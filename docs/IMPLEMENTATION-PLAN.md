@@ -54,6 +54,8 @@ nomad-mobile/
 - `expo-secure-store` - Secure JWT storage
 - `@tanstack/react-query` - Data fetching/caching
 - `nativewind` - Tailwind CSS for React Native (matches web styling)
+- `@react-native-firebase/app` - Firebase core
+- `@react-native-firebase/crashlytics` - Crash reporting (free)
 
 ### 1.2 API Client
 
@@ -211,14 +213,18 @@ const discovery = {
 
 **iOS App Store:**
 - App name: "Nomad Karaoke"
+- Subtitle: "find your perfect karaoke songs"
 - Bundle ID: `com.nomadkaraoke.mobile`
 - Screenshots: 6.5" (iPhone 14 Pro Max), 5.5" (iPhone 8 Plus)
 - Category: Music
+- Minimum iOS: 15.0
 
 **Google Play:**
+- App name: "Nomad Karaoke - find your perfect karaoke songs"
 - Package: `com.nomadkaraoke.mobile`
 - Screenshots: Phone, 7" tablet, 10" tablet
 - Category: Music & Audio
+- Minimum Android: 10 (API 29)
 
 ### 4.3 Brand Assets Needed
 
@@ -357,8 +363,8 @@ interface User {
 - [ ] Offline mode for cached data
 - [ ] App Store approved (iOS)
 - [ ] Play Store approved (Android)
-- [ ] Analytics tracking (basic events)
-- [ ] Error tracking (Sentry or similar)
+- [ ] Analytics tracking (via Decide API, with mobile context)
+- [ ] Crashlytics error tracking integrated
 
 ### Post-MVP Features (Future Phases)
 
@@ -385,17 +391,70 @@ interface User {
 
 ---
 
-## Open Questions
+## Resolved Decisions
 
-1. **Universal links**: Do we want `app.nomadkaraoke.com` universal links, or just custom scheme `nomadkaraoke://`?
+### 1. Deep Linking Strategy
 
-2. **Analytics**: Use existing analytics setup or new mobile-specific? (Recommend: extend existing)
+**Decision:** Use both custom scheme AND universal links with smart app banners.
 
-3. **Error tracking**: Sentry, Crashlytics, or Expo's built-in?
+- **Custom scheme**: `nomadkaraoke://` for magic link auth redirects
+- **Universal links**: `app.nomadkaraoke.com` for QR codes and marketing links
+- **Smart app banner**: When users visit web URLs on mobile, show iOS/Android smart banner offering app download, but don't force - let users choose web or app
 
-4. **App name variations**: "Nomad Karaoke" vs "Nomad Karaoke - Song Finder" (for discoverability)?
+**Implementation:**
+- QR codes link to `https://app.nomadkaraoke.com/...`
+- Server returns web page with smart app banner meta tags
+- If app installed, universal link opens app directly
+- If not installed, user sees web version + "Get the app" banner
 
-5. **Minimum OS versions**: iOS 15+ / Android 10+ reasonable?
+This respects user choice - the web apps are already responsive, so users who prefer web aren't blocked.
+
+### 2. Analytics
+
+**Decision:** Extend existing analytics (same backend integration).
+
+Since the mobile app uses the same Decide API, analytics events will flow through the existing backend. Add mobile-specific context:
+- Platform (ios/android)
+- App version
+- Device model
+
+No separate mobile analytics platform needed.
+
+### 3. Error Tracking
+
+**Decision:** Firebase Crashlytics (free, GCP-integrated).
+
+**Why Crashlytics:**
+- **Free**: No monthly fees, unlimited crashes
+- **GCP integration**: Already using Firebase/GCP, data stays in same project
+- **Good for debugging**: Stack traces, device info, breadcrumbs
+- **Claude-friendly**: Crash reports are text-based, easy to analyze in future sessions
+
+**Setup:**
+```bash
+npx expo install @react-native-firebase/app @react-native-firebase/crashlytics
+```
+
+Crashes and non-fatal errors logged to Firebase Console → Crashlytics dashboard.
+
+### 4. App Name
+
+**Decision:** "Nomad Karaoke - find your perfect karaoke songs"
+
+- Store listing title: "Nomad Karaoke"
+- Subtitle/tagline: "find your perfect karaoke songs"
+- This matches the Decide product positioning
+
+### 5. Minimum OS Versions
+
+**Decision:** Start with iOS 15+ / Android 10+, raise if needed.
+
+- iOS 15+: ~95% of active devices (reasonable)
+- Android 10+: ~85% of active devices (reasonable)
+
+If we hit significant technical challenges from supporting older versions, acceptable to raise to:
+- iOS 17+ (~80% of devices)
+- Android 12+ (~70% of devices)
 
 ---
 
