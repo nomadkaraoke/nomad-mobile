@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 export default function MagicLinkSentScreen() {
   const { email } = useLocalSearchParams<{ email: string }>();
+  // Normalize email param (could be array or undefined)
+  const displayEmail = Array.isArray(email) ? email[0] || '' : email || '';
 
   return (
     <SafeAreaView style={styles.container}>
@@ -23,7 +25,7 @@ export default function MagicLinkSentScreen() {
         <Text style={styles.title}>Check Your Email</Text>
         <Text style={styles.subtitle}>
           We sent a magic link to{'\n'}
-          <Text style={styles.email}>{email}</Text>
+          <Text style={styles.email}>{displayEmail}</Text>
         </Text>
 
         <Text style={styles.instructions}>

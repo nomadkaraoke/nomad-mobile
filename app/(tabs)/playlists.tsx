@@ -6,6 +6,16 @@ export default function PlaylistsScreen() {
   // TODO: Fetch playlists from API
   const playlists: Array<{ id: string; name: string; songCount: number }> = [];
 
+  // TODO: Implement playlist creation (navigate to create modal or call API)
+  const handleCreatePlaylist = () => {
+    console.log('Create playlist pressed');
+  };
+
+  // TODO: Navigate to playlist detail screen
+  const handlePlaylistPress = (playlist: { id: string; name: string }) => {
+    console.log('Playlist pressed:', playlist.id);
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right']}>
       {playlists.length === 0 ? (
@@ -15,7 +25,7 @@ export default function PlaylistsScreen() {
           <Text style={styles.emptySubtitle}>
             Create playlists to organize your favorite karaoke songs
           </Text>
-          <TouchableOpacity style={styles.createButton}>
+          <TouchableOpacity style={styles.createButton} onPress={handleCreatePlaylist}>
             <Ionicons name="add" size={20} color="#FFFFFF" />
             <Text style={styles.createButtonText}>Create Playlist</Text>
           </TouchableOpacity>
@@ -26,7 +36,7 @@ export default function PlaylistsScreen() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.playlistItem}>
+            <TouchableOpacity style={styles.playlistItem} onPress={() => handlePlaylistPress(item)}>
               <View style={styles.playlistIcon}>
                 <Ionicons name="musical-notes" size={24} color="#3B82F6" />
               </View>
@@ -43,7 +53,7 @@ export default function PlaylistsScreen() {
       )}
 
       {playlists.length > 0 && (
-        <TouchableOpacity style={styles.fab}>
+        <TouchableOpacity style={styles.fab} onPress={handleCreatePlaylist}>
           <Ionicons name="add" size={28} color="#FFFFFF" />
         </TouchableOpacity>
       )}

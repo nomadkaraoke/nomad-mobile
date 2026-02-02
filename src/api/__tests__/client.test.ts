@@ -4,6 +4,19 @@ import { api } from '../client';
 const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>;
 const mockSecureStore = SecureStore as jest.Mocked<typeof SecureStore>;
 
+// Helper to create mock Response with headers
+function createMockResponse(data: unknown, options: { ok?: boolean; status?: number; contentType?: string } = {}): Response {
+  const { ok = true, status = 200, contentType = 'application/json' } = options;
+  return {
+    ok,
+    status,
+    headers: {
+      get: (name: string) => name.toLowerCase() === 'content-type' ? contentType : null,
+    },
+    json: () => Promise.resolve(data),
+  } as unknown as Response;
+}
+
 describe('ApiClient', () => {
   const BASE_URL = 'https://karaoke-decide-718638054799.us-central1.run.app';
 
@@ -52,10 +65,7 @@ describe('ApiClient', () => {
   describe('auth.guest', () => {
     it('should create guest session and store token', async () => {
       const mockResponse = { access_token: 'guest-token-123' };
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockResponse),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse(mockResponse));
 
       const result = await api.auth.guest();
 
@@ -73,11 +83,7 @@ describe('ApiClient', () => {
     });
 
     it('should throw on API error', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-        json: () => Promise.resolve({ message: 'Server error' }),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({ message: 'Server error' }, { ok: false, status: 500 }));
 
       await expect(api.auth.guest()).rejects.toThrow('Server error');
     });
@@ -85,10 +91,7 @@ describe('ApiClient', () => {
 
   describe('auth.sendMagicLink', () => {
     it('should send magic link request', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({}));
 
       await api.auth.sendMagicLink('test@example.com');
 
@@ -105,10 +108,7 @@ describe('ApiClient', () => {
   describe('auth.verifyMagicLink', () => {
     it('should verify token and store auth', async () => {
       const mockResponse = { access_token: 'verified-token' };
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockResponse),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse(mockResponse));
 
       const result = await api.auth.verifyMagicLink('magic-token-123');
 
@@ -133,10 +133,7 @@ describe('ApiClient', () => {
         per_page: 20,
         has_more: false,
       };
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockSongs),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse(mockSongs));
 
       const result = await api.catalog.searchSongs({ q: 'test', page: 1 });
 
@@ -148,10 +145,7 @@ describe('ApiClient', () => {
     });
 
     it('should handle empty search params', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ data: [], total: 0 }),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({ data: [], total: 0 }));
 
       await api.catalog.searchSongs({});
 
@@ -162,10 +156,7 @@ describe('ApiClient', () => {
     });
 
     it('should include genre and decade filters', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ data: [] }),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({ data: [] }));
 
       await api.catalog.searchSongs({ genre: 'rock', decade: '1980s' });
 
@@ -183,10 +174,7 @@ describe('ApiClient', () => {
   describe('catalog.getSong', () => {
     it('should get song by id', async () => {
       const mockSong = { id: 'song-123', title: 'Test Song', artist: 'Artist' };
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockSong),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse(mockSong));
 
       const result = await api.catalog.getSong('song-123');
 
@@ -201,10 +189,7 @@ describe('ApiClient', () => {
   describe('users.me', () => {
     it('should fetch current user', async () => {
       const mockUser = { id: 'user-1', email: 'test@example.com' };
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockUser),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse(mockUser));
 
       const result = await api.users.me();
 
@@ -219,10 +204,7 @@ describe('ApiClient', () => {
   describe('playlists', () => {
     it('should list playlists', async () => {
       const mockPlaylists = [{ id: 'pl-1', name: 'My Playlist', song_count: 5 }];
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockPlaylists),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse(mockPlaylists));
 
       const result = await api.playlists.list();
 
@@ -235,10 +217,7 @@ describe('ApiClient', () => {
 
     it('should create playlist', async () => {
       const mockPlaylist = { id: 'pl-new', name: 'New Playlist', song_count: 0 };
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockPlaylist),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse(mockPlaylist));
 
       const result = await api.playlists.create('New Playlist');
 
@@ -253,10 +232,7 @@ describe('ApiClient', () => {
     });
 
     it('should delete playlist', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({}));
 
       await api.playlists.delete('pl-123');
 
@@ -267,10 +243,7 @@ describe('ApiClient', () => {
     });
 
     it('should add song to playlist', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({}));
 
       await api.playlists.addSong('pl-123', 'song-456');
 
@@ -284,10 +257,7 @@ describe('ApiClient', () => {
     });
 
     it('should remove song from playlist', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({}));
 
       await api.playlists.removeSong('pl-123', 'song-456');
 
@@ -300,10 +270,7 @@ describe('ApiClient', () => {
 
   describe('services', () => {
     it('should connect Spotify', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({}));
 
       await api.services.connectSpotify('auth-code-123');
 
@@ -317,10 +284,7 @@ describe('ApiClient', () => {
     });
 
     it('should disconnect Spotify', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({}));
 
       await api.services.disconnectSpotify();
 
@@ -331,10 +295,7 @@ describe('ApiClient', () => {
     });
 
     it('should sync listening history', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({}));
 
       await api.services.syncListeningHistory();
 
@@ -347,11 +308,7 @@ describe('ApiClient', () => {
 
   describe('error handling', () => {
     it('should throw with message from API response', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-        status: 400,
-        json: () => Promise.resolve({ message: 'Invalid request' }),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({ message: 'Invalid request' }, { ok: false, status: 400 }));
 
       await expect(api.catalog.searchSongs({ q: 'test' })).rejects.toThrow('Invalid request');
     });
@@ -360,8 +317,9 @@ describe('ApiClient', () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 404,
+        headers: { get: () => 'application/json' },
         json: () => Promise.reject(new Error('Not JSON')),
-      } as Response);
+      } as unknown as Response);
 
       await expect(api.catalog.getSong('missing')).rejects.toThrow('HTTP 404');
     });
@@ -370,10 +328,7 @@ describe('ApiClient', () => {
   describe('authorization header', () => {
     it('should include auth header when token is set', async () => {
       await api.setToken('my-token');
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      } as Response);
+      mockFetch.mockResolvedValueOnce(createMockResponse({}));
 
       await api.users.me();
 

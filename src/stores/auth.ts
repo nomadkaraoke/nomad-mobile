@@ -85,11 +85,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: true });
     try {
       await api.auth.logout();
-      set({ user: null, isAuthenticated: false });
-      // Create a new guest session
-      await get().loginAsGuest();
     } catch (error) {
       console.error('Logout error:', error);
+    }
+    // Always clear user state and create guest session, even if logout API fails
+    set({ user: null, isAuthenticated: false });
+    try {
+      await get().loginAsGuest();
+    } catch (guestError) {
+      console.error('Failed to create guest session after logout:', guestError);
     } finally {
       set({ isLoading: false });
     }
