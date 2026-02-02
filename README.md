@@ -4,7 +4,16 @@ React Native mobile app for iOS and Android - a native frontend for the Nomad Ka
 
 ## Status
 
-**Planning complete** - See [Implementation Plan](docs/IMPLEMENTATION-PLAN.md)
+**Phase 1: Foundation complete** - See [Implementation Plan](docs/IMPLEMENTATION-PLAN.md)
+
+Completed:
+- Expo project setup with TypeScript
+- Expo Router navigation (tabs + auth routes)
+- Basic screens: Discover, Search, Playlists, Settings
+- Auth screens: Login, Magic Link Sent
+- API client with typed endpoints
+- Zustand auth store
+- NativeWind (Tailwind CSS) configured
 
 ## What This App Does
 
@@ -36,6 +45,12 @@ npx expo run:ios
 
 # Run on Android
 npx expo run:android
+
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
 ```
 
 ## Backend

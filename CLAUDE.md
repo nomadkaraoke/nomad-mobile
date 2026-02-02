@@ -4,7 +4,7 @@
 
 React Native + Expo mobile app for Nomad Karaoke - a mobile frontend for the Decide song discovery platform.
 
-**Status:** Planning complete, implementation not started
+**Status:** Phase 1 Foundation complete - basic project structure and navigation set up
 
 ## Tech Stack
 
@@ -52,6 +52,12 @@ npx expo run:ios
 
 # Run on Android emulator
 npx expo run:android
+
+# Run tests
+npm test
+
+# Run tests with coverage (target: 70%+)
+npm run test:coverage
 
 # Build for production
 eas build --platform all
