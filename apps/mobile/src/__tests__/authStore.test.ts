@@ -73,3 +73,21 @@ it('after a reinstall, discards a session the iOS Keychain kept from the previou
   expect(useAuth.getState().state.status).toBe('signedOut');
   expect(await SecureStore.getItemAsync('nomad.session.v1')).toBeNull();
 });
+
+it('a keychain read failure still finishes hydrating (signed out) instead of leaving a blank app', async () => {
+  (SecureStore.getItemAsync as jest.Mock).mockRejectedValueOnce(new Error('keychain locked'));
+  useAuth.setState({ state: { status: 'signedOut' }, hydrated: false });
+  await expect(useAuth.getState().hydrate()).resolves.toBeUndefined();
+  expect(useAuth.getState().hydrated).toBe(true);
+  expect(useAuth.getState().state.status).toBe('signedOut');
+});
+
+it.each(['null', '{}', '{"token":1,"email":"a@b.co"}'])('treats malformed stored session %s as signed out', async (raw) => {
+  await useAuth.getState().requestCode('me@example.com');
+  await useAuth.getState().verify('123456'); // sets the install marker
+  await SecureStore.setItemAsync('nomad.session.v1', raw);
+  useAuth.setState({ state: { status: 'signedOut' }, hydrated: false });
+  await useAuth.getState().hydrate();
+  expect(useAuth.getState().state.status).toBe('signedOut');
+  expect(useAuth.getState().getToken()).toBeNull();
+});

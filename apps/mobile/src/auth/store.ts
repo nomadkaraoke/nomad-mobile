@@ -22,23 +22,41 @@ type AuthStore = {
 };
 
 /** Gen session (identity of record, spec §4) persisted in SecureStore. */
+/** A stored session, or null if missing or not the shape we wrote (corrupt / older format). */
+function parseSession(raw: string | null): Session | null {
+  if (!raw) return null;
+  try {
+    const v: unknown = JSON.parse(raw);
+    if (v && typeof v === 'object') {
+      const { token, email, createdAt } = v as Record<string, unknown>;
+      if (typeof token === 'string' && token && typeof email === 'string') {
+        return { token, email, createdAt: typeof createdAt === 'number' ? createdAt : 0 };
+      }
+    }
+  } catch {
+    // fall through
+  }
+  return null;
+}
+
 export const useAuth = create<AuthStore>((set, get) => ({
   state: { status: 'signedOut' },
   hydrated: false,
 
   async hydrate() {
-    if (!appStorage.getBoolean(INSTALL_MARKER)) {
-      await SecureStore.deleteItemAsync(KEY);
-      appStorage.set(INSTALL_MARKER, true);
-    }
-    const raw = await SecureStore.getItemAsync(KEY);
+    // Never leave the app un-hydrated (AppProviders renders nothing until then): any storage failure,
+    // e.g. iOS Keychain unreadable during a locked-device launch, falls back to signed out.
     let state: AuthState = { status: 'signedOut' };
-    if (raw) {
-      try {
-        state = { status: 'signedIn', session: JSON.parse(raw) as Session };
-      } catch {
+    try {
+      if (!appStorage.getBoolean(INSTALL_MARKER)) {
         await SecureStore.deleteItemAsync(KEY);
+        appStorage.set(INSTALL_MARKER, true);
       }
+      const session = parseSession(await SecureStore.getItemAsync(KEY));
+      if (session) state = { status: 'signedIn', session };
+      else await SecureStore.deleteItemAsync(KEY);
+    } catch {
+      // Keep signed out; the next sign-in overwrites whatever is stored.
     }
     set({ state, hydrated: true });
   },
