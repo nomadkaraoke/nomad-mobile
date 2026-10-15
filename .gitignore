@@ -36,7 +36,6 @@ android/.gradle/
 
 # Testing
 coverage/
-__mocks__/
 
 # Build
 *.jks
@@ -62,3 +61,10 @@ __mocks__/
 # Generated native folders (use prebuild)
 /ios
 /android
+
+# workspace
+coverage/
+.superpowers/
+apps/mobile/ios/
+apps/mobile/android/
+.expo/
