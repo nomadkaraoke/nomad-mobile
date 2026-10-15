@@ -1,0 +1,67 @@
+# Phase 0 execution ledger (rulings, final review)
+
+Copied from the executing-plans workspace on 2026-10-15. Every deviation from the plan, with its cost if wrong.
+
+- Pre-flight: Task4 configureClient/ApiError consumed by Task6 setup.ts + authApi (ApiError from @nomad/api-gen) — consistent. Task3 IntlProvider/resolveLocale/RTL_LOCALES consumed by Task6 _layout+locale.ts — consistent. Task5 List/Button/TextField/Screen consumed by Task6 screens — consistent. Task2 normalizeEmail/normalizeCode/AuthState consumed by Task6 store — consistent. Task6 testIDs consumed by Task8 Maestro — consistent.
+- Task 1: Ruling: SDK 57 template puts routes in apps/mobile/src/app (not app/) — follow template/AGENTS.md convention; all plan route paths map app/→src/app/ — cost if wrong: path rename only
+- Task 1: Ruling: template ships .claude/settings.json enabling expo@claude-plugins-official + AGENTS.md — moved both to repo root (satisfies Task 8 plugin step early) — cost if wrong: none
+- Task 1: Ruling: pnpm 12 requires allowBuilds + auto-added minimumReleaseAgeExclude in pnpm-workspace.yaml — kept — cost if wrong: none
+- Task 1: complete (commits 7091c43..5daf864, tests: sh -c 'pnpm lint && pnpm typecheck' → $ pnpm -r --parallel exec tsc --noEmit)
+- Task 2: Ruling: pnpm 12 ignores .npmrc node-linker; moved to pnpm-workspace.yaml nodeLinker: hoisted; jest projects use globs (packages/*, apps/*) so not-yet-created packages don't break runs — cost if wrong: none
+- Task 2: Ruling: each JS package gets babel.config.js (babel-preset-expo) so jest-expo transforms TS — cost if wrong: none
+- Task 2: Ruling: jobPhase NEEDS_USER also includes awaiting_audio_edit/in_audio_edit per job.py — cost if wrong: UI shows needs-action for audio edit
+- Task 2: complete (commits 5daf864..5c4edf7, tests: pnpm jest --selectProjects core → Ran all test suites.)
+- Task 3: Ruling: @testing-library/react-native pinned ^13.3.3 (v14 uses test-renderer/react-reconciler 0.34 needing React 19.3; Expo 57 ships 19.2.3) — cost if wrong: upgrade RNTL when SDK moves to React 19.3
+- Task 3: Ruling: en-fallback test moved to its own file with top-level jest.mock (isolateModules loads a 2nd React copy → invalid hook call); mutation-checked RED without deepMerge — cost if wrong: none
+- Task 3: Ruling: shared jest.shared.js transformIgnorePatterns (use-intl/@formatjs ESM) reused by all RN projects — cost if wrong: none
+- Task 3: Ruling: commit messages/.en-snapshot.json (translate.py's incremental-change snapshot) so re-translation stays incremental across machines; gen leaves it untracked — cost if wrong: one extra file
+- Task 3: complete (commits 5c4edf7..c251f89, tests: sh -c 'pnpm jest --selectProjects i18n core && pnpm i18n:check' → All 32 locale(s) passed validation.)
+- Task 4: Ruling: hey-api output left unformatted (no prettier dep) and throwOnError set on the client-fetch plugin per 0.99 docs; facades return .data — cost if wrong: none
+- Task 4: Ruling: added test 'reconfiguring replaces header interceptor' + popular/getSong path test beyond plan — cost if wrong: none
+- Task 4: complete (commits c251f89..56f8b64, tests: pnpm jest --selectProjects api-decide api-gen → Ran all test suites in 2 projects.)
+- Task 5: Ruling: FlashList 2.0.2 / Skia 2.6.2 (expo install's SDK-57-pinned versions) instead of research-doc latest 2.3.3/2.14 — Expo compatibility table wins — cost if wrong: later bump
+- Task 5: Ruling: FlashList bundled jestSetup broken (RecyclerView export missing) → only its measureLayout mock reused; Skia mocked structurally (official mock needs canvaskit env) — cost if wrong: none
+- Task 5: Ruling: Uniwind types via packages/ui/src/uniwind-env.d.ts triple-slash ref instead of metro-generated uniwind-types.d.ts (deterministic in CI) — cost if wrong: none
+- Task 5: Ruling: added TextField test + Button spinner test + WaveformCanvas played-color test beyond plan; dropped estimatedItemSize prop (removed in FlashList v2) — cost if wrong: none
+- Task 5: complete (commits 56f8b64..d3bfc4f, tests: sh -c 'pnpm jest --selectProjects ui && pnpm lint' → $ eslint .)
+- Task 6: Ruling: debounce test starts from '' (real typing); initial non-empty query searches immediately by design (prefilled screens) — cost if wrong: one extra request on prefilled mount
+- Task 6: Ruling: providers extracted to src/providers/AppProviders.tsx; observability init deferred to Task 7; route tests use in-memory renderRouter table of real screens (src/test-utils/routes.ts) — cost if wrong: none
+- Task 6: Ruling: renderRouter enables fake timers → signInFlow beforeEach resets to real timers; retry test rejects twice because QueryClient retry:1 — cost if wrong: none
+- Task 6: Ruling: SafeAreaView (safe-area-context) styled via style not className (Uniwind only types RN core); app gets babel.config.js + CSS moduleNameMapper stub for jest — cost if wrong: none
+- Task 6: Ruling: added tests beyond plan: corrupt stored session, malformed code, no-results, validation errors, account sign-out — cost if wrong: none
+- Task 6: complete (commits d3bfc4f..b9b2559, tests: sh -c 'pnpm jest && pnpm typecheck && pnpm lint' → $ eslint .)
+- Task 6: Ruling: coverage threshold failed on functions (50%) due to 32 untested locale loaders → added allLocales test (mutation-checked) rather than lowering threshold — cost if wrong: none
+- Task 7: Ruling: @sentry/react-native ~7.11 (expo install's SDK-57 pin, not research's 8.30); @sentry/cli build script approved (binary download only, no account) — cost if wrong: later bump
+- Task 7: complete (commits b9b2559..452c4e3, tests: sh -c 'pnpm jest && pnpm lint' → $ eslint .)
+- Task 8: Ruling: Expo MCP local capabilities proxy through remote Expo MCP (needs Expo account login) → not set up; agent loop uses maestro mcp + xcrun simctl screenshots; Expo plugin (skills) enabled via .claude/settings.json — cost if wrong: Andrew sets up Expo MCP after account decision
+- Task 8: Ruling: iOS sim on iOS 26.5 runtime (already installed) / iPhone 17 Pro; brew reinstall cocoapods (stale Ruby 3.3 shim + broken brew ffi) and PATH=/opt/homebrew/bin for builds — cost if wrong: none (local dev tooling)
+- Task 8: Ruling: Android emulator BLOCKED — AVD Pixel_8_API_35_Root is dangling, no system images installed; multi-GB download needs Andrew's OK. Ran gradle assembleDebug compile check instead — cost if wrong: Android runtime unverified until emulator exists
+- Task 8: Ruling: device-found bugs fixed with TDD: Hermes lacks Intl.PluralRules (FormatJS polyfill + fil data) and Intl.DisplayNames (static LOCALE_NAMES); iOS Keychain survives reinstall (MMKV install marker; added react-native-mmkv per stack doc); pushed screens lacked back button (native header, verified RED/GREEN via Maestro since jest mocks screens); keyboard covered tabs (Keyboard.dismiss on row press) — cost if wrong: none
+- Task 8: Ruling: Maestro launch uses stopApp+clearKeychain not clearState (dev-client relaunch triggers SpringBoard 'Open in' prompt invisible to Maestro); no openLink on iOS — cost if wrong: flows assume app was launched once on the sim
+- Task 8: complete (commits 452c4e3..7513f60, tests: sh -c 'pnpm jest && maestro --device 56F4EBCD-4B5D-43D0-B7AB-6DB31B1D348C test maestro/' → 2/2 Flows Passed in 51s)
+- Task 9: Ruling: EAS workflows live in apps/mobile/.eas/workflows (Expo project root in a monorepo), added e2e-test build profile; Node 24 in CI — cost if wrong: move dir
+- Task 9: Ruling: CI can't be dispatched before ci.yml is on main (GitHub 404) → reproduced every CI step in a clean clone with --frozen-lockfile (all green); real Actions run happens on the PR — cost if wrong: an env difference (ubuntu vs mac) surfaces on the PR
+- Task 9: complete (commits 7513f60..a86dcaf, tests: sh -c 'pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm i18n:check' → All 32 locale(s) passed validation.)
+- Final review: opus code-reviewer — 0 Critical, 3 Important, 13 Minor
+- Final: fixed hydrate failure leaves app blank forever — authStore 'keychain read failure still finishes hydrating' RED→GREEN, suite 121/121
+- Final: fixed stored session not shape-validated — authStore 'treats malformed stored session' (3 cases) RED→GREEN, suite 121/121
+- Final: fixed coverage gate ignores apps/mobile/src — collectCoverageFrom now includes app (94.7% lines, gate passes), suite 121/121
+- Final: Ruling: expo-doctor on ubuntu unverified — runs on the PR's CI — cost if wrong: one CI fix
+- Final: Ruling: Android runtime unverified — emulator blocked pending Andrew's OK for system image download; gradle compile check run instead — cost if wrong: Android-only bug found later
+- Final: Ruling: zh-Hant devices get Simplified zh strings — matches spec's 33-locale list — cost if wrong: add zh-Hant locale later
+- Final: Ruling: RTL applies on next launch — documented Phase 1 item — cost if wrong: one confusing first launch for ar/he
+- Final: Ruling: dormant EAS workflows, vendored scripts, generated clients not judged — by design — cost if wrong: none now
+- Final: Ruling: no resend-code/change-email on code screen — not in Phase 0 spec; Phase 1 real auth — cost if wrong: none (mock)
+- Final: minor (deferred): __pycache__ .pyc committed under packages/i18n/scripts; add to .gitignore
+- Final: minor (deferred): app.json lists expo-secure-store/expo-localization plugins twice
+- Final: minor (deferred): OpenAPI drift check misses new untracked generated files (use git status --porcelain)
+- Final: minor (deferred): late 401 from old token can sign out a fresh session (dormant until gen calls)
+- Final: minor (deferred): 401 during codeSent clears pending sign-in (dormant)
+- Final: minor (deferred): QueryClient retry:1 retries 4xx incl. 401
+- Final: minor (deferred): normalizeCode doesn't fold en/em dashes or full-width digits
+- Final: minor (deferred): results list blanks between searches (add keepPreviousData)
+- Final: minor (deferred): IntlProvider re-merges messages every render (useMemo)
+- Final: minor (deferred): UI locale fixed at launch but Accept-Language reads device locale live
+- Final: minor (deferred): returnTo deep-link param not allowlisted to in-app paths
+- Final: minor (deferred): eas.json channel set without expo-updates installed
+- Final: minor (deferred): no test asserting setupApiClients sends decide no token / decide 401 keeps session
