@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Bejelentkezés",
+    "signOut": "Kijelentkezés",
+    "title": "Fiók",
+    "signedInAs": "Bejelentkezve mint {email}",
+    "language": "Nyelv"
+  },
+  "common": {
+    "error": "Valami hiba történt.",
+    "retry": "Próbáld újra",
+    "loading": "Betöltés…",
+    "cancel": "Mégse",
+    "continue": "Folytatás"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Még nincs karaoke verzió} one {# karaoke verzió} other {# karaoke verzió}}",
+    "makeAnySong": "Nem találod? Készíts el bármilyen dalt",
+    "noResults": "Nincs találat a következőre: „{query}”.",
+    "popularHeading": "Népszerű karaoke dalok",
+    "searchPlaceholder": "Dalok vagy előadók keresése"
+  },
+  "signIn": {
+    "codeHelp": "Elküldtünk egy 6 számjegyű kódot a(z) {email} címre.",
+    "codeInvalid": "Add meg a 6 számjegyű kódot.",
+    "codeLabel": "Kód",
+    "devMockNotice": "Fejlesztői mód: használd a 123456 kódot",
+    "emailInvalid": "Adj meg egy érvényes e-mail-címet.",
+    "emailTitle": "Bejelentkezés",
+    "sendCode": "Kód küldése",
+    "verify": "Bejelentkezés",
+    "emailLabel": "E-mail",
+    "codeTitle": "Ellenőrizd a postaládádat"
+  },
+  "song": {
+    "comingSoon": "A videókészítés hamarosan elérhető lesz az alkalmazásban.",
+    "makeVideo": "Karaokevideó készítése",
+    "signInToMake": "Jelentkezz be a dal elkészítéséhez",
+    "artistLabel": "Előadó",
+    "titleLabel": "Dal címe"
+  },
+  "tabs": {
+    "account": "Fiók",
+    "find": "Keresés",
+    "videos": "Videóim"
+  },
+  "videos": {
+    "emptyBody": "Az általad készített dalok itt fognak megjelenni.",
+    "emptyTitle": "Még nincsenek videók",
+    "signInPrompt": "Jelentkezz be a videóid megtekintéséhez"
+  }
+}

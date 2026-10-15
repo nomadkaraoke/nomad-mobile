@@ -13,8 +13,9 @@
     "i18n:translate": "python3 packages/i18n/scripts/translate.py --messages-dir packages/i18n/messages --target all"
   },
   "devDependencies": {
-    "@testing-library/react-native": "^14.1.0",
+    "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^30.0.0",
+    "@types/node": "^26.6.5",
     "eslint": "^9.39.5",
     "eslint-config-expo": "~57.0.2",
     "jest": "^30.5.2",

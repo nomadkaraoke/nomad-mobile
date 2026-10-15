@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Mag-sign in",
+    "signOut": "Mag-sign out",
+    "title": "Account",
+    "signedInAs": "Naka-sign in bilang {email}",
+    "language": "Wika"
+  },
+  "common": {
+    "error": "May nagkaproblema.",
+    "retry": "Subukan muli",
+    "loading": "Nilo-load…",
+    "cancel": "Kanselahin",
+    "continue": "Magpatuloy"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Wala pang karaoke version} one {# karaoke version} other {# na karaoke version}}",
+    "makeAnySong": "Hindi mahanap? Gumawa ng kahit anong kanta",
+    "noResults": "Walang nakitang kanta para sa “{query}”.",
+    "popularHeading": "Sikat sa karaoke",
+    "searchPlaceholder": "Maghanap ng kanta o artist"
+  },
+  "signIn": {
+    "codeHelp": "Nagpadala kami ng 6-digit code sa {email}.",
+    "codeInvalid": "Ilagay ang 6-digit code.",
+    "codeLabel": "Code",
+    "devMockNotice": "Development mode: gamitin ang code 123456",
+    "emailInvalid": "Maglagay ng wastong email address.",
+    "emailTitle": "Mag-sign in",
+    "sendCode": "Ipadala ang code",
+    "verify": "Mag-sign in",
+    "emailLabel": "Email",
+    "codeTitle": "I-check ang iyong email"
+  },
+  "song": {
+    "comingSoon": "Malapit nang maging available ang paggawa ng video sa app.",
+    "makeVideo": "Gumawa ng karaoke video",
+    "signInToMake": "Mag-sign in para gawin ang kantang ito",
+    "artistLabel": "Artist",
+    "titleLabel": "Pamagat ng kanta"
+  },
+  "tabs": {
+    "account": "Account",
+    "find": "Maghanap",
+    "videos": "Aking mga Video"
+  },
+  "videos": {
+    "emptyBody": "Lalabas dito ang mga kantang gagawin mo.",
+    "emptyTitle": "Wala pang video",
+    "signInPrompt": "Mag-sign in para makita ang iyong mga video"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Giriş yap",
+    "signOut": "Çıkış yap",
+    "title": "Hesap",
+    "signedInAs": "{email} olarak giriş yapıldı",
+    "language": "Dil"
+  },
+  "common": {
+    "error": "Bir şeyler ters gitti.",
+    "retry": "Tekrar dene",
+    "loading": "Yükleniyor…",
+    "cancel": "İptal",
+    "continue": "Devam Et"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Henüz karaoke versiyonu yok} one {# karaoke versiyonu} other {# karaoke versiyonu}}",
+    "makeAnySong": "Bulamadın mı? İstediğin şarkıyı yap",
+    "noResults": "“{query}” için şarkı bulunamadı.",
+    "popularHeading": "Karaokede popüler",
+    "searchPlaceholder": "Şarkı veya sanatçı ara"
+  },
+  "signIn": {
+    "codeHelp": "{email} adresine 6 haneli bir kod gönderdik.",
+    "codeInvalid": "6 haneli kodu gir.",
+    "codeLabel": "Kod",
+    "devMockNotice": "Geliştirme modu: 123456 kodunu kullanın",
+    "emailInvalid": "Geçerli bir e-posta adresi gir.",
+    "emailTitle": "Giriş yap",
+    "sendCode": "Kod gönder",
+    "verify": "Giriş yap",
+    "emailLabel": "E-posta",
+    "codeTitle": "E-postanı kontrol et"
+  },
+  "song": {
+    "comingSoon": "Uygulama üzerinden video oluşturma çok yakında.",
+    "makeVideo": "Karaoke videosu yap",
+    "signInToMake": "Bu şarkıyı yapmak için giriş yap",
+    "artistLabel": "Sanatçı",
+    "titleLabel": "Şarkı adı"
+  },
+  "tabs": {
+    "account": "Hesap",
+    "find": "Bul",
+    "videos": "Videolarım"
+  },
+  "videos": {
+    "emptyBody": "Yaptığın şarkılar burada görünecek.",
+    "emptyTitle": "Henüz video yok",
+    "signInPrompt": "Videolarını görmek için giriş yap"
+  }
+}

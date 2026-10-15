@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Войти",
+    "signOut": "Выйти",
+    "title": "Аккаунт",
+    "signedInAs": "Выполнен вход как {email}",
+    "language": "Язык"
+  },
+  "common": {
+    "error": "Что-то пошло не так.",
+    "retry": "Попробовать снова",
+    "loading": "Загрузка…",
+    "cancel": "Отмена",
+    "continue": "Продолжить"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Караоке-версий пока нет} one {# караоке-версия} few {# караоке-версии} many {# караоке-версий} other {# караоке-версии}}",
+    "makeAnySong": "Не можешь найти? Создай любую песню",
+    "noResults": "По запросу «{query}» ничего не найдено.",
+    "popularHeading": "Популярно в караоке",
+    "searchPlaceholder": "Поиск песен или исполнителей"
+  },
+  "signIn": {
+    "codeHelp": "Мы отправили 6-значный код на {email}.",
+    "codeInvalid": "Введи 6-значный код.",
+    "codeLabel": "Код",
+    "devMockNotice": "Режим разработки: используй код 123456",
+    "emailInvalid": "Введи корректный email.",
+    "emailTitle": "Вход",
+    "sendCode": "Отправить код",
+    "verify": "Войти",
+    "emailLabel": "Email",
+    "codeTitle": "Проверь почту"
+  },
+  "song": {
+    "comingSoon": "Создание видео в приложении появится совсем скоро.",
+    "makeVideo": "Создать караоке-видео",
+    "signInToMake": "Войди, чтобы создать караоке для этой песни",
+    "artistLabel": "Исполнитель",
+    "titleLabel": "Название песни"
+  },
+  "tabs": {
+    "account": "Аккаунт",
+    "find": "Поиск",
+    "videos": "Мои видео"
+  },
+  "videos": {
+    "emptyBody": "Созданные тобой песни появятся здесь.",
+    "emptyTitle": "Видео пока нет",
+    "signInPrompt": "Войди, чтобы увидеть свои видео"
+  }
+}

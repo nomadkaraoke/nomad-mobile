@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Prijavi se",
+    "signOut": "Odjavi se",
+    "title": "Račun",
+    "signedInAs": "Prijavljen/a kao {email}",
+    "language": "Jezik"
+  },
+  "common": {
+    "error": "Nešto je pošlo po zlu.",
+    "retry": "Pokušaj ponovno",
+    "loading": "Učitavam…",
+    "cancel": "Odustani",
+    "continue": "Nastavi"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Još nema karaoke verzija} one {# karaoke verzija} few {# karaoke verzije} other {# karaoke verzija}}",
+    "makeAnySong": "Ne možeš pronaći? Stvori bilo koju pjesmu",
+    "noResults": "Nije pronađena nijedna pjesma za „{query}”.",
+    "popularHeading": "Popularno za karaoke",
+    "searchPlaceholder": "Pretraži pjesme ili izvođače"
+  },
+  "signIn": {
+    "codeHelp": "Poslali smo šesteroznamenkasti kod na {email}.",
+    "codeInvalid": "Unesi šesteroznamenkasti kod.",
+    "codeLabel": "Kod",
+    "devMockNotice": "Razvojni način: upotrijebi kod 123456",
+    "emailInvalid": "Unesi valjanu e-mail adresu.",
+    "emailTitle": "Prijava",
+    "sendCode": "Pošalji kod",
+    "verify": "Prijavi se",
+    "emailLabel": "E-pošta",
+    "codeTitle": "Provjeri svoju e-poštu"
+  },
+  "song": {
+    "comingSoon": "Izrada videozapisa u aplikaciji stiže uskoro.",
+    "makeVideo": "Napravi karaoke video",
+    "signInToMake": "Prijavi se za izradu ove pjesme",
+    "artistLabel": "Izvođač",
+    "titleLabel": "Naslov pjesme"
+  },
+  "tabs": {
+    "account": "Račun",
+    "find": "Traži",
+    "videos": "Moji videozapisi"
+  },
+  "videos": {
+    "emptyBody": "Ovdje će se pojaviti pjesme koje izradiš.",
+    "emptyTitle": "Još nema videozapisa",
+    "signInPrompt": "Prijavi se kako bi vidio svoje videozapise"
+  }
+}

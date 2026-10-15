@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Přihlásit se",
+    "signOut": "Odhlásit se",
+    "title": "Účet",
+    "signedInAs": "Přihlášen jako {email}",
+    "language": "Jazyk"
+  },
+  "common": {
+    "error": "Něco se pokazilo.",
+    "retry": "Zkusit znovu",
+    "loading": "Načítám…",
+    "cancel": "Zrušit",
+    "continue": "Pokračovat"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Zatím žádné karaoke verze} one {# karaoke verze} few {# karaoke verze} other {# karaoke verzí}}",
+    "makeAnySong": "Nemůžeš to najít? Vytvoř si jakoukoli skladbu",
+    "noResults": "Pro „{query}“ nebyly nalezeny žádné skladby.",
+    "popularHeading": "Oblíbené na karaoke",
+    "searchPlaceholder": "Hledat skladby nebo interprety"
+  },
+  "signIn": {
+    "codeHelp": "Poslali jsme šestimístný kód na {email}.",
+    "codeInvalid": "Zadej šestimístný kód.",
+    "codeLabel": "Kód",
+    "devMockNotice": "Vývojářský režim: použij kód 123456",
+    "emailInvalid": "Zadej platnou e-mailovou adresu.",
+    "emailTitle": "Přihlásit se",
+    "sendCode": "Odeslat kód",
+    "verify": "Přihlásit se",
+    "emailLabel": "E-mail",
+    "codeTitle": "Zkontroluj si e-mail"
+  },
+  "song": {
+    "comingSoon": "Tvorba videí přímo v aplikaci už brzy.",
+    "makeVideo": "Vytvořit karaoke video",
+    "signInToMake": "Pro vytvoření této skladby se přihlas",
+    "artistLabel": "Umělec",
+    "titleLabel": "Název písně"
+  },
+  "tabs": {
+    "account": "Účet",
+    "find": "Hledat",
+    "videos": "Moje videa"
+  },
+  "videos": {
+    "emptyBody": "Tady se zobrazí skladby, které vytvoříš.",
+    "emptyTitle": "Zatím žádná videa",
+    "signInPrompt": "Přihlas se a podívej se na svá videa"
+  }
+}

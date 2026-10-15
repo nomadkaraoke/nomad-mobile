@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "title": "Compte",
+    "signedInAs": "Connecté en tant que {email}",
+    "language": "Langue"
+  },
+  "common": {
+    "error": "Une erreur s'est produite.",
+    "retry": "Réessayer",
+    "loading": "Chargement…",
+    "cancel": "Annuler",
+    "continue": "Continuer"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Pas encore de version karaoké} one {# version karaoké} other {# versions karaoké}}",
+    "makeAnySong": "Tu ne trouves pas ? Crée n'importe quel morceau",
+    "noResults": "Aucun morceau trouvé pour « {query} ».",
+    "popularHeading": "Populaires en karaoké",
+    "searchPlaceholder": "Rechercher des morceaux ou des artistes"
+  },
+  "signIn": {
+    "codeHelp": "Nous avons envoyé un code à 6 chiffres à {email}.",
+    "codeInvalid": "Saisis le code à 6 chiffres.",
+    "codeLabel": "Code",
+    "devMockNotice": "Mode développement : utilise le code 123456",
+    "emailInvalid": "Saisis une adresse e-mail valide.",
+    "emailTitle": "Se connecter",
+    "sendCode": "Envoyer le code",
+    "verify": "Se connecter",
+    "emailLabel": "E-mail",
+    "codeTitle": "Vérifie tes e-mails"
+  },
+  "song": {
+    "comingSoon": "La création de vidéos directement dans l'application arrive bientôt.",
+    "makeVideo": "Créer une vidéo karaoké",
+    "signInToMake": "Connecte-toi pour créer ce morceau",
+    "artistLabel": "Artiste",
+    "titleLabel": "Titre de la chanson"
+  },
+  "tabs": {
+    "account": "Compte",
+    "find": "Rechercher",
+    "videos": "Mes vidéos"
+  },
+  "videos": {
+    "emptyBody": "Les morceaux que tu crées apparaîtront ici.",
+    "emptyTitle": "Pas encore de vidéo",
+    "signInPrompt": "Connecte-toi pour voir tes vidéos"
+  }
+}

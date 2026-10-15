@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Prihlásiť sa",
+    "signOut": "Odhlásiť sa",
+    "title": "Účet",
+    "signedInAs": "Prihlásený ako {email}",
+    "language": "Jazyk"
+  },
+  "common": {
+    "error": "Niečo sa pokazilo.",
+    "retry": "Skúsiť znova",
+    "loading": "Načítavam…",
+    "cancel": "Zrušiť",
+    "continue": "Pokračovať"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Zatiaľ žiadne karaoke verzie} one {# karaoke verzia} few {# karaoke verzie} other {# karaoke verzií}}",
+    "makeAnySong": "Nevieš to nájsť? Vytvor si akúkoľvek skladbu",
+    "noResults": "Pre výraz „{query}“ sa nenašli žiadne skladby.",
+    "popularHeading": "Populárne na karaoke",
+    "searchPlaceholder": "Hľadať skladby alebo interpretov"
+  },
+  "signIn": {
+    "codeHelp": "Na {email} sme ti poslali 6-miestny kód.",
+    "codeInvalid": "Zadaj 6-miestny kód.",
+    "codeLabel": "Kód",
+    "devMockNotice": "Vývojársky režim: použi kód 123456",
+    "emailInvalid": "Zadaj platnú e-mailovú adresu.",
+    "emailTitle": "Prihlásenie",
+    "sendCode": "Odoslať kód",
+    "verify": "Prihlásiť sa",
+    "emailLabel": "E-mail",
+    "codeTitle": "Skontroluj si e-mail"
+  },
+  "song": {
+    "comingSoon": "Už čoskoro budeš môcť vytvárať videá priamo v aplikácii.",
+    "makeVideo": "Vytvoriť karaoke video",
+    "signInToMake": "Prihlás sa a vytvor si túto skladbu",
+    "artistLabel": "Interpret",
+    "titleLabel": "Názov piesne"
+  },
+  "tabs": {
+    "account": "Účet",
+    "find": "Hľadať",
+    "videos": "Moje videá"
+  },
+  "videos": {
+    "emptyBody": "Tu sa zobrazia skladby, ktoré vytvoríš.",
+    "emptyTitle": "Zatiaľ žiadne videá",
+    "signInPrompt": "Prihlás sa a pozri si svoje videá"
+  }
+}

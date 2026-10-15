@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Inicia la sessió",
+    "signOut": "Tanca la sessió",
+    "signedInAs": "Sessió iniciada com a {email}",
+    "title": "Compte",
+    "language": "Idioma"
+  },
+  "common": {
+    "error": "S'ha produït un error.",
+    "retry": "Torna-ho a provar",
+    "loading": "Carregant…",
+    "cancel": "Cancel·la",
+    "continue": "Continua"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Encara no hi ha cap versió de karaoke} one {# versió de karaoke} other {# versions de karaoke}}",
+    "makeAnySong": "No la trobes? Crea qualsevol cançó",
+    "noResults": "No s'ha trobat cap cançó per a “{query}”.",
+    "popularHeading": "Populars per al karaoke",
+    "searchPlaceholder": "Cerca cançons o artistes"
+  },
+  "signIn": {
+    "codeHelp": "Hem enviat un codi de 6 dígits a {email}.",
+    "codeInvalid": "Introdueix el codi de 6 dígits.",
+    "codeLabel": "Codi",
+    "devMockNotice": "Mode de desenvolupament: fes servir el codi 123456",
+    "emailInvalid": "Introdueix una adreça electrònica vàlida.",
+    "emailTitle": "Inicia la sessió",
+    "sendCode": "Envia el codi",
+    "verify": "Inicia la sessió",
+    "emailLabel": "Correu electrònic",
+    "codeTitle": "Comprova el teu correu electrònic"
+  },
+  "song": {
+    "comingSoon": "Molt aviat podràs crear vídeos a l'aplicació.",
+    "makeVideo": "Crea un vídeo de karaoke",
+    "signInToMake": "Inicia la sessió per crear aquesta cançó",
+    "artistLabel": "Artista",
+    "titleLabel": "Títol de la cançó"
+  },
+  "tabs": {
+    "account": "Compte",
+    "find": "Cerca",
+    "videos": "Els meus vídeos"
+  },
+  "videos": {
+    "emptyBody": "Les cançons que creïs apareixeran aquí.",
+    "emptyTitle": "Encara no hi ha vídeos",
+    "signInPrompt": "Inicia la sessió per veure els teus vídeos"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Accedi",
+    "signOut": "Esci",
+    "title": "Account",
+    "signedInAs": "Accesso effettuato come {email}",
+    "language": "Lingua"
+  },
+  "common": {
+    "error": "Qualcosa è andato storto.",
+    "retry": "Riprova",
+    "loading": "Caricamento…",
+    "cancel": "Annulla",
+    "continue": "Continua"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Ancora nessuna versione karaoke} one {# versione karaoke} other {# versioni karaoke}}",
+    "makeAnySong": "Non lo trovi? Crea qualsiasi brano",
+    "noResults": "Nessun brano trovato per “{query}”.",
+    "popularHeading": "I più popolari per il karaoke",
+    "searchPlaceholder": "Cerca brani o artisti"
+  },
+  "signIn": {
+    "codeHelp": "Abbiamo inviato un codice a 6 cifre a {email}.",
+    "codeInvalid": "Inserisci il codice a 6 cifre.",
+    "codeLabel": "Codice",
+    "devMockNotice": "Modalità di sviluppo: usa il codice 123456",
+    "emailInvalid": "Inserisci un indirizzo email valido.",
+    "emailTitle": "Accedi",
+    "sendCode": "Invia codice",
+    "verify": "Accedi",
+    "emailLabel": "Email",
+    "codeTitle": "Controlla la tua email"
+  },
+  "song": {
+    "comingSoon": "La creazione di video direttamente nell'app arriverà presto.",
+    "makeVideo": "Crea video karaoke",
+    "signInToMake": "Accedi per creare questo brano",
+    "artistLabel": "Artista",
+    "titleLabel": "Titolo della canzone"
+  },
+  "tabs": {
+    "account": "Account",
+    "find": "Cerca",
+    "videos": "I miei video"
+  },
+  "videos": {
+    "emptyBody": "I brani che crei appariranno qui.",
+    "emptyTitle": "Ancora nessun video",
+    "signInPrompt": "Accedi per visualizzare i tuoi video"
+  }
+}

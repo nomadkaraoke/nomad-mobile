@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "登录",
+    "signOut": "退出登录",
+    "title": "账户",
+    "signedInAs": "已登录为 {email}",
+    "language": "语言"
+  },
+  "common": {
+    "error": "出错了。",
+    "retry": "重试",
+    "loading": "正在加载…",
+    "cancel": "取消",
+    "continue": "继续"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {暂无卡拉OK版本} one {# 个卡拉OK版本} other {# 个卡拉OK版本}}",
+    "makeAnySong": "没找到？制作任意歌曲",
+    "noResults": "未找到与“{query}”相关的歌曲。",
+    "popularHeading": "热门卡拉OK推荐",
+    "searchPlaceholder": "搜索歌曲或歌手"
+  },
+  "signIn": {
+    "codeHelp": "我们已向 {email} 发送了 6 位数验证码。",
+    "codeInvalid": "请输入 6 位数验证码。",
+    "codeLabel": "验证码",
+    "devMockNotice": "开发模式：请使用验证码 123456",
+    "emailInvalid": "请输入有效的电子邮箱地址。",
+    "emailTitle": "登录",
+    "sendCode": "发送验证码",
+    "verify": "登录",
+    "emailLabel": "邮箱",
+    "codeTitle": "请查收邮件"
+  },
+  "song": {
+    "comingSoon": "应用内视频制作功能即将推出。",
+    "makeVideo": "制作卡拉OK视频",
+    "signInToMake": "登录后即可制作这首歌曲",
+    "artistLabel": "歌手",
+    "titleLabel": "歌曲名称"
+  },
+  "tabs": {
+    "account": "账户",
+    "find": "发现",
+    "videos": "我的视频"
+  },
+  "videos": {
+    "emptyBody": "你制作的歌曲会显示在这里。",
+    "emptyTitle": "暂无视频",
+    "signInPrompt": "登录后查看你的视频"
+  }
+}

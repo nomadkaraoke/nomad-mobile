@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "เข้าสู่ระบบ",
+    "signOut": "ออกจากระบบ",
+    "title": "บัญชี",
+    "signedInAs": "เข้าสู่ระบบด้วย {email}",
+    "language": "ภาษา"
+  },
+  "common": {
+    "error": "เกิดข้อผิดพลาดบางอย่าง",
+    "retry": "ลองอีกครั้ง",
+    "loading": "กำลังโหลด…",
+    "cancel": "ยกเลิก",
+    "continue": "ดำเนินการต่อ"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {ยังไม่มีเวอร์ชันคาราโอเกะ} other {เวอร์ชันคาราโอเกะ # เวอร์ชัน}}",
+    "makeAnySong": "หาไม่เจอใช่ไหม? ทำได้ทุกเพลง",
+    "noResults": "ไม่พบเพลงสำหรับ “{query}”",
+    "popularHeading": "คาราโอเกะยอดนิยม",
+    "searchPlaceholder": "ค้นหาเพลงหรือศิลปิน"
+  },
+  "signIn": {
+    "codeHelp": "เราได้ส่งรหัส 6 หลักไปที่ {email} แล้ว",
+    "codeInvalid": "กรุณากรอกรหัส 6 หลัก",
+    "codeLabel": "รหัส",
+    "devMockNotice": "โหมดการพัฒนา: ใช้รหัส 123456",
+    "emailInvalid": "กรุณากรอกอีเมลที่ถูกต้อง",
+    "emailTitle": "เข้าสู่ระบบ",
+    "sendCode": "ส่งรหัส",
+    "verify": "เข้าสู่ระบบ",
+    "emailLabel": "อีเมล",
+    "codeTitle": "ตรวจสอบอีเมลของคุณ"
+  },
+  "song": {
+    "comingSoon": "การสร้างวิดีโอบนแอปจะเปิดให้ใช้งานเร็ว ๆ นี้",
+    "makeVideo": "ทำวิดีโอคาราโอเกะ",
+    "signInToMake": "เข้าสู่ระบบเพื่อทำเพลงนี้",
+    "artistLabel": "ศิลปิน",
+    "titleLabel": "ชื่อเพลง"
+  },
+  "tabs": {
+    "account": "บัญชี",
+    "find": "ค้นหา",
+    "videos": "วิดีโอของฉัน"
+  },
+  "videos": {
+    "emptyBody": "เพลงที่คุณทำจะแสดงที่นี่",
+    "emptyTitle": "ยังไม่มีวิดีโอ",
+    "signInPrompt": "เข้าสู่ระบบเพื่อดูวิดีโอของคุณ"
+  }
+}

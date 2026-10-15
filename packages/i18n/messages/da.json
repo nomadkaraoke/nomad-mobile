@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Log ind",
+    "signOut": "Log ud",
+    "title": "Konto",
+    "signedInAs": "Logget ind som {email}",
+    "language": "Sprog"
+  },
+  "common": {
+    "error": "Der gik noget galt.",
+    "retry": "Prøv igen",
+    "loading": "Indlæser…",
+    "cancel": "Annuller",
+    "continue": "Fortsæt"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Ingen karaokeversioner endnu} one {# karaokeversion} other {# karaokeversioner}}",
+    "makeAnySong": "Kan du ikke finde den? Lav en hvilken som helst sang",
+    "noResults": "Ingen sange fundet for “{query}”.",
+    "popularHeading": "Populært til karaoke",
+    "searchPlaceholder": "Søg efter sange eller kunstnere"
+  },
+  "signIn": {
+    "codeHelp": "Vi har sendt en 6-cifret kode til {email}.",
+    "codeInvalid": "Indtast den 6-cifrede kode.",
+    "codeLabel": "Kode",
+    "devMockNotice": "Udviklertilstand: brug koden 123456",
+    "emailInvalid": "Indtast en gyldig e-mailadresse.",
+    "emailTitle": "Log ind",
+    "sendCode": "Send kode",
+    "verify": "Log ind",
+    "emailLabel": "E-mail",
+    "codeTitle": "Tjek din e-mail"
+  },
+  "song": {
+    "comingSoon": "Det bliver snart muligt at lave videoer direkte i appen.",
+    "makeVideo": "Lav karaokevideo",
+    "signInToMake": "Log ind for at lave denne sang",
+    "artistLabel": "Kunstner",
+    "titleLabel": "Sangtitel"
+  },
+  "tabs": {
+    "account": "Konto",
+    "find": "Find",
+    "videos": "Mine videoer"
+  },
+  "videos": {
+    "emptyBody": "Sange, du laver, vises her.",
+    "emptyTitle": "Ingen videoer endnu",
+    "signInPrompt": "Log ind for at se dine videoer"
+  }
+}
