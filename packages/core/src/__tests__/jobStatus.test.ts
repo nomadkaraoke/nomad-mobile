@@ -19,5 +19,6 @@ it.each([
   ['prep_complete', 'done'],
   ['failed', 'failed'],
   ['cancelled', 'failed'],
+  ['error', 'failed'],
   ['some_future_status', 'working'],
 ])('%s → %s', (s, phase) => expect(jobPhase(s)).toBe(phase));

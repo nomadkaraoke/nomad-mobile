@@ -12,7 +12,8 @@ const NEEDS_USER = new Set([
   'awaiting_instrumental_selection',
 ]);
 const DONE = new Set(['complete', 'prep_complete']);
-const FAILED = new Set(['failed', 'cancelled']);
+// 'error' is deprecated in gen but job_manager still sets it on some failures.
+const FAILED = new Set(['failed', 'cancelled', 'error']);
 
 export function jobPhase(status: string): JobPhase {
   if (NEEDS_USER.has(status)) return 'needsUser';

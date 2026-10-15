@@ -10,6 +10,9 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   checks:
     runs-on: ubuntu-latest
@@ -32,7 +35,9 @@ jobs:
       - name: OpenAPI drift (generated clients match committed snapshots)
         run: |
           pnpm gen:api:offline
-          git diff --exit-code -- packages/api-gen/src/client packages/api-decide/src/client
+          # porcelain also catches new untracked files that git diff would miss
+          changes="$(git status --porcelain -- packages/api-gen/src/client packages/api-decide/src/client)"
+          if [ -n "$changes" ]; then echo "$changes"; git diff -- packages/api-gen/src/client packages/api-decide/src/client; exit 1; fi
       - name: expo-doctor
         working-directory: apps/mobile
         run: npx --yes expo-doctor
