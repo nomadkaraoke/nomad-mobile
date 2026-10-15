@@ -1,0 +1,43 @@
+# Signed-out "make" → mock email-code sign-in (code 123456) → back on the song → Account shows sign-out.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow: ../common/launch.yaml
+- tapOn:
+    id: "find-search-input"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "song-row-43362"
+    timeout: 20000
+- tapOn:
+    id: "song-row-43362"
+- assertVisible: "Sign in to make this song"
+- tapOn:
+    id: "song-make"
+- tapOn:
+    id: "signin-email"
+- inputText: "maestro@example.com"
+- tapOn:
+    id: "signin-send"
+- extendedWaitUntil:
+    visible:
+      id: "signin-code"
+    timeout: 10000
+- tapOn:
+    id: "signin-code"
+- inputText: "123456"
+- tapOn:
+    id: "signin-verify"
+- extendedWaitUntil:
+    visible:
+      text: "Make karaoke video"
+    timeout: 10000
+- tapOn: "Back"
+- extendedWaitUntil:
+    visible:
+      id: "find-search-input"
+    timeout: 10000
+- tapOn:
+    id: "tab-account"
+- assertVisible:
+    id: "account-signout"

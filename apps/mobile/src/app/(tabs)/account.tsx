@@ -1,4 +1,4 @@
-import { useTranslations } from '@nomad/i18n';
+import { LOCALE_NAMES, useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import { router } from 'expo-router';
 
@@ -10,7 +10,6 @@ export default function AccountScreen() {
   const state = useAuth((s) => s.state);
   const signOut = useAuth((s) => s.signOut);
   const locale = currentLocale();
-  const languageName = new Intl.DisplayNames([locale], { type: 'language' }).of(locale) ?? locale;
 
   return (
     <Screen testID="account-screen">
@@ -28,7 +27,7 @@ export default function AccountScreen() {
         />
       )}
       <Text variant="muted">{t('language')}</Text>
-      <Text testID="account-language">{languageName}</Text>
+      <Text testID="account-language">{LOCALE_NAMES[locale]}</Text>
     </Screen>
   );
 }

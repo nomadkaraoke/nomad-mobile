@@ -3,7 +3,7 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, List, Screen, Text, TextField } from '@nomad/ui';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, View } from 'react-native';
+import { ActivityIndicator, Keyboard, Pressable, View } from 'react-native';
 
 import { useSongSearch } from '../../find/useSongSearch';
 
@@ -13,7 +13,10 @@ function SongRow({ song }: { song: SongResponse }) {
     <Pressable
       testID={`song-row-${song.id}`}
       accessibilityRole="button"
-      onPress={() => router.push({ pathname: '/song/[id]', params: { id: String(song.id) } })}
+      onPress={() => {
+        Keyboard.dismiss();
+        router.push({ pathname: '/song/[id]', params: { id: String(song.id) } });
+      }}
       className="border-b border-border py-3"
     >
       <Text className="font-semibold">{song.title}</Text>

@@ -57,6 +57,8 @@ it('account tab signs out', async () => {
   await useAuth.getState().verify('123456');
   renderRouter(appRoutes(), { initialUrl: '/account' });
   expect(await screen.findByText('Signed in as me@example.com')).toBeTruthy();
+  expect(screen.getByTestId('account-language')).toHaveTextContent('English');
   await act(async () => fireEvent.press(screen.getByTestId('account-signout')));
   expect(await screen.findByTestId('account-signin')).toBeTruthy();
 });
+

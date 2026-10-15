@@ -1,71 +1,49 @@
 # Nomad Karaoke Mobile
 
-React Native mobile app for iOS and Android - a native frontend for the Nomad Karaoke song discovery platform.
+The combined Nomad Karaoke app for iOS and Android. Find a song (karaoke-decide), make a karaoke video of it (karaoke-gen), pay, and watch. Built with Expo SDK 57, React Native and TypeScript.
 
 ## Status
 
-**Phase 1: Foundation complete** - See [Implementation Plan](docs/IMPLEMENTATION-PLAN.md)
+**Phase 0 (foundation), 2026-10-14.** This phase delivers:
 
-Completed:
-- Expo project setup with TypeScript
-- Expo Router navigation (tabs + auth routes)
-- Basic screens: Discover, Search, Playlists, Settings
-- Auth screens: Login, Magic Link Sent
-- API client with typed endpoints
-- Zustand auth store
-- NativeWind (Tailwind CSS) configured
+- the pnpm workspace
+- generated API clients
+- 33-locale i18n
+- UI wrappers
+- CI
+- Maestro smoke flows
+- placeholder screens: live decide search, plus a mock email-code sign-in
 
-## What This App Does
+Phase 1 builds the MVP flow (make → pay → watch). See the [design spec](docs/superpowers/specs/2026-10-14-mobile-phase0-design.md).
 
-- Search 275,000+ karaoke songs
-- Get personalized song recommendations
-- Connect Spotify/Last.fm for music taste analysis
-- Create and manage playlists
-- (Future) Order custom karaoke videos
-
-## Tech Stack
-
-- React Native + Expo
-- TypeScript
-- Expo Router
-- Zustand + React Query
-- NativeWind (Tailwind CSS)
-
-## Getting Started
+## Quick start
 
 ```bash
-# Install dependencies
-npm install
+pnpm install
+pnpm test && pnpm typecheck && pnpm lint
 
-# Start development server
-npx expo start
-
-# Run on iOS
-npx expo run:ios
-
-# Run on Android
-npx expo run:android
-
-# Run tests
-npm test
-
-# Run tests with coverage
-npm run test:coverage
+cd apps/mobile
+npx expo run:ios --device "iPhone 17 Pro"   # or: npx expo run:android
+maestro test ../../maestro/
 ```
 
-## Backend
+In development, sign in with any email and the code `123456`. The real gen email-code endpoints arrive in Phase 1.
 
-This app connects to the Decide API:
-- Production: `https://karaoke-decide-718638054799.us-central1.run.app`
-- API Docs: See `../karaoke-decide/docs/API.md`
+## Layout
 
-## App Store Links
+| Path | What |
+|---|---|
+| `apps/mobile` | Expo Router app |
+| `packages/core` | Pure TS domain logic |
+| `packages/i18n` | Messages for 33 locales, locale resolution, translation scripts |
+| `packages/api-gen`, `packages/api-decide` | OpenAPI-generated clients for karaoke-gen and karaoke-decide |
+| `packages/ui` | Design tokens and primitives; the only place that imports FlashList or Skia |
+| `openapi/` | Committed OpenAPI snapshots |
+| `maestro/` | E2E flows |
 
-- iOS: Coming soon
-- Android: Coming soon
+See [CLAUDE.md](CLAUDE.md) for conventions and commands.
 
-## Related Projects
+## Backends
 
-- [karaoke-decide](../karaoke-decide) - Backend API
-- [karaoke-gen](../karaoke-gen) - Video generation (future integration)
-- [public-website](../public-website) - Marketing website
+- karaoke-gen: `https://api.nomadkaraoke.com`
+- karaoke-decide: `https://decide.nomadkaraoke.com` (`/api/*`)

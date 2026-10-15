@@ -1,4 +1,4 @@
-import { IntlProvider, RTL_LOCALES } from '@nomad/i18n';
+import { installIntlPolyfills, IntlProvider, RTL_LOCALES } from '@nomad/i18n';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect, useState, type ReactNode } from 'react';
 import { I18nManager } from 'react-native';
@@ -8,6 +8,8 @@ import { useAuth } from '../auth/store';
 import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
 
+// Before anything formats: Hermes has no Intl.PluralRules (ICU plurals would throw).
+installIntlPolyfills();
 initObservability();
 setupApiClients();
 

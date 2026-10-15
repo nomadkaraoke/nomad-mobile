@@ -61,3 +61,15 @@ it('repeated signOut (401 storm) touches storage only once', async () => {
   expect(useAuth.getState().state.status).toBe('signedOut');
   expect(SecureStore.deleteItemAsync).toHaveBeenCalledTimes(1);
 });
+
+it('after a reinstall, discards a session the iOS Keychain kept from the previous install', async () => {
+  await useAuth.getState().requestCode('me@example.com');
+  await useAuth.getState().verify('123456');
+  // Reinstall: app storage (MMKV) is wiped, Keychain (SecureStore) is not.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require('react-native-mmkv').__resetMMKV();
+  useAuth.setState({ state: { status: 'signedOut' }, hydrated: false });
+  await useAuth.getState().hydrate();
+  expect(useAuth.getState().state.status).toBe('signedOut');
+  expect(await SecureStore.getItemAsync('nomad.session.v1')).toBeNull();
+});

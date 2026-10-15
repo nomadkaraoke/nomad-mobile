@@ -3,9 +3,13 @@ import * as SecureStore from 'expo-secure-store';
 import { create } from 'zustand';
 
 import { currentLocale } from '../locale';
+import { appStorage } from '../storage';
 import { getAuthApi } from './authApi';
 
 const KEY = 'nomad.session.v1';
+// iOS keeps Keychain items (SecureStore) across uninstall; this app-sandbox marker does not survive,
+// so a session found without it belongs to a previous install and is discarded.
+const INSTALL_MARKER = 'install.marker.v1';
 
 type AuthStore = {
   state: AuthState;
@@ -23,6 +27,10 @@ export const useAuth = create<AuthStore>((set, get) => ({
   hydrated: false,
 
   async hydrate() {
+    if (!appStorage.getBoolean(INSTALL_MARKER)) {
+      await SecureStore.deleteItemAsync(KEY);
+      appStorage.set(INSTALL_MARKER, true);
+    }
     const raw = await SecureStore.getItemAsync(KEY);
     let state: AuthState = { status: 'signedOut' };
     if (raw) {
@@ -50,6 +58,7 @@ export const useAuth = create<AuthStore>((set, get) => ({
     const { token } = await getAuthApi().verifyCode(s.email, code);
     const session: Session = { token, email: s.email, createdAt: Date.now() };
     await SecureStore.setItemAsync(KEY, JSON.stringify(session));
+    appStorage.set(INSTALL_MARKER, true);
     set({ state: { status: 'signedIn', session } });
   },
 

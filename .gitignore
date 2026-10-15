@@ -68,3 +68,4 @@ coverage/
 apps/mobile/ios/
 apps/mobile/android/
 .expo/
+apps/mobile/uniwind-types.d.ts

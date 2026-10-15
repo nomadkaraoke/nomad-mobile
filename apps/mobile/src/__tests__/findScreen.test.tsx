@@ -1,6 +1,7 @@
 import * as decide from '@nomad/api-decide';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
+import { Keyboard } from 'react-native';
 
 import { appRoutes } from '../test-utils/routes';
 
@@ -54,4 +55,12 @@ it('shows a no-results message for an empty search', async () => {
   renderRouter(appRoutes(), { initialUrl: '/find' });
   fireEvent.changeText(await screen.findByTestId('find-search-input'), 'zzzz');
   expect(await screen.findByText('No songs found for “zzzz”.', {}, { timeout: 2000 })).toBeTruthy();
+});
+
+it('dismisses the search keyboard when a result is opened', async () => {
+  const dismiss = jest.spyOn(Keyboard, 'dismiss');
+  renderRouter(appRoutes(), { initialUrl: '/find' });
+  fireEvent.changeText(await screen.findByTestId('find-search-input'), 'hello');
+  fireEvent.press(await screen.findByTestId('song-row-2', {}, { timeout: 2000 }));
+  expect(dismiss).toHaveBeenCalled();
 });
