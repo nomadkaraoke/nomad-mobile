@@ -1,0 +1,44 @@
+# DORMANT: requires an Expo account + EAS project id, Apple/Google store accounts (ask Andrew before creating).
+name: release
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  build_ios:
+    type: build
+    params:
+      platform: ios
+      profile: production
+
+  build_android:
+    type: build
+    params:
+      platform: android
+      profile: production
+
+  # Maestro jobs need a paid EAS plan (Starter+). Enable after deciding on CI E2E (see CLAUDE.md Phase 1 notes).
+  # build_ios_e2e:
+  #   type: build
+  #   params:
+  #     platform: ios
+  #     profile: e2e-test
+  # maestro_ios:
+  #   needs: [build_ios_e2e]
+  #   type: maestro
+  #   params:
+  #     build_id: ${{ needs.build_ios_e2e.outputs.build_id }}
+  #     flow_path: ['../../maestro/flows/smoke-find.yaml', '../../maestro/flows/smoke-signin-gate.yaml']
+
+  submit_ios:
+    needs: [build_ios]
+    type: submit
+    params:
+      build_id: ${{ needs.build_ios.outputs.build_id }}
+
+  submit_android:
+    needs: [build_android]
+    type: submit
+    params:
+      build_id: ${{ needs.build_android.outputs.build_id }}

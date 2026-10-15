@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "title": "Account",
+    "signedInAs": "Angemeldet als {email}",
+    "language": "Sprache"
+  },
+  "common": {
+    "error": "Etwas ist schiefgelaufen.",
+    "retry": "Erneut versuchen",
+    "loading": "Lade…",
+    "cancel": "Abbrechen",
+    "continue": "Weiter"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Noch keine Karaoke-Versionen} one {# Karaoke-Version} other {# Karaoke-Versionen}}",
+    "makeAnySong": "Nicht gefunden? Erstelle jeden Song",
+    "noResults": "Keine Songs für „{query}“ gefunden.",
+    "popularHeading": "Beliebt für Karaoke",
+    "searchPlaceholder": "Songs oder Interpreten suchen"
+  },
+  "signIn": {
+    "codeHelp": "Wir haben einen 6-stelligen Code an {email} gesendet.",
+    "codeInvalid": "Gib den 6-stelligen Code ein.",
+    "codeLabel": "Code",
+    "devMockNotice": "Entwicklungsmodus: Verwende Code 123456",
+    "emailInvalid": "Gib eine gültige E-Mail-Adresse ein.",
+    "emailTitle": "Anmelden",
+    "sendCode": "Code senden",
+    "verify": "Anmelden",
+    "emailLabel": "E-Mail",
+    "codeTitle": "Überprüfe deine E-Mails"
+  },
+  "song": {
+    "comingSoon": "Die Videoerstellung in der App kommt bald.",
+    "makeVideo": "Karaoke-Video erstellen",
+    "signInToMake": "Melde dich an, um diesen Song zu erstellen",
+    "artistLabel": "Künstler",
+    "titleLabel": "Songtitel"
+  },
+  "tabs": {
+    "account": "Account",
+    "find": "Suchen",
+    "videos": "Meine Videos"
+  },
+  "videos": {
+    "emptyBody": "Songs, die du erstellst, erscheinen hier.",
+    "emptyTitle": "Noch keine Videos",
+    "signInPrompt": "Melde dich an, um deine Videos zu sehen"
+  }
+}

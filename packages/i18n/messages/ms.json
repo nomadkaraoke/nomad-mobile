@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Log masuk",
+    "signOut": "Log keluar",
+    "title": "Akaun",
+    "signedInAs": "Log masuk sebagai {email}",
+    "language": "Bahasa"
+  },
+  "common": {
+    "error": "Sesuatu telah berlaku masalah.",
+    "retry": "Cuba lagi",
+    "loading": "Memuatkan…",
+    "cancel": "Batal",
+    "continue": "Teruskan"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Belum ada versi karaoke} other {# versi karaoke}}",
+    "makeAnySong": "Tidak jumpa? Cipta sebarang lagu",
+    "noResults": "Tiada lagu ditemui untuk “{query}”.",
+    "popularHeading": "Popular untuk karaoke",
+    "searchPlaceholder": "Cari lagu atau artis"
+  },
+  "signIn": {
+    "codeHelp": "Kami telah menghantar kod 6 digit ke {email}.",
+    "codeInvalid": "Masukkan kod 6 digit.",
+    "codeLabel": "Kod",
+    "devMockNotice": "Mod pembangunan: gunakan kod 123456",
+    "emailInvalid": "Masukkan alamat e-mel yang sah.",
+    "emailTitle": "Log masuk",
+    "sendCode": "Hantar kod",
+    "verify": "Log masuk",
+    "emailLabel": "E-mel",
+    "codeTitle": "Semak e-mel anda"
+  },
+  "song": {
+    "comingSoon": "Ciri mencipta video dalam aplikasi akan datang tidak lama lagi.",
+    "makeVideo": "Cipta video karaoke",
+    "signInToMake": "Log masuk untuk mencipta lagu ini",
+    "artistLabel": "Artis",
+    "titleLabel": "Tajuk lagu"
+  },
+  "tabs": {
+    "account": "Akaun",
+    "find": "Cari",
+    "videos": "Video Saya"
+  },
+  "videos": {
+    "emptyBody": "Lagu yang anda cipta akan dipaparkan di sini.",
+    "emptyTitle": "Belum ada video",
+    "signInPrompt": "Log masuk untuk melihat video anda"
+  }
+}

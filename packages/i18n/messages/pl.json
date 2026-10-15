@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Zaloguj się",
+    "signOut": "Wyloguj się",
+    "title": "Konto",
+    "signedInAs": "Zalogowano jako {email}",
+    "language": "Język"
+  },
+  "common": {
+    "error": "Coś poszło nie tak.",
+    "retry": "Spróbuj ponownie",
+    "loading": "Ładowanie…",
+    "cancel": "Anuluj",
+    "continue": "Kontynuuj"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Brak wersji karaoke} one {# wersja karaoke} few {# wersje karaoke} many {# wersji karaoke} other {# wersji karaoke}}",
+    "makeAnySong": "Nie możesz znaleźć? Stwórz dowolną piosenkę",
+    "noResults": "Nie znaleziono piosenek dla „{query}”.",
+    "popularHeading": "Popularne w karaoke",
+    "searchPlaceholder": "Szukaj piosenek lub wykonawców"
+  },
+  "signIn": {
+    "codeHelp": "Wysłaliśmy 6-cyfrowy kod na adres {email}.",
+    "codeInvalid": "Wpisz 6-cyfrowy kod.",
+    "codeLabel": "Kod",
+    "devMockNotice": "Tryb deweloperski: użyj kodu 123456",
+    "emailInvalid": "Wpisz prawidłowy adres e-mail.",
+    "emailTitle": "Zaloguj się",
+    "sendCode": "Wyślij kod",
+    "verify": "Zaloguj się",
+    "emailLabel": "E-mail",
+    "codeTitle": "Sprawdź swój e-mail"
+  },
+  "song": {
+    "comingSoon": "Tworzenie filmów w aplikacji będzie dostępne już wkrótce.",
+    "makeVideo": "Stwórz wideo karaoke",
+    "signInToMake": "Zaloguj się, aby stworzyć tę piosenkę",
+    "artistLabel": "Wykonawca",
+    "titleLabel": "Tytuł piosenki"
+  },
+  "tabs": {
+    "account": "Konto",
+    "find": "Szukaj",
+    "videos": "Moje filmy"
+  },
+  "videos": {
+    "emptyBody": "Utworzone przez Ciebie piosenki pojawią się tutaj.",
+    "emptyTitle": "Brak filmów",
+    "signInPrompt": "Zaloguj się, aby zobaczyć swoje filmy"
+  }
+}

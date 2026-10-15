@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Entrar",
+    "signOut": "Sair",
+    "title": "Conta",
+    "signedInAs": "Logado como {email}",
+    "language": "Idioma"
+  },
+  "common": {
+    "error": "Algo deu errado.",
+    "retry": "Tentar novamente",
+    "loading": "Carregando…",
+    "cancel": "Cancelar",
+    "continue": "Continuar"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Nenhuma versão de karaokê ainda} one {# versão de karaokê} other {# versões de karaokê}}",
+    "makeAnySong": "Não encontrou? Crie qualquer música",
+    "noResults": "Nenhuma música encontrada para “{query}”.",
+    "popularHeading": "Populares no karaokê",
+    "searchPlaceholder": "Buscar músicas ou artistas"
+  },
+  "signIn": {
+    "codeHelp": "Enviamos um código de 6 dígitos para {email}.",
+    "codeInvalid": "Digite o código de 6 dígitos.",
+    "codeLabel": "Código",
+    "devMockNotice": "Modo de desenvolvimento: use o código 123456",
+    "emailInvalid": "Digite um e-mail válido.",
+    "emailTitle": "Entrar",
+    "sendCode": "Enviar código",
+    "verify": "Entrar",
+    "emailLabel": "E-mail",
+    "codeTitle": "Verifique seu e-mail"
+  },
+  "song": {
+    "comingSoon": "A criação de vídeos no app estará disponível em breve.",
+    "makeVideo": "Criar vídeo de karaokê",
+    "signInToMake": "Entre para criar esta música",
+    "artistLabel": "Artista",
+    "titleLabel": "Título da música"
+  },
+  "tabs": {
+    "account": "Conta",
+    "find": "Buscar",
+    "videos": "Meus Vídeos"
+  },
+  "videos": {
+    "emptyBody": "As músicas que você criar aparecerão aqui.",
+    "emptyTitle": "Nenhum vídeo ainda",
+    "signInPrompt": "Entre para ver seus vídeos"
+  }
+}

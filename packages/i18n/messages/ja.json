@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "サインイン",
+    "signOut": "サインアウト",
+    "title": "アカウント",
+    "signedInAs": "{email} でログイン中",
+    "language": "言語"
+  },
+  "common": {
+    "error": "問題が発生しました。",
+    "retry": "もう一度試す",
+    "loading": "読み込み中…",
+    "cancel": "キャンセル",
+    "continue": "続ける"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {カラオケバージョンはまだありません} one {#件のカラオケバージョン} other {#件のカラオケバージョン}}",
+    "makeAnySong": "見つかりませんか？ どんな曲でも作成できます",
+    "noResults": "「{query}」に一致する曲は見つかりませんでした。",
+    "popularHeading": "カラオケの人気曲",
+    "searchPlaceholder": "曲名やアーティスト名で検索"
+  },
+  "signIn": {
+    "codeHelp": "{email} に6桁の確認コードを送信しました。",
+    "codeInvalid": "6桁のコードを入力してください。",
+    "codeLabel": "認証コード",
+    "devMockNotice": "開発モード: コード「123456」を使用してください",
+    "emailInvalid": "有効なメールアドレスを入力してください。",
+    "emailTitle": "サインイン",
+    "sendCode": "コードを送信",
+    "verify": "サインイン",
+    "emailLabel": "メールアドレス",
+    "codeTitle": "メールをご確認ください"
+  },
+  "song": {
+    "comingSoon": "アプリ内での動画作成機能は近日公開予定です。",
+    "makeVideo": "カラオケ動画を作成",
+    "signInToMake": "サインインしてこの曲を作成",
+    "artistLabel": "アーティスト",
+    "titleLabel": "曲名"
+  },
+  "tabs": {
+    "account": "アカウント",
+    "find": "さがす",
+    "videos": "マイ動画"
+  },
+  "videos": {
+    "emptyBody": "作成した曲がここに表示されます。",
+    "emptyTitle": "動画はまだありません",
+    "signInPrompt": "サインインして動画を表示"
+  }
+}

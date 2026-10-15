@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "로그인",
+    "signOut": "로그아웃",
+    "title": "계정",
+    "signedInAs": "{email}(으)로 로그인됨",
+    "language": "언어"
+  },
+  "common": {
+    "error": "문제가 발생했습니다.",
+    "retry": "다시 시도",
+    "loading": "불러오는 중…",
+    "cancel": "취소",
+    "continue": "계속"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {노래방 버전 없음} other {노래방 버전 #개}}",
+    "makeAnySong": "원하는 곡이 없나요? 어떤 곡이든 직접 만들어 보세요",
+    "noResults": "“{query}”에 대한 검색 결과가 없습니다.",
+    "popularHeading": "인기 노래방 곡",
+    "searchPlaceholder": "곡 또는 아티스트 검색"
+  },
+  "signIn": {
+    "codeHelp": "{email}(으)로 6자리 인증 코드를 전송했습니다.",
+    "codeInvalid": "6자리 인증 코드를 입력해 주세요.",
+    "codeLabel": "인증 코드",
+    "devMockNotice": "개발 모드: 코드 123456 사용",
+    "emailInvalid": "올바른 이메일 주소를 입력해 주세요.",
+    "emailTitle": "로그인",
+    "sendCode": "인증 코드 전송",
+    "verify": "로그인",
+    "emailLabel": "이메일",
+    "codeTitle": "이메일을 확인해 주세요"
+  },
+  "song": {
+    "comingSoon": "앱 내 비디오 제작 기능이 곧 출시됩니다.",
+    "makeVideo": "노래방 비디오 만들기",
+    "signInToMake": "이 곡을 만들려면 로그인하세요",
+    "artistLabel": "아티스트",
+    "titleLabel": "노래 제목"
+  },
+  "tabs": {
+    "account": "계정",
+    "find": "검색",
+    "videos": "내 비디오"
+  },
+  "videos": {
+    "emptyBody": "만든 곡이 여기에 표시됩니다.",
+    "emptyTitle": "아직 비디오가 없습니다",
+    "signInPrompt": "비디오를 확인하려면 로그인하세요"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Logga in",
+    "signOut": "Logga ut",
+    "title": "Konto",
+    "signedInAs": "Inloggad som {email}",
+    "language": "Språk"
+  },
+  "common": {
+    "error": "Något gick fel.",
+    "retry": "Försök igen",
+    "loading": "Laddar…",
+    "cancel": "Avbryt",
+    "continue": "Fortsätt"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Inga karaokeversioner ännu} one {# karaokeversion} other {# karaokeversioner}}",
+    "makeAnySong": "Hittar du den inte? Skapa vilken låt som helst",
+    "noResults": "Inga låtar hittades för ”{query}”.",
+    "popularHeading": "Populärt för karaoke",
+    "searchPlaceholder": "Sök låtar eller artister"
+  },
+  "signIn": {
+    "codeHelp": "Vi har skickat en 6-siffrig kod till {email}.",
+    "codeInvalid": "Ange den 6-siffriga koden.",
+    "codeLabel": "Kod",
+    "devMockNotice": "Utvecklingsläge: använd koden 123456",
+    "emailInvalid": "Ange en giltig e-postadress.",
+    "emailTitle": "Logga in",
+    "sendCode": "Skicka kod",
+    "verify": "Logga in",
+    "emailLabel": "E-post",
+    "codeTitle": "Kolla din e-post"
+  },
+  "song": {
+    "comingSoon": "Snart kan du skapa videor direkt i appen.",
+    "makeVideo": "Skapa karaokevideo",
+    "signInToMake": "Logga in för att skapa den här låten",
+    "artistLabel": "Artist",
+    "titleLabel": "Låttitel"
+  },
+  "tabs": {
+    "account": "Konto",
+    "find": "Hitta",
+    "videos": "Mina videor"
+  },
+  "videos": {
+    "emptyBody": "Låtar du skapar kommer att visas här.",
+    "emptyTitle": "Inga videor ännu",
+    "signInPrompt": "Logga in för att se dina videor"
+  }
+}

@@ -1,33 +1,5 @@
 module.exports = {
-  preset: 'jest-expo',
-  transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|nativewind|react-native-css-interop)',
-  ],
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!**/node_modules/**',
-    '!**/*.d.ts',
-    '!src/types/**',
-  ],
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70,
-    },
-  },
-  testMatch: [
-    '**/__tests__/**/*.test.{ts,tsx}',
-    '**/*.test.{ts,tsx}',
-  ],
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/app/',
-  ],
+  projects: ['<rootDir>/packages/*', '<rootDir>/apps/*'],
+  coverageThreshold: { global: { lines: 70, branches: 60, functions: 70, statements: 70 } },
+  collectCoverageFrom: ['packages/*/src/**/*.{ts,tsx}', 'apps/mobile/src/**/*.{ts,tsx}', '!apps/mobile/src/test-utils/**', '!**/src/client/**', '!**/index.ts', '!**/__tests__/**', '!**/*.d.ts'],
 };

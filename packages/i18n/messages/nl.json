@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Inloggen",
+    "signOut": "Uitloggen",
+    "title": "Account",
+    "signedInAs": "Ingelogd als {email}",
+    "language": "Taal"
+  },
+  "common": {
+    "error": "Er is iets misgegaan.",
+    "retry": "Probeer opnieuw",
+    "loading": "Laden…",
+    "cancel": "Annuleren",
+    "continue": "Doorgaan"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Nog geen karaokeversies} one {# karaokeversie} other {# karaokeversies}}",
+    "makeAnySong": "Niet gevonden? Maak elk nummer",
+    "noResults": "Geen nummers gevonden voor “{query}”.",
+    "popularHeading": "Populair voor karaoke",
+    "searchPlaceholder": "Zoek op nummers of artiesten"
+  },
+  "signIn": {
+    "codeHelp": "We hebben een 6-cijferige code gestuurd naar {email}.",
+    "codeInvalid": "Vul de 6-cijferige code in.",
+    "codeLabel": "Code",
+    "devMockNotice": "Ontwikkelingsmodus: gebruik code 123456",
+    "emailInvalid": "Vul een geldig e-mailadres in.",
+    "emailTitle": "Inloggen",
+    "sendCode": "Code versturen",
+    "verify": "Inloggen",
+    "emailLabel": "E-mail",
+    "codeTitle": "Check je e-mail"
+  },
+  "song": {
+    "comingSoon": "Binnenkort kun je video's maken in de app.",
+    "makeVideo": "Karaokevideo maken",
+    "signInToMake": "Log in om dit nummer te maken",
+    "artistLabel": "Artiest",
+    "titleLabel": "Titel van het nummer"
+  },
+  "tabs": {
+    "account": "Account",
+    "find": "Zoeken",
+    "videos": "Mijn video's"
+  },
+  "videos": {
+    "emptyBody": "Nummers die je maakt verschijnen hier.",
+    "emptyTitle": "Nog geen video's",
+    "signInPrompt": "Log in om je video's te bekijken"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Đăng nhập",
+    "signOut": "Đăng xuất",
+    "title": "Tài khoản",
+    "signedInAs": "Đã đăng nhập bằng {email}",
+    "language": "Ngôn ngữ"
+  },
+  "common": {
+    "error": "Đã có lỗi xảy ra.",
+    "retry": "Thử lại",
+    "loading": "Đang tải…",
+    "cancel": "Hủy",
+    "continue": "Tiếp tục"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Chưa có bản karaoke nào} other {# bản karaoke}}",
+    "makeAnySong": "Không tìm thấy? Tạo bài hát bất kỳ",
+    "noResults": "Không tìm thấy bài hát nào cho “{query}”.",
+    "popularHeading": "Bài hát karaoke phổ biến",
+    "searchPlaceholder": "Tìm kiếm bài hát hoặc nghệ sĩ"
+  },
+  "signIn": {
+    "codeHelp": "Chúng tôi đã gửi mã gồm 6 chữ số đến {email}.",
+    "codeInvalid": "Vui lòng nhập mã gồm 6 chữ số.",
+    "codeLabel": "Mã xác nhận",
+    "devMockNotice": "Chế độ phát triển: dùng mã 123456",
+    "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ.",
+    "emailTitle": "Đăng nhập",
+    "sendCode": "Gửi mã",
+    "verify": "Đăng nhập",
+    "emailLabel": "Email",
+    "codeTitle": "Kiểm tra email của bạn"
+  },
+  "song": {
+    "comingSoon": "Tính năng tạo video trực tiếp trong ứng dụng sẽ sớm ra mắt.",
+    "makeVideo": "Tạo video karaoke",
+    "signInToMake": "Đăng nhập để tạo bài hát này",
+    "artistLabel": "Nghệ sĩ",
+    "titleLabel": "Tên bài hát"
+  },
+  "tabs": {
+    "account": "Tài khoản",
+    "find": "Tìm kiếm",
+    "videos": "Video của tôi"
+  },
+  "videos": {
+    "emptyBody": "Các bài hát bạn tạo sẽ xuất hiện tại đây.",
+    "emptyTitle": "Chưa có video nào",
+    "signInPrompt": "Đăng nhập để xem video của bạn"
+  }
+}

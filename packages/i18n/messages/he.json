@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "התחברות",
+    "signOut": "התנתקות",
+    "title": "חשבון",
+    "signedInAs": "מחוברים בתור {email}",
+    "language": "שפה"
+  },
+  "common": {
+    "error": "משהו השתבש.",
+    "retry": "נסה שוב",
+    "loading": "טוען…",
+    "cancel": "ביטול",
+    "continue": "המשך"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {אין עדיין גרסאות קריוקי} one {גרסת קריוקי אחת} two {שתי גרסאות קריוקי} other {# גרסאות קריוקי}}",
+    "makeAnySong": "לא מצאתם? צרו כל שיר שתרצו",
+    "noResults": "לא נמצאו שירים עבור “{query}”.",
+    "popularHeading": "פופולרי לקריוקי",
+    "searchPlaceholder": "חיפוש שירים או אמנים"
+  },
+  "signIn": {
+    "codeHelp": "שלחנו קוד בן 6 ספרות לכתובת {email}.",
+    "codeInvalid": "נא להזין את הקוד בן 6 הספרות.",
+    "codeLabel": "קוד",
+    "devMockNotice": "מצב פיתוח: יש להשתמש בקוד 123456",
+    "emailInvalid": "נא להזין כתובת אימייל תקינה.",
+    "emailTitle": "התחברות",
+    "sendCode": "שליחת קוד",
+    "verify": "התחברות",
+    "emailLabel": "אימייל",
+    "codeTitle": "בדקו את המייל שלכם"
+  },
+  "song": {
+    "comingSoon": "יצירת סרטונים באפליקציה תהיה זמינה בקרוב.",
+    "makeVideo": "יצירת סרטון קריוקי",
+    "signInToMake": "יש להתחבר כדי ליצור את השיר הזה",
+    "artistLabel": "אומן",
+    "titleLabel": "שם השיר"
+  },
+  "tabs": {
+    "account": "חשבון",
+    "find": "חיפוש",
+    "videos": "הסרטונים שלי"
+  },
+  "videos": {
+    "emptyBody": "שירים שתכינו יופיעו כאן.",
+    "emptyTitle": "אין עדיין סרטונים",
+    "signInPrompt": "יש להתחבר כדי לראות את הסרטונים שלכם"
+  }
+}

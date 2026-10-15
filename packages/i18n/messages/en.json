@@ -1,0 +1,52 @@
+{
+  "common": {
+    "retry": "Try again",
+    "loading": "Loading…",
+    "error": "Something went wrong.",
+    "cancel": "Cancel",
+    "continue": "Continue"
+  },
+  "tabs": {
+    "find": "Find",
+    "videos": "My Videos",
+    "account": "Account"
+  },
+  "find": {
+    "searchPlaceholder": "Search songs or artists",
+    "popularHeading": "Popular for karaoke",
+    "noResults": "No songs found for “{query}”.",
+    "makeAnySong": "Can't find it? Make any song",
+    "karaokeVersions": "{count, plural, =0 {No karaoke versions yet} one {# karaoke version} other {# karaoke versions}}"
+  },
+  "song": {
+    "makeVideo": "Make karaoke video",
+    "signInToMake": "Sign in to make this song",
+    "artistLabel": "Artist",
+    "titleLabel": "Song title",
+    "comingSoon": "Making videos in the app is coming soon."
+  },
+  "signIn": {
+    "emailTitle": "Sign in",
+    "emailLabel": "Email",
+    "emailInvalid": "Enter a valid email address.",
+    "sendCode": "Send code",
+    "codeTitle": "Check your email",
+    "codeHelp": "We sent a 6-digit code to {email}.",
+    "codeLabel": "Code",
+    "codeInvalid": "Enter the 6-digit code.",
+    "verify": "Sign in",
+    "devMockNotice": "Development mode: use code 123456"
+  },
+  "videos": {
+    "emptyTitle": "No videos yet",
+    "emptyBody": "Songs you make will appear here.",
+    "signInPrompt": "Sign in to see your videos"
+  },
+  "account": {
+    "title": "Account",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "signedInAs": "Signed in as {email}",
+    "language": "Language"
+  }
+}

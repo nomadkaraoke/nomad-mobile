@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Kirjaudu sisään",
+    "signOut": "Kirjaudu ulos",
+    "title": "Tili",
+    "signedInAs": "Kirjautuneena: {email}",
+    "language": "Kieli"
+  },
+  "common": {
+    "error": "Jokin meni pieleen.",
+    "retry": "Yritä uudelleen",
+    "loading": "Ladataan…",
+    "cancel": "Peruuta",
+    "continue": "Jatka"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Ei vielä karaokeversioita} one {# karaokeversio} other {# karaokeversiota}}",
+    "makeAnySong": "Etkö löydä etsimääsi? Tee mikä tahansa kappale",
+    "noResults": "Haulla ”{query}” ei löytynyt kappaleita.",
+    "popularHeading": "Suosittuja karaokekappaleita",
+    "searchPlaceholder": "Hae kappaleita tai esittäjiä"
+  },
+  "signIn": {
+    "codeHelp": "Lähetimme 6-numeroisen koodin osoitteeseen {email}.",
+    "codeInvalid": "Syötä 6-numeroinen koodi.",
+    "codeLabel": "Koodi",
+    "devMockNotice": "Kehitystila: käytä koodia 123456",
+    "emailInvalid": "Syötä kelvollinen sähköpostiosoite.",
+    "emailTitle": "Kirjaudu sisään",
+    "sendCode": "Lähetä koodi",
+    "verify": "Kirjaudu sisään",
+    "emailLabel": "Sähköposti",
+    "codeTitle": "Tarkista sähköpostisi"
+  },
+  "song": {
+    "comingSoon": "Videoiden tekeminen suoraan sovelluksessa on tulossa pian.",
+    "makeVideo": "Tee karaokevideo",
+    "signInToMake": "Kirjaudu sisään tehdäksesi tämän kappaleen",
+    "artistLabel": "Artisti",
+    "titleLabel": "Kappaleen nimi"
+  },
+  "tabs": {
+    "account": "Tili",
+    "find": "Haku",
+    "videos": "Omat videot"
+  },
+  "videos": {
+    "emptyBody": "Tekemäsi kappaleet näkyvät täällä.",
+    "emptyTitle": "Ei vielä videoita",
+    "signInPrompt": "Kirjaudu sisään nähdäksesi videosi"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "account": {
+    "signIn": "Conectează-te",
+    "signOut": "Deconectează-te",
+    "title": "Cont",
+    "signedInAs": "Autentificat ca {email}",
+    "language": "Limbă"
+  },
+  "common": {
+    "error": "Ceva nu a funcționat.",
+    "retry": "Încearcă din nou",
+    "loading": "Se încarcă…",
+    "cancel": "Anulează",
+    "continue": "Continuă"
+  },
+  "find": {
+    "karaokeVersions": "{count, plural, =0 {Nicio versiune karaoke încă} one {# versiune karaoke} few {# versiuni karaoke} other {# de versiuni karaoke}}",
+    "makeAnySong": "Nu găsești piesa? Creează orice melodie",
+    "noResults": "Nu am găsit nicio melodie pentru „{query}”.",
+    "popularHeading": "Populare pentru karaoke",
+    "searchPlaceholder": "Caută melodii sau artiști"
+  },
+  "signIn": {
+    "codeHelp": "Am trimis un cod din 6 cifre la {email}.",
+    "codeInvalid": "Introdu codul din 6 cifre.",
+    "codeLabel": "Cod",
+    "devMockNotice": "Mod de dezvoltare: folosește codul 123456",
+    "emailInvalid": "Introdu o adresă de email validă.",
+    "emailTitle": "Conectare",
+    "sendCode": "Trimite codul",
+    "verify": "Conectează-te",
+    "emailLabel": "Email",
+    "codeTitle": "Verifică-ți emailul"
+  },
+  "song": {
+    "comingSoon": "Crearea videoclipurilor în aplicație va fi disponibilă în curând.",
+    "makeVideo": "Creează un video karaoke",
+    "signInToMake": "Conectează-te pentru a crea această melodie",
+    "artistLabel": "Artist",
+    "titleLabel": "Titlul melodiei"
+  },
+  "tabs": {
+    "account": "Cont",
+    "find": "Caută",
+    "videos": "Videoclipurile mele"
+  },
+  "videos": {
+    "emptyBody": "Melodiile pe care le creezi vor apărea aici.",
+    "emptyTitle": "Niciun videoclip încă",
+    "signInPrompt": "Conectează-te pentru a-ți vedea videoclipurile"
+  }
+}

@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test:coverage
+      - name: i18n completeness (hard fail)
+        run: pnpm i18n:check
+      - name: OpenAPI drift (generated clients match committed snapshots)
+        run: |
+          pnpm gen:api:offline
+          # porcelain also catches new untracked files that git diff would miss
+          changes="$(git status --porcelain -- packages/api-gen/src/client packages/api-decide/src/client)"
+          if [ -n "$changes" ]; then echo "$changes"; git diff -- packages/api-gen/src/client packages/api-decide/src/client; exit 1; fi
+      - name: expo-doctor
+        working-directory: apps/mobile
+        run: npx --yes expo-doctor

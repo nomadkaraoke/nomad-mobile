@@ -1,0 +1,27 @@
+# Signed-out launch. clearKeychain drops the SecureStore session (MMKV keeps the install marker, so the
+# app treats this as the same install, signed out). We avoid clearState: on a dev-client build it wipes the
+# remembered Metro server, and reconnecting triggers an iOS "Open in …?" SpringBoard prompt Maestro can't see.
+# The conditional steps only matter for a never-launched dev build; release/E2E builds skip them.
+appId: com.nomadkaraoke.mobile
+---
+- stopApp
+- launchApp:
+    clearKeychain: true
+- runFlow:
+    when:
+      visible: "DEVELOPMENT SERVERS"
+    commands:
+      - tapOn:
+          text: "http://.*:8081"
+- extendedWaitUntil:
+    visible: "Runtime version.*|Search songs or artists"
+    timeout: 60000
+- runFlow:
+    when:
+      visible: "Runtime version.*"
+    commands:
+      - tapOn: "Close"
+- extendedWaitUntil:
+    visible:
+      id: "find-search-input"
+    timeout: 60000
