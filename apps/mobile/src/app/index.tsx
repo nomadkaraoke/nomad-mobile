@@ -1,5 +1,5 @@
-import { View } from 'react-native';
+import { Redirect } from 'expo-router';
 
 export default function Index() {
-  return <View testID="app-root" style={{ flex: 1, backgroundColor: '#0f0f0f' }} />;
+  return <Redirect href="/find" />;
 }

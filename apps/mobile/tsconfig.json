@@ -10,7 +10,10 @@
         "./assets/*"
       ]
     },
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "types": [
+      "jest"
+    ]
   },
   "include": [
     "**/*.ts",
