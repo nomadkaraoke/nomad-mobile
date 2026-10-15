@@ -3,6 +3,7 @@ packages:
   - packages/*
 allowBuilds:
   '@parcel/watcher': true
+  '@shopify/react-native-skia': true
   unrs-resolver: true
 minimumReleaseAgeExclude:
   - '@expo/cli@57.0.30'

@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+@import 'uniwind';
+@source "../../packages/ui/src";
+
+/* Mirrors karaoke-gen/frontend/app/globals.css brand tokens (and packages/ui/src/tokens.ts). */
+@theme {
+  --color-bg: #0f0f0f;
+  --color-card: #1a1a1a;
+  --color-border: #2a2a2a;
+  --color-text: #e5e5e5;
+  --color-muted: #888888;
+  --color-primary: #ff7acc;
+  --color-primary-fg: #ffffff;
+  --color-gold: #ffdf6b;
+  --color-purple: #8b5cf6;
+  --color-danger: #ef4444;
+  --color-success: #22c55e;
+  --color-waveform: #0d1117;
+}
