@@ -6,7 +6,9 @@ import { I18nManager } from 'react-native';
 import { setupApiClients } from '../api/setup';
 import { useAuth } from '../auth/store';
 import { currentLocale } from '../locale';
+import { initObservability } from '../observability';
 
+initObservability();
 setupApiClients();
 
 /** i18n + server-state providers; renders nothing until the stored session has been read. */
