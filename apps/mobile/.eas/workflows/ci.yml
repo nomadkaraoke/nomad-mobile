@@ -1,0 +1,15 @@
+# DORMANT: requires an Expo account + EAS project id (ask Andrew before creating).
+# Repo-level checks (lint, tsc, jest, i18n, OpenAPI drift) run in GitHub Actions (.github/workflows/ci.yml);
+# this workflow adds a preview OTA update per PR once EAS Update is configured.
+name: ci
+
+on:
+  pull_request:
+    branches: ['*']
+
+jobs:
+  publish_preview_update:
+    type: update
+    environment: preview
+    params:
+      branch: pr-${{ github.event.pull_request.number }}
