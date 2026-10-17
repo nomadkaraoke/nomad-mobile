@@ -1,8 +1,8 @@
 # Claude Code Instructions for Nomad Mobile
 
-The combined Nomad Karaoke iOS/Android app: decide catalog search → gen "make a karaoke video" → pay → watch. kjbox singer and native lyrics editing come later.
+The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke project (decide recommendations, gen karaoke videos, kjbox nights, a singer's own history). **Read [docs/VISION.md](docs/VISION.md) first**: it has the four use cases, the navigation, the release bar (no publishing until all four have a first usable version) and the phase roadmap.
 
-**Status:** Phase 0 foundation (2026-10-14). The workspace, packages, CI and agent tooling are in place. The screens are placeholders, and sign-in uses a **mock** email-code API. Phase 1 builds the MVP flow.
+**Status:** Phase 0 foundation (2026-10-14). The workspace, packages, CI and agent tooling are in place. The screens are placeholders, and sign-in uses a **mock** email-code API. Phase 1 ("Make it": real sign-in → make → pay → watch, against the gen local stack) is next.
 
 - Spec: [docs/superpowers/specs/2026-10-14-mobile-phase0-design.md](docs/superpowers/specs/2026-10-14-mobile-phase0-design.md) (MVP flow §2, foundation §3, shared auth + payments §4)
 - Phase 0 plan: [docs/superpowers/plans/2026-10-14-mobile-phase0-foundation.md](docs/superpowers/plans/2026-10-14-mobile-phase0-foundation.md)
@@ -87,7 +87,7 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - Sentry Expo config plugin (org/project, source maps, dSYMs) is added together with the Sentry account.
 - EAS: `eas.json` and `.eas/workflows/*` are dormant. `runtimeVersion` / `updates.url` need an EAS project id.
 - Maestro in CI: EAS Workflows `type: maestro` (paid plan) or macOS GitHub runners. This is still a decision to make.
-- Decide recommendations and personal song features: backlog Frog #13 (needs spec §4.2 `exchange-gen-session`).
+- Decide recommendations and personal song features: Phase 3 "Discover" in docs/VISION.md (needs spec §4.2 `exchange-gen-session`).
 
 ## App identity
 
