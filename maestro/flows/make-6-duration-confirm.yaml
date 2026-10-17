@@ -1,0 +1,55 @@
+# 6. Duration confirm (spec §8.6): a 15-minute track → Confirm cost → Confirm → the job carries on.
+appId: com.nomadkaraoke.mobile
+name: make-6-duration-confirm
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: duration
+      CREDITS: "4"
+      USER_CONFIG: '{"audio_duration_seconds":900}'
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/make-any.yaml
+    env:
+      ARTIST: "Fake Artist"
+      TITLE: "Long Song"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "make-pick"
+    timeout: 30000
+- tapOn:
+    id: "make-submit"
+- extendedWaitUntil:
+    visible:
+      id: "job-confirm-.*"
+    timeout: 90000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-duration
+- tapOn:
+    id: "job-confirm-.*"
+- extendedWaitUntil:
+    visible:
+      id: "duration-confirm"
+    timeout: 20000
+- assertVisible:
+    id: "duration-body"
+    text: ".*15:00.*2 credits in total \\(1 more\\).*"
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/duration-sheet
+- tapOn:
+    id: "duration-confirm"
+- extendedWaitUntil:
+    visible:
+      id: "make-list"
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: "job-ready-.*"
+    timeout: 120000
+- assertNotVisible:
+    id: "job-confirm-.*"

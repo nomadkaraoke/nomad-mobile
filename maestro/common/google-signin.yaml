@@ -1,0 +1,12 @@
+# The sign-in sheet's fake Google path (EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 sends fake:<email>). Env: EMAIL.
+appId: com.nomadkaraoke.mobile
+---
+- extendedWaitUntil:
+    visible:
+      id: "signin-sheet"
+    timeout: 10000
+- tapOn:
+    id: "signin-fake-email"
+- inputText: ${EMAIL}
+- tapOn:
+    id: "signin-google"

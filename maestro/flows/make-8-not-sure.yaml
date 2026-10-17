@@ -1,0 +1,44 @@
+# 8. "Not sure" audio pick (spec §8.8): search_confidence unsure (tier 3) → the list → choose one → job.
+appId: com.nomadkaraoke.mobile
+name: make-8-not-sure
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: unsure
+      CREDITS: "2"
+      GLOBAL_CONFIG: '{"search_confidence":"unsure"}'
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/make-any.yaml
+    env:
+      ARTIST: "Fake Artist"
+      TITLE: "Unsure Song"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "make-source-.*"
+    timeout: 30000
+- assertNotVisible:
+    id: "make-pick"
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-not-sure-list
+- tapOn:
+    id: "make-source-.*"
+    index: 0
+- tapOn:
+    id: "make-submit"
+- extendedWaitUntil:
+    visible:
+      id: "job-card-.*"
+    timeout: 20000
+# search_confidence is global: put it back for the flows after this one.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: config
+      STACK: ${STACK}

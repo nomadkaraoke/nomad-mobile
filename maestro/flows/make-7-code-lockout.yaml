@@ -1,0 +1,63 @@
+# 7. Code lockout (spec §8.7): 5 wrong codes → locked → Send a new code → the new code works.
+appId: com.nomadkaraoke.mobile
+name: make-7-code-lockout
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: lockout
+      CREDITS: "2"
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/make-any.yaml
+    env:
+      ARTIST: "Fake Artist"
+      TITLE: "Lockout Song"
+- extendedWaitUntil:
+    visible:
+      id: "signin-sheet"
+    timeout: 10000
+- tapOn:
+    id: "signin-email-start"
+- tapOn:
+    id: "signin-email"
+- inputText: ${output.email}
+- tapOn:
+    id: "signin-send"
+- extendedWaitUntil:
+    visible:
+      id: "signin-code-screen"
+    timeout: 15000
+# Each rejected code clears the boxes, so the next six digits are a fresh try.
+- repeat:
+    times: 5
+    commands:
+      - tapOn:
+          id: "signin-code"
+      - inputText: "000000"
+      - extendedWaitUntil:
+          visible:
+            id: "signin-error"
+          timeout: 15000
+- assertVisible: "Too many tries.*"
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/signin-code-locked
+- tapOn:
+    id: "signin-resend"
+- extendedWaitUntil:
+    visible: "We sent a new code.*"
+    timeout: 15000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: code
+      STACK: ${STACK}
+      EMAIL: ${output.email}
+- tapOn:
+    id: "signin-code"
+- inputText: ${output.code}
+- extendedWaitUntil:
+    visible:
+      id: "make-pick"
+    timeout: 30000

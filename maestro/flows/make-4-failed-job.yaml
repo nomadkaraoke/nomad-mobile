@@ -1,0 +1,39 @@
+# 4. Failed job (spec §8.4): fail_at lyrics → failed card with Try again.
+appId: com.nomadkaraoke.mobile
+name: make-4-failed-job
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: failed
+      CREDITS: "2"
+      USER_CONFIG: '{"fail_at":"lyrics"}'
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/make-any.yaml
+    env:
+      ARTIST: "Fake Artist"
+      TITLE: "Failing Song"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "make-pick"
+    timeout: 30000
+- tapOn:
+    id: "make-submit"
+- extendedWaitUntil:
+    visible:
+      id: "job-retry-.*"
+    timeout: 90000
+- assertVisible: "Something went wrong making this one."
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-failed
+- tapOn:
+    id: "job-error-.*"
+- assertVisible:
+    id: "job-error-text-.*"
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-failed-details

@@ -1,15 +1,38 @@
-# Signed-out launch. clearKeychain drops the SecureStore session (MMKV keeps the install marker, so the
-# app treats this as the same install, signed out). We avoid clearState: on a dev-client build it wipes the
-# remembered Metro server, and reconnecting triggers an iOS "Open in …?" SpringBoard prompt Maestro can't see.
-# The conditional steps only matter for a never-launched dev build; release/E2E builds skip them.
+# Signed-out launch.
+# iOS: clearKeychain drops the SecureStore session (MMKV keeps the install marker, so the app treats this as
+# the same install, signed out). We avoid clearState there: on a dev-client build it wipes the remembered Metro
+# server, and reconnecting triggers an iOS "Open in …?" SpringBoard prompt Maestro can't see.
+# Android: clearKeychain is a no-op (the session would survive), so clearState, which also forgets the Metro
+# server; typing it into the launcher reconnects. Metro goes through the emulator's host alias 10.0.2.2, so it
+# doesn't depend on an adb reverse rule (those vanish whenever the emulator's adb transport drops).
+# The conditional steps only matter for a dev build that has no server yet; release/E2E builds skip them.
 appId: com.nomadkaraoke.mobile
 ---
 - stopApp
-- launchApp:
-    clearKeychain: true
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - launchApp:
+          clearKeychain: true
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - launchApp:
+          clearState: true
+      - runFlow:
+          when:
+            visible: "Connect"
+          commands:
+            - tapOn: "http://"
+            - eraseText
+            - inputText: "http://10.0.2.2:8081"
+            - tapOn: "Connect"
 - runFlow:
     when:
       visible: "DEVELOPMENT SERVERS"
+      platform: iOS
     commands:
       - tapOn:
           text: "http://.*:8081"

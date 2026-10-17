@@ -1,0 +1,24 @@
+# Gets past the system UI in front of an in-app browser.
+# iOS asks before an auth session opens ("… Wants to Use … to Sign In").
+# Android: a fresh emulator's Chrome shows its first-run screen inside the Custom Tab
+# (scripts/e2e-local.sh also turns it off with chrome-command-line, so this is a fallback).
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    when:
+      visible: "Continue"
+      platform: iOS
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Use without an account"
+      platform: Android
+    commands:
+      - tapOn: "Use without an account"
+- runFlow:
+    when:
+      visible: "No thanks|No Thanks"
+      platform: Android
+    commands:
+      - tapOn: "No thanks|No Thanks"

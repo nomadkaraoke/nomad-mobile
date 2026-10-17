@@ -4,17 +4,14 @@ The combined Nomad Karaoke app for iOS and Android. Find a song (karaoke-decide)
 
 ## Status
 
-**Phase 0 (foundation), 2026-10-14.** This phase delivers:
+**Phase 1 ("Make it"), 2026-10-17.** Real gen sign-in (email code, Google, Apple behind a flag), the make flow
+(gen picks the audio, you confirm), credits through Stripe checkout that returns to the app, the Make tab with
+progress and needs-you actions, and the ready screen (YouTube link, Copy, Share, MP4). Nine Maestro flows run it
+end to end on iOS and Android against the gen local stack.
 
-- the pnpm workspace
-- generated API clients
-- 33-locale i18n
-- UI wrappers
-- CI
-- Maestro smoke flows
-- placeholder screens: live decide search, plus a mock email-code sign-in
-
-The vision, release bar and phase roadmap are in [docs/VISION.md](docs/VISION.md). Phase 1 (make → pay → watch) is next. See also the [Phase 0 design spec](docs/superpowers/specs/2026-10-14-mobile-phase0-design.md).
+Phase 0 (2026-10-14) laid the foundation: the pnpm workspace, generated API clients, 33-locale i18n, UI wrappers
+and CI. The vision, release bar and phase roadmap are in [docs/VISION.md](docs/VISION.md); Phase 1's design is
+[docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md](docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md).
 
 ## Quick start
 
@@ -24,10 +21,14 @@ pnpm test && pnpm typecheck && pnpm lint
 
 cd apps/mobile
 npx expo run:ios --device "iPhone 17 Pro"   # or: npx expo run:android
-maestro test ../../maestro/
+cd ../..
+scripts/e2e-local.sh --platform ios         # or: --platform android
 ```
 
-In development, sign in with any email and the code `123456`. The real gen email-code endpoints arrive in Phase 1.
+The app talks to prod gen by default. For development and E2E, point it at the
+[gen local stack](../karaoke-gen/docs/TESTING.md) (real backend, fake workers): `scripts/e2e-local.sh` starts the
+stack and a Metro with `EXPO_PUBLIC_GEN_API_URL=http://127.0.0.1:8010` and `EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1`.
+Sign-in codes come from the stack's `/api/test/emails`. See CLAUDE.md § E2E.
 
 ## Layout
 
@@ -39,7 +40,8 @@ In development, sign in with any email and the code `123456`. The real gen email
 | `packages/api-gen`, `packages/api-decide` | OpenAPI-generated clients for karaoke-gen and karaoke-decide |
 | `packages/ui` | Design tokens and primitives; the only place that imports FlashList or Skia |
 | `openapi/` | Committed OpenAPI snapshots |
-| `maestro/` | E2E flows |
+| `maestro/` | E2E flows (`flows/`), shared steps (`common/`), local-stack helpers (`scripts/stack.js`) |
+| `docs/screenshots/phase1/` | Screenshots the flows capture, per platform |
 
 See [CLAUDE.md](CLAUDE.md) for conventions and commands.
 

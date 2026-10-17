@@ -1,0 +1,114 @@
+# 1. Happy path (spec §8.1): 0 credits → real decide search → song → Make it → email code sign-in →
+#    credits → fake checkout Pay → back to Make it → job → ready → YouTube block → Copy link.
+appId: com.nomadkaraoke.mobile
+name: make-1-happy-path
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: happy
+      CREDITS: "0"
+- runFlow: ../common/launch.yaml
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/discover-popular
+# Real search (decide), as in the Discover smoke flow.
+- tapOn:
+    id: "discover-search-input"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible: ".*Lionel Richie.*"
+    timeout: 30000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/discover-search-results
+- tapOn: ".*Lionel Richie.*"
+- extendedWaitUntil:
+    visible:
+      id: "song-badge"
+    timeout: 20000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/song-page
+- tapOn:
+    id: "song-make"
+# Sign-in sheet → email → code from the stack's captured outbox.
+- extendedWaitUntil:
+    visible:
+      id: "signin-sheet"
+    timeout: 10000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/signin-sheet
+- tapOn:
+    id: "signin-email-start"
+- extendedWaitUntil:
+    visible:
+      id: "signin-email"
+    timeout: 10000
+- tapOn:
+    id: "signin-email"
+- inputText: ${output.email}
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/signin-email
+- tapOn:
+    id: "signin-send"
+- extendedWaitUntil:
+    visible:
+      id: "signin-code-screen"
+    timeout: 15000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: code
+      STACK: ${STACK}
+      EMAIL: ${output.email}
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/signin-code
+- inputText: ${output.code}
+# 0 credits: the make flow sends the person to credits.
+- extendedWaitUntil:
+    visible:
+      id: "credits-checkout"
+    timeout: 30000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/credits-picker
+- tapOn:
+    id: "credits-checkout"
+- runFlow: ../common/web-auth-alert.yaml
+- extendedWaitUntil:
+    visible: "Pay"
+    timeout: 30000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/fake-checkout
+- tapOn: "Pay"
+# "Credits added" shows for under a second before the screen returns to the make flow (Android's slower
+# hierarchy reads can miss it), so the proof of payment is the new balance there.
+- runFlow:
+    when:
+      visible:
+        id: "credits-added"
+    commands:
+      - takeScreenshot: docs/screenshots/phase1/${PLATFORM}/credits-added
+# Back in the make flow, gen's pick is ready to confirm, with the 3 credits just bought.
+- extendedWaitUntil:
+    visible:
+      id: "make-pick"
+    timeout: 30000
+- assertVisible: ".*You have 3.*"
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-pick-perfect
+- tapOn:
+    id: "make-submit"
+- extendedWaitUntil:
+    visible:
+      id: "make-list"
+    timeout: 20000
+- assertVisible:
+    id: "job-card-.*"
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-working
+- extendedWaitUntil:
+    visible:
+      id: "job-ready-.*"
+    timeout: 120000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-ready
+- tapOn:
+    id: "job-card-.*"
+- extendedWaitUntil:
+    visible:
+      id: "ready-youtube-link"
+    timeout: 20000
+- tapOn:
+    id: "ready-copy"
+- assertVisible:
+    id: "ready-copied"
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/ready-youtube-copied

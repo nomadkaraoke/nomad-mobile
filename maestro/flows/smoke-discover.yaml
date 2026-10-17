@@ -24,7 +24,7 @@ appId: com.nomadkaraoke.mobile
     timeout: 20000
 - assertVisible:
     id: "song-make"
-# iOS has no hardware back: the pushed song screen must offer a visible back button.
-- tapOn: "Back"
+# iOS has no hardware back: the pushed song screen must offer a visible back button ("Navigate up" on Android).
+- tapOn: "Back|Navigate up"
 - assertVisible:
     id: "discover-search-input"
