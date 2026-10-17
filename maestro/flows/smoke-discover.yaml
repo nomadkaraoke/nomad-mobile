@@ -1,0 +1,30 @@
+# Discover tab → live decide search → song page.
+# Taps Lionel Richie "Hello" by text: decide catalog ids change between catalog rebuilds.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow: ../common/launch.yaml
+- assertVisible:
+    id: "tab-discover"
+- assertVisible:
+    id: "tab-tonight"
+- assertVisible:
+    id: "tab-make"
+- assertVisible:
+    id: "tab-me"
+- tapOn:
+    id: "discover-search-input"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible: ".*Lionel Richie.*"
+    timeout: 20000
+- tapOn: ".*Lionel Richie.*"
+- extendedWaitUntil:
+    visible:
+      id: "song-badge"
+    timeout: 20000
+- assertVisible:
+    id: "song-make"
+# iOS has no hardware back: the pushed song screen must offer a visible back button ("Navigate up" on Android).
+- tapOn: "Back|Navigate up"
+- assertVisible:
+    id: "discover-search-input"

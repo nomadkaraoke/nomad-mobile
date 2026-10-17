@@ -29,7 +29,7 @@ jobs:
   #   type: maestro
   #   params:
   #     build_id: ${{ needs.build_ios_e2e.outputs.build_id }}
-  #     flow_path: ['../../maestro/flows/smoke-find.yaml', '../../maestro/flows/smoke-signin-gate.yaml']
+  #     flow_path: ['../../maestro/flows/smoke-discover.yaml']
 
   submit_ios:
     needs: [build_ios]

@@ -9,6 +9,15 @@ const VARIANTS = {
 
 export type TextProps = RNTextProps & { variant?: keyof typeof VARIANTS; className?: string };
 
-export function Text({ variant = 'body', className, ...rest }: TextProps) {
-  return <RNText className={`${VARIANTS[variant]} ${className ?? ''}`} {...rest} />;
+const START = { textAlign: 'left' } as const;
+const EXPLICIT_ALIGN = /(^|\s)text-(left|right|center|justify)(\s|$)/;
+
+/**
+ * Text aligned to the start of the line. The default ("auto", iOS natural alignment) left paragraphs
+ * left-aligned under forced RTL (ar, he); an explicit 'left' is mirrored to the right by React Native
+ * when I18nManager.isRTL (checked on the simulator).
+ */
+export function Text({ variant = 'body', className, style, ...rest }: TextProps) {
+  const start = className && EXPLICIT_ALIGN.test(className) ? null : START;
+  return <RNText className={`${VARIANTS[variant]} ${className ?? ''}`} style={start ? [start, style] : style} {...rest} />;
 }

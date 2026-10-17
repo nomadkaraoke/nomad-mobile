@@ -18,6 +18,11 @@ export class ApiError extends Error {
   }
 }
 
+// Sign-in attempts made while signed out. Not handoff-token: that one carries the session, so its 401 is real.
+const SIGN_IN_PATH = /\/api\/users\/auth\/(send-code|verify-code|google|apple)$/;
+const isSignInRequest = (request: Request | undefined) =>
+  request !== undefined && SIGN_IN_PATH.test(request.url.split('?')[0] ?? '');
+
 let requestInterceptor: number | null = null;
 let errorInterceptor: number | null = null;
 
@@ -34,10 +39,16 @@ export function configureClient(deps: ClientDeps): void {
   });
 
   if (errorInterceptor !== null) client.interceptors.error.eject(errorInterceptor);
-  errorInterceptor = client.interceptors.error.use((error, response) => {
-    if (response?.status === 401) deps.onUnauthorized();
+  errorInterceptor = client.interceptors.error.use((error, response, request) => {
+    // A 401 from a sign-in endpoint (wrong code, bad ID token) is not a dead session.
+    if (response?.status === 401 && !isSignInRequest(request)) deps.onUnauthorized();
     const detail =
       error && typeof error === 'object' && 'detail' in error ? (error as { detail: unknown }).detail : error;
     return new ApiError(response?.status ?? 0, detail);
   });
+}
+
+/** True when `e` is an ApiError with this status (and, if given, this string detail). */
+export function isApiError(e: unknown, status: number, detail?: string): e is ApiError {
+  return e instanceof ApiError && e.status === status && (detail === undefined || e.detail === detail);
 }

@@ -9,7 +9,13 @@
     "userInterfaceStyle": "dark",
     "ios": {
       "bundleIdentifier": "com.nomadkaraoke.mobile",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": [
+          "youtube",
+          "vnd.youtube"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -36,7 +42,18 @@
         }
       ],
       "expo-secure-store",
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": false,
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save your karaoke videos to your Photos.",
+          "granularPermissions": [
+            "video"
+          ]
+        }
+      ],
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,

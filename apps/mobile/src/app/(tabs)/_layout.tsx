@@ -2,6 +2,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslations } from '@nomad/i18n';
 import { colors } from '@nomad/ui';
 import { Tabs } from 'expo-router';
+import type { ComponentProps } from 'react';
+
+type IconName = ComponentProps<typeof Ionicons>['name'];
+
+// Spec §4.1: Discover, Tonight, Make, Me.
+const TABS: { name: 'discover' | 'tonight' | 'make' | 'me'; icon: IconName }[] = [
+  { name: 'discover', icon: 'search' },
+  { name: 'tonight', icon: 'moon' },
+  { name: 'make', icon: 'sparkles' },
+  { name: 'me', icon: 'person' },
+];
 
 export default function TabsLayout() {
   const t = useTranslations('tabs');
@@ -14,30 +25,17 @@ export default function TabsLayout() {
         tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.border },
       }}
     >
-      <Tabs.Screen
-        name="find"
-        options={{
-          title: t('find'),
-          tabBarButtonTestID: 'tab-find',
-          tabBarIcon: ({ color, size }) => <Ionicons name="search" color={color} size={size} />,
-        }}
-      />
-      <Tabs.Screen
-        name="videos"
-        options={{
-          title: t('videos'),
-          tabBarButtonTestID: 'tab-videos',
-          tabBarIcon: ({ color, size }) => <Ionicons name="film" color={color} size={size} />,
-        }}
-      />
-      <Tabs.Screen
-        name="account"
-        options={{
-          title: t('account'),
-          tabBarButtonTestID: 'tab-account',
-          tabBarIcon: ({ color, size }) => <Ionicons name="person" color={color} size={size} />,
-        }}
-      />
+      {TABS.map(({ name, icon }) => (
+        <Tabs.Screen
+          key={name}
+          name={name}
+          options={{
+            title: t(name),
+            tabBarButtonTestID: `tab-${name}`,
+            tabBarIcon: ({ color, size }) => <Ionicons name={icon} color={color} size={size} />,
+          }}
+        />
+      ))}
     </Tabs>
   );
 }

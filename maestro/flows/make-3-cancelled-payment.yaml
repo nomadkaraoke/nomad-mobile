@@ -1,0 +1,45 @@
+# 3. Cancelled payment (spec §8.3): fake checkout Cancel → "No payment made", still on credits.
+appId: com.nomadkaraoke.mobile
+name: make-3-cancelled-payment
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: cancel
+      CREDITS: "0"
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/make-any.yaml
+    env:
+      ARTIST: "Fake Artist"
+      TITLE: "Cancelled Song"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "credits-checkout"
+    timeout: 30000
+- tapOn:
+    id: "credits-checkout"
+- runFlow: ../common/web-auth-alert.yaml
+- extendedWaitUntil:
+    visible: "Pay"
+    timeout: 30000
+# The page's Cancel button (beside Pay), not the browser's own toolbar Cancel.
+- tapOn:
+    text: "Cancel"
+    rightOf:
+      text: "Pay"
+- extendedWaitUntil:
+    visible:
+      id: "credits-no-payment"
+    timeout: 20000
+- assertVisible:
+    id: "credits-checkout"
+- assertNotVisible:
+    id: "credits-added"
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/credits-no-payment

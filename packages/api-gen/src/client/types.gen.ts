@@ -453,6 +453,56 @@ export type AttachUploadUrlsResponse = {
 };
 
 /**
+ * AttributionSourceRow
+ *
+ * Funnel counts for one acquisition channel.
+ */
+export type AttributionSourceRow = {
+    /**
+     * Source
+     */
+    source: string;
+    /**
+     * Signups
+     */
+    signups?: number;
+    /**
+     * Verified
+     */
+    verified?: number;
+    /**
+     * Made Job
+     */
+    made_job?: number;
+    /**
+     * Paid
+     */
+    paid?: number;
+    /**
+     * Revenue Cents
+     */
+    revenue_cents?: number;
+};
+
+/**
+ * AttributionSummaryResponse
+ */
+export type AttributionSummaryResponse = {
+    /**
+     * Days
+     */
+    days: number;
+    /**
+     * Total Signups
+     */
+    total_signups: number;
+    /**
+     * Sources
+     */
+    sources: Array<AttributionSourceRow>;
+};
+
+/**
  * AudioEditReviewListResponse
  */
 export type AudioEditReviewListResponse = {
@@ -1665,6 +1715,10 @@ export type BodyUploadAssetApiTenantThemeAssetsPost = {
      * File
      */
     file: Blob | File;
+    /**
+     * Purpose
+     */
+    purpose?: string | null;
 };
 
 /**
@@ -2658,6 +2712,10 @@ export type CreateCheckoutRequest = {
      * Email
      */
     email: string;
+    /**
+     * Return To
+     */
+    return_to?: 'app' | null;
 };
 
 /**
@@ -3279,6 +3337,12 @@ export type CreateJobWithUploadUrlsRequest = {
      * Pause after upload for user to edit input audio
      */
     requires_audio_edit?: boolean;
+    /**
+     * Track Code
+     *
+     * Tenant's own catalogue code for this track (tenant portals only)
+     */
+    track_code?: string | null;
     /**
      * Upload Mode
      *
@@ -3952,6 +4016,38 @@ export type HttpValidationError = {
      * Detail
      */
     detail?: Array<ValidationError>;
+};
+
+/**
+ * HandoffTokenRequest
+ */
+export type HandoffTokenRequest = {
+    /**
+     * Target
+     */
+    target: 'job_review';
+    /**
+     * Job Id
+     */
+    job_id: string;
+    /**
+     * Locale
+     */
+    locale?: string | null;
+};
+
+/**
+ * HandoffTokenResponse
+ */
+export type HandoffTokenResponse = {
+    /**
+     * Url
+     */
+    url: string;
+    /**
+     * Expires In Seconds
+     */
+    expires_in_seconds: number;
 };
 
 /**
@@ -4713,6 +4809,10 @@ export type MagicLinkStatusResponse = {
      * Status
      */
     status: string;
+    /**
+     * Handoff
+     */
+    handoff?: boolean;
 };
 
 /**
@@ -5168,6 +5268,14 @@ export type PreviewRequest = {
         [key: string]: unknown;
     };
     sample?: PreviewSample;
+    /**
+     * Include Cdg
+     */
+    include_cdg?: boolean;
+    /**
+     * Kinds
+     */
+    kinds?: Array<'title_card' | 'karaoke_frame' | 'end_screen'> | null;
 };
 
 /**
@@ -5181,11 +5289,27 @@ export type PreviewResponse = {
     /**
      * Karaoke Frame
      */
-    karaoke_frame: string;
+    karaoke_frame?: string | null;
     /**
      * End Screen
      */
     end_screen?: string | null;
+    /**
+     * Cdg Title Card
+     */
+    cdg_title_card?: string | null;
+    /**
+     * Cdg Lyrics
+     */
+    cdg_lyrics?: string | null;
+    /**
+     * Cdg Instrumental
+     */
+    cdg_instrumental?: string | null;
+    /**
+     * Cdg Outro
+     */
+    cdg_outro?: string | null;
 };
 
 /**
@@ -5608,6 +5732,14 @@ export type SaveResponse = {
      */
     fonts: Array<string>;
     /**
+     * Cdg Images
+     */
+    cdg_images?: Array<string>;
+    /**
+     * Cdg Transitions
+     */
+    cdg_transitions?: Array<string>;
+    /**
      * Refreshed Jobs
      */
     refreshed_jobs?: number;
@@ -5686,6 +5818,44 @@ export type SendCompletionEmailResponse = {
 };
 
 /**
+ * SendLoginCodeRequest
+ */
+export type SendLoginCodeRequest = {
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Locale
+     */
+    locale?: string | null;
+    /**
+     * Device Fingerprint
+     */
+    device_fingerprint?: string | null;
+    /**
+     * Referral Code
+     */
+    referral_code?: string | null;
+    /**
+     * Attribution
+     */
+    attribution?: {
+        [key: string]: string | null;
+    } | null;
+};
+
+/**
+ * SendLoginCodeResponse
+ */
+export type SendLoginCodeResponse = {
+    /**
+     * Status
+     */
+    status: string;
+};
+
+/**
  * SendMagicLinkRequest
  *
  * Request to send a magic link email.
@@ -5703,6 +5873,12 @@ export type SendMagicLinkRequest = {
      * Referral Code
      */
     referral_code?: string | null;
+    /**
+     * Attribution
+     */
+    attribution?: {
+        [key: string]: string | null;
+    } | null;
     /**
      * Purpose
      */
@@ -5793,6 +5969,34 @@ export type SignedUploadUrl = {
      * True when upload_url is a GCS resumable session URI
      */
     resumable?: boolean;
+};
+
+/**
+ * SocialSignInRequest
+ */
+export type SocialSignInRequest = {
+    /**
+     * Id Token
+     */
+    id_token: string;
+    /**
+     * Locale
+     */
+    locale?: string | null;
+    /**
+     * Device Fingerprint
+     */
+    device_fingerprint?: string | null;
+    /**
+     * Referral Code
+     */
+    referral_code?: string | null;
+    /**
+     * Attribution
+     */
+    attribution?: {
+        [key: string]: string | null;
+    } | null;
 };
 
 /**
@@ -6680,6 +6884,14 @@ export type ThemeResponse = {
      * Fonts
      */
     fonts: Array<string>;
+    /**
+     * Cdg Images
+     */
+    cdg_images?: Array<string>;
+    /**
+     * Cdg Transitions
+     */
+    cdg_transitions?: Array<string>;
 };
 
 /**
@@ -7086,6 +7298,20 @@ export type UserDetailResponse = {
      */
     referral_code?: string | null;
     /**
+     * Signup Source
+     */
+    signup_source?: string | null;
+    /**
+     * Signup Venue
+     */
+    signup_venue?: string | null;
+    /**
+     * Signup Attribution
+     */
+    signup_attribution?: {
+        [key: string]: unknown;
+    } | null;
+    /**
      * Recent Sessions
      */
     recent_sessions?: Array<{
@@ -7254,6 +7480,14 @@ export type UserPublic = {
      */
     referral_discount_expires_at?: string | null;
     /**
+     * Promo Discount Percent
+     */
+    promo_discount_percent?: number | null;
+    /**
+     * Promo Discount Expires At
+     */
+    promo_discount_expires_at?: string | null;
+    /**
      * Referred By Code
      */
     referred_by_code?: string | null;
@@ -7394,6 +7628,20 @@ export type VerifyCodeResponse = {
      * Credit Status
      */
     credit_status: string;
+};
+
+/**
+ * VerifyLoginCodeRequest
+ */
+export type VerifyLoginCodeRequest = {
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Code
+     */
+    code: string;
 };
 
 /**
@@ -12491,6 +12739,31 @@ export type ListCreditPackagesApiUsersCreditsPackagesGetResponses = {
 
 export type ListCreditPackagesApiUsersCreditsPackagesGetResponse = ListCreditPackagesApiUsersCreditsPackagesGetResponses[keyof ListCreditPackagesApiUsersCreditsPackagesGetResponses];
 
+export type CheckoutAppReturnApiUsersCreditsAppReturnGetData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Status
+         */
+        status?: string | null;
+        /**
+         * Session Id
+         */
+        session_id?: string | null;
+    };
+    url: '/api/users/credits/app-return';
+};
+
+export type CheckoutAppReturnApiUsersCreditsAppReturnGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CheckoutAppReturnApiUsersCreditsAppReturnGetError = CheckoutAppReturnApiUsersCreditsAppReturnGetErrors[keyof CheckoutAppReturnApiUsersCreditsAppReturnGetErrors];
+
 export type CreateCheckoutApiUsersCreditsCheckoutPostData = {
     body: CreateCheckoutRequest;
     path?: never;
@@ -12631,6 +12904,40 @@ export type SubmitUserFeedbackApiUsersFeedbackPostResponses = {
 };
 
 export type SubmitUserFeedbackApiUsersFeedbackPostResponse = SubmitUserFeedbackApiUsersFeedbackPostResponses[keyof SubmitUserFeedbackApiUsersFeedbackPostResponses];
+
+export type AttributionSummaryApiUsersAdminAttributionSummaryGetData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Days
+         */
+        days?: number;
+        /**
+         * Token
+         */
+        token?: string | null;
+    };
+    url: '/api/users/admin/attribution-summary';
+};
+
+export type AttributionSummaryApiUsersAdminAttributionSummaryGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AttributionSummaryApiUsersAdminAttributionSummaryGetError = AttributionSummaryApiUsersAdminAttributionSummaryGetErrors[keyof AttributionSummaryApiUsersAdminAttributionSummaryGetErrors];
+
+export type AttributionSummaryApiUsersAdminAttributionSummaryGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: AttributionSummaryResponse;
+};
+
+export type AttributionSummaryApiUsersAdminAttributionSummaryGetResponse = AttributionSummaryApiUsersAdminAttributionSummaryGetResponses[keyof AttributionSummaryApiUsersAdminAttributionSummaryGetResponses];
 
 export type ListUsersApiUsersAdminUsersGetData = {
     body?: never;
@@ -16649,6 +16956,137 @@ export type CatalogResolveApiKjboxCatalogResolvePostResponses = {
      */
     200: unknown;
 };
+
+export type SendLoginCodeApiUsersAuthSendCodePostData = {
+    body: SendLoginCodeRequest;
+    path?: never;
+    query?: never;
+    url: '/api/users/auth/send-code';
+};
+
+export type SendLoginCodeApiUsersAuthSendCodePostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type SendLoginCodeApiUsersAuthSendCodePostError = SendLoginCodeApiUsersAuthSendCodePostErrors[keyof SendLoginCodeApiUsersAuthSendCodePostErrors];
+
+export type SendLoginCodeApiUsersAuthSendCodePostResponses = {
+    /**
+     * Successful Response
+     */
+    202: SendLoginCodeResponse;
+};
+
+export type SendLoginCodeApiUsersAuthSendCodePostResponse = SendLoginCodeApiUsersAuthSendCodePostResponses[keyof SendLoginCodeApiUsersAuthSendCodePostResponses];
+
+export type VerifyLoginCodeApiUsersAuthVerifyCodePostData = {
+    body: VerifyLoginCodeRequest;
+    path?: never;
+    query?: never;
+    url: '/api/users/auth/verify-code';
+};
+
+export type VerifyLoginCodeApiUsersAuthVerifyCodePostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type VerifyLoginCodeApiUsersAuthVerifyCodePostError = VerifyLoginCodeApiUsersAuthVerifyCodePostErrors[keyof VerifyLoginCodeApiUsersAuthVerifyCodePostErrors];
+
+export type VerifyLoginCodeApiUsersAuthVerifyCodePostResponses = {
+    /**
+     * Successful Response
+     */
+    200: VerifyMagicLinkResponse;
+};
+
+export type VerifyLoginCodeApiUsersAuthVerifyCodePostResponse = VerifyLoginCodeApiUsersAuthVerifyCodePostResponses[keyof VerifyLoginCodeApiUsersAuthVerifyCodePostResponses];
+
+export type CreateHandoffTokenApiUsersAuthHandoffTokenPostData = {
+    body: HandoffTokenRequest;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/users/auth/handoff-token';
+};
+
+export type CreateHandoffTokenApiUsersAuthHandoffTokenPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateHandoffTokenApiUsersAuthHandoffTokenPostError = CreateHandoffTokenApiUsersAuthHandoffTokenPostErrors[keyof CreateHandoffTokenApiUsersAuthHandoffTokenPostErrors];
+
+export type CreateHandoffTokenApiUsersAuthHandoffTokenPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: HandoffTokenResponse;
+};
+
+export type CreateHandoffTokenApiUsersAuthHandoffTokenPostResponse = CreateHandoffTokenApiUsersAuthHandoffTokenPostResponses[keyof CreateHandoffTokenApiUsersAuthHandoffTokenPostResponses];
+
+export type GoogleSignInApiUsersAuthGooglePostData = {
+    body: SocialSignInRequest;
+    path?: never;
+    query?: never;
+    url: '/api/users/auth/google';
+};
+
+export type GoogleSignInApiUsersAuthGooglePostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GoogleSignInApiUsersAuthGooglePostError = GoogleSignInApiUsersAuthGooglePostErrors[keyof GoogleSignInApiUsersAuthGooglePostErrors];
+
+export type GoogleSignInApiUsersAuthGooglePostResponses = {
+    /**
+     * Successful Response
+     */
+    200: VerifyMagicLinkResponse;
+};
+
+export type GoogleSignInApiUsersAuthGooglePostResponse = GoogleSignInApiUsersAuthGooglePostResponses[keyof GoogleSignInApiUsersAuthGooglePostResponses];
+
+export type AppleSignInApiUsersAuthApplePostData = {
+    body: SocialSignInRequest;
+    path?: never;
+    query?: never;
+    url: '/api/users/auth/apple';
+};
+
+export type AppleSignInApiUsersAuthApplePostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AppleSignInApiUsersAuthApplePostError = AppleSignInApiUsersAuthApplePostErrors[keyof AppleSignInApiUsersAuthApplePostErrors];
+
+export type AppleSignInApiUsersAuthApplePostResponses = {
+    /**
+     * Successful Response
+     */
+    200: VerifyMagicLinkResponse;
+};
+
+export type AppleSignInApiUsersAuthApplePostResponse = AppleSignInApiUsersAuthApplePostResponses[keyof AppleSignInApiUsersAuthApplePostResponses];
 
 export type GetTenantConfigApiTenantConfigGetData = {
     body?: never;

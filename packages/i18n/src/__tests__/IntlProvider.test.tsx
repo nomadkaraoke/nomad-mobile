@@ -18,11 +18,11 @@ function PluralProbe({ count }: { count: number }) {
 it('renders the locale string', () => {
   render(
     <IntlProvider locale="es">
-      <Probe k="tabs.find" />
+      <Probe k="tabs.discover" />
     </IntlProvider>,
   );
   const es = JSON.parse(fs.readFileSync(path.join(__dirname, '../../messages/es.json'), 'utf8'));
-  expect(screen.getByText(es.tabs.find)).toBeTruthy();
+  expect(screen.getByText(es.tabs.discover)).toBeTruthy();
 });
 
 it('formats ICU plurals', () => {

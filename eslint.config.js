@@ -37,4 +37,22 @@ module.exports = defineConfig([
       ],
     },
   },
+  // Maestro runScript helpers run in Maestro's GraalJS: its http/json/output globals plus the flow's env vars.
+  {
+    files: ['maestro/scripts/**/*.js'],
+    languageOptions: {
+      globals: {
+        http: 'readonly',
+        json: 'readonly',
+        output: 'writable',
+        STACK: 'readonly',
+        ACTION: 'readonly',
+        NAME: 'readonly',
+        CREDITS: 'readonly',
+        USER_CONFIG: 'readonly',
+        GLOBAL_CONFIG: 'readonly',
+        EMAIL: 'readonly',
+      },
+    },
+  },
 ]);

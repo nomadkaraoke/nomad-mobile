@@ -7,7 +7,8 @@ export const colors = {
   text: '#e5e5e5',
   muted: '#888888',
   primary: '#ff7acc',
-  primaryFg: '#ffffff',
+  // Gen web puts white on pink (2.4:1, below WCAG AA). The app uses near-black (8.1:1) for legibility.
+  primaryFg: '#0f0f0f',
   gold: '#ffdf6b',
   purple: '#8b5cf6',
   danger: '#ef4444',

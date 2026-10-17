@@ -1,0 +1,105 @@
+# UX screenshots for a long-titled song through song page → sign-in → pick → Make tab → ready, in whatever
+# language the app runs in. Not part of the E2E suite (maestro/flows): run it by hand for screenshot
+# reviews, e.g. in Arabic (RTL) on the iOS simulator:
+#
+#   xcrun simctl spawn booted defaults write com.nomadkaraoke.mobile AppleLanguages -array ar
+#   xcrun simctl launch booted com.nomadkaraoke.mobile   # first launch flips RTL; it applies on the next
+#   maestro test -e STACK=http://127.0.0.1:8010 -e PLATFORM=ios -e SHOT=ux-ar maestro/screens/long-title.yaml
+#   xcrun simctl spawn booted defaults delete com.nomadkaraoke.mobile AppleLanguages   # back to the device language
+#
+# Targets testIDs only (no English text), so it works in any locale. SHOT prefixes the screenshot names.
+appId: com.nomadkaraoke.mobile
+name: screens-long-title
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: ux
+      CREDITS: "3"
+- stopApp
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - launchApp:
+          clearKeychain: true
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - clearState
+      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
+# A fresh dev-client load shows the developer-menu sheet over the app, which hides the app's elements.
+- extendedWaitUntil:
+    visible: "Runtime version.*"
+    timeout: 20000
+    optional: true
+- runFlow:
+    when:
+      visible: "Runtime version.*"
+    commands:
+      - tapOn: "Close|Continue"
+- extendedWaitUntil:
+    visible:
+      id: "discover-search-input"
+    timeout: 60000
+# A real decide song with a long title (45 characters, plus a long credit line).
+- tapOn:
+    id: "discover-search-input"
+- inputText: "born is the king"
+- extendedWaitUntil:
+    visible: ".*Born Is The King.*"
+    timeout: 30000
+# Search key: closes the keyboard and iOS's text edit menu, which can sit over the first result.
+- pressKey: Enter
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-discover-results
+- tapOn:
+    id: "song-row-421104"
+- extendedWaitUntil:
+    visible:
+      id: "song-badge"
+    timeout: 20000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-song-page
+- tapOn:
+    id: "song-make"
+- extendedWaitUntil:
+    visible:
+      id: "signin-sheet"
+    timeout: 10000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-signin-sheet
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "make-pick"
+    timeout: 30000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-make-pick
+- tapOn:
+    id: "make-submit"
+- extendedWaitUntil:
+    visible:
+      id: "make-list"
+    timeout: 20000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-make-tab-working
+- extendedWaitUntil:
+    visible:
+      id: "job-ready-.*"
+    timeout: 120000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-make-tab-ready
+- tapOn:
+    id: "job-card-.*"
+- extendedWaitUntil:
+    visible:
+      id: "ready-youtube-link"
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-ready

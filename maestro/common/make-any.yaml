@@ -1,0 +1,26 @@
+# Discover → "Make any song" with typed artist and title → Make it. Env: ARTIST, TITLE.
+appId: com.nomadkaraoke.mobile
+---
+# A search with no matches puts "Make any song" right under the search field. Scrolling the long popular
+# list to reach it raced FlashList's recycling and sometimes tapped a song row instead.
+- tapOn:
+    id: "discover-search-input"
+- inputText: "zzqxj"
+- extendedWaitUntil:
+    visible:
+      id: "discover-make-any"
+    timeout: 20000
+- tapOn:
+    id: "discover-make-any"
+- extendedWaitUntil:
+    visible:
+      id: "song-artist"
+    timeout: 10000
+- tapOn:
+    id: "song-artist"
+- inputText: ${ARTIST}
+- tapOn:
+    id: "song-title"
+- inputText: ${TITLE}
+- tapOn:
+    id: "song-make"

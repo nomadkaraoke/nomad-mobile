@@ -1,0 +1,52 @@
+# 9. No YouTube link (spec §8.9): youtube_url_enabled off → the ready screen plays the MP4 in the app.
+appId: com.nomadkaraoke.mobile
+name: make-9-no-youtube
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: noyoutube
+      CREDITS: "2"
+      USER_CONFIG: '{"youtube_url_enabled":false}'
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/make-any.yaml
+    env:
+      ARTIST: "Fake Artist"
+      TITLE: "Private Song"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "make-pick"
+    timeout: 30000
+- tapOn:
+    id: "make-submit"
+- extendedWaitUntil:
+    visible:
+      id: "job-ready-.*"
+    timeout: 120000
+- tapOn:
+    id: "job-card-.*"
+- extendedWaitUntil:
+    visible:
+      id: "ready-play|ready-player"
+    timeout: 20000
+- assertNotVisible:
+    id: "ready-youtube"
+- runFlow:
+    when:
+      visible:
+        id: "ready-play"
+    commands:
+      - tapOn:
+          id: "ready-play"
+- extendedWaitUntil:
+    visible:
+      id: "ready-player"
+    timeout: 60000
+- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/ready-player

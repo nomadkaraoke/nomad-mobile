@@ -2,9 +2,10 @@
 
 The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke project (decide recommendations, gen karaoke videos, kjbox nights, a singer's own history). **Read [docs/VISION.md](docs/VISION.md) first**: it has the four use cases, the navigation, the release bar (no publishing until all four have a first usable version) and the phase roadmap.
 
-**Status:** Phase 0 foundation (2026-10-14). The workspace, packages, CI and agent tooling are in place. The screens are placeholders, and sign-in uses a **mock** email-code API. Phase 1 ("Make it": real sign-in → make → pay → watch, against the gen local stack) is next.
+**Status:** Phase 1 "Make it" (2026-10-17): real gen sign-in → make → pay → watch, verified by nine Maestro flows on iOS and Android against the gen local stack, plus a prod check of the release APK (real email-code sign-in, live Stripe checkout open/cancel, real audio search). Next: Phase 2 "Native review" (docs/VISION.md). Phase 0 (2026-10-14) laid the workspace, packages, CI and agent tooling.
 
-- Spec: [docs/superpowers/specs/2026-10-14-mobile-phase0-design.md](docs/superpowers/specs/2026-10-14-mobile-phase0-design.md) (MVP flow §2, foundation §3, shared auth + payments §4)
+- Phase 1 spec: [docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md](docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md); plan: [docs/superpowers/plans/2026-10-17-mobile-phase1-make-it.md](docs/superpowers/plans/2026-10-17-mobile-phase1-make-it.md)
+- Phase 0 spec: [docs/superpowers/specs/2026-10-14-mobile-phase0-design.md](docs/superpowers/specs/2026-10-14-mobile-phase0-design.md) (MVP flow §2, foundation §3, shared auth + payments §4)
 - Phase 0 plan: [docs/superpowers/plans/2026-10-14-mobile-phase0-foundation.md](docs/superpowers/plans/2026-10-14-mobile-phase0-foundation.md)
 - Stack decision and research: `../docs/archive/2026-10-14-mobile-app-stack-research.md` (workspace root)
 - Expo-specific guidance: [AGENTS.md](AGENTS.md). **Read the versioned Expo docs before touching Expo APIs.** Training data is stale.
@@ -28,13 +29,15 @@ The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke proj
 
 ```
 apps/mobile/          Expo app (src/app routes, src/auth, src/api, src/find, src/providers)
-packages/core/        pure TS: session model + input normalizers, job phases, poll backoff, formatting
+packages/core/        pure TS: session model + input normalizers, job phases + steps, audio-search ranking, duration confirm, formatting
 packages/i18n/        messages/<33>.json, resolveLocale, IntlProvider; scripts/ vendored from karaoke-gen
-packages/api-gen/     generated karaoke-gen client + configureClient + facades (getMe, listCreditPackages)
+packages/api-gen/     generated karaoke-gen client + configureClient + facades (auth, credits, make, jobs) + zod overrides
 packages/api-decide/  generated karaoke-decide client + facades (searchSongs, popularSongs, getSong)
 packages/ui/          tokens, Screen/Text/Button/TextField, <List> (FlashList), <WaveformCanvas> (Skia)
 openapi/              gen.json + decide.json snapshots (refresh: pnpm gen:api)
-maestro/flows/        E2E smoke flows
+maestro/flows/        E2E flows (make-1…9 against the gen local stack, smoke-discover); common/ shared steps; scripts/stack.js
+maestro/screens/      screenshot-only flows for UX reviews (long-title.yaml: any locale, e.g. ar for RTL; not in the suite)
+scripts/e2e-local.sh  gen local stack + Metro + Maestro, per platform
 ```
 
 ## Commands
@@ -44,6 +47,7 @@ pnpm install                       # pnpm 12; settings live in pnpm-workspace.ya
 pnpm test                          # all jest projects   (pnpm test:coverage enforces 70%+ on packages/*)
 pnpm typecheck && pnpm lint
 pnpm gen:api                       # refresh OpenAPI snapshots from prod + regenerate clients
+GEN_OPENAPI_URL=http://127.0.0.1:8010/openapi.json node scripts/fetch-openapi.mjs gen  # gen snapshot from another stack
 pnpm gen:api:offline               # regenerate from committed snapshots (CI drift check)
 pnpm i18n:translate                # translate new en.json keys → 32 locales (Gemini, GCS cache)
 pnpm i18n:check                    # key/placeholder completeness (CI hard-fails)
@@ -52,10 +56,21 @@ cd apps/mobile
 npx expo install <pkg>             # ALWAYS use this for native deps (SDK-compatible versions)
 npx expo run:ios --device "iPhone 17 Pro"   # dev build on simulator (needs working CocoaPods)
 npx expo run:android               # dev build on emulator (AVD Pixel_8_API_35_Root)
-maestro test ../../maestro/        # E2E smoke flows against the running dev build
+
+scripts/e2e-local.sh --platform ios        # (repo root) all flows vs the gen local stack; or --platform android
+scripts/e2e-local.sh --platform android make-4   # flows whose file name contains "make-4"
 ```
 
 CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows Homebrew's. Run iOS builds with `PATH=/opt/homebrew/bin:$PATH`.
+
+## E2E (Maestro against the gen local stack)
+
+- **Stack:** gen's `scripts/local-stack.sh` (real FastAPI on the Firestore/GCS emulators, `FAKE_WORKERS=1`; gen `docs/TESTING.md` § Local stack). API `http://127.0.0.1:8010`, web `:3010`, `LOCAL_STACK_API_URL=http://127.0.0.1:8010`. `scripts/e2e-local.sh` starts it from `GEN_DIR` (default `../karaoke-gen`, the main clone; needs gen ≥ v0.278.2. To test unmerged gen code, `GEN_DIR=../karaoke-gen-<worktree> scripts/e2e-local.sh …`, or run `scripts/local-stack.sh up --frontend` there yourself with `LOCAL_STACK_API_URL=http://127.0.0.1:8010`) when it isn't up.
+- **One URL on both platforms:** Android uses `adb reverse tcp:8010` / `tcp:3010`, so the app, fake checkout and the review handoff all use `http://127.0.0.1`. Metro is started with `EXPO_PUBLIC_GEN_API_URL=http://127.0.0.1:8010 EXPO_PUBLIC_GEN_WEB_URL=http://127.0.0.1:3010 EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1` (inlined at bundle time: restart Metro with `--clear` after changing them). Cleartext http works out of the box (iOS ATS `NSAllowsLocalNetworking`; Android debug manifest `usesCleartextTraffic`).
+- **Seeding:** each flow calls `maestro/scripts/stack.js` (`ACTION: setup`) for its own `e2e-<name>-<ms>@example.com` user (`CREDITS`, per-user `USER_CONFIG` knobs) and resets the GLOBAL knobs (search is global) to step delay 0.2 s / `perfect`. `ACTION: code` reads the newest sign-in code from `/api/test/emails`. Per-user fake-config **persists for that email** (a scenario's `fail_at`/`audio_duration_seconds` stick to the user), so never reuse an email across flows.
+- **Never run the iOS and Android suites at the same time against one stack.** The search knobs (`search_confidence`, `search_result_count`) and step delay are GLOBAL fake-config: flow 8 sets `unsure` and every flow's setup resets it, so concurrent runs break each other. Run one platform, then the other (or give each its own stack on other ports).
+- **Flows 2–9** use "Make any song" (reached through a no-match search, `common/make-any.yaml`; scrolling the popular list raced FlashList recycling) + the fake Google path; only flow 1 depends on live decide results. Screenshots land in `docs/screenshots/phase1/<platform>/` (paths are relative to the **working directory**, so run Maestro from the repo root).
+- **Android emulator:** AVD `Pixel_8_API_35_Root` (`system-images;android-35;google_apis;arm64-v8a`; start it with `-gpu host`), configured with `hw.ramSize = 4096M`, `hw.cpu.ncore = 4`, `hw.gpu.mode = host`. With the default 1.5 GB / software GPU, adb dropped the emulator transport mid-flow ("device offline"), which also wipes every `adb reverse` rule.
 
 ## Rules
 
@@ -77,12 +92,22 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 
 - **Hermes has no `Intl.PluralRules` or `Intl.DisplayNames`.** `installIntlPolyfills()` (`@nomad/i18n`) runs first in `AppProviders` and loads FormatJS plural data for all 33 locales (plus `fil`, because `tl` canonicalizes to it). Language names come from the static `LOCALE_NAMES`. If you use another `Intl` API, check Hermes support or polyfill it.
 - **The iOS Keychain (SecureStore) survives uninstall.** The auth store discards a session that has no MMKV install marker, which is wiped on uninstall, so reinstalling the app always starts signed out.
-- **Maestro on a dev-client build:** `maestro/common/launch.yaml` uses `stopApp` and `clearKeychain` instead of `clearState`. `clearState` drops the remembered Metro server, and reconnecting triggers an iOS "Open in …?" SpringBoard prompt that Maestro cannot see. Use the header back button (`tapOn: "Back"`) and avoid `openLink` on iOS for the same reason.
+- **Maestro on a dev-client build (iOS):** `maestro/common/launch.yaml` uses `stopApp` and `clearKeychain` instead of `clearState` on iOS. `clearState` drops the remembered Metro server, and reconnecting triggers an iOS "Open in …?" SpringBoard prompt that Maestro cannot see. Use the header back button (`tapOn: "Back|Navigate up"`) and avoid `openLink` on iOS for the same reason.
+- **Maestro on Android:** `clearKeychain` is a no-op there (the session survives), so `launch.yaml` uses `clearState` on Android, which also forgets the Metro server; it then `openLink`s the dev-client URL `exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081` (Metro through 10.0.2.2, no adb reverse). Don't type the URL into the dev launcher: `inputText`/`eraseText` there hung Maestro's driver (120 s gRPC timeout) late in a suite. The header back button is "Navigate up" on Android (`tapOn: "Back|Navigate up"`). A fresh emulator's Chrome shows a first-run screen inside Custom Tabs (`e2e-local.sh` disables it; `common/web-auth-alert.yaml` taps past it). Don't `kill $(lsof -ti tcp:8081)` to restart Metro: the emulator's qemu holds a connection to 8081 and dies with it.
+- **Maestro on iOS:** `openAuthSessionAsync` (checkout) first shows a "… Wants to Use … to Sign In" alert (`common/web-auth-alert.yaml` taps Continue). The fake checkout's own Cancel needs `rightOf: Pay` (the browser toolbar has a Cancel too). `hideKeyboard` on iOS can tap whatever is under the keyboard; avoid it.
+- **Android delivers the checkout return (`nomadkaraoke://checkout?status=…`) to Expo Router too.** `src/app/+native-intent.tsx` keeps the current screen, otherwise "Unmatched Route" covers the credits screen. If the return cold-starts the app (Android killed it during card entry), it opens `/make/new` when a fresh make intent is stored, else Me.
+- **Duration confirm sends the full total.** `durationConfirm` (`@nomad/core`) computes `totalCredits` = the job's `state_data.credits_charged` (`?? 1`: jobs made before gen v0.278.2 never recorded it, and gen charged 1) + the pending extra; the app sends that total and gen (≥ v0.278.2) records `credits_charged` on create and resolves the confirm against it.
+- **RTL text alignment:** iOS "natural" alignment (RN's `auto`) ignores `I18nManager.forceRTL`, so paragraphs stayed left-aligned in ar/he. `@nomad/ui` `Text` defaults to `textAlign: 'left'`, which RN mirrors to the right under RTL. Interpolated titles/emails go through `isolate()` (`@nomad/i18n`) so Latin text doesn't scramble inside an Arabic sentence.
+- **Metro started with `CI=1` doesn't watch files** (`e2e-local.sh` starts it that way): after editing code, restart it, or run your own `npx expo start --dev-client` (same env, no `CI=1`) while iterating.
 - **`renderRouter` (expo-router testing) switches jest to fake timers.** Reset with `jest.useRealTimers()` in `beforeEach` when code uses real delays.
 
-## Phase 1 notes (deferred from Phase 0)
+## Sign-in and session
 
-- Swap `mockAuthApi` (`apps/mobile/src/auth/authApi.ts`, code `123456`) for gen's `POST /api/users/auth/send-code` / `verify-code` once they ship (spec §4.1). Set `EXPO_PUBLIC_AUTH_MOCK=0`.
+- Gen email code, Google (`react-native-google-auth`) and Apple (`expo-apple-authentication`, off until `EXPO_PUBLIC_APPLE_SIGNIN=1`; `app.config.ts` strips the entitlement otherwise). Against the local stack, `EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1` makes Google/Apple send `fake:<email>`; `config.ts` only honours it when the gen URL is a local host (loopback, 10.0.2.2, private LAN, `*.local`).
+- `useSessionCheck` (in `AppProviders`) calls `GET /api/users/me` on launch and on every foreground while signed in; a 401 signs out through the gen client's `onUnauthorized`. Open sign-in with `openSignIn(returnTo)` (`auth/signInUi.ts`).
+
+## Deferred / later-phase notes
+
 - RTL (ar, he) currently applies on the next launch. Reload through `expo-updates` once EAS Update is configured.
 - Sentry Expo config plugin (org/project, source maps, dSYMs) is added together with the Sentry account.
 - EAS: `eas.json` and `.eas/workflows/*` are dormant. `runtimeVersion` / `updates.url` need an EAS project id.
@@ -90,6 +115,9 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - Decide personal recommendations, music services and vocal range: Phase 3 "Discover" in docs/VISION.md (needs spec §4.2 `exchange-gen-session`). Sung history, playlists and library are Phase 4 "Me".
 
 ## App identity
+
+- Apple: App ID `com.nomadkaraoke.mobile` ("Nomad Karaoke") registered 2026-10-17 in Andrew's Apple Developer account (Individual, team `55B76HN73D`, renews 2027-06-25) with Sign in with Apple enabled. Turning the Apple button on (`EXPO_PUBLIC_APPLE_SIGNIN=1`) and verifying it needs a team-signed iOS build (Xcode signed into Andrew's Apple ID): parked to Phase 6 with TestFlight.
+- Google OAuth clients (project `nomadkaraoke`, created 2026-10-17): web `718638054799-fush0smd1e4icq9pt0immp8n59jjlebh` (the token audience gen verifies), iOS `718638054799-hre535n83p8i85tsqf6ai759nlubhd2o`, Android `718638054799-q0f65m68a31du5nn9h5accsauad232ku` (debug keystore SHA-1 `5E:8F:…:F6:25`; add the release key's SHA-1 when a real signing key exists).
 
 - iOS bundle id / Android package: `com.nomadkaraoke.mobile`
 - URL scheme: `nomadkaraoke`

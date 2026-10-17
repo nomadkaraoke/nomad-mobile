@@ -1,9 +1,15 @@
-import { getCurrentUserApiUsersMeGet, listCreditPackagesApiUsersCreditsPackagesGet } from './client';
-
+// eslint-disable-next-line import/export -- the facade CreditPackage below deliberately shadows the generated one
 export * from './client';
-export { ApiError, configureClient, type ClientDeps } from './configure';
+export { ApiError, configureClient, isApiError, type ClientDeps } from './configure';
 
-// Readable facades over FastAPI's generated operation names.
-export const getMe = async () => (await getCurrentUserApiUsersMeGet()).data;
+// Zod schemas for responses the OpenAPI snapshot doesn't type (or types too loosely).
+export { AudioResultSchema, type AudioResult } from './overrides/audioSearch';
+export { JobDetailSchema, JobSummarySchema, type JobDetail, type JobSummary } from './overrides/jobs';
 
-export const listCreditPackages = async () => (await listCreditPackagesApiUsersCreditsPackagesGet()).data;
+// Readable facades over FastAPI's generated operation names. Every one throws ApiError.
+export * from './facades/auth';
+// Explicit: the facade's camelCase CreditPackage replaces the generated one of the same name.
+// eslint-disable-next-line import/export
+export { createAppCheckout, listCreditPackages, type CreditPackage } from './facades/credits';
+export * from './facades/make';
+export * from './facades/jobs';

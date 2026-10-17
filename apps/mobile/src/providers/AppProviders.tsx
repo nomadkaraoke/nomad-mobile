@@ -5,6 +5,7 @@ import { I18nManager } from 'react-native';
 
 import { setupApiClients } from '../api/setup';
 import { useAuth } from '../auth/store';
+import { useSessionCheck } from '../auth/useSessionCheck';
 import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
 
@@ -12,6 +13,12 @@ import { initObservability } from '../observability';
 installIntlPolyfills();
 initObservability();
 setupApiClients();
+
+/** Spec §5: re-checks the gen session on launch and on foreground (a 401 signs out). */
+function SessionCheck() {
+  useSessionCheck();
+  return null;
+}
 
 /** i18n + server-state providers; renders nothing until the stored session has been read. */
 export function AppProviders({ children }: { children: ReactNode }) {
@@ -35,7 +42,10 @@ export function AppProviders({ children }: { children: ReactNode }) {
   if (!hydrated) return null;
   return (
     <IntlProvider locale={locale}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <SessionCheck />
+        {children}
+      </QueryClientProvider>
     </IntlProvider>
   );
 }
