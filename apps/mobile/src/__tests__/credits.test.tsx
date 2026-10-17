@@ -132,6 +132,31 @@ it('a dismissed browser whose balance already rose counts as paid', async () => 
   expect(await screen.findByTestId('credits-added')).toBeTruthy();
 });
 
+it('a dismissed browser re-checks the balance a few times before saying no payment was made', async () => {
+  openCredits();
+  await screen.findByTestId('credits-pkg-3_credits');
+  // Baseline, then two unchanged reads; the webhook lands on the third check.
+  gen.getMe
+    .mockResolvedValueOnce({ email: 'me@example.com', credits: 1 })
+    .mockResolvedValueOnce({ email: 'me@example.com', credits: 1 })
+    .mockResolvedValueOnce({ email: 'me@example.com', credits: 1 })
+    .mockResolvedValue({ email: 'me@example.com', credits: 4 });
+  browser.openAuthSessionAsync.mockResolvedValue({ type: 'dismiss' } as WebBrowser.WebBrowserAuthSessionResult);
+  await act(async () => fireEvent.press(screen.getByTestId('credits-checkout')));
+  expect(await screen.findByTestId('credits-added')).toBeTruthy();
+  expect(screen.queryByTestId('credits-no-payment')).toBeNull();
+});
+
+it('a dismissed browser checks the balance 3 times (not forever) before "No payment made"', async () => {
+  openCredits();
+  await screen.findByTestId('credits-pkg-3_credits');
+  browser.openAuthSessionAsync.mockResolvedValue({ type: 'dismiss' } as WebBrowser.WebBrowserAuthSessionResult);
+  await act(async () => fireEvent.press(screen.getByTestId('credits-checkout')));
+  expect(await screen.findByTestId('credits-no-payment')).toBeTruthy();
+  const afterOpen = gen.getMe.mock.calls.length;
+  expect(afterOpen).toBe(1 + 3); // the baseline, then three checks
+});
+
 it('shows a plain failure (not a crash) when checkout cannot start', async () => {
   openCredits();
   await screen.findByTestId('credits-pkg-3_credits');

@@ -4,8 +4,12 @@ import * as WebBrowser from 'expo-web-browser';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const RETURN_URL = 'nomadkaraoke://checkout';
-/** Spec: poll every 1s for up to 10s. Mutable so tests can shrink the wait instead of faking timers. */
-export const pollConfig = { intervalMs: 1000, tries: 10 };
+/**
+ * Spec: poll every 1s for up to 10s after a paid return. A dismissed browser (closed after paying, before the
+ * redirect) checks 3 times (~2s) before "No payment made". Mutable so tests can shrink the wait instead of
+ * faking timers.
+ */
+export const pollConfig = { intervalMs: 1000, tries: 10, dismissTries: 3 };
 
 export type CheckoutPhase = 'idle' | 'opening' | 'confirming' | 'added' | 'noPayment' | 'pending' | 'failed';
 
@@ -32,7 +36,10 @@ export function useCheckout(email: string) {
     };
   }, []);
 
-  /** Resolves after `ms`, or at once on unmount (the timer is cleared so nothing outlives the screen). */
+  /**
+   * Resolves after `ms`. On unmount the timer is cleared and the promise never settles, so a poll waiting on it
+   * just stops (nothing outlives the screen); pending awaits are garbage-collected with it.
+   */
   const sleep = useCallback(
     (ms: number) =>
       new Promise<void>((resolve) => {
@@ -86,7 +93,7 @@ export function useCheckout(email: string) {
         const url = await createAppCheckout(packageId, email);
         const result = await WebBrowser.openAuthSessionAsync(url, RETURN_URL);
         if (result.type === 'success' && returnStatus(result.url) === 'success') await finish(pollConfig.tries);
-        else if (result.type === 'dismiss' && (await waitForCredits(1))) {
+        else if (result.type === 'dismiss' && (await waitForCredits(pollConfig.dismissTries))) {
           // Closed the browser after paying, before the redirect: the credit is already there.
           void queryClient.invalidateQueries({ queryKey: ['me'] });
           set('added');
