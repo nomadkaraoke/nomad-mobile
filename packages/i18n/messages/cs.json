@@ -203,6 +203,7 @@
     "permissionDenied": "Pokud chceš video uložit, povol aplikaci Nomad Karaoke v Nastavení přístup k Fotkám.",
     "play": "Přehrát video",
     "saved": "Uloženo do Fotek",
-    "share": "Sdílet"
+    "share": "Sdílet",
+    "savedGallery": "Uloženo do tvé galerie"
   }
 }

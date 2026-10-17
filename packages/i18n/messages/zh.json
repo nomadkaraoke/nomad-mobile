@@ -203,6 +203,7 @@
     "permissionDenied": "若要保存视频，请在“设置”中允许 Nomad Karaoke 访问您的“照片”。",
     "play": "播放视频",
     "saved": "已保存到“照片”",
-    "share": "分享"
+    "share": "分享",
+    "savedGallery": "已保存至您的作品库"
   }
 }

@@ -203,6 +203,7 @@
     "permissionDenied": "Za spremanje videozapisa dopusti aplikaciji Nomad Karaoke pristup Fotografijama u Postavkama.",
     "play": "Pokreni videozapis",
     "saved": "Spremljeno u Fotografije",
-    "share": "Podijeli"
+    "share": "Podijeli",
+    "savedGallery": "Spremljeno u tvoju galeriju"
   }
 }

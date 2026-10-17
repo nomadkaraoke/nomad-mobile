@@ -89,9 +89,11 @@ describe('openYouTube', () => {
   });
 
   it('falls back to the browser when the app link fails to open', async () => {
+    Platform.OS = 'android';
     canOpen.mockResolvedValue(true);
     open.mockRejectedValueOnce(new Error('no handler'));
     await openYouTube('dQw4w9WgXcQ');
+    expect(open).toHaveBeenCalledWith('vnd.youtube://dQw4w9WgXcQ');
     expect(open).toHaveBeenLastCalledWith('https://youtu.be/dQw4w9WgXcQ');
   });
 });

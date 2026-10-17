@@ -8,15 +8,15 @@ import { GEN_API_URL } from '../config';
 const KEY = 'lossy_720p_mp4';
 
 /**
- * The signed 2-hour GCS URL gen adds to GET /api/jobs/{id} for a complete job, if any. Gen fills
- * download_urls from the legacy flat `output_files` map, which current workers don't write, so this is
- * usually null and the authenticated download endpoint is used instead. Both shapes are accepted.
+ * The signed 2-hour GCS URL gen adds to GET /api/jobs/{id} for a complete job, if any: the flat
+ * `download_urls.lossy_720p_mp4` gen signs from file_urls.finals (a nested `finals.lossy_720p_mp4` is
+ * accepted too). The player streams it directly; without one the authenticated endpoint is used.
  */
 export function signedMp4Url(job: JobDetail): string | null {
   const urls = job.download_urls ?? {};
   const finals = urls.finals;
   const nested = finals && typeof finals === 'object' ? (finals as Record<string, unknown>)[KEY] : undefined;
-  const url = nested ?? urls[KEY];
+  const url = urls[KEY] ?? nested;
   return typeof url === 'string' && url ? url : null;
 }
 
@@ -28,7 +28,8 @@ export class Mp4ArchivedError extends Error {
   }
 }
 
-// expo-file-system only reports the status: "Unable to download a file: response has status[:] 410".
+// expo-file-system (57.0.x native FileSystemDownload.swift / .kt) only reports the HTTP status, in the
+// message "Unable to download a file: response has status[:] 410". Recheck this if the package changes it.
 const isGone = (e: unknown) => e instanceof Error && /status:?\s*410\b/.test(e.message);
 
 /** `fraction` is 0–1, or null when the server sends no Content-Length (gen's streamed endpoint doesn't). */
@@ -77,6 +78,20 @@ export async function downloadMp4(
     if (e instanceof Mp4ArchivedError) return 'archived';
     throw e;
   }
-  await Asset.create(file.uri);
+  try {
+    await Asset.create(file.uri);
+  } finally {
+    // Photos keeps its own copy. A file passed in belongs to the player, which deletes it itself.
+    if (!cached) discardMp4(file);
+  }
   return 'saved';
+}
+
+/** Deletes a cached MP4; a file that's already gone is fine. */
+export function discardMp4(file: File): void {
+  try {
+    file.delete();
+  } catch {
+    // Already deleted or never written.
+  }
 }

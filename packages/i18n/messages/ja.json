@@ -203,6 +203,7 @@
     "permissionDenied": "動画を保存するには、「設定」でNomad Karaokeによる「写真」への追加を許可してください。",
     "play": "動画を再生",
     "saved": "「写真」に保存しました",
-    "share": "共有"
+    "share": "共有",
+    "savedGallery": "ギャラリーに保存しました"
   }
 }

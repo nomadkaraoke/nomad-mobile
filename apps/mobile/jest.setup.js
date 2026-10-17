@@ -66,6 +66,7 @@ jest.mock('expo-file-system', () => {
   class File {
     constructor(dir, name) {
       this.uri = `${dir}/${name}`;
+      this.delete = jest.fn();
     }
   }
   File.downloadFileAsync = jest.fn();

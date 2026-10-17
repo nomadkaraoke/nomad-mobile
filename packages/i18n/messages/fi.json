@@ -203,6 +203,7 @@
     "permissionDenied": "Jos haluat tallentaa videon, anna Nomad Karaokelle lupa lisätä kohteita Kuvat-sovellukseen laitteesi asetuksista.",
     "play": "Toista video",
     "saved": "Tallennettu Kuvat-sovellukseen",
-    "share": "Jaa"
+    "share": "Jaa",
+    "savedGallery": "Tallennettu galleriaasi"
   }
 }

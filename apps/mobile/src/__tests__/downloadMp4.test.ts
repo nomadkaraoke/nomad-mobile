@@ -30,6 +30,13 @@ describe('signedMp4Url', () => {
       'https://gcs/signed',
     );
   });
+  it('prefers the flat download_urls.lossy_720p_mp4 gen signs from file_urls.finals', () => {
+    expect(
+      signedMp4Url(
+        complete({ download_urls: { lossy_720p_mp4: 'https://gcs/flat', finals: { lossy_720p_mp4: 'https://gcs/nested' } } }),
+      ),
+    ).toBe('https://gcs/flat');
+  });
   it('reads a flat download_urls.lossy_720p_mp4', () => {
     expect(signedMp4Url(complete({ download_urls: { lossy_720p_mp4: 'https://gcs/flat' } }))).toBe('https://gcs/flat');
   });
@@ -80,11 +87,32 @@ describe('fetchMp4', () => {
 });
 
 describe('downloadMp4', () => {
-  it('happy path: asks for write-only access, downloads, saves to Photos', async () => {
+  it('happy path: asks for write-only access, downloads, saves to Photos, then deletes the cache copy', async () => {
+    let fetched!: { delete: jest.Mock };
+    download.mockImplementation(async (_url, dest) => (fetched = dest));
     await expect(downloadMp4('j1')).resolves.toBe('saved');
     expect(requestPermissions).toHaveBeenCalledWith(true);
     expect(download).toHaveBeenCalledTimes(1);
     expect(createAsset).toHaveBeenCalledWith('file:///cache/nomad-j1-720p.mp4');
+    expect(fetched.delete).toHaveBeenCalledTimes(1);
+  });
+
+  it('deletes the cache copy even when saving to Photos fails', async () => {
+    let fetched!: { delete: jest.Mock };
+    download.mockImplementation(async (_url, dest) => (fetched = dest));
+    createAsset.mockRejectedValue(new Error('save failed'));
+    await expect(downloadMp4('j1')).rejects.toThrow('save failed');
+    expect(fetched.delete).toHaveBeenCalledTimes(1);
+  });
+
+  it('a failed delete does not turn a save into an error', async () => {
+    download.mockImplementation(async (_url, dest) => {
+      dest.delete.mockImplementation(() => {
+        throw new Error('gone');
+      });
+      return dest;
+    });
+    await expect(downloadMp4('j1')).resolves.toBe('saved');
   });
 
   it('permission denied: no download, nothing saved', async () => {
@@ -101,10 +129,12 @@ describe('downloadMp4', () => {
   });
 
   it('reuses a file already fetched (e.g. by the in-app player)', async () => {
-    const cached = { uri: 'file:///cache/nomad-j1-720p.mp4' } as File;
+    const cached = { uri: 'file:///cache/nomad-j1-720p.mp4', delete: jest.fn() } as unknown as File;
     await expect(downloadMp4('j1', { cached })).resolves.toBe('saved');
     expect(download).not.toHaveBeenCalled();
     expect(createAsset).toHaveBeenCalledWith(cached.uri);
+    // The player still holds it.
+    expect(cached.delete).not.toHaveBeenCalled();
   });
 
   it('other failures throw', async () => {

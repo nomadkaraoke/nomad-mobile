@@ -198,6 +198,7 @@
     "downloading": "Downloading… {percent}%",
     "downloadingNoSize": "Downloading…",
     "saved": "Saved to Photos",
+    "savedGallery": "Saved to your gallery",
     "permissionDenied": "To save the video, allow Nomad Karaoke to add to your Photos in Settings.",
     "openSettings": "Open settings",
     "archived": "This video has been archived. Ask for it to be re-made from the website.",

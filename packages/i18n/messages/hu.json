@@ -203,6 +203,7 @@
     "permissionDenied": "A videó mentéséhez engedélyezd a Nomad Karaoke számára a Fotókhoz való hozzáadást a Beállításokban.",
     "play": "Videó lejátszása",
     "saved": "Mentve a Fotók közé",
-    "share": "Megosztás"
+    "share": "Megosztás",
+    "savedGallery": "Elmentve a galériádba"
   }
 }

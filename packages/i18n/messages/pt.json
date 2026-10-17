@@ -203,6 +203,7 @@
     "permissionDenied": "Para salvar o vídeo, permita que o Nomad Karaoke acesse suas Fotos nas Ajustes/Configurações.",
     "play": "Reproduzir vídeo",
     "saved": "Salvo em Fotos",
-    "share": "Compartilhar"
+    "share": "Compartilhar",
+    "savedGallery": "Salvo na sua galeria"
   }
 }

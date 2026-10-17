@@ -203,6 +203,7 @@
     "permissionDenied": "För att spara videon behöver du ge Nomad Karaoke åtkomst till Bilder i Inställningar.",
     "play": "Spela upp video",
     "saved": "Sparad i Bilder",
-    "share": "Dela"
+    "share": "Dela",
+    "savedGallery": "Sparat i ditt galleri"
   }
 }

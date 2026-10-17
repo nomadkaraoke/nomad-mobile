@@ -9,10 +9,9 @@ import { useVideoPlayer, VideoView } from 'expo-video';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, Linking, Platform, Pressable, Share, View } from 'react-native';
 
-import { downloadMp4, fetchMp4, Mp4ArchivedError, signedMp4Url } from '../../jobs/downloadMp4';
+import { discardMp4, downloadMp4, fetchMp4, Mp4ArchivedError, signedMp4Url } from '../../jobs/downloadMp4';
+import { copiedToast } from '../../jobs/readyUi';
 import { openYouTube, youtubeId, youtubeShortUrl, youtubeThumbnail, youtubeTitle } from '../../jobs/youtube';
-
-const COPIED_MS = 2000;
 
 type Transfer =
   | { kind: 'idle' | 'saved' | 'denied' | 'archived' | 'failed' }
@@ -46,7 +45,15 @@ export default function ReadyScreen() {
   // The MP4 fetched for in-app playback; Download saves it without fetching again.
   const [local, setLocal] = useState<File | null>(null);
   const busy = transfer.kind === 'busy';
-  const onProgress = (progress: number | null) => setTransfer({ kind: 'busy', progress });
+  // A late progress event (after the save, or after a failure) must not bring the progress line back.
+  const onProgress = (progress: number | null) =>
+    setTransfer((prev) => (prev.kind === 'busy' ? { kind: 'busy', progress } : prev));
+
+  // The player's cached MP4 goes when it's replaced or the screen closes (Photos keeps its own copy).
+  useEffect(() => {
+    if (!local) return;
+    return () => discardMp4(local);
+  }, [local]);
 
   const fail = (e: unknown) => setTransfer({ kind: e instanceof Mp4ArchivedError ? 'archived' : 'failed' });
 
@@ -136,17 +143,18 @@ export default function ReadyScreen() {
 function YouTubeBlock({ id, title }: { id: string; title: string }) {
   const t = useTranslations('ready');
   const url = youtubeShortUrl(id);
-  const [copied, setCopied] = useState(false);
+  // Counts taps, so copying again restarts the toast's timer.
+  const [copied, setCopied] = useState(0);
 
   useEffect(() => {
     if (!copied) return;
-    const timer = setTimeout(() => setCopied(false), COPIED_MS);
+    const timer = setTimeout(() => setCopied(0), copiedToast.ms);
     return () => clearTimeout(timer);
   }, [copied]);
 
   const onCopy = async () => {
     await Clipboard.setStringAsync(url);
-    setCopied(true);
+    setCopied((n) => n + 1);
   };
 
   // Android shares only `message`; iOS shares `url` alongside it, so the link goes in once.
@@ -186,7 +194,7 @@ function YouTubeBlock({ id, title }: { id: string; title: string }) {
           <Button testID="ready-share" variant="secondary" label={t('share')} onPress={onShare} />
         </View>
       </View>
-      {copied ? (
+      {copied > 0 ? (
         <Text testID="ready-copied" accessibilityLiveRegion="polite" className="self-center rounded-full bg-card px-4 py-1">
           {t('copied')}
         </Text>
@@ -222,7 +230,7 @@ function TransferStatus({ transfer }: { transfer: Transfer }) {
     case 'saved':
       return (
         <Text testID="ready-saved" accessibilityLiveRegion="polite" className="font-semibold text-success">
-          {t('saved')}
+          {Platform.OS === 'android' ? t('savedGallery') : t('saved')}
         </Text>
       );
     case 'denied':

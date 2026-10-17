@@ -203,6 +203,7 @@
     "permissionDenied": "Videoyu kaydetmek için Ayarlar'dan Nomad Karaoke'nin Fotoğraflar'a ekleme yapmasına izin ver.",
     "play": "Videoyu oynat",
     "saved": "Fotoğraflar'a kaydedildi",
-    "share": "Paylaş"
+    "share": "Paylaş",
+    "savedGallery": "Galerine kaydedildi"
   }
 }

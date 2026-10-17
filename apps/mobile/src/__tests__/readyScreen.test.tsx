@@ -6,9 +6,10 @@ import { Asset, requestPermissionsAsync } from 'expo-media-library';
 import { router } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
 import { useVideoPlayer } from 'expo-video';
-import { Linking, Share, StyleSheet } from 'react-native';
+import { Linking, Platform, Share, StyleSheet } from 'react-native';
 
 import { useAuth } from '../auth/store';
+import { copiedToast } from '../jobs/readyUi';
 import { jobsPoll } from '../jobs/useMyJobs';
 import { appRoutes } from '../test-utils/routes';
 import { gen, session } from '../test-utils/genAuthMock';
@@ -115,10 +116,12 @@ it('Share opens the native share sheet with the link', async () => {
 });
 
 it('without a YouTube URL plays the signed 720p MP4 in the app, and still offers Download', async () => {
-  open(ready({ state_data: undefined, download_urls: { finals: { lossy_720p_mp4: 'https://gcs/signed.mp4' } } }));
+  open(ready({ state_data: undefined, download_urls: { lossy_720p_mp4: 'https://gcs/signed.mp4' } }));
   expect(await screen.findByTestId('ready-player')).toBeTruthy();
   expect(screen.queryByTestId('ready-youtube')).toBeNull();
+  // Streams the signed URL directly: nothing is pre-downloaded.
   expect(useVideoPlayer).toHaveBeenLastCalledWith('https://gcs/signed.mp4');
+  expect(download).not.toHaveBeenCalled();
   expect(screen.getByTestId('ready-download')).toBeTruthy();
 });
 
@@ -201,4 +204,89 @@ it('opens from a finished job card on the Make tab', async () => {
   // The duration sheet route next to it still resolves.
   act(() => router.push('/job/duration/r1'));
   await waitFor(() => expect(app.getPathname()).toBe('/job/duration/r1'));
+});
+
+it('Copy again restarts the Copied timer', async () => {
+  open();
+  await screen.findByTestId('ready-youtube');
+  // renderRouter runs on fake timers.
+  const elapse = (ms: number) => act(() => jest.advanceTimersByTimeAsync(ms));
+  await act(async () => fireEvent.press(screen.getByTestId('ready-copy')));
+  await elapse(copiedToast.ms - 500);
+  await act(async () => fireEvent.press(screen.getByTestId('ready-copy')));
+  await elapse(1000);
+  // Past the first tap's 2s, within the second's: still showing.
+  expect(screen.getByTestId('ready-copied')).toBeTruthy();
+  await elapse(copiedToast.ms);
+  expect(screen.queryByTestId('ready-copied')).toBeNull();
+});
+
+it('a progress event arriving after the save does not bring the progress line back', async () => {
+  let late!: () => void;
+  download.mockImplementation(async (_url, dest, opts) => {
+    late = () => opts.onProgress({ bytesWritten: 100, totalBytes: 100 });
+    return dest;
+  });
+  open();
+  await screen.findByTestId('ready-youtube');
+  await act(async () => fireEvent.press(screen.getByTestId('ready-download')));
+  expect(await screen.findByTestId('ready-saved')).toBeTruthy();
+  act(() => late());
+  expect(screen.getByTestId('ready-saved')).toBeTruthy();
+  expect(screen.queryByTestId('ready-progress')).toBeNull();
+});
+
+it('on Android says Saved to your gallery', async () => {
+  const os = Platform.OS;
+  Platform.OS = 'android';
+  try {
+    open();
+    await screen.findByTestId('ready-youtube');
+    await act(async () => fireEvent.press(screen.getByTestId('ready-download')));
+    expect(await screen.findByTestId('ready-saved')).toHaveTextContent('Saved to your gallery');
+  } finally {
+    Platform.OS = os;
+  }
+});
+
+it("the player's cached MP4 is kept for Download and deleted when the screen goes away", async () => {
+  let fetched!: { delete: jest.Mock };
+  download.mockImplementation(async (_url, dest) => (fetched = dest));
+  const app = open(ready({ state_data: undefined }));
+  await act(async () => fireEvent.press(await screen.findByTestId('ready-play')));
+  await act(async () => fireEvent.press(screen.getByTestId('ready-download')));
+  expect(await screen.findByTestId('ready-saved')).toBeTruthy();
+  expect(fetched.delete).not.toHaveBeenCalled();
+  app.unmount();
+  expect(fetched.delete).toHaveBeenCalledTimes(1);
+});
+
+it('a job that is not finished says so', async () => {
+  open(ready({ status: 'rendering_video' }));
+  expect(await screen.findByTestId('ready-not-ready')).toBeTruthy();
+  expect(screen.queryByTestId('ready-download')).toBeNull();
+});
+
+it('a failed load offers Try again', async () => {
+  // The app's QueryClient retries once before giving up.
+  gen.getJob
+    .mockRejectedValueOnce(new Error('offline'))
+    .mockRejectedValueOnce(new Error('offline'))
+    .mockResolvedValue(ready());
+  renderRouter(appRoutes(), { initialUrl: '/job/r1' });
+  await act(async () => fireEvent.press(await screen.findByTestId('ready-reload', {}, { timeout: 5000 })));
+  expect(await screen.findByTestId('ready-youtube')).toBeTruthy();
+});
+
+it('a no-YouTube job from the Make tab shows a spinner, not Play, until the full job (with a signed URL) loads', async () => {
+  const listed = ready({ state_data: undefined });
+  gen.listMyJobs.mockResolvedValue([listed]);
+  let resolve!: (j: JobDetail) => void;
+  gen.getJob.mockImplementation(() => new Promise((r) => (resolve = r)));
+  renderRouter(appRoutes(), { initialUrl: '/make' });
+  await act(async () => fireEvent.press(await screen.findByTestId('job-card-r1')));
+  expect(await screen.findByTestId('ready-loading')).toBeTruthy();
+  expect(screen.queryByTestId('ready-play')).toBeNull();
+  await act(async () => resolve({ ...listed, download_urls: { lossy_720p_mp4: 'https://gcs/signed.mp4' } }));
+  expect(await screen.findByTestId('ready-player')).toBeTruthy();
 });

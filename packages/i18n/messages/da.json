@@ -203,6 +203,7 @@
     "permissionDenied": "For at gemme videoen skal du give Nomad Karaoke adgang til Fotos i Indstillinger.",
     "play": "Afspil video",
     "saved": "Gemt i Fotos",
-    "share": "Del"
+    "share": "Del",
+    "savedGallery": "Gemt i dit galleri"
   }
 }

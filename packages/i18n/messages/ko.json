@@ -203,6 +203,7 @@
     "permissionDenied": "비디오를 저장하려면 설정에서 Nomad Karaoke가 사진 앱에 접근할 수 있도록 허용해 주세요.",
     "play": "비디오 재생",
     "saved": "사진 앱에 저장됨",
-    "share": "공유"
+    "share": "공유",
+    "savedGallery": "갤러리에 저장되었습니다"
   }
 }

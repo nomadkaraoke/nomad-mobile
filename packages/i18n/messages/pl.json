@@ -203,6 +203,7 @@
     "permissionDenied": "Aby zapisać wideo, zezwól Nomad Karaoke na dostęp do aplikacji Zdjęcia w Ustawieniach.",
     "play": "Odtwórz wideo",
     "saved": "Zapisano w Zdjęciach",
-    "share": "Udostępnij"
+    "share": "Udostępnij",
+    "savedGallery": "Zapisano w Twojej galerii"
   }
 }

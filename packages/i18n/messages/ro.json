@@ -203,6 +203,7 @@
     "permissionDenied": "Pentru a salva videoclipul, permite aplicației Nomad Karaoke să adauge fișiere în Poze din Setări.",
     "play": "Redă videoclipul",
     "saved": "Salvat în Poze",
-    "share": "Distribuie"
+    "share": "Distribuie",
+    "savedGallery": "Salvat în galeria ta"
   }
 }
