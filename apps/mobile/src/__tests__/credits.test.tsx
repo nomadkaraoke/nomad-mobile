@@ -132,9 +132,16 @@ it('a dismissed browser whose balance already rose counts as paid', async () => 
   expect(await screen.findByTestId('credits-added')).toBeTruthy();
 });
 
+// The app's launch session check (useSessionCheck) also reads the balance; let it land before counting.
+const settleLaunchCheck = async () => {
+  await waitFor(() => expect(gen.getMe).toHaveBeenCalled());
+  gen.getMe.mockClear();
+};
+
 it('a dismissed browser re-checks the balance a few times before saying no payment was made', async () => {
   openCredits();
   await screen.findByTestId('credits-pkg-3_credits');
+  await settleLaunchCheck();
   // Baseline, then two unchanged reads; the webhook lands on the third check.
   gen.getMe
     .mockResolvedValueOnce({ email: 'me@example.com', credits: 1 })
@@ -150,6 +157,7 @@ it('a dismissed browser re-checks the balance a few times before saying no payme
 it('a dismissed browser checks the balance 3 times (not forever) before "No payment made"', async () => {
   openCredits();
   await screen.findByTestId('credits-pkg-3_credits');
+  await settleLaunchCheck();
   browser.openAuthSessionAsync.mockResolvedValue({ type: 'dismiss' } as WebBrowser.WebBrowserAuthSessionResult);
   await act(async () => fireEvent.press(screen.getByTestId('credits-checkout')));
   expect(await screen.findByTestId('credits-no-payment')).toBeTruthy();
