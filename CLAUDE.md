@@ -29,7 +29,7 @@ The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke proj
 
 ```
 apps/mobile/          Expo app (src/app routes, src/auth, src/api, src/find, src/providers)
-packages/core/        pure TS: session model + input normalizers, job phases, poll backoff, formatting
+packages/core/        pure TS: session model + input normalizers, job phases + steps, audio-search ranking, duration confirm, formatting
 packages/i18n/        messages/<33>.json, resolveLocale, IntlProvider; scripts/ vendored from karaoke-gen
 packages/api-gen/     generated karaoke-gen client + configureClient + facades (auth, credits, make, jobs) + zod overrides
 packages/api-decide/  generated karaoke-decide client + facades (searchSongs, popularSongs, getSong)
@@ -95,15 +95,19 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - **Maestro on a dev-client build (iOS):** `maestro/common/launch.yaml` uses `stopApp` and `clearKeychain` instead of `clearState` on iOS. `clearState` drops the remembered Metro server, and reconnecting triggers an iOS "Open in …?" SpringBoard prompt that Maestro cannot see. Use the header back button (`tapOn: "Back|Navigate up"`) and avoid `openLink` on iOS for the same reason.
 - **Maestro on Android:** `clearKeychain` is a no-op there (the session survives), so `launch.yaml` uses `clearState` on Android, which also forgets the Metro server; it then `openLink`s the dev-client URL `exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081` (Metro through 10.0.2.2, no adb reverse). Don't type the URL into the dev launcher: `inputText`/`eraseText` there hung Maestro's driver (120 s gRPC timeout) late in a suite. The header back button is "Navigate up" on Android (`tapOn: "Back|Navigate up"`). A fresh emulator's Chrome shows a first-run screen inside Custom Tabs (`e2e-local.sh` disables it; `common/web-auth-alert.yaml` taps past it). Don't `kill $(lsof -ti tcp:8081)` to restart Metro: the emulator's qemu holds a connection to 8081 and dies with it.
 - **Maestro on iOS:** `openAuthSessionAsync` (checkout) first shows a "… Wants to Use … to Sign In" alert (`common/web-auth-alert.yaml` taps Continue). The fake checkout's own Cancel needs `rightOf: Pay` (the browser toolbar has a Cancel too). `hideKeyboard` on iOS can tap whatever is under the keyboard; avoid it.
-- **Android delivers the checkout return (`nomadkaraoke://checkout?status=…`) to Expo Router too.** `src/app/+native-intent.tsx` keeps the current screen, otherwise "Unmatched Route" covers the credits screen.
-- **gen doesn't record `credits_charged` for create-from-search jobs.** Its reconcile reads a missing value as 1, its confirm-duration route as 0; `durationConfirm` shows the real total and acknowledges gen's arithmetic (`acknowledgedCredits`).
+- **Android delivers the checkout return (`nomadkaraoke://checkout?status=…`) to Expo Router too.** `src/app/+native-intent.tsx` keeps the current screen, otherwise "Unmatched Route" covers the credits screen. If the return cold-starts the app (Android killed it during card entry), it opens `/make/new` when a fresh make intent is stored, else Me.
+- **Duration confirm sends the full total.** `durationConfirm` (`@nomad/core`) computes `totalCredits` = the job's `state_data.credits_charged` (`?? 1`: jobs made before gen v0.278.2 never recorded it, and gen charged 1) + the pending extra; the app sends that total and gen (≥ v0.278.2) records `credits_charged` on create and resolves the confirm against it.
 - **RTL text alignment:** iOS "natural" alignment (RN's `auto`) ignores `I18nManager.forceRTL`, so paragraphs stayed left-aligned in ar/he. `@nomad/ui` `Text` defaults to `textAlign: 'left'`, which RN mirrors to the right under RTL. Interpolated titles/emails go through `isolate()` (`@nomad/i18n`) so Latin text doesn't scramble inside an Arabic sentence.
 - **Metro started with `CI=1` doesn't watch files** (`e2e-local.sh` starts it that way): after editing code, restart it, or run your own `npx expo start --dev-client` (same env, no `CI=1`) while iterating.
 - **`renderRouter` (expo-router testing) switches jest to fake timers.** Reset with `jest.useRealTimers()` in `beforeEach` when code uses real delays.
 
-## Phase 1 notes (deferred from Phase 0)
+## Sign-in and session
 
-- Sign-in is real (Phase 1): gen email code, Google (`react-native-google-auth`) and Apple (`expo-apple-authentication`, off until `EXPO_PUBLIC_APPLE_SIGNIN=1`; `app.config.ts` strips the entitlement otherwise). Against the local stack, `EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1` makes Google/Apple send `fake:<email>` (never against prod gen).
+- Gen email code, Google (`react-native-google-auth`) and Apple (`expo-apple-authentication`, off until `EXPO_PUBLIC_APPLE_SIGNIN=1`; `app.config.ts` strips the entitlement otherwise). Against the local stack, `EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1` makes Google/Apple send `fake:<email>`; `config.ts` only honours it when the gen URL is a local host (loopback, 10.0.2.2, private LAN, `*.local`).
+- `useSessionCheck` (in `AppProviders`) calls `GET /api/users/me` on launch and on every foreground while signed in; a 401 signs out through the gen client's `onUnauthorized`. Open sign-in with `openSignIn(returnTo)` (`auth/signInUi.ts`).
+
+## Deferred / later-phase notes
+
 - RTL (ar, he) currently applies on the next launch. Reload through `expo-updates` once EAS Update is configured.
 - Sentry Expo config plugin (org/project, source maps, dSYMs) is added together with the Sentry account.
 - EAS: `eas.json` and `.eas/workflows/*` are dormant. `runtimeVersion` / `updates.url` need an EAS project id.
