@@ -90,8 +90,11 @@ function CreditsBody({ email, returnTo, packages, selected, setSelected, locale 
     if (phase !== 'added' || left.current) return;
     left.current = true;
     const timer = setTimeout(() => {
-      if (returnTo && isInAppPath(returnTo) && router.canGoBack()) router.back();
-      else router.replace((returnTo && isInAppPath(returnTo) ? returnTo : '/(tabs)/me') as Href);
+      // Back when there is history (replacing would stack a second (tabs) under the root); a cold-start
+      // credits screen has none, so it is replaced with returnTo, or Me where the balance shows.
+      const target = returnTo && isInAppPath(returnTo) ? (returnTo as Href) : '/me';
+      if (router.canGoBack()) router.back();
+      else router.replace(target);
     }, 1500); // long enough to read "Credits added" before the make flow comes back
     return () => clearTimeout(timer);
   }, [phase, returnTo]);

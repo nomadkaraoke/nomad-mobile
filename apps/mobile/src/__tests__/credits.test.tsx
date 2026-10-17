@@ -150,6 +150,19 @@ it('an invalid returnTo falls back to the Me tab after a purchase', async () => 
   await waitFor(() => expect(app.getPathname()).toBe('/me'), { timeout: 3000 });
 });
 
+it('opened from Me (no returnTo): a purchase goes back to Me without stacking a second set of tabs', async () => {
+  const app = renderRouter(routes(), { initialUrl: '/me' });
+  await screen.findByTestId('me-screen');
+  act(() => router.push('/credits'));
+  await screen.findByTestId('credits-pkg-3_credits');
+  browser.openAuthSessionAsync.mockResolvedValue({ type: 'success', url: 'nomadkaraoke://checkout?status=success' });
+  gen.getMe.mockResolvedValueOnce({ email: 'me@example.com', credits: 1 }).mockResolvedValue({ email: 'me@example.com', credits: 4 });
+  await act(async () => fireEvent.press(screen.getByTestId('credits-checkout')));
+  await waitFor(() => expect(app.getPathname()).toBe('/me'), { timeout: 3000 });
+  const root = app.getRouterState()?.routes[0]?.state;
+  expect(root?.routes?.map((r) => r.name)).toEqual(['(tabs)']);
+});
+
 it('shows a retry when the packages fail to load', async () => {
   gen.listCreditPackages.mockRejectedValue(new Error('boom'));
   openCredits();
