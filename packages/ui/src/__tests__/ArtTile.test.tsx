@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react-native';
+import { StyleSheet } from 'react-native';
 
 import { ArtTile, initials } from '../ArtTile';
+import { colors } from '../tokens';
 
 // The tile is decorative (hidden from screen readers), so queries must include hidden elements.
 const H = { includeHiddenElements: true };
@@ -19,6 +21,12 @@ it('renders the title initials on a decorative tile, hidden from screen readers'
   expect(screen.getByTestId('art', H)).toHaveTextContent('MB');
   expect(screen.getByTestId('art', H).props.accessibilityElementsHidden).toBe(true);
   expect(screen.getByTestId('art', H).props.importantForAccessibility).toBe('no-hide-descendants');
+});
+
+it('paints the brand gradient from the tokens (purple to translucent pink)', () => {
+  render(<ArtTile testID="art" title="Starlight" />);
+  const style = StyleSheet.flatten(screen.getByTestId('art', H).props.style);
+  expect(style.experimental_backgroundImage).toBe(`linear-gradient(135deg, ${colors.purple}, ${colors.primary}80)`);
 });
 
 it('shows an image instead of initials when one is given', () => {

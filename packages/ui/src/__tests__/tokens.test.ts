@@ -1,3 +1,6 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
 import { colors } from '../tokens';
 
 // WCAG 2.x relative luminance and contrast ratio.
@@ -20,4 +23,15 @@ it('body and muted text meet AA on the background and on cards', () => {
     expect(contrast(colors.text, surface)).toBeGreaterThanOrEqual(4.5);
     expect(contrast(colors.muted, surface)).toBeGreaterThanOrEqual(4.5);
   }
+});
+
+it('matches the Uniwind @theme in apps/mobile/global.css colour for colour', () => {
+  const css = readFileSync(join(__dirname, '../../../../apps/mobile/global.css'), 'utf8');
+  const theme = css.slice(css.indexOf('@theme'));
+  const fromCss: Record<string, string> = {};
+  for (const [, name, value] of theme.matchAll(/--color-([a-z-]+):\s*(#[0-9a-fA-F]{6})/g)) {
+    fromCss[name!.replace(/-([a-z])/g, (_m: string, c: string) => c.toUpperCase())] = value!.toLowerCase();
+  }
+  const fromTokens = Object.fromEntries(Object.entries(colors).map(([k, v]) => [k, v.toLowerCase()]));
+  expect(fromCss).toEqual(fromTokens);
 });

@@ -1,5 +1,7 @@
 import { Image, Text, View } from 'react-native';
 
+import { colors } from './tokens';
+
 export type ArtTileProps = {
   title: string;
   testID: string;
@@ -11,6 +13,9 @@ export type ArtTileProps = {
 
 // Leading punctuation and symbols a title word can start with: "(I Can't…", "“Heroes”", "#1 Crush".
 const LEADING_MARKS = /^[\s"'“”‘’()[\]{}.,!?¿¡\-–—&/:;#*+]+/;
+
+// Brand purple into half-transparent pink (80 = 50% alpha), over the dark background.
+const GRADIENT = `linear-gradient(135deg, ${colors.purple}, ${colors.primary}80)`;
 
 /** Up to two initials from the title's first words, ignoring a leading "The" and punctuation. */
 export function initials(title: string): string {
@@ -36,7 +41,7 @@ export function ArtTile({ title, testID, imageUrl, height = 160 }: ArtTileProps)
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
       className="w-full justify-end overflow-hidden rounded-xl p-4"
-      style={{ height, experimental_backgroundImage: 'linear-gradient(135deg, #3b1d5e, #ff7acc80)' }}
+      style={{ height, experimental_backgroundImage: GRADIENT }}
     >
       {imageUrl ? (
         <Image testID={`${testID}-image`} source={{ uri: imageUrl }} className="absolute inset-0" resizeMode="cover" />

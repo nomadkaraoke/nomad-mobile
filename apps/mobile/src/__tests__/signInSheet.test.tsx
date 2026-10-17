@@ -3,6 +3,7 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import * as Apple from 'expo-apple-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { renderRouter } from 'expo-router/testing-library';
+import { Keyboard } from 'react-native';
 import { GoogleAuth } from 'react-native-google-auth';
 
 import { useAuth } from '../auth/store';
@@ -69,7 +70,8 @@ it('hides Apple when appleAvailable() is false, and uses a generic title without
   expect(screen.queryByTestId('signin-apple')).toBeNull();
 });
 
-it('email → code → signed in → back in the make flow', async () => {
+it('email → code → signed in → back in the make flow, with the keyboard put away', async () => {
+  const dismiss = jest.spyOn(Keyboard, 'dismiss');
   const app = openSheet();
   fireEvent.press(await screen.findByTestId('signin-email-start'));
   fireEvent.changeText(await screen.findByTestId('signin-email'), 'Me@Example.com');
@@ -82,6 +84,9 @@ it('email → code → signed in → back in the make flow', async () => {
   expect(gen.verifyCode).toHaveBeenCalledWith('me@example.com', '123456');
   expect(useAuth.getState().getToken()).toBe('tok-me@example.com');
   expect(useMakeIntent.getState().get()).toMatchObject({ title: 'Starlight' });
+  // The code field had the keyboard up; Android keeps it over the destination unless it's dismissed.
+  expect(dismiss).toHaveBeenCalled();
+  dismiss.mockRestore();
 });
 
 it('email errors: invalid address, throttled sends, disposable inboxes', async () => {

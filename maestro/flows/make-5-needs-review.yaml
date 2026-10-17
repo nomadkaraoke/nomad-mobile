@@ -41,18 +41,16 @@ name: make-5-needs-review
     visible: ".*127\\.0\\.0\\.1.*"
     timeout: 30000
 # Signed in by the handoff: gen web shows "Successfully signed in!" for a moment, then the review page
-# (first Next dev compile can be slow). A fast redirect can skip past the interstitial, so either counts;
-# the review page is only reachable signed in. (On the local stack the review page itself can show
-# "Failed to load lyrics": Next dev mounts it twice and gen's correction-data races awaiting_review ->
-# in_review, see task-9 report.)
+# loads (first Next dev compile can be slow; a fast redirect can skip past the interstitial). The review
+# page is only reachable signed in, and it must load. "Failed to load lyrics" here is gen's correction-data
+# race: GET /api/review/{id}/correction-data checks awaiting_review then transitions to in_review, and two
+# concurrent loads make the second one 500 (in_review -> in_review). Seen on iOS every run, not on Android.
+# Wait for the page to settle on the review UI or one of the failures, whichever comes first.
 - extendedWaitUntil:
-    visible: "Successfully signed in!?|Failed to load lyrics|Loading\\.\\.\\."
+    visible: ".*Lyrics Transcription Review.*|Failed to load lyrics|.*page could not be found.*"
     timeout: 90000
-# Let the page settle (interstitial → review page) before the screenshot.
-- extendedWaitUntil:
-    notVisible: "Successfully signed in!?|Loading\\.\\.\\."
-    timeout: 60000
-    optional: true
+- assertNotVisible: "Failed to load lyrics"
+- assertNotVisible: ".*page could not be found.*"
 - waitForAnimationToEnd:
     timeout: 10000
 - takeScreenshot: docs/screenshots/phase1/${PLATFORM}/review-bridge-browser

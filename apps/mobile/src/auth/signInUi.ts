@@ -1,5 +1,6 @@
 import { useTranslations } from '@nomad/i18n';
 import { router, type Href } from 'expo-router';
+import { Keyboard } from 'react-native';
 
 import { isSignInError } from './authApi';
 
@@ -12,9 +13,11 @@ export const isInAppPath = (p: string) => p.startsWith('/') && !p.startsWith('//
 /**
  * Leave the sign-in sheet for `returnTo` (the make flow passes `/make/new`). The sign-in screens replace one
  * another rather than stacking, so dismissing to `returnTo` (or replacing the sheet with it when it isn't
- * in the history) never leaves a sign-in screen behind.
+ * in the history) never leaves a sign-in screen behind. Puts the keyboard away first.
  */
 export function finishSignIn(returnTo: string | undefined) {
+  // The code/email field had the keyboard up; Android leaves it over the destination screen otherwise.
+  Keyboard.dismiss();
   if (returnTo && isInAppPath(returnTo)) router.dismissTo(returnTo as Href);
   else if (router.canGoBack()) router.back();
   else router.replace('/');

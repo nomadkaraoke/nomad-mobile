@@ -2,8 +2,8 @@ import type { SongResponse } from '@nomad/api-decide';
 import { useTranslations } from '@nomad/i18n';
 import { Button, List, Screen, Text, TextField } from '@nomad/ui';
 import { router } from 'expo-router';
-import { useState } from 'react';
-import { ActivityIndicator, Keyboard, Pressable, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, AppState, Keyboard, Pressable, View } from 'react-native';
 
 import { useSongSearch } from '../../find/useSongSearch';
 
@@ -32,6 +32,16 @@ export default function DiscoverScreen() {
   const t = useTranslations();
   const [query, setQuery] = useState('');
   const { mode, songs, isLoading, isError, refetch, query: activeQuery } = useSongSearch(query);
+
+  // The search field never takes focus by itself: on Android a resumed activity can hand focus back to
+  // it (or a sheet can leave the keyboard up), covering the tab bar. Focus only on the user's tap.
+  useEffect(() => {
+    Keyboard.dismiss();
+    const sub = AppState.addEventListener('change', (next) => {
+      if (next === 'active') Keyboard.dismiss();
+    });
+    return () => sub?.remove(); // jest-expo's AppState mock returns no subscription
+  }, []);
 
   const empty = isLoading ? (
     <ActivityIndicator testID="discover-loading" />
