@@ -75,6 +75,24 @@ it('Confirm acknowledges the full total (credits_charged + pending), then return
   await waitFor(() => expect(gen.listMyJobs.mock.calls.length).toBeGreaterThan(fetched));
 });
 
+it('a job without credits_charged (create-from-search) shows the real total but acknowledges what gen checks', async () => {
+  // Captured from the gen local stack: 15:00, the create-time credit is not recorded in state_data.
+  const unrecorded = job({
+    job_id: 'd1',
+    status: 'awaiting_duration_confirm',
+    state_data: { pending_additional_credits: 1, duration_actual_seconds: 900 },
+  });
+  gen.listMyJobs.mockResolvedValue([unrecorded]);
+  gen.getJob.mockResolvedValue(unrecorded as JobDetail);
+  await openSheet();
+  expect(screen.getByTestId('duration-body')).toHaveTextContent(
+    'This track is 15:00 long, so it costs 2 credits in total (1 more).',
+  );
+  expect(screen.getByTestId('duration-refund-note')).toBeTruthy();
+  await act(async () => fireEvent.press(screen.getByTestId('duration-confirm')));
+  expect(gen.confirmDuration).toHaveBeenCalledWith('d1', 1);
+});
+
 it('Confirm without enough credits (402) goes to credits, returning to this sheet', async () => {
   gen.confirmDuration.mockRejectedValue(apiError(402, 'insufficient_credits'));
   const app = await openSheet();

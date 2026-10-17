@@ -95,7 +95,7 @@ type BodyProps = {
 
 function DurationBody({ job, busy, confirming, cancelling, failed, onConfirm, onCancel }: BodyProps) {
   const t = useTranslations('duration');
-  const { totalCredits, extraCredits, seconds } = durationConfirm(job);
+  const { totalCredits, extraCredits, acknowledgedCredits, seconds } = durationConfirm(job);
   const charged = totalCredits - extraCredits;
   return (
     <>
@@ -118,7 +118,7 @@ function DurationBody({ job, busy, confirming, cancelling, failed, onConfirm, on
         label={t('confirm')}
         loading={confirming}
         disabled={busy}
-        onPress={() => onConfirm(totalCredits)}
+        onPress={() => onConfirm(acknowledgedCredits)}
       />
       <Button
         testID="duration-cancel"
