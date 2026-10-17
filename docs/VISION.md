@@ -85,12 +85,12 @@ Phase specs refine these. decide's own [VISION.md](https://github.com/nomadkarao
 | Phase | Use case | What it delivers | New backend work |
 |---|---|---|---|
 | **0. Foundation** ✅ | n/a | Workspace, generated API clients, 33-locale i18n, UI wrappers, CI, Maestro (PR #3) | n/a |
-| **1. Make it** | 2 | Real email-code sign-in → search → make (best audio picked automatically) → pay with the web link through gen's fake checkout → job progress → watch and YouTube link. A job that needs review opens gen's web review as a temporary bridge. | gen `handoff-token` endpoint plus a local-stack scenario |
+| **1. Make it** ✅ | 2 | Real sign-in (email code + Google; Apple built, switched on in phase 6) → search → make (best audio picked automatically) → pay with the web link through gen's fake checkout → job progress → watch and YouTube link. A job that needs review opens gen's web review as a temporary bridge. | gen `handoff-token` endpoint plus a local-stack scenario |
 | **2. Native review** | 2 | Lyrics and instrumental review designed for phones; replaces the bridge | Expected none (review APIs exist); confirm in the phase spec |
 | **3. Discover** | 1 | Music services, quiz, recommendations, filters including the library filter, vocal range and singable filter | decide sign-in exchange (spec §4.2), a decide local stack, Apple Music |
 | **4. Me** | 4 | History and ratings (crowd singability data), playlists and library, "get this made" | decide history and playlist APIs (some exist) |
 | **5. Tonight** | 3 (+2) | Nomad nights natively (deep link, optional account, requests, queue, make on the spot, automatic history), plus tonight's setlist at other bars | kjbox singer API for the app, plus a kjbox local stack |
-| **6. Release readiness** | all | In-app purchases (RevenueCat), push notifications, account deletion, Sentry and PostHog, store listings and privacy labels, test builds (TestFlight and Google Play internal testing) | RevenueCat webhook, Expo push tokens, `DELETE /api/users/me` |
+| **6. Release readiness** | all | In-app purchases (RevenueCat), push notifications, account deletion, Sentry and PostHog, store listings and privacy labels, test builds (TestFlight and Google Play internal testing), switching on Sign in with Apple (built in phase 1; needs a team-signed iOS build), a real Android release signing key (plus its Google OAuth SHA-1) | RevenueCat webhook, Expo push tokens, `DELETE /api/users/me` |
 
 Push notifications are in the release, but Expo's push service needs an EAS project ID, so they arrive in phase 6 with the account decisions. Until then, job progress is polled.
 

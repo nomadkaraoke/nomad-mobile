@@ -2,7 +2,7 @@
 
 The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke project (decide recommendations, gen karaoke videos, kjbox nights, a singer's own history). **Read [docs/VISION.md](docs/VISION.md) first**: it has the four use cases, the navigation, the release bar (no publishing until all four have a first usable version) and the phase roadmap.
 
-**Status:** Phase 1 "Make it" (2026-10-17): real gen sign-in → make → pay → watch, verified by nine Maestro flows on iOS and Android against the gen local stack. Next: Task 9 (screenshot UX review, prod verification, ship). Phase 0 (2026-10-14) laid the workspace, packages, CI and agent tooling.
+**Status:** Phase 1 "Make it" (2026-10-17): real gen sign-in → make → pay → watch, verified by nine Maestro flows on iOS and Android against the gen local stack, plus a prod check of the release APK (real email-code sign-in, live Stripe checkout open/cancel, real audio search). Next: Phase 2 "Native review" (docs/VISION.md). Phase 0 (2026-10-14) laid the workspace, packages, CI and agent tooling.
 
 - Phase 1 spec: [docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md](docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md); plan: [docs/superpowers/plans/2026-10-17-mobile-phase1-make-it.md](docs/superpowers/plans/2026-10-17-mobile-phase1-make-it.md)
 - Phase 0 spec: [docs/superpowers/specs/2026-10-14-mobile-phase0-design.md](docs/superpowers/specs/2026-10-14-mobile-phase0-design.md) (MVP flow §2, foundation §3, shared auth + payments §4)
@@ -111,6 +111,9 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - Decide personal recommendations, music services and vocal range: Phase 3 "Discover" in docs/VISION.md (needs spec §4.2 `exchange-gen-session`). Sung history, playlists and library are Phase 4 "Me".
 
 ## App identity
+
+- Apple: App ID `com.nomadkaraoke.mobile` ("Nomad Karaoke") registered 2026-10-17 in Andrew's Apple Developer account (Individual, team `55B76HN73D`, renews 2027-06-25) with Sign in with Apple enabled. Turning the Apple button on (`EXPO_PUBLIC_APPLE_SIGNIN=1`) and verifying it needs a team-signed iOS build (Xcode signed into Andrew's Apple ID): parked to Phase 6 with TestFlight.
+- Google OAuth clients (project `nomadkaraoke`, created 2026-10-17): web `718638054799-fush0smd1e4icq9pt0immp8n59jjlebh` (the token audience gen verifies), iOS `718638054799-hre535n83p8i85tsqf6ai759nlubhd2o`, Android `718638054799-q0f65m68a31du5nn9h5accsauad232ku` (debug keystore SHA-1 `5E:8F:…:F6:25`; add the release key's SHA-1 when a real signing key exists).
 
 - iOS bundle id / Android package: `com.nomadkaraoke.mobile`
 - URL scheme: `nomadkaraoke`
