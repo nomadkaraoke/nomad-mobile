@@ -59,7 +59,9 @@
     "titleLabel": "Titel van het nummer",
     "hasKaraoke": "Karaokeversies beschikbaar",
     "makeIt": "Maken · 1 credit",
-    "noKaraoke": "Geen karaokeversie gevonden"
+    "noKaraoke": "Geen karaokeversie gevonden",
+    "hasKaraokeHint": "Je kunt nog steeds je eigen versie maken, op basis van de audio die je kiest.",
+    "noKaraokeHint": "Maak er je eigen karaokevideo van, klaar om te zingen en te delen."
   },
   "tabs": {
     "discover": "Ontdekken",

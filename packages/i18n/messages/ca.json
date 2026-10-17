@@ -59,7 +59,9 @@
     "titleLabel": "Títol de la cançó",
     "hasKaraoke": "Hi ha versions de karaoke",
     "makeIt": "Crea-la · 1 crèdit",
-    "noKaraoke": "No s'ha trobat cap versió de karaoke"
+    "noKaraoke": "No s'ha trobat cap versió de karaoke",
+    "hasKaraokeHint": "Encara pots crear el teu propi karaoke, a partir de l'àudio que triïs.",
+    "noKaraokeHint": "Crea el teu propi vídeo de karaoke d'aquesta cançó, a punt per cantar i compartir."
   },
   "tabs": {
     "discover": "Descobreix",

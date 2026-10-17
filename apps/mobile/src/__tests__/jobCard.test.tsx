@@ -223,3 +223,15 @@ it('done: Ready, and a tap opens the job', async () => {
   expect(await screen.findByTestId('job-ready-stub')).toBeTruthy();
   expect(app.getPathname()).toBe('/job/ok');
 });
+
+it('done with a YouTube link: the video thumbnail sits beside the title; without one, no thumbnail', async () => {
+  show(
+    job({ job_id: 'yt', status: 'complete', state_data: { youtube_url: 'https://youtu.be/dQw4w9WgXcQ' } }),
+    job({ job_id: 'np', status: 'complete', title: 'Private Song' }),
+  );
+  openTab();
+  const thumb = await screen.findByTestId('job-thumb-yt', { includeHiddenElements: true });
+  expect(thumb.props.source).toEqual({ uri: 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg' });
+  expect(screen.getByTestId('job-ready-np')).toBeTruthy();
+  expect(screen.queryByTestId('job-thumb-np', { includeHiddenElements: true })).toBeNull();
+});

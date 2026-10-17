@@ -59,7 +59,9 @@
     "titleLabel": "Şarkı adı",
     "hasKaraoke": "Karaoke sürümleri mevcut",
     "makeIt": "Oluştur · 1 kredi",
-    "noKaraoke": "Karaoke sürümü bulunamadı"
+    "noKaraoke": "Karaoke sürümü bulunamadı",
+    "hasKaraokeHint": "Yine de seçtiğin ses dosyasından kendi karaoke videonu yapabilirsin.",
+    "noKaraokeHint": "Şarkı söylemeye ve paylaşmaya hazır, kendi karaoke videonu oluştur."
   },
   "tabs": {
     "discover": "Keşfet",

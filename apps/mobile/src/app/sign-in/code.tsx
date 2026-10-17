@@ -1,4 +1,4 @@
-import { useTranslations } from '@nomad/i18n';
+import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, CodeField, Screen, Text } from '@nomad/ui';
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
@@ -45,7 +45,7 @@ export default function SignInCodeScreen() {
     try {
       await requestCode(email);
       setCode('');
-      setNotice(t('resent', { email }));
+      setNotice(t('resent', { email: isolate(email) }));
     } catch (e) {
       setError(errorText(e));
     } finally {
@@ -56,7 +56,7 @@ export default function SignInCodeScreen() {
   return (
     <Screen testID="signin-code-screen" scroll>
       <Text variant="title">{t('codeTitle')}</Text>
-      {email ? <Text variant="muted">{notice ?? t('codeHelp', { email })}</Text> : null}
+      {email ? <Text variant="muted">{notice ?? t('codeHelp', { email: isolate(email) })}</Text> : null}
       <CodeField
         testID="signin-code"
         label={t('codeLabel')}

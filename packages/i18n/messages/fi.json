@@ -59,7 +59,9 @@
     "titleLabel": "Kappaleen nimi",
     "hasKaraoke": "Karaokeversioita löytyy",
     "makeIt": "Luo versio · 1 krediitti",
-    "noKaraoke": "Karaokeversiota ei löytynyt"
+    "noKaraoke": "Karaokeversiota ei löytynyt",
+    "hasKaraokeHint": "Voit silti tehdä omasi valitsemastasi ääniraidasta.",
+    "noKaraokeHint": "Tee siitä oma karaokevideosi, valmiina laulettavaksi ja jaettavaksi."
   },
   "tabs": {
     "discover": "Löydä uutta",

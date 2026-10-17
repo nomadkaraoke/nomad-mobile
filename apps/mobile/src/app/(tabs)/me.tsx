@@ -1,5 +1,5 @@
 import { getMe } from '@nomad/api-gen';
-import { LOCALE_NAMES, useTranslations } from '@nomad/i18n';
+import { isolate, LOCALE_NAMES, useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
@@ -30,7 +30,7 @@ export default function MeScreen() {
             <ActivityIndicator testID="me-credits-loading" />
           )}
           <Button testID="me-buy" label={t('buyCredits')} onPress={() => router.push('/credits')} />
-          <Text>{t('signedInAs', { email: state.session.email })}</Text>
+          <Text>{t('signedInAs', { email: isolate(state.session.email) })}</Text>
         </>
       ) : (
         <Button

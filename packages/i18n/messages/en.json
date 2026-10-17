@@ -24,7 +24,9 @@
     "titleLabel": "Song title",
     "makeIt": "Make it · 1 credit",
     "noKaraoke": "No karaoke version found",
-    "hasKaraoke": "Karaoke versions exist"
+    "hasKaraoke": "Karaoke versions exist",
+    "noKaraokeHint": "Make your own karaoke video of it, ready to sing and share.",
+    "hasKaraokeHint": "You can still make your own, from the audio you pick."
   },
   "signIn": {
     "emailTitle": "Sign in",

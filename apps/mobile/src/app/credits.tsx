@@ -1,10 +1,11 @@
 import { listCreditPackages, type CreditPackage } from '@nomad/api-gen';
 import { formatPrice } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
-import { Button, Screen, Text } from '@nomad/ui';
+import { Button, colors, Screen, Text } from '@nomad/ui';
 import { useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams, type Href } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { isInAppPath } from '../auth/signInUi';
@@ -91,7 +92,7 @@ function CreditsBody({ email, returnTo, packages, selected, setSelected, locale 
     const timer = setTimeout(() => {
       if (returnTo && isInAppPath(returnTo) && router.canGoBack()) router.back();
       else router.replace((returnTo && isInAppPath(returnTo) ? returnTo : '/(tabs)/me') as Href);
-    }, 900);
+    }, 1500); // long enough to read "Credits added" before the make flow comes back
     return () => clearTimeout(timer);
   }, [phase, returnTo]);
 
@@ -103,8 +104,9 @@ function CreditsBody({ email, returnTo, packages, selected, setSelected, locale 
       <Text variant="muted">{t('explainer')}</Text>
 
       {phase === 'added' ? (
-        <View testID="credits-added" className="rounded-lg border border-border bg-card p-3">
-          <Text>{t('added')}</Text>
+        <View testID="credits-added" className="flex-row items-center gap-2 rounded-lg border border-success/40 bg-success/10 p-3">
+          <Ionicons name="checkmark-circle" size={22} color={colors.success} accessibilityElementsHidden importantForAccessibility="no" />
+          <Text className="font-semibold text-success">{t('added')}</Text>
         </View>
       ) : null}
       {phase === 'noPayment' ? (
@@ -132,9 +134,9 @@ function CreditsBody({ email, returnTo, packages, selected, setSelected, locale 
           const on = p.id === chosen?.id;
           const badge =
             p.id === POPULAR
-              ? t('popular')
+              ? { label: t('popular'), cls: 'bg-primary/15 text-primary' }
               : p.id === BEST_VALUE
-                ? t('each', { price: perCredit(p, locale) })
+                ? { label: t('each', { price: perCredit(p, locale) }), cls: 'bg-gold/15 text-gold' }
                 : null;
           return (
             <Pressable
@@ -146,11 +148,18 @@ function CreditsBody({ email, returnTo, packages, selected, setSelected, locale 
               onPress={() => setSelected(p.id)}
               className={`flex-row items-center justify-between rounded-lg border p-4 ${on ? 'border-primary bg-card' : 'border-border'}`}
             >
-              <View className="gap-1">
+              <View className="shrink flex-row flex-wrap items-center gap-2">
                 <Text>{t('packageCredits', { credits: p.credits })}</Text>
-                {badge ? <Text variant="muted" testID={`credits-badge-${p.id}`}>{badge}</Text> : null}
+                {badge ? (
+                  <Text
+                    testID={`credits-badge-${p.id}`}
+                    className={`overflow-hidden rounded-full px-2 py-0.5 text-xs font-bold ${badge.cls}`}
+                  >
+                    {badge.label}
+                  </Text>
+                ) : null}
               </View>
-              <Text>{formatPrice(p.priceCents, 'USD', locale)}</Text>
+              <Text className="font-bold">{formatPrice(p.priceCents, 'USD', locale)}</Text>
             </Pressable>
           );
         })

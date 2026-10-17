@@ -59,7 +59,9 @@
     "titleLabel": "Låttitel",
     "hasKaraoke": "Det finns karaokeversioner",
     "makeIt": "Skapa · 1 kredit",
-    "noKaraoke": "Hittade ingen karaokeversion"
+    "noKaraoke": "Hittade ingen karaokeversion",
+    "hasKaraokeHint": "Du kan fortfarande göra en egen, utifrån ljudet du väljer.",
+    "noKaraokeHint": "Gör en egen karaokevideo av den, redo att sjungas till och delas."
   },
   "tabs": {
     "discover": "Upptäck",

@@ -59,7 +59,9 @@
     "titleLabel": "Judul lagu",
     "hasKaraoke": "Versi karaoke tersedia",
     "makeIt": "Buat · 1 kredit",
-    "noKaraoke": "Versi karaoke tidak ditemukan"
+    "noKaraoke": "Versi karaoke tidak ditemukan",
+    "hasKaraokeHint": "Kamu masih bisa membuatnya sendiri dari audio yang kamu pilih.",
+    "noKaraokeHint": "Buat video karaokemu sendiri, siap dinyanyikan dan dibagikan."
   },
   "tabs": {
     "discover": "Jelajahi",

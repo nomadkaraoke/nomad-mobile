@@ -59,7 +59,9 @@
     "titleLabel": "Tajuk lagu",
     "hasKaraoke": "Versi karaoke sedia ada",
     "makeIt": "Buat · 1 kredit",
-    "noKaraoke": "Tiada versi karaoke ditemui"
+    "noKaraoke": "Tiada versi karaoke ditemui",
+    "hasKaraokeHint": "Anda masih boleh cipta versi anda sendiri, daripada audio yang anda pilih.",
+    "noKaraokeHint": "Cipta video karaoke anda sendiri untuk lagu ini, sedia untuk dinyanyikan dan dikongsi."
   },
   "tabs": {
     "discover": "Teroka",

@@ -1,6 +1,5 @@
-import { ActivityIndicator, Pressable } from 'react-native';
+import { ActivityIndicator, Pressable, Text } from 'react-native';
 
-import { Text } from './Text';
 import { colors } from './tokens';
 
 export type ButtonProps = {
@@ -12,9 +11,15 @@ export type ButtonProps = {
   loading?: boolean;
 };
 
+const VARIANTS = {
+  // Near-black on pink (tokens.primaryFg): 8:1, where gen web's white is 2.4:1.
+  primary: { box: 'bg-primary', label: 'text-primary-fg font-bold', spinner: colors.primaryFg },
+  secondary: { box: 'bg-card border border-border', label: 'text-text font-semibold', spinner: colors.text },
+} as const;
+
 export function Button({ label, onPress, testID, variant = 'primary', disabled, loading }: ButtonProps) {
   const inactive = Boolean(disabled || loading);
-  const base = variant === 'primary' ? 'bg-primary' : 'bg-card border border-border';
+  const v = VARIANTS[variant];
   return (
     <Pressable
       testID={testID}
@@ -23,12 +28,13 @@ export function Button({ label, onPress, testID, variant = 'primary', disabled, 
       accessibilityState={{ disabled: inactive, busy: Boolean(loading) }}
       disabled={inactive}
       onPress={onPress}
-      className={`${base} min-h-12 items-center justify-center rounded-lg px-4 ${inactive ? 'opacity-50' : ''}`}
+      className={`${v.box} min-h-12 items-center justify-center rounded-lg px-4 ${inactive ? 'opacity-50' : ''}`}
     >
       {loading ? (
-        <ActivityIndicator testID={`${testID}-spinner`} color={colors.primaryFg} />
+        <ActivityIndicator testID={`${testID}-spinner`} color={v.spinner} />
       ) : (
-        <Text className="font-semibold">{label}</Text>
+        // Its own Text (not ./Text): that one sets text-text, which would fight the label colour.
+        <Text className={`text-center text-base ${v.label}`}>{label}</Text>
       )}
     </Pressable>
   );

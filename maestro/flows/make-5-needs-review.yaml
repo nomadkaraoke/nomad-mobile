@@ -40,10 +40,21 @@ name: make-5-needs-review
 - extendedWaitUntil:
     visible: ".*127\\.0\\.0\\.1.*"
     timeout: 30000
-# Signed in by the handoff (first Next dev compile can be slow).
+# Signed in by the handoff: gen web shows "Successfully signed in!" for a moment, then the review page
+# (first Next dev compile can be slow). A fast redirect can skip past the interstitial, so either counts;
+# the review page is only reachable signed in. (On the local stack the review page itself can show
+# "Failed to load lyrics": Next dev mounts it twice and gen's correction-data races awaiting_review ->
+# in_review, see task-9 report.)
 - extendedWaitUntil:
-    visible: "Successfully signed in!?"
+    visible: "Successfully signed in!?|Failed to load lyrics|Loading\\.\\.\\."
     timeout: 90000
+# Let the page settle (interstitial → review page) before the screenshot.
+- extendedWaitUntil:
+    notVisible: "Successfully signed in!?|Loading\\.\\.\\."
+    timeout: 60000
+    optional: true
+- waitForAnimationToEnd:
+    timeout: 10000
 - takeScreenshot: docs/screenshots/phase1/${PLATFORM}/review-bridge-browser
 - runFlow:
     when:

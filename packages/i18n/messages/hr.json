@@ -59,7 +59,9 @@
     "titleLabel": "Naslov pjesme",
     "hasKaraoke": "Postoje karaoke verzije",
     "makeIt": "Izradi · 1 kredit",
-    "noKaraoke": "Nije pronađena karaoke verzija"
+    "noKaraoke": "Nije pronađena karaoke verzija",
+    "hasKaraokeHint": "I dalje možeš napraviti vlastitu verziju, koristeći zvuk koji odabereš.",
+    "noKaraokeHint": "Napravi vlastiti karaoke video za ovu pjesmu, spreman za pjevanje i dijeljenje."
   },
   "tabs": {
     "discover": "Otkrij",

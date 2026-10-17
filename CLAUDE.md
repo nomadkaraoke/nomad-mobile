@@ -36,6 +36,7 @@ packages/api-decide/  generated karaoke-decide client + facades (searchSongs, po
 packages/ui/          tokens, Screen/Text/Button/TextField, <List> (FlashList), <WaveformCanvas> (Skia)
 openapi/              gen.json + decide.json snapshots (refresh: pnpm gen:api)
 maestro/flows/        E2E flows (make-1…9 against the gen local stack, smoke-discover); common/ shared steps; scripts/stack.js
+maestro/screens/      screenshot-only flows for UX reviews (long-title.yaml: any locale, e.g. ar for RTL; not in the suite)
 scripts/e2e-local.sh  gen local stack + Metro + Maestro, per platform
 ```
 
@@ -96,6 +97,8 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - **Maestro on iOS:** `openAuthSessionAsync` (checkout) first shows a "… Wants to Use … to Sign In" alert (`common/web-auth-alert.yaml` taps Continue). The fake checkout's own Cancel needs `rightOf: Pay` (the browser toolbar has a Cancel too). `hideKeyboard` on iOS can tap whatever is under the keyboard; avoid it.
 - **Android delivers the checkout return (`nomadkaraoke://checkout?status=…`) to Expo Router too.** `src/app/+native-intent.tsx` keeps the current screen, otherwise "Unmatched Route" covers the credits screen.
 - **gen doesn't record `credits_charged` for create-from-search jobs.** Its reconcile reads a missing value as 1, its confirm-duration route as 0; `durationConfirm` shows the real total and acknowledges gen's arithmetic (`acknowledgedCredits`).
+- **RTL text alignment:** iOS "natural" alignment (RN's `auto`) ignores `I18nManager.forceRTL`, so paragraphs stayed left-aligned in ar/he. `@nomad/ui` `Text` defaults to `textAlign: 'left'`, which RN mirrors to the right under RTL. Interpolated titles/emails go through `isolate()` (`@nomad/i18n`) so Latin text doesn't scramble inside an Arabic sentence.
+- **Metro started with `CI=1` doesn't watch files** (`e2e-local.sh` starts it that way): after editing code, restart it, or run your own `npx expo start --dev-client` (same env, no `CI=1`) while iterating.
 - **`renderRouter` (expo-router testing) switches jest to fake timers.** Reset with `jest.useRealTimers()` in `beforeEach` when code uses real delays.
 
 ## Phase 1 notes (deferred from Phase 0)

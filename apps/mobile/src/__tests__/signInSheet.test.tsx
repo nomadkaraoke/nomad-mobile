@@ -52,7 +52,8 @@ const openSheet = () => renderRouter(signInRoutes(), { initialUrl: '/sign-in?ret
 
 it('is titled with the song being made and offers Google, Apple and email', async () => {
   openSheet();
-  expect(await screen.findByText('Sign in to make Starlight')).toBeTruthy();
+  // The song title is bidi-isolated, so a Latin title stays in one piece inside an Arabic sentence.
+  expect(await screen.findByText('Sign in to make \u2068Starlight\u2069')).toBeTruthy();
   expect(screen.getByText('Continue with Google')).toBeTruthy();
   expect(screen.getByText('Continue with email')).toBeTruthy();
   expect(await screen.findByText('Continue with Apple')).toBeTruthy();
@@ -73,7 +74,7 @@ it('email → code → signed in → back in the make flow', async () => {
   fireEvent.press(await screen.findByTestId('signin-email-start'));
   fireEvent.changeText(await screen.findByTestId('signin-email'), 'Me@Example.com');
   await act(async () => fireEvent.press(screen.getByTestId('signin-send')));
-  expect(await screen.findByText('We sent a 6-digit code to me@example.com.')).toBeTruthy();
+  expect(await screen.findByText('We sent a 6-digit code to \u2068me@example.com\u2069.')).toBeTruthy();
   // Typing the 6th digit submits (as does one-time-code autofill).
   await act(async () => fireEvent.changeText(screen.getByTestId('signin-code'), '123456'));
   expect(await screen.findByTestId('make-stub')).toBeTruthy();
@@ -161,7 +162,7 @@ it('Me: sign in returns to the Me tab, then sign out', async () => {
   const app = renderRouter(signInRoutes(), { initialUrl: '/me' });
   fireEvent.press(await screen.findByTestId('me-signin'));
   await act(async () => fireEvent.press(await screen.findByTestId('signin-google')));
-  expect(await screen.findByText('Signed in as g@example.com')).toBeTruthy();
+  expect(await screen.findByText('Signed in as \u2068g@example.com\u2069')).toBeTruthy();
   expect(app.getPathname()).toBe('/me');
   await act(async () => fireEvent.press(screen.getByTestId('me-signout')));
   expect(await screen.findByTestId('me-signin')).toBeTruthy();

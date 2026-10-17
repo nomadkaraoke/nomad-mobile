@@ -1,6 +1,6 @@
 import { getSong } from '@nomad/api-decide';
 import { useTranslations } from '@nomad/i18n';
-import { Button, Screen, Text, TextField } from '@nomad/ui';
+import { ArtTile, Button, Screen, Text, TextField } from '@nomad/ui';
 import { useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
@@ -57,18 +57,31 @@ export default function SongScreen() {
         </>
       ) : song.data ? (
         <>
-          <Text variant="title">{song.data.title}</Text>
-          <Text variant="muted">{song.data.artist}</Text>
-          <View className="flex-row">
+          {/* Decide's catalog has no cover art yet (SongResponse), so the tile is generated. */}
+          <ArtTile testID="song-art" title={song.data.title} />
+          <View className="gap-1">
+            <Text variant="title">{song.data.title}</Text>
+            <Text variant="muted" className="text-base">
+              {song.data.artist}
+            </Text>
+          </View>
+          <View testID="song-badge-card" className="items-start gap-2 rounded-xl border border-border bg-card p-3">
             {song.data.brand_count === 0 ? (
-              <Text testID="song-badge" className="rounded-full bg-gold/15 px-3 py-1 text-sm font-semibold text-gold">
+              <Text
+                testID="song-badge"
+                className="overflow-hidden rounded-full bg-gold/15 px-2.5 py-0.5 text-xs font-bold text-gold"
+              >
                 {t('song.noKaraoke')}
               </Text>
             ) : (
-              <Text testID="song-badge" className="rounded-full bg-card px-3 py-1 text-sm text-muted">
+              <Text
+                testID="song-badge"
+                className="overflow-hidden rounded-full bg-success/15 px-2.5 py-0.5 text-xs font-bold text-success"
+              >
                 {t('song.hasKaraoke')}
               </Text>
             )}
+            <Text variant="muted">{song.data.brand_count === 0 ? t('song.noKaraokeHint') : t('song.hasKaraokeHint')}</Text>
           </View>
         </>
       ) : null}

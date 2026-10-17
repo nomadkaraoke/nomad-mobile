@@ -59,7 +59,9 @@
     "titleLabel": "Tytuł piosenki",
     "hasKaraoke": "Dostępne wersje karaoke",
     "makeIt": "Stwórz · 1 kredyt",
-    "noKaraoke": "Nie znaleziono wersji karaoke"
+    "noKaraoke": "Nie znaleziono wersji karaoke",
+    "hasKaraokeHint": "Nadal możesz stworzyć własną wersję z wybranego pliku audio.",
+    "noKaraokeHint": "Stwórz własne wideo karaoke z tego utworu – gotowe do śpiewania i udostępniania."
   },
   "tabs": {
     "discover": "Odkrywaj",

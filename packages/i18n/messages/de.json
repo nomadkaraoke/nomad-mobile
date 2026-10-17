@@ -59,7 +59,9 @@
     "titleLabel": "Songtitel",
     "hasKaraoke": "Karaoke-Versionen vorhanden",
     "makeIt": "Erstellen · 1 Guthaben",
-    "noKaraoke": "Keine Karaoke-Version gefunden"
+    "noKaraoke": "Keine Karaoke-Version gefunden",
+    "hasKaraokeHint": "Du kannst trotzdem dein eigenes erstellen – aus der Audiodatei, die du auswählst.",
+    "noKaraokeHint": "Erstelle dein eigenes Karaoke-Video davon – bereit zum Mitsingen und Teilen."
   },
   "tabs": {
     "discover": "Entdecken",

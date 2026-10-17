@@ -1,4 +1,4 @@
-import { useTranslations } from '@nomad/i18n';
+import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text, TextField } from '@nomad/ui';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
@@ -53,7 +53,7 @@ export default function SignInSheet() {
   return (
     <Screen testID="signin-sheet" scroll>
       <Text variant="title">
-        {isFreshIntent(intent) ? t('sheetTitle', { title: intent.title }) : t('sheetTitleGeneric')}
+        {isFreshIntent(intent) ? t('sheetTitle', { title: isolate(intent.title) }) : t('sheetTitleGeneric')}
       </Text>
       <Text variant="muted">{t('sheetBody')}</Text>
       {fake ? (
@@ -98,7 +98,12 @@ export default function SignInSheet() {
           {error}
         </Text>
       ) : null}
-      <Pressable testID="signin-privacy" accessibilityRole="link" onPress={() => void WebBrowser.openBrowserAsync(PRIVACY_URL)}>
+      <Pressable
+        testID="signin-privacy"
+        accessibilityRole="link"
+        onPress={() => void WebBrowser.openBrowserAsync(PRIVACY_URL)}
+        className="min-h-11 justify-center self-start"
+      >
         <Text variant="muted" className="underline">
           {t('privacy')}
         </Text>

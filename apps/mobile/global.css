@@ -10,7 +10,7 @@
   --color-text: #e5e5e5;
   --color-muted: #888888;
   --color-primary: #ff7acc;
-  --color-primary-fg: #ffffff;
+  --color-primary-fg: #0f0f0f; /* gen web: #ffffff; near-black for AA contrast on pink */
   --color-gold: #ffdf6b;
   --color-purple: #8b5cf6;
   --color-danger: #ef4444;

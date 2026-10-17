@@ -197,7 +197,7 @@ export default function MakeScreen() {
                   testID="make-other-sources"
                   accessibilityRole="button"
                   onPress={() => setShowOthers((v) => !v)}
-                  className="py-2"
+                  className="min-h-11 justify-center self-start"
                 >
                   <Text className="text-primary">
                     {showOthers ? t('hideOtherSources') : t('seeOtherSources', { count: others.length })}
@@ -224,7 +224,7 @@ export default function MakeScreen() {
               testID="make-youtube-toggle"
               accessibilityRole="button"
               onPress={() => setYoutubeOpen((v) => !v)}
-              className="py-2"
+              className="min-h-11 justify-center self-start"
             >
               <Text className="text-primary">{t('youtubeToggle')}</Text>
             </Pressable>

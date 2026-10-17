@@ -59,7 +59,9 @@
     "titleLabel": "Sangtittel",
     "hasKaraoke": "Karaokeversjoner finnes",
     "makeIt": "Lag den · 1 kreditt",
-    "noKaraoke": "Ingen karaokeversjon funnet"
+    "noKaraoke": "Ingen karaokeversjon funnet",
+    "hasKaraokeHint": "Du kan fortsatt lage din egen, basert på lyden du velger.",
+    "noKaraokeHint": "Lag din egen karaokevideo av den, klar til å synges og deles."
   },
   "tabs": {
     "discover": "Oppdag",

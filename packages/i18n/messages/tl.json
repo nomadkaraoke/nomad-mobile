@@ -59,7 +59,9 @@
     "titleLabel": "Pamagat ng kanta",
     "hasKaraoke": "May mga karaoke version",
     "makeIt": "Gawin ito · 1 credit",
-    "noKaraoke": "Walang nahanap na karaoke version"
+    "noKaraoke": "Walang nahanap na karaoke version",
+    "hasKaraokeHint": "Maaari ka pa ring gumawa ng sarili mo, mula sa audio na pipiliin mo.",
+    "noKaraokeHint": "Gumawa ng sarili mong karaoke video nito, handa nang kantahin at i-share."
   },
   "tabs": {
     "discover": "Mag-discover",

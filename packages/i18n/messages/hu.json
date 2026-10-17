@@ -59,7 +59,9 @@
     "titleLabel": "Dal címe",
     "hasKaraoke": "Létezik hozzá karaoke verzió",
     "makeIt": "Készítsd el · 1 kredit",
-    "noKaraoke": "Nem található hozzá karaoke verzió"
+    "noKaraoke": "Nem található hozzá karaoke verzió",
+    "hasKaraokeHint": "Ettől függetlenül elkészítheted a sajátodat az általad választott hanganyagból.",
+    "noKaraokeHint": "Készíts belőle saját karaoke videót, készen az éneklésre és megosztásra."
   },
   "tabs": {
     "discover": "Felfedezés",

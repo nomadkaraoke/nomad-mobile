@@ -59,7 +59,9 @@
     "titleLabel": "曲名",
     "hasKaraoke": "カラオケ音源あり",
     "makeIt": "作成する · 1クレジット",
-    "noKaraoke": "カラオケ音源が見つかりません"
+    "noKaraoke": "カラオケ音源が見つかりません",
+    "hasKaraokeHint": "お好みの音源から、自分だけのカラオケ動画を作成することもできます。",
+    "noKaraokeHint": "自分だけのカラオケ動画を作成して、歌ったりシェアしたりしましょう。"
   },
   "tabs": {
     "discover": "見つける",

@@ -59,7 +59,9 @@
     "titleLabel": "Název písně",
     "hasKaraoke": "Karaoke verze existují",
     "makeIt": "Vytvořit · 1 kredit",
-    "noKaraoke": "Nebyla nalezena žádná karaoke verze"
+    "noKaraoke": "Nebyla nalezena žádná karaoke verze",
+    "hasKaraokeHint": "Pořád si můžeš vytvořit vlastní z audia, které si vybereš.",
+    "noKaraokeHint": "Vytvoř si z toho vlastní karaoke video, připravené ke zpěvu i sdílení."
   },
   "tabs": {
     "discover": "Objevovat",

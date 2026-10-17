@@ -59,7 +59,9 @@
     "titleLabel": "Tên bài hát",
     "hasKaraoke": "Đã có bản karaoke",
     "makeIt": "Tạo ngay · 1 credit",
-    "noKaraoke": "Không tìm thấy bản karaoke"
+    "noKaraoke": "Không tìm thấy bản karaoke",
+    "hasKaraokeHint": "Bạn vẫn có thể tự tạo bản riêng từ âm thanh bạn chọn.",
+    "noKaraokeHint": "Tự tạo video karaoke cho bài này, sẵn sàng để hát và chia sẻ."
   },
   "tabs": {
     "discover": "Khám phá",

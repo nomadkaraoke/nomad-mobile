@@ -33,12 +33,16 @@ it('a song with no karaoke version: gold badge and "Make it · 1 credit" (disabl
   expect(screen.getByTestId('song-make')).toBeEnabled();
   expect(screen.getByTestId('song-badge')).toHaveTextContent('No karaoke version found');
   expect(screen.getByTestId('song-make')).toHaveTextContent('Make it · 1 credit');
+  // The badge sits in a card with a one-line explainer, under generated artwork (decide has no cover art).
+  expect(screen.getByTestId('song-badge-card')).toHaveTextContent(/Make your own karaoke video/);
+  expect(screen.getByTestId('song-art', { includeHiddenElements: true })).toHaveTextContent('S');
 });
 
 it('a song with karaoke versions still offers Make it', async () => {
   getSong.mockResolvedValue({ id: 7, artist: 'Muse', title: 'Starlight', brands: ['SF'], brand_count: 2, is_popular: true });
   renderRouter(routes(), { initialUrl: '/song/7' });
   expect(await screen.findByText('Karaoke versions exist')).toBeTruthy();
+  expect(screen.getByTestId('song-badge-card')).toHaveTextContent(/make your own/i);
   expect(screen.getByTestId('song-make')).toBeEnabled();
 });
 

@@ -74,7 +74,7 @@ it('opens the in-app browser for the chosen package; a paid return waits for the
 
   expect(gen.createAppCheckout).toHaveBeenCalledWith('5_credits', 'me@example.com');
   expect(browser.openAuthSessionAsync).toHaveBeenCalledWith('https://checkout.example/pay', 'nomadkaraoke://checkout');
-  expect(await screen.findByTestId('credits-added', {}, { timeout: 6000 })).toHaveTextContent('Credits added');
+  expect(await screen.findByTestId('credits-added', {}, { timeout: 6000 })).toHaveTextContent(/Credits added/); // after the tick icon's glyph
   expect(gen.getMe.mock.calls.length).toBeGreaterThanOrEqual(4);
   expect(invalidate).toHaveBeenCalledWith({ queryKey: ['me'] });
   await waitFor(() => expect(app.getPathname()).toBe('/make/new'), { timeout: 3000 });

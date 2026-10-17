@@ -59,7 +59,9 @@
     "titleLabel": "歌曲名称",
     "hasKaraoke": "已有卡拉OK版本",
     "makeIt": "制作 · 1 点积分",
-    "noKaraoke": "未找到卡拉OK版本"
+    "noKaraoke": "未找到卡拉OK版本",
+    "hasKaraokeHint": "你仍然可以用自己挑选的音频来制作专属版本。",
+    "noKaraokeHint": "为这首歌制作专属的卡拉OK视频，随时开唱与分享。"
   },
   "tabs": {
     "discover": "发现",

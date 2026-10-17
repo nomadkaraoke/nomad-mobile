@@ -59,7 +59,9 @@
     "titleLabel": "노래 제목",
     "hasKaraoke": "노래방 버전 있음",
     "makeIt": "만들기 · 1 크레딧",
-    "noKaraoke": "노래방 버전 없음"
+    "noKaraoke": "노래방 버전 없음",
+    "hasKaraokeHint": "직접 선택한 오디오로 나만의 노래방 영상을 만들 수도 있어요.",
+    "noKaraokeHint": "직접 노래방 영상을 만들어 바로 부르고 공유해 보세요."
   },
   "tabs": {
     "discover": "둘러보기",

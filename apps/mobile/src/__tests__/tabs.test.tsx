@@ -50,7 +50,7 @@ it('Me (signed in): credits from gen, Buy credits, language, email and sign out'
   const app = renderRouter(makeRoutes(), { initialUrl: '/me' });
   expect(await screen.findByText('3 credits')).toBeTruthy();
   expect(screen.getByTestId('me-credits')).toHaveTextContent('3 credits');
-  expect(screen.getByText('Signed in as me@example.com')).toBeTruthy();
+  expect(screen.getByText('Signed in as \u2068me@example.com\u2069')).toBeTruthy();
   expect(screen.getByTestId('me-language')).toHaveTextContent('English');
   fireEvent.press(screen.getByTestId('me-buy'));
   expect(await screen.findByTestId('credits-stub')).toBeTruthy();

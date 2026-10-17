@@ -51,7 +51,7 @@ it('429 too_many_attempts shows the locked message; Send a new code resends and 
   expect(gen.sendCode).toHaveBeenCalledTimes(2);
   expect(gen.sendCode).toHaveBeenLastCalledWith('me@example.com', 'en');
   expect(useAuth.getState().attemptsLeft).toBe(5);
-  expect(screen.getByText('We sent a new code to me@example.com.')).toBeTruthy();
+  expect(screen.getByText('We sent a new code to \u2068me@example.com\u2069.')).toBeTruthy();
   expect(screen.queryByTestId('signin-error')).toBeNull();
   expect(screen.getByTestId('signin-verify')).not.toBeDisabled();
 

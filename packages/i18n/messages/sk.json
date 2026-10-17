@@ -59,7 +59,9 @@
     "titleLabel": "Názov piesne",
     "hasKaraoke": "Existujú karaoke verzie",
     "makeIt": "Vytvoriť · 1 kredit",
-    "noKaraoke": "Nenašla sa žiadna karaoke verzia"
+    "noKaraoke": "Nenašla sa žiadna karaoke verzia",
+    "hasKaraokeHint": "Stále si môžeš vytvoriť vlastnú verziu zo zvuku, ktorý si vyberieš.",
+    "noKaraokeHint": "Vytvor si z nej vlastné karaoke video, pripravené na spievanie a zdieľanie."
   },
   "tabs": {
     "discover": "Objavovať",

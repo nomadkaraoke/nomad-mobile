@@ -5,9 +5,10 @@ import { Button, Text } from '@nomad/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { useState, type ReactNode } from 'react';
-import { Pressable, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 
 import { openReview } from './openReview';
+import { youtubeId, youtubeThumbnail } from './youtube';
 
 type Kind = 'working' | 'review' | 'duration' | 'web' | 'done' | 'failed' | 'cancelled';
 
@@ -49,14 +50,26 @@ export function JobCard({ job }: { job: JobSummary }) {
   );
 
   if (kind === 'done') {
+    const videoId = job.state_data?.youtube_url ? youtubeId(job.state_data.youtube_url) : null;
     return (
       <Pressable
         testID={`job-card-${id}`}
         accessibilityRole="button"
         onPress={() => router.push({ pathname: '/job/[id]', params: { id } })}
-        className="rounded-lg border border-border bg-card p-3"
+        className="flex-row items-center gap-3 rounded-lg border border-border bg-card p-3"
       >
-        {heading}
+        {videoId ? (
+          // 16:9 thumbnail so a finished song is recognisable at a glance; decorative (the title follows).
+          <Image
+            testID={`job-thumb-${id}`}
+            source={{ uri: youtubeThumbnail(videoId) }}
+            accessibilityElementsHidden
+            importantForAccessibility="no"
+            className="h-14 w-24 rounded-md bg-border"
+            resizeMode="cover"
+          />
+        ) : null}
+        <View className="flex-1">{heading}</View>
       </Pressable>
     );
   }
@@ -225,7 +238,7 @@ function Failed({ job }: { job: JobSummary }) {
           accessibilityRole="button"
           accessibilityState={{ expanded: open }}
           onPress={() => setOpen((o) => !o)}
-          className="gap-1"
+          className="min-h-11 justify-center gap-1"
         >
           <Text variant="muted">{`${open ? '▾' : '▸'} ${t('details')}`}</Text>
           {open ? (

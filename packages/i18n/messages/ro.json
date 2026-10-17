@@ -59,7 +59,9 @@
     "titleLabel": "Titlul melodiei",
     "hasKaraoke": "Există versiuni karaoke",
     "makeIt": "Creează · 1 credit",
-    "noKaraoke": "Nu s-a găsit nicio versiune karaoke"
+    "noKaraoke": "Nu s-a găsit nicio versiune karaoke",
+    "hasKaraokeHint": "Poți totuși să-ți creezi propria versiune, din fișierul audio pe care îl alegi.",
+    "noKaraokeHint": "Creează-ți propriul videoclip karaoke cu această piesă, gata de cântat și distribuit."
   },
   "tabs": {
     "discover": "Descoperă",

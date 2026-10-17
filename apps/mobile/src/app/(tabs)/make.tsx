@@ -74,7 +74,7 @@ export default function MakeTabScreen() {
         data={jobs.data}
         keyExtractor={(j) => j.job_id}
         ListHeaderComponent={
-          <View className="gap-1 pb-2">
+          <View className="w-full gap-1 pb-2">
             {title}
             {jobs.isRefetchError ? (
               <Text variant="muted" testID="make-refresh-failed">

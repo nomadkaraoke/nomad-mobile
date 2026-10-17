@@ -59,7 +59,9 @@
     "titleLabel": "Sangtitel",
     "hasKaraoke": "Der findes karaoke-versioner",
     "makeIt": "Lav den · 1 kredit",
-    "noKaraoke": "Ingen karaoke-version fundet"
+    "noKaraoke": "Ingen karaoke-version fundet",
+    "hasKaraokeHint": "Du kan stadig lave din egen ud fra den lydfil, du vælger.",
+    "noKaraokeHint": "Lav din egen karaokevideo af den, klar til at synge og dele."
   },
   "tabs": {
     "discover": "Udforsk",
