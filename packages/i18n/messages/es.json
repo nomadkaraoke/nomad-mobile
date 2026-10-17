@@ -127,7 +127,8 @@
     "title": "Crear",
     "emptyBody": "Las canciones que crees aparecerán aquí.",
     "loadFailed": "No se pudieron cargar tus canciones.",
-    "findSong": "Buscar una canción"
+    "findSong": "Buscar una canción",
+    "refreshFailed": "No se pudo actualizar. Desliza hacia abajo para intentarlo de nuevo."
   },
   "tonight": {
     "comingSoon": "Próximamente: tus solicitudes y la lista de esta noche",
@@ -153,8 +154,11 @@
     "cancelVideo": "Cancelar este video",
     "confirm": "Confirmar",
     "failed": "No se pudo realizar la acción. Inténtalo de nuevo.",
-    "refundNote": "Si cancelas, se te reembolsa el crédito automáticamente.",
-    "title": "Confirmar costo"
+    "refundNote": "Si cancelas, se reembolsarán los créditos cobrados por este video.",
+    "title": "Confirmar costo",
+    "nothingBody": "Este video ya no necesita una verificación de costo.",
+    "nothingTitle": "Nada que confirmar",
+    "close": "Cerrar"
   },
   "jobs": {
     "cancelled": "Cancelado",
@@ -178,6 +182,11 @@
     },
     "untitled": "Canción sin título",
     "confirmCost": "Confirmar costo",
-    "ready": "Listo"
+    "ready": "Listo",
+    "chooseAudioOnWeb": "Elige un audio diferente en el sitio web",
+    "keepTrying": "Seguir intentando",
+    "stalledBody": "Es posible que la fuente de esta pista esté desconectada en este momento. Suele restablecerse pronto: podemos seguir intentándolo hasta por una hora, o puedes elegir un audio diferente en el sitio web.",
+    "stalledBodyExtended": "Seguimos intentándolo, pero la fuente de esta pista sigue desconectada. Puedes volver a intentarlo o elegir un audio diferente en el sitio web.",
+    "stalledTitle": "Todavía estamos intentando conectar con la fuente de audio"
   }
 }

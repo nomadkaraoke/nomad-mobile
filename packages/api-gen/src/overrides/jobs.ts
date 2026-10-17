@@ -13,6 +13,16 @@ const StateDataSchema = z.looseObject({
   brand_code: opt(z.string()),
 });
 
+// error_details.{code,stage,stall_minutes,keep_trying} are in gen's summary projection. A value of an
+// unexpected type reads as absent rather than dropping the whole job from the list.
+const lenient = <T extends z.ZodType>(schema: T) => opt(schema).catch(undefined);
+const ErrorDetailsSchema = z.looseObject({
+  code: lenient(z.string()),
+  stage: lenient(z.string()),
+  stall_minutes: lenient(z.number()),
+  keep_trying: lenient(z.boolean()),
+});
+
 const UrlTreeSchema = z.record(z.string(), z.unknown());
 
 export const JobSummarySchema = z.looseObject({
@@ -24,6 +34,7 @@ export const JobSummarySchema = z.looseObject({
   created_at: opt(z.string()),
   user_email: opt(z.string()),
   error_message: opt(z.string()),
+  error_details: lenient(ErrorDetailsSchema),
   credit_refunded: opt(z.boolean()),
   state_data: opt(StateDataSchema),
   file_urls: opt(UrlTreeSchema),

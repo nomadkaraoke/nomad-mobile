@@ -68,6 +68,12 @@ it('working: a job parked on capacity shows the slow line, not an error', async 
   expect(await screen.findByTestId('job-slow-j')).toHaveTextContent("Still working, this one's taking a little longer");
 });
 
+it('working: a download waiting to retry shows the slow line too', async () => {
+  show(job({ job_id: 'j', status: 'download_pending_retry', progress: 12 }));
+  openTab();
+  expect(await screen.findByTestId('job-slow-j')).toHaveTextContent("Still working, this one's taking a little longer");
+});
+
 it('review: Needs you, then Review lyrics gets a handoff link, opens it, and refetches when it closes', async () => {
   show(job({ job_id: 'r', status: 'awaiting_review' }));
   gen.createHandoffUrl.mockResolvedValue('https://gen.web/en/auth/verify?token=x&handoff=1');
@@ -141,7 +147,42 @@ it('failed: the message, collapsible details, and Try again calls retry then ref
   const fetched = gen.listMyJobs.mock.calls.length;
   await act(async () => fireEvent.press(screen.getByTestId('job-retry-f')));
   expect(gen.retryJob).toHaveBeenCalledWith('f');
+  expect(gen.retryJob.mock.calls[0]).toHaveLength(1); // a plain retry, not keep-trying
   await waitFor(() => expect(gen.listMyJobs).toHaveBeenCalledTimes(fetched + 1));
+});
+
+it('stalled download: a plain notice with Keep trying (an hour) and the website, not the raw error', async () => {
+  show(
+    job({
+      job_id: 's',
+      status: 'failed',
+      error_message: 'Torrent stalled: no peers after 20 minutes',
+      error_details: { code: 'audio_download_stalled', stall_minutes: 20 },
+    }),
+  );
+  gen.retryJob.mockResolvedValue(undefined);
+  gen.createHandoffUrl.mockRejectedValue(apiError(409, 'not_in_review'));
+  openTab();
+  expect(await screen.findByTestId('job-stalled-s')).toHaveTextContent(/^We're still trying to reach the audio source/);
+  expect(screen.queryByText('Something went wrong making this one.')).toBeNull();
+  expect(screen.queryByTestId('job-error-s')).toBeNull();
+  expect(screen.queryByTestId('job-retry-s')).toBeNull();
+
+  const fetched = gen.listMyJobs.mock.calls.length;
+  await act(async () => fireEvent.press(screen.getByTestId('job-keep-trying-s')));
+  expect(gen.retryJob).toHaveBeenCalledWith('s', { keepTrying: true });
+  await waitFor(() => expect(gen.listMyJobs).toHaveBeenCalledTimes(fetched + 1));
+
+  // Choosing different audio happens on the website (gen 409s the review handoff for a failed job).
+  await act(async () => fireEvent.press(screen.getByTestId('job-web-s')));
+  expect(gen.createHandoffUrl).toHaveBeenCalledWith('s', 'en');
+  expect(browser.openBrowserAsync).toHaveBeenCalledWith(`${GEN_WEB_URL}/app`);
+});
+
+it('stalled download already extended: says the source is still offline', async () => {
+  show(job({ job_id: 's', status: 'failed', error_details: { code: 'audio_download_stalled', keep_trying: true } }));
+  openTab();
+  expect(await screen.findByTestId('job-stalled-s')).toHaveTextContent(/still offline/);
 });
 
 it('failed: a retry error is shown on the card', async () => {

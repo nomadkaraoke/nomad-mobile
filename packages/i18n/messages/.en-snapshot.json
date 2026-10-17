@@ -77,7 +77,8 @@
     "emptyBody": "Songs you make will appear here.",
     "signInPrompt": "Sign in to see the songs you've made",
     "findSong": "Find a song",
-    "loadFailed": "Couldn't load your songs."
+    "loadFailed": "Couldn't load your songs.",
+    "refreshFailed": "Couldn't refresh. Pull down to try again."
   },
   "make": {
     "searching": "Finding the best audio…",
@@ -164,6 +165,11 @@
     "retryFailed": "Couldn't start it again. Try once more in a moment.",
     "cancelled": "Cancelled",
     "ready": "Ready",
+    "stalledTitle": "We're still trying to reach the audio source",
+    "stalledBody": "This track's source may be offline right now. It often comes back soon: we can keep trying for up to an hour, or you can choose different audio on the website.",
+    "stalledBodyExtended": "We kept trying, but this track's source is still offline. You can keep trying again, or choose different audio on the website.",
+    "keepTrying": "Keep trying",
+    "chooseAudioOnWeb": "Choose different audio on the website",
     "steps": {
       "audio": "Got the audio",
       "separated": "Separated the vocals",
@@ -175,9 +181,12 @@
   "duration": {
     "title": "Confirm cost",
     "body": "This track is {duration} long, so it costs {total, plural, one {# credit} other {# credits}} in total ({extra} more).",
-    "refundNote": "If you cancel, your credit is refunded automatically.",
+    "refundNote": "If you cancel, any credits charged for this video are refunded.",
     "confirm": "Confirm",
     "cancelVideo": "Cancel this video",
-    "failed": "Couldn't do that. Try again."
+    "failed": "Couldn't do that. Try again.",
+    "nothingTitle": "Nothing to confirm",
+    "nothingBody": "This video doesn't need a cost check any more.",
+    "close": "Close"
   }
 }

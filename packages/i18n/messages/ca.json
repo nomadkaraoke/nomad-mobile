@@ -127,7 +127,8 @@
     "title": "Crea",
     "emptyBody": "Les cançons que creïs apareixeran aquí.",
     "loadFailed": "No s'han pogut carregar les teves cançons.",
-    "findSong": "Cerca una cançó"
+    "findSong": "Cerca una cançó",
+    "refreshFailed": "No s'ha pogut actualitzar. Llisca cap avall per tornar-ho a intentar."
   },
   "tonight": {
     "comingSoon": "Properament: les teves peticions i la cua d'aquesta nit",
@@ -153,8 +154,11 @@
     "cancelVideo": "Cancel·la aquest vídeo",
     "confirm": "Confirma",
     "failed": "No s'ha pogut fer. Torna-ho a provar.",
-    "refundNote": "Si cancel·les, se't reemborsa el crèdit automàticament.",
-    "title": "Confirma el cost"
+    "refundNote": "Si cancel·les, se't reemborsaran tots els crèdits cobrats per aquest vídeo.",
+    "title": "Confirma el cost",
+    "nothingBody": "Aquest vídeo ja no necessita cap comprovació de cost.",
+    "nothingTitle": "Res per confirmar",
+    "close": "Tanca"
   },
   "jobs": {
     "cancelled": "Cancel·lat",
@@ -178,6 +182,11 @@
     },
     "untitled": "Cançó sense títol",
     "confirmCost": "Confirma el cost",
-    "ready": "A punt"
+    "ready": "A punt",
+    "chooseAudioOnWeb": "Tria un altre àudio al lloc web",
+    "keepTrying": "Continua intentant-ho",
+    "stalledBody": "És possible que la font d'aquesta pista estigui fora de línia ara mateix. Sovint torna a estar disponible aviat: podem continuar intentant-ho fins a una hora, o pots triar un altre àudio al lloc web.",
+    "stalledBodyExtended": "Ho hem continuat intentant, però la font d'aquesta pista encara està fora de línia. Pots tornar-ho a intentar o triar un altre àudio al lloc web.",
+    "stalledTitle": "Encara estem intentant connectar amb la font d'àudio"
   }
 }

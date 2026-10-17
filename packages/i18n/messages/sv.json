@@ -127,7 +127,8 @@
     "title": "Skapa",
     "emptyBody": "Låtar du skapar kommer att visas här.",
     "loadFailed": "Kunde inte läsa in dina låtar.",
-    "findSong": "Hitta en låt"
+    "findSong": "Hitta en låt",
+    "refreshFailed": "Kunde inte uppdatera. Dra nedåt för att försöka igen."
   },
   "tonight": {
     "comingSoon": "Kommer snart: dina önskemål och kvällens kö",
@@ -153,8 +154,11 @@
     "cancelVideo": "Avbryt den här videon",
     "confirm": "Bekräfta",
     "failed": "Det gick inte att genomföra. Försök igen.",
-    "refundNote": "Om du avbryter återbetalas dina krediter automatiskt.",
-    "title": "Bekräfta kostnad"
+    "refundNote": "Om du avbryter återbetalas alla krediter som dragits för den här videon.",
+    "title": "Bekräfta kostnad",
+    "nothingBody": "Den här videon behöver inte längre någon kostnadskontroll.",
+    "nothingTitle": "Inget att bekräfta",
+    "close": "Stäng"
   },
   "jobs": {
     "cancelled": "Avbruten",
@@ -178,6 +182,11 @@
     },
     "untitled": "Namnlös låt",
     "confirmCost": "Bekräfta kostnad",
-    "ready": "Klar"
+    "ready": "Klar",
+    "chooseAudioOnWeb": "Välj annat ljud på webbplatsen",
+    "keepTrying": "Fortsätt försöka",
+    "stalledBody": "Källan för det här spåret kan vara offline just nu. Den brukar komma tillbaka snart: vi kan fortsätta försöka i upp till en timme, eller så kan du välja ett annat ljud på webbplatsen.",
+    "stalledBodyExtended": "Vi fortsatte försöka, men spårets källa är fortfarande offline. Du kan försöka igen, eller välja ett annat ljud på webbplatsen.",
+    "stalledTitle": "Vi försöker fortfarande nå ljudkällan"
   }
 }

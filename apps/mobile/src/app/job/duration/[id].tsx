@@ -9,7 +9,8 @@ import { ActivityIndicator, View } from 'react-native';
 /**
  * Duration confirm (spec §4.6): a long track costs more than the credit already charged. Confirm
  * acknowledges the full total; without enough credits it goes to the credits screen, which
- * comes back here. Cancel stops the job, and gen refunds what was charged.
+ * comes back here. Cancel stops the job, and gen refunds what was charged. A job that has moved on
+ * (confirmed elsewhere, cancelled) shows "Nothing to confirm" with just Close.
  */
 export default function DurationSheet() {
   const t = useTranslations('duration');
@@ -61,6 +62,12 @@ export default function DurationSheet() {
         ) : (
           <ActivityIndicator testID="duration-loading" />
         )
+      ) : job.data.status !== 'awaiting_duration_confirm' ? (
+        <View testID="duration-nothing" className="gap-4">
+          <Text>{t('nothingTitle')}</Text>
+          <Text variant="muted">{t('nothingBody')}</Text>
+          <Button testID="duration-close" variant="secondary" label={t('close')} onPress={done} />
+        </View>
       ) : (
         <DurationBody
           job={job.data}
@@ -89,12 +96,18 @@ type BodyProps = {
 function DurationBody({ job, busy, confirming, cancelling, failed, onConfirm, onCancel }: BodyProps) {
   const t = useTranslations('duration');
   const { totalCredits, extraCredits, seconds } = durationConfirm(job);
+  const charged = totalCredits - extraCredits;
   return (
     <>
       <Text testID="duration-body">
         {t('body', { duration: formatClock(seconds), total: totalCredits, extra: extraCredits })}
       </Text>
-      <Text variant="muted">{t('refundNote')}</Text>
+      {/* gen refunds credits_charged on cancel (job_manager._refund_credit_for_job) and skips a 0-credit job. */}
+      {charged > 0 ? (
+        <Text variant="muted" testID="duration-refund-note">
+          {t('refundNote')}
+        </Text>
+      ) : null}
       {failed ? (
         <Text variant="error" testID="duration-error">
           {t('failed')}

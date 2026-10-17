@@ -127,7 +127,8 @@
     "title": "制作",
     "emptyBody": "你制作的歌曲会显示在这里。",
     "loadFailed": "无法加载您的歌曲。",
-    "findSong": "查找歌曲"
+    "findSong": "查找歌曲",
+    "refreshFailed": "刷新失败。下拉即可重试。"
   },
   "tonight": {
     "comingSoon": "即将推出：你的点歌和今晚的已点队列",
@@ -153,8 +154,11 @@
     "cancelVideo": "取消生成此视频",
     "confirm": "确认",
     "failed": "操作失败，请重试。",
-    "refundNote": "如果您取消，积分将自动退还。",
-    "title": "确认费用"
+    "refundNote": "如果您取消，为此视频扣除的所有点数都将全额退还。",
+    "title": "确认费用",
+    "nothingBody": "该视频不再需要费用确认。",
+    "nothingTitle": "无需确认",
+    "close": "关闭"
   },
   "jobs": {
     "cancelled": "已取消",
@@ -178,6 +182,11 @@
     },
     "untitled": "未命名歌曲",
     "confirmCost": "确认费用",
-    "ready": "准备就绪"
+    "ready": "准备就绪",
+    "chooseAudioOnWeb": "在网站上选择其他音频",
+    "keepTrying": "继续尝试",
+    "stalledBody": "该曲目的音频源当前可能处于离线状态。通常很快就会恢复：我们可以继续尝试最多 1 小时，或者您也可以在网站上选择其他音频。",
+    "stalledBodyExtended": "我们一直在尝试，但该曲目的音频源仍处于离线状态。您可以继续重试，也可以在网站上选择其他音频。",
+    "stalledTitle": "我们仍在尝试连接音频源"
   }
 }

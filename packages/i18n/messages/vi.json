@@ -127,7 +127,8 @@
     "title": "Tạo bài",
     "emptyBody": "Các bài hát bạn tạo sẽ xuất hiện tại đây.",
     "loadFailed": "Không thể tải các bài hát của bạn.",
-    "findSong": "Tìm bài hát"
+    "findSong": "Tìm bài hát",
+    "refreshFailed": "Không thể làm mới. Kéo xuống để thử lại."
   },
   "tonight": {
     "comingSoon": "Sắp ra mắt: bài hát bạn yêu cầu và danh sách chờ tối nay",
@@ -153,8 +154,11 @@
     "cancelVideo": "Hủy video này",
     "confirm": "Xác nhận",
     "failed": "Không thể thực hiện thao tác đó. Hãy thử lại.",
-    "refundNote": "Nếu bạn hủy, credit sẽ được tự động hoàn lại.",
-    "title": "Xác nhận chi phí"
+    "refundNote": "Nếu bạn hủy, mọi credit đã tính cho video này sẽ được hoàn lại.",
+    "title": "Xác nhận chi phí",
+    "nothingBody": "Video này không cần kiểm tra chi phí nữa.",
+    "nothingTitle": "Không có mục nào cần xác nhận",
+    "close": "Đóng"
   },
   "jobs": {
     "cancelled": "Đã hủy",
@@ -178,6 +182,11 @@
     },
     "untitled": "Bài hát chưa có tên",
     "confirmCost": "Xác nhận chi phí",
-    "ready": "Sẵn sàng"
+    "ready": "Sẵn sàng",
+    "chooseAudioOnWeb": "Chọn âm thanh khác trên trang web",
+    "keepTrying": "Tiếp tục thử lại",
+    "stalledBody": "Nguồn của bản nhạc này có thể đang ngoại tuyến. Nguồn thường sẽ sớm hoạt động trở lại: chúng tôi có thể tiếp tục thử tối đa một giờ, hoặc bạn có thể chọn âm thanh khác trên trang web.",
+    "stalledBodyExtended": "Chúng tôi đã tiếp tục thử nhưng nguồn của bản nhạc này vẫn đang ngoại tuyến. Bạn có thể tiếp tục thử lại, hoặc chọn âm thanh khác trên trang web.",
+    "stalledTitle": "Chúng tôi vẫn đang cố gắng kết nối với nguồn âm thanh"
   }
 }

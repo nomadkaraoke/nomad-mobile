@@ -127,7 +127,8 @@
     "title": "Criar",
     "emptyBody": "As músicas que você criar aparecerão aqui.",
     "loadFailed": "Não foi possível carregar suas músicas.",
-    "findSong": "Buscar uma música"
+    "findSong": "Buscar uma música",
+    "refreshFailed": "Não foi possível atualizar. Puxe para baixo para tentar novamente."
   },
   "tonight": {
     "comingSoon": "Em breve: seus pedidos e a fila de hoje à noite",
@@ -153,8 +154,11 @@
     "cancelVideo": "Cancelar este vídeo",
     "confirm": "Confirmar",
     "failed": "Não foi possível fazer isso. Tente novamente.",
-    "refundNote": "Se você cancelar, seu crédito será reembolsado automaticamente.",
-    "title": "Confirmar custo"
+    "refundNote": "Se você cancelar, os créditos cobrados por este vídeo serão reembolsados.",
+    "title": "Confirmar custo",
+    "nothingBody": "Este vídeo não precisa mais de uma verificação de custo.",
+    "nothingTitle": "Nada a confirmar",
+    "close": "Fechar"
   },
   "jobs": {
     "cancelled": "Cancelado",
@@ -178,6 +182,11 @@
     },
     "untitled": "Música sem título",
     "confirmCost": "Confirmar custo",
-    "ready": "Pronto"
+    "ready": "Pronto",
+    "chooseAudioOnWeb": "Escolher outro áudio no site",
+    "keepTrying": "Continuar tentando",
+    "stalledBody": "A fonte desta faixa pode estar offline no momento. Geralmente ela volta logo: podemos continuar tentando por até uma hora, ou você pode escolher outro áudio no site.",
+    "stalledBodyExtended": "Continuamos tentando, mas a fonte desta faixa ainda está offline. Você pode continuar tentando novamente ou escolher outro áudio no site.",
+    "stalledTitle": "Ainda estamos tentando acessar a fonte de áudio"
   }
 }

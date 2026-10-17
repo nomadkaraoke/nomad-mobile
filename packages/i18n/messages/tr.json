@@ -127,7 +127,8 @@
     "title": "Oluştur",
     "emptyBody": "Yaptığın şarkılar burada görünecek.",
     "loadFailed": "Şarkıların yüklenemedi.",
-    "findSong": "Bir şarkı bul"
+    "findSong": "Bir şarkı bul",
+    "refreshFailed": "Yenilenemedi. Tekrar denemek için aşağı çek."
   },
   "tonight": {
     "comingSoon": "Çok yakında: İsteklerin ve bu gecenin sırası",
@@ -153,8 +154,11 @@
     "cancelVideo": "Bu videoyu iptal et",
     "confirm": "Onayla",
     "failed": "Bu işlem yapılamadı. Tekrar dene.",
-    "refundNote": "İptal edersen kredin otomatik olarak iade edilir.",
-    "title": "Maliyeti onayla"
+    "refundNote": "İptal edersen, bu video için kesilen tüm krediler iade edilir.",
+    "title": "Maliyeti onayla",
+    "nothingBody": "Bu video için artık maliyet kontrolü gerekmiyor.",
+    "nothingTitle": "Onaylanacak bir şey yok",
+    "close": "Kapat"
   },
   "jobs": {
     "cancelled": "İptal edildi",
@@ -178,6 +182,11 @@
     },
     "untitled": "Başlıksız şarkı",
     "confirmCost": "Maliyeti onayla",
-    "ready": "Hazır"
+    "ready": "Hazır",
+    "chooseAudioOnWeb": "Web sitesinden farklı bir ses seç",
+    "keepTrying": "Denemeye devam et",
+    "stalledBody": "Bu parçanın kaynağı şu anda çevrimdışı olabilir. Genelde kısa süre içinde düzelir: Bir saate kadar denemeye devam edebiliriz ya da web sitesinden farklı bir ses seçebilirsin.",
+    "stalledBodyExtended": "Denemeye devam ettik ama bu parçanın kaynağı hâlâ çevrimdışı. Tekrar denemeye devam edebilir ya da web sitesinden farklı bir ses seçebilirsin.",
+    "stalledTitle": "Ses kaynağına ulaşmaya çalışıyoruz"
   }
 }

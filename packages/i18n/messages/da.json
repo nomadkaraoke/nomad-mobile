@@ -127,7 +127,8 @@
     "title": "Lav",
     "emptyBody": "Sange, du laver, vises her.",
     "loadFailed": "Kunne ikke indlæse dine sange.",
-    "findSong": "Find en sang"
+    "findSong": "Find en sang",
+    "refreshFailed": "Kunne ikke opdatere. Træk ned for at prøve igen."
   },
   "tonight": {
     "comingSoon": "Kommer snart: dine ønsker og aftenens kø",
@@ -153,8 +154,11 @@
     "cancelVideo": "Annuller denne video",
     "confirm": "Bekræft",
     "failed": "Det kunne ikke lade sig gøre. Prøv igen.",
-    "refundNote": "Hvis du annullerer, bliver din kredit automatisk refunderet.",
-    "title": "Bekræft pris"
+    "refundNote": "Hvis du annullerer, vil eventuelle brugte kreditter for denne video blive refunderet.",
+    "title": "Bekræft pris",
+    "nothingBody": "Denne video behøver ikke længere et pristjek.",
+    "nothingTitle": "Intet at bekræfte",
+    "close": "Luk"
   },
   "jobs": {
     "cancelled": "Annulleret",
@@ -178,6 +182,11 @@
     },
     "untitled": "Sang uden titel",
     "confirmCost": "Bekræft pris",
-    "ready": "Klar"
+    "ready": "Klar",
+    "chooseAudioOnWeb": "Vælg en anden lydfil på hjemmesiden",
+    "keepTrying": "Bliv ved med at prøve",
+    "stalledBody": "Dette spors kilde er muligvis offline lige nu. Den kommer ofte hurtigt tilbage: Vi kan blive ved med at prøve i op til en time, eller du kan vælge en anden lydfil på hjemmesiden.",
+    "stalledBodyExtended": "Vi blev ved med at prøve, men dette spors kilde er stadig offline. Du kan lade os blive ved med at prøve, eller vælge en anden lydfil på hjemmesiden.",
+    "stalledTitle": "Vi forsøger stadig at få kontakt til lydkilden"
   }
 }

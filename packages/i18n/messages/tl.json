@@ -127,7 +127,8 @@
     "title": "Gawin",
     "emptyBody": "Lalabas dito ang mga kantang gagawin mo.",
     "loadFailed": "Hindi ma-load ang iyong mga kanta.",
-    "findSong": "Maghanap ng kanta"
+    "findSong": "Maghanap ng kanta",
+    "refreshFailed": "Hindi ma-refresh. Hilahin pababa para subukang muli."
   },
   "tonight": {
     "comingSoon": "Malapit na: ang iyong mga request at queue ngayong gabi",
@@ -153,8 +154,11 @@
     "cancelVideo": "Kanselahin ang video na ito",
     "confirm": "Kumpirmahin",
     "failed": "Hindi nagawa iyon. Subukang muli.",
-    "refundNote": "Kung magkakansela ka, awtomatikong ire-refund ang iyong credit.",
-    "title": "Kumpirmahin ang halaga"
+    "refundNote": "Kung magkakansela ka, ire-refund ang anumang credit na ibinawas para sa video na ito.",
+    "title": "Kumpirmahin ang halaga",
+    "nothingBody": "Hindi na kailangan ng cost check para sa video na ito.",
+    "nothingTitle": "Walang dapat kumpirmahin",
+    "close": "Isara"
   },
   "jobs": {
     "cancelled": "Nakansela",
@@ -178,6 +182,11 @@
     },
     "untitled": "Kantang walang pamagat",
     "confirmCost": "Kumpirmahin ang halaga",
-    "ready": "Handa na"
+    "ready": "Handa na",
+    "chooseAudioOnWeb": "Pumili ng ibang audio sa website",
+    "keepTrying": "Subukan pa rin",
+    "stalledBody": "Maaaring offline ang source ng track na ito ngayon. Madalas naman itong bumabalik agad: puwede naming ipagpatuloy ang pagsubok nang hanggang isang oras, o puwede kang pumili ng ibang audio sa website.",
+    "stalledBodyExtended": "Sinubukan namin nang paulit-ulit, ngunit offline pa rin ang source ng track na ito. Puwede mong subukang muli, o pumili ng ibang audio sa website.",
+    "stalledTitle": "Sinusubukan pa rin naming ma-access ang audio source"
   }
 }

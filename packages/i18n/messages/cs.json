@@ -127,7 +127,8 @@
     "title": "Vytvořit",
     "emptyBody": "Tady se zobrazí skladby, které vytvoříš.",
     "loadFailed": "Nepodařilo se načíst tvoje skladby.",
-    "findSong": "Najít skladbu"
+    "findSong": "Najít skladbu",
+    "refreshFailed": "Obnovení se nezdařilo. Potáhni dolů a zkus to znovu."
   },
   "tonight": {
     "comingSoon": "Již brzy: tvoje písničky na přání a dnešní pořadník",
@@ -153,8 +154,11 @@
     "cancelVideo": "Zrušit toto video",
     "confirm": "Potvrdit",
     "failed": "To se nepodařilo. Zkus to znovu.",
-    "refundNote": "Pokud video zrušíš, kredit se ti automaticky vrátí.",
-    "title": "Potvrdit cenu"
+    "refundNote": "Pokud akci zrušíš, veškeré kredity naúčtované za toto video ti vrátíme.",
+    "title": "Potvrdit cenu",
+    "nothingBody": "U tohoto videa už není potřeba kontrolovat cenu.",
+    "nothingTitle": "Není co potvrdit",
+    "close": "Zavřít"
   },
   "jobs": {
     "cancelled": "Zrušeno",
@@ -178,6 +182,11 @@
     },
     "untitled": "Skladba bez názvu",
     "confirmCost": "Potvrdit cenu",
-    "ready": "Připraveno"
+    "ready": "Připraveno",
+    "chooseAudioOnWeb": "Vyber jiné audio na webu",
+    "keepTrying": "Zkoušet dál",
+    "stalledBody": "Zdroj této skladby je možná právě offline. Často bývá brzy znovu dostupný: můžeme to zkoušet dál až hodinu, nebo můžeš vybrat jiné audio na webu.",
+    "stalledBodyExtended": "Zkoušeli jsme to dál, ale zdroj této skladby je stále offline. Můžeš to zkusit ještě jednou, nebo vybrat jiné audio na webu.",
+    "stalledTitle": "Stále se pokoušíme připojit ke zdroji zvuku"
   }
 }

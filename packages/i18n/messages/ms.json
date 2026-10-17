@@ -127,7 +127,8 @@
     "title": "Buat",
     "emptyBody": "Lagu yang anda cipta akan dipaparkan di sini.",
     "loadFailed": "Tidak dapat memuatkan lagu anda.",
-    "findSong": "Cari lagu"
+    "findSong": "Cari lagu",
+    "refreshFailed": "Gagal menyegar semula. Tarik ke bawah untuk mencuba lagi."
   },
   "tonight": {
     "comingSoon": "Akan datang: permintaan anda dan barisan giliran malam ini",
@@ -153,8 +154,11 @@
     "cancelVideo": "Batalkan video ini",
     "confirm": "Sahkan",
     "failed": "Tidak dapat berbuat demikian. Cuba lagi.",
-    "refundNote": "Jika anda batalkan, kredit anda akan dikembalikan secara automatik.",
-    "title": "Sahkan kos"
+    "refundNote": "Jika anda batalkan, sebarang kredit yang dicaj untuk video ini akan dikembalikan.",
+    "title": "Sahkan kos",
+    "nothingBody": "Video ini tidak memerlukan semakan kos lagi.",
+    "nothingTitle": "Tiada apa untuk disahkan",
+    "close": "Tutup"
   },
   "jobs": {
     "cancelled": "Dibatalkan",
@@ -178,6 +182,11 @@
     },
     "untitled": "Lagu tanpa tajuk",
     "confirmCost": "Sahkan kos",
-    "ready": "Sedia"
+    "ready": "Sedia",
+    "chooseAudioOnWeb": "Pilih audio lain di tapak web",
+    "keepTrying": "Terus mencuba",
+    "stalledBody": "Sumber trek ini mungkin berada di luar talian sekarang. Ia biasanya pulih tidak lama lagi: kami boleh terus mencuba sehingga satu jam, atau anda boleh memilih audio lain di tapak web.",
+    "stalledBodyExtended": "Kami sudah mencuba berulang kali, tetapi sumber trek ini masih di luar talian. Anda boleh terus mencuba lagi, atau memilih audio lain di tapak web.",
+    "stalledTitle": "Kami masih cuba menyambung ke sumber audio"
   }
 }

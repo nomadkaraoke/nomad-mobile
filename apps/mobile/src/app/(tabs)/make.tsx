@@ -43,7 +43,8 @@ export default function MakeTabScreen() {
     );
   }
 
-  if (jobs.isError) {
+  // Only a failed first load replaces the list; a failed poll keeps the cards (see refreshFailed below).
+  if (jobs.isError && !jobs.data) {
     return (
       <Screen testID="make-tab-screen">
         {title}
@@ -53,7 +54,7 @@ export default function MakeTabScreen() {
     );
   }
 
-  if (jobs.data.length === 0) {
+  if (!jobs.data || jobs.data.length === 0) {
     return (
       <Screen testID="make-tab-screen">
         {title}
@@ -72,7 +73,16 @@ export default function MakeTabScreen() {
         testID="make-list"
         data={jobs.data}
         keyExtractor={(j) => j.job_id}
-        ListHeaderComponent={<View className="pb-2">{title}</View>}
+        ListHeaderComponent={
+          <View className="gap-1 pb-2">
+            {title}
+            {jobs.isRefetchError ? (
+              <Text variant="muted" testID="make-refresh-failed">
+                {t('refreshFailed')}
+              </Text>
+            ) : null}
+          </View>
+        }
         renderItem={(job) => (
           <View className="pb-3">
             <JobCard job={job} />

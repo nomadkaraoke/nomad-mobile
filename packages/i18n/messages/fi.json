@@ -127,7 +127,8 @@
     "title": "Luo",
     "emptyBody": "Tekemäsi kappaleet näkyvät täällä.",
     "loadFailed": "Kappaleitasi ei voitu ladata.",
-    "findSong": "Etsi kappale"
+    "findSong": "Etsi kappale",
+    "refreshFailed": "Päivitys epäonnistui. Vedä alaspäin yrittääksesi uudelleen."
   },
   "tonight": {
     "comingSoon": "Tulossa pian: toivekappaleesi ja tämän illan jono",
@@ -153,8 +154,11 @@
     "cancelVideo": "Peruuta tämä video",
     "confirm": "Vahvista",
     "failed": "Se ei onnistunut. Yritä uudelleen.",
-    "refundNote": "Jos peruutat, krediittisi palautetaan automaattisesti.",
-    "title": "Vahvista hinta"
+    "refundNote": "Jos peruutat, tästä videosta veloitetut krediitit palautetaan.",
+    "title": "Vahvista hinta",
+    "nothingBody": "Tämä video ei enää vaadi hinnan tarkistusta.",
+    "nothingTitle": "Ei mitään vahvistettavaa",
+    "close": "Sulje"
   },
   "jobs": {
     "cancelled": "Peruutettu",
@@ -178,6 +182,11 @@
     },
     "untitled": "Nimetön kappale",
     "confirmCost": "Vahvista hinta",
-    "ready": "Valmis"
+    "ready": "Valmis",
+    "chooseAudioOnWeb": "Valitse toinen ääniraita verkkosivustolla",
+    "keepTrying": "Yritä uudelleen",
+    "stalledBody": "Tämän kappaleen lähde saattaa olla juuri nyt offline-tilassa. Se palaa usein linjoille pian: voimme jatkaa yrittämistä jopa tunnin ajan, tai voit valita toisen ääniraidan verkkosivustolla.",
+    "stalledBodyExtended": "Yritimme useaan kertaan, mutta kappaleen lähde on yhä offline-tilassa. Voit yrittää vielä uudelleen tai valita toisen ääniraidan verkkosivustolla.",
+    "stalledTitle": "Yritämme yhä saada yhteyttä äänilähteeseen"
   }
 }

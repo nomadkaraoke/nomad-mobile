@@ -127,7 +127,8 @@
     "title": "Buat",
     "emptyBody": "Lagu yang Anda buat akan muncul di sini.",
     "loadFailed": "Tidak bisa memuat lagu-lagumu.",
-    "findSong": "Cari lagu"
+    "findSong": "Cari lagu",
+    "refreshFailed": "Gagal menyegarkan. Tarik ke bawah untuk mencoba lagi."
   },
   "tonight": {
     "comingSoon": "Segera hadir: lagu permintaan Anda dan antrean malam ini",
@@ -153,8 +154,11 @@
     "cancelVideo": "Batalkan video ini",
     "confirm": "Konfirmasi",
     "failed": "Gagal memprosesnya. Coba lagi.",
-    "refundNote": "Jika dibatalkan, kreditmu akan otomatis dikembalikan.",
-    "title": "Konfirmasi biaya"
+    "refundNote": "Jika Anda membatalkan, kredit yang telah dipotong untuk video ini akan dikembalikan.",
+    "title": "Konfirmasi biaya",
+    "nothingBody": "Video ini tidak memerlukan pemeriksaan biaya lagi.",
+    "nothingTitle": "Tidak ada yang perlu dikonfirmasi",
+    "close": "Tutup"
   },
   "jobs": {
     "cancelled": "Dibatalkan",
@@ -178,6 +182,11 @@
     },
     "untitled": "Lagu tanpa judul",
     "confirmCost": "Konfirmasi biaya",
-    "ready": "Siap"
+    "ready": "Siap",
+    "chooseAudioOnWeb": "Pilih audio lain di situs web",
+    "keepTrying": "Coba lagi",
+    "stalledBody": "Sumber trek ini mungkin sedang offline saat ini. Biasanya akan segera kembali normal: kami dapat terus mencoba hingga satu jam, atau Anda dapat memilih audio lain di situs web.",
+    "stalledBodyExtended": "Kami sudah terus mencoba, tetapi sumber trek ini masih offline. Anda dapat terus mencoba lagi, atau memilih audio lain di situs web.",
+    "stalledTitle": "Kami masih berusaha menjangkau sumber audio"
   }
 }

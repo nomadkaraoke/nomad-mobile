@@ -127,7 +127,8 @@
     "title": "Twórz",
     "emptyBody": "Utworzone przez Ciebie piosenki pojawią się tutaj.",
     "loadFailed": "Nie udało się wczytać Twoich utworów.",
-    "findSong": "Znajdź piosenkę"
+    "findSong": "Znajdź piosenkę",
+    "refreshFailed": "Nie udało się odświeżyć. Przeciągnij w dół, aby spróbować ponownie."
   },
   "tonight": {
     "comingSoon": "Już wkrótce: Twoje propozycje i kolejka na dziś wieczór",
@@ -153,8 +154,11 @@
     "cancelVideo": "Anuluj to wideo",
     "confirm": "Zatwierdź",
     "failed": "Nie udało się tego zrobić. Spróbuj ponownie.",
-    "refundNote": "Jeśli anulujesz, Twój kredyt zostanie automatycznie zwrócony.",
-    "title": "Potwierdź koszt"
+    "refundNote": "Jeśli anulujesz, wszystkie kredyty pobrane za to wideo zostaną zwrócone.",
+    "title": "Potwierdź koszt",
+    "nothingBody": "To wideo nie wymaga już sprawdzania kosztów.",
+    "nothingTitle": "Nic do potwierdzenia",
+    "close": "Zamknij"
   },
   "jobs": {
     "cancelled": "Anulowano",
@@ -178,6 +182,11 @@
     },
     "untitled": "Utwór bez tytułu",
     "confirmCost": "Potwierdź koszt",
-    "ready": "Gotowe"
+    "ready": "Gotowe",
+    "chooseAudioOnWeb": "Wybierz inne audio na stronie",
+    "keepTrying": "Próbuj dalej",
+    "stalledBody": "Źródło tego utworu może być teraz niedostępne. Zwykle szybko wraca: możemy ponawiać próby przez maksymalnie godzinę albo możesz wybrać inne audio na stronie.",
+    "stalledBodyExtended": "Próbowaliśmy, ale źródło tego utworu nadal jest niedostępne. Możesz ponowić próbę lub wybrać inne audio na stronie.",
+    "stalledTitle": "Nadal próbujemy połączyć się ze źródłem audio"
   }
 }

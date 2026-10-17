@@ -127,7 +127,8 @@
     "title": "Lag",
     "emptyBody": "Sanger du lager, dukker opp her.",
     "loadFailed": "Kunne ikke laste inn sangene dine.",
-    "findSong": "Finn en sang"
+    "findSong": "Finn en sang",
+    "refreshFailed": "Kunne ikke oppdatere. Dra ned for å prøve igjen."
   },
   "tonight": {
     "comingSoon": "Kommer snart: sangønskene dine og kveldens kø",
@@ -153,8 +154,11 @@
     "cancelVideo": "Avbryt denne videoen",
     "confirm": "Bekreft",
     "failed": "Kunne ikke gjøre det. Prøv igjen.",
-    "refundNote": "Hvis du avbryter, blir kreditten din refundert automatisk.",
-    "title": "Bekreft pris"
+    "refundNote": "Hvis du avbryter, blir eventuelle brukte kreditter for denne videoen refundert.",
+    "title": "Bekreft pris",
+    "nothingBody": "Denne videoen trenger ikke lenger en kostnadssjekk.",
+    "nothingTitle": "Ingenting å bekrefte",
+    "close": "Lukk"
   },
   "jobs": {
     "cancelled": "Avbrutt",
@@ -178,6 +182,11 @@
     },
     "untitled": "Sang uten tittel",
     "confirmCost": "Bekreft pris",
-    "ready": "Klar"
+    "ready": "Klar",
+    "chooseAudioOnWeb": "Velg en annen lydkilde på nettstedet",
+    "keepTrying": "Prøv videre",
+    "stalledBody": "Kilden til dette sporet kan være offline akkurat nå. Den kommer ofte tilbake snart: Vi kan fortsette å prøve i opptil én time, eller du kan velge en annen lydkilde på nettsiden.",
+    "stalledBodyExtended": "Vi fortsatte å prøve, men kilden til dette sporet er fortsatt offline. Du kan prøve videre, eller velge en annen lydkilde på nettsiden.",
+    "stalledTitle": "Vi prøver fortsatt å få kontakt med lydkilden"
   }
 }

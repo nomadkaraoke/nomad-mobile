@@ -127,7 +127,8 @@
     "title": "Izradi",
     "emptyBody": "Ovdje će se pojaviti pjesme koje izradiš.",
     "loadFailed": "Učitavanje tvojih pjesama nije uspjelo.",
-    "findSong": "Pronađi pjesmu"
+    "findSong": "Pronađi pjesmu",
+    "refreshFailed": "Osvježavanje nije uspjelo. Povuci prema dolje za ponovni pokušaj."
   },
   "tonight": {
     "comingSoon": "Uskoro: tvoje pjesme i red čekanja za večeras",
@@ -153,8 +154,11 @@
     "cancelVideo": "Otkaži ovaj video",
     "confirm": "Potvrdi",
     "failed": "To nije uspjelo. Pokušaj ponovno.",
-    "refundNote": "Ako otkažeš, kredit ti se automatski vraća.",
-    "title": "Potvrdi cijenu"
+    "refundNote": "Ako otkažeš, svi krediti naplaćeni za ovaj videozapis bit će ti vraćeni.",
+    "title": "Potvrdi cijenu",
+    "nothingBody": "Za ovaj videozapis više nije potrebna provjera troška.",
+    "nothingTitle": "Nema ničega za potvrdu",
+    "close": "Zatvori"
   },
   "jobs": {
     "cancelled": "Otkazano",
@@ -178,6 +182,11 @@
     },
     "untitled": "Pjesma bez naslova",
     "confirmCost": "Potvrdi cijenu",
-    "ready": "Spremno"
+    "ready": "Spremno",
+    "chooseAudioOnWeb": "Odaberi drugi audiozapis na web-mjestu",
+    "keepTrying": "Nastavi pokušavati",
+    "stalledBody": "Izvor ove pjesme trenutačno je možda nedostupan. Često ubrzo ponovno postane dostupan: možemo nastaviti pokušavati do sat vremena ili možeš odabrati drugi audiozapis na web-mjestu.",
+    "stalledBodyExtended": "Nastavili smo pokušavati, ali izvor ove pjesme i dalje je nedostupan. Možeš nastaviti pokušavati ili odabrati drugi audiozapis na web-mjestu.",
+    "stalledTitle": "I dalje pokušavamo doći do izvora zvuka"
   }
 }

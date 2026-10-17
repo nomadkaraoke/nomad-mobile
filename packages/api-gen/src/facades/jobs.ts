@@ -42,7 +42,10 @@ export async function cancelJob(id: string): Promise<void> {
   await cancelJobApiJobsJobIdCancelPost({ path: { job_id: id }, body: { reason: 'Cancelled in the mobile app' } });
 }
 
-/** Resume the same job from its checkpoint, like the web's Retry. */
-export async function retryJob(id: string): Promise<void> {
-  await retryJobApiJobsJobIdRetryPost({ path: { job_id: id }, body: { keep_trying: false } });
+/**
+ * Resume the same job from its checkpoint, like the web's Retry. `keepTrying` is the web's
+ * "Keep trying" for a stalled audio download: gen waits up to an hour for the source instead of 20 minutes.
+ */
+export async function retryJob(id: string, { keepTrying = false }: { keepTrying?: boolean } = {}): Promise<void> {
+  await retryJobApiJobsJobIdRetryPost({ path: { job_id: id }, body: { keep_trying: keepTrying } });
 }

@@ -279,6 +279,13 @@ describe('jobs', () => {
     expectRequest('POST', '/api/jobs/j/retry');
     expect(await lastBody()).toEqual({ keep_trying: false });
   });
+
+  it('retryJob with keepTrying asks gen to wait up to an hour for a stalled download', async () => {
+    fetchMock.mockResolvedValue(json({ status: 'success', job_id: 'j', message: 'Retrying' }));
+    await retryJob('j', { keepTrying: true });
+    expectRequest('POST', '/api/jobs/j/retry');
+    expect(await lastBody()).toEqual({ keep_trying: true });
+  });
 });
 
 describe('isApiError', () => {

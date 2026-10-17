@@ -127,7 +127,8 @@
     "title": "Erstellen",
     "emptyBody": "Songs, die du erstellst, erscheinen hier.",
     "loadFailed": "Deine Songs konnten nicht geladen werden.",
-    "findSong": "Song suchen"
+    "findSong": "Song suchen",
+    "refreshFailed": "Konnte nicht aktualisiert werden. Zum erneuten Versuchen nach unten ziehen."
   },
   "tonight": {
     "comingSoon": "Demnächst verfügbar: deine Songwünsche und die Warteschlange für heute Abend",
@@ -153,8 +154,11 @@
     "cancelVideo": "Dieses Video abbrechen",
     "confirm": "Bestätigen",
     "failed": "Das hat nicht geklappt. Versuche es erneut.",
-    "refundNote": "Wenn du abbrichst, wird dein Guthaben automatisch erstattet.",
-    "title": "Kosten bestätigen"
+    "refundNote": "Wenn du abbrichst, wird jegliches für dieses Video abgebuchte Guthaben erstattet.",
+    "title": "Kosten bestätigen",
+    "nothingBody": "Dieses Video benötigt keine Kostenprüfung mehr.",
+    "nothingTitle": "Nichts zu bestätigen",
+    "close": "Schließen"
   },
   "jobs": {
     "cancelled": "Abgebrochen",
@@ -178,6 +182,11 @@
     },
     "untitled": "Unbenannter Song",
     "confirmCost": "Kosten bestätigen",
-    "ready": "Bereit"
+    "ready": "Bereit",
+    "chooseAudioOnWeb": "Andere Audiodatei auf der Website wählen",
+    "keepTrying": "Weiter versuchen",
+    "stalledBody": "Die Quelle dieses Titels ist möglicherweise gerade offline. Oft ist sie bald wieder da: Wir können es bis zu eine Stunde lang weiter versuchen, oder du wählst eine andere Audiodatei auf der Website.",
+    "stalledBodyExtended": "Wir haben es weiter versucht, aber die Quelle dieses Titels ist immer noch offline. Du kannst es noch einmal versuchen oder eine andere Audiodatei auf der Website wählen.",
+    "stalledTitle": "Wir versuchen weiterhin, die Audioquelle zu erreichen"
   }
 }

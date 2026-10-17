@@ -55,12 +55,14 @@ afterAll(() => {
   jobsPoll.intervalMs = 10_000;
 });
 
-it('says how long the track is and what it costs in total, and that a cancel is refunded', async () => {
+it('says how long the track is and what it costs in total, and that a cancel refunds what was charged', async () => {
   await openSheet();
   expect(screen.getByTestId('duration-body')).toHaveTextContent(
     'This track is 14:32 long, so it costs 2 credits in total (1 more).',
   );
-  expect(screen.getByText('If you cancel, your credit is refunded automatically.')).toBeTruthy();
+  expect(screen.getByTestId('duration-refund-note')).toHaveTextContent(
+    'If you cancel, any credits charged for this video are refunded.',
+  );
   expect(gen.getJob).toHaveBeenCalledWith('d1');
 });
 
@@ -102,4 +104,29 @@ it('opened directly (no Make tab behind it) it loads the job itself', async () =
   gen.listMyJobs.mockResolvedValue([]);
   renderRouter(jobRoutes(), { initialUrl: '/job/duration/d1' });
   expect(await screen.findByTestId('duration-body')).toHaveTextContent(/14:32/);
+});
+
+it('no refund note when nothing was charged (gen has nothing to refund)', async () => {
+  const free = job({
+    job_id: 'd1',
+    status: 'awaiting_duration_confirm',
+    state_data: { credits_charged: 0, pending_additional_credits: 1, duration_actual_seconds: 700 },
+  });
+  gen.listMyJobs.mockResolvedValue([free]);
+  gen.getJob.mockResolvedValue(free as JobDetail);
+  await openSheet();
+  expect(screen.queryByTestId('duration-refund-note')).toBeNull();
+});
+
+it('a job that no longer needs confirming shows "Nothing to confirm" and Close only', async () => {
+  gen.getJob.mockResolvedValue(job({ job_id: 'd1', status: 'separating_stage1' }) as JobDetail);
+  gen.listMyJobs.mockResolvedValue([]);
+  const app = renderRouter(jobRoutes(), { initialUrl: '/make' });
+  await screen.findByTestId('make-empty');
+  act(() => router.push('/job/duration/d1'));
+  expect(await screen.findByTestId('duration-nothing')).toHaveTextContent(/^Nothing to confirm/);
+  expect(screen.queryByTestId('duration-confirm')).toBeNull();
+  expect(screen.queryByTestId('duration-cancel')).toBeNull();
+  fireEvent.press(screen.getByTestId('duration-close'));
+  await waitFor(() => expect(app.getPathname()).toBe('/make'));
 });

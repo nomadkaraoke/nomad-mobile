@@ -110,6 +110,17 @@ it('a load error offers Try again', async () => {
   expect(await screen.findByTestId('job-card-j1')).toBeTruthy();
 });
 
+it('a failed poll keeps the cards and says it could not refresh', async () => {
+  gen.listMyJobs
+    .mockResolvedValueOnce([job({ job_id: 'j1', status: 'encoding' })])
+    .mockRejectedValue(new Error('offline'));
+  openTab();
+  expect(await screen.findByTestId('job-card-j1')).toBeTruthy();
+  expect(await screen.findByTestId('make-refresh-failed', {}, { timeout: 4000 })).toHaveTextContent(/^Couldn't refresh/);
+  expect(screen.getByTestId('job-card-j1')).toBeTruthy();
+  expect(screen.queryByTestId('make-retry')).toBeNull();
+});
+
 it('signed out: the sign-in prompt and no job request', async () => {
   await useAuth.getState().signOut();
   openTab();

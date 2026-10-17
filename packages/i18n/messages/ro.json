@@ -127,7 +127,8 @@
     "title": "Creează",
     "emptyBody": "Melodiile pe care le creezi vor apărea aici.",
     "loadFailed": "Nu s-au putut încărca piesele tale.",
-    "findSong": "Găsește o piesă"
+    "findSong": "Găsește o piesă",
+    "refreshFailed": "Nu s-a putut actualiza. Trage în jos pentru a încerca din nou."
   },
   "tonight": {
     "comingSoon": "În curând: cererile tale și lista de redare pentru diseară",
@@ -153,8 +154,11 @@
     "cancelVideo": "Anulează acest videoclip",
     "confirm": "Confirmă",
     "failed": "Nu s-a putut efectua acțiunea. Încearcă din nou.",
-    "refundNote": "Dacă anulezi, creditul îți este rambursat automat.",
-    "title": "Confirmă costul"
+    "refundNote": "Dacă anulezi, creditele utilizate pentru acest videoclip îți vor fi rambursate.",
+    "title": "Confirmă costul",
+    "nothingBody": "Acest videoclip nu mai are nevoie de verificarea costului.",
+    "nothingTitle": "Nimic de confirmat",
+    "close": "Închide"
   },
   "jobs": {
     "cancelled": "Anulat",
@@ -178,6 +182,11 @@
     },
     "untitled": "Piesă fără titlu",
     "confirmCost": "Confirmă costul",
-    "ready": "Pregătit"
+    "ready": "Pregătit",
+    "chooseAudioOnWeb": "Alege un alt fișier audio pe site",
+    "keepTrying": "Mai încearcă",
+    "stalledBody": "Sursa acestei piese ar putea fi offline acum. De obicei își revine repede: putem continua să încercăm timp de până la o oră sau poți alege un alt fișier audio pe site.",
+    "stalledBodyExtended": "Am tot încercat, dar sursa acestei piese este încă offline. Poți continua să încerci sau poți alege un alt fișier audio pe site.",
+    "stalledTitle": "Încă încercăm să accesăm sursa audio"
   }
 }

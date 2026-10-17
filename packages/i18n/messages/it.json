@@ -127,7 +127,8 @@
     "title": "Crea",
     "emptyBody": "I brani che crei appariranno qui.",
     "loadFailed": "Impossibile caricare i tuoi brani.",
-    "findSong": "Cerca un brano"
+    "findSong": "Cerca un brano",
+    "refreshFailed": "Impossibile aggiornare. Trascina verso il basso per riprovare."
   },
   "tonight": {
     "comingSoon": "In arrivo: le tue richieste e la scaletta di stasera",
@@ -153,8 +154,11 @@
     "cancelVideo": "Annulla questo video",
     "confirm": "Conferma",
     "failed": "Impossibile completare l'operazione. Riprova.",
-    "refundNote": "Se annulli, il tuo credito ti verrà rimborsato automaticamente.",
-    "title": "Conferma costo"
+    "refundNote": "Se annulli, tutti i crediti addebitati per questo video ti saranno rimborsati.",
+    "title": "Conferma costo",
+    "nothingBody": "Questo video non richiede più una verifica dei costi.",
+    "nothingTitle": "Nulla da confermare",
+    "close": "Chiudi"
   },
   "jobs": {
     "cancelled": "Annullato",
@@ -178,6 +182,11 @@
     },
     "untitled": "Brano senza titolo",
     "confirmCost": "Conferma costo",
-    "ready": "Pronto"
+    "ready": "Pronto",
+    "chooseAudioOnWeb": "Scegli un audio diverso sul sito web",
+    "keepTrying": "Continua a provare",
+    "stalledBody": "La sorgente di questa traccia potrebbe essere offline al momento. Spesso torna disponibile a breve: possiamo continuare a provare fino a un'ora, oppure puoi scegliere un audio diverso sul sito web.",
+    "stalledBodyExtended": "Abbiamo continuato a provare, ma la sorgente di questa traccia è ancora offline. Puoi continuare a provare oppure scegliere un audio diverso sul sito web.",
+    "stalledTitle": "Stiamo ancora provando a raggiungere la sorgente audio"
   }
 }

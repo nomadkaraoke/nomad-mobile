@@ -127,7 +127,8 @@
     "title": "Maken",
     "emptyBody": "Nummers die je maakt verschijnen hier.",
     "loadFailed": "Kon je nummers niet laden.",
-    "findSong": "Zoek een nummer"
+    "findSong": "Zoek een nummer",
+    "refreshFailed": "Vernieuwen mislukt. Trek omlaag om het opnieuw te proberen."
   },
   "tonight": {
     "comingSoon": "Binnenkort beschikbaar: je verzoekjes en de wachtrij van vanavond",
@@ -153,8 +154,11 @@
     "cancelVideo": "Deze video annuleren",
     "confirm": "Bevestigen",
     "failed": "Dat is niet gelukt. Probeer het opnieuw.",
-    "refundNote": "Als je annuleert, krijg je je credit automatisch terug.",
-    "title": "Kosten bevestigen"
+    "refundNote": "Als je annuleert, worden eventuele credits die voor deze video zijn afgeschreven teruggestort.",
+    "title": "Kosten bevestigen",
+    "nothingBody": "Deze video heeft geen kostencontrole meer nodig.",
+    "nothingTitle": "Niets te bevestigen",
+    "close": "Sluiten"
   },
   "jobs": {
     "cancelled": "Geannuleerd",
@@ -178,6 +182,11 @@
     },
     "untitled": "Nummer zonder titel",
     "confirmCost": "Kosten bevestigen",
-    "ready": "Klaar"
+    "ready": "Klaar",
+    "chooseAudioOnWeb": "Kies andere audio op de website",
+    "keepTrying": "Blijven proberen",
+    "stalledBody": "De bron van dit nummer is momenteel mogelijk offline. Meestal werkt dit snel weer: we kunnen het tot een uur lang blijven proberen, of je kunt andere audio kiezen op de website.",
+    "stalledBodyExtended": "We zijn het blijven proberen, maar de bron van dit nummer is nog steeds offline. Je kunt het nog eens laten proberen of andere audio kiezen op de website.",
+    "stalledTitle": "We proberen de audiobron nog steeds te bereiken"
   }
 }

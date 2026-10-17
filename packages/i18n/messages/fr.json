@@ -127,7 +127,8 @@
     "title": "Créer",
     "emptyBody": "Les morceaux que tu crées apparaîtront ici.",
     "loadFailed": "Impossible de charger tes morceaux.",
-    "findSong": "Trouver un morceau"
+    "findSong": "Trouver un morceau",
+    "refreshFailed": "Impossible d'actualiser. Glisse vers le bas pour réessayer."
   },
   "tonight": {
     "comingSoon": "Bientôt disponible : tes demandes et la file d'attente de ce soir",
@@ -153,8 +154,11 @@
     "cancelVideo": "Annuler cette vidéo",
     "confirm": "Confirmer",
     "failed": "Impossible d'effectuer cette action. Réessaie.",
-    "refundNote": "Si tu annules, ton crédit est automatiquement remboursé.",
-    "title": "Confirmer le coût"
+    "refundNote": "Si tu annules, tous les crédits débités pour cette vidéo te seront remboursés.",
+    "title": "Confirmer le coût",
+    "nothingBody": "Cette vidéo n'a plus besoin d'une vérification du coût.",
+    "nothingTitle": "Rien à confirmer",
+    "close": "Fermer"
   },
   "jobs": {
     "cancelled": "Annulé",
@@ -178,6 +182,11 @@
     },
     "untitled": "Morceau sans titre",
     "confirmCost": "Confirmer le coût",
-    "ready": "Prêt"
+    "ready": "Prêt",
+    "chooseAudioOnWeb": "Choisir un autre fichier audio sur le site web",
+    "keepTrying": "Continuer d'essayer",
+    "stalledBody": "La source de cette piste est peut-être hors ligne pour le moment. Elle revient souvent rapidement : nous pouvons continuer d'essayer pendant une heure maximum, ou tu peux choisir un autre fichier audio sur le site web.",
+    "stalledBodyExtended": "Nous avons continué d'essayer, mais la source de cette piste est toujours hors ligne. Tu peux réessayer, ou choisir un autre fichier audio sur le site web.",
+    "stalledTitle": "Nous essayons toujours de contacter la source audio"
   }
 }

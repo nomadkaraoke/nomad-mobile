@@ -127,7 +127,8 @@
     "title": "Készítés",
     "emptyBody": "Az általad készített dalok itt fognak megjelenni.",
     "loadFailed": "Nem sikerült betölteni a dalaidat.",
-    "findSong": "Keress egy dalt"
+    "findSong": "Keress egy dalt",
+    "refreshFailed": "Nem sikerült frissíteni. Húzd lefelé az újbóli próbálkozáshoz."
   },
   "tonight": {
     "comingSoon": "Hamarosan: kéréseid és a ma esti várólista",
@@ -153,8 +154,11 @@
     "cancelVideo": "Videó készítésének megszakítása",
     "confirm": "Megerősítés",
     "failed": "Nem sikerült. Próbáld újra.",
-    "refundNote": "Ha megszakítod, automatikusan visszakapod a kreditedet.",
-    "title": "Költség megerősítése"
+    "refundNote": "Ha visszavonod, a videóért levont krediteket visszatérítjük.",
+    "title": "Költség megerősítése",
+    "nothingBody": "Ehhez a videóhoz már nincs szükség a költség ellenőrzésére.",
+    "nothingTitle": "Nincs mit megerősíteni",
+    "close": "Bezárás"
   },
   "jobs": {
     "cancelled": "Megszakítva",
@@ -178,6 +182,11 @@
     },
     "untitled": "Névtelen dal",
     "confirmCost": "Költség megerősítése",
-    "ready": "Kész"
+    "ready": "Kész",
+    "chooseAudioOnWeb": "Válassz másik hanganyagot a weboldalon",
+    "keepTrying": "Próbáljuk tovább",
+    "stalledBody": "Lehet, hogy a szám forrása jelenleg offline. Gyakran hamar helyreáll: legfeljebb egy órán át próbálkozhatunk még, vagy választhatsz másik hanganyagot a weboldalon.",
+    "stalledBodyExtended": "Tovább próbálkoztunk, de a szám forrása még mindig offline. Megpróbálhatjuk újra, vagy választhatsz másik hanganyagot a weboldalon.",
+    "stalledTitle": "Még mindig próbáljuk elérni a hangforrást"
   }
 }

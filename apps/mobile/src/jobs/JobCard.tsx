@@ -13,6 +13,12 @@ type Kind = 'working' | 'review' | 'duration' | 'web' | 'done' | 'failed' | 'can
 
 const STEP_KEYS = ['audio', 'separated', 'lyrics', 'video', 'youtube'] as const;
 
+/** error_details.code gen's audio-download worker sets when a torrent never started (web: StalledDownloadNotice). */
+export const STALLED_DOWNLOAD_CODE = 'audio_download_stalled';
+
+const isStalledDownload = (job: JobSummary) =>
+  job.status === 'failed' && job.error_details?.code === STALLED_DOWNLOAD_CODE;
+
 /** jobPhase lumps cancelled into failed and every needs-you status together; the card needs them apart. */
 export function cardKind(status: string): Kind {
   if (status === 'cancelled') return 'cancelled';
@@ -76,7 +82,7 @@ export function JobCard({ job }: { job: JobSummary }) {
           />
         </>
       ) : null}
-      {kind === 'failed' ? <Failed job={job} /> : null}
+      {kind === 'failed' ? isStalledDownload(job) ? <StalledDownload job={job} /> : <Failed job={job} /> : null}
       {kind === 'cancelled' ? (
         <Text variant="muted" testID={`job-cancelled-${id}`}>
           {t('cancelled')}
@@ -138,19 +144,60 @@ function Progress({ job }: { job: JobSummary }) {
   );
 }
 
-function ReviewAction({ id, label, testID, body }: { id: string; label: string; testID: string; body?: ReactNode }) {
+type ReviewActionProps = { id: string; label: string; testID: string; body?: ReactNode; variant?: 'primary' | 'secondary' };
+
+function ReviewAction({ id, label, testID, body, variant }: ReviewActionProps) {
   const t = useTranslations('jobs');
   const queryClient = useQueryClient();
   const open = useMutation({ mutationFn: () => openReview(id, queryClient) });
   return (
     <>
       {body ? <Text variant="muted">{body}</Text> : null}
-      <Button testID={testID} label={label} loading={open.isPending} onPress={() => open.mutate()} />
+      <Button testID={testID} variant={variant} label={label} loading={open.isPending} onPress={() => open.mutate()} />
       {open.isError ? (
         <Text variant="error" testID={`${testID}-error`}>
           {t('openFailed')}
         </Text>
       ) : null}
+    </>
+  );
+}
+
+/**
+ * A failed job whose torrent never started (its only source was offline): no raw error, just
+ * Keep trying (gen waits up to an hour) or choose different audio on the website.
+ */
+function StalledDownload({ job }: { job: JobSummary }) {
+  const t = useTranslations('jobs');
+  const queryClient = useQueryClient();
+  const id = job.job_id;
+  const keepTrying = useMutation({
+    mutationFn: () => retryJob(id, { keepTrying: true }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['jobs'] }),
+  });
+  return (
+    <>
+      <View testID={`job-stalled-${id}`} className="gap-1">
+        <Text className="font-semibold text-gold">{t('stalledTitle')}</Text>
+        <Text variant="muted">{job.error_details?.keep_trying ? t('stalledBodyExtended') : t('stalledBody')}</Text>
+      </View>
+      {job.credit_refunded ? (
+        <Text variant="muted" testID={`job-refunded-${id}`}>
+          {t('refunded')}
+        </Text>
+      ) : null}
+      <Button
+        testID={`job-keep-trying-${id}`}
+        label={t('keepTrying')}
+        loading={keepTrying.isPending}
+        onPress={() => keepTrying.mutate()}
+      />
+      {keepTrying.isError ? (
+        <Text variant="error" testID={`job-keep-trying-error-${id}`}>
+          {t('retryFailed')}
+        </Text>
+      ) : null}
+      <ReviewAction id={id} label={t('chooseAudioOnWeb')} testID={`job-web-${id}`} variant="secondary" />
     </>
   );
 }
