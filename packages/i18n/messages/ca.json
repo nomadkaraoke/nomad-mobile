@@ -125,7 +125,9 @@
     "emptyTitle": "Encara no has creat res",
     "signInPrompt": "Inicia la sessió per veure les cançons que has creat",
     "title": "Crea",
-    "emptyBody": "Les cançons que creïs apareixeran aquí."
+    "emptyBody": "Les cançons que creïs apareixeran aquí.",
+    "loadFailed": "No s'han pogut carregar les teves cançons.",
+    "findSong": "Cerca una cançó"
   },
   "tonight": {
     "comingSoon": "Properament: les teves peticions i la cua d'aquesta nit",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# crèdit} other {# crèdits}}",
     "popular": "Popular",
     "title": "Compra crèdits"
+  },
+  "duration": {
+    "body": "Aquesta pista dura {duration}, així que costa {total, plural, one {# crèdit} other {# crèdits}} en total ({extra} més).",
+    "cancelVideo": "Cancel·la aquest vídeo",
+    "confirm": "Confirma",
+    "failed": "No s'ha pogut fer. Torna-ho a provar.",
+    "refundNote": "Si cancel·les, se't reemborsa el crèdit automàticament.",
+    "title": "Confirma el cost"
+  },
+  "jobs": {
+    "cancelled": "Cancel·lat",
+    "details": "Detalls",
+    "durationBody": "Aquesta pista és més llarga del que és habitual, així que costa més. Comprova el cost abans de continuar.",
+    "failed": "Hi ha hagut un error en crear aquest vídeo.",
+    "finishOnWeb": "Acaba-ho al lloc web",
+    "needsYou": "Requereix la teva atenció",
+    "openFailed": "No s'ha pogut obrir el lloc web. Torna-ho a provar.",
+    "refunded": "Se t'ha reemborsat el crèdit",
+    "retryFailed": "No s'ha pogut tornar a iniciar. Torna-ho a provar d'aquí a un moment.",
+    "reviewBody": "Revisa la lletra abans que s'acabi",
+    "reviewLyrics": "Revisa la lletra",
+    "slow": "Encara s'està processant; aquest està trigant una mica més",
+    "steps": {
+      "audio": "Àudio obtingut",
+      "lyrics": "Sincronitzant la lletra",
+      "separated": "Veu separada",
+      "video": "Creant el vídeo",
+      "youtube": "Publicant a YouTube"
+    },
+    "untitled": "Cançó sense títol",
+    "confirmCost": "Confirma el cost",
+    "ready": "A punt"
   }
 }

@@ -125,7 +125,9 @@
     "emptyTitle": "Nu ai creat nicio piesă încă",
     "signInPrompt": "Conectează-te pentru a vedea piesele pe care le-ai creat",
     "title": "Creează",
-    "emptyBody": "Melodiile pe care le creezi vor apărea aici."
+    "emptyBody": "Melodiile pe care le creezi vor apărea aici.",
+    "loadFailed": "Nu s-au putut încărca piesele tale.",
+    "findSong": "Găsește o piesă"
   },
   "tonight": {
     "comingSoon": "În curând: cererile tale și lista de redare pentru diseară",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# credit} few {# credite} other {# de credite}}",
     "popular": "Popular",
     "title": "Cumpără credite"
+  },
+  "duration": {
+    "body": "Această piesă are o durată de {duration}, așa că va costa {total, plural, one {# credit} few {# credite} other {# de credite}} în total (cu {extra} în plus).",
+    "cancelVideo": "Anulează acest videoclip",
+    "confirm": "Confirmă",
+    "failed": "Nu s-a putut efectua acțiunea. Încearcă din nou.",
+    "refundNote": "Dacă anulezi, creditul îți este rambursat automat.",
+    "title": "Confirmă costul"
+  },
+  "jobs": {
+    "cancelled": "Anulat",
+    "details": "Detalii",
+    "durationBody": "Această piesă este mai lungă decât majoritatea, așa că va costa mai mult. Verifică costul înainte de a continua.",
+    "failed": "Ceva nu a mers bine la crearea videoclipului.",
+    "finishOnWeb": "Finalizează pe site",
+    "needsYou": "Necesită atenția ta",
+    "openFailed": "Nu s-a putut deschide site-ul. Încearcă din nou.",
+    "refunded": "Creditul tău a fost rambursat",
+    "retryFailed": "Nu s-a putut reporni. Mai încearcă o dată peste câteva momente.",
+    "reviewBody": "Verifică versurile înainte de finalizare",
+    "reviewLyrics": "Verifică versurile",
+    "slow": "Încă se lucrează, durează puțin mai mult",
+    "steps": {
+      "audio": "Audio preluat",
+      "lyrics": "Se sincronizează versurile",
+      "separated": "Vocea a fost separată",
+      "video": "Se creează videoclipul",
+      "youtube": "Se postează pe YouTube"
+    },
+    "untitled": "Piesă fără titlu",
+    "confirmCost": "Confirmă costul",
+    "ready": "Pregătit"
   }
 }

@@ -125,7 +125,9 @@
     "emptyTitle": "Aún no has creado nada",
     "signInPrompt": "Inicia sesión para ver las canciones que has creado",
     "title": "Crear",
-    "emptyBody": "Las canciones que crees aparecerán aquí."
+    "emptyBody": "Las canciones que crees aparecerán aquí.",
+    "loadFailed": "No se pudieron cargar tus canciones.",
+    "findSong": "Buscar una canción"
   },
   "tonight": {
     "comingSoon": "Próximamente: tus solicitudes y la lista de esta noche",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# crédito} other {# créditos}}",
     "popular": "Populares",
     "title": "Comprar créditos"
+  },
+  "duration": {
+    "body": "Esta pista dura {duration}, por lo que cuesta {total, plural, one {# crédito} other {# créditos}} en total ({extra} más).",
+    "cancelVideo": "Cancelar este video",
+    "confirm": "Confirmar",
+    "failed": "No se pudo realizar la acción. Inténtalo de nuevo.",
+    "refundNote": "Si cancelas, se te reembolsa el crédito automáticamente.",
+    "title": "Confirmar costo"
+  },
+  "jobs": {
+    "cancelled": "Cancelado",
+    "details": "Detalles",
+    "durationBody": "Esta pista es más larga de lo habitual, por lo que cuesta más. Revisa el costo antes de continuar.",
+    "failed": "Algo salió mal al crear este video.",
+    "finishOnWeb": "Termina esto en el sitio web",
+    "needsYou": "Requiere tu atención",
+    "openFailed": "No se pudo abrir el sitio web. Inténtalo de nuevo.",
+    "refunded": "Se reembolsó tu crédito",
+    "retryFailed": "No se pudo reiniciar. Vuelve a intentarlo en un momento.",
+    "reviewBody": "Revisa las letras antes de finalizar",
+    "reviewLyrics": "Revisar letras",
+    "slow": "Seguimos trabajando, esto está tardando un poco más",
+    "steps": {
+      "audio": "Audio obtenido",
+      "lyrics": "Sincronizando letras",
+      "separated": "Voz separada",
+      "video": "Creando el video",
+      "youtube": "Publicando en YouTube"
+    },
+    "untitled": "Canción sin título",
+    "confirmCost": "Confirmar costo",
+    "ready": "Listo"
   }
 }

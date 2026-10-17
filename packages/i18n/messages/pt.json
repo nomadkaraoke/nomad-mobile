@@ -125,7 +125,9 @@
     "emptyTitle": "Nada criado ainda",
     "signInPrompt": "Faça login para ver as músicas que você criou",
     "title": "Criar",
-    "emptyBody": "As músicas que você criar aparecerão aqui."
+    "emptyBody": "As músicas que você criar aparecerão aqui.",
+    "loadFailed": "Não foi possível carregar suas músicas.",
+    "findSong": "Buscar uma música"
   },
   "tonight": {
     "comingSoon": "Em breve: seus pedidos e a fila de hoje à noite",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# crédito} other {# créditos}}",
     "popular": "Popular",
     "title": "Comprar créditos"
+  },
+  "duration": {
+    "body": "Esta faixa tem {duration} de duração, por isso custa {total, plural, one {# crédito} other {# créditos}} no total ({extra} a mais).",
+    "cancelVideo": "Cancelar este vídeo",
+    "confirm": "Confirmar",
+    "failed": "Não foi possível fazer isso. Tente novamente.",
+    "refundNote": "Se você cancelar, seu crédito será reembolsado automaticamente.",
+    "title": "Confirmar custo"
+  },
+  "jobs": {
+    "cancelled": "Cancelado",
+    "details": "Detalhes",
+    "durationBody": "Esta faixa é mais longa do que a maioria, por isso custa mais. Verifique o custo antes de continuar.",
+    "failed": "Algo deu errado ao criar esta música.",
+    "finishOnWeb": "Conclua isso no site",
+    "needsYou": "Aguardando você",
+    "openFailed": "Não foi possível abrir o site. Tente novamente.",
+    "refunded": "Seu crédito foi reembolsado",
+    "retryFailed": "Não foi possível tentar novamente. Tente mais uma vez em instantes.",
+    "reviewBody": "Verifique a letra antes de finalizar",
+    "reviewLyrics": "Revisar letra",
+    "slow": "Ainda em andamento, isso está demorando um pouco mais",
+    "steps": {
+      "audio": "Áudio obtido",
+      "lyrics": "Sincronizando a letra",
+      "separated": "Vocais separados",
+      "video": "Criando o vídeo",
+      "youtube": "Publicando no YouTube"
+    },
+    "untitled": "Música sem título",
+    "confirmCost": "Confirmar custo",
+    "ready": "Pronto"
   }
 }

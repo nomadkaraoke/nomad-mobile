@@ -125,7 +125,9 @@
     "emptyTitle": "作成した曲はまだありません",
     "signInPrompt": "作成した曲を見るにはサインインしてください",
     "title": "作成",
-    "emptyBody": "作成した曲がここに表示されます。"
+    "emptyBody": "作成した曲がここに表示されます。",
+    "loadFailed": "曲を読み込めませんでした。",
+    "findSong": "曲を探す"
   },
   "tonight": {
     "comingSoon": "近日公開：リクエスト一覧と今夜のキュー",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# クレジット} other {# クレジット}}",
     "popular": "人気",
     "title": "クレジットを購入"
+  },
+  "duration": {
+    "body": "この曲の長さは{duration}のため、合計{total, plural, one {#クレジット} other {#クレジット}}（追加で{extra}）が必要です。",
+    "cancelVideo": "この動画の作成をキャンセル",
+    "confirm": "確定する",
+    "failed": "処理できませんでした。もう一度お試しください。",
+    "refundNote": "キャンセルした場合、クレジットは自動的に返還されます。",
+    "title": "料金を確認"
+  },
+  "jobs": {
+    "cancelled": "キャンセル済み",
+    "details": "詳細",
+    "durationBody": "この曲は通常より長いため、追加のクレジットが必要です。処理を続ける前に必要クレジットをご確認ください。",
+    "failed": "動画の作成中に問題が発生しました。",
+    "finishOnWeb": "Webサイトで続きを行う",
+    "needsYou": "確認が必要です",
+    "openFailed": "Webサイトを開けませんでした。もう一度お試しください。",
+    "refunded": "クレジットが返還されました",
+    "retryFailed": "再開できませんでした。少し時間をおいてからもう一度お試しください。",
+    "reviewBody": "完成する前に歌詞をご確認ください",
+    "reviewLyrics": "歌詞を確認する",
+    "slow": "処理中です。通常より少し時間がかかっています",
+    "steps": {
+      "audio": "音声を取得しました",
+      "lyrics": "歌詞を同期中",
+      "separated": "ボーカルを分離しました",
+      "video": "動画を作成中",
+      "youtube": "YouTubeに投稿中"
+    },
+    "untitled": "無題の曲",
+    "confirmCost": "料金を確認",
+    "ready": "準備完了"
   }
 }

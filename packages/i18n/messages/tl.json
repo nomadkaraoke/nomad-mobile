@@ -125,7 +125,9 @@
     "emptyTitle": "Wala pang nagagawa",
     "signInPrompt": "Mag-sign in para makita ang mga kantang ginawa mo",
     "title": "Gawin",
-    "emptyBody": "Lalabas dito ang mga kantang gagawin mo."
+    "emptyBody": "Lalabas dito ang mga kantang gagawin mo.",
+    "loadFailed": "Hindi ma-load ang iyong mga kanta.",
+    "findSong": "Maghanap ng kanta"
   },
   "tonight": {
     "comingSoon": "Malapit na: ang iyong mga request at queue ngayong gabi",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# credit} other {# credits}}",
     "popular": "Sikat",
     "title": "Bumili ng credits"
+  },
+  "duration": {
+    "body": "Ang track na ito ay {duration} ang haba, kaya ang kabuuang halaga nito ay {total, plural, one {# credit} other {# credits}} (karagdagang {extra}).",
+    "cancelVideo": "Kanselahin ang video na ito",
+    "confirm": "Kumpirmahin",
+    "failed": "Hindi nagawa iyon. Subukang muli.",
+    "refundNote": "Kung magkakansela ka, awtomatikong ire-refund ang iyong credit.",
+    "title": "Kumpirmahin ang halaga"
+  },
+  "jobs": {
+    "cancelled": "Nakansela",
+    "details": "Mga Detalye",
+    "durationBody": "Mas mahaba ang track na ito kaysa sa karaniwan, kaya mas mataas ang halaga nito. Suriin ang halaga bago ito magpatuloy.",
+    "failed": "Nagkaroon ng problema sa paggawa nito.",
+    "finishOnWeb": "Tapusin ito sa website",
+    "needsYou": "Kailangan ang iyong pansin",
+    "openFailed": "Hindi mabuksan ang website. Subukang muli.",
+    "refunded": "Na-refund ang iyong credit",
+    "retryFailed": "Hindi ito masimulan muli. Subukang muli maya-maya.",
+    "reviewBody": "Suriin ang lyrics bago ito matapos",
+    "reviewLyrics": "Suriin ang lyrics",
+    "slow": "Ginagawa pa, medyo mas matagal lang ito kaysa sa karaniwan",
+    "steps": {
+      "audio": "Nakuha na ang audio",
+      "lyrics": "Sini-sync ang lyrics",
+      "separated": "Nahiwalay na ang vocals",
+      "video": "Ginagawa ang video",
+      "youtube": "Ipinopost sa YouTube"
+    },
+    "untitled": "Kantang walang pamagat",
+    "confirmCost": "Kumpirmahin ang halaga",
+    "ready": "Handa na"
   }
 }

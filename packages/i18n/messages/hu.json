@@ -125,7 +125,9 @@
     "emptyTitle": "Még nem készült semmi",
     "signInPrompt": "Jelentkezz be az elkészített dalaid megtekintéséhez",
     "title": "Készítés",
-    "emptyBody": "Az általad készített dalok itt fognak megjelenni."
+    "emptyBody": "Az általad készített dalok itt fognak megjelenni.",
+    "loadFailed": "Nem sikerült betölteni a dalaidat.",
+    "findSong": "Keress egy dalt"
   },
   "tonight": {
     "comingSoon": "Hamarosan: kéréseid és a ma esti várólista",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# kredit} other {# kredit}}",
     "popular": "Népszerű",
     "title": "Kredit vásárlása"
+  },
+  "duration": {
+    "body": "Ez a szám {duration} hosszú, így összesen {total, plural, one {# kreditbe} other {# kreditbe}} kerül (még {extra}).",
+    "cancelVideo": "Videó készítésének megszakítása",
+    "confirm": "Megerősítés",
+    "failed": "Nem sikerült. Próbáld újra.",
+    "refundNote": "Ha megszakítod, automatikusan visszakapod a kreditedet.",
+    "title": "Költség megerősítése"
+  },
+  "jobs": {
+    "cancelled": "Megszakítva",
+    "details": "Részletek",
+    "durationBody": "Ez a szám az átlagosnál hosszabb, ezért többe kerül. Ellenőrizd a költséget a folytatás előtt.",
+    "failed": "Hiba történt a készítés során.",
+    "finishOnWeb": "Fejezd be a weboldalon",
+    "needsYou": "Rád vár",
+    "openFailed": "Nem sikerült megnyitni a weboldalt. Próbáld újra.",
+    "refunded": "Visszakaptad a kreditedet",
+    "retryFailed": "Nem sikerült újraindítani. Próbáld meg egy pillanat múlva.",
+    "reviewBody": "Ellenőrizd a dalszöveget a véglegesítés előtt",
+    "reviewLyrics": "Dalszöveg ellenőrzése",
+    "slow": "Még dolgozunk rajta, ez a szám kicsit tovább tart",
+    "steps": {
+      "audio": "Hanganyag betöltve",
+      "lyrics": "Dalszöveg szinkronizálása",
+      "separated": "Éneksáv leválasztva",
+      "video": "Videó készítése",
+      "youtube": "Közzététel a YouTube-on"
+    },
+    "untitled": "Névtelen dal",
+    "confirmCost": "Költség megerősítése",
+    "ready": "Kész"
   }
 }

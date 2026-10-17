@@ -125,7 +125,9 @@
     "emptyTitle": "Intet lavet endnu",
     "signInPrompt": "Log ind for at se de sange, du har lavet",
     "title": "Lav",
-    "emptyBody": "Sange, du laver, vises her."
+    "emptyBody": "Sange, du laver, vises her.",
+    "loadFailed": "Kunne ikke indlæse dine sange.",
+    "findSong": "Find en sang"
   },
   "tonight": {
     "comingSoon": "Kommer snart: dine ønsker og aftenens kø",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# kredit} other {# kreditter}}",
     "popular": "Populær",
     "title": "Køb kreditter"
+  },
+  "duration": {
+    "body": "Dette nummer varer {duration}, så det koster {total, plural, one {# kredit} other {# kreditter}} i alt ({extra} mere).",
+    "cancelVideo": "Annuller denne video",
+    "confirm": "Bekræft",
+    "failed": "Det kunne ikke lade sig gøre. Prøv igen.",
+    "refundNote": "Hvis du annullerer, bliver din kredit automatisk refunderet.",
+    "title": "Bekræft pris"
+  },
+  "jobs": {
+    "cancelled": "Annulleret",
+    "details": "Detaljer",
+    "durationBody": "Dette nummer er længere end de fleste, så det koster mere. Tjek prisen, før vi fortsætter.",
+    "failed": "Noget gik galt under oprettelsen af denne.",
+    "finishOnWeb": "Færdiggør dette på hjemmesiden",
+    "needsYou": "Kræver din handling",
+    "openFailed": "Kunne ikke åbne hjemmesiden. Prøv igen.",
+    "refunded": "Din kredit blev refunderet",
+    "retryFailed": "Kunne ikke starte den igen. Prøv igen om et øjeblik.",
+    "reviewBody": "Tjek teksten, før den er færdig",
+    "reviewLyrics": "Gennemse sangtekst",
+    "slow": "Arbejder stadig – denne tager lidt længere tid",
+    "steps": {
+      "audio": "Lyden er hentet",
+      "lyrics": "Synkroniserer sangtekst",
+      "separated": "Vokalen er adskilt",
+      "video": "Laver videoen",
+      "youtube": "Uploader til YouTube"
+    },
+    "untitled": "Sang uden titel",
+    "confirmCost": "Bekræft pris",
+    "ready": "Klar"
   }
 }

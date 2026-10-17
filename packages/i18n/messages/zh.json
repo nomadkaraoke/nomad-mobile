@@ -125,7 +125,9 @@
     "emptyTitle": "尚未制作任何歌曲",
     "signInPrompt": "登录以查看你制作的歌曲",
     "title": "制作",
-    "emptyBody": "你制作的歌曲会显示在这里。"
+    "emptyBody": "你制作的歌曲会显示在这里。",
+    "loadFailed": "无法加载您的歌曲。",
+    "findSong": "查找歌曲"
   },
   "tonight": {
     "comingSoon": "即将推出：你的点歌和今晚的已点队列",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# 点积分} other {# 点积分}}",
     "popular": "热门",
     "title": "购买点数"
+  },
+  "duration": {
+    "body": "这首曲目时长为 {duration}，因此总共需要 {total, plural, one {# 点积分} other {# 点积分}}（需额外支付 {extra} 点）。",
+    "cancelVideo": "取消生成此视频",
+    "confirm": "确认",
+    "failed": "操作失败，请重试。",
+    "refundNote": "如果您取消，积分将自动退还。",
+    "title": "确认费用"
+  },
+  "jobs": {
+    "cancelled": "已取消",
+    "details": "详情",
+    "durationBody": "这首曲目比一般曲目更长，因此需要消耗更多积分。继续之前请先确认所需费用。",
+    "failed": "制作这首歌曲时出了点问题。",
+    "finishOnWeb": "前往网页端完成",
+    "needsYou": "待您处理",
+    "openFailed": "无法打开网页，请重试。",
+    "refunded": "您的积分已退还",
+    "retryFailed": "无法重新开始，请稍后再试一次。",
+    "reviewBody": "完成前请先检查歌词",
+    "reviewLyrics": "检查歌词",
+    "slow": "仍在处理中，这个任务需要的时间稍长一些",
+    "steps": {
+      "audio": "已获取音频",
+      "lyrics": "正在同步歌词",
+      "separated": "已分离伴奏与人声",
+      "video": "正在制作视频",
+      "youtube": "正在发布至 YouTube"
+    },
+    "untitled": "未命名歌曲",
+    "confirmCost": "确认费用",
+    "ready": "准备就绪"
   }
 }

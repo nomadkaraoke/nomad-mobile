@@ -21,6 +21,7 @@ jest.mock('@nomad/api-gen', () => ({
   createJobFromSearch: jest.fn(),
   createJobFromUrl: jest.fn(),
   getMe: jest.fn(),
+  listMyJobs: jest.fn(),
 }));
 
 const TIER1 = { sessionId: 's1', results: [bestChoice(0), youtube(1), spotify(2)] };
@@ -35,6 +36,7 @@ beforeEach(async () => {
   gen.searchAudio.mockResolvedValue(TIER1);
   gen.createJobFromSearch.mockResolvedValue('job-1');
   gen.createJobFromUrl.mockResolvedValue('job-2');
+  gen.listMyJobs.mockResolvedValue([]);
 });
 
 const openMake = () => renderRouter(makeRoutes(), { initialUrl: '/make/new' });

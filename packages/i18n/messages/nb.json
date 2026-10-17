@@ -125,7 +125,9 @@
     "emptyTitle": "Ingenting er laget ennå",
     "signInPrompt": "Logg inn for å se sangene du har laget",
     "title": "Lag",
-    "emptyBody": "Sanger du lager, dukker opp her."
+    "emptyBody": "Sanger du lager, dukker opp her.",
+    "loadFailed": "Kunne ikke laste inn sangene dine.",
+    "findSong": "Finn en sang"
   },
   "tonight": {
     "comingSoon": "Kommer snart: sangønskene dine og kveldens kø",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# kreditt} other {# kreditter}}",
     "popular": "Populær",
     "title": "Kjøp kreditter"
+  },
+  "duration": {
+    "body": "Dette sporet er {duration} langt, så det koster totalt {total, plural, one {# kreditt} other {# kreditter}} ({extra} ekstra).",
+    "cancelVideo": "Avbryt denne videoen",
+    "confirm": "Bekreft",
+    "failed": "Kunne ikke gjøre det. Prøv igjen.",
+    "refundNote": "Hvis du avbryter, blir kreditten din refundert automatisk.",
+    "title": "Bekreft pris"
+  },
+  "jobs": {
+    "cancelled": "Avbrutt",
+    "details": "Detaljer",
+    "durationBody": "Dette sporet er lengre enn de fleste, så det koster mer. Sjekk prisen før prosessen fortsetter.",
+    "failed": "Noe gikk galt under lagingen av denne.",
+    "finishOnWeb": "Fullfør dette på nettsiden",
+    "needsYou": "Trenger handling fra deg",
+    "openFailed": "Kunne ikke åpne nettsiden. Prøv igjen.",
+    "refunded": "Kreditten din ble refundert",
+    "retryFailed": "Kunne ikke starte på nytt. Prøv igjen om et øyeblikk.",
+    "reviewBody": "Sjekk teksten før den fullføres",
+    "reviewLyrics": "Se over sangteksten",
+    "slow": "Jobber fortsatt – denne tar litt lengre tid enn vanlig",
+    "steps": {
+      "audio": "Hentet lyden",
+      "lyrics": "Synkroniserer sangtekst",
+      "separated": "Skilte ut vokalen",
+      "video": "Lager videoen",
+      "youtube": "Publiserer på YouTube"
+    },
+    "untitled": "Sang uten tittel",
+    "confirmCost": "Bekreft pris",
+    "ready": "Klar"
   }
 }

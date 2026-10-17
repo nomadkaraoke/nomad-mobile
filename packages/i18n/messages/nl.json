@@ -125,7 +125,9 @@
     "emptyTitle": "Nog niets gemaakt",
     "signInPrompt": "Log in om de nummers te zien die je hebt gemaakt",
     "title": "Maken",
-    "emptyBody": "Nummers die je maakt verschijnen hier."
+    "emptyBody": "Nummers die je maakt verschijnen hier.",
+    "loadFailed": "Kon je nummers niet laden.",
+    "findSong": "Zoek een nummer"
   },
   "tonight": {
     "comingSoon": "Binnenkort beschikbaar: je verzoekjes en de wachtrij van vanavond",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# credit} other {# credits}}",
     "popular": "Populair",
     "title": "Credits kopen"
+  },
+  "duration": {
+    "body": "Dit nummer duurt {duration}, dus kost het in totaal {total, plural, one {# credit} other {# credits}} ({extra} extra).",
+    "cancelVideo": "Deze video annuleren",
+    "confirm": "Bevestigen",
+    "failed": "Dat is niet gelukt. Probeer het opnieuw.",
+    "refundNote": "Als je annuleert, krijg je je credit automatisch terug.",
+    "title": "Kosten bevestigen"
+  },
+  "jobs": {
+    "cancelled": "Geannuleerd",
+    "details": "Details",
+    "durationBody": "Dit nummer is langer dan de meeste nummers, dus het kost meer. Controleer de kosten voordat we verdergaan.",
+    "failed": "Er is iets misgegaan bij het maken hiervan.",
+    "finishOnWeb": "Maak dit af op de website",
+    "needsYou": "Jouw actie vereist",
+    "openFailed": "Kon de website niet openen. Probeer het opnieuw.",
+    "refunded": "Je credit is terugbetaald",
+    "retryFailed": "Kon niet opnieuw starten. Probeer het zo meteen nog eens.",
+    "reviewBody": "Controleer de songtekst voordat de video klaar is",
+    "reviewLyrics": "Songtekst controleren",
+    "slow": "Nog even bezig, deze duurt iets langer",
+    "steps": {
+      "audio": "Audio ontvangen",
+      "lyrics": "Songtekst synchroniseren",
+      "separated": "Zang gescheiden",
+      "video": "Video maken",
+      "youtube": "Plaatsen op YouTube"
+    },
+    "untitled": "Nummer zonder titel",
+    "confirmCost": "Kosten bevestigen",
+    "ready": "Klaar"
   }
 }

@@ -125,7 +125,9 @@
     "emptyTitle": "Noch nichts erstellt",
     "signInPrompt": "Melde dich an, um deine erstellten Songs zu sehen",
     "title": "Erstellen",
-    "emptyBody": "Songs, die du erstellst, erscheinen hier."
+    "emptyBody": "Songs, die du erstellst, erscheinen hier.",
+    "loadFailed": "Deine Songs konnten nicht geladen werden.",
+    "findSong": "Song suchen"
   },
   "tonight": {
     "comingSoon": "Demnächst verfügbar: deine Songwünsche und die Warteschlange für heute Abend",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# Guthaben} other {# Guthaben}}",
     "popular": "Beliebt",
     "title": "Guthaben kaufen"
+  },
+  "duration": {
+    "body": "Dieser Titel ist {duration} lang, daher kostet er insgesamt {total, plural, one {# Guthaben} other {# Guthaben}} ({extra} mehr).",
+    "cancelVideo": "Dieses Video abbrechen",
+    "confirm": "Bestätigen",
+    "failed": "Das hat nicht geklappt. Versuche es erneut.",
+    "refundNote": "Wenn du abbrichst, wird dein Guthaben automatisch erstattet.",
+    "title": "Kosten bestätigen"
+  },
+  "jobs": {
+    "cancelled": "Abgebrochen",
+    "details": "Details",
+    "durationBody": "Dieser Titel ist länger als die meisten, daher kostet er mehr. Überprüfe die Kosten, bevor es weitergeht.",
+    "failed": "Beim Erstellen ist etwas schiefgelaufen.",
+    "finishOnWeb": "Auf der Website abschließen",
+    "needsYou": "Aktion erforderlich",
+    "openFailed": "Die Website konnte nicht geöffnet werden. Versuche es erneut.",
+    "refunded": "Dein Guthaben wurde erstattet",
+    "retryFailed": "Konnte nicht erneut gestartet werden. Versuche es gleich noch einmal.",
+    "reviewBody": "Überprüfe den Text vor der Fertigstellung",
+    "reviewLyrics": "Text überprüfen",
+    "slow": "Wird noch bearbeitet, das dauert etwas länger",
+    "steps": {
+      "audio": "Audio erhalten",
+      "lyrics": "Text wird synchronisiert",
+      "separated": "Gesang getrennt",
+      "video": "Video wird erstellt",
+      "youtube": "Wird auf YouTube veröffentlicht"
+    },
+    "untitled": "Unbenannter Song",
+    "confirmCost": "Kosten bestätigen",
+    "ready": "Bereit"
   }
 }

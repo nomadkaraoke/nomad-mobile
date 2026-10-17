@@ -125,7 +125,9 @@
     "emptyTitle": "Ei vielä luotuja kappaleita",
     "signInPrompt": "Kirjaudu sisään nähdäksesi luomasi kappaleet",
     "title": "Luo",
-    "emptyBody": "Tekemäsi kappaleet näkyvät täällä."
+    "emptyBody": "Tekemäsi kappaleet näkyvät täällä.",
+    "loadFailed": "Kappaleitasi ei voitu ladata.",
+    "findSong": "Etsi kappale"
   },
   "tonight": {
     "comingSoon": "Tulossa pian: toivekappaleesi ja tämän illan jono",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# krediitti} other {# krediittiä}}",
     "popular": "Suosittu",
     "title": "Osta krediittejä"
+  },
+  "duration": {
+    "body": "Tämä kappale on {duration} pitkä, joten se maksaa yhteensä {total, plural, one {# krediitin} other {# krediittiä}} ({extra} lisää).",
+    "cancelVideo": "Peruuta tämä video",
+    "confirm": "Vahvista",
+    "failed": "Se ei onnistunut. Yritä uudelleen.",
+    "refundNote": "Jos peruutat, krediittisi palautetaan automaattisesti.",
+    "title": "Vahvista hinta"
+  },
+  "jobs": {
+    "cancelled": "Peruutettu",
+    "details": "Tiedot",
+    "durationBody": "Tämä kappale on tavallista pidempi, joten se maksaa enemmän. Tarkista hinta ennen kuin jatketaan.",
+    "failed": "Jokin meni pieleen tämän luomisessa.",
+    "finishOnWeb": "Viimeistele tämä verkkosivustolla",
+    "needsYou": "Vaatii toimiasi",
+    "openFailed": "Verkkosivustoa ei voitu avata. Yritä uudelleen.",
+    "refunded": "Krediittisi palautettiin",
+    "retryFailed": "Aloittaminen uudelleen ei onnistunut. Yritä hetken kuluttua uudelleen.",
+    "reviewBody": "Tarkista sanoitukset ennen kuin kappale valmistuu",
+    "reviewLyrics": "Tarkista sanoitukset",
+    "slow": "Käsitellään vielä, tässä kestää hieman tavallista pidempään",
+    "steps": {
+      "audio": "Ääni noudettu",
+      "lyrics": "Synkronoidaan sanoituksia",
+      "separated": "Lauluäänet eroteltu",
+      "video": "Luodaan videota",
+      "youtube": "Julkaistaan YouTubeen"
+    },
+    "untitled": "Nimetön kappale",
+    "confirmCost": "Vahvista hinta",
+    "ready": "Valmis"
   }
 }

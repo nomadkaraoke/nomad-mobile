@@ -125,7 +125,9 @@
     "emptyTitle": "Zatiaľ si nič nevytvoril",
     "signInPrompt": "Prihlás sa a pozri si skladby, ktoré si vytvoril",
     "title": "Tvorba",
-    "emptyBody": "Tu sa zobrazia skladby, ktoré vytvoríš."
+    "emptyBody": "Tu sa zobrazia skladby, ktoré vytvoríš.",
+    "loadFailed": "Nepodarilo sa načítať tvoje skladby.",
+    "findSong": "Nájsť skladbu"
   },
   "tonight": {
     "comingSoon": "Už čoskoro: tvoje požiadavky a poradovník na dnešný večer",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# kredit} few {# kredity} other {# kreditov}}",
     "popular": "Populárne",
     "title": "Kúpiť kredity"
+  },
+  "duration": {
+    "body": "Táto skladba má dĺžku {duration}, takže celkovo stojí {total, plural, one {# kredit} few {# kredity} other {# kreditov}} (o {extra} viac).",
+    "cancelVideo": "Zrušiť toto video",
+    "confirm": "Potvrdiť",
+    "failed": "To sa nepodarilo. Skús to znova.",
+    "refundNote": "Ak to zrušíš, kredit sa ti automaticky vráti.",
+    "title": "Potvrdiť cenu"
+  },
+  "jobs": {
+    "cancelled": "Zrušené",
+    "details": "Podrobnosti",
+    "durationBody": "Táto skladba je dlhšia než väčšina ostatných, takže stojí viac. Pred pokračovaním si skontroluj cenu.",
+    "failed": "Pri vytváraní tohto videa sa niečo pokazilo.",
+    "finishOnWeb": "Dokončiť na webe",
+    "needsYou": "Čaká na teba",
+    "openFailed": "Nepodarilo sa otvoriť webovú stránku. Skús to znova.",
+    "refunded": "Kredit ti bol vrátený",
+    "retryFailed": "Nepodarilo sa to znova spustiť. O chvíľu to skús ešte raz.",
+    "reviewBody": "Pred dokončením skontroluj text",
+    "reviewLyrics": "Skontrolovať text",
+    "slow": "Stále pracujeme, toto trvá o niečo dlhšie",
+    "steps": {
+      "audio": "Zvuk je načítaný",
+      "lyrics": "Synchronizuje sa text",
+      "separated": "Vokály sú oddelené",
+      "video": "Vytvára sa video",
+      "youtube": "Uverejňuje sa na YouTube"
+    },
+    "untitled": "Skladba bez názvu",
+    "confirmCost": "Potvrdiť cenu",
+    "ready": "Pripravené"
   }
 }

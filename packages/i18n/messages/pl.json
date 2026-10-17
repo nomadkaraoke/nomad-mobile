@@ -125,7 +125,9 @@
     "emptyTitle": "Jeszcze nic tu nie ma",
     "signInPrompt": "Zaloguj się, aby zobaczyć stworzone przez siebie piosenki",
     "title": "Twórz",
-    "emptyBody": "Utworzone przez Ciebie piosenki pojawią się tutaj."
+    "emptyBody": "Utworzone przez Ciebie piosenki pojawią się tutaj.",
+    "loadFailed": "Nie udało się wczytać Twoich utworów.",
+    "findSong": "Znajdź piosenkę"
   },
   "tonight": {
     "comingSoon": "Już wkrótce: Twoje propozycje i kolejka na dziś wieczór",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# kredyt} few {# kredyty} many {# kredytów} other {# kredytów}}",
     "popular": "Popularne",
     "title": "Kup kredyty"
+  },
+  "duration": {
+    "body": "Ten utwór trwa {duration}, więc kosztuje łącznie {total, plural, one {# kredyt} few {# kredyty} many {# kredytów} other {# kredytów}} ({extra} więcej).",
+    "cancelVideo": "Anuluj to wideo",
+    "confirm": "Zatwierdź",
+    "failed": "Nie udało się tego zrobić. Spróbuj ponownie.",
+    "refundNote": "Jeśli anulujesz, Twój kredyt zostanie automatycznie zwrócony.",
+    "title": "Potwierdź koszt"
+  },
+  "jobs": {
+    "cancelled": "Anulowano",
+    "details": "Szczegóły",
+    "durationBody": "Ten utwór jest dłuższy niż większość, dlatego kosztuje więcej. Sprawdź koszt, zanim przejdziemy dalej.",
+    "failed": "Coś poszło nie tak podczas tworzenia tego wideo.",
+    "finishOnWeb": "Dokończ na stronie internetowej",
+    "needsYou": "Wymaga Twojej uwagi",
+    "openFailed": "Nie udało się otworzyć strony internetowej. Spróbuj ponownie.",
+    "refunded": "Twój kredyt został zwrócony",
+    "retryFailed": "Nie udało się uruchomić ponownie. Spróbuj jeszcze raz za chwilę.",
+    "reviewBody": "Sprawdź tekst przed zakończeniem",
+    "reviewLyrics": "Przejrzyj tekst",
+    "slow": "Nadal pracujemy — to zajmuje trochę więcej czasu",
+    "steps": {
+      "audio": "Pobrano dźwięk",
+      "lyrics": "Synchronizowanie tekstu",
+      "separated": "Wyizolowano wokal",
+      "video": "Tworzenie wideo",
+      "youtube": "Publikowanie na YouTube"
+    },
+    "untitled": "Utwór bez tytułu",
+    "confirmCost": "Potwierdź koszt",
+    "ready": "Gotowe"
   }
 }

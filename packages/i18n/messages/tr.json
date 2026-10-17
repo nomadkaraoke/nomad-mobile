@@ -125,7 +125,9 @@
     "emptyTitle": "Henüz oluşturulan bir şey yok",
     "signInPrompt": "Oluşturduğun şarkıları görmek için giriş yap",
     "title": "Oluştur",
-    "emptyBody": "Yaptığın şarkılar burada görünecek."
+    "emptyBody": "Yaptığın şarkılar burada görünecek.",
+    "loadFailed": "Şarkıların yüklenemedi.",
+    "findSong": "Bir şarkı bul"
   },
   "tonight": {
     "comingSoon": "Çok yakında: İsteklerin ve bu gecenin sırası",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# kredi} other {# kredi}}",
     "popular": "Popüler",
     "title": "Kredi satın al"
+  },
+  "duration": {
+    "body": "Bu parça {duration} uzunluğunda, bu yüzden toplam maliyeti {total, plural, one {# kredi} other {# kredi}} ({extra} ek kredi).",
+    "cancelVideo": "Bu videoyu iptal et",
+    "confirm": "Onayla",
+    "failed": "Bu işlem yapılamadı. Tekrar dene.",
+    "refundNote": "İptal edersen kredin otomatik olarak iade edilir.",
+    "title": "Maliyeti onayla"
+  },
+  "jobs": {
+    "cancelled": "İptal edildi",
+    "details": "Ayrıntılar",
+    "durationBody": "Bu parça normalden daha uzun olduğu için maliyeti daha yüksek. Devam etmeden önce maliyeti kontrol et.",
+    "failed": "Bunu hazırlarken bir şeyler ters gitti.",
+    "finishOnWeb": "Bunu web sitesinde tamamla",
+    "needsYou": "İşlem yapman gerekiyor",
+    "openFailed": "Web sitesi açılamadı. Tekrar dene.",
+    "refunded": "Kredin iade edildi",
+    "retryFailed": "Yeniden başlatılamadı. Birazdan tekrar dene.",
+    "reviewBody": "Tamamlanmadan önce sözleri kontrol et",
+    "reviewLyrics": "Sözleri incele",
+    "slow": "Çalışma sürüyor, bu işlem biraz daha uzun sürüyor",
+    "steps": {
+      "audio": "Ses dosyası alındı",
+      "lyrics": "Sözler senkronize ediliyor",
+      "separated": "Vokaller ayrıştırıldı",
+      "video": "Video hazırlanıyor",
+      "youtube": "YouTube'a yükleniyor"
+    },
+    "untitled": "Başlıksız şarkı",
+    "confirmCost": "Maliyeti onayla",
+    "ready": "Hazır"
   }
 }

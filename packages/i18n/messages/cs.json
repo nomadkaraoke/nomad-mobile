@@ -125,7 +125,9 @@
     "emptyTitle": "Zatím tu nic není",
     "signInPrompt": "Přihlas se a podívej se na skladby, které už máš hotové",
     "title": "Vytvořit",
-    "emptyBody": "Tady se zobrazí skladby, které vytvoříš."
+    "emptyBody": "Tady se zobrazí skladby, které vytvoříš.",
+    "loadFailed": "Nepodařilo se načíst tvoje skladby.",
+    "findSong": "Najít skladbu"
   },
   "tonight": {
     "comingSoon": "Již brzy: tvoje písničky na přání a dnešní pořadník",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# kredit} few {# kredity} other {# kreditů}}",
     "popular": "Populární",
     "title": "Koupit kredity"
+  },
+  "duration": {
+    "body": "Tato skladba má délku {duration}, takže celkem stojí {total, plural, one {# kredit} few {# kredity} other {# kreditů}} (o {extra} navíc).",
+    "cancelVideo": "Zrušit toto video",
+    "confirm": "Potvrdit",
+    "failed": "To se nepodařilo. Zkus to znovu.",
+    "refundNote": "Pokud video zrušíš, kredit se ti automaticky vrátí.",
+    "title": "Potvrdit cenu"
+  },
+  "jobs": {
+    "cancelled": "Zrušeno",
+    "details": "Podrobnosti",
+    "durationBody": "Tato skladba je delší než většina ostatních, takže stojí více. Zkontroluj cenu, než bude zpracování pokračovat.",
+    "failed": "Při vytváření tohoto videa se něco pokazilo.",
+    "finishOnWeb": "Dokončit na webu",
+    "needsYou": "Čeká na tebe",
+    "openFailed": "Nepodařilo se otevřít web. Zkus to znovu.",
+    "refunded": "Kredit ti byl vrácen",
+    "retryFailed": "Nepodařilo se to spustit znovu. Zkus to za chvilku ještě jednou.",
+    "reviewBody": "Zkontroluj text, než bude video hotové",
+    "reviewLyrics": "Zkontrolovat text",
+    "slow": "Stále pracujeme, tentokrát to trvá o něco déle",
+    "steps": {
+      "audio": "Zvuk je připraven",
+      "lyrics": "Synchronizace textu",
+      "separated": "Oddělení vokálů",
+      "video": "Vytváření videa",
+      "youtube": "Nahrávání na YouTube"
+    },
+    "untitled": "Skladba bez názvu",
+    "confirmCost": "Potvrdit cenu",
+    "ready": "Připraveno"
   }
 }

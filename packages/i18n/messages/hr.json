@@ -125,7 +125,9 @@
     "emptyTitle": "Još ništa nije izrađeno",
     "signInPrompt": "Prijavi se za pregled pjesama koje si izradio",
     "title": "Izradi",
-    "emptyBody": "Ovdje će se pojaviti pjesme koje izradiš."
+    "emptyBody": "Ovdje će se pojaviti pjesme koje izradiš.",
+    "loadFailed": "Učitavanje tvojih pjesama nije uspjelo.",
+    "findSong": "Pronađi pjesmu"
   },
   "tonight": {
     "comingSoon": "Uskoro: tvoje pjesme i red čekanja za večeras",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# kredit} few {# kredita} other {# kredita}}",
     "popular": "Popularno",
     "title": "Kupi kredite"
+  },
+  "duration": {
+    "body": "Ova pjesma traje {duration}, pa ukupno košta {total, plural, one {# kredit} few {# kredita} other {# kredita}} ({extra} više).",
+    "cancelVideo": "Otkaži ovaj video",
+    "confirm": "Potvrdi",
+    "failed": "To nije uspjelo. Pokušaj ponovno.",
+    "refundNote": "Ako otkažeš, kredit ti se automatski vraća.",
+    "title": "Potvrdi cijenu"
+  },
+  "jobs": {
+    "cancelled": "Otkazano",
+    "details": "Pojedinosti",
+    "durationBody": "Ova je pjesma duža od većine, pa košta više. Provjeri cijenu prije nego što nastavimo.",
+    "failed": "Nešto je pošlo po zlu pri izradi ovog videa.",
+    "finishOnWeb": "Dovrši ovo na web-mjestu",
+    "needsYou": "Čeka tvoju radnju",
+    "openFailed": "Otvaranje web-stranice nije uspjelo. Pokušaj ponovno.",
+    "refunded": "Kredit ti je vraćen",
+    "retryFailed": "Ponovno pokretanje nije uspjelo. Pokušaj ponovno za trenutak.",
+    "reviewBody": "Provjeri tekst pjesme prije dovršetka",
+    "reviewLyrics": "Pregledaj tekst",
+    "slow": "Još uvijek radimo na tome, ovo traje malo duže",
+    "steps": {
+      "audio": "Zvuk je preuzet",
+      "lyrics": "Sinkronizacija teksta",
+      "separated": "Vokali su odvojeni",
+      "video": "Izrada videa",
+      "youtube": "Objavljivanje na YouTubeu"
+    },
+    "untitled": "Pjesma bez naslova",
+    "confirmCost": "Potvrdi cijenu",
+    "ready": "Spremno"
   }
 }

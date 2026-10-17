@@ -13,7 +13,12 @@ jest.mock('@nomad/api-decide', () => ({
   getSong: jest.fn(),
   configureClient: jest.fn(),
 }));
-jest.mock('@nomad/api-gen', () => ({ ...jest.requireActual('@nomad/api-gen'), getMe: jest.fn(), exchangeGoogleToken: jest.fn() }));
+jest.mock('@nomad/api-gen', () => ({
+  ...jest.requireActual('@nomad/api-gen'),
+  getMe: jest.fn(),
+  exchangeGoogleToken: jest.fn(),
+  listMyJobs: jest.fn(),
+}));
 
 beforeEach(async () => {
   jest.useRealTimers();
@@ -21,6 +26,7 @@ beforeEach(async () => {
   (decide.popularSongs as jest.Mock).mockResolvedValue([]);
   await useAuth.getState().signOut();
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 });
+  gen.listMyJobs.mockResolvedValue([]);
 });
 
 it('opens on Discover and shows four tabs: Discover, Tonight, Make, Me', async () => {
@@ -68,7 +74,7 @@ it('Make tab (signed out) offers sign-in that returns to the Make tab', async ()
   expect(await screen.findByTestId('signin-sheet')).toBeTruthy();
   expect(app.getSearchParams()).toMatchObject({ returnTo: '/(tabs)/make' });
   await act(async () => fireEvent.press(screen.getByTestId('signin-google')));
-  expect(await screen.findByTestId('make-tab-empty')).toBeTruthy();
+  expect(await screen.findByTestId('make-empty')).toBeTruthy();
   expect(app.getSegments()).toEqual(['(tabs)', 'make']);
   expect(useAuth.getState().state.status).toBe('signedIn');
 });

@@ -125,7 +125,9 @@
     "emptyTitle": "Chưa có bài nào được tạo",
     "signInPrompt": "Đăng nhập để xem các bài hát bạn đã tạo",
     "title": "Tạo bài",
-    "emptyBody": "Các bài hát bạn tạo sẽ xuất hiện tại đây."
+    "emptyBody": "Các bài hát bạn tạo sẽ xuất hiện tại đây.",
+    "loadFailed": "Không thể tải các bài hát của bạn.",
+    "findSong": "Tìm bài hát"
   },
   "tonight": {
     "comingSoon": "Sắp ra mắt: bài hát bạn yêu cầu và danh sách chờ tối nay",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# credit} other {# credit}}",
     "popular": "Phổ biến",
     "title": "Mua credit"
+  },
+  "duration": {
+    "body": "Bản nhạc này dài {duration}, vì vậy tổng chi phí là {total, plural, one {# credit} other {# credit}} (thêm {extra}).",
+    "cancelVideo": "Hủy video này",
+    "confirm": "Xác nhận",
+    "failed": "Không thể thực hiện thao tác đó. Hãy thử lại.",
+    "refundNote": "Nếu bạn hủy, credit sẽ được tự động hoàn lại.",
+    "title": "Xác nhận chi phí"
+  },
+  "jobs": {
+    "cancelled": "Đã hủy",
+    "details": "Chi tiết",
+    "durationBody": "Bản nhạc này dài hơn bình thường nên sẽ tốn nhiều chi phí hơn. Hãy kiểm tra chi phí trước khi tiếp tục.",
+    "failed": "Đã xảy ra lỗi khi tạo bài này.",
+    "finishOnWeb": "Hoàn tất việc này trên trang web",
+    "needsYou": "Cần bạn thao tác",
+    "openFailed": "Không thể mở trang web. Hãy thử lại.",
+    "refunded": "Credit của bạn đã được hoàn lại",
+    "retryFailed": "Không thể khởi động lại. Hãy thử lại sau giây lát.",
+    "reviewBody": "Kiểm tra lời bài hát trước khi hoàn tất",
+    "reviewLyrics": "Xem lại lời bài hát",
+    "slow": "Vẫn đang xử lý, bài này mất nhiều thời gian hơn một chút",
+    "steps": {
+      "audio": "Đã nhận âm thanh",
+      "lyrics": "Đang đồng bộ lời bài hát",
+      "separated": "Đã tách giọng hát",
+      "video": "Đang tạo video",
+      "youtube": "Đang đăng lên YouTube"
+    },
+    "untitled": "Bài hát chưa có tên",
+    "confirmCost": "Xác nhận chi phí",
+    "ready": "Sẵn sàng"
   }
 }

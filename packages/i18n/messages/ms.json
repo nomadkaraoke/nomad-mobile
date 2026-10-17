@@ -125,7 +125,9 @@
     "emptyTitle": "Belum ada yang dibuat",
     "signInPrompt": "Log masuk untuk melihat lagu yang telah anda buat",
     "title": "Buat",
-    "emptyBody": "Lagu yang anda cipta akan dipaparkan di sini."
+    "emptyBody": "Lagu yang anda cipta akan dipaparkan di sini.",
+    "loadFailed": "Tidak dapat memuatkan lagu anda.",
+    "findSong": "Cari lagu"
   },
   "tonight": {
     "comingSoon": "Akan datang: permintaan anda dan barisan giliran malam ini",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, other {# kredit}}",
     "popular": "Popular",
     "title": "Beli kredit"
+  },
+  "duration": {
+    "body": "Trek ini berdurasi {duration}, jadi jumlah kosnya ialah {total, plural, other {# kredit}} ({extra} lagi).",
+    "cancelVideo": "Batalkan video ini",
+    "confirm": "Sahkan",
+    "failed": "Tidak dapat berbuat demikian. Cuba lagi.",
+    "refundNote": "Jika anda batalkan, kredit anda akan dikembalikan secara automatik.",
+    "title": "Sahkan kos"
+  },
+  "jobs": {
+    "cancelled": "Dibatalkan",
+    "details": "Butiran",
+    "durationBody": "Trek ini lebih panjang daripada biasa, jadi kosnya lebih tinggi. Semak kos sebelum diteruskan.",
+    "failed": "Ada masalah semasa menghasilkan video ini.",
+    "finishOnWeb": "Selesaikan ini di laman web",
+    "needsYou": "Tindakan anda diperlukan",
+    "openFailed": "Tidak dapat membuka laman web. Cuba lagi.",
+    "refunded": "Kredit anda telah dikembalikan",
+    "retryFailed": "Tidak dapat memulakannya semula. Cuba lagi sebentar nanti.",
+    "reviewBody": "Semak lirik sebelum disiapkan",
+    "reviewLyrics": "Semak lirik",
+    "slow": "Masih berjalan, proses ini mengambil masa lebih lama sedikit",
+    "steps": {
+      "audio": "Audio sedia ada",
+      "lyrics": "Menyelaraskan lirik",
+      "separated": "Vokal telah diasingkan",
+      "video": "Menghasilkan video",
+      "youtube": "Memuat naik ke YouTube"
+    },
+    "untitled": "Lagu tanpa tajuk",
+    "confirmCost": "Sahkan kos",
+    "ready": "Sedia"
   }
 }

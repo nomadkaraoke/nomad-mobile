@@ -75,7 +75,9 @@
     "title": "Make",
     "emptyTitle": "Nothing made yet",
     "emptyBody": "Songs you make will appear here.",
-    "signInPrompt": "Sign in to see the songs you've made"
+    "signInPrompt": "Sign in to see the songs you've made",
+    "findSong": "Find a song",
+    "loadFailed": "Couldn't load your songs."
   },
   "make": {
     "searching": "Finding the best audio…",
@@ -145,5 +147,37 @@
     "loadFailed": "Couldn't load the credit packages.",
     "checkoutFailed": "Couldn't start checkout. Try again.",
     "signInPrompt": "Sign in to buy credits"
+  },
+  "jobs": {
+    "untitled": "Untitled song",
+    "needsYou": "Needs you",
+    "reviewBody": "Check the lyrics before it's finished",
+    "reviewLyrics": "Review lyrics",
+    "durationBody": "This track is longer than most, so it costs more. Check the cost before it carries on.",
+    "confirmCost": "Confirm cost",
+    "finishOnWeb": "Finish this on the website",
+    "openFailed": "Couldn't open the website. Try again.",
+    "slow": "Still working, this one's taking a little longer",
+    "failed": "Something went wrong making this one.",
+    "details": "Details",
+    "refunded": "Your credit was refunded",
+    "retryFailed": "Couldn't start it again. Try once more in a moment.",
+    "cancelled": "Cancelled",
+    "ready": "Ready",
+    "steps": {
+      "audio": "Got the audio",
+      "separated": "Separated the vocals",
+      "lyrics": "Syncing lyrics",
+      "video": "Making the video",
+      "youtube": "Posting to YouTube"
+    }
+  },
+  "duration": {
+    "title": "Confirm cost",
+    "body": "This track is {duration} long, so it costs {total, plural, one {# credit} other {# credits}} in total ({extra} more).",
+    "refundNote": "If you cancel, your credit is refunded automatically.",
+    "confirm": "Confirm",
+    "cancelVideo": "Cancel this video",
+    "failed": "Couldn't do that. Try again."
   }
 }

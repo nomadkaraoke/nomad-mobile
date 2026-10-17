@@ -125,7 +125,9 @@
     "emptyTitle": "Non hai ancora creato nulla",
     "signInPrompt": "Accedi per vedere i brani che hai creato",
     "title": "Crea",
-    "emptyBody": "I brani che crei appariranno qui."
+    "emptyBody": "I brani che crei appariranno qui.",
+    "loadFailed": "Impossibile caricare i tuoi brani.",
+    "findSong": "Cerca un brano"
   },
   "tonight": {
     "comingSoon": "In arrivo: le tue richieste e la scaletta di stasera",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# credito} other {# crediti}}",
     "popular": "Popolari",
     "title": "Acquista crediti"
+  },
+  "duration": {
+    "body": "Questa traccia dura {duration}, quindi costa {total, plural, one {# credito} other {# crediti}} in totale ({extra} in più).",
+    "cancelVideo": "Annulla questo video",
+    "confirm": "Conferma",
+    "failed": "Impossibile completare l'operazione. Riprova.",
+    "refundNote": "Se annulli, il tuo credito ti verrà rimborsato automaticamente.",
+    "title": "Conferma costo"
+  },
+  "jobs": {
+    "cancelled": "Annullato",
+    "details": "Dettagli",
+    "durationBody": "Questa traccia è più lunga del solito, quindi costa di più. Controlla il costo prima di continuare.",
+    "failed": "Qualcosa è andato storto durante la creazione.",
+    "finishOnWeb": "Completa sul sito web",
+    "needsYou": "Richiede il tuo intervento",
+    "openFailed": "Impossibile aprire il sito web. Riprova.",
+    "refunded": "Il tuo credito è stato rimborsato",
+    "retryFailed": "Impossibile riavviare. Riprova tra un momento.",
+    "reviewBody": "Controlla il testo prima di completare",
+    "reviewLyrics": "Rivedi il testo",
+    "slow": "Ancora in lavorazione, ci vorrà un po' più del solito",
+    "steps": {
+      "audio": "Audio acquisito",
+      "lyrics": "Sincronizzazione del testo",
+      "separated": "Voce separata",
+      "video": "Creazione del video",
+      "youtube": "Pubblicazione su YouTube"
+    },
+    "untitled": "Brano senza titolo",
+    "confirmCost": "Conferma costo",
+    "ready": "Pronto"
   }
 }

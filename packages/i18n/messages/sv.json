@@ -125,7 +125,9 @@
     "emptyTitle": "Inget skapat ännu",
     "signInPrompt": "Logga in för att se låtarna du har skapat",
     "title": "Skapa",
-    "emptyBody": "Låtar du skapar kommer att visas här."
+    "emptyBody": "Låtar du skapar kommer att visas här.",
+    "loadFailed": "Kunde inte läsa in dina låtar.",
+    "findSong": "Hitta en låt"
   },
   "tonight": {
     "comingSoon": "Kommer snart: dina önskemål och kvällens kö",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# kredit} other {# krediter}}",
     "popular": "Populära",
     "title": "Köp krediter"
+  },
+  "duration": {
+    "body": "Det här spåret är {duration} långt, så det kostar totalt {total, plural, one {# kredit} other {# krediter}} ({extra} extra).",
+    "cancelVideo": "Avbryt den här videon",
+    "confirm": "Bekräfta",
+    "failed": "Det gick inte att genomföra. Försök igen.",
+    "refundNote": "Om du avbryter återbetalas dina krediter automatiskt.",
+    "title": "Bekräfta kostnad"
+  },
+  "jobs": {
+    "cancelled": "Avbruten",
+    "details": "Detaljer",
+    "durationBody": "Det här spåret är längre än de flesta, så det kostar mer. Godkänn kostnaden innan vi fortsätter.",
+    "failed": "Något gick fel när den här skapades.",
+    "finishOnWeb": "Slutför på webbplatsen",
+    "needsYou": "Kräver din åtgärd",
+    "openFailed": "Kunde inte öppna webbplatsen. Försök igen.",
+    "refunded": "Dina krediter har återbetalats",
+    "retryFailed": "Kunde inte starta igen. Försök om en liten stund.",
+    "reviewBody": "Kolla igenom texten innan den blir klar",
+    "reviewLyrics": "Granska texten",
+    "slow": "Arbetar fortfarande, den här tar lite längre tid",
+    "steps": {
+      "audio": "Ljudet har hämtats",
+      "lyrics": "Synkar text",
+      "separated": "Separerade sången",
+      "video": "Skapar videon",
+      "youtube": "Publicerar på YouTube"
+    },
+    "untitled": "Namnlös låt",
+    "confirmCost": "Bekräfta kostnad",
+    "ready": "Klar"
   }
 }

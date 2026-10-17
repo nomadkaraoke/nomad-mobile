@@ -125,7 +125,9 @@
     "emptyTitle": "Rien de créé pour l'instant",
     "signInPrompt": "Connecte-toi pour voir les morceaux que tu as créés",
     "title": "Créer",
-    "emptyBody": "Les morceaux que tu crées apparaîtront ici."
+    "emptyBody": "Les morceaux que tu crées apparaîtront ici.",
+    "loadFailed": "Impossible de charger tes morceaux.",
+    "findSong": "Trouver un morceau"
   },
   "tonight": {
     "comingSoon": "Bientôt disponible : tes demandes et la file d'attente de ce soir",
@@ -145,5 +147,37 @@
     "packageCredits": "{credits, plural, one {# crédit} other {# crédits}}",
     "popular": "Populaire",
     "title": "Acheter des crédits"
+  },
+  "duration": {
+    "body": "Ce morceau dure {duration}, il coûte donc {total, plural, one {# crédit} other {# crédits}} au total ({extra} de plus).",
+    "cancelVideo": "Annuler cette vidéo",
+    "confirm": "Confirmer",
+    "failed": "Impossible d'effectuer cette action. Réessaie.",
+    "refundNote": "Si tu annules, ton crédit est automatiquement remboursé.",
+    "title": "Confirmer le coût"
+  },
+  "jobs": {
+    "cancelled": "Annulé",
+    "details": "Détails",
+    "durationBody": "Ce morceau est plus long que la moyenne, il coûte donc plus cher. Vérifie le coût avant de continuer.",
+    "failed": "Un problème est survenu lors de la création de cette vidéo.",
+    "finishOnWeb": "Terminer sur le site web",
+    "needsYou": "Action requise",
+    "openFailed": "Impossible d'ouvrir le site web. Réessaie.",
+    "refunded": "Ton crédit a été remboursé",
+    "retryFailed": "Impossible de relancer. Réessaie dans un instant.",
+    "reviewBody": "Vérifie les paroles avant la finalisation",
+    "reviewLyrics": "Vérifier les paroles",
+    "slow": "Toujours en cours, cela prend un peu plus de temps que prévu",
+    "steps": {
+      "audio": "Audio récupéré",
+      "lyrics": "Synchronisation des paroles",
+      "separated": "Voix isolée",
+      "video": "Création de la vidéo",
+      "youtube": "Publication sur YouTube"
+    },
+    "untitled": "Morceau sans titre",
+    "confirmCost": "Confirmer le coût",
+    "ready": "Prêt"
   }
 }
