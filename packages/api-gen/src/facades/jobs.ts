@@ -10,10 +10,22 @@ import {
 import { type JobDetail, JobDetailSchema, type JobSummary, JobSummarySchema } from '../overrides/jobs';
 import { parseResponse } from '../overrides/parse';
 
-/** The signed-in user's jobs, newest first (gen's dashboard summary projection). */
-export async function listMyJobs(): Promise<JobSummary[]> {
+/**
+ * The signed-in user's jobs, newest first (gen's dashboard summary projection). Gen returns every
+ * user's jobs to an admin session, so keep only `email`'s. A malformed legacy job is dropped (and
+ * warned about) instead of failing the whole list.
+ */
+export async function listMyJobs(email: string): Promise<JobSummary[]> {
   const { data } = await listJobsApiJobsGet({ query: { fields: 'summary' } });
-  return parseResponse(z.array(JobSummarySchema), data);
+  const me = email.trim().toLowerCase();
+  return parseResponse(z.array(z.unknown()), data).flatMap((item) => {
+    const job = JobSummarySchema.safeParse(item);
+    if (!job.success) {
+      console.warn('listMyJobs: dropping malformed job', (item as { job_id?: unknown } | null)?.job_id);
+      return [];
+    }
+    return job.data.user_email?.toLowerCase() === me ? [job.data] : [];
+  });
 }
 
 export async function getJob(id: string): Promise<JobDetail> {

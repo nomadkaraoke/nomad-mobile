@@ -60,6 +60,12 @@ describe('auth', () => {
     expect(await lastBody()).toEqual({ email: 'a@b.co', locale: 'fr' });
   });
 
+  it('a wrong code (401 from /api/users/auth/*) does not sign out', async () => {
+    fetchMock.mockResolvedValue(json({ detail: 'invalid_code' }, 401));
+    await expect(verifyCode('a@b.co', '000000')).rejects.toMatchObject({ status: 401, detail: 'invalid_code' });
+    expect(onUnauthorized).not.toHaveBeenCalled();
+  });
+
   it('verifyCode maps the verify response to a GenSession', async () => {
     fetchMock.mockResolvedValue(json(VERIFY));
     await expect(verifyCode('a@b.co', '123456')).resolves.toEqual(SESSION);
@@ -87,7 +93,8 @@ describe('auth', () => {
     fetchMock.mockResolvedValue(json({ detail: 'invalid_token' }, 401));
     const err = await exchangeAppleToken('bad', 'en').catch((e: unknown) => e);
     expect(isApiError(err, 401, 'invalid_token')).toBe(true);
-    expect(onUnauthorized).toHaveBeenCalledTimes(1);
+    // a failed sign-in attempt is not a dead session
+    expect(onUnauthorized).not.toHaveBeenCalled();
   });
 
   it('a malformed response throws ApiError invalid_response', async () => {
@@ -101,6 +108,12 @@ describe('auth', () => {
     fetchMock.mockResolvedValue(json({ user: USER, has_session: true }));
     await expect(getMe()).resolves.toEqual({ email: 'a@b.co', credits: 3 });
     expectRequest('GET', '/api/users/me');
+  });
+
+  it('a 401 from handoff-token (session expired) still signs out', async () => {
+    fetchMock.mockResolvedValue(json({ detail: 'invalid_session' }, 401));
+    await expect(createHandoffUrl('job-1', 'en')).rejects.toMatchObject({ status: 401 });
+    expect(onUnauthorized).toHaveBeenCalledTimes(1);
   });
 
   it('createHandoffUrl posts job_review target and returns the url', async () => {
@@ -198,7 +211,7 @@ describe('jobs', () => {
 
   it('listMyJobs requests the summary projection and parses every job', async () => {
     fetchMock.mockResolvedValue(json(jobsSummaryFixture));
-    const jobs = await listMyJobs();
+    const jobs = await listMyJobs('Singer@Example.com');
     expectRequest('GET', '/api/jobs?fields=summary');
     expect(jobs.map((j) => j.job_id)).toEqual(['a1b2c3d4', 'e5f6a7b8', 'c9d0e1f2', '0a1b2c3d']);
     expect(jobs[0]?.state_data).toMatchObject({ youtube_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', brand_code: 'NOMAD-1234' });
@@ -207,6 +220,30 @@ describe('jobs', () => {
     // unknown fields pass through for later screens (e.g. error_details for retry states)
     expect(jobs[2]).toMatchObject({ error_details: { code: 'download_failed' } });
     expect(jobs[0]?.file_urls).toHaveProperty('finals');
+  });
+
+  it('listMyJobs drops other users\' jobs (gen returns everyone\'s to an admin session)', async () => {
+    const other = { ...jobsSummaryFixture[0], job_id: 'not-mine', user_email: 'someone@else.com' };
+    const noEmail = { ...jobsSummaryFixture[1], job_id: 'no-email', user_email: undefined };
+    fetchMock.mockResolvedValue(json([other, jobsSummaryFixture[0], noEmail]));
+    const jobs = await listMyJobs('singer@example.com');
+    expect(jobs.map((j) => j.job_id)).toEqual(['a1b2c3d4']);
+  });
+
+  it('listMyJobs drops a malformed job with a warning instead of failing the list', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const legacy = { job_id: 'legacy', user_email: 'singer@example.com' }; // no status
+    const noCreatedAt = { ...jobsSummaryFixture[3], created_at: null };
+    fetchMock.mockResolvedValue(json([legacy, noCreatedAt]));
+    const jobs = await listMyJobs('singer@example.com');
+    expect(jobs.map((j) => j.job_id)).toEqual(['0a1b2c3d']);
+    expect(warn).toHaveBeenCalledWith('listMyJobs: dropping malformed job', 'legacy');
+    warn.mockRestore();
+  });
+
+  it('listMyJobs still rejects a non-list body', async () => {
+    fetchMock.mockResolvedValue(json({ detail: 'nope' }));
+    await expect(listMyJobs('singer@example.com')).rejects.toMatchObject({ status: 0, detail: 'invalid_response' });
   });
 
   it('getJob returns the detail with download urls', async () => {
