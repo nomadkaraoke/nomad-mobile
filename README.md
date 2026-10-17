@@ -30,6 +30,25 @@ The app talks to prod gen by default. For development and E2E, point it at the
 stack and a Metro with `EXPO_PUBLIC_GEN_API_URL=http://127.0.0.1:8010` and `EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1`.
 Sign-in codes come from the stack's `/api/test/emails`. See CLAUDE.md § E2E.
 
+## Sideload on your Android phone
+
+The release APK talks to prod (gen, decide, Stripe), so anything you do in it is real.
+
+1. On the phone: Settings → About phone → tap **Build number** 7 times, then Settings → System → Developer options →
+   turn on **USB debugging**. Plug it into the Mac and accept the "Allow USB debugging?" prompt.
+2. `adb devices` should list it. Then: `adb install -r dist/nomad-karaoke-phase1-release.apk`
+   (or copy the APK to the phone and open it, allowing installs from that app).
+
+To build the APK yourself (it's signed with the Expo template's debug keystore, which is the one the Google
+Android OAuth client is registered for; don't set any `EXPO_PUBLIC_*` local-stack variables):
+
+```bash
+cd apps/mobile
+CI=1 npx expo prebuild --platform android --no-install   # only if apps/mobile/android doesn't exist yet
+cd android && ANDROID_HOME=~/Library/Android/sdk ./gradlew :app:assembleRelease
+cp app/build/outputs/apk/release/app-release.apk ../../../dist/nomad-karaoke-phase1-release.apk
+```
+
 ## Layout
 
 | Path | What |
