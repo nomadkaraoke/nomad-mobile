@@ -210,33 +210,39 @@ describe('jobs', () => {
   });
 
   it('listMyJobs requests the summary projection and parses every job', async () => {
+    // Fixture: GET /api/jobs?fields=summary captured from the gen local stack (v0.278.0, fake workers).
     fetchMock.mockResolvedValue(json(jobsSummaryFixture));
-    const jobs = await listMyJobs('Singer@Example.com');
+    const jobs = await listMyJobs('Fixture-1792228616@Example.com');
     expectRequest('GET', '/api/jobs?fields=summary');
-    expect(jobs.map((j) => j.job_id)).toEqual(['a1b2c3d4', 'e5f6a7b8', 'c9d0e1f2', '0a1b2c3d']);
-    expect(jobs[0]?.state_data).toMatchObject({ youtube_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', brand_code: 'NOMAD-1234' });
-    expect(jobs[1]?.state_data).toMatchObject({ credits_charged: 1, pending_additional_credits: 2, duration_actual_seconds: 1412.6 });
-    expect(jobs[2]).toMatchObject({ credit_refunded: true, error_message: 'Audio download failed' });
+    expect(jobs.map((j) => [j.job_id, j.status])).toEqual([
+      ['fd5e6f81', 'awaiting_review'],
+      ['15108d56', 'failed'],
+      ['12999be4', 'awaiting_duration_confirm'],
+      ['1760c524', 'complete'],
+    ]);
+    expect(jobs[1]).toMatchObject({ credit_refunded: true, error_message: 'lyrics failed: Fake lyrics worker failed (fail_at=lyrics)' });
     // unknown fields pass through for later screens (e.g. error_details for retry states)
-    expect(jobs[2]).toMatchObject({ error_details: { code: 'download_failed' } });
-    expect(jobs[0]?.file_urls).toHaveProperty('finals');
+    expect(jobs[1]).toMatchObject({ error_details: { stage: 'lyrics' } });
+    expect(jobs[2]?.state_data).toMatchObject({ pending_additional_credits: 1, duration_actual_seconds: 660 });
+    expect(jobs[3]?.state_data).toMatchObject({ youtube_url: 'https://youtu.be/dQw4w9WgXcQ' });
+    expect(jobs[3]?.file_urls).toHaveProperty('finals');
   });
 
   it('listMyJobs drops other users\' jobs (gen returns everyone\'s to an admin session)', async () => {
     const other = { ...jobsSummaryFixture[0], job_id: 'not-mine', user_email: 'someone@else.com' };
     const noEmail = { ...jobsSummaryFixture[1], job_id: 'no-email', user_email: undefined };
     fetchMock.mockResolvedValue(json([other, jobsSummaryFixture[0], noEmail]));
-    const jobs = await listMyJobs('singer@example.com');
-    expect(jobs.map((j) => j.job_id)).toEqual(['a1b2c3d4']);
+    const jobs = await listMyJobs('fixture-1792228616@example.com');
+    expect(jobs.map((j) => j.job_id)).toEqual(['fd5e6f81']);
   });
 
   it('listMyJobs drops a malformed job with a warning instead of failing the list', async () => {
     const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
-    const legacy = { job_id: 'legacy', user_email: 'singer@example.com' }; // no status
+    const legacy = { job_id: 'legacy', user_email: 'fixture-1792228616@example.com' }; // no status
     const noCreatedAt = { ...jobsSummaryFixture[3], created_at: null };
     fetchMock.mockResolvedValue(json([legacy, noCreatedAt]));
-    const jobs = await listMyJobs('singer@example.com');
-    expect(jobs.map((j) => j.job_id)).toEqual(['0a1b2c3d']);
+    const jobs = await listMyJobs('fixture-1792228616@example.com');
+    expect(jobs.map((j) => j.job_id)).toEqual(['1760c524']);
     expect(warn).toHaveBeenCalledWith('listMyJobs: dropping malformed job', 'legacy');
     warn.mockRestore();
   });
@@ -249,15 +255,15 @@ describe('jobs', () => {
   it('getJob returns the detail with download urls', async () => {
     fetchMock.mockResolvedValue(
       json({
-        ...jobsSummaryFixture[0],
-        download_urls: { finals: { lossy_720p_mp4: '/api/jobs/a1b2c3d4/download/finals/lossy_720p_mp4' } },
+        ...jobsSummaryFixture[3],
+        download_urls: { finals: { lossy_720p_mp4: '/api/jobs/1760c524/download/finals/lossy_720p_mp4' } },
         timeline: [],
       }),
     );
-    const job = await getJob('a1b2c3d4');
-    expectRequest('GET', '/api/jobs/a1b2c3d4');
-    expect(job.download_urls).toEqual({ finals: { lossy_720p_mp4: '/api/jobs/a1b2c3d4/download/finals/lossy_720p_mp4' } });
-    expect(job.title).toBe('Pink Pony Club');
+    const job = await getJob('1760c524');
+    expectRequest('GET', '/api/jobs/1760c524');
+    expect(job.download_urls).toEqual({ finals: { lossy_720p_mp4: '/api/jobs/1760c524/download/finals/lossy_720p_mp4' } });
+    expect(job.title).toBe('Fake Song');
   });
 
   it('confirmDuration posts acknowledged credits', async () => {

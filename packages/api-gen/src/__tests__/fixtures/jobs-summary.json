@@ -1,102 +1,341 @@
 [
   {
-    "job_id": "a1b2c3d4",
-    "status": "complete",
-    "progress": 100,
-    "created_at": "2026-10-16T19:02:11.482913+00:00",
-    "updated_at": "2026-10-16T19:21:40.118204+00:00",
-    "artist": "Chappell Roan",
-    "title": "Pink Pony Club",
-    "error_message": null,
-    "non_interactive": false,
-    "user_email": "singer@example.com",
-    "is_private": false,
+    "created_at": "2026-10-17T09:20:13.650385Z",
+    "existing_instrumental_gcs_path": null,
+    "finalise_only": false,
+    "status": "awaiting_review",
+    "updated_at": "2026-10-17T09:20:14.836166+00:00",
+    "stems_purged_at": null,
+    "source_name": "RED",
     "made_for_you": false,
-    "locale": "en",
-    "credit_refunded": false,
-    "url": null,
-    "filename": null,
-    "audio_search_artist": "Chappell Roan",
-    "audio_search_title": "Pink Pony Club",
-    "audio_source_type": "audio_search",
-    "source_name": "Spotify",
-    "source_id": "5U2zRk0yZGOPz0SgjoGNgg",
-    "target_file": null,
-    "download_url": null,
     "state_data": {
-      "brand_code": "NOMAD-1234",
-      "youtube_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "credits_charged": 1,
-      "audio_complete": true,
-      "lyrics_complete": true
-    },
-    "file_urls": {
-      "finals": {
-        "lossy_720p_mp4": "gs://karaoke-gen-storage/jobs/a1b2c3d4/finals/NOMAD-1234 - Chappell Roan - Pink Pony Club (Final Karaoke Lossy 720p).mp4",
-        "lossy_4k_mp4": "gs://karaoke-gen-storage/jobs/a1b2c3d4/finals/NOMAD-1234 - Chappell Roan - Pink Pony Club (Final Karaoke Lossy 4k).mp4"
+      "backing_vocals_analysis": {
+        "silence_threshold_db": -40.0,
+        "audible_segments": [],
+        "recommended_selection": "clean",
+        "has_audible_content": false,
+        "total_duration_seconds": 30.0,
+        "total_audible_duration_seconds": 0.0,
+        "stem_comparison": {
+          "backing_audible_fraction": 0.0,
+          "backing_median_db": null,
+          "lead_audible_fraction": 1.0,
+          "flat_fraction": 0.0,
+          "corr_backing_vocals": 0.0,
+          "lead_overlap_fraction": 0.0,
+          "vocals_audible_fraction": 1.0,
+          "silence_threshold_db": -40.0,
+          "window_ms": 100,
+          "lead_median_db": -35.05,
+          "backing_db_std": 0.0,
+          "duration_seconds": 30.0,
+          "corr_backing_lead": 0.0,
+          "error": null,
+          "vocals_median_db": -35.05,
+          "coverage_ratio": 0.0
+        },
+        "heuristic_recommended_selection": "clean",
+        "audible_percentage": 0.0
       },
-      "packages": {
-        "cdg_zip": "gs://karaoke-gen-storage/jobs/a1b2c3d4/packages/NOMAD-1234 - Chappell Roan - Pink Pony Club (Final Karaoke CDG).zip"
+      "duration_actual_seconds": 30.0,
+      "audio_progress": {
+        "stage": "separating",
+        "progress": 30,
+        "message": "Separating audio (fake)"
+      },
+      "cloud_run_retry_pending": null,
+      "lyrics_complete": true,
+      "audio_complete": true
+    },
+    "audio_search_title": null,
+    "prep_only": false,
+    "artist": "Local Stack",
+    "source_id": "2f61c2750191ca09",
+    "url": null,
+    "is_private": false,
+    "processing_metadata": {
+      "transcription": {
+        "reference_sources": [
+          "lrclib"
+        ],
+        "provider": "fake_workers"
+      },
+      "separation": {
+        "stems_generated": [
+          "clean_instrumental",
+          "backing_vocals",
+          "combined_instrumentals"
+        ],
+        "other_models": [],
+        "provider": "fake_workers",
+        "backing_models": [
+          "fake_backing_model.ckpt"
+        ],
+        "clean_model": "fake_clean_model.ckpt",
+        "duration_seconds": 0.0
       }
     },
-    "processing_metadata": {}
-  },
-  {
-    "job_id": "e5f6a7b8",
-    "status": "awaiting_duration_confirm",
-    "progress": 10,
-    "created_at": "2026-10-17T08:15:03.004512+00:00",
-    "updated_at": "2026-10-17T08:15:49.731002+00:00",
-    "artist": "Pink Floyd",
-    "title": "Echoes",
-    "non_interactive": false,
-    "user_email": "singer@example.com",
-    "is_private": false,
-    "made_for_you": false,
-    "locale": "en",
-    "audio_search_artist": "Pink Floyd",
-    "audio_search_title": "Echoes",
     "audio_source_type": "audio_search",
-    "state_data": {
-      "credits_charged": 1,
-      "pending_additional_credits": 2,
-      "duration_actual_seconds": 1412.6,
-      "duration_confirm_reason": "long_track"
-    },
-    "processing_metadata": {}
+    "credit_refunded": false,
+    "audio_search_artist": null,
+    "target_file": "01 - Fake Song.flac",
+    "filename": "Local Stack - Fake Song.flac",
+    "user_email": "fixture-1792228616@example.com",
+    "error_message": null,
+    "progress": 55,
+    "job_id": "fd5e6f81",
+    "customer_email": null,
+    "renders_purged_at": null,
+    "locale": null,
+    "outputs_deleted_at": null,
+    "title": "Fake Song",
+    "download_url": null,
+    "non_interactive": false
   },
   {
-    "job_id": "c9d0e1f2",
+    "created_at": "2026-10-17T09:20:13.261339Z",
+    "existing_instrumental_gcs_path": null,
+    "finalise_only": false,
     "status": "failed",
-    "progress": 20,
-    "created_at": "2026-10-15T21:40:55.910114+00:00",
-    "updated_at": "2026-10-15T21:58:12.300471+00:00",
-    "artist": "Some Artist",
-    "title": "Some Song",
-    "error_message": "Audio download failed",
-    "error_details": { "code": "download_failed", "stage": "downloading_audio" },
-    "user_email": "singer@example.com",
-    "is_private": false,
-    "credit_refunded": true,
+    "updated_at": "2026-10-17T09:20:14.465018+00:00",
+    "stems_purged_at": null,
+    "source_name": "RED",
+    "made_for_you": false,
     "state_data": {
-      "credits_charged": 1,
-      "cloud_run_retry_pending": null
-    }
+      "duration_actual_seconds": 30.0,
+      "audio_progress": {
+        "stage": "separating",
+        "progress": 30,
+        "message": "Separating audio (fake)"
+      },
+      "cloud_run_retry_pending": null,
+      "audio_complete": true,
+      "backing_vocals_analysis": {
+        "silence_threshold_db": -40.0,
+        "audible_segments": [],
+        "recommended_selection": "clean",
+        "has_audible_content": false,
+        "total_duration_seconds": 30.0,
+        "total_audible_duration_seconds": 0.0,
+        "stem_comparison": {
+          "backing_audible_fraction": 0.0,
+          "backing_median_db": null,
+          "lead_audible_fraction": 1.0,
+          "flat_fraction": 0.0,
+          "corr_backing_vocals": 0.0,
+          "lead_overlap_fraction": 0.0,
+          "vocals_audible_fraction": 1.0,
+          "silence_threshold_db": -40.0,
+          "window_ms": 100,
+          "lead_median_db": -35.05,
+          "backing_db_std": 0.0,
+          "duration_seconds": 30.0,
+          "corr_backing_lead": 0.0,
+          "error": null,
+          "vocals_median_db": -35.05,
+          "coverage_ratio": 0.0
+        },
+        "heuristic_recommended_selection": "clean",
+        "audible_percentage": 0.0
+      }
+    },
+    "audio_search_title": null,
+    "prep_only": false,
+    "artist": "Local Stack",
+    "source_id": "2f61c2750191ca09",
+    "url": null,
+    "is_private": false,
+    "processing_metadata": {
+      "separation": {
+        "stems_generated": [
+          "clean_instrumental",
+          "backing_vocals",
+          "combined_instrumentals"
+        ],
+        "other_models": [],
+        "provider": "fake_workers",
+        "backing_models": [
+          "fake_backing_model.ckpt"
+        ],
+        "clean_model": "fake_clean_model.ckpt",
+        "duration_seconds": 0.0
+      }
+    },
+    "audio_source_type": "audio_search",
+    "error_details": {
+      "stage": "lyrics"
+    },
+    "job_id": "15108d56",
+    "target_file": "01 - Fake Song.flac",
+    "audio_search_artist": null,
+    "error_message": "lyrics failed: Fake lyrics worker failed (fail_at=lyrics)",
+    "user_email": "fixture-1792228616@example.com",
+    "progress": 15,
+    "filename": "Local Stack - Fake Song.flac",
+    "customer_email": null,
+    "renders_purged_at": null,
+    "locale": null,
+    "outputs_deleted_at": null,
+    "title": "Fake Song",
+    "credit_refunded": true,
+    "non_interactive": false,
+    "download_url": null
   },
   {
-    "job_id": "0a1b2c3d",
-    "status": "separating_stage1",
-    "progress": 25,
-    "created_at": "2026-10-17T09:01:00.000000+00:00",
-    "updated_at": "2026-10-17T09:03:12.500000+00:00",
-    "artist": "ABBA",
-    "title": "Dancing Queen",
-    "user_email": "singer@example.com",
-    "is_private": false,
+    "created_at": "2026-10-17T09:17:00.717626Z",
+    "existing_instrumental_gcs_path": null,
+    "finalise_only": false,
+    "status": "awaiting_duration_confirm",
+    "updated_at": "2026-10-17T09:17:08.739038+00:00",
+    "stems_purged_at": null,
+    "source_name": "RED",
+    "made_for_you": false,
     "state_data": {
-      "credits_charged": 1,
-      "audio_progress": { "stage": "separating_stage1", "progress": 25 }
+      "duration_confirm_reason": "reconcile",
+      "duration_actual_seconds": 660.0,
+      "cloud_run_retry_pending": null,
+      "pending_additional_credits": 1
     },
-    "file_urls": {}
+    "audio_search_title": null,
+    "prep_only": false,
+    "artist": "Local Stack",
+    "source_id": "2f61c2750191ca09",
+    "url": null,
+    "is_private": false,
+    "processing_metadata": {},
+    "audio_source_type": "audio_search",
+    "credit_refunded": false,
+    "audio_search_artist": null,
+    "target_file": "01 - Fake Song.flac",
+    "filename": "Local Stack - Fake Song.flac",
+    "user_email": "fixture-1792228616@example.com",
+    "error_message": null,
+    "progress": 16,
+    "job_id": "12999be4",
+    "customer_email": null,
+    "renders_purged_at": null,
+    "locale": null,
+    "outputs_deleted_at": null,
+    "title": "Fake Song",
+    "download_url": null,
+    "non_interactive": false
+  },
+  {
+    "created_at": "2026-10-17T09:16:56.341704Z",
+    "existing_instrumental_gcs_path": null,
+    "finalise_only": false,
+    "status": "complete",
+    "updated_at": "2026-10-17T09:17:00.740466+00:00",
+    "stems_purged_at": null,
+    "source_name": "RED",
+    "made_for_you": false,
+    "state_data": {
+      "youtube_url": "https://youtu.be/dQw4w9WgXcQ",
+      "backing_vocals_analysis": {
+        "silence_threshold_db": -40.0,
+        "audible_segments": [],
+        "recommended_selection": "clean",
+        "has_audible_content": false,
+        "total_duration_seconds": 30.0,
+        "total_audible_duration_seconds": 0.0,
+        "stem_comparison": {
+          "backing_audible_fraction": 0.0,
+          "backing_median_db": null,
+          "lead_audible_fraction": 1.0,
+          "flat_fraction": 0.0,
+          "corr_backing_vocals": 0.0,
+          "lead_overlap_fraction": 0.0,
+          "vocals_audible_fraction": 1.0,
+          "silence_threshold_db": -40.0,
+          "window_ms": 100,
+          "lead_median_db": -35.05,
+          "backing_db_std": 0.0,
+          "duration_seconds": 30.0,
+          "corr_backing_lead": 0.0,
+          "error": null,
+          "vocals_median_db": -35.05,
+          "coverage_ratio": 0.0
+        },
+        "heuristic_recommended_selection": "clean",
+        "audible_percentage": 0.0
+      },
+      "lyrics_complete": true,
+      "duration_actual_seconds": 30.0,
+      "audio_progress": {
+        "stage": "separating",
+        "progress": 30,
+        "message": "Separating audio (fake)"
+      },
+      "cloud_run_retry_pending": null,
+      "audio_complete": true,
+      "instrumental_selection": "clean"
+    },
+    "audio_search_title": null,
+    "prep_only": false,
+    "artist": "Local Stack",
+    "source_id": "2f61c2750191ca09",
+    "url": null,
+    "is_private": false,
+    "processing_metadata": {
+      "transcription": {
+        "reference_sources": [
+          "lrclib"
+        ],
+        "provider": "fake_workers"
+      },
+      "timing": {
+        "video_worker_seconds": 0.3
+      },
+      "separation": {
+        "stems_generated": [
+          "clean_instrumental",
+          "backing_vocals",
+          "combined_instrumentals"
+        ],
+        "other_models": [],
+        "provider": "fake_workers",
+        "backing_models": [
+          "fake_backing_model.ckpt"
+        ],
+        "clean_model": "fake_clean_model.ckpt",
+        "duration_seconds": 0.0
+      },
+      "auto_approval": {
+        "source": "fake_workers",
+        "outcome": "auto_completed"
+      }
+    },
+    "audio_source_type": "audio_search",
+    "file_urls": {
+      "videos": {
+        "with_vocals": "jobs/1760c524/videos/with_vocals.mkv"
+      },
+      "finals": {
+        "lossless_4k_mkv": "jobs/1760c524/finals/lossless_4k_mkv.mkv",
+        "lossless_4k_mp4": "jobs/1760c524/finals/lossless_4k_mp4.mp4",
+        "with_vocals_mp4": "jobs/1760c524/finals/with_vocals_mp4.mp4",
+        "lossy_4k_mp4": "jobs/1760c524/finals/lossy_4k_mp4.mp4",
+        "lossy_720p_mp4": "jobs/1760c524/finals/lossy_720p_mp4.mp4"
+      },
+      "packages": {
+        "cdg_zip": "jobs/1760c524/packages/cdg_zip.zip",
+        "txt_zip": "jobs/1760c524/packages/txt_zip.zip"
+      }
+    },
+    "job_id": "1760c524",
+    "target_file": "01 - Fake Song.flac",
+    "audio_search_artist": null,
+    "error_message": null,
+    "user_email": "fixture-1792228616@example.com",
+    "progress": 100,
+    "filename": "Local Stack - Fake Song.flac",
+    "customer_email": null,
+    "renders_purged_at": null,
+    "locale": null,
+    "outputs_deleted_at": null,
+    "title": "Fake Song",
+    "credit_refunded": false,
+    "non_interactive": false,
+    "download_url": null
   }
 ]

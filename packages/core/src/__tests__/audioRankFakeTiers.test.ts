@@ -1,42 +1,33 @@
+import fixture from './fixtures/fake-search-tiers.json';
 import { getSearchConfidence, AudioResultLike } from '../audioRank';
 
-// Local fixtures shaped like the gen local-stack fake search (search_confidence =
-// perfect / recommended / unsure). TODO(controller): re-sync with gen's
-// FRONTEND_FIXTURE once the fake_workers PR lands.
-const title = 'Song';
-const artist = 'Artist';
-const red = (over: Partial<AudioResultLike>): AudioResultLike => ({
-  title, artist, provider: 'RED', is_lossless: true, release_type: 'Album',
-  target_file: `01 - ${title}.flac`, quality_data: { format: 'FLAC', bit_depth: 16, media: 'CD' }, ...over,
-});
-const spotify = (over: Partial<AudioResultLike> = {}): AudioResultLike => ({
-  title, artist, provider: 'Spotify', is_lossless: false, ...over,
-});
-const youtube = (over: Partial<AudioResultLike> = {}): AudioResultLike => ({
-  title: `${artist} - ${title} (Official Video)`, artist, provider: 'YouTube', is_lossless: false,
-  channel: `${artist}VEVO`, view_count: 1000000, ...over,
-});
+// The gen local stack's fake audio search shapes its results by the `search_confidence` fake-config knob.
+// fixtures/fake-search-tiers.json is a verbatim copy of gen's
+// frontend/lib/__tests__/fixtures/fake-search-tiers.json (kept current there by a backend test;
+// regenerate in gen: poetry run python -m backend.services.fake_workers.search --write-fixture, then copy).
+// Feeding those exact shapes to our ranking port keeps the app's tiers in step with the web's.
+const shapes = fixture.shapes as unknown as Record<'perfect' | 'recommended' | 'unsure', AudioResultLike[]>;
+const { title, artist } = fixture;
 
-const perfect = [red({ seeders: 120 }), spotify(), youtube()];
-const recommended = [red({ seeders: 25 }), spotify(), youtube()];
-const unsure = [
-  red({ seeders: 2, title: 'Other', target_file: '01 - Other Thing.flac' }),
-  spotify({ title: 'Other' }),
-  youtube({ title: 'Artist - Other Thing (Official Video)' }),
-];
+describe('getSearchConfidence on gen fake-search shapes', () => {
+  it.each([
+    ['perfect', 1],
+    ['recommended', 2],
+    ['unsure', 3],
+  ] as const)('%s lands in tier %i', (shape, tier) => {
+    expect(getSearchConfidence(shapes[shape], title, artist).tier).toBe(tier);
+    // Some flows pass only the title; the tier must hold there too.
+    expect(getSearchConfidence(shapes[shape], title).tier).toBe(tier);
+  });
 
-describe('getSearchConfidence on fake-search shaped results', () => {
-  it('perfect -> tier 1 with the well-seeded torrent', () => {
-    const c = getSearchConfidence(perfect, title, artist);
-    expect(c.tier).toBe(1);
-    expect(c.best).toBe(perfect[0]);
+  it('perfect picks the well-seeded lossless torrent', () => {
+    expect(getSearchConfidence(shapes.perfect, title, artist).best).toBe(shapes.perfect[0]);
   });
-  it('recommended -> tier 2', () => {
-    expect(getSearchConfidence(recommended, title, artist).tier).toBe(2);
+
+  it('unsure stays tier 3 with a single result', () => {
+    expect(getSearchConfidence(shapes.unsure.slice(0, 1), title, artist).tier).toBe(3);
   });
-  it('unsure -> tier 3', () => {
-    expect(getSearchConfidence(unsure, title, artist).tier).toBe(3);
-  });
+
   it('no results -> tier 3 with null best', () => {
     expect(getSearchConfidence([], title, artist)).toMatchObject({ tier: 3, best: null });
   });
