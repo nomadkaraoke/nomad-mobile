@@ -5,7 +5,8 @@
 #   scripts/e2e-local.sh --platform ios                  # every flow in maestro/flows
 #   scripts/e2e-local.sh --platform android make-4       # flows whose file name contains "make-4"
 #
-# Env: GEN_DIR (gen checkout with scripts/local-stack.sh; default ../karaoke-gen-mobile-app-auth),
+# Env: GEN_DIR (gen checkout with scripts/local-stack.sh, at least v0.278.2; default ../karaoke-gen, the main
+#      clone: pull it first, or point GEN_DIR at a gen worktree with the code you want to test),
 #      IOS_DEVICE (simulator name or UDID; default "iPhone 17 Pro"), ANDROID_SERIAL (default emulator-5554).
 #
 # Both platforms use the same http://127.0.0.1 URLs: on Android, `adb reverse` maps the stack's API (8010)
@@ -16,7 +17,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-GEN_DIR="${GEN_DIR:-$ROOT/../karaoke-gen-mobile-app-auth}"
+GEN_DIR="${GEN_DIR:-$ROOT/../karaoke-gen}"
 STACK="http://127.0.0.1:8010"
 WEB="http://127.0.0.1:3010"
 MAESTRO="${MAESTRO:-$(command -v maestro || echo "$HOME/.maestro/bin/maestro")}"
@@ -55,7 +56,9 @@ else
   xcrun simctl boot "$DEVICE" 2>/dev/null || true
   # Maestro wants the UDID.
   if [[ ! "$DEVICE" =~ ^[0-9A-F-]{36}$ ]]; then
-    DEVICE="$(xcrun simctl list devices booted | grep -F "$DEVICE (" | head -1 | grep -oE '[0-9A-F-]{36}')"
+    NAME="$DEVICE"
+    DEVICE="$(xcrun simctl list devices booted | grep -F "$NAME (" | head -1 | grep -oE '[0-9A-F-]{36}' || true)"
+    [[ -n "$DEVICE" ]] || { echo "no booted iOS simulator named \"$NAME\" (set IOS_DEVICE to a name or UDID)" >&2; exit 1; }
   fi
 fi
 
@@ -65,11 +68,22 @@ METRO_PID=""
 cleanup() { [[ -n "$METRO_PID" ]] && kill "$METRO_PID" 2>/dev/null || true; }
 trap cleanup EXIT
 if ! curl -sf -m 2 http://127.0.0.1:8081/status | grep -q running; then
-  echo "Starting Metro (logs: /tmp/nomad-mobile-metro.log)"
+  METRO_LOG=/tmp/nomad-mobile-metro.log
+  echo "Starting Metro (logs: $METRO_LOG)"
+  # --clear: the EXPO_PUBLIC_* values are baked into cached transforms, and new special route files
+  # (e.g. +native-intent) need a fresh route context.
   (cd "$ROOT/apps/mobile" && EXPO_PUBLIC_GEN_API_URL="$STACK" EXPO_PUBLIC_GEN_WEB_URL="$WEB" \
-    EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 CI=1 exec npx expo start --dev-client --port 8081) >/tmp/nomad-mobile-metro.log 2>&1 &
+    EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 CI=1 exec npx expo start --dev-client --port 8081 --clear) >"$METRO_LOG" 2>&1 &
   METRO_PID=$!
-  until curl -sf -m 2 http://127.0.0.1:8081/status | grep -q running; do sleep 2; done
+  deadline=$((SECONDS + 120))
+  until curl -sf -m 2 http://127.0.0.1:8081/status | grep -q running; do
+    if (( SECONDS > deadline )) || ! kill -0 "$METRO_PID" 2>/dev/null; then
+      echo "Metro didn't start (exited, or not up within 120s); last log lines:" >&2
+      tail -n 30 "$METRO_LOG" >&2
+      exit 1
+    fi
+    sleep 2
+  done
 else
   echo "Using the Metro already on :8081 (it must have EXPO_PUBLIC_GEN_API_URL=$STACK and EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1)"
 fi

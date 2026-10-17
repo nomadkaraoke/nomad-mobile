@@ -35,10 +35,15 @@ name: make-5-needs-review
 - takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-needs-review
 - tapOn:
     id: "job-review-.*"
-# The in-app browser opens gen web (the local stack's Next app) on the handoff link.
+# The in-app browser opens gen web (the local stack's Next app) on the single-use handoff link
+# (/auth/verify?…&handoff=1), which signs in without a tap and then goes on to the review.
 - extendedWaitUntil:
     visible: ".*127\\.0\\.0\\.1.*"
     timeout: 30000
+# Signed in by the handoff (first Next dev compile can be slow).
+- extendedWaitUntil:
+    visible: "Successfully signed in!?"
+    timeout: 90000
 - takeScreenshot: docs/screenshots/phase1/${PLATFORM}/review-bridge-browser
 - runFlow:
     when:
