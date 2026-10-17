@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Properament: les teves peticions i la cua d'aquesta nit",
     "title": "Aquesta nit"
+  },
+  "credits": {
+    "added": "Crèdits afegits",
+    "checkout": "Continua al pagament segur",
+    "checkoutFailed": "No s'ha pogut iniciar el pagament. Torna-ho a provar.",
+    "each": "{price} cadascun",
+    "explainer": "1 crèdit = 1 vídeo de karaoke. També funciona al lloc web.",
+    "loadFailed": "No s'han pogut carregar els paquets de crèdits.",
+    "noPayment": "No s'ha fet cap pagament",
+    "pending": "Pagament rebut, els crèdits estan en camí",
+    "refresh": "Actualitza el saldo",
+    "signInPrompt": "Inicia sessió per comprar crèdits",
+    "packageCredits": "{credits, plural, one {# crèdit} other {# crèdits}}",
+    "popular": "Popular",
+    "title": "Compra crèdits"
   }
 }

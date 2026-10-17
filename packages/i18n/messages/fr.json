@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Bientôt disponible : tes demandes et la file d'attente de ce soir",
     "title": "Ce soir"
+  },
+  "credits": {
+    "added": "Crédits ajoutés",
+    "checkout": "Continuer vers le paiement sécurisé",
+    "checkoutFailed": "Impossible de lancer le paiement. Réessaie.",
+    "each": "{price} l'unité",
+    "explainer": "1 crédit = 1 vidéo karaoké. Fonctionne aussi sur le site web.",
+    "loadFailed": "Impossible de charger les packs de crédits.",
+    "noPayment": "Aucun paiement effectué",
+    "pending": "Paiement reçu, tes crédits arrivent",
+    "refresh": "Actualiser le solde",
+    "signInPrompt": "Connecte-toi pour acheter des crédits",
+    "packageCredits": "{credits, plural, one {# crédit} other {# crédits}}",
+    "popular": "Populaire",
+    "title": "Acheter des crédits"
   }
 }

@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Už čoskoro: tvoje požiadavky a poradovník na dnešný večer",
     "title": "Dnes večer"
+  },
+  "credits": {
+    "added": "Kredity boli pridané",
+    "checkout": "Pokračovať na bezpečnú platbu",
+    "checkoutFailed": "Nepodarilo sa spustiť platbu. Skús to znova.",
+    "each": "{price} za kus",
+    "explainer": "1 kredit = 1 karaoke video. Funguje aj na webe.",
+    "loadFailed": "Nepodarilo sa načítať balíčky kreditov.",
+    "noPayment": "Platba neprebehla",
+    "pending": "Platba prijatá, kredity sú na ceste",
+    "refresh": "Obnoviť zostatok",
+    "signInPrompt": "Prihlás sa, aby si si mohol kúpiť kredity",
+    "packageCredits": "{credits, plural, one {# kredit} few {# kredity} other {# kreditov}}",
+    "popular": "Populárne",
+    "title": "Kúpiť kredity"
   }
 }

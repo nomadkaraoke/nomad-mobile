@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Kommer snart: sangønskene dine og kveldens kø",
     "title": "I kveld"
+  },
+  "credits": {
+    "added": "Kreditter er lagt til",
+    "checkout": "Fortsett til sikker betaling",
+    "checkoutFailed": "Kunne ikke starte betalingen. Prøv igjen.",
+    "each": "{price} per stk.",
+    "explainer": "1 kreditt = 1 karaokevideo. Fungerer på nettsiden også.",
+    "loadFailed": "Kunne ikke laste inn kredittpakkene.",
+    "noPayment": "Ingen betaling gjennomført",
+    "pending": "Betaling mottatt, kredittene er på vei",
+    "refresh": "Oppdater saldo",
+    "signInPrompt": "Logg inn for å kjøpe kreditter",
+    "packageCredits": "{credits, plural, one {# kreditt} other {# kreditter}}",
+    "popular": "Populær",
+    "title": "Kjøp kreditter"
   }
 }

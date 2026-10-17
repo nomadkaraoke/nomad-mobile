@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Kommer snart: dine ønsker og aftenens kø",
     "title": "I aften"
+  },
+  "credits": {
+    "added": "Credits tilføjet",
+    "checkout": "Fortsæt til sikker betaling",
+    "checkoutFailed": "Kunne ikke starte betalingen. Prøv igen.",
+    "each": "{price} pr. stk.",
+    "explainer": "1 credit = 1 karaokevideo. Fungerer også på hjemmesiden.",
+    "loadFailed": "Kunne ikke indlæse credit-pakkerne.",
+    "noPayment": "Ingen betaling gennemført",
+    "pending": "Betaling modtaget, dine credits er på vej",
+    "refresh": "Opdater saldo",
+    "signInPrompt": "Log ind for at købe credits",
+    "packageCredits": "{credits, plural, one {# kredit} other {# kreditter}}",
+    "popular": "Populær",
+    "title": "Køb kreditter"
   }
 }

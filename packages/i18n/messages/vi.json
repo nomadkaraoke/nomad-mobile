@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Sắp ra mắt: bài hát bạn yêu cầu và danh sách chờ tối nay",
     "title": "Tối nay"
+  },
+  "credits": {
+    "added": "Đã cộng credit",
+    "checkout": "Tiếp tục thanh toán an toàn",
+    "checkoutFailed": "Không thể bắt đầu thanh toán. Vui lòng thử lại.",
+    "each": "{price}/credit",
+    "explainer": "1 credit = 1 video karaoke. Dùng được trên cả trang web.",
+    "loadFailed": "Không thể tải các gói credit.",
+    "noPayment": "Chưa thực hiện thanh toán",
+    "pending": "Đã nhận thanh toán, credit sẽ sớm được cộng vào tài khoản",
+    "refresh": "Làm mới số dư",
+    "signInPrompt": "Đăng nhập để mua credit",
+    "packageCredits": "{credits, plural, one {# credit} other {# credit}}",
+    "popular": "Phổ biến",
+    "title": "Mua credit"
   }
 }

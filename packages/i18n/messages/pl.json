@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Już wkrótce: Twoje propozycje i kolejka na dziś wieczór",
     "title": "Dziś wieczorem"
+  },
+  "credits": {
+    "added": "Dodano kredyty",
+    "checkout": "Przejdź do bezpiecznej płatności",
+    "checkoutFailed": "Nie udało się rozpocząć płatności. Spróbuj ponownie.",
+    "each": "{price} za szt.",
+    "explainer": "1 kredyt = 1 wideo karaoke. Działa również na stronie internetowej.",
+    "loadFailed": "Nie udało się załadować pakietów kredytów.",
+    "noPayment": "Nie dokonano płatności",
+    "pending": "Płatność otrzymana, kredyty są w drodze",
+    "refresh": "Odśwież stan konta",
+    "signInPrompt": "Zaloguj się, aby kupić kredyty",
+    "packageCredits": "{credits, plural, one {# kredyt} few {# kredyty} many {# kredytów} other {# kredytów}}",
+    "popular": "Popularne",
+    "title": "Kup kredyty"
   }
 }

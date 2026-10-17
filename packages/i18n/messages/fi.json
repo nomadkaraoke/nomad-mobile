@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Tulossa pian: toivekappaleesi ja tämän illan jono",
     "title": "Tänä iltana"
+  },
+  "credits": {
+    "added": "Krediitit lisätty",
+    "checkout": "Siirry suojattuun kassalle",
+    "checkoutFailed": "Kassalle siirtyminen epäonnistui. Yritä uudelleen.",
+    "each": "{price} / kpl",
+    "explainer": "1 krediitti = 1 karaokevideo. Toimii myös verkkosivustolla.",
+    "loadFailed": "Krediittipaketteja ei voitu ladata.",
+    "noPayment": "Maksua ei suoritettu",
+    "pending": "Maksu vastaanotettu, krediitit ovat tulossa",
+    "refresh": "Päivitä saldo",
+    "signInPrompt": "Kirjaudu sisään ostaaksesi krediittejä",
+    "packageCredits": "{credits, plural, one {# krediitti} other {# krediittiä}}",
+    "popular": "Suosittu",
+    "title": "Osta krediittejä"
   }
 }

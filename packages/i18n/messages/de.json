@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Demnächst verfügbar: deine Songwünsche und die Warteschlange für heute Abend",
     "title": "Heute Abend"
+  },
+  "credits": {
+    "added": "Guthaben hinzugefügt",
+    "checkout": "Weiter zur sicheren Kasse",
+    "checkoutFailed": "Bezahlvorgang konnte nicht gestartet werden. Versuche es erneut.",
+    "each": "je {price}",
+    "explainer": "1 Guthaben = 1 Karaoke-Video. Funktioniert auch auf der Website.",
+    "loadFailed": "Guthaben-Pakete konnten nicht geladen werden.",
+    "noPayment": "Keine Zahlung erfolgt",
+    "pending": "Zahlung erhalten, Guthaben ist unterwegs",
+    "refresh": "Guthaben aktualisieren",
+    "signInPrompt": "Melde dich an, um Guthaben zu kaufen",
+    "packageCredits": "{credits, plural, one {# Guthaben} other {# Guthaben}}",
+    "popular": "Beliebt",
+    "title": "Guthaben kaufen"
   }
 }

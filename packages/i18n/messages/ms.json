@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Akan datang: permintaan anda dan barisan giliran malam ini",
     "title": "Malam Ini"
+  },
+  "credits": {
+    "added": "Kredit telah ditambah",
+    "checkout": "Teruskan ke pembayaran selamat",
+    "checkoutFailed": "Tidak dapat memulakan pembayaran. Sila cuba lagi.",
+    "each": "{price} setiap satu",
+    "explainer": "1 kredit = 1 video karaoke. Boleh digunakan di laman web juga.",
+    "loadFailed": "Tidak dapat memuatkan pakej kredit.",
+    "noPayment": "Tiada pembayaran dibuat",
+    "pending": "Pembayaran diterima, kredit sedang dimasukkan",
+    "refresh": "Muat semula baki",
+    "signInPrompt": "Log masuk untuk membeli kredit",
+    "packageCredits": "{credits, plural, other {# kredit}}",
+    "popular": "Popular",
+    "title": "Beli kredit"
   }
 }

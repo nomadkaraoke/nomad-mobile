@@ -1,12 +1,155 @@
+import { listCreditPackages, type CreditPackage } from '@nomad/api-gen';
+import { formatPrice } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
-import { Screen, Text } from '@nomad/ui';
+import { Button, Screen, Text } from '@nomad/ui';
+import { useQuery } from '@tanstack/react-query';
+import { router, useLocalSearchParams, type Href } from 'expo-router';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 
-/** Placeholder so `/credits` exists under typed routes; Task 5 replaces it with the credits screen (spec §4.5). */
+import { isInAppPath } from '../auth/signInUi';
+import { useAuth } from '../auth/store';
+import { useCheckout } from '../credits/useCheckout';
+import { currentLocale } from '../locale';
+
+const DEFAULT_PACKAGE = '3_credits';
+const POPULAR = '3_credits';
+const BEST_VALUE = '10_credits';
+
+/** Spec §4.5: pick a package, pay in an in-app browser, land back where the person came from. */
 export default function CreditsScreen() {
-  const t = useTranslations('account');
+  const t = useTranslations('credits');
+  const { returnTo } = useLocalSearchParams<{ returnTo?: string }>();
+  const auth = useAuth((s) => s.state);
+  const email = auth.status === 'signedIn' ? auth.session.email : null;
+  const [selected, setSelected] = useState(DEFAULT_PACKAGE);
+  const locale = currentLocale();
+
+  // Signed out: the sign-in sheet returns here.
+  const askedSignIn = useRef(false);
+  useEffect(() => {
+    if (auth.status === 'signedOut' && !askedSignIn.current) {
+      askedSignIn.current = true;
+      router.push({ pathname: '/sign-in', params: { returnTo: '/credits' } });
+    }
+  }, [auth.status]);
+
+  const packages = useQuery({ queryKey: ['credit-packages'], queryFn: listCreditPackages, enabled: Boolean(email) });
+
+  if (!email) {
+    return (
+      <Screen testID="credits-screen">
+        <Text variant="title">{t('title')}</Text>
+        <Text variant="muted">{t('signInPrompt')}</Text>
+      </Screen>
+    );
+  }
   return (
-    <Screen testID="credits-screen">
-      <Text variant="title">{t('buyCredits')}</Text>
+    <CreditsBody
+      email={email}
+      returnTo={returnTo}
+      packages={packages}
+      selected={selected}
+      setSelected={setSelected}
+      locale={locale}
+    />
+  );
+}
+
+type BodyProps = {
+  email: string;
+  returnTo: string | undefined;
+  packages: { data?: CreditPackage[]; isPending: boolean; isError: boolean; refetch: () => unknown };
+  selected: string;
+  setSelected: (id: string) => void;
+  locale: string;
+};
+
+function CreditsBody({ email, returnTo, packages, selected, setSelected, locale }: BodyProps) {
+  const t = useTranslations('credits');
+  const tc = useTranslations('common');
+  const checkout = useCheckout(email);
+  const { phase } = checkout;
+
+  // Paid and credited: back to where the person came from (the make flow still holds the song).
+  const left = useRef(false);
+  useEffect(() => {
+    if (phase !== 'added' || left.current) return;
+    left.current = true;
+    const timer = setTimeout(() => {
+      if (returnTo && isInAppPath(returnTo) && router.canGoBack()) router.back();
+      else router.replace((returnTo && isInAppPath(returnTo) ? returnTo : '/(tabs)/me') as Href);
+    }, 900);
+    return () => clearTimeout(timer);
+  }, [phase, returnTo]);
+
+  const chosen = packages.data?.find((p) => p.id === selected) ?? packages.data?.[0];
+
+  return (
+    <Screen testID="credits-screen" scroll>
+      <Text variant="title">{t('title')}</Text>
+      <Text variant="muted">{t('explainer')}</Text>
+
+      {phase === 'added' ? (
+        <View testID="credits-added" className="rounded-lg border border-border bg-card p-3">
+          <Text>{t('added')}</Text>
+        </View>
+      ) : null}
+      {phase === 'noPayment' ? (
+        <View testID="credits-no-payment" className="rounded-lg border border-border bg-card p-3">
+          <Text variant="muted">{t('noPayment')}</Text>
+        </View>
+      ) : null}
+      {phase === 'pending' ? (
+        <View testID="credits-pending" className="gap-2 rounded-lg border border-border bg-card p-3">
+          <Text>{t('pending')}</Text>
+          <Button testID="credits-refresh" variant="secondary" label={t('refresh')} onPress={() => void checkout.refresh()} />
+        </View>
+      ) : null}
+      {phase === 'failed' ? <Text variant="error" testID="credits-failed">{t('checkoutFailed')}</Text> : null}
+
+      {packages.isPending ? (
+        <ActivityIndicator testID="credits-loading" />
+      ) : packages.isError || !packages.data ? (
+        <View className="items-start gap-2">
+          <Text variant="error">{t('loadFailed')}</Text>
+          <Button testID="credits-retry" variant="secondary" label={tc('retry')} onPress={() => void packages.refetch()} />
+        </View>
+      ) : (
+        packages.data.map((p) => {
+          const on = p.id === chosen?.id;
+          const badge =
+            p.id === POPULAR
+              ? t('popular')
+              : p.id === BEST_VALUE
+                ? t('each', { price: formatPrice(p.priceCents / p.credits, 'USD', locale) })
+                : null;
+          return (
+            <Pressable
+              key={p.id}
+              testID={`credits-pkg-${p.id}`}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: on }}
+              onPress={() => setSelected(p.id)}
+              className={`flex-row items-center justify-between rounded-lg border p-4 ${on ? 'border-primary bg-card' : 'border-border'}`}
+            >
+              <View className="gap-1">
+                <Text>{t('packageCredits', { credits: p.credits })}</Text>
+                {badge ? <Text variant="muted" testID={`credits-badge-${p.id}`}>{badge}</Text> : null}
+              </View>
+              <Text>{formatPrice(p.priceCents, 'USD', locale)}</Text>
+            </Pressable>
+          );
+        })
+      )}
+
+      <Button
+        testID="credits-checkout"
+        label={t('checkout')}
+        loading={checkout.busy}
+        disabled={!chosen || phase === 'added'}
+        onPress={() => chosen && void checkout.start(chosen.id)}
+      />
     </Screen>
   );
 }

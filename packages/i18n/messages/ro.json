@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "În curând: cererile tale și lista de redare pentru diseară",
     "title": "În această seară"
+  },
+  "credits": {
+    "added": "Credite adăugate",
+    "checkout": "Continuă spre finalizarea securizată a plății",
+    "checkoutFailed": "Nu s-a putut iniția finalizarea plății. Încearcă din nou.",
+    "each": "{price} / buc.",
+    "explainer": "1 credit = 1 videoclip karaoke. Funcționează și pe site.",
+    "loadFailed": "Nu s-au putut încărca pachetele de credite.",
+    "noPayment": "Nicio plată efectuată",
+    "pending": "Plată primită, creditele sunt pe drum",
+    "refresh": "Actualizează soldul",
+    "signInPrompt": "Conectează-te pentru a cumpăra credite",
+    "packageCredits": "{credits, plural, one {# credit} few {# credite} other {# de credite}}",
+    "popular": "Popular",
+    "title": "Cumpără credite"
   }
 }

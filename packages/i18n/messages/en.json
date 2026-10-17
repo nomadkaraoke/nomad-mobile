@@ -130,5 +130,20 @@
       "youtube": "YouTube",
       "other": "Other"
     }
+  },
+  "credits": {
+    "title": "Buy credits",
+    "explainer": "1 credit = 1 karaoke video. Works on the website too.",
+    "packageCredits": "{credits, plural, one {# credit} other {# credits}}",
+    "popular": "Popular",
+    "each": "{price} each",
+    "checkout": "Continue to secure checkout",
+    "added": "Credits added",
+    "noPayment": "No payment made",
+    "pending": "Payment received, credits are on their way",
+    "refresh": "Refresh balance",
+    "loadFailed": "Couldn't load the credit packages.",
+    "checkoutFailed": "Couldn't start checkout. Try again.",
+    "signInPrompt": "Sign in to buy credits"
   }
 }

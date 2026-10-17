@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Hamarosan: kéréseid és a ma esti várólista",
     "title": "Ma este"
+  },
+  "credits": {
+    "added": "Kreditek hozzáadva",
+    "checkout": "Tovább a biztonságos fizetéshez",
+    "checkoutFailed": "Nem sikerült elindítani a fizetést. Próbáld újra.",
+    "each": "{price} / db",
+    "explainer": "1 kredit = 1 karaoke videó. A weboldalon is működik.",
+    "loadFailed": "Nem sikerült betölteni a kreditcsomagokat.",
+    "noPayment": "Nem történt fizetés",
+    "pending": "A fizetés megérkezett, a kreditek úton vannak",
+    "refresh": "Egyenleg frissítése",
+    "signInPrompt": "Jelentkezz be kreditek vásárlásához",
+    "packageCredits": "{credits, plural, one {# kredit} other {# kredit}}",
+    "popular": "Népszerű",
+    "title": "Kredit vásárlása"
   }
 }

@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Çok yakında: İsteklerin ve bu gecenin sırası",
     "title": "Bu Gece"
+  },
+  "credits": {
+    "added": "Krediler eklendi",
+    "checkout": "Güvenli ödemeye devam et",
+    "checkoutFailed": "Ödeme başlatılamadı. Tekrar dene.",
+    "each": "Tanesi {price}",
+    "explainer": "1 kredi = 1 karaoke videosu. Web sitesinde de geçerlidir.",
+    "loadFailed": "Kredi paketleri yüklenemedi.",
+    "noPayment": "Ödeme yapılmadı",
+    "pending": "Ödeme alındı, kredilerin yükleniyor",
+    "refresh": "Bakiyeyi yenile",
+    "signInPrompt": "Kredi satın almak için giriş yap",
+    "packageCredits": "{credits, plural, one {# kredi} other {# kredi}}",
+    "popular": "Popüler",
+    "title": "Kredi satın al"
   }
 }

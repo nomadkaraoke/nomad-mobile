@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Binnenkort beschikbaar: je verzoekjes en de wachtrij van vanavond",
     "title": "Vanavond"
+  },
+  "credits": {
+    "added": "Credits toegevoegd",
+    "checkout": "Doorgaan naar veilig afrekenen",
+    "checkoutFailed": "Kon het afrekenen niet starten. Probeer het opnieuw.",
+    "each": "{price} per stuk",
+    "explainer": "1 credit = 1 karaokevideo. Werkt ook op de website.",
+    "loadFailed": "Kon de creditpakketten niet laden.",
+    "noPayment": "Geen betaling uitgevoerd",
+    "pending": "Betaling ontvangen, de credits zijn onderweg",
+    "refresh": "Saldo vernieuwen",
+    "signInPrompt": "Log in om credits te kopen",
+    "packageCredits": "{credits, plural, one {# credit} other {# credits}}",
+    "popular": "Populair",
+    "title": "Credits kopen"
   }
 }

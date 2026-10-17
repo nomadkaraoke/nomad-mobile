@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Malapit na: ang iyong mga request at queue ngayong gabi",
     "title": "Ngayong Gabi"
+  },
+  "credits": {
+    "added": "Naidagdag na ang mga credit",
+    "checkout": "Magpatuloy sa secure checkout",
+    "checkoutFailed": "Hindi masimulan ang checkout. Subukan muli.",
+    "each": "{price} bawat isa",
+    "explainer": "1 credit = 1 karaoke video. Gumagana rin sa website.",
+    "loadFailed": "Hindi ma-load ang mga credit package.",
+    "noPayment": "Walang bayad na naisagawa",
+    "pending": "Natanggap na ang bayad, paparating na ang iyong mga credit",
+    "refresh": "I-refresh ang balanse",
+    "signInPrompt": "Mag-sign in para bumili ng mga credit",
+    "packageCredits": "{credits, plural, one {# credit} other {# credits}}",
+    "popular": "Sikat",
+    "title": "Bumili ng credits"
   }
 }

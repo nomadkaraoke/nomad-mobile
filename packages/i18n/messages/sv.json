@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "Kommer snart: dina önskemål och kvällens kö",
     "title": "I kväll"
+  },
+  "credits": {
+    "added": "Krediter har lagts till",
+    "checkout": "Fortsätt till säker kassa",
+    "checkoutFailed": "Det gick inte att öppna kassan. Försök igen.",
+    "each": "{price} styck",
+    "explainer": "1 kredit = 1 karaokevideo. Fungerar på webbplatsen också.",
+    "loadFailed": "Det gick inte att läsa in kreditpaketen.",
+    "noPayment": "Ingen betalning genomförd",
+    "pending": "Betalningen är mottagen, dina krediter är på väg",
+    "refresh": "Uppdatera saldo",
+    "signInPrompt": "Logga in för att köpa krediter",
+    "packageCredits": "{credits, plural, one {# kredit} other {# krediter}}",
+    "popular": "Populära",
+    "title": "Köp krediter"
   }
 }

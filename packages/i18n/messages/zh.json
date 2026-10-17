@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "即将推出：你的点歌和今晚的已点队列",
     "title": "今晚"
+  },
+  "credits": {
+    "added": "积分已到账",
+    "checkout": "前往安全结账",
+    "checkoutFailed": "无法发起结账，请重试。",
+    "each": "单价 {price}",
+    "explainer": "1 积分 = 1 个卡拉OK视频。网站同样适用。",
+    "loadFailed": "无法加载积分套餐。",
+    "noPayment": "未付款",
+    "pending": "已收到付款，积分即将到账",
+    "refresh": "刷新余额",
+    "signInPrompt": "登录以购买积分",
+    "packageCredits": "{credits, plural, one {# 点积分} other {# 点积分}}",
+    "popular": "热门",
+    "title": "购买点数"
   }
 }

@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "In arrivo: le tue richieste e la scaletta di stasera",
     "title": "Stasera"
+  },
+  "credits": {
+    "added": "Crediti aggiunti",
+    "checkout": "Continua con il pagamento sicuro",
+    "checkoutFailed": "Impossibile avviare il pagamento. Riprova.",
+    "each": "{price} ciascuno",
+    "explainer": "1 credito = 1 video karaoke. Funziona anche sul sito web.",
+    "loadFailed": "Impossibile caricare i pacchetti di crediti.",
+    "noPayment": "Nessun pagamento effettuato",
+    "pending": "Pagamento ricevuto, i crediti stanno arrivando",
+    "refresh": "Aggiorna il saldo",
+    "signInPrompt": "Accedi per acquistare crediti",
+    "packageCredits": "{credits, plural, one {# credito} other {# crediti}}",
+    "popular": "Popolari",
+    "title": "Acquista crediti"
   }
 }

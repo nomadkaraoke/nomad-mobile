@@ -130,5 +130,20 @@
   "tonight": {
     "comingSoon": "近日公開：リクエスト一覧と今夜のキュー",
     "title": "Tonight"
+  },
+  "credits": {
+    "added": "クレジットが追加されました",
+    "checkout": "安全な決済へ進む",
+    "checkoutFailed": "決済を開始できませんでした。もう一度お試しください。",
+    "each": "1つあたり{price}",
+    "explainer": "1クレジット＝カラオケ動画1本。ウェブサイトでもご利用いただけます。",
+    "loadFailed": "クレジットパッケージを読み込めませんでした。",
+    "noPayment": "支払いは行われていません",
+    "pending": "お支払いを確認しました。クレジットの反映をお待ちください",
+    "refresh": "残高を更新",
+    "signInPrompt": "クレジットを購入するにはサインインしてください",
+    "packageCredits": "{credits, plural, one {# クレジット} other {# クレジット}}",
+    "popular": "人気",
+    "title": "クレジットを購入"
   }
 }
