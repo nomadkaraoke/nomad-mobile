@@ -7,7 +7,7 @@ import { IntlProvider, LOCALES, useTranslations } from '../index';
 
 function Probe() {
   const t = useTranslations('tabs');
-  return <Text>{t('find')}</Text>;
+  return <Text>{t('discover')}</Text>;
 }
 
 // Every locale must be wired to its own JSON (catches a wrong/missing loader path).
@@ -18,5 +18,5 @@ it.each(LOCALES)('%s renders its own translation', (locale) => {
       <Probe />
     </IntlProvider>,
   );
-  expect(screen.getByText(messages.tabs.find)).toBeTruthy();
+  expect(screen.getByText(messages.tabs.discover)).toBeTruthy();
 });

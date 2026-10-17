@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Zaloguj się",
     "signOut": "Wyloguj się",
-    "title": "Konto",
     "signedInAs": "Zalogowano jako {email}",
-    "language": "Język"
+    "language": "Język",
+    "credits": "{credits, plural, one {# kredyt} few {# kredyty} many {# kredytów} other {# kredytów}}",
+    "title": "Moje konto",
+    "buyCredits": "Kup kredyty"
   },
   "common": {
     "error": "Coś poszło nie tak.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Zaloguj się do Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Tworzenie filmów w aplikacji będzie dostępne już wkrótce.",
-    "makeVideo": "Stwórz wideo karaoke",
-    "signInToMake": "Zaloguj się, aby stworzyć tę piosenkę",
     "artistLabel": "Wykonawca",
-    "titleLabel": "Tytuł piosenki"
+    "titleLabel": "Tytuł piosenki",
+    "hasKaraoke": "Dostępne wersje karaoke",
+    "makeIt": "Stwórz · 1 kredyt",
+    "noKaraoke": "Nie znaleziono wersji karaoke"
   },
   "tabs": {
-    "account": "Konto",
-    "find": "Szukaj",
-    "videos": "Moje filmy"
+    "discover": "Odkrywaj",
+    "make": "Twórz",
+    "me": "Moje konto",
+    "tonight": "Dziś wieczorem"
   },
-  "videos": {
-    "emptyBody": "Utworzone przez Ciebie piosenki pojawią się tutaj.",
-    "emptyTitle": "Brak filmów",
-    "signInPrompt": "Zaloguj się, aby zobaczyć swoje filmy"
+  "make": {
+    "cost": "Koszt: 1 kredyt · Masz {credits}",
+    "costOnly": "Koszt: 1 kredyt",
+    "createFailed": "Nie udało się tego rozpocząć. Spróbuj ponownie.",
+    "findSong": "Znajdź piosenkę",
+    "getCredits": "Kup kredyty",
+    "hideOtherSources": "Ukryj inne źródła",
+    "noIntent": "Najpierw wybierz piosenkę, którą chcesz stworzyć.",
+    "noResults": "Nie udało nam się znaleźć ścieżki dźwiękowej do tej piosenki",
+    "notSure": "Nie mamy pewności, która z nich jest właściwa. Wybierz jedną:",
+    "perfectMatch": "Idealne dopasowanie",
+    "publicNote": "Publikowane publicznie na YouTube, więc możesz łatwo się podzielić",
+    "reason": {
+      "compilation": "Kompilacja",
+      "hiRes": "Album Hi-Res",
+      "hiResLossless": "24-bitowy bezstratny",
+      "live": "Nagranie na żywo",
+      "lossless": "bezstratna jakość",
+      "lossy": "skompresowany dźwięk",
+      "lowAvailability": "pobieranie może potrwać dłużej",
+      "other": "Inne wydanie",
+      "slower": "pobieranie może być wolniejsze",
+      "studioAlbum": "Album studyjny",
+      "views": "{views} wyświetleń",
+      "reliable": "niezawodne pobieranie",
+      "single": "Pojedynczo",
+      "spotify": "Spotify",
+      "vinyl": "Zgrane z winyla",
+      "youtube": "YouTube"
+    },
+    "recommended": "Polecane",
+    "searchExpired": "Wyszukiwanie wygasło, więc sprawdziliśmy ponownie.",
+    "searchFailed": "Nie udało się wyszukać dźwięku. Spróbuj ponownie.",
+    "searching": "Szukamy najlepszego dźwięku…",
+    "searchingHint": "To może potrwać do minuty.",
+    "seeOtherSources": "Zobacz inne źródła ({count})",
+    "submit": "Stwórz",
+    "youtubeInvalid": "To nie wygląda na prawidłowy link do YouTube.",
+    "youtubeLabel": "Link do YouTube",
+    "youtubeToggle": "Wklej zamiast tego link do YouTube",
+    "category": {
+      "best": "Najlepszy wybór",
+      "compilations": "Składanki",
+      "hiRes": "Hi-res 24-bit",
+      "live": "Wersje na żywo",
+      "other": "Inne",
+      "singles": "Single",
+      "spotify": "Spotify",
+      "studio": "Albumy studyjne",
+      "vinyl": "Zgrane z winyla",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Jeszcze nic tu nie ma",
+    "signInPrompt": "Zaloguj się, aby zobaczyć stworzone przez siebie piosenki",
+    "title": "Twórz",
+    "emptyBody": "Utworzone przez Ciebie piosenki pojawią się tutaj."
+  },
+  "tonight": {
+    "comingSoon": "Już wkrótce: Twoje propozycje i kolejka na dziś wieczór",
+    "title": "Dziś wieczorem"
   }
 }

@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Prijavi se",
     "signOut": "Odjavi se",
-    "title": "Račun",
     "signedInAs": "Prijavljen/a kao {email}",
-    "language": "Jezik"
+    "language": "Jezik",
+    "credits": "{credits, plural, one {# kredit} few {# kredita} other {# kredita}}",
+    "title": "Ja",
+    "buyCredits": "Kupi kredite"
   },
   "common": {
     "error": "Nešto je pošlo po zlu.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Prijavi se u Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Izrada videozapisa u aplikaciji stiže uskoro.",
-    "makeVideo": "Napravi karaoke video",
-    "signInToMake": "Prijavi se za izradu ove pjesme",
     "artistLabel": "Izvođač",
-    "titleLabel": "Naslov pjesme"
+    "titleLabel": "Naslov pjesme",
+    "hasKaraoke": "Postoje karaoke verzije",
+    "makeIt": "Izradi · 1 kredit",
+    "noKaraoke": "Nije pronađena karaoke verzija"
   },
   "tabs": {
-    "account": "Račun",
-    "find": "Traži",
-    "videos": "Moji videozapisi"
+    "discover": "Otkrij",
+    "make": "Izradi",
+    "me": "Ja",
+    "tonight": "Večeras"
   },
-  "videos": {
-    "emptyBody": "Ovdje će se pojaviti pjesme koje izradiš.",
-    "emptyTitle": "Još nema videozapisa",
-    "signInPrompt": "Prijavi se kako bi vidio svoje videozapise"
+  "make": {
+    "cost": "Cijena: 1 kredit · Imaš {credits}",
+    "costOnly": "Cijena: 1 kredit",
+    "createFailed": "Nije uspjelo pokretanje. Pokušaj ponovno.",
+    "findSong": "Pronađi pjesmu",
+    "getCredits": "Nabavi kredite",
+    "hideOtherSources": "Sakrij ostale izvore",
+    "noIntent": "Prvo odaberi pjesmu koju želiš izraditi.",
+    "noResults": "Nismo uspjeli pronaći audiozapis za ovu pjesmu",
+    "notSure": "Nismo sigurni koja je prava. Odaberi jednu:",
+    "perfectMatch": "Savršeno podudaranje",
+    "publicNote": "Objavljuje se javno na YouTubeu kako bi se moglo dijeliti",
+    "reason": {
+      "compilation": "Kompilacija",
+      "hiRes": "Hi-res album",
+      "hiResLossless": "24-bitni lossless",
+      "live": "Snimka uživo",
+      "lossless": "lossless",
+      "lossy": "komprimirani audio",
+      "lowAvailability": "dohvaćanje bi moglo trajati dulje",
+      "other": "Drugo izdanje",
+      "slower": "dohvaćanje bi moglo biti sporije",
+      "studioAlbum": "Studijski album",
+      "views": "{views, plural, one {# pregled} few {# pregleda} other {# pregleda}}",
+      "reliable": "pouzdano preuzimanje",
+      "single": "Pojedinačno",
+      "spotify": "Spotify",
+      "vinyl": "Snimka s vinila",
+      "youtube": "YouTube"
+    },
+    "recommended": "Preporučeno",
+    "searchExpired": "Pretraga je istekla, pa smo potražili ponovno.",
+    "searchFailed": "Pretraživanje audiozapisa nije uspjelo. Pokušaj ponovno.",
+    "searching": "Pronalaženje najboljeg zvuka…",
+    "searchingHint": "Ovo može potrajati do minute.",
+    "seeOtherSources": "Prikaži ostale izvore ({count})",
+    "submit": "Izradi",
+    "youtubeInvalid": "Ovo ne izgleda kao YouTube poveznica.",
+    "youtubeLabel": "YouTube poveznica",
+    "youtubeToggle": "Zalijepi YouTube poveznicu umjesto toga",
+    "category": {
+      "best": "Najbolji izbor",
+      "compilations": "Kompilacije",
+      "hiRes": "Visoka rezolucija (24-bit)",
+      "live": "Verzije uživo",
+      "other": "Ostalo",
+      "singles": "Singlovi",
+      "spotify": "Spotify",
+      "studio": "Studijski albumi",
+      "vinyl": "S vinila",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Još ništa nije izrađeno",
+    "signInPrompt": "Prijavi se za pregled pjesama koje si izradio",
+    "title": "Izradi",
+    "emptyBody": "Ovdje će se pojaviti pjesme koje izradiš."
+  },
+  "tonight": {
+    "comingSoon": "Uskoro: tvoje pjesme i red čekanja za večeras",
+    "title": "Večeras"
   }
 }

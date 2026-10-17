@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Đăng nhập",
     "signOut": "Đăng xuất",
-    "title": "Tài khoản",
     "signedInAs": "Đã đăng nhập bằng {email}",
-    "language": "Ngôn ngữ"
+    "language": "Ngôn ngữ",
+    "credits": "{credits, plural, one {# credit} other {# credit}}",
+    "title": "Tôi",
+    "buyCredits": "Mua credit"
   },
   "common": {
     "error": "Đã có lỗi xảy ra.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Đăng nhập vào Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Tính năng tạo video trực tiếp trong ứng dụng sẽ sớm ra mắt.",
-    "makeVideo": "Tạo video karaoke",
-    "signInToMake": "Đăng nhập để tạo bài hát này",
     "artistLabel": "Nghệ sĩ",
-    "titleLabel": "Tên bài hát"
+    "titleLabel": "Tên bài hát",
+    "hasKaraoke": "Đã có bản karaoke",
+    "makeIt": "Tạo ngay · 1 credit",
+    "noKaraoke": "Không tìm thấy bản karaoke"
   },
   "tabs": {
-    "account": "Tài khoản",
-    "find": "Tìm kiếm",
-    "videos": "Video của tôi"
+    "discover": "Khám phá",
+    "make": "Tạo bài",
+    "me": "Tôi",
+    "tonight": "Tối nay"
   },
-  "videos": {
-    "emptyBody": "Các bài hát bạn tạo sẽ xuất hiện tại đây.",
-    "emptyTitle": "Chưa có video nào",
-    "signInPrompt": "Đăng nhập để xem video của bạn"
+  "make": {
+    "cost": "Tốn 1 credit · Bạn có {credits}",
+    "costOnly": "Tốn 1 credit",
+    "createFailed": "Không thể bắt đầu tạo bài này. Hãy thử lại.",
+    "findSong": "Tìm bài hát",
+    "getCredits": "Nhận thêm credit",
+    "hideOtherSources": "Ẩn các nguồn khác",
+    "noIntent": "Hãy chọn một bài hát để tạo trước.",
+    "noResults": "Không tìm thấy âm thanh cho bài hát này",
+    "notSure": "Chưa rõ bản nào là chuẩn nhất. Bạn hãy chọn một bản nhé:",
+    "perfectMatch": "Khớp hoàn toàn",
+    "publicNote": "Được đăng công khai trên YouTube để bạn có thể chia sẻ",
+    "reason": {
+      "compilation": "Tuyển tập",
+      "hiRes": "Album Hi-res",
+      "hiResLossless": "Lossless 24-bit",
+      "live": "Bản thu trực tiếp",
+      "lossless": "lossless",
+      "lossy": "âm thanh nén",
+      "lowAvailability": "có thể mất nhiều thời gian hơn để lấy",
+      "other": "Bản phát hành khác",
+      "slower": "có thể lấy chậm hơn",
+      "studioAlbum": "Album phòng thu",
+      "views": "{views} lượt xem",
+      "reliable": "tải xuống ổn định",
+      "single": "Đơn lẻ",
+      "spotify": "Spotify",
+      "vinyl": "Bản rip từ đĩa than",
+      "youtube": "YouTube"
+    },
+    "recommended": "Đề xuất",
+    "searchExpired": "Lượt tìm kiếm đã hết hạn, chúng tôi đã tìm kiếm lại.",
+    "searchFailed": "Không thể tìm kiếm âm thanh. Hãy thử lại.",
+    "searching": "Đang tìm bản âm thanh tốt nhất…",
+    "searchingHint": "Quá trình này có thể mất tới một phút.",
+    "seeOtherSources": "Xem các nguồn khác ({count})",
+    "submit": "Tạo bài hát",
+    "youtubeInvalid": "Liên kết này có vẻ không phải là link YouTube.",
+    "youtubeLabel": "Liên kết YouTube",
+    "youtubeToggle": "Dán liên kết YouTube thay thế",
+    "category": {
+      "best": "Lựa chọn tốt nhất",
+      "compilations": "Tuyển tập",
+      "hiRes": "Chất lượng cao 24-bit",
+      "live": "Bản live",
+      "other": "Khác",
+      "singles": "Đĩa đơn",
+      "spotify": "Spotify",
+      "studio": "Album phòng thu",
+      "vinyl": "Bản rip từ đĩa than",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Chưa có bài nào được tạo",
+    "signInPrompt": "Đăng nhập để xem các bài hát bạn đã tạo",
+    "title": "Tạo bài",
+    "emptyBody": "Các bài hát bạn tạo sẽ xuất hiện tại đây."
+  },
+  "tonight": {
+    "comingSoon": "Sắp ra mắt: bài hát bạn yêu cầu và danh sách chờ tối nay",
+    "title": "Tối nay"
   }
 }

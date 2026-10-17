@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Anmelden",
     "signOut": "Abmelden",
-    "title": "Account",
     "signedInAs": "Angemeldet als {email}",
-    "language": "Sprache"
+    "language": "Sprache",
+    "credits": "{credits, plural, one {# Guthaben} other {# Guthaben}}",
+    "title": "Ich",
+    "buyCredits": "Guthaben kaufen"
   },
   "common": {
     "error": "Etwas ist schiefgelaufen.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Melde dich bei Nomad Karaoke an"
   },
   "song": {
-    "comingSoon": "Die Videoerstellung in der App kommt bald.",
-    "makeVideo": "Karaoke-Video erstellen",
-    "signInToMake": "Melde dich an, um diesen Song zu erstellen",
     "artistLabel": "Künstler",
-    "titleLabel": "Songtitel"
+    "titleLabel": "Songtitel",
+    "hasKaraoke": "Karaoke-Versionen vorhanden",
+    "makeIt": "Erstellen · 1 Guthaben",
+    "noKaraoke": "Keine Karaoke-Version gefunden"
   },
   "tabs": {
-    "account": "Account",
-    "find": "Suchen",
-    "videos": "Meine Videos"
+    "discover": "Entdecken",
+    "make": "Erstellen",
+    "me": "Ich",
+    "tonight": "Heute Abend"
   },
-  "videos": {
-    "emptyBody": "Songs, die du erstellst, erscheinen hier.",
-    "emptyTitle": "Noch keine Videos",
-    "signInPrompt": "Melde dich an, um deine Videos zu sehen"
+  "make": {
+    "cost": "Kostet 1 Guthaben · Du hast {credits}",
+    "costOnly": "Kostet 1 Guthaben",
+    "createFailed": "Konnte nicht gestartet werden. Versuch es noch einmal.",
+    "findSong": "Song suchen",
+    "getCredits": "Guthaben aufladen",
+    "hideOtherSources": "Andere Quellen ausblenden",
+    "noIntent": "Wähle zuerst einen Song aus, den du erstellen möchtest.",
+    "noResults": "Wir konnten kein Audio für diesen Song finden",
+    "notSure": "Wir sind uns nicht sicher, welches das richtige ist. Wähle eins aus:",
+    "perfectMatch": "Perfekter Treffer",
+    "publicNote": "Öffentlich auf YouTube gepostet, damit du es teilen kannst",
+    "reason": {
+      "compilation": "Kompilation",
+      "hiRes": "Hi-Res-Album",
+      "hiResLossless": "24-Bit verlustfrei",
+      "live": "Live-Aufnahme",
+      "lossless": "verlustfrei",
+      "lossy": "komprimiertes Audio",
+      "lowAvailability": "Abrufen kann länger dauern",
+      "other": "Andere Veröffentlichung",
+      "slower": "Abrufen ist möglicherweise langsamer",
+      "studioAlbum": "Studioalbum",
+      "views": "{views} Aufrufe",
+      "reliable": "zuverlässiger Download",
+      "single": "Einzeln",
+      "spotify": "Spotify",
+      "vinyl": "Vinyl-Rip",
+      "youtube": "YouTube"
+    },
+    "recommended": "Empfohlen",
+    "searchExpired": "Diese Suche ist abgelaufen, daher haben wir erneut gesucht.",
+    "searchFailed": "Audiosuche fehlgeschlagen. Versuch es noch einmal.",
+    "searching": "Beste Audiodatei wird gesucht…",
+    "searchingHint": "Das kann bis zu einer Minute dauern.",
+    "seeOtherSources": "Andere Quellen anzeigen ({count})",
+    "submit": "Erstellen",
+    "youtubeInvalid": "Das sieht nicht nach einem YouTube-Link aus.",
+    "youtubeLabel": "YouTube-Link",
+    "youtubeToggle": "Stattdessen einen YouTube-Link einfügen",
+    "category": {
+      "best": "Beste Wahl",
+      "compilations": "Compilations",
+      "hiRes": "Hi-Res 24-Bit",
+      "live": "Live-Versionen",
+      "other": "Andere",
+      "singles": "Singles",
+      "spotify": "Spotify",
+      "studio": "Studioalben",
+      "vinyl": "Vinyl-Rips",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Noch nichts erstellt",
+    "signInPrompt": "Melde dich an, um deine erstellten Songs zu sehen",
+    "title": "Erstellen",
+    "emptyBody": "Songs, die du erstellst, erscheinen hier."
+  },
+  "tonight": {
+    "comingSoon": "Demnächst verfügbar: deine Songwünsche und die Warteschlange für heute Abend",
+    "title": "Heute Abend"
   }
 }

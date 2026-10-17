@@ -3,8 +3,10 @@
     "signIn": "Inicia la sessió",
     "signOut": "Tanca la sessió",
     "signedInAs": "Sessió iniciada com a {email}",
-    "title": "Compte",
-    "language": "Idioma"
+    "language": "Idioma",
+    "credits": "{credits, plural, one {# crèdit} other {# crèdits}}",
+    "title": "Jo",
+    "buyCredits": "Compra crèdits"
   },
   "common": {
     "error": "S'ha produït un error.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Inicia sessió a Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Molt aviat podràs crear vídeos a l'aplicació.",
-    "makeVideo": "Crea un vídeo de karaoke",
-    "signInToMake": "Inicia la sessió per crear aquesta cançó",
     "artistLabel": "Artista",
-    "titleLabel": "Títol de la cançó"
+    "titleLabel": "Títol de la cançó",
+    "hasKaraoke": "Hi ha versions de karaoke",
+    "makeIt": "Crea-la · 1 crèdit",
+    "noKaraoke": "No s'ha trobat cap versió de karaoke"
   },
   "tabs": {
-    "account": "Compte",
-    "find": "Cerca",
-    "videos": "Els meus vídeos"
+    "discover": "Descobreix",
+    "make": "Crea",
+    "me": "Jo",
+    "tonight": "Aquesta nit"
   },
-  "videos": {
-    "emptyBody": "Les cançons que creïs apareixeran aquí.",
-    "emptyTitle": "Encara no hi ha vídeos",
-    "signInPrompt": "Inicia la sessió per veure els teus vídeos"
+  "make": {
+    "category": {
+      "best": "Millor opció",
+      "compilations": "Recopilatoris",
+      "hiRes": "Alta resolució (24 bits)",
+      "live": "Versions en directe",
+      "singles": "Senzills",
+      "studio": "Àlbums d'estudi",
+      "vinyl": "Rips de vinil",
+      "youtube": "YouTube",
+      "other": "Altre",
+      "spotify": "Spotify"
+    },
+    "cost": "Cost: 1 crèdit · En tens {credits}",
+    "costOnly": "Cost: 1 crèdit",
+    "createFailed": "No s'ha pogut iniciar. Torna-ho a provar.",
+    "findSong": "Cerca una cançó",
+    "getCredits": "Aconsegueix crèdits",
+    "hideOtherSources": "Amaga les altres fonts",
+    "noIntent": "Tria primer una cançó per crear-la.",
+    "noResults": "No hem trobat l'àudio d'aquesta cançó",
+    "notSure": "No sabem del cert quina és la correcta. Tria'n una:",
+    "perfectMatch": "Coincidència exacta",
+    "publicNote": "Publicat públicament a YouTube perquè el puguis compartir",
+    "reason": {
+      "compilation": "Recopilatori",
+      "hiRes": "Àlbum en alta resolució",
+      "hiResLossless": "Sense pèrdua (24 bits)",
+      "live": "Gravació en directe",
+      "lossless": "sense pèrdua",
+      "lossy": "àudio comprimit",
+      "lowAvailability": "pot trigar més a obtenir-se",
+      "other": "Altra edició",
+      "slower": "pot trigar més a carregar",
+      "studioAlbum": "Àlbum d'estudi",
+      "views": "{views} visualitzacions",
+      "vinyl": "Rip de vinil",
+      "youtube": "YouTube",
+      "reliable": "descàrrega fiable",
+      "single": "Individual",
+      "spotify": "Spotify"
+    },
+    "recommended": "Recomanat",
+    "searchExpired": "Aquesta cerca ha caducat, així que hem tornat a cercar.",
+    "searchFailed": "No s'ha pogut cercar l'àudio. Torna-ho a provar.",
+    "searching": "Buscant el millor àudio…",
+    "searchingHint": "Això pot trigar fins a un minut.",
+    "seeOtherSources": "Mostra les altres fonts ({count})",
+    "submit": "Crea'l",
+    "youtubeInvalid": "Això no sembla un enllaç de YouTube.",
+    "youtubeLabel": "Enllaç de YouTube",
+    "youtubeToggle": "Enganxa un enllaç de YouTube"
+  },
+  "makeTab": {
+    "emptyTitle": "Encara no has creat res",
+    "signInPrompt": "Inicia la sessió per veure les cançons que has creat",
+    "title": "Crea",
+    "emptyBody": "Les cançons que creïs apareixeran aquí."
+  },
+  "tonight": {
+    "comingSoon": "Properament: les teves peticions i la cua d'aquesta nit",
+    "title": "Aquesta nit"
   }
 }

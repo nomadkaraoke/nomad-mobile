@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Giriş yap",
     "signOut": "Çıkış yap",
-    "title": "Hesap",
     "signedInAs": "{email} olarak giriş yapıldı",
-    "language": "Dil"
+    "language": "Dil",
+    "credits": "{credits, plural, one {# kredi} other {# kredi}}",
+    "title": "Ben",
+    "buyCredits": "Kredi satın al"
   },
   "common": {
     "error": "Bir şeyler ters gitti.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Nomad Karaoke'ye giriş yap"
   },
   "song": {
-    "comingSoon": "Uygulama üzerinden video oluşturma çok yakında.",
-    "makeVideo": "Karaoke videosu yap",
-    "signInToMake": "Bu şarkıyı yapmak için giriş yap",
     "artistLabel": "Sanatçı",
-    "titleLabel": "Şarkı adı"
+    "titleLabel": "Şarkı adı",
+    "hasKaraoke": "Karaoke sürümleri mevcut",
+    "makeIt": "Oluştur · 1 kredi",
+    "noKaraoke": "Karaoke sürümü bulunamadı"
   },
   "tabs": {
-    "account": "Hesap",
-    "find": "Bul",
-    "videos": "Videolarım"
+    "discover": "Keşfet",
+    "make": "Oluştur",
+    "me": "Ben",
+    "tonight": "Bu Gece"
   },
-  "videos": {
-    "emptyBody": "Yaptığın şarkılar burada görünecek.",
-    "emptyTitle": "Henüz video yok",
-    "signInPrompt": "Videolarını görmek için giriş yap"
+  "make": {
+    "cost": "Ücret: 1 kredi · {credits} kredin var",
+    "costOnly": "Ücret: 1 kredi",
+    "createFailed": "Bu başlatılamadı. Tekrar dene.",
+    "findSong": "Bir şarkı bul",
+    "getCredits": "Kredi al",
+    "hideOtherSources": "Diğer kaynakları gizle",
+    "noIntent": "Önce oluşturmak istediğin bir şarkıyı seç.",
+    "noResults": "Bu şarkı için ses dosyası bulamadık",
+    "notSure": "Hangisinin doğru olduğundan emin olamadık. Birini seç:",
+    "perfectMatch": "Tam eşleşme",
+    "publicNote": "Paylaşabilmen için YouTube'da herkese açık olarak paylaşılır",
+    "reason": {
+      "compilation": "Derleme albüm",
+      "hiRes": "Yüksek çözünürlüklü albüm",
+      "hiResLossless": "24-bit kayıpsız",
+      "live": "Canlı kayıt",
+      "lossless": "kayıpsız ses",
+      "lossy": "sıkıştırılmış ses",
+      "lowAvailability": "yüklenmesi daha uzun sürebilir",
+      "other": "Diğer sürüm",
+      "slower": "yüklenmesi daha yavaş olabilir",
+      "studioAlbum": "Stüdyo albümü",
+      "views": "{views} görüntüleme",
+      "reliable": "sorunsuz indirme",
+      "single": "Tekli",
+      "spotify": "Spotify",
+      "vinyl": "Plak kaydı",
+      "youtube": "YouTube"
+    },
+    "recommended": "Önerilen",
+    "searchExpired": "Aramanın süresi dolduğu için tekrar aradık.",
+    "searchFailed": "Ses araması yapılamadı. Tekrar dene.",
+    "searching": "En iyi ses bulunuyor…",
+    "searchingHint": "Bu işlem bir dakika kadar sürebilir.",
+    "seeOtherSources": "Diğer kaynakları gör ({count})",
+    "submit": "Oluştur",
+    "youtubeInvalid": "Bu geçerli bir YouTube bağlantısına benzemiyor.",
+    "youtubeLabel": "YouTube bağlantısı",
+    "youtubeToggle": "Bunun yerine bir YouTube bağlantısı yapıştır",
+    "category": {
+      "best": "En iyi seçim",
+      "compilations": "Derlemeler",
+      "hiRes": "Yüksek çözünürlüklü 24-bit",
+      "live": "Canlı versiyonlar",
+      "other": "Diğer",
+      "singles": "Tekliler",
+      "spotify": "Spotify",
+      "studio": "Stüdyo albümleri",
+      "vinyl": "Plak kayıtları",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Henüz oluşturulan bir şey yok",
+    "signInPrompt": "Oluşturduğun şarkıları görmek için giriş yap",
+    "title": "Oluştur",
+    "emptyBody": "Yaptığın şarkılar burada görünecek."
+  },
+  "tonight": {
+    "comingSoon": "Çok yakında: İsteklerin ve bu gecenin sırası",
+    "title": "Bu Gece"
   }
 }

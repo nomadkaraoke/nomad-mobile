@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Conectează-te",
     "signOut": "Deconectează-te",
-    "title": "Cont",
     "signedInAs": "Autentificat ca {email}",
-    "language": "Limbă"
+    "language": "Limbă",
+    "credits": "{credits, plural, one {# credit} few {# credite} other {# de credite}}",
+    "title": "Eu",
+    "buyCredits": "Cumpără credite"
   },
   "common": {
     "error": "Ceva nu a funcționat.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Conectează-te la Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Crearea videoclipurilor în aplicație va fi disponibilă în curând.",
-    "makeVideo": "Creează un video karaoke",
-    "signInToMake": "Conectează-te pentru a crea această melodie",
     "artistLabel": "Artist",
-    "titleLabel": "Titlul melodiei"
+    "titleLabel": "Titlul melodiei",
+    "hasKaraoke": "Există versiuni karaoke",
+    "makeIt": "Creează · 1 credit",
+    "noKaraoke": "Nu s-a găsit nicio versiune karaoke"
   },
   "tabs": {
-    "account": "Cont",
-    "find": "Caută",
-    "videos": "Videoclipurile mele"
+    "discover": "Descoperă",
+    "make": "Creează",
+    "me": "Eu",
+    "tonight": "În această seară"
   },
-  "videos": {
-    "emptyBody": "Melodiile pe care le creezi vor apărea aici.",
-    "emptyTitle": "Niciun videoclip încă",
-    "signInPrompt": "Conectează-te pentru a-ți vedea videoclipurile"
+  "make": {
+    "cost": "Cost: 1 credit · Ai {credits}",
+    "costOnly": "Cost: 1 credit",
+    "createFailed": "Nu am putut începe procesarea. Încearcă din nou.",
+    "findSong": "Găsește o piesă",
+    "getCredits": "Cumpără credite",
+    "hideOtherSources": "Ascunde celelalte surse",
+    "noIntent": "Alege mai întâi o piesă pe care vrei să o creezi.",
+    "noResults": "Nu am găsit fișierul audio pentru această piesă",
+    "notSure": "Nu suntem siguri care dintre acestea este cea potrivită. Alege una:",
+    "perfectMatch": "Potrivire perfectă",
+    "publicNote": "Postat public pe YouTube, astfel încât să îl poți distribui",
+    "reason": {
+      "compilation": "Compilație",
+      "hiRes": "Album Hi-Res",
+      "hiResLossless": "24-bit lossless",
+      "live": "Înregistrare live",
+      "lossless": "lossless",
+      "lossy": "audio comprimat",
+      "lowAvailability": "descărcarea poate dura mai mult",
+      "other": "Altă versiune",
+      "slower": "descărcarea ar putea fi mai lentă",
+      "studioAlbum": "Album de studio",
+      "views": "{views, plural, one {# vizionare} few {# vizionări} other {# de vizionări}}",
+      "reliable": "descărcare sigură",
+      "single": "Individual",
+      "spotify": "Spotify",
+      "vinyl": "Rip de pe vinil",
+      "youtube": "YouTube"
+    },
+    "recommended": "Recomandat",
+    "searchExpired": "Căutarea a expirat, așa că am căutat din nou.",
+    "searchFailed": "Nu s-a putut căuta piesa audio. Încearcă din nou.",
+    "searching": "Căutăm cel mai bun audio…",
+    "searchingHint": "Poate dura până la un minut.",
+    "seeOtherSources": "Vezi celelalte surse ({count})",
+    "submit": "Creează",
+    "youtubeInvalid": "Acesta nu pare a fi un link de YouTube valid.",
+    "youtubeLabel": "Link de YouTube",
+    "youtubeToggle": "Lipește mai degrabă un link de YouTube",
+    "category": {
+      "best": "Cea mai bună alegere",
+      "compilations": "Compilații",
+      "hiRes": "Înaltă rezoluție 24-bit",
+      "live": "Versiuni live",
+      "other": "Altele",
+      "singles": "Single-uri",
+      "spotify": "Spotify",
+      "studio": "Albume de studio",
+      "vinyl": "Rip-uri de pe vinil",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Nu ai creat nicio piesă încă",
+    "signInPrompt": "Conectează-te pentru a vedea piesele pe care le-ai creat",
+    "title": "Creează",
+    "emptyBody": "Melodiile pe care le creezi vor apărea aici."
+  },
+  "tonight": {
+    "comingSoon": "În curând: cererile tale și lista de redare pentru diseară",
+    "title": "În această seară"
   }
 }

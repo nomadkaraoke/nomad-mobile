@@ -7,9 +7,10 @@
     "continue": "Continue"
   },
   "tabs": {
-    "find": "Find",
-    "videos": "My Videos",
-    "account": "Account"
+    "discover": "Discover",
+    "tonight": "Tonight",
+    "make": "Make",
+    "me": "Me"
   },
   "find": {
     "searchPlaceholder": "Search songs or artists",
@@ -19,11 +20,11 @@
     "karaokeVersions": "{count, plural, =0 {No karaoke versions yet} one {# karaoke version} other {# karaoke versions}}"
   },
   "song": {
-    "makeVideo": "Make karaoke video",
-    "signInToMake": "Sign in to make this song",
     "artistLabel": "Artist",
     "titleLabel": "Song title",
-    "comingSoon": "Making videos in the app is coming soon."
+    "makeIt": "Make it · 1 credit",
+    "noKaraoke": "No karaoke version found",
+    "hasKaraoke": "Karaoke versions exist"
   },
   "signIn": {
     "emailTitle": "Sign in",
@@ -57,16 +58,76 @@
     "resend": "Send a new code",
     "resent": "We sent a new code to {email}."
   },
-  "videos": {
-    "emptyTitle": "No videos yet",
-    "emptyBody": "Songs you make will appear here.",
-    "signInPrompt": "Sign in to see your videos"
-  },
   "account": {
-    "title": "Account",
     "signIn": "Sign in",
     "signOut": "Sign out",
     "signedInAs": "Signed in as {email}",
-    "language": "Language"
+    "language": "Language",
+    "title": "Me",
+    "credits": "{credits, plural, one {# credit} other {# credits}}",
+    "buyCredits": "Buy credits"
+  },
+  "tonight": {
+    "title": "Tonight",
+    "comingSoon": "Coming soon: your requests and tonight's queue"
+  },
+  "makeTab": {
+    "title": "Make",
+    "emptyTitle": "Nothing made yet",
+    "emptyBody": "Songs you make will appear here.",
+    "signInPrompt": "Sign in to see the songs you've made"
+  },
+  "make": {
+    "searching": "Finding the best audio…",
+    "searchingHint": "This can take up to a minute.",
+    "searchFailed": "Couldn't search for audio. Try again.",
+    "perfectMatch": "Perfect match",
+    "recommended": "Recommended",
+    "seeOtherSources": "See other sources ({count})",
+    "hideOtherSources": "Hide other sources",
+    "notSure": "We're not sure which of these is right. Pick one:",
+    "noResults": "We couldn't find audio for this song",
+    "youtubeToggle": "Paste a YouTube link instead",
+    "youtubeLabel": "YouTube link",
+    "youtubeInvalid": "That doesn't look like a YouTube link.",
+    "costOnly": "Cost 1 credit",
+    "cost": "Cost 1 credit · You have {credits}",
+    "publicNote": "Posted publicly on YouTube so you can share it",
+    "submit": "Make it",
+    "createFailed": "Couldn't start this one. Try again.",
+    "searchExpired": "That search expired, so we looked again.",
+    "getCredits": "Get credits",
+    "noIntent": "Pick a song to make first.",
+    "findSong": "Find a song",
+    "reason": {
+      "studioAlbum": "Studio album",
+      "single": "Single",
+      "hiRes": "Hi-res album",
+      "live": "Live recording",
+      "compilation": "Compilation",
+      "vinyl": "Vinyl rip",
+      "spotify": "Spotify",
+      "youtube": "YouTube",
+      "other": "Other release",
+      "lossless": "lossless",
+      "hiResLossless": "24-bit lossless",
+      "lossy": "compressed audio",
+      "reliable": "reliable download",
+      "slower": "may be slower to fetch",
+      "lowAvailability": "may take longer to fetch",
+      "views": "{views} views"
+    },
+    "category": {
+      "best": "Best choice",
+      "hiRes": "Hi-res 24-bit",
+      "studio": "Studio albums",
+      "singles": "Singles",
+      "live": "Live versions",
+      "compilations": "Compilations",
+      "vinyl": "Vinyl rips",
+      "spotify": "Spotify",
+      "youtube": "YouTube",
+      "other": "Other"
+    }
   }
 }

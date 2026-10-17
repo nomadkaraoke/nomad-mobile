@@ -2,9 +2,11 @@
   "account": {
     "signIn": "サインイン",
     "signOut": "サインアウト",
-    "title": "アカウント",
     "signedInAs": "{email} でログイン中",
-    "language": "言語"
+    "language": "言語",
+    "credits": "{credits, plural, one {# クレジット} other {# クレジット}}",
+    "title": "マイページ",
+    "buyCredits": "クレジットを購入"
   },
   "common": {
     "error": "問題が発生しました。",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Nomad Karaokeにサインイン"
   },
   "song": {
-    "comingSoon": "アプリ内での動画作成機能は近日公開予定です。",
-    "makeVideo": "カラオケ動画を作成",
-    "signInToMake": "サインインしてこの曲を作成",
     "artistLabel": "アーティスト",
-    "titleLabel": "曲名"
+    "titleLabel": "曲名",
+    "hasKaraoke": "カラオケ音源あり",
+    "makeIt": "作成する · 1クレジット",
+    "noKaraoke": "カラオケ音源が見つかりません"
   },
   "tabs": {
-    "account": "アカウント",
-    "find": "さがす",
-    "videos": "マイ動画"
+    "discover": "見つける",
+    "make": "作成",
+    "me": "マイページ",
+    "tonight": "Tonight"
   },
-  "videos": {
-    "emptyBody": "作成した曲がここに表示されます。",
-    "emptyTitle": "動画はまだありません",
-    "signInPrompt": "サインインして動画を表示"
+  "make": {
+    "cost": "消費：1クレジット · 所持：{credits}",
+    "costOnly": "消費：1クレジット",
+    "createFailed": "開始できませんでした。もう一度お試しください。",
+    "findSong": "曲を探す",
+    "getCredits": "クレジットを購入",
+    "hideOtherSources": "他の音源を非表示",
+    "noIntent": "まずは作成する曲を選んでください。",
+    "noResults": "この曲の音源が見つかりませんでした",
+    "notSure": "どれが適切か判断できませんでした。ひとつ選んでください：",
+    "perfectMatch": "完全一致",
+    "publicNote": "共有できるようにYouTubeで一般公開されます",
+    "reason": {
+      "compilation": "コンピレーション",
+      "hiRes": "ハイレゾアルバム",
+      "hiResLossless": "24-bit ロスレス",
+      "live": "ライブ音源",
+      "lossless": "ロスレス",
+      "lossy": "圧縮音源",
+      "lowAvailability": "取得に時間がかかる場合があります",
+      "other": "その他のリリース",
+      "slower": "読み込みに時間がかかる場合があります",
+      "studioAlbum": "スタジオアルバム",
+      "views": "{views} 回再生",
+      "reliable": "安定したダウンロード",
+      "single": "シングル",
+      "spotify": "Spotify",
+      "vinyl": "レコード音源",
+      "youtube": "YouTube"
+    },
+    "recommended": "おすすめ",
+    "searchExpired": "検索の有効期限が切れたため、再検索しました。",
+    "searchFailed": "音源を検索できませんでした。もう一度お試しください。",
+    "searching": "最適な音源を探しています…",
+    "searchingHint": "最大で1分ほどかかる場合があります。",
+    "seeOtherSources": "他の音源を見る ({count})",
+    "submit": "作成する",
+    "youtubeInvalid": "YouTubeのリンクではないようです。",
+    "youtubeLabel": "YouTubeリンク",
+    "youtubeToggle": "代わりにYouTubeリンクを貼り付ける",
+    "category": {
+      "best": "おすすめ",
+      "compilations": "コンピレーション",
+      "hiRes": "ハイレゾ 24-bit",
+      "live": "ライブバージョン",
+      "other": "その他",
+      "singles": "シングル",
+      "spotify": "Spotify",
+      "studio": "スタジオアルバム",
+      "vinyl": "レコード音源",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "作成した曲はまだありません",
+    "signInPrompt": "作成した曲を見るにはサインインしてください",
+    "title": "作成",
+    "emptyBody": "作成した曲がここに表示されます。"
+  },
+  "tonight": {
+    "comingSoon": "近日公開：リクエスト一覧と今夜のキュー",
+    "title": "Tonight"
   }
 }

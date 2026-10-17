@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Увійти",
     "signOut": "Вийти",
-    "title": "Акаунт",
     "signedInAs": "Виконано вхід як {email}",
-    "language": "Мова"
+    "language": "Мова",
+    "credits": "{credits, plural, one {# кредит} few {# кредити} many {# кредитів} other {# кредиту}}",
+    "title": "Профіль",
+    "buyCredits": "Купити кредити"
   },
   "common": {
     "error": "Щось пішло не так.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Увійти до Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Створення відео в додатку з'явиться незабаром.",
-    "makeVideo": "Створити караоке-відео",
-    "signInToMake": "Увійди, щоб створити цю пісню",
     "artistLabel": "Виконавець",
-    "titleLabel": "Назва пісні"
+    "titleLabel": "Назва пісні",
+    "hasKaraoke": "Є караоке-версії",
+    "makeIt": "Створити · 1 кредит",
+    "noKaraoke": "Караоке-версій не знайдено"
   },
   "tabs": {
-    "account": "Акаунт",
-    "find": "Пошук",
-    "videos": "Мої відео"
+    "discover": "Огляд",
+    "make": "Створити",
+    "me": "Профіль",
+    "tonight": "Сьогодні"
   },
-  "videos": {
-    "emptyBody": "Створені тобою пісні з'являтимуться тут.",
-    "emptyTitle": "Відео ще немає",
-    "signInPrompt": "Увійди, щоб побачити свої відео"
+  "make": {
+    "cost": "Вартість: 1 кредит · У тебе {credits}",
+    "costOnly": "Вартість: 1 кредит",
+    "createFailed": "Не вдалося розпочати. Спробуй ще раз.",
+    "findSong": "Знайти пісню",
+    "getCredits": "Отримати кредити",
+    "hideOtherSources": "Сховати інші джерела",
+    "noIntent": "Спочатку обери пісню.",
+    "noResults": "Ми не змогли знайти аудіо для цієї пісні",
+    "notSure": "Ми не впевнені, який варіант підходить. Обери один із них:",
+    "perfectMatch": "Ідеальний збіг",
+    "publicNote": "Публікується у відкритому доступі на YouTube, щоб можна було поділитися",
+    "reason": {
+      "compilation": "Збірка",
+      "hiRes": "Hi-res альбом",
+      "hiResLossless": "24-бітний lossless",
+      "live": "Концертний запис",
+      "lossless": "lossless",
+      "lossy": "стиснене аудіо",
+      "lowAvailability": "завантаження може тривати довше",
+      "other": "Інший реліз",
+      "slower": "завантаження може бути повільнішим",
+      "studioAlbum": "Студійний альбом",
+      "views": "{views, plural, one {# перегляд} few {# перегляди} many {# переглядів} other {# перегляду}}",
+      "reliable": "надійне завантаження",
+      "single": "Одинично",
+      "spotify": "Spotify",
+      "vinyl": "Оцифровка з вінілу",
+      "youtube": "YouTube"
+    },
+    "recommended": "Рекомендовано",
+    "searchExpired": "Термін дії пошуку минув, тому ми повторили його.",
+    "searchFailed": "Не вдалося виконати пошук аудіо. Спробуй ще раз.",
+    "searching": "Шукаємо найкраще аудіо…",
+    "searchingHint": "Це може зайняти до хвилини.",
+    "seeOtherSources": "Інші джерела ({count})",
+    "submit": "Створити",
+    "youtubeInvalid": "Це не схоже на посилання на YouTube.",
+    "youtubeLabel": "Посилання на YouTube",
+    "youtubeToggle": "Вставити посилання на YouTube натомість",
+    "category": {
+      "best": "Найкращий вибір",
+      "compilations": "Збірки",
+      "hiRes": "Висока якість 24-bit",
+      "live": "Живі виступи",
+      "other": "Інше",
+      "singles": "Сингли",
+      "spotify": "Spotify",
+      "studio": "Студійні альбоми",
+      "vinyl": "Оцифровки з вінілу",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Ще нічого не створено",
+    "signInPrompt": "Увійди, щоб побачити створені пісні",
+    "title": "Створити",
+    "emptyBody": "Створені тобою пісні з'являтимуться тут."
+  },
+  "tonight": {
+    "comingSoon": "Незабаром: твої запити та черга на сьогодні",
+    "title": "Сьогодні"
   }
 }

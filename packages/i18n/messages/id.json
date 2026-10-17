@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Masuk",
     "signOut": "Keluar",
-    "title": "Akun",
     "signedInAs": "Masuk sebagai {email}",
-    "language": "Bahasa"
+    "language": "Bahasa",
+    "credits": "{credits, plural, other {# kredit}}",
+    "title": "Saya",
+    "buyCredits": "Beli kredit"
   },
   "common": {
     "error": "Terjadi kesalahan.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Masuk ke Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Fitur pembuatan video di aplikasi akan segera hadir.",
-    "makeVideo": "Buat video karaoke",
-    "signInToMake": "Masuk untuk membuat lagu ini",
     "artistLabel": "Artis",
-    "titleLabel": "Judul lagu"
+    "titleLabel": "Judul lagu",
+    "hasKaraoke": "Versi karaoke tersedia",
+    "makeIt": "Buat · 1 kredit",
+    "noKaraoke": "Versi karaoke tidak ditemukan"
   },
   "tabs": {
-    "account": "Akun",
-    "find": "Cari",
-    "videos": "Video Saya"
+    "discover": "Jelajahi",
+    "make": "Buat",
+    "me": "Saya",
+    "tonight": "Malam Ini"
   },
-  "videos": {
-    "emptyBody": "Lagu yang Anda buat akan muncul di sini.",
-    "emptyTitle": "Belum ada video",
-    "signInPrompt": "Masuk untuk melihat video Anda"
+  "make": {
+    "cost": "Biaya 1 kredit · Anda memiliki {credits}",
+    "costOnly": "Biaya 1 kredit",
+    "createFailed": "Tidak dapat memproses lagu ini. Coba lagi.",
+    "findSong": "Cari lagu",
+    "getCredits": "Beli kredit",
+    "hideOtherSources": "Sembunyikan sumber lain",
+    "noIntent": "Pilih lagu yang ingin dibuat terlebih dahulu.",
+    "noResults": "Kami tidak dapat menemukan audio untuk lagu ini",
+    "notSure": "Kami tidak yakin mana yang tepat. Pilih salah satu:",
+    "perfectMatch": "Sangat cocok",
+    "publicNote": "Diposting secara publik di YouTube agar bisa Anda bagikan",
+    "reason": {
+      "compilation": "Kompilasi",
+      "hiRes": "Album hi-res",
+      "hiResLossless": "24-bit lossless",
+      "live": "Rekaman live",
+      "lossless": "lossless",
+      "lossy": "audio terkompresi",
+      "lowAvailability": "mungkin butuh waktu lebih lama untuk dimuat",
+      "other": "Rilis lainnya",
+      "slower": "mungkin lebih lambat dimuat",
+      "studioAlbum": "Album studio",
+      "views": "{views} tayangan",
+      "reliable": "unduhan lancar",
+      "single": "Tunggal",
+      "spotify": "Spotify",
+      "vinyl": "Rip vinyl",
+      "youtube": "YouTube"
+    },
+    "recommended": "Direkomendasikan",
+    "searchExpired": "Pencarian telah kedaluwarsa, jadi kami mencarinya kembali.",
+    "searchFailed": "Tidak dapat mencari audio. Coba lagi.",
+    "searching": "Mencari audio terbaik…",
+    "searchingHint": "Ini bisa memakan waktu hingga satu menit.",
+    "seeOtherSources": "Lihat sumber lain ({count})",
+    "submit": "Buat",
+    "youtubeInvalid": "Tautan tidak tampak seperti tautan YouTube.",
+    "youtubeLabel": "Tautan YouTube",
+    "youtubeToggle": "Tempel tautan YouTube sebagai gantinya",
+    "category": {
+      "best": "Pilihan terbaik",
+      "compilations": "Kompilasi",
+      "hiRes": "Resolusi tinggi 24-bit",
+      "live": "Versi live",
+      "other": "Lainnya",
+      "singles": "Single",
+      "spotify": "Spotify",
+      "studio": "Album studio",
+      "vinyl": "Rip vinyl",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Belum ada yang dibuat",
+    "signInPrompt": "Masuk untuk melihat lagu-lagu yang telah Anda buat",
+    "title": "Buat",
+    "emptyBody": "Lagu yang Anda buat akan muncul di sini."
+  },
+  "tonight": {
+    "comingSoon": "Segera hadir: lagu permintaan Anda dan antrean malam ini",
+    "title": "Malam Ini"
   }
 }

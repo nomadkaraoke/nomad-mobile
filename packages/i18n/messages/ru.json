@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Войти",
     "signOut": "Выйти",
-    "title": "Аккаунт",
     "signedInAs": "Выполнен вход как {email}",
-    "language": "Язык"
+    "language": "Язык",
+    "credits": "{credits, plural, one {# кредит} few {# кредита} many {# кредитов} other {# кредита}}",
+    "title": "Профиль",
+    "buyCredits": "Купить кредиты"
   },
   "common": {
     "error": "Что-то пошло не так.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Войти в Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Создание видео в приложении появится совсем скоро.",
-    "makeVideo": "Создать караоке-видео",
-    "signInToMake": "Войди, чтобы создать караоке для этой песни",
     "artistLabel": "Исполнитель",
-    "titleLabel": "Название песни"
+    "titleLabel": "Название песни",
+    "hasKaraoke": "Есть караоке-версии",
+    "makeIt": "Создать · 1 кредит",
+    "noKaraoke": "Караоке-версия не найдена"
   },
   "tabs": {
-    "account": "Аккаунт",
-    "find": "Поиск",
-    "videos": "Мои видео"
+    "discover": "Каталог",
+    "make": "Создать",
+    "me": "Профиль",
+    "tonight": "Вечер"
   },
-  "videos": {
-    "emptyBody": "Созданные тобой песни появятся здесь.",
-    "emptyTitle": "Видео пока нет",
-    "signInPrompt": "Войди, чтобы увидеть свои видео"
+  "make": {
+    "cost": "Стоимость: 1 кредит · У тебя {credits}",
+    "costOnly": "Стоимость: 1 кредит",
+    "createFailed": "Не удалось начать. Попробуй ещё раз.",
+    "findSong": "Найти песню",
+    "getCredits": "Купить кредиты",
+    "hideOtherSources": "Скрыть другие источники",
+    "noIntent": "Сначала выбери песню для создания.",
+    "noResults": "Мы не смогли найти аудио для этой песни",
+    "notSure": "Не уверены, какой вариант подходит. Выбери нужный:",
+    "perfectMatch": "Точное совпадение",
+    "publicNote": "Публикуется в открытом доступе на YouTube, чтобы можно было поделиться",
+    "reason": {
+      "compilation": "Сборник",
+      "hiRes": "Hi-Res альбом",
+      "hiResLossless": "24-бит lossless",
+      "live": "Концертная запись",
+      "lossless": "lossless",
+      "lossy": "сжатое аудио",
+      "lowAvailability": "поиск и скачивание могут занять больше времени",
+      "other": "Другой релиз",
+      "slower": "скачивание может быть медленнее",
+      "studioAlbum": "Студийный альбом",
+      "views": "{views, plural, one {# просмотр} few {# просмотра} many {# просмотров} other {# просмотра}}",
+      "reliable": "надежное скачивание",
+      "single": "Одиночный",
+      "spotify": "Spotify",
+      "vinyl": "Оцифровка с винила",
+      "youtube": "YouTube"
+    },
+    "recommended": "Рекомендуем",
+    "searchExpired": "Результаты поиска устарели, поэтому мы повторили поиск.",
+    "searchFailed": "Не удалось выполнить поиск аудио. Попробуй ещё раз.",
+    "searching": "Ищем лучшее аудио…",
+    "searchingHint": "Это может занять до минуты.",
+    "seeOtherSources": "Другие источники ({count})",
+    "submit": "Создать",
+    "youtubeInvalid": "Это не похоже на ссылку на YouTube.",
+    "youtubeLabel": "Ссылка на YouTube",
+    "youtubeToggle": "Вставить ссылку на YouTube",
+    "category": {
+      "best": "Лучший выбор",
+      "compilations": "Сборники",
+      "hiRes": "Высокое разрешение 24-bit",
+      "live": "Концертные версии",
+      "other": "Другое",
+      "singles": "Синглы",
+      "spotify": "Spotify",
+      "studio": "Студийные альбомы",
+      "vinyl": "Оцифровки с винила",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Пока ничего не создано",
+    "signInPrompt": "Войди, чтобы увидеть созданные песни",
+    "title": "Создать",
+    "emptyBody": "Созданные тобой песни появятся здесь."
+  },
+  "tonight": {
+    "comingSoon": "Скоро: твои треки и очередь на сегодня",
+    "title": "Вечер"
   }
 }

@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Inloggen",
     "signOut": "Uitloggen",
-    "title": "Account",
     "signedInAs": "Ingelogd als {email}",
-    "language": "Taal"
+    "language": "Taal",
+    "credits": "{credits, plural, one {# credit} other {# credits}}",
+    "title": "Account",
+    "buyCredits": "Credits kopen"
   },
   "common": {
     "error": "Er is iets misgegaan.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Log in bij Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Binnenkort kun je video's maken in de app.",
-    "makeVideo": "Karaokevideo maken",
-    "signInToMake": "Log in om dit nummer te maken",
     "artistLabel": "Artiest",
-    "titleLabel": "Titel van het nummer"
+    "titleLabel": "Titel van het nummer",
+    "hasKaraoke": "Karaokeversies beschikbaar",
+    "makeIt": "Maken · 1 credit",
+    "noKaraoke": "Geen karaokeversie gevonden"
   },
   "tabs": {
-    "account": "Account",
-    "find": "Zoeken",
-    "videos": "Mijn video's"
+    "discover": "Ontdekken",
+    "make": "Maken",
+    "me": "Account",
+    "tonight": "Vanavond"
   },
-  "videos": {
-    "emptyBody": "Nummers die je maakt verschijnen hier.",
-    "emptyTitle": "Nog geen video's",
-    "signInPrompt": "Log in om je video's te bekijken"
+  "make": {
+    "cost": "Kost 1 credit · Je hebt {credits}",
+    "costOnly": "Kost 1 credit",
+    "createFailed": "Kon deze niet starten. Probeer het opnieuw.",
+    "findSong": "Zoek een nummer",
+    "getCredits": "Credits kopen",
+    "hideOtherSources": "Andere bronnen verbergen",
+    "noIntent": "Kies eerst een nummer om te maken.",
+    "noResults": "We konden geen audio vinden voor dit nummer",
+    "notSure": "We weten niet zeker welke de juiste is. Kies er een:",
+    "perfectMatch": "Perfecte match",
+    "publicNote": "Openbaar geplaatst op YouTube zodat je het kunt delen",
+    "reason": {
+      "compilation": "Compilatie",
+      "hiRes": "Hi-res album",
+      "hiResLossless": "24-bit lossless",
+      "live": "Live-opname",
+      "lossless": "lossless",
+      "lossy": "gecomprimeerde audio",
+      "lowAvailability": "kan langer duren om op te halen",
+      "other": "Andere release",
+      "slower": "kan trager zijn om op te halen",
+      "studioAlbum": "Studioalbum",
+      "views": "{views} weergaven",
+      "reliable": "betrouwbare download",
+      "single": "Enkel",
+      "spotify": "Spotify",
+      "vinyl": "Vinyl rip",
+      "youtube": "YouTube"
+    },
+    "recommended": "Aanbevolen",
+    "searchExpired": "Die zoekopdracht is verlopen, dus we hebben opnieuw gezocht.",
+    "searchFailed": "Kon niet zoeken naar audio. Probeer het opnieuw.",
+    "searching": "Beste audio zoeken…",
+    "searchingHint": "Dit kan tot een minuut duren.",
+    "seeOtherSources": "Bekijk andere bronnen ({count})",
+    "submit": "Maken",
+    "youtubeInvalid": "Dat lijkt geen geldige YouTube-link te zijn.",
+    "youtubeLabel": "YouTube-link",
+    "youtubeToggle": "Plak in plaats daarvan een YouTube-link",
+    "category": {
+      "best": "Beste keuze",
+      "compilations": "Compilaties",
+      "hiRes": "Hi-res 24-bit",
+      "live": "Liveversies",
+      "other": "Anders",
+      "singles": "Singles",
+      "spotify": "Spotify",
+      "studio": "Studioalbums",
+      "vinyl": "Vinyl rips",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Nog niets gemaakt",
+    "signInPrompt": "Log in om de nummers te zien die je hebt gemaakt",
+    "title": "Maken",
+    "emptyBody": "Nummers die je maakt verschijnen hier."
+  },
+  "tonight": {
+    "comingSoon": "Binnenkort beschikbaar: je verzoekjes en de wachtrij van vanavond",
+    "title": "Vanavond"
   }
 }

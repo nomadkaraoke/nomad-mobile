@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Log ind",
     "signOut": "Log ud",
-    "title": "Konto",
     "signedInAs": "Logget ind som {email}",
-    "language": "Sprog"
+    "language": "Sprog",
+    "credits": "{credits, plural, one {# kredit} other {# kreditter}}",
+    "title": "Mig",
+    "buyCredits": "Køb kreditter"
   },
   "common": {
     "error": "Der gik noget galt.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Log ind på Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Det bliver snart muligt at lave videoer direkte i appen.",
-    "makeVideo": "Lav karaokevideo",
-    "signInToMake": "Log ind for at lave denne sang",
     "artistLabel": "Kunstner",
-    "titleLabel": "Sangtitel"
+    "titleLabel": "Sangtitel",
+    "hasKaraoke": "Der findes karaoke-versioner",
+    "makeIt": "Lav den · 1 kredit",
+    "noKaraoke": "Ingen karaoke-version fundet"
   },
   "tabs": {
-    "account": "Konto",
-    "find": "Find",
-    "videos": "Mine videoer"
+    "discover": "Udforsk",
+    "make": "Lav",
+    "me": "Mig",
+    "tonight": "I aften"
   },
-  "videos": {
-    "emptyBody": "Sange, du laver, vises her.",
-    "emptyTitle": "Ingen videoer endnu",
-    "signInPrompt": "Log ind for at se dine videoer"
+  "make": {
+    "cost": "Koster 1 kredit · Du har {credits}",
+    "costOnly": "Koster 1 kredit",
+    "createFailed": "Kunne ikke starte denne. Prøv igen.",
+    "findSong": "Find en sang",
+    "getCredits": "Få kreditter",
+    "hideOtherSources": "Skjul andre kilder",
+    "noIntent": "Vælg en sang at lave først.",
+    "noResults": "Vi kunne ikke finde lyd til denne sang",
+    "notSure": "Vi er ikke sikre på, hvilken af disse der er den rigtige. Vælg én:",
+    "perfectMatch": "Perfekt match",
+    "publicNote": "Offentliggøres på YouTube, så du kan dele den",
+    "reason": {
+      "compilation": "Opsamling",
+      "hiRes": "Hi-res-album",
+      "hiResLossless": "24-bit tabsfri",
+      "live": "Liveoptagelse",
+      "lossless": "tabsfri",
+      "lossy": "komprimeret lyd",
+      "lowAvailability": "kan tage længere tid at hente",
+      "other": "Anden udgivelse",
+      "slower": "kan være langsommere at hente",
+      "studioAlbum": "Studiealbum",
+      "views": "{views} visninger",
+      "reliable": "pålidelig download",
+      "single": "Enkelt",
+      "spotify": "Spotify",
+      "vinyl": "Vinyl-rip",
+      "youtube": "YouTube"
+    },
+    "recommended": "Anbefalet",
+    "searchExpired": "Søgningen udløb, så vi søgte igen.",
+    "searchFailed": "Kunne ikke søge efter lyd. Prøv igen.",
+    "searching": "Finder den bedste lyd…",
+    "searchingHint": "Dette kan tage op til et minut.",
+    "seeOtherSources": "Se andre kilder ({count})",
+    "submit": "Lav den",
+    "youtubeInvalid": "Det ligner ikke et gyldigt YouTube-link.",
+    "youtubeLabel": "YouTube-link",
+    "youtubeToggle": "Indsæt et YouTube-link i stedet",
+    "category": {
+      "best": "Bedste valg",
+      "compilations": "Opsamlinger",
+      "hiRes": "Hi-res 24-bit",
+      "live": "Live-versioner",
+      "other": "Andet",
+      "singles": "Singler",
+      "spotify": "Spotify",
+      "studio": "Studiealbum",
+      "vinyl": "Vinyl-rip",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Intet lavet endnu",
+    "signInPrompt": "Log ind for at se de sange, du har lavet",
+    "title": "Lav",
+    "emptyBody": "Sange, du laver, vises her."
+  },
+  "tonight": {
+    "comingSoon": "Kommer snart: dine ønsker og aftenens kø",
+    "title": "I aften"
   }
 }

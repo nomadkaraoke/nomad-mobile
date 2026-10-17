@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Entrar",
     "signOut": "Sair",
-    "title": "Conta",
     "signedInAs": "Logado como {email}",
-    "language": "Idioma"
+    "language": "Idioma",
+    "credits": "{credits, plural, one {# crédito} other {# créditos}}",
+    "title": "Perfil",
+    "buyCredits": "Comprar créditos"
   },
   "common": {
     "error": "Algo deu errado.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Fazer login no Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "A criação de vídeos no app estará disponível em breve.",
-    "makeVideo": "Criar vídeo de karaokê",
-    "signInToMake": "Entre para criar esta música",
     "artistLabel": "Artista",
-    "titleLabel": "Título da música"
+    "titleLabel": "Título da música",
+    "hasKaraoke": "Existem versões de karaokê",
+    "makeIt": "Criar · 1 crédito",
+    "noKaraoke": "Nenhuma versão de karaokê encontrada"
   },
   "tabs": {
-    "account": "Conta",
-    "find": "Buscar",
-    "videos": "Meus Vídeos"
+    "discover": "Descobrir",
+    "make": "Criar",
+    "me": "Perfil",
+    "tonight": "Hoje à noite"
   },
-  "videos": {
-    "emptyBody": "As músicas que você criar aparecerão aqui.",
-    "emptyTitle": "Nenhum vídeo ainda",
-    "signInPrompt": "Entre para ver seus vídeos"
+  "make": {
+    "cost": "Custa 1 crédito · Você tem {credits}",
+    "costOnly": "Custa 1 crédito",
+    "createFailed": "Não foi possível iniciar esta criação. Tente novamente.",
+    "findSong": "Buscar uma música",
+    "getCredits": "Comprar créditos",
+    "hideOtherSources": "Ocultar outras fontes",
+    "noIntent": "Escolha uma música para criar primeiro.",
+    "noResults": "Não encontramos o áudio desta música",
+    "notSure": "Não temos certeza de qual destas opções é a certa. Escolha uma:",
+    "perfectMatch": "Correspondência perfeita",
+    "publicNote": "Publicado no YouTube como público para você poder compartilhar",
+    "reason": {
+      "compilation": "Coletânea",
+      "hiRes": "Álbum em alta resolução",
+      "hiResLossless": "24-bit sem perdas (lossless)",
+      "live": "Gravação ao vivo",
+      "lossless": "Sem perdas (lossless)",
+      "lossy": "Áudio comprimido",
+      "lowAvailability": "pode demorar mais para carregar",
+      "other": "Outro lançamento",
+      "slower": "pode demorar mais para carregar",
+      "studioAlbum": "Álbum de estúdio",
+      "views": "{views} visualizações",
+      "reliable": "download confiável",
+      "single": "Único",
+      "spotify": "Spotify",
+      "vinyl": "Gravação de vinil",
+      "youtube": "YouTube"
+    },
+    "recommended": "Recomendado",
+    "searchExpired": "Essa busca expirou, então pesquisamos novamente.",
+    "searchFailed": "Não foi possível buscar o áudio. Tente novamente.",
+    "searching": "Buscando o melhor áudio…",
+    "searchingHint": "Isso pode levar até um minuto.",
+    "seeOtherSources": "Ver outras fontes ({count})",
+    "submit": "Criar",
+    "youtubeInvalid": "Isso não parece um link do YouTube válido.",
+    "youtubeLabel": "Link do YouTube",
+    "youtubeToggle": "Prefiro colar um link do YouTube",
+    "category": {
+      "best": "Melhor escolha",
+      "compilations": "Coletâneas",
+      "hiRes": "Alta resolução 24-bit",
+      "live": "Versões ao vivo",
+      "other": "Outro",
+      "singles": "Singles",
+      "spotify": "Spotify",
+      "studio": "Álbuns de estúdio",
+      "vinyl": "Gravações de vinil",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Nada criado ainda",
+    "signInPrompt": "Faça login para ver as músicas que você criou",
+    "title": "Criar",
+    "emptyBody": "As músicas que você criar aparecerão aqui."
+  },
+  "tonight": {
+    "comingSoon": "Em breve: seus pedidos e a fila de hoje à noite",
+    "title": "Hoje à noite"
   }
 }

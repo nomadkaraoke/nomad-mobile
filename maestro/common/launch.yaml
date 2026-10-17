@@ -23,5 +23,5 @@ appId: com.nomadkaraoke.mobile
       - tapOn: "Close"
 - extendedWaitUntil:
     visible:
-      id: "find-search-input"
+      id: "discover-search-input"
     timeout: 60000

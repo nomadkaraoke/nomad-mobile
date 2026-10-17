@@ -2,9 +2,11 @@
   "account": {
     "signIn": "เข้าสู่ระบบ",
     "signOut": "ออกจากระบบ",
-    "title": "บัญชี",
     "signedInAs": "เข้าสู่ระบบด้วย {email}",
-    "language": "ภาษา"
+    "language": "ภาษา",
+    "credits": "{credits, plural, one {# เครดิต} other {# เครดิต}}",
+    "title": "บัญชีของฉัน",
+    "buyCredits": "ซื้อเครดิต"
   },
   "common": {
     "error": "เกิดข้อผิดพลาดบางอย่าง",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "เข้าสู่ระบบ Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "การสร้างวิดีโอบนแอปจะเปิดให้ใช้งานเร็ว ๆ นี้",
-    "makeVideo": "ทำวิดีโอคาราโอเกะ",
-    "signInToMake": "เข้าสู่ระบบเพื่อทำเพลงนี้",
     "artistLabel": "ศิลปิน",
-    "titleLabel": "ชื่อเพลง"
+    "titleLabel": "ชื่อเพลง",
+    "hasKaraoke": "มีเวอร์ชันคาราโอเกะแล้ว",
+    "makeIt": "สร้างเลย · 1 เครดิต",
+    "noKaraoke": "ไม่พบเวอร์ชันคาราโอเกะ"
   },
   "tabs": {
-    "account": "บัญชี",
-    "find": "ค้นหา",
-    "videos": "วิดีโอของฉัน"
+    "discover": "ค้นพบ",
+    "make": "สร้าง",
+    "me": "ฉัน",
+    "tonight": "คืนนี้"
   },
-  "videos": {
-    "emptyBody": "เพลงที่คุณทำจะแสดงที่นี่",
-    "emptyTitle": "ยังไม่มีวิดีโอ",
-    "signInPrompt": "เข้าสู่ระบบเพื่อดูวิดีโอของคุณ"
+  "make": {
+    "cost": "ใช้ 1 เครดิต · คุณมี {credits}",
+    "costOnly": "ใช้ 1 เครดิต",
+    "createFailed": "ไม่สามารถเริ่มรายการนี้ได้ ลองใหม่อีกครั้ง",
+    "findSong": "ค้นหาเพลง",
+    "getCredits": "ซื้อเครดิต",
+    "hideOtherSources": "ซ่อนแหล่งเสียงอื่น ๆ",
+    "noIntent": "เลือกเพลงที่จะสร้างก่อน",
+    "noResults": "เราไม่พบไฟล์เสียงสำหรับเพลงนี้",
+    "notSure": "เราไม่แน่ใจว่าเวอร์ชันไหนถูกต้อง เลือกหนึ่งเวอร์ชัน:",
+    "perfectMatch": "ตรงกันเป๊ะ",
+    "publicNote": "เผยแพร่เป็นสาธารณะบน YouTube เพื่อให้คุณแชร์ได้",
+    "reason": {
+      "compilation": "อัลบั้มรวมเพลง",
+      "hiRes": "อัลบั้ม Hi-res",
+      "hiResLossless": "24-bit lossless",
+      "live": "บันทึกการแสดงสด",
+      "lossless": "lossless",
+      "lossy": "เสียงแบบบีบอัด",
+      "lowAvailability": "อาจใช้เวลาดึงข้อมูลนานขึ้น",
+      "other": "เวอร์ชันอื่น ๆ",
+      "slower": "อาจใช้เวลาดึงข้อมูลช้าลง",
+      "studioAlbum": "อัลบั้มสตูดิโอ",
+      "views": "ยอดดู {views} ครั้ง",
+      "reliable": "ดาวน์โหลดได้เสถียร",
+      "single": "แบบเดี่ยว",
+      "spotify": "Spotify",
+      "vinyl": "ไฟล์จากแผ่นเสียง",
+      "youtube": "YouTube"
+    },
+    "recommended": "แนะนำ",
+    "searchExpired": "ผลการค้นหาหมดอายุแล้ว เราจึงค้นหาใหม่อีกครั้ง",
+    "searchFailed": "ค้นหาไฟล์เสียงไม่สำเร็จ ลองใหม่อีกครั้ง",
+    "searching": "กำลังค้นหาไฟล์เสียงที่ดีที่สุด…",
+    "searchingHint": "ขั้นตอนนี้อาจใช้เวลาถึง 1 นาที",
+    "seeOtherSources": "ดูแหล่งเสียงอื่น ๆ ({count})",
+    "submit": "สร้างเลย",
+    "youtubeInvalid": "ดูเหมือนไม่ใช่ลิงก์ YouTube ที่ถูกต้อง",
+    "youtubeLabel": "ลิงก์ YouTube",
+    "youtubeToggle": "วางลิงก์ YouTube แทน",
+    "category": {
+      "best": "ตัวเลือกที่ดีที่สุด",
+      "compilations": "อัลบั้มรวมเพลง",
+      "hiRes": "ความละเอียดสูง 24-bit",
+      "live": "เวอร์ชันแสดงสด",
+      "other": "อื่นๆ",
+      "singles": "ซิงเกิล",
+      "spotify": "Spotify",
+      "studio": "สตูดิโออัลบั้ม",
+      "vinyl": "ไฟล์จากแผ่นเสียง",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "ยังไม่ได้สร้างอะไรเลย",
+    "signInPrompt": "เข้าสู่ระบบเพื่อดูเพลงที่คุณเคยสร้าง",
+    "title": "สร้าง",
+    "emptyBody": "เพลงที่คุณทำจะแสดงที่นี่"
+  },
+  "tonight": {
+    "comingSoon": "เร็ว ๆ นี้: เพลงที่คุณขอและคิวสำหรับคืนนี้",
+    "title": "คืนนี้"
   }
 }

@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Přihlásit se",
     "signOut": "Odhlásit se",
-    "title": "Účet",
     "signedInAs": "Přihlášen jako {email}",
-    "language": "Jazyk"
+    "language": "Jazyk",
+    "credits": "{credits, plural, one {# kredit} few {# kredity} other {# kreditů}}",
+    "title": "Já",
+    "buyCredits": "Koupit kredity"
   },
   "common": {
     "error": "Něco se pokazilo.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Přihlas se do Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Tvorba videí přímo v aplikaci už brzy.",
-    "makeVideo": "Vytvořit karaoke video",
-    "signInToMake": "Pro vytvoření této skladby se přihlas",
     "artistLabel": "Umělec",
-    "titleLabel": "Název písně"
+    "titleLabel": "Název písně",
+    "hasKaraoke": "Karaoke verze existují",
+    "makeIt": "Vytvořit · 1 kredit",
+    "noKaraoke": "Nebyla nalezena žádná karaoke verze"
   },
   "tabs": {
-    "account": "Účet",
-    "find": "Hledat",
-    "videos": "Moje videa"
+    "discover": "Objevovat",
+    "make": "Vytvořit",
+    "me": "Já",
+    "tonight": "Dnes večer"
   },
-  "videos": {
-    "emptyBody": "Tady se zobrazí skladby, které vytvoříš.",
-    "emptyTitle": "Zatím žádná videa",
-    "signInPrompt": "Přihlas se a podívej se na svá videa"
+  "make": {
+    "cost": "Stojí 1 kredit · Máš {credits}",
+    "costOnly": "Stojí 1 kredit",
+    "createFailed": "Tohle se nepodařilo spustit. Zkus to znovu.",
+    "findSong": "Najít skladbu",
+    "getCredits": "Získat kredity",
+    "hideOtherSources": "Skrýt ostatní zdroje",
+    "noIntent": "Nejprve vyber skladbu, kterou chceš vytvořit.",
+    "noResults": "Pro tuto skladbu se nám nepodařilo najít zvuk",
+    "notSure": "Nejsme si jistí, která z nich je ta pravá. Jednu vyber:",
+    "perfectMatch": "Přesná shoda",
+    "publicNote": "Zveřejněno veřejně na YouTube, takže to můžeš sdílet",
+    "reason": {
+      "compilation": "Kompilace",
+      "hiRes": "Hi-res album",
+      "hiResLossless": "24bitový bezeztrátový zvuk",
+      "live": "Živá nahrávka",
+      "lossless": "bezeztrátový zvuk",
+      "lossy": "komprimovaný zvuk",
+      "lowAvailability": "načítání může trvat déle",
+      "other": "Jiné vydání",
+      "slower": "načítání může být pomalejší",
+      "studioAlbum": "Studiové album",
+      "views": "{views, plural, one {# zhlédnutí} few {# zhlédnutí} other {# zhlédnutí}}",
+      "reliable": "spolehlivé stahování",
+      "single": "Jednotlivě",
+      "spotify": "Spotify",
+      "vinyl": "Rip z vinylu",
+      "youtube": "YouTube"
+    },
+    "recommended": "Doporučeno",
+    "searchExpired": "Platnost vyhledávání vypršela, tak jsme to zkusili znovu.",
+    "searchFailed": "Zvuk se nepodařilo vyhledat. Zkus to znovu.",
+    "searching": "Hledáme nejlepší zvuk…",
+    "searchingHint": "Může to trvat až minutu.",
+    "seeOtherSources": "Zobrazit další zdroje ({count})",
+    "submit": "Vytvořit",
+    "youtubeInvalid": "Tohle nevypadá jako odkaz na YouTube.",
+    "youtubeLabel": "Odkaz na YouTube",
+    "youtubeToggle": "Místo toho vložit odkaz na YouTube",
+    "category": {
+      "best": "Nejlepší volba",
+      "compilations": "Kompilace",
+      "hiRes": "Vysoké rozlišení 24-bit",
+      "live": "Živé verze",
+      "other": "Jiné",
+      "singles": "Singly",
+      "spotify": "Spotify",
+      "studio": "Studiová alba",
+      "vinyl": "Ripy z vinylu",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Zatím tu nic není",
+    "signInPrompt": "Přihlas se a podívej se na skladby, které už máš hotové",
+    "title": "Vytvořit",
+    "emptyBody": "Tady se zobrazí skladby, které vytvoříš."
+  },
+  "tonight": {
+    "comingSoon": "Již brzy: tvoje písničky na přání a dnešní pořadník",
+    "title": "Dnes večer"
   }
 }

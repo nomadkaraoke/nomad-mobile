@@ -2,9 +2,11 @@
   "account": {
     "signIn": "登录",
     "signOut": "退出登录",
-    "title": "账户",
     "signedInAs": "已登录为 {email}",
-    "language": "语言"
+    "language": "语言",
+    "credits": "{credits, plural, one {# 点积分} other {# 点积分}}",
+    "title": "我的",
+    "buyCredits": "购买点数"
   },
   "common": {
     "error": "出错了。",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "登录 Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "应用内视频制作功能即将推出。",
-    "makeVideo": "制作卡拉OK视频",
-    "signInToMake": "登录后即可制作这首歌曲",
     "artistLabel": "歌手",
-    "titleLabel": "歌曲名称"
+    "titleLabel": "歌曲名称",
+    "hasKaraoke": "已有卡拉OK版本",
+    "makeIt": "制作 · 1 点积分",
+    "noKaraoke": "未找到卡拉OK版本"
   },
   "tabs": {
-    "account": "账户",
-    "find": "发现",
-    "videos": "我的视频"
+    "discover": "发现",
+    "make": "制作",
+    "me": "我的",
+    "tonight": "今晚"
   },
-  "videos": {
-    "emptyBody": "你制作的歌曲会显示在这里。",
-    "emptyTitle": "暂无视频",
-    "signInPrompt": "登录后查看你的视频"
+  "make": {
+    "cost": "消耗 1 点积分 · 现有 {credits}",
+    "costOnly": "消耗 1 点积分",
+    "createFailed": "无法开始制作。请重试。",
+    "findSong": "查找歌曲",
+    "getCredits": "获取积分",
+    "hideOtherSources": "隐藏其他来源",
+    "noIntent": "请先选择要制作的歌曲。",
+    "noResults": "未找到这首歌的音频",
+    "notSure": "我们不确定哪一个是正确的，请选择一个：",
+    "perfectMatch": "最佳匹配",
+    "publicNote": "公开发布至 YouTube，方便你随时分享",
+    "reason": {
+      "compilation": "精选集",
+      "hiRes": "高解析度专辑",
+      "hiResLossless": "24 位无损",
+      "live": "现场录音",
+      "lossless": "无损",
+      "lossy": "压缩音频",
+      "lowAvailability": "获取可能需要更长时间",
+      "other": "其他发行版本",
+      "slower": "获取速度可能较慢",
+      "studioAlbum": "录音室专辑",
+      "views": "{views} 次观看",
+      "reliable": "下载稳定",
+      "single": "单曲",
+      "spotify": "Spotify",
+      "vinyl": "黑胶转录",
+      "youtube": "YouTube"
+    },
+    "recommended": "推荐",
+    "searchExpired": "搜索已超时，已为你重新搜索。",
+    "searchFailed": "无法搜索音频。请重试。",
+    "searching": "正在寻找最佳音频…",
+    "searchingHint": "这可能需要约一分钟时间。",
+    "seeOtherSources": "查看其他来源 ({count})",
+    "submit": "立即制作",
+    "youtubeInvalid": "链接看起来不是有效的 YouTube 链接。",
+    "youtubeLabel": "YouTube 链接",
+    "youtubeToggle": "改为粘贴 YouTube 链接",
+    "category": {
+      "best": "最佳选择",
+      "compilations": "合辑",
+      "hiRes": "高解析度 24-bit",
+      "live": "现场版",
+      "other": "其他",
+      "singles": "单曲",
+      "spotify": "Spotify",
+      "studio": "录音室专辑",
+      "vinyl": "黑胶转录",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "尚未制作任何歌曲",
+    "signInPrompt": "登录以查看你制作的歌曲",
+    "title": "制作",
+    "emptyBody": "你制作的歌曲会显示在这里。"
+  },
+  "tonight": {
+    "comingSoon": "即将推出：你的点歌和今晚的已点队列",
+    "title": "今晚"
   }
 }

@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Kirjaudu sisään",
     "signOut": "Kirjaudu ulos",
-    "title": "Tili",
     "signedInAs": "Kirjautuneena: {email}",
-    "language": "Kieli"
+    "language": "Kieli",
+    "credits": "{credits, plural, one {# krediitti} other {# krediittiä}}",
+    "title": "Minä",
+    "buyCredits": "Osta krediittejä"
   },
   "common": {
     "error": "Jokin meni pieleen.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Kirjaudu sisään Nomad Karaokeen"
   },
   "song": {
-    "comingSoon": "Videoiden tekeminen suoraan sovelluksessa on tulossa pian.",
-    "makeVideo": "Tee karaokevideo",
-    "signInToMake": "Kirjaudu sisään tehdäksesi tämän kappaleen",
     "artistLabel": "Artisti",
-    "titleLabel": "Kappaleen nimi"
+    "titleLabel": "Kappaleen nimi",
+    "hasKaraoke": "Karaokeversioita löytyy",
+    "makeIt": "Luo versio · 1 krediitti",
+    "noKaraoke": "Karaokeversiota ei löytynyt"
   },
   "tabs": {
-    "account": "Tili",
-    "find": "Haku",
-    "videos": "Omat videot"
+    "discover": "Löydä uutta",
+    "make": "Luo",
+    "me": "Minä",
+    "tonight": "Tänä iltana"
   },
-  "videos": {
-    "emptyBody": "Tekemäsi kappaleet näkyvät täällä.",
-    "emptyTitle": "Ei vielä videoita",
-    "signInPrompt": "Kirjaudu sisään nähdäksesi videosi"
+  "make": {
+    "cost": "Hinta 1 krediitti · Sinulla on {credits}",
+    "costOnly": "Hinta 1 krediitti",
+    "createFailed": "Tämän aloittaminen epäonnistui. Yritä uudelleen.",
+    "findSong": "Etsi kappale",
+    "getCredits": "Hanki krediittejä",
+    "hideOtherSources": "Piilota muut lähteet",
+    "noIntent": "Valitse ensin luotava kappale.",
+    "noResults": "Tälle kappaleelle ei löytynyt ääniraitaa",
+    "notSure": "Emme ole varmoja, mikä näistä on oikea. Valitse niistä yksi:",
+    "perfectMatch": "Täydellinen osuma",
+    "publicNote": "Julkaistaan julkisesti YouTubessa, jotta voit jakaa sen",
+    "reason": {
+      "compilation": "Kokoelma",
+      "hiRes": "Hi-res-albumi",
+      "hiResLossless": "24-bittinen häviötön",
+      "live": "Livenauhoitus",
+      "lossless": "häviötön",
+      "lossy": "pakattu ääni",
+      "lowAvailability": "nouto saattaa kestää pidempään",
+      "other": "Muu julkaisu",
+      "slower": "nouto voi kestää pidempään",
+      "studioAlbum": "Studioalbumi",
+      "views": "{views} katselukertaa",
+      "reliable": "luotettava lataus",
+      "single": "Yksittäinen",
+      "spotify": "Spotify",
+      "vinyl": "Vinyylikopio",
+      "youtube": "YouTube"
+    },
+    "recommended": "Suositeltu",
+    "searchExpired": "Haku vanheni, joten haimme uudelleen.",
+    "searchFailed": "Äänen etsiminen epäonnistui. Yritä uudelleen.",
+    "searching": "Etsitään parasta ääntä…",
+    "searchingHint": "Tämä voi kestää jopa minuutin.",
+    "seeOtherSources": "Katso muut lähteet ({count})",
+    "submit": "Luo versio",
+    "youtubeInvalid": "Tämä ei näytä YouTube-linkiltä.",
+    "youtubeLabel": "YouTube-linkki",
+    "youtubeToggle": "Liitä sen sijaan YouTube-linkki",
+    "category": {
+      "best": "Paras valinta",
+      "compilations": "Kokoelmat",
+      "hiRes": "Korkearesoluutio 24-bit",
+      "live": "Live-versiot",
+      "other": "Muu",
+      "singles": "Singlet",
+      "spotify": "Spotify",
+      "studio": "Studioalbumit",
+      "vinyl": "Vinyylikopiot",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Ei vielä luotuja kappaleita",
+    "signInPrompt": "Kirjaudu sisään nähdäksesi luomasi kappaleet",
+    "title": "Luo",
+    "emptyBody": "Tekemäsi kappaleet näkyvät täällä."
+  },
+  "tonight": {
+    "comingSoon": "Tulossa pian: toivekappaleesi ja tämän illan jono",
+    "title": "Tänä iltana"
   }
 }

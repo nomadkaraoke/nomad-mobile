@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Mag-sign in",
     "signOut": "Mag-sign out",
-    "title": "Account",
     "signedInAs": "Naka-sign in bilang {email}",
-    "language": "Wika"
+    "language": "Wika",
+    "credits": "{credits, plural, one {# credit} other {# credits}}",
+    "title": "Ako",
+    "buyCredits": "Bumili ng credits"
   },
   "common": {
     "error": "May nagkaproblema.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Mag-sign in sa Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Malapit nang maging available ang paggawa ng video sa app.",
-    "makeVideo": "Gumawa ng karaoke video",
-    "signInToMake": "Mag-sign in para gawin ang kantang ito",
     "artistLabel": "Artist",
-    "titleLabel": "Pamagat ng kanta"
+    "titleLabel": "Pamagat ng kanta",
+    "hasKaraoke": "May mga karaoke version",
+    "makeIt": "Gawin ito · 1 credit",
+    "noKaraoke": "Walang nahanap na karaoke version"
   },
   "tabs": {
-    "account": "Account",
-    "find": "Maghanap",
-    "videos": "Aking mga Video"
+    "discover": "Mag-discover",
+    "make": "Gawin",
+    "me": "Ako",
+    "tonight": "Ngayong Gabi"
   },
-  "videos": {
-    "emptyBody": "Lalabas dito ang mga kantang gagawin mo.",
-    "emptyTitle": "Wala pang video",
-    "signInPrompt": "Mag-sign in para makita ang iyong mga video"
+  "make": {
+    "cost": "Halaga: 1 credit · Mayroon kang {credits}",
+    "costOnly": "Halaga: 1 credit",
+    "createFailed": "Hindi masimulan ito. Subukan muli.",
+    "findSong": "Maghanap ng kanta",
+    "getCredits": "Kumuha ng credits",
+    "hideOtherSources": "Itago ang iba pang sources",
+    "noIntent": "Pumili muna ng kantang gagawin.",
+    "noResults": "Wala kaming mahanap na audio para sa kantang ito",
+    "notSure": "Hindi kami sigurado kung alin dito ang tama. Pumili ng isa:",
+    "perfectMatch": "Swak na tugma",
+    "publicNote": "Naka-post nang pampubliko sa YouTube para maibahagi mo",
+    "reason": {
+      "compilation": "Compilation",
+      "hiRes": "Hi-res album",
+      "hiResLossless": "24-bit lossless",
+      "live": "Live recording",
+      "lossless": "lossless",
+      "lossy": "compressed audio",
+      "lowAvailability": "maaaring magtagal bago makuha",
+      "other": "Ibang release",
+      "slower": "maaaring mas mabagal kunin",
+      "studioAlbum": "Studio album",
+      "views": "{views} views",
+      "reliable": "maaasahang pag-download",
+      "single": "Isahan",
+      "spotify": "Spotify",
+      "vinyl": "Vinyl rip",
+      "youtube": "YouTube"
+    },
+    "recommended": "Inirerekomenda",
+    "searchExpired": "Nag-expire na ang paghahanap, kaya naghanap kami ulit.",
+    "searchFailed": "Hindi makapaghanap ng audio. Subukan muli.",
+    "searching": "Hinahanap ang pinakamagandang audio…",
+    "searchingHint": "Maaari itong tumagal nang hanggang isang minuto.",
+    "seeOtherSources": "Tingnan ang iba pang sources ({count})",
+    "submit": "Gawin ito",
+    "youtubeInvalid": "Mukhang hindi ito link sa YouTube.",
+    "youtubeLabel": "Link sa YouTube",
+    "youtubeToggle": "Mag-paste na lang ng link sa YouTube",
+    "category": {
+      "best": "Pinakamagandang pagpipilian",
+      "compilations": "Mga Compilation",
+      "hiRes": "Hi-res 24-bit",
+      "live": "Mga Live version",
+      "other": "Iba pa",
+      "singles": "Mga Single",
+      "spotify": "Spotify",
+      "studio": "Mga Studio album",
+      "vinyl": "Mga Vinyl rip",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Wala pang nagagawa",
+    "signInPrompt": "Mag-sign in para makita ang mga kantang ginawa mo",
+    "title": "Gawin",
+    "emptyBody": "Lalabas dito ang mga kantang gagawin mo."
+  },
+  "tonight": {
+    "comingSoon": "Malapit na: ang iyong mga request at queue ngayong gabi",
+    "title": "Ngayong Gabi"
   }
 }

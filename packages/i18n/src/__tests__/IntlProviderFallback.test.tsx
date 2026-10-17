@@ -3,12 +3,12 @@ import { Text } from 'react-native';
 
 import { IntlProvider, useTranslations } from '../index';
 
-// fr.json is missing tabs.find (and everything else) for this whole file.
+// fr.json is missing tabs.discover (and everything else) for this whole file.
 jest.mock('../../messages/fr.json', () => ({ tabs: {} }));
 
 function Probe() {
   const t = useTranslations('tabs');
-  return <Text>{t('find')}</Text>;
+  return <Text>{t('discover')}</Text>;
 }
 
 it('falls back to the en string (not the key path) for a key missing in the locale', () => {
@@ -17,6 +17,6 @@ it('falls back to the en string (not the key path) for a key missing in the loca
       <Probe />
     </IntlProvider>,
   );
-  expect(screen.getByText('Find')).toBeTruthy();
-  expect(screen.queryByText('tabs.find')).toBeNull();
+  expect(screen.getByText('Discover')).toBeTruthy();
+  expect(screen.queryByText('tabs.discover')).toBeNull();
 });

@@ -28,26 +28,26 @@ function SongRow({ song }: { song: SongResponse }) {
   );
 }
 
-export default function FindScreen() {
+export default function DiscoverScreen() {
   const t = useTranslations();
   const [query, setQuery] = useState('');
   const { mode, songs, isLoading, isError, refetch, query: activeQuery } = useSongSearch(query);
 
   const empty = isLoading ? (
-    <ActivityIndicator testID="find-loading" />
+    <ActivityIndicator testID="discover-loading" />
   ) : isError ? (
     <View className="items-start gap-2">
       <Text variant="error">{t('common.error')}</Text>
-      <Button testID="find-retry" label={t('common.retry')} variant="secondary" onPress={refetch} />
+      <Button testID="discover-retry" label={t('common.retry')} variant="secondary" onPress={refetch} />
     </View>
   ) : mode === 'search' ? (
     <Text variant="muted">{t('find.noResults', { query: activeQuery })}</Text>
   ) : null;
 
   return (
-    <Screen testID="find-screen">
+    <Screen testID="discover-screen">
       <TextField
-        testID="find-search-input"
+        testID="discover-search-input"
         label={t('find.searchPlaceholder')}
         placeholder={t('find.searchPlaceholder')}
         value={query}
@@ -58,7 +58,7 @@ export default function FindScreen() {
       {mode === 'popular' && !isError ? <Text variant="title">{t('find.popularHeading')}</Text> : null}
       <View className="flex-1">
         <List
-          testID="find-list"
+          testID="discover-list"
           data={songs}
           keyExtractor={(s) => String(s.id)}
           renderItem={(s) => <SongRow song={s} />}
@@ -66,7 +66,7 @@ export default function FindScreen() {
           ListFooterComponent={
             <View className="py-4">
               <Button
-                testID="find-make-any"
+                testID="discover-make-any"
                 label={t('find.makeAnySong')}
                 variant="secondary"
                 onPress={() => router.push({ pathname: '/song/[id]', params: { id: 'new' } })}

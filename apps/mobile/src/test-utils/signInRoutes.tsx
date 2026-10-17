@@ -2,7 +2,7 @@ import { View } from 'react-native';
 
 import { appRoutes } from './routes';
 
-/** App routes plus a `/make` stand-in (the real make screen lands with the make flow). */
+/** App routes with the make flow stubbed: sign-in tests only check that they land on `/make`. */
 export function signInRoutes() {
-  return { ...appRoutes(), make: () => <View testID="make-stub" /> };
+  return { ...appRoutes(), 'make/index': () => <View testID="make-stub" /> };
 }

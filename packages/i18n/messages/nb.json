@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Logg inn",
     "signOut": "Logg ut",
-    "title": "Konto",
     "signedInAs": "Logget inn som {email}",
-    "language": "Språk"
+    "language": "Språk",
+    "credits": "{credits, plural, one {# kreditt} other {# kreditter}}",
+    "title": "Meg",
+    "buyCredits": "Kjøp kreditter"
   },
   "common": {
     "error": "Noe gikk galt.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Logg inn på Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Muligheten til å lage videoer i appen kommer snart.",
-    "makeVideo": "Lag karaokevideo",
-    "signInToMake": "Logg inn for å lage denne sangen",
     "artistLabel": "Artist",
-    "titleLabel": "Sangtittel"
+    "titleLabel": "Sangtittel",
+    "hasKaraoke": "Karaokeversjoner finnes",
+    "makeIt": "Lag den · 1 kreditt",
+    "noKaraoke": "Ingen karaokeversjon funnet"
   },
   "tabs": {
-    "account": "Konto",
-    "find": "Finn",
-    "videos": "Mine videoer"
+    "discover": "Oppdag",
+    "make": "Lag",
+    "me": "Meg",
+    "tonight": "I kveld"
   },
-  "videos": {
-    "emptyBody": "Sanger du lager, dukker opp her.",
-    "emptyTitle": "Ingen videoer ennå",
-    "signInPrompt": "Logg inn for å se videoene dine"
+  "make": {
+    "cost": "Koster 1 kreditt · Du har {credits}",
+    "costOnly": "Koster 1 kreditt",
+    "createFailed": "Kunne ikke starte denne. Prøv igjen.",
+    "findSong": "Finn en sang",
+    "getCredits": "Skaff kreditter",
+    "hideOtherSources": "Skjul andre kilder",
+    "noIntent": "Velg en sang du vil lage først.",
+    "noResults": "Vi fant ikke lydspor til denne sangen",
+    "notSure": "Vi er usikre på hvilken av disse som er riktig. Velg én:",
+    "perfectMatch": "Perfekt treff",
+    "publicNote": "Publiseres offentlig på YouTube slik at du kan dele den",
+    "reason": {
+      "compilation": "Samlealbum",
+      "hiRes": "Høyoppløselig album",
+      "hiResLossless": "24-bit tapsfritt",
+      "live": "Liveopptak",
+      "lossless": "tapsfritt",
+      "lossy": "komprimert lyd",
+      "lowAvailability": "kan ta lengre tid å hente",
+      "other": "Annen utgivelse",
+      "slower": "kan være tregere å hente",
+      "studioAlbum": "Studioalbum",
+      "views": "{views} avspillinger",
+      "reliable": "pålitelig nedlasting",
+      "single": "Enkel",
+      "spotify": "Spotify",
+      "vinyl": "Vinyl-rip",
+      "youtube": "YouTube"
+    },
+    "recommended": "Anbefalt",
+    "searchExpired": "Søket utløp, så vi søkte på nytt.",
+    "searchFailed": "Kunne ikke søke etter lyd. Prøv igjen.",
+    "searching": "Finner den beste lyden…",
+    "searchingHint": "Dette kan ta opptil ett minutt.",
+    "seeOtherSources": "Se andre kilder ({count})",
+    "submit": "Lag den",
+    "youtubeInvalid": "Det ser ikke ut som en gyldig YouTube-lenke.",
+    "youtubeLabel": "YouTube-lenke",
+    "youtubeToggle": "Lim inn en YouTube-lenke i stedet",
+    "category": {
+      "best": "Beste valg",
+      "compilations": "Samlealbum",
+      "hiRes": "Høyoppløselig 24-bit",
+      "live": "Liveversjoner",
+      "other": "Annet",
+      "singles": "Singler",
+      "spotify": "Spotify",
+      "studio": "Studioalbum",
+      "vinyl": "Vinyl-rip",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Ingenting er laget ennå",
+    "signInPrompt": "Logg inn for å se sangene du har laget",
+    "title": "Lag",
+    "emptyBody": "Sanger du lager, dukker opp her."
+  },
+  "tonight": {
+    "comingSoon": "Kommer snart: sangønskene dine og kveldens kø",
+    "title": "I kveld"
   }
 }

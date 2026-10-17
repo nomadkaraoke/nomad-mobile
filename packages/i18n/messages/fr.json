@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Se connecter",
     "signOut": "Se déconnecter",
-    "title": "Compte",
     "signedInAs": "Connecté en tant que {email}",
-    "language": "Langue"
+    "language": "Langue",
+    "credits": "{credits, plural, one {# crédit} other {# crédits}}",
+    "title": "Moi",
+    "buyCredits": "Acheter des crédits"
   },
   "common": {
     "error": "Une erreur s'est produite.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Connecte-toi à Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "La création de vidéos directement dans l'application arrive bientôt.",
-    "makeVideo": "Créer une vidéo karaoké",
-    "signInToMake": "Connecte-toi pour créer ce morceau",
     "artistLabel": "Artiste",
-    "titleLabel": "Titre de la chanson"
+    "titleLabel": "Titre de la chanson",
+    "hasKaraoke": "Des versions karaoké existent",
+    "makeIt": "Créer · 1 crédit",
+    "noKaraoke": "Aucune version karaoké trouvée"
   },
   "tabs": {
-    "account": "Compte",
-    "find": "Rechercher",
-    "videos": "Mes vidéos"
+    "discover": "Découvrir",
+    "make": "Créer",
+    "me": "Moi",
+    "tonight": "Ce soir"
   },
-  "videos": {
-    "emptyBody": "Les morceaux que tu crées apparaîtront ici.",
-    "emptyTitle": "Pas encore de vidéo",
-    "signInPrompt": "Connecte-toi pour voir tes vidéos"
+  "make": {
+    "cost": "Coûte 1 crédit · Tu as {credits}",
+    "costOnly": "Coûte 1 crédit",
+    "createFailed": "Impossible de lancer la création. Réessaie.",
+    "findSong": "Trouver un morceau",
+    "getCredits": "Obtenir des crédits",
+    "hideOtherSources": "Masquer les autres sources",
+    "noIntent": "Choisis d'abord un morceau à créer.",
+    "noResults": "Nous n'avons pas trouvé de piste audio pour ce morceau",
+    "notSure": "On hésite entre plusieurs versions. Choisis la bonne :",
+    "perfectMatch": "Correspondance parfaite",
+    "publicNote": "Publié publiquement sur YouTube pour que tu puisses le partager",
+    "reason": {
+      "compilation": "Compilation",
+      "hiRes": "Album haute résolution",
+      "hiResLossless": "Sans perte 24 bits",
+      "live": "Enregistrement en direct",
+      "lossless": "sans perte",
+      "lossy": "audio compressé",
+      "lowAvailability": "peut être plus long à récupérer",
+      "other": "Autre version",
+      "slower": "peut être plus lent à récupérer",
+      "studioAlbum": "Album studio",
+      "views": "{views} vues",
+      "reliable": "téléchargement fiable",
+      "single": "Individuel",
+      "spotify": "Spotify",
+      "vinyl": "Rip vinyle",
+      "youtube": "YouTube"
+    },
+    "recommended": "Recommandé",
+    "searchExpired": "Cette recherche a expiré, nous l'avons donc relancée.",
+    "searchFailed": "Impossible de rechercher la piste audio. Réessaie.",
+    "searching": "Recherche de la meilleure piste audio…",
+    "searchingHint": "Cela peut prendre jusqu'à une minute.",
+    "seeOtherSources": "Voir les autres sources ({count})",
+    "submit": "Créer",
+    "youtubeInvalid": "Ce lien ne ressemble pas à un lien YouTube.",
+    "youtubeLabel": "Lien YouTube",
+    "youtubeToggle": "Coller plutôt un lien YouTube",
+    "category": {
+      "best": "Meilleur choix",
+      "compilations": "Compilations",
+      "hiRes": "Haute résolution 24 bits",
+      "live": "Versions live",
+      "other": "Autre",
+      "singles": "Singles",
+      "spotify": "Spotify",
+      "studio": "Albums studio",
+      "vinyl": "Rips vinyle",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Rien de créé pour l'instant",
+    "signInPrompt": "Connecte-toi pour voir les morceaux que tu as créés",
+    "title": "Créer",
+    "emptyBody": "Les morceaux que tu crées apparaîtront ici."
+  },
+  "tonight": {
+    "comingSoon": "Bientôt disponible : tes demandes et la file d'attente de ce soir",
+    "title": "Ce soir"
   }
 }

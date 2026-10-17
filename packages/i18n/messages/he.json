@@ -2,9 +2,11 @@
   "account": {
     "signIn": "התחברות",
     "signOut": "התנתקות",
-    "title": "חשבון",
     "signedInAs": "מחוברים בתור {email}",
-    "language": "שפה"
+    "language": "שפה",
+    "credits": "{credits, plural, one {קרדיט #} other {# קרדיטים}}",
+    "title": "החשבון שלי",
+    "buyCredits": "רכישת קרדיטים"
   },
   "common": {
     "error": "משהו השתבש.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "היכנס ל-Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "יצירת סרטונים באפליקציה תהיה זמינה בקרוב.",
-    "makeVideo": "יצירת סרטון קריוקי",
-    "signInToMake": "יש להתחבר כדי ליצור את השיר הזה",
     "artistLabel": "אומן",
-    "titleLabel": "שם השיר"
+    "titleLabel": "שם השיר",
+    "hasKaraoke": "קיימות גרסאות קריוקי",
+    "makeIt": "להכין שיר · קרדיט אחד",
+    "noKaraoke": "לא נמצאה גרסת קריוקי"
   },
   "tabs": {
-    "account": "חשבון",
-    "find": "חיפוש",
-    "videos": "הסרטונים שלי"
+    "discover": "גילוי",
+    "make": "הכנה",
+    "me": "החשבון שלי",
+    "tonight": "הערב"
   },
-  "videos": {
-    "emptyBody": "שירים שתכינו יופיעו כאן.",
-    "emptyTitle": "אין עדיין סרטונים",
-    "signInPrompt": "יש להתחבר כדי לראות את הסרטונים שלכם"
+  "make": {
+    "cost": "עלות: קרדיט אחד · נותרו לך {credits}",
+    "costOnly": "עלות: קרדיט אחד",
+    "createFailed": "לא הצלחנו להתחיל הפעם. כדאי לנסות שוב.",
+    "findSong": "חיפוש שיר",
+    "getCredits": "השגת קרדיטים",
+    "hideOtherSources": "הסתרת מקורות אחרים",
+    "noIntent": "קודם צריך לבחור שיר להכנה.",
+    "noResults": "לא מצאנו אודיו לשיר הזה",
+    "notSure": "לא בטוחים איזו תוצאה מתאימה. אפשר לבחור אחת:",
+    "perfectMatch": "התאמה מושלמת",
+    "publicNote": "מתפרסם באופן ציבורי ב-YouTube כדי שיהיה אפשר לשתף",
+    "reason": {
+      "compilation": "אוסף",
+      "hiRes": "אלבום באיכות Hi-res",
+      "hiResLossless": "איכות 24-bit lossless",
+      "live": "הקלטה מהופעה חיה",
+      "lossless": "ללא דחיסה (lossless)",
+      "lossy": "אודיו דחוס",
+      "lowAvailability": "עשוי לקחת יותר זמן להורדה",
+      "other": "גרסה אחרת",
+      "slower": "עשוי להיות איטי יותר להורדה",
+      "studioAlbum": "אלבום אולפן",
+      "views": "{views} צפיות",
+      "reliable": "הורדה אמינה",
+      "single": "בודד",
+      "spotify": "Spotify",
+      "vinyl": "המרה מתקליט",
+      "youtube": "YouTube"
+    },
+    "recommended": "מומלץ",
+    "searchExpired": "פג תוקף החיפוש, אז חיפשנו שוב.",
+    "searchFailed": "לא הצלחנו לחפש אודיו. כדאי לנסות שוב.",
+    "searching": "מחפשים את האודיו הטוב ביותר…",
+    "searchingHint": "זה עשוי לקחת עד דקה.",
+    "seeOtherSources": "הצגת מקורות נוספים ({count})",
+    "submit": "להכין עכשיו",
+    "youtubeInvalid": "זה לא נראה כמו קישור תקין ל-YouTube.",
+    "youtubeLabel": "קישור ל-YouTube",
+    "youtubeToggle": "הדבקת קישור ל-YouTube במקום",
+    "category": {
+      "best": "הבחירה הטובה ביותר",
+      "compilations": "אוספים",
+      "hiRes": "רזולוציה גבוהה 24-bit",
+      "live": "הופעות חיות",
+      "other": "אחר",
+      "singles": "סינגלים",
+      "spotify": "Spotify",
+      "studio": "אלבומי אולפן",
+      "vinyl": "המרות מתקליט",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "עוד לא הכנת שירים",
+    "signInPrompt": "כדאי להתחבר כדי לראות את השירים שהכנת",
+    "title": "הכנה",
+    "emptyBody": "שירים שתכינו יופיעו כאן."
+  },
+  "tonight": {
+    "comingSoon": "בקרוב: הבקשות שלך והתור להערב",
+    "title": "הערב"
   }
 }

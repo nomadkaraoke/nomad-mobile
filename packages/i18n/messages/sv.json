@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Logga in",
     "signOut": "Logga ut",
-    "title": "Konto",
     "signedInAs": "Inloggad som {email}",
-    "language": "Språk"
+    "language": "Språk",
+    "credits": "{credits, plural, one {# kredit} other {# krediter}}",
+    "title": "Jag",
+    "buyCredits": "Köp krediter"
   },
   "common": {
     "error": "Något gick fel.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Logga in på Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Snart kan du skapa videor direkt i appen.",
-    "makeVideo": "Skapa karaokevideo",
-    "signInToMake": "Logga in för att skapa den här låten",
     "artistLabel": "Artist",
-    "titleLabel": "Låttitel"
+    "titleLabel": "Låttitel",
+    "hasKaraoke": "Det finns karaokeversioner",
+    "makeIt": "Skapa · 1 kredit",
+    "noKaraoke": "Hittade ingen karaokeversion"
   },
   "tabs": {
-    "account": "Konto",
-    "find": "Hitta",
-    "videos": "Mina videor"
+    "discover": "Upptäck",
+    "make": "Skapa",
+    "me": "Jag",
+    "tonight": "I kväll"
   },
-  "videos": {
-    "emptyBody": "Låtar du skapar kommer att visas här.",
-    "emptyTitle": "Inga videor ännu",
-    "signInPrompt": "Logga in för att se dina videor"
+  "make": {
+    "cost": "Kostar 1 kredit · Du har {credits}",
+    "costOnly": "Kostar 1 kredit",
+    "createFailed": "Kunde inte starta den här. Försök igen.",
+    "findSong": "Hitta en låt",
+    "getCredits": "Skaffa krediter",
+    "hideOtherSources": "Dölj andra källor",
+    "noIntent": "Välj en låt att skapa först.",
+    "noResults": "Vi kunde inte hitta något ljud för den här låten",
+    "notSure": "Vi är inte säkra på vilken av dessa som är rätt. Välj en:",
+    "perfectMatch": "Perfekt matchning",
+    "publicNote": "Publiceras offentligt på YouTube så att du kan dela den",
+    "reason": {
+      "compilation": "Samlingsalbum",
+      "hiRes": "Högupplöst album",
+      "hiResLossless": "24-bitars förlustfritt",
+      "live": "Liveinspelning",
+      "lossless": "förlustfritt",
+      "lossy": "komprimerat ljud",
+      "lowAvailability": "kan ta längre tid att hämta",
+      "other": "Annan utgåva",
+      "slower": "kan ta längre tid att hämta",
+      "studioAlbum": "Studioalbum",
+      "views": "{views} visningar",
+      "reliable": "pålitlig nedladdning",
+      "single": "Enskild",
+      "spotify": "Spotify",
+      "vinyl": "Vinylripp",
+      "youtube": "YouTube"
+    },
+    "recommended": "Rekommenderas",
+    "searchExpired": "Sökningen löpte ut, så vi sökte igen.",
+    "searchFailed": "Kunde inte söka efter ljud. Försök igen.",
+    "searching": "Söker efter bästa ljudet…",
+    "searchingHint": "Det kan ta upp till en minut.",
+    "seeOtherSources": "Se andra källor ({count})",
+    "submit": "Skapa",
+    "youtubeInvalid": "Det där ser inte ut som en YouTube-länk.",
+    "youtubeLabel": "YouTube-länk",
+    "youtubeToggle": "Klistra in en YouTube-länk i stället",
+    "category": {
+      "best": "Bästa valet",
+      "compilations": "Samlingar",
+      "hiRes": "Högupplöst 24-bit",
+      "live": "Liveversioner",
+      "other": "Annat",
+      "singles": "Singlar",
+      "spotify": "Spotify",
+      "studio": "Studioalbum",
+      "vinyl": "Vinylrippar",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Inget skapat ännu",
+    "signInPrompt": "Logga in för att se låtarna du har skapat",
+    "title": "Skapa",
+    "emptyBody": "Låtar du skapar kommer att visas här."
+  },
+  "tonight": {
+    "comingSoon": "Kommer snart: dina önskemål och kvällens kö",
+    "title": "I kväll"
   }
 }

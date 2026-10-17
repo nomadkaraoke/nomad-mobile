@@ -22,6 +22,7 @@ jest.mock('@nomad/api-gen', () => ({
   verifyCode: jest.fn(),
   exchangeGoogleToken: jest.fn(),
   exchangeAppleToken: jest.fn(),
+  getMe: jest.fn(),
 }));
 jest.mock('../config', () => ({
   ...jest.requireActual('../config'),
@@ -43,6 +44,7 @@ beforeEach(async () => {
   gen.sendCode.mockResolvedValue(undefined);
   gen.verifyCode.mockImplementation(async (email) => session(email));
   gen.exchangeGoogleToken.mockResolvedValue(session('g@example.com'));
+  gen.getMe.mockResolvedValue({ email: 'g@example.com', credits: 1 });
   (decide.getSong as jest.Mock).mockResolvedValue({ id: 2, artist: 'Adele', title: 'Hello', brands: [], brand_count: 1, is_popular: true });
 });
 
@@ -147,19 +149,20 @@ it('fake mode shows Apple even where the device has no Apple sign-in, and sends 
   expect(apple.signInAsync).not.toHaveBeenCalled();
 });
 
-it('signed-out "make" on a song opens the sheet; account tab signs in and out', async () => {
+it('signed-out "make" on a song opens the sheet', async () => {
   renderRouter(signInRoutes(), { initialUrl: '/song/2' });
-  fireEvent.press(await screen.findByTestId('song-make'));
+  await screen.findByText('Hello');
+  fireEvent.press(screen.getByTestId('song-make'));
   expect(await screen.findByTestId('signin-sheet')).toBeTruthy();
 });
 
-it('account: sign in returns to the account tab, then sign out', async () => {
+it('Me: sign in returns to the Me tab, then sign out', async () => {
   google.signIn.mockResolvedValueOnce({ type: 'success', data: { idToken: 'gid' } } as never);
-  const app = renderRouter(signInRoutes(), { initialUrl: '/account' });
-  fireEvent.press(await screen.findByTestId('account-signin'));
+  const app = renderRouter(signInRoutes(), { initialUrl: '/me' });
+  fireEvent.press(await screen.findByTestId('me-signin'));
   await act(async () => fireEvent.press(await screen.findByTestId('signin-google')));
   expect(await screen.findByText('Signed in as g@example.com')).toBeTruthy();
-  expect(app.getPathname()).toBe('/account');
-  await act(async () => fireEvent.press(screen.getByTestId('account-signout')));
-  expect(await screen.findByTestId('account-signin')).toBeTruthy();
+  expect(app.getPathname()).toBe('/me');
+  await act(async () => fireEvent.press(screen.getByTestId('me-signout')));
+  expect(await screen.findByTestId('me-signin')).toBeTruthy();
 });

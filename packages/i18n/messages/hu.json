@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Bejelentkezés",
     "signOut": "Kijelentkezés",
-    "title": "Fiók",
     "signedInAs": "Bejelentkezve mint {email}",
-    "language": "Nyelv"
+    "language": "Nyelv",
+    "credits": "{credits, plural, one {# kredit} other {# kredit}}",
+    "title": "Profilom",
+    "buyCredits": "Kredit vásárlása"
   },
   "common": {
     "error": "Valami hiba történt.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Jelentkezz be a Nomad Karaoke-ba"
   },
   "song": {
-    "comingSoon": "A videókészítés hamarosan elérhető lesz az alkalmazásban.",
-    "makeVideo": "Karaokevideó készítése",
-    "signInToMake": "Jelentkezz be a dal elkészítéséhez",
     "artistLabel": "Előadó",
-    "titleLabel": "Dal címe"
+    "titleLabel": "Dal címe",
+    "hasKaraoke": "Létezik hozzá karaoke verzió",
+    "makeIt": "Készítsd el · 1 kredit",
+    "noKaraoke": "Nem található hozzá karaoke verzió"
   },
   "tabs": {
-    "account": "Fiók",
-    "find": "Keresés",
-    "videos": "Videóim"
+    "discover": "Felfedezés",
+    "make": "Készítés",
+    "me": "Profilom",
+    "tonight": "Ma este"
   },
-  "videos": {
-    "emptyBody": "Az általad készített dalok itt fognak megjelenni.",
-    "emptyTitle": "Még nincsenek videók",
-    "signInPrompt": "Jelentkezz be a videóid megtekintéséhez"
+  "make": {
+    "cost": "Ára: 1 kredit · Egyenleged: {credits}",
+    "costOnly": "Ára: 1 kredit",
+    "createFailed": "Nem sikerült elindítani. Próbáld újra.",
+    "findSong": "Keress egy dalt",
+    "getCredits": "Kreditfeltöltés",
+    "hideOtherSources": "További források elrejtése",
+    "noIntent": "Először válassz egy dalt, amit elkészítenél.",
+    "noResults": "Nem találtunk hanganyagot ehhez a dalhoz",
+    "notSure": "Nem vagyunk biztosak benne, melyik a megfelelő. Válassz egyet:",
+    "perfectMatch": "Tökéletes egyezés",
+    "publicNote": "Nyilvánosan közzétéve a YouTube-on, hogy meg tudd osztani",
+    "reason": {
+      "compilation": "Válogatásalbum",
+      "hiRes": "Nagy felbontású album",
+      "hiResLossless": "24 bites veszteségmentes",
+      "live": "Élő felvétel",
+      "lossless": "veszteségmentes",
+      "lossy": "tömörített hang",
+      "lowAvailability": "a lekérés tovább tarthat",
+      "other": "Egyéb kiadás",
+      "slower": "a lekérés lassabb lehet",
+      "studioAlbum": "Stúdióalbum",
+      "views": "{views} megtekintés",
+      "reliable": "megbízható letöltés",
+      "single": "Egyes",
+      "spotify": "Spotify",
+      "vinyl": "Bakelit felvétel",
+      "youtube": "YouTube"
+    },
+    "recommended": "Ajánlott",
+    "searchExpired": "A keresés lejárt, ezért újra rákerestünk.",
+    "searchFailed": "Nem sikerült a hanganyag keresése. Próbáld újra.",
+    "searching": "A legjobb minőségű hanganyag keresése…",
+    "searchingHint": "Ez akár egy percig is eltarthat.",
+    "seeOtherSources": "További források ({count})",
+    "submit": "Készítsd el",
+    "youtubeInvalid": "Ez nem tűnik érvényes YouTube-linknek.",
+    "youtubeLabel": "YouTube-link",
+    "youtubeToggle": "Inkább illessz be egy YouTube-linket",
+    "category": {
+      "best": "Legjobb választás",
+      "compilations": "Válogatások",
+      "hiRes": "Nagy felbontású 24-bites",
+      "live": "Élő verziók",
+      "other": "Egyéb",
+      "singles": "Kislemezek",
+      "spotify": "Spotify",
+      "studio": "Stúdióalbumok",
+      "vinyl": "Bakelit felvételek",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Még nem készült semmi",
+    "signInPrompt": "Jelentkezz be az elkészített dalaid megtekintéséhez",
+    "title": "Készítés",
+    "emptyBody": "Az általad készített dalok itt fognak megjelenni."
+  },
+  "tonight": {
+    "comingSoon": "Hamarosan: kéréseid és a ma esti várólista",
+    "title": "Ma este"
   }
 }

@@ -2,9 +2,11 @@
   "account": {
     "signIn": "Prihlásiť sa",
     "signOut": "Odhlásiť sa",
-    "title": "Účet",
     "signedInAs": "Prihlásený ako {email}",
-    "language": "Jazyk"
+    "language": "Jazyk",
+    "credits": "{credits, plural, one {# kredit} few {# kredity} other {# kreditov}}",
+    "title": "Profil",
+    "buyCredits": "Kúpiť kredity"
   },
   "common": {
     "error": "Niečo sa pokazilo.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "Prihlás sa do Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "Už čoskoro budeš môcť vytvárať videá priamo v aplikácii.",
-    "makeVideo": "Vytvoriť karaoke video",
-    "signInToMake": "Prihlás sa a vytvor si túto skladbu",
     "artistLabel": "Interpret",
-    "titleLabel": "Názov piesne"
+    "titleLabel": "Názov piesne",
+    "hasKaraoke": "Existujú karaoke verzie",
+    "makeIt": "Vytvoriť · 1 kredit",
+    "noKaraoke": "Nenašla sa žiadna karaoke verzia"
   },
   "tabs": {
-    "account": "Účet",
-    "find": "Hľadať",
-    "videos": "Moje videá"
+    "discover": "Objavovať",
+    "make": "Vytvoriť",
+    "me": "Profil",
+    "tonight": "Dnes večer"
   },
-  "videos": {
-    "emptyBody": "Tu sa zobrazia skladby, ktoré vytvoríš.",
-    "emptyTitle": "Zatiaľ žiadne videá",
-    "signInPrompt": "Prihlás sa a pozri si svoje videá"
+  "make": {
+    "cost": "Stojí 1 kredit · Máš {credits}",
+    "costOnly": "Stojí 1 kredit",
+    "createFailed": "Toto sa nepodarilo spustiť. Skús to znova.",
+    "findSong": "Nájsť skladbu",
+    "getCredits": "Získať kredity",
+    "hideOtherSources": "Skryť ďalšie zdroje",
+    "noIntent": "Najprv si vyber skladbu, ktorú chceš vytvoriť.",
+    "noResults": "Pre túto skladbu sa nám nepodarilo nájsť zvuk",
+    "notSure": "Nie sme si istí, ktorá z týchto možností je správna. Vyber jednu:",
+    "perfectMatch": "Presná zhoda",
+    "publicNote": "Zverejnené verejne na YouTube, takže to môžeš zdieľať",
+    "reason": {
+      "compilation": "Kompilácia",
+      "hiRes": "Hi-res album",
+      "hiResLossless": "24-bitový bezstratový formát",
+      "live": "Živá nahrávka",
+      "lossless": "bezstratový formát",
+      "lossy": "komprimovaný zvuk",
+      "lowAvailability": "načítanie môže trvať dlhšie",
+      "other": "Iné vydanie",
+      "slower": "načítanie môže byť pomalšie",
+      "studioAlbum": "Štúdiový album",
+      "views": "{views, plural, one {# pozretie} few {# pozretia} other {# pozretí}}",
+      "reliable": "spoľahlivé sťahovanie",
+      "single": "Jednotlivo",
+      "spotify": "Spotify",
+      "vinyl": "Vinylová nahrávka",
+      "youtube": "YouTube"
+    },
+    "recommended": "Odporúčané",
+    "searchExpired": "Platnosť vyhľadávania vypršala, preto sme vyhľadali znova.",
+    "searchFailed": "Nepodarilo sa vyhľadať zvuk. Skús to znova.",
+    "searching": "Hľadáme najlepší zvuk…",
+    "searchingHint": "Môže to trvať až minútu.",
+    "seeOtherSources": "Zobraziť ďalšie zdroje ({count})",
+    "submit": "Vytvoriť",
+    "youtubeInvalid": "Toto nevyzerá ako odkaz na YouTube.",
+    "youtubeLabel": "Odkaz na YouTube",
+    "youtubeToggle": "Namiesto toho vložiť odkaz na YouTube",
+    "category": {
+      "best": "Najlepšia voľba",
+      "compilations": "Kompilácie",
+      "hiRes": "Vysoké rozlíšenie 24-bit",
+      "live": "Živé verzie",
+      "other": "Iné",
+      "singles": "Single",
+      "spotify": "Spotify",
+      "studio": "Štúdiové albumy",
+      "vinyl": "Vinylové nahrávky",
+      "youtube": "YouTube"
+    }
+  },
+  "makeTab": {
+    "emptyTitle": "Zatiaľ si nič nevytvoril",
+    "signInPrompt": "Prihlás sa a pozri si skladby, ktoré si vytvoril",
+    "title": "Tvorba",
+    "emptyBody": "Tu sa zobrazia skladby, ktoré vytvoríš."
+  },
+  "tonight": {
+    "comingSoon": "Už čoskoro: tvoje požiadavky a poradovník na dnešný večer",
+    "title": "Dnes večer"
   }
 }

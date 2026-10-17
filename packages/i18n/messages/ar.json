@@ -3,8 +3,10 @@
     "signIn": "تسجيل الدخول",
     "signOut": "تسجيل الخروج",
     "signedInAs": "مسجل الدخول باسم {email}",
-    "title": "الحساب",
-    "language": "اللغة"
+    "language": "اللغة",
+    "credits": "{credits, plural, zero {بدون رصيد} one {رصيد واحد} two {رصيدان} few {# أرصدة} many {# رصيدًا} other {# رصيد}}",
+    "title": "حسابي",
+    "buyCredits": "شراء رصيد"
   },
   "common": {
     "error": "حدث خطأ ما.",
@@ -53,20 +55,79 @@
     "sheetTitleGeneric": "تسجيل الدخول إلى Nomad Karaoke"
   },
   "song": {
-    "comingSoon": "ستتوفر ميزة إنشاء الفيديوهات في التطبيق قريبًا.",
-    "makeVideo": "إنشاء فيديو كاراوكي",
-    "signInToMake": "سجّل الدخول لإنشاء هذه الأغنية",
     "artistLabel": "فنان",
-    "titleLabel": "عنوان الأغنية"
+    "titleLabel": "عنوان الأغنية",
+    "hasKaraoke": "تتوفر نسخ كاريوكي",
+    "makeIt": "إنشاء · رصيد واحد",
+    "noKaraoke": "لم يُعثر على نسخة كاريوكي"
   },
   "tabs": {
-    "account": "الحساب",
-    "find": "بحث",
-    "videos": "فيديوهاتي"
+    "discover": "استكشف",
+    "make": "إنشاء",
+    "me": "حسابي",
+    "tonight": "الليلة"
   },
-  "videos": {
-    "emptyBody": "ستظهر الأغاني التي تنشئها هنا.",
-    "emptyTitle": "لا توجد فيديوهات بعد",
-    "signInPrompt": "سجّل الدخول لمشاهدة فيديوهاتك"
+  "make": {
+    "category": {
+      "best": "الخيار الأفضل",
+      "compilations": "مجموعات الأغاني",
+      "hiRes": "دقة عالية 24-bit",
+      "live": "تسجيلات حية",
+      "singles": "أغانٍ منفردة",
+      "studio": "ألبومات الاستوديو",
+      "vinyl": "تسجيلات الفينيل",
+      "youtube": "YouTube",
+      "other": "أخرى",
+      "spotify": "Spotify"
+    },
+    "cost": "التكلفة رصيد واحد · لديك {credits}",
+    "costOnly": "التكلفة رصيد واحد",
+    "createFailed": "تعذر البدء في هذه الأغنية. حاول مرة أخرى.",
+    "findSong": "ابحث عن أغنية",
+    "getCredits": "شراء رصيد",
+    "hideOtherSources": "إخفاء المصادر الأخرى",
+    "noIntent": "اختر أغنية للبدء أولاً.",
+    "noResults": "لم نتمكن من العثور على صوت لهذه الأغنية",
+    "notSure": "لسنا متأكدين أيها هو المطلوب. اختر واحداً:",
+    "perfectMatch": "تطابق تام",
+    "publicNote": "يُنشر علنًا على YouTube لتتمكن من مشاركته",
+    "reason": {
+      "compilation": "مجموعة أغاني",
+      "hiRes": "ألبوم بدقة عالية",
+      "hiResLossless": "صوت 24-bit بدون فقدان",
+      "live": "تسجيل حي",
+      "lossless": "بدون فقدان",
+      "lossy": "صوت مضغوط",
+      "lowAvailability": "قد يستغرق جلبه وقتًا أطول",
+      "other": "إصدار آخر",
+      "slower": "قد يستغرق جلبه وقتاً أطول",
+      "studioAlbum": "ألبوم استوديو",
+      "views": "{views} مشاهدة",
+      "vinyl": "تسجيل فينيل",
+      "youtube": "YouTube",
+      "reliable": "تنزيل موثوق",
+      "single": "مفرد",
+      "spotify": "Spotify"
+    },
+    "recommended": "موصى به",
+    "searchExpired": "انتهت صلاحية هذا البحث، لذا بحثنا مجدداً.",
+    "searchFailed": "تعذر البحث عن الصوت. حاول مرة أخرى.",
+    "searching": "جارٍ البحث عن أفضل صوت…",
+    "searchingHint": "قد يستغرق هذا دقيقة كحد أقصى.",
+    "seeOtherSources": "عرض المصادر الأخرى ({count})",
+    "submit": "إنشاء",
+    "youtubeInvalid": "لا يبدو هذا كرابط YouTube صالح.",
+    "youtubeLabel": "رابط YouTube",
+    "youtubeToggle": "لصق رابط YouTube بدلاً من ذلك"
+  },
+  "makeTab": {
+    "emptyTitle": "لم تنشئ أي شيء بعد",
+    "signInPrompt": "سجّل الدخول لمشاهدة الأغاني التي أنشأتها",
+    "title": "إنشاء",
+    "emptyBody": "ستظهر الأغاني التي تنشئها هنا."
+  },
+  "tonight": {
+    "comingSoon": "قريباً: طلباتك وقائمة انتظار الليلة",
+    "title": "الليلة"
   }
 }
