@@ -87,7 +87,7 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - Sentry Expo config plugin (org/project, source maps, dSYMs) is added together with the Sentry account.
 - EAS: `eas.json` and `.eas/workflows/*` are dormant. `runtimeVersion` / `updates.url` need an EAS project id.
 - Maestro in CI: EAS Workflows `type: maestro` (paid plan) or macOS GitHub runners. This is still a decision to make.
-- Decide recommendations and personal song features: Phase 3 "Discover" in docs/VISION.md (needs spec §4.2 `exchange-gen-session`).
+- Decide personal recommendations, music services and vocal range: Phase 3 "Discover" in docs/VISION.md (needs spec §4.2 `exchange-gen-session`). Sung history, playlists and library are Phase 4 "Me".
 
 ## App identity
 

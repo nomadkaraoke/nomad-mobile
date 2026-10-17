@@ -21,7 +21,7 @@ Build order therefore follows dependencies and risk, not launch strategy.
 The use cases overlap: one person can be any of them on a given night.
 
 1. **"What should I sing?" at any karaoke night, anywhere.** Connect your music data, measure your vocal range, and get personal song recommendations. This is karaoke-decide.
-2. **"There's no karaoke version" at any night that plays from YouTube.** Make one with karaoke-gen in the app, including a really easy, mobile-friendly lyrics and instrumental review. Hand the YouTube link to the KJ and sing it the same night. This should drive credit sales. App stores take 30%; if that becomes a problem, emails from the system can include a link and discount code to buy credits on the website instead.
+2. **"There's no karaoke version" at any night that plays from YouTube.** Make one with karaoke-gen in the app, including a really easy, mobile-friendly lyrics and instrumental review. Hand the YouTube link to the KJ and sing it the same night. This should drive credit sales. App stores take a cut (up to 30%; the exact fees per platform and region get confirmed in phase 6); if that becomes a problem, emails from the system can include a link and discount code to buy credits on the website instead.
 3. **At Andrew's own nights.** Frictionlessly request songs into the rotation, including making a song on the spot. sing.nomadkaraoke.com (kjbox) does this on the web today.
 4. **Karaoke nerds.** Everything above, plus a history of what they've sung, a personal library of songs they enjoy singing, better data-driven recommendations, suggestions for songs to get made, and later perhaps a subscription that pre-generates tracks for them.
 
