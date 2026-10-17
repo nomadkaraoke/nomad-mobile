@@ -45,7 +45,8 @@ Android OAuth client is registered for; don't set any `EXPO_PUBLIC_*` local-stac
 ```bash
 cd apps/mobile
 CI=1 npx expo prebuild --platform android --no-install   # only if apps/mobile/android doesn't exist yet
-cd android && ANDROID_HOME=~/Library/Android/sdk ./gradlew :app:assembleRelease
+# arm64-v8a only: every current Android phone (and the Apple-silicon emulator); a universal build is ~170 MB
+cd android && ANDROID_HOME=~/Library/Android/sdk ./gradlew :app:assembleRelease -PreactNativeArchitectures=arm64-v8a
 cp app/build/outputs/apk/release/app-release.apk ../../../dist/nomad-karaoke-phase1-release.apk
 ```
 
