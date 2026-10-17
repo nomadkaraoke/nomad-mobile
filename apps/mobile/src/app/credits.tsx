@@ -16,6 +16,16 @@ const DEFAULT_PACKAGE = '3_credits';
 const POPULAR = '3_credits';
 const BEST_VALUE = '10_credits';
 
+/** "$6" for whole-dollar per-credit prices, "$8.33" otherwise. */
+const perCredit = (p: CreditPackage, locale: string) => {
+  const dollars = p.priceCents / p.credits / 100;
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: Number.isInteger(dollars) ? 0 : 2,
+  }).format(dollars);
+};
+
 /** Spec §4.5: pick a package, pay in an in-app browser, land back where the person came from. */
 export default function CreditsScreen() {
   const t = useTranslations('credits');
@@ -26,13 +36,15 @@ export default function CreditsScreen() {
   const locale = currentLocale();
 
   // Signed out: the sign-in sheet returns here.
+  // Keep the original returnTo through sign-in so the purchase still ends back in the make flow.
+  const signInReturn = returnTo && isInAppPath(returnTo) ? `/credits?returnTo=${encodeURIComponent(returnTo)}` : '/credits';
   const askedSignIn = useRef(false);
   useEffect(() => {
     if (auth.status === 'signedOut' && !askedSignIn.current) {
       askedSignIn.current = true;
-      router.push({ pathname: '/sign-in', params: { returnTo: '/credits' } });
+      router.push({ pathname: '/sign-in', params: { returnTo: signInReturn } });
     }
-  }, [auth.status]);
+  }, [auth.status, signInReturn]);
 
   const packages = useQuery({ queryKey: ['credit-packages'], queryFn: listCreditPackages, enabled: Boolean(email) });
 
@@ -122,7 +134,7 @@ function CreditsBody({ email, returnTo, packages, selected, setSelected, locale 
             p.id === POPULAR
               ? t('popular')
               : p.id === BEST_VALUE
-                ? t('each', { price: formatPrice(p.priceCents / p.credits, 'USD', locale) })
+                ? t('each', { price: perCredit(p, locale) })
                 : null;
           return (
             <Pressable
@@ -130,6 +142,7 @@ function CreditsBody({ email, returnTo, packages, selected, setSelected, locale 
               testID={`credits-pkg-${p.id}`}
               accessibilityRole="radio"
               accessibilityState={{ selected: on }}
+              disabled={phase === 'pending'}
               onPress={() => setSelected(p.id)}
               className={`flex-row items-center justify-between rounded-lg border p-4 ${on ? 'border-primary bg-card' : 'border-border'}`}
             >
@@ -147,7 +160,7 @@ function CreditsBody({ email, returnTo, packages, selected, setSelected, locale 
         testID="credits-checkout"
         label={t('checkout')}
         loading={checkout.busy}
-        disabled={!chosen || phase === 'added'}
+        disabled={!chosen || phase === 'added' || phase === 'pending'}
         onPress={() => chosen && void checkout.start(chosen.id)}
       />
     </Screen>

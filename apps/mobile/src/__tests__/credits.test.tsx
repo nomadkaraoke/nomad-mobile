@@ -5,6 +5,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { renderRouter } from 'expo-router/testing-library';
 
 import * as credits from '../app/credits';
+import { pollConfig } from '../credits/useCheckout';
 import { useAuth } from '../auth/store';
 import { gen, session } from '../test-utils/genAuthMock';
 import { makeRoutes } from '../test-utils/makeFixtures';
@@ -37,6 +38,7 @@ const openCredits = (url = '/credits?returnTo=/make/new') => renderRouter(routes
 beforeEach(async () => {
   jest.useRealTimers();
   jest.clearAllMocks();
+  pollConfig.intervalMs = 20;
   await useAuth.getState().signInWithSession(session());
   gen.listCreditPackages.mockResolvedValue(PACKAGES);
   gen.createAppCheckout.mockResolvedValue('https://checkout.example/pay');
@@ -48,7 +50,7 @@ it('lists the packages with prices and badges, defaulting to 3 credits', async (
   expect(await screen.findByTestId('credits-pkg-3_credits')).toBeTruthy();
   expect(screen.getByText('$24.00')).toBeTruthy();
   expect(screen.getByTestId('credits-badge-3_credits')).toHaveTextContent('Popular');
-  expect(screen.getByTestId('credits-badge-10_credits')).toHaveTextContent('$6.00 each');
+  expect(screen.getByTestId('credits-badge-10_credits')).toHaveTextContent('$6 each');
   expect(screen.getByTestId('credits-pkg-3_credits').props.accessibilityState.selected).toBe(true);
   fireEvent.press(screen.getByTestId('credits-pkg-5_credits'));
   expect(screen.getByTestId('credits-pkg-5_credits').props.accessibilityState.selected).toBe(true);
@@ -94,21 +96,58 @@ it.each([
 });
 
 it('a webhook that never lands says credits are on their way, with a refresh that can succeed', async () => {
-  jest.useFakeTimers();
   openCredits();
   browser.openAuthSessionAsync.mockResolvedValue({ type: 'success', url: 'nomadkaraoke://checkout?status=success' });
   await screen.findByTestId('credits-pkg-3_credits');
   await act(async () => fireEvent.press(screen.getByTestId('credits-checkout')));
-  await act(async () => {
-    await jest.advanceTimersByTimeAsync(12000);
-  });
+  await screen.findByTestId('credits-pending', {}, { timeout: 3000 });
+  expect(screen.getByTestId('credits-checkout').props.accessibilityState.disabled).toBe(true);
+  expect(screen.getByTestId('credits-pkg-5_credits').props.accessibilityState.disabled).toBe(true);
   expect(screen.getByTestId('credits-pending')).toHaveTextContent(/Payment received, credits are on their way/);
   expect(screen.queryByTestId('credits-failed')).toBeNull();
 
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 4 });
   await act(async () => fireEvent.press(screen.getByTestId('credits-refresh')));
   expect(screen.getByTestId('credits-added')).toBeTruthy();
-  jest.useRealTimers();
+});
+
+it('uses a fresh balance as the baseline, so a stale low cache is not a false "Credits added"', async () => {
+  openCredits();
+  // The cache says 0, the server (really) says 5 and never changes.
+  gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 5 });
+  await screen.findByTestId('credits-pkg-3_credits');
+  browser.openAuthSessionAsync.mockResolvedValue({ type: 'success', url: 'nomadkaraoke://checkout?status=success' });
+  await act(async () => fireEvent.press(screen.getByTestId('credits-checkout')));
+  await screen.findByTestId('credits-pending', {}, { timeout: 3000 });
+  expect(screen.queryByTestId('credits-added')).toBeNull();
+  expect(screen.getByTestId('credits-pending')).toBeTruthy();
+});
+
+it('a dismissed browser whose balance already rose counts as paid', async () => {
+  openCredits();
+  await screen.findByTestId('credits-pkg-3_credits');
+  gen.getMe.mockResolvedValueOnce({ email: 'me@example.com', credits: 1 }).mockResolvedValue({ email: 'me@example.com', credits: 4 });
+  browser.openAuthSessionAsync.mockResolvedValue({ type: 'dismiss' } as WebBrowser.WebBrowserAuthSessionResult);
+  await act(async () => fireEvent.press(screen.getByTestId('credits-checkout')));
+  expect(await screen.findByTestId('credits-added')).toBeTruthy();
+});
+
+it('shows a plain failure (not a crash) when checkout cannot start', async () => {
+  openCredits();
+  await screen.findByTestId('credits-pkg-3_credits');
+  gen.createAppCheckout.mockRejectedValue(new Error('boom'));
+  await act(async () => fireEvent.press(screen.getByTestId('credits-checkout')));
+  expect(await screen.findByTestId('credits-failed')).toHaveTextContent(/start checkout/);
+  expect(browser.openAuthSessionAsync).not.toHaveBeenCalled();
+});
+
+it('an invalid returnTo falls back to the Me tab after a purchase', async () => {
+  const app = openCredits('/credits?returnTo=https://evil.example');
+  await screen.findByTestId('credits-pkg-3_credits');
+  browser.openAuthSessionAsync.mockResolvedValue({ type: 'success', url: 'nomadkaraoke://checkout?status=success' });
+  gen.getMe.mockResolvedValueOnce({ email: 'me@example.com', credits: 1 }).mockResolvedValue({ email: 'me@example.com', credits: 4 });
+  await act(async () => fireEvent.press(screen.getByTestId('credits-checkout')));
+  await waitFor(() => expect(app.getPathname()).toBe('/me'), { timeout: 3000 });
 });
 
 it('shows a retry when the packages fail to load', async () => {
@@ -125,4 +164,11 @@ it('opens the sign-in sheet when signed out', async () => {
   const app = openCredits('/credits');
   await waitFor(() => expect(app.getPathname()).toBe('/sign-in'));
   expect(app.getSearchParams()).toEqual({ returnTo: '/credits' });
+});
+
+it('keeps the original returnTo through sign-in', async () => {
+  await useAuth.getState().signOut();
+  const app = openCredits('/credits?returnTo=/make/new');
+  await waitFor(() => expect(app.getPathname()).toBe('/sign-in'));
+  expect(app.getSearchParams()).toEqual({ returnTo: '/credits?returnTo=/make/new' });
 });

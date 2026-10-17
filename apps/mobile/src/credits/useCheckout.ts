@@ -4,12 +4,10 @@ import * as WebBrowser from 'expo-web-browser';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const RETURN_URL = 'nomadkaraoke://checkout';
-const POLL_MS = 1000;
-const POLL_TRIES = 10;
+/** Spec: poll every 1s for up to 10s. Mutable so tests can shrink the wait instead of faking timers. */
+export const pollConfig = { intervalMs: 1000, tries: 10 };
 
 export type CheckoutPhase = 'idle' | 'opening' | 'confirming' | 'added' | 'noPayment' | 'pending' | 'failed';
-
-const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 /** `nomadkaraoke://checkout?status=success|cancelled` -> the status, or null for anything else. */
 const returnStatus = (url: string | undefined): string | null => url?.match(/[?&]status=([^&#]*)/)?.[1] ?? null;
@@ -23,12 +21,29 @@ export function useCheckout(email: string) {
   const [phase, setPhase] = useState<CheckoutPhase>('idle');
   const alive = useRef(true);
   const baseline = useRef(0);
+  const timers = useRef(new Set<ReturnType<typeof setTimeout>>());
   useEffect(() => {
     alive.current = true;
+    const pending = timers.current;
     return () => {
       alive.current = false;
+      pending.forEach(clearTimeout);
+      pending.clear();
     };
   }, []);
+
+  /** Resolves after `ms`, or at once on unmount (the timer is cleared so nothing outlives the screen). */
+  const sleep = useCallback(
+    (ms: number) =>
+      new Promise<void>((resolve) => {
+        const id = setTimeout(() => {
+          timers.current.delete(id);
+          resolve();
+        }, ms);
+        timers.current.add(id);
+      }),
+    [],
+  );
 
   const set = (p: CheckoutPhase) => {
     if (alive.current) setPhase(p);
@@ -47,10 +62,10 @@ export function useCheckout(email: string) {
       } catch {
         // a blip while polling: keep trying until the window closes
       }
-      if (i < tries - 1) await sleep(POLL_MS);
+      if (i < tries - 1) await sleep(pollConfig.intervalMs);
     }
     return false;
-  }, [email, queryClient]);
+  }, [email, queryClient, sleep]);
 
   const finish = useCallback(
     async (tries: number) => {
@@ -66,17 +81,21 @@ export function useCheckout(email: string) {
     async (packageId: string) => {
       set('opening');
       try {
-        // The balance before paying: "credits rose" is measured against it.
-        baseline.current = (queryClient.getQueryData<{ credits: number }>(['me', email]) ?? (await getMe())).credits;
+        // Always fresh: a stale cached balance below the real one would read as "credits rose".
+        baseline.current = (await getMe()).credits;
         const url = await createAppCheckout(packageId, email);
         const result = await WebBrowser.openAuthSessionAsync(url, RETURN_URL);
-        if (result.type === 'success' && returnStatus(result.url) === 'success') await finish(POLL_TRIES);
-        else set('noPayment');
+        if (result.type === 'success' && returnStatus(result.url) === 'success') await finish(pollConfig.tries);
+        else if (result.type === 'dismiss' && (await waitForCredits(1))) {
+          // Closed the browser after paying, before the redirect: the credit is already there.
+          void queryClient.invalidateQueries({ queryKey: ['me'] });
+          set('added');
+        } else set('noPayment');
       } catch {
         set('failed');
       }
     },
-    [email, finish, queryClient],
+    [email, finish, queryClient, waitForCredits],
   );
 
   /** The "on its way" refresh button: one more short wait for the webhook. */
