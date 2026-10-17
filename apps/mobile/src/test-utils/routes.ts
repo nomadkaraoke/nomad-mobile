@@ -7,6 +7,7 @@ import * as rootLayout from '../app/_layout';
 import * as index from '../app/index';
 import * as signInCode from '../app/sign-in/code';
 import * as signInEmail from '../app/sign-in/email';
+import * as signInSheet from '../app/sign-in/index';
 import * as song from '../app/song/[id]';
 
 export function appRoutes() {
@@ -18,6 +19,7 @@ export function appRoutes() {
     '(tabs)/videos': videos,
     '(tabs)/account': account,
     'song/[id]': song,
+    'sign-in/index': signInSheet,
     'sign-in/email': signInEmail,
     'sign-in/code': signInCode,
   };

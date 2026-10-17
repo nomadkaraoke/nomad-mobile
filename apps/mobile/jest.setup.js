@@ -27,3 +27,25 @@ jest.mock('react-native-mmkv', () => {
     __resetMMKV: () => stores.forEach((s) => s.clear()),
   };
 });
+
+// Native sign-in SDKs: tests drive these per case (signIn / signInAsync resolve or reject).
+jest.mock('react-native-google-auth', () => {
+  class GoogleAuthError extends Error {
+    constructor(code, message) {
+      super(message);
+      this.code = code;
+    }
+  }
+  return {
+    GoogleAuth: { configure: jest.fn(async () => {}), signIn: jest.fn(async () => ({ type: 'cancelled' })) },
+    GoogleAuthErrorCodes: { SIGN_IN_CANCELLED: 'SIGN_IN_CANCELLED' },
+    GoogleAuthError,
+    isGoogleAuthError: (e) => e instanceof GoogleAuthError,
+  };
+});
+
+jest.mock('expo-apple-authentication', () => ({
+  isAvailableAsync: jest.fn(async () => true),
+  signInAsync: jest.fn(),
+  AppleAuthenticationScope: { FULL_NAME: 0, EMAIL: 1 },
+}));

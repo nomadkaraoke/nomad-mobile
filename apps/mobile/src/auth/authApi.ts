@@ -1,27 +1,47 @@
 import { ApiError } from '@nomad/api-gen';
 
-export interface AuthApi {
-  sendCode(email: string, locale: string): Promise<void>;
-  verifyCode(email: string, code: string): Promise<{ token: string }>;
+// Gen sign-in endpoints (spec §5). The store and social.ts call the facades directly; this module owns
+// how their failures are shown to a person.
+export { exchangeAppleToken, exchangeGoogleToken, sendCode, verifyCode, type GenSession } from '@nomad/api-gen';
+
+/** Gen allows 5 wrong codes; the 6th attempt is locked out (429 too_many_attempts) whatever it is. */
+export const MAX_CODE_ATTEMPTS = 5;
+
+export type SignInErrorKind =
+  | 'invalid' // wrong code, attemptsLeft says how many remain
+  | 'locked' // too many wrong codes: only a new code helps
+  | 'expired' // code timed out (or was destroyed by a lockout)
+  | 'tooManyCodes' // send-code throttled
+  | 'disposable' // throwaway email rejected
+  | 'notAllowed' // gen refused this account (tenant rules)
+  | 'signupLimited' // too many new accounts from here
+  | 'failed' // anything else from gen
+  | 'network'; // never reached gen
+
+export class SignInError extends Error {
+  constructor(
+    public readonly kind: SignInErrorKind,
+    public readonly attemptsLeft?: number,
+  ) {
+    super(kind);
+    this.name = 'SignInError';
+  }
 }
 
-export const MOCK_CODE = '123456';
+export const isSignInError = (e: unknown): e is SignInError => e instanceof SignInError;
 
-/** Stand-in for gen POST /api/users/auth/send-code + verify-code (spec §4.1, built in Phase 1). */
-export const mockAuthApi: AuthApi = {
-  async sendCode() {
-    await new Promise((r) => setTimeout(r, 300));
-  },
-  async verifyCode(email, code) {
-    await new Promise((r) => setTimeout(r, 300));
-    if (code !== MOCK_CODE) throw new ApiError(400, 'invalid_code');
-    return { token: `mock-${email}` };
-  },
-};
-
-export const isAuthMocked = () => process.env.EXPO_PUBLIC_AUTH_MOCK !== '0';
-
-export function getAuthApi(): AuthApi {
-  if (!isAuthMocked()) throw new Error('Real gen email-code auth lands in Phase 1 (spec §4.1)');
-  return mockAuthApi;
+/** Maps a gen sign-in failure (send-code, verify-code, google, apple) to what the person needs to know. */
+export function toSignInError(e: unknown): SignInError {
+  if (e instanceof SignInError) return e;
+  if (!(e instanceof ApiError) || e.status === 0) return new SignInError('network');
+  const { status, detail } = e;
+  if (status === 429 && detail === 'too_many_attempts') return new SignInError('locked', 0);
+  if (status === 429 && detail === 'too_many_codes') return new SignInError('tooManyCodes');
+  if (status === 429 && detail === 'signup_rate_limited') return new SignInError('signupLimited');
+  if (status === 401 && detail === 'expired') return new SignInError('expired');
+  if (status === 422 && detail === 'sign_in_not_allowed') return new SignInError('notAllowed');
+  // send-code's disposable-email 422 carries a sentence (a validation 422 carries a list).
+  if (status === 422 && typeof detail === 'string') return new SignInError('disposable');
+  if (status >= 500 && detail !== 'google_not_configured') return new SignInError('network');
+  return new SignInError('failed');
 }

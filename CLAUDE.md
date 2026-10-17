@@ -83,7 +83,7 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 
 ## Phase 1 notes (deferred from Phase 0)
 
-- Swap `mockAuthApi` (`apps/mobile/src/auth/authApi.ts`, code `123456`) for gen's `POST /api/users/auth/send-code` / `verify-code` once they ship (spec §4.1). Set `EXPO_PUBLIC_AUTH_MOCK=0`.
+- Sign-in is real (Phase 1): gen email code, Google (`react-native-google-auth`) and Apple (`expo-apple-authentication`, off until `EXPO_PUBLIC_APPLE_SIGNIN=1`; `app.config.ts` strips the entitlement otherwise). Against the local stack, `EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1` makes Google/Apple send `fake:<email>` (never against prod gen).
 - RTL (ar, he) currently applies on the next launch. Reload through `expo-updates` once EAS Update is configured.
 - Sentry Expo config plugin (org/project, source maps, dSYMs) is added together with the Sentry account.
 - EAS: `eas.json` and `.eas/workflows/*` are dormant. `runtimeVersion` / `updates.url` need an EAS project id.

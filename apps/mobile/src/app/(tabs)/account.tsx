@@ -23,7 +23,7 @@ export default function AccountScreen() {
         <Button
           testID="account-signin"
           label={t('signIn')}
-          onPress={() => router.push({ pathname: '/sign-in/email', params: { returnTo: '/account' } })}
+          onPress={() => router.push({ pathname: '/sign-in', params: { returnTo: '/account' } })}
         />
       )}
       <Text variant="muted">{t('language')}</Text>

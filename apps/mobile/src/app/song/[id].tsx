@@ -25,7 +25,7 @@ export default function SongScreen() {
 
   const onMake = () => {
     if (!signedIn) {
-      router.push({ pathname: '/sign-in/email', params: { returnTo: `/song/${id}` } });
+      router.push({ pathname: '/sign-in', params: { returnTo: `/song/${id}` } });
       return;
     }
     // Phase 1 replaces this with the gen make flow (spec §2 step 3).
