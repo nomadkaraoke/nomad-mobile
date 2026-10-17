@@ -10,7 +10,7 @@ const rows = [];
 for (const [path, ops] of Object.entries(spec.paths)) {
   if (path.startsWith('/api/admin') || path.startsWith('/api/internal')) continue;
   for (const [method, op] of Object.entries(ops)) {
-    const ok = op.responses?.['200'] ?? op.responses?.['201'];
+    const ok = op.responses?.['200'] ?? op.responses?.['201'] ?? op.responses?.['202'];
     const schema = ok?.content?.['application/json']?.schema;
     if (!isTyped(schema)) rows.push(`| ${method.toUpperCase()} | \`${path}\` | \`${op.operationId}\` |`);
   }

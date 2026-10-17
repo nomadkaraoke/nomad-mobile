@@ -13,7 +13,7 @@ const ME = { user: { email: 'a@b.co', credits: 2 } };
 it('sends bearer token and locale to /api/users/me', async () => {
   fetchMock.mockResolvedValue(json(ME));
   configureClient({ baseUrl: 'https://gen.test', getToken: () => 'tok', getLocale: () => 'ja', onUnauthorized: jest.fn() });
-  await expect(getMe()).resolves.toEqual(ME);
+  await expect(getMe()).resolves.toEqual({ email: 'a@b.co', credits: 2 });
   const req = lastRequest();
   expect(req.url).toBe('https://gen.test/api/users/me');
   expect(req.headers.get('authorization')).toBe('Bearer tok');

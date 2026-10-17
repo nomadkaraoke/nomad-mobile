@@ -41,3 +41,8 @@ export function configureClient(deps: ClientDeps): void {
     return new ApiError(response?.status ?? 0, detail);
   });
 }
+
+/** True when `e` is an ApiError with this status (and, if given, this string detail). */
+export function isApiError(e: unknown, status: number, detail?: string): e is ApiError {
+  return e instanceof ApiError && e.status === status && (detail === undefined || e.detail === detail);
+}

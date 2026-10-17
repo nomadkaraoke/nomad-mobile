@@ -3,7 +3,7 @@
   "info": {
     "title": "Karaoke Generator API",
     "description": "Backend API for web-based karaoke video generation",
-    "version": "0.268.11"
+    "version": "0.277.1"
   },
   "paths": {
     "/api/health": {
@@ -3884,7 +3884,7 @@
           "internal"
         ],
         "summary": "Process Stale Reviews Endpoint",
-        "description": "Process stale review jobs — send reminders and expire old ones.\n\nCalled by Cloud Scheduler (hourly). Can also be triggered manually\nfrom the admin dashboard.\n\n- Jobs in review for >= 24h get a reminder email\n- Jobs in review for >= 48h are auto-cancelled with credit refund\n- Signed-URL upload jobs whose browser upload never finished (>= 2h) are\n  auto-cancelled with credit refund",
+        "description": "Process stale review jobs — send reminders and expire old ones.\n\nCalled by Cloud Scheduler (hourly). Can also be triggered manually\nfrom the admin dashboard.\n\n- Jobs in review for >= 24h get a reminder email\n- Jobs in review for >= 48h are auto-cancelled with credit refund\n- Signed-URL upload jobs whose browser upload never finished (>= 2h) are\n  auto-cancelled with credit refund\n- Free-to-paid conversion emails (when CONVERSION_EMAILS_ENABLED)",
         "operationId": "process_stale_reviews_endpoint_api_internal_process_stale_reviews_post",
         "security": [
           {
@@ -6548,7 +6548,7 @@
           "review"
         ],
         "summary": "Get Instrumental Urls",
-        "description": "Return instrumental stem options (same-origin audio proxy paths) for the review.\n\nSince the 2026-09-17 fast-load re-architecture these are non-expiring proxy paths, so\na refresh is no longer strictly needed — but the preview modal still calls this on an\naudio load error (e.g. a transient network blip) to swap in a fresh URL, and it's a\ncheap, backwards-compatible way to do so. Returns the same shape as correction-data's\n``instrumental_options``.",
+        "description": "Return instrumental stem options (same-origin audio proxy paths) for the review.\n\nSince the 2026-09-17 fast-load re-architecture these are non-expiring proxy paths, so\na refresh is no longer strictly needed — but the preview modal still calls this on an\naudio load error (e.g. a transient network blip) to swap in a fresh URL, and it's a\ncheap, backwards-compatible way to do so. Returns the same shape as correction-data's\n``instrumental_options``.\n\nAlso the review page's \"are the stems ready yet?\" poll: review opens as soon as\nLYRICS finish, while audio separation typically lands 2-3 minutes later, so the\ncorrection-data fetched at page load often has no stems / backing analysis. The\npage polls this until ``audio_complete`` and then swaps in the fresh\n``backing_vocals_analysis`` + ``auto_approval`` (re-derived now that the analysis\nexists), so the finish modal's instrumental chooser appears without a reload.\n``audio_complete`` is set only after stems, review OGGs and the backing analysis\nare all written (audio_worker), so it's the right \"everything is ready\" signal.",
         "operationId": "get_instrumental_urls_api_review__job_id__instrumental_urls_get",
         "security": [
           {
@@ -9728,6 +9728,71 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserFeedbackResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/admin/attribution-summary": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Attribution Summary",
+        "description": "Signups -> verified -> made a job -> paid, grouped by signup_source (admin only).\n\nCovers consumer accounts created in the last ``days`` (test and tenant users\nexcluded). Users without a recorded source show as \"direct / unknown\"; all\naccounts created before attribution capture shipped (2026-10) land there.",
+        "operationId": "attribution_summary_api_users_admin_attribution_summary_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 90,
+              "title": "Days"
+            }
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttributionSummaryResponse"
                 }
               }
             }
@@ -17731,6 +17796,90 @@
         }
       }
     },
+    "/api/users/auth/send-code": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Send Login Code",
+        "description": "Email a 6-digit sign-in code (plus a magic link) to ``email``.",
+        "operationId": "send_login_code_api_users_auth_send_code_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendLoginCodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendLoginCodeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/auth/verify-code": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Verify Login Code",
+        "description": "Exchange an emailed code for a session (same response as GET /auth/verify).",
+        "operationId": "verify_login_code_api_users_auth_verify_code_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyLoginCodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyMagicLinkResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/tenant/config": {
       "get": {
         "tags": [
@@ -19409,6 +19558,71 @@
         ],
         "title": "AttachUploadUrlsResponse",
         "description": "Signed URL to upload an audio file for an existing job."
+      },
+      "AttributionSourceRow": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "signups": {
+            "type": "integer",
+            "title": "Signups",
+            "default": 0
+          },
+          "verified": {
+            "type": "integer",
+            "title": "Verified",
+            "default": 0
+          },
+          "made_job": {
+            "type": "integer",
+            "title": "Made Job",
+            "default": 0
+          },
+          "paid": {
+            "type": "integer",
+            "title": "Paid",
+            "default": 0
+          },
+          "revenue_cents": {
+            "type": "integer",
+            "title": "Revenue Cents",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "source"
+        ],
+        "title": "AttributionSourceRow",
+        "description": "Funnel counts for one acquisition channel."
+      },
+      "AttributionSummaryResponse": {
+        "properties": {
+          "days": {
+            "type": "integer",
+            "title": "Days"
+          },
+          "total_signups": {
+            "type": "integer",
+            "title": "Total Signups"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/AttributionSourceRow"
+            },
+            "type": "array",
+            "title": "Sources"
+          }
+        },
+        "type": "object",
+        "required": [
+          "days",
+          "total_signups",
+          "sources"
+        ],
+        "title": "AttributionSummaryResponse"
       },
       "AudioEditReviewListResponse": {
         "properties": {
@@ -21636,6 +21850,17 @@
             "type": "string",
             "contentMediaType": "application/octet-stream",
             "title": "File"
+          },
+          "purpose": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Purpose"
           }
         },
         "type": "object",
@@ -24204,6 +24429,18 @@
             "title": "Requires Audio Edit",
             "description": "Pause after upload for user to edit input audio",
             "default": false
+          },
+          "track_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Track Code",
+            "description": "Tenant's own catalogue code for this track (tenant portals only)"
           },
           "upload_mode": {
             "type": "string",
@@ -27175,6 +27412,30 @@
           },
           "sample": {
             "$ref": "#/components/schemas/PreviewSample"
+          },
+          "include_cdg": {
+            "type": "boolean",
+            "title": "Include Cdg",
+            "default": false
+          },
+          "kinds": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "title_card",
+                    "karaoke_frame",
+                    "end_screen"
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kinds"
           }
         },
         "type": "object",
@@ -27197,7 +27458,14 @@
             "title": "Title Card"
           },
           "karaoke_frame": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Karaoke Frame"
           },
           "end_screen": {
@@ -27210,12 +27478,53 @@
               }
             ],
             "title": "End Screen"
+          },
+          "cdg_title_card": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cdg Title Card"
+          },
+          "cdg_lyrics": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cdg Lyrics"
+          },
+          "cdg_instrumental": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cdg Instrumental"
+          },
+          "cdg_outro": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cdg Outro"
           }
         },
         "type": "object",
-        "required": [
-          "karaoke_frame"
-        ],
         "title": "PreviewResponse"
       },
       "PreviewSample": {
@@ -27793,6 +28102,20 @@
             "type": "array",
             "title": "Fonts"
           },
+          "cdg_images": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Cdg Images"
+          },
+          "cdg_transitions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Cdg Transitions"
+          },
           "refreshed_jobs": {
             "type": "integer",
             "title": "Refreshed Jobs",
@@ -27912,6 +28235,93 @@
         "title": "SendCompletionEmailResponse",
         "description": "Response from sending a completion email."
       },
+      "SendLoginCodeRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "locale": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locale"
+          },
+          "device_fingerprint": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 256
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device Fingerprint"
+          },
+          "referral_code": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Referral Code"
+          },
+          "attribution": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "propertyNames": {
+                  "maxLength": 32
+                },
+                "type": "object",
+                "maxProperties": 16
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attribution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "title": "SendLoginCodeRequest"
+      },
+      "SendLoginCodeResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "SendLoginCodeResponse"
+      },
       "SendMagicLinkRequest": {
         "properties": {
           "email": {
@@ -27939,6 +28349,32 @@
               }
             ],
             "title": "Referral Code"
+          },
+          "attribution": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "propertyNames": {
+                  "maxLength": 32
+                },
+                "type": "object",
+                "maxProperties": 16
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attribution"
           },
           "purpose": {
             "anyOf": [
@@ -29328,6 +29764,20 @@
             },
             "type": "array",
             "title": "Fonts"
+          },
+          "cdg_images": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Cdg Images"
+          },
+          "cdg_transitions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Cdg Transitions"
           }
         },
         "type": "object",
@@ -30050,6 +30500,40 @@
             ],
             "title": "Referral Code"
           },
+          "signup_source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Signup Source"
+          },
+          "signup_venue": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Signup Venue"
+          },
+          "signup_attribution": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Signup Attribution"
+          },
           "recent_sessions": {
             "items": {
               "additionalProperties": true,
@@ -30321,6 +30805,28 @@
             ],
             "title": "Referral Discount Expires At"
           },
+          "promo_discount_percent": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Promo Discount Percent"
+          },
+          "promo_discount_expires_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Promo Discount Expires At"
+          },
           "referred_by_code": {
             "anyOf": [
               {
@@ -30541,6 +31047,25 @@
           "credit_status"
         ],
         "title": "VerifyCodeResponse"
+      },
+      "VerifyLoginCodeRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "code": {
+            "type": "string",
+            "maxLength": 32,
+            "title": "Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "code"
+        ],
+        "title": "VerifyLoginCodeRequest"
       },
       "VerifyMagicLinkResponse": {
         "properties": {

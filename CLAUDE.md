@@ -30,7 +30,7 @@ The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke proj
 apps/mobile/          Expo app (src/app routes, src/auth, src/api, src/find, src/providers)
 packages/core/        pure TS: session model + input normalizers, job phases, poll backoff, formatting
 packages/i18n/        messages/<33>.json, resolveLocale, IntlProvider; scripts/ vendored from karaoke-gen
-packages/api-gen/     generated karaoke-gen client + configureClient + facades (getMe, listCreditPackages)
+packages/api-gen/     generated karaoke-gen client + configureClient + facades (auth, credits, make, jobs) + zod overrides
 packages/api-decide/  generated karaoke-decide client + facades (searchSongs, popularSongs, getSong)
 packages/ui/          tokens, Screen/Text/Button/TextField, <List> (FlashList), <WaveformCanvas> (Skia)
 openapi/              gen.json + decide.json snapshots (refresh: pnpm gen:api)
@@ -44,6 +44,7 @@ pnpm install                       # pnpm 12; settings live in pnpm-workspace.ya
 pnpm test                          # all jest projects   (pnpm test:coverage enforces 70%+ on packages/*)
 pnpm typecheck && pnpm lint
 pnpm gen:api                       # refresh OpenAPI snapshots from prod + regenerate clients
+GEN_OPENAPI_URL=http://127.0.0.1:8010/openapi.json node scripts/fetch-openapi.mjs gen  # gen snapshot from another stack
 pnpm gen:api:offline               # regenerate from committed snapshots (CI drift check)
 pnpm i18n:translate                # translate new en.json keys → 32 locales (Gemini, GCS cache)
 pnpm i18n:check                    # key/placeholder completeness (CI hard-fails)

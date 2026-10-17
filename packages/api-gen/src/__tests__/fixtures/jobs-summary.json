@@ -1,0 +1,102 @@
+[
+  {
+    "job_id": "a1b2c3d4",
+    "status": "complete",
+    "progress": 100,
+    "created_at": "2026-10-16T19:02:11.482913+00:00",
+    "updated_at": "2026-10-16T19:21:40.118204+00:00",
+    "artist": "Chappell Roan",
+    "title": "Pink Pony Club",
+    "error_message": null,
+    "non_interactive": false,
+    "user_email": "singer@example.com",
+    "is_private": false,
+    "made_for_you": false,
+    "locale": "en",
+    "credit_refunded": false,
+    "url": null,
+    "filename": null,
+    "audio_search_artist": "Chappell Roan",
+    "audio_search_title": "Pink Pony Club",
+    "audio_source_type": "audio_search",
+    "source_name": "Spotify",
+    "source_id": "5U2zRk0yZGOPz0SgjoGNgg",
+    "target_file": null,
+    "download_url": null,
+    "state_data": {
+      "brand_code": "NOMAD-1234",
+      "youtube_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "credits_charged": 1,
+      "audio_complete": true,
+      "lyrics_complete": true
+    },
+    "file_urls": {
+      "finals": {
+        "lossy_720p_mp4": "gs://karaoke-gen-storage/jobs/a1b2c3d4/finals/NOMAD-1234 - Chappell Roan - Pink Pony Club (Final Karaoke Lossy 720p).mp4",
+        "lossy_4k_mp4": "gs://karaoke-gen-storage/jobs/a1b2c3d4/finals/NOMAD-1234 - Chappell Roan - Pink Pony Club (Final Karaoke Lossy 4k).mp4"
+      },
+      "packages": {
+        "cdg_zip": "gs://karaoke-gen-storage/jobs/a1b2c3d4/packages/NOMAD-1234 - Chappell Roan - Pink Pony Club (Final Karaoke CDG).zip"
+      }
+    },
+    "processing_metadata": {}
+  },
+  {
+    "job_id": "e5f6a7b8",
+    "status": "awaiting_duration_confirm",
+    "progress": 10,
+    "created_at": "2026-10-17T08:15:03.004512+00:00",
+    "updated_at": "2026-10-17T08:15:49.731002+00:00",
+    "artist": "Pink Floyd",
+    "title": "Echoes",
+    "non_interactive": false,
+    "user_email": "singer@example.com",
+    "is_private": false,
+    "made_for_you": false,
+    "locale": "en",
+    "audio_search_artist": "Pink Floyd",
+    "audio_search_title": "Echoes",
+    "audio_source_type": "audio_search",
+    "state_data": {
+      "credits_charged": 1,
+      "pending_additional_credits": 2,
+      "duration_actual_seconds": 1412.6,
+      "duration_confirm_reason": "long_track"
+    },
+    "processing_metadata": {}
+  },
+  {
+    "job_id": "c9d0e1f2",
+    "status": "failed",
+    "progress": 20,
+    "created_at": "2026-10-15T21:40:55.910114+00:00",
+    "updated_at": "2026-10-15T21:58:12.300471+00:00",
+    "artist": "Some Artist",
+    "title": "Some Song",
+    "error_message": "Audio download failed",
+    "error_details": { "code": "download_failed", "stage": "downloading_audio" },
+    "user_email": "singer@example.com",
+    "is_private": false,
+    "credit_refunded": true,
+    "state_data": {
+      "credits_charged": 1,
+      "cloud_run_retry_pending": null
+    }
+  },
+  {
+    "job_id": "0a1b2c3d",
+    "status": "separating_stage1",
+    "progress": 25,
+    "created_at": "2026-10-17T09:01:00.000000+00:00",
+    "updated_at": "2026-10-17T09:03:12.500000+00:00",
+    "artist": "ABBA",
+    "title": "Dancing Queen",
+    "user_email": "singer@example.com",
+    "is_private": false,
+    "state_data": {
+      "credits_charged": 1,
+      "audio_progress": { "stage": "separating_stage1", "progress": 25 }
+    },
+    "file_urls": {}
+  }
+]
