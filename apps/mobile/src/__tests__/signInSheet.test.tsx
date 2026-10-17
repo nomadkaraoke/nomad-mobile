@@ -70,6 +70,12 @@ it('hides Apple when appleAvailable() is false, and uses a generic title without
   expect(screen.queryByTestId('signin-apple')).toBeNull();
 });
 
+it('uses the generic title when not opened by the make flow, even with a fresh intent', async () => {
+  renderRouter(signInRoutes(), { initialUrl: '/sign-in?returnTo=/me' });
+  expect(await screen.findByText('Sign in to Nomad Karaoke')).toBeTruthy();
+  expect(screen.queryByText(/Sign in to make/)).toBeNull();
+});
+
 it('email → code → signed in → back in the make flow, with the keyboard put away', async () => {
   const dismiss = jest.spyOn(Keyboard, 'dismiss');
   const app = openSheet();

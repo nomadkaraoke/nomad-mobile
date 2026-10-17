@@ -53,7 +53,9 @@ export default function SignInSheet() {
   return (
     <Screen testID="signin-sheet" scroll>
       <Text variant="title">
-        {isFreshIntent(intent) ? t('sheetTitle', { title: isolate(intent.title) }) : t('sheetTitleGeneric')}
+        {returnTo === '/make/new' && isFreshIntent(intent)
+          ? t('sheetTitle', { title: isolate(intent.title) })
+          : t('sheetTitleGeneric')}
       </Text>
       <Text variant="muted">{t('sheetBody')}</Text>
       {fake ? (
