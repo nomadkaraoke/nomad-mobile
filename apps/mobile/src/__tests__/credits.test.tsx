@@ -210,3 +210,15 @@ it('keeps the original returnTo through sign-in', async () => {
   await waitFor(() => expect(app.getPathname()).toBe('/sign-in'));
   expect(app.getSearchParams()).toEqual({ returnTo: '/credits?returnTo=/make/new' });
 });
+
+it('signed out with the sign-in sheet dismissed: a Sign in button reopens it, keeping returnTo', async () => {
+  await useAuth.getState().signOut();
+  const app = renderRouter(routes(), { initialUrl: '/me' });
+  await screen.findByTestId('me-screen');
+  act(() => router.push({ pathname: '/credits', params: { returnTo: '/make/new' } }));
+  await waitFor(() => expect(app.getPathname()).toBe('/sign-in'));
+  act(() => router.back());
+  fireEvent.press(await screen.findByTestId('credits-signin'));
+  await waitFor(() => expect(app.getPathname()).toBe('/sign-in'));
+  expect(app.getSearchParams()).toEqual({ returnTo: '/credits?returnTo=/make/new' });
+});

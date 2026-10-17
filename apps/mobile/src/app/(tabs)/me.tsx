@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { ActivityIndicator } from 'react-native';
 
+import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
 import { currentLocale } from '../../locale';
 
@@ -36,7 +37,7 @@ export default function MeScreen() {
         <Button
           testID="me-signin"
           label={t('signIn')}
-          onPress={() => router.push({ pathname: '/sign-in', params: { returnTo: '/me' } })}
+          onPress={() => openSignIn('/me')}
         />
       )}
       <Text variant="muted">{t('language')}</Text>

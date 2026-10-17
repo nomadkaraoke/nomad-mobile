@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
+import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
 import { JobCard } from '../../jobs/JobCard';
 import { useMyJobs } from '../../jobs/useMyJobs';
@@ -28,7 +29,7 @@ export default function MakeTabScreen() {
         <Button
           testID="make-tab-signin"
           label={ta('signIn')}
-          onPress={() => router.push({ pathname: '/sign-in', params: { returnTo: '/(tabs)/make' } })}
+          onPress={() => openSignIn('/(tabs)/make')}
         />
       </Screen>
     );

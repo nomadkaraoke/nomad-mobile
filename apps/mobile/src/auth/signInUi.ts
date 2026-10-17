@@ -10,6 +10,11 @@ export type SignInParams = { returnTo?: string };
 /** Only in-app paths ("/make/new"), never a URL or a protocol-relative "//host" from a crafted deep link. */
 export const isInAppPath = (p: string) => p.startsWith('/') && !p.startsWith('//') && !p.startsWith('/\\');
 
+/** Opens the sign-in sheet; finishing it lands on `returnTo`. */
+export function openSignIn(returnTo: string) {
+  router.push({ pathname: '/sign-in', params: { returnTo } });
+}
+
 /**
  * Leave the sign-in sheet for `returnTo` (the make flow passes `/make/new`). The sign-in screens replace one
  * another rather than stacking, so dismissing to `returnTo` (or replacing the sheet with it when it isn't

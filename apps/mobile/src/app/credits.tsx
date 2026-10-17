@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
-import { isInAppPath } from '../auth/signInUi';
+import { isInAppPath, openSignIn } from '../auth/signInUi';
 import { useAuth } from '../auth/store';
 import { useCheckout } from '../credits/useCheckout';
 import { currentLocale } from '../locale';
@@ -30,6 +30,7 @@ const perCredit = (p: CreditPackage, locale: string) => {
 /** Spec §4.5: pick a package, pay in an in-app browser, land back where the person came from. */
 export default function CreditsScreen() {
   const t = useTranslations('credits');
+  const ta = useTranslations('account');
   const { returnTo } = useLocalSearchParams<{ returnTo?: string }>();
   const auth = useAuth((s) => s.state);
   const email = auth.status === 'signedIn' ? auth.session.email : null;
@@ -43,7 +44,7 @@ export default function CreditsScreen() {
   useEffect(() => {
     if (auth.status === 'signedOut' && !askedSignIn.current) {
       askedSignIn.current = true;
-      router.push({ pathname: '/sign-in', params: { returnTo: signInReturn } });
+      openSignIn(signInReturn);
     }
   }, [auth.status, signInReturn]);
 
@@ -54,6 +55,7 @@ export default function CreditsScreen() {
       <Screen testID="credits-screen">
         <Text variant="title">{t('title')}</Text>
         <Text variant="muted">{t('signInPrompt')}</Text>
+        <Button testID="credits-signin" label={ta('signIn')} onPress={() => openSignIn(signInReturn)} />
       </Screen>
     );
   }

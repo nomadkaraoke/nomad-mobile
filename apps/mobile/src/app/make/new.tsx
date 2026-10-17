@@ -13,6 +13,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
+import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
 import { isFreshIntent, useMakeIntent } from '../../make/intentStore';
 import { PickCard, SourceGroups } from '../../make/SourcePicker';
@@ -118,7 +119,7 @@ export default function MakeScreen() {
 
   // Signed out (session expired mid-flow): reopen sign-in; it returns here with the intent kept.
   useEffect(() => {
-    if (!signedIn && intent) router.push({ pathname: '/sign-in', params: { returnTo: '/make/new' } });
+    if (!signedIn && intent) openSignIn('/make/new');
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only when the sign-in state changes
   }, [signedIn]);
 
@@ -166,7 +167,7 @@ export default function MakeScreen() {
         <Button
           testID="make-signin"
           label={tAll('account.signIn')}
-          onPress={() => router.push({ pathname: '/sign-in', params: { returnTo: '/make/new' } })}
+          onPress={() => openSignIn('/make/new')}
         />
       ) : search.isPending || search.isIdle ? (
         <View testID="make-searching" className="items-center gap-2 py-8">

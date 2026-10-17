@@ -6,6 +6,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
+import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
 import { useMakeIntent } from '../../make/intentStore';
 
@@ -38,7 +39,7 @@ export default function SongScreen() {
     setIntent({ ...target, createdAt: Date.now() });
     // Sign-in carries straight on into the make flow (spec §4.3).
     if (signedIn) router.push('/make/new');
-    else router.push({ pathname: '/sign-in', params: { returnTo: '/make/new' } });
+    else openSignIn('/make/new');
   };
 
   return (
