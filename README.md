@@ -14,7 +14,7 @@ The combined Nomad Karaoke app for iOS and Android. Find a song (karaoke-decide)
 - Maestro smoke flows
 - placeholder screens: live decide search, plus a mock email-code sign-in
 
-Phase 1 builds the MVP flow (make → pay → watch). See the [design spec](docs/superpowers/specs/2026-10-14-mobile-phase0-design.md).
+The vision, release bar and phase roadmap are in [docs/VISION.md](docs/VISION.md). Phase 1 (make → pay → watch) is next. See also the [Phase 0 design spec](docs/superpowers/specs/2026-10-14-mobile-phase0-design.md).
 
 ## Quick start
 
