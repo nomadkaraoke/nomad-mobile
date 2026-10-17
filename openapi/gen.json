@@ -3,7 +3,7 @@
   "info": {
     "title": "Karaoke Generator API",
     "description": "Backend API for web-based karaoke video generation",
-    "version": "0.277.1"
+    "version": "0.278.0"
   },
   "paths": {
     "/api/health": {
@@ -9510,6 +9510,72 @@
         }
       }
     },
+    "/api/users/credits/app-return": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Checkout App Return",
+        "description": "Stripe's https return URL for app checkouts → 302 to ``{scheme}://checkout?status=…``.\n\n``status`` is ``success`` or ``cancelled`` (anything else → ``cancelled``);\n``session_id`` is accepted but never forwarded. The tiny HTML body links back\nto the app for browsers that block scheme redirects. Credits are granted by\nthe Stripe webhook, never by this bounce.",
+        "operationId": "checkout_app_return_api_users_credits_app_return_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "session_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/users/credits/checkout": {
       "post": {
         "tags": [
@@ -17880,6 +17946,150 @@
         }
       }
     },
+    "/api/users/auth/handoff-token": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Create Handoff Token",
+        "description": "Signed-in web link for the app's own job review (the mobile \"Review on web\").\n\nThe URL is ``{FRONTEND_URL}/{locale}/auth/verify?token=…&handoff=1``: a\n``job_review:<id>`` magic-link token valid for ``HANDOFF_TOKEN_TTL_SECONDS``\nand usable once. ``handoff=1`` makes the verify page sign in without the\nemail-scanner \"Complete Sign-In\" tap; a used or expired link shows the\nnormal \"link expired\" state. 401 ``invalid_session``, 404 ``not_found``\n(missing or not the caller's job), 409 ``not_in_review``.",
+        "operationId": "create_handoff_token_api_users_auth_handoff_token_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HandoffTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HandoffTokenResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/auth/google": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Google Sign In",
+        "description": "Exchange a Google ID token for a gen session (same response as verify-code).\n\nAudience = ``GOOGLE_OAUTH_CLIENT_IDS``. 401 ``invalid_token`` (bad signature,\nissuer, audience, expiry, or unverified email), 503 ``google_not_configured``,\n503 ``identity_provider_unavailable`` (couldn't fetch the provider's keys;\nretryable), 422 disposable / blocked, 429 ``signup_rate_limited`` (new accounts only).",
+        "operationId": "google_sign_in_api_users_auth_google_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SocialSignInRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyMagicLinkResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/auth/apple": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Apple Sign In",
+        "description": "Exchange an Apple ID token for a gen session (same response as verify-code).\n\nAudience = ``APPLE_SIGNIN_AUDIENCES``. \"Hide My Email\" relay addresses\n(``@privaterelay.appleid.com``) are accepted as their own account. Errors as\nfor ``/auth/google`` (no 503: the Apple audience has a default).",
+        "operationId": "apple_sign_in_api_users_auth_apple_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SocialSignInRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyMagicLinkResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/tenant/config": {
       "get": {
         "tags": [
@@ -23421,6 +23631,18 @@
             "type": "string",
             "format": "email",
             "title": "Email"
+          },
+          "return_to": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "app"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Return To"
           }
         },
         "type": "object",
@@ -25420,6 +25642,57 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "HandoffTokenRequest": {
+        "properties": {
+          "target": {
+            "type": "string",
+            "const": "job_review",
+            "title": "Target"
+          },
+          "job_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Job Id"
+          },
+          "locale": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locale"
+          }
+        },
+        "type": "object",
+        "required": [
+          "target",
+          "job_id"
+        ],
+        "title": "HandoffTokenRequest"
+      },
+      "HandoffTokenResponse": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "expires_in_seconds": {
+            "type": "integer",
+            "title": "Expires In Seconds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url",
+          "expires_in_seconds"
+        ],
+        "title": "HandoffTokenResponse"
+      },
       "IPRequest": {
         "properties": {
           "ip_address": {
@@ -26733,6 +27006,11 @@
           "status": {
             "type": "string",
             "title": "Status"
+          },
+          "handoff": {
+            "type": "boolean",
+            "title": "Handoff",
+            "default": false
           }
         },
         "type": "object",
@@ -28502,6 +28780,82 @@
         ],
         "title": "SignedUploadUrl",
         "description": "Signed URL (or resumable session URI) for uploading a file."
+      },
+      "SocialSignInRequest": {
+        "properties": {
+          "id_token": {
+            "type": "string",
+            "maxLength": 8192,
+            "minLength": 1,
+            "title": "Id Token"
+          },
+          "locale": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locale"
+          },
+          "device_fingerprint": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 256
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device Fingerprint"
+          },
+          "referral_code": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Referral Code"
+          },
+          "attribution": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "propertyNames": {
+                  "maxLength": 32
+                },
+                "type": "object",
+                "maxProperties": 16
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attribution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_token"
+        ],
+        "title": "SocialSignInRequest"
       },
       "SongRequestPublic": {
         "properties": {

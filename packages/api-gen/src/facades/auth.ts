@@ -1,7 +1,13 @@
 import { z } from 'zod';
 
-import { client } from '../client/client.gen';
-import { getCurrentUserApiUsersMeGet, sendLoginCodeApiUsersAuthSendCodePost, verifyLoginCodeApiUsersAuthVerifyCodePost } from '../client';
+import {
+  appleSignInApiUsersAuthApplePost,
+  createHandoffTokenApiUsersAuthHandoffTokenPost,
+  getCurrentUserApiUsersMeGet,
+  googleSignInApiUsersAuthGooglePost,
+  sendLoginCodeApiUsersAuthSendCodePost,
+  verifyLoginCodeApiUsersAuthVerifyCodePost,
+} from '../client';
 import { parseResponse } from '../overrides/parse';
 
 /** A signed-in gen session: what every sign-in method returns. */
@@ -30,16 +36,16 @@ export async function verifyCode(email: string, code: string): Promise<GenSessio
   return toSession(data);
 }
 
-async function exchangeIdToken(provider: 'google' | 'apple', idToken: string, locale: string): Promise<GenSession> {
-  const { data } = await client.post({ url: `/api/users/auth/${provider}`, body: { id_token: idToken, locale } });
+// Social sign-in responses are still zod-checked: a malformed body surfaces as ApiError invalid_response.
+export async function exchangeGoogleToken(idToken: string, locale: string): Promise<GenSession> {
+  const { data } = await googleSignInApiUsersAuthGooglePost({ body: { id_token: idToken, locale } });
   return toSession(parseResponse(VerifySchema, data));
 }
 
-// Untyped until openapi/gen.json is refreshed after gen v0.278.0 ships.
-export const exchangeGoogleToken = (idToken: string, locale: string) => exchangeIdToken('google', idToken, locale);
-
-// Untyped until openapi/gen.json is refreshed after gen v0.278.0 ships.
-export const exchangeAppleToken = (idToken: string, locale: string) => exchangeIdToken('apple', idToken, locale);
+export async function exchangeAppleToken(idToken: string, locale: string): Promise<GenSession> {
+  const { data } = await appleSignInApiUsersAuthApplePost({ body: { id_token: idToken, locale } });
+  return toSession(parseResponse(VerifySchema, data));
+}
 
 export async function getMe(): Promise<{ email: string; credits: number }> {
   const { data } = await getCurrentUserApiUsersMeGet();
@@ -48,11 +54,9 @@ export async function getMe(): Promise<{ email: string; credits: number }> {
 
 const HandoffSchema = z.object({ url: z.string(), expires_in_seconds: z.number() });
 
-// Untyped until openapi/gen.json is refreshed after gen v0.278.0 ships.
 /** Single-use, 2-minute signed-in web link to the job's lyrics review. */
 export async function createHandoffUrl(jobId: string, locale: string): Promise<string> {
-  const { data } = await client.post({
-    url: '/api/users/auth/handoff-token',
+  const { data } = await createHandoffTokenApiUsersAuthHandoffTokenPost({
     body: { target: 'job_review', job_id: jobId, locale },
   });
   return parseResponse(HandoffSchema, data).url;

@@ -2712,6 +2712,10 @@ export type CreateCheckoutRequest = {
      * Email
      */
     email: string;
+    /**
+     * Return To
+     */
+    return_to?: 'app' | null;
 };
 
 /**
@@ -4015,6 +4019,38 @@ export type HttpValidationError = {
 };
 
 /**
+ * HandoffTokenRequest
+ */
+export type HandoffTokenRequest = {
+    /**
+     * Target
+     */
+    target: 'job_review';
+    /**
+     * Job Id
+     */
+    job_id: string;
+    /**
+     * Locale
+     */
+    locale?: string | null;
+};
+
+/**
+ * HandoffTokenResponse
+ */
+export type HandoffTokenResponse = {
+    /**
+     * Url
+     */
+    url: string;
+    /**
+     * Expires In Seconds
+     */
+    expires_in_seconds: number;
+};
+
+/**
  * IPRequest
  *
  * Request to add/remove an IP.
@@ -4773,6 +4809,10 @@ export type MagicLinkStatusResponse = {
      * Status
      */
     status: string;
+    /**
+     * Handoff
+     */
+    handoff?: boolean;
 };
 
 /**
@@ -5929,6 +5969,34 @@ export type SignedUploadUrl = {
      * True when upload_url is a GCS resumable session URI
      */
     resumable?: boolean;
+};
+
+/**
+ * SocialSignInRequest
+ */
+export type SocialSignInRequest = {
+    /**
+     * Id Token
+     */
+    id_token: string;
+    /**
+     * Locale
+     */
+    locale?: string | null;
+    /**
+     * Device Fingerprint
+     */
+    device_fingerprint?: string | null;
+    /**
+     * Referral Code
+     */
+    referral_code?: string | null;
+    /**
+     * Attribution
+     */
+    attribution?: {
+        [key: string]: string | null;
+    } | null;
 };
 
 /**
@@ -12671,6 +12739,31 @@ export type ListCreditPackagesApiUsersCreditsPackagesGetResponses = {
 
 export type ListCreditPackagesApiUsersCreditsPackagesGetResponse = ListCreditPackagesApiUsersCreditsPackagesGetResponses[keyof ListCreditPackagesApiUsersCreditsPackagesGetResponses];
 
+export type CheckoutAppReturnApiUsersCreditsAppReturnGetData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Status
+         */
+        status?: string | null;
+        /**
+         * Session Id
+         */
+        session_id?: string | null;
+    };
+    url: '/api/users/credits/app-return';
+};
+
+export type CheckoutAppReturnApiUsersCreditsAppReturnGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CheckoutAppReturnApiUsersCreditsAppReturnGetError = CheckoutAppReturnApiUsersCreditsAppReturnGetErrors[keyof CheckoutAppReturnApiUsersCreditsAppReturnGetErrors];
+
 export type CreateCheckoutApiUsersCreditsCheckoutPostData = {
     body: CreateCheckoutRequest;
     path?: never;
@@ -16913,6 +17006,87 @@ export type VerifyLoginCodeApiUsersAuthVerifyCodePostResponses = {
 };
 
 export type VerifyLoginCodeApiUsersAuthVerifyCodePostResponse = VerifyLoginCodeApiUsersAuthVerifyCodePostResponses[keyof VerifyLoginCodeApiUsersAuthVerifyCodePostResponses];
+
+export type CreateHandoffTokenApiUsersAuthHandoffTokenPostData = {
+    body: HandoffTokenRequest;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/users/auth/handoff-token';
+};
+
+export type CreateHandoffTokenApiUsersAuthHandoffTokenPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateHandoffTokenApiUsersAuthHandoffTokenPostError = CreateHandoffTokenApiUsersAuthHandoffTokenPostErrors[keyof CreateHandoffTokenApiUsersAuthHandoffTokenPostErrors];
+
+export type CreateHandoffTokenApiUsersAuthHandoffTokenPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: HandoffTokenResponse;
+};
+
+export type CreateHandoffTokenApiUsersAuthHandoffTokenPostResponse = CreateHandoffTokenApiUsersAuthHandoffTokenPostResponses[keyof CreateHandoffTokenApiUsersAuthHandoffTokenPostResponses];
+
+export type GoogleSignInApiUsersAuthGooglePostData = {
+    body: SocialSignInRequest;
+    path?: never;
+    query?: never;
+    url: '/api/users/auth/google';
+};
+
+export type GoogleSignInApiUsersAuthGooglePostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GoogleSignInApiUsersAuthGooglePostError = GoogleSignInApiUsersAuthGooglePostErrors[keyof GoogleSignInApiUsersAuthGooglePostErrors];
+
+export type GoogleSignInApiUsersAuthGooglePostResponses = {
+    /**
+     * Successful Response
+     */
+    200: VerifyMagicLinkResponse;
+};
+
+export type GoogleSignInApiUsersAuthGooglePostResponse = GoogleSignInApiUsersAuthGooglePostResponses[keyof GoogleSignInApiUsersAuthGooglePostResponses];
+
+export type AppleSignInApiUsersAuthApplePostData = {
+    body: SocialSignInRequest;
+    path?: never;
+    query?: never;
+    url: '/api/users/auth/apple';
+};
+
+export type AppleSignInApiUsersAuthApplePostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AppleSignInApiUsersAuthApplePostError = AppleSignInApiUsersAuthApplePostErrors[keyof AppleSignInApiUsersAuthApplePostErrors];
+
+export type AppleSignInApiUsersAuthApplePostResponses = {
+    /**
+     * Successful Response
+     */
+    200: VerifyMagicLinkResponse;
+};
+
+export type AppleSignInApiUsersAuthApplePostResponse = AppleSignInApiUsersAuthApplePostResponses[keyof AppleSignInApiUsersAuthApplePostResponses];
 
 export type GetTenantConfigApiTenantConfigGetData = {
     body?: never;
