@@ -28,9 +28,13 @@ const goToCredits = () => router.push({ pathname: '/credits', params: { returnTo
 export default function MakeScreen() {
   const t = useTranslations('make');
   const tAll = useTranslations();
-  const storedIntent = useMakeIntent((s) => s.intent);
   const clearIntent = useMakeIntent((s) => s.clear);
-  const intent = isFreshIntent(storedIntent) ? storedIntent : null;
+  // Read once on mount: the 30-minute expiry decides whether to resume a make flow, not whether an open pick
+  // card (and its search results) survives someone taking a while to choose.
+  const [intent] = useState(() => {
+    const stored = useMakeIntent.getState().intent;
+    return isFreshIntent(stored) ? stored : null;
+  });
   const auth = useAuth((s) => s.state);
   const signedIn = auth.status === 'signedIn';
   const email = signedIn ? auth.session.email : null;
@@ -143,7 +147,8 @@ export default function MakeScreen() {
     return (
       <Screen testID="make-screen">
         <Text testID="make-no-intent">{t('noIntent')}</Text>
-        <Button testID="make-discover" label={t('findSong')} onPress={() => router.replace('/discover')} />
+        {/* dismissTo pops back to the tabs (replace would stack a second (tabs)); with no history it opens Discover. */}
+        <Button testID="make-discover" label={t('findSong')} onPress={() => router.dismissTo('/discover')} />
       </Screen>
     );
   }

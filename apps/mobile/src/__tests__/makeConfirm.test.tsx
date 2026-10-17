@@ -178,6 +178,25 @@ it('without a fresh intent there is nothing to make', async () => {
   expect(gen.searchAudio).not.toHaveBeenCalled();
 });
 
+it('without an intent, Find a song goes back to Discover without stacking a second set of tabs', async () => {
+  useMakeIntent.getState().clear();
+  const app = renderRouter(makeRoutes(), { initialUrl: '/discover' });
+  await screen.findByTestId('discover-screen');
+  act(() => router.push('/make/new'));
+  fireEvent.press(await screen.findByTestId('make-discover'));
+  expect(await screen.findByTestId('discover-screen')).toBeTruthy();
+  expect(app.getPathname()).toBe('/discover');
+  const root = app.getRouterState()?.routes[0]?.state;
+  expect(root?.routes?.map((r) => r.name)).toEqual(['(tabs)']);
+});
+
+it('without an intent on a cold start (no history), Find a song opens Discover', async () => {
+  useMakeIntent.getState().clear();
+  const app = openMake();
+  fireEvent.press(await screen.findByTestId('make-discover'));
+  await waitFor(() => expect(app.getPathname()).toBe('/discover'));
+});
+
 it('an expired search session (404 on create) searches again for a fresh pick', async () => {
   gen.createJobFromSearch.mockRejectedValueOnce(apiError(404, 'Search expired — please search again'));
   gen.searchAudio.mockResolvedValueOnce(TIER1).mockResolvedValueOnce({ ...TIER1, sessionId: 's1b' });
@@ -243,4 +262,18 @@ it('after create the screen keeps its song until it is gone (no "Pick a song" fl
   dismiss.mockRestore();
   app.unmount();
   expect(useMakeIntent.getState().intent).toBeNull();
+});
+
+it('an open pick card outlives the 30-minute resume window (expiry only applies to resuming)', async () => {
+  const start = Date.now();
+  useMakeIntent.getState().set({ artist: 'Muse', title: 'Starlight', createdAt: start - 29 * 60 * 1000 });
+  openMake();
+  expect(await screen.findByTestId('make-pick')).toBeTruthy();
+  // Two minutes later the intent is 31 minutes old; any re-render must keep the song and its results.
+  const now = jest.spyOn(Date, 'now').mockReturnValue(start + 2 * 60 * 1000);
+  fireEvent.press(screen.getByTestId('make-other-sources'));
+  expect(await screen.findByTestId('make-source-1')).toBeTruthy();
+  expect(screen.queryByTestId('make-no-intent')).toBeNull();
+  expect(screen.getByTestId('make-pick')).toBeTruthy();
+  now.mockRestore();
 });
