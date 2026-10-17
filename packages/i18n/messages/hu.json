@@ -200,13 +200,13 @@
     "downloadMp4": "MP4 letöltése",
     "downloading": "Letöltés… {percent}%",
     "downloadingNoSize": "Letöltés…",
-    "notReady": "Ez a videó még nincs kész. Megtalálod a Készítés lapon, amint elkészül.",
     "openInYouTube": "Megnyitás a YouTube-on",
     "openSettings": "Beállítások megnyitása",
     "permissionDenied": "A videó mentéséhez engedélyezd a Nomad Karaoke számára a Fotókhoz való hozzáadást a Beállításokban.",
     "play": "Videó lejátszása",
     "saved": "Mentve a Fotók közé",
     "share": "Megosztás",
-    "savedGallery": "Elmentve a galériádba"
+    "savedGallery": "Elmentve a galériádba",
+    "notReady": "Ez a videó még nincs kész. Amint elkészül, a(z) {tab} fülön találod majd."
   }
 }

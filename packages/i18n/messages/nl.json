@@ -200,13 +200,13 @@
     "downloadMp4": "MP4 downloaden",
     "downloading": "Downloaden… {percent}%",
     "downloadingNoSize": "Downloaden…",
-    "notReady": "Deze video is nog niet klaar. Je vindt hem op het tabblad Maken zodra hij klaar is.",
     "openInYouTube": "Openen in YouTube",
     "openSettings": "Instellingen openen",
     "permissionDenied": "Geef Nomad Karaoke in Instellingen toestemming om toe te voegen aan Foto's om de video op te slaan.",
     "play": "Video afspelen",
     "saved": "Opgeslagen in Foto's",
     "share": "Delen",
-    "savedGallery": "Opgeslagen in je galerij"
+    "savedGallery": "Opgeslagen in je galerij",
+    "notReady": "Deze video is nog niet klaar. Je vindt hem op het tabblad {tab} zodra hij klaar is."
   }
 }

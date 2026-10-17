@@ -200,13 +200,13 @@
     "downloadMp4": "I-download ang MP4",
     "downloading": "Dina-download… {percent}%",
     "downloadingNoSize": "Dina-download…",
-    "notReady": "Hindi pa handa ang video na ito. Makikita mo ito sa Make tab kapag tapos na.",
     "openInYouTube": "Buksan sa YouTube",
     "openSettings": "Buksan ang settings",
     "permissionDenied": "Para mai-save ang video, payagan ang Nomad Karaoke na mag-save sa iyong Photos sa Settings.",
     "play": "I-play ang video",
     "saved": "Nai-save sa Photos",
     "share": "I-share",
-    "savedGallery": "Nai-save na sa iyong gallery"
+    "savedGallery": "Nai-save na sa iyong gallery",
+    "notReady": "Hindi pa handa ang video na ito. Makikita mo ito sa {tab} tab kapag tapos na."
   }
 }

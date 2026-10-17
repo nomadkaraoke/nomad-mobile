@@ -200,13 +200,13 @@
     "downloadMp4": "Pobierz MP4",
     "downloading": "Pobieranie… {percent}%",
     "downloadingNoSize": "Pobieranie…",
-    "notReady": "To wideo nie jest jeszcze gotowe. Znajdziesz je w zakładce Stwórz, gdy będzie gotowe.",
     "openInYouTube": "Otwórz w YouTube",
     "openSettings": "Otwórz Ustawienia",
     "permissionDenied": "Aby zapisać wideo, zezwól Nomad Karaoke na dostęp do aplikacji Zdjęcia w Ustawieniach.",
     "play": "Odtwórz wideo",
     "saved": "Zapisano w Zdjęciach",
     "share": "Udostępnij",
-    "savedGallery": "Zapisano w Twojej galerii"
+    "savedGallery": "Zapisano w Twojej galerii",
+    "notReady": "To wideo nie jest jeszcze gotowe. Znajdziesz je w zakładce {tab}, gdy będzie gotowe."
   }
 }

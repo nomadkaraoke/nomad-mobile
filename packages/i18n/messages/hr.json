@@ -200,13 +200,13 @@
     "downloadMp4": "Preuzmi MP4",
     "downloading": "Preuzimanje… {percent}%",
     "downloadingNoSize": "Preuzimanje…",
-    "notReady": "Ovaj videozapis još nije spreman. Pronaći ćeš ga na kartici Izradi kada bude dovršen.",
     "openInYouTube": "Otvori na usluzi YouTube",
     "openSettings": "Otvori postavke",
     "permissionDenied": "Za spremanje videozapisa dopusti aplikaciji Nomad Karaoke pristup Fotografijama u Postavkama.",
     "play": "Pokreni videozapis",
     "saved": "Spremljeno u Fotografije",
     "share": "Podijeli",
-    "savedGallery": "Spremljeno u tvoju galeriju"
+    "savedGallery": "Spremljeno u tvoju galeriju",
+    "notReady": "Ovaj videozapis još nije spreman. Pronaći ćeš ga na kartici {tab} kada bude gotov."
   }
 }

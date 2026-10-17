@@ -200,13 +200,13 @@
     "downloadMp4": "MP4 İndir",
     "downloading": "İndiriliyor… %{percent}",
     "downloadingNoSize": "İndiriliyor…",
-    "notReady": "Bu video henüz hazır değil. Tamamlandığında Make sekmesinde bulabilirsin.",
     "openInYouTube": "YouTube'da Aç",
     "openSettings": "Ayarları aç",
     "permissionDenied": "Videoyu kaydetmek için Ayarlar'dan Nomad Karaoke'nin Fotoğraflar'a ekleme yapmasına izin ver.",
     "play": "Videoyu oynat",
     "saved": "Fotoğraflar'a kaydedildi",
     "share": "Paylaş",
-    "savedGallery": "Galerine kaydedildi"
+    "savedGallery": "Galerine kaydedildi",
+    "notReady": "Bu video henüz hazır değil. Tamamlandığında {tab} sekmesinde bulabilirsin."
   }
 }

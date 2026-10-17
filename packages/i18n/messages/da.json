@@ -200,13 +200,13 @@
     "downloadMp4": "Download MP4",
     "downloading": "Downloader… {percent}%",
     "downloadingNoSize": "Downloader…",
-    "notReady": "Denne video er ikke klar endnu. Du finder den under fanen Opret, når den er færdig.",
     "openInYouTube": "Åbn på YouTube",
     "openSettings": "Åbn Indstillinger",
     "permissionDenied": "For at gemme videoen skal du give Nomad Karaoke adgang til Fotos i Indstillinger.",
     "play": "Afspil video",
     "saved": "Gemt i Fotos",
     "share": "Del",
-    "savedGallery": "Gemt i dit galleri"
+    "savedGallery": "Gemt i dit galleri",
+    "notReady": "Denne video er ikke klar endnu. Du finder den under fanen {tab}, når den er færdig."
   }
 }

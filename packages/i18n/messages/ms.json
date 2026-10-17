@@ -200,13 +200,13 @@
     "downloadMp4": "Muat turun MP4",
     "downloading": "Memuat turun… {percent}%",
     "downloadingNoSize": "Memuat turun…",
-    "notReady": "Video ini belum siap lagi. Anda boleh mencarinya di tab Hasilkan setelah selesai.",
     "openInYouTube": "Buka di YouTube",
     "openSettings": "Buka tetapan",
     "permissionDenied": "Untuk menyimpan video, benarkan Nomad Karaoke menambah ke Foto anda dalam Tetapan.",
     "play": "Mainkan video",
     "saved": "Disimpan ke Foto",
     "share": "Kongsi",
-    "savedGallery": "Disimpan ke galeri anda"
+    "savedGallery": "Disimpan ke galeri anda",
+    "notReady": "Video ini belum siap lagi. Anda boleh mencarinya di tab {tab} setelah selesai."
   }
 }

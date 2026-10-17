@@ -200,13 +200,13 @@
     "downloadMp4": "Stáhnout MP4",
     "downloading": "Stahování… {percent} %",
     "downloadingNoSize": "Stahování…",
-    "notReady": "Toto video ještě není připravené. Až bude hotové, najdeš ho na kartě Vytvořit.",
     "openInYouTube": "Otevřít na YouTube",
     "openSettings": "Otevřít Nastavení",
     "permissionDenied": "Pokud chceš video uložit, povol aplikaci Nomad Karaoke v Nastavení přístup k Fotkám.",
     "play": "Přehrát video",
     "saved": "Uloženo do Fotek",
     "share": "Sdílet",
-    "savedGallery": "Uloženo do tvé galerie"
+    "savedGallery": "Uloženo do tvé galerie",
+    "notReady": "Tohle video ještě není připravené. Až bude hotové, najdeš ho na kartě {tab}."
   }
 }

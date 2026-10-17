@@ -26,6 +26,7 @@ type Transfer =
 export default function ReadyScreen() {
   const t = useTranslations('ready');
   const tc = useTranslations('common');
+  const tTabs = useTranslations('tabs');
   const { id } = useLocalSearchParams<{ id: string }>();
   const queryClient = useQueryClient();
 
@@ -95,7 +96,7 @@ export default function ReadyScreen() {
       <Screen testID="ready-screen">
         <Text variant="title">{data.title}</Text>
         <Text variant="muted" testID="ready-not-ready">
-          {t('notReady')}
+          {t('notReady', { tab: tTabs('make') })}
         </Text>
       </Screen>
     );

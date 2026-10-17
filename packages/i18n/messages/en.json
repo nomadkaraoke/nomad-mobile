@@ -207,6 +207,6 @@
     "archived": "This video has been archived. Ask for it to be re-made from the website.",
     "downloadFailed": "Couldn't download the video. Try again.",
     "play": "Play video",
-    "notReady": "This video isn't ready yet. You'll find it on the Make tab when it's done."
+    "notReady": "This video isn't ready yet. You'll find it on the {tab} tab when it's done."
   }
 }

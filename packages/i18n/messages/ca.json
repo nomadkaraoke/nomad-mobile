@@ -200,13 +200,13 @@
     "downloadMp4": "Descarrega l'MP4",
     "downloading": "Descarregant… {percent}%",
     "downloadingNoSize": "Descarregant…",
-    "notReady": "Aquest vídeo encara no està a punt. El trobaràs a la pestanya Crea quan estigui llest.",
     "openInYouTube": "Obre a YouTube",
     "openSettings": "Obre la configuració",
     "permissionDenied": "Per desar el vídeo, permet que Nomad Karaoke afegeixi contingut a Fotos a Configuració.",
     "play": "Reprodueix el vídeo",
     "saved": "Desat a Fotos",
     "share": "Comparteix",
-    "savedGallery": "S'ha desat a la teva galeria"
+    "savedGallery": "S'ha desat a la teva galeria",
+    "notReady": "Aquest vídeo encara no està a punt. El trobaràs a la pestanya {tab} quan estigui acabat."
   }
 }

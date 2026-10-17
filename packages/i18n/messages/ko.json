@@ -200,13 +200,13 @@
     "downloadMp4": "MP4 다운로드",
     "downloading": "다운로드 중… {percent}%",
     "downloadingNoSize": "다운로드 중…",
-    "notReady": "이 비디오는 아직 준비되지 않았습니다. 완료되면 'Make' 탭에서 확인하실 수 있습니다.",
     "openInYouTube": "YouTube에서 열기",
     "openSettings": "설정 열기",
     "permissionDenied": "비디오를 저장하려면 설정에서 Nomad Karaoke가 사진 앱에 접근할 수 있도록 허용해 주세요.",
     "play": "비디오 재생",
     "saved": "사진 앱에 저장됨",
     "share": "공유",
-    "savedGallery": "갤러리에 저장되었습니다"
+    "savedGallery": "갤러리에 저장되었습니다",
+    "notReady": "이 영상은 아직 준비되지 않았습니다. 완료되면 {tab} 탭에서 확인하실 수 있습니다."
   }
 }

@@ -200,13 +200,13 @@
     "downloadMp4": "Last ned MP4",
     "downloading": "Laster ned… {percent}%",
     "downloadingNoSize": "Laster ned…",
-    "notReady": "Denne videoen er ikke klar ennå. Du finner den under Lag-fanen når den er ferdig.",
     "openInYouTube": "Åpne i YouTube",
     "openSettings": "Åpne Innstillinger",
     "permissionDenied": "For å lagre videoen må du gi Nomad Karaoke tilgang til Bilder under Innstillinger.",
     "play": "Spill av video",
     "saved": "Lagret i Bilder",
     "share": "Del",
-    "savedGallery": "Lagret i galleriet ditt"
+    "savedGallery": "Lagret i galleriet ditt",
+    "notReady": "Denne videoen er ikke klar ennå. Du finner den under {tab}-fanen når den er ferdig."
   }
 }

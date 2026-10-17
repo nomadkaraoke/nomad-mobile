@@ -200,13 +200,13 @@
     "downloadMp4": "הורדת MP4",
     "downloading": "מוריד… {percent}%",
     "downloadingNoSize": "מוריד…",
-    "notReady": "הסרטון עדיין לא מוכן. תמצאו אותו בלשונית Make כשהוא יהיה מוכן.",
     "openInYouTube": "פתיחה ב-YouTube",
     "openSettings": "פתיחת הגדרות",
     "permissionDenied": "כדי לשמור את הסרטון, יש לאשר ל-Nomad Karaoke גישה ל'תמונות' דרך ההגדרות.",
     "play": "הפעלת סרטון",
     "saved": "נשמר ב'תמונות'",
     "share": "שיתוף",
-    "savedGallery": "נשמר בגלריה שלך"
+    "savedGallery": "נשמר בגלריה שלך",
+    "notReady": "הסרטון הזה עדיין לא מוכן. תוכלו למצוא אותו בלשונית {tab} ברגע שיהיה מוכן."
   }
 }

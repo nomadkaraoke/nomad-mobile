@@ -200,13 +200,13 @@
     "downloadMp4": "MP4をダウンロード",
     "downloading": "ダウンロード中… {percent}%",
     "downloadingNoSize": "ダウンロード中…",
-    "notReady": "この動画はまだ準備ができていません。完成すると「作成」タブに表示されます。",
     "openInYouTube": "YouTubeで開く",
     "openSettings": "設定を開く",
     "permissionDenied": "動画を保存するには、「設定」でNomad Karaokeによる「写真」への追加を許可してください。",
     "play": "動画を再生",
     "saved": "「写真」に保存しました",
     "share": "共有",
-    "savedGallery": "ギャラリーに保存しました"
+    "savedGallery": "ギャラリーに保存しました",
+    "notReady": "この動画はまだ準備ができていません。完了すると{tab}タブに表示されます。"
   }
 }

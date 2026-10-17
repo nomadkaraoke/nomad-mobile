@@ -200,13 +200,13 @@
     "downloadMp4": "Descarcă MP4",
     "downloading": "Se descarcă… {percent}%",
     "downloadingNoSize": "Se descarcă…",
-    "notReady": "Acest videoclip nu este gata încă. Îl vei găsi în fila Creează când este gata.",
     "openInYouTube": "Deschide în YouTube",
     "openSettings": "Deschide setările",
     "permissionDenied": "Pentru a salva videoclipul, permite aplicației Nomad Karaoke să adauge fișiere în Poze din Setări.",
     "play": "Redă videoclipul",
     "saved": "Salvat în Poze",
     "share": "Distribuie",
-    "savedGallery": "Salvat în galeria ta"
+    "savedGallery": "Salvat în galeria ta",
+    "notReady": "Acest videoclip nu este gata încă. Îl vei găsi în fila {tab} când va fi gata."
   }
 }

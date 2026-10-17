@@ -200,13 +200,13 @@
     "downloadMp4": "下载 MP4",
     "downloading": "正在下载… {percent}%",
     "downloadingNoSize": "正在下载…",
-    "notReady": "该视频尚未就绪。制作完成后，您可以在“制作”标签页中找到它。",
     "openInYouTube": "在 YouTube 中打开",
     "openSettings": "打开设置",
     "permissionDenied": "若要保存视频，请在“设置”中允许 Nomad Karaoke 访问您的“照片”。",
     "play": "播放视频",
     "saved": "已保存到“照片”",
     "share": "分享",
-    "savedGallery": "已保存至您的作品库"
+    "savedGallery": "已保存至您的作品库",
+    "notReady": "该视频尚未准备就绪。制作完成后，您可以在“{tab}”标签页中找到它。"
   }
 }

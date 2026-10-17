@@ -200,13 +200,13 @@
     "downloadMp4": "Tải MP4",
     "downloading": "Đang tải xuống… {percent}%",
     "downloadingNoSize": "Đang tải xuống…",
-    "notReady": "Video này chưa sẵn sàng. Bạn sẽ tìm thấy video trong tab Make khi hoàn thành.",
     "openInYouTube": "Mở trên YouTube",
     "openSettings": "Mở Cài đặt",
     "permissionDenied": "Để lưu video, vui lòng cho phép Nomad Karaoke thêm vào Ảnh trong Cài đặt.",
     "play": "Phát video",
     "saved": "Đã lưu vào Ảnh",
     "share": "Chia sẻ",
-    "savedGallery": "Đã lưu vào bộ sưu tập của bạn"
+    "savedGallery": "Đã lưu vào bộ sưu tập của bạn",
+    "notReady": "Video này vẫn chưa sẵn sàng. Bạn sẽ tìm thấy video ở tab {tab} khi hoàn tất."
   }
 }
