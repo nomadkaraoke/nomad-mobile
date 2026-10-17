@@ -36,16 +36,17 @@ export async function verifyCode(email: string, code: string): Promise<GenSessio
   return toSession(data);
 }
 
+const SOCIAL_SIGN_IN = { google: googleSignInApiUsersAuthGooglePost, apple: appleSignInApiUsersAuthApplePost };
+
 // Social sign-in responses are still zod-checked: a malformed body surfaces as ApiError invalid_response.
-export async function exchangeGoogleToken(idToken: string, locale: string): Promise<GenSession> {
-  const { data } = await googleSignInApiUsersAuthGooglePost({ body: { id_token: idToken, locale } });
+async function exchangeIdToken(provider: keyof typeof SOCIAL_SIGN_IN, idToken: string, locale: string): Promise<GenSession> {
+  const { data } = await SOCIAL_SIGN_IN[provider]({ body: { id_token: idToken, locale } });
   return toSession(parseResponse(VerifySchema, data));
 }
 
-export async function exchangeAppleToken(idToken: string, locale: string): Promise<GenSession> {
-  const { data } = await appleSignInApiUsersAuthApplePost({ body: { id_token: idToken, locale } });
-  return toSession(parseResponse(VerifySchema, data));
-}
+export const exchangeGoogleToken = (idToken: string, locale: string) => exchangeIdToken('google', idToken, locale);
+
+export const exchangeAppleToken = (idToken: string, locale: string) => exchangeIdToken('apple', idToken, locale);
 
 export async function getMe(): Promise<{ email: string; credits: number }> {
   const { data } = await getCurrentUserApiUsersMeGet();
