@@ -3,8 +3,9 @@
 # the same install, signed out). We avoid clearState there: on a dev-client build it wipes the remembered Metro
 # server, and reconnecting triggers an iOS "Open in …?" SpringBoard prompt Maestro can't see.
 # Android: clearKeychain is a no-op (the session would survive), so clearState, which also forgets the Metro
-# server; typing it into the launcher reconnects. Metro goes through the emulator's host alias 10.0.2.2, so it
-# doesn't depend on an adb reverse rule (those vanish whenever the emulator's adb transport drops).
+# server; the dev-client deep link then opens the app on Metro via the emulator's host alias 10.0.2.2 (no adb
+# reverse rule to lose). (openLink is only a problem on iOS, see CLAUDE.md.) Typing the URL into the dev
+# launcher instead hung Maestro's driver on the 10th flow of a suite (inputText/eraseText gRPC timeouts).
 # The conditional steps only matter for a dev build that has no server yet; release/E2E builds skip them.
 appId: com.nomadkaraoke.mobile
 ---
@@ -19,16 +20,8 @@ appId: com.nomadkaraoke.mobile
     when:
       platform: Android
     commands:
-      - launchApp:
-          clearState: true
-      - runFlow:
-          when:
-            visible: "Connect"
-          commands:
-            - tapOn: "http://"
-            - eraseText
-            - inputText: "http://10.0.2.2:8081"
-            - tapOn: "Connect"
+      - clearState
+      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
 - runFlow:
     when:
       visible: "DEVELOPMENT SERVERS"
