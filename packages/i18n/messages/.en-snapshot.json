@@ -188,5 +188,21 @@
     "nothingTitle": "Nothing to confirm",
     "nothingBody": "This video doesn't need a cost check any more.",
     "close": "Close"
+  },
+  "ready": {
+    "openInYouTube": "Open in YouTube",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "share": "Share",
+    "downloadMp4": "Download MP4",
+    "downloading": "Downloading… {percent}%",
+    "downloadingNoSize": "Downloading…",
+    "saved": "Saved to Photos",
+    "permissionDenied": "To save the video, allow Nomad Karaoke to add to your Photos in Settings.",
+    "openSettings": "Open settings",
+    "archived": "This video has been archived. Ask for it to be re-made from the website.",
+    "downloadFailed": "Couldn't download the video. Try again.",
+    "play": "Play video",
+    "notReady": "This video isn't ready yet. You'll find it on the Make tab when it's done."
   }
 }

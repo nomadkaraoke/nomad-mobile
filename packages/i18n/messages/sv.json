@@ -188,5 +188,21 @@
     "stalledBody": "Källan för det här spåret kan vara offline just nu. Den brukar komma tillbaka snart: vi kan fortsätta försöka i upp till en timme, eller så kan du välja ett annat ljud på webbplatsen.",
     "stalledBodyExtended": "Vi fortsatte försöka, men spårets källa är fortfarande offline. Du kan försöka igen, eller välja ett annat ljud på webbplatsen.",
     "stalledTitle": "Vi försöker fortfarande nå ljudkällan"
+  },
+  "ready": {
+    "archived": "Den här videon har arkiverats. Du kan be om att få den återskapad via webbplatsen.",
+    "copied": "Kopierat",
+    "copyLink": "Kopiera länk",
+    "downloadFailed": "Det gick inte att ladda ner videon. Försök igen.",
+    "downloadMp4": "Ladda ner MP4",
+    "downloading": "Laddar ner… {percent}%",
+    "downloadingNoSize": "Laddar ner…",
+    "notReady": "Den här videon är inte klar än. Du hittar den under fliken Skapa när den är färdig.",
+    "openInYouTube": "Öppna på YouTube",
+    "openSettings": "Öppna inställningarna",
+    "permissionDenied": "För att spara videon behöver du ge Nomad Karaoke åtkomst till Bilder i Inställningar.",
+    "play": "Spela upp video",
+    "saved": "Sparad i Bilder",
+    "share": "Dela"
   }
 }

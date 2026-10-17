@@ -188,5 +188,21 @@
     "stalledBody": "Maaaring offline ang source ng track na ito ngayon. Madalas naman itong bumabalik agad: puwede naming ipagpatuloy ang pagsubok nang hanggang isang oras, o puwede kang pumili ng ibang audio sa website.",
     "stalledBodyExtended": "Sinubukan namin nang paulit-ulit, ngunit offline pa rin ang source ng track na ito. Puwede mong subukang muli, o pumili ng ibang audio sa website.",
     "stalledTitle": "Sinusubukan pa rin naming ma-access ang audio source"
+  },
+  "ready": {
+    "archived": "Nai-archive na ang video na ito. Mag-request na gawin itong muli mula sa website.",
+    "copied": "Nakopya na",
+    "copyLink": "Kopyahin ang link",
+    "downloadFailed": "Hindi ma-download ang video. Subukan muli.",
+    "downloadMp4": "I-download ang MP4",
+    "downloading": "Dina-download… {percent}%",
+    "downloadingNoSize": "Dina-download…",
+    "notReady": "Hindi pa handa ang video na ito. Makikita mo ito sa Make tab kapag tapos na.",
+    "openInYouTube": "Buksan sa YouTube",
+    "openSettings": "Buksan ang settings",
+    "permissionDenied": "Para mai-save ang video, payagan ang Nomad Karaoke na mag-save sa iyong Photos sa Settings.",
+    "play": "I-play ang video",
+    "saved": "Nai-save sa Photos",
+    "share": "I-share"
   }
 }

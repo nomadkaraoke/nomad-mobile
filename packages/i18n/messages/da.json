@@ -188,5 +188,21 @@
     "stalledBody": "Dette spors kilde er muligvis offline lige nu. Den kommer ofte hurtigt tilbage: Vi kan blive ved med at prøve i op til en time, eller du kan vælge en anden lydfil på hjemmesiden.",
     "stalledBodyExtended": "Vi blev ved med at prøve, men dette spors kilde er stadig offline. Du kan lade os blive ved med at prøve, eller vælge en anden lydfil på hjemmesiden.",
     "stalledTitle": "Vi forsøger stadig at få kontakt til lydkilden"
+  },
+  "ready": {
+    "archived": "Denne video er blevet arkiveret. Anmod om at få den lavet igen via hjemmesiden.",
+    "copied": "Kopieret",
+    "copyLink": "Kopiér link",
+    "downloadFailed": "Kunne ikke downloade videoen. Prøv igen.",
+    "downloadMp4": "Download MP4",
+    "downloading": "Downloader… {percent}%",
+    "downloadingNoSize": "Downloader…",
+    "notReady": "Denne video er ikke klar endnu. Du finder den under fanen Opret, når den er færdig.",
+    "openInYouTube": "Åbn på YouTube",
+    "openSettings": "Åbn Indstillinger",
+    "permissionDenied": "For at gemme videoen skal du give Nomad Karaoke adgang til Fotos i Indstillinger.",
+    "play": "Afspil video",
+    "saved": "Gemt i Fotos",
+    "share": "Del"
   }
 }

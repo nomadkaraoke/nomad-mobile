@@ -188,5 +188,21 @@
     "stalledBody": "Lehet, hogy a szám forrása jelenleg offline. Gyakran hamar helyreáll: legfeljebb egy órán át próbálkozhatunk még, vagy választhatsz másik hanganyagot a weboldalon.",
     "stalledBodyExtended": "Tovább próbálkoztunk, de a szám forrása még mindig offline. Megpróbálhatjuk újra, vagy választhatsz másik hanganyagot a weboldalon.",
     "stalledTitle": "Még mindig próbáljuk elérni a hangforrást"
+  },
+  "ready": {
+    "archived": "Ez a videó archiválva lett. Kérd az újbóli elkészítését a weboldalon.",
+    "copied": "Másolva",
+    "copyLink": "Link másolása",
+    "downloadFailed": "Nem sikerült letölteni a videót. Próbáld újra.",
+    "downloadMp4": "MP4 letöltése",
+    "downloading": "Letöltés… {percent}%",
+    "downloadingNoSize": "Letöltés…",
+    "notReady": "Ez a videó még nincs kész. Megtalálod a Készítés lapon, amint elkészül.",
+    "openInYouTube": "Megnyitás a YouTube-on",
+    "openSettings": "Beállítások megnyitása",
+    "permissionDenied": "A videó mentéséhez engedélyezd a Nomad Karaoke számára a Fotókhoz való hozzáadást a Beállításokban.",
+    "play": "Videó lejátszása",
+    "saved": "Mentve a Fotók közé",
+    "share": "Megosztás"
   }
 }

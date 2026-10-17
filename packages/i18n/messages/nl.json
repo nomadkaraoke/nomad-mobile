@@ -188,5 +188,21 @@
     "stalledBody": "De bron van dit nummer is momenteel mogelijk offline. Meestal werkt dit snel weer: we kunnen het tot een uur lang blijven proberen, of je kunt andere audio kiezen op de website.",
     "stalledBodyExtended": "We zijn het blijven proberen, maar de bron van dit nummer is nog steeds offline. Je kunt het nog eens laten proberen of andere audio kiezen op de website.",
     "stalledTitle": "We proberen de audiobron nog steeds te bereiken"
+  },
+  "ready": {
+    "archived": "Deze video is gearchiveerd. Vraag via de website aan om deze opnieuw te laten maken.",
+    "copied": "Gekopieerd",
+    "copyLink": "Link kopiëren",
+    "downloadFailed": "Kan de video niet downloaden. Probeer het opnieuw.",
+    "downloadMp4": "MP4 downloaden",
+    "downloading": "Downloaden… {percent}%",
+    "downloadingNoSize": "Downloaden…",
+    "notReady": "Deze video is nog niet klaar. Je vindt hem op het tabblad Maken zodra hij klaar is.",
+    "openInYouTube": "Openen in YouTube",
+    "openSettings": "Instellingen openen",
+    "permissionDenied": "Geef Nomad Karaoke in Instellingen toestemming om toe te voegen aan Foto's om de video op te slaan.",
+    "play": "Video afspelen",
+    "saved": "Opgeslagen in Foto's",
+    "share": "Delen"
   }
 }

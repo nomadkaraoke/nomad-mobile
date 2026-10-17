@@ -188,5 +188,21 @@
     "stalledBody": "La source de cette piste est peut-être hors ligne pour le moment. Elle revient souvent rapidement : nous pouvons continuer d'essayer pendant une heure maximum, ou tu peux choisir un autre fichier audio sur le site web.",
     "stalledBodyExtended": "Nous avons continué d'essayer, mais la source de cette piste est toujours hors ligne. Tu peux réessayer, ou choisir un autre fichier audio sur le site web.",
     "stalledTitle": "Nous essayons toujours de contacter la source audio"
+  },
+  "ready": {
+    "archived": "Cette vidéo a été archivée. Demande sa recréation depuis le site web.",
+    "copied": "Copié !",
+    "copyLink": "Copier le lien",
+    "downloadFailed": "Impossible de télécharger la vidéo. Réessaie.",
+    "downloadMp4": "Télécharger le MP4",
+    "downloading": "Téléchargement… {percent}%",
+    "downloadingNoSize": "Téléchargement…",
+    "notReady": "Cette vidéo n'est pas encore prête. Tu la trouveras dans l'onglet Créer dès qu'elle sera terminée.",
+    "openInYouTube": "Ouvrir dans YouTube",
+    "openSettings": "Ouvrir les réglages",
+    "permissionDenied": "Pour enregistrer la vidéo, autorise Nomad Karaoke à accéder à Photos dans les Réglages.",
+    "play": "Lire la vidéo",
+    "saved": "Enregistré dans Photos",
+    "share": "Partager"
   }
 }

@@ -188,5 +188,21 @@
     "stalledBody": "Źródło tego utworu może być teraz niedostępne. Zwykle szybko wraca: możemy ponawiać próby przez maksymalnie godzinę albo możesz wybrać inne audio na stronie.",
     "stalledBodyExtended": "Próbowaliśmy, ale źródło tego utworu nadal jest niedostępne. Możesz ponowić próbę lub wybrać inne audio na stronie.",
     "stalledTitle": "Nadal próbujemy połączyć się ze źródłem audio"
+  },
+  "ready": {
+    "archived": "To wideo zostało zarchiwizowane. Poproś o jego ponowne utworzenie na stronie internetowej.",
+    "copied": "Skopiowano",
+    "copyLink": "Kopiuj link",
+    "downloadFailed": "Nie udało się pobrać wideo. Spróbuj ponownie.",
+    "downloadMp4": "Pobierz MP4",
+    "downloading": "Pobieranie… {percent}%",
+    "downloadingNoSize": "Pobieranie…",
+    "notReady": "To wideo nie jest jeszcze gotowe. Znajdziesz je w zakładce Stwórz, gdy będzie gotowe.",
+    "openInYouTube": "Otwórz w YouTube",
+    "openSettings": "Otwórz Ustawienia",
+    "permissionDenied": "Aby zapisać wideo, zezwól Nomad Karaoke na dostęp do aplikacji Zdjęcia w Ustawieniach.",
+    "play": "Odtwórz wideo",
+    "saved": "Zapisano w Zdjęciach",
+    "share": "Udostępnij"
   }
 }

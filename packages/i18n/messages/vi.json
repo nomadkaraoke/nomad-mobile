@@ -188,5 +188,21 @@
     "stalledBody": "Nguồn của bản nhạc này có thể đang ngoại tuyến. Nguồn thường sẽ sớm hoạt động trở lại: chúng tôi có thể tiếp tục thử tối đa một giờ, hoặc bạn có thể chọn âm thanh khác trên trang web.",
     "stalledBodyExtended": "Chúng tôi đã tiếp tục thử nhưng nguồn của bản nhạc này vẫn đang ngoại tuyến. Bạn có thể tiếp tục thử lại, hoặc chọn âm thanh khác trên trang web.",
     "stalledTitle": "Chúng tôi vẫn đang cố gắng kết nối với nguồn âm thanh"
+  },
+  "ready": {
+    "archived": "Video này đã được lưu trữ. Hãy yêu cầu tạo lại từ trang web.",
+    "copied": "Đã sao chép",
+    "copyLink": "Sao chép liên kết",
+    "downloadFailed": "Không thể tải video xuống. Vui lòng thử lại.",
+    "downloadMp4": "Tải MP4",
+    "downloading": "Đang tải xuống… {percent}%",
+    "downloadingNoSize": "Đang tải xuống…",
+    "notReady": "Video này chưa sẵn sàng. Bạn sẽ tìm thấy video trong tab Make khi hoàn thành.",
+    "openInYouTube": "Mở trên YouTube",
+    "openSettings": "Mở Cài đặt",
+    "permissionDenied": "Để lưu video, vui lòng cho phép Nomad Karaoke thêm vào Ảnh trong Cài đặt.",
+    "play": "Phát video",
+    "saved": "Đã lưu vào Ảnh",
+    "share": "Chia sẻ"
   }
 }

@@ -188,5 +188,21 @@
     "stalledBody": "Bu parçanın kaynağı şu anda çevrimdışı olabilir. Genelde kısa süre içinde düzelir: Bir saate kadar denemeye devam edebiliriz ya da web sitesinden farklı bir ses seçebilirsin.",
     "stalledBodyExtended": "Denemeye devam ettik ama bu parçanın kaynağı hâlâ çevrimdışı. Tekrar denemeye devam edebilir ya da web sitesinden farklı bir ses seçebilirsin.",
     "stalledTitle": "Ses kaynağına ulaşmaya çalışıyoruz"
+  },
+  "ready": {
+    "archived": "Bu video arşivlendi. Web sitesinden yeniden oluşturulmasını isteyebilirsin.",
+    "copied": "Kopyalandı",
+    "copyLink": "Bağlantıyı kopyala",
+    "downloadFailed": "Video indirilemedi. Tekrar dene.",
+    "downloadMp4": "MP4 İndir",
+    "downloading": "İndiriliyor… %{percent}",
+    "downloadingNoSize": "İndiriliyor…",
+    "notReady": "Bu video henüz hazır değil. Tamamlandığında Make sekmesinde bulabilirsin.",
+    "openInYouTube": "YouTube'da Aç",
+    "openSettings": "Ayarları aç",
+    "permissionDenied": "Videoyu kaydetmek için Ayarlar'dan Nomad Karaoke'nin Fotoğraflar'a ekleme yapmasına izin ver.",
+    "play": "Videoyu oynat",
+    "saved": "Fotoğraflar'a kaydedildi",
+    "share": "Paylaş"
   }
 }

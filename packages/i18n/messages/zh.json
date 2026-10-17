@@ -188,5 +188,21 @@
     "stalledBody": "该曲目的音频源当前可能处于离线状态。通常很快就会恢复：我们可以继续尝试最多 1 小时，或者您也可以在网站上选择其他音频。",
     "stalledBodyExtended": "我们一直在尝试，但该曲目的音频源仍处于离线状态。您可以继续重试，也可以在网站上选择其他音频。",
     "stalledTitle": "我们仍在尝试连接音频源"
+  },
+  "ready": {
+    "archived": "此视频已归档。如需重新制作，请前往网站申请。",
+    "copied": "已复制",
+    "copyLink": "复制链接",
+    "downloadFailed": "视频下载失败，请重试。",
+    "downloadMp4": "下载 MP4",
+    "downloading": "正在下载… {percent}%",
+    "downloadingNoSize": "正在下载…",
+    "notReady": "该视频尚未就绪。制作完成后，您可以在“制作”标签页中找到它。",
+    "openInYouTube": "在 YouTube 中打开",
+    "openSettings": "打开设置",
+    "permissionDenied": "若要保存视频，请在“设置”中允许 Nomad Karaoke 访问您的“照片”。",
+    "play": "播放视频",
+    "saved": "已保存到“照片”",
+    "share": "分享"
   }
 }

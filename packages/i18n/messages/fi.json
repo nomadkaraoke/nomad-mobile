@@ -188,5 +188,21 @@
     "stalledBody": "Tämän kappaleen lähde saattaa olla juuri nyt offline-tilassa. Se palaa usein linjoille pian: voimme jatkaa yrittämistä jopa tunnin ajan, tai voit valita toisen ääniraidan verkkosivustolla.",
     "stalledBodyExtended": "Yritimme useaan kertaan, mutta kappaleen lähde on yhä offline-tilassa. Voit yrittää vielä uudelleen tai valita toisen ääniraidan verkkosivustolla.",
     "stalledTitle": "Yritämme yhä saada yhteyttä äänilähteeseen"
+  },
+  "ready": {
+    "archived": "Tämä video on arkistoitu. Voit pyytää sen luomista uudelleen verkkosivustolta.",
+    "copied": "Kopioitu",
+    "copyLink": "Kopioi linkki",
+    "downloadFailed": "Videon lataaminen epäonnistui. Yritä uudelleen.",
+    "downloadMp4": "Lataa MP4",
+    "downloading": "Ladataan… {percent} %",
+    "downloadingNoSize": "Ladataan…",
+    "notReady": "Tämä video ei ole vielä valmis. Löydät sen Luo-välilehdeltä, kun se on valmis.",
+    "openInYouTube": "Avaa YouTubessa",
+    "openSettings": "Avaa asetukset",
+    "permissionDenied": "Jos haluat tallentaa videon, anna Nomad Karaokelle lupa lisätä kohteita Kuvat-sovellukseen laitteesi asetuksista.",
+    "play": "Toista video",
+    "saved": "Tallennettu Kuvat-sovellukseen",
+    "share": "Jaa"
   }
 }

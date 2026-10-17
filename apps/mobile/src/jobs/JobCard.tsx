@@ -3,7 +3,7 @@ import { jobPhase, jobStep } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { Button, Text } from '@nomad/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { router, type Href } from 'expo-router';
+import { router } from 'expo-router';
 import { useState, type ReactNode } from 'react';
 import { Pressable, View } from 'react-native';
 
@@ -53,8 +53,7 @@ export function JobCard({ job }: { job: JobSummary }) {
       <Pressable
         testID={`job-card-${id}`}
         accessibilityRole="button"
-        // The ready screen (/job/[id]) lands with Task 7; until then typed routes don't know it.
-        onPress={() => router.push(`/job/${id}` as Href)}
+        onPress={() => router.push({ pathname: '/job/[id]', params: { id } })}
         className="rounded-lg border border-border bg-card p-3"
       >
         {heading}

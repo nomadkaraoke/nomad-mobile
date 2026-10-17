@@ -188,5 +188,21 @@
     "stalledBody": "És possible que la font d'aquesta pista estigui fora de línia ara mateix. Sovint torna a estar disponible aviat: podem continuar intentant-ho fins a una hora, o pots triar un altre àudio al lloc web.",
     "stalledBodyExtended": "Ho hem continuat intentant, però la font d'aquesta pista encara està fora de línia. Pots tornar-ho a intentar o triar un altre àudio al lloc web.",
     "stalledTitle": "Encara estem intentant connectar amb la font d'àudio"
+  },
+  "ready": {
+    "archived": "Aquest vídeo s'ha arxivat. Demana que es torni a crear des del lloc web.",
+    "copied": "Copiat",
+    "copyLink": "Copia l'enllaç",
+    "downloadFailed": "No s'ha pogut descarregar el vídeo. Torna-ho a provar.",
+    "downloadMp4": "Descarrega l'MP4",
+    "downloading": "Descarregant… {percent}%",
+    "downloadingNoSize": "Descarregant…",
+    "notReady": "Aquest vídeo encara no està a punt. El trobaràs a la pestanya Crea quan estigui llest.",
+    "openInYouTube": "Obre a YouTube",
+    "openSettings": "Obre la configuració",
+    "permissionDenied": "Per desar el vídeo, permet que Nomad Karaoke afegeixi contingut a Fotos a Configuració.",
+    "play": "Reprodueix el vídeo",
+    "saved": "Desat a Fotos",
+    "share": "Comparteix"
   }
 }

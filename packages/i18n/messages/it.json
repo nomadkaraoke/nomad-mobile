@@ -188,5 +188,21 @@
     "stalledBody": "La sorgente di questa traccia potrebbe essere offline al momento. Spesso torna disponibile a breve: possiamo continuare a provare fino a un'ora, oppure puoi scegliere un audio diverso sul sito web.",
     "stalledBodyExtended": "Abbiamo continuato a provare, ma la sorgente di questa traccia è ancora offline. Puoi continuare a provare oppure scegliere un audio diverso sul sito web.",
     "stalledTitle": "Stiamo ancora provando a raggiungere la sorgente audio"
+  },
+  "ready": {
+    "archived": "Questo video è stato archiviato. Richiedi di ricrearlo dal sito web.",
+    "copied": "Copiato",
+    "copyLink": "Copia link",
+    "downloadFailed": "Impossibile scaricare il video. Riprova.",
+    "downloadMp4": "Scarica MP4",
+    "downloading": "Download in corso… {percent}%",
+    "downloadingNoSize": "Download in corso…",
+    "notReady": "Questo video non è ancora pronto. Lo troverai nella scheda Crea quando sarà pronto.",
+    "openInYouTube": "Apri su YouTube",
+    "openSettings": "Apri impostazioni",
+    "permissionDenied": "Per salvare il video, consenti a Nomad Karaoke di accedere a Foto nelle impostazioni.",
+    "play": "Riproduci video",
+    "saved": "Salvato in Foto",
+    "share": "Condividi"
   }
 }

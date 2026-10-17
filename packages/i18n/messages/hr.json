@@ -188,5 +188,21 @@
     "stalledBody": "Izvor ove pjesme trenutačno je možda nedostupan. Često ubrzo ponovno postane dostupan: možemo nastaviti pokušavati do sat vremena ili možeš odabrati drugi audiozapis na web-mjestu.",
     "stalledBodyExtended": "Nastavili smo pokušavati, ali izvor ove pjesme i dalje je nedostupan. Možeš nastaviti pokušavati ili odabrati drugi audiozapis na web-mjestu.",
     "stalledTitle": "I dalje pokušavamo doći do izvora zvuka"
+  },
+  "ready": {
+    "archived": "Ovaj videozapis je arhiviran. Zatraži ponovnu izradu putem web-stranice.",
+    "copied": "Kopirano",
+    "copyLink": "Kopiraj poveznicu",
+    "downloadFailed": "Preuzimanje videozapisa nije uspjelo. Pokušaj ponovno.",
+    "downloadMp4": "Preuzmi MP4",
+    "downloading": "Preuzimanje… {percent}%",
+    "downloadingNoSize": "Preuzimanje…",
+    "notReady": "Ovaj videozapis još nije spreman. Pronaći ćeš ga na kartici Izradi kada bude dovršen.",
+    "openInYouTube": "Otvori na usluzi YouTube",
+    "openSettings": "Otvori postavke",
+    "permissionDenied": "Za spremanje videozapisa dopusti aplikaciji Nomad Karaoke pristup Fotografijama u Postavkama.",
+    "play": "Pokreni videozapis",
+    "saved": "Spremljeno u Fotografije",
+    "share": "Podijeli"
   }
 }

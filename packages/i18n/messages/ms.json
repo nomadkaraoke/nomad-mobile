@@ -188,5 +188,21 @@
     "stalledBody": "Sumber trek ini mungkin berada di luar talian sekarang. Ia biasanya pulih tidak lama lagi: kami boleh terus mencuba sehingga satu jam, atau anda boleh memilih audio lain di tapak web.",
     "stalledBodyExtended": "Kami sudah mencuba berulang kali, tetapi sumber trek ini masih di luar talian. Anda boleh terus mencuba lagi, atau memilih audio lain di tapak web.",
     "stalledTitle": "Kami masih cuba menyambung ke sumber audio"
+  },
+  "ready": {
+    "archived": "Video ini telah diarkibkan. Buat permintaan di laman web untuk menghasilkannya semula.",
+    "copied": "Disalin",
+    "copyLink": "Salin pautan",
+    "downloadFailed": "Tidak dapat memuat turun video. Sila cuba lagi.",
+    "downloadMp4": "Muat turun MP4",
+    "downloading": "Memuat turun… {percent}%",
+    "downloadingNoSize": "Memuat turun…",
+    "notReady": "Video ini belum siap lagi. Anda boleh mencarinya di tab Hasilkan setelah selesai.",
+    "openInYouTube": "Buka di YouTube",
+    "openSettings": "Buka tetapan",
+    "permissionDenied": "Untuk menyimpan video, benarkan Nomad Karaoke menambah ke Foto anda dalam Tetapan.",
+    "play": "Mainkan video",
+    "saved": "Disimpan ke Foto",
+    "share": "Kongsi"
   }
 }

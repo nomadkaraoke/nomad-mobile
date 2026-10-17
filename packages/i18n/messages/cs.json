@@ -188,5 +188,21 @@
     "stalledBody": "Zdroj této skladby je možná právě offline. Často bývá brzy znovu dostupný: můžeme to zkoušet dál až hodinu, nebo můžeš vybrat jiné audio na webu.",
     "stalledBodyExtended": "Zkoušeli jsme to dál, ale zdroj této skladby je stále offline. Můžeš to zkusit ještě jednou, nebo vybrat jiné audio na webu.",
     "stalledTitle": "Stále se pokoušíme připojit ke zdroji zvuku"
+  },
+  "ready": {
+    "archived": "Toto video bylo archivováno. Požádej o jeho opětovné vytvoření na webu.",
+    "copied": "Zkopírováno",
+    "copyLink": "Kopírovat odkaz",
+    "downloadFailed": "Video se nepodařilo stáhnout. Zkus to znovu.",
+    "downloadMp4": "Stáhnout MP4",
+    "downloading": "Stahování… {percent} %",
+    "downloadingNoSize": "Stahování…",
+    "notReady": "Toto video ještě není připravené. Až bude hotové, najdeš ho na kartě Vytvořit.",
+    "openInYouTube": "Otevřít na YouTube",
+    "openSettings": "Otevřít Nastavení",
+    "permissionDenied": "Pokud chceš video uložit, povol aplikaci Nomad Karaoke v Nastavení přístup k Fotkám.",
+    "play": "Přehrát video",
+    "saved": "Uloženo do Fotek",
+    "share": "Sdílet"
   }
 }

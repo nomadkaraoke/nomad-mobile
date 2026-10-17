@@ -188,5 +188,21 @@
     "stalledBody": "Sursa acestei piese ar putea fi offline acum. De obicei își revine repede: putem continua să încercăm timp de până la o oră sau poți alege un alt fișier audio pe site.",
     "stalledBodyExtended": "Am tot încercat, dar sursa acestei piese este încă offline. Poți continua să încerci sau poți alege un alt fișier audio pe site.",
     "stalledTitle": "Încă încercăm să accesăm sursa audio"
+  },
+  "ready": {
+    "archived": "Acest videoclip a fost arhivat. Solicită recrearea lui de pe site.",
+    "copied": "Copiat",
+    "copyLink": "Copiază linkul",
+    "downloadFailed": "Videoclipul nu a putut fi descărcat. Încearcă din nou.",
+    "downloadMp4": "Descarcă MP4",
+    "downloading": "Se descarcă… {percent}%",
+    "downloadingNoSize": "Se descarcă…",
+    "notReady": "Acest videoclip nu este gata încă. Îl vei găsi în fila Creează când este gata.",
+    "openInYouTube": "Deschide în YouTube",
+    "openSettings": "Deschide setările",
+    "permissionDenied": "Pentru a salva videoclipul, permite aplicației Nomad Karaoke să adauge fișiere în Poze din Setări.",
+    "play": "Redă videoclipul",
+    "saved": "Salvat în Poze",
+    "share": "Distribuie"
   }
 }

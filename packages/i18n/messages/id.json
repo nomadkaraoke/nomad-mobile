@@ -188,5 +188,21 @@
     "stalledBody": "Sumber trek ini mungkin sedang offline saat ini. Biasanya akan segera kembali normal: kami dapat terus mencoba hingga satu jam, atau Anda dapat memilih audio lain di situs web.",
     "stalledBodyExtended": "Kami sudah terus mencoba, tetapi sumber trek ini masih offline. Anda dapat terus mencoba lagi, atau memilih audio lain di situs web.",
     "stalledTitle": "Kami masih berusaha menjangkau sumber audio"
+  },
+  "ready": {
+    "archived": "Video ini telah diarsipkan. Minta pembuatan ulang melalui situs web.",
+    "copied": "Tersalin",
+    "copyLink": "Salin tautan",
+    "downloadFailed": "Gagal mengunduh video. Coba lagi.",
+    "downloadMp4": "Unduh MP4",
+    "downloading": "Mengunduh… {percent}%",
+    "downloadingNoSize": "Mengunduh…",
+    "notReady": "Video ini belum siap. Kamu bisa menemukannya di tab Buat setelah selesai.",
+    "openInYouTube": "Buka di YouTube",
+    "openSettings": "Buka Pengaturan",
+    "permissionDenied": "Untuk menyimpan video, izinkan Nomad Karaoke mengakses Foto di Pengaturan.",
+    "play": "Putar video",
+    "saved": "Tersimpan di Foto",
+    "share": "Bagikan"
   }
 }

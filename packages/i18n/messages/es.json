@@ -188,5 +188,21 @@
     "stalledBody": "Es posible que la fuente de esta pista esté desconectada en este momento. Suele restablecerse pronto: podemos seguir intentándolo hasta por una hora, o puedes elegir un audio diferente en el sitio web.",
     "stalledBodyExtended": "Seguimos intentándolo, pero la fuente de esta pista sigue desconectada. Puedes volver a intentarlo o elegir un audio diferente en el sitio web.",
     "stalledTitle": "Todavía estamos intentando conectar con la fuente de audio"
+  },
+  "ready": {
+    "archived": "Este video ha sido archivado. Solicita que se vuelva a generar desde el sitio web.",
+    "copied": "Copiado",
+    "copyLink": "Copiar enlace",
+    "downloadFailed": "No se pudo descargar el video. Inténtalo de nuevo.",
+    "downloadMp4": "Descargar MP4",
+    "downloading": "Descargando… {percent}%",
+    "downloadingNoSize": "Descargando…",
+    "notReady": "Este video aún no está listo. Lo encontrarás en la pestaña Crear cuando termine.",
+    "openInYouTube": "Abrir en YouTube",
+    "openSettings": "Abrir configuración",
+    "permissionDenied": "Para guardar el video, permite que Nomad Karaoke acceda a Fotos en Configuración.",
+    "play": "Reproducir video",
+    "saved": "Guardado en Fotos",
+    "share": "Compartir"
   }
 }

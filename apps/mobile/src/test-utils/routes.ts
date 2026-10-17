@@ -6,6 +6,7 @@ import * as me from '../app/(tabs)/me';
 import * as tonight from '../app/(tabs)/tonight';
 import * as rootLayout from '../app/_layout';
 import * as index from '../app/index';
+import * as readyScreen from '../app/job/[id]';
 import * as durationSheet from '../app/job/duration/[id]';
 import * as makeFlow from '../app/make/new';
 import * as signInCode from '../app/sign-in/code';
@@ -24,6 +25,7 @@ export function appRoutes() {
     '(tabs)/me': me,
     'song/[id]': song,
     'make/new': makeFlow,
+    'job/[id]': readyScreen,
     'job/duration/[id]': durationSheet,
     'sign-in/index': signInSheet,
     'sign-in/email': signInEmail,

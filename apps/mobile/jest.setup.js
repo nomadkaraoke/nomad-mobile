@@ -53,3 +53,21 @@ jest.mock('expo-apple-authentication', () => ({
 // The real Sentry SDK starts timers at import, which keeps jest workers alive after the run.
 // observability.test.ts overrides this with its own mock to assert init().
 jest.mock('@sentry/react-native', () => ({ init: jest.fn(), wrap: (c) => c, captureException: jest.fn() }));
+
+// Ready screen native modules (any suite that loads the route table imports them). Tests drive the jest.fns.
+jest.mock('expo-video', () => {
+  const { createElement } = jest.requireActual('react');
+  const { View } = jest.requireActual('react-native');
+  return { useVideoPlayer: jest.fn(() => ({ play: jest.fn() })), VideoView: (props) => createElement(View, props) };
+});
+jest.mock('expo-clipboard', () => ({ setStringAsync: jest.fn(async () => true) }));
+jest.mock('expo-media-library', () => ({ requestPermissionsAsync: jest.fn(), Asset: { create: jest.fn() } }));
+jest.mock('expo-file-system', () => {
+  class File {
+    constructor(dir, name) {
+      this.uri = `${dir}/${name}`;
+    }
+  }
+  File.downloadFileAsync = jest.fn();
+  return { File, Paths: { cache: 'file:///cache' } };
+});
