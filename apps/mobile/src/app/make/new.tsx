@@ -22,7 +22,7 @@ const YOUTUBE_URL = /^https?:\/\/([a-z0-9-]+\.)*(youtube\.com|youtu\.be)\/\S+$/i
 
 type Target = { kind: 'source'; sessionId: string; index: number } | { kind: 'url'; url: string };
 
-const goToCredits = () => router.push({ pathname: '/credits', params: { returnTo: '/make' } });
+const goToCredits = () => router.push({ pathname: '/credits', params: { returnTo: '/make/new' } });
 
 /** Spec §4.4: gen finds the audio, the person confirms (or picks another, or pastes a YouTube link), job created. */
 export default function MakeScreen() {
@@ -65,6 +65,14 @@ export default function MakeScreen() {
       ? { kind: 'source', sessionId: search.data.sessionId, index: selectedIndex }
       : null;
 
+  const created = useRef(false);
+  useEffect(
+    () => () => {
+      if (created.current) clearIntent();
+    },
+    [clearIntent],
+  );
+
   const create = useMutation({
     mutationFn: (to: Target) => {
       const song = { artist: intent!.artist, title: intent!.title };
@@ -73,8 +81,9 @@ export default function MakeScreen() {
         : createJobFromSearch({ sessionId: to.sessionId, index: to.index, ...song });
     },
     onSuccess: () => {
+      // The intent is cleared when this screen unmounts, so it never flashes "Pick a song" on the way out.
+      created.current = true;
       router.dismissTo('/(tabs)/make');
-      clearIntent();
       void queryClient.invalidateQueries({ queryKey: ['jobs'] });
       void queryClient.invalidateQueries({ queryKey: ['me'] });
     },
@@ -105,7 +114,7 @@ export default function MakeScreen() {
 
   // Signed out (session expired mid-flow): reopen sign-in; it returns here with the intent kept.
   useEffect(() => {
-    if (!signedIn && intent) router.push({ pathname: '/sign-in', params: { returnTo: '/make' } });
+    if (!signedIn && intent) router.push({ pathname: '/sign-in', params: { returnTo: '/make/new' } });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only when the sign-in state changes
   }, [signedIn]);
 
@@ -152,7 +161,7 @@ export default function MakeScreen() {
         <Button
           testID="make-signin"
           label={tAll('account.signIn')}
-          onPress={() => router.push({ pathname: '/sign-in', params: { returnTo: '/make' } })}
+          onPress={() => router.push({ pathname: '/sign-in', params: { returnTo: '/make/new' } })}
         />
       ) : search.isPending || search.isIdle ? (
         <View testID="make-searching" className="items-center gap-2 py-8">
@@ -224,7 +233,7 @@ export default function MakeScreen() {
             <TextField
               testID="make-youtube-input"
               label={t('youtubeLabel')}
-              placeholder="https://youtube.com/watch?v=…"
+              placeholder={t('youtubePlaceholder')}
               value={youtubeUrl}
               onChangeText={setYoutubeUrl}
               autoCapitalize="none"

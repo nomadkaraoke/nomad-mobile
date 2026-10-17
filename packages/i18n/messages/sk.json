@@ -118,7 +118,8 @@
       "studio": "Štúdiové albumy",
       "vinyl": "Vinylové nahrávky",
       "youtube": "YouTube"
-    }
+    },
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "Zatiaľ si nič nevytvoril",

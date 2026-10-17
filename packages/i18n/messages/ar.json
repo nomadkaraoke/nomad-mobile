@@ -118,7 +118,8 @@
     "submit": "إنشاء",
     "youtubeInvalid": "لا يبدو هذا كرابط YouTube صالح.",
     "youtubeLabel": "رابط YouTube",
-    "youtubeToggle": "لصق رابط YouTube بدلاً من ذلك"
+    "youtubeToggle": "لصق رابط YouTube بدلاً من ذلك",
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "لم تنشئ أي شيء بعد",

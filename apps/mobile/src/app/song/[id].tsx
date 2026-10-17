@@ -37,8 +37,8 @@ export default function SongScreen() {
     if (!canMake) return;
     setIntent({ ...target, createdAt: Date.now() });
     // Sign-in carries straight on into the make flow (spec §4.3).
-    if (signedIn) router.push('/make');
-    else router.push({ pathname: '/sign-in', params: { returnTo: '/make' } });
+    if (signedIn) router.push('/make/new');
+    else router.push({ pathname: '/sign-in', params: { returnTo: '/make/new' } });
   };
 
   return (

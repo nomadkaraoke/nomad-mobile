@@ -118,7 +118,8 @@
       "studio": "Album phòng thu",
       "vinyl": "Bản rip từ đĩa than",
       "youtube": "YouTube"
-    }
+    },
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "Chưa có bài nào được tạo",

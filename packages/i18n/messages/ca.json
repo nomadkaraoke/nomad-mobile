@@ -118,7 +118,8 @@
     "submit": "Crea'l",
     "youtubeInvalid": "Això no sembla un enllaç de YouTube.",
     "youtubeLabel": "Enllaç de YouTube",
-    "youtubeToggle": "Enganxa un enllaç de YouTube"
+    "youtubeToggle": "Enganxa un enllaç de YouTube",
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "Encara no has creat res",

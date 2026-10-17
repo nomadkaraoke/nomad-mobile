@@ -89,6 +89,7 @@
     "noResults": "We couldn't find audio for this song",
     "youtubeToggle": "Paste a YouTube link instead",
     "youtubeLabel": "YouTube link",
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
     "youtubeInvalid": "That doesn't look like a YouTube link.",
     "costOnly": "Cost 1 credit",
     "cost": "Cost 1 credit · You have {credits}",

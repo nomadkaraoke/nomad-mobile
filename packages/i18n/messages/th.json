@@ -118,7 +118,8 @@
       "studio": "สตูดิโออัลบั้ม",
       "vinyl": "ไฟล์จากแผ่นเสียง",
       "youtube": "YouTube"
-    }
+    },
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "ยังไม่ได้สร้างอะไรเลย",

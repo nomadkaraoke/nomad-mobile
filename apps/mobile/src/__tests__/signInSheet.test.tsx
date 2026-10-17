@@ -48,7 +48,7 @@ beforeEach(async () => {
   (decide.getSong as jest.Mock).mockResolvedValue({ id: 2, artist: 'Adele', title: 'Hello', brands: [], brand_count: 1, is_popular: true });
 });
 
-const openSheet = () => renderRouter(signInRoutes(), { initialUrl: '/sign-in?returnTo=/make' });
+const openSheet = () => renderRouter(signInRoutes(), { initialUrl: '/sign-in?returnTo=/make/new' });
 
 it('is titled with the song being made and offers Google, Apple and email', async () => {
   openSheet();
@@ -77,14 +77,14 @@ it('email → code → signed in → back in the make flow', async () => {
   // Typing the 6th digit submits (as does one-time-code autofill).
   await act(async () => fireEvent.changeText(screen.getByTestId('signin-code'), '123456'));
   expect(await screen.findByTestId('make-stub')).toBeTruthy();
-  expect(app.getPathname()).toBe('/make');
+  expect(app.getPathname()).toBe('/make/new');
   expect(gen.verifyCode).toHaveBeenCalledWith('me@example.com', '123456');
   expect(useAuth.getState().getToken()).toBe('tok-me@example.com');
   expect(useMakeIntent.getState().get()).toMatchObject({ title: 'Starlight' });
 });
 
 it('email errors: invalid address, throttled sends, disposable inboxes', async () => {
-  renderRouter(signInRoutes(), { initialUrl: '/sign-in/email?returnTo=/make' });
+  renderRouter(signInRoutes(), { initialUrl: '/sign-in/email?returnTo=/make/new' });
   fireEvent.changeText(await screen.findByTestId('signin-email'), 'nope');
   await act(async () => fireEvent.press(screen.getByTestId('signin-send')));
   expect(screen.getByTestId('signin-error')).toHaveTextContent('Enter a valid email address.');
@@ -113,7 +113,7 @@ it('Google success → session stored → make flow', async () => {
   const app = openSheet();
   await act(async () => fireEvent.press(await screen.findByTestId('signin-google')));
   expect(await screen.findByTestId('make-stub')).toBeTruthy();
-  expect(app.getPathname()).toBe('/make');
+  expect(app.getPathname()).toBe('/make/new');
   expect(gen.exchangeGoogleToken).toHaveBeenCalledWith('gid', 'en');
   expect(useAuth.getState().getToken()).toBe('tok-g@example.com');
   expect(SecureStore.setItemAsync).toHaveBeenCalled();

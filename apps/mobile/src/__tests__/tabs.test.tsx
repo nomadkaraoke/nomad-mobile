@@ -1,6 +1,7 @@
 import * as decide from '@nomad/api-decide';
 import { act, fireEvent, screen } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
+import { GoogleAuth } from 'react-native-google-auth';
 
 import { useAuth } from '../auth/store';
 import { gen, session } from '../test-utils/genAuthMock';
@@ -12,7 +13,7 @@ jest.mock('@nomad/api-decide', () => ({
   getSong: jest.fn(),
   configureClient: jest.fn(),
 }));
-jest.mock('@nomad/api-gen', () => ({ ...jest.requireActual('@nomad/api-gen'), getMe: jest.fn() }));
+jest.mock('@nomad/api-gen', () => ({ ...jest.requireActual('@nomad/api-gen'), getMe: jest.fn(), exchangeGoogleToken: jest.fn() }));
 
 beforeEach(async () => {
   jest.useRealTimers();
@@ -59,9 +60,15 @@ it('Me: sign out returns to the signed-out state', async () => {
 });
 
 it('Make tab (signed out) offers sign-in that returns to the Make tab', async () => {
+  (GoogleAuth.signIn as jest.Mock).mockResolvedValueOnce({ type: 'success', data: { idToken: 'gid' } });
+  gen.exchangeGoogleToken.mockResolvedValue(session('g@example.com'));
   const app = renderRouter(makeRoutes(), { initialUrl: '/discover' });
   fireEvent.press(await screen.findByTestId('tab-make'));
   fireEvent.press(await screen.findByTestId('make-tab-signin'));
   expect(await screen.findByTestId('signin-sheet')).toBeTruthy();
   expect(app.getSearchParams()).toMatchObject({ returnTo: '/(tabs)/make' });
+  await act(async () => fireEvent.press(screen.getByTestId('signin-google')));
+  expect(await screen.findByTestId('make-tab-empty')).toBeTruthy();
+  expect(app.getSegments()).toEqual(['(tabs)', 'make']);
+  expect(useAuth.getState().state.status).toBe('signedIn');
 });

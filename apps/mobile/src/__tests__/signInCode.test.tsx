@@ -21,7 +21,7 @@ beforeEach(async () => {
   await useAuth.getState().requestCode('me@example.com');
 });
 
-const openCode = () => renderRouter(signInRoutes(), { initialUrl: '/sign-in/code?returnTo=/make' });
+const openCode = () => renderRouter(signInRoutes(), { initialUrl: '/sign-in/code?returnTo=/make/new' });
 const enter = async (code: string) => {
   fireEvent.changeText(screen.getByTestId('signin-code'), code.slice(0, 5));
   await act(async () => fireEvent.changeText(screen.getByTestId('signin-code'), code));
@@ -57,7 +57,7 @@ it('429 too_many_attempts shows the locked message; Send a new code resends and 
 
   await enter('123456');
   expect(await screen.findByTestId('make-stub')).toBeTruthy();
-  expect(app.getPathname()).toBe('/make');
+  expect(app.getPathname()).toBe('/make/new');
 });
 
 it('an expired code offers a new one; a throttled resend says so', async () => {
@@ -102,6 +102,6 @@ it.each(['https://evil.example', '//evil.example/make', 'make'])('ignores a retu
   await screen.findByTestId('signin-code');
   await enter('123456');
   expect(useAuth.getState().state.status).toBe('signedIn');
-  expect(app.getPathname()).not.toBe('/make');
+  expect(app.getPathname()).not.toBe('/make/new');
   expect(app.getPathname()).not.toMatch(/evil/);
 });

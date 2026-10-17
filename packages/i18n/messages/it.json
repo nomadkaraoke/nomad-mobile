@@ -118,7 +118,8 @@
       "studio": "Album in studio",
       "vinyl": "Rip da vinile",
       "youtube": "YouTube"
-    }
+    },
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "Non hai ancora creato nulla",

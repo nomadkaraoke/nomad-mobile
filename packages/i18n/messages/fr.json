@@ -118,7 +118,8 @@
       "studio": "Albums studio",
       "vinyl": "Rips vinyle",
       "youtube": "YouTube"
-    }
+    },
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "Rien de créé pour l'instant",

@@ -37,7 +37,7 @@ beforeEach(async () => {
   gen.createJobFromUrl.mockResolvedValue('job-2');
 });
 
-const openMake = () => renderRouter(makeRoutes(), { initialUrl: '/make' });
+const openMake = () => renderRouter(makeRoutes(), { initialUrl: '/make/new' });
 
 it('searches once, then tier 1 shows the pick card, the cost and a single Make it', async () => {
   let finish!: (v: typeof TIER1) => void;
@@ -114,12 +114,12 @@ it('a double tap on Make it creates one job; the button is disabled while it is 
   expect(await screen.findByTestId('make-tab-screen')).toBeTruthy();
 });
 
-it('402 from the search goes to credits and returns to /make', async () => {
+it('402 from the search goes to credits and returns to /make/new', async () => {
   gen.searchAudio.mockRejectedValue(apiError(402, { credits_available: 0, credits_required: 1 }));
   const app = openMake();
   expect(await screen.findByTestId('credits-stub')).toBeTruthy();
   expect(app.getPathname()).toBe('/credits');
-  expect(app.getSearchParams()).toMatchObject({ returnTo: '/make' });
+  expect(app.getSearchParams()).toMatchObject({ returnTo: '/make/new' });
 });
 
 it('402 from create goes to credits and keeps the intent', async () => {
@@ -127,7 +127,7 @@ it('402 from create goes to credits and keeps the intent', async () => {
   const app = openMake();
   await act(async () => fireEvent.press(await screen.findByTestId('make-submit')));
   expect(await screen.findByTestId('credits-stub')).toBeTruthy();
-  expect(app.getSearchParams()).toMatchObject({ returnTo: '/make' });
+  expect(app.getSearchParams()).toMatchObject({ returnTo: '/make/new' });
   expect(useMakeIntent.getState().get()).toMatchObject({ title: 'Starlight' });
 });
 
@@ -205,15 +205,15 @@ it('back from credits without paying: no loop, a Get credits button instead', as
   expect(await screen.findByTestId('credits-stub')).toBeTruthy();
   await act(async () => router.back());
   expect(await screen.findByTestId('make-get-credits')).toBeTruthy();
-  expect(app.getPathname()).toBe('/make');
+  expect(app.getPathname()).toBe('/make/new');
   expect(gen.searchAudio).toHaveBeenCalledTimes(1);
 });
 
-it('signed out on /make (session expired): reopens sign-in and keeps the intent', async () => {
+it('signed out on /make/new (session expired): reopens sign-in and keeps the intent', async () => {
   await useAuth.getState().signOut();
   const app = openMake();
   expect(await screen.findByTestId('signin-sheet')).toBeTruthy();
-  expect(app.getSearchParams()).toMatchObject({ returnTo: '/make' });
+  expect(app.getSearchParams()).toMatchObject({ returnTo: '/make/new' });
   expect(gen.searchAudio).not.toHaveBeenCalled();
   expect(useMakeIntent.getState().get()).toMatchObject({ title: 'Starlight' });
 });
@@ -229,4 +229,16 @@ it('Discover → song → Make it → created: the song and make screens are gon
   expect(await screen.findByTestId('make-tab-screen')).toBeTruthy();
   const root = app.getRouterState()?.routes[0]?.state;
   expect(root?.routes?.map((r) => r.name)).toEqual(['(tabs)']);
+});
+
+it('after create the screen keeps its song until it is gone (no "Pick a song" flash); unmount clears the intent', async () => {
+  const dismiss = jest.spyOn(router, 'dismissTo').mockImplementation(() => {});
+  const app = openMake();
+  await act(async () => fireEvent.press(await screen.findByTestId('make-submit')));
+  expect(dismiss).toHaveBeenCalledWith('/(tabs)/make');
+  expect(screen.queryByTestId('make-no-intent')).toBeNull();
+  expect(screen.getByTestId('make-pick')).toBeTruthy();
+  dismiss.mockRestore();
+  app.unmount();
+  expect(useMakeIntent.getState().intent).toBeNull();
 });

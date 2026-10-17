@@ -118,7 +118,8 @@
       "studio": "Studiealbum",
       "vinyl": "Vinyl-rip",
       "youtube": "YouTube"
-    }
+    },
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "Intet lavet endnu",

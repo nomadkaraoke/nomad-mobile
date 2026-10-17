@@ -42,13 +42,13 @@ it('a song with karaoke versions still offers Make it', async () => {
   expect(screen.getByTestId('song-make')).toBeEnabled();
 });
 
-it('signed out: Make it sets the intent and opens the sign-in sheet for /make', async () => {
+it('signed out: Make it sets the intent and opens the sign-in sheet for /make/new', async () => {
   const app = renderRouter(routes(), { initialUrl: '/song/7' });
   await screen.findByText('Starlight');
   fireEvent.press(screen.getByTestId('song-make'));
   expect(await screen.findByTestId('signin-stub')).toBeTruthy();
   expect(app.getPathname()).toBe('/sign-in');
-  expect(app.getSearchParams()).toMatchObject({ returnTo: '/make' });
+  expect(app.getSearchParams()).toMatchObject({ returnTo: '/make/new' });
   expect(useMakeIntent.getState().get()).toMatchObject({ artist: 'Muse', title: 'Starlight', decideSongId: 7 });
 });
 
@@ -58,7 +58,7 @@ it('signed in: Make it goes straight to the make flow', async () => {
   await screen.findByText('Starlight');
   fireEvent.press(screen.getByTestId('song-make'));
   expect(await screen.findByTestId('make-stub')).toBeTruthy();
-  expect(app.getPathname()).toBe('/make');
+  expect(app.getPathname()).toBe('/make/new');
   expect(useMakeIntent.getState().get()).toMatchObject({ title: 'Starlight' });
 });
 

@@ -118,7 +118,8 @@
       "studio": "Studiová alba",
       "vinyl": "Ripy z vinylu",
       "youtube": "YouTube"
-    }
+    },
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "Zatím tu nic není",

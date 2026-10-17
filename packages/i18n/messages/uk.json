@@ -118,7 +118,8 @@
       "studio": "Студійні альбоми",
       "vinyl": "Оцифровки з вінілу",
       "youtube": "YouTube"
-    }
+    },
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "Ще нічого не створено",

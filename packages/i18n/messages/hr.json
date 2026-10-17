@@ -118,7 +118,8 @@
       "studio": "Studijski albumi",
       "vinyl": "S vinila",
       "youtube": "YouTube"
-    }
+    },
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "Još ništa nije izrađeno",

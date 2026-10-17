@@ -118,7 +118,8 @@
       "studio": "Álbuns de estúdio",
       "vinyl": "Gravações de vinil",
       "youtube": "YouTube"
-    }
+    },
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "Nada criado ainda",

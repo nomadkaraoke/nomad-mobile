@@ -13,7 +13,7 @@ import { isFreshIntent, useMakeIntent } from '../../make/intentStore';
 
 const PRIVACY_URL = 'https://nomadkaraoke.com/privacy';
 
-/** The sign-in sheet: Google, Apple (iOS), or email. Opened by the make flow with returnTo=/make. */
+/** The sign-in sheet: Google, Apple (iOS), or email. Opened by the make flow with returnTo=/make/new. */
 export default function SignInSheet() {
   const t = useTranslations('signIn');
   const errorText = useSignInErrorText();

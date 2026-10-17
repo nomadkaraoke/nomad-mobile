@@ -6,7 +6,7 @@ import * as me from '../app/(tabs)/me';
 import * as tonight from '../app/(tabs)/tonight';
 import * as rootLayout from '../app/_layout';
 import * as index from '../app/index';
-import * as makeFlow from '../app/make/index';
+import * as makeFlow from '../app/make/new';
 import * as signInCode from '../app/sign-in/code';
 import * as signInEmail from '../app/sign-in/email';
 import * as signInSheet from '../app/sign-in/index';
@@ -22,7 +22,7 @@ export function appRoutes() {
     '(tabs)/make': makeTab,
     '(tabs)/me': me,
     'song/[id]': song,
-    'make/index': makeFlow,
+    'make/new': makeFlow,
     'sign-in/index': signInSheet,
     'sign-in/email': signInEmail,
     'sign-in/code': signInCode,

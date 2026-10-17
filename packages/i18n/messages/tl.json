@@ -118,7 +118,8 @@
       "studio": "Mga Studio album",
       "vinyl": "Mga Vinyl rip",
       "youtube": "YouTube"
-    }
+    },
+    "youtubePlaceholder": "https://youtube.com/watch?v=…"
   },
   "makeTab": {
     "emptyTitle": "Wala pang nagagawa",
