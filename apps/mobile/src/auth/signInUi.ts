@@ -6,13 +6,16 @@ import { isSignInError } from './authApi';
 /** Sign-in route params (all three sign-in screens). */
 export type SignInParams = { returnTo?: string };
 
+/** Only in-app paths ("/make"), never a URL or a protocol-relative "//host" from a crafted deep link. */
+export const isInAppPath = (p: string) => p.startsWith('/') && !p.startsWith('//') && !p.startsWith('/\\');
+
 /**
  * Leave the sign-in sheet for `returnTo` (the make flow passes `/make`). The sign-in screens replace one
  * another rather than stacking, so dismissing to `returnTo` (or replacing the sheet with it when it isn't
  * in the history) never leaves a sign-in screen behind.
  */
 export function finishSignIn(returnTo: string | undefined) {
-  if (returnTo) router.dismissTo(returnTo as Href);
+  if (returnTo && isInAppPath(returnTo)) router.dismissTo(returnTo as Href);
   else if (router.canGoBack()) router.back();
   else router.replace('/');
 }

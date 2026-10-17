@@ -135,6 +135,18 @@ it('fake mode: a test email field, and Google sends fake:<email>', async () => {
   expect(google.signIn).not.toHaveBeenCalled();
 });
 
+it('fake mode shows Apple even where the device has no Apple sign-in, and sends fake:<email>', async () => {
+  config.fakeSocialEnabled.mockReturnValue(true);
+  apple.isAvailableAsync.mockResolvedValue(false);
+  gen.exchangeAppleToken.mockResolvedValue(session('tester@example.com'));
+  openSheet();
+  fireEvent.changeText(await screen.findByTestId('signin-fake-email'), 'tester@example.com');
+  await act(async () => fireEvent.press(await screen.findByTestId('signin-apple')));
+  expect(await screen.findByTestId('make-stub')).toBeTruthy();
+  expect(gen.exchangeAppleToken).toHaveBeenCalledWith('fake:tester@example.com', 'en');
+  expect(apple.signInAsync).not.toHaveBeenCalled();
+});
+
 it('signed-out "make" on a song opens the sheet; account tab signs in and out', async () => {
   renderRouter(signInRoutes(), { initialUrl: '/song/2' });
   fireEvent.press(await screen.findByTestId('song-make'));

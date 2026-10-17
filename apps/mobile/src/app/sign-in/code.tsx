@@ -30,6 +30,8 @@ export default function SignInCodeScreen() {
       await verify(value);
       finishSignIn(returnTo);
     } catch (e) {
+      // Start the next try from empty boxes, so a new digit can't resubmit the rejected code.
+      setCode('');
       setError(errorText(e));
     } finally {
       setBusy(null);

@@ -81,3 +81,27 @@ it('the Sign in button verifies too, and a network failure is explained', async 
   await act(async () => fireEvent.changeText(screen.getByTestId('signin-code'), '123456'));
   expect(screen.getByTestId('signin-error')).toHaveTextContent("Couldn't connect. Check your connection and try again.");
 });
+
+it('after a wrong code the boxes clear, so the next digit cannot resubmit the rejected code', async () => {
+  gen.verifyCode.mockRejectedValueOnce(apiError(401, 'invalid_code'));
+  openCode();
+  await screen.findByTestId('signin-code');
+  await enter('000000');
+  expect(screen.getByTestId('signin-code')).toHaveProp('value', '');
+  // Typing on (or an autofill landing) only submits once a whole new code is in.
+  await act(async () => fireEvent.changeText(screen.getByTestId('signin-code'), '1'));
+  expect(gen.verifyCode).toHaveBeenCalledTimes(1);
+  await act(async () => fireEvent.changeText(screen.getByTestId('signin-code'), '123456'));
+  expect(gen.verifyCode).toHaveBeenCalledTimes(2);
+  expect(gen.verifyCode).toHaveBeenLastCalledWith('me@example.com', '123456');
+  expect(gen.verifyCode).not.toHaveBeenNthCalledWith(2, 'me@example.com', '000000');
+});
+
+it.each(['https://evil.example', '//evil.example/make', 'make'])('ignores a returnTo that is not an in-app path (%s)', async (returnTo) => {
+  const app = renderRouter(signInRoutes(), { initialUrl: `/sign-in/code?returnTo=${encodeURIComponent(returnTo)}` });
+  await screen.findByTestId('signin-code');
+  await enter('123456');
+  expect(useAuth.getState().state.status).toBe('signedIn');
+  expect(app.getPathname()).not.toBe('/make');
+  expect(app.getPathname()).not.toMatch(/evil/);
+});

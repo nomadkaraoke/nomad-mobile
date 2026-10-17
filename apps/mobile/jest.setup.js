@@ -49,3 +49,7 @@ jest.mock('expo-apple-authentication', () => ({
   signInAsync: jest.fn(),
   AppleAuthenticationScope: { FULL_NAME: 0, EMAIL: 1 },
 }));
+
+// The real Sentry SDK starts timers at import, which keeps jest workers alive after the run.
+// observability.test.ts overrides this with its own mock to assert init().
+jest.mock('@sentry/react-native', () => ({ init: jest.fn(), wrap: (c) => c, captureException: jest.fn() }));

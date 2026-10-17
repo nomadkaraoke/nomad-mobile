@@ -5,8 +5,11 @@ import { CodeField } from '../CodeField';
 it('shows one box per digit and keeps only digits, up to the length', () => {
   const onChangeText = jest.fn();
   const { rerender } = render(<CodeField testID="c" label="Code" value="" onChangeText={onChangeText} />);
-  fireEvent.changeText(screen.getByLabelText('Code'), '12 3-45678');
-  expect(onChangeText).toHaveBeenCalledWith('123456');
+  fireEvent.changeText(screen.getByLabelText('Code'), '12 3-456');
+  expect(onChangeText).toHaveBeenLastCalledWith('123456');
+  // Autofill / paste next to digits already typed: the newest digits win.
+  fireEvent.changeText(screen.getByLabelText('Code'), '12654321');
+  expect(onChangeText).toHaveBeenLastCalledWith('654321');
 
   rerender(<CodeField testID="c" label="Code" value="123" onChangeText={onChangeText} />);
   expect(screen.getByTestId('c-box-0')).toHaveTextContent('1');

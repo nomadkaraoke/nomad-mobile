@@ -28,11 +28,12 @@ export default function SignInSheet() {
 
   useEffect(() => {
     let live = true;
-    void appleAvailable().then((ok) => live && setShowApple(ok));
+    // Fake mode shows Apple everywhere so E2E can drive the fake Apple path on Android too.
+    void (fake ? Promise.resolve(true) : appleAvailable()).then((ok) => live && setShowApple(ok));
     return () => {
       live = false;
     };
-  }, []);
+  }, [fake]);
 
   const social = async (provider: 'google' | 'apple', run: (o: { fakeEmail: string }) => Promise<SocialResult>) => {
     setBusy(provider);

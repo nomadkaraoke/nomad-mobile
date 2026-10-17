@@ -19,7 +19,8 @@ export type CodeFieldProps = {
  */
 export function CodeField({ label, value, onChangeText, testID, length = 6, invalid, onFilled, autoFocus }: CodeFieldProps) {
   const onChange = (raw: string) => {
-    const digits = raw.replace(/\D/g, '').slice(0, length);
+    // Over-long input (autofill or a paste landing next to digits already typed) keeps the newest digits.
+    const digits = raw.replace(/\D/g, '').slice(-length);
     onChangeText(digits);
     if (digits.length === length) onFilled?.(digits);
   };
@@ -43,7 +44,8 @@ export function CodeField({ label, value, onChangeText, testID, length = 6, inva
           accessibilityLabel={label}
           value={value}
           onChangeText={onChange}
-          // No maxLength: a pasted "123 456" must keep its last digit; onChange trims to `length` digits.
+          // No maxLength: a pasted "123 456" or an autofill into a part-filled field must arrive whole;
+          // onChange keeps the last `length` digits.
           keyboardType="number-pad"
           autoComplete="one-time-code"
           textContentType="oneTimeCode"

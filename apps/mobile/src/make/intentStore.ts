@@ -37,7 +37,10 @@ type IntentStore = {
   intent: MakeIntent | null;
   set(i: MakeIntent): void;
   clear(): void;
-  /** The intent, or null once it's older than 30 minutes (and then it's cleared). */
+  /**
+   * The intent, or null once it's older than 30 minutes. Clears an expired intent (a state update), so call it
+   * from handlers/effects, not during render; render code reads `intent` through isFreshIntent().
+   */
   get(): MakeIntent | null;
 };
 
