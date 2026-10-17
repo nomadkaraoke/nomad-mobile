@@ -42,9 +42,9 @@ name: make-5-needs-review
     timeout: 30000
 # Signed in by the handoff: gen web shows "Successfully signed in!" for a moment, then the review page
 # loads (first Next dev compile can be slow; a fast redirect can skip past the interstitial). The review
-# page is only reachable signed in, and it must load. "Failed to load lyrics" here is gen's correction-data
+# page is only reachable signed in, and it must load. "Failed to load lyrics" here was gen's correction-data
 # race: GET /api/review/{id}/correction-data checks awaiting_review then transitions to in_review, and two
-# concurrent loads make the second one 500 (in_review -> in_review). Seen on iOS every run, not on Android.
+# concurrent loads made the second one 500 (in_review -> in_review); fixed in gen 45fade64.
 # Wait for the page to settle on the review UI or one of the failures, whichever comes first.
 - extendedWaitUntil:
     visible: ".*Lyrics Transcription Review.*|Failed to load lyrics|.*page could not be found.*"

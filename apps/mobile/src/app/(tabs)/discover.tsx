@@ -1,7 +1,7 @@
 import type { SongResponse } from '@nomad/api-decide';
 import { useTranslations } from '@nomad/i18n';
 import { Button, List, Screen, Text, TextField } from '@nomad/ui';
-import { router } from 'expo-router';
+import { router, useIsFocused } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, AppState, Keyboard, Pressable, View } from 'react-native';
 
@@ -35,13 +35,17 @@ export default function DiscoverScreen() {
 
   // The search field never takes focus by itself: on Android a resumed activity can hand focus back to
   // it (or a sheet can leave the keyboard up), covering the tab bar. Focus only on the user's tap.
+  // Only while Discover is on screen: with the sign-in code screen on top, coming back from the mail
+  // app must keep the code field focused.
+  const focused = useIsFocused();
   useEffect(() => {
+    if (!focused) return;
     Keyboard.dismiss();
     const sub = AppState.addEventListener('change', (next) => {
       if (next === 'active') Keyboard.dismiss();
     });
     return () => sub?.remove(); // jest-expo's AppState mock returns no subscription
-  }, []);
+  }, [focused]);
 
   const empty = isLoading ? (
     <ActivityIndicator testID="discover-loading" />

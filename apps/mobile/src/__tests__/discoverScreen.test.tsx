@@ -1,5 +1,6 @@
 import * as decide from '@nomad/api-decide';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { router } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
 import { AppState, Keyboard } from 'react-native';
 
@@ -48,14 +49,35 @@ it('opening Discover never raises the keyboard: no autofocus, and a keyboard lef
 it('coming back to the app (a launcher tap resumes it on Android) puts the keyboard away too', async () => {
   const listeners: ((s: string) => void)[] = [];
   const add = jest.spyOn(AppState, 'addEventListener').mockImplementation((_type, fn) => {
-    listeners.push(fn as (s: string) => void);
-    return { remove: jest.fn() } as unknown as ReturnType<typeof AppState.addEventListener>;
+    const listener = fn as (s: string) => void;
+    listeners.push(listener);
+    const remove = () => listeners.splice(listeners.indexOf(listener), 1);
+    return { remove } as unknown as ReturnType<typeof AppState.addEventListener>;
   });
   renderRouter(appRoutes(), { initialUrl: '/discover' });
   await screen.findByTestId('discover-search-input');
   const dismiss = jest.spyOn(Keyboard, 'dismiss');
   act(() => listeners.forEach((fn) => fn('active')));
   expect(dismiss).toHaveBeenCalled();
+  dismiss.mockRestore();
+  add.mockRestore();
+});
+
+it('coming back to the app with another screen on top (the code field waiting for a pasted code) leaves the keyboard alone', async () => {
+  const listeners: ((s: string) => void)[] = [];
+  const add = jest.spyOn(AppState, 'addEventListener').mockImplementation((_type, fn) => {
+    const listener = fn as (s: string) => void;
+    listeners.push(listener);
+    const remove = () => listeners.splice(listeners.indexOf(listener), 1);
+    return { remove } as unknown as ReturnType<typeof AppState.addEventListener>;
+  });
+  const app = renderRouter(appRoutes(), { initialUrl: '/discover' });
+  await screen.findByTestId('discover-search-input');
+  act(() => router.push('/song/new'));
+  await waitFor(() => expect(app.getPathname()).toBe('/song/new'));
+  const dismiss = jest.spyOn(Keyboard, 'dismiss');
+  act(() => listeners.forEach((fn) => fn('active')));
+  expect(dismiss).not.toHaveBeenCalled();
   dismiss.mockRestore();
   add.mockRestore();
 });
