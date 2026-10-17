@@ -158,7 +158,8 @@
     "title": "Potvrdi cijenu",
     "nothingBody": "Za ovaj videozapis više nije potrebna provjera troška.",
     "nothingTitle": "Nema ničega za potvrdu",
-    "close": "Zatvori"
+    "close": "Zatvori",
+    "priceChanged": "Cijena se promijenila — provjeri novi ukupni iznos"
   },
   "jobs": {
     "cancelled": "Otkazano",

@@ -158,7 +158,8 @@
     "title": "Potvrdiť cenu",
     "nothingBody": "Toto video už nevyžaduje kontrolu ceny.",
     "nothingTitle": "Nie je čo potvrdiť",
-    "close": "Zavrieť"
+    "close": "Zavrieť",
+    "priceChanged": "Cena sa zmenila — skontroluj novú celkovú sumu"
   },
   "jobs": {
     "cancelled": "Zrušené",

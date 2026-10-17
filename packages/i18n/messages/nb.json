@@ -158,7 +158,8 @@
     "title": "Bekreft pris",
     "nothingBody": "Denne videoen trenger ikke lenger en kostnadssjekk.",
     "nothingTitle": "Ingenting å bekrefte",
-    "close": "Lukk"
+    "close": "Lukk",
+    "priceChanged": "Prisen er endret – sjekk den nye totalsummen"
   },
   "jobs": {
     "cancelled": "Avbrutt",

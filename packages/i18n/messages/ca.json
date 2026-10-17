@@ -158,7 +158,8 @@
     "title": "Confirma el cost",
     "nothingBody": "Aquest vídeo ja no necessita cap comprovació de cost.",
     "nothingTitle": "Res per confirmar",
-    "close": "Tanca"
+    "close": "Tanca",
+    "priceChanged": "El preu ha canviat — comprova el nou total"
   },
   "jobs": {
     "cancelled": "Cancel·lat",

@@ -158,7 +158,8 @@
     "title": "Konfirmasi biaya",
     "nothingBody": "Video ini tidak memerlukan pemeriksaan biaya lagi.",
     "nothingTitle": "Tidak ada yang perlu dikonfirmasi",
-    "close": "Tutup"
+    "close": "Tutup",
+    "priceChanged": "Harga telah berubah — periksa total yang baru"
   },
   "jobs": {
     "cancelled": "Dibatalkan",

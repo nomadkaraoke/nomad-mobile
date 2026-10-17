@@ -158,7 +158,8 @@
     "title": "Kosten bevestigen",
     "nothingBody": "Deze video heeft geen kostencontrole meer nodig.",
     "nothingTitle": "Niets te bevestigen",
-    "close": "Sluiten"
+    "close": "Sluiten",
+    "priceChanged": "De prijs is gewijzigd — controleer het nieuwe totaalbedrag"
   },
   "jobs": {
     "cancelled": "Geannuleerd",

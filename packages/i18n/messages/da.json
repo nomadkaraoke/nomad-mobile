@@ -158,7 +158,8 @@
     "title": "Bekræft pris",
     "nothingBody": "Denne video behøver ikke længere et pristjek.",
     "nothingTitle": "Intet at bekræfte",
-    "close": "Luk"
+    "close": "Luk",
+    "priceChanged": "Prisen har ændret sig – tjek det nye totalbeløb"
   },
   "jobs": {
     "cancelled": "Annulleret",

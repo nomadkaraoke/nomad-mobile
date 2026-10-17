@@ -10,21 +10,17 @@ export interface JobLike {
 }
 
 export interface DurationConfirm {
-  /** What the video costs in all (shown to the person). */
+  /** What the video costs in all: shown to the person, and the `acknowledged_credits` confirm-duration expects. */
   totalCredits: number;
   /** How many more credits confirming takes. */
   extraCredits: number;
-  /** The `acknowledged_credits` gen's confirm-duration route checks against. */
-  acknowledgedCredits: number;
   seconds: number;
 }
 
 /**
  * What the user is asked to confirm when a track runs longer than the credits already charged.
- *
- * create-from-search takes 1 credit without writing `credits_charged`. Gen's duration reconcile reads a missing
- * value as 1, but its confirm-duration route reads it as 0 and expects `0 + pending`. So the person sees the
- * real total, and the acknowledgement uses gen's route arithmetic.
+ * A job without `credits_charged` (made before gen v0.278.2) was charged 1: gen's `get_credits_charged`
+ * uses the same default, so the total shown is the total gen checks.
  */
 export function durationConfirm(job: JobLike): DurationConfirm {
   const sd = job.state_data ?? {};
@@ -32,7 +28,6 @@ export function durationConfirm(job: JobLike): DurationConfirm {
   return {
     totalCredits: (sd.credits_charged ?? 1) + extraCredits,
     extraCredits,
-    acknowledgedCredits: (sd.credits_charged ?? 0) + extraCredits,
     seconds: sd.duration_actual_seconds ?? 0,
   };
 }

@@ -158,7 +158,8 @@
     "title": "Kosten bestätigen",
     "nothingBody": "Dieses Video benötigt keine Kostenprüfung mehr.",
     "nothingTitle": "Nichts zu bestätigen",
-    "close": "Schließen"
+    "close": "Schließen",
+    "priceChanged": "Der Preis hat sich geändert – überprüfe den neuen Gesamtbetrag"
   },
   "jobs": {
     "cancelled": "Abgebrochen",

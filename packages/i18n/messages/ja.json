@@ -158,7 +158,8 @@
     "title": "料金を確認",
     "nothingBody": "この動画の料金確認は完了しています。",
     "nothingTitle": "確認項目はありません",
-    "close": "閉じる"
+    "close": "閉じる",
+    "priceChanged": "価格が変更されました。新しい合計金額をご確認ください"
   },
   "jobs": {
     "cancelled": "キャンセル済み",

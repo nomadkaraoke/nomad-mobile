@@ -158,7 +158,8 @@
     "title": "Sahkan kos",
     "nothingBody": "Video ini tidak memerlukan semakan kos lagi.",
     "nothingTitle": "Tiada apa untuk disahkan",
-    "close": "Tutup"
+    "close": "Tutup",
+    "priceChanged": "Harga telah berubah — semak jumlah baharu"
   },
   "jobs": {
     "cancelled": "Dibatalkan",

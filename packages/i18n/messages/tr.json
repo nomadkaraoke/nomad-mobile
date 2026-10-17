@@ -158,7 +158,8 @@
     "title": "Maliyeti onayla",
     "nothingBody": "Bu video için artık maliyet kontrolü gerekmiyor.",
     "nothingTitle": "Onaylanacak bir şey yok",
-    "close": "Kapat"
+    "close": "Kapat",
+    "priceChanged": "Fiyat değişti — yeni toplamı kontrol et"
   },
   "jobs": {
     "cancelled": "İptal edildi",

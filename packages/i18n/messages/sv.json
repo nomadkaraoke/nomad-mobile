@@ -158,7 +158,8 @@
     "title": "Bekräfta kostnad",
     "nothingBody": "Den här videon behöver inte längre någon kostnadskontroll.",
     "nothingTitle": "Inget att bekräfta",
-    "close": "Stäng"
+    "close": "Stäng",
+    "priceChanged": "Priset har ändrats – kontrollera det nya totalbeloppet"
   },
   "jobs": {
     "cancelled": "Avbruten",

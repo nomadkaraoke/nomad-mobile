@@ -4,6 +4,7 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, Text } from '@nomad/ui';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
 /**
@@ -17,6 +18,8 @@ export default function DurationSheet() {
   const tc = useTranslations('common');
   const { id } = useLocalSearchParams<{ id: string }>();
   const queryClient = useQueryClient();
+  // gen answered 409: the total (or the job) changed under the sheet. Show the fresh figure, not an error.
+  const [priceChanged, setPriceChanged] = useState(false);
 
   const job = useQuery({
     queryKey: ['job', id],
@@ -38,17 +41,22 @@ export default function DurationSheet() {
 
   const confirm = useMutation({
     mutationFn: (total: number) => confirmDuration(id, total),
+    onMutate: () => setPriceChanged(false),
     onSuccess: done,
     onError: (e) => {
       if (isApiError(e, 402)) {
         router.push({ pathname: '/credits', params: { returnTo: `/job/duration/${id}` } });
+      } else if (isApiError(e, 409)) {
+        setPriceChanged(true);
+        void job.refetch();
       }
     },
   });
   const cancel = useMutation({ mutationFn: () => cancelJob(id), onSuccess: done });
 
   const busy = confirm.isPending || cancel.isPending;
-  const failed = (confirm.isError && !isApiError(confirm.error, 402)) || cancel.isError;
+  const failed =
+    (confirm.isError && !isApiError(confirm.error, 402) && !isApiError(confirm.error, 409)) || cancel.isError;
 
   return (
     <View testID="duration-sheet" className="flex-1 gap-4 bg-bg p-6">
@@ -75,6 +83,7 @@ export default function DurationSheet() {
           confirming={confirm.isPending}
           cancelling={cancel.isPending}
           failed={failed}
+          priceChanged={priceChanged}
           onConfirm={(total) => confirm.mutate(total)}
           onCancel={() => cancel.mutate()}
         />
@@ -89,16 +98,22 @@ type BodyProps = {
   confirming: boolean;
   cancelling: boolean;
   failed: boolean;
+  priceChanged: boolean;
   onConfirm: (total: number) => void;
   onCancel: () => void;
 };
 
-function DurationBody({ job, busy, confirming, cancelling, failed, onConfirm, onCancel }: BodyProps) {
+function DurationBody({ job, busy, confirming, cancelling, failed, priceChanged, onConfirm, onCancel }: BodyProps) {
   const t = useTranslations('duration');
-  const { totalCredits, extraCredits, acknowledgedCredits, seconds } = durationConfirm(job);
+  const { totalCredits, extraCredits, seconds } = durationConfirm(job);
   const charged = totalCredits - extraCredits;
   return (
     <>
+      {priceChanged ? (
+        <Text testID="duration-price-changed" className="font-semibold text-gold">
+          {t('priceChanged')}
+        </Text>
+      ) : null}
       <Text testID="duration-body">
         {t('body', { duration: formatClock(seconds), total: totalCredits, extra: extraCredits })}
       </Text>
@@ -118,7 +133,7 @@ function DurationBody({ job, busy, confirming, cancelling, failed, onConfirm, on
         label={t('confirm')}
         loading={confirming}
         disabled={busy}
-        onPress={() => onConfirm(acknowledgedCredits)}
+        onPress={() => onConfirm(totalCredits)}
       />
       <Button
         testID="duration-cancel"

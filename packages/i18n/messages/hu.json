@@ -158,7 +158,8 @@
     "title": "Költség megerősítése",
     "nothingBody": "Ehhez a videóhoz már nincs szükség a költség ellenőrzésére.",
     "nothingTitle": "Nincs mit megerősíteni",
-    "close": "Bezárás"
+    "close": "Bezárás",
+    "priceChanged": "Megváltozott az ár — ellenőrizd az új végösszeget"
   },
   "jobs": {
     "cancelled": "Megszakítva",

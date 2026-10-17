@@ -158,7 +158,8 @@
     "title": "Confirmer le coût",
     "nothingBody": "Cette vidéo n'a plus besoin d'une vérification du coût.",
     "nothingTitle": "Rien à confirmer",
-    "close": "Fermer"
+    "close": "Fermer",
+    "priceChanged": "Le prix a changé — vérifie le nouveau total"
   },
   "jobs": {
     "cancelled": "Annulé",

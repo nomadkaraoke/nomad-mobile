@@ -158,7 +158,8 @@
     "title": "确认费用",
     "nothingBody": "该视频不再需要费用确认。",
     "nothingTitle": "无需确认",
-    "close": "关闭"
+    "close": "关闭",
+    "priceChanged": "价格已变动 — 请查看最新总额"
   },
   "jobs": {
     "cancelled": "已取消",

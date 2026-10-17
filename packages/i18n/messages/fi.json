@@ -158,7 +158,8 @@
     "title": "Vahvista hinta",
     "nothingBody": "Tämä video ei enää vaadi hinnan tarkistusta.",
     "nothingTitle": "Ei mitään vahvistettavaa",
-    "close": "Sulje"
+    "close": "Sulje",
+    "priceChanged": "Hinta muuttui — tarkista uusi loppusumma"
   },
   "jobs": {
     "cancelled": "Peruutettu",

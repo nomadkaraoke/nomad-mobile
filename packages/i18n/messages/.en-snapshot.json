@@ -185,6 +185,7 @@
     "confirm": "Confirm",
     "cancelVideo": "Cancel this video",
     "failed": "Couldn't do that. Try again.",
+    "priceChanged": "The price changed — check the new total",
     "nothingTitle": "Nothing to confirm",
     "nothingBody": "This video doesn't need a cost check any more.",
     "close": "Close"

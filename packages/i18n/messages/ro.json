@@ -158,7 +158,8 @@
     "title": "Confirmă costul",
     "nothingBody": "Acest videoclip nu mai are nevoie de verificarea costului.",
     "nothingTitle": "Nimic de confirmat",
-    "close": "Închide"
+    "close": "Închide",
+    "priceChanged": "Prețul s-a schimbat — verifică noul total"
   },
   "jobs": {
     "cancelled": "Anulat",

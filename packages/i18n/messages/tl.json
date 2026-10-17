@@ -158,7 +158,8 @@
     "title": "Kumpirmahin ang halaga",
     "nothingBody": "Hindi na kailangan ng cost check para sa video na ito.",
     "nothingTitle": "Walang dapat kumpirmahin",
-    "close": "Isara"
+    "close": "Isara",
+    "priceChanged": "Nagbago ang presyo — tingnan ang bagong kabuuan"
   },
   "jobs": {
     "cancelled": "Nakansela",

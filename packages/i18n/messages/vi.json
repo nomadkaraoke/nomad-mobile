@@ -158,7 +158,8 @@
     "title": "Xác nhận chi phí",
     "nothingBody": "Video này không cần kiểm tra chi phí nữa.",
     "nothingTitle": "Không có mục nào cần xác nhận",
-    "close": "Đóng"
+    "close": "Đóng",
+    "priceChanged": "Giá đã thay đổi — vui lòng kiểm tra lại tổng tiền mới"
   },
   "jobs": {
     "cancelled": "Đã hủy",
