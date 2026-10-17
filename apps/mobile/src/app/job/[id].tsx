@@ -1,4 +1,4 @@
-import { getJob, type JobDetail, type JobSummary } from '@nomad/api-gen';
+import { getJob, type JobDetail } from '@nomad/api-gen';
 import { useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -9,6 +9,7 @@ import { useVideoPlayer, VideoView } from 'expo-video';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, Linking, Platform, Pressable, Share, View } from 'react-native';
 
+import { cachedJobSummary } from '../../jobs/cachedJob';
 import { discardMp4, downloadMp4, fetchMp4, Mp4ArchivedError, signedMp4Url } from '../../jobs/downloadMp4';
 import { copiedToast } from '../../jobs/readyUi';
 import { openYouTube, youtubeId, youtubeShortUrl, youtubeThumbnail, youtubeTitle } from '../../jobs/youtube';
@@ -33,10 +34,7 @@ export default function ReadyScreen() {
     queryFn: (): Promise<JobDetail> => getJob(id),
     // The Make tab's copy shows the YouTube block at once while the full job loads.
     placeholderData: (): JobDetail | undefined => {
-      const summary = queryClient
-        .getQueriesData<JobSummary[]>({ queryKey: ['jobs'] })
-        .flatMap(([, jobs]) => jobs ?? [])
-        .find((j) => j.job_id === id);
+      const summary = cachedJobSummary(queryClient, id);
       return summary && { ...summary, download_urls: undefined };
     },
   });

@@ -7,6 +7,8 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
+import { cachedJobSummary } from '../../../jobs/cachedJob';
+
 /**
  * Duration confirm (spec §4.6): a long track costs more than the credit already charged. Confirm
  * acknowledges the full total; without enough credits it goes to the credits screen, which
@@ -26,11 +28,7 @@ export default function DurationSheet() {
     // Only the summary fields are needed, so the Make tab's copy can stand in.
     queryFn: (): Promise<JobSummary> => getJob(id),
     // The Make tab already has the job: show it at once while the fresh copy loads.
-    placeholderData: () =>
-      queryClient
-        .getQueriesData<JobSummary[]>({ queryKey: ['jobs'] })
-        .flatMap(([, jobs]) => jobs ?? [])
-        .find((j) => j.job_id === id),
+    placeholderData: () => cachedJobSummary(queryClient, id),
   });
 
   const done = () => {
