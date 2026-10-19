@@ -30,6 +30,7 @@ The use cases overlap: one person can be any of them on a given night.
 - **All native.** Every screen is built natively and designed for phones, including the kjbox singer flow and gen's lyrics and instrumental review. The web apps are reference designs. A web view is allowed only as a temporary bridge while its native screen is being built, and is removed in the phase that replaces it.
 - **One account.** The gen user is the identity of record across gen, decide and kjbox ([Phase 0 spec §4](superpowers/specs/2026-10-14-mobile-phase0-design.md)). Credits are shared with the web.
 - **Singers only.** The app is for singers. KJs, Andrew included, keep running nights from the kjbox KJ dashboard. Other venues are supported through use case 2: the singer hands over a YouTube link.
+- **Offline where possible.** Every feature states what it does offline and what it gives up. Search works offline from an opt-in saved list of karaoke songs, with library tags. Sung history and ratings are recorded on the phone first and synced later (Phase 4). Making a track, the Gemini fallback, songs with no karaoke version, and brand-new uploads need a connection.
 - **Same endpoints as the web.** The app calls the same backend endpoints as the web apps, and both are tested against the same local stacks (gen's lives at `karaoke-gen/scripts/local-stack.sh`).
 - **No accounts or spend without asking.** Apple, Google Play, Expo/EAS, RevenueCat, Sentry and PostHog accounts wait for Andrew's go-ahead in phase 6.
 
@@ -59,7 +60,7 @@ Every song page offers the same actions: add to a setlist, request tonight, make
 - Personal recommendations from listening history, with decide's quiz for people with no data.
 - Vocal range detection (sing a scale into the mic) and a "singable" filter.
 - Rich filters and sorting: genre, mood, energy, decade, popularity, voice gender, duration, and a karaoke-classic flag.
-- **A library filter:** show or recommend only songs available in KaraFun or another commercial karaoke catalogue, for nights that use those libraries, or only songs with a community karaoke release.
+- **A library filter:** show or recommend only songs available in KaraFun or another commercial karaoke catalogue, for nights that use those libraries, or only songs with a community karaoke release. Phase 3 researches which commercial libraries publish an authoritative song list, starting with KaraFun, Karaoke Cloud and Singa, and supports only those that are easy to source. Phase 1b lays the data model (library tags on the offline song list).
 
 **Make (use case 2)**
 - Make a karaoke video from search; the best audio source is picked automatically.
@@ -86,6 +87,7 @@ Phase specs refine these. decide's own [VISION.md](https://github.com/nomadkarao
 |---|---|---|---|
 | **0. Foundation** ✅ | n/a | Workspace, generated API clients, 33-locale i18n, UI wrappers, CI, Maestro (PR #3) | n/a |
 | **1. Make it** ✅ | 2 | Real sign-in (email code + Google; Apple built, switched on in phase 6) → search → make (best audio picked automatically) → pay with the web link through gen's fake checkout → job progress → watch and YouTube link. A job that needs review opens gen's web review as a temporary bridge. | gen `handoff-token` endpoint plus a local-stack scenario |
+| **1b. Search parity** ✅ | 1, 2 | Song search as good as the websites': decide's search service (the single song-search backend), a TS matcher shared with it, an opt-in offline song list, "Did you mean" and Gemini fallback, versions and a pick screen, and the make flow's match judge | karaoke-decide search service (decide #160); gen decide-partner secret and fake judge knobs (gen #1190) |
 | **2. Native review** | 2 | Lyrics and instrumental review designed for phones; replaces the bridge | Expected none (review APIs exist); confirm in the phase spec |
 | **3. Discover** | 1 | Music services, quiz, recommendations, filters including the library filter, vocal range and singable filter | decide sign-in exchange (spec §4.2), a decide local stack, Apple Music |
 | **4. Me** | 4 | History and ratings (crowd singability data), playlists and library, "get this made" | decide history and playlist APIs (some exist) |

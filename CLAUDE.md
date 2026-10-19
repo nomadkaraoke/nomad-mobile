@@ -2,8 +2,9 @@
 
 The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke project (decide recommendations, gen karaoke videos, kjbox nights, a singer's own history). **Read [docs/VISION.md](docs/VISION.md) first**: it has the four use cases, the navigation, the release bar (no publishing until all four have a first usable version) and the phase roadmap.
 
-**Status:** Phase 1 "Make it" (2026-10-17): real gen sign-in → make → pay → watch, verified by nine Maestro flows on iOS and Android against the gen local stack, plus a prod check of the release APK (real email-code sign-in, live Stripe checkout open/cancel, real audio search). Next: Phase 2 "Native review" (docs/VISION.md). Phase 0 (2026-10-14) laid the workspace, packages, CI and agent tooling.
+**Status:** Phase 1 "Make it" (2026-10-17): real gen sign-in → make → pay → watch, verified by nine Maestro flows on iOS and Android against the gen local stack, plus a prod check of the release APK (real email-code sign-in, live Stripe checkout open/cancel, real audio search). Phase 1b "Search parity" (2026-10-19) then rebuilt song search on decide's search service: offline song list, outcomes (did-you-mean, resolve, versions, pick screen), make-flow match judge, flows search-1…4 + make-10. Next: Phase 2 "Native review" (docs/VISION.md). Phase 0 (2026-10-14) laid the workspace, packages, CI and agent tooling.
 
+- Phase 1b spec: [docs/superpowers/specs/2026-10-18-mobile-search-parity-design.md](docs/superpowers/specs/2026-10-18-mobile-search-parity-design.md); plan: [docs/superpowers/plans/2026-10-18-mobile-search-parity.md](docs/superpowers/plans/2026-10-18-mobile-search-parity.md)
 - Phase 1 spec: [docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md](docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md); plan: [docs/superpowers/plans/2026-10-17-mobile-phase1-make-it.md](docs/superpowers/plans/2026-10-17-mobile-phase1-make-it.md)
 - Phase 0 spec: [docs/superpowers/specs/2026-10-14-mobile-phase0-design.md](docs/superpowers/specs/2026-10-14-mobile-phase0-design.md) (MVP flow §2, foundation §3, shared auth + payments §4)
 - Phase 0 plan: [docs/superpowers/plans/2026-10-14-mobile-phase0-foundation.md](docs/superpowers/plans/2026-10-14-mobile-phase0-foundation.md)
@@ -28,11 +29,11 @@ The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke proj
 ## Workspace
 
 ```
-apps/mobile/          Expo app (src/app routes, src/auth, src/api, src/find, src/providers)
-packages/core/        pure TS: session model + input normalizers, job phases + steps, audio-search ranking, duration confirm, formatting
+apps/mobile/          Expo app (src/app routes, src/auth, src/api, src/find (useSearch, components, outcome.ts), src/offline (opt-in offline song index), src/providers)
+packages/core/        pure TS: session model + input normalizers, job phases + steps, audio-search ranking, duration confirm, formatting, search/ (song matcher; Python parity fixtures synced from decide by scripts/sync-search-fixtures.mjs, `DECIDE_DIR`)
 packages/i18n/        messages/<33>.json, resolveLocale, IntlProvider; scripts/ vendored from karaoke-gen
 packages/api-gen/     generated karaoke-gen client + configureClient + facades (auth, credits, make, jobs) + zod overrides
-packages/api-decide/  generated karaoke-decide client + facades (searchSongs, popularSongs, getSong)
+packages/api-decide/  generated karaoke-decide client + facades (searchSongs, popularSongs, getSong) and the search service client; decide's search service is the app's single song-search backend
 packages/ui/          tokens, Screen/Text/Button/TextField, <List> (FlashList), <WaveformCanvas> (Skia)
 openapi/              gen.json + decide.json snapshots (refresh: pnpm gen:api)
 maestro/flows/        E2E flows (make-1…10, search-1…4, smoke-discover) against the gen + decide search local stacks; common/ shared steps; scripts/stack.js
@@ -102,6 +103,12 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - **Duration confirm sends the full total.** `durationConfirm` (`@nomad/core`) computes `totalCredits` = the job's `state_data.credits_charged` (`?? 1`: jobs made before gen v0.278.2 never recorded it, and gen charged 1) + the pending extra; the app sends that total and gen (≥ v0.278.2) records `credits_charged` on create and resolves the confirm against it.
 - **RTL text alignment:** iOS "natural" alignment (RN's `auto`) ignores `I18nManager.forceRTL`, so paragraphs stayed left-aligned in ar/he. `@nomad/ui` `Text` defaults to `textAlign: 'left'`, which RN mirrors to the right under RTL. Interpolated titles/emails go through `isolate()` (`@nomad/i18n`) so Latin text doesn't scramble inside an Arabic sentence.
 - **Metro started with `CI=1` doesn't watch files** (`e2e-local.sh` starts it that way): after editing code, restart it, or run your own `npx expo start --dev-client` (same env, no `CI=1`) while iterating.
+- **expo-sqlite closes crash (segfault) after an FTS5 query.** Every open of `offline.db` passes `{useNewConnection: true, finalizeUnusedStatementsBeforeClosing: false}` (a typed but `@hidden` option); go through `openOfflineReader()`. `expo-sqlite` is pinned (see the `"//"` key in package.json). Don't bump it without re-checking on device.
+- **Tests must not live under `src/app`.** expo-router's `require.context` bundles every `.tsx` there as a route. Put screen tests in `apps/mobile/src/__tests__/`.
+- **Offline identify cost scales with the index.** Median ~50 ms, p95 ~280 ms on big indexes, on the JS thread; `useSearch` debounces it (300 ms) and runs it after the cloud request is sent. Don't call it per keystroke.
+- **The device id** (sent as `sid`/device header to decide search) lives in MMKV, so it resets on uninstall.
+- **colima stale lock after a crash or reboot:** `colima start` fails until you remove the symlink `~/.colima/_lima/_disks/colima/in_use_by`.
+- **`pnpm i18n:translate` needs `gcloud auth login`** (GCS cache + Gemini via ADC) and `env -u GEMINI_API_KEY`. If auth has lapsed, new keys stay out of `.en-snapshot.json` and get translated on the next run.
 - **`renderRouter` (expo-router testing) switches jest to fake timers.** Reset with `jest.useRealTimers()` in `beforeEach` when code uses real delays.
 
 ## Sign-in and session
@@ -115,6 +122,7 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - Sentry Expo config plugin (org/project, source maps, dSYMs) is added together with the Sentry account.
 - EAS: `eas.json` and `.eas/workflows/*` are dormant. `runtimeVersion` / `updates.url` need an EAS project id.
 - Maestro in CI: EAS Workflows `type: maestro` (paid plan) or macOS GitHub runners. This is still a decision to make.
+- Library filter (KaraFun, Karaoke Cloud, Singa): Phase 3 researches which publish an authoritative list; Phase 1b only carries the library tags in the offline list. Me's sung history will be recorded on the phone first and synced later (Phase 4), per VISION's offline principle.
 - Decide personal recommendations, music services and vocal range: Phase 3 "Discover" in docs/VISION.md (needs spec §4.2 `exchange-gen-session`). Sung history, playlists and library are Phase 4 "Me".
 
 ## App identity
