@@ -269,12 +269,14 @@ export default function DiscoverScreen() {
     resolveQuery(text, currentSid()).then(
       (result) => {
         if (!current()) return;
+        // An answer with no outcome is a failure: keep result/submitted empty so the screen isn't "describing" nothing.
+        const nothing = describeOutcome(result, text, NO_CHOICE) === null;
         setDescribe((d) => ({
           ...d,
           loading: false,
-          result,
-          submitted: text,
-          failed: describeOutcome(result, text, NO_CHOICE) === null,
+          result: nothing ? null : result,
+          submitted: nothing ? "" : text,
+          failed: nothing,
           unreachable: false,
         }));
       },

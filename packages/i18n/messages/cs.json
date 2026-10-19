@@ -157,7 +157,7 @@
       "fileMayNotMatch": "Název souboru nemusí odpovídat tvé skladbě",
       "lowAvailability": "Nízká dostupnost — příprava může trvat o něco déle",
       "noLossless": "Nejsou k dispozici žádné bezeztrátové zdroje — našel se jen YouTube / ztrátový formát nebo ripy z vinylu",
-      "lossy": "Tohle je zdroj z YouTube / ztrátový formát. Bezztrátový zvuk dělá lepší karaoke, pokud je k dispozici."
+      "lossy": "Tohle je zdroj z YouTube / ztrátový formát. Bezeztrátový zvuk dělá lepší karaoke, pokud je k dispozici."
     },
     "youtubeBlocked": "YouTube právě blokuje naše stahování, takže tuhle možnost nemůžeme použít. Vyber jiný zdroj, nebo to zkus za pár minut znovu.",
     "youtubeFallbackToggle": "Nemůžeš najít svoji skladbu? Vlož místo toho odkaz",
