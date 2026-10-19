@@ -114,6 +114,10 @@ function relevance(title: string, group: OfflineGroup, queryKey: string): [numbe
  * Karaoke songs whose artist/title contain every typed word (the last as a prefix), most relevant first:
  * the phone's version of decide's typed-query availability search. Rivals never appear. `[]` on no match
  * or any SQLite error (search must never get worse than empty).
+ *
+ * Differs from decide (`AvailabilityIndex.search`): no short-query LIKE or trigram + fuzzy fallback when FTS
+ * finds nothing (a typo finds no typed-word groups; identify still corrects it), and the FTS query is built
+ * from `songNorm(q)` where decide uses `normalize(q)`.
  */
 export function searchAvailabilityOffline(db: SqlReader, q: string, limit = 20): OfflineGroup[] {
   try {
@@ -134,7 +138,12 @@ export function searchAvailabilityOffline(db: SqlReader, q: string, limit = 20):
   }
 }
 
-/** The most popular karaoke songs on the phone (the empty-query list when the cloud can't be reached). `[]` on error. */
+/**
+ * The most popular karaoke songs on the phone (the empty-query list when the cloud can't be reached). `[]` on error.
+ *
+ * Differs from decide (`AvailabilityIndex.popular`, `pop DESC, version_count DESC, song_key`): equal
+ * popularity is ordered by `song_key` only, so ties may list in another order.
+ */
 export function popularOffline(db: SqlReader, limit = 30): OfflineGroup[] {
   try {
     return groupsOf(

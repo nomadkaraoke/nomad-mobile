@@ -41,7 +41,7 @@ it('shows popular songs with a karaoke-version badge, then search results', asyn
   expect(await screen.findByText('3 karaoke versions')).toBeTruthy();
   fireEvent.changeText(screen.getByTestId('discover-search-input'), 'hello');
   expect(await screen.findByText('Adele', {}, { timeout: 2000 })).toBeTruthy();
-  expect(screen.getByTestId('song-row-0')).toBeTruthy();
+  expect(screen.getByTestId('similar-row-0')).toBeTruthy(); // nothing identified: the plain results list
   expect(screen.getByText('1 karaoke version')).toBeTruthy();
 });
 
@@ -114,6 +114,7 @@ it('dismisses the search keyboard when a result is opened', async () => {
   renderRouter(appRoutes(), { initialUrl: '/discover' });
   fireEvent.changeText(await screen.findByTestId('discover-search-input'), 'hello');
   await screen.findByText('Adele', {}, { timeout: 2000 });
-  fireEvent.press(screen.getByTestId('song-row-0'));
+  await act(() => jest.advanceTimersByTimeAsync(300)); // fresh results ignore taps for 300 ms
+  fireEvent.press(screen.getByTestId('similar-row-0'));
   expect(dismiss).toHaveBeenCalled();
 });

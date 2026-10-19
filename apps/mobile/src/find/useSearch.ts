@@ -4,6 +4,7 @@ import {
   popularSongs,
   resolveQuery,
   searchSongs,
+  type ApiError,
   type Identification,
   type ResolveResponse,
   type SongGroup,
@@ -36,6 +37,13 @@ export const WARMING_UP_AFTER_MS = 1500;
 export const UNREACHABLE_AFTER_MS = 30_000;
 /** A failed cloud call (503 while the index loads, a dropped connection) is retried this often until UNREACHABLE_AFTER_MS. */
 export const RETRY_AFTER_MS = 2000;
+/**
+ * While online, offline results wait this long before showing: when the cloud answers within it, the cloud
+ * answer is shown directly and the outcome layout doesn't flip from the offline answer to the cloud one.
+ */
+export const OFFLINE_HOLD_MS = 150;
+/** The Gemini resolve only runs for a query left alone this long (since the last keystroke), never for prefixes. */
+export const RESOLVE_STABLE_MS = 800;
 export const SEARCH_LIMIT = 20;
 export const POPULAR_LIMIT = 30;
 const POPULAR_FRESH_MS = 60 * 60 * 1000;
@@ -55,8 +63,14 @@ export type SearchState = {
   /** The Gemini fallback's answer when the cloud found nothing at all. */
   resolve: ResolveResponse | null;
   error: 'unreachable' | null;
-  /** The (debounced, trimmed) query this state answers; under 2 characters → the popular list. */
+  /** The (debounced, trimmed) query being searched; under 2 characters → the popular list. */
   query: string;
+  /**
+   * The query `identification`/`groups`/`resolve` answer. Until the new query's first answer lands it is the
+   * previous query's (the old results stay up to avoid flicker): the UI must not show an identification card
+   * or a correction unless `resultsQuery === query`.
+   */
+  resultsQuery: string | null;
   /** Runs the current query again (after `error`). */
   retry: () => void;
 };
@@ -98,7 +112,15 @@ function toIdentification(q: string, r: IdentifyResult): Identification {
   };
 }
 
-/** decide SearchService.search over offline.db: the identified song's group(s) first, then the typed-word matches. Throws on SQLite errors. */
+/**
+ * decide SearchService.search over offline.db: the identified song's group(s) first, then the typed-word matches.
+ * Throws on SQLite errors.
+ *
+ * Differs from decide: no short-query LIKE / trigram + fuzzy fallback when FTS finds nothing (typos rely on
+ * identify); the typed-word search runs on `songNorm(q)`, not decide's `normalize(q)`; `candidates` yields one
+ * group per karaoke candidate (identify order) ahead of the typed-word groups, where the cloud returns only
+ * the typed-word groups for candidates.
+ */
 function searchOffline(db: SqlReader, q: string): Results {
   const ident = identify(db, q, { marginBonus: OFFLINE_MARGIN_BONUS });
   const merged = new Map<string, OfflineGroup>();
@@ -121,6 +143,13 @@ function offlineResults(q: string): Results | null {
   } catch {
     return null;
   }
+}
+
+/** The ApiError when `e` is a 4xx (duck-typed: the generated client's error, whatever module instance threw it). */
+function clientError(e: unknown): Pick<ApiError, 'status' | 'retryAfter'> | null {
+  if (typeof e !== 'object' || e === null || !('status' in e)) return null;
+  const { status, retryAfter } = e as Partial<ApiError>;
+  return typeof status === 'number' && status >= 400 && status < 500 ? { status, retryAfter: retryAfter ?? null } : null;
 }
 
 let popularCache: { at: number; groups: SongGroup[] } | null = null;
@@ -161,6 +190,7 @@ const INITIAL: Data = {
   resolve: null,
   error: null,
   query: '',
+  resultsQuery: null,
 };
 
 /**
@@ -170,7 +200,13 @@ const INITIAL: Data = {
  * `none` with no groups asks the Gemini resolve once. Under 2 characters: the popular list.
  */
 export function useSearch(rawQuery: string): SearchState {
-  const q = useDebounced(rawQuery.trim());
+  const typed = rawQuery.trim();
+  const q = useDebounced(typed);
+  // The last keystroke (raw, before the debounce): the resolve waits until the box has been left alone.
+  const keystroke = useRef({ value: typed, at: 0 });
+  useEffect(() => {
+    keystroke.current = { value: typed, at: Date.now() };
+  }, [typed]);
   const net = useNetInfo();
   const offline = net.isConnected === false;
   const [data, setData] = useState<Data>(INITIAL);
@@ -193,7 +229,7 @@ export function useSearch(rawQuery: string): SearchState {
     const cached = q.length < MIN_QUERY_CHARS && popularCache && Date.now() - popularCache.at < POPULAR_FRESH_MS;
     if (cached) {
       cloudDone = true;
-      set({ query: q, offline, source: 'cloud', identification: null, groups: popularCache!.groups, resolve: null, loading: false, warmingUp: false, error: null });
+      set({ query: q, resultsQuery: q, offline, source: 'cloud', identification: null, groups: popularCache!.groups, resolve: null, loading: false, warmingUp: false, error: null });
       return () => {
         cancelled = true;
       };
@@ -202,8 +238,8 @@ export function useSearch(rawQuery: string): SearchState {
 
     const settleWithoutCloud = (error: SearchState['error']) => {
       cloudDone = true;
-      if (local) set({ loading: false, warmingUp: false, error });
-      else set({ source: 'none', identification: null, groups: [], loading: false, warmingUp: false, error });
+      if (local) set({ source: 'offline', ...local, resultsQuery: q, resolve: null, loading: false, warmingUp: false, error });
+      else set({ source: 'none', resultsQuery: q, identification: null, groups: [], resolve: null, loading: false, warmingUp: false, error });
     };
 
     // Cloud first (it is the slow one), then the offline matcher after yielding so typing never waits on it.
@@ -222,15 +258,36 @@ export function useSearch(rawQuery: string): SearchState {
             cloudDone = true;
             const needsResolve =
               q.length >= MIN_QUERY_CHARS && r.identification?.status === 'none' && r.groups.length === 0;
-            set({ source: 'cloud', ...r, warmingUp: false, error: null, loading: needsResolve });
+            set({ source: 'cloud', ...r, resultsQuery: q, warmingUp: false, error: null, loading: needsResolve });
             if (!needsResolve) return;
-            resolveQuery(q, currentSid()).then(
-              (resolve) => set({ resolve, loading: false }),
-              () => set({ loading: false }),
-            );
+            // Only for a query left alone RESOLVE_STABLE_MS since the last keystroke (Gemini is never asked about
+            // a prefix). Typing on starts a new generation (after the debounce), which drops this one.
+            const askWhenStable = () => {
+              if (!live() || keystroke.current.value !== q) return;
+              const wait = RESOLVE_STABLE_MS - (Date.now() - keystroke.current.at);
+              if (wait > 0) {
+                later(wait, askWhenStable);
+                return;
+              }
+              resolveQuery(q, currentSid()).then(
+                (resolve) => set({ resolve, loading: false }),
+                () => set({ loading: false }),
+              );
+            };
+            askWhenStable();
           },
-          () => {
+          (e: unknown) => {
             if (!live() || cloudDone) return;
+            // A client error (bad query, 429 rate limit) won't fix itself on a 2 s retry: settle now. A 429's
+            // Retry-After is honoured with one automatic retry when it fits in the unreachable window.
+            const client = clientError(e);
+            if (client) {
+              controller.abort();
+              settleWithoutCloud('unreachable');
+              const wait = client.status === 429 && client.retryAfter != null ? client.retryAfter * 1000 : null;
+              if (wait !== null && wait <= UNREACHABLE_AFTER_MS) later(wait, () => live() && setAttempt((n) => n + 1));
+              return;
+            }
             if (Date.now() - started + RETRY_AFTER_MS >= UNREACHABLE_AFTER_MS) settleWithoutCloud('unreachable');
             else later(RETRY_AFTER_MS, () => live() && !cloudDone && run());
           },
@@ -243,8 +300,16 @@ export function useSearch(rawQuery: string): SearchState {
       if (!live() || cloudDone) return;
       local = offlineResults(q);
       if (!live() || cloudDone) return; // The cloud answered while the matcher ran.
-      if (local) set({ source: 'offline', ...local, resolve: null, loading: !offline });
-      else if (offline) settleWithoutCloud(null);
+      const found = local;
+      if (!found) {
+        if (offline) settleWithoutCloud(null);
+        return;
+      }
+      const show = () => {
+        if (live() && !cloudDone) set({ source: 'offline', ...found, resultsQuery: q, resolve: null, loading: !offline });
+      };
+      if (offline) show();
+      else later(OFFLINE_HOLD_MS, show);
     });
 
     return () => {

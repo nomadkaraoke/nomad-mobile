@@ -15,10 +15,18 @@ export class ApiError extends Error {
   constructor(
     public readonly status: number,
     public readonly detail: unknown,
+    /** Seconds from a `Retry-After` header (429/503), when the server sent a numeric one. */
+    public readonly retryAfter: number | null = null,
   ) {
     super(typeof detail === 'string' ? detail : `HTTP ${status}`);
     this.name = 'ApiError';
   }
+}
+
+/** A numeric `Retry-After` (delta-seconds); an HTTP-date or garbage → null. */
+function retryAfterSeconds(header: string | null | undefined): number | null {
+  if (!header || !/^\s*\d+\s*$/.test(header)) return null;
+  return Number(header);
 }
 
 type Interceptors = { request: number | null; error: number | null };
@@ -43,7 +51,7 @@ export function configureClient(deps: ClientDeps): void {
         if (response?.status === 401) deps.onUnauthorized();
         const detail =
           error && typeof error === 'object' && 'detail' in error ? (error as { detail: unknown }).detail : error;
-        return new ApiError(response?.status ?? 0, detail);
+        return new ApiError(response?.status ?? 0, detail, retryAfterSeconds(response?.headers.get('Retry-After')));
       }),
     });
   }

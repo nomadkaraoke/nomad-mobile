@@ -223,9 +223,9 @@ describe('a cold or unreachable search service', () => {
     searchSongs.mockReturnValue(new Promise(() => {}));
     // The first query is searched on mount (no debounce), so the clock starts at 0.
     const { result } = renderHook(() => useSearch('starlite muse'));
-    await advance(0);
+    await advance(150); // the offline hold
     expect(result.current).toMatchObject({ source: 'offline', warmingUp: false });
-    await advance(1499);
+    await advance(1349);
     expect(result.current.warmingUp).toBe(false);
     await advance(1);
     expect(result.current).toMatchObject({ warmingUp: true, loading: true, error: null });
@@ -284,7 +284,10 @@ describe('the Gemini resolve fallback', () => {
     const answer = deferred<unknown>();
     resolveQuery.mockReturnValue(answer.promise);
     const { result, rerender } = renderHook(({ q }: { q: string }) => useSearch(q), { initialProps: { q: 'that song from the whale movie' } });
-    await advance(300);
+    await advance(799); // 800 ms since the box last changed (here: since mount)
+    expect(resolveQuery).not.toHaveBeenCalled();
+    expect(result.current).toMatchObject({ loading: true });
+    await advance(1);
     expect(resolveQuery).toHaveBeenCalledTimes(1);
     expect(resolveQuery).toHaveBeenCalledWith('that song from the whale movie', currentSid());
     expect(result.current).toMatchObject({ source: 'cloud', loading: true, resolve: null });
@@ -310,8 +313,20 @@ describe('the Gemini resolve fallback', () => {
     searchSongs.mockResolvedValue(response([]));
     resolveQuery.mockRejectedValue(new Error('429'));
     const { result } = renderHook(() => useSearch('mystery'));
-    await advance(300);
+    await advance(800);
     expect(result.current).toMatchObject({ loading: false, resolve: null, error: null });
+  });
+
+  it('is never asked for a prefix typed on within 800 ms of the last keystroke', async () => {
+    searchSongs.mockResolvedValue(response([]));
+    const { rerender } = renderHook(({ q }: { q: string }) => useSearch(q), { initialProps: { q: 'whale' } });
+    await advance(400); // "whale" searched on mount; still inside its 800 ms
+    rerender({ q: 'whale movie' });
+    await advance(300 + 499);
+    expect(resolveQuery).not.toHaveBeenCalled();
+    await advance(1);
+    expect(resolveQuery).toHaveBeenCalledTimes(1);
+    expect(resolveQuery).toHaveBeenCalledWith('whale movie', currentSid());
   });
 
   it('drops a resolve answer that arrives after a newer query', async () => {
@@ -319,10 +334,92 @@ describe('the Gemini resolve fallback', () => {
     const answer = deferred<unknown>();
     resolveQuery.mockReturnValue(answer.promise);
     const { result, rerender } = renderHook(({ q }: { q: string }) => useSearch(q), { initialProps: { q: 'mystery' } });
-    await advance(300);
+    await advance(800);
+    expect(resolveQuery).toHaveBeenCalledTimes(1);
     rerender({ q: 'hello' });
     await advance(300);
     await settle(() => answer.resolve({ kind: 'content', groups: [] }));
     expect(result.current).toMatchObject({ query: 'hello', resolve: null });
+  });
+});
+
+describe('C5 carries', () => {
+  it('a 4xx (bad query) settles at once as unreachable: no warming-up retries', async () => {
+    searchSongs.mockRejectedValue({ status: 422, detail: 'bad', retryAfter: null });
+    const { result } = renderHook(() => useSearch('hello'));
+    await advance(0);
+    expect(result.current).toMatchObject({ error: 'unreachable', loading: false, warmingUp: false, source: 'none' });
+    await advance(10_000);
+    expect(searchSongs).toHaveBeenCalledTimes(1);
+  });
+
+  it('a 429 with Retry-After settles at once, then searches again once the wait is over', async () => {
+    searchSongs.mockRejectedValueOnce({ status: 429, detail: 'slow down', retryAfter: 5 });
+    const { result } = renderHook(() => useSearch('hello'));
+    await advance(0);
+    expect(result.current).toMatchObject({ error: 'unreachable', loading: false });
+    await advance(4999);
+    expect(searchSongs).toHaveBeenCalledTimes(1);
+    await advance(1);
+    expect(searchSongs).toHaveBeenCalledTimes(2);
+    expect(result.current).toMatchObject({ error: null, source: 'cloud' });
+  });
+
+  it('a 429 without Retry-After waits for retry()', async () => {
+    searchSongs.mockRejectedValueOnce({ status: 429, detail: 'slow down', retryAfter: null });
+    const { result } = renderHook(() => useSearch('hello'));
+    await advance(60_000);
+    expect(searchSongs).toHaveBeenCalledTimes(1);
+    expect(result.current.error).toBe('unreachable');
+    act(() => result.current.retry());
+    await advance(0);
+    expect(result.current).toMatchObject({ error: null, source: 'cloud' });
+  });
+
+  it('online, a cloud answer inside the 150 ms hold is shown directly (the offline answer never renders)', async () => {
+    readerMock.mockReturnValue(fixture);
+    const cloud = deferred<SearchResponse>();
+    searchSongs.mockReturnValue(cloud.promise);
+    const seen: string[] = [];
+    const { result } = renderHook(() => {
+      const s = useSearch('starlite muse');
+      seen.push(s.source);
+      return s;
+    });
+    await advance(100);
+    await settle(() => cloud.resolve(response([group('Starlight', 'Muse')], 'confident')));
+    await advance(500);
+    expect(result.current.source).toBe('cloud');
+    expect(seen).not.toContain('offline');
+  });
+
+  it('resultsQuery says which query the shown results answer (the previous one until the new answer lands)', async () => {
+    const second = deferred<SearchResponse>();
+    searchSongs.mockImplementation((q: string) => (q === 'hello' ? Promise.resolve(response([group('Hello')], 'confident')) : second.promise));
+    const { result, rerender } = renderHook(({ q }: { q: string }) => useSearch(q), { initialProps: { q: 'hello' } });
+    await advance(0);
+    expect(result.current).toMatchObject({ query: 'hello', resultsQuery: 'hello' });
+    rerender({ q: 'help me' });
+    await advance(300);
+    expect(result.current).toMatchObject({ query: 'help me', resultsQuery: 'hello', loading: true });
+    expect(result.current.identification?.status).toBe('confident'); // still the old one: the UI gates on resultsQuery
+    await settle(() => second.resolve(response([group('Help')])));
+    expect(result.current).toMatchObject({ query: 'help me', resultsQuery: 'help me' });
+  });
+
+  it('unmounting while a request is in flight aborts it and never sets state afterwards', async () => {
+    const cloud = deferred<SearchResponse>();
+    searchSongs.mockReturnValue(cloud.promise);
+    const errors = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const { unmount } = renderHook(() => useSearch('hello'));
+    await advance(0);
+    const { signal } = searchSongs.mock.calls[0]![1] as { signal: AbortSignal };
+    unmount();
+    expect(signal.aborted).toBe(true);
+    await settle(() => cloud.resolve(response([group('Hello')])));
+    await advance(30_000);
+    expect(errors).not.toHaveBeenCalled();
+    expect(searchSongs).toHaveBeenCalledTimes(1);
+    errors.mockRestore();
   });
 });

@@ -61,3 +61,18 @@ it('getSong hits the catalog song path', async () => {
   await expect(getSong(7)).resolves.toMatchObject({ id: 7 });
   expect(lastRequest().url).toBe('https://decide.test/api/catalog/songs/7');
 });
+
+it('carries a numeric Retry-After (seconds) on the ApiError; an HTTP-date or none → null', async () => {
+  configureClient({ baseUrl: 'https://decide.test', getToken: () => null, getLocale: () => 'en', getDeviceId: () => 'dev-1', onUnauthorized: jest.fn() });
+  const limited = (retryAfter?: string) =>
+    new Response(JSON.stringify({ detail: 'slow down' }), {
+      status: 429,
+      headers: { 'content-type': 'application/json', ...(retryAfter ? { 'Retry-After': retryAfter } : {}) },
+    });
+  fetchMock.mockResolvedValueOnce(limited('7'));
+  await expect(getSong(1)).rejects.toMatchObject({ status: 429, retryAfter: 7 });
+  fetchMock.mockResolvedValueOnce(limited('Wed, 21 Oct 2026 07:28:00 GMT'));
+  await expect(getSong(1)).rejects.toMatchObject({ status: 429, retryAfter: null });
+  fetchMock.mockResolvedValueOnce(limited());
+  await expect(getSong(1)).rejects.toMatchObject({ status: 429, retryAfter: null });
+});
