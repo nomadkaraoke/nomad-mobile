@@ -6,7 +6,17 @@
     "language": "Taal",
     "credits": "{credits, plural, one {# credit} other {# credits}}",
     "title": "Account",
-    "buyCredits": "Credits kopen"
+    "buyCredits": "Credits kopen",
+    "offlineDownload": "Download nummerslijst voor offline gebruik",
+    "offlineDownloadSize": "Download nummerslijst voor offline gebruik ({size} MB)",
+    "offlineDownloading": "Nummerslijst downloaden… {percent}%",
+    "offlineError": "Kon de nummerslijst niet downloaden.",
+    "offlineHeading": "Offline nummerslijst",
+    "offlineHint": "Zoek naar nummers zonder internetverbinding, uit een lijst die op deze telefoon is opgeslagen.",
+    "offlineRemove": "Offline nummerslijst verwijderen",
+    "offlineRetry": "Probeer het downloaden opnieuw",
+    "offlineSaved": "Nummerslijst opgeslagen op deze telefoon ({size} MB)",
+    "offlineUpdated": "Nummerslijst bijgewerkt {days, plural, =0 {vandaag} one {# dag geleden} other {# dagen geleden}}"
   },
   "common": {
     "error": "Er is iets misgegaan.",
@@ -61,7 +71,9 @@
     "makeIt": "Maken · 1 credit",
     "noKaraoke": "Geen karaokeversie gevonden",
     "hasKaraokeHint": "Je kunt nog steeds je eigen versie maken, op basis van de audio die je kiest.",
-    "noKaraokeHint": "Maak er je eigen karaokevideo van, klaar om te zingen en te delen."
+    "noKaraokeHint": "Maak er je eigen karaokevideo van, klaar om te zingen en te delen.",
+    "offlineMissing": "Je bent offline en dit nummer staat niet in de nummerslijst die op deze telefoon is opgeslagen.",
+    "offlineNote": "Offline · uit de nummerslijst die op deze telefoon is opgeslagen"
   },
   "tabs": {
     "discover": "Ontdekken",

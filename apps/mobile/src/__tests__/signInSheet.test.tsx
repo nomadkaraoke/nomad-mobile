@@ -15,7 +15,8 @@ jest.mock('@nomad/api-decide', () => ({
   searchSongs: jest.fn(),
   popularSongs: jest.fn(async () => []),
   pingSearch: jest.fn(async () => true),
-  getSong: jest.fn(),
+  getSongDetail: jest.fn(),
+  logSearchEvent: jest.fn(async () => {}),
   configureClient: jest.fn(),
 }));
 jest.mock('@nomad/api-gen', () => ({
@@ -40,14 +41,17 @@ beforeEach(async () => {
   jest.useRealTimers();
   jest.clearAllMocks();
   await useAuth.getState().signOut();
-  useMakeIntent.getState().set({ artist: 'Lionel Richie', title: 'Starlight', decideSongId: 1, createdAt: Date.now() });
+  useMakeIntent.getState().set({ artist: 'Lionel Richie', title: 'Starlight', source: 'typed', editedFields: [], createdAt: Date.now() });
   config.fakeSocialEnabled.mockReturnValue(false);
   apple.isAvailableAsync.mockResolvedValue(true);
   gen.sendCode.mockResolvedValue(undefined);
   gen.verifyCode.mockImplementation(async (email) => session(email));
   gen.exchangeGoogleToken.mockResolvedValue(session('g@example.com'));
   gen.getMe.mockResolvedValue({ email: 'g@example.com', credits: 1 });
-  (decide.getSong as jest.Mock).mockResolvedValue({ id: 2, artist: 'Adele', title: 'Hello', brands: [], brand_count: 1, is_popular: true });
+  (decide.getSongDetail as jest.Mock).mockResolvedValue({
+    song: { artist: 'Adele', title: 'Hello', song_key: 'adele|hello', popularity: 90, karaoke: true },
+    versions: [],
+  });
 });
 
 const openSheet = () => renderRouter(signInRoutes(), { initialUrl: '/sign-in?returnTo=/make/new' });
@@ -64,7 +68,7 @@ it('is titled with the song being made and offers Google, Apple and email', asyn
 
 it('hides Apple when appleAvailable() is false, and uses a generic title without a fresh intent', async () => {
   apple.isAvailableAsync.mockResolvedValue(false);
-  useMakeIntent.getState().set({ artist: 'A', title: 'Old', createdAt: Date.now() - 31 * 60 * 1000 });
+  useMakeIntent.getState().set({ artist: 'A', title: 'Old', source: 'typed', editedFields: [], createdAt: Date.now() - 31 * 60 * 1000 });
   openSheet();
   expect(await screen.findByText('Sign in to Nomad Karaoke')).toBeTruthy();
   await waitFor(() => expect(apple.isAvailableAsync).toHaveBeenCalled());
@@ -163,7 +167,7 @@ it('fake mode shows Apple even where the device has no Apple sign-in, and sends 
 });
 
 it('signed-out "make" on a song opens the sheet', async () => {
-  renderRouter(signInRoutes(), { initialUrl: '/song/2' });
+  renderRouter(signInRoutes(), { initialUrl: '/song/adele%7Chello' });
   await screen.findByText('Hello');
   fireEvent.press(screen.getByTestId('song-make'));
   expect(await screen.findByTestId('signin-sheet')).toBeTruthy();

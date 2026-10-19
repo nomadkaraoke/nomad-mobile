@@ -41,7 +41,11 @@ import {
 import { currentSid, logEvent, renewSid } from "../../find/searchSession";
 import { MIN_QUERY_CHARS, useSearch } from "../../find/useSearch";
 import { useTapGuard } from "../../find/useTapGuard";
-import { useMakeIntent } from "../../make/intentStore";
+import {
+  identifiedIntent,
+  useMakeIntent,
+  type SongIdentity,
+} from "../../make/intentStore";
 import { useOfflineIndex } from "../../offline/offlineIndex";
 
 /** A popular-list row (empty search box). */
@@ -88,9 +92,7 @@ const makeIdentified = (song: SongRef, signedIn: boolean) => {
   });
   renewSid();
   Keyboard.dismiss();
-  useMakeIntent
-    .getState()
-    .set({ artist: song.artist, title: song.title, createdAt: Date.now() });
+  useMakeIntent.getState().set(identifiedIntent(song));
   if (signedIn) router.push("/make/new");
   else openSignIn("/make/new");
 };
@@ -177,6 +179,34 @@ export default function DiscoverScreen() {
   const guard = useTapGuard(
     `${answerKey}|${search.source}|${fresh}|${outcome?.kind ?? ""}|${search.groups.map((g) => g.song_key).join(",")}`,
   );
+
+  // "Make any song" starts from the song this answer identified (kjbox prefillMake, spec §4.3): the card's
+  // song, else the resolve's artist/title split; a new query with none empties every field the user hasn't
+  // edited. Edited fields are never touched.
+  const resolveSplit = describing ? describe.result?.split : search.resolve?.split;
+  const prefillFrom: SongIdentity | null =
+    outcome?.kind === "song" || outcome?.kind === "missing"
+      ? outcome.song
+      : resolveSplit
+        ? { artist: resolveSplit.artist, title: resolveSplit.title }
+        : null;
+  // Only once this screen has an answer (or the popular list); primitive deps so a re-render never re-fills.
+  const prefillActive = (popular && !describing) || outcome !== null;
+  const prefillArtist = prefillFrom?.artist ?? null;
+  const prefillTitle = prefillFrom?.title ?? "";
+  const prefillSongKey = prefillFrom?.song_key;
+  useEffect(() => {
+    if (!prefillActive) return;
+    useMakeIntent.getState().prefill(
+      prefillArtist === null
+        ? null
+        : {
+            artist: prefillArtist,
+            title: prefillTitle,
+            ...(prefillSongKey ? { song_key: prefillSongKey } : {}),
+          },
+    );
+  }, [prefillActive, prefillArtist, prefillTitle, prefillSongKey]);
 
   // Every make offer shown is logged once per answer (spec §5.6, kjbox D11).
   useEffect(() => {

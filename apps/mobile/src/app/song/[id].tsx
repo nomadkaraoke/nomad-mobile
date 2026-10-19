@@ -1,92 +1,179 @@
-import { getSong } from '@nomad/api-decide';
+import { getSongDetail, type SongDetail } from '@nomad/api-decide';
+import { offlineSongGroup } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { ArtTile, Button, Screen, Text, TextField } from '@nomad/ui';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { useEffect, useRef, type ReactNode } from 'react';
+import { ActivityIndicator, Linking, View } from 'react-native';
 
 import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
-import { useMakeIntent } from '../../make/intentStore';
+import { VersionList } from '../../find/components/VersionList';
+import { logEvent } from '../../find/searchSession';
+import { toGroup } from '../../find/useSearch';
+import { identifiedIntent, typedIntent, useMakeIntent, type MakeIntent } from '../../make/intentStore';
+import { openOfflineReader } from '../../offline/offlineIndex';
+import { useOfflineIndexStore } from '../../offline/offlineIndexStore';
 
-/** A decide song (spec §4.2), or `id=new` for "make any song" with typed artist and title. */
+/** The song from the offline list on this phone, or null (no list, not in it, or a broken file). */
+function offlineDetail(key: string): SongDetail | null {
+  try {
+    const db = openOfflineReader();
+    const group = db ? offlineSongGroup(db, key) : null;
+    if (!group) return null;
+    const { song_key, artist, title, versions } = toGroup(group);
+    return { song: { artist, title, song_key, popularity: null, karaoke: true }, versions };
+  } catch {
+    return null;
+  }
+}
+
+const goMake = (intent: MakeIntent, signedIn: boolean) => {
+  useMakeIntent.getState().set(intent);
+  // Sign-in carries straight on into the make flow (spec §4.3).
+  if (signedIn) router.push('/make/new');
+  else openSignIn('/make/new');
+};
+
+/**
+ * A song by its `song_key` (spec §4.2): its Community / Commercial versions from decide, or from the offline
+ * list when there's no connection or decide can't be reached, and "Make it" with its canonical artist/title.
+ * `id=new` is "make any song": a free-text form pre-filled from Discover's current identification.
+ *
+ * Decide keys "Starlight" and "Starlight (Live)" separately, so this page lists one key's versions; Discover's
+ * card merges every same-song group (R24).
+ */
 export default function SongScreen() {
-  const t = useTranslations();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const isNew = id === 'new';
-  const songId = Number(id);
+  return id === 'new' ? <MakeAnySong /> : <KnownSong songKey={id} />;
+}
+
+function MakeAnySong() {
+  const t = useTranslations('song');
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
-  const setIntent = useMakeIntent((s) => s.set);
-  const [artist, setArtist] = useState('');
-  const [title, setTitle] = useState('');
-
-  const song = useQuery({
-    queryKey: ['decide', 'song', songId],
-    queryFn: () => getSong(songId),
-    enabled: !isNew && Number.isFinite(songId),
-  });
-
-  const target = isNew
-    ? { artist: artist.trim(), title: title.trim() }
-    : song.data
-      ? { artist: song.data.artist, title: song.data.title, decideSongId: song.data.id }
-      : null;
-  const canMake = target !== null && target.artist !== '' && target.title !== '';
-
-  const onMake = () => {
-    if (!canMake) return;
-    setIntent({ ...target, createdAt: Date.now() });
-    // Sign-in carries straight on into the make flow (spec §4.3).
-    if (signedIn) router.push('/make/new');
-    else openSignIn('/make/new');
-  };
+  const draft = useMakeIntent((s) => s.draft);
+  const edit = useMakeIntent((s) => s.edit);
+  const intent = typedIntent(draft);
+  const canMake = intent.artist !== '' && intent.title !== '';
 
   return (
     <Screen testID="song-screen" scroll>
-      {isNew ? (
-        <>
-          <TextField testID="song-artist" label={t('song.artistLabel')} value={artist} onChangeText={setArtist} />
-          <TextField testID="song-title" label={t('song.titleLabel')} value={title} onChangeText={setTitle} />
-        </>
-      ) : song.isLoading ? (
-        <ActivityIndicator testID="song-loading" />
-      ) : song.isError ? (
-        <>
-          <Text variant="error">{t('common.error')}</Text>
-          <Button testID="song-retry" label={t('common.retry')} variant="secondary" onPress={() => void song.refetch()} />
-        </>
-      ) : song.data ? (
-        <>
-          {/* Decide's catalog has no cover art yet (SongResponse), so the tile is generated. */}
-          <ArtTile testID="song-art" title={song.data.title} />
-          <View className="gap-1">
-            <Text variant="title">{song.data.title}</Text>
-            <Text variant="muted" className="text-base">
-              {song.data.artist}
-            </Text>
+      <TextField testID="song-artist" label={t('artistLabel')} value={draft.artist} onChangeText={(v) => edit('artist', v)} />
+      <TextField testID="song-title" label={t('titleLabel')} value={draft.title} onChangeText={(v) => edit('title', v)} />
+      <Button
+        testID="song-make"
+        label={t('makeIt')}
+        onPress={() => canMake && goMake(typedIntent(draft), signedIn)}
+        disabled={!canMake}
+      />
+    </Screen>
+  );
+}
+
+function KnownSong({ songKey }: { songKey: string }) {
+  const t = useTranslations();
+  const signedIn = useAuth((s) => s.state.status === 'signedIn');
+  const offline = useNetInfo().isConnected === false;
+  const run = useOfflineIndexStore((s) => s.run);
+
+  // The offline list answers at once (and is all there is without a connection); decide's answer replaces it.
+  const local = useQuery({
+    queryKey: ['offline', 'song', run, songKey],
+    queryFn: () => offlineDetail(songKey),
+    staleTime: Infinity,
+    retry: false,
+  });
+  const cloud = useQuery({
+    queryKey: ['decide', 'song', songKey],
+    queryFn: () => getSongDetail(songKey),
+    enabled: !offline,
+  });
+  const detail = cloud.data ?? local.data ?? null;
+  const fromOffline = !cloud.data && detail !== null;
+  const canMake = detail !== null && !offline;
+
+  const offerLogged = useRef(false);
+  useEffect(() => {
+    if (!canMake || offerLogged.current) return;
+    offerLogged.current = true;
+    logEvent('make_offer_shown', { where: 'song_page', song_key: songKey });
+  }, [canMake, songKey]);
+
+  const onMake = () => {
+    if (!detail || !canMake) return;
+    logEvent('make_offer_tap', { where: 'song_page', song_key: songKey });
+    goMake(identifiedIntent(detail.song), signedIn);
+  };
+
+  const openUrl = (url: string) => {
+    logEvent('open_youtube', { where: 'song_page', song_key: songKey });
+    Linking.openURL(url).catch(() => {});
+  };
+
+  let body: ReactNode;
+  if (detail) {
+    const { song, versions } = detail;
+    const hasVersions = versions.length > 0;
+    body = (
+      <>
+        {fromOffline ? (
+          <View testID="song-offline-note" className="rounded-lg bg-border px-3 py-2">
+            <Text className="text-xs">{t('song.offlineNote')}</Text>
           </View>
-          <View testID="song-badge-card" className="items-start gap-2 rounded-xl border border-border bg-card p-3">
-            {song.data.brand_count === 0 ? (
-              <Text
-                testID="song-badge"
-                className="overflow-hidden rounded-full bg-gold/15 px-2.5 py-0.5 text-xs font-bold text-gold"
-              >
-                {t('song.noKaraoke')}
-              </Text>
-            ) : (
-              <Text
-                testID="song-badge"
-                className="overflow-hidden rounded-full bg-success/15 px-2.5 py-0.5 text-xs font-bold text-success"
-              >
-                {t('song.hasKaraoke')}
-              </Text>
-            )}
-            <Text variant="muted">{song.data.brand_count === 0 ? t('song.noKaraokeHint') : t('song.hasKaraokeHint')}</Text>
-          </View>
-        </>
-      ) : null}
-      <Button testID="song-make" label={t('song.makeIt')} onPress={onMake} disabled={!canMake} />
+        ) : null}
+        {/* Decide's catalog has no cover art yet, so the tile is generated. */}
+        <ArtTile testID="song-art" title={song.title} />
+        <View className="gap-1">
+          <Text variant="title">{song.title}</Text>
+          <Text variant="muted" className="text-base">
+            {song.artist}
+          </Text>
+        </View>
+        <View testID="song-badge-card" className="items-start gap-2 rounded-xl border border-border bg-card p-3">
+          <Text
+            testID="song-badge"
+            className={`overflow-hidden rounded-full px-2.5 py-0.5 text-xs font-bold ${
+              hasVersions ? 'bg-success/15 text-success' : 'bg-gold/15 text-gold'
+            }`}
+          >
+            {hasVersions ? t('song.hasKaraoke') : t('song.noKaraoke')}
+          </Text>
+          <Text variant="muted">{hasVersions ? t('song.hasKaraokeHint') : t('song.noKaraokeHint')}</Text>
+        </View>
+        {hasVersions ? <VersionList key={song.song_key} versions={versions} total={versions.length} openUrl={openUrl} /> : null}
+      </>
+    );
+  } else if (local.isLoading || (!offline && cloud.isLoading)) {
+    body = <ActivityIndicator testID="song-loading" />;
+  } else if (offline) {
+    body = (
+      <Text testID="song-offline-missing" variant="muted">
+        {t('song.offlineMissing')}
+      </Text>
+    );
+  } else {
+    body = (
+      <>
+        <Text variant="error">{t('common.error')}</Text>
+        <Button testID="song-retry" label={t('common.retry')} variant="secondary" onPress={() => void cloud.refetch()} />
+      </>
+    );
+  }
+
+  return (
+    <Screen testID="song-screen" scroll>
+      {body}
+      {offline ? (
+        detail ? (
+          <Text testID="song-make-offline" variant="muted">
+            {t('discover.needsConnection')}
+          </Text>
+        ) : null
+      ) : (
+        <Button testID="song-make" label={t('song.makeIt')} onPress={onMake} disabled={!canMake} />
+      )}
     </Screen>
   );
 }

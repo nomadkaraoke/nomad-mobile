@@ -6,7 +6,17 @@
     "language": "Kieli",
     "credits": "{credits, plural, one {# krediitti} other {# krediittiä}}",
     "title": "Minä",
-    "buyCredits": "Osta krediittejä"
+    "buyCredits": "Osta krediittejä",
+    "offlineDownload": "Lataa kappalelista offline-käyttöä varten",
+    "offlineDownloadSize": "Lataa kappalelista offline-käyttöä varten ({size} Mt)",
+    "offlineDownloading": "Ladataan kappalelistaa… {percent} %",
+    "offlineError": "Kappalelistan lataaminen epäonnistui.",
+    "offlineHeading": "Offline-kappalelista",
+    "offlineHint": "Etsi kappaleita ilman verkkoyhteyttä tähän puhelimeen tallennetusta listasta.",
+    "offlineRemove": "Poista offline-kappalelista",
+    "offlineRetry": "Yritä ladata uudelleen",
+    "offlineSaved": "Kappalelista tallennettu tähän puhelimeen ({size} Mt)",
+    "offlineUpdated": "Kappalelista päivitetty {days, plural, =0 {tänään} one {# päivä sitten} other {# päivää sitten}}"
   },
   "common": {
     "error": "Jokin meni pieleen.",
@@ -61,7 +71,9 @@
     "makeIt": "Luo versio · 1 krediitti",
     "noKaraoke": "Karaokeversiota ei löytynyt",
     "hasKaraokeHint": "Voit silti tehdä omasi valitsemastasi ääniraidasta.",
-    "noKaraokeHint": "Tee siitä oma karaokevideosi, valmiina laulettavaksi ja jaettavaksi."
+    "noKaraokeHint": "Tee siitä oma karaokevideosi, valmiina laulettavaksi ja jaettavaksi.",
+    "offlineMissing": "Olet offline-tilassa, eikä tätä kappaletta löydy tähän puhelimeen tallennetusta kappalelistasta.",
+    "offlineNote": "Offline · tähän puhelimeen tallennetusta kappalelistasta"
   },
   "tabs": {
     "discover": "Löydä uutta",

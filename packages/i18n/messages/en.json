@@ -65,7 +65,9 @@
     "noKaraoke": "No karaoke version found",
     "hasKaraoke": "Karaoke versions exist",
     "noKaraokeHint": "Make your own karaoke video of it, ready to sing and share.",
-    "hasKaraokeHint": "You can still make your own, from the audio you pick."
+    "hasKaraokeHint": "You can still make your own, from the audio you pick.",
+    "offlineNote": "Offline · from the song list saved on this phone",
+    "offlineMissing": "You're offline, and this song isn't in the song list saved on this phone."
   },
   "signIn": {
     "emailTitle": "Sign in",
@@ -106,7 +108,17 @@
     "language": "Language",
     "title": "Me",
     "credits": "{credits, plural, one {# credit} other {# credits}}",
-    "buyCredits": "Buy credits"
+    "buyCredits": "Buy credits",
+    "offlineHeading": "Offline song list",
+    "offlineHint": "Search for songs with no connection, from a list saved on this phone.",
+    "offlineDownload": "Download song list for offline use",
+    "offlineDownloadSize": "Download song list for offline use ({size} MB)",
+    "offlineDownloading": "Downloading the song list… {percent}%",
+    "offlineSaved": "Song list saved on this phone ({size} MB)",
+    "offlineUpdated": "Song list updated {days, plural, =0 {today} one {# day ago} other {# days ago}}",
+    "offlineRemove": "Remove offline song list",
+    "offlineError": "Couldn't download the song list.",
+    "offlineRetry": "Try the download again"
   },
   "tonight": {
     "title": "Tonight",

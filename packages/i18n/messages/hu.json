@@ -6,7 +6,17 @@
     "language": "Nyelv",
     "credits": "{credits, plural, one {# kredit} other {# kredit}}",
     "title": "Profilom",
-    "buyCredits": "Kredit vásárlása"
+    "buyCredits": "Kredit vásárlása",
+    "offlineDownload": "Dallista letöltése offline használatra",
+    "offlineDownloadSize": "Dallista letöltése offline használatra ({size} MB)",
+    "offlineDownloading": "Dallista letöltése… {percent}%",
+    "offlineError": "Nem sikerült letölteni a dallistát.",
+    "offlineHeading": "Offline dallista",
+    "offlineHint": "Keress dalokat internetkapcsolat nélkül, az erre a telefonra mentett listából.",
+    "offlineRemove": "Offline dallista eltávolítása",
+    "offlineRetry": "Letöltés újrapróbálása",
+    "offlineSaved": "Dallista elmentve erre a telefonra ({size} MB)",
+    "offlineUpdated": "Dallista frissítve {days, plural, =0 {ma} one {# napja} other {# napja}}"
   },
   "common": {
     "error": "Valami hiba történt.",
@@ -61,7 +71,9 @@
     "makeIt": "Készítsd el · 1 kredit",
     "noKaraoke": "Nem található hozzá karaoke verzió",
     "hasKaraokeHint": "Ettől függetlenül elkészítheted a sajátodat az általad választott hanganyagból.",
-    "noKaraokeHint": "Készíts belőle saját karaoke videót, készen az éneklésre és megosztásra."
+    "noKaraokeHint": "Készíts belőle saját karaoke videót, készen az éneklésre és megosztásra.",
+    "offlineMissing": "Offline módban vagy, és ez a dal nem szerepel az erre a telefonra mentett dallistában.",
+    "offlineNote": "Offline · az erre a telefonra mentett dallistából"
   },
   "tabs": {
     "discover": "Felfedezés",

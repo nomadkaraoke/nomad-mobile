@@ -1,15 +1,85 @@
+import { getOfflineIndexManifest } from '@nomad/api-decide';
 import { getMe } from '@nomad/api-gen';
+import { formatMegabytes } from '@nomad/core';
 import { isolate, LOCALE_NAMES, useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 
 import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
 import { currentLocale } from '../../locale';
+import { useOfflineIndex } from '../../offline/offlineIndex';
 
-/** Me (spec §4.1): credit balance, buy credits, language, signed-in email, sign out. */
+const DAY_MS = 24 * 60 * 60 * 1000;
+const daysSince = (at: number) => Math.max(0, Math.floor((Date.now() - at) / DAY_MS));
+
+/**
+ * The opt-in offline song list (spec §7.1): "Download song list for offline use (N MB)", progress, "Song list
+ * updated N days ago", "Remove offline song list". The download size comes from decide's manifest, fetched
+ * only while this section is on screen with no list yet.
+ */
+function OfflineSongList() {
+  const t = useTranslations('account');
+  const locale = currentLocale();
+  const { status, bytes, downloadedAt, progress, download, remove } = useOfflineIndex();
+  const hasList = downloadedAt !== null && (status === 'ready' || status === 'error');
+  const manifest = useQuery({
+    queryKey: ['decide', 'offline-index-manifest'],
+    queryFn: getOfflineIndexManifest,
+    enabled: !hasList && status !== 'downloading',
+    staleTime: 60 * 60 * 1000,
+    retry: false,
+  });
+
+  return (
+    <View testID="me-offline" className="gap-2 rounded-xl border border-border bg-card p-3">
+      <Text className="font-semibold">{t('offlineHeading')}</Text>
+      {hasList ? (
+        <>
+          {bytes !== null ? (
+            <Text testID="me-offline-size">{t('offlineSaved', { size: formatMegabytes(bytes, locale) })}</Text>
+          ) : null}
+          <Text testID="me-offline-updated" variant="muted">
+            {t('offlineUpdated', { days: daysSince(downloadedAt) })}
+          </Text>
+        </>
+      ) : (
+        <Text variant="muted">{t('offlineHint')}</Text>
+      )}
+      {status === 'downloading' ? (
+        <View className="flex-row items-center gap-2">
+          <ActivityIndicator />
+          <Text testID="me-offline-progress">{t('offlineDownloading', { percent: Math.round((progress ?? 0) * 100) })}</Text>
+        </View>
+      ) : status === 'error' ? (
+        <>
+          <Text testID="me-offline-error" variant="error">
+            {t('offlineError')}
+          </Text>
+          <Button testID="me-offline-retry" label={t('offlineRetry')} variant="secondary" onPress={() => void download()} />
+        </>
+      ) : !hasList ? (
+        <Button
+          testID="me-offline-download"
+          label={
+            manifest.data
+              ? t('offlineDownloadSize', { size: formatMegabytes(manifest.data.bytes, locale) })
+              : t('offlineDownload')
+          }
+          variant="secondary"
+          onPress={() => void download()}
+        />
+      ) : null}
+      {hasList ? (
+        <Button testID="me-offline-remove" label={t('offlineRemove')} variant="secondary" onPress={() => void remove()} />
+      ) : null}
+    </View>
+  );
+}
+
+/** Me (spec §4.1): credit balance, buy credits, the offline song list, language, signed-in email, sign out. */
 export default function MeScreen() {
   const t = useTranslations('account');
   const state = useAuth((s) => s.state);
@@ -40,6 +110,7 @@ export default function MeScreen() {
           onPress={() => openSignIn('/me')}
         />
       )}
+      <OfflineSongList />
       <Text variant="muted">{t('language')}</Text>
       <Text testID="me-language">{LOCALE_NAMES[locale]}</Text>
       {signedIn ? (

@@ -6,7 +6,17 @@
     "language": "Ngôn ngữ",
     "credits": "{credits, plural, one {# credit} other {# credit}}",
     "title": "Tôi",
-    "buyCredits": "Mua credit"
+    "buyCredits": "Mua credit",
+    "offlineDownload": "Tải danh sách bài hát để dùng ngoại tuyến",
+    "offlineDownloadSize": "Tải danh sách bài hát để dùng ngoại tuyến ({size} MB)",
+    "offlineDownloading": "Đang tải danh sách bài hát… {percent}%",
+    "offlineError": "Không thể tải danh sách bài hát.",
+    "offlineHeading": "Danh sách bài hát ngoại tuyến",
+    "offlineHint": "Tìm bài hát ngay cả khi không có mạng, từ danh sách đã lưu trên điện thoại này.",
+    "offlineRemove": "Xóa danh sách bài hát ngoại tuyến",
+    "offlineRetry": "Thử tải lại",
+    "offlineSaved": "Đã lưu danh sách bài hát trên điện thoại này ({size} MB)",
+    "offlineUpdated": "Danh sách bài hát được cập nhật {days, plural, =0 {hôm nay} one {# ngày trước} other {# ngày trước}}"
   },
   "common": {
     "error": "Đã có lỗi xảy ra.",
@@ -61,7 +71,9 @@
     "makeIt": "Tạo ngay · 1 credit",
     "noKaraoke": "Không tìm thấy bản karaoke",
     "hasKaraokeHint": "Bạn vẫn có thể tự tạo bản riêng từ âm thanh bạn chọn.",
-    "noKaraokeHint": "Tự tạo video karaoke cho bài này, sẵn sàng để hát và chia sẻ."
+    "noKaraokeHint": "Tự tạo video karaoke cho bài này, sẵn sàng để hát và chia sẻ.",
+    "offlineMissing": "Bạn đang ngoại tuyến và bài hát này không có trong danh sách đã lưu trên điện thoại này.",
+    "offlineNote": "Ngoại tuyến · từ danh sách bài hát đã lưu trên điện thoại này"
   },
   "tabs": {
     "discover": "Khám phá",

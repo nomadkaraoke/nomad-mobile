@@ -273,7 +273,16 @@ describe('2 · confident, no karaoke version yet', () => {
     const app = await renderDiscover();
     fireEvent.press(screen.getByTestId('missing-card-make'));
     expect(log).toHaveBeenCalledWith('make_offer_tap', { where: 'missing_card', song_key: 'the strokes|machu picchu' });
-    expect(useMakeIntent.getState().intent).toMatchObject({ artist: 'The Strokes', title: 'Machu Picchu' });
+    expect(useMakeIntent.getState().intent).toEqual({
+      artist: 'The Strokes',
+      title: 'Machu Picchu',
+      canonicalArtist: 'The Strokes',
+      canonicalTitle: 'Machu Picchu',
+      songKey: 'the strokes|machu picchu',
+      source: 'identified',
+      editedFields: [],
+      createdAt: expect.any(Number),
+    });
     await waitFor(() => expect(app.getPathname()).toBe('/sign-in')); // signed out: sign-in carries on to make
   });
 
@@ -336,6 +345,48 @@ describe('3 · not sure which song', () => {
     mockState = { ...mockState, source: 'offline', groups: babies.slice(0, 3).map((b) => group(b)) };
     await renderDiscover();
     expect(screen.getByTestId('similar-row-2')).toBeTruthy();
+  });
+});
+
+describe('Make any song pre-fill (kjbox D10)', () => {
+  it('a confident answer pre-fills the form with the identified song; Undo empties the fields again', async () => {
+    mockState = state({ identification: confident(STARLIGHT), groups: [group(STARLIGHT)] });
+    await renderDiscover();
+    expect(useMakeIntent.getState().draft).toEqual({
+      artist: 'Muse',
+      title: 'Starlight',
+      canonicalArtist: 'Muse',
+      canonicalTitle: 'Starlight',
+      songKey: 'muse|starlight',
+      editedFields: [],
+    });
+    fireEvent.press(screen.getByTestId('song-card-undo'));
+    await waitFor(() => expect(useMakeIntent.getState().draft).toMatchObject({ artist: '', title: '' }));
+  });
+
+  it('a field the user edited is never overwritten by the answer', async () => {
+    useMakeIntent.getState().edit('title', 'My own title');
+    mockState = state({ identification: confident(STARLIGHT), groups: [group(STARLIGHT)] });
+    await renderDiscover();
+    expect(useMakeIntent.getState().draft).toMatchObject({ artist: 'Muse', title: 'My own title', editedFields: ['title'] });
+  });
+
+  it("the resolve's artist/title split pre-fills the form (not canonical) when no song is identified", async () => {
+    mockState = state({
+      query: 'queen bohemian',
+      resultsQuery: 'queen bohemian',
+      identification: { status: 'none', kind: null, best: null, candidates: [] },
+      resolve: { split: { artist: 'Queen', title: 'Bohemian Rhapsody' }, groups: [], alternatives: [] },
+    });
+    await renderDiscover();
+    expect(useMakeIntent.getState().draft).toEqual({ artist: 'Queen', title: 'Bohemian Rhapsody', editedFields: [] });
+  });
+
+  it('the popular list (empty box) empties the fields the user has not edited', async () => {
+    useMakeIntent.getState().prefill({ artist: 'Muse', title: 'Starlight', song_key: 'muse|starlight' });
+    mockState = state({ query: '', resultsQuery: '' });
+    await renderDiscover();
+    expect(useMakeIntent.getState().draft).toEqual({ artist: '', title: '', editedFields: [] });
   });
 });
 

@@ -6,7 +6,17 @@
     "language": "Jazyk",
     "credits": "{credits, plural, one {# kredit} few {# kredity} other {# kreditů}}",
     "title": "Já",
-    "buyCredits": "Koupit kredity"
+    "buyCredits": "Koupit kredity",
+    "offlineDownload": "Stáhnout seznam skladeb pro offline použití",
+    "offlineDownloadSize": "Stáhnout seznam skladeb pro offline použití ({size} MB)",
+    "offlineDownloading": "Stahování seznamu skladeb… {percent} %",
+    "offlineError": "Seznam skladeb se nepodařilo stáhnout.",
+    "offlineHeading": "Offline seznam skladeb",
+    "offlineHint": "Hledej skladby i bez připojení ze seznamu uloženého v tomto telefonu.",
+    "offlineRemove": "Odstranit offline seznam skladeb",
+    "offlineRetry": "Zkusit stáhnout znovu",
+    "offlineSaved": "Seznam skladeb je uložen v tomto telefonu ({size} MB)",
+    "offlineUpdated": "Seznam skladeb aktualizován {days, plural, =0 {dnes} one {před # dnem} few {před # dny} other {před # dny}}"
   },
   "common": {
     "error": "Něco se pokazilo.",
@@ -61,7 +71,9 @@
     "makeIt": "Vytvořit · 1 kredit",
     "noKaraoke": "Nebyla nalezena žádná karaoke verze",
     "hasKaraokeHint": "Pořád si můžeš vytvořit vlastní z audia, které si vybereš.",
-    "noKaraokeHint": "Vytvoř si z toho vlastní karaoke video, připravené ke zpěvu i sdílení."
+    "noKaraokeHint": "Vytvoř si z toho vlastní karaoke video, připravené ke zpěvu i sdílení.",
+    "offlineMissing": "Jsi offline a tato skladba není v seznamu skladeb uloženém v tomto telefonu.",
+    "offlineNote": "Offline · ze seznamu skladeb uloženého v tomto telefonu"
   },
   "tabs": {
     "discover": "Objevovat",

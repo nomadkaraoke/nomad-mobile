@@ -28,38 +28,34 @@ export function offlineGroups(db: SqlReader, ident: IdentifyResult): OfflineGrou
   else if (ident.status === 'candidates') songs = ident.candidates;
   else return [];
   const keys = [...new Set(songs.map((s) => songKey(s.artist, s.title)))];
-  const groups: OfflineGroup[] = [];
-  for (const key of keys) {
-    const song = db.all<{ artist: string; title: string }>(
-      'SELECT artist, title FROM songs WHERE song_key = ? AND karaoke = 1 LIMIT 1',
+  return keys.map((key) => offlineSongGroup(db, key)).filter((g): g is OfflineGroup => g !== null);
+}
+
+/**
+ * One karaoke song's group by `song_key` (the song page offline), or null when the list doesn't have it or
+ * it is a rival (no karaoke version). Versions: playable first, then rank, then index order.
+ */
+export function offlineSongGroup(db: SqlReader, key: string): OfflineGroup | null {
+  const song = db.all<{ artist: string; title: string }>(
+    'SELECT artist, title FROM songs WHERE song_key = ? AND karaoke = 1 LIMIT 1',
+    [key],
+  )[0];
+  if (!song) return null;
+  const versions = db
+    .all<VersionRow>(
+      'SELECT brand_code, brand_name, kind, youtube_url, rank FROM versions ' +
+        'WHERE song_key = ? ORDER BY youtube_url IS NULL, rank, rowid',
       [key],
-    )[0];
-    if (!song) continue;
-    const versions = db
-      .all<VersionRow>(
-        'SELECT brand_code, brand_name, kind, youtube_url, rank FROM versions ' +
-          'WHERE song_key = ? ORDER BY youtube_url IS NULL, rank, rowid',
-        [key],
-      )
-      .map((v) => ({
-        brandCode: v.brand_code,
-        brandName: v.brand_name,
-        kind: v.kind,
-        youtubeUrl: v.youtube_url,
-        rank: v.rank,
-      }));
-    if (versions.length) {
-      groups.push({
-        songKey: key,
-        artist: song.artist,
-        title: song.title,
-        karaoke: true,
-        versionCount: versions.length,
-        versions,
-      });
-    }
-  }
-  return groups;
+    )
+    .map((v) => ({
+      brandCode: v.brand_code,
+      brandName: v.brand_name,
+      kind: v.kind,
+      youtubeUrl: v.youtube_url,
+      rank: v.rank,
+    }));
+  if (!versions.length) return null;
+  return { songKey: key, artist: song.artist, title: song.title, karaoke: true, versionCount: versions.length, versions };
 }
 
 // ---------------------------------------------------------------------------------------------------------

@@ -3,7 +3,7 @@
 import Database from 'better-sqlite3';
 import path from 'node:path';
 
-import { popularOffline, searchAvailabilityOffline } from '../offline';
+import { offlineSongGroup, popularOffline, searchAvailabilityOffline } from '../offline';
 import type { SqlReader } from '../types';
 
 let raw: Database.Database;
@@ -62,5 +62,20 @@ describe('popularOffline', () => {
     const groups = popularOffline(db, 3);
     expect(groups.map((g) => g.title)).toEqual(['BIRDS OF A FEATHER', 'Espresso', expect.any(String)]);
     expect(groups.every((g) => g.versions.length > 0 && g.versionCount === g.versions.length)).toBe(true);
+  });
+});
+
+describe('offlineSongGroup', () => {
+  it("is one song's group by key: every version, playable first, then rank", () => {
+    const g = offlineSongGroup(db, 'muse|starlight');
+    expect(g).toMatchObject({ songKey: 'muse|starlight', artist: 'Muse', title: 'Starlight', karaoke: true, versionCount: 5 });
+    expect(g!.versions.map((v) => v.brandCode)).toEqual(['CC', 'NOMAD', 'KV', 'SC', 'SF']);
+    expect(g!.versions[2]).toEqual({ brandCode: 'KV', brandName: 'Karaoke Version', kind: 'commercial', youtubeUrl: null, rank: 2006 });
+  });
+
+  it('is null for an unknown key or a rival (no karaoke version)', () => {
+    expect(offlineSongGroup(db, 'nobody|nothing')).toBeNull();
+    const rival = db.all<{ song_key: string }>('SELECT song_key FROM songs WHERE karaoke = 0 LIMIT 1')[0]!;
+    expect(offlineSongGroup(db, rival.song_key)).toBeNull();
   });
 });

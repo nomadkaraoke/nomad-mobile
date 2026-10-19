@@ -1,10 +1,24 @@
 import { appStorage } from '../storage';
-import { INTENT_TTL_MS, isFreshIntent, useMakeIntent, type MakeIntent } from '../make/intentStore';
+import {
+  EMPTY_DRAFT,
+  editMake,
+  identifiedIntent,
+  INTENT_TTL_MS,
+  isFreshIntent,
+  prefillMake,
+  typedIntent,
+  useMakeIntent,
+  type MakeIntent,
+} from '../make/intentStore';
 
 const intent = (over: Partial<MakeIntent> = {}): MakeIntent => ({
   artist: 'Lionel Richie',
   title: 'Hello',
-  decideSongId: 43362,
+  canonicalArtist: 'Lionel Richie',
+  canonicalTitle: 'Hello',
+  songKey: 'lionel richie|hello',
+  source: 'identified',
+  editedFields: [],
   createdAt: Date.now(),
   ...over,
 });
@@ -58,9 +72,103 @@ it('ignores a corrupt or foreign stored value on launch', () => {
   expect(relaunch().getState().intent).toBeNull();
 });
 
-it('keeps an intent without a decide song id (free-text "make any song")', () => {
-  const i = intent();
-  delete i.decideSongId;
+it('keeps a typed intent without canonical values (free-text "make any song")', () => {
+  const i: MakeIntent = { artist: 'Muse', title: 'Uprising', source: 'typed', editedFields: ['artist', 'title'], createdAt: Date.now() };
   useMakeIntent.getState().set(i);
   expect(relaunch().getState().get()).toEqual(i);
+});
+
+it('an intent stored by the previous app version (no source / editedFields) loads as typed', () => {
+  appStorage.set('make.intent.v1', JSON.stringify({ artist: 'Muse', title: 'Starlight', decideSongId: 7, createdAt: Date.now() }));
+  expect(relaunch().getState().intent).toEqual({ artist: 'Muse', title: 'Starlight', source: 'typed', editedFields: [], createdAt: expect.any(Number) });
+});
+
+it('drops malformed optional fields on load', () => {
+  appStorage.set(
+    'make.intent.v1',
+    JSON.stringify({ artist: 'A', title: 'B', source: 'nope', editedFields: ['artist', 'bogus', 3], songKey: 5, createdAt: Date.now() }),
+  );
+  expect(relaunch().getState().intent).toEqual({ artist: 'A', title: 'B', source: 'typed', editedFields: ['artist'], createdAt: expect.any(Number) });
+});
+
+describe('identified and typed intents', () => {
+  it('Make it on an identified song stores source identified with the canonical values', () => {
+    const i = identifiedIntent({ artist: 'Muse', title: 'Starlight', song_key: 'muse|starlight' }, 1000);
+    expect(i).toEqual({
+      artist: 'Muse',
+      title: 'Starlight',
+      canonicalArtist: 'Muse',
+      canonicalTitle: 'Starlight',
+      songKey: 'muse|starlight',
+      source: 'identified',
+      editedFields: [],
+      createdAt: 1000,
+    });
+  });
+
+  it('a typed intent trims the fields and keeps the edits and the pre-fill it started from', () => {
+    const draft = editMake(prefillMake(EMPTY_DRAFT, { artist: 'Muse', title: 'Starlight', song_key: 'muse|starlight' }), 'title', ' Uprising ');
+    expect(typedIntent(draft, 5)).toEqual({
+      artist: 'Muse',
+      title: 'Uprising',
+      canonicalArtist: 'Muse',
+      canonicalTitle: 'Starlight',
+      songKey: 'muse|starlight',
+      source: 'typed',
+      editedFields: ['title'],
+      createdAt: 5,
+    });
+  });
+});
+
+describe('make-any pre-fill (kjbox D10 / A95)', () => {
+  const starlight = { artist: 'Muse', title: 'Starlight', song_key: 'muse|starlight' };
+  const hello = { artist: 'Adele', title: 'Hello', song_key: 'adele|hello' };
+
+  it('pre-fills both fields from the identification, and a new one replaces them while nothing was edited', () => {
+    let d = prefillMake(EMPTY_DRAFT, starlight);
+    expect(d).toMatchObject({ artist: 'Muse', title: 'Starlight', editedFields: [] });
+    d = prefillMake(d, hello);
+    expect(d).toMatchObject({ artist: 'Adele', title: 'Hello', songKey: 'adele|hello' });
+    d = prefillMake(d, null);
+    expect(d).toEqual(EMPTY_DRAFT);
+  });
+
+  it('an artist/title split of the typed words fills the fields but is not canonical', () => {
+    expect(prefillMake(EMPTY_DRAFT, { artist: 'Queen', title: 'Bohemian Rhapsody' })).toEqual({
+      artist: 'Queen',
+      title: 'Bohemian Rhapsody',
+      editedFields: [],
+    });
+  });
+
+  it('pre-fill, edit the title, new identification: the title stays and the artist follows', () => {
+    let d = prefillMake(EMPTY_DRAFT, starlight);
+    d = editMake(d, 'title', 'Starlight (Live)');
+    expect(d.editedFields).toEqual(['title']);
+    d = prefillMake(d, hello);
+    expect(d.title).toBe('Starlight (Live)');
+    expect(d.artist).toBe('Adele');
+    d = prefillMake(d, null);
+    expect(d.title).toBe('Starlight (Live)');
+    expect(d.artist).toBe('');
+  });
+
+  it('a field counts as edited from the first edit on, even when edited back to empty', () => {
+    let d = editMake(prefillMake(EMPTY_DRAFT, starlight), 'artist', '');
+    d = editMake(d, 'artist', 'M');
+    expect(d.editedFields).toEqual(['artist']);
+    d = prefillMake(d, hello);
+    expect(d).toMatchObject({ artist: 'M', title: 'Hello' });
+  });
+
+  it('the store keeps the draft across screens; clear() (a job was made) starts it over', () => {
+    const s = () => useMakeIntent.getState();
+    s().prefill(starlight);
+    s().edit('title', 'Uprising');
+    s().prefill(hello);
+    expect(s().draft).toMatchObject({ artist: 'Adele', title: 'Uprising', editedFields: ['title'] });
+    s().clear();
+    expect(s().draft).toEqual(EMPTY_DRAFT);
+  });
 });

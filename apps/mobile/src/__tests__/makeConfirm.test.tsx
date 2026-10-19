@@ -13,7 +13,8 @@ jest.mock('@nomad/api-decide', () => ({
   searchSongs: jest.fn(),
   popularSongs: jest.fn(async () => []),
   pingSearch: jest.fn(async () => true),
-  getSong: jest.fn(),
+  getSongDetail: jest.fn(),
+  logSearchEvent: jest.fn(async () => {}),
   configureClient: jest.fn(),
 }));
 jest.mock('@nomad/api-gen', () => ({
@@ -32,7 +33,7 @@ beforeEach(async () => {
   jest.useRealTimers();
   jest.clearAllMocks();
   await useAuth.getState().signInWithSession(session());
-  useMakeIntent.getState().set({ artist: 'Muse', title: 'Starlight', decideSongId: 7, createdAt: Date.now() });
+  useMakeIntent.getState().set({ artist: 'Muse', title: 'Starlight', source: 'typed', editedFields: [], createdAt: Date.now() });
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 });
   gen.searchAudio.mockResolvedValue(TIER1);
   gen.createJobFromSearch.mockResolvedValue('job-1');
@@ -173,7 +174,7 @@ it('a failed search can be retried', async () => {
 });
 
 it('without a fresh intent there is nothing to make', async () => {
-  useMakeIntent.getState().set({ artist: 'Muse', title: 'Old', createdAt: Date.now() - 31 * 60 * 1000 });
+  useMakeIntent.getState().set({ artist: 'Muse', title: 'Old', source: 'typed', editedFields: [], createdAt: Date.now() - 31 * 60 * 1000 });
   openMake();
   expect(await screen.findByTestId('make-no-intent')).toBeTruthy();
   expect(gen.searchAudio).not.toHaveBeenCalled();
@@ -241,10 +242,13 @@ it('signed out on /make/new (session expired): reopens sign-in and keeps the int
 });
 
 it('Discover → song → Make it → created: the song and make screens are gone, the Make tab shows', async () => {
-  (decide.getSong as jest.Mock).mockResolvedValue({ id: 7, artist: 'Muse', title: 'Starlight', brands: [], brand_count: 0 });
+  (decide.getSongDetail as jest.Mock).mockResolvedValue({
+    song: { artist: 'Muse', title: 'Starlight', song_key: 'muse|starlight', popularity: 80, karaoke: false },
+    versions: [],
+  });
   const app = renderRouter(makeRoutes(), { initialUrl: '/discover' });
   await screen.findByTestId('discover-screen');
-  act(() => router.push('/song/7'));
+  act(() => router.push({ pathname: '/song/[id]', params: { id: 'muse|starlight' } }));
   await screen.findByText('Starlight');
   fireEvent.press(screen.getByTestId('song-make'));
   await act(async () => fireEvent.press(await screen.findByTestId('make-submit')));
@@ -267,7 +271,7 @@ it('after create the screen keeps its song until it is gone (no "Pick a song" fl
 
 it('an open pick card outlives the 30-minute resume window (expiry only applies to resuming)', async () => {
   const start = Date.now();
-  useMakeIntent.getState().set({ artist: 'Muse', title: 'Starlight', createdAt: start - 29 * 60 * 1000 });
+  useMakeIntent.getState().set({ artist: 'Muse', title: 'Starlight', source: 'typed', editedFields: [], createdAt: start - 29 * 60 * 1000 });
   openMake();
   expect(await screen.findByTestId('make-pick')).toBeTruthy();
   // Two minutes later the intent is 31 minutes old; any re-render must keep the song and its results.

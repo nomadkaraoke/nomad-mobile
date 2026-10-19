@@ -1,10 +1,17 @@
+// The song page (spec §4.2): a song_key → its grouped versions (decide getSongDetail online, the offline list
+// otherwise) and "Make it" with the canonical artist/title; `new` → the free-text "make any song" form.
 import * as decide from '@nomad/api-decide';
-import { fireEvent, screen } from '@testing-library/react-native';
+import type { SongDetail, Version } from '@nomad/api-decide';
+import type { SqlReader } from '@nomad/core';
+import { fireEvent, screen, waitFor } from '@testing-library/react-native';
+import Database from 'better-sqlite3';
 import { renderRouter } from 'expo-router/testing-library';
-import { View } from 'react-native';
+import path from 'node:path';
+import { Linking, View } from 'react-native';
 
 import { useAuth } from '../auth/store';
-import { useMakeIntent } from '../make/intentStore';
+import { logEvent } from '../find/searchSession';
+import { EMPTY_DRAFT, useMakeIntent } from '../make/intentStore';
 import { session } from '../test-utils/genAuthMock';
 import { signInRoutes } from '../test-utils/signInRoutes';
 
@@ -12,71 +19,242 @@ jest.mock('@nomad/api-decide', () => ({
   searchSongs: jest.fn(),
   popularSongs: jest.fn(async () => []),
   pingSearch: jest.fn(async () => true),
-  getSong: jest.fn(),
+  getSongDetail: jest.fn(),
+  logSearchEvent: jest.fn(async () => {}),
   configureClient: jest.fn(),
 }));
-const getSong = decide.getSong as jest.Mock;
+jest.mock('../find/searchSession', () => ({ logEvent: jest.fn(), renewSid: jest.fn(), currentSid: () => 'sid-1' }));
+
+// The offline list: the core package's fixture offline.db (has Muse "Starlight" with 5 versions).
+let mockReader: SqlReader | null = null;
+jest.mock('../offline/offlineIndex', () => ({
+  openOfflineReader: () => mockReader,
+  useOfflineIndex: () => ({ status: 'none', downloadedAt: null, bytes: null, progress: null, download: jest.fn(), remove: jest.fn() }),
+  maybeRefreshOfflineIndex: async () => {},
+}));
+
+let mockConnected = true;
+jest.mock('@react-native-community/netinfo', () => {
+  const actual = jest.requireActual('@react-native-community/netinfo/jest/netinfo-mock.js');
+  return { ...actual, useNetInfo: () => ({ isConnected: mockConnected, isInternetReachable: mockConnected }) };
+});
+
+const getSongDetail = decide.getSongDetail as jest.Mock;
+const log = logEvent as jest.Mock;
+
+const raw = new Database(path.join(__dirname, '../../../../packages/core/src/search/__fixtures__/offline_fixture.db'), {
+  readonly: true,
+});
+const fixtureReader: SqlReader = { all: <T,>(sql: string, params: unknown[] = []) => raw.prepare(sql).all(...params) as T[] };
+afterAll(() => raw.close());
+
+const version = (i: number, kind: Version['kind'] = 'community', youtube = true): Version => ({
+  brand_code: `B${i}`,
+  brand_name: `Brand ${i}`,
+  kind,
+  youtube_url: youtube ? `https://youtu.be/v${i}` : null,
+  rank: i,
+});
+const detail = (versions: Version[], over: Partial<SongDetail['song']> = {}): SongDetail => ({
+  song: { artist: 'Muse', title: 'Starlight', song_key: 'muse|starlight', popularity: 80, karaoke: versions.length > 0, ...over },
+  versions,
+});
 
 const routes = () => ({ ...signInRoutes(), 'sign-in/index': () => <View testID="signin-stub" /> });
+const KEY_URL = `/song/${encodeURIComponent('muse|starlight')}`;
 
 beforeEach(async () => {
   jest.useRealTimers();
   jest.clearAllMocks();
   await useAuth.getState().signOut();
   useMakeIntent.getState().clear();
-  getSong.mockResolvedValue({ id: 7, artist: 'Muse', title: 'Starlight', brands: [], brand_count: 0, is_popular: true });
+  mockReader = null;
+  mockConnected = true;
+  getSongDetail.mockResolvedValue(detail([version(0), version(1, 'commercial', false)]));
 });
 
-it('a song with no karaoke version: gold badge and "Make it · 1 credit" (disabled until it loads)', async () => {
-  renderRouter(routes(), { initialUrl: '/song/7' });
-  expect(screen.getByTestId('song-make')).toBeDisabled();
-  expect(await screen.findByText('Starlight')).toBeTruthy();
-  expect(screen.getByTestId('song-make')).toBeEnabled();
-  expect(screen.getByTestId('song-badge')).toHaveTextContent('No karaoke version found');
-  expect(screen.getByTestId('song-make')).toHaveTextContent('Make it · 1 credit');
-  // The badge sits in a card with a one-line explainer, under generated artwork (decide has no cover art).
-  expect(screen.getByTestId('song-badge-card')).toHaveTextContent(/Make your own karaoke video/);
-  expect(screen.getByTestId('song-art', { includeHiddenElements: true })).toHaveTextContent('S');
+describe('a song (online: decide getSongDetail)', () => {
+  it('shows the title, artist and every version from getSongDetail', async () => {
+    getSongDetail.mockResolvedValue(detail([0, 1, 2, 3, 4, 5, 6].map((i) => version(i, i % 2 ? 'commercial' : 'community', i % 2 === 0))));
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(screen.getByTestId('song-make')).toBeDisabled();
+    expect(await screen.findByText('Starlight')).toBeTruthy();
+    expect(getSongDetail).toHaveBeenCalledWith('muse|starlight');
+    expect(screen.getByText('Muse')).toBeTruthy();
+    expect(screen.getByTestId('song-badge')).toHaveTextContent('Karaoke versions exist');
+    expect(screen.getByText('Karaoke versions (7)')).toBeTruthy();
+    expect(screen.getByTestId('version-row-0-youtube')).toBeTruthy();
+    expect(screen.getByTestId('version-row-1')).toHaveTextContent(/In a library or on disc/);
+    // The best 5, then "Show all 7" expands in place (the page has them all).
+    expect(screen.queryByTestId('version-row-5')).toBeNull();
+    fireEvent.press(screen.getByTestId('versions-show-all'));
+    expect(screen.getByTestId('version-row-6')).toBeTruthy();
+    expect(screen.queryByTestId('song-offline-note')).toBeNull();
+    expect(screen.getByTestId('song-art', { includeHiddenElements: true })).toHaveTextContent('S');
+  });
+
+  it('a song with no karaoke version: gold badge, no version list, Make it still offered', async () => {
+    getSongDetail.mockResolvedValue(detail([]));
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByText('Starlight')).toBeTruthy();
+    expect(screen.getByTestId('song-badge')).toHaveTextContent('No karaoke version found');
+    expect(screen.getByTestId('song-badge-card')).toHaveTextContent(/Make your own karaoke video/);
+    expect(screen.queryByTestId('version-list')).toBeNull();
+    expect(screen.getByTestId('song-make')).toHaveTextContent('Make it · 1 credit');
+    expect(screen.getByTestId('song-make')).toBeEnabled();
+  });
+
+  it('opening a YouTube version logs it with where song_page', async () => {
+    const open = jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    fireEvent.press(await screen.findByTestId('version-row-0-youtube'));
+    expect(open).toHaveBeenCalledWith('https://youtu.be/v0');
+    expect(log).toHaveBeenCalledWith('open_youtube', { where: 'song_page', song_key: 'muse|starlight' });
+    open.mockRestore();
+  });
+
+  it('a failed load with no offline list shows the error and retries', async () => {
+    getSongDetail.mockRejectedValue(new Error('503'));
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByTestId('song-retry', {}, { timeout: 4000 })).toBeTruthy();
+    getSongDetail.mockResolvedValue(detail([version(0)]));
+    fireEvent.press(screen.getByTestId('song-retry'));
+    expect(await screen.findByText('Starlight')).toBeTruthy();
+  });
 });
 
-it('a song with karaoke versions still offers Make it', async () => {
-  getSong.mockResolvedValue({ id: 7, artist: 'Muse', title: 'Starlight', brands: ['SF'], brand_count: 2, is_popular: true });
-  renderRouter(routes(), { initialUrl: '/song/7' });
-  expect(await screen.findByText('Karaoke versions exist')).toBeTruthy();
-  expect(screen.getByTestId('song-badge-card')).toHaveTextContent(/make your own/i);
-  expect(screen.getByTestId('song-make')).toBeEnabled();
+describe('Make it', () => {
+  it('signed out: stores source identified with the canonical values and opens sign-in for /make/new', async () => {
+    getSongDetail.mockResolvedValue(detail([version(0)], { artist: 'MUSE', title: 'Starlight' }));
+    const app = renderRouter(routes(), { initialUrl: KEY_URL });
+    await screen.findByText('Starlight');
+    expect(log).toHaveBeenCalledWith('make_offer_shown', { where: 'song_page', song_key: 'muse|starlight' });
+    fireEvent.press(screen.getByTestId('song-make'));
+    expect(await screen.findByTestId('signin-stub')).toBeTruthy();
+    expect(app.getPathname()).toBe('/sign-in');
+    expect(app.getSearchParams()).toMatchObject({ returnTo: '/make/new' });
+    expect(log).toHaveBeenCalledWith('make_offer_tap', { where: 'song_page', song_key: 'muse|starlight' });
+    expect(useMakeIntent.getState().get()).toEqual({
+      artist: 'MUSE',
+      title: 'Starlight',
+      canonicalArtist: 'MUSE',
+      canonicalTitle: 'Starlight',
+      songKey: 'muse|starlight',
+      source: 'identified',
+      editedFields: [],
+      createdAt: expect.any(Number),
+    });
+  });
+
+  it('signed in: goes straight to the make flow', async () => {
+    await useAuth.getState().signInWithSession(session());
+    const app = renderRouter(routes(), { initialUrl: KEY_URL });
+    await screen.findByText('Starlight');
+    fireEvent.press(screen.getByTestId('song-make'));
+    expect(await screen.findByTestId('make-stub')).toBeTruthy();
+    expect(app.getPathname()).toBe('/make/new');
+    expect(useMakeIntent.getState().get()).toMatchObject({ title: 'Starlight', source: 'identified' });
+  });
 });
 
-it('signed out: Make it sets the intent and opens the sign-in sheet for /make/new', async () => {
-  const app = renderRouter(routes(), { initialUrl: '/song/7' });
-  await screen.findByText('Starlight');
-  fireEvent.press(screen.getByTestId('song-make'));
-  expect(await screen.findByTestId('signin-stub')).toBeTruthy();
-  expect(app.getPathname()).toBe('/sign-in');
-  expect(app.getSearchParams()).toMatchObject({ returnTo: '/make/new' });
-  expect(useMakeIntent.getState().get()).toMatchObject({ artist: 'Muse', title: 'Starlight', decideSongId: 7 });
+describe('offline', () => {
+  it('no connection: the versions come from the offline list, and the cloud is not asked', async () => {
+    mockConnected = false;
+    mockReader = fixtureReader;
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByText('Starlight')).toBeTruthy();
+    expect(getSongDetail).not.toHaveBeenCalled();
+    expect(screen.getByTestId('song-offline-note')).toHaveTextContent(/saved on this phone/);
+    expect(screen.getByText('Karaoke versions (5)')).toBeTruthy();
+    expect(screen.getByTestId('version-row-0')).toHaveTextContent(/CC Karaoke/);
+    expect(screen.getByTestId('version-row-2')).toHaveTextContent(/Karaoke Version.*In a library or on disc/);
+    // Making needs a connection.
+    expect(screen.queryByTestId('song-make')).toBeNull();
+    expect(screen.getByTestId('song-make-offline')).toHaveTextContent('Making a song needs a connection');
+  });
+
+  it('online but the cloud fails: falls back to the offline list', async () => {
+    getSongDetail.mockRejectedValue(new Error('unreachable'));
+    mockReader = fixtureReader;
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByTestId('song-offline-note', {}, { timeout: 4000 })).toBeTruthy();
+    expect(screen.getByText('Karaoke versions (5)')).toBeTruthy();
+    expect(screen.queryByTestId('song-retry')).toBeNull();
+    // Online: Make it is still offered with the offline list's canonical values.
+    fireEvent.press(screen.getByTestId('song-make'));
+    expect(useMakeIntent.getState().get()).toMatchObject({ canonicalArtist: 'Muse', canonicalTitle: 'Starlight', source: 'identified' });
+  });
+
+  it('online: the cloud answer replaces the offline one when it arrives', async () => {
+    let answer!: (d: SongDetail) => void;
+    getSongDetail.mockReturnValue(new Promise((r) => (answer = r)));
+    mockReader = fixtureReader;
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByText('Karaoke versions (5)')).toBeTruthy();
+    answer(detail([version(0)]));
+    expect(await screen.findByText('Karaoke versions (1)')).toBeTruthy();
+    expect(screen.queryByTestId('song-offline-note')).toBeNull();
+  });
+
+  it('no connection and the song is not in the offline list: says so', async () => {
+    mockConnected = false;
+    mockReader = fixtureReader;
+    renderRouter(routes(), { initialUrl: `/song/${encodeURIComponent('nobody|nothing')}` });
+    expect(await screen.findByTestId('song-offline-missing')).toBeTruthy();
+    expect(screen.queryByTestId('song-make')).toBeNull();
+  });
+
+  it('no connection and no offline list: says so', async () => {
+    mockConnected = false;
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByTestId('song-offline-missing')).toBeTruthy();
+  });
 });
 
-it('signed in: Make it goes straight to the make flow', async () => {
-  await useAuth.getState().signInWithSession(session());
-  const app = renderRouter(routes(), { initialUrl: '/song/7' });
-  await screen.findByText('Starlight');
-  fireEvent.press(screen.getByTestId('song-make'));
-  expect(await screen.findByTestId('make-stub')).toBeTruthy();
-  expect(app.getPathname()).toBe('/make/new');
-  expect(useMakeIntent.getState().get()).toMatchObject({ title: 'Starlight' });
-});
+describe('make any song (/song/new)', () => {
+  it('typed artist and title become a typed intent with the edited fields', async () => {
+    await useAuth.getState().signInWithSession(session());
+    renderRouter(routes(), { initialUrl: '/song/new' });
+    expect(await screen.findByTestId('song-make')).toBeDisabled();
+    fireEvent.changeText(screen.getByTestId('song-artist'), ' Muse ');
+    fireEvent.changeText(screen.getByTestId('song-title'), 'Uprising');
+    fireEvent.press(screen.getByTestId('song-make'));
+    expect(await screen.findByTestId('make-stub')).toBeTruthy();
+    expect(useMakeIntent.getState().get()).toEqual({
+      artist: 'Muse',
+      title: 'Uprising',
+      source: 'typed',
+      editedFields: ['artist', 'title'],
+      createdAt: expect.any(Number),
+    });
+    expect(getSongDetail).not.toHaveBeenCalled();
+  });
 
-it('make any song: typed artist and title become the intent', async () => {
-  await useAuth.getState().signInWithSession(session());
-  renderRouter(routes(), { initialUrl: '/song/new' });
-  expect(await screen.findByTestId('song-make')).toBeDisabled();
-  fireEvent.changeText(screen.getByTestId('song-artist'), ' Muse ');
-  fireEvent.changeText(screen.getByTestId('song-title'), 'Uprising');
-  fireEvent.press(screen.getByTestId('song-make'));
-  expect(await screen.findByTestId('make-stub')).toBeTruthy();
-  const intent = useMakeIntent.getState().get();
-  expect(intent).toMatchObject({ artist: 'Muse', title: 'Uprising' });
-  expect(intent?.decideSongId).toBeUndefined();
-  expect(getSong).not.toHaveBeenCalled();
+  it('starts pre-filled from the current identification; an edited field survives a later pre-fill', async () => {
+    useMakeIntent.getState().prefill({ artist: 'Muse', title: 'Starlight', song_key: 'muse|starlight' });
+    renderRouter(routes(), { initialUrl: '/song/new' });
+    expect(await screen.findByTestId('song-artist')).toHaveProp('value', 'Muse');
+    expect(screen.getByTestId('song-title')).toHaveProp('value', 'Starlight');
+    fireEvent.changeText(screen.getByTestId('song-title'), 'Uprising');
+    // A new identification arrives (Discover, underneath): only the untouched artist follows it.
+    useMakeIntent.getState().prefill({ artist: 'Adele', title: 'Hello', song_key: 'adele|hello' });
+    await waitFor(() => expect(screen.getByTestId('song-artist')).toHaveProp('value', 'Adele'));
+    expect(screen.getByTestId('song-title')).toHaveProp('value', 'Uprising');
+    fireEvent.press(screen.getByTestId('song-make'));
+    expect(useMakeIntent.getState().get()).toMatchObject({
+      artist: 'Adele',
+      title: 'Uprising',
+      canonicalArtist: 'Adele',
+      canonicalTitle: 'Hello',
+      songKey: 'adele|hello',
+      source: 'typed',
+      editedFields: ['title'],
+    });
+  });
+
+  it('the draft is untouched by opening a song page', async () => {
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    await screen.findByText('Starlight');
+    expect(useMakeIntent.getState().draft).toEqual(EMPTY_DRAFT);
+  });
 });

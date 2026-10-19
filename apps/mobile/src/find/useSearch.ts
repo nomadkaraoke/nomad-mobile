@@ -89,7 +89,7 @@ const toRef = (s: CoreSongRef): SongRef => ({
   karaoke: s.karaoke,
 });
 
-const toGroup = (g: OfflineGroup): SongGroup => ({
+export const toGroup = (g: OfflineGroup): SongGroup => ({
   song_key: g.songKey,
   artist: g.artist,
   title: g.title,

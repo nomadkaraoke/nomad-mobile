@@ -6,7 +6,17 @@
     "language": "Språk",
     "credits": "{credits, plural, one {# kreditt} other {# kreditter}}",
     "title": "Meg",
-    "buyCredits": "Kjøp kreditter"
+    "buyCredits": "Kjøp kreditter",
+    "offlineDownload": "Last ned sangliste for frakoblet bruk",
+    "offlineDownloadSize": "Last ned sangliste for frakoblet bruk ({size} MB)",
+    "offlineDownloading": "Laster ned sanglisten… {percent} %",
+    "offlineError": "Kunne ikke laste ned sanglisten.",
+    "offlineHeading": "Frakoblet sangliste",
+    "offlineHint": "Søk etter sanger uten nett, fra en liste som er lagret på denne telefonen.",
+    "offlineRemove": "Fjern frakoblet sangliste",
+    "offlineRetry": "Prøv å laste ned på nytt",
+    "offlineSaved": "Sanglisten er lagret på denne telefonen ({size} MB)",
+    "offlineUpdated": "Sanglisten ble oppdatert {days, plural, =0 {i dag} one {for # dag siden} other {for # dager siden}}"
   },
   "common": {
     "error": "Noe gikk galt.",
@@ -61,7 +71,9 @@
     "makeIt": "Lag den · 1 kreditt",
     "noKaraoke": "Ingen karaokeversjon funnet",
     "hasKaraokeHint": "Du kan fortsatt lage din egen, basert på lyden du velger.",
-    "noKaraokeHint": "Lag din egen karaokevideo av den, klar til å synges og deles."
+    "noKaraokeHint": "Lag din egen karaokevideo av den, klar til å synges og deles.",
+    "offlineMissing": "Du er frakoblet, og denne sangen finnes ikke i sanglisten som er lagret på denne telefonen.",
+    "offlineNote": "Frakoblet · fra sanglisten som er lagret på denne telefonen"
   },
   "tabs": {
     "discover": "Oppdag",

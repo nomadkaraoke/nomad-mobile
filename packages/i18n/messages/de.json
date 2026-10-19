@@ -6,7 +6,17 @@
     "language": "Sprache",
     "credits": "{credits, plural, one {# Guthaben} other {# Guthaben}}",
     "title": "Ich",
-    "buyCredits": "Guthaben kaufen"
+    "buyCredits": "Guthaben kaufen",
+    "offlineDownload": "Songliste für Offline-Nutzung herunterladen",
+    "offlineDownloadSize": "Songliste für Offline-Nutzung herunterladen ({size} MB)",
+    "offlineDownloading": "Songliste wird heruntergeladen… {percent}%",
+    "offlineError": "Die Songliste konnte nicht heruntergeladen werden.",
+    "offlineHeading": "Offline-Songliste",
+    "offlineHint": "Suche auch ohne Verbindung nach Songs – mit einer Liste, die auf diesem Smartphone gespeichert ist.",
+    "offlineRemove": "Offline-Songliste entfernen",
+    "offlineRetry": "Download erneut versuchen",
+    "offlineSaved": "Songliste auf diesem Smartphone gespeichert ({size} MB)",
+    "offlineUpdated": "Songliste aktualisiert {days, plural, =0 {heute} one {vor # Tag} other {vor # Tagen}}"
   },
   "common": {
     "error": "Etwas ist schiefgelaufen.",
@@ -61,7 +71,9 @@
     "makeIt": "Erstellen · 1 Guthaben",
     "noKaraoke": "Keine Karaoke-Version gefunden",
     "hasKaraokeHint": "Du kannst trotzdem dein eigenes erstellen – aus der Audiodatei, die du auswählst.",
-    "noKaraokeHint": "Erstelle dein eigenes Karaoke-Video davon – bereit zum Mitsingen und Teilen."
+    "noKaraokeHint": "Erstelle dein eigenes Karaoke-Video davon – bereit zum Mitsingen und Teilen.",
+    "offlineMissing": "Du bist offline und dieser Song ist nicht in der auf diesem Smartphone gespeicherten Songliste enthalten.",
+    "offlineNote": "Offline · aus der auf diesem Smartphone gespeicherten Songliste"
   },
   "tabs": {
     "discover": "Entdecken",

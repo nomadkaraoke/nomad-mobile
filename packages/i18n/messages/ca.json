@@ -6,7 +6,17 @@
     "language": "Idioma",
     "credits": "{credits, plural, one {# crèdit} other {# crèdits}}",
     "title": "Jo",
-    "buyCredits": "Compra crèdits"
+    "buyCredits": "Compra crèdits",
+    "offlineDownload": "Descarrega la llista de cançons per utilitzar-la sense connexió",
+    "offlineDownloadSize": "Descarrega la llista de cançons per utilitzar-la sense connexió ({size} MB)",
+    "offlineDownloading": "S'està descarregant la llista de cançons… {percent}%",
+    "offlineError": "No s'ha pogut descarregar la llista de cançons.",
+    "offlineHeading": "Llista de cançons sense connexió",
+    "offlineHint": "Cerca cançons sense connexió a partir d'una llista desada en aquest telèfon.",
+    "offlineRemove": "Elimina la llista de cançons sense connexió",
+    "offlineRetry": "Torna a provar la descàrrega",
+    "offlineSaved": "Llista de cançons desada en aquest telèfon ({size} MB)",
+    "offlineUpdated": "Llista de cançons actualitzada {days, plural, =0 {avui} one {fa # dia} other {fa # dies}}"
   },
   "common": {
     "error": "S'ha produït un error.",
@@ -61,7 +71,9 @@
     "makeIt": "Crea-la · 1 crèdit",
     "noKaraoke": "No s'ha trobat cap versió de karaoke",
     "hasKaraokeHint": "Encara pots crear el teu propi karaoke, a partir de l'àudio que triïs.",
-    "noKaraokeHint": "Crea el teu propi vídeo de karaoke d'aquesta cançó, a punt per cantar i compartir."
+    "noKaraokeHint": "Crea el teu propi vídeo de karaoke d'aquesta cançó, a punt per cantar i compartir.",
+    "offlineMissing": "No tens connexió i aquesta cançó no és a la llista desada en aquest telèfon.",
+    "offlineNote": "Sense connexió · de la llista de cançons desada en aquest telèfon"
   },
   "tabs": {
     "discover": "Descobreix",

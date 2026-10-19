@@ -6,7 +6,17 @@
     "language": "Limbă",
     "credits": "{credits, plural, one {# credit} few {# credite} other {# de credite}}",
     "title": "Eu",
-    "buyCredits": "Cumpără credite"
+    "buyCredits": "Cumpără credite",
+    "offlineDownload": "Descarcă lista de melodii pentru utilizare offline",
+    "offlineDownloadSize": "Descarcă lista de melodii pentru utilizare offline ({size} MB)",
+    "offlineDownloading": "Se descarcă lista de melodii… {percent}%",
+    "offlineError": "Nu s-a putut descărca lista de melodii.",
+    "offlineHeading": "Listă de melodii offline",
+    "offlineHint": "Caută melodii fără conexiune la internet, dintr-o listă salvată pe acest telefon.",
+    "offlineRemove": "Elimină lista de melodii offline",
+    "offlineRetry": "Reîncearcă descărcarea",
+    "offlineSaved": "Listă de melodii salvată pe acest telefon ({size} MB)",
+    "offlineUpdated": "Listă de melodii actualizată {days, plural, =0 {astăzi} one {acum o zi} few {acum # zile} other {acum # de zile}}"
   },
   "common": {
     "error": "Ceva nu a funcționat.",
@@ -61,7 +71,9 @@
     "makeIt": "Creează · 1 credit",
     "noKaraoke": "Nu s-a găsit nicio versiune karaoke",
     "hasKaraokeHint": "Poți totuși să-ți creezi propria versiune, din fișierul audio pe care îl alegi.",
-    "noKaraokeHint": "Creează-ți propriul videoclip karaoke cu această piesă, gata de cântat și distribuit."
+    "noKaraokeHint": "Creează-ți propriul videoclip karaoke cu această piesă, gata de cântat și distribuit.",
+    "offlineMissing": "Ești offline, iar această melodie nu se află în lista salvată pe acest telefon.",
+    "offlineNote": "Offline · din lista de melodii salvată pe acest telefon"
   },
   "tabs": {
     "discover": "Descoperă",

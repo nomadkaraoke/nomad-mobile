@@ -16,7 +16,7 @@ beforeEach(() => {
 
 it('a gen 401 signs out and keeps the make intent', async () => {
   await useAuth.getState().signInWithSession(session());
-  useMakeIntent.getState().set({ artist: 'Adele', title: 'Hello', createdAt: Date.now() });
+  useMakeIntent.getState().set({ artist: 'Adele', title: 'Hello', source: 'typed', editedFields: [], createdAt: Date.now() });
   fetchMock.mockResolvedValue(
     new Response(JSON.stringify({ detail: 'Invalid session' }), { status: 401, headers: { 'Content-Type': 'application/json' } }),
   );

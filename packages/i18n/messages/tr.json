@@ -6,7 +6,17 @@
     "language": "Dil",
     "credits": "{credits, plural, one {# kredi} other {# kredi}}",
     "title": "Ben",
-    "buyCredits": "Kredi satın al"
+    "buyCredits": "Kredi satın al",
+    "offlineDownload": "Şarkı listesini çevrimdışı kullanım için indir",
+    "offlineDownloadSize": "Şarkı listesini çevrimdışı kullanım için indir ({size} MB)",
+    "offlineDownloading": "Şarkı listesi indiriliyor… %{percent}",
+    "offlineError": "Şarkı listesi indirilemedi.",
+    "offlineHeading": "Çevrimdışı şarkı listesi",
+    "offlineHint": "Bu telefona kaydedilen liste sayesinde internet bağlantın yokken de şarkı ara.",
+    "offlineRemove": "Çevrimdışı şarkı listesini kaldır",
+    "offlineRetry": "İndirmeyi tekrar dene",
+    "offlineSaved": "Şarkı listesi bu telefona kaydedildi ({size} MB)",
+    "offlineUpdated": "Şarkı listesi {days, plural, =0 {bugün} one {# gün önce} other {# gün önce}} güncellendi"
   },
   "common": {
     "error": "Bir şeyler ters gitti.",
@@ -61,7 +71,9 @@
     "makeIt": "Oluştur · 1 kredi",
     "noKaraoke": "Karaoke sürümü bulunamadı",
     "hasKaraokeHint": "Yine de seçtiğin ses dosyasından kendi karaoke videonu yapabilirsin.",
-    "noKaraokeHint": "Şarkı söylemeye ve paylaşmaya hazır, kendi karaoke videonu oluştur."
+    "noKaraokeHint": "Şarkı söylemeye ve paylaşmaya hazır, kendi karaoke videonu oluştur.",
+    "offlineMissing": "Çevrimdışısın ve bu şarkı telefonuna kaydedilen şarkı listesinde bulunmuyor.",
+    "offlineNote": "Çevrimdışı · Bu telefona kaydedilen şarkı listesinden"
   },
   "tabs": {
     "discover": "Keşfet",
