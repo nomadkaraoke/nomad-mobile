@@ -118,9 +118,7 @@
     "searchingHint": "Ini mungkin mengambil masa sehingga satu minit.",
     "seeOtherSources": "Lihat sumber lain ({count})",
     "submit": "Buat",
-    "youtubeInvalid": "Itu tidak kelihatan seperti pautan YouTube.",
     "youtubeLabel": "Pautan YouTube",
-    "youtubeToggle": "Tampal pautan YouTube sebagai ganti",
     "category": {
       "best": "Pilihan terbaik",
       "compilations": "Kompilasi",
@@ -139,7 +137,30 @@
     "matchUseTidied": "gunakan versi yang dikemaskan",
     "matchUseCorrection": "gunakan pembetulan",
     "communityWatch": "Tonton di YouTube",
-    "communityExists": "Versi karaoke komuniti sudah pun wujud"
+    "communityExists": "Versi karaoke komuniti sudah pun wujud",
+    "wrongTrack": "Trek salah?",
+    "moreCount": "+{count} lagi",
+    "showLess": "Tunjukkan lebih sedikit",
+    "avail": {
+      "high": "Ketersediaan tinggi",
+      "medium": "Ketersediaan sederhana",
+      "low": "Ketersediaan rendah"
+    },
+    "linkInvalid": "Itu nampaknya bukan pautan yang sah.",
+    "linkUnsupported": "Pautan tersebut tidak disokong. Sila cuba sumber lain.",
+    "warn": {
+      "fileLooksLike": "Nama fail menunjukkan lagu/trek yang berbeza: {file}",
+      "fileMayNotMatch": "Nama fail mungkin tidak sepadan dengan lagu anda",
+      "lowAvailability": "Ketersediaan rendah — mungkin mengambil sedikit masa lagi untuk disediakan",
+      "noLossless": "Tiada sumber lossless tersedia — hanya YouTube/lossy atau rakaman vinil yang ditemui",
+      "lossy": "Ini adalah sumber YouTube/lossy. Audio lossless menjadikan karaoke lebih baik jika tersedia."
+    },
+    "youtubeBlocked": "YouTube sedang menyekat muat turun kami buat masa ini, jadi kami tidak dapat menggunakannya. Sila pilih sumber lain atau cuba lagi dalam beberapa minit.",
+    "youtubeFallbackToggle": "Tidak jumpa lagu anda? Tampal pautan sebagai ganti",
+    "filename": "Nama fail:",
+    "release": "Keluaran:",
+    "titleMatch": "Tajuk sepadan",
+    "youtubeFallbackHint": "Jumpa lagu di YouTube? Tampal pautan dan kami akan buatkan video karaoke daripadanya."
   },
   "makeTab": {
     "emptyTitle": "Belum ada yang dibuat",

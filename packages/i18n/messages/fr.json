@@ -118,9 +118,7 @@
     "searchingHint": "Cela peut prendre jusqu'à une minute.",
     "seeOtherSources": "Voir les autres sources ({count})",
     "submit": "Créer",
-    "youtubeInvalid": "Ce lien ne ressemble pas à un lien YouTube.",
     "youtubeLabel": "Lien YouTube",
-    "youtubeToggle": "Coller plutôt un lien YouTube",
     "category": {
       "best": "Meilleur choix",
       "compilations": "Compilations",
@@ -139,7 +137,30 @@
     "matchUseTidied": "utiliser la version nettoyée",
     "matchUseCorrection": "utiliser la correction",
     "communityWatch": "Regarder sur YouTube",
-    "communityExists": "Une version karaoké communautaire existe déjà"
+    "communityExists": "Une version karaoké communautaire existe déjà",
+    "wrongTrack": "Mauvaise piste ?",
+    "moreCount": "+{count} de plus",
+    "showLess": "Afficher moins",
+    "avail": {
+      "high": "Haute disponibilité",
+      "medium": "Disponibilité moyenne",
+      "low": "Faible disponibilité"
+    },
+    "linkInvalid": "Ça ne ressemble pas à un lien.",
+    "linkUnsupported": "Ce lien n'est pas pris en charge. Essaie une autre source.",
+    "warn": {
+      "fileLooksLike": "Le nom du fichier suggère un autre morceau : {file}",
+      "fileMayNotMatch": "Le nom du fichier ne correspond peut-être pas à ton morceau",
+      "lowAvailability": "Faible disponibilité — la préparation peut prendre un peu plus de temps",
+      "noLossless": "Aucune source sans perte disponible — seules des sources YouTube/avec perte ou des rips vinyle ont été trouvés",
+      "lossy": "C'est une source YouTube/avec perte. L'audio sans perte donne un meilleur karaoké quand il est disponible."
+    },
+    "youtubeBlocked": "YouTube bloque nos téléchargements en ce moment, nous ne pouvons donc pas utiliser cette source. Choisis une autre source ou réessaie dans quelques minutes.",
+    "youtubeFallbackToggle": "Tu ne trouves pas ta chanson ? Colle plutôt un lien",
+    "filename": "Nom du fichier :",
+    "release": "Sortie :",
+    "titleMatch": "Titre correspondant",
+    "youtubeFallbackHint": "Tu as trouvé la chanson sur YouTube ? Colle le lien et on créera la vidéo de karaoké à partir de ça."
   },
   "makeTab": {
     "emptyTitle": "Rien de créé pour l'instant",

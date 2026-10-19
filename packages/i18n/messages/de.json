@@ -118,9 +118,7 @@
     "searchingHint": "Das kann bis zu einer Minute dauern.",
     "seeOtherSources": "Andere Quellen anzeigen ({count})",
     "submit": "Erstellen",
-    "youtubeInvalid": "Das sieht nicht nach einem YouTube-Link aus.",
     "youtubeLabel": "YouTube-Link",
-    "youtubeToggle": "Stattdessen einen YouTube-Link einfügen",
     "category": {
       "best": "Beste Wahl",
       "compilations": "Compilations",
@@ -139,7 +137,30 @@
     "matchUseTidied": "bereinigte Version verwenden",
     "matchUseCorrection": "Korrektur verwenden",
     "communityWatch": "Auf YouTube ansehen",
-    "communityExists": "Eine Community-Karaoke-Version existiert bereits"
+    "communityExists": "Eine Community-Karaoke-Version existiert bereits",
+    "wrongTrack": "Falscher Track?",
+    "moreCount": "+{count} weitere",
+    "showLess": "Weniger anzeigen",
+    "avail": {
+      "high": "Hohe Verfügbarkeit",
+      "medium": "Mittlere Verfügbarkeit",
+      "low": "Geringe Verfügbarkeit"
+    },
+    "linkInvalid": "Das sieht nicht nach einem Link aus.",
+    "linkUnsupported": "Dieser Link wird nicht unterstützt. Probiere eine andere Quelle.",
+    "warn": {
+      "fileLooksLike": "Der Dateiname deutet auf einen anderen Titel hin: {file}",
+      "fileMayNotMatch": "Der Dateiname passt möglicherweise nicht zu deinem Song",
+      "lowAvailability": "Geringe Verfügbarkeit – die Vorbereitung kann etwas länger dauern",
+      "noLossless": "Keine verlustfreien Quellen verfügbar – nur YouTube/verlustbehaftete Quellen oder Vinyl-Rips gefunden",
+      "lossy": "Dies ist eine YouTube- oder komprimierte Quelle. Verlustfreies Audio liefert bessere Karaoke-Ergebnisse, falls verfügbar."
+    },
+    "youtubeBlocked": "YouTube blockiert derzeit unsere Downloads, daher können wir dieses Video nicht verwenden. Wähle eine andere Quelle oder versuche es in ein paar Minuten erneut.",
+    "youtubeFallbackToggle": "Song nicht gefunden? Füge stattdessen einen Link ein",
+    "filename": "Dateiname:",
+    "release": "Veröffentlichung:",
+    "titleMatch": "Titelübereinstimmung",
+    "youtubeFallbackHint": "Hast du den Song auf YouTube gefunden? Füge den Link ein und wir machen daraus das Karaoke-Video."
   },
   "makeTab": {
     "emptyTitle": "Noch nichts erstellt",

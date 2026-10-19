@@ -118,9 +118,7 @@
     "searchingHint": "Dit kan tot een minuut duren.",
     "seeOtherSources": "Bekijk andere bronnen ({count})",
     "submit": "Maken",
-    "youtubeInvalid": "Dat lijkt geen geldige YouTube-link te zijn.",
     "youtubeLabel": "YouTube-link",
-    "youtubeToggle": "Plak in plaats daarvan een YouTube-link",
     "category": {
       "best": "Beste keuze",
       "compilations": "Compilaties",
@@ -139,7 +137,30 @@
     "matchUseTidied": "gebruik opgeschoonde versie",
     "matchUseCorrection": "gebruik de correctie",
     "communityWatch": "Bekijk op YouTube",
-    "communityExists": "Er bestaat al een karaokeversie van de community"
+    "communityExists": "Er bestaat al een karaokeversie van de community",
+    "wrongTrack": "Verkeerde track?",
+    "moreCount": "+{count} meer",
+    "showLess": "Minder tonen",
+    "avail": {
+      "high": "Hoge beschikbaarheid",
+      "medium": "Gemiddelde beschikbaarheid",
+      "low": "Lage beschikbaarheid"
+    },
+    "linkInvalid": "Dat lijkt geen link te zijn.",
+    "linkUnsupported": "Die link wordt niet ondersteund. Probeer een andere bron.",
+    "warn": {
+      "fileLooksLike": "De bestandsnaam wijst op een ander nummer: {file}",
+      "fileMayNotMatch": "De bestandsnaam komt mogelijk niet overeen met je nummer",
+      "lowAvailability": "Lage beschikbaarheid — het kan wat langer duren om voor te bereiden",
+      "noLossless": "Geen lossless bronnen beschikbaar — alleen YouTube/lossy of vinyl-rips gevonden",
+      "lossy": "Dit is een YouTube/lossy bron. Lossless audio levert een betere karaokevideo op, indien beschikbaar."
+    },
+    "youtubeBlocked": "YouTube blokkeert momenteel onze downloads, dus we kunnen deze niet gebruiken. Kies een andere bron of probeer het over een paar minuten opnieuw.",
+    "youtubeFallbackToggle": "Kun je je nummer niet vinden? Plak in plaats daarvan een link",
+    "filename": "Bestandsnaam:",
+    "release": "Release:",
+    "titleMatch": "Titel komt overeen",
+    "youtubeFallbackHint": "Heb je het nummer op YouTube gevonden? Plak de link en we maken daar de karaokevideo van."
   },
   "makeTab": {
     "emptyTitle": "Nog niets gemaakt",

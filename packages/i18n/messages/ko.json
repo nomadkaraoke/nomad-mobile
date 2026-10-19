@@ -118,9 +118,7 @@
     "searchingHint": "최대 1분 정도 걸릴 수 있습니다.",
     "seeOtherSources": "다른 음원 보기 ({count})",
     "submit": "만들기",
-    "youtubeInvalid": "올바른 YouTube 링크가 아닙니다.",
     "youtubeLabel": "YouTube 링크",
-    "youtubeToggle": "대신 YouTube 링크 붙여넣기",
     "category": {
       "best": "최고의 선택",
       "compilations": "컴필레이션",
@@ -139,7 +137,30 @@
     "matchUseTidied": "정리된 버전 사용하기",
     "matchUseCorrection": "수정본 사용하기",
     "communityWatch": "YouTube에서 보기",
-    "communityExists": "이미 커뮤니티 노래방 버전이 있어요"
+    "communityExists": "이미 커뮤니티 노래방 버전이 있어요",
+    "wrongTrack": "잘못된 트랙인가요?",
+    "moreCount": "+{count}개 더 보기",
+    "showLess": "간략히 보기",
+    "avail": {
+      "high": "원활함",
+      "medium": "보통",
+      "low": "이용 가능성 낮음"
+    },
+    "linkInvalid": "올바른 링크 형식이 아닙니다.",
+    "linkUnsupported": "지원되지 않는 링크입니다. 다른 소스를 이용해 보세요.",
+    "warn": {
+      "fileLooksLike": "파일명이 다른 곡인 것 같아요: {file}",
+      "fileMayNotMatch": "파일명이 찾으시는 곡과 일치하지 않을 수 있습니다",
+      "lowAvailability": "수급이 원활하지 않음 — 준비하는 데 시간이 조금 더 걸릴 수 있습니다",
+      "noLossless": "사용 가능한 무손실 음원이 없습니다 — YouTube/손실 압축 음원 또는 바이닐 음원만 확인됩니다",
+      "lossy": "이것은 YouTube/손실 음원입니다. 무손실 오디오가 있을 경우 더 나은 가라오케 영상이 만들어집니다."
+    },
+    "youtubeBlocked": "현재 YouTube에서 다운로드를 차단하고 있어 해당 링크는 사용할 수 없습니다. 다른 소스를 선택하거나 몇 분 후에 다시 시도해 주세요.",
+    "youtubeFallbackToggle": "원하는 곡을 찾을 수 없나요? 대신 링크를 붙여넣어 보세요",
+    "filename": "파일명:",
+    "release": "발매:",
+    "titleMatch": "제목 일치",
+    "youtubeFallbackHint": "YouTube에서 노래를 찾으셨나요? 링크를 붙여넣어 주시면 그걸로 가라오케 비디오를 만들어 드릴게요."
   },
   "makeTab": {
     "emptyTitle": "아직 만든 노래가 없어요",

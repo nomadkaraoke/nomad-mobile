@@ -118,9 +118,7 @@
     "searchingHint": "Tämä voi kestää jopa minuutin.",
     "seeOtherSources": "Katso muut lähteet ({count})",
     "submit": "Luo versio",
-    "youtubeInvalid": "Tämä ei näytä YouTube-linkiltä.",
     "youtubeLabel": "YouTube-linkki",
-    "youtubeToggle": "Liitä sen sijaan YouTube-linkki",
     "category": {
       "best": "Paras valinta",
       "compilations": "Kokoelmat",
@@ -139,7 +137,30 @@
     "matchUseTidied": "käytä siistittyä versiota",
     "matchUseCorrection": "käytä korjausta",
     "communityWatch": "Katso YouTubessa",
-    "communityExists": "Yhteisön tekemä karaokeversio on jo olemassa"
+    "communityExists": "Yhteisön tekemä karaokeversio on jo olemassa",
+    "wrongTrack": "Väärä raita?",
+    "moreCount": "+{count} muuta",
+    "showLess": "Näytä vähemmän",
+    "avail": {
+      "high": "Hyvä saatavuus",
+      "medium": "Kohtalainen saatavuus",
+      "low": "Heikko saatavuus"
+    },
+    "linkInvalid": "Tuo ei näytä linkiltä.",
+    "linkUnsupported": "Tätä linkkiä ei tueta. Kokeile toista lähdettä.",
+    "warn": {
+      "fileLooksLike": "Tiedostonimi viittaa eri kappaleeseen: {file}",
+      "fileMayNotMatch": "Tiedostonimi ei välttämättä vastaa kappalettasi",
+      "lowAvailability": "Heikko saatavuus — valmistelussa saattaa kestää hieman kauemmin",
+      "noLossless": "Häviöttömiä lähteitä ei saatavilla — löytyi vain YouTube- tai muita häviöllisiä lähteitä taikka vinyylirippauksia",
+      "lossy": "Tämä on YouTube- tai häviöllinen lähde. Häviötön ääni takaa paremman karaoken, jos sellainen on saatavilla."
+    },
+    "youtubeBlocked": "YouTube estää latauksemme tällä hetkellä, joten emme voi käyttää sitä. Valitse toinen lähde tai yritä uudelleen muutaman minuutin kuluttua.",
+    "youtubeFallbackToggle": "Etkö löydä kappalettasi? Liitä sen sijaan linkki",
+    "filename": "Tiedostonimi:",
+    "release": "Julkaisu:",
+    "titleMatch": "Nimi täsmää",
+    "youtubeFallbackHint": "Löysitkö kappaleen YouTubesta? Liitä linkki, niin teemme karaokevideon siitä."
   },
   "makeTab": {
     "emptyTitle": "Ei vielä luotuja kappaleita",

@@ -118,9 +118,7 @@
     "searchingHint": "Isso pode levar até um minuto.",
     "seeOtherSources": "Ver outras fontes ({count})",
     "submit": "Criar",
-    "youtubeInvalid": "Isso não parece um link do YouTube válido.",
     "youtubeLabel": "Link do YouTube",
-    "youtubeToggle": "Prefiro colar um link do YouTube",
     "category": {
       "best": "Melhor escolha",
       "compilations": "Coletâneas",
@@ -139,7 +137,30 @@
     "matchUseTidied": "usar a versão ajustada",
     "matchUseCorrection": "usar a correção",
     "communityWatch": "Assistir no YouTube",
-    "communityExists": "Já existe uma versão de karaokê da comunidade"
+    "communityExists": "Já existe uma versão de karaokê da comunidade",
+    "wrongTrack": "Faixa errada?",
+    "moreCount": "+{count} mais",
+    "showLess": "Mostrar menos",
+    "avail": {
+      "high": "Alta disponibilidade",
+      "medium": "Média disponibilidade",
+      "low": "Baixa disponibilidade"
+    },
+    "linkInvalid": "Isso não parece ser um link.",
+    "linkUnsupported": "Esse link não é compatível. Tente outra fonte.",
+    "warn": {
+      "fileLooksLike": "O nome do arquivo sugere uma faixa diferente: {file}",
+      "fileMayNotMatch": "O nome do arquivo pode não corresponder à sua música",
+      "lowAvailability": "Baixa disponibilidade — pode demorar um pouco mais para preparar",
+      "noLossless": "Nenhuma fonte sem perdas (lossless) disponível — apenas ripagens de vinil ou YouTube/com perdas (lossy) encontradas",
+      "lossy": "Esta é uma fonte do YouTube/com perdas. Áudio sem perdas faz um karaokê melhor quando disponível."
+    },
+    "youtubeBlocked": "O YouTube está bloqueando nossos downloads no momento, então não podemos usar essa opção. Escolha outra fonte ou tente novamente em alguns minutos.",
+    "youtubeFallbackToggle": "Não encontrou sua música? Cole um link",
+    "filename": "Nome do arquivo:",
+    "release": "Lançamento:",
+    "titleMatch": "Título correspondente",
+    "youtubeFallbackHint": "Encontrou a música no YouTube? Cole o link e faremos o vídeo de karaokê a partir dele."
   },
   "makeTab": {
     "emptyTitle": "Nada criado ainda",

@@ -130,16 +130,37 @@
     "searchingHint": "قد يستغرق هذا دقيقة كحد أقصى.",
     "seeOtherSources": "عرض المصادر الأخرى ({count})",
     "submit": "إنشاء",
-    "youtubeInvalid": "لا يبدو هذا كرابط YouTube صالح.",
     "youtubeLabel": "رابط YouTube",
-    "youtubeToggle": "لصق رابط YouTube بدلاً من ذلك",
     "youtubePlaceholder": "https://youtube.com/watch?v=…",
     "matchChecking": "جارٍ التحقق من تفاصيل الأغنية…",
     "matchUsingTyped": "استخدام ما كتبته: {value}",
     "matchUseTidied": "استخدام النسخة المنقحة",
     "matchUseCorrection": "استخدام التصحيح",
     "communityWatch": "شاهد على YouTube",
-    "communityExists": "توجد بالفعل نسخة كاريوكي أنشأها مجتمع المستخدمين"
+    "communityExists": "توجد بالفعل نسخة كاريوكي أنشأها مجتمع المستخدمين",
+    "wrongTrack": "مسار خاطئ؟",
+    "moreCount": "+{count} المزيد",
+    "showLess": "إظهار أقل",
+    "avail": {
+      "high": "توفر عالٍ",
+      "low": "توفر منخفض",
+      "medium": "توفر متوسط"
+    },
+    "linkInvalid": "لا يبدو هذا الرابط صحيحًا.",
+    "linkUnsupported": "هذا الرابط غير مدعوم. جرّب مصدرًا آخر.",
+    "warn": {
+      "fileLooksLike": "يشير اسم الملف إلى مقطع صوتي مختلف: {file}",
+      "fileMayNotMatch": "قد لا يتطابق اسم الملف مع أغنيتك",
+      "lowAvailability": "توفر منخفض — قد يستغرق تجهيزه وقتًا أطول قليلًا",
+      "noLossless": "لا تتوفر مصادر بلا فقدان للجودة (Lossless) — عثرنا فقط على مصادر من YouTube/مضغوطة أو تسجيلات أسطوانات فينيل",
+      "lossy": "هذا مصدر YouTube/مضغوط. الصوت بدون فقدان الجودة يصنع كاريوكي أفضل عند توفره."
+    },
+    "youtubeBlocked": "يحظر YouTube عمليات التنزيل لدينا حاليًا، لذا لا يمكننا استخدامه. يُرجى اختيار مصدر آخر أو المحاولة مرة أخرى بعد بضع دقائق.",
+    "youtubeFallbackHint": "هل وجدت الأغنية على YouTube؟ الصق الرابط وسنتولى إنشاء فيديو الكاريوكي منه.",
+    "youtubeFallbackToggle": "لم تجد أغنيتك؟ الصق رابطًا بدلًا من ذلك",
+    "filename": "اسم الملف:",
+    "release": "الإصدار:",
+    "titleMatch": "تطابق العنوان"
   },
   "makeTab": {
     "emptyTitle": "لم تنشئ أي شيء بعد",

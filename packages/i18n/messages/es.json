@@ -118,9 +118,7 @@
     "searchingHint": "Esto puede tardar hasta un minuto.",
     "seeOtherSources": "Ver otras fuentes ({count})",
     "submit": "Crear",
-    "youtubeInvalid": "No parece un enlace de YouTube válido.",
     "youtubeLabel": "Enlace de YouTube",
-    "youtubeToggle": "Pega un enlace de YouTube en su lugar",
     "category": {
       "best": "Mejor opción",
       "compilations": "Recopilaciones",
@@ -139,7 +137,30 @@
     "matchUseTidied": "usar la versión arreglada",
     "matchUseCorrection": "usar la corrección",
     "communityWatch": "Ver en YouTube",
-    "communityExists": "Ya existe una versión de karaoke de la comunidad"
+    "communityExists": "Ya existe una versión de karaoke de la comunidad",
+    "wrongTrack": "¿Pista equivocada?",
+    "moreCount": "+{count} más",
+    "showLess": "Mostrar menos",
+    "avail": {
+      "high": "Alta disponibilidad",
+      "medium": "Disponibilidad media",
+      "low": "Baja disponibilidad"
+    },
+    "linkInvalid": "Eso no parece un enlace.",
+    "linkUnsupported": "Ese enlace no es compatible. Prueba con otra fuente.",
+    "warn": {
+      "fileLooksLike": "El nombre del archivo sugiere una pista diferente: {file}",
+      "fileMayNotMatch": "Es posible que el nombre del archivo no coincida con tu canción",
+      "lowAvailability": "Baja disponibilidad — puede tardar un poco más en prepararse",
+      "noLossless": "No hay fuentes sin pérdida disponibles — solo se encontraron copias de vinilo o de YouTube/con pérdida",
+      "lossy": "Esta es una fuente de YouTube o de audio comprimido. El audio sin pérdida crea un mejor karaoke cuando está disponible."
+    },
+    "youtubeBlocked": "YouTube está bloqueando nuestras descargas en este momento, por lo que no podemos usar esa. Elige otra fuente o vuelve a intentarlo en unos minutos.",
+    "youtubeFallbackToggle": "¿No encuentras tu canción? Pega un enlace en su lugar",
+    "filename": "Nombre del archivo:",
+    "release": "Lanzamiento:",
+    "titleMatch": "Coincidencia de título",
+    "youtubeFallbackHint": "¿Encontraste la canción en YouTube? Pega el enlace y haremos el video de karaoke con eso."
   },
   "makeTab": {
     "emptyTitle": "Aún no has creado nada",

@@ -118,9 +118,7 @@
     "searchingHint": "Dette kan ta opptil ett minutt.",
     "seeOtherSources": "Se andre kilder ({count})",
     "submit": "Lag den",
-    "youtubeInvalid": "Det ser ikke ut som en gyldig YouTube-lenke.",
     "youtubeLabel": "YouTube-lenke",
-    "youtubeToggle": "Lim inn en YouTube-lenke i stedet",
     "category": {
       "best": "Beste valg",
       "compilations": "Samlealbum",
@@ -139,7 +137,30 @@
     "matchUseTidied": "bruk oppryddet versjon",
     "matchUseCorrection": "bruk rettelsen",
     "communityWatch": "Se på YouTube",
-    "communityExists": "En karaokeversjon fra fellesskapet finnes allerede"
+    "communityExists": "En karaokeversjon fra fellesskapet finnes allerede",
+    "wrongTrack": "Feil spor?",
+    "moreCount": "+{count} flere",
+    "showLess": "Vis mindre",
+    "avail": {
+      "high": "Høy tilgjengelighet",
+      "medium": "Middels tilgjengelighet",
+      "low": "Lav tilgjengelighet"
+    },
+    "linkInvalid": "Det ser ikke ut som en gyldig lenke.",
+    "linkUnsupported": "Den lenken støttes ikke. Prøv en annen kilde.",
+    "warn": {
+      "fileLooksLike": "Filnavnet tyder på et annet spor: {file}",
+      "fileMayNotMatch": "Filnavnet stemmer kanskje ikke med sangen din",
+      "lowAvailability": "Lav tilgjengelighet – det kan ta litt lengre tid å klargjøre",
+      "noLossless": "Ingen tapsfrie kilder tilgjengelig – fant bare YouTube/lossy eller vinylripp",
+      "lossy": "Dette er en YouTube/komprimert kilde. Tapsfri lyd gir bedre karaoke når det er tilgjengelig."
+    },
+    "youtubeBlocked": "YouTube blokkerer nedlastingene våre akkurat nå, så vi kan ikke bruke den. Velg en annen kilde, eller prøv igjen om noen minutter.",
+    "youtubeFallbackToggle": "Finner du ikke sangen din? Lim inn en lenke i stedet",
+    "filename": "Filnavn:",
+    "release": "Utgivelse:",
+    "titleMatch": "Tittelsamsvar",
+    "youtubeFallbackHint": "Fant du sangen på YouTube? Lim inn lenken, så lager vi karaokevideoen fra den."
   },
   "makeTab": {
     "emptyTitle": "Ingenting er laget ennå",

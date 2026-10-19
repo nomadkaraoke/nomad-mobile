@@ -118,9 +118,7 @@
     "searchingHint": "最大で1分ほどかかる場合があります。",
     "seeOtherSources": "他の音源を見る ({count})",
     "submit": "作成する",
-    "youtubeInvalid": "YouTubeのリンクではないようです。",
     "youtubeLabel": "YouTubeリンク",
-    "youtubeToggle": "代わりにYouTubeリンクを貼り付ける",
     "category": {
       "best": "おすすめ",
       "compilations": "コンピレーション",
@@ -139,7 +137,30 @@
     "matchUseTidied": "整形版を使用する",
     "matchUseCorrection": "修正を適用する",
     "communityWatch": "YouTubeで見る",
-    "communityExists": "コミュニティ版のカラオケがすでに存在します"
+    "communityExists": "コミュニティ版のカラオケがすでに存在します",
+    "wrongTrack": "間違ったトラックですか？",
+    "moreCount": "他 {count} 件",
+    "showLess": "折りたたむ",
+    "avail": {
+      "high": "取得しやすさ：高",
+      "medium": "取得しやすさ：中",
+      "low": "入手困難"
+    },
+    "linkInvalid": "有効なリンクではないようです。",
+    "linkUnsupported": "そのリンクには対応していません。別のソースをお試しください。",
+    "warn": {
+      "fileLooksLike": "ファイル名から別の曲の可能性があります: {file}",
+      "fileMayNotMatch": "ファイル名が曲名と一致していない可能性があります",
+      "lowAvailability": "音源の確保が難しいため、準備に少し時間がかかる場合があります",
+      "noLossless": "ロスレス音源が見つかりません — YouTube／非可逆圧縮音源、またはレコード音源のみです",
+      "lossy": "これはYouTubeまたは圧縮音源です。ロスレス音源（高音質）がある場合は、そちらの方がより良いカラオケになります。"
+    },
+    "youtubeBlocked": "現在YouTubeからのダウンロードが制限されているため、この音源は使用できません。別のソースを選択するか、数分後にもう一度お試しください。",
+    "youtubeFallbackToggle": "お探しの曲が見つかりませんか？代わりにリンクを貼り付けてください",
+    "filename": "ファイル名:",
+    "release": "リリース:",
+    "titleMatch": "タイトル一致",
+    "youtubeFallbackHint": "YouTubeで曲を見つけましたか？リンクを貼り付けていただければ、そこからカラオケ動画を作成します。"
   },
   "makeTab": {
     "emptyTitle": "作成した曲はまだありません",

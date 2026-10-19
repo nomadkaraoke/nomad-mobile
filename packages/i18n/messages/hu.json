@@ -118,9 +118,7 @@
     "searchingHint": "Ez akár egy percig is eltarthat.",
     "seeOtherSources": "További források ({count})",
     "submit": "Készítsd el",
-    "youtubeInvalid": "Ez nem tűnik érvényes YouTube-linknek.",
     "youtubeLabel": "YouTube-link",
-    "youtubeToggle": "Inkább illessz be egy YouTube-linket",
     "category": {
       "best": "Legjobb választás",
       "compilations": "Válogatások",
@@ -139,7 +137,30 @@
     "matchUseTidied": "letisztított verzió használata",
     "matchUseCorrection": "javítás használata",
     "communityWatch": "Megtekintés YouTube-on",
-    "communityExists": "Már létezik egy közösségi karaoke verzió"
+    "communityExists": "Már létezik egy közösségi karaoke verzió",
+    "wrongTrack": "Rossz dal?",
+    "moreCount": "+{count} további",
+    "showLess": "Kevesebb mutatása",
+    "avail": {
+      "high": "Jó elérhetőség",
+      "medium": "Közepes elérhetőség",
+      "low": "Alacsony elérhetőség"
+    },
+    "linkInvalid": "Ez nem tűnik érvényes linknek.",
+    "linkUnsupported": "Ez a link nem támogatott. Próbálj meg egy másik forrást.",
+    "warn": {
+      "fileLooksLike": "A fájlnév alapján ez egy másik szám lehet: {file}",
+      "fileMayNotMatch": "Lehet, hogy a fájlnév nem egyezik a daloddal",
+      "lowAvailability": "Korlátozott elérhetőség – az előkészítés kicsit több időt vehet igénybe",
+      "noLossless": "Nem érhető el veszteségmentes forrás – csak YouTube-/veszteséges vagy bakelitről rippelt verzió található",
+      "lossy": "Ez egy YouTube/veszteséges forrás. A veszteségmentes hangból jobb karaoke készül, ha elérhető."
+    },
+    "youtubeBlocked": "A YouTube jelenleg blokkolja a letöltéseinket, így ezt most nem tudjuk használni. Válassz egy másik forrást, vagy próbáld újra pár perc múlva.",
+    "youtubeFallbackToggle": "Nem találod a dalodat? Illessz be inkább egy linket",
+    "filename": "Fájlnév:",
+    "release": "Kiadás:",
+    "titleMatch": "Címegyezés",
+    "youtubeFallbackHint": "Megtaláltad a dalt a YouTube-on? Illeszd be a linket, és abból elkészítjük a karaoke videót."
   },
   "makeTab": {
     "emptyTitle": "Még nem készült semmi",

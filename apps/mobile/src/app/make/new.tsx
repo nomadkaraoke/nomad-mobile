@@ -1,9 +1,11 @@
 import {
+  ApiError,
   communityCheck,
   createJobFromSearch,
   createJobFromUrl,
   getMe,
   isApiError,
+  validateUrl,
   type AudioResult,
 } from '@nomad/api-gen';
 import { getSearchConfidence } from '@nomad/core';
@@ -22,9 +24,24 @@ import { PickCard, SourceGroups } from '../../make/SourcePicker';
 import { useAudioSearch } from '../../make/useAudioSearch';
 import { useMatchJudge } from '../../make/useMatchJudge';
 
-const YOUTUBE_URL = /^https?:\/\/([a-z0-9-]+\.)*(youtube\.com|youtu\.be)\/\S+$/i;
+// Only a basic shape check: gen downloads from many sites, and `validateUrl` asks gen before creating.
+const LINK = /^https?:\/\/\S+$/i;
 
 type Target = { kind: 'source'; sessionId: string; index: number } | { kind: 'url'; url: string };
+
+/** What a failed create means for the person (spec §4.3 item 8, kjbox make.js `errText`). */
+type CreateFailure = 'credits' | 'expired' | 'youtube_blocked' | 'failed';
+
+function createFailure(e: unknown, target: Target): CreateFailure {
+  if (isApiError(e, 402)) return 'credits';
+  if (!(e instanceof ApiError)) return 'failed';
+  const detail = typeof e.detail === 'string' ? e.detail : JSON.stringify(e.detail ?? '');
+  // gen's YouTube download is bot-checked: say it's YouTube, not a generic failure.
+  if ([400, 403, 422].includes(e.status) && /youtube/i.test(detail) && /bot/i.test(detail)) return 'youtube_blocked';
+  // The search session expired (404), or belongs to another account (403): search again.
+  if (target.kind === 'source' && (e.status === 404 || e.status === 403)) return 'expired';
+  return 'failed';
+}
 
 const goToCredits = () => router.push({ pathname: '/credits', params: { returnTo: '/make/new' } });
 
@@ -53,6 +70,9 @@ export default function MakeScreen() {
   const [showOthers, setShowOthers] = useState(false);
   const [youtubeOpen, setYoutubeOpen] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState('');
+  // gen's `validate-url` said no: its own words, shown under the link box.
+  const [linkError, setLinkError] = useState<string | null>(null);
+  const [checkingLink, setCheckingLink] = useState(false);
   const [searchedAgain, setSearchedAgain] = useState(false);
 
   const active = signedIn ? intent : null;
@@ -97,10 +117,12 @@ export default function MakeScreen() {
   const locked = !judge.gateOpen;
   const best = confidence && confidence.tier < 3 ? (confidence.best as AudioResult | null) : null;
   const noResults = search.isSuccess && results.length === 0;
+  // Spec §4.3 item 7: the link box comes first, open, when the search found nothing good (tier 3) or nothing.
+  const linkFirst = noResults || confidence?.tier === 3;
   const useLink = youtubeOpen || noResults;
   const selectedIndex = picked ?? best?.index ?? null;
   const url = youtubeUrl.trim();
-  const urlValid = YOUTUBE_URL.test(url);
+  const urlValid = LINK.test(url);
 
   const target: Target | null = useLink
     ? urlValid
@@ -131,21 +153,39 @@ export default function MakeScreen() {
       void queryClient.invalidateQueries({ queryKey: ['jobs'] });
       void queryClient.invalidateQueries({ queryKey: ['me'] });
     },
-    onError: (e) => {
-      if (isApiError(e, 402)) goToCredits();
-      else if (isApiError(e, 404)) {
-        // gen's search session expired: search again and let them confirm the fresh pick.
+    onError: (e, { to }) => {
+      const failure = createFailure(e, to);
+      if (failure === 'credits') goToCredits();
+      else if (failure === 'expired') {
+        // gen's search session expired (or isn't ours): search again and let them confirm the fresh pick.
         setPicked(null);
         setSearchedAgain(true);
         search.run();
       }
     },
   });
+  const failure = create.isError && create.variables ? createFailure(create.error, create.variables.to) : null;
 
   // Review Focus 3: a ref (inFlight, above), not just `disabled`, so two taps in one frame still create one job.
-  const submit = () => {
+  const submit = async () => {
     if (!target || !song || locked || inFlight.current) return;
     inFlight.current = true;
+    if (target.kind === 'url') {
+      // Like gen's "Use this URL": ask gen first, so an unsupported link fails here, not after paying.
+      setCheckingLink(true);
+      try {
+        const check = await validateUrl(target.url);
+        if (!check.supported) {
+          setLinkError(check.detail || t('linkUnsupported'));
+          inFlight.current = false;
+          return;
+        }
+      } catch {
+        // Fail open, as gen does: create still validates server-side.
+      } finally {
+        setCheckingLink(false);
+      }
+    }
     create.mutate({ to: target, as: song }, { onSettled: () => (inFlight.current = false) });
   };
 
@@ -194,6 +234,32 @@ export default function MakeScreen() {
 
   const others = best ? results.filter((r) => r.index !== best.index) : results;
 
+  // The link box: typing in it chooses the link (as tapping a source chooses that source).
+  const linkBox = (
+    <View testID="make-youtube" className="gap-2">
+      {linkFirst ? <Text variant="muted">{t('youtubeFallbackHint')}</Text> : null}
+      <TextField
+        testID="make-youtube-input"
+        label={t('youtubeLabel')}
+        placeholder={t('youtubePlaceholder')}
+        value={youtubeUrl}
+        onChangeText={(v) => {
+          setYoutubeUrl(v);
+          setLinkError(null);
+          setYoutubeOpen(true);
+        }}
+        autoCapitalize="none"
+        keyboardType="url"
+        error={url && !urlValid ? t('linkInvalid') : undefined}
+      />
+      {linkError ? (
+        <Text testID="youtube-invalid" variant="error">
+          {linkError}
+        </Text>
+      ) : null}
+    </View>
+  );
+
   return (
     <Screen testID="make-screen" scroll>
       <View className="gap-1">
@@ -239,11 +305,13 @@ export default function MakeScreen() {
             </View>
           ) : null}
           {noResults ? <Text testID="make-no-results">{t('noResults')}</Text> : null}
+          {linkFirst ? linkBox : null}
           {best && confidence ? (
             <>
               <PickCard
                 result={best}
                 tier={confidence.tier}
+                confidence={confidence}
                 songTitle={song?.title ?? intent.title}
                 selected={!useLink && selectedIndex === best.index}
                 disabled={locked}
@@ -271,6 +339,8 @@ export default function MakeScreen() {
           {results.length > 0 && (!best || showOthers) ? (
             <SourceGroups
               results={others}
+              searchTitle={song?.title ?? intent.title}
+              expandAll={confidence?.tier === 3}
               selectedIndex={useLink ? null : selectedIndex}
               disabled={locked}
               onSelect={(index) => {
@@ -280,34 +350,30 @@ export default function MakeScreen() {
             />
           ) : null}
 
-          {noResults ? null : (
-            <Pressable
-              testID="make-youtube-toggle"
-              accessibilityRole="button"
-              onPress={() => setYoutubeOpen((v) => !v)}
-              className="min-h-11 justify-center self-start"
-            >
-              <Text className="text-primary">{t('youtubeToggle')}</Text>
-            </Pressable>
+          {linkFirst ? null : (
+            <>
+              {/* Tiers 1–2: a good pick is on screen, so YouTube is a last resort behind a small toggle. */}
+              <Pressable
+                testID="youtube-toggle"
+                accessibilityRole="button"
+                onPress={() => setYoutubeOpen((v) => !v)}
+                className="min-h-11 justify-center self-start"
+              >
+                <Text className="text-primary">{t('youtubeFallbackToggle')}</Text>
+              </Pressable>
+              {youtubeOpen ? linkBox : null}
+            </>
           )}
-          {useLink ? (
-            <TextField
-              testID="make-youtube-input"
-              label={t('youtubeLabel')}
-              placeholder={t('youtubePlaceholder')}
-              value={youtubeUrl}
-              onChangeText={setYoutubeUrl}
-              autoCapitalize="none"
-              keyboardType="url"
-              error={url && !urlValid ? t('youtubeInvalid') : undefined}
-            />
-          ) : null}
 
           <View testID="make-cost" className="gap-1 rounded-xl border border-border bg-card p-3">
             <Text>{me.data ? t('cost', { credits: me.data.credits }) : t('costOnly')}</Text>
             <Text variant="muted">{t('publicNote')}</Text>
           </View>
-          {create.isError && !isApiError(create.error, 402) && !isApiError(create.error, 404) ? (
+          {failure === 'youtube_blocked' ? (
+            <Text testID="error-youtube-blocked" variant="error">
+              {t('youtubeBlocked')}
+            </Text>
+          ) : failure === 'failed' ? (
             <Text testID="make-error" variant="error">
               {t('createFailed')}
             </Text>
@@ -315,9 +381,9 @@ export default function MakeScreen() {
           <Button
             testID="make-submit"
             label={t('submit')}
-            onPress={submit}
-            disabled={!target || locked || create.isPending}
-            loading={create.isPending}
+            onPress={() => void submit()}
+            disabled={!target || locked || create.isPending || checkingLink}
+            loading={create.isPending || checkingLink}
           />
         </>
       )}

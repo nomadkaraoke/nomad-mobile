@@ -118,9 +118,7 @@
     "searchingHint": "Maaari itong tumagal nang hanggang isang minuto.",
     "seeOtherSources": "Tingnan ang iba pang sources ({count})",
     "submit": "Gawin ito",
-    "youtubeInvalid": "Mukhang hindi ito link sa YouTube.",
     "youtubeLabel": "Link sa YouTube",
-    "youtubeToggle": "Mag-paste na lang ng link sa YouTube",
     "category": {
       "best": "Pinakamagandang pagpipilian",
       "compilations": "Mga Compilation",
@@ -139,7 +137,30 @@
     "matchUseTidied": "gamitin ang inayos na bersyon",
     "matchUseCorrection": "gamitin ang itinama",
     "communityWatch": "Panoorin sa YouTube",
-    "communityExists": "Mayroon nang karaoke version mula sa komunidad"
+    "communityExists": "Mayroon nang karaoke version mula sa komunidad",
+    "wrongTrack": "Maling track?",
+    "moreCount": "+{count} pa",
+    "showLess": "Ipakita ang mas kaunti",
+    "avail": {
+      "high": "Mataas ang availability",
+      "medium": "Katamtamang availability",
+      "low": "Mababang availability"
+    },
+    "linkInvalid": "Mukhang hindi iyan link.",
+    "linkUnsupported": "Hindi suportado ang link na iyan. Subukan ang ibang source.",
+    "warn": {
+      "fileLooksLike": "Ipinapahiwatig ng filename na ibang track ito: {file}",
+      "fileMayNotMatch": "Maaaring hindi tumugma ang filename sa iyong kanta",
+      "lowAvailability": "Mababang availability — maaaring magtagal nang kaunti bago maihanda",
+      "noLossless": "Walang lossless sources na available — YouTube/lossy o mga vinyl rip lang ang nahanap",
+      "lossy": "Ito ay YouTube/lossy source. Mas maganda ang karaoke kapag lossless audio kung available."
+    },
+    "youtubeBlocked": "Bina-block ng YouTube ang aming mga download ngayon, kaya hindi namin magamit iyan. Pumili ng ibang source, o subukang muli pagkalipas ng ilang minuto.",
+    "youtubeFallbackToggle": "Hindi mahanap ang iyong kanta? Mag-paste na lang ng link",
+    "filename": "Filename:",
+    "release": "Release:",
+    "titleMatch": "Tugma ang pamagat",
+    "youtubeFallbackHint": "Nahanap ang kanta sa YouTube? I-paste ang link at gagawin naming karaoke video iyon."
   },
   "makeTab": {
     "emptyTitle": "Wala pang nagagawa",

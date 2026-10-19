@@ -118,9 +118,7 @@
     "searchingHint": "Quá trình này có thể mất tới một phút.",
     "seeOtherSources": "Xem các nguồn khác ({count})",
     "submit": "Tạo bài hát",
-    "youtubeInvalid": "Liên kết này có vẻ không phải là link YouTube.",
     "youtubeLabel": "Liên kết YouTube",
-    "youtubeToggle": "Dán liên kết YouTube thay thế",
     "category": {
       "best": "Lựa chọn tốt nhất",
       "compilations": "Tuyển tập",
@@ -139,7 +137,30 @@
     "matchUseTidied": "sử dụng bản đã tinh chỉnh",
     "matchUseCorrection": "sử dụng bản sửa đổi",
     "communityWatch": "Xem trên YouTube",
-    "communityExists": "Đã có sẵn một phiên bản karaoke từ cộng đồng"
+    "communityExists": "Đã có sẵn một phiên bản karaoke từ cộng đồng",
+    "wrongTrack": "Sai bài hát?",
+    "moreCount": "+{count} phiên bản khác",
+    "showLess": "Ẩn bớt",
+    "avail": {
+      "high": "Độ khả dụng cao",
+      "medium": "Độ khả dụng trung bình",
+      "low": "Nguồn tải hạn chế"
+    },
+    "linkInvalid": "Đây dường như không phải là một liên kết hợp lệ.",
+    "linkUnsupported": "Liên kết này không được hỗ trợ. Bạn hãy thử một nguồn khác nhé.",
+    "warn": {
+      "fileLooksLike": "Tên tệp cho thấy đây là một bài hát khác: {file}",
+      "fileMayNotMatch": "Tên tệp có thể không khớp với bài hát của bạn",
+      "lowAvailability": "Độ khả dụng thấp — có thể mất thêm một chút thời gian để chuẩn bị",
+      "noLossless": "Không có nguồn lossless — chỉ tìm thấy bản trích xuất từ YouTube/lossy hoặc đĩa than (vinyl)",
+      "lossy": "Đây là nguồn YouTube/lossy. Bản audio lossless sẽ cho ra video karaoke chất lượng tốt hơn nếu có sẵn."
+    },
+    "youtubeBlocked": "YouTube hiện đang chặn lượt tải xuống của chúng tôi nên tạm thời chưa dùng được nguồn này. Bạn hãy chọn một nguồn khác hoặc thử lại sau vài phút nhé.",
+    "youtubeFallbackToggle": "Không tìm thấy bài hát của bạn? Dán liên kết vào đây",
+    "filename": "Tên file:",
+    "release": "Phát hành:",
+    "titleMatch": "Khớp tiêu đề",
+    "youtubeFallbackHint": "Bạn tìm thấy bài hát trên YouTube? Hãy dán liên kết và chúng tôi sẽ tạo video karaoke từ đó."
   },
   "makeTab": {
     "emptyTitle": "Chưa có bài nào được tạo",

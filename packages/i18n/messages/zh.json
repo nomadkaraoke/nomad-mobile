@@ -118,9 +118,7 @@
     "searchingHint": "这可能需要约一分钟时间。",
     "seeOtherSources": "查看其他来源 ({count})",
     "submit": "立即制作",
-    "youtubeInvalid": "链接看起来不是有效的 YouTube 链接。",
     "youtubeLabel": "YouTube 链接",
-    "youtubeToggle": "改为粘贴 YouTube 链接",
     "category": {
       "best": "最佳选择",
       "compilations": "合辑",
@@ -139,7 +137,30 @@
     "matchUseTidied": "使用整理后的版本",
     "matchUseCorrection": "使用修正内容",
     "communityWatch": "在 YouTube 上观看",
-    "communityExists": "社区中已存在该歌曲的卡拉OK版本"
+    "communityExists": "社区中已存在该歌曲的卡拉OK版本",
+    "wrongTrack": "曲目错误？",
+    "moreCount": "还有 {count} 个",
+    "showLess": "显示更少",
+    "avail": {
+      "high": "高可用性",
+      "medium": "中等可用性",
+      "low": "获取较难"
+    },
+    "linkInvalid": "这看起来不像是链接。",
+    "linkUnsupported": "暂不支持该链接。请尝试其他来源。",
+    "warn": {
+      "fileLooksLike": "文件名似乎属于另一首歌曲：{file}",
+      "fileMayNotMatch": "文件名可能与你的歌曲不匹配",
+      "lowAvailability": "可用性较低 — 准备时间可能会稍长一些",
+      "noLossless": "没有可用的无损音源 — 仅找到 YouTube/有损音质或黑胶转录版本",
+      "lossy": "这是 YouTube/有损音源。如果有无损音频，制作出的卡拉OK效果会更好。"
+    },
+    "youtubeBlocked": "YouTube 目前阻止了我们的下载请求，暂时无法使用该链接。请选择其他来源，或稍后重试。",
+    "youtubeFallbackToggle": "找不到想唱的歌？直接粘贴链接试试",
+    "filename": "文件名：",
+    "release": "发行：",
+    "titleMatch": "标题匹配",
+    "youtubeFallbackHint": "在 YouTube 上找到了这首歌？粘贴链接，我们将用它来制作卡拉OK视频。"
   },
   "makeTab": {
     "emptyTitle": "尚未制作任何歌曲",

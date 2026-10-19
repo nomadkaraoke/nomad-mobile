@@ -30,6 +30,11 @@ name: make-8-not-sure
 - tapOn:
     id: "make-source-.*"
     index: 0
+# The link box comes first at tier 3 and the rows carry gen's details, so Make it is below the fold.
+- scrollUntilVisible:
+    element:
+      id: "make-submit"
+    direction: DOWN
 - tapOn:
     id: "make-submit"
 - extendedWaitUntil:

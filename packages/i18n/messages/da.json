@@ -118,9 +118,7 @@
     "searchingHint": "Dette kan tage op til et minut.",
     "seeOtherSources": "Se andre kilder ({count})",
     "submit": "Lav den",
-    "youtubeInvalid": "Det ligner ikke et gyldigt YouTube-link.",
     "youtubeLabel": "YouTube-link",
-    "youtubeToggle": "Indsæt et YouTube-link i stedet",
     "category": {
       "best": "Bedste valg",
       "compilations": "Opsamlinger",
@@ -139,7 +137,30 @@
     "matchUseTidied": "brug den tilrettede version",
     "matchUseCorrection": "brug rettelsen",
     "communityWatch": "Se på YouTube",
-    "communityExists": "Der findes allerede en fællesskabskaraokeversion"
+    "communityExists": "Der findes allerede en fællesskabskaraokeversion",
+    "wrongTrack": "Forkert nummer?",
+    "moreCount": "+{count} mere",
+    "showLess": "Vis mindre",
+    "avail": {
+      "high": "Høj tilgængelighed",
+      "medium": "Middel tilgængelighed",
+      "low": "Lav tilgængelighed"
+    },
+    "linkInvalid": "Det ligner ikke et link.",
+    "linkUnsupported": "Det link understøttes ikke. Prøv en anden kilde.",
+    "warn": {
+      "fileLooksLike": "Filnavnet antyder et andet nummer: {file}",
+      "fileMayNotMatch": "Filnavnet passer muligvis ikke til din sang",
+      "lowAvailability": "Lav tilgængelighed – det tager måske lidt længere tid at forberede",
+      "noLossless": "Ingen tabsfrie kilder tilgængelige – der blev kun fundet YouTube/lossy eller vinyl-rips",
+      "lossy": "Dette er en YouTube/komprimeret kilde. Tabsfri lyd giver bedre karaoke, når det er tilgængeligt."
+    },
+    "youtubeBlocked": "YouTube blokerer vores downloads lige nu, så vi kan ikke bruge den. Vælg en anden kilde, eller prøv igen om et par minutter.",
+    "youtubeFallbackToggle": "Kan du ikke finde din sang? Indsæt et link i stedet",
+    "filename": "Filnavn:",
+    "release": "Udgivelse:",
+    "titleMatch": "Titelmatch",
+    "youtubeFallbackHint": "Fandt du sangen på YouTube? Indsæt linket, så laver vi karaokevideoen ud fra det."
   },
   "makeTab": {
     "emptyTitle": "Intet lavet endnu",

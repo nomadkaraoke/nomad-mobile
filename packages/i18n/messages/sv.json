@@ -118,9 +118,7 @@
     "searchingHint": "Det kan ta upp till en minut.",
     "seeOtherSources": "Se andra källor ({count})",
     "submit": "Skapa",
-    "youtubeInvalid": "Det där ser inte ut som en YouTube-länk.",
     "youtubeLabel": "YouTube-länk",
-    "youtubeToggle": "Klistra in en YouTube-länk i stället",
     "category": {
       "best": "Bästa valet",
       "compilations": "Samlingar",
@@ -139,7 +137,30 @@
     "matchUseTidied": "använd rensad version",
     "matchUseCorrection": "använd korrigeringen",
     "communityWatch": "Titta på YouTube",
-    "communityExists": "Det finns redan en community-karaokeversion"
+    "communityExists": "Det finns redan en community-karaokeversion",
+    "wrongTrack": "Fel spår?",
+    "moreCount": "+{count} fler",
+    "showLess": "Visa mindre",
+    "avail": {
+      "high": "Hög tillgänglighet",
+      "medium": "Medelhög tillgänglighet",
+      "low": "Låg tillgänglighet"
+    },
+    "linkInvalid": "Det där ser inte ut som en länk.",
+    "linkUnsupported": "Den länken stöds inte. Prova en annan källa.",
+    "warn": {
+      "fileLooksLike": "Filnamnet tyder på ett annat spår: {file}",
+      "fileMayNotMatch": "Filnamnet kanske inte matchar din låt",
+      "lowAvailability": "Låg tillgänglighet – det kan ta lite längre tid att förbereda",
+      "noLossless": "Inga förlustfria källor tillgängliga – hittade bara YouTube/lossy eller vinylrippar",
+      "lossy": "Detta är en YouTube-/komprimerad källa. Förlustfritt ljud ger bättre karaoke när det är tillgängligt."
+    },
+    "youtubeBlocked": "YouTube blockerar våra nedladdningar just nu, så vi kan inte använda den. Välj en annan källa eller försök igen om några minuter.",
+    "youtubeFallbackToggle": "Hittar du inte din låt? Klistra in en länk istället",
+    "filename": "Filnamn:",
+    "release": "Utgåva:",
+    "titleMatch": "Titelmatchning",
+    "youtubeFallbackHint": "Hittade du låten på YouTube? Klistra in länken så gör vi karaokevideon från den."
   },
   "makeTab": {
     "emptyTitle": "Inget skapat ännu",

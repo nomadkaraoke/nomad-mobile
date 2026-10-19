@@ -27,6 +27,7 @@ jest.mock('@nomad/api-gen', () => ({
   listMyJobs: jest.fn(),
   matchJudge: jest.fn(),
   communityCheck: jest.fn(),
+  validateUrl: jest.fn(),
 }));
 
 const TIER1 = { sessionId: 's1', results: [bestChoice(0), youtube(1), spotify(2)] };
@@ -71,6 +72,7 @@ beforeEach(async () => {
   gen.listMyJobs.mockResolvedValue([]);
   gen.matchJudge.mockResolvedValue(verdict());
   gen.communityCheck.mockResolvedValue({ has_community: false, songs: [], best_youtube_url: null });
+  gen.validateUrl.mockResolvedValue({ supported: true });
 });
 
 const openMake = () => renderRouter(makeRoutes(), { initialUrl: '/make/new' });
@@ -184,7 +186,7 @@ it('create-from-url gets the applied artist/title', async () => {
   gen.matchJudge.mockResolvedValue(verdict({ kind: 'cosmetic', ...FIXED }));
   openMake();
   await submitEnabled();
-  fireEvent.press(screen.getByTestId('make-youtube-toggle'));
+  fireEvent.press(screen.getByTestId('youtube-toggle'));
   fireEvent.changeText(screen.getByTestId('make-youtube-input'), 'https://youtu.be/abc123');
   await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
   expect(gen.createJobFromUrl).toHaveBeenCalledWith({ url: 'https://youtu.be/abc123', artist: 'Muse', title: 'Starlight' });

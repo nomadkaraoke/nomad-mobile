@@ -130,16 +130,37 @@
     "searchingHint": "Això pot trigar fins a un minut.",
     "seeOtherSources": "Mostra les altres fonts ({count})",
     "submit": "Crea'l",
-    "youtubeInvalid": "Això no sembla un enllaç de YouTube.",
     "youtubeLabel": "Enllaç de YouTube",
-    "youtubeToggle": "Enganxa un enllaç de YouTube",
     "youtubePlaceholder": "https://youtube.com/watch?v=…",
     "matchChecking": "Comprovant els detalls de la cançó…",
     "matchUsingTyped": "Utilitzant el que has escrit: {value}",
     "matchUseTidied": "utilitza la versió polida",
     "matchUseCorrection": "utilitza la correcció",
     "communityWatch": "Mira-ho a YouTube",
-    "communityExists": "Ja existeix una versió de karaoke de la comunitat"
+    "communityExists": "Ja existeix una versió de karaoke de la comunitat",
+    "wrongTrack": "Pista equivocada?",
+    "moreCount": "+{count} més",
+    "showLess": "Mostra'n menys",
+    "avail": {
+      "high": "Disponibilitat alta",
+      "low": "Disponibilitat baixa",
+      "medium": "Disponibilitat mitjana"
+    },
+    "linkInvalid": "Això no sembla un enllaç.",
+    "linkUnsupported": "Aquest enllaç no és compatible. Prova amb una altra font.",
+    "warn": {
+      "fileLooksLike": "El nom del fitxer suggereix una cançó diferent: {file}",
+      "fileMayNotMatch": "És possible que el nom del fitxer no coincideixi amb la teva cançó",
+      "lowAvailability": "Disponibilitat baixa — pot trigar una mica més a preparar-se",
+      "noLossless": "No hi ha fonts sense pèrdua disponibles — només s'han trobat fonts de YouTube/amb pèrdua o digitalitzacions de vinil",
+      "lossy": "Aquesta és una font de YouTube/amb pèrdua. L'àudio sense pèrdua crea un karaoke millor quan està disponible."
+    },
+    "youtubeBlocked": "YouTube està bloquejant les nostres descàrregues ara mateix, així que no podem utilitzar aquesta font. Tria'n una altra o torna-ho a provar d'aquí a uns minuts.",
+    "youtubeFallbackHint": "Has trobat la cançó a YouTube? Enganxa l'enllaç i en crearem el vídeo de karaoke a partir d'aquí.",
+    "youtubeFallbackToggle": "No trobes la teva cançó? Enganxa un enllaç directament",
+    "filename": "Nom del fitxer:",
+    "release": "Llançament:",
+    "titleMatch": "Coincidència de títol"
   },
   "makeTab": {
     "emptyTitle": "Encara no has creat res",

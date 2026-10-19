@@ -118,9 +118,7 @@
     "searchingHint": "इसमें एक मिनट तक लग सकता है।",
     "seeOtherSources": "अन्य स्रोत देखो ({count})",
     "submit": "इसे बनाओ",
-    "youtubeInvalid": "यह कोई YouTube लिंक नहीं लगता।",
     "youtubeLabel": "YouTube लिंक",
-    "youtubeToggle": "इसके बजाय YouTube लिंक पेस्ट करो",
     "category": {
       "best": "सबसे अच्छा विकल्प",
       "compilations": "संकलन",
@@ -139,7 +137,30 @@
     "matchUseTidied": "व्यवस्थित वर्शन का इस्तेमाल करो",
     "matchUseCorrection": "सुधार का इस्तेमाल करो",
     "communityWatch": "YouTube पर देखो",
-    "communityExists": "एक कम्युनिटी कराओके वर्शन पहले से मौजूद है"
+    "communityExists": "एक कम्युनिटी कराओके वर्शन पहले से मौजूद है",
+    "wrongTrack": "गलत ट्रैक?",
+    "moreCount": "+{count} और",
+    "showLess": "कम दिखाओ",
+    "avail": {
+      "high": "उच्च उपलब्धता",
+      "medium": "मध्यम उपलब्धता",
+      "low": "कम उपलब्धता"
+    },
+    "linkInvalid": "यह कोई लिंक नहीं लग रहा है।",
+    "linkUnsupported": "यह लिंक समर्थित नहीं है। कोई दूसरा स्रोत आज़माओ।",
+    "warn": {
+      "fileLooksLike": "फ़ाइल के नाम से किसी दूसरे ट्रैक का संकेत मिलता है: {file}",
+      "fileMayNotMatch": "हो सकता है कि फ़ाइल का नाम तुम्हारे गाने से मेल न खाए",
+      "lowAvailability": "कम उपलब्धता — तैयार होने में थोड़ा ज़्यादा समय लग सकता है",
+      "noLossless": "कोई लॉसलेस (lossless) स्रोत उपलब्ध नहीं हैं — केवल YouTube/लॉसी (lossy) या विनाइल रिप्स मिले हैं",
+      "lossy": "यह एक YouTube/लॉसी सोर्स है। उपलब्ध होने पर लॉसलेस ऑडियो से बेहतर कराओके बनता है।"
+    },
+    "youtubeBlocked": "YouTube अभी हमारे डाउनलोड को ब्लॉक कर रहा है, इसलिए हम उसका उपयोग नहीं कर सकते। कोई दूसरा स्रोत चुनो, या कुछ मिनट बाद फिर से कोशिश करो।",
+    "youtubeFallbackToggle": "अपना गाना नहीं ढूँढ पा रहे हो? इसके बजाय कोई लिंक पेस्ट करो",
+    "filename": "फ़ाइल का नाम:",
+    "release": "रिलीज़:",
+    "titleMatch": "टाइटल मैच",
+    "youtubeFallbackHint": "क्या गाना YouTube पर मिल गया? लिंक पेस्ट करो और हम उससे कराओके वीडियो बना देंगे।"
   },
   "makeTab": {
     "emptyTitle": "अभी तक कुछ नहीं बनाया",

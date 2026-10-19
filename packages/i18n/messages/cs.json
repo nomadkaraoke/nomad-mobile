@@ -118,9 +118,7 @@
     "searchingHint": "Může to trvat až minutu.",
     "seeOtherSources": "Zobrazit další zdroje ({count})",
     "submit": "Vytvořit",
-    "youtubeInvalid": "Tohle nevypadá jako odkaz na YouTube.",
     "youtubeLabel": "Odkaz na YouTube",
-    "youtubeToggle": "Místo toho vložit odkaz na YouTube",
     "category": {
       "best": "Nejlepší volba",
       "compilations": "Kompilace",
@@ -139,7 +137,30 @@
     "matchUseTidied": "použít upravenou verzi",
     "matchUseCorrection": "použít opravu",
     "communityWatch": "Sledovat na YouTube",
-    "communityExists": "Komunitní karaoke verze už existuje"
+    "communityExists": "Komunitní karaoke verze už existuje",
+    "wrongTrack": "Špatná stopa?",
+    "moreCount": "+{count} dalších",
+    "showLess": "Zobrazit méně",
+    "avail": {
+      "high": "Vysoká dostupnost",
+      "medium": "Střední dostupnost",
+      "low": "Nízká dostupnost"
+    },
+    "linkInvalid": "Tohle nevypadá jako odkaz.",
+    "linkUnsupported": "Tenhle odkaz není podporovaný. Zkus jiný zdroj.",
+    "warn": {
+      "fileLooksLike": "Název souboru odpovídá jiné skladbě: {file}",
+      "fileMayNotMatch": "Název souboru nemusí odpovídat tvé skladbě",
+      "lowAvailability": "Nízká dostupnost — příprava může trvat o něco déle",
+      "noLossless": "Nejsou k dispozici žádné bezeztrátové zdroje — našel se jen YouTube / ztrátový formát nebo ripy z vinylu",
+      "lossy": "Tohle je zdroj z YouTube / ztrátový formát. Bezztrátový zvuk dělá lepší karaoke, pokud je k dispozici."
+    },
+    "youtubeBlocked": "YouTube právě blokuje naše stahování, takže tuhle možnost nemůžeme použít. Vyber jiný zdroj, nebo to zkus za pár minut znovu.",
+    "youtubeFallbackToggle": "Nemůžeš najít svoji skladbu? Vlož místo toho odkaz",
+    "filename": "Název souboru:",
+    "release": "Vydání:",
+    "titleMatch": "Shoda názvu",
+    "youtubeFallbackHint": "Našel jsi písničku na YouTube? Vlož odkaz a my z něj uděláme karaoke video."
   },
   "makeTab": {
     "emptyTitle": "Zatím tu nic není",

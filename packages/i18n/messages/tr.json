@@ -118,9 +118,7 @@
     "searchingHint": "Bu işlem bir dakika kadar sürebilir.",
     "seeOtherSources": "Diğer kaynakları gör ({count})",
     "submit": "Oluştur",
-    "youtubeInvalid": "Bu geçerli bir YouTube bağlantısına benzemiyor.",
     "youtubeLabel": "YouTube bağlantısı",
-    "youtubeToggle": "Bunun yerine bir YouTube bağlantısı yapıştır",
     "category": {
       "best": "En iyi seçim",
       "compilations": "Derlemeler",
@@ -139,7 +137,30 @@
     "matchUseTidied": "düzenlenmiş sürümü kullan",
     "matchUseCorrection": "düzeltmeyi kullan",
     "communityWatch": "YouTube'da izle",
-    "communityExists": "Bu şarkının bir topluluk karaoke versiyonu zaten var"
+    "communityExists": "Bu şarkının bir topluluk karaoke versiyonu zaten var",
+    "wrongTrack": "Yanlış parça mı?",
+    "moreCount": "+{count} daha",
+    "showLess": "Daha az göster",
+    "avail": {
+      "high": "Yüksek bulunabilirlik",
+      "medium": "Orta bulunabilirlik",
+      "low": "Düşük bulunabilirlik"
+    },
+    "linkInvalid": "Bu bir bağlantıya benzemiyor.",
+    "linkUnsupported": "Bu bağlantı desteklenmiyor. Başka bir kaynak dene.",
+    "warn": {
+      "fileLooksLike": "Dosya adı farklı bir parçaya işaret ediyor: {file}",
+      "fileMayNotMatch": "Dosya adı şarkınla eşleşmeyebilir",
+      "lowAvailability": "Düşük bulunabilirlik — hazırlanması biraz daha uzun sürebilir",
+      "noLossless": "Kayıpsız kaynak bulunamadı — yalnızca YouTube/kayıplı veya plak kayıtları bulundu",
+      "lossy": "Bu bir YouTube/kayıplı ses kaynağı. Kayıpsız sesler bulunduğunda daha iyi karaoke sonuçları verir."
+    },
+    "youtubeBlocked": "YouTube şu anda indirmelerimizi engelliyor, bu yüzden bunu kullanamıyoruz. Başka bir kaynak seç veya birkaç dakika sonra tekrar dene.",
+    "youtubeFallbackToggle": "Şarkını bulamıyor musun? Bunun yerine bir bağlantı yapıştır",
+    "filename": "Dosya adı:",
+    "release": "Yayın:",
+    "titleMatch": "Başlık eşleşmesi",
+    "youtubeFallbackHint": "Şarkıyı YouTube'da buldun mu? Bağlantıyı yapıştır, karaoke videosunu oradan yapalım."
   },
   "makeTab": {
     "emptyTitle": "Henüz oluşturulan bir şey yok",

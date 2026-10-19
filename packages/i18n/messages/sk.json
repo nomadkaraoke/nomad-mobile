@@ -118,9 +118,7 @@
     "searchingHint": "Môže to trvať až minútu.",
     "seeOtherSources": "Zobraziť ďalšie zdroje ({count})",
     "submit": "Vytvoriť",
-    "youtubeInvalid": "Toto nevyzerá ako odkaz na YouTube.",
     "youtubeLabel": "Odkaz na YouTube",
-    "youtubeToggle": "Namiesto toho vložiť odkaz na YouTube",
     "category": {
       "best": "Najlepšia voľba",
       "compilations": "Kompilácie",
@@ -139,7 +137,30 @@
     "matchUseTidied": "použiť upravenú verziu",
     "matchUseCorrection": "použiť opravu",
     "communityWatch": "Pozrieť na YouTube",
-    "communityExists": "Komunitná karaoke verzia už existuje"
+    "communityExists": "Komunitná karaoke verzia už existuje",
+    "wrongTrack": "Nesprávna skladba?",
+    "moreCount": "+{count} ďalších",
+    "showLess": "Zobraziť menej",
+    "avail": {
+      "high": "Vysoká dostupnosť",
+      "medium": "Stredná dostupnosť",
+      "low": "Nízka dostupnosť"
+    },
+    "linkInvalid": "Toto nevyzerá ako odkaz.",
+    "linkUnsupported": "Tento odkaz nie je podporovaný. Vyskúšaj iný zdroj.",
+    "warn": {
+      "fileLooksLike": "Názov súboru naznačuje inú skladbu: {file}",
+      "fileMayNotMatch": "Názov súboru sa nemusí zhodovať s tvojou skladbou",
+      "lowAvailability": "Nízka dostupnosť — príprava môže trvať o niečo dlhšie",
+      "noLossless": "Nie sú k dispozícii žiadne bezstratové zdroje — našli sa iba YouTube/stratové zdroje alebo vinylové ripy",
+      "lossy": "Toto je YouTube/stratový zdroj. Bezstratové audio vytvára lepšie karaoke, ak je dostupné."
+    },
+    "youtubeBlocked": "YouTube momentálne blokuje naše sťahovanie, takže toto video nemôžeme použiť. Vyber si iný zdroj alebo to skús znova o pár minút.",
+    "youtubeFallbackToggle": "Nemôžeš nájsť svoju skladbu? Vlož namiesto toho odkaz",
+    "filename": "Názov súboru:",
+    "release": "Vydanie:",
+    "titleMatch": "Zhoda názvu",
+    "youtubeFallbackHint": "Našiel si pieseň na YouTube? Vlož odkaz a my z neho vytvoríme karaoke video."
   },
   "makeTab": {
     "emptyTitle": "Zatiaľ si nič nevytvoril",

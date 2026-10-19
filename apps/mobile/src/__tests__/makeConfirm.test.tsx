@@ -26,6 +26,7 @@ jest.mock('@nomad/api-gen', () => ({
   listMyJobs: jest.fn(),
   matchJudge: jest.fn(),
   communityCheck: jest.fn(),
+  validateUrl: jest.fn(),
 }));
 
 const TIER1 = { sessionId: 's1', results: [bestChoice(0), youtube(1), spotify(2)] };
@@ -53,6 +54,7 @@ beforeEach(async () => {
     needs_ai: false,
   });
   gen.communityCheck.mockResolvedValue({ has_community: false, songs: [], best_youtube_url: null });
+  gen.validateUrl.mockResolvedValue({ supported: true });
 });
 
 const openMake = () => renderRouter(makeRoutes(), { initialUrl: '/make/new' });
@@ -114,8 +116,8 @@ it('tier 3: no pick card, the grouped list is open, and choosing a row enables M
   openMake();
   expect(await screen.findByTestId('make-source-2')).toBeTruthy();
   expect(screen.queryByTestId('make-pick')).toBeNull();
-  expect(screen.getByText('YouTube')).toBeTruthy();
-  expect(screen.getByText('Spotify')).toBeTruthy();
+  expect(screen.getByText('YouTube (2)')).toBeTruthy();
+  expect(screen.getByText('Spotify (1)')).toBeTruthy();
   expect(screen.getByTestId('make-submit')).toBeDisabled();
   fireEvent.press(screen.getByTestId('make-source-2'));
   expect(screen.getByTestId('make-submit')).toBeEnabled();
@@ -168,7 +170,7 @@ it('another create error shows a message and Make it works again', async () => {
 
 it('Paste a YouTube link instead → createJobFromUrl', async () => {
   openMake();
-  fireEvent.press(await screen.findByTestId('make-youtube-toggle'));
+  fireEvent.press(await screen.findByTestId('youtube-toggle'));
   fireEvent.changeText(screen.getByTestId('make-youtube-input'), 'not a link');
   expect(screen.getByTestId('make-submit')).toBeDisabled();
   fireEvent.changeText(screen.getByTestId('make-youtube-input'), ' https://youtu.be/abc123 ');

@@ -118,9 +118,7 @@
     "searchingHint": "To może potrwać do minuty.",
     "seeOtherSources": "Zobacz inne źródła ({count})",
     "submit": "Stwórz",
-    "youtubeInvalid": "To nie wygląda na prawidłowy link do YouTube.",
     "youtubeLabel": "Link do YouTube",
-    "youtubeToggle": "Wklej zamiast tego link do YouTube",
     "category": {
       "best": "Najlepszy wybór",
       "compilations": "Składanki",
@@ -139,7 +137,30 @@
     "matchUseTidied": "użyj uporządkowanej wersji",
     "matchUseCorrection": "użyj poprawki",
     "communityWatch": "Obejrzyj na YouTube",
-    "communityExists": "Wersja karaoke stworzona przez społeczność już istnieje"
+    "communityExists": "Wersja karaoke stworzona przez społeczność już istnieje",
+    "wrongTrack": "Zły utwór?",
+    "moreCount": "+{count} więcej",
+    "showLess": "Pokaż mniej",
+    "avail": {
+      "high": "Wysoka dostępność",
+      "medium": "Średnia dostępność",
+      "low": "Niska dostępność"
+    },
+    "linkInvalid": "To nie wygląda na prawidłowy link.",
+    "linkUnsupported": "Ten link nie jest obsługiwany. Wypróbuj inne źródło.",
+    "warn": {
+      "fileLooksLike": "Nazwa pliku wskazuje na inny utwór: {file}",
+      "fileMayNotMatch": "Nazwa pliku może nie pasować do twojej piosenki",
+      "lowAvailability": "Niska dostępność — przygotowanie może zająć nieco więcej czasu",
+      "noLossless": "Brak bezstratnych źródeł — znaleziono tylko źródła z YouTube/stratne lub ripy z winyli",
+      "lossy": "To jest źródło z YouTube/stratne. Dźwięk bezstratny daje lepsze karaoke, jeśli jest dostępny."
+    },
+    "youtubeBlocked": "YouTube blokuje obecnie pobieranie, więc nie możemy użyć tego źródła. Wybierz inne źródło lub spróbuj ponownie za kilka minut.",
+    "youtubeFallbackToggle": "Nie możesz znaleźć swojej piosenki? Wklej bezpośredni link",
+    "filename": "Nazwa pliku:",
+    "release": "Wydanie:",
+    "titleMatch": "Dopasowanie tytułu",
+    "youtubeFallbackHint": "Piosenka znaleziona na YouTube? Wklej link, a zrobimy z niego wideo karaoke."
   },
   "makeTab": {
     "emptyTitle": "Jeszcze nic tu nie ma",

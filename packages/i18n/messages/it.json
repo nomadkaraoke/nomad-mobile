@@ -118,9 +118,7 @@
     "searchingHint": "Potrebbe richiedere fino a un minuto.",
     "seeOtherSources": "Mostra altre fonti ({count})",
     "submit": "Crea",
-    "youtubeInvalid": "Questo non sembra un link di YouTube.",
     "youtubeLabel": "Link di YouTube",
-    "youtubeToggle": "Incolla invece un link di YouTube",
     "category": {
       "best": "Scelta migliore",
       "compilations": "Compilation",
@@ -139,7 +137,30 @@
     "matchUseTidied": "usa la versione ripulita",
     "matchUseCorrection": "usa la correzione",
     "communityWatch": "Guarda su YouTube",
-    "communityExists": "Esiste già una versione karaoke della community"
+    "communityExists": "Esiste già una versione karaoke della community",
+    "wrongTrack": "Traccia sbagliata?",
+    "moreCount": "+{count} altre",
+    "showLess": "Mostra di meno",
+    "avail": {
+      "high": "Alta disponibilità",
+      "medium": "Media disponibilità",
+      "low": "Bassa disponibilità"
+    },
+    "linkInvalid": "Non sembra un link valido.",
+    "linkUnsupported": "Questo link non è supportato. Prova con un'altra fonte.",
+    "warn": {
+      "fileLooksLike": "Il nome del file sembra indicare una traccia diversa: {file}",
+      "fileMayNotMatch": "Il nome del file potrebbe non corrispondere alla tua canzone",
+      "lowAvailability": "Disponibilità ridotta — potrebbe richiedere un po' più di tempo per la preparazione",
+      "noLossless": "Nessuna fonte lossless disponibile — trovati solo rip da vinile o lossy/YouTube",
+      "lossy": "Questa è una fonte YouTube/lossy. L'audio lossless crea un karaoke migliore quando disponibile."
+    },
+    "youtubeBlocked": "Al momento YouTube sta bloccando i nostri download, quindi non possiamo usarlo. Scegli un'altra fonte o riprova tra qualche minuto.",
+    "youtubeFallbackToggle": "Non trovi la tua canzone? Incolla invece un link",
+    "filename": "Nome file:",
+    "release": "Release:",
+    "titleMatch": "Corrispondenza titolo",
+    "youtubeFallbackHint": "Hai trovato la canzone su YouTube? Incolla il link e creeremo il video karaoke da lì."
   },
   "makeTab": {
     "emptyTitle": "Non hai ancora creato nulla",

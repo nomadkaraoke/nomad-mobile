@@ -118,9 +118,7 @@
     "searchingHint": "זה עשוי לקחת עד דקה.",
     "seeOtherSources": "הצגת מקורות נוספים ({count})",
     "submit": "להכין עכשיו",
-    "youtubeInvalid": "זה לא נראה כמו קישור תקין ל-YouTube.",
     "youtubeLabel": "קישור ל-YouTube",
-    "youtubeToggle": "הדבקת קישור ל-YouTube במקום",
     "category": {
       "best": "הבחירה הטובה ביותר",
       "compilations": "אוספים",
@@ -139,7 +137,30 @@
     "matchUseTidied": "להשתמש בגרסה המסודרת",
     "matchUseCorrection": "להשתמש בתיקון",
     "communityWatch": "צפו ב-YouTube",
-    "communityExists": "כבר קיימת גרסת קריוקי קהילתית"
+    "communityExists": "כבר קיימת גרסת קריוקי קהילתית",
+    "wrongTrack": "רצועה שגויה?",
+    "moreCount": "+{count} נוספים",
+    "showLess": "הצג פחות",
+    "avail": {
+      "high": "זמינות גבוהה",
+      "medium": "זמינות בינונית",
+      "low": "זמינות נמוכה"
+    },
+    "linkInvalid": "זה לא נראה כמו קישור.",
+    "linkUnsupported": "הקישור הזה אינו נתמך. נסו מקור אחר.",
+    "warn": {
+      "fileLooksLike": "שם הקובץ מרמז על שיר אחר: {file}",
+      "fileMayNotMatch": "ייתכן ששם הקובץ אינו תואם לשיר שלך",
+      "lowAvailability": "זמינות נמוכה — ההכנה עשויה לקחת קצת יותר זמן",
+      "noLossless": "אין מקורות lossless זמינים — נמצאו רק המרות מ-YouTube/lossy או מוויניל",
+      "lossy": "זהו מקור מ-YouTube או אודיו דחוס (lossy). אודיו ללא אובדן איכות יוצר קריוקי טוב יותר כשזה זמין."
+    },
+    "youtubeBlocked": "YouTube חוסמת כרגע את ההורדות שלנו, לכן לא נוכל להשתמש במקור הזה. אפשר לבחור מקור אחר, או לנסות שוב בעוד כמה דקות.",
+    "youtubeFallbackToggle": "לא מוצאים את השיר שלכם? הדביקו קישור במקום זאת",
+    "filename": "שם קובץ:",
+    "release": "הוצאה:",
+    "titleMatch": "התאמת שם",
+    "youtubeFallbackHint": "מצאתם את השיר ב-YouTube? הדביקו את הקישור ואנחנו נכין ממנו את סרטון הקריוקי."
   },
   "makeTab": {
     "emptyTitle": "עוד לא הכנת שירים",

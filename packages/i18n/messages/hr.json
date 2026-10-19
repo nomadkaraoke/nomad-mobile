@@ -118,9 +118,7 @@
     "searchingHint": "Ovo može potrajati do minute.",
     "seeOtherSources": "Prikaži ostale izvore ({count})",
     "submit": "Izradi",
-    "youtubeInvalid": "Ovo ne izgleda kao YouTube poveznica.",
     "youtubeLabel": "YouTube poveznica",
-    "youtubeToggle": "Zalijepi YouTube poveznicu umjesto toga",
     "category": {
       "best": "Najbolji izbor",
       "compilations": "Kompilacije",
@@ -139,7 +137,30 @@
     "matchUseTidied": "koristi uređenu verziju",
     "matchUseCorrection": "koristi ispravak",
     "communityWatch": "Gledaj na YouTube",
-    "communityExists": "Karaoke verzija zajednice već postoji"
+    "communityExists": "Karaoke verzija zajednice već postoji",
+    "wrongTrack": "Pogrešna pjesma?",
+    "moreCount": "+{count} više",
+    "showLess": "Prikaži manje",
+    "avail": {
+      "high": "Visoka dostupnost",
+      "medium": "Srednja dostupnost",
+      "low": "Slaba dostupnost"
+    },
+    "linkInvalid": "To ne izgleda kao poveznica.",
+    "linkUnsupported": "Ta poveznica nije podržana. Isprobaj drugi izvor.",
+    "warn": {
+      "fileLooksLike": "Naziv datoteke upućuje na drugu pjesmu: {file}",
+      "fileMayNotMatch": "Naziv datoteke možda ne odgovara tvojoj pjesmi",
+      "lowAvailability": "Niska dostupnost — priprema bi mogla potrajati malo dulje",
+      "noLossless": "Nema dostupnih lossless izvora — pronađeni su samo YouTube/lossy izvori ili snimke s vinila",
+      "lossy": "Ovo je YouTube/lossy izvor. Lossless zvuk daje bolje karaoke kada je dostupan."
+    },
+    "youtubeBlocked": "YouTube trenutno blokira naša preuzimanja, pa ne možemo iskoristiti taj izvor. Odaberi drugi izvor ili pokušaj ponovno za nekoliko minuta.",
+    "youtubeFallbackToggle": "Ne možeš pronaći svoju pjesmu? Umjesto toga zalijepi poveznicu",
+    "filename": "Naziv datoteke:",
+    "release": "Izdanje:",
+    "titleMatch": "Podudaranje naslova",
+    "youtubeFallbackHint": "Pronašao/la si pjesmu na YouTubeu? Zalijepi link i od toga ćemo napraviti karaoke video."
   },
   "makeTab": {
     "emptyTitle": "Još ništa nije izrađeno",

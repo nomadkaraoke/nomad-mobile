@@ -118,9 +118,7 @@
     "searchingHint": "Poate dura până la un minut.",
     "seeOtherSources": "Vezi celelalte surse ({count})",
     "submit": "Creează",
-    "youtubeInvalid": "Acesta nu pare a fi un link de YouTube valid.",
     "youtubeLabel": "Link de YouTube",
-    "youtubeToggle": "Lipește mai degrabă un link de YouTube",
     "category": {
       "best": "Cea mai bună alegere",
       "compilations": "Compilații",
@@ -139,7 +137,30 @@
     "matchUseTidied": "folosește versiunea curățată",
     "matchUseCorrection": "folosește corecția",
     "communityWatch": "Urmărește pe YouTube",
-    "communityExists": "Există deja o versiune karaoke creată de comunitate"
+    "communityExists": "Există deja o versiune karaoke creată de comunitate",
+    "wrongTrack": "Piesă greșită?",
+    "moreCount": "+{count} mai multe",
+    "showLess": "Arată mai puțin",
+    "avail": {
+      "high": "Disponibilitate ridicată",
+      "medium": "Disponibilitate medie",
+      "low": "Disponibilitate redusă"
+    },
+    "linkInvalid": "Acesta nu pare a fi un link.",
+    "linkUnsupported": "Acest link nu este acceptat. Încearcă o altă sursă.",
+    "warn": {
+      "fileLooksLike": "Numele fișierului sugerează o altă piesă: {file}",
+      "fileMayNotMatch": "Este posibil ca numele fișierului să nu se potrivească cu melodia ta",
+      "lowAvailability": "Disponibilitate redusă — pregătirea ar putea dura puțin mai mult",
+      "noLossless": "Nu există surse lossless disponibile — s-au găsit doar surse YouTube/lossy sau rip-uri de pe vinil",
+      "lossy": "Aceasta este o sursă YouTube/lossy. Audio-ul lossless produce un karaoke mai bun când este disponibil."
+    },
+    "youtubeBlocked": "YouTube ne blochează descărcările în acest moment, așa că nu putem folosi această opțiune. Alege o altă sursă sau încearcă din nou în câteva minute.",
+    "youtubeFallbackToggle": "Nu-ți găsești melodia? Adaugă un link direct",
+    "filename": "Nume fișier:",
+    "release": "Lansare:",
+    "titleMatch": "Potrivire titlu",
+    "youtubeFallbackHint": "Ai găsit piesa pe YouTube? Lipește linkul și vom face videoclipul de karaoke din el."
   },
   "makeTab": {
     "emptyTitle": "Nu ai creat nicio piesă încă",

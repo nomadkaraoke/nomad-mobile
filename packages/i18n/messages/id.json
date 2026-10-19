@@ -118,9 +118,7 @@
     "searchingHint": "Ini bisa memakan waktu hingga satu menit.",
     "seeOtherSources": "Lihat sumber lain ({count})",
     "submit": "Buat",
-    "youtubeInvalid": "Tautan tidak tampak seperti tautan YouTube.",
     "youtubeLabel": "Tautan YouTube",
-    "youtubeToggle": "Tempel tautan YouTube sebagai gantinya",
     "category": {
       "best": "Pilihan terbaik",
       "compilations": "Kompilasi",
@@ -139,7 +137,30 @@
     "matchUseTidied": "gunakan versi yang dirapikan",
     "matchUseCorrection": "gunakan koreksi",
     "communityWatch": "Tonton di YouTube",
-    "communityExists": "Versi karaoke komunitas sudah ada"
+    "communityExists": "Versi karaoke komunitas sudah ada",
+    "wrongTrack": "Track salah?",
+    "moreCount": "+{count} lainnya",
+    "showLess": "Tampilkan lebih sedikit",
+    "avail": {
+      "high": "Ketersediaan tinggi",
+      "medium": "Ketersediaan sedang",
+      "low": "Ketersediaan rendah"
+    },
+    "linkInvalid": "Itu tampaknya bukan tautan yang valid.",
+    "linkUnsupported": "Tautan tersebut tidak didukung. Coba sumber lain.",
+    "warn": {
+      "fileLooksLike": "Nama file menunjukkan lagu yang berbeda: {file}",
+      "fileMayNotMatch": "Nama file mungkin tidak cocok dengan lagu Anda",
+      "lowAvailability": "Ketersediaan rendah — mungkin butuh waktu sedikit lebih lama untuk disiapkan",
+      "noLossless": "Tidak ada sumber lossless yang tersedia — hanya ditemukan rip YouTube/lossy atau piringan hitam",
+      "lossy": "Ini adalah sumber YouTube/lossy. Audio lossless menghasilkan karaoke yang lebih baik jika tersedia."
+    },
+    "youtubeBlocked": "YouTube sedang memblokir unduhan kami saat ini, jadi kami tidak bisa menggunakan tautan tersebut. Pilih sumber lain, atau coba lagi dalam beberapa menit.",
+    "youtubeFallbackToggle": "Tidak dapat menemukan lagu Anda? Tempel tautan sebagai gantinya",
+    "filename": "Nama file:",
+    "release": "Rilis:",
+    "titleMatch": "Judul cocok",
+    "youtubeFallbackHint": "Menemukan lagunya di YouTube? Tempel tautannya dan kami akan membuatkan video karaokenya dari situ."
   },
   "makeTab": {
     "emptyTitle": "Belum ada yang dibuat",
