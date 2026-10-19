@@ -1,0 +1,378 @@
+[
+ {
+  "in": "Beyonc\u00e9",
+  "normalize": "beyonce",
+  "identity": "beyonce",
+  "songNorm": "beyonce",
+  "fts": "\"beyonce\"*",
+  "indexText": "beyonce"
+ },
+ {
+  "in": "M\u00d8",
+  "normalize": "mo",
+  "identity": "mo",
+  "songNorm": "mo",
+  "fts": "\"mo\"*",
+  "indexText": "mo"
+ },
+ {
+  "in": "Stra\u00dfenbande",
+  "normalize": "strassenbande",
+  "identity": "strassenbande",
+  "songNorm": "strassenbande",
+  "fts": "\"strassenbande\"*",
+  "indexText": "strassenbande"
+ },
+ {
+  "in": "\u0416ft Song",
+  "normalize": "\u0436ft song",
+  "identity": "\u0436ft song",
+  "songNorm": "\u0436ft song",
+  "fts": "\"\u0436ft\" \"song\"*",
+  "indexText": "\u0436ft song \u0436ftsong"
+ },
+ {
+  "in": "\u03a3\u0391\u03a3 \u039f\u0394\u039f\u03a3",
+  "normalize": "\u03c3\u03b1\u03c2 \u03bf\u03b4\u03bf\u03c2",
+  "identity": "\u03c3\u03b1\u03c2 \u03bf\u03b4\u03bf\u03c2",
+  "songNorm": "\u03c3\u03b1\u03c2 \u03bf\u03b4\u03bf\u03c2",
+  "fts": "\"\u03c3\u03b1\u03c2\" \"\u03bf\u03b4\u03bf\u03c2\"*",
+  "indexText": "\u03c3\u03b1\u03c2 \u03bf\u03b4\u03bf\u03c2 \u03c3\u03b1\u03c2\u03bf\u03b4\u03bf\u03c2"
+ },
+ {
+  "in": "\u216b Roman",
+  "normalize": "\u217b roman",
+  "identity": "\u217b roman",
+  "songNorm": "\u217b roman",
+  "fts": "\"\u217b\" \"roman\"*",
+  "indexText": "\u217b roman \u217broman"
+ },
+ {
+  "in": "\u0130stanbul (feat. Tarkan)",
+  "normalize": "istanbul tarkan",
+  "identity": "istanbul",
+  "songNorm": "istanbul",
+  "fts": "\"istanbul\" \"tarkan\"*",
+  "indexText": "istanbul tarkan istanbultarkan"
+ },
+ {
+  "in": "featur\u0131ng Bob",
+  "normalize": "bob",
+  "identity": "",
+  "songNorm": "",
+  "fts": "\"bob\"*",
+  "indexText": "bob"
+ },
+ {
+  "in": "\ufb01nal \ufb02ight",
+  "normalize": "\ufb01nal \ufb02ight",
+  "identity": "\ufb01nal \ufb02ight",
+  "songNorm": "\ufb01nal \ufb02ight",
+  "fts": "\"\ufb01nal\" \"\ufb02ight\"*",
+  "indexText": "\ufb01nal \ufb02ight \ufb01nal\ufb02ight"
+ },
+ {
+  "in": "\uff26\uff55\uff4c\uff4c \uff37\uff49\uff44\uff54\uff48",
+  "normalize": "\uff46\uff55\uff4c\uff4c \uff57\uff49\uff44\uff54\uff48",
+  "identity": "\uff46\uff55\uff4c\uff4c \uff57\uff49\uff44\uff54\uff48",
+  "songNorm": "\uff46\uff55\uff4c\uff4c \uff57\uff49\uff44\uff54\uff48",
+  "fts": "\"\uff46\uff55\uff4c\uff4c\" \"\uff57\uff49\uff44\uff54\uff48\"*",
+  "indexText": "\uff46\uff55\uff4c\uff4c \uff57\uff49\uff44\uff54\uff48 \uff46\uff55\uff4c\uff4c\uff57\uff49\uff44\uff54\uff48"
+ },
+ {
+  "in": "Party in the U.S.A.",
+  "normalize": "party in the u s a",
+  "identity": "party in the u s a",
+  "songNorm": "party in the usa",
+  "fts": "\"party\" \"in\" \"the\" \"u\" \"s\" \"a\"*",
+  "indexText": "party in the u s a partyin inthe theu us sa"
+ },
+ {
+  "in": "a b c d",
+  "normalize": "a b c d",
+  "identity": "a b c d",
+  "songNorm": "abcd",
+  "fts": "\"a\" \"b\" \"c\" \"d\"*",
+  "indexText": "a b c d ab bc cd"
+ },
+ {
+  "in": "\u0416 a b",
+  "normalize": "\u0436 a b",
+  "identity": "\u0436 a b",
+  "songNorm": "\u0436 ab",
+  "fts": "\"\u0436\" \"a\" \"b\"*",
+  "indexText": "\u0436 a b \u0436a ab"
+ },
+ {
+  "in": "\u6b4c karaoke \u30ca\u30eb\u30c8",
+  "normalize": "\u6b4c karaoke \u30ca\u30eb\u30c8",
+  "identity": "\u6b4c karaoke \u30ca\u30eb\u30c8",
+  "songNorm": "\u6b4c karaoke \u30ca\u30eb\u30c8",
+  "fts": "\"\u6b4c\" \"karaoke\" \"\u30ca\u30eb\u30c8\"*",
+  "indexText": "\u6b4c karaoke \u30ca\u30eb\u30c8 \u6b4ckaraoke karaoke\u30ca\u30eb\u30c8"
+ },
+ {
+  "in": "\u05e9\u05d9\u05e8 \u05d4\u05e9\u05d9\u05e8\u05d9\u05dd",
+  "normalize": "\u05e9\u05d9\u05e8 \u05d4\u05e9\u05d9\u05e8\u05d9\u05dd",
+  "identity": "\u05e9\u05d9\u05e8 \u05d4\u05e9\u05d9\u05e8\u05d9\u05dd",
+  "songNorm": "\u05e9\u05d9\u05e8 \u05d4\u05e9\u05d9\u05e8\u05d9\u05dd",
+  "fts": "\"\u05e9\u05d9\u05e8\" \"\u05d4\u05e9\u05d9\u05e8\u05d9\u05dd\"*",
+  "indexText": "\u05e9\u05d9\u05e8 \u05d4\u05e9\u05d9\u05e8\u05d9\u05dd \u05e9\u05d9\u05e8\u05d4\u05e9\u05d9\u05e8\u05d9\u05dd"
+ },
+ {
+  "in": "\u0928\u092e\u0938\u094d\u0924\u0947 \u0926\u0941\u0928\u093f\u092f\u093e",
+  "normalize": "\u0928\u092e\u0938 \u0924 \u0926 \u0928 \u092f",
+  "identity": "\u0928\u092e\u0938 \u0924 \u0926 \u0928 \u092f",
+  "songNorm": "\u0928\u092e\u0938 \u0924 \u0926 \u0928 \u092f",
+  "fts": "\"\u0928\u092e\u0938\" \"\u0924\" \"\u0926\" \"\u0928\" \"\u092f\"*",
+  "indexText": "\u0928\u092e\u0938 \u0924 \u0926 \u0928 \u092f \u0928\u092e\u0938\u0924 \u0924\u0926 \u0926\u0928 \u0928\u092f"
+ },
+ {
+  "in": "\ud83c\udfa4 Sing \ud83c\udfa4",
+  "normalize": "sing",
+  "identity": "sing",
+  "songNorm": "sing",
+  "fts": "\"sing\"*",
+  "indexText": "sing"
+ },
+ {
+  "in": "x\u2003y\u00a0z\u001cw\u0085v\ufeffu",
+  "normalize": "x y z w v u",
+  "identity": "x y z w v u",
+  "songNorm": "xyzwvu",
+  "fts": "\"x\" \"y\" \"z\" \"w\" \"v\" \"u\"*",
+  "indexText": "x y z w v u xy yz zw wv vu"
+ },
+ {
+  "in": "tab\there",
+  "normalize": "tab here",
+  "identity": "tab here",
+  "songNorm": "tab here",
+  "fts": "\"tab\" \"here\"*",
+  "indexText": "tab here tabhere"
+ },
+ {
+  "in": "under_score",
+  "normalize": "under_score",
+  "identity": "under_score",
+  "songNorm": "under_score",
+  "fts": "\"under_score\"*",
+  "indexText": "under_score"
+ },
+ {
+  "in": "AC/DC",
+  "normalize": "ac dc",
+  "identity": "ac dc",
+  "songNorm": "ac dc",
+  "fts": "\"ac\" \"dc\"*",
+  "indexText": "ac dc acdc"
+ },
+ {
+  "in": "(Over)Thinking",
+  "normalize": "over thinking",
+  "identity": "over thinking",
+  "songNorm": "over thinking",
+  "fts": "\"over\" \"thinking\"*",
+  "indexText": "over thinking overthinking"
+ },
+ {
+  "in": "Don\u2019t Stop Believin'",
+  "normalize": "dont stop believin",
+  "identity": "dont stop believin",
+  "songNorm": "dont stop believin",
+  "fts": "\"dont\" \"stop\" \"believin\"*",
+  "indexText": "dont stop believin dontstop stopbelievin"
+ },
+ {
+  "in": "Twenty One Pilots",
+  "normalize": "21 pilots",
+  "identity": "21 pilots",
+  "songNorm": "21 pilots",
+  "fts": "\"21\" \"pilots\"*",
+  "indexText": "21 pilots 21pilots"
+ },
+ {
+  "in": "Rocky IV",
+  "normalize": "rocky 4",
+  "identity": "rocky 4",
+  "songNorm": "rocky 4",
+  "fts": "\"rocky\" \"4\"*",
+  "indexText": "rocky 4 rocky4"
+ },
+ {
+  "in": "Zedd feat. Hayley Williams of Paramore Stay the Night",
+  "normalize": "zedd hayley williams of paramore stay the night",
+  "identity": "zedd",
+  "songNorm": "zedd",
+  "fts": "\"zedd\" \"hayley\" \"williams\" \"of\" \"paramore\" \"stay\" \"the\" \"night\"*",
+  "indexText": "zedd hayley williams of paramore stay the night zeddhayley hayleywilliams williamsof ofparamore paramorestay staythe thenight"
+ },
+ {
+  "in": "Song Pt 2 vs B",
+  "normalize": "song part 2 versus b",
+  "identity": "song part 2 versus b",
+  "songNorm": "song part 2 versus b",
+  "fts": "\"song\" \"part\" \"2\" \"versus\" \"b\"*",
+  "indexText": "song part 2 versus b songpart part2 2versus versusb"
+ },
+ {
+  "in": "\u00bd Price \u00b2\u00b3",
+  "normalize": "\u00bd price \u00b2\u00b3",
+  "identity": "\u00bd price \u00b2\u00b3",
+  "songNorm": "\u00bd price \u00b2\u00b3",
+  "fts": "\"\u00bd\" \"price\" \"\u00b2\u00b3\"*",
+  "indexText": "\u00bd price \u00b2\u00b3 \u00bdprice price\u00b2\u00b3"
+ },
+ {
+  "in": "Se\u00f1or Smoke \u2014 Live",
+  "normalize": "senor smoke live",
+  "identity": "senor smoke live",
+  "songNorm": "senor smoke live",
+  "fts": "\"senor\" \"smoke\" \"live\"*",
+  "indexText": "senor smoke live senorsmoke smokelive"
+ },
+ {
+  "in": "\ud835\udc01\ud835\udc28\ud835\udc25\ud835\udc1d \ud835\udfcf\ud835\udfd0",
+  "normalize": "\ud835\udc01\ud835\udc28\ud835\udc25\ud835\udc1d \ud835\udfcf\ud835\udfd0",
+  "identity": "\ud835\udc01\ud835\udc28\ud835\udc25\ud835\udc1d \ud835\udfcf\ud835\udfd0",
+  "songNorm": "\ud835\udc01\ud835\udc28\ud835\udc25\ud835\udc1d \ud835\udfcf\ud835\udfd0",
+  "fts": "\"\ud835\udc01\ud835\udc28\ud835\udc25\ud835\udc1d\" \"\ud835\udfcf\ud835\udfd0\"*",
+  "indexText": "\ud835\udc01\ud835\udc28\ud835\udc25\ud835\udc1d \ud835\udfcf\ud835\udfd0 \ud835\udc01\ud835\udc28\ud835\udc25\ud835\udc1d\ud835\udfcf\ud835\udfd0"
+ },
+ {
+  "in": "\u01c5emal",
+  "normalize": "\u01c6emal",
+  "identity": "\u01c6emal",
+  "songNorm": "\u01c6emal",
+  "fts": "\"\u01c6emal\"*",
+  "indexText": "\u01c6emal"
+ },
+ {
+  "in": "Stay (Acoustic) feat. Justin Bieber (Live)",
+  "normalize": "stay acoustic justin bieber live",
+  "identity": "stay acoustic",
+  "songNorm": "stay acoustic",
+  "fts": "\"stay\" \"acoustic\" \"justin\" \"bieber\" \"live\"*",
+  "indexText": "stay acoustic justin bieber live stayacoustic acousticjustin justinbieber bieberlive"
+ },
+ {
+  "in": "Feats Of Strength",
+  "normalize": "feats of strength",
+  "identity": "feats of strength",
+  "songNorm": "feats of strength",
+  "fts": "\"feats\" \"of\" \"strength\"*",
+  "indexText": "feats of strength featsof ofstrength"
+ },
+ {
+  "in": "The Feat",
+  "normalize": "the feat",
+  "identity": "the feat",
+  "songNorm": "the feat",
+  "fts": "\"the\" \"feat\"*",
+  "indexText": "the feat thefeat"
+ },
+ {
+  "in": "Soft Cell",
+  "normalize": "soft cell",
+  "identity": "soft cell",
+  "songNorm": "soft cell",
+  "fts": "\"soft\" \"cell\"*",
+  "indexText": "soft cell softcell"
+ },
+ {
+  "in": "Hayloft II",
+  "normalize": "hayloft 2",
+  "identity": "hayloft 2",
+  "songNorm": "hayloft 2",
+  "fts": "\"hayloft\" \"2\"*",
+  "indexText": "hayloft 2 hayloft2"
+ },
+ {
+  "in": "Craft (feat. X)",
+  "normalize": "craft x",
+  "identity": "craft",
+  "songNorm": "craft",
+  "fts": "\"craft\" \"x\"*",
+  "indexText": "craft x craftx"
+ },
+ {
+  "in": "Simon + Garfunkel & Co",
+  "normalize": "simon and garfunkel and co",
+  "identity": "simon and garfunkel and co",
+  "songNorm": "simon and garfunkel and co",
+  "fts": "\"simon\" \"and\" \"garfunkel\" \"and\" \"co\"*",
+  "indexText": "simon and garfunkel and co simonand andgarfunkel garfunkeland andco"
+ },
+ {
+  "in": "One Hundred Years",
+  "normalize": "1 hundred years",
+  "identity": "1 hundred years",
+  "songNorm": "1 hundred years",
+  "fts": "\"1\" \"hundred\" \"years\"*",
+  "indexText": "1 hundred years 1hundred hundredyears"
+ },
+ {
+  "in": "Ninety Nine Red Balloons",
+  "normalize": "99 red balloons",
+  "identity": "99 red balloons",
+  "songNorm": "99 red balloons",
+  "fts": "\"99\" \"red\" \"balloons\"*",
+  "indexText": "99 red balloons 99red redballoons"
+ },
+ {
+  "in": "twenty twenty",
+  "normalize": "20 20",
+  "identity": "20 20",
+  "songNorm": "20 20",
+  "fts": "\"20\" \"20\"*",
+  "indexText": "20 20 2020"
+ },
+ {
+  "in": "A FT. B",
+  "normalize": "a b",
+  "identity": "a",
+  "songNorm": "a",
+  "fts": "\"a\" \"b\"*",
+  "indexText": "a b ab"
+ },
+ {
+  "in": "ft",
+  "normalize": "ft",
+  "identity": "ft",
+  "songNorm": "ft",
+  "fts": "\"ft\"*",
+  "indexText": "ft"
+ },
+ {
+  "in": "x feat.\u3000y",
+  "normalize": "x y",
+  "identity": "x",
+  "songNorm": "x",
+  "fts": "\"x\" \"y\"*",
+  "indexText": "x y xy"
+ },
+ {
+  "in": "a.b.c",
+  "normalize": "a b c",
+  "identity": "a b c",
+  "songNorm": "abc",
+  "fts": "\"a\" \"b\" \"c\"*",
+  "indexText": "a b c ab bc"
+ },
+ {
+  "in": "1 2 3",
+  "normalize": "1 2 3",
+  "identity": "1 2 3",
+  "songNorm": "123",
+  "fts": "\"1\" \"2\" \"3\"*",
+  "indexText": "1 2 3 12 23"
+ },
+ {
+  "in": "",
+  "normalize": "",
+  "identity": "",
+  "songNorm": "",
+  "fts": "",
+  "indexText": ""
+ }
+]
