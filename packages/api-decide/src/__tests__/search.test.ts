@@ -42,6 +42,12 @@ it('searchSongs hits /api/search with q and limit and sends X-Device-Id', async 
   expect(req.headers.get('accept-language')).toBe('en');
 });
 
+it('searchSongs sends the search-session id when given', async () => {
+  fetchMock.mockResolvedValue(json(SEARCH));
+  await searchSongs('hey', { sid: 'abc123' });
+  expect(lastRequest().url).toBe('https://decide.test/api/search?q=hey&sid=abc123');
+});
+
 it('searchSongs omits limit by default and forwards the abort signal', async () => {
   fetchMock.mockResolvedValue(json(SEARCH));
   const ctrl = new AbortController();

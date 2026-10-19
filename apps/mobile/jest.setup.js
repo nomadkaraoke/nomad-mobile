@@ -72,3 +72,6 @@ jest.mock('expo-file-system', () => {
   File.downloadFileAsync = jest.fn();
   return { File, Paths: { cache: 'file:///cache' } };
 });
+
+// NetInfo's native module is absent under jest: use the library's mock (connected) unless a suite mocks it itself.
+jest.mock('@react-native-community/netinfo', () => require('@react-native-community/netinfo/jest/netinfo-mock.js'));

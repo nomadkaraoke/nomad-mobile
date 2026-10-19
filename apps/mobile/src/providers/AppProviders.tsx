@@ -6,6 +6,7 @@ import { I18nManager } from 'react-native';
 import { setupApiClients } from '../api/setup';
 import { useAuth } from '../auth/store';
 import { useSessionCheck } from '../auth/useSessionCheck';
+import { useSearchWarmup } from '../find/useSearchWarmup';
 import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
 
@@ -17,6 +18,12 @@ setupApiClients();
 /** Spec §5: re-checks the gen session on launch and on foreground (a 401 signs out). */
 function SessionCheck() {
   useSessionCheck();
+  return null;
+}
+
+/** Spec §5.1: wakes the scale-to-zero search service (and checks the offline song list) on launch and foreground. */
+function SearchWarmup() {
+  useSearchWarmup();
   return null;
 }
 
@@ -44,6 +51,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
     <IntlProvider locale={locale}>
       <QueryClientProvider client={queryClient}>
         <SessionCheck />
+        <SearchWarmup />
         {children}
       </QueryClientProvider>
     </IntlProvider>

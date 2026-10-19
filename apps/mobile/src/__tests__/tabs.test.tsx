@@ -8,8 +8,9 @@ import { gen, session } from '../test-utils/genAuthMock';
 import { makeRoutes } from '../test-utils/makeFixtures';
 
 jest.mock('@nomad/api-decide', () => ({
-  searchCatalogSongs: jest.fn(),
-  popularCatalogSongs: jest.fn(async () => []),
+  searchSongs: jest.fn(),
+  popularSongs: jest.fn(async () => []),
+  pingSearch: jest.fn(async () => true),
   getSong: jest.fn(),
   configureClient: jest.fn(),
 }));
@@ -23,7 +24,7 @@ jest.mock('@nomad/api-gen', () => ({
 beforeEach(async () => {
   jest.useRealTimers();
   jest.clearAllMocks();
-  (decide.popularCatalogSongs as jest.Mock).mockResolvedValue([]);
+  (decide.popularSongs as jest.Mock).mockResolvedValue([]);
   await useAuth.getState().signOut();
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 });
   gen.listMyJobs.mockResolvedValue([]);

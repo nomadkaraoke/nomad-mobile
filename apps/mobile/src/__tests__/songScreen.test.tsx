@@ -9,8 +9,9 @@ import { session } from '../test-utils/genAuthMock';
 import { signInRoutes } from '../test-utils/signInRoutes';
 
 jest.mock('@nomad/api-decide', () => ({
-  searchCatalogSongs: jest.fn(),
-  popularCatalogSongs: jest.fn(async () => []),
+  searchSongs: jest.fn(),
+  popularSongs: jest.fn(async () => []),
+  pingSearch: jest.fn(async () => true),
   getSong: jest.fn(),
   configureClient: jest.fn(),
 }));

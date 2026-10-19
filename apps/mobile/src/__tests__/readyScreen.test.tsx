@@ -16,8 +16,9 @@ import { gen, session } from '../test-utils/genAuthMock';
 import { job } from '../test-utils/jobFixtures';
 
 jest.mock('@nomad/api-decide', () => ({
-  searchCatalogSongs: jest.fn(),
-  popularCatalogSongs: jest.fn(async () => []),
+  searchSongs: jest.fn(),
+  popularSongs: jest.fn(async () => []),
+  pingSearch: jest.fn(async () => true),
   getSong: jest.fn(),
   configureClient: jest.fn(),
 }));

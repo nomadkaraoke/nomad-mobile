@@ -58,7 +58,7 @@ name: screens-long-title
     timeout: 5000
 - takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-discover-results
 - tapOn:
-    id: "song-row-421104"
+    id: "song-row-0"
 - extendedWaitUntil:
     visible:
       id: "song-badge"

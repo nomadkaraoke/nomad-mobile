@@ -1,8 +1,4 @@
-import {
-  getPopularSongsApiCatalogSongsPopularGet,
-  getSongApiCatalogSongsSongIdGet,
-  searchCatalogApiCatalogSongsGet,
-} from './client';
+import { getSongApiCatalogSongsSongIdGet } from './client';
 import {
   eventApiSearchEventPost,
   offlineIndexApiSearchOfflineIndexGet,
@@ -31,20 +27,14 @@ export type {
 
 // Readable facades over FastAPI's generated operation names.
 
-// Legacy catalog endpoints (decide /api/catalog/songs). Kept compiling for the current Discover screen;
-// Task C4 moves the app to the search service and deletes these callers.
-export const searchCatalogSongs = async (q: string, page = 1) =>
-  (await searchCatalogApiCatalogSongsGet({ query: { q, page, per_page: 20 } })).data;
-
-export const popularCatalogSongs = async (limit = 30) =>
-  (await getPopularSongsApiCatalogSongsPopularGet({ query: { limit } })).data;
-
+// Legacy catalog song by numeric id (decide /api/catalog/songs/{id}): the song page until it reads the search service.
 export const getSong = async (id: number) =>
   (await getSongApiCatalogSongsSongIdGet({ path: { song_id: id } })).data;
 
 // Search service (decide /api/search/*).
-export const searchSongs = async (q: string, opts: { limit?: number; signal?: AbortSignal } = {}) =>
-  (await searchApiSearchGet({ query: { q, limit: opts.limit }, signal: opts.signal })).data;
+/** `sid` is the client's search-session id (decide logs it with the search; it makes one up when absent). */
+export const searchSongs = async (q: string, opts: { limit?: number; sid?: string; signal?: AbortSignal } = {}) =>
+  (await searchApiSearchGet({ query: { q, limit: opts.limit, sid: opts.sid }, signal: opts.signal })).data;
 
 export const popularSongs = async (limit = 30) =>
   (await popularApiSearchPopularGet({ query: { limit } })).data;

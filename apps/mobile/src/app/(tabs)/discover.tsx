@@ -1,28 +1,29 @@
-import type { SongResponse } from '@nomad/api-decide';
+import type { SongGroup } from '@nomad/api-decide';
 import { useTranslations } from '@nomad/i18n';
 import { Button, List, Screen, Text, TextField } from '@nomad/ui';
 import { router, useIsFocused } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, AppState, Keyboard, Pressable, View } from 'react-native';
 
-import { useSongSearch } from '../../find/useSongSearch';
+import { MIN_QUERY_CHARS, useSearch } from '../../find/useSearch';
 
-function SongRow({ song }: { song: SongResponse }) {
+// Interim list until Task C5 renders the four search outcomes; the song page reads a song_key from Task C6.
+function SongRow({ song, index }: { song: SongGroup; index: number }) {
   const t = useTranslations('find');
   return (
     <Pressable
-      testID={`song-row-${song.id}`}
+      testID={`song-row-${index}`}
       accessibilityRole="button"
       onPress={() => {
         Keyboard.dismiss();
-        router.push({ pathname: '/song/[id]', params: { id: String(song.id) } });
+        router.push({ pathname: '/song/[id]', params: { id: song.song_key } });
       }}
       className="border-b border-border py-3"
     >
       <Text className="font-semibold">{song.title}</Text>
       <Text variant="muted">{song.artist}</Text>
-      <Text variant="muted" className={song.brand_count > 0 ? 'text-gold' : ''}>
-        {t('karaokeVersions', { count: song.brand_count })}
+      <Text variant="muted" className={song.version_count > 0 ? 'text-gold' : ''}>
+        {t('karaokeVersions', { count: song.version_count })}
       </Text>
     </Pressable>
   );
@@ -31,7 +32,9 @@ function SongRow({ song }: { song: SongResponse }) {
 export default function DiscoverScreen() {
   const t = useTranslations();
   const [query, setQuery] = useState('');
-  const { mode, songs, isLoading, isError, refetch, query: activeQuery } = useSongSearch(query);
+  const search = useSearch(query);
+  const popular = search.query.length < MIN_QUERY_CHARS;
+  const isError = search.error !== null;
 
   // The search field never takes focus by itself: on Android a resumed activity can hand focus back to
   // it (or a sheet can leave the keyboard up), covering the tab bar. Focus only on the user's tap.
@@ -47,15 +50,15 @@ export default function DiscoverScreen() {
     return () => sub?.remove(); // jest-expo's AppState mock returns no subscription
   }, [focused]);
 
-  const empty = isLoading ? (
+  const empty = search.loading ? (
     <ActivityIndicator testID="discover-loading" />
   ) : isError ? (
     <View className="items-start gap-2">
       <Text variant="error">{t('common.error')}</Text>
-      <Button testID="discover-retry" label={t('common.retry')} variant="secondary" onPress={refetch} />
+      <Button testID="discover-retry" label={t('common.retry')} variant="secondary" onPress={search.retry} />
     </View>
-  ) : mode === 'search' ? (
-    <Text variant="muted">{t('find.noResults', { query: activeQuery })}</Text>
+  ) : !popular ? (
+    <Text variant="muted">{t('find.noResults', { query: search.query })}</Text>
   ) : null;
 
   return (
@@ -69,13 +72,13 @@ export default function DiscoverScreen() {
         autoCapitalize="none"
         returnKeyType="search"
       />
-      {mode === 'popular' && !isError ? <Text variant="title">{t('find.popularHeading')}</Text> : null}
+      {popular && !isError ? <Text variant="title">{t('find.popularHeading')}</Text> : null}
       <View className="flex-1">
         <List
           testID="discover-list"
-          data={songs}
-          keyExtractor={(s) => String(s.id)}
-          renderItem={(s) => <SongRow song={s} />}
+          data={search.groups}
+          keyExtractor={(s) => s.song_key}
+          renderItem={(s, i) => <SongRow song={s} index={i} />}
           ListEmptyComponent={empty ?? undefined}
           ListFooterComponent={
             <View className="py-4">
