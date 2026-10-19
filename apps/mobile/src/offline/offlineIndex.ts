@@ -7,12 +7,15 @@ import { CryptoDigestAlgorithm, digest } from 'expo-crypto';
 import { Directory, File, Paths } from 'expo-file-system';
 import { openDatabaseSync, type SQLiteBindValue, type SQLiteDatabase } from 'expo-sqlite';
 import { Inflate } from 'pako';
+import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { useOfflineIndexStore, type OfflineIndexFile } from './offlineIndexStore';
 
 /** A background refresh is due after a week (or sooner when the app's schema/normaliser changed). */
 export const REFRESH_AFTER_MS = 7 * 24 * 60 * 60 * 1000;
+/** Once a refresh is due, the manifest is fetched at most this often (no new run → nothing to download). */
+export const RECHECK_AFTER_MS = 24 * 60 * 60 * 1000;
 
 // The list lives in the cache directory: it can always be downloaded again, so it stays out of iCloud and
 // Android backups. If the OS purges it, openOfflineReader() notices and the store goes back to `none`.
@@ -20,7 +23,8 @@ const DIR_NAME = 'offline';
 const CURRENT = 'current.db';
 const PREVIOUS = 'previous.db';
 const SQLITE_SIDECARS = ['-journal', '-wal', '-shm'];
-const CHUNK = 1 << 20;
+/** pako input slice and output chunk: small enough that each slice is a short JS stall. */
+const SLICE = 256 << 10;
 /** Share of the progress bar the network download takes; the rest is verify + unpack. */
 const DOWNLOAD_SHARE = 0.75;
 
@@ -59,10 +63,11 @@ function closeReader(): void {
   opened = null;
 }
 
-/** Test hook: forget the open reader (simulates an app restart). */
+/** Test hook: forget the open reader and the launch check (simulates an app restart). */
 export function resetOfflineReaderForTests(): void {
   closeReader();
   rejectedRun = null;
+  launchChecked = false;
 }
 
 /** A swap interrupted between its two renames leaves only previous.db: put it back. */
@@ -70,6 +75,50 @@ function restoreInterruptedSwap(): void {
   const current = fileIn(CURRENT);
   const previous = fileIn(PREVIOUS);
   if (!current.exists && previous.exists) previous.moveSync(current);
+}
+
+/**
+ * Deletes what a download, unpack or swap the app died in left behind (run-named `.part` files, previous.db,
+ * an orphaned current.db). Keeps current.db and its SQLite sidecars while a list is recorded. Never touches the
+ * open reader's file, so it is safe at any time no download is running.
+ */
+function sweepLeftovers(): void {
+  try {
+    const dir = offlineDir();
+    if (!dir.exists) return;
+    if (useOfflineIndexStore.getState().run === null) {
+      closeReader();
+      dir.delete(); // Nothing recorded: everything in it is an orphan.
+      return;
+    }
+    restoreInterruptedSwap();
+    for (const entry of dir.list()) {
+      if (entry.name === CURRENT || entry.name.startsWith(`${CURRENT}-`)) continue;
+      try {
+        entry.delete();
+      } catch {
+        // Already gone.
+      }
+    }
+  } catch {
+    // Best effort: the next launch tries again.
+  }
+}
+
+let launchChecked = false;
+
+/**
+ * Once per launch, on first use (the Me/offline UI mounting, or the background refresh): sweep leftovers, and
+ * reconcile the store with the disk (an OS cache purge deletes the file; a list for other versions is unusable).
+ */
+function checkOnLaunch(): void {
+  if (launchChecked || inFlight) return;
+  launchChecked = true;
+  sweepLeftovers();
+  const s = useOfflineIndexStore.getState();
+  if (s.run === null) return;
+  if (!fileIn(CURRENT).exists) s.cleared();
+  else if (s.run === rejectedRun) s.unusable();
 }
 
 type Verdict = 'ok' | 'corrupt' | 'incompatible';
@@ -94,7 +143,8 @@ function checkDatabase(db: SQLiteDatabase): Verdict {
 /**
  * expo-sqlite 57's close finalizes every statement on the connection, FTS5's internal ones included, and FTS5
  * then finalizes them again: SIGSEGV on closeSync() (seen on the iOS simulator). getAllSync/getFirstSync
- * finalize their own statements, so skipping that sweep leaks nothing.
+ * finalize their own statements, so skipping that sweep leaks nothing. expo-sqlite is pinned exactly in
+ * package.json because this option is @hidden: re-check it (and the crash) before upgrading.
  */
 const OPEN_OPTIONS = { useNewConnection: true, finalizeUnusedStatementsBeforeClosing: false } as const;
 
@@ -121,11 +171,7 @@ function verdictOf(name: string): { verdict: Verdict; db: SQLiteDatabase | null 
 export function openOfflineReader(): SqlReader | null {
   if (opened) return opened.reader;
   const { run } = useOfflineIndexStore.getState();
-  if (run === null) {
-    deleteQuietly(CURRENT); // An orphan from a download that never finished recording itself.
-    return null;
-  }
-  if (run === rejectedRun) return null;
+  if (run === null || run === rejectedRun) return null;
   restoreInterruptedSwap();
   if (!fileIn(CURRENT).exists) {
     useOfflineIndexStore.getState().cleared();
@@ -140,6 +186,7 @@ export function openOfflineReader(): SqlReader | null {
     }
     if (verdict === 'incompatible') {
       rejectedRun = run; // Kept: maybeRefreshOfflineIndex() replaces it.
+      useOfflineIndexStore.getState().unusable();
     } else {
       deleteQuietly(CURRENT);
       useOfflineIndexStore.getState().cleared();
@@ -181,11 +228,11 @@ async function verifyAndUnpack(
   dest.create({ overwrite: true });
   const output = dest.open();
   try {
-    const inflate = new Inflate({ chunkSize: CHUNK });
+    const inflate = new Inflate({ chunkSize: SLICE });
     inflate.onData = (chunk) => output.writeBytes(chunk);
     const total = compressed.length;
     for (let read = 0; read < total; ) {
-      const next = Math.min(total, read + CHUNK);
+      const next = Math.min(total, read + SLICE);
       inflate.push(compressed.subarray(read, next), next >= total);
       read = next;
       if (inflate.err) throw new Error(`gunzip: ${inflate.msg}`);
@@ -204,6 +251,7 @@ async function verifyAndUnpack(
 function swapIn(candidate: File): void {
   closeReader();
   rejectedRun = null;
+  restoreInterruptedSwap(); // Never delete previous.db while it is the only copy.
   deleteQuietly(PREVIOUS);
   const current = fileIn(CURRENT);
   if (current.exists) current.moveSync(fileIn(PREVIOUS));
@@ -214,6 +262,8 @@ function swapIn(candidate: File): void {
 
 async function runDownload(given: OfflineIndexManifest | undefined, signal: AbortSignal): Promise<void> {
   const store = useOfflineIndexStore.getState();
+  launchChecked = true;
+  sweepLeftovers(); // Single-flight: no other download's parts can be in use.
   store.started();
   let partNames: string[] = [];
   try {
@@ -320,10 +370,14 @@ async function isUnmetered(): Promise<boolean> {
  * normaliser differs from the file's, and only on an unmetered connection. Never makes the first download.
  */
 export async function maybeRefreshOfflineIndex(now = Date.now()): Promise<void> {
+  checkOnLaunch();
   const s = useOfflineIndexStore.getState();
   if (s.run === null || s.status === 'downloading') return;
+  const usable = isCompatible(s) && s.run !== rejectedRun;
   const recent = s.downloadedAt !== null && now - s.downloadedAt < REFRESH_AFTER_MS;
-  if (recent && isCompatible(s)) return;
+  if (recent && usable) return;
+  const checkedRecently = s.checkedAt !== null && now - s.checkedAt < RECHECK_AFTER_MS;
+  if (checkedRecently && usable) return;
   if (!(await isUnmetered())) return;
   let manifest: OfflineIndexManifest;
   try {
@@ -331,12 +385,14 @@ export async function maybeRefreshOfflineIndex(now = Date.now()): Promise<void> 
   } catch {
     return; // Try again next time.
   }
-  if (manifest.run === s.run && isCompatible(s)) return;
+  useOfflineIndexStore.getState().checked(now);
+  if (manifest.run === s.run && usable) return;
   await downloadOfflineIndex(manifest);
 }
 
-/** The offline list for UI: state plus the two actions. */
+/** The offline list for UI: state plus the two actions. The first mount per launch runs the launch check. */
 export function useOfflineIndex() {
+  useEffect(checkOnLaunch, []);
   const state = useOfflineIndexStore(
     useShallow((s) => ({ status: s.status, downloadedAt: s.downloadedAt, bytes: s.bytes, progress: s.progress })),
   );

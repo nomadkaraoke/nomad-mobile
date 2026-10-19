@@ -3,11 +3,13 @@ import NetInfo from '@react-native-community/netinfo';
 import { act, renderHook } from '@testing-library/react-native';
 import { gzip } from 'pako';
 
+import { appStorage } from '../../storage';
 import { dbJson, File, fsState, openDatabaseSync } from '../../test-utils/memoryFs';
 import {
   downloadOfflineIndex,
   maybeRefreshOfflineIndex,
   openOfflineReader,
+  RECHECK_AFTER_MS,
   REFRESH_AFTER_MS,
   removeOfflineIndex,
   resetOfflineReaderForTests,
@@ -276,7 +278,8 @@ describe('openOfflineReader', () => {
     fsState.files.set(CURRENT, new TextEncoder().encode(dbJson('r1', { normalizer: 4 })));
     expect(openOfflineReader()).toBeNull();
     expect(fsState.files.has(CURRENT)).toBe(true);
-    expect(useOfflineIndexStore.getState().run).toBe('r1');
+    // Kept for the refresh to replace, but not offered as ready.
+    expect(useOfflineIndexStore.getState()).toMatchObject({ run: 'r1', status: 'none' });
     // Not re-checked on every keystroke.
     const opens = (openDatabaseSync as jest.Mock).mock.calls.length;
     expect(openOfflineReader()).toBeNull();
@@ -297,6 +300,71 @@ describe('openOfflineReader', () => {
     new File(CURRENT).moveSync(new File(`${DIR}/previous.db`));
     expect(openOfflineReader()?.all('SELECT run FROM x')).toEqual([{ run: 'r1' }]);
     expect(fsState.files.has(CURRENT)).toBe(true);
+  });
+});
+
+describe('leftovers and the launch check', () => {
+  const seedParts = () => {
+    for (const name of ['old-run.db.gz.part', 'old-run.db.part', 'old-run.db.part-journal']) {
+      fsState.files.set(`${DIR}/${name}`, new Uint8Array([1, 2, 3]));
+    }
+  };
+
+  it('a download sweeps part files an earlier crashed run left behind', async () => {
+    await install('r1');
+    seedParts();
+    resetOfflineReaderForTests(); // relaunch
+    manifestMock.mockResolvedValueOnce(publish('r2'));
+    await downloadOfflineIndex();
+    expect(partFiles()).toEqual([]);
+    expect(fsState.files.has(`${DIR}/old-run.db.part-journal`)).toBe(false);
+    expect(useOfflineIndexStore.getState().run).toBe('r2');
+  });
+
+  it('the first use after a relaunch sweeps them too, keeping current.db', async () => {
+    await install('r1');
+    seedParts();
+    fsState.files.set(`${DIR}/previous.db`, new Uint8Array([9]));
+    resetOfflineReaderForTests(); // relaunch
+    netMock.mockResolvedValue(cellular);
+    await maybeRefreshOfflineIndex();
+    expect(partFiles()).toEqual([]);
+    expect([...fsState.files.keys()]).toEqual([CURRENT]);
+    expect(openOfflineReader()?.all('SELECT run FROM x')).toEqual([{ run: 'r1' }]);
+  });
+
+  it('with no list recorded, the sweep removes everything (an orphaned current.db included)', () => {
+    fsState.dirs.add(DIR);
+    fsState.files.set(CURRENT, new TextEncoder().encode(dbJson('orphan')));
+    seedParts();
+    renderHook(() => useOfflineIndex());
+    expect(fsState.files.size).toBe(0);
+  });
+
+  it('openOfflineReader does no file work when the user never opted in', () => {
+    fsState.dirs.add(DIR);
+    fsState.files.set(CURRENT, new TextEncoder().encode(dbJson('orphan')));
+    expect(openOfflineReader()).toBeNull();
+    expect(fsState.log).toEqual([]);
+    expect(openDatabaseSync).not.toHaveBeenCalled();
+  });
+
+  it('mounting the hook after the OS purged the cache resets to none', async () => {
+    await install('r1');
+    resetOfflineReaderForTests();
+    fsState.files.delete(CURRENT);
+    const { result } = renderHook(() => useOfflineIndex());
+    expect(result.current.status).toBe('none');
+    expect(useOfflineIndexStore.getState().run).toBeNull();
+  });
+
+  it('runs once per launch', async () => {
+    await install('r1');
+    resetOfflineReaderForTests();
+    renderHook(() => useOfflineIndex());
+    seedParts();
+    renderHook(() => useOfflineIndex());
+    expect(partFiles()).toHaveLength(2);
   });
 });
 
@@ -342,6 +410,25 @@ describe('maybeRefreshOfflineIndex', () => {
     manifestMock.mockResolvedValueOnce(publish('r2'));
     await maybeRefreshOfflineIndex();
     expect(useOfflineIndexStore.getState().run).toBe('r2');
+  });
+
+  it('once due, fetches the manifest at most daily while the server has no new run', async () => {
+    await install('r1');
+    const t0 = Date.now();
+    useOfflineIndexStore.setState({ downloadedAt: t0 - 8 * 24 * 3600 * 1000 });
+    netMock.mockResolvedValue(wifi);
+    manifestMock.mockResolvedValue(publish('r1'));
+
+    await maybeRefreshOfflineIndex(t0);
+    expect(manifestMock).toHaveBeenCalledTimes(2); // install + this check
+    expect(useOfflineIndexStore.getState().checkedAt).toBe(t0);
+
+    await maybeRefreshOfflineIndex(t0 + RECHECK_AFTER_MS - 1);
+    expect(manifestMock).toHaveBeenCalledTimes(2);
+
+    await maybeRefreshOfflineIndex(t0 + RECHECK_AFTER_MS);
+    expect(manifestMock).toHaveBeenCalledTimes(3);
+    expect(File.downloadFileAsync).toHaveBeenCalledTimes(1);
   });
 
   it('skips the download when the server still has the same run', async () => {
@@ -414,6 +501,14 @@ describe('persistence and the hook', () => {
     });
     return mod.useOfflineIndexStore.getState();
   };
+
+  it('a persisted list built for other versions starts as none (kept for the refresh)', async () => {
+    await install('r1');
+    useOfflineIndexStore.getState().checked(123);
+    const raw = JSON.parse(appStorage.getString('offline.index.v1')!);
+    appStorage.set('offline.index.v1', JSON.stringify({ ...raw, normalizer: 2 }));
+    expect(relaunch()).toMatchObject({ status: 'none', run: 'r1', normalizer: 2, checkedAt: 123 });
+  });
 
   it('the downloaded file survives an app restart; a half-finished download does not', async () => {
     await install('r1');
