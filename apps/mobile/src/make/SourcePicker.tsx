@@ -7,7 +7,7 @@ import {
   type ConfidenceTier,
   type SearchConfidence,
 } from '@nomad/core';
-import { useTranslations } from '@nomad/i18n';
+import { isolate, useTranslations } from '@nomad/i18n';
 import { Text } from '@nomad/ui';
 import { useState } from 'react';
 import { Platform, Pressable, View } from 'react-native';
@@ -65,7 +65,10 @@ function Tags(props: { result: AudioResult; searchTitle: string; showMatch: bool
   );
 }
 
-/** The raw file name (monospace), so the person can check it is their song (gen's "Filename:"). */
+/**
+ * The raw file name (monospace), so the person can check it is their song (gen's "Filename:"). Isolated: in an
+ * RTL sentence a Latin name like "01 - Song.flac" otherwise has its parts reordered.
+ */
 function Filename({ result }: { result: AudioResult }) {
   const t = useTranslations('make');
   if (!result.target_file) return null;
@@ -73,7 +76,7 @@ function Filename({ result }: { result: AudioResult }) {
     <Text variant="muted">
       {t('filename')}{' '}
       <Text testID={`source-filename-${result.index}`} variant="muted" className="text-text" style={MONO}>
-        {result.target_file}
+        {isolate(result.target_file)}
       </Text>
     </Text>
   );
@@ -124,7 +127,7 @@ export function PickCard(props: {
       </Text>
       <Filename result={r} />
       <Text variant="muted">
-        {t('release')} <Text className="text-text">{[getDisplayName(r), r.title].filter(Boolean).join(' - ')}</Text>
+        {t('release')} <Text className="text-text">{isolate([getDisplayName(r), r.title].filter(Boolean).join(' - '))}</Text>
       </Text>
       <Tags result={r} searchTitle={props.songTitle} showMatch={false} />
       <Metadata result={r} />

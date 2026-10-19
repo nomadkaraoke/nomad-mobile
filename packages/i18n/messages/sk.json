@@ -8,15 +8,18 @@
     "title": "Profil",
     "buyCredits": "Kúpiť kredity",
     "offlineDownload": "Stiahnuť zoznam skladieb na offline použitie",
-    "offlineDownloadSize": "Stiahnuť zoznam skladieb na offline použitie ({size} MB)",
+    "offlineDownloadSize": "Stiahnuť zoznam skladieb na offline použitie ({size} MB)",
     "offlineDownloading": "Sťahuje sa zoznam skladieb… {percent} %",
     "offlineError": "Zoznam skladieb sa nepodarilo stiahnuť.",
     "offlineHeading": "Offline zoznam skladieb",
     "offlineHint": "Hľadaj skladby aj bez internetu zo zoznamu uloženého v tomto telefóne.",
     "offlineRemove": "Odstrániť offline zoznam skladieb",
     "offlineRetry": "Skúsiť stiahnuť znova",
-    "offlineSaved": "Zoznam skladieb je uložený v tomto telefóne ({size} MB)",
-    "offlineUpdated": "Zoznam skladieb bol aktualizovaný {days, plural, =0 {dnes} one {pred # dňom} few {pred # dňami} other {pred # dňami}}"
+    "offlineSaved": "Zoznam skladieb je uložený v tomto telefóne ({size} MB)",
+    "offlineUpdated": "Zoznam skladieb bol aktualizovaný {days, plural, =0 {dnes} one {pred # dňom} few {pred # dňami} other {pred # dňami}}",
+    "offlineRemoveTitle": "Odstrániť offline zoznam skladieb?",
+    "offlineRemoveBody": "Vyhľadávanie bez pripojenia nebude fungovať, kým ho znova nestiahneš.",
+    "offlineRemoveConfirm": "Odstrániť"
   },
   "common": {
     "error": "Niečo sa pokazilo.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Stále si môžeš vytvoriť vlastnú verziu zo zvuku, ktorý si vyberieš.",
     "noKaraokeHint": "Vytvor si z nej vlastné karaoke video, pripravené na spievanie a zdieľanie.",
     "offlineMissing": "Si offline a táto skladba nie je v zozname skladieb uloženom v tomto telefóne.",
-    "offlineNote": "Offline · zo zoznamu skladieb uloženého v tomto telefóne"
+    "offlineNote": "Offline · zo zoznamu skladieb uloženého v tomto telefóne",
+    "cloudErrorNote": "Vyhľadávanie je momentálne nedostupné · zobrazuje sa zoznam skladieb uložený v tomto telefóne"
   },
   "tabs": {
     "discover": "Objavovať",

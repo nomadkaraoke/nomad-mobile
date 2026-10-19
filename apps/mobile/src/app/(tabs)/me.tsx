@@ -5,7 +5,7 @@ import { isolate, LOCALE_NAMES, useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, Alert, View } from 'react-native';
 
 import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
@@ -22,16 +22,25 @@ const daysSince = (at: number) => Math.max(0, Math.floor((Date.now() - at) / DAY
  */
 function OfflineSongList() {
   const t = useTranslations('account');
+  const tCommon = useTranslations('common');
   const locale = currentLocale();
   const { status, bytes, downloadedAt, progress, download, remove } = useOfflineIndex();
-  const hasList = downloadedAt !== null && (status === 'ready' || status === 'error');
+  // A refresh download keeps the list already on the phone (and its size/date) until the new one is swapped in.
+  const hasList = downloadedAt !== null && status !== 'none';
+  // Only for the size on the Download button: not while downloading, and not in the error state (its button is
+  // Try again, without a size).
   const manifest = useQuery({
     queryKey: ['decide', 'offline-index-manifest'],
     queryFn: getOfflineIndexManifest,
-    enabled: !hasList && status !== 'downloading',
+    enabled: !hasList && status === 'none',
     staleTime: 60 * 60 * 1000,
     retry: false,
   });
+  const confirmRemove = () =>
+    Alert.alert(t('offlineRemoveTitle'), t('offlineRemoveBody'), [
+      { text: tCommon('cancel'), style: 'cancel' },
+      { text: t('offlineRemoveConfirm'), style: 'destructive', onPress: () => void remove() },
+    ]);
 
   return (
     <View testID="me-offline" className="gap-2 rounded-xl border border-border bg-card p-3">
@@ -72,8 +81,8 @@ function OfflineSongList() {
           onPress={() => void download()}
         />
       ) : null}
-      {hasList ? (
-        <Button testID="me-offline-remove" label={t('offlineRemove')} variant="secondary" onPress={() => void remove()} />
+      {hasList && status !== 'downloading' ? (
+        <Button testID="me-offline-remove" label={t('offlineRemove')} variant="secondary" onPress={confirmRemove} />
       ) : null}
     </View>
   );

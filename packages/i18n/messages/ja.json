@@ -8,15 +8,18 @@
     "title": "マイページ",
     "buyCredits": "クレジットを購入",
     "offlineDownload": "オフライン用の曲リストをダウンロード",
-    "offlineDownloadSize": "オフライン用の曲リストをダウンロード ({size} MB)",
+    "offlineDownloadSize": "オフライン用の曲リストをダウンロード ({size} MB)",
     "offlineDownloading": "曲リストをダウンロード中… {percent}%",
     "offlineError": "曲リストをダウンロードできませんでした。",
     "offlineHeading": "オフライン曲リスト",
     "offlineHint": "この端末に保存されたリストから、インターネット接続なしで曲を検索できます。",
     "offlineRemove": "オフライン曲リストを削除",
     "offlineRetry": "もう一度ダウンロードする",
-    "offlineSaved": "この端末に曲リストを保存済み ({size} MB)",
-    "offlineUpdated": "曲リストの更新: {days, plural, =0 {今日} one {#日前} other {#日前}}"
+    "offlineSaved": "この端末に曲リストを保存済み ({size} MB)",
+    "offlineUpdated": "曲リストの更新: {days, plural, =0 {今日} one {#日前} other {#日前}}",
+    "offlineRemoveTitle": "オフライン曲リストを削除しますか？",
+    "offlineRemoveBody": "もう一度ダウンロードするまで、オフラインでの検索は使えません。",
+    "offlineRemoveConfirm": "削除"
   },
   "common": {
     "error": "問題が発生しました。",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "お好みの音源から、自分だけのカラオケ動画を作成することもできます。",
     "noKaraokeHint": "自分だけのカラオケ動画を作成して、歌ったりシェアしたりしましょう。",
     "offlineMissing": "オフラインです。この曲はこの端末に保存された曲リストに含まれていません。",
-    "offlineNote": "オフライン · この端末に保存された曲リストより"
+    "offlineNote": "オフライン · この端末に保存された曲リストより",
+    "cloudErrorNote": "現在、検索に接続できません · この端末に保存された曲リストを表示しています"
   },
   "tabs": {
     "discover": "見つける",

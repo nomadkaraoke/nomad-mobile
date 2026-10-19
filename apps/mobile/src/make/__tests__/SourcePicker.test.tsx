@@ -25,13 +25,14 @@ it('a Spotify row shows the track (target_file), not the album', () => {
   groups([spotify(4, 'Starlight')]);
   expect(screen.getByTestId('source-title-4')).toHaveTextContent('Starlight');
   expect(screen.queryByText('Black Holes and Revelations')).toBeNull();
-  expect(screen.getByTestId('make-source-4')).toHaveTextContent(/Muse · Black Holes and Revelations/);
+  expect(screen.getByTestId('make-source-4')).toHaveTextContent(/Muse\u2069 · \u2068Black Holes and Revelations/);
 });
 
 it('rows show the raw filename in monospace and the release details', () => {
   groups([studio(1, { label: 'Warner', edition_info: 'Deluxe' })]);
   const name = screen.getByTestId('source-filename-1');
-  expect(name).toHaveTextContent('03 - Starlight.flac');
+  // Bidi-isolated, so an RTL sentence can't reorder the parts of a Latin file name.
+  expect(name).toHaveTextContent('\u206803 - Starlight.flac\u2069', { normalizer: (t: string) => t });
   expect(name).toHaveStyle({ fontFamily: 'Menlo' });
   expect(screen.getByText('[Album / 2006 / Warner / Deluxe / CD]')).toBeTruthy();
   expect(screen.getByText('FLAC 16bit CD')).toBeTruthy();
@@ -110,8 +111,8 @@ describe('pick card', () => {
   it('shows the filename, release, quality, availability and release details', () => {
     card([bestChoice(0)], bestChoice(0));
     const pick = within(screen.getByTestId('make-pick'));
-    expect(screen.getByTestId('source-filename-0')).toHaveTextContent('03 - Starlight.flac');
-    expect(pick.getByText('Muse - Black Holes and Revelations')).toBeTruthy();
+    expect(screen.getByTestId('source-filename-0')).toHaveTextContent(/03 - Starlight\.flac/);
+    expect(pick.getByText('\u2068Muse - Black Holes and Revelations\u2069')).toBeTruthy();
     expect(screen.getByTestId('source-availability-0')).toHaveTextContent('High availability');
     expect(pick.getByText('[Album / 2006 / CD]')).toBeTruthy();
     expect(screen.queryByTestId('make-pick-warning-0')).toBeNull();

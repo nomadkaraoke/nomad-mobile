@@ -8,15 +8,18 @@
     "title": "Moi",
     "buyCredits": "Acheter des crédits",
     "offlineDownload": "Télécharger la liste de chansons pour une utilisation hors ligne",
-    "offlineDownloadSize": "Télécharger la liste de chansons pour une utilisation hors ligne ({size} Mo)",
+    "offlineDownloadSize": "Télécharger la liste de chansons pour une utilisation hors ligne ({size} Mo)",
     "offlineDownloading": "Téléchargement de la liste de chansons… {percent} %",
     "offlineError": "Impossible de télécharger la liste de chansons.",
     "offlineHeading": "Liste de chansons hors ligne",
     "offlineHint": "Recherche des chansons sans connexion, depuis une liste enregistrée sur ce téléphone.",
     "offlineRemove": "Supprimer la liste de chansons hors ligne",
     "offlineRetry": "Réessayer le téléchargement",
-    "offlineSaved": "Liste de chansons enregistrée sur ce téléphone ({size} Mo)",
-    "offlineUpdated": "Liste de chansons mise à jour {days, plural, =0 {aujourd'hui} one {il y a # jour} other {il y a # jours}}"
+    "offlineSaved": "Liste de chansons enregistrée sur ce téléphone ({size} Mo)",
+    "offlineUpdated": "Liste de chansons mise à jour {days, plural, =0 {aujourd'hui} one {il y a # jour} other {il y a # jours}}",
+    "offlineRemoveTitle": "Supprimer la liste de chansons hors ligne ?",
+    "offlineRemoveBody": "La recherche hors connexion ne fonctionnera plus tant que vous ne l'aurez pas téléchargée à nouveau.",
+    "offlineRemoveConfirm": "Supprimer"
   },
   "common": {
     "error": "Une erreur s'est produite.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Tu peux quand même créer ta propre version, à partir de l'audio de ton choix.",
     "noKaraokeHint": "Crée ta propre vidéo karaoké à partir de ce morceau, prête à chanter et à partager.",
     "offlineMissing": "Tu es hors ligne et cette chanson ne figure pas dans la liste enregistrée sur ce téléphone.",
-    "offlineNote": "Hors ligne · depuis la liste de chansons enregistrée sur ce téléphone"
+    "offlineNote": "Hors ligne · depuis la liste de chansons enregistrée sur ce téléphone",
+    "cloudErrorNote": "Impossible d'accéder à la recherche pour l'instant · affichage de la liste de chansons enregistrée sur ce téléphone"
   },
   "tabs": {
     "discover": "Découvrir",

@@ -2,7 +2,6 @@ import { getSongDetail, type SongDetail } from '@nomad/api-decide';
 import { offlineSongGroup } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { ArtTile, Button, Screen, Text, TextField } from '@nomad/ui';
-import { useNetInfo } from '@react-native-community/netinfo';
 import { useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, type ReactNode } from 'react';
@@ -14,6 +13,7 @@ import { VersionList } from '../../find/components/VersionList';
 import { logEvent } from '../../find/searchSession';
 import { toGroup } from '../../find/useSearch';
 import { identifiedIntent, typedIntent, useMakeIntent, type MakeIntent } from '../../make/intentStore';
+import { useOffline } from '../../net/useOffline';
 import { openOfflineReader } from '../../offline/offlineIndex';
 import { useOfflineIndexStore } from '../../offline/offlineIndexStore';
 
@@ -75,7 +75,7 @@ function MakeAnySong() {
 function KnownSong({ songKey }: { songKey: string }) {
   const t = useTranslations();
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
-  const offline = useNetInfo().isConnected === false;
+  const offline = useOffline();
   const run = useOfflineIndexStore((s) => s.run);
 
   // The offline list answers at once (and is all there is without a connection); decide's answer replaces it.
@@ -92,6 +92,9 @@ function KnownSong({ songKey }: { songKey: string }) {
   });
   const detail = cloud.data ?? local.data ?? null;
   const fromOffline = !cloud.data && detail !== null;
+  // Online, the offline list fills the page while decide loads without a note; it only says so when it is all
+  // there is (no connection, or decide failed).
+  const offlineNote = fromOffline ? (offline ? t('song.offlineNote') : cloud.isError ? t('song.cloudErrorNote') : null) : null;
   const canMake = detail !== null && !offline;
 
   const offerLogged = useRef(false);
@@ -118,9 +121,9 @@ function KnownSong({ songKey }: { songKey: string }) {
     const hasVersions = versions.length > 0;
     body = (
       <>
-        {fromOffline ? (
+        {offlineNote ? (
           <View testID="song-offline-note" className="rounded-lg bg-border px-3 py-2">
-            <Text className="text-xs">{t('song.offlineNote')}</Text>
+            <Text className="text-xs">{offlineNote}</Text>
           </View>
         ) : null}
         {/* Decide's catalog has no cover art yet, so the tile is generated. */}

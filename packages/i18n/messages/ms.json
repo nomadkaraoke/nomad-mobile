@@ -8,15 +8,18 @@
     "title": "Saya",
     "buyCredits": "Beli kredit",
     "offlineDownload": "Muat turun senarai lagu untuk kegunaan luar talian",
-    "offlineDownloadSize": "Muat turun senarai lagu untuk kegunaan luar talian ({size} MB)",
+    "offlineDownloadSize": "Muat turun senarai lagu untuk kegunaan luar talian ({size} MB)",
     "offlineDownloading": "Memuat turun senarai lagu… {percent}%",
     "offlineError": "Tidak dapat memuat turun senarai lagu.",
     "offlineHeading": "Senarai lagu luar talian",
     "offlineHint": "Cari lagu tanpa sambungan, daripada senarai yang disimpan pada telefon ini.",
     "offlineRemove": "Padamkan senarai lagu luar talian",
     "offlineRetry": "Cuba muat turun sekali lagi",
-    "offlineSaved": "Senarai lagu disimpan pada telefon ini ({size} MB)",
-    "offlineUpdated": "Senarai lagu dikemas kini {days, plural, =0 {hari ini} one {# hari lalu} other {# hari lalu}}"
+    "offlineSaved": "Senarai lagu disimpan pada telefon ini ({size} MB)",
+    "offlineUpdated": "Senarai lagu dikemas kini {days, plural, =0 {hari ini} one {# hari lalu} other {# hari lalu}}",
+    "offlineRemoveTitle": "Padamkan senarai lagu luar talian?",
+    "offlineRemoveBody": "Carian tanpa sambungan tidak akan berfungsi sehingga anda memuat turunnya semula.",
+    "offlineRemoveConfirm": "Padam"
   },
   "common": {
     "error": "Sesuatu telah berlaku masalah.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Anda masih boleh cipta versi anda sendiri, daripada audio yang anda pilih.",
     "noKaraokeHint": "Cipta video karaoke anda sendiri untuk lagu ini, sedia untuk dinyanyikan dan dikongsi.",
     "offlineMissing": "Anda sedang berada di luar talian, dan lagu ini tiada dalam senarai lagu yang disimpan pada telefon ini.",
-    "offlineNote": "Luar talian · daripada senarai lagu yang disimpan pada telefon ini"
+    "offlineNote": "Luar talian · daripada senarai lagu yang disimpan pada telefon ini",
+    "cloudErrorNote": "Carian tidak dapat dicapai buat masa ini · menunjukkan senarai lagu yang disimpan pada telefon ini"
   },
   "tabs": {
     "discover": "Teroka",

@@ -59,7 +59,8 @@ function details(r: AudioResult, t: MakeT): string[] {
 /** The pick card's reason line, e.g. "Studio album · Black Holes and Revelations · 2006 · lossless · reliable download". */
 export function pickReason(r: AudioResult, t: MakeT): string {
   // A torrent's or Spotify result's title is the release (album) name; a YouTube title is the video itself.
-  const release = !isYoutube(r) && r.title ? [r.title] : [];
+  // Isolated: a Latin album name inside an RTL sentence otherwise swaps places with its neighbours.
+  const release = !isYoutube(r) && r.title ? [isolate(r.title)] : [];
   return [t(`reason.${kindKey(r)}`), ...release, ...details(r, t)].join(' · ');
 }
 
@@ -69,9 +70,13 @@ export function pickReason(r: AudioResult, t: MakeT): string {
  */
 export function sourceRowText(r: AudioResult, t: MakeT): { title: string; detail: string } {
   if (isSpotify(r) && r.target_file) {
-    return { title: r.target_file, detail: [r.artist, r.title, ...details(r, t)].filter(Boolean).join(' · ') };
+    return {
+      title: r.target_file,
+      detail: [r.artist, r.title].filter(Boolean).map(isolate).concat(details(r, t)).join(' · '),
+    };
   }
-  return { title: r.title, detail: [getDisplayName(r), ...details(r, t)].filter(Boolean).join(' · ') };
+  const name = getDisplayName(r);
+  return { title: r.title, detail: [...(name ? [isolate(name)] : []), ...details(r, t)].join(' · ') };
 }
 
 export type Availability = 'high' | 'medium' | 'low';

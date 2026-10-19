@@ -22,9 +22,9 @@ import {
   type SongRef as CoreSongRef,
   type SqlReader,
 } from '@nomad/core';
-import { useNetInfo } from '@react-native-community/netinfo';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useOffline } from '../net/useOffline';
 import { openOfflineReader } from '../offline/offlineIndex';
 import { currentSid } from './searchSession';
 
@@ -208,8 +208,7 @@ export function useSearch(rawQuery: string): SearchState {
   useEffect(() => {
     keystroke.current = { value: typed, at: Date.now() };
   }, [typed]);
-  const net = useNetInfo();
-  const offline = net.isConnected === false;
+  const offline = useOffline();
   const [data, setData] = useState<Data>(INITIAL);
   const [attempt, setAttempt] = useState(0);
   const generation = useRef(0);

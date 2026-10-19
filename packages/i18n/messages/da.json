@@ -8,15 +8,18 @@
     "title": "Mig",
     "buyCredits": "Køb kreditter",
     "offlineDownload": "Download sangliste til offlinebrug",
-    "offlineDownloadSize": "Download sangliste til offlinebrug ({size} MB)",
+    "offlineDownloadSize": "Download sangliste til offlinebrug ({size} MB)",
     "offlineDownloading": "Downloader sanglisten… {percent}%",
     "offlineError": "Kunne ikke downloade sanglisten.",
     "offlineHeading": "Offline sangliste",
     "offlineHint": "Søg efter sange uden internetforbindelse fra en liste, der er gemt på denne telefon.",
     "offlineRemove": "Fjern offline sangliste",
     "offlineRetry": "Prøv at downloade igen",
-    "offlineSaved": "Sangliste gemt på denne telefon ({size} MB)",
-    "offlineUpdated": "Sangliste opdateret {days, plural, =0 {i dag} one {for # dag siden} other {for # dage siden}}"
+    "offlineSaved": "Sangliste gemt på denne telefon ({size} MB)",
+    "offlineUpdated": "Sangliste opdateret {days, plural, =0 {i dag} one {for # dag siden} other {for # dage siden}}",
+    "offlineRemoveTitle": "Fjern offline sanglisten?",
+    "offlineRemoveBody": "Søgning uden forbindelse virker ikke, før du downloader den igen.",
+    "offlineRemoveConfirm": "Fjern"
   },
   "common": {
     "error": "Der gik noget galt.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Du kan stadig lave din egen ud fra den lydfil, du vælger.",
     "noKaraokeHint": "Lav din egen karaokevideo af den, klar til at synge og dele.",
     "offlineMissing": "Du er offline, og denne sang findes ikke i sanglisten, der er gemt på denne telefon.",
-    "offlineNote": "Offline · fra sanglisten gemt på denne telefon"
+    "offlineNote": "Offline · fra sanglisten gemt på denne telefon",
+    "cloudErrorNote": "Kan ikke få forbindelse til søgningen lige nu · viser sanglisten gemt på denne telefon"
   },
   "tabs": {
     "discover": "Udforsk",

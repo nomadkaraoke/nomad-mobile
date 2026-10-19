@@ -8,15 +8,18 @@
     "title": "我的",
     "buyCredits": "购买点数",
     "offlineDownload": "下载离线歌单",
-    "offlineDownloadSize": "下载离线歌单（{size} MB）",
+    "offlineDownloadSize": "下载离线歌单（{size} MB）",
     "offlineDownloading": "正在下载歌单… {percent}%",
     "offlineError": "歌单下载失败。",
     "offlineHeading": "离线歌单",
     "offlineHint": "即使没有网络，也可以直接搜索已保存在本设备上的歌单。",
     "offlineRemove": "移除离线歌单",
     "offlineRetry": "重新下载",
-    "offlineSaved": "歌单已保存在本设备上（{size} MB）",
-    "offlineUpdated": "歌单更新于 {days, plural, =0 {今天} one {# 天前} other {# 天前}}"
+    "offlineSaved": "歌单已保存在本设备上（{size} MB）",
+    "offlineUpdated": "歌单更新于 {days, plural, =0 {今天} one {# 天前} other {# 天前}}",
+    "offlineRemoveTitle": "移除离线歌单？",
+    "offlineRemoveBody": "重新下载之前，无法在没有网络时搜索。",
+    "offlineRemoveConfirm": "移除"
   },
   "common": {
     "error": "出错了。",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "你仍然可以用自己挑选的音频来制作专属版本。",
     "noKaraokeHint": "为这首歌制作专属的卡拉OK视频，随时开唱与分享。",
     "offlineMissing": "您当前处于离线状态，且本设备保存的歌单中未包含这首歌曲。",
-    "offlineNote": "离线 · 来自保存在本设备上的歌单"
+    "offlineNote": "离线 · 来自保存在本设备上的歌单",
+    "cloudErrorNote": "暂时无法连接搜索服务 · 正在显示保存在本设备上的歌单"
   },
   "tabs": {
     "discover": "发现",

@@ -8,15 +8,18 @@
     "title": "Moje konto",
     "buyCredits": "Kup kredyty",
     "offlineDownload": "Pobierz listę utworów do użytku offline",
-    "offlineDownloadSize": "Pobierz listę utworów do użytku offline ({size} MB)",
+    "offlineDownloadSize": "Pobierz listę utworów do użytku offline ({size} MB)",
     "offlineDownloading": "Pobieranie listy utworów… {percent}%",
     "offlineError": "Nie udało się pobrać listy utworów.",
     "offlineHeading": "Lista utworów offline",
     "offlineHint": "Wyszukuj utwory bez połączenia z internetem, korzystając z listy zapisanej na tym telefonie.",
     "offlineRemove": "Usuń listę utworów offline",
     "offlineRetry": "Spróbuj pobrać ponownie",
-    "offlineSaved": "Lista utworów zapisana na tym telefonie ({size} MB)",
-    "offlineUpdated": "Lista utworów zaktualizowana {days, plural, =0 {dzisiaj} one {# dzień temu} few {# dni temu} many {# dni temu} other {# dni temu}}"
+    "offlineSaved": "Lista utworów zapisana na tym telefonie ({size} MB)",
+    "offlineUpdated": "Lista utworów zaktualizowana {days, plural, =0 {dzisiaj} one {# dzień temu} few {# dni temu} many {# dni temu} other {# dni temu}}",
+    "offlineRemoveTitle": "Usunąć listę utworów offline?",
+    "offlineRemoveBody": "Wyszukiwanie bez połączenia nie będzie działać, dopóki nie pobierzesz jej ponownie.",
+    "offlineRemoveConfirm": "Usuń"
   },
   "common": {
     "error": "Coś poszło nie tak.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Nadal możesz stworzyć własną wersję z wybranego pliku audio.",
     "noKaraokeHint": "Stwórz własne wideo karaoke z tego utworu – gotowe do śpiewania i udostępniania.",
     "offlineMissing": "Jesteś offline, a tego utworu nie ma na liście zapisanej na tym telefonie.",
-    "offlineNote": "Offline · z listy utworów zapisanej na tym telefonie"
+    "offlineNote": "Offline · z listy utworów zapisanej na tym telefonie",
+    "cloudErrorNote": "Nie można teraz połączyć się z wyszukiwarką · pokazujemy listę utworów zapisaną na tym telefonie"
   },
   "tabs": {
     "discover": "Odkrywaj",

@@ -35,3 +35,12 @@ export const APPLE_SIGNIN_ENABLED = process.env.EXPO_PUBLIC_APPLE_SIGNIN === '1'
 export function fakeSocialEnabled(): boolean {
   return process.env.EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN === '1' && isLocalUrl(GEN_API_URL);
 }
+
+/**
+ * Debug/E2E only: search, the song page and the make offers behave as if the device had no connection (the
+ * offline song list answers; no cloud search). Only against a local decide, so a misconfigured build can never
+ * ship it. The Me screen's offline-list download still uses decide, so a flow can download the list first.
+ */
+export function searchForceOffline(): boolean {
+  return process.env.EXPO_PUBLIC_SEARCH_FORCE_OFFLINE === '1' && isLocalUrl(DECIDE_API_URL);
+}

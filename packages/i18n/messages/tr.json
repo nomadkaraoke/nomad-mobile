@@ -8,15 +8,18 @@
     "title": "Ben",
     "buyCredits": "Kredi satın al",
     "offlineDownload": "Şarkı listesini çevrimdışı kullanım için indir",
-    "offlineDownloadSize": "Şarkı listesini çevrimdışı kullanım için indir ({size} MB)",
+    "offlineDownloadSize": "Şarkı listesini çevrimdışı kullanım için indir ({size} MB)",
     "offlineDownloading": "Şarkı listesi indiriliyor… %{percent}",
     "offlineError": "Şarkı listesi indirilemedi.",
     "offlineHeading": "Çevrimdışı şarkı listesi",
     "offlineHint": "Bu telefona kaydedilen liste sayesinde internet bağlantın yokken de şarkı ara.",
     "offlineRemove": "Çevrimdışı şarkı listesini kaldır",
     "offlineRetry": "İndirmeyi tekrar dene",
-    "offlineSaved": "Şarkı listesi bu telefona kaydedildi ({size} MB)",
-    "offlineUpdated": "Şarkı listesi {days, plural, =0 {bugün} one {# gün önce} other {# gün önce}} güncellendi"
+    "offlineSaved": "Şarkı listesi bu telefona kaydedildi ({size} MB)",
+    "offlineUpdated": "Şarkı listesi {days, plural, =0 {bugün} one {# gün önce} other {# gün önce}} güncellendi",
+    "offlineRemoveTitle": "Çevrimdışı şarkı listesi kaldırılsın mı?",
+    "offlineRemoveBody": "Tekrar indirene kadar bağlantısız arama çalışmaz.",
+    "offlineRemoveConfirm": "Kaldır"
   },
   "common": {
     "error": "Bir şeyler ters gitti.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Yine de seçtiğin ses dosyasından kendi karaoke videonu yapabilirsin.",
     "noKaraokeHint": "Şarkı söylemeye ve paylaşmaya hazır, kendi karaoke videonu oluştur.",
     "offlineMissing": "Çevrimdışısın ve bu şarkı telefonuna kaydedilen şarkı listesinde bulunmuyor.",
-    "offlineNote": "Çevrimdışı · Bu telefona kaydedilen şarkı listesinden"
+    "offlineNote": "Çevrimdışı · Bu telefona kaydedilen şarkı listesinden",
+    "cloudErrorNote": "Aramaya şu anda ulaşılamıyor · bu telefona kaydedilen şarkı listesi gösteriliyor"
   },
   "tabs": {
     "discover": "Keşfet",

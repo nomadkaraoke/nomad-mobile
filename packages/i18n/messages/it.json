@@ -8,15 +8,18 @@
     "title": "Profilo",
     "buyCredits": "Acquista crediti",
     "offlineDownload": "Scarica l'elenco dei brani per l'uso offline",
-    "offlineDownloadSize": "Scarica l'elenco dei brani per l'uso offline ({size} MB)",
+    "offlineDownloadSize": "Scarica l'elenco dei brani per l'uso offline ({size} MB)",
     "offlineDownloading": "Download dell'elenco dei brani in corso… {percent}%",
     "offlineError": "Impossibile scaricare l'elenco dei brani.",
     "offlineHeading": "Elenco dei brani offline",
     "offlineHint": "Cerca i brani anche senza connessione, da un elenco salvato su questo telefono.",
     "offlineRemove": "Rimuovi l'elenco dei brani offline",
     "offlineRetry": "Riprova a scaricare",
-    "offlineSaved": "Elenco dei brani salvato su questo telefono ({size} MB)",
-    "offlineUpdated": "Elenco dei brani aggiornato {days, plural, =0 {oggi} one {# giorno fa} other {# giorni fa}}"
+    "offlineSaved": "Elenco dei brani salvato su questo telefono ({size} MB)",
+    "offlineUpdated": "Elenco dei brani aggiornato {days, plural, =0 {oggi} one {# giorno fa} other {# giorni fa}}",
+    "offlineRemoveTitle": "Rimuovere l'elenco dei brani offline?",
+    "offlineRemoveBody": "La ricerca senza connessione non funzionerà finché non lo scaricherai di nuovo.",
+    "offlineRemoveConfirm": "Rimuovi"
   },
   "common": {
     "error": "Qualcosa è andato storto.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Puoi comunque creare la tua versione, a partire dall'audio che scegli.",
     "noKaraokeHint": "Crea il tuo video karaoke del brano, pronto da cantare e condividere.",
     "offlineMissing": "Sei offline e questo brano non è presente nell'elenco salvato su questo telefono.",
-    "offlineNote": "Offline · dall'elenco dei brani salvato su questo telefono"
+    "offlineNote": "Offline · dall'elenco dei brani salvato su questo telefono",
+    "cloudErrorNote": "Impossibile accedere alla ricerca al momento · viene mostrato l'elenco dei brani salvato su questo telefono"
   },
   "tabs": {
     "discover": "Scopri",

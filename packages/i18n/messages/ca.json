@@ -8,15 +8,18 @@
     "title": "Jo",
     "buyCredits": "Compra crèdits",
     "offlineDownload": "Descarrega la llista de cançons per utilitzar-la sense connexió",
-    "offlineDownloadSize": "Descarrega la llista de cançons per utilitzar-la sense connexió ({size} MB)",
+    "offlineDownloadSize": "Descarrega la llista de cançons per utilitzar-la sense connexió ({size} MB)",
     "offlineDownloading": "S'està descarregant la llista de cançons… {percent}%",
     "offlineError": "No s'ha pogut descarregar la llista de cançons.",
     "offlineHeading": "Llista de cançons sense connexió",
     "offlineHint": "Cerca cançons sense connexió a partir d'una llista desada en aquest telèfon.",
     "offlineRemove": "Elimina la llista de cançons sense connexió",
     "offlineRetry": "Torna a provar la descàrrega",
-    "offlineSaved": "Llista de cançons desada en aquest telèfon ({size} MB)",
-    "offlineUpdated": "Llista de cançons actualitzada {days, plural, =0 {avui} one {fa # dia} other {fa # dies}}"
+    "offlineSaved": "Llista de cançons desada en aquest telèfon ({size} MB)",
+    "offlineUpdated": "Llista de cançons actualitzada {days, plural, =0 {avui} one {fa # dia} other {fa # dies}}",
+    "offlineRemoveTitle": "Vols eliminar la llista de cançons sense connexió?",
+    "offlineRemoveBody": "La cerca sense connexió no funcionarà fins que la tornis a descarregar.",
+    "offlineRemoveConfirm": "Elimina"
   },
   "common": {
     "error": "S'ha produït un error.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Encara pots crear el teu propi karaoke, a partir de l'àudio que triïs.",
     "noKaraokeHint": "Crea el teu propi vídeo de karaoke d'aquesta cançó, a punt per cantar i compartir.",
     "offlineMissing": "No tens connexió i aquesta cançó no és a la llista desada en aquest telèfon.",
-    "offlineNote": "Sense connexió · de la llista de cançons desada en aquest telèfon"
+    "offlineNote": "Sense connexió · de la llista de cançons desada en aquest telèfon",
+    "cloudErrorNote": "No es pot accedir a la cerca ara mateix · es mostra la llista de cançons desada en aquest telèfon"
   },
   "tabs": {
     "discover": "Descobreix",

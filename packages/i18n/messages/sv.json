@@ -8,15 +8,18 @@
     "title": "Jag",
     "buyCredits": "Köp krediter",
     "offlineDownload": "Ladda ner låtlistan för offlineanvändning",
-    "offlineDownloadSize": "Ladda ner låtlistan för offlineanvändning ({size} MB)",
+    "offlineDownloadSize": "Ladda ner låtlistan för offlineanvändning ({size} MB)",
     "offlineDownloading": "Laddar ner låtlistan… {percent}%",
     "offlineError": "Det gick inte att ladda ner låtlistan.",
     "offlineHeading": "Offlinelåtlista",
     "offlineHint": "Sök efter låtar utan internetanslutning, från en lista som sparats på den här telefonen.",
     "offlineRemove": "Ta bort offlinelåtlistan",
     "offlineRetry": "Försök ladda ner igen",
-    "offlineSaved": "Låtlistan har sparats på den här telefonen ({size} MB)",
-    "offlineUpdated": "Låtlistan uppdaterades {days, plural, =0 {i dag} one {för # dag sedan} other {för # dagar sedan}}"
+    "offlineSaved": "Låtlistan har sparats på den här telefonen ({size} MB)",
+    "offlineUpdated": "Låtlistan uppdaterades {days, plural, =0 {i dag} one {för # dag sedan} other {för # dagar sedan}}",
+    "offlineRemoveTitle": "Ta bort offlinelåtlistan?",
+    "offlineRemoveBody": "Sökning utan anslutning fungerar inte förrän du laddar ner den igen.",
+    "offlineRemoveConfirm": "Ta bort"
   },
   "common": {
     "error": "Något gick fel.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Du kan fortfarande göra en egen, utifrån ljudet du väljer.",
     "noKaraokeHint": "Gör en egen karaokevideo av den, redo att sjungas till och delas.",
     "offlineMissing": "Du är offline och den här låten finns inte i låtlistan som sparats på den här telefonen.",
-    "offlineNote": "Offline · från låtlistan som sparats på den här telefonen"
+    "offlineNote": "Offline · från låtlistan som sparats på den här telefonen",
+    "cloudErrorNote": "Det går inte att nå söktjänsten just nu · visar låtlistan som sparats på den här telefonen"
   },
   "tabs": {
     "discover": "Upptäck",

@@ -8,15 +8,18 @@
     "title": "Ja",
     "buyCredits": "Kupi kredite",
     "offlineDownload": "Preuzmi popis pjesama za izvanmrežno korištenje",
-    "offlineDownloadSize": "Preuzmi popis pjesama za izvanmrežno korištenje ({size} MB)",
+    "offlineDownloadSize": "Preuzmi popis pjesama za izvanmrežno korištenje ({size} MB)",
     "offlineDownloading": "Preuzimanje popisa pjesama… {percent}%",
     "offlineError": "Nije uspjelo preuzimanje popisa pjesama.",
     "offlineHeading": "Izvanmrežni popis pjesama",
     "offlineHint": "Pretražuj pjesme bez internetske veze, s popisa spremljenog na ovom telefonu.",
     "offlineRemove": "Ukloni izvanmrežni popis pjesama",
     "offlineRetry": "Pokušaj ponovno preuzeti",
-    "offlineSaved": "Popis pjesama spremljen je na ovom telefonu ({size} MB)",
-    "offlineUpdated": "Popis pjesama ažuriran je {days, plural, =0 {danas} one {prije # dan} few {prije # dana} other {prije # dana}}"
+    "offlineSaved": "Popis pjesama spremljen je na ovom telefonu ({size} MB)",
+    "offlineUpdated": "Popis pjesama ažuriran je {days, plural, =0 {danas} one {prije # dan} few {prije # dana} other {prije # dana}}",
+    "offlineRemoveTitle": "Ukloniti izvanmrežni popis pjesama?",
+    "offlineRemoveBody": "Pretraživanje bez veze neće raditi dok ga ponovno ne preuzmeš.",
+    "offlineRemoveConfirm": "Ukloni"
   },
   "common": {
     "error": "Nešto je pošlo po zlu.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "I dalje možeš napraviti vlastitu verziju, koristeći zvuk koji odabereš.",
     "noKaraokeHint": "Napravi vlastiti karaoke video za ovu pjesmu, spreman za pjevanje i dijeljenje.",
     "offlineMissing": "Nemaš internetsku vezu, a ove pjesme nema na popisu spremljenom na ovom telefonu.",
-    "offlineNote": "Izvanmrežno · s popisa pjesama spremljenog na ovom telefonu"
+    "offlineNote": "Izvanmrežno · s popisa pjesama spremljenog na ovom telefonu",
+    "cloudErrorNote": "Pretraživanje trenutno nije dostupno · prikazuje se popis pjesama spremljen na ovom telefonu"
   },
   "tabs": {
     "discover": "Otkrij",

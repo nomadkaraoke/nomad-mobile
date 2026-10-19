@@ -8,15 +8,18 @@
     "title": "Perfil",
     "buyCredits": "Comprar créditos",
     "offlineDownload": "Descargar lista de canciones para usar sin conexión",
-    "offlineDownloadSize": "Descargar lista de canciones para usar sin conexión ({size} MB)",
+    "offlineDownloadSize": "Descargar lista de canciones para usar sin conexión ({size} MB)",
     "offlineDownloading": "Descargando la lista de canciones… {percent}%",
     "offlineError": "No se pudo descargar la lista de canciones.",
     "offlineHeading": "Lista de canciones sin conexión",
     "offlineHint": "Busca canciones sin conexión desde una lista guardada en este teléfono.",
     "offlineRemove": "Eliminar lista de canciones sin conexión",
     "offlineRetry": "Reintentar la descarga",
-    "offlineSaved": "Lista de canciones guardada en este teléfono ({size} MB)",
-    "offlineUpdated": "Lista de canciones actualizada {days, plural, =0 {hoy} one {hace # día} other {hace # días}}"
+    "offlineSaved": "Lista de canciones guardada en este teléfono ({size} MB)",
+    "offlineUpdated": "Lista de canciones actualizada {days, plural, =0 {hoy} one {hace # día} other {hace # días}}",
+    "offlineRemoveTitle": "¿Eliminar la lista de canciones sin conexión?",
+    "offlineRemoveBody": "La búsqueda sin conexión no funcionará hasta que la vuelvas a descargar.",
+    "offlineRemoveConfirm": "Eliminar"
   },
   "common": {
     "error": "Algo salió mal.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Aun así puedes crear el tuyo propio a partir del audio que elijas.",
     "noKaraokeHint": "Crea tu propio video de karaoke con esta canción, listo para cantar y compartir.",
     "offlineMissing": "Estás sin conexión y esta canción no está en la lista de canciones guardada en este teléfono.",
-    "offlineNote": "Sin conexión · de la lista de canciones guardada en este teléfono"
+    "offlineNote": "Sin conexión · de la lista de canciones guardada en este teléfono",
+    "cloudErrorNote": "No se puede acceder a la búsqueda en este momento · se muestra la lista de canciones guardada en este teléfono"
   },
   "tabs": {
     "discover": "Descubrir",

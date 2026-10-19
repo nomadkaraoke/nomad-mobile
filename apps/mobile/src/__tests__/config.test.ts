@@ -6,6 +6,7 @@ const ENV_KEYS = [
   'EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID',
   'EXPO_PUBLIC_APPLE_SIGNIN',
   'EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN',
+  'EXPO_PUBLIC_SEARCH_FORCE_OFFLINE',
 ] as const;
 
 beforeEach(() => {
@@ -26,6 +27,7 @@ it('defaults to prod gen, the gen web app and the Nomad Google client ids', () =
   expect(c.GOOGLE_IOS_CLIENT_ID).toBe('718638054799-hre535n83p8i85tsqf6ai759nlubhd2o.apps.googleusercontent.com');
   expect(c.APPLE_SIGNIN_ENABLED).toBe(false);
   expect(c.fakeSocialEnabled()).toBe(false);
+  expect(c.searchForceOffline()).toBe(false);
 });
 
 it('reads overrides from env', () => {
@@ -83,4 +85,30 @@ it('keeps fake social sign-in off unless the env is exactly 1', () => {
   process.env.EXPO_PUBLIC_GEN_API_URL = 'http://127.0.0.1:8010';
   process.env.EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN = 'true';
   expect(load().fakeSocialEnabled()).toBe(false);
+});
+
+describe('searchForceOffline (E2E: search as if the device had no connection)', () => {
+  it.each(['http://127.0.0.1:8020', 'http://10.0.2.2:8020', 'http://192.168.1.20:8020'])(
+    'is on against a local decide (%s) with the env set to 1',
+    (decideUrl) => {
+      process.env.EXPO_PUBLIC_DECIDE_API_URL = decideUrl;
+      process.env.EXPO_PUBLIC_SEARCH_FORCE_OFFLINE = '1';
+      expect(load().searchForceOffline()).toBe(true);
+    },
+  );
+
+  it.each([undefined, 'https://decide.nomadkaraoke.com', 'http://127.0.0.1.evil.example'])(
+    'is never on against a non-local decide (%s), even with the env set',
+    (decideUrl) => {
+      if (decideUrl !== undefined) process.env.EXPO_PUBLIC_DECIDE_API_URL = decideUrl;
+      process.env.EXPO_PUBLIC_SEARCH_FORCE_OFFLINE = '1';
+      expect(load().searchForceOffline()).toBe(false);
+    },
+  );
+
+  it('is off unless the env is exactly 1', () => {
+    process.env.EXPO_PUBLIC_DECIDE_API_URL = 'http://127.0.0.1:8020';
+    process.env.EXPO_PUBLIC_SEARCH_FORCE_OFFLINE = 'true';
+    expect(load().searchForceOffline()).toBe(false);
+  });
 });

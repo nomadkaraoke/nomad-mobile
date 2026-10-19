@@ -8,15 +8,18 @@
     "title": "마이페이지",
     "buyCredits": "크레딧 구매",
     "offlineDownload": "오프라인용 노래 목록 다운로드",
-    "offlineDownloadSize": "오프라인용 노래 목록 다운로드 ({size} MB)",
+    "offlineDownloadSize": "오프라인용 노래 목록 다운로드 ({size} MB)",
     "offlineDownloading": "노래 목록 다운로드 중… {percent}%",
     "offlineError": "노래 목록을 다운로드할 수 없습니다.",
     "offlineHeading": "오프라인 노래 목록",
     "offlineHint": "인터넷에 연결되지 않아도 이 휴대폰에 저장된 목록에서 노래를 검색할 수 있어요.",
     "offlineRemove": "오프라인 노래 목록 삭제",
     "offlineRetry": "다운로드 다시 시도",
-    "offlineSaved": "이 휴대폰에 노래 목록 저장 완료 ({size} MB)",
-    "offlineUpdated": "노래 목록 업데이트: {days, plural, =0 {오늘} one {#일 전} other {#일 전}}"
+    "offlineSaved": "이 휴대폰에 노래 목록 저장 완료 ({size} MB)",
+    "offlineUpdated": "노래 목록 업데이트: {days, plural, =0 {오늘} one {#일 전} other {#일 전}}",
+    "offlineRemoveTitle": "오프라인 노래 목록을 삭제할까요?",
+    "offlineRemoveBody": "다시 다운로드하기 전까지는 연결 없이 검색할 수 없어요.",
+    "offlineRemoveConfirm": "삭제"
   },
   "common": {
     "error": "문제가 발생했습니다.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "직접 선택한 오디오로 나만의 노래방 영상을 만들 수도 있어요.",
     "noKaraokeHint": "직접 노래방 영상을 만들어 바로 부르고 공유해 보세요.",
     "offlineMissing": "현재 오프라인 상태이며, 이 노래는 이 휴대폰에 저장된 노래 목록에 없습니다.",
-    "offlineNote": "오프라인 · 이 휴대폰에 저장된 노래 목록 기준"
+    "offlineNote": "오프라인 · 이 휴대폰에 저장된 노래 목록 기준",
+    "cloudErrorNote": "지금은 검색 서버에 연결할 수 없어요 · 이 휴대폰에 저장된 노래 목록을 보여드려요"
   },
   "tabs": {
     "discover": "둘러보기",

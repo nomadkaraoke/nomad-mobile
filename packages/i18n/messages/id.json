@@ -8,15 +8,18 @@
     "title": "Saya",
     "buyCredits": "Beli kredit",
     "offlineDownload": "Unduh daftar lagu untuk penggunaan offline",
-    "offlineDownloadSize": "Unduh daftar lagu untuk penggunaan offline ({size} MB)",
+    "offlineDownloadSize": "Unduh daftar lagu untuk penggunaan offline ({size} MB)",
     "offlineDownloading": "Mengunduh daftar lagu… {percent}%",
     "offlineError": "Gagal mengunduh daftar lagu.",
     "offlineHeading": "Daftar lagu offline",
     "offlineHint": "Cari lagu tanpa koneksi internet, dari daftar yang tersimpan di ponsel ini.",
     "offlineRemove": "Hapus daftar lagu offline",
     "offlineRetry": "Coba unduh lagi",
-    "offlineSaved": "Daftar lagu tersimpan di ponsel ini ({size} MB)",
-    "offlineUpdated": "Daftar lagu diperbarui {days, plural, =0 {hari ini} one {# hari lalu} other {# hari lalu}}"
+    "offlineSaved": "Daftar lagu tersimpan di ponsel ini ({size} MB)",
+    "offlineUpdated": "Daftar lagu diperbarui {days, plural, =0 {hari ini} one {# hari lalu} other {# hari lalu}}",
+    "offlineRemoveTitle": "Hapus daftar lagu offline?",
+    "offlineRemoveBody": "Pencarian tanpa koneksi tidak akan berfungsi sampai kamu mengunduhnya lagi.",
+    "offlineRemoveConfirm": "Hapus"
   },
   "common": {
     "error": "Terjadi kesalahan.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Kamu masih bisa membuatnya sendiri dari audio yang kamu pilih.",
     "noKaraokeHint": "Buat video karaokemu sendiri, siap dinyanyikan dan dibagikan.",
     "offlineMissing": "Anda sedang offline, dan lagu ini tidak ada di daftar lagu yang tersimpan di ponsel ini.",
-    "offlineNote": "Offline · dari daftar lagu yang tersimpan di ponsel ini"
+    "offlineNote": "Offline · dari daftar lagu yang tersimpan di ponsel ini",
+    "cloudErrorNote": "Pencarian tidak dapat diakses saat ini · menampilkan daftar lagu yang tersimpan di ponsel ini"
   },
   "tabs": {
     "discover": "Jelajahi",

@@ -8,15 +8,18 @@
     "title": "Minä",
     "buyCredits": "Osta krediittejä",
     "offlineDownload": "Lataa kappalelista offline-käyttöä varten",
-    "offlineDownloadSize": "Lataa kappalelista offline-käyttöä varten ({size} Mt)",
+    "offlineDownloadSize": "Lataa kappalelista offline-käyttöä varten ({size} Mt)",
     "offlineDownloading": "Ladataan kappalelistaa… {percent} %",
     "offlineError": "Kappalelistan lataaminen epäonnistui.",
     "offlineHeading": "Offline-kappalelista",
     "offlineHint": "Etsi kappaleita ilman verkkoyhteyttä tähän puhelimeen tallennetusta listasta.",
     "offlineRemove": "Poista offline-kappalelista",
     "offlineRetry": "Yritä ladata uudelleen",
-    "offlineSaved": "Kappalelista tallennettu tähän puhelimeen ({size} Mt)",
-    "offlineUpdated": "Kappalelista päivitetty {days, plural, =0 {tänään} one {# päivä sitten} other {# päivää sitten}}"
+    "offlineSaved": "Kappalelista tallennettu tähän puhelimeen ({size} Mt)",
+    "offlineUpdated": "Kappalelista päivitetty {days, plural, =0 {tänään} one {# päivä sitten} other {# päivää sitten}}",
+    "offlineRemoveTitle": "Poistetaanko offline-kappalelista?",
+    "offlineRemoveBody": "Haku ilman yhteyttä ei toimi, ennen kuin lataat listan uudelleen.",
+    "offlineRemoveConfirm": "Poista"
   },
   "common": {
     "error": "Jokin meni pieleen.",
@@ -73,7 +76,8 @@
     "hasKaraokeHint": "Voit silti tehdä omasi valitsemastasi ääniraidasta.",
     "noKaraokeHint": "Tee siitä oma karaokevideosi, valmiina laulettavaksi ja jaettavaksi.",
     "offlineMissing": "Olet offline-tilassa, eikä tätä kappaletta löydy tähän puhelimeen tallennetusta kappalelistasta.",
-    "offlineNote": "Offline · tähän puhelimeen tallennetusta kappalelistasta"
+    "offlineNote": "Offline · tähän puhelimeen tallennetusta kappalelistasta",
+    "cloudErrorNote": "Hakuun ei juuri nyt saada yhteyttä · näytetään tähän puhelimeen tallennettu kappalelista"
   },
   "tabs": {
     "discover": "Löydä uutta",

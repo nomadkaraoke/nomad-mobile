@@ -177,7 +177,9 @@ describe('offline', () => {
     getSongDetail.mockRejectedValue(new Error('unreachable'));
     mockReader = fixtureReader;
     renderRouter(routes(), { initialUrl: KEY_URL });
-    expect(await screen.findByTestId('song-offline-note', {}, { timeout: 4000 })).toBeTruthy();
+    expect(await screen.findByTestId('song-offline-note', {}, { timeout: 4000 })).toHaveTextContent(
+      "Can't reach search right now · showing the song list saved on this phone",
+    );
     expect(screen.getByText('Karaoke versions (5)')).toBeTruthy();
     expect(screen.queryByTestId('song-retry')).toBeNull();
     // Online: Make it is still offered with the offline list's canonical values.
@@ -191,6 +193,8 @@ describe('offline', () => {
     mockReader = fixtureReader;
     renderRouter(routes(), { initialUrl: KEY_URL });
     expect(await screen.findByText('Karaoke versions (5)')).toBeTruthy();
+    // Online and still loading: the offline list fills in without claiming to be offline.
+    expect(screen.queryByTestId('song-offline-note')).toBeNull();
     answer(detail([version(0)]));
     expect(await screen.findByText('Karaoke versions (1)')).toBeTruthy();
     expect(screen.queryByTestId('song-offline-note')).toBeNull();
