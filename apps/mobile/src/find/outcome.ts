@@ -23,7 +23,7 @@ const without = (groups: SongGroup[], song: SongRef) => groups.filter((g) => !sa
 
 /**
  * Every group that is `song` (sameSong: "Starlight" and "Starlight (Live)" by Muse) as one group: versions
- * merged best-first by rank, duplicates (same brand and link) dropped; `version_count` is the merged total.
+ * merged playable-first then best-first by rank, duplicates (same brand and link) dropped; `version_count` is the merged total.
  */
 function mergedGroup(groups: SongGroup[], song: SongRef): SongGroup | null {
   const same = groups.filter((g) => sameSong(g, song));
@@ -42,7 +42,8 @@ function mergedGroup(groups: SongGroup[], song: SongRef): SongGroup | null {
       seen.add(key);
       return true;
     })
-    .sort((a, b) => a.rank - b.rank); // stable: equal ranks keep group order
+    // Playable (youtube_url) first, then best rank, like offline groups and decide; stable otherwise.
+    .sort((a, b) => Number(!a.youtube_url) - Number(!b.youtube_url) || a.rank - b.rank);
   const total = same.reduce((n, g) => n + g.version_count, 0) - duplicates;
   return { ...same[0]!, versions, version_count: Math.max(total, versions.length) };
 }

@@ -33,9 +33,9 @@ apps/mobile/          Expo app (src/app routes, src/auth, src/api, src/find (use
 packages/core/        pure TS: session model + input normalizers, job phases + steps, audio-search ranking, duration confirm, formatting, search/ (song matcher; Python parity fixtures synced from decide by scripts/sync-search-fixtures.mjs, `DECIDE_DIR`)
 packages/i18n/        messages/<33>.json, resolveLocale, IntlProvider; scripts/ vendored from karaoke-gen
 packages/api-gen/     generated karaoke-gen client + configureClient + facades (auth, credits, make, jobs) + zod overrides
-packages/api-decide/  generated karaoke-decide client + facades (searchSongs, popularSongs, getSong) and the search service client; decide's search service is the app's single song-search backend
+packages/api-decide/  generated karaoke-decide catalog client (facade `getSong`, legacy by numeric id) + the search service client and its facades (searchSongs, popularSongs, getSongDetail, resolveQuery, getOfflineIndexManifest, logSearchEvent, pingSearch); decide's search service is the app's single song-search backend
 packages/ui/          tokens, Screen/Text/Button/TextField, <List> (FlashList), <WaveformCanvas> (Skia)
-openapi/              gen.json + decide.json snapshots (refresh: pnpm gen:api)
+openapi/              gen.json + decide.json + decide-search.json snapshots (refresh: pnpm gen:api; point at another stack with GEN_OPENAPI_URL / DECIDE_SEARCH_OPENAPI_URL, see scripts/fetch-openapi.mjs)
 maestro/flows/        E2E flows (make-1…10, search-1…4, smoke-discover) against the gen + decide search local stacks; common/ shared steps; scripts/stack.js
 maestro/screens/      screenshot-only flows for UX reviews (long-title.yaml: any locale, e.g. ar for RTL; not in the suite)
 scripts/e2e-local.sh  gen local stack + decide search local stack + Metro + Maestro, per platform
@@ -106,8 +106,9 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - **expo-sqlite closes crash (segfault) after an FTS5 query.** Every open of `offline.db` passes `{useNewConnection: true, finalizeUnusedStatementsBeforeClosing: false}` (a typed but `@hidden` option); go through `openOfflineReader()`. `expo-sqlite` is pinned (see the `"//"` key in package.json). Don't bump it without re-checking on device.
 - **Tests must not live under `src/app`.** expo-router's `require.context` bundles every `.tsx` there as a route. Put screen tests in `apps/mobile/src/__tests__/`.
 - **Offline identify cost scales with the index.** Median ~50 ms, p95 ~280 ms on big indexes, on the JS thread; `useSearch` debounces it (300 ms) and runs it after the cloud request is sent. Don't call it per keystroke.
-- **The device id** (sent as `sid`/device header to decide search) lives in MMKV, so it resets on uninstall.
+- **`sid` vs the device id:** `sid` is the in-memory search-session id (`find/searchSession.ts`, renewed when a song is picked or the app restarts) that decide logs with each search. The device id (MMKV, so it resets on uninstall) is only sent as the `X-Device-Id` header to decide.
 - **colima stale lock after a crash or reboot:** `colima start` fails until you remove the symlink `~/.colima/_lima/_disks/colima/in_use_by`.
+- **`make.categoryCount` (`"{label} ({count})"`) is hand-written and format-only**, already in `.en-snapshot.json`, so a plain `pnpm i18n:translate` won't redo it (`--no-cache` will).
 - **`pnpm i18n:translate` needs `gcloud auth login`** (GCS cache + Gemini via ADC) and `env -u GEMINI_API_KEY`. If auth has lapsed, new keys stay out of `.en-snapshot.json` and get translated on the next run.
 - **`renderRouter` (expo-router testing) switches jest to fake timers.** Reset with `jest.useRealTimers()` in `beforeEach` when code uses real delays.
 

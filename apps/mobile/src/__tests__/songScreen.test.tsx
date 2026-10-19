@@ -187,6 +187,19 @@ describe('offline', () => {
     expect(useMakeIntent.getState().get()).toMatchObject({ canonicalArtist: 'Muse', canonicalTitle: 'Starlight', source: 'identified' });
   });
 
+  it('a decide 404 (key only in the offline list) is "not on the server": no error note, offline data shown, not retried', async () => {
+    getSongDetail.mockRejectedValue({ status: 404, detail: 'not found' });
+    mockReader = fixtureReader;
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    jest.useRealTimers(); // renderRouter switches to fake timers
+    expect(await screen.findByText('Karaoke versions (5)')).toBeTruthy();
+    await waitFor(() => expect(getSongDetail).toHaveBeenCalledTimes(1));
+    await new Promise((r) => setTimeout(r, 1200)); // react-query's first retry delay is 1 s
+    expect(getSongDetail).toHaveBeenCalledTimes(1);
+    expect(screen.queryByTestId('song-offline-note')).toBeNull();
+    expect(screen.queryByTestId('song-retry')).toBeNull();
+  });
+
   it('online: the cloud answer replaces the offline one when it arrives', async () => {
     let answer!: (d: SongDetail) => void;
     getSongDetail.mockReturnValue(new Promise((r) => (answer = r)));

@@ -108,6 +108,8 @@ type Describe = {
   result: ResolveResponse | null;
   submitted: string;
   failed: boolean;
+  /** The describe request itself couldn't reach decide (network / 5xx): not "we couldn't work out the song". */
+  unreachable: boolean;
 };
 const DESCRIBE_CLOSED: Describe = {
   open: false,
@@ -116,6 +118,7 @@ const DESCRIBE_CLOSED: Describe = {
   result: null,
   submitted: "",
   failed: false,
+  unreachable: false,
 };
 
 export default function DiscoverScreen() {
@@ -174,6 +177,10 @@ export default function DiscoverScreen() {
     search.source === "cloud" &&
     search.groups.length === 0 &&
     search.identification?.status === "none";
+  // "No songs found" only for a real, empty answer: when search couldn't run (nothing to show, or an error
+  // banner is up) the empty list is not a result.
+  const noResultsAreReal =
+    describing || (search.source !== "none" && search.error === null);
   const where = outcome && !figuringOut ? makeOfferWhere(outcome) : null;
   const guard = useTapGuard(
     `${answerKey}|${search.source}|${fresh}|${outcome?.kind ?? ""}|${search.groups.map((g) => g.song_key).join(",")}`,
@@ -234,13 +241,14 @@ export default function DiscoverScreen() {
   const onQuery = (text: string) => {
     setQuery(text);
     describeRequest.current += 1;
-    if (describe.result || describe.failed || describe.loading) {
+    if (describe.result || describe.failed || describe.unreachable || describe.loading) {
       setDescribe((d) => ({
         ...d,
         loading: false,
         result: null,
         submitted: "",
         failed: false,
+        unreachable: false,
       }));
     }
   };
@@ -257,7 +265,7 @@ export default function DiscoverScreen() {
     logEvent("describe_submit", { chars: text.length });
     const request = ++describeRequest.current;
     const current = () => describeRequest.current === request;
-    setDescribe((d) => ({ ...d, loading: true, failed: false }));
+    setDescribe((d) => ({ ...d, loading: true, failed: false, unreachable: false }));
     resolveQuery(text, currentSid()).then(
       (result) => {
         if (!current()) return;
@@ -267,17 +275,22 @@ export default function DiscoverScreen() {
           result,
           submitted: text,
           failed: describeOutcome(result, text, NO_CHOICE) === null,
+          unreachable: false,
         }));
       },
-      () => {
-        if (current())
-          setDescribe((d) => ({
-            ...d,
-            loading: false,
-            result: null,
-            submitted: "",
-            failed: true,
-          }));
+      (e: unknown) => {
+        if (!current()) return;
+        // A 4xx is decide refusing this description; anything else (network, 5xx) means it never answered.
+        const status = (e as { status?: unknown } | null)?.status;
+        const refused = typeof status === "number" && status >= 400 && status < 500;
+        setDescribe((d) => ({
+          ...d,
+          loading: false,
+          result: null,
+          submitted: "",
+          failed: refused,
+          unreachable: !refused,
+        }));
       },
     );
   };
@@ -370,13 +383,13 @@ export default function DiscoverScreen() {
             cap={null}
             onOpen={guard((g: SongGroup) => openSong(g.song_key))}
           />
-        ) : (
+        ) : noResultsAreReal ? (
           <Text variant="muted">
             {t("find.noResults", {
               query: describing ? describe.submitted : search.query,
             })}
           </Text>
-        );
+        ) : null;
     }
   };
 
@@ -463,6 +476,12 @@ export default function DiscoverScreen() {
       ) : describe.failed ? (
         <Text variant="muted" testID="describe-nothing">
           {t("discover.describeNothing")}
+        </Text>
+      ) : describe.unreachable ? (
+        <Text variant="error" testID="describe-unreachable">
+          {search.offline
+            ? t("discover.needsConnection")
+            : t("discover.unreachable")}
         </Text>
       ) : null}
       {/* The sticky make bar rides above the keyboard. Both platforms pad: Android is edge-to-edge (SDK 57,

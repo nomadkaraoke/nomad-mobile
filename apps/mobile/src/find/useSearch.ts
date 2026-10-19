@@ -26,6 +26,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useOffline } from '../net/useOffline';
 import { openOfflineReader } from '../offline/offlineIndex';
+import { useOfflineIndexStore } from '../offline/offlineIndexStore';
 import { currentSid } from './searchSession';
 
 /** Shorter queries show the popular list (decide search's MIN_QUERY_CHARS). */
@@ -212,6 +213,11 @@ export function useSearch(rawQuery: string): SearchState {
   const [data, setData] = useState<Data>(INITIAL);
   const [attempt, setAttempt] = useState(0);
   const generation = useRef(0);
+  // A download finishing (or the list being removed) changes the run: re-run the current query against it.
+  const indexRun = useOfflineIndexStore((s) => s.run);
+  // The query whose 429 Retry-After was already retried automatically: one automatic retry per query, then
+  // `unreachable` stays until the user taps retry().
+  const autoRetried = useRef<string | null>(null);
 
   useEffect(() => {
     const gen = ++generation.current;
@@ -292,7 +298,10 @@ export function useSearch(rawQuery: string): SearchState {
               controller.abort();
               settleWithoutCloud(client.status === 429 ? 'unreachable' : 'rejected');
               const wait = client.status === 429 && client.retryAfter != null ? client.retryAfter * 1000 : null;
-              if (wait !== null && wait <= UNREACHABLE_AFTER_MS) later(wait, () => live() && setAttempt((n) => n + 1));
+              if (wait !== null && wait <= UNREACHABLE_AFTER_MS && autoRetried.current !== q) {
+                autoRetried.current = q;
+                later(wait, () => live() && setAttempt((n) => n + 1));
+              }
               return;
             }
             if (Date.now() - started + RETRY_AFTER_MS >= UNREACHABLE_AFTER_MS) settleWithoutCloud('unreachable');
@@ -324,7 +333,7 @@ export function useSearch(rawQuery: string): SearchState {
       controller.abort();
       timers.forEach(clearTimeout);
     };
-  }, [q, offline, attempt]);
+  }, [q, offline, attempt, indexRun]);
 
   const retry = useCallback(() => setAttempt((n) => n + 1), []);
   return { ...data, retry };

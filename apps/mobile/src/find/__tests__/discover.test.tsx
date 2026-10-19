@@ -210,10 +210,10 @@ describe('Review Focus 4: disc-only versions and 50+ versions', () => {
       groups: [group(STARLIGHT, [version(0), version(2), version(3)]), live, group(ref('Taylor Swift', 'Starlight'))],
     });
     await renderDiscover();
-    // 3 + 3 versions, B0 (same brand + link) once: 5, best rank first.
+    // 3 + 3 versions, B0 (same brand + link) once: 5; playable first, then best rank (B1 has no link: last).
     expect(screen.getByText('Karaoke versions (5)')).toBeTruthy();
     expect(['Brand 0', 'Brand 1', 'Brand 2', 'Brand 3', 'Brand 5'].map((b) => screen.getAllByText(b).length)).toEqual([1, 1, 1, 1, 1]);
-    expect(screen.getByTestId('version-row-1-kind').props.children).toBe('Commercial'); // B1 from the live group, rank 1
+    expect(screen.getByTestId('version-row-4-kind').props.children).toBe('Commercial'); // B1 (no link) from the live group, last
     expect(screen.queryByTestId('version-row-5')).toBeNull();
     expect(screen.queryByText('Starlight (Live)')).toBeNull(); // not a separate "similar" row
     expect(screen.getByText('Other songs with similar names (1)')).toBeTruthy();
@@ -517,6 +517,41 @@ describe('errors', () => {
     mockState = state({ query: 'zz', resultsQuery: 'zz', error: 'unreachable', source: 'none' });
     await renderDiscover();
     expect(screen.getByText("Can't reach search right now.")).toBeTruthy();
+    expect(screen.queryByText(/No songs found/)).toBeNull();
+  });
+
+  it('a refused query does not claim "No songs found"', async () => {
+    mockState = state({ query: 'zz', resultsQuery: 'zz', error: 'rejected', source: 'none' });
+    await renderDiscover();
+    expect(screen.queryByText(/No songs found/)).toBeNull();
+  });
+
+  it('offline with no downloaded list does not claim "No songs found"', async () => {
+    mockState = state({ offline: true, source: 'none', query: 'baby', resultsQuery: 'baby' });
+    await renderDiscover();
+    expect(screen.getByTestId('offline-banner')).toBeTruthy();
+    expect(screen.queryByText(/No songs found/)).toBeNull();
+  });
+
+  it('Describe it: a network failure says search is unreachable, not "couldn\'t work out the song"', async () => {
+    resolveQuery.mockRejectedValue(new Error('Network request failed'));
+    await renderDiscover();
+    fireEvent.press(screen.getByTestId('describe-link'));
+    fireEvent.changeText(screen.getByTestId('describe-input'), 'hmm');
+    await act(async () => fireEvent.press(screen.getByTestId('describe-submit')));
+    expect(await screen.findByTestId('describe-unreachable')).toBeTruthy();
+    expect(screen.getByText("Can't reach search right now.")).toBeTruthy();
+    expect(screen.queryByTestId('describe-nothing')).toBeNull();
+  });
+
+  it('Describe it: a 4xx refusal still says it could not work the song out', async () => {
+    resolveQuery.mockRejectedValue({ status: 422 });
+    await renderDiscover();
+    fireEvent.press(screen.getByTestId('describe-link'));
+    fireEvent.changeText(screen.getByTestId('describe-input'), 'hmm');
+    await act(async () => fireEvent.press(screen.getByTestId('describe-submit')));
+    expect(await screen.findByTestId('describe-nothing')).toBeTruthy();
+    expect(screen.queryByTestId('describe-unreachable')).toBeNull();
   });
 });
 

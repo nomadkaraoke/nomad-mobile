@@ -7,6 +7,7 @@ import Database from 'better-sqlite3';
 import path from 'node:path';
 
 import { openOfflineReader } from '../../offline/offlineIndex';
+import { useOfflineIndexStore } from '../../offline/offlineIndexStore';
 import { currentSid } from '../searchSession';
 import { resetSearchCacheForTests, useSearch } from '../useSearch';
 
@@ -389,6 +390,36 @@ describe('C5 carries', () => {
     await advance(1);
     expect(searchSongs).toHaveBeenCalledTimes(2);
     expect(result.current).toMatchObject({ error: null, source: 'cloud' });
+  });
+
+  it('retries a 429 automatically only once per query, then waits for retry()', async () => {
+    searchSongs.mockRejectedValue({ status: 429, detail: 'slow down', retryAfter: 2 });
+    const { result } = renderHook(() => useSearch('hello'));
+    await advance(0);
+    await advance(2000);
+    expect(searchSongs).toHaveBeenCalledTimes(2);
+    await advance(60_000);
+    expect(searchSongs).toHaveBeenCalledTimes(2);
+    expect(result.current.error).toBe('unreachable');
+    searchSongs.mockImplementation(async (q: string) => response([group(q)]));
+    act(() => result.current.retry());
+    await advance(0);
+    expect(result.current).toMatchObject({ error: null, source: 'cloud' });
+  });
+
+  it('re-runs the current query when the offline list is downloaded', async () => {
+    netMock.mockReturnValue({ isConnected: false });
+    const { result } = renderHook(() => useSearch('starlite muse'));
+    await advance(300);
+    expect(result.current).toMatchObject({ source: 'none', offline: true });
+    readerMock.mockReturnValue(fixture);
+    await act(async () => {
+      useOfflineIndexStore.setState({ run: 'new-run' });
+    });
+    await advance(0);
+    expect(result.current.source).toBe('offline');
+    expect(result.current.groups.length).toBeGreaterThan(0);
+    useOfflineIndexStore.setState({ run: null });
   });
 
   it('a 429 without Retry-After waits for retry()', async () => {

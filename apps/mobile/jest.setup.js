@@ -75,3 +75,19 @@ jest.mock('expo-file-system', () => {
 
 // NetInfo's native module is absent under jest: use the library's mock (connected) unless a suite mocks it itself.
 jest.mock('@react-native-community/netinfo', () => require('@react-native-community/netinfo/jest/netinfo-mock.js'));
+
+// react-query's gc timers (5 min) would keep a jest worker alive after a suite that renders AppProviders
+// ("worker failed to exit gracefully"): unref them. Wrapped lazily so fake timers installed later still apply.
+{
+  const { timeoutManager } = require('@tanstack/query-core');
+  const unref = (t) => {
+    if (t && typeof t.unref === 'function') t.unref();
+    return t;
+  };
+  timeoutManager.setTimeoutProvider({
+    setTimeout: (cb, ms) => unref(setTimeout(cb, ms)),
+    clearTimeout: (id) => clearTimeout(id),
+    setInterval: (cb, ms) => unref(setInterval(cb, ms)),
+    clearInterval: (id) => clearInterval(id),
+  });
+}

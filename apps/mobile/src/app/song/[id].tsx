@@ -30,6 +30,8 @@ function offlineDetail(key: string): SongDetail | null {
   }
 }
 
+const isNotFound = (e: unknown) => (e as { status?: unknown } | null)?.status === 404;
+
 const goMake = (intent: MakeIntent, signedIn: boolean) => {
   useMakeIntent.getState().set(intent);
   // Sign-in carries straight on into the make flow (spec §4.3).
@@ -89,12 +91,15 @@ function KnownSong({ songKey }: { songKey: string }) {
     queryKey: ['decide', 'song', songKey],
     queryFn: () => getSongDetail(songKey),
     enabled: !offline,
+    // A 404 is "not on the server" (the key may only be in the offline list): not an error, never retried.
+    retry: (count, e) => !isNotFound(e) && count < 1,
   });
+  const notOnServer = cloud.isError && isNotFound(cloud.error);
   const detail = cloud.data ?? local.data ?? null;
   const fromOffline = !cloud.data && detail !== null;
   // Online, the offline list fills the page while decide loads without a note; it only says so when it is all
   // there is (no connection, or decide failed).
-  const offlineNote = fromOffline ? (offline ? t('song.offlineNote') : cloud.isError ? t('song.cloudErrorNote') : null) : null;
+  const offlineNote = fromOffline ? (offline ? t('song.offlineNote') : cloud.isError && !notOnServer ? t('song.cloudErrorNote') : null) : null;
   const canMake = detail !== null && !offline;
 
   const offerLogged = useRef(false);
