@@ -1,0 +1,761 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Nomad Karaoke Search API",
+    "description": "Song identification + karaoke availability for the Nomad Karaoke app",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/search/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_search_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search/ready": {
+      "get": {
+        "summary": "Ready",
+        "operationId": "ready_api_search_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Index not loaded"
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "get": {
+        "summary": "Search",
+        "operationId": "search_api_search_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "sid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Sid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search/popular": {
+      "get": {
+        "summary": "Popular",
+        "operationId": "popular_api_search_popular_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 30,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SongGroup"
+                  },
+                  "title": "Response Popular Api Search Popular Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search/song": {
+      "get": {
+        "summary": "Song",
+        "operationId": "song_api_search_song_get",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512,
+              "title": "Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SongDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search/resolve": {
+      "get": {
+        "summary": "Resolve",
+        "description": "Gemini fallback via gen (spec §6). ``{}`` whenever there is nothing to offer.",
+        "operationId": "resolve_api_search_resolve_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "sid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Sid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResolveResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search/event": {
+      "post": {
+        "summary": "Event",
+        "operationId": "event_api_search_event_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchEvent"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search/offline-index": {
+      "get": {
+        "summary": "Offline Index",
+        "operationId": "offline_index_api_search_offline_index_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfflineIndexManifest"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Health": {
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ok"
+        ],
+        "title": "Health"
+      },
+      "Identification": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "confident",
+              "candidates",
+              "none"
+            ],
+            "title": "Status"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "same",
+                  "cosmetic",
+                  "completed",
+                  "content"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kind"
+          },
+          "best": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SongRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/SongRef"
+            },
+            "type": "array",
+            "title": "Candidates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "Identification"
+      },
+      "IndexInfo": {
+        "properties": {
+          "run": {
+            "type": "string",
+            "title": "Run"
+          },
+          "built_at": {
+            "type": "integer",
+            "title": "Built At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "run",
+          "built_at"
+        ],
+        "title": "IndexInfo"
+      },
+      "OfflineIndexManifest": {
+        "properties": {
+          "run": {
+            "type": "string",
+            "title": "Run"
+          },
+          "schema": {
+            "type": "integer",
+            "title": "Schema"
+          },
+          "normalizer": {
+            "type": "integer",
+            "title": "Normalizer"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "bytes": {
+            "type": "integer",
+            "title": "Bytes"
+          },
+          "sha256": {
+            "type": "string",
+            "title": "Sha256"
+          }
+        },
+        "type": "object",
+        "required": [
+          "run",
+          "schema",
+          "normalizer",
+          "url",
+          "bytes",
+          "sha256"
+        ],
+        "title": "OfflineIndexManifest",
+        "description": "Where the phone downloads ``offline.db.gz`` for the loaded run."
+      },
+      "ResolveResponse": {
+        "properties": {
+          "corrected": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SongRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "cosmetic",
+                  "content"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kind"
+          },
+          "typed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Typed"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/SongGroup"
+            },
+            "type": "array",
+            "title": "Groups"
+          },
+          "split": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Split"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "alternatives": {
+            "items": {
+              "$ref": "#/components/schemas/SongRef"
+            },
+            "type": "array",
+            "title": "Alternatives"
+          }
+        },
+        "type": "object",
+        "title": "ResolveResponse",
+        "description": "kjbox ``/sing/search/resolve`` shape. Every field is optional: ``{}`` means\n\"nothing to offer\" (including any failure of the gen call)."
+      },
+      "SearchEvent": {
+        "properties": {
+          "sid": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Sid"
+          },
+          "type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Type"
+          },
+          "data": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sid",
+          "type"
+        ],
+        "title": "SearchEvent"
+      },
+      "SearchResponse": {
+        "properties": {
+          "identification": {
+            "$ref": "#/components/schemas/Identification"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/SongGroup"
+            },
+            "type": "array",
+            "title": "Groups"
+          },
+          "index": {
+            "$ref": "#/components/schemas/IndexInfo"
+          },
+          "sid": {
+            "type": "string",
+            "title": "Sid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "identification",
+          "groups",
+          "index",
+          "sid"
+        ],
+        "title": "SearchResponse"
+      },
+      "SongDetail": {
+        "properties": {
+          "song": {
+            "$ref": "#/components/schemas/SongRef"
+          },
+          "versions": {
+            "items": {
+              "$ref": "#/components/schemas/Version"
+            },
+            "type": "array",
+            "title": "Versions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "song",
+          "versions"
+        ],
+        "title": "SongDetail"
+      },
+      "SongGroup": {
+        "properties": {
+          "song_key": {
+            "type": "string",
+            "title": "Song Key"
+          },
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "version_count": {
+            "type": "integer",
+            "title": "Version Count"
+          },
+          "versions": {
+            "items": {
+              "$ref": "#/components/schemas/Version"
+            },
+            "type": "array",
+            "title": "Versions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "song_key",
+          "artist",
+          "title",
+          "version_count",
+          "versions"
+        ],
+        "title": "SongGroup",
+        "description": "A song with karaoke versions, best first. ``version_count`` counts them all,\neven when ``versions`` is capped."
+      },
+      "SongRef": {
+        "properties": {
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "song_key": {
+            "type": "string",
+            "title": "Song Key"
+          },
+          "popularity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Popularity"
+          },
+          "karaoke": {
+            "type": "boolean",
+            "title": "Karaoke"
+          }
+        },
+        "type": "object",
+        "required": [
+          "artist",
+          "title",
+          "song_key",
+          "karaoke"
+        ],
+        "title": "SongRef",
+        "description": "One real song. ``song_key`` is ``text_normalize.song_key`` of its song_id.db\ndisplay spelling, the key availability groups are stored under."
+      },
+      "Split": {
+        "properties": {
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "artist",
+          "title"
+        ],
+        "title": "Split"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "Version": {
+        "properties": {
+          "brand_code": {
+            "type": "string",
+            "title": "Brand Code"
+          },
+          "brand_name": {
+            "type": "string",
+            "title": "Brand Name"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "community",
+              "commercial"
+            ],
+            "title": "Kind"
+          },
+          "youtube_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Youtube Url"
+          },
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
+          }
+        },
+        "type": "object",
+        "required": [
+          "brand_code",
+          "brand_name",
+          "kind",
+          "rank"
+        ],
+        "title": "Version"
+      }
+    }
+  }
+}

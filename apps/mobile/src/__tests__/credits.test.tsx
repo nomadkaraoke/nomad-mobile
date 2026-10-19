@@ -11,8 +11,8 @@ import { gen, session } from '../test-utils/genAuthMock';
 import { makeRoutes } from '../test-utils/makeFixtures';
 
 jest.mock('@nomad/api-decide', () => ({
-  searchSongs: jest.fn(),
-  popularSongs: jest.fn(async () => []),
+  searchCatalogSongs: jest.fn(),
+  popularCatalogSongs: jest.fn(async () => []),
   getSong: jest.fn(),
   configureClient: jest.fn(),
 }));

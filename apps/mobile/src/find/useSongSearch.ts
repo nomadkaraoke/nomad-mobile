@@ -1,4 +1,4 @@
-import { popularSongs, searchSongs, type SongResponse } from '@nomad/api-decide';
+import { popularCatalogSongs, searchCatalogSongs, type SongResponse } from '@nomad/api-decide';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
@@ -17,13 +17,13 @@ export function useSongSearch(rawQuery: string) {
   const mode: 'popular' | 'search' = q.length === 0 ? 'popular' : 'search';
   const popular = useQuery({
     queryKey: ['decide', 'popular'],
-    queryFn: () => popularSongs(30),
+    queryFn: () => popularCatalogSongs(30),
     enabled: mode === 'popular',
     staleTime: 60 * 60 * 1000,
   });
   const search = useQuery({
     queryKey: ['decide', 'search', q],
-    queryFn: () => searchSongs(q),
+    queryFn: () => searchCatalogSongs(q),
     enabled: mode === 'search',
     staleTime: 5 * 60 * 1000,
   });

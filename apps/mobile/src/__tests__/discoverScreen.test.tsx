@@ -7,19 +7,19 @@ import { AppState, Keyboard } from 'react-native';
 import { appRoutes } from '../test-utils/routes';
 
 jest.mock('@nomad/api-decide', () => ({
-  searchSongs: jest.fn(),
-  popularSongs: jest.fn(),
+  searchCatalogSongs: jest.fn(),
+  popularCatalogSongs: jest.fn(),
   getSong: jest.fn(),
   configureClient: jest.fn(),
 }));
-const searchSongs = decide.searchSongs as jest.Mock;
-const popularSongs = decide.popularSongs as jest.Mock;
+const searchCatalogSongs = decide.searchCatalogSongs as jest.Mock;
+const popularCatalogSongs = decide.popularCatalogSongs as jest.Mock;
 
 beforeEach(() => {
-  popularSongs.mockReset().mockResolvedValue([
+  popularCatalogSongs.mockReset().mockResolvedValue([
     { id: 1, artist: 'Lionel Richie', title: 'Hello', brands: [], brand_count: 3, is_popular: true },
   ]);
-  searchSongs.mockReset().mockResolvedValue({
+  searchCatalogSongs.mockReset().mockResolvedValue({
     songs: [{ id: 2, artist: 'Adele', title: 'Hello', brands: [], brand_count: 1, is_popular: true }],
     total: 1,
     page: 1,
@@ -84,7 +84,7 @@ it('coming back to the app with another screen on top (the code field waiting fo
 
 it('shows an error with a working retry button', async () => {
   // Fail the first load and the query client's one automatic retry, then recover.
-  popularSongs
+  popularCatalogSongs
     .mockReset()
     .mockRejectedValueOnce(new Error('offline'))
     .mockRejectedValueOnce(new Error('offline'))
@@ -93,11 +93,11 @@ it('shows an error with a working retry button', async () => {
   const retry = await screen.findByTestId('discover-retry', {}, { timeout: 3000 });
   await act(async () => fireEvent.press(retry));
   await waitFor(() => expect(screen.queryByTestId('discover-retry')).toBeNull());
-  expect(popularSongs.mock.calls.length).toBeGreaterThanOrEqual(2);
+  expect(popularCatalogSongs.mock.calls.length).toBeGreaterThanOrEqual(2);
 });
 
 it('shows a no-results message for an empty search', async () => {
-  searchSongs.mockReset().mockResolvedValue({ songs: [], total: 0, page: 1, per_page: 20, has_more: false });
+  searchCatalogSongs.mockReset().mockResolvedValue({ songs: [], total: 0, page: 1, per_page: 20, has_more: false });
   renderRouter(appRoutes(), { initialUrl: '/discover' });
   fireEvent.changeText(await screen.findByTestId('discover-search-input'), 'zzzz');
   expect(await screen.findByText('No songs found for “zzzz”.', {}, { timeout: 2000 })).toBeTruthy();

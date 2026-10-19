@@ -5,9 +5,9 @@ import type { ReactNode } from 'react';
 
 import { useSongSearch } from '../find/useSongSearch';
 
-jest.mock('@nomad/api-decide', () => ({ searchSongs: jest.fn(), popularSongs: jest.fn() }));
-const searchSongs = decide.searchSongs as jest.Mock;
-const popularSongs = decide.popularSongs as jest.Mock;
+jest.mock('@nomad/api-decide', () => ({ searchCatalogSongs: jest.fn(), popularCatalogSongs: jest.fn() }));
+const searchCatalogSongs = decide.searchCatalogSongs as jest.Mock;
+const popularCatalogSongs = decide.popularCatalogSongs as jest.Mock;
 
 const wrapper = ({ children }: { children: ReactNode }) => (
   <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
@@ -17,10 +17,10 @@ const wrapper = ({ children }: { children: ReactNode }) => (
 
 beforeEach(() => {
   jest.useFakeTimers();
-  popularSongs.mockReset().mockResolvedValue([
+  popularCatalogSongs.mockReset().mockResolvedValue([
     { id: 1, artist: 'A', title: 'Pop', brands: [], brand_count: 3, is_popular: true },
   ]);
-  searchSongs.mockReset().mockImplementation(async (q: string) => ({
+  searchCatalogSongs.mockReset().mockImplementation(async (q: string) => ({
     songs: [{ id: 2, artist: 'B', title: q, brands: [], brand_count: 0, is_popular: false }],
     total: 1,
     page: 1,
@@ -35,7 +35,7 @@ it('blank or whitespace query shows popular and never searches', async () => {
   act(() => jest.advanceTimersByTime(500));
   await waitFor(() => expect(result.current.songs[0]?.title).toBe('Pop'));
   expect(result.current.mode).toBe('popular');
-  expect(searchSongs).not.toHaveBeenCalled();
+  expect(searchCatalogSongs).not.toHaveBeenCalled();
 });
 
 it('debounces: rapid typing searches only the last trimmed query', async () => {
@@ -49,12 +49,12 @@ it('debounces: rapid typing searches only the last trimmed query', async () => {
   act(() => jest.advanceTimersByTime(350));
   await waitFor(() => expect(result.current.songs[0]?.title).toBe('hel'));
   expect(result.current.mode).toBe('search');
-  expect(searchSongs).toHaveBeenCalledTimes(1);
-  expect(searchSongs).toHaveBeenCalledWith('hel');
+  expect(searchCatalogSongs).toHaveBeenCalledTimes(1);
+  expect(searchCatalogSongs).toHaveBeenCalledWith('hel');
 });
 
 it('reports errors and can refetch', async () => {
-  searchSongs.mockRejectedValueOnce(new Error('net'));
+  searchCatalogSongs.mockRejectedValueOnce(new Error('net'));
   const { result } = renderHook(() => useSongSearch('x'), { wrapper });
   act(() => jest.advanceTimersByTime(350));
   await waitFor(() => expect(result.current.isError).toBe(true));
