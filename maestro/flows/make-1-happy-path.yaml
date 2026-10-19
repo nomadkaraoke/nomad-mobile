@@ -1,5 +1,5 @@
-# 1. Happy path (spec §8.1): 0 credits → real decide search → song → Make it → email code sign-in →
-#    credits → fake checkout Pay → back to Make it → job → ready → YouTube block → Copy link.
+# 1. Happy path (spec §8.1): 0 credits → decide search (search local stack) → song card → song page → Make it →
+#    email code sign-in → credits → fake checkout Pay → back to Make it → job → ready → YouTube block → Copy link.
 appId: com.nomadkaraoke.mobile
 name: make-1-happy-path
 ---
@@ -11,21 +11,32 @@ name: make-1-happy-path
       NAME: happy
       CREDITS: "0"
 - runFlow: ../common/launch.yaml
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/discover-popular
-# Real search (decide), as in the Discover smoke flow.
+- extendedWaitUntil:
+    visible:
+      id: "song-row-0"
+    timeout: 30000
+- takeScreenshot: ${SHOTS}/discover-popular
+# decide's search local stack (fixture index): "hello" is Adele's "Hello", with karaoke versions.
 - tapOn:
     id: "discover-search-input"
 - inputText: "hello"
 - extendedWaitUntil:
-    visible: ".*Lionel Richie.*"
+    visible:
+      id: "song-card"
     timeout: 30000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/discover-search-results
-- tapOn: ".*Lionel Richie.*"
+- assertVisible:
+    id: "song-card"
+    text: ".*Adele.*"
+# Search key: closes the keyboard (and iOS's text edit menu, which can sit over the card).
+- pressKey: Enter
+- takeScreenshot: ${SHOTS}/discover-search-results
+- tapOn:
+    id: "song-card"
 - extendedWaitUntil:
     visible:
       id: "song-badge"
     timeout: 20000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/song-page
+- takeScreenshot: ${SHOTS}/song-page
 - tapOn:
     id: "song-make"
 # Sign-in sheet → email → code from the stack's captured outbox.
@@ -33,7 +44,7 @@ name: make-1-happy-path
     visible:
       id: "signin-sheet"
     timeout: 10000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/signin-sheet
+- takeScreenshot: ${SHOTS}/signin-sheet
 - tapOn:
     id: "signin-email-start"
 - extendedWaitUntil:
@@ -43,7 +54,7 @@ name: make-1-happy-path
 - tapOn:
     id: "signin-email"
 - inputText: ${output.email}
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/signin-email
+- takeScreenshot: ${SHOTS}/signin-email
 - tapOn:
     id: "signin-send"
 - extendedWaitUntil:
@@ -56,21 +67,21 @@ name: make-1-happy-path
       ACTION: code
       STACK: ${STACK}
       EMAIL: ${output.email}
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/signin-code
+- takeScreenshot: ${SHOTS}/signin-code
 - inputText: ${output.code}
 # 0 credits: the make flow sends the person to credits.
 - extendedWaitUntil:
     visible:
       id: "credits-checkout"
     timeout: 30000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/credits-picker
+- takeScreenshot: ${SHOTS}/credits-picker
 - tapOn:
     id: "credits-checkout"
 - runFlow: ../common/web-auth-alert.yaml
 - extendedWaitUntil:
     visible: "Pay"
     timeout: 30000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/fake-checkout
+- takeScreenshot: ${SHOTS}/fake-checkout
 - tapOn: "Pay"
 # "Credits added" shows for under a second before the screen returns to the make flow (Android's slower
 # hierarchy reads can miss it), so the proof of payment is the new balance there.
@@ -79,28 +90,27 @@ name: make-1-happy-path
       visible:
         id: "credits-added"
     commands:
-      - takeScreenshot: docs/screenshots/phase1/${PLATFORM}/credits-added
+      - takeScreenshot: ${SHOTS}/credits-added
 # Back in the make flow, gen's pick is ready to confirm, with the 3 credits just bought.
 - extendedWaitUntil:
     visible:
       id: "make-pick"
     timeout: 30000
 - assertVisible: ".*You have 3.*"
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-pick-perfect
-- tapOn:
-    id: "make-submit"
+- takeScreenshot: ${SHOTS}/make-pick-perfect
+- runFlow: ../common/make-submit.yaml
 - extendedWaitUntil:
     visible:
       id: "make-list"
     timeout: 20000
 - assertVisible:
     id: "job-card-.*"
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-working
+- takeScreenshot: ${SHOTS}/make-tab-working
 - extendedWaitUntil:
     visible:
       id: "job-ready-.*"
     timeout: 120000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-ready
+- takeScreenshot: ${SHOTS}/make-tab-ready
 - tapOn:
     id: "job-card-.*"
 - extendedWaitUntil:
@@ -111,4 +121,4 @@ name: make-1-happy-path
     id: "ready-copy"
 - assertVisible:
     id: "ready-copied"
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/ready-youtube-copied
+- takeScreenshot: ${SHOTS}/ready-youtube-copied

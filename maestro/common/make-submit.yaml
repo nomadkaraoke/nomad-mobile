@@ -1,0 +1,11 @@
+# Make it on the make screen, once it is enabled: it stays disabled while gen's match judge checks the song (up to
+# the judge's timeout). The flows' users get the fake judge's `none` verdict (stack.js), which settles at once.
+appId: com.nomadkaraoke.mobile
+---
+- extendedWaitUntil:
+    visible:
+      id: "make-submit"
+      enabled: true
+    timeout: 20000
+- tapOn:
+    id: "make-submit"

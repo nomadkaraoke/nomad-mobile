@@ -1,0 +1,44 @@
+# Search parity 1 (spec §4.1 outcome 1): a misspelled query decide is confident about → the song card, with the
+# song's Community and Commercial karaoke versions under it, then its song page.
+appId: com.nomadkaraoke.mobile
+name: search-1-confident-versions
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: config
+      STACK: ${STACK}
+- runFlow: ../common/launch.yaml
+- tapOn:
+    id: "discover-search-input"
+- inputText: "starlite muse"
+- extendedWaitUntil:
+    visible:
+      id: "song-card"
+    timeout: 30000
+- assertVisible:
+    id: "song-card"
+    text: ".*Starlight.*"
+- assertVisible:
+    id: "version-row-.*-kind"
+    text: "Community"
+- assertVisible:
+    id: "version-row-.*-kind"
+    text: "Commercial"
+- assertVisible:
+    id: "version-row-.*-youtube"
+- pressKey: Enter
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ${SHOTS}/search-confident-card
+- tapOn:
+    id: "song-card"
+- extendedWaitUntil:
+    visible:
+      id: "version-list"
+    timeout: 20000
+- assertVisible:
+    id: "song-make"
+- assertNotVisible:
+    id: "song-offline-note"
+- takeScreenshot: ${SHOTS}/search-song-page

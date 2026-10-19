@@ -24,8 +24,7 @@ name: make-9-no-youtube
     visible:
       id: "make-pick"
     timeout: 30000
-- tapOn:
-    id: "make-submit"
+- runFlow: ../common/make-submit.yaml
 - extendedWaitUntil:
     visible:
       id: "job-ready-.*"
@@ -49,4 +48,4 @@ name: make-9-no-youtube
     visible:
       id: "ready-player"
     timeout: 60000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/ready-player
+- takeScreenshot: ${SHOTS}/ready-player

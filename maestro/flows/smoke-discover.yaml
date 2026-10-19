@@ -1,7 +1,12 @@
-# Discover tab → live decide search → song page.
-# Taps Lionel Richie "Hello" by text: decide catalog ids change between catalog rebuilds.
+# Discover tab → decide search (search local stack) → song card → song page → back.
 appId: com.nomadkaraoke.mobile
+name: smoke-discover
 ---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: config
+      STACK: ${STACK}
 - runFlow: ../common/launch.yaml
 - assertVisible:
     id: "tab-discover"
@@ -15,9 +20,15 @@ appId: com.nomadkaraoke.mobile
     id: "discover-search-input"
 - inputText: "hello"
 - extendedWaitUntil:
-    visible: ".*Lionel Richie.*"
-    timeout: 20000
-- tapOn: ".*Lionel Richie.*"
+    visible:
+      id: "song-card"
+    timeout: 30000
+- assertVisible:
+    id: "song-card"
+    text: ".*Adele.*"
+- pressKey: Enter
+- tapOn:
+    id: "song-card"
 - extendedWaitUntil:
     visible:
       id: "song-badge"

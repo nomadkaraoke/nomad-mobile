@@ -1,0 +1,24 @@
+# On Me: removes the offline song list if one is saved (Remove → the confirm's Remove). English UI.
+appId: com.nomadkaraoke.mobile
+---
+- scrollUntilVisible:
+    element:
+      id: "me-offline"
+    direction: DOWN
+- runFlow:
+    when:
+      visible:
+        id: "me-offline-remove"
+    commands:
+      - tapOn:
+          id: "me-offline-remove"
+      - extendedWaitUntil:
+          visible: "Remove the offline song list?"
+          timeout: 5000
+      - tapOn:
+          text: "Remove"
+          below: "Remove the offline song list?"
+      - extendedWaitUntil:
+          visible:
+            id: "me-offline-download"
+          timeout: 10000

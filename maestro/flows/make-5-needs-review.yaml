@@ -24,15 +24,14 @@ name: make-5-needs-review
     visible:
       id: "make-pick"
     timeout: 30000
-- tapOn:
-    id: "make-submit"
+- runFlow: ../common/make-submit.yaml
 - extendedWaitUntil:
     visible:
       id: "job-review-.*"
     timeout: 90000
 - assertVisible:
     id: "job-needs-you-.*"
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-needs-review
+- takeScreenshot: ${SHOTS}/make-tab-needs-review
 - tapOn:
     id: "job-review-.*"
 # The in-app browser opens gen web (the local stack's Next app) on the single-use handoff link
@@ -53,7 +52,7 @@ name: make-5-needs-review
 - assertNotVisible: ".*page could not be found.*"
 - waitForAnimationToEnd:
     timeout: 10000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/review-bridge-browser
+- takeScreenshot: ${SHOTS}/review-bridge-browser
 - runFlow:
     when:
       platform: iOS
