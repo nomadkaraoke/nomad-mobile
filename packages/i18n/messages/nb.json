@@ -264,7 +264,7 @@
     "needsConnection": "Du må være tilkoblet for å lage en sang",
     "noKaraokeYet": "🎵 Ingen karaokeversjon ennå",
     "notIt": "Feil sang?",
-    "offlineBanner": "Frakoblet · søker blant sanger lagret på denne telefonen (oppdatert {days, plural, =0 {i dag} one {# dag siden} other {# dager siden}})",
+    "offlineBanner": "Frakoblet · søker blant sanger lagret på denne telefonen (oppdatert {days, plural, =0 {i dag} one {for # dag siden} other {for # dager siden}})",
     "offlineDownload": "Last ned sanglisten",
     "offlineNoList": "Frakoblet · ingen sangliste er lagret på denne telefonen ennå",
     "resultsHeading": "Sanger med karaokeversjoner",
