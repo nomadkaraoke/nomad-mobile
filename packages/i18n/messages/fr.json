@@ -245,6 +245,7 @@
     "showMore": "Afficher {count} de plus",
     "tidiedTo": "Ajusté en {value}",
     "undo": "Annuler",
-    "whichOne": "À quelle chanson tu penses ?"
+    "whichOne": "À quelle chanson tu penses ?",
+    "rejected": "Impossible de lancer cette recherche. Essaie avec d'autres mots."
   }
 }

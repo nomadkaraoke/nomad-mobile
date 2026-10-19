@@ -245,6 +245,7 @@
     "showMore": "Mostrar {count} más",
     "tidiedTo": "Ajustado a {value}",
     "undo": "Deshacer",
-    "whichOne": "¿A qué canción te refieres?"
+    "whichOne": "¿A qué canción te refieres?",
+    "rejected": "No se pudo buscar eso. Prueba con otras palabras."
   }
 }

@@ -21,8 +21,34 @@ export const NO_CHOICE: Choice = { keepTyped: false, notIt: false, picked: null 
 
 const without = (groups: SongGroup[], song: SongRef) => groups.filter((g) => !sameSong(g, song));
 
+/**
+ * Every group that is `song` (sameSong: "Starlight" and "Starlight (Live)" by Muse) as one group: versions
+ * merged best-first by rank, duplicates (same brand and link) dropped; `version_count` is the merged total.
+ */
+function mergedGroup(groups: SongGroup[], song: SongRef): SongGroup | null {
+  const same = groups.filter((g) => sameSong(g, song));
+  if (same.length === 0) return null;
+  if (same.length === 1) return same[0]!;
+  const seen = new Set<string>();
+  let duplicates = 0;
+  const versions = same
+    .flatMap((g) => g.versions)
+    .filter((v) => {
+      const key = `${v.brand_code}|${v.youtube_url ?? ''}`;
+      if (seen.has(key)) {
+        duplicates += 1;
+        return false;
+      }
+      seen.add(key);
+      return true;
+    })
+    .sort((a, b) => a.rank - b.rank); // stable: equal ranks keep group order
+  const total = same.reduce((n, g) => n + g.version_count, 0) - duplicates;
+  return { ...same[0]!, versions, version_count: Math.max(total, versions.length) };
+}
+
 function songOutcome(song: SongRef, announce: Announce, groups: SongGroup[], canNotIt: boolean): Outcome {
-  const group = groups.find((g) => sameSong(g, song)) ?? null;
+  const group = mergedGroup(groups, song);
   const others = without(groups, song);
   // kjbox B108: only the index's karaoke flag may claim "no karaoke version yet" ("Killers" vs "The Killers").
   if (!group && song.karaoke === false) return { kind: 'missing', song, others };

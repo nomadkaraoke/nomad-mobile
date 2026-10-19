@@ -245,6 +245,7 @@
     "showMore": "Még {count} megjelenítése",
     "tidiedTo": "Rendezve erre: {value}",
     "undo": "Visszavonás",
-    "whichOne": "Melyik dalra gondolsz?"
+    "whichOne": "Melyik dalra gondolsz?",
+    "rejected": "Erre nem sikerült rákeresni. Próbálkozz más szavakkal."
   }
 }

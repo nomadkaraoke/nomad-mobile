@@ -245,6 +245,7 @@
     "showMore": "Vis {count} mere",
     "tidiedTo": "Finpudset til {value}",
     "undo": "Fortryd",
-    "whichOne": "Hvilken sang mener du?"
+    "whichOne": "Hvilken sang mener du?",
+    "rejected": "Kunne ikke søge efter det. Prøv med andre ord."
   }
 }

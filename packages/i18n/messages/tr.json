@@ -245,6 +245,7 @@
     "showMore": "{count} tane daha göster",
     "tidiedTo": "{value} olarak düzenlendi",
     "undo": "Geri al",
-    "whichOne": "Hangi şarkıyı kastediyorsun?"
+    "whichOne": "Hangi şarkıyı kastediyorsun?",
+    "rejected": "Bunun için arama yapılamadı. Farklı kelimeler dene."
   }
 }

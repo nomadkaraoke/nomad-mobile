@@ -62,7 +62,8 @@ export type SearchState = {
   groups: SongGroup[];
   /** The Gemini fallback's answer when the cloud found nothing at all. */
   resolve: ResolveResponse | null;
-  error: 'unreachable' | null;
+  /** `unreachable`: no answer (offline results may stay). `rejected`: decide refused this query (a 4xx). */
+  error: 'unreachable' | 'rejected' | null;
   /** The (debounced, trimmed) query being searched; under 2 characters → the popular list. */
   query: string;
   /**
@@ -263,7 +264,13 @@ export function useSearch(rawQuery: string): SearchState {
             // Only for a query left alone RESOLVE_STABLE_MS since the last keystroke (Gemini is never asked about
             // a prefix). Typing on starts a new generation (after the debounce), which drops this one.
             const askWhenStable = () => {
-              if (!live() || keystroke.current.value !== q) return;
+              if (!live()) return;
+              // The box changed: typing on starts a new generation after the debounce, but a change undone within
+              // the debounce (A → Ax → A) doesn't, so look again later instead of giving up.
+              if (keystroke.current.value !== q) {
+                later(RESOLVE_STABLE_MS, askWhenStable);
+                return;
+              }
               const wait = RESOLVE_STABLE_MS - (Date.now() - keystroke.current.at);
               if (wait > 0) {
                 later(wait, askWhenStable);
@@ -278,12 +285,13 @@ export function useSearch(rawQuery: string): SearchState {
           },
           (e: unknown) => {
             if (!live() || cloudDone) return;
-            // A client error (bad query, 429 rate limit) won't fix itself on a 2 s retry: settle now. A 429's
-            // Retry-After is honoured with one automatic retry when it fits in the unreachable window.
+            // A client error won't fix itself on a 2 s retry: settle now. A 429 is "can't reach search" with its
+            // Retry-After honoured by one automatic retry (when it fits in the unreachable window); any other 4xx
+            // (400/404/422…) is decide refusing this query. A 408 is retried like a 5xx.
             const client = clientError(e);
-            if (client) {
+            if (client && client.status !== 408) {
               controller.abort();
-              settleWithoutCloud('unreachable');
+              settleWithoutCloud(client.status === 429 ? 'unreachable' : 'rejected');
               const wait = client.status === 429 && client.retryAfter != null ? client.retryAfter * 1000 : null;
               if (wait !== null && wait <= UNREACHABLE_AFTER_MS) later(wait, () => live() && setAttempt((n) => n + 1));
               return;

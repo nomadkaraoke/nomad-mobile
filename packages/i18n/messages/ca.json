@@ -245,6 +245,7 @@
     "showMore": "Mostra'n {count} més",
     "tidiedTo": "Ajustat a {value}",
     "undo": "Desfer",
-    "whichOne": "Quina cançó vols dir?"
+    "whichOne": "Quina cançó vols dir?",
+    "rejected": "No s'ha pogut cercar això. Prova amb altres paraules."
   }
 }

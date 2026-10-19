@@ -245,6 +245,7 @@
     "showMore": "Prikaži još {count}",
     "tidiedTo": "Uređeno u {value}",
     "undo": "Poništi",
-    "whichOne": "Na koju pjesmu misliš?"
+    "whichOne": "Na koju pjesmu misliš?",
+    "rejected": "Nismo uspjeli pronaći ništa za taj pojam. Pokušaj s drugim riječima."
   }
 }

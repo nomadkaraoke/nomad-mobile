@@ -329,6 +329,22 @@ describe('the Gemini resolve fallback', () => {
     expect(resolveQuery).toHaveBeenCalledWith('whale movie', currentSid());
   });
 
+  it('still asks once the box settles after a change undone within the debounce (A → Ax → A)', async () => {
+    searchSongs.mockResolvedValue(response([]));
+    const { result, rerender } = renderHook(({ q }: { q: string }) => useSearch(q), { initialProps: { q: 'whale' } });
+    await advance(700);
+    rerender({ q: 'whalex' });
+    await advance(150); // the check at 800 ms sees "whalex" in the box
+    expect(resolveQuery).not.toHaveBeenCalled();
+    rerender({ q: 'whale' }); // back within the debounce: no new generation
+    await advance(100);
+    expect(result.current.loading).toBe(true);
+    await advance(2000);
+    expect(resolveQuery).toHaveBeenCalledTimes(1);
+    expect(resolveQuery).toHaveBeenCalledWith('whale', currentSid());
+    expect(result.current.loading).toBe(false);
+  });
+
   it('drops a resolve answer that arrives after a newer query', async () => {
     searchSongs.mockImplementation(async (q: string) => response(q === 'mystery' ? [] : [group(q)]));
     const answer = deferred<unknown>();
@@ -344,13 +360,23 @@ describe('the Gemini resolve fallback', () => {
 });
 
 describe('C5 carries', () => {
-  it('a 4xx (bad query) settles at once as unreachable: no warming-up retries', async () => {
-    searchSongs.mockRejectedValue({ status: 422, detail: 'bad', retryAfter: null });
+  it.each([400, 404, 422])('a %i settles at once as rejected (decide refused the query): no warming-up retries', async (status) => {
+    searchSongs.mockRejectedValue({ status, detail: 'bad', retryAfter: null });
     const { result } = renderHook(() => useSearch('hello'));
     await advance(0);
-    expect(result.current).toMatchObject({ error: 'unreachable', loading: false, warmingUp: false, source: 'none' });
+    expect(result.current).toMatchObject({ error: 'rejected', loading: false, warmingUp: false, source: 'none' });
     await advance(10_000);
     expect(searchSongs).toHaveBeenCalledTimes(1);
+  });
+
+  it('a 408 is retried like a 5xx', async () => {
+    searchSongs.mockRejectedValueOnce({ status: 408, detail: 'timeout', retryAfter: null });
+    const { result } = renderHook(() => useSearch('hello'));
+    await advance(0);
+    expect(result.current).toMatchObject({ error: null, loading: true });
+    await advance(2000);
+    expect(searchSongs).toHaveBeenCalledTimes(2);
+    expect(result.current).toMatchObject({ error: null, source: 'cloud' });
   });
 
   it('a 429 with Retry-After settles at once, then searches again once the wait is over', async () => {

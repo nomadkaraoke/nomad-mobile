@@ -245,6 +245,7 @@
     "showMore": "{count} weitere anzeigen",
     "tidiedTo": "Bereinigt zu {value}",
     "undo": "Rückgängig",
-    "whichOne": "Welchen Song meinst du?"
+    "whichOne": "Welchen Song meinst du?",
+    "rejected": "Dafür konnte keine Suche durchgeführt werden. Probiere andere Suchbegriffe aus."
   }
 }

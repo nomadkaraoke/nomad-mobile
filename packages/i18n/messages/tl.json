@@ -245,6 +245,7 @@
     "showMore": "Ipakita ang {count} pa",
     "tidiedTo": "Inayos sa {value}",
     "undo": "I-undo",
-    "whichOne": "Aling kanta ang tinutukoy mo?"
+    "whichOne": "Aling kanta ang tinutukoy mo?",
+    "rejected": "Hindi maihanap 'yan. Sumubok ng ibang mga salita."
   }
 }

@@ -55,7 +55,8 @@
     "describeSubmit": "Find it",
     "describeNothing": "We couldn't work out which song that is. Try describing it another way.",
     "warmingUp": "Warming up search…",
-    "unreachable": "Can't reach search right now."
+    "unreachable": "Can't reach search right now.",
+    "rejected": "Couldn't search for that. Try different words."
   },
   "song": {
     "artistLabel": "Artist",

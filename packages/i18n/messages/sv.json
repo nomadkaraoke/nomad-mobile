@@ -245,6 +245,7 @@
     "showMore": "Visa {count} till",
     "tidiedTo": "Justerat till {value}",
     "undo": "Ångra",
-    "whichOne": "Vilken låt menar du?"
+    "whichOne": "Vilken låt menar du?",
+    "rejected": "Det gick inte att söka på det. Prova med andra sökord."
   }
 }

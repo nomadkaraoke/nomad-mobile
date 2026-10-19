@@ -245,6 +245,7 @@
     "showMore": "Näytä vielä {count}",
     "tidiedTo": "Siistitty muotoon {value}",
     "undo": "Kumoa",
-    "whichOne": "Mitä kappaletta tarkoitat?"
+    "whichOne": "Mitä kappaletta tarkoitat?",
+    "rejected": "Hakua ei voitu suorittaa. Kokeile eri hakusanoja."
   }
 }

@@ -245,6 +245,7 @@
     "showMore": "Zobrazit dalších {count}",
     "tidiedTo": "Upraveno na {value}",
     "undo": "Zpět",
-    "whichOne": "Kterou písničku myslíš?"
+    "whichOne": "Kterou písničku myslíš?",
+    "rejected": "Tohle se nepodařilo vyhledat. Zkus jiná slova."
   }
 }

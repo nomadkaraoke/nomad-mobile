@@ -245,6 +245,7 @@
     "showMore": "Pokaż jeszcze {count}",
     "tidiedTo": "Uporządkowano: {value}",
     "undo": "Cofnij",
-    "whichOne": "O którą piosenkę ci chodzi?"
+    "whichOne": "O którą piosenkę ci chodzi?",
+    "rejected": "Nie udało się tego wyszukać. Spróbuj użyć innych słów."
   }
 }

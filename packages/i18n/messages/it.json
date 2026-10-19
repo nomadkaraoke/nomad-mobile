@@ -245,6 +245,7 @@
     "showMore": "Mostra altre {count}",
     "tidiedTo": "Sistemato in {value}",
     "undo": "Annulla",
-    "whichOne": "Quale canzone intendi?"
+    "whichOne": "Quale canzone intendi?",
+    "rejected": "Impossibile completare la ricerca. Prova con parole diverse."
   }
 }

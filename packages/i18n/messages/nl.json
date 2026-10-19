@@ -245,6 +245,7 @@
     "showMore": "Toon er nog {count}",
     "tidiedTo": "Opgeschoond naar {value}",
     "undo": "Ongedaan maken",
-    "whichOne": "Welk liedje bedoel je?"
+    "whichOne": "Welk liedje bedoel je?",
+    "rejected": "Kon daar niet naar zoeken. Probeer andere zoekwoorden."
   }
 }

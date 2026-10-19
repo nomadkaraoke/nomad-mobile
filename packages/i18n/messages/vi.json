@@ -245,6 +245,7 @@
     "showMore": "Xem thêm {count} bài",
     "tidiedTo": "Đã chỉnh gọn thành {value}",
     "undo": "Hoàn tác",
-    "whichOne": "Ý bạn là bài hát nào?"
+    "whichOne": "Ý bạn là bài hát nào?",
+    "rejected": "Không thể tìm kiếm nội dung đó. Hãy thử các từ khóa khác xem sao."
   }
 }

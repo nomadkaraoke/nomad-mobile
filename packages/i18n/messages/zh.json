@@ -245,6 +245,7 @@
     "showMore": "展开另外 {count} 首",
     "tidiedTo": "已整理为 {value}",
     "undo": "撤销",
-    "whichOne": "你想找哪首歌？"
+    "whichOne": "你想找哪首歌？",
+    "rejected": "无法搜索该内容。请尝试其他关键词。"
   }
 }

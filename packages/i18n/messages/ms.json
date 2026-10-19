@@ -245,6 +245,7 @@
     "showMore": "Tunjukkan {count} lagi",
     "tidiedTo": "Dikemaskan kepada {value}",
     "undo": "Buat asal",
-    "whichOne": "Lagu mana yang anda maksudkan?"
+    "whichOne": "Lagu mana yang anda maksudkan?",
+    "rejected": "Carian tersebut tidak dapat dilakukan. Cuba gunakan perkataan lain."
   }
 }

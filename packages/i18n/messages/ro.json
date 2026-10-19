@@ -245,6 +245,7 @@
     "showMore": "Arată încă {count}",
     "tidiedTo": "Ajustat în {value}",
     "undo": "Anulează",
-    "whichOne": "La ce piesă te referi?"
+    "whichOne": "La ce piesă te referi?",
+    "rejected": "Nu am putut căuta asta. Încearcă alte cuvinte."
   }
 }

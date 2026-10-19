@@ -203,6 +203,36 @@ describe('Review Focus 4: disc-only versions and 50+ versions', () => {
     await waitFor(() => expect(app.getPathname()).toBe('/song/muse|starlight'));
   });
 
+  it('merges every group that is the same song (Muse "Starlight" + "Starlight (Live)") into the card, by rank', async () => {
+    const live = { ...group(ref('Muse', 'Starlight (Live)'), [version(1, 'commercial', false), version(5), version(0)]) };
+    mockState = state({
+      identification: confident(STARLIGHT, 'same'),
+      groups: [group(STARLIGHT, [version(0), version(2), version(3)]), live, group(ref('Taylor Swift', 'Starlight'))],
+    });
+    await renderDiscover();
+    // 3 + 3 versions, B0 (same brand + link) once: 5, best rank first.
+    expect(screen.getByText('Karaoke versions (5)')).toBeTruthy();
+    expect(['Brand 0', 'Brand 1', 'Brand 2', 'Brand 3', 'Brand 5'].map((b) => screen.getAllByText(b).length)).toEqual([1, 1, 1, 1, 1]);
+    expect(screen.getByTestId('version-row-1-kind').props.children).toBe('Commercial'); // B1 from the live group, rank 1
+    expect(screen.queryByTestId('version-row-5')).toBeNull();
+    expect(screen.queryByText('Starlight (Live)')).toBeNull(); // not a separate "similar" row
+    expect(screen.getByText('Other songs with similar names (1)')).toBeTruthy();
+  });
+
+  it('a merged total over 5 shows "Show all N" with the merged count', async () => {
+    mockState = state({
+      identification: confident(STARLIGHT, 'same'),
+      groups: [
+        group(STARLIGHT, Array.from({ length: 4 }, (_, i) => version(i))),
+        group(ref('Muse', 'Starlight (Live)'), Array.from({ length: 3 }, (_, i) => version(i + 10))),
+      ],
+    });
+    await renderDiscover();
+    expect(screen.getByText('Show all 7')).toBeTruthy();
+    fireEvent.press(screen.getByTestId('versions-show-all'));
+    expect(screen.getByTestId('version-row-6')).toBeTruthy();
+  });
+
   it('"Show all" expands in place when every version is already loaded', async () => {
     const seven = Array.from({ length: 7 }, (_, i) => version(i));
     mockState = state({ identification: confident(STARLIGHT, 'same'), groups: [group(STARLIGHT, seven)] });
@@ -234,7 +264,7 @@ describe('2 · confident, no karaoke version yet', () => {
     expect(screen.getByTestId('similar-row-2')).toBeTruthy();
     expect(screen.queryByTestId('similar-row-3')).toBeNull();
     expect(screen.getByText('Show 1 more')).toBeTruthy();
-    expect(log).toHaveBeenCalledWith('make_offer_shown', expect.objectContaining({ where: 'missing_card' }));
+    expect(log).toHaveBeenCalledWith('make_offer_shown', { where: 'missing_card', source: 'search', q: 'machu picchu strokes' });
     fireEvent.press(screen.getByTestId('similar-show-more'));
     expect(screen.getByTestId('similar-row-3')).toBeTruthy();
   });
@@ -371,6 +401,38 @@ describe('Describe it', () => {
     expect(screen.getByTestId('version-row-1')).toBeTruthy();
   });
 
+  it('an answer still in flight when the user types in the search box is dropped', async () => {
+    mockState = state({ identification: confident(STARLIGHT, 'same'), groups: [group(STARLIGHT)] });
+    let answer!: (v: unknown) => void;
+    resolveQuery.mockReturnValue(new Promise((res) => (answer = res)));
+    await renderDiscover();
+    fireEvent.press(screen.getByTestId('describe-link'));
+    fireEvent.changeText(screen.getByTestId('describe-input'), 'is this the real life');
+    await act(async () => fireEvent.press(screen.getByTestId('describe-submit')));
+    fireEvent.changeText(screen.getByTestId('discover-search-input'), 'starlite muse');
+    await act(async () => answer({ kind: 'content', corrected: ref('Queen', 'Bohemian Rhapsody'), groups: [], alternatives: [] }));
+    await act(() => jest.advanceTimersByTimeAsync(300));
+    expect(screen.queryByText('Bohemian Rhapsody')).toBeNull();
+    expect(screen.getByText('Starlight')).toBeTruthy();
+    expect(screen.queryByTestId('discover-figuring-out')).toBeNull();
+  });
+
+  it('a second submit wins over a slower first one', async () => {
+    const answers: ((v: unknown) => void)[] = [];
+    resolveQuery.mockImplementation(() => new Promise((res) => answers.push(res)));
+    await renderDiscover();
+    fireEvent.press(screen.getByTestId('describe-link'));
+    fireEvent.changeText(screen.getByTestId('describe-input'), 'first');
+    await act(async () => fireEvent.press(screen.getByTestId('describe-submit')));
+    fireEvent.changeText(screen.getByTestId('describe-input'), 'second');
+    // The button is busy while a request runs; the keyboard's search key still submits.
+    await act(async () => fireEvent(screen.getByTestId('describe-input'), 'submitEditing'));
+    await act(async () => answers[1]!({ kind: 'content', corrected: ref('B', 'Second Song'), groups: [], alternatives: [] }));
+    await act(async () => answers[0]!({ kind: 'content', corrected: ref('A', 'First Song'), groups: [], alternatives: [] }));
+    expect(screen.getByText('Second Song')).toBeTruthy();
+    expect(screen.queryByText('First Song')).toBeNull();
+  });
+
   it('alternatives render as "Did you mean?" chips', async () => {
     resolveQuery.mockResolvedValue({ kind: null, corrected: null, groups: [], alternatives: [ref('A', 'One'), ref('B', 'Two')] });
     await renderDiscover();
@@ -388,6 +450,22 @@ describe('Describe it', () => {
     fireEvent.changeText(screen.getByTestId('describe-input'), 'hmm');
     await act(async () => fireEvent.press(screen.getByTestId('describe-submit')));
     expect(await screen.findByTestId('describe-nothing')).toBeTruthy();
+  });
+});
+
+describe('errors', () => {
+  it('a refused query (4xx) says so neutrally, with retry', async () => {
+    mockState = state({ query: 'zz', resultsQuery: 'zz', error: 'rejected', source: 'none' });
+    await renderDiscover();
+    expect(screen.getByText("Couldn't search for that. Try different words.")).toBeTruthy();
+    expect(screen.queryByText("Can't reach search right now.")).toBeNull();
+    expect(screen.getByTestId('discover-retry')).toBeTruthy();
+  });
+
+  it('unreachable says it can\'t reach search', async () => {
+    mockState = state({ query: 'zz', resultsQuery: 'zz', error: 'unreachable', source: 'none' });
+    await renderDiscover();
+    expect(screen.getByText("Can't reach search right now.")).toBeTruthy();
   });
 });
 

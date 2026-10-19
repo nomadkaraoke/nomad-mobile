@@ -245,6 +245,7 @@
     "showMore": "Vis {count} til",
     "tidiedTo": "Justert til {value}",
     "undo": "Angre",
-    "whichOne": "Hvilken sang mener du?"
+    "whichOne": "Hvilken sang mener du?",
+    "rejected": "Kunne ikke søke etter det. Prøv med andre ord."
   }
 }
