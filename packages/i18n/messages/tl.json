@@ -18,7 +18,7 @@
     "offlineSaved": "Naka-save ang listahan ng mga kanta sa teleponong ito ({size} MB)",
     "offlineUpdated": "Na-update ang listahan ng mga kanta {days, plural, =0 {ngayong araw} one {# araw ang nakalipas} other {# araw ang nakalipas}}",
     "offlineRemoveTitle": "Alisin ang offline na listahan ng mga kanta?",
-    "offlineRemoveBody": "Hindi gagana ang paghahanap nang walang koneksyon hangga't hindi mo ito dina-download ulit.",
+    "offlineRemoveBody": "Hindi gagana ang paghahanap nang walang koneksyon hangga't hindi mo ito muling dina-download.",
     "offlineRemoveConfirm": "Alisin"
   },
   "common": {

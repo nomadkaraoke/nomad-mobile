@@ -77,7 +77,7 @@
     "noKaraokeHint": "Buat video karaokemu sendiri, siap dinyanyikan dan dibagikan.",
     "offlineMissing": "Anda sedang offline, dan lagu ini tidak ada di daftar lagu yang tersimpan di ponsel ini.",
     "offlineNote": "Offline · dari daftar lagu yang tersimpan di ponsel ini",
-    "cloudErrorNote": "Pencarian tidak dapat diakses saat ini · menampilkan daftar lagu yang tersimpan di ponsel ini"
+    "cloudErrorNote": "Tidak dapat mengakses pencarian saat ini · menampilkan daftar lagu yang tersimpan di ponsel ini"
   },
   "tabs": {
     "discover": "Jelajahi",

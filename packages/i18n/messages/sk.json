@@ -18,7 +18,7 @@
     "offlineSaved": "Zoznam skladieb je uložený v tomto telefóne ({size} MB)",
     "offlineUpdated": "Zoznam skladieb bol aktualizovaný {days, plural, =0 {dnes} one {pred # dňom} few {pred # dňami} other {pred # dňami}}",
     "offlineRemoveTitle": "Odstrániť offline zoznam skladieb?",
-    "offlineRemoveBody": "Vyhľadávanie bez pripojenia nebude fungovať, kým ho znova nestiahneš.",
+    "offlineRemoveBody": "Vyhľadávanie bez pripojenia nebude fungovať, kým si ho znova nestiahneš.",
     "offlineRemoveConfirm": "Odstrániť"
   },
   "common": {

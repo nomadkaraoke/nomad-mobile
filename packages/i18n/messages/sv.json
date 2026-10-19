@@ -18,7 +18,7 @@
     "offlineSaved": "Låtlistan har sparats på den här telefonen ({size} MB)",
     "offlineUpdated": "Låtlistan uppdaterades {days, plural, =0 {i dag} one {för # dag sedan} other {för # dagar sedan}}",
     "offlineRemoveTitle": "Ta bort offlinelåtlistan?",
-    "offlineRemoveBody": "Sökning utan anslutning fungerar inte förrän du laddar ner den igen.",
+    "offlineRemoveBody": "Det går inte att söka utan anslutning förrän du laddar ner den igen.",
     "offlineRemoveConfirm": "Ta bort"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Gör en egen karaokevideo av den, redo att sjungas till och delas.",
     "offlineMissing": "Du är offline och den här låten finns inte i låtlistan som sparats på den här telefonen.",
     "offlineNote": "Offline · från låtlistan som sparats på den här telefonen",
-    "cloudErrorNote": "Det går inte att nå söktjänsten just nu · visar låtlistan som sparats på den här telefonen"
+    "cloudErrorNote": "Det går inte att nå sökningen just nu · visar låtlistan som sparats på denna telefon"
   },
   "tabs": {
     "discover": "Upptäck",

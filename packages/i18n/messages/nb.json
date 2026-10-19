@@ -17,8 +17,8 @@
     "offlineRetry": "Prøv å laste ned på nytt",
     "offlineSaved": "Sanglisten er lagret på denne telefonen ({size} MB)",
     "offlineUpdated": "Sanglisten ble oppdatert {days, plural, =0 {i dag} one {for # dag siden} other {for # dager siden}}",
-    "offlineRemoveTitle": "Fjerne den frakoblede sanglisten?",
-    "offlineRemoveBody": "Søk uten tilkobling fungerer ikke før du laster den ned igjen.",
+    "offlineRemoveTitle": "Fjerne den nedlastede sanglisten?",
+    "offlineRemoveBody": "Søk uten nettilkobling vil ikke fungere før du laster den ned på nytt.",
     "offlineRemoveConfirm": "Fjern"
   },
   "common": {

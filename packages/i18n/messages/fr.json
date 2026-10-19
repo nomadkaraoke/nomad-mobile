@@ -18,8 +18,8 @@
     "offlineSaved": "Liste de chansons enregistrée sur ce téléphone ({size} Mo)",
     "offlineUpdated": "Liste de chansons mise à jour {days, plural, =0 {aujourd'hui} one {il y a # jour} other {il y a # jours}}",
     "offlineRemoveTitle": "Supprimer la liste de chansons hors ligne ?",
-    "offlineRemoveBody": "La recherche hors connexion ne fonctionnera plus tant que vous ne l'aurez pas téléchargée à nouveau.",
-    "offlineRemoveConfirm": "Supprimer"
+    "offlineRemoveBody": "La recherche hors ligne ne fonctionnera plus tant que tu ne l'auras pas téléchargée à nouveau.",
+    "offlineRemoveConfirm": "Retirer"
   },
   "common": {
     "error": "Une erreur s'est produite.",

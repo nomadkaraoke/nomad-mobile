@@ -18,7 +18,7 @@
     "offlineSaved": "Lista de músicas salva neste celular ({size} MB)",
     "offlineUpdated": "Lista de músicas atualizada {days, plural, =0 {hoje} one {há # dia} other {há # dias}}",
     "offlineRemoveTitle": "Remover a lista de músicas offline?",
-    "offlineRemoveBody": "A pesquisa sem conexão não vai funcionar até você baixá-la de novo.",
+    "offlineRemoveBody": "A busca offline não funcionará até que você baixe a lista novamente.",
     "offlineRemoveConfirm": "Remover"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Crie seu próprio vídeo de karaokê desta música, pronto para cantar e compartilhar.",
     "offlineMissing": "Você está offline e esta música não está na lista salva neste celular.",
     "offlineNote": "Offline · da lista de músicas salva neste celular",
-    "cloudErrorNote": "Não é possível acessar a pesquisa no momento · mostrando a lista de músicas salva neste celular"
+    "cloudErrorNote": "Não foi possível acessar a busca no momento · mostrando a lista de músicas salva neste celular"
   },
   "tabs": {
     "discover": "Descobrir",

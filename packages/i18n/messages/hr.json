@@ -17,8 +17,8 @@
     "offlineRetry": "Pokušaj ponovno preuzeti",
     "offlineSaved": "Popis pjesama spremljen je na ovom telefonu ({size} MB)",
     "offlineUpdated": "Popis pjesama ažuriran je {days, plural, =0 {danas} one {prije # dan} few {prije # dana} other {prije # dana}}",
-    "offlineRemoveTitle": "Ukloniti izvanmrežni popis pjesama?",
-    "offlineRemoveBody": "Pretraživanje bez veze neće raditi dok ga ponovno ne preuzmeš.",
+    "offlineRemoveTitle": "Želiš li ukloniti izvanmrežni popis pjesama?",
+    "offlineRemoveBody": "Pretraživanje bez internetske veze neće raditi dok ga ponovno ne preuzmeš.",
     "offlineRemoveConfirm": "Ukloni"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Napravi vlastiti karaoke video za ovu pjesmu, spreman za pjevanje i dijeljenje.",
     "offlineMissing": "Nemaš internetsku vezu, a ove pjesme nema na popisu spremljenom na ovom telefonu.",
     "offlineNote": "Izvanmrežno · s popisa pjesama spremljenog na ovom telefonu",
-    "cloudErrorNote": "Pretraživanje trenutno nije dostupno · prikazuje se popis pjesama spremljen na ovom telefonu"
+    "cloudErrorNote": "Pretraživanje trenutačno nije dostupno · prikazuje se popis pjesama spremljen na ovom telefonu"
   },
   "tabs": {
     "discover": "Otkrij",

@@ -17,8 +17,8 @@
     "offlineRetry": "重新下载",
     "offlineSaved": "歌单已保存在本设备上（{size} MB）",
     "offlineUpdated": "歌单更新于 {days, plural, =0 {今天} one {# 天前} other {# 天前}}",
-    "offlineRemoveTitle": "移除离线歌单？",
-    "offlineRemoveBody": "重新下载之前，无法在没有网络时搜索。",
+    "offlineRemoveTitle": "移除离线歌曲列表？",
+    "offlineRemoveBody": "重新下载前，离线搜索将无法使用。",
     "offlineRemoveConfirm": "移除"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "为这首歌制作专属的卡拉OK视频，随时开唱与分享。",
     "offlineMissing": "您当前处于离线状态，且本设备保存的歌单中未包含这首歌曲。",
     "offlineNote": "离线 · 来自保存在本设备上的歌单",
-    "cloudErrorNote": "暂时无法连接搜索服务 · 正在显示保存在本设备上的歌单"
+    "cloudErrorNote": "暂时无法连接搜索 · 正在显示保存在此手机上的歌曲列表"
   },
   "tabs": {
     "discover": "发现",

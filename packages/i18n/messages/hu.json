@@ -18,7 +18,7 @@
     "offlineSaved": "Dallista elmentve erre a telefonra ({size} MB)",
     "offlineUpdated": "Dallista frissítve {days, plural, =0 {ma} one {# napja} other {# napja}}",
     "offlineRemoveTitle": "Eltávolítod az offline dallistát?",
-    "offlineRemoveBody": "A kapcsolat nélküli keresés nem fog működni, amíg újra le nem töltöd.",
+    "offlineRemoveBody": "Az internetkapcsolat nélküli keresés nem fog működni, amíg újra le nem töltöd.",
     "offlineRemoveConfirm": "Eltávolítás"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Készíts belőle saját karaoke videót, készen az éneklésre és megosztásra.",
     "offlineMissing": "Offline módban vagy, és ez a dal nem szerepel az erre a telefonra mentett dallistában.",
     "offlineNote": "Offline · az erre a telefonra mentett dallistából",
-    "cloudErrorNote": "A kereső jelenleg nem érhető el · az erre a telefonra mentett dallista látható"
+    "cloudErrorNote": "A keresés jelenleg nem érhető el · az erre a telefonra mentett dallista jelenik meg"
   },
   "tabs": {
     "discover": "Felfedezés",

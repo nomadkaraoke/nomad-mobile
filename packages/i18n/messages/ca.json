@@ -17,8 +17,8 @@
     "offlineRetry": "Torna a provar la descàrrega",
     "offlineSaved": "Llista de cançons desada en aquest telèfon ({size} MB)",
     "offlineUpdated": "Llista de cançons actualitzada {days, plural, =0 {avui} one {fa # dia} other {fa # dies}}",
-    "offlineRemoveTitle": "Vols eliminar la llista de cançons sense connexió?",
-    "offlineRemoveBody": "La cerca sense connexió no funcionarà fins que la tornis a descarregar.",
+    "offlineRemoveTitle": "Vols eliminar la llista de cançons fora de línia?",
+    "offlineRemoveBody": "Cercar sense connexió no funcionarà fins que no la tornis a descarregar.",
     "offlineRemoveConfirm": "Elimina"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Crea el teu propi vídeo de karaoke d'aquesta cançó, a punt per cantar i compartir.",
     "offlineMissing": "No tens connexió i aquesta cançó no és a la llista desada en aquest telèfon.",
     "offlineNote": "Sense connexió · de la llista de cançons desada en aquest telèfon",
-    "cloudErrorNote": "No es pot accedir a la cerca ara mateix · es mostra la llista de cançons desada en aquest telèfon"
+    "cloudErrorNote": "Ara mateix no es pot accedir a la cerca · es mostra la llista de cançons desada en aquest telèfon"
   },
   "tabs": {
     "discover": "Descobreix",

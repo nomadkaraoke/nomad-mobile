@@ -17,8 +17,8 @@
     "offlineRetry": "Riprova a scaricare",
     "offlineSaved": "Elenco dei brani salvato su questo telefono ({size} MB)",
     "offlineUpdated": "Elenco dei brani aggiornato {days, plural, =0 {oggi} one {# giorno fa} other {# giorni fa}}",
-    "offlineRemoveTitle": "Rimuovere l'elenco dei brani offline?",
-    "offlineRemoveBody": "La ricerca senza connessione non funzionerà finché non lo scaricherai di nuovo.",
+    "offlineRemoveTitle": "Vuoi rimuovere l'elenco dei brani offline?",
+    "offlineRemoveBody": "La ricerca offline non funzionerà finché non la scaricherai di nuovo.",
     "offlineRemoveConfirm": "Rimuovi"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Crea il tuo video karaoke del brano, pronto da cantare e condividere.",
     "offlineMissing": "Sei offline e questo brano non è presente nell'elenco salvato su questo telefono.",
     "offlineNote": "Offline · dall'elenco dei brani salvato su questo telefono",
-    "cloudErrorNote": "Impossibile accedere alla ricerca al momento · viene mostrato l'elenco dei brani salvato su questo telefono"
+    "cloudErrorNote": "Impossibile accedere alla ricerca in questo momento · mostro l'elenco dei brani salvato su questo telefono"
   },
   "tabs": {
     "discover": "Scopri",

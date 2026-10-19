@@ -17,8 +17,8 @@
     "offlineRetry": "Zkusit stáhnout znovu",
     "offlineSaved": "Seznam skladeb je uložen v tomto telefonu ({size} MB)",
     "offlineUpdated": "Seznam skladeb aktualizován {days, plural, =0 {dnes} one {před # dnem} few {před # dny} other {před # dny}}",
-    "offlineRemoveTitle": "Odstranit offline seznam skladeb?",
-    "offlineRemoveBody": "Vyhledávání bez připojení nebude fungovat, dokud ho znovu nestáhneš.",
+    "offlineRemoveTitle": "Odebrat offline seznam skladeb?",
+    "offlineRemoveBody": "Vyhledávání bez připojení nebude fungovat, dokud si seznam znovu nestáhneš.",
     "offlineRemoveConfirm": "Odstranit"
   },
   "common": {

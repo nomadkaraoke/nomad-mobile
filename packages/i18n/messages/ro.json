@@ -18,7 +18,7 @@
     "offlineSaved": "Listă de melodii salvată pe acest telefon ({size} MB)",
     "offlineUpdated": "Listă de melodii actualizată {days, plural, =0 {astăzi} one {acum o zi} few {acum # zile} other {acum # de zile}}",
     "offlineRemoveTitle": "Elimini lista de melodii offline?",
-    "offlineRemoveBody": "Căutarea fără conexiune nu va funcționa până nu o descarci din nou.",
+    "offlineRemoveBody": "Căutarea fără conexiune nu va funcționa până când nu o descarci din nou.",
     "offlineRemoveConfirm": "Elimină"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Creează-ți propriul videoclip karaoke cu această piesă, gata de cântat și distribuit.",
     "offlineMissing": "Ești offline, iar această melodie nu se află în lista salvată pe acest telefon.",
     "offlineNote": "Offline · din lista de melodii salvată pe acest telefon",
-    "cloudErrorNote": "Căutarea nu este disponibilă momentan · se afișează lista de melodii salvată pe acest telefon"
+    "cloudErrorNote": "Căutarea nu este disponibilă acum · se afișează lista de melodii salvată pe acest telefon"
   },
   "tabs": {
     "discover": "Descoperă",

@@ -18,7 +18,7 @@
     "offlineSaved": "Kappalelista tallennettu tähän puhelimeen ({size} Mt)",
     "offlineUpdated": "Kappalelista päivitetty {days, plural, =0 {tänään} one {# päivä sitten} other {# päivää sitten}}",
     "offlineRemoveTitle": "Poistetaanko offline-kappalelista?",
-    "offlineRemoveBody": "Haku ilman yhteyttä ei toimi, ennen kuin lataat listan uudelleen.",
+    "offlineRemoveBody": "Haku ilman verkkoyhteyttä ei toimi, ennen kuin lataat listan uudelleen.",
     "offlineRemoveConfirm": "Poista"
   },
   "common": {

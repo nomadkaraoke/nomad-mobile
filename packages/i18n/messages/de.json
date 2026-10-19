@@ -18,7 +18,7 @@
     "offlineSaved": "Songliste auf diesem Smartphone gespeichert ({size} MB)",
     "offlineUpdated": "Songliste aktualisiert {days, plural, =0 {heute} one {vor # Tag} other {vor # Tagen}}",
     "offlineRemoveTitle": "Offline-Songliste entfernen?",
-    "offlineRemoveBody": "Die Suche ohne Verbindung funktioniert erst wieder, wenn du sie erneut herunterlädst.",
+    "offlineRemoveBody": "Die Suche ohne Internetverbindung funktioniert erst wieder, wenn du sie erneut herunterlädst.",
     "offlineRemoveConfirm": "Entfernen"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Erstelle dein eigenes Karaoke-Video davon – bereit zum Mitsingen und Teilen.",
     "offlineMissing": "Du bist offline und dieser Song ist nicht in der auf diesem Smartphone gespeicherten Songliste enthalten.",
     "offlineNote": "Offline · aus der auf diesem Smartphone gespeicherten Songliste",
-    "cloudErrorNote": "Suche derzeit nicht erreichbar · Anzeige aus der auf diesem Smartphone gespeicherten Songliste"
+    "cloudErrorNote": "Suche gerade nicht erreichbar · es wird die auf diesem Smartphone gespeicherte Songliste angezeigt"
   },
   "tabs": {
     "discover": "Entdecken",

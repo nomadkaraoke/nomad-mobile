@@ -18,7 +18,7 @@
     "offlineSaved": "Şarkı listesi bu telefona kaydedildi ({size} MB)",
     "offlineUpdated": "Şarkı listesi {days, plural, =0 {bugün} one {# gün önce} other {# gün önce}} güncellendi",
     "offlineRemoveTitle": "Çevrimdışı şarkı listesi kaldırılsın mı?",
-    "offlineRemoveBody": "Tekrar indirene kadar bağlantısız arama çalışmaz.",
+    "offlineRemoveBody": "Tekrar indirene kadar bağlantı olmadan arama yapamazsın.",
     "offlineRemoveConfirm": "Kaldır"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Şarkı söylemeye ve paylaşmaya hazır, kendi karaoke videonu oluştur.",
     "offlineMissing": "Çevrimdışısın ve bu şarkı telefonuna kaydedilen şarkı listesinde bulunmuyor.",
     "offlineNote": "Çevrimdışı · Bu telefona kaydedilen şarkı listesinden",
-    "cloudErrorNote": "Aramaya şu anda ulaşılamıyor · bu telefona kaydedilen şarkı listesi gösteriliyor"
+    "cloudErrorNote": "Şu anda aramaya ulaşılamıyor · bu telefona kaydedilen şarkı listesi gösteriliyor"
   },
   "tabs": {
     "discover": "Keşfet",

@@ -18,7 +18,7 @@
     "offlineSaved": "この端末に曲リストを保存済み ({size} MB)",
     "offlineUpdated": "曲リストの更新: {days, plural, =0 {今日} one {#日前} other {#日前}}",
     "offlineRemoveTitle": "オフライン曲リストを削除しますか？",
-    "offlineRemoveBody": "もう一度ダウンロードするまで、オフラインでの検索は使えません。",
+    "offlineRemoveBody": "もう一度ダウンロードするまで、オフラインでの検索は利用できなくなります。",
     "offlineRemoveConfirm": "削除"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "自分だけのカラオケ動画を作成して、歌ったりシェアしたりしましょう。",
     "offlineMissing": "オフラインです。この曲はこの端末に保存された曲リストに含まれていません。",
     "offlineNote": "オフライン · この端末に保存された曲リストより",
-    "cloudErrorNote": "現在、検索に接続できません · この端末に保存された曲リストを表示しています"
+    "cloudErrorNote": "現在検索に接続できません · このスマートフォンに保存されている曲リストを表示しています"
   },
   "tabs": {
     "discover": "見つける",

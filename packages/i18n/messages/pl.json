@@ -18,7 +18,7 @@
     "offlineSaved": "Lista utworów zapisana na tym telefonie ({size} MB)",
     "offlineUpdated": "Lista utworów zaktualizowana {days, plural, =0 {dzisiaj} one {# dzień temu} few {# dni temu} many {# dni temu} other {# dni temu}}",
     "offlineRemoveTitle": "Usunąć listę utworów offline?",
-    "offlineRemoveBody": "Wyszukiwanie bez połączenia nie będzie działać, dopóki nie pobierzesz jej ponownie.",
+    "offlineRemoveBody": "Wyszukiwanie bez połączenia z internetem nie będzie działać, dopóki nie pobierzesz jej ponownie.",
     "offlineRemoveConfirm": "Usuń"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Stwórz własne wideo karaoke z tego utworu – gotowe do śpiewania i udostępniania.",
     "offlineMissing": "Jesteś offline, a tego utworu nie ma na liście zapisanej na tym telefonie.",
     "offlineNote": "Offline · z listy utworów zapisanej na tym telefonie",
-    "cloudErrorNote": "Nie można teraz połączyć się z wyszukiwarką · pokazujemy listę utworów zapisaną na tym telefonie"
+    "cloudErrorNote": "Nie można teraz połączyć się z wyszukiwarką · wyświetlam listę utworów zapisaną na tym telefonie"
   },
   "tabs": {
     "discover": "Odkrywaj",

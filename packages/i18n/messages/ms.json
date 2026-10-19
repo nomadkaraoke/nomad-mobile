@@ -17,9 +17,9 @@
     "offlineRetry": "Cuba muat turun sekali lagi",
     "offlineSaved": "Senarai lagu disimpan pada telefon ini ({size} MB)",
     "offlineUpdated": "Senarai lagu dikemas kini {days, plural, =0 {hari ini} one {# hari lalu} other {# hari lalu}}",
-    "offlineRemoveTitle": "Padamkan senarai lagu luar talian?",
-    "offlineRemoveBody": "Carian tanpa sambungan tidak akan berfungsi sehingga anda memuat turunnya semula.",
-    "offlineRemoveConfirm": "Padam"
+    "offlineRemoveTitle": "Padam senarai lagu luar talian?",
+    "offlineRemoveBody": "Carian tanpa sambungan internet tidak akan berfungsi sehingga anda memuat turunnya semula.",
+    "offlineRemoveConfirm": "Alih keluar"
   },
   "common": {
     "error": "Sesuatu telah berlaku masalah.",
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Cipta video karaoke anda sendiri untuk lagu ini, sedia untuk dinyanyikan dan dikongsi.",
     "offlineMissing": "Anda sedang berada di luar talian, dan lagu ini tiada dalam senarai lagu yang disimpan pada telefon ini.",
     "offlineNote": "Luar talian · daripada senarai lagu yang disimpan pada telefon ini",
-    "cloudErrorNote": "Carian tidak dapat dicapai buat masa ini · menunjukkan senarai lagu yang disimpan pada telefon ini"
+    "cloudErrorNote": "Carian tidak dapat dihubungi buat masa ini · memaparkan senarai lagu yang disimpan pada telefon ini"
   },
   "tabs": {
     "discover": "Teroka",

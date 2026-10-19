@@ -67,7 +67,8 @@
     "noKaraokeHint": "Make your own karaoke video of it, ready to sing and share.",
     "hasKaraokeHint": "You can still make your own, from the audio you pick.",
     "offlineNote": "Offline · from the song list saved on this phone",
-    "offlineMissing": "You're offline, and this song isn't in the song list saved on this phone."
+    "offlineMissing": "You're offline, and this song isn't in the song list saved on this phone.",
+    "cloudErrorNote": "Can't reach search right now · showing the song list saved on this phone"
   },
   "signIn": {
     "emailTitle": "Sign in",
@@ -118,7 +119,10 @@
     "offlineUpdated": "Song list updated {days, plural, =0 {today} one {# day ago} other {# days ago}}",
     "offlineRemove": "Remove offline song list",
     "offlineError": "Couldn't download the song list.",
-    "offlineRetry": "Try the download again"
+    "offlineRetry": "Try the download again",
+    "offlineRemoveTitle": "Remove the offline song list?",
+    "offlineRemoveBody": "Searching with no connection won't work until you download it again.",
+    "offlineRemoveConfirm": "Remove"
   },
   "tonight": {
     "title": "Tonight",

@@ -17,8 +17,8 @@
     "offlineRetry": "Probeer het downloaden opnieuw",
     "offlineSaved": "Nummerslijst opgeslagen op deze telefoon ({size} MB)",
     "offlineUpdated": "Nummerslijst bijgewerkt {days, plural, =0 {vandaag} one {# dag geleden} other {# dagen geleden}}",
-    "offlineRemoveTitle": "Offline nummerslijst verwijderen?",
-    "offlineRemoveBody": "Zoeken zonder verbinding werkt pas weer als je hem opnieuw downloadt.",
+    "offlineRemoveTitle": "De offline nummerslijst verwijderen?",
+    "offlineRemoveBody": "Zoeken zonder verbinding werkt pas weer als je deze opnieuw downloadt.",
     "offlineRemoveConfirm": "Verwijderen"
   },
   "common": {
@@ -77,7 +77,7 @@
     "noKaraokeHint": "Maak er je eigen karaokevideo van, klaar om te zingen en te delen.",
     "offlineMissing": "Je bent offline en dit nummer staat niet in de nummerslijst die op deze telefoon is opgeslagen.",
     "offlineNote": "Offline · uit de nummerslijst die op deze telefoon is opgeslagen",
-    "cloudErrorNote": "Zoekfunctie is momenteel niet bereikbaar · we tonen de nummerslijst die op deze telefoon is opgeslagen"
+    "cloudErrorNote": "Kan de zoekfunctie nu niet bereiken · nummerslijst op deze telefoon wordt getoond"
   },
   "tabs": {
     "discover": "Ontdekken",
