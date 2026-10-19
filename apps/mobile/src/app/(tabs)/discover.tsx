@@ -15,7 +15,6 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Linking,
-  Platform,
   Pressable,
   ScrollView,
   View,
@@ -466,13 +465,14 @@ export default function DiscoverScreen() {
           {t("discover.describeNothing")}
         </Text>
       ) : null}
-      {/* The sticky make bar rides above the keyboard (iOS pads; Android's window resizes on its own). It stays
+      {/* The sticky make bar rides above the keyboard. Both platforms pad: Android is edge-to-edge (SDK 57,
+          API 35), so adjustResize no longer shrinks the window and the bar sat under the keyboard. It stays
           mounted across popular ↔ results: a KAV mounted while the keyboard is already up never hears the
           keyboard event, so it wouldn't pad. KAV measures its frame relative to its parent (Screen's content,
           which starts at the top inset); the offset turns that into window coordinates. */}
       <KeyboardAvoidingView
         style={{ flex: 1, gap: 12 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        behavior="padding"
         keyboardVerticalOffset={insets.top}
       >
         {popular && !describing ? (
