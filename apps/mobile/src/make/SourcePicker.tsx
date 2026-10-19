@@ -15,6 +15,8 @@ export function PickCard(props: {
   tier: ConfidenceTier;
   songTitle: string;
   selected: boolean;
+  /** Closed while the match judge checks the song (spec §4.3 gate). */
+  disabled?: boolean;
   onPress: () => void;
 }) {
   const t = useTranslations('make');
@@ -23,9 +25,10 @@ export function PickCard(props: {
     <Pressable
       testID="make-pick"
       accessibilityRole="radio"
-      accessibilityState={{ selected: props.selected }}
+      accessibilityState={{ selected: props.selected, disabled: !!props.disabled }}
+      disabled={props.disabled}
       onPress={props.onPress}
-      className={`gap-1 ${cardClass(props.selected)}`}
+      className={`gap-1 ${cardClass(props.selected)} ${props.disabled ? 'opacity-60' : ''}`}
     >
       <View className="flex-row">
         <Text
@@ -48,6 +51,8 @@ export function PickCard(props: {
 export function SourceGroups(props: {
   results: AudioResult[];
   selectedIndex: number | null;
+  /** Closed while the match judge checks the song (spec §4.3 gate). */
+  disabled?: boolean;
   onSelect: (index: number) => void;
 }) {
   const t = useTranslations('make');
@@ -66,9 +71,10 @@ export function SourceGroups(props: {
                 key={r.index}
                 testID={`make-source-${r.index}`}
                 accessibilityRole="radio"
-                accessibilityState={{ selected }}
+                accessibilityState={{ selected, disabled: !!props.disabled }}
+                disabled={props.disabled}
                 onPress={() => props.onSelect(r.index)}
-                className={cardClass(selected)}
+                className={`${cardClass(selected)} ${props.disabled ? 'opacity-60' : ''}`}
               >
                 <Text className="font-semibold">{text.title}</Text>
                 <Text variant="muted">{text.detail}</Text>

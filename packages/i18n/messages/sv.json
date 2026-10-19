@@ -133,7 +133,13 @@
       "vinyl": "Vinylrippar",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Kontrollerar låtdetaljer…",
+    "matchUsingTyped": "Använder det du skrev: {value}",
+    "matchUseTidied": "använd rensad version",
+    "matchUseCorrection": "använd korrigeringen",
+    "communityWatch": "Titta på YouTube",
+    "communityExists": "Det finns redan en community-karaokeversion"
   },
   "makeTab": {
     "emptyTitle": "Inget skapat ännu",

@@ -133,7 +133,13 @@
       "vinyl": "黑胶转录",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "正在检查歌曲详情…",
+    "matchUsingTyped": "使用您输入的内容：{value}",
+    "matchUseTidied": "使用整理后的版本",
+    "matchUseCorrection": "使用修正内容",
+    "communityWatch": "在 YouTube 上观看",
+    "communityExists": "社区中已存在该歌曲的卡拉OK版本"
   },
   "makeTab": {
     "emptyTitle": "尚未制作任何歌曲",

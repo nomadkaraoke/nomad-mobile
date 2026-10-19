@@ -156,6 +156,12 @@
     "getCredits": "Get credits",
     "noIntent": "Pick a song to make first.",
     "findSong": "Find a song",
+    "matchChecking": "Checking song details…",
+    "matchUsingTyped": "Using what you typed: {value}",
+    "matchUseTidied": "use tidied version",
+    "matchUseCorrection": "use the correction",
+    "communityExists": "A community karaoke version already exists",
+    "communityWatch": "Watch on YouTube",
     "reason": {
       "studioAlbum": "Studio album",
       "single": "Single",

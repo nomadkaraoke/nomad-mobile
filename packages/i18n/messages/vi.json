@@ -133,7 +133,13 @@
       "vinyl": "Bản rip từ đĩa than",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Đang kiểm tra chi tiết bài hát…",
+    "matchUsingTyped": "Sử dụng nội dung bạn đã nhập: {value}",
+    "matchUseTidied": "sử dụng bản đã tinh chỉnh",
+    "matchUseCorrection": "sử dụng bản sửa đổi",
+    "communityWatch": "Xem trên YouTube",
+    "communityExists": "Đã có sẵn một phiên bản karaoke từ cộng đồng"
   },
   "makeTab": {
     "emptyTitle": "Chưa có bài nào được tạo",

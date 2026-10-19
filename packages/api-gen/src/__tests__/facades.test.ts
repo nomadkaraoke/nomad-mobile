@@ -2,6 +2,7 @@ import jobsSummaryFixture from './fixtures/jobs-summary.json';
 import {
   ApiError,
   cancelJob,
+  communityCheck,
   configureClient,
   confirmDuration,
   createAppCheckout,
@@ -16,9 +17,11 @@ import {
   JobSummarySchema,
   listCreditPackages,
   listMyJobs,
+  matchJudge,
   retryJob,
   searchAudio,
   sendCode,
+  validateUrl,
   verifyCode,
 } from '../index';
 
@@ -201,6 +204,55 @@ describe('make', () => {
       review_mode: 'auto',
       is_private: false,
     });
+  });
+});
+
+describe('catalog checks', () => {
+  const VERDICT = {
+    kind: 'cosmetic',
+    confident: true,
+    canonical_artist: 'Queen',
+    canonical_title: 'Bohemian Rhapsody',
+    alternatives: [],
+    engine: 'catalog',
+    reason: 'case',
+    needs_ai: false,
+  };
+
+  it('matchJudge posts the stage and tier and returns the verdict', async () => {
+    fetchMock.mockResolvedValue(json(VERDICT));
+    const v = await matchJudge({ artist: 'queen', title: 'bohemian rhapsody', stage: 'full', audio_confidence_tier: 3 });
+    expectRequest('POST', '/api/catalog/match-judge');
+    expect(await lastBody()).toEqual({ artist: 'queen', title: 'bohemian rhapsody', stage: 'full', audio_confidence_tier: 3 });
+    expect(v).toEqual(VERDICT);
+  });
+
+  it('matchJudge fills defaults and treats an unknown kind as none', async () => {
+    const { alternatives: _a, reason: _r, needs_ai: _n, ...bare } = VERDICT;
+    fetchMock.mockResolvedValue(json({ ...bare, kind: 'something_new' }));
+    const v = await matchJudge({ artist: 'a', title: 'b', stage: 'fast' });
+    expect(v).toMatchObject({ kind: 'none', alternatives: [], reason: '', needs_ai: false });
+  });
+
+  it('communityCheck posts artist/title', async () => {
+    const body = {
+      has_community: true,
+      songs: [{ artist: 'A', title: 'T', community_tracks: [{ brand_name: 'Nomad', brand_code: 'NOMAD', youtube_url: 'https://youtu.be/c', is_community: true }] }],
+      best_youtube_url: 'https://youtu.be/c',
+    };
+    fetchMock.mockResolvedValue(json(body));
+    await expect(communityCheck({ artist: 'A', title: 'T' })).resolves.toEqual(body);
+    expectRequest('POST', '/api/catalog/community-check');
+    expect(await lastBody()).toEqual({ artist: 'A', title: 'T' });
+  });
+
+  it('validateUrl returns supported, with the detail only when gen gives one', async () => {
+    fetchMock.mockResolvedValue(json({ supported: true, detail: null }));
+    await expect(validateUrl('https://vimeo.com/1')).resolves.toEqual({ supported: true });
+    expectRequest('POST', '/api/jobs/validate-url');
+    expect(await lastBody()).toEqual({ url: 'https://vimeo.com/1' });
+    fetchMock.mockResolvedValue(json({ supported: false, detail: 'DRM' }));
+    await expect(validateUrl('https://netflix.com/x')).resolves.toEqual({ supported: false, detail: 'DRM' });
   });
 });
 

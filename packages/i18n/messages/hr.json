@@ -133,7 +133,13 @@
       "vinyl": "S vinila",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Provjera detalja pjesme…",
+    "matchUsingTyped": "Koristimo ono što si upisao: {value}",
+    "matchUseTidied": "koristi uređenu verziju",
+    "matchUseCorrection": "koristi ispravak",
+    "communityWatch": "Gledaj na YouTube",
+    "communityExists": "Karaoke verzija zajednice već postoji"
   },
   "makeTab": {
     "emptyTitle": "Još ništa nije izrađeno",

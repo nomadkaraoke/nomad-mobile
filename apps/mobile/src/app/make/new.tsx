@@ -1,4 +1,5 @@
 import {
+  communityCheck,
   createJobFromSearch,
   createJobFromUrl,
   getMe,
@@ -16,8 +17,10 @@ import { ActivityIndicator, Pressable, View } from 'react-native';
 import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
 import { isFreshIntent, useMakeIntent } from '../../make/intentStore';
+import { CommunityExists, DidYouMean, MatchNotice } from '../../make/JudgeNotices';
 import { PickCard, SourceGroups } from '../../make/SourcePicker';
 import { useAudioSearch } from '../../make/useAudioSearch';
+import { useMatchJudge } from '../../make/useMatchJudge';
 
 const YOUTUBE_URL = /^https?:\/\/([a-z0-9-]+\.)*(youtube\.com|youtu\.be)\/\S+$/i;
 
@@ -25,7 +28,12 @@ type Target = { kind: 'source'; sessionId: string; index: number } | { kind: 'ur
 
 const goToCredits = () => router.push({ pathname: '/credits', params: { returnTo: '/make/new' } });
 
-/** Spec §4.4: gen finds the audio, the person confirms (or picks another, or pastes a YouTube link), job created. */
+/**
+ * Spec §4.4: gen finds the audio, the person confirms (or picks another, or pastes a YouTube link), job created.
+ * Spec §4.3: gen's match judge runs alongside the search and may tidy or correct the artist/title; the source
+ * choice stays closed until it settles, and the job is made with the applied artist/title. A parallel community
+ * check says when a community karaoke version already exists.
+ */
 export default function MakeScreen() {
   const t = useTranslations('make');
   const tAll = useTranslations();
@@ -41,20 +49,46 @@ export default function MakeScreen() {
   const email = signedIn ? auth.session.email : null;
   const queryClient = useQueryClient();
 
-  const search = useAudioSearch(signedIn ? intent : null);
-  const me = useQuery({ queryKey: ['me', email], queryFn: getMe, enabled: signedIn });
-
   const [picked, setPicked] = useState<number | null>(null);
   const [showOthers, setShowOthers] = useState(false);
   const [youtubeOpen, setYoutubeOpen] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [searchedAgain, setSearchedAgain] = useState(false);
 
+  const active = signedIn ? intent : null;
+  const search = useAudioSearch(active);
+  const me = useQuery({ queryKey: ['me', email], queryFn: getMe, enabled: signedIn });
+  // Non-blocking and once per make (gen's /api/catalog/* share a 20/min bucket); a failure shows nothing.
+  const community = useQuery({
+    queryKey: ['community-check', active?.artist, active?.title],
+    queryFn: () => communityCheck({ artist: active!.artist, title: active!.title }),
+    enabled: !!active,
+    retry: false,
+    staleTime: Infinity,
+  });
+
   const results: AudioResult[] = useMemo(() => search.data?.results ?? [], [search.data]);
-  const confidence = useMemo(
-    () => (intent && search.data ? getSearchConfidence(results, intent.title, intent.artist) : null),
-    [intent, search.data, results],
+  // The judge's tier: how well the results match what was searched for.
+  const searched = search.variables;
+  const searchTier = useMemo(
+    () => (search.isSuccess && searched ? getSearchConfidence(results, searched.title, searched.artist).tier : null),
+    [search.isSuccess, searched, results],
   );
+  const judge = useMatchJudge(active, {
+    tier: searchTier,
+    reSearch: (s) => {
+      setPicked(null);
+      search.searchFor(s);
+    },
+  });
+  // What's shown and what the job is made with: the applied artist/title.
+  const song = judge.applied ?? (intent ? { artist: intent.artist, title: intent.title } : null);
+  const confidence = useMemo(
+    () => (song && search.data ? getSearchConfidence(results, song.title, song.artist) : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- the song's fields, not its identity
+    [song?.title, song?.artist, search.data, results],
+  );
+  const locked = !judge.gateOpen;
   const best = confidence && confidence.tier < 3 ? (confidence.best as AudioResult | null) : null;
   const noResults = search.isSuccess && results.length === 0;
   const useLink = youtubeOpen || noResults;
@@ -79,12 +113,11 @@ export default function MakeScreen() {
   );
 
   const create = useMutation({
-    mutationFn: (to: Target) => {
-      const song = { artist: intent!.artist, title: intent!.title };
-      return to.kind === 'url'
-        ? createJobFromUrl({ url: to.url, ...song })
-        : createJobFromSearch({ sessionId: to.sessionId, index: to.index, ...song });
-    },
+    // Always the applied artist/title (tidied, corrected, or what they typed after Undo).
+    mutationFn: ({ to, as }: { to: Target; as: { artist: string; title: string } }) =>
+      to.kind === 'url'
+        ? createJobFromUrl({ url: to.url, ...as })
+        : createJobFromSearch({ sessionId: to.sessionId, index: to.index, ...as }),
     onSuccess: () => {
       // The intent is cleared when this screen unmounts, so it never flashes "Pick a song" on the way out.
       created.current = true;
@@ -106,9 +139,9 @@ export default function MakeScreen() {
   // Review Focus 3: a ref, not just `disabled`, so two taps in one frame still create one job.
   const inFlight = useRef(false);
   const submit = () => {
-    if (!target || inFlight.current) return;
+    if (!target || !song || locked || inFlight.current) return;
     inFlight.current = true;
-    create.mutate(target, { onSettled: () => (inFlight.current = false) });
+    create.mutate({ to: target, as: song }, { onSettled: () => (inFlight.current = false) });
   };
 
   // Out of credits before searching: straight to credits (spec §4.4).
@@ -159,9 +192,18 @@ export default function MakeScreen() {
   return (
     <Screen testID="make-screen" scroll>
       <View className="gap-1">
-        <Text variant="title">{intent.title}</Text>
-        <Text variant="muted">{intent.artist}</Text>
+        <Text testID="make-song-title" variant="title">
+          {song?.title ?? intent.title}
+        </Text>
+        <Text testID="make-song-artist" variant="muted">
+          {song?.artist ?? intent.artist}
+        </Text>
       </View>
+      {judge.correction ? (
+        <MatchNotice correction={judge.correction} onUndo={judge.undo} onRedo={judge.redo} />
+      ) : null}
+      {judge.suggestions.length > 0 ? <DidYouMean options={judge.suggestions} onPick={judge.acceptAlternative} /> : null}
+      {signedIn && community.data ? <CommunityExists check={community.data} /> : null}
 
       {!signedIn ? (
         <Button
@@ -185,14 +227,21 @@ export default function MakeScreen() {
       ) : (
         <>
           {searchedAgain ? <Text variant="muted">{t('searchExpired')}</Text> : null}
+          {locked ? (
+            <View testID="match-gate-checking" className="flex-row items-center gap-2">
+              <ActivityIndicator size="small" />
+              <Text variant="muted">{t('matchChecking')}</Text>
+            </View>
+          ) : null}
           {noResults ? <Text testID="make-no-results">{t('noResults')}</Text> : null}
           {best && confidence ? (
             <>
               <PickCard
                 result={best}
                 tier={confidence.tier}
-                songTitle={intent.title}
+                songTitle={song?.title ?? intent.title}
                 selected={!useLink && selectedIndex === best.index}
+                disabled={locked}
                 onPress={() => {
                   setPicked(best.index);
                   setYoutubeOpen(false);
@@ -218,6 +267,7 @@ export default function MakeScreen() {
             <SourceGroups
               results={others}
               selectedIndex={useLink ? null : selectedIndex}
+              disabled={locked}
               onSelect={(index) => {
                 setPicked(index);
                 setYoutubeOpen(false);
@@ -261,7 +311,7 @@ export default function MakeScreen() {
             testID="make-submit"
             label={t('submit')}
             onPress={submit}
-            disabled={!target || create.isPending}
+            disabled={!target || locked || create.isPending}
             loading={create.isPending}
           />
         </>

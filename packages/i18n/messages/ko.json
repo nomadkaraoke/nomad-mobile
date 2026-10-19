@@ -133,7 +133,13 @@
       "vinyl": "바이닐 립",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "노래 세부 정보 확인 중…",
+    "matchUsingTyped": "입력한 내용 사용: {value}",
+    "matchUseTidied": "정리된 버전 사용하기",
+    "matchUseCorrection": "수정본 사용하기",
+    "communityWatch": "YouTube에서 보기",
+    "communityExists": "이미 커뮤니티 노래방 버전이 있어요"
   },
   "makeTab": {
     "emptyTitle": "아직 만든 노래가 없어요",

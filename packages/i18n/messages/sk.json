@@ -133,7 +133,13 @@
       "vinyl": "Vinylové nahrávky",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Kontrolujú sa detaily skladby…",
+    "matchUsingTyped": "Používam to, čo si zadal: {value}",
+    "matchUseTidied": "použiť upravenú verziu",
+    "matchUseCorrection": "použiť opravu",
+    "communityWatch": "Pozrieť na YouTube",
+    "communityExists": "Komunitná karaoke verzia už existuje"
   },
   "makeTab": {
     "emptyTitle": "Zatiaľ si nič nevytvoril",

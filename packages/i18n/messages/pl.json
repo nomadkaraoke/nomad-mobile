@@ -133,7 +133,13 @@
       "vinyl": "Zgrane z winyla",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Sprawdzanie szczegółów utworu…",
+    "matchUsingTyped": "Używam wpisanego tekstu: {value}",
+    "matchUseTidied": "użyj uporządkowanej wersji",
+    "matchUseCorrection": "użyj poprawki",
+    "communityWatch": "Obejrzyj na YouTube",
+    "communityExists": "Wersja karaoke stworzona przez społeczność już istnieje"
   },
   "makeTab": {
     "emptyTitle": "Jeszcze nic tu nie ma",

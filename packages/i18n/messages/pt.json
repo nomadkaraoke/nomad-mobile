@@ -133,7 +133,13 @@
       "vinyl": "Gravações de vinil",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Verificando detalhes da música…",
+    "matchUsingTyped": "Usando o que você digitou: {value}",
+    "matchUseTidied": "usar a versão ajustada",
+    "matchUseCorrection": "usar a correção",
+    "communityWatch": "Assistir no YouTube",
+    "communityExists": "Já existe uma versão de karaokê da comunidade"
   },
   "makeTab": {
     "emptyTitle": "Nada criado ainda",

@@ -133,7 +133,13 @@
       "vinyl": "विनाइल रिप्स",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "गाने की जानकारी चेक की जा रही है…",
+    "matchUsingTyped": "जो तुमने टाइप किया है, उसका इस्तेमाल हो रहा है: {value}",
+    "matchUseTidied": "व्यवस्थित वर्शन का इस्तेमाल करो",
+    "matchUseCorrection": "सुधार का इस्तेमाल करो",
+    "communityWatch": "YouTube पर देखो",
+    "communityExists": "एक कम्युनिटी कराओके वर्शन पहले से मौजूद है"
   },
   "makeTab": {
     "emptyTitle": "अभी तक कुछ नहीं बनाया",

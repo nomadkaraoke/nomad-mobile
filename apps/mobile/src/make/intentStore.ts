@@ -12,6 +12,10 @@ const FIELDS: MakeField[] = ['artist', 'title'];
  * page, the missing card), so they equal the canonical values. `source: 'typed'`: the free-text "make any
  * song" form; the canonical values are the identification it was pre-filled from (if any) and
  * `editedFields` the fields the user changed, which nothing may overwrite later (kjbox D10).
+ *
+ * On a typed intent with `editedFields`, `songKey`/`canonical*` are hints only (where the pre-fill came from):
+ * the make flow searches, judges and names the job from `artist`/`title`, and gen's match judge never
+ * overwrites a field the user changed away from that pre-fill (`useMatchJudge`).
  */
 export type MakeIntent = {
   artist: string;

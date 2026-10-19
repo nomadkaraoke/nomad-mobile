@@ -133,7 +133,13 @@
       "vinyl": "ไฟล์จากแผ่นเสียง",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "กำลังตรวจสอบรายละเอียดเพลง…",
+    "matchUsingTyped": "ใช้ข้อความที่คุณพิมพ์: {value}",
+    "matchUseTidied": "ใช้เวอร์ชันที่จัดระเบียบแล้ว",
+    "matchUseCorrection": "ใช้ตามที่แก้ไข",
+    "communityWatch": "ดูบน YouTube",
+    "communityExists": "มีเวอร์ชันคาราโอเกะจากชุมชนอยู่แล้ว"
   },
   "makeTab": {
     "emptyTitle": "ยังไม่ได้สร้างอะไรเลย",

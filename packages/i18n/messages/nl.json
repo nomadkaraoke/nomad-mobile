@@ -133,7 +133,13 @@
       "vinyl": "Vinyl rips",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Nummergegevens controleren…",
+    "matchUsingTyped": "We gebruiken wat je hebt getypt: {value}",
+    "matchUseTidied": "gebruik opgeschoonde versie",
+    "matchUseCorrection": "gebruik de correctie",
+    "communityWatch": "Bekijk op YouTube",
+    "communityExists": "Er bestaat al een karaokeversie van de community"
   },
   "makeTab": {
     "emptyTitle": "Nog niets gemaakt",
