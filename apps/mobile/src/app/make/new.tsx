@@ -37,11 +37,28 @@ function createFailure(e: unknown, target: Target): CreateFailure {
   if (!(e instanceof ApiError)) return 'failed';
   const detail = typeof e.detail === 'string' ? e.detail : JSON.stringify(e.detail ?? '');
   // gen's YouTube download is bot-checked: say it's YouTube, not a generic failure.
-  if ([400, 403, 422].includes(e.status) && /youtube/i.test(detail) && /bot/i.test(detail)) return 'youtube_blocked';
+  if ([400, 403, 422].includes(e.status) && /youtube/i.test(detail) && /\bbot\b/i.test(detail)) return 'youtube_blocked';
   // The search session expired (404), or belongs to another account (403): search again.
   if (target.kind === 'source' && (e.status === 404 || e.status === 403)) return 'expired';
   return 'failed';
 }
+
+// gen's validate-url is a pre-check only: a slow answer must not hold up Make it (gen fails open too).
+const VALIDATE_TIMEOUT_MS = 10_000;
+const withTimeout = <T,>(p: Promise<T>, ms: number) =>
+  new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('validate-url timed out')), ms);
+    p.then(
+      (v) => {
+        clearTimeout(timer);
+        resolve(v);
+      },
+      (e: unknown) => {
+        clearTimeout(timer);
+        reject(e);
+      },
+    );
+  });
 
 const goToCredits = () => router.push({ pathname: '/credits', params: { returnTo: '/make/new' } });
 
@@ -174,7 +191,7 @@ export default function MakeScreen() {
       // Like gen's "Use this URL": ask gen first, so an unsupported link fails here, not after paying.
       setCheckingLink(true);
       try {
-        const check = await validateUrl(target.url);
+        const check = await withTimeout(validateUrl(target.url), VALIDATE_TIMEOUT_MS);
         if (!check.supported) {
           setLinkError(check.detail || t('linkUnsupported'));
           inFlight.current = false;
@@ -314,9 +331,10 @@ export default function MakeScreen() {
                 confidence={confidence}
                 songTitle={song?.title ?? intent.title}
                 selected={!useLink && selectedIndex === best.index}
-                disabled={locked}
+                disabled={locked || checkingLink}
                 onPress={() => {
                   setPicked(best.index);
+                  setLinkError(null);
                   setYoutubeOpen(false);
                 }}
               />
@@ -342,9 +360,10 @@ export default function MakeScreen() {
               searchTitle={song?.title ?? intent.title}
               expandAll={confidence?.tier === 3}
               selectedIndex={useLink ? null : selectedIndex}
-              disabled={locked}
+              disabled={locked || checkingLink}
               onSelect={(index) => {
                 setPicked(index);
+                setLinkError(null);
                 setYoutubeOpen(false);
               }}
             />

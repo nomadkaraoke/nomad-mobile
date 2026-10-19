@@ -160,7 +160,8 @@
     "filename": "Bestandsnaam:",
     "release": "Release:",
     "titleMatch": "Titel komt overeen",
-    "youtubeFallbackHint": "Heb je het nummer op YouTube gevonden? Plak de link en we maken daar de karaokevideo van."
+    "youtubeFallbackHint": "Heb je het nummer op YouTube gevonden? Plak de link en we maken daar de karaokevideo van.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Nog niets gemaakt",

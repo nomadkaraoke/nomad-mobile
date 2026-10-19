@@ -160,7 +160,8 @@
     "filename": "파일명:",
     "release": "발매:",
     "titleMatch": "제목 일치",
-    "youtubeFallbackHint": "YouTube에서 노래를 찾으셨나요? 링크를 붙여넣어 주시면 그걸로 가라오케 비디오를 만들어 드릴게요."
+    "youtubeFallbackHint": "YouTube에서 노래를 찾으셨나요? 링크를 붙여넣어 주시면 그걸로 가라오케 비디오를 만들어 드릴게요.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "아직 만든 노래가 없어요",

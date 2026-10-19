@@ -160,7 +160,8 @@
     "filename": "Nama fail:",
     "release": "Keluaran:",
     "titleMatch": "Tajuk sepadan",
-    "youtubeFallbackHint": "Jumpa lagu di YouTube? Tampal pautan dan kami akan buatkan video karaoke daripadanya."
+    "youtubeFallbackHint": "Jumpa lagu di YouTube? Tampal pautan dan kami akan buatkan video karaoke daripadanya.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Belum ada yang dibuat",

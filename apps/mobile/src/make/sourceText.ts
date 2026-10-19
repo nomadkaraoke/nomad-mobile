@@ -1,4 +1,5 @@
 import type { AudioResult } from '@nomad/api-gen';
+import { isolate } from '@nomad/i18n';
 import { categorizeResult, checkFilenameMismatch, formatCount, getDisplayName, type SearchConfidence } from '@nomad/core';
 
 /** `useTranslations('make')`. */
@@ -114,7 +115,8 @@ export function sortByTitleMatch<R extends AudioResult>(
 export function pickWarnings(confidence: SearchConfidence, t: MakeT): string[] {
   const out = confidence.warnings.map((w) => {
     if (w.startsWith('Filename suggests different track: ')) {
-      return t('warn.fileLooksLike', { file: w.slice('Filename suggests different track: '.length) });
+      // isolate(): a Latin file name inside an Arabic or Hebrew sentence would otherwise be reordered.
+      return t('warn.fileLooksLike', { file: isolate(w.slice('Filename suggests different track: '.length)) });
     }
     if (w.startsWith('Filename may not match')) return t('warn.fileMayNotMatch');
     if (w.startsWith('No lossless sources')) return t('warn.noLossless');

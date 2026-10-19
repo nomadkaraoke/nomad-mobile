@@ -92,10 +92,16 @@ describe('pick warnings', () => {
     const conf = getSearchConfidence([lowWrong as never], 'Starlight', 'Muse');
     expect(conf.warnings).toHaveLength(3);
     expect(pickWarnings(conf, t)).toEqual([
-      'The filename suggests a different track: Take a Bow',
+      'The filename suggests a different track: \u2068Take a Bow\u2069',
       'No lossless sources available — only YouTube/lossy or vinyl rips found',
       'Low availability — may take a bit more time to prepare',
     ]);
+  });
+
+  it('isolates the Latin file name so it stays in order inside an RTL sentence', () => {
+    const conf = getSearchConfidence([{ ...bestChoice(0), target_file: '01 - Take a Bow.flac' }], 'Starlight', 'Muse');
+    const [first] = pickWarnings(conf, (_key, values) => `تحذير: ${String(values?.file)}`);
+    expect(first).toBe('تحذير: \u2068Take a Bow\u2069');
   });
 
   it("adds gen's lossy note when the best is YouTube and no warning already mentions lossless", () => {

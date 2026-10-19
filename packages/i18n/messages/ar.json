@@ -160,7 +160,8 @@
     "youtubeFallbackToggle": "لم تجد أغنيتك؟ الصق رابطًا بدلًا من ذلك",
     "filename": "اسم الملف:",
     "release": "الإصدار:",
-    "titleMatch": "تطابق العنوان"
+    "titleMatch": "تطابق العنوان",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "لم تنشئ أي شيء بعد",

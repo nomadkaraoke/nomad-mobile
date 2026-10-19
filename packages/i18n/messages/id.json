@@ -160,7 +160,8 @@
     "filename": "Nama file:",
     "release": "Rilis:",
     "titleMatch": "Judul cocok",
-    "youtubeFallbackHint": "Menemukan lagunya di YouTube? Tempel tautannya dan kami akan membuatkan video karaokenya dari situ."
+    "youtubeFallbackHint": "Menemukan lagunya di YouTube? Tempel tautannya dan kami akan membuatkan video karaokenya dari situ.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Belum ada yang dibuat",

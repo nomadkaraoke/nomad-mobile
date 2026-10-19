@@ -160,7 +160,8 @@
     "filename": "Filnavn:",
     "release": "Udgivelse:",
     "titleMatch": "Titelmatch",
-    "youtubeFallbackHint": "Fandt du sangen på YouTube? Indsæt linket, så laver vi karaokevideoen ud fra det."
+    "youtubeFallbackHint": "Fandt du sangen på YouTube? Indsæt linket, så laver vi karaokevideoen ud fra det.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Intet lavet endnu",

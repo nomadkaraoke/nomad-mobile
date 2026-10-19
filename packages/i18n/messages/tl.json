@@ -160,7 +160,8 @@
     "filename": "Filename:",
     "release": "Release:",
     "titleMatch": "Tugma ang pamagat",
-    "youtubeFallbackHint": "Nahanap ang kanta sa YouTube? I-paste ang link at gagawin naming karaoke video iyon."
+    "youtubeFallbackHint": "Nahanap ang kanta sa YouTube? I-paste ang link at gagawin naming karaoke video iyon.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Wala pang nagagawa",

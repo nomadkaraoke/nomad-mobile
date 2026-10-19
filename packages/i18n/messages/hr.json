@@ -160,7 +160,8 @@
     "filename": "Naziv datoteke:",
     "release": "Izdanje:",
     "titleMatch": "Podudaranje naslova",
-    "youtubeFallbackHint": "Pronašao/la si pjesmu na YouTubeu? Zalijepi link i od toga ćemo napraviti karaoke video."
+    "youtubeFallbackHint": "Pronašao/la si pjesmu na YouTubeu? Zalijepi link i od toga ćemo napraviti karaoke video.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Još ništa nije izrađeno",

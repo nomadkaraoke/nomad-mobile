@@ -160,7 +160,8 @@
     "filename": "Nazwa pliku:",
     "release": "Wydanie:",
     "titleMatch": "Dopasowanie tytułu",
-    "youtubeFallbackHint": "Piosenka znaleziona na YouTube? Wklej link, a zrobimy z niego wideo karaoke."
+    "youtubeFallbackHint": "Piosenka znaleziona na YouTube? Wklej link, a zrobimy z niego wideo karaoke.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Jeszcze nic tu nie ma",

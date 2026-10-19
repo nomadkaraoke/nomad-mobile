@@ -150,6 +150,49 @@ describe('links are checked with gen before creating', () => {
     await waitFor(() => expect(gen.createJobFromUrl).toHaveBeenCalledTimes(1));
   });
 
+  it('choosing a source clears a validate-url message', async () => {
+    gen.searchAudio.mockResolvedValue(TIER3);
+    gen.validateUrl.mockResolvedValue({ supported: false, detail: 'Not supported.' });
+    openMake();
+    await waitFor(() => expect(screen.getByTestId('make-youtube-input')).toBeTruthy());
+    fireEvent.changeText(screen.getByTestId('make-youtube-input'), 'https://example.com/a');
+    await readySubmit();
+    await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
+    expect(await screen.findByTestId('youtube-invalid')).toBeTruthy();
+    fireEvent.press(screen.getByTestId('make-source-2'));
+    expect(screen.queryByTestId('youtube-invalid')).toBeNull();
+  });
+
+  it('while the link is being checked, sources and Make it are closed', async () => {
+    gen.searchAudio.mockResolvedValue(TIER3);
+    let answer!: (v: { supported: boolean }) => void;
+    gen.validateUrl.mockReturnValue(new Promise((r) => (answer = r)));
+    openMake();
+    await waitFor(() => expect(screen.getByTestId('make-youtube-input')).toBeTruthy());
+    fireEvent.changeText(screen.getByTestId('make-youtube-input'), 'https://youtu.be/abc123');
+    await readySubmit();
+    await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
+    expect(screen.getByTestId('make-source-2')).toBeDisabled();
+    expect(screen.getByTestId('make-submit')).toBeDisabled();
+    await act(async () => answer({ supported: true }));
+    await waitFor(() => expect(gen.createJobFromUrl).toHaveBeenCalledTimes(1));
+  });
+
+  it('a validate-url that never answers times out after 10 s and fails open', async () => {
+    gen.validateUrl.mockReturnValue(new Promise(() => {}));
+    openMake();
+    await readySubmit();
+    fireEvent.press(screen.getByTestId('youtube-toggle'));
+    fireEvent.changeText(screen.getByTestId('make-youtube-input'), 'https://youtu.be/abc123');
+    jest.useFakeTimers();
+    await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
+    await act(async () => jest.advanceTimersByTime(9_999));
+    expect(gen.createJobFromUrl).not.toHaveBeenCalled();
+    await act(async () => jest.advanceTimersByTime(1));
+    expect(gen.createJobFromUrl).toHaveBeenCalledTimes(1);
+    jest.useRealTimers();
+  });
+
   it('not a link at all → Make it stays disabled, with an inline hint', async () => {
     openMake();
     await readySubmit();
@@ -207,6 +250,9 @@ describe('create errors', () => {
 
   it.each([
     [400, 'This YouTube video is private and cannot be downloaded.'],
+    // "bot" must be a word: these mention YouTube but aren't its bot check.
+    [400, 'YouTube returned both audio and video streams'],
+    [422, 'YouTube robots.txt disallows this URL'],
     [422, [{ msg: 'field required' }]],
     [500, 'boom'],
   ])('%i %j → createFailed', async (status, detail) => {

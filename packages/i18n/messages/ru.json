@@ -160,7 +160,8 @@
     "filename": "Имя файла:",
     "release": "Релиз:",
     "titleMatch": "Совпадение названия",
-    "youtubeFallbackHint": "Нашел песню на YouTube? Вставь ссылку, и мы сделаем караоке-видео из нее."
+    "youtubeFallbackHint": "Нашел песню на YouTube? Вставь ссылку, и мы сделаем караоке-видео из нее.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Пока ничего не создано",

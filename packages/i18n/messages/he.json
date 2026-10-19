@@ -160,7 +160,8 @@
     "filename": "שם קובץ:",
     "release": "הוצאה:",
     "titleMatch": "התאמת שם",
-    "youtubeFallbackHint": "מצאתם את השיר ב-YouTube? הדביקו את הקישור ואנחנו נכין ממנו את סרטון הקריוקי."
+    "youtubeFallbackHint": "מצאתם את השיר ב-YouTube? הדביקו את הקישור ואנחנו נכין ממנו את סרטון הקריוקי.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "עוד לא הכנת שירים",

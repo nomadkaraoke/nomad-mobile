@@ -160,7 +160,8 @@
     "filename": "Filnavn:",
     "release": "Utgivelse:",
     "titleMatch": "Tittelsamsvar",
-    "youtubeFallbackHint": "Fant du sangen på YouTube? Lim inn lenken, så lager vi karaokevideoen fra den."
+    "youtubeFallbackHint": "Fant du sangen på YouTube? Lim inn lenken, så lager vi karaokevideoen fra den.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Ingenting er laget ennå",

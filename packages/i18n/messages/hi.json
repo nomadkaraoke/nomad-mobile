@@ -160,7 +160,8 @@
     "filename": "फ़ाइल का नाम:",
     "release": "रिलीज़:",
     "titleMatch": "टाइटल मैच",
-    "youtubeFallbackHint": "क्या गाना YouTube पर मिल गया? लिंक पेस्ट करो और हम उससे कराओके वीडियो बना देंगे।"
+    "youtubeFallbackHint": "क्या गाना YouTube पर मिल गया? लिंक पेस्ट करो और हम उससे कराओके वीडियो बना देंगे।",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "अभी तक कुछ नहीं बनाया",

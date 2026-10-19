@@ -160,7 +160,8 @@
     "filename": "Tên file:",
     "release": "Phát hành:",
     "titleMatch": "Khớp tiêu đề",
-    "youtubeFallbackHint": "Bạn tìm thấy bài hát trên YouTube? Hãy dán liên kết và chúng tôi sẽ tạo video karaoke từ đó."
+    "youtubeFallbackHint": "Bạn tìm thấy bài hát trên YouTube? Hãy dán liên kết và chúng tôi sẽ tạo video karaoke từ đó.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Chưa có bài nào được tạo",

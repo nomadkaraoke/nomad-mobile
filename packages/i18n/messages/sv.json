@@ -160,7 +160,8 @@
     "filename": "Filnamn:",
     "release": "Utgåva:",
     "titleMatch": "Titelmatchning",
-    "youtubeFallbackHint": "Hittade du låten på YouTube? Klistra in länken så gör vi karaokevideon från den."
+    "youtubeFallbackHint": "Hittade du låten på YouTube? Klistra in länken så gör vi karaokevideon från den.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Inget skapat ännu",

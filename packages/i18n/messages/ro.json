@@ -160,7 +160,8 @@
     "filename": "Nume fișier:",
     "release": "Lansare:",
     "titleMatch": "Potrivire titlu",
-    "youtubeFallbackHint": "Ai găsit piesa pe YouTube? Lipește linkul și vom face videoclipul de karaoke din el."
+    "youtubeFallbackHint": "Ai găsit piesa pe YouTube? Lipește linkul și vom face videoclipul de karaoke din el.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Nu ai creat nicio piesă încă",

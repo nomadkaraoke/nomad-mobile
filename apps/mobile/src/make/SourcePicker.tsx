@@ -171,7 +171,7 @@ export function SourceGroups(props: {
           <View key={group.category} className="gap-2">
             <View className="flex-row items-center justify-between">
               <Text variant="muted" className="font-semibold uppercase">
-                {`${t(`category.${key}`)} (${rows.length})`}
+                {t('categoryCount', { label: t(`category.${key}`), count: rows.length })}
               </Text>
               {hidden > 0 && !props.expandAll ? (
                 <Pressable

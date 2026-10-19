@@ -156,6 +156,7 @@
     "wrongTrack": "Wrong track?",
     "moreCount": "+{count} more",
     "showLess": "Show less",
+    "categoryCount": "{label} ({count})",
     "avail": {
       "high": "High availability",
       "medium": "Medium availability",

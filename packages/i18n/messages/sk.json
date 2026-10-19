@@ -160,7 +160,8 @@
     "filename": "Názov súboru:",
     "release": "Vydanie:",
     "titleMatch": "Zhoda názvu",
-    "youtubeFallbackHint": "Našiel si pieseň na YouTube? Vlož odkaz a my z neho vytvoríme karaoke video."
+    "youtubeFallbackHint": "Našiel si pieseň na YouTube? Vlož odkaz a my z neho vytvoríme karaoke video.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Zatiaľ si nič nevytvoril",

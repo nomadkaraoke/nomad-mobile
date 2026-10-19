@@ -160,7 +160,8 @@
     "filename": "Název souboru:",
     "release": "Vydání:",
     "titleMatch": "Shoda názvu",
-    "youtubeFallbackHint": "Našel jsi písničku na YouTube? Vlož odkaz a my z něj uděláme karaoke video."
+    "youtubeFallbackHint": "Našel jsi písničku na YouTube? Vlož odkaz a my z něj uděláme karaoke video.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Zatím tu nic není",

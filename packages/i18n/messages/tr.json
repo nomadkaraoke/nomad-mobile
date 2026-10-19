@@ -160,7 +160,8 @@
     "filename": "Dosya adı:",
     "release": "Yayın:",
     "titleMatch": "Başlık eşleşmesi",
-    "youtubeFallbackHint": "Şarkıyı YouTube'da buldun mu? Bağlantıyı yapıştır, karaoke videosunu oradan yapalım."
+    "youtubeFallbackHint": "Şarkıyı YouTube'da buldun mu? Bağlantıyı yapıştır, karaoke videosunu oradan yapalım.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Henüz oluşturulan bir şey yok",

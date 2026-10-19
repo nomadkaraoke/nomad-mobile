@@ -160,7 +160,8 @@
     "filename": "Fájlnév:",
     "release": "Kiadás:",
     "titleMatch": "Címegyezés",
-    "youtubeFallbackHint": "Megtaláltad a dalt a YouTube-on? Illeszd be a linket, és abból elkészítjük a karaoke videót."
+    "youtubeFallbackHint": "Megtaláltad a dalt a YouTube-on? Illeszd be a linket, és abból elkészítjük a karaoke videót.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Még nem készült semmi",

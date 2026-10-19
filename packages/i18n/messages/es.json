@@ -160,7 +160,8 @@
     "filename": "Nombre del archivo:",
     "release": "Lanzamiento:",
     "titleMatch": "Coincidencia de título",
-    "youtubeFallbackHint": "¿Encontraste la canción en YouTube? Pega el enlace y haremos el video de karaoke con eso."
+    "youtubeFallbackHint": "¿Encontraste la canción en YouTube? Pega el enlace y haremos el video de karaoke con eso.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Aún no has creado nada",

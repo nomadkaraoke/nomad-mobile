@@ -124,7 +124,7 @@ describe('pick card', () => {
     card([doubtful], doubtful);
     expect(screen.getByTestId('source-wrong-track-0')).toBeTruthy();
     expect(screen.getByTestId('make-pick-warning-0')).toHaveTextContent(
-      '⚠ The filename suggests a different track: Take a Bow',
+      '⚠ The filename suggests a different track: \u2068Take a Bow\u2069',
     );
     expect(screen.getByTestId('make-pick-warning-1')).toHaveTextContent(/Low availability/);
   });

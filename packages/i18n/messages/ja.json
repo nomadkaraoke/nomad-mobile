@@ -160,7 +160,8 @@
     "filename": "ファイル名:",
     "release": "リリース:",
     "titleMatch": "タイトル一致",
-    "youtubeFallbackHint": "YouTubeで曲を見つけましたか？リンクを貼り付けていただければ、そこからカラオケ動画を作成します。"
+    "youtubeFallbackHint": "YouTubeで曲を見つけましたか？リンクを貼り付けていただければ、そこからカラオケ動画を作成します。",
+    "categoryCount": "{label}（{count}）"
   },
   "makeTab": {
     "emptyTitle": "作成した曲はまだありません",

@@ -160,7 +160,8 @@
     "filename": "Tiedostonimi:",
     "release": "Julkaisu:",
     "titleMatch": "Nimi täsmää",
-    "youtubeFallbackHint": "Löysitkö kappaleen YouTubesta? Liitä linkki, niin teemme karaokevideon siitä."
+    "youtubeFallbackHint": "Löysitkö kappaleen YouTubesta? Liitä linkki, niin teemme karaokevideon siitä.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Ei vielä luotuja kappaleita",

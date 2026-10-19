@@ -160,7 +160,8 @@
     "youtubeFallbackToggle": "No trobes la teva cançó? Enganxa un enllaç directament",
     "filename": "Nom del fitxer:",
     "release": "Llançament:",
-    "titleMatch": "Coincidència de títol"
+    "titleMatch": "Coincidència de títol",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Encara no has creat res",

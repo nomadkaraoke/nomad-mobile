@@ -160,7 +160,8 @@
     "filename": "文件名：",
     "release": "发行：",
     "titleMatch": "标题匹配",
-    "youtubeFallbackHint": "在 YouTube 上找到了这首歌？粘贴链接，我们将用它来制作卡拉OK视频。"
+    "youtubeFallbackHint": "在 YouTube 上找到了这首歌？粘贴链接，我们将用它来制作卡拉OK视频。",
+    "categoryCount": "{label}（{count}）"
   },
   "makeTab": {
     "emptyTitle": "尚未制作任何歌曲",

@@ -160,7 +160,8 @@
     "filename": "Nome do arquivo:",
     "release": "Lançamento:",
     "titleMatch": "Título correspondente",
-    "youtubeFallbackHint": "Encontrou a música no YouTube? Cole o link e faremos o vídeo de karaokê a partir dele."
+    "youtubeFallbackHint": "Encontrou a música no YouTube? Cole o link e faremos o vídeo de karaokê a partir dele.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Nada criado ainda",
