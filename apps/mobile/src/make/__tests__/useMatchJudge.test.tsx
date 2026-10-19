@@ -33,10 +33,10 @@ const verdict = (over: Partial<MatchVerdict> = {}): MatchVerdict => ({
 const FIXED = { canonical_artist: 'Queen', canonical_title: 'Bohemian Rhapsody' };
 
 /** Drives the hook like the make screen: `tier` null while the first audio search runs. */
-function setup(i: MakeIntent | null = intent()) {
+function setup(i: MakeIntent | null = intent(), busy?: () => boolean) {
   const reSearch = jest.fn();
   const hook = renderHook(
-    ({ tier }: { tier: JudgeSearch['tier'] }) => useMatchJudge(i, { tier, reSearch }),
+    ({ tier }: { tier: JudgeSearch['tier'] }) => useMatchJudge(i, { tier, reSearch, busy }),
     { initialProps: { tier: null as JudgeSearch['tier'] } },
   );
   const searchDone = async (tier: 1 | 2 | 3) => {
@@ -182,6 +182,9 @@ it('ambiguous shows Did you mean; accepting an option applies it, searches again
   expect(result.current.applied).toEqual({ artist: 'Panic! at the Disco', title: 'Bohemian Rhapsody' });
   expect(result.current.suggestions).toEqual([]);
   expect(result.current.correction).toMatchObject({ kind: 'content', active: true });
+  // Like gen: the accepted suggestion is now a confident content verdict.
+  expect(result.current.kind).toBe('content');
+  expect(result.current.verdict).toMatchObject({ confident: true, canonical_artist: 'Panic! at the Disco' });
   expect(reSearch).toHaveBeenCalledWith({ artist: 'Panic! at the Disco', title: 'Bohemian Rhapsody' });
   expect(logEvent).toHaveBeenCalledWith('pick_candidate', { where: 'make', index: 1 });
 });
@@ -260,4 +263,54 @@ it('a failed full judge still settles and opens the gate', async () => {
   await waitFor(() => expect(result.current.state).toBe('settled'));
   expect(result.current.gateOpen).toBe(true);
   expect(result.current.correction).toBeNull();
+});
+
+/** fast: a confident catalogue tidy; full (asked at tier 3) is held until `answer`. */
+function heldFull() {
+  let answer!: (v: MatchVerdict) => void;
+  gen.matchJudge.mockImplementation((b) =>
+    b.stage === 'fast'
+      ? Promise.resolve(verdict({ kind: 'cosmetic', canonical_artist: 'Queen', canonical_title: 'bohemian rapsody' }))
+      : new Promise<MatchVerdict>((r) => (answer = r)),
+  );
+  return (v: MatchVerdict) => answer(v);
+}
+
+it('a verdict that lands after unmount applies nothing and searches nothing (gen cancelled guard)', async () => {
+  const answer = heldFull();
+  const { result, searchDone, reSearch, unmount } = setup();
+  await waitFor(() => expect(result.current.correction).not.toBeNull());
+  await searchDone(3);
+  await waitFor(() => expect(fullCalls()).toHaveLength(1));
+  unmount();
+  await act(async () => answer(verdict({ kind: 'content', engine: 'ai', ...FIXED })));
+  expect(reSearch).not.toHaveBeenCalled();
+});
+
+it('a verdict that lands while the job is being created changes nothing and searches nothing', async () => {
+  const answer = heldFull();
+  let busy = false;
+  const { result, searchDone, reSearch } = setup(intent(), () => busy);
+  await searchDone(3);
+  await waitFor(() => expect(fullCalls()).toHaveLength(1));
+  const before = result.current.applied;
+  busy = true;
+  await act(async () => answer(verdict({ kind: 'content', engine: 'ai', ...FIXED })));
+  expect(reSearch).not.toHaveBeenCalled();
+  expect(result.current.applied).toEqual(before);
+  expect(result.current.state).toBe('settled');
+});
+
+it('an explicit Undo is respected: a later verdict does not re-apply over it', async () => {
+  const answer = heldFull();
+  const { result, searchDone, reSearch } = setup();
+  await waitFor(() => expect(result.current.correction?.active).toBe(true));
+  act(() => result.current.undo());
+  await searchDone(3);
+  await waitFor(() => expect(fullCalls()).toHaveLength(1));
+  await act(async () => answer(verdict({ kind: 'content', engine: 'ai', ...FIXED })));
+  expect(result.current.applied).toEqual({ artist: 'queen', title: 'bohemian rapsody' });
+  expect(result.current.correction?.active).toBe(false);
+  expect(reSearch).not.toHaveBeenCalled();
+  expect(result.current.gateOpen).toBe(true);
 });

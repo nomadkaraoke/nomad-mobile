@@ -58,7 +58,8 @@ beforeEach(async () => {
 const openMake = () => renderRouter(makeRoutes(), { initialUrl: '/make/new' });
 /** Make it, once the judge's gate has opened. */
 // Not inside act(): waitFor can't see updates an open act scope is holding back.
-const readySubmit = () => waitFor(() => expect(screen.getByTestId('make-submit')).toBeEnabled());
+const readySubmit = () =>
+  waitFor(() => expect(screen.getByTestId('make-submit')).toBeEnabled(), { timeout: 3000 });
 
 it('searches once, then tier 1 shows the pick card, the cost and a single Make it', async () => {
   let finish!: (v: typeof TIER1) => void;

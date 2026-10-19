@@ -13,6 +13,8 @@ export type JudgeSearch = {
   tier: ConfidenceTier | null;
   /** Searches again for a corrected song. */
   reSearch(song: Song): void;
+  /** True while the job is being created: a late verdict must not change the song or search again then. */
+  busy?: () => boolean;
 };
 
 /** An applied correction: `from` is exactly what was showing before it, `to` what it showed after. */
@@ -75,9 +77,23 @@ export function useMatchJudge(intent: MakeIntent | null, search: JudgeSearch) {
   const appliedRef = useRef(applied);
   const correctionRef = useRef(correction);
   const reSearchRef = useRef(search.reSearch);
+  const busyRef = useRef(search.busy);
   useEffect(() => {
     reSearchRef.current = search.reSearch;
+    busyRef.current = search.busy;
   });
+  // gen's `cancelled` guard: a verdict landing after unmount must not apply or start a (~45 s) gen search.
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
+    };
+  }, []);
+  /** The user undid, redid or picked a suggestion: a late verdict never overrides that choice. */
+  const userChose = useRef(false);
+  /** May a judge verdict that arrives now change anything? */
+  const mayApply = useCallback(() => alive.current && !userChose.current && !busyRef.current?.(), []);
 
   const show = useCallback((song: Song, next: Correction | null) => {
     appliedRef.current = song;
@@ -111,14 +127,14 @@ export function useMatchJudge(intent: MakeIntent | null, search: JudgeSearch) {
     show({ artist: intent.artist, title: intent.title }, null);
     matchJudge({ artist: intent.artist, title: intent.title, stage: 'fast' })
       .then((v) => {
-        if (v.kind === 'cosmetic' && v.confident && !v.needs_ai) {
+        if (mayApply() && v.kind === 'cosmetic' && v.confident && !v.needs_ai) {
           setVerdict(v);
           applyCorrection('cosmetic', { artist: v.canonical_artist, title: v.canonical_title }, false);
         }
         setFast({ verdict: v });
       })
       .catch(() => setFast({ verdict: null }));
-  }, [intent, show, applyCorrection]);
+  }, [intent, show, applyCorrection, mayApply]);
 
   // The first search's tier is the judge's; it also starts the gate's safety timer.
   const searchTier = search.tier;
@@ -141,6 +157,7 @@ export function useMatchJudge(intent: MakeIntent | null, search: JudgeSearch) {
     const t = tier;
     matchJudge({ ...song, stage: 'full', audio_confidence_tier: t })
       .then((v) => {
+        if (!mayApply()) return;
         setVerdict(v);
         const to = { artist: v.canonical_artist, title: v.canonical_title };
         if (v.kind === 'cosmetic' && v.confident) applyCorrection('cosmetic', to, false);
@@ -152,13 +169,14 @@ export function useMatchJudge(intent: MakeIntent | null, search: JudgeSearch) {
       // Matching is a nice-to-have: on failure the user keeps what they typed.
       .catch(() => {})
       .finally(() => setFullDone(true));
-  }, [wantFull, tier, applyCorrection]);
+  }, [wantFull, tier, applyCorrection, mayApply]);
 
   const settled = fast !== null && tier !== null && (!wantFull || fullDone);
 
   const undo = useCallback(() => {
     const c = correctionRef.current;
     if (!c?.active) return;
+    userChose.current = true;
     show(c.from, { ...c, active: false });
     logEvent('keep_typed', { where: 'make', kind: c.kind });
   }, [show]);
@@ -166,6 +184,7 @@ export function useMatchJudge(intent: MakeIntent | null, search: JudgeSearch) {
   const redo = useCallback(() => {
     const c = correctionRef.current;
     if (!c || c.active) return;
+    userChose.current = true;
     show(c.to, { ...c, active: true });
     logEvent('reapply_tidy', { where: 'make', kind: c.kind });
   }, [show]);
@@ -175,6 +194,18 @@ export function useMatchJudge(intent: MakeIntent | null, search: JudgeSearch) {
       const pick = suggestions[i];
       if (!pick) return;
       setSuggestions([]);
+      userChose.current = true;
+      // Like gen: the accepted suggestion becomes a confident content correction.
+      setVerdict({
+        kind: 'content',
+        confident: true,
+        canonical_artist: pick.artist,
+        canonical_title: pick.title,
+        alternatives: [],
+        engine: 'ai',
+        reason: '',
+        needs_ai: false,
+      });
       logEvent('pick_candidate', { where: 'make', index: i });
       // The user chose it: it replaces both fields, and the audio is searched again for it.
       applyCorrection('content', pick, true, true);

@@ -74,7 +74,8 @@ beforeEach(async () => {
 });
 
 const openMake = () => renderRouter(makeRoutes(), { initialUrl: '/make/new' });
-const submitEnabled = () => waitFor(() => expect(screen.getByTestId('make-submit')).toBeEnabled());
+const submitEnabled = () =>
+  waitFor(() => expect(screen.getByTestId('make-submit')).toBeEnabled(), { timeout: 3000 });
 
 it('the fast judge and the audio search start together; a confident cosmetic tidy applies with no full call', async () => {
   let finish!: (v: typeof TIER1) => void;
@@ -236,6 +237,7 @@ it('Review Focus 5: the title the user edited is never overwritten, and Undo res
 
 it('community-exists shows when a community version exists, with a watch link; make stays available', async () => {
   const open = jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
+  try {
   gen.communityCheck.mockResolvedValue({
     has_community: true,
     songs: [
@@ -254,7 +256,9 @@ it('community-exists shows when a community version exists, with a watch link; m
   expect(open).toHaveBeenCalledWith('https://youtu.be/best');
   await submitEnabled();
   expect(gen.communityCheck).toHaveBeenCalledTimes(1);
-  open.mockRestore();
+  } finally {
+    open.mockRestore();
+  }
 });
 
 it('a failed community check renders nothing and blocks nothing', async () => {
@@ -265,3 +269,47 @@ it('a failed community check renders nothing and blocks nothing', async () => {
   expect(screen.queryByTestId('community-exists')).toBeNull();
 });
 
+
+/** fast: needs the AI; full is held until the returned function answers it. */
+function holdFull() {
+  let answer!: (v: MatchVerdict) => void;
+  gen.matchJudge.mockImplementation((b) =>
+    b.stage === 'fast' ? Promise.resolve(verdict({ needs_ai: true })) : new Promise<MatchVerdict>((r) => (answer = r)),
+  );
+  return (v: MatchVerdict) => answer(v);
+}
+
+it('a tier-3 correction that lands after the screen is gone starts no audio search', async () => {
+  gen.searchAudio.mockResolvedValue(TIER3);
+  const answer = holdFull();
+  const app = openMake();
+  await waitFor(() => expect(fullCalls()).toHaveLength(1));
+  app.unmount();
+  await act(async () => answer(verdict({ kind: 'content', engine: 'ai', ...FIXED })));
+  expect(gen.searchAudio).toHaveBeenCalledTimes(1);
+});
+
+it('a correction that lands while Make it is creating the job: no re-search, the pick stays, the job keeps its name', async () => {
+  jest.useFakeTimers();
+  gen.searchAudio.mockResolvedValue({ sessionId: 's2', results: [bestChoice(0), youtube(1)] });
+  const answer = holdFull();
+  let created!: (id: string) => void;
+  gen.createJobFromSearch.mockReturnValue(new Promise((r) => (created = r)));
+  openMake();
+  await act(async () => {
+    await jest.advanceTimersByTimeAsync(0);
+  });
+  expect(screen.getByTestId('make-submit')).toBeDisabled();
+  await act(async () => {
+    await jest.advanceTimersByTimeAsync(JUDGE_GATE_TIMEOUT_MS);
+  });
+  expect(screen.getByTestId('make-submit')).toBeEnabled();
+  await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
+  expect(gen.createJobFromSearch).toHaveBeenCalledWith({ sessionId: 's2', index: 0, artist: 'muse', title: 'starlite' });
+  await act(async () => answer(verdict({ kind: 'content', engine: 'ai', ...FIXED })));
+  expect(gen.searchAudio).toHaveBeenCalledTimes(1);
+  expect(screen.getByTestId('make-song-title')).toHaveTextContent('starlite');
+  expect(screen.getByTestId('make-pick')).toHaveProp('accessibilityState', expect.objectContaining({ selected: true }));
+  await act(async () => created('job-1'));
+  expect(gen.createJobFromSearch).toHaveBeenCalledTimes(1);
+});

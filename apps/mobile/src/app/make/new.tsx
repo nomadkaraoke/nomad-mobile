@@ -74,19 +74,25 @@ export default function MakeScreen() {
     () => (search.isSuccess && searched ? getSearchConfidence(results, searched.title, searched.artist).tier : null),
     [search.isSuccess, searched, results],
   );
+  // Set while a job is being created (declared before the judge, which must not re-search under a submit).
+  const inFlight = useRef(false);
   const judge = useMatchJudge(active, {
     tier: searchTier,
     reSearch: (s) => {
+      if (inFlight.current) return;
       setPicked(null);
       search.searchFor(s);
     },
+    busy: () => inFlight.current,
   });
   // What's shown and what the job is made with: the applied artist/title.
-  const song = judge.applied ?? (intent ? { artist: intent.artist, title: intent.title } : null);
+  const song = useMemo(
+    () => judge.applied ?? (intent ? { artist: intent.artist, title: intent.title } : null),
+    [judge.applied, intent],
+  );
   const confidence = useMemo(
     () => (song && search.data ? getSearchConfidence(results, song.title, song.artist) : null),
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- the song's fields, not its identity
-    [song?.title, song?.artist, search.data, results],
+    [song, search.data, results],
   );
   const locked = !judge.gateOpen;
   const best = confidence && confidence.tier < 3 ? (confidence.best as AudioResult | null) : null;
@@ -136,8 +142,7 @@ export default function MakeScreen() {
     },
   });
 
-  // Review Focus 3: a ref, not just `disabled`, so two taps in one frame still create one job.
-  const inFlight = useRef(false);
+  // Review Focus 3: a ref (inFlight, above), not just `disabled`, so two taps in one frame still create one job.
   const submit = () => {
     if (!target || !song || locked || inFlight.current) return;
     inFlight.current = true;
