@@ -4,7 +4,7 @@ import { configureClient as configureGen } from '@nomad/api-gen';
 import { useAuth } from '../auth/store';
 import { DECIDE_API_URL, GEN_API_URL } from '../config';
 import { currentLocale } from '../locale';
-import { getDeviceId } from './deviceId';
+import { getDeviceId } from '../device/deviceId';
 
 export { DECIDE_API_URL, GEN_API_URL, GEN_WEB_URL } from '../config';
 

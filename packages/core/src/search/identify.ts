@@ -12,6 +12,7 @@
 //   4. rescore every candidate (_score)
 //   5. decide: confident / candidates / none
 import { LevenshteinPattern, levenshteinSeq, partialRatio, ratio, tokenSetRatio, wRatio } from './fuzz';
+import { LruCache } from './lru';
 import { songKey, songNorm } from './normalize';
 import { codePoints, pyCompare, PY_I, PY_SPACE, pyLen, pyRound, pySlice, pySplit, pyStrip, WB_AFTER, WB_BEFORE } from './pyCompat';
 import type { IdentifyResult, MatchDetail, SongRef, SqlReader } from './types';
@@ -178,8 +179,27 @@ function vocabBucket(db: SqlReader, first: string, length: number): Bucket {
   return bucket;
 }
 
+// Typo variants per reader, LRU-bounded: typing re-identifies on every keystroke, and every word but the
+// last is unchanged, so its variants (a fuzzy scan over the vocab bucket) are reused. Read-only once built.
+const VARIANT_CACHE_SIZE = 512;
+const variantCache = new WeakMap<SqlReader, LruCache<string, ReadonlyMap<string, number>>>();
+
+function variants(db: SqlReader, word: string): ReadonlyMap<string, number> {
+  let cache = variantCache.get(db);
+  if (!cache) {
+    cache = new LruCache(VARIANT_CACHE_SIZE);
+    variantCache.set(db, cache);
+  }
+  let v = cache.get(word);
+  if (!v) {
+    v = computeVariants(db, word);
+    cache.set(word, v);
+  }
+  return v;
+}
+
 /** Index words the typed `word` might be a typo of → {word: similarity}, the word itself first. */
-function variants(db: SqlReader, word: string): Map<string, number> {
+function computeVariants(db: SqlReader, word: string): Map<string, number> {
   const out = new Map<string, number>([[word, 1.0]]);
   const wc = codePoints(word);
   if (wc.length < 3) return out; // short words: exact only
@@ -239,7 +259,7 @@ function phraseCandidates(db: SqlReader, words: string[]): Row[] {
 }
 
 /** Any run of words that fuzzily names an artist → that artist's songs. */
-function artistCandidates(db: SqlReader, words: string[], vars: Map<string, Map<string, number>>): Row[] {
+function artistCandidates(db: SqlReader, words: string[], vars: Map<string, ReadonlyMap<string, number>>): Row[] {
   const hits = new Map<string, true>();
   const n = words.length;
   for (let i = 0; i < n; i++) {
@@ -276,7 +296,7 @@ function artistCandidates(db: SqlReader, words: string[], vars: Map<string, Map<
 }
 
 /** Songs containing every typed word (any spelling; last may be partial), plus leave-one-out. */
-function candidates(db: SqlReader, allWords: string[], vars: Map<string, Map<string, number>>): Row[] {
+function candidates(db: SqlReader, allWords: string[], vars: Map<string, ReadonlyMap<string, number>>): Row[] {
   const distinctive = allWords.filter((w) => !STOP_WORDS.has(w));
   const words = distinctive.length >= 2 ? distinctive : allWords;
   const groups = words.map((w, i) => {
@@ -436,7 +456,7 @@ export function identify(db: SqlReader, query: string, opts: IdentifyOptions = {
   if (!words.length || pyLen(words.join('')) < 3) return none();
   qnorm = words.join(' ');
 
-  const vars = new Map<string, Map<string, number>>();
+  const vars = new Map<string, ReadonlyMap<string, number>>();
   for (const w of words) if (!vars.has(w)) vars.set(w, variants(db, w));
   let pool = [...candidates(db, words, vars), ...phraseCandidates(db, words), ...artistCandidates(db, words, vars)];
   const unique = new Map<string, Row>();

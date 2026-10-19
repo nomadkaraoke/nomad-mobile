@@ -7,7 +7,7 @@ export * from './duration';
 export * from './search/types';
 export { identify, MAX_QUERY_CHARS, OFFLINE_MARGIN_BONUS, type IdentifyOptions } from './search/identify';
 export { identifyKind } from './search/kind';
-export { offlineGroups } from './search/offline';
+export { OFFLINE_SCHEMA_VERSION, offlineGroups } from './search/offline';
 export { sameSong } from './search/sameSong';
 export {
   ftsMatchQuery,

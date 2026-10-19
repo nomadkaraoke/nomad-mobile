@@ -6,7 +6,8 @@ import path from 'node:path';
 
 import { identify, OFFLINE_MARGIN_BONUS } from '../identify';
 import { identifyKind } from '../kind';
-import { offlineGroups } from '../offline';
+import { OFFLINE_SCHEMA_VERSION, offlineGroups } from '../offline';
+import { NORMALIZER_VERSION } from '../normalize';
 import type { IdentifyResult, OfflineGroup, SongRef, SqlReader } from '../types';
 import parity from '../__fixtures__/parity.json';
 
@@ -49,6 +50,14 @@ beforeAll(() => {
   db = betterSqliteReader(raw);
 });
 afterAll(() => raw.close());
+
+it('the fixture offline.db carries the schema and normaliser versions this app supports', () => {
+  const meta = Object.fromEntries(
+    db.all<{ key: string; value: string }>('SELECT key, value FROM meta').map((r) => [r.key, r.value]),
+  );
+  expect(Number(meta.offline_schema_version)).toBe(OFFLINE_SCHEMA_VERSION);
+  expect(Number(meta.normalizer_version)).toBe(NORMALIZER_VERSION);
+});
 
 function ref(r: SongRef) {
   return { artist: r.artist, title: r.title, songKey: r.songKey, popularity: r.popularity, karaoke: r.karaoke };

@@ -3,6 +3,12 @@
 import { songKey } from './normalize';
 import type { IdentifyResult, OfflineGroup, OfflineVersion, SqlReader } from './types';
 
+/**
+ * The offline.db layout this app reads (decide `offline.OFFLINE_SCHEMA_VERSION`). The phone only uses a
+ * file whose manifest `schema` and `meta.offline_schema_version` equal it.
+ */
+export const OFFLINE_SCHEMA_VERSION = 1;
+
 type VersionRow = {
   brand_code: string;
   brand_name: string;

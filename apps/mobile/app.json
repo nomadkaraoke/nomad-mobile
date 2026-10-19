@@ -53,7 +53,13 @@
           ]
         }
       ],
-      "expo-video"
+      "expo-video",
+      [
+        "expo-sqlite",
+        {
+          "enableFTS": true
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
