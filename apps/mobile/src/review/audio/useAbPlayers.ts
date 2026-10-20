@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useLockstep } from './lockstep';
 import { instrumentalUrl, MAX_URL_REFRESHES, refreshInstrumentalOptions } from './mediaSources';
+import { replaceAndWait, safePlay, type AudioErrorCode } from './playback';
 
 export interface AbPlayers {
   active: InstrumentalChoice;
@@ -16,7 +17,7 @@ export interface AbPlayers {
   position: number;
   duration: number;
   loading: boolean;
-  error: string | null;
+  error: AudioErrorCode | null;
 }
 
 const IDS: readonly InstrumentalChoice[] = ['clean', 'with_backing'];
@@ -38,11 +39,13 @@ export function useAbPlayers(jobId: string, options: InstrumentalOption[]): AbPl
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
   const [loaded, setLoaded] = useState({ clean: false, with_backing: false });
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<AudioErrorCode | null>(null);
 
   const activeRef = useRef(active);
   const refreshes = useRef(0);
   const refreshing = useRef(false);
+  // Bumped by every playback command and by teardown: async continuations bail when it moved on.
+  const genRef = useRef(0);
 
   // A change in the stems' URLs (not in the array identity) rebuilds the pair.
   const key = IDS.map((id) => options.find((o) => o.id === id)?.audio_url ?? '').join('|');
@@ -63,7 +66,10 @@ export function useAbPlayers(jobId: string, options: InstrumentalOption[]): AbPl
     const clean = make(urls[0]!, 'clean');
     const withBacking = make(urls[1]!, 'with_backing');
     const players = { clean, with_backing: withBacking };
+    // Cap = 3 refreshes in total for this pair (not per error); it only resets when the stem URLs change.
     refreshes.current = 0;
+    refreshing.current = false;
+    let disposed = false;
     setLoaded({ clean: false, with_backing: false });
     setError(null);
     setPair(players);
@@ -78,34 +84,43 @@ export function useAbPlayers(jobId: string, options: InstrumentalOption[]): AbPl
           setDuration(s.duration);
         }
         if (!s.error) return;
-        // Signed/proxied URLs can expire mid-review: re-fetch them (bounded), then give up with the error.
+        // Signed/proxied URLs can expire mid-review: re-fetch them (bounded), then give up.
         if (refreshes.current >= MAX_URL_REFRESHES) {
-          setError(s.error);
+          setError('load_failed');
           return;
         }
         if (refreshing.current) return;
         refreshing.current = true;
         refreshes.current += 1;
+        const gen = ++genRef.current;
         void refreshInstrumentalOptions(jobId)
-          .then((fresh) => {
-            const at = players[activeRef.current].currentTime;
-            const wasPlaying = players[activeRef.current].playing;
-            for (const pid of IDS) {
-              const url = instrumentalUrl(jobId, fresh, pid);
-              if (!url) continue;
-              players[pid].replace({ uri: url });
-              void Promise.resolve(players[pid].seekTo(at)).then(() => {
-                if (wasPlaying) players[pid].play();
-              });
-            }
+          .then(async (fresh) => {
+            if (disposed) return;
+            const cur = players[activeRef.current];
+            const at = cur.currentTime;
+            const wasPlaying = cur.playing;
+            await Promise.all(
+              IDS.map(async (pid) => {
+                const url = instrumentalUrl(jobId, fresh, pid);
+                if (!url) return;
+                await replaceAndWait(players[pid], { uri: url });
+                if (disposed) return;
+                await players[pid].seekTo(at);
+                if (wasPlaying && gen === genRef.current && !disposed) safePlay(players[pid], setError);
+              }),
+            );
           })
-          .catch(() => undefined)
+          .catch(() => {
+            if (!disposed) setError('load_failed');
+          })
           .finally(() => {
             refreshing.current = false;
           });
       }),
     );
     return () => {
+      disposed = true;
+      genRef.current += 1;
       subs.forEach((s) => s.remove());
       clean.remove();
       withBacking.remove();
@@ -117,6 +132,7 @@ export function useAbPlayers(jobId: string, options: InstrumentalOption[]): AbPl
 
   const setActive = useCallback(
     (c: InstrumentalChoice) => {
+      genRef.current += 1;
       activeRef.current = c;
       setActiveState(c);
       if (!pair) return;
@@ -125,17 +141,20 @@ export function useAbPlayers(jobId: string, options: InstrumentalOption[]): AbPl
     [pair],
   );
   const play = useCallback(() => {
-    if (pair) IDS.forEach((id) => pair[id].play());
+    genRef.current += 1;
+    if (pair) IDS.forEach((id) => safePlay(pair[id], setError));
   }, [pair]);
   const pause = useCallback(() => {
+    genRef.current += 1;
     if (pair) IDS.forEach((id) => pair[id].pause());
   }, [pair]);
   const seekTo = useCallback(
     async (t: number) => {
+      genRef.current += 1;
       if (pair) await Promise.all(IDS.map((id) => pair[id].seekTo(t)));
     },
     [pair],
   );
 
-  return { active, setActive, play, pause, seekTo, playing, position, duration, loading: !pair || !loaded.clean || !loaded.with_backing, error };
+  return { active, setActive, play, pause, seekTo, playing, position, duration, loading: !error && (!pair || !loaded.clean || !loaded.with_backing), error };
 }

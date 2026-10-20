@@ -12,6 +12,7 @@ class MockPlayer {
   playing = false;
   rate = 1;
   removed = false;
+  isLoaded = true;
   source: unknown;
   listeners: Listener[] = [];
   constructor(source: unknown) {
@@ -31,6 +32,9 @@ class MockPlayer {
   });
   replace = jest.fn((s: unknown) => {
     this.source = s;
+    this.isLoaded = false;
+    // The new item reports loaded shortly after, unless a test wants to control that moment.
+    if (mockAutoLoad) queueMicrotask(() => this.emit({ isLoaded: true }));
   });
   remove = jest.fn(() => {
     this.removed = true;
@@ -40,12 +44,14 @@ class MockPlayer {
     return { remove: () => (this.listeners = this.listeners.filter((x) => x !== l)) };
   });
   emit(extra: Record<string, unknown> = {}) {
+    if (typeof extra.isLoaded === 'boolean') this.isLoaded = extra.isLoaded;
     const status = { currentTime: this.currentTime, duration: 100, playing: this.playing, isLoaded: true, error: null, ...extra };
     this.listeners.forEach((l) => l(status));
   }
 }
 
 const mockPlayers: MockPlayer[] = [];
+let mockAutoLoad = true;
 jest.mock('expo-audio', () => ({
   createAudioPlayer: jest.fn((source: unknown) => {
     const p = new MockPlayer(source);
@@ -67,6 +73,7 @@ const uriOf = (p: MockPlayer) => (p.source as { uri: string }).uri;
 
 beforeEach(() => {
   mockPlayers.length = 0;
+  mockAutoLoad = true;
   mockGetUrls.mockReset();
 });
 
@@ -120,14 +127,14 @@ describe('audio: useReviewPlayer', () => {
     expect(p.pause).toHaveBeenCalledTimes(1);
   });
 
-  it('setRate applies to the player and survives a source switch', () => {
+  it('setRate applies to the player and survives a source switch', async () => {
     const { result, rerender } = renderHook((p: { ready: boolean }) => useReviewPlayer('j1', { vocalsReady: p.ready }), {
       initialProps: { ready: false },
     });
     act(() => result.current.setRate(0.5));
     expect(result.current.rate).toBe(0.5);
     act(() => result.current.setSource('vocals'));
-    rerender({ ready: true });
+    await act(async () => rerender({ ready: true }));
     expect(mockPlayers[0]!.rate).toBe(0.5);
   });
 
@@ -135,6 +142,104 @@ describe('audio: useReviewPlayer', () => {
     const { unmount } = renderHook(() => useReviewPlayer('j1', { vocalsReady: false }));
     unmount();
     expect(mockPlayers[0]!.removed).toBe(true);
+  });
+});
+
+describe('audio: robustness', () => {
+  it('a throwing or rejecting play() sets play_failed instead of escaping; abort is benign', async () => {
+    const { result } = renderHook(() => useReviewPlayer('j1', { vocalsReady: false }));
+    const p = mockPlayers[0]!;
+    p.play.mockImplementationOnce(() => {
+      throw new Error('activateSession failed');
+    });
+    act(() => result.current.play());
+    expect(result.current.error).toBe('play_failed');
+    act(() => p.emit()); // a status tick must not clear a play failure
+    expect(result.current.error).toBe('play_failed');
+    const { result: r2 } = renderHook(() => useReviewPlayer('j1', { vocalsReady: false }));
+    const abort = Object.assign(new Error('x'), { name: 'AbortError' });
+    mockPlayers[1]!.play.mockImplementationOnce(() => Promise.reject(abort) as never);
+    await act(async () => r2.current.toggle());
+    expect(r2.current.error).toBeNull();
+  });
+
+  it('A/B play() throwing surfaces play_failed', () => {
+    const { result } = renderHook(() => useAbPlayers('j1', OPTIONS));
+    mockPlayers[0]!.play.mockImplementationOnce(() => {
+      throw new Error('nope');
+    });
+    act(() => result.current.play());
+    expect(result.current.error).toBe('play_failed');
+  });
+
+  it('pause() during an in-flight playRange seek prevents playback', async () => {
+    const { result } = renderHook(() => useReviewPlayer('j1', { vocalsReady: false }));
+    const p = mockPlayers[0]!;
+    let release!: () => void;
+    p.seekTo.mockImplementationOnce(() => new Promise<void>((r) => (release = r)));
+    act(() => result.current.playRange(5, 8));
+    act(() => result.current.pause());
+    await act(async () => release());
+    expect(p.play).not.toHaveBeenCalled();
+  });
+
+  it('unmount during an in-flight seek does not touch the removed player', async () => {
+    const { result, unmount } = renderHook(() => useReviewPlayer('j1', { vocalsReady: false }));
+    const p = mockPlayers[0]!;
+    let release!: () => void;
+    p.seekTo.mockImplementationOnce(() => new Promise<void>((r) => (release = r)));
+    act(() => result.current.playRange(5, 8));
+    unmount();
+    await act(async () => release());
+    expect(p.play).not.toHaveBeenCalled();
+  });
+
+  it('source swap pauses, waits for the new item to load, then seeks and resumes', async () => {
+    mockAutoLoad = false;
+    const { result, rerender } = renderHook((p: { ready: boolean }) => useReviewPlayer('j1', { vocalsReady: p.ready }), {
+      initialProps: { ready: false },
+    });
+    const p = mockPlayers[0]!;
+    p.currentTime = 12;
+    p.playing = true;
+    act(() => result.current.setSource('vocals'));
+    rerender({ ready: true });
+    expect(p.pause).toHaveBeenCalled();
+    expect(p.replace).toHaveBeenCalledTimes(1);
+    expect(p.seekTo).not.toHaveBeenCalled();
+    await act(async () => p.emit({ isLoaded: true }));
+    expect(p.seekTo).toHaveBeenCalledWith(12);
+    expect(p.play).toHaveBeenCalledTimes(1);
+  });
+
+  it('exposes loaded from the player status', () => {
+    const { result } = renderHook(() => useReviewPlayer('j1', { vocalsReady: false }));
+    expect(result.current.loaded).toBe(false);
+    act(() => mockPlayers[0]!.emit({ isLoaded: true }));
+    expect(result.current.loaded).toBe(true);
+  });
+
+  it('A/B refresh-fetch rejection surfaces load_failed and stops loading', async () => {
+    mockGetUrls.mockRejectedValue(new Error('offline'));
+    const { result } = renderHook(() => useAbPlayers('j1', OPTIONS));
+    await act(async () => mockPlayers[0]!.emit({ error: 'boom' }));
+    expect(result.current.error).toBe('load_failed');
+    expect(result.current.loading).toBe(false);
+  });
+
+  it('lockstep ignores a removed (throwing) player', () => {
+    jest.useFakeTimers();
+    try {
+      renderHook(() => useAbPlayers('j1', OPTIONS));
+      Object.defineProperty(mockPlayers[1]!, 'currentTime', {
+        get() {
+          throw new Error('released');
+        },
+      });
+      expect(() => act(() => void jest.advanceTimersByTime(1000))).not.toThrow();
+    } finally {
+      jest.useRealTimers();
+    }
   });
 });
 
@@ -201,6 +306,6 @@ describe('audio: useAbPlayers', () => {
     }
     expect(mockGetUrls).toHaveBeenCalledTimes(3);
     expect(a.replace).toHaveBeenCalledTimes(3);
-    expect(result.current.error).toBe('boom');
+    expect(result.current.error).toBe('load_failed');
   });
 });

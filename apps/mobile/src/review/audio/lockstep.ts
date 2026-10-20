@@ -19,8 +19,13 @@ export function useLockstep(active: LockstepPlayer | null, other: LockstepPlayer
   useEffect(() => {
     if (!active || !other) return;
     const id = setInterval(() => {
-      const target = lockstepCheck(active.currentTime, other.currentTime);
-      if (target !== null) void other.seekTo(target);
+      // A removed native player throws on access: the tick is simply skipped.
+      try {
+        const target = lockstepCheck(active.currentTime, other.currentTime);
+        if (target !== null) void Promise.resolve(other.seekTo(target)).catch(() => undefined);
+      } catch {
+        /* player already removed */
+      }
     }, LOCKSTEP_INTERVAL_MS);
     return () => clearInterval(id);
   }, [active, other]);
