@@ -196,6 +196,7 @@ function ReviewBody({ jobId, data }: ReviewScreenProps) {
           submitter={submitter}
           showChooser={plan.showChooser}
           onBackToLyrics={() => goTo('lyrics')}
+          onContinueOnWeb={continueWeb}
         />
       )}
 

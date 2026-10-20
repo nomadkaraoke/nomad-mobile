@@ -22,6 +22,8 @@ type Props = {
   /** False for a job with the singer's own instrumental (`custom`): no chooser, no wait for stems. */
   showChooser: boolean;
   onBackToLyrics: () => void;
+  /** The menu's "Continue on web", also offered next to Retry when the submit failed (the way out). */
+  onContinueOnWeb?: () => void;
 };
 
 /**
@@ -29,8 +31,9 @@ type Props = {
  * "Make my video". Making waits for the stems (gen can't resolve a selection without them) and for
  * every word to be timed; it never waits for the preview.
  */
-export function FinishStep({ jobId, stems, submitter, showChooser, onBackToLyrics }: Props) {
+export function FinishStep({ jobId, stems, submitter, showChooser, onBackToLyrics, onContinueOnWeb }: Props) {
   const t = useTranslations('review.finish');
+  const tr = useTranslations('review');
   const tl = useTranslations('review.lyrics');
   const editCount = useReviewStore((s) => s.editCount);
   const isDuet = useReviewStore((s) => s.doc.isDuet);
@@ -110,7 +113,17 @@ export function FinishStep({ jobId, stems, submitter, showChooser, onBackToLyric
               <StartText testID="review-finish-error" className="text-sm text-danger" accessibilityLiveRegion="polite">
                 {error === 'network' ? t('failedNetwork') : t('failed')}
               </StartText>
-              <Button testID="review-finish-retry" label={t('retry')} onPress={() => void submit()} />
+              <View className="flex-row gap-2">
+                {onContinueOnWeb ? (
+                  <View className="flex-1">
+                    <Button testID="review-finish-web" variant="secondary" label={tr('menuWeb')} onPress={onContinueOnWeb} />
+                  </View>
+                ) : null}
+                <View className="flex-1">
+                  {/* Retry respects what blocks Make my video (untimed words, stems not ready). */}
+                  <Button testID="review-finish-retry" label={t('retry')} disabled={blocked} onPress={() => void submit()} />
+                </View>
+              </View>
             </View>
           ) : (
             <Button

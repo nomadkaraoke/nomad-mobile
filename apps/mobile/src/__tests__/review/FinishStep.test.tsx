@@ -199,6 +199,36 @@ describe('FinishStep', () => {
     expect(loadDraft('j1', draftKeyOf(cleanFixture()))).toBeNull();
   });
 
+  it('a failed submit offers Continue on web next to Retry', async () => {
+    gen.completeReview!.mockRejectedValueOnce(new ApiError(503, 'busy'));
+    const onContinueOnWeb = jest.fn();
+    renderReview(finish({ onContinueOnWeb }), cleanFixture());
+    expect(screen.queryByTestId('review-finish-web')).toBeNull(); // only in the error state
+    await act(async () => fireEvent.press(submitButton()));
+    expect(screen.getByTestId('review-finish-web')).toHaveTextContent('Continue on web');
+    fireEvent.press(screen.getByTestId('review-finish-web'));
+    expect(onContinueOnWeb).toHaveBeenCalledTimes(1);
+    expect(gen.saveCorrections).toHaveBeenCalledTimes(1); // the web is not a retry
+  });
+
+  it('Retry is disabled while a word is untimed, like Make my video', async () => {
+    gen.completeReview!.mockRejectedValueOnce(new ApiError(503, 'busy'));
+    const { store } = renderReview(finish(), cleanFixture());
+    await act(async () => fireEvent.press(submitButton()));
+    expect(screen.getByTestId('review-finish-retry').props.accessibilityState.disabled).toBeFalsy();
+    act(() =>
+      store.getState().apply((d) => ({
+        ...d,
+        segments: d.segments.map((s, i) =>
+          i === 0 ? { ...s, words: s.words.map((w, j) => (j === 0 ? { ...w, start_time: null, end_time: null } : w)) } : s,
+        ),
+      })),
+    );
+    expect(screen.getByTestId('review-finish-retry').props.accessibilityState.disabled).toBe(true);
+    await act(async () => fireEvent.press(screen.getByTestId('review-finish-retry')));
+    expect(gen.saveCorrections).toHaveBeenCalledTimes(1);
+  });
+
   it('a dropped connection says so', async () => {
     gen.getCorrectionData!.mockRejectedValueOnce(new ApiError(0, 'Network request failed'));
     renderReview(finish(), cleanFixture());

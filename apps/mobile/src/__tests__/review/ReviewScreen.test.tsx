@@ -186,7 +186,7 @@ describe('ReviewScreen', () => {
     expect(screen.getByTestId('review-step-lyrics')).toBeTruthy();
   });
 
-  it('Finish: while saving, steps, undo, duet and discard are locked, so no second submit can start', async () => {
+  it('Finish: while saving, steps, undo, Continue on web, duet and discard are locked, so no second submit can start', async () => {
     gen.saveCorrections!.mockReturnValue(new Promise(() => {}));
     await renderScreen(cleanFixture({ ...STEMS, audio_complete: true }));
     deleteFirstLine();
@@ -201,6 +201,9 @@ describe('ReviewScreen', () => {
     fireEvent.press(screen.getByTestId('review-menu'));
     expect(screen.getByTestId('review-menu-duet').props.accessibilityState.disabled).toBe(true);
     expect(screen.getByTestId('review-menu-discard').props.accessibilityState.disabled).toBe(true);
+    expect(screen.getByTestId('review-menu-web').props.accessibilityState.disabled).toBe(true);
+    fireEvent.press(screen.getByTestId('review-menu-web'));
+    expect(continueOnWeb).not.toHaveBeenCalled();
     fireEvent.press(screen.getByTestId('review-finish-submit'));
     expect(gen.saveCorrections).toHaveBeenCalledTimes(1);
   });
@@ -399,6 +402,16 @@ describe('ReviewScreen', () => {
     await act(async () => listeners.forEach((fn) => fn('active')));
     await waitFor(() => expect(storage.getString('review-draft:j1')).toBeUndefined());
     // The spy stays until the next test's restoreAllMocks: the screen still unsubscribes on unmount.
+  });
+
+  it('Finish: a failed submit offers Continue on web, which hands over like the menu', async () => {
+    gen.saveCorrections!.mockRejectedValueOnce(new ApiError(503, 'busy'));
+    await renderScreen(cleanFixture({ ...STEMS, audio_complete: true }));
+    fireEvent.press(screen.getByTestId('review-lyrics-next'));
+    await act(async () => fireEvent.press(screen.getByTestId('review-finish-submit')));
+    fireEvent.press(screen.getByTestId('review-finish-web'));
+    await waitFor(() => expect(continueOnWeb).toHaveBeenCalledTimes(1));
+    expect(continueOnWeb.mock.calls[0]![0]).toBe('j1');
   });
 
   it('menu: a failed handoff says so', async () => {

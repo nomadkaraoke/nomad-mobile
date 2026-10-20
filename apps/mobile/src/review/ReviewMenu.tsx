@@ -25,7 +25,7 @@ type Props = {
   onDiscard: () => void;
   /** Hidden when undefined. */
   onContinueOnWeb?: () => void;
-  /** Saving or submitted: the duet flag and discard are disabled (the edits were sent). */
+  /** Saving or submitted: Continue on web, the duet flag and discard are disabled (the edits were sent). */
   locked?: boolean;
 };
 
@@ -86,6 +86,8 @@ export function ReviewMenu({ visible, onClose, isDuet, onSetDuet, onDiscard, onC
             testID="review-menu-web"
             icon="globe-outline"
             label={t('menuWeb')}
+            // Saving or submitted: the review is gen's now, there is nothing left to hand over.
+            disabled={locked}
             // Opens the in-app browser: like the Alert, wait until the sheet has gone.
             onPress={() => closeThen(onContinueOnWeb)}
           />
