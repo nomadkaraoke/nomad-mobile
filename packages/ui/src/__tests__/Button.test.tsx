@@ -30,3 +30,9 @@ it('primary labels are bold on the dark-on-pink foreground; secondary labels use
   expect(screen.getByText('Go').props.className).toEqual(expect.stringContaining('text-text'));
   expect(screen.getByText('Go').props.className).not.toEqual(expect.stringContaining('text-primary-fg'));
 });
+
+it('pads its label vertically, so a label that wraps (long German copy) is not jammed against the edges', () => {
+  render(<Button testID="b" label="Warten auf den Abschluss der Musik-Trennung…" onPress={jest.fn()} />);
+  expect(screen.getByTestId('b').props.className).toEqual(expect.stringContaining('py-2.5'));
+  expect(screen.getByTestId('b').props.className).toEqual(expect.stringContaining('min-h-12'));
+});

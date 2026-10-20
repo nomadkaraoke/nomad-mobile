@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslations } from '@nomad/i18n';
-import { colors } from '@nomad/ui';
+import { colors, StartText } from '@nomad/ui';
 import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import type { IconName } from '../IconButton';
 
@@ -16,6 +16,9 @@ const MAIN: { tool: LineTool | 'more'; icon: IconName }[] = [
   { tool: 'more', icon: 'ellipsis-horizontal' },
 ];
 const MORE: LineTool[] = ['split', 'merge', 'insert', 'delete'];
+
+/** Lines a toolbar label may take: one per word, at most two. */
+const labelLines = (label: string) => (label.trim().includes(' ') ? 2 : 1);
 
 type Props = {
   index: number;
@@ -43,12 +46,21 @@ export function LineToolbar({ index, canSplit, canMerge, onTool }: Props) {
               accessibilityLabel={t(tool)}
               accessibilityState={tool === 'more' ? { expanded: more } : undefined}
               onPress={() => (tool === 'more' ? setMore((m) => !m) : onTool(tool, index))}
-              className="min-h-12 flex-1 items-center justify-center py-1"
+              className="min-h-12 flex-1 items-center justify-start px-0.5 py-1"
             >
               <Ionicons name={icon} size={20} color={on ? colors.text : colors.primary} />
-              <Text className="text-xs text-text" numberOfLines={1}>
+              {/* Five equal columns: a long label (he, de, ru) wraps onto a second line and shrinks rather than running
+                  into its neighbours. A one-word label keeps to one line, so a word too wide for the column shrinks
+                  instead of breaking mid-word ("Verschiebe-n"). */}
+              <StartText
+                testID={`review-tool-${tool}-label`}
+                className="text-center text-xs text-text"
+                numberOfLines={labelLines(t(tool))}
+                adjustsFontSizeToFit
+                minimumFontScale={0.7}
+              >
                 {t(tool)}
-              </Text>
+              </StartText>
             </Pressable>
           );
         })}
@@ -68,7 +80,7 @@ export function LineToolbar({ index, canSplit, canMerge, onTool }: Props) {
                 onPress={() => onTool(tool, index)}
                 className={`min-h-11 justify-center rounded-lg border border-border bg-bg px-3 ${on ? '' : 'opacity-40'}`}
               >
-                <Text className={`text-base ${tool === 'delete' ? 'text-danger' : 'text-text'}`}>{t(tool)}</Text>
+                <StartText className={`text-base ${tool === 'delete' ? 'text-danger' : 'text-text'}`}>{t(tool)}</StartText>
               </Pressable>
             );
           })}
