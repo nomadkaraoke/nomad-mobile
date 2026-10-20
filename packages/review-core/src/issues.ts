@@ -1,5 +1,6 @@
 import type { ReviewDoc } from './doc';
 import type { Word } from './types';
+import { nextTimedStart, prevTimedEnd } from './timing';
 import { openVocalGaps } from './vocalGaps';
 
 export type IssueKind = 'untimed' | 'vocal_gap' | 'ai_corrected' | 'estimated' | 'long_word' | 'long_gap';
@@ -26,9 +27,8 @@ const isTimed = (w: Word): boolean => w.start_time !== null && w.end_time !== nu
  */
 export function collectIssues(doc: ReviewDoc): Issue[] {
   const out: Issue[] = [];
-  let prevTimed: { end: number } | null = null;
-
   doc.segments.forEach((seg, s) => {
+    let prevTimed: { end: number } | null = null; // long gaps only count inside a line
     const words = seg.words;
     const nearestTimed = (from: number): number | null => {
       for (let j = from; j >= 0; j--) if (words[j]!.start_time !== null) return words[j]!.start_time;
@@ -42,7 +42,7 @@ export function collectIssues(doc: ReviewDoc): Issue[] {
     words.forEach((w, j) => {
       if (!isTimed(w)) {
         if (!untimedRun) {
-          out.push({ kind: 'untimed', segment: s, word: j, time: nearestTimed(j) ?? seg.start_time ?? 0 });
+          out.push({ kind: 'untimed', segment: s, word: j, time: nearestTimed(j) ?? prevTimedEnd(doc.segments, s) ?? nextTimedStart(doc.segments, s) ?? 0 });
         }
         untimedRun = true;
       } else untimedRun = false;
@@ -75,7 +75,7 @@ export function collectIssues(doc: ReviewDoc): Issue[] {
     });
   });
 
-  for (const gap of openVocalGaps(doc)) {
+  for (const { gap } of openVocalGaps(doc)) {
     const idx = doc.segments.findIndex((seg) => seg.words.some((w) => w.start_time !== null && w.start_time >= gap.start));
     out.push({ kind: 'vocal_gap', segment: idx === -1 ? Math.max(0, doc.segments.length - 1) : idx, time: gap.start });
   }

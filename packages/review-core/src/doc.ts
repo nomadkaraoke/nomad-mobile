@@ -12,7 +12,8 @@ export function fromCorrectionData(data: CorrectionData): ReviewDoc {
 }
 
 export function toSubmission(doc: ReviewDoc): CorrectionData {
-  return { ...doc.source, corrected_segments: [...doc.segments], is_duet: doc.isDuet };
+  // Wordless segments carry no lyrics and would only confuse the renderer: never submit them.
+  return { ...doc.source, corrected_segments: doc.segments.filter((s) => s.words.length > 0), is_duet: doc.isDuet };
 }
 
 /** Replace one segment, keeping every other segment's object identity. Out-of-range index is a no-op. */

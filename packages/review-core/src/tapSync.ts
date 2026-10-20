@@ -1,9 +1,9 @@
 import type { LyricsSegment, Word } from './types';
 import { replaceSegment, type ReviewDoc } from './doc';
-import { clampSyncTime, sanitizeSegment } from './timing';
+import { clampSyncTime, nextTimedStart, prevTimedEnd, sanitizeSegment } from './timing';
 
 /** A press shorter than this is a tap (marks the onset only); longer is a hold (keeps its release). */
-export const HOLD_THRESHOLD_MS = 250;
+export const HOLD_THRESHOLD_MS = 200;
 /** A tapped word never grows longer than this when its end is gap-filled. */
 export const MAX_TAP_GAP_FILL_SECONDS = 1.0;
 /** Keep this clear of the next word's onset. */
@@ -36,22 +36,6 @@ const timedStarts = (words: readonly Word[]): number[] =>
 const timedEnds = (words: readonly Word[]): number[] =>
   words.filter((w) => w.end_time !== null).map((w) => w.end_time as number);
 
-function neighbourEnd(doc: ReviewDoc, s: number): number | null {
-  for (let i = s - 1; i >= 0; i--) {
-    const e = doc.segments[i]!.end_time ?? timedEnds(doc.segments[i]!.words).pop();
-    if (e !== undefined && e !== null) return e;
-  }
-  return null;
-}
-
-function neighbourStart(doc: ReviewDoc, s: number): number | null {
-  for (let i = s + 1; i < doc.segments.length; i++) {
-    const st = doc.segments[i]!.start_time ?? timedStarts(doc.segments[i]!.words)[0];
-    if (st !== undefined && st !== null) return st;
-  }
-  return null;
-}
-
 /**
  * Start a Tap To Sync pass on one line. A fully untimed line has no bounds of its own, so they
  * come from its neighbours, then `opts.fallbackStart/fallbackEnd`, then 0 / start + 10 s.
@@ -60,11 +44,11 @@ export function createTapSync(doc: ReviewDoc, segmentIndex: number, opts: TapSyn
   const segment = doc.segments[segmentIndex];
   if (!segment) throw new RangeError(`createTapSync: no segment ${segmentIndex}`);
   const segStart =
-    segment.start_time ?? timedStarts(segment.words)[0] ?? neighbourEnd(doc, segmentIndex) ?? opts.fallbackStart ?? 0;
+    segment.start_time ?? timedStarts(segment.words)[0] ?? prevTimedEnd(doc.segments, segmentIndex) ?? opts.fallbackStart ?? 0;
   const segEnd =
     segment.end_time ??
     timedEnds(segment.words).pop() ??
-    neighbourStart(doc, segmentIndex) ??
+    nextTimedStart(doc.segments, segmentIndex) ??
     opts.fallbackEnd ??
     segStart + UNKNOWN_END_SPAN_SECONDS;
   return {
@@ -135,7 +119,22 @@ export function shouldStop(state: TapSyncState, t: number): boolean {
   return !state.holding && t > state.segEnd + STOP_AFTER_END_SECONDS;
 }
 
-/** Write the synced line back into the doc (sanitized: no word with end < start). */
+/**
+ * Write the synced line back into the doc (sanitized: no word with end < start). The last tapped
+ * word's end is capped just before the next timed word (in the line if it was not re-synced this
+ * pass, else on the next line), so a stopped or finished pass never overlaps what follows.
+ */
 export function commitTapSync(doc: ReviewDoc, state: TapSyncState): ReviewDoc {
-  return replaceSegment(doc, state.segmentIndex, sanitizeSegment(state.segment));
+  let seg = state.segment;
+  const last = state.synced.size ? Math.max(...state.synced) : -1;
+  const lastWord = last >= 0 ? seg.words[last] : undefined;
+  if (lastWord && lastWord.start_time !== null && lastWord.end_time !== null) {
+    const inLine = seg.words.slice(last + 1).find((w) => w.start_time !== null);
+    const nextStart = inLine ? (inLine.start_time as number) : nextTimedStart(doc.segments, state.segmentIndex);
+    if (nextStart !== null) {
+      const end = Math.max(Math.min(lastWord.end_time, nextStart - OVERLAP_BUFFER_SECONDS), lastWord.start_time);
+      seg = withWord(seg, last, { end_time: end });
+    }
+  }
+  return replaceSegment(doc, state.segmentIndex, sanitizeSegment(seg));
 }

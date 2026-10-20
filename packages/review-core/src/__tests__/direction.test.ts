@@ -12,5 +12,7 @@ describe('lineDirection', () => {
     expect(lineDirection('(1) "Hello"')).toBe('ltr');
     expect(lineDirection('— 42 —')).toBe('ltr');
     expect(lineDirection('')).toBe('ltr');
+    expect(lineDirection('\uFEFFHello world')).toBe('ltr'); // BOM is neutral
+    expect(lineDirection('\uFEFF\u05E9\u05DC\u05D5\u05DD')).toBe('rtl');
   });
 });

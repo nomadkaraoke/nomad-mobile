@@ -97,6 +97,46 @@ describe('Tap To Sync', () => {
     expect(out.segments[0]).toBe(doc.segments[0]);
   });
 
+  it('hold threshold is 200 ms (gen TAP_THRESHOLD_MS)', () => {
+    const mk = () => press(createTapSync(docOf([seg([w('a'), w('b')], 9, 12)]), 0), 10);
+    expect(release(mk(), 10.2, 199).segment.words[0]!.end_time).toBe(11); // tap
+    expect(release(mk(), 10.2, 200).segment.words[0]!.end_time).toBe(10.2); // hold
+  });
+
+  describe('commit caps the last tapped word', () => {
+    it('finished pass: capped before the next line start', () => {
+      const doc = docOf([seg([w('a'), w('b')], 9, 12, 'x'), seg([w('c', 10.6, 11)], 10.6, 11, 'y')]);
+      let s = createTapSync(doc, 0);
+      s = tap(s, 10);
+      s = tap(s, 10.4); // last word: tap end = 11.4
+      expect(s.done).toBe(true);
+      const out = commitTapSync(doc, s);
+      expect(out.segments[0]!.words[1]!.end_time).toBeCloseTo(10.59);
+      expect(out.segments[0]!.words[0]!.end_time).toBeCloseTo(10.39);
+    });
+    it('partial pass: capped before the next, un-resynced word in the same line', () => {
+      const doc = docOf([seg([w('a', 9, 9.5), w('b', 10.5, 11), w('c', 11.5, 12)], 9, 12)]);
+      let s = createTapSync(doc, 0);
+      s = tap(s, 10); // stopped here, b/c keep stale timing
+      const out = commitTapSync(doc, s);
+      expect(out.segments[0]!.words[0]).toMatchObject({ start_time: 10, end_time: expect.closeTo(10.49) });
+      expect(out.segments[0]!.words[1]).toMatchObject({ start_time: 10.5, end_time: 11 });
+    });
+    it('never goes below the word start and leaves an uncapped last line alone', () => {
+      const doc = docOf([seg([w('a'), w('b')], 9, 12, 'x'), seg([w('c', 10.001, 11)], 10.001, 11, 'y')]);
+      let s = createTapSync(doc, 0);
+      s = tap(s, 10);
+      s = tap(s, 10.0001);
+      expect(commitTapSync(doc, s).segments[0]!.words[1]!.end_time).toBe(10.0001);
+      const solo = docOf([seg([w('a')], 9, 12)]);
+      expect(commitTapSync(solo, tap(createTapSync(solo, 0), 10)).segments[0]!.words[0]!.end_time).toBe(11);
+    });
+    it('commit without any tap changes nothing but sanitization', () => {
+      const doc = docOf([seg([w('a', 1, 2)], 1, 2)]);
+      expect(commitTapSync(doc, createTapSync(doc, 0)).segments[0]).toEqual(doc.segments[0]);
+    });
+  });
+
   it('empty segment is done immediately; bad index throws', () => {
     expect(createTapSync(docOf([seg([], 1, 2)]), 0).done).toBe(true);
     expect(() => createTapSync(docOf([]), 0)).toThrow(RangeError);

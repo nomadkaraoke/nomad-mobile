@@ -3,7 +3,7 @@ import type { LyricsSegment, Word } from './types';
 /** Tap To Sync window: a tap may land this far outside the segment. */
 export const SYNC_WINDOW_SECONDS = 3;
 
-const isTimed = (w: Word): boolean => w.start_time !== null && w.end_time !== null;
+const isTimed = (w: Word): w is Word & { start_time: number; end_time: number } => w.start_time !== null && w.end_time !== null;
 
 /**
  * Repair timing from older jobs: clamp each word's end >= start, and derive the segment's
@@ -73,4 +73,24 @@ export function activeLine(segments: readonly LyricsSegment[], t: number): numbe
   // Skip trailing untimed lines that merely inherited an earlier start.
   while (found > 0 && segments[found]!.start_time === null && !segments[found]!.words.some((w) => w.start_time !== null)) found--;
   return startOf(found) === -Infinity ? -1 : found;
+}
+
+/** End of the last timed word on the closest earlier line that has one, else null. */
+export function prevTimedEnd(segments: readonly LyricsSegment[], s: number): number | null {
+  for (let i = s - 1; i >= 0; i--) {
+    for (let j = segments[i]!.words.length - 1; j >= 0; j--) {
+      const w = segments[i]!.words[j]!;
+      if (isTimed(w)) return w.end_time;
+    }
+  }
+  return null;
+}
+
+/** Start of the first timed word on the closest later line that has one, else null. */
+export function nextTimedStart(segments: readonly LyricsSegment[], s: number): number | null {
+  for (let i = s + 1; i < segments.length; i++) {
+    const w = segments[i]!.words.find(isTimed);
+    if (w) return w.start_time;
+  }
+  return null;
 }

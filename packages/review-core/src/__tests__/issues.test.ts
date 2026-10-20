@@ -5,16 +5,13 @@ import { collectIssues } from '../issues';
 import { docWith, gapOf, line, word } from './helpers';
 
 describe('collectIssues', () => {
-  it('sorts the corrections fixture by time: untimed (time 0) before the later AI span', () => {
+  it('sorts the corrections fixture in song order', () => {
     const issues = collectIssues(fromCorrectionData(fixture as unknown as CorrectionData));
-    expect(issues.map((i) => [i.kind, i.segment, i.word])).toEqual([
-      ['untimed', 1, 0],
-      ['ai_corrected', 0, 3],
-      ['long_gap', 2, 0], // 15.9 -> 20.0 across the untimed line
-      ['untimed', 2, 1],
+    expect(issues.map((i) => [i.kind, i.segment, i.word, i.time])).toEqual([
+      ['ai_corrected', 0, 3, 14.4],
+      ['untimed', 1, 0, 15.9], // fully untimed line: previous line's last timed end
+      ['untimed', 2, 1, 20],
     ]);
-    const times = issues.map((i) => i.time);
-    expect(times).toEqual([...times].sort((a, b) => a - b));
   });
 
   it('untimed time is the nearest timed neighbour within the line', () => {
@@ -22,9 +19,12 @@ describe('collectIssues', () => {
     expect(i).toEqual({ kind: 'untimed', segment: 0, word: 1, time: 4 });
   });
 
-  it('untimed uses the line start when no word is timed, else 0', () => {
-    const [i] = collectIssues(docWith([line('a', [word('x', null, null)], { start_time: 7, end_time: 9 })]));
-    expect(i!.time).toBe(7);
+  it('fully untimed line: previous line end, else next line start, else 0', () => {
+    const un = line('u', [word('u', null, null)], { start_time: 99, end_time: 100 });
+    const t = (segs: ReturnType<typeof line>[]) => collectIssues(docWith(segs)).find((i) => i.kind === 'untimed')!.time;
+    expect(t([line('a', [word('a', 1, 2)]), un, line('b', [word('b', 8, 9)])])).toBe(2);
+    expect(t([un, line('b', [word('b', 8, 9)])])).toBe(8);
+    expect(t([un])).toBe(0);
   });
 
   it('one untimed issue per run', () => {
@@ -52,14 +52,14 @@ describe('collectIssues', () => {
     expect(est).toEqual([{ kind: 'estimated', segment: 0, word: 0, time: 1 }]);
   });
 
-  it('flags long words and long gaps (> 2 s) across lines', () => {
+  it('flags long words and long gaps inside a line (> 2 s), not between lines', () => {
     const d = docWith([
       line('a', [word('a', 1, 4)]),
-      line('b', [word('b', 6.5, 7), word('c', 7.0, 9.0)]),
+      line('b', [word('b', 10, 10.5), word('c', 13, 13.5)]),
     ]);
     expect(collectIssues(d).map((i) => [i.kind, i.segment, i.word, i.time])).toEqual([
       ['long_word', 0, 0, 1],
-      ['long_gap', 1, 0, 4],
+      ['long_gap', 1, 1, 10.5],
     ]);
   });
 
@@ -83,11 +83,10 @@ describe('collectIssues', () => {
 
   it('ties break by kind priority', () => {
     const d = docWith(
-      [line('a', [word('x', 5, 5.5, { ai_corrected: true, timing_estimated: false }), word('y', null, null)], { start_time: 5, end_time: 5.5 })],
+      [line('a', [word('x', 5, 5.04, { ai_corrected: true })])],
       { vocal_gaps: { gaps: [gapOf({ start: 5, end: 12 })] } },
     );
-    const kinds = collectIssues(d).map((i) => i.kind);
-    expect(kinds.indexOf('ai_corrected')).toBeLessThan(kinds.indexOf('untimed') + 10);
+    expect(collectIssues(d).map((i) => i.kind)).toEqual(['vocal_gap', 'ai_corrected']);
     const same = collectIssues(docWith([line('a', [word('x', null, null, { ai_corrected: true })], { start_time: 3, end_time: 4 })]));
     expect(same.map((i) => i.kind)).toEqual(['untimed', 'ai_corrected']);
   });
