@@ -217,6 +217,11 @@ describe('LyricsStep', () => {
     expect(screen.queryByTestId('review-player-follow')).toBeNull();
   });
 
+  it('ends the list with room for the Follow pill, so it never sits over the last line or gap callout', () => {
+    renderStep();
+    expect(screen.getByTestId('review-lines-footer').props.className).toContain('h-20');
+  });
+
   it('holds auto-follow off for 1.5 s after a jump (a line tap), then follows again', () => {
     const now = jest.spyOn(Date, 'now').mockReturnValue(100_000);
     const { rerenderWith } = renderStep(cleanFixture());

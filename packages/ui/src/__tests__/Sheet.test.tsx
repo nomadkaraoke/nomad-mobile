@@ -30,7 +30,7 @@ it('closes on backdrop press and labels the backdrop', () => {
       <Text>body</Text>
     </Sheet>,
   );
-  expect(screen.getByLabelText('Close')).toBeTruthy();
+  expect(screen.getByTestId('s-backdrop').props.accessibilityLabel).toBe('Close');
   fireEvent.press(screen.getByTestId('s-backdrop'));
   expect(onClose).toHaveBeenCalledTimes(1);
 });
@@ -55,4 +55,19 @@ it('gives the modal content its own GestureHandlerRootView (gestures inside a Mo
   expect(root.props.style).toEqual({ flex: 1 });
   expect(screen.getByTestId('s-panel')).toBeTruthy();
   expect(screen.getByTestId('s-gesture-root')).toBeTruthy();
+});
+
+it('has a labelled 44 pt close button in its header (the backdrop is a thin strip once the keyboard is up)', () => {
+  const onClose = jest.fn();
+  render(
+    <Sheet visible onClose={onClose} title="Edit" testID="s" closeLabel="Close">
+      <Text>body</Text>
+    </Sheet>,
+  );
+  const close = screen.getByTestId('s-close');
+  expect(close.props.accessibilityLabel).toBe('Close');
+  expect(close.props.accessibilityRole).toBe('button');
+  expect(close.props.className).toEqual(expect.stringContaining('h-11'));
+  fireEvent.press(close);
+  expect(onClose).toHaveBeenCalledTimes(1);
 });

@@ -1,10 +1,10 @@
 import { useTranslations } from '@nomad/i18n';
 import { countUntimedWords, planSteps, type CorrectionData, type ReviewStep } from '@nomad/review-core';
-import { colors } from '@nomad/ui';
+import { colors, StartText } from '@nomad/ui';
 import { Stack, useNavigation } from 'expo-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, AppState, Pressable, Text, View } from 'react-native';
+import { Alert, AppState, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useReviewPlayer } from './audio/useReviewPlayer';
@@ -160,19 +160,18 @@ function ReviewBody({ jobId, data }: ReviewScreenProps) {
 
       <StepsHeader step={step} onStep={goTo} disabled={locked} />
 
-      {restored ? (
+      {/* Once Make my video is pressed there is nothing left to discard (and on success it would linger). */}
+      {restored && !locked ? (
         <View className="mx-3 mb-1 flex-row items-center rounded-xl border border-border bg-card ps-3">
-          <Text className="flex-1 text-sm text-text">{t('restored')}</Text>
+          <StartText className="flex-1 text-sm text-text">{t('restored')}</StartText>
           <Pressable
             testID="review-restored-discard"
             accessibilityRole="button"
             accessibilityLabel={t('discard')}
-            accessibilityState={{ disabled: locked }}
-            disabled={locked}
             onPress={() => confirmDiscard(discard)}
             className="min-h-11 justify-center px-3"
           >
-            <Text className="text-sm font-semibold text-primary">{t('restoredDiscard')}</Text>
+            <StartText className="text-sm font-semibold text-primary">{t('restoredDiscard')}</StartText>
           </Pressable>
         </View>
       ) : null}
@@ -288,7 +287,7 @@ function StepsHeader({ step, onStep, disabled }: { step: ReviewStep; onStep: (s:
             onPress={() => onStep(s)}
             className="min-h-11 flex-1 justify-end pb-1"
           >
-            <Text className={`text-center text-sm font-semibold ${on ? 'text-primary' : 'text-muted'}`}>{t(s)}</Text>
+            <StartText className={`text-center text-sm font-semibold ${on ? 'text-primary' : 'text-muted'}`}>{t(s)}</StartText>
             <View className={`mt-1 h-1 rounded-full ${on ? 'bg-primary' : 'bg-border'}`} />
           </Pressable>
         );

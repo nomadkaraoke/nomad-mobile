@@ -1,8 +1,8 @@
 import { useTranslations } from '@nomad/i18n';
 import { applyLineText, insertGapText, insertLineEstimated } from '@nomad/review-core';
-import { Button, colors, Sheet } from '@nomad/ui';
-import { useEffect, useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Button, colors, Sheet, StartText } from '@nomad/ui';
+import { useEffect, useRef, useState } from 'react';
+import { TextInput, View } from 'react-native';
 
 import type { TextRequest } from '../lyrics/LyricsStep';
 import { useReviewStore } from '../store';
@@ -28,6 +28,12 @@ type Guessed = { segment: number; count: number; timed: boolean; keepGoing?: boo
 const words = (text: string): string[] => text.split(/\s+/).filter(Boolean);
 
 /**
+ * The field takes focus once the sheet has slid up. autoFocus inside an RN Modal put the cursor in the field
+ * on Android without raising the keyboard (iOS raised it).
+ */
+export const FOCUS_DELAY_MS = 350;
+
+/**
  * Edit text sheet (spec §4.3). Saving an edit keeps matched words' timings (`applyLineText`); new
  * words get estimated timing and the sheet offers "Re-sync now?". The same sheet types new lines
  * (Ruling K: no wordless lines, so Save stays disabled until there is a word).
@@ -38,6 +44,12 @@ export function EditLineSheet({ target, onClose, onResyncRequested, audioDuratio
   const editSeg = useReviewStore((s) => (target.kind === 'edit' ? s.doc.segments[target.segment] : undefined));
   const [text, setText] = useState(() => editSeg?.text ?? '');
   const [guessed, setGuessed] = useState<Guessed | null>(null);
+  const input = useRef<TextInput>(null);
+
+  useEffect(() => {
+    const id = setTimeout(() => input.current?.focus(), FOCUS_DELAY_MS);
+    return () => clearTimeout(id);
+  }, []);
 
   const gone = target.kind === 'edit' && !editSeg && !guessed;
   useEffect(() => {
@@ -86,11 +98,11 @@ export function EditLineSheet({ target, onClose, onResyncRequested, audioDuratio
     <Sheet visible onClose={onClose} title={title} testID="review-line-sheet" closeLabel={t('close')}>
       {guessed ? (
         <View className="gap-3">
-          <Text className="text-base text-text">
+          <StartText className="text-base text-text">
             {guessed.timed
               ? t('lineSheet.guessed', { count: guessed.count })
               : t('lineSheet.needsTiming', { count: guessed.count })}
-          </Text>
+          </StartText>
           <Button
             testID="review-line-resync-now"
             label={t('lineSheet.resyncNow')}
@@ -103,6 +115,7 @@ export function EditLineSheet({ target, onClose, onResyncRequested, audioDuratio
       ) : (
         <View className="gap-3">
           <TextInput
+            ref={input}
             testID="review-line-input"
             accessibilityLabel={t('lineSheet.input')}
             placeholder={t('lineSheet.placeholder')}
@@ -110,7 +123,6 @@ export function EditLineSheet({ target, onClose, onResyncRequested, audioDuratio
             value={text}
             onChangeText={setText}
             multiline
-            autoFocus
             autoCorrect={false}
             className="min-h-24 rounded-lg border border-border bg-bg px-3 py-3 text-base text-text"
             style={{ textAlignVertical: 'top' }}

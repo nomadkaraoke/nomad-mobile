@@ -309,6 +309,18 @@ describe('ReviewScreen', () => {
     expect(screen.queryByTestId('review-restored-discard')).toBeNull();
   });
 
+  it('the restored-draft banner goes away once Make my video is pressed (nothing left to discard)', async () => {
+    gen.saveCorrections!.mockReturnValue(new Promise(() => {}));
+    const data = cleanFixture({ ...STEMS, audio_complete: true });
+    saveDraft('j1', { v: 1, audioHash: 'h1', segments: data.corrected_segments.slice(1), isDuet: false, selection: null, editCount: 1, savedAt: 1 });
+    await renderScreen(data);
+    expect(screen.getByTestId('review-restored-discard')).toBeTruthy();
+    fireEvent.press(screen.getByTestId('review-lyrics-next'));
+    expect(screen.getByTestId('review-restored-discard')).toBeTruthy();
+    fireEvent.press(screen.getByTestId('review-finish-submit'));
+    expect(screen.queryByTestId('review-restored-discard')).toBeNull();
+  });
+
   it('menu: Mark as duet shows singer chips; Not a duet hides them', async () => {
     await renderScreen(correctionsFixture());
     fireEvent.press(screen.getByTestId('review-menu'));

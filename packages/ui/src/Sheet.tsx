@@ -18,7 +18,13 @@ export type SheetProps = {
   onDismiss?: () => void;
 };
 
-/** Bottom sheet on RN's Modal: slides up over the screen; tapping the dimmed backdrop closes it. */
+/** A non-word glyph: the button's meaning comes from its accessibility label. */
+const CLOSE_GLYPH = '\u2715';
+
+/**
+ * Bottom sheet on RN's Modal: slides up over the screen; tapping the dimmed backdrop or the header's close
+ * button closes it. The close button matters once the keyboard is up: the backdrop is then a thin strip.
+ */
 export function Sheet({ visible, onClose, title, testID, closeLabel, children, fullHeight, onDismiss }: SheetProps) {
   return (
     <Modal visible={visible} animationType="slide" transparent statusBarTranslucent navigationBarTranslucent onRequestClose={onClose} onDismiss={onDismiss} testID={testID}>
@@ -37,11 +43,25 @@ export function Sheet({ visible, onClose, title, testID, closeLabel, children, f
         />
         <View
           testID={`${testID}-panel`}
-          className={`rounded-t-3xl border border-border bg-card px-4 pb-6 pt-4 ${fullHeight ? 'h-[92%]' : 'max-h-[85%]'}`}
+          className={`rounded-t-3xl border border-border bg-card px-4 pb-6 pt-3 ${fullHeight ? 'h-[92%]' : 'max-h-[85%]'}`}
         >
-          <Text className="mb-3 font-bold" accessibilityRole="header">
-            {title}
-          </Text>
+          <View className="mb-1 flex-row items-center gap-2">
+            <Text className="flex-1 font-bold" accessibilityRole="header">
+              {title}
+            </Text>
+            <Pressable
+              testID={`${testID}-close`}
+              accessibilityRole="button"
+              accessibilityLabel={closeLabel}
+              onPress={onClose}
+              hitSlop={4}
+              className="-me-2 h-11 w-11 items-center justify-center rounded-full"
+            >
+              <Text className="text-lg text-muted" importantForAccessibility="no" accessibilityElementsHidden>
+                {CLOSE_GLYPH}
+              </Text>
+            </Pressable>
+          </View>
           {children}
         </View>
       </KeyboardAvoidingView>

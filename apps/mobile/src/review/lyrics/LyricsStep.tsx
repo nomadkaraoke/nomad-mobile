@@ -19,11 +19,12 @@ import {
   type SingerId,
   type VocalGap,
 } from '@nomad/review-core';
-import { colors, List, type ListHandle, type WaveformMarker } from '@nomad/ui';
+import { colors, List, type ListHandle, StartText, type WaveformMarker } from '@nomad/ui';
 import { useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState, type Ref } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import type { ReviewPlayer } from '../audio/useReviewPlayer';
+import { directionalIcon } from '../directionalIcon';
 import { ReviewStoreContext, useReviewStore } from '../store';
 import { GapCallout } from './GapCallout';
 import { IssuesBar } from './IssuesBar';
@@ -335,7 +336,9 @@ export function LyricsStep({ ref, ...props }: LyricsStepProps) {
           getItemType={(item) => item.type}
           extraData={extraData}
           onScrollBeginDrag={() => setFollow(false)}
-          ListEmptyComponent={<Text className="p-6 text-center text-muted">{t('lyrics.empty')}</Text>}
+          ListEmptyComponent={<StartText className="p-6 text-center text-muted">{t('lyrics.empty')}</StartText>}
+          // Room below the last row for the floating Follow pill: it covered the last gap callout's buttons.
+          ListFooterComponent={<View testID="review-lines-footer" className="h-20" />}
         />
         {!follow ? (
           <Pressable
@@ -345,7 +348,7 @@ export function LyricsStep({ ref, ...props }: LyricsStepProps) {
             onPress={onFollow}
             className="absolute bottom-3 min-h-11 justify-center self-center rounded-full bg-primary px-5"
           >
-            <Text className="font-bold text-primary-fg">{t('player.follow')}</Text>
+            <StartText className="font-bold text-primary-fg">{t('player.follow')}</StartText>
           </Pressable>
         ) : null}
       </View>
@@ -359,8 +362,8 @@ export function LyricsStep({ ref, ...props }: LyricsStepProps) {
           onPress={onCta}
           className={`min-h-12 flex-row items-center justify-center gap-2 rounded-lg px-4 ${blocked ? 'border border-danger bg-bg' : 'bg-primary'}`}
         >
-          <Text className={blocked ? 'text-base font-semibold text-danger' : 'text-base font-bold text-primary-fg'}>{ctaLabel}</Text>
-          {blocked ? null : <Ionicons name="arrow-forward" size={18} color={colors.primaryFg} />}
+          <StartText className={blocked ? 'text-base font-semibold text-danger' : 'text-base font-bold text-primary-fg'}>{ctaLabel}</StartText>
+          {blocked ? null : <Ionicons name={directionalIcon('arrow-forward')} size={18} color={colors.primaryFg} />}
         </Pressable>
       </View>
     </View>

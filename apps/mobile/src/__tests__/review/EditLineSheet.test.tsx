@@ -1,7 +1,8 @@
 import type { CorrectionData } from '@nomad/review-core';
-import { fireEvent, screen } from '@testing-library/react-native';
+import { act, fireEvent, screen } from '@testing-library/react-native';
+import { TextInput } from 'react-native';
 
-import { EditLineSheet, type EditLineTarget } from '../../review/sheets/EditLineSheet';
+import { EditLineSheet, FOCUS_DELAY_MS, type EditLineTarget } from '../../review/sheets/EditLineSheet';
 import { correctionsFixture, GAP, renderReview } from '../../test-utils/reviewFixtures';
 
 function renderSheet(target: EditLineTarget, data: CorrectionData = correctionsFixture(), audioDuration?: number) {
@@ -24,6 +25,21 @@ beforeEach(() => {
 });
 
 describe('EditLineSheet', () => {
+  it('focuses the text field once the sheet is up (autoFocus inside a Modal left Android without a keyboard)', () => {
+    jest.useFakeTimers();
+    try {
+      const focus = (TextInput.prototype as unknown as { focus: jest.Mock }).focus;
+      focus.mockClear();
+      renderSheet({ kind: 'edit', segment: 0 });
+      expect(screen.getByTestId('review-line-input').props.autoFocus).toBeFalsy();
+      expect(focus).not.toHaveBeenCalled();
+      act(() => jest.advanceTimersByTime(FOCUS_DELAY_MS));
+      expect(focus).toHaveBeenCalledTimes(1);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
   it('saving new words keeps matched timings, then "Re-sync now?" opens Tap To Sync on the line', () => {
     const { segs, onResyncRequested, onClose } = renderSheet({ kind: 'edit', segment: 0 });
     expect(screen.getByTestId('review-line-input').props.value).toBe('Hello darkness my old friend');
