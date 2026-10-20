@@ -79,24 +79,34 @@ export async function getWaveformData(jobId: string, numPoints = 800): Promise<{
   return { amplitudes: body.amplitudes, duration: body.duration_seconds ?? body.duration ?? 0 };
 }
 
-/** `lines` is gen's required alias of `corrected_segments`. `is_duet` is always sent. */
-export async function saveCorrections(jobId: string, data: CorrectionData, isDuet: boolean): Promise<void> {
+/**
+ * `lines` is gen's required alias of `corrected_segments`. `is_duet` is omitted when `isDuet` is undefined:
+ * gen overwrites the stored flag with any non-null value, so callers pass it only when known
+ * (loaded as true, or toggled by the user).
+ */
+export async function saveCorrections(jobId: string, data: CorrectionData, isDuet?: boolean): Promise<void> {
   await submitCorrectionsApiJobsJobIdCorrectionsPost({
     path: { job_id: jobId },
-    body: { corrections: { ...data, lines: data.corrected_segments }, is_duet: isDuet },
+    body: {
+      corrections: { ...data, lines: data.corrected_segments },
+      ...(isDuet === undefined ? {} : { is_duet: isDuet }),
+    },
   });
 }
 
-/** Final call of Finish. `auto` lets gen resolve the instrumental from its own verdict. */
+/**
+ * Final call of Finish. `auto` lets gen resolve the instrumental from its own verdict.
+ * Always sends `is_duet` (`isDuet ?? false`): on complete gen only latches the flag up, never down.
+ */
 export async function completeReview(
   jobId: string,
   data: CorrectionData,
   selection: 'clean' | 'with_backing' | 'auto',
-  isDuet: boolean,
+  isDuet?: boolean,
 ): Promise<{ status: string }> {
   const { data: body } = await completeReviewApiReviewJobIdCompletePost({
     path: { job_id: jobId },
-    body: { ...data, instrumental_selection: selection, is_duet: isDuet },
+    body: { ...data, instrumental_selection: selection, is_duet: isDuet ?? false },
   });
   return { status: parseResponse(CompleteReviewSchema, body).status };
 }
@@ -105,8 +115,12 @@ export async function completeReview(
 export async function requestPreview(
   jobId: string,
   data: CorrectionData,
+  isDuet?: boolean,
 ): Promise<{ status: 'success' | 'generating'; previewHash: string }> {
-  const { data: body } = await generatePreviewVideoApiReviewJobIdPreviewVideoPost({ path: { job_id: jobId }, body: { ...data } });
+  const { data: body } = await generatePreviewVideoApiReviewJobIdPreviewVideoPost({
+    path: { job_id: jobId },
+    body: isDuet === undefined ? { ...data } : { ...data, is_duet: isDuet },
+  });
   const parsed = parseResponse(PreviewRequestSchema, body);
   return { status: parsed.status, previewHash: parsed.preview_hash };
 }

@@ -5,9 +5,11 @@ export { ApiError, configureClient, isApiError, type ClientDeps } from './config
 // Zod schemas for responses the OpenAPI snapshot doesn't type (or types too loosely).
 export { AudioResultSchema, type AudioResult } from './overrides/audioSearch';
 export {
+  CompleteReviewSchema,
   CorrectionDataSchema,
   InstrumentalUrlsSchema,
   PreviewRequestSchema,
+  PreviewStatusSchema,
   VocalsPeaksSchema,
   WaveformDataSchema,
 } from './overrides/review';

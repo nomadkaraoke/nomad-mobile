@@ -124,6 +124,28 @@ describe('review facades', () => {
     expect(body.corrections.replay).toEqual({ future: true });
   });
 
+  it('saveCorrections omits is_duet when unknown, sends false when explicitly false', async () => {
+    fetchMock.mockImplementation(async () => json({ status: 'success' }));
+    await saveCorrections('j1', DOC);
+    expect(await lastBody()).not.toHaveProperty('is_duet');
+    await saveCorrections('j1', DOC, false);
+    expect((await lastBody()).is_duet).toBe(false);
+  });
+
+  it('requestPreview posts is_duet only when given', async () => {
+    fetchMock.mockImplementation(async () => json({ status: 'generating', preview_hash: 'h' }));
+    await requestPreview('j1', DOC, true);
+    expect((await lastBody()).is_duet).toBe(true);
+    await requestPreview('j1', DOC);
+    expect(await lastBody()).not.toHaveProperty('is_duet');
+  });
+
+  it('completeReview defaults is_duet to false', async () => {
+    fetchMock.mockResolvedValue(json({ status: 'success' }));
+    await completeReview('j1', DOC, 'clean');
+    expect((await lastBody()).is_duet).toBe(false);
+  });
+
   it('completeReview posts the doc with instrumental_selection and is_duet', async () => {
     fetchMock.mockResolvedValue(json({ status: 'success', instrumental_selection: 'clean' }));
     await expect(completeReview('j1', DOC, 'auto', false)).resolves.toEqual({ status: 'success' });
