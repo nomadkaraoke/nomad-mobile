@@ -51,7 +51,7 @@ export function useTimingStep(op: (d: ReviewDoc) => ReviewDoc, replay: () => voi
     const before = store.getState().doc;
     store.getState().apply(op);
     return store.getState().doc !== before;
-  }, replay);
+  }, replay, { begin: () => store.getState().beginGesture(), end: () => store.getState().endGesture() });
   return { handlers, enabled: op(doc) !== doc };
 }
 

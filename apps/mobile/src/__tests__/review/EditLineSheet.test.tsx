@@ -4,10 +4,13 @@ import { fireEvent, screen } from '@testing-library/react-native';
 import { EditLineSheet, type EditLineTarget } from '../../review/sheets/EditLineSheet';
 import { correctionsFixture, GAP, renderReview } from '../../test-utils/reviewFixtures';
 
-function renderSheet(target: EditLineTarget, data: CorrectionData = correctionsFixture()) {
+function renderSheet(target: EditLineTarget, data: CorrectionData = correctionsFixture(), audioDuration?: number) {
   const onClose = jest.fn();
   const onResyncRequested = jest.fn();
-  const r = renderReview(<EditLineSheet target={target} onClose={onClose} onResyncRequested={onResyncRequested} />, data);
+  const r = renderReview(
+    <EditLineSheet target={target} onClose={onClose} onResyncRequested={onResyncRequested} audioDuration={audioDuration} />,
+    data,
+  );
   const segs = () => r.store.getState().doc.segments;
   return { ...r, onClose, onResyncRequested, segs };
 }
@@ -94,6 +97,28 @@ describe('EditLineSheet', () => {
     expect(n.words.every((w) => w.timing_estimated)).toBe(true);
     fireEvent.press(screen.getByTestId('review-line-done'));
     expect(onClose).toHaveBeenCalled();
+  });
+
+  it('a line typed after the last one never runs past the end of the audio', () => {
+    const { segs } = renderSheet({ kind: 'insertAfter', segment: 3 }, correctionsFixture(), 32.5);
+    type('la la');
+    save();
+    expect(segs()[4]).toMatchObject({ text: 'la la', start_time: 31.5, end_time: 32.5 });
+  });
+
+  it('several lines typed for a gap re-sync with "keep going" on; one line without', () => {
+    const many = renderSheet({ kind: 'gap', gap: GAP });
+    type('softly creeping\nleft its seeds');
+    save();
+    fireEvent.press(screen.getByTestId('review-line-resync-now'));
+    expect(many.onResyncRequested).toHaveBeenCalledWith(3, { keepGoing: true });
+    many.unmount();
+
+    const one = renderSheet({ kind: 'gap', gap: GAP });
+    type('softly creeping');
+    save();
+    fireEvent.press(screen.getByTestId('review-line-resync-now'));
+    expect(one.onResyncRequested).toHaveBeenCalledWith(3);
   });
 
   it('closes when the line being edited is gone', () => {

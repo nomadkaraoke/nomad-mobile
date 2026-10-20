@@ -81,8 +81,8 @@ describe('NudgeSheet', () => {
     fireEvent(btn, 'pressIn');
     act(() => jest.advanceTimersByTime(REPEAT_DELAY_MS + REPEAT_INTERVAL_MS * 4));
     fireEvent(btn, 'pressOut');
-    expect(store.getState().editCount).toBe(5);
     expect(seg().start_time).toBeCloseTo(9.5, 6);
+    expect(store.getState().editCount).toBe(1);
     expect(player.playRange).toHaveBeenCalledTimes(1);
     jest.useRealTimers();
   });
@@ -93,11 +93,28 @@ describe('NudgeSheet', () => {
     const btn = screen.getByTestId('review-nudge-line-plus');
     fireEvent(btn, 'pressIn');
     act(() => jest.advanceTimersByTime(REPEAT_DELAY_MS + REPEAT_INTERVAL_MS * 30));
-    expect(store.getState().editCount).toBe(10);
+    expect(store.getState().doc.segments[0]!.end_time).toBe(14);
+    expect(store.getState().editCount).toBe(1);
     // It replayed when it hit the clamp; the release does not replay again.
     expect(player.playRange).toHaveBeenCalledTimes(1);
     fireEvent(btn, 'pressOut');
     expect(player.playRange).toHaveBeenCalledTimes(1);
+    jest.useRealTimers();
+  });
+
+  it('holding for 30 steps is one undo: undo once restores the pre-hold doc', () => {
+    jest.useFakeTimers();
+    const data = reviewData([line('a', [word('a0', 'hi', 10, 10.5), word('a1', 'yo', 10.6, 11)])]);
+    const { store } = renderSheet(0, data);
+    const before = store.getState().doc;
+    const btn = screen.getByTestId('review-nudge-line-plus');
+    fireEvent(btn, 'pressIn');
+    act(() => jest.advanceTimersByTime(REPEAT_DELAY_MS + REPEAT_INTERVAL_MS * 29));
+    fireEvent(btn, 'pressOut');
+    expect(store.getState().doc.segments[0]!.start_time).toBeCloseTo(13, 6); // 30 × 0.1 s
+    act(() => store.getState().undoLast());
+    expect(store.getState().doc).toBe(before);
+    expect(store.getState().undo.canUndo).toBe(false);
     jest.useRealTimers();
   });
 

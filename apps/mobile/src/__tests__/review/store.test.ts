@@ -35,6 +35,32 @@ describe('review store', () => {
     expect(store.getState().doc).toBe(before);
   });
 
+  it('a gesture coalesces its applies into one undo entry and one edit', () => {
+    const store = createReviewStore('j1', data());
+    const before = store.getState().doc;
+    const bump = (d: { segments: readonly LyricsSegment[] } & Record<string, unknown>) => ({
+      ...d,
+      segments: [seg('a', `${d.segments[0]!.text}!`), d.segments[1]!],
+    });
+    store.getState().beginGesture();
+    for (let i = 0; i < 150; i++) store.getState().apply((d) => bump(d as never) as never);
+    store.getState().endGesture();
+    expect(store.getState().doc.segments[0]!.text).toBe(`hello${'!'.repeat(150)}`);
+    expect(store.getState().editCount).toBe(1);
+    store.getState().undoLast();
+    expect(store.getState().doc).toBe(before);
+    expect(store.getState().undo.canUndo).toBe(false);
+
+    // After the gesture, applies push again; a gesture with no change pushes nothing.
+    store.getState().beginGesture();
+    store.getState().apply((d) => d);
+    store.getState().endGesture();
+    expect(store.getState().undo.canUndo).toBe(false);
+    store.getState().apply((d) => bump(d as never) as never);
+    store.getState().apply((d) => bump(d as never) as never);
+    expect(store.getState().editCount).toBe(3);
+  });
+
   it('ignores an op that returns the same doc', () => {
     const store = createReviewStore('j1', data());
     store.getState().apply((d) => d);

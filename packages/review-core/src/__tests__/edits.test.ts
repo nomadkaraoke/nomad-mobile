@@ -229,6 +229,11 @@ describe('insertLineEstimated', () => {
     const late = mk([S('a', [W('1', 'a', 4, 5)])]);
     expect(insertLineEstimated(late, -1, 'intro').doc.segments[0]).toMatchObject({ start_time: 0, end_time: 4 });
   });
+  it('caps the fallback window at the audio duration', () => {
+    expect(insertLineEstimated(two(), 1, 'end', 7.5).doc.segments[2]).toMatchObject({ start_time: 6, end_time: 7.5 });
+    // No room left before the end of the audio: untimed.
+    expect(insertLineEstimated(two(), 1, 'end', 6).timed).toBe(false);
+  });
   it('inserts untimed words when there is no room, and nothing for blank text', () => {
     const tight = mk([S('a', [W('1', 'a', 0, 1)]), S('b', [W('2', 'b', 1.02, 2)])]);
     const r = insertLineEstimated(tight, 0, 'x y');
@@ -267,6 +272,19 @@ describe('shiftLine', () => {
     const un = mk([S('a', [W('1', 'a', null, null)])]);
     expect(shiftLine(un, 0, 1)).toBe(un);
     expect(shiftLine(doc, 9, 1)).toBe(doc);
+  });
+  it('never moves a line the other way than asked (a line overlapping its neighbour)', () => {
+    // Line b starts at 1.5, before line a ends (2): the clamp would push "earlier" later.
+    const doc = mk([S('a', [W('1', 'a', 1, 2)]), S('b', [W('2', 'b', 1.5, 3)]), S('c', [W('3', 'c', 10, 11)])]);
+    expect(shiftLine(doc, 1, -0.1)).toBe(doc);
+    // And the mirror case: line b ends after line c starts, so "later" must not pull it earlier.
+    const late = mk([S('a', [W('1', 'a', 0, 1)]), S('b', [W('2', 'b', 5, 7)]), S('c', [W('3', 'c', 6.5, 8)])]);
+    expect(shiftLine(late, 1, 0.1)).toBe(late);
+  });
+  it('rounds shifted times to the millisecond', () => {
+    const doc = mk([S('a', [W('1', 'a', 0.1, 0.2), W('2', 'b', 0.3, 0.7)])]);
+    const d = shiftLine(doc, 0, 0.2);
+    expect(d.segments[0]!.words.map((w) => [w.start_time, w.end_time])).toEqual([[0.3, 0.4], [0.5, 0.9]]);
   });
   it('settles at a neighbour after repeated 0.1 s steps (no float-dust moves)', () => {
     let doc = mk([S('a', [W('1', 'a', 10, 10.5), W('2', 'b', 12.3, 13)]), S('b', [W('3', 'c', 14, 15)])]);

@@ -164,11 +164,14 @@ describe('WordSheet', () => {
     act(() => jest.advanceTimersByTime(REPEAT_DELAY_MS + REPEAT_INTERVAL_MS * 3));
     fireEvent(btn, 'pressOut');
     fireEvent(btn, 'press'); // the release's own press is not another step
-    expect(store.getState().editCount).toBe(4);
+    // Four steps, but one press = one edit and one undo entry.
     expect(words()[0]!.start_time).toBeCloseTo(0.8, 6);
+    expect(store.getState().editCount).toBe(1);
     expect(player.playRange).toHaveBeenCalledTimes(1);
     act(() => jest.advanceTimersByTime(1000));
-    expect(store.getState().editCount).toBe(4);
+    expect(words()[0]!.start_time).toBeCloseTo(0.8, 6);
+    act(() => store.getState().undoLast());
+    expect(words()[0]!.start_time).toBe(1);
     jest.useRealTimers();
   });
 

@@ -6,6 +6,8 @@ import { nextTimedStart, prevTimedEnd, sanitizeSegment } from './timing';
 export const MIN_WORD_SECONDS = 0.05;
 /** Timing differences below this (seconds) are rounding noise. */
 const TIME_EPSILON = 1e-6;
+/** Millisecond rounding, so repeated steps don't accumulate float error. */
+const ms = (t: number): number => Math.round(t * 1000) / 1000;
 
 let idCounter = 0;
 /** Pure-JS unique id (no nanoid / crypto dependency). */
@@ -223,7 +225,8 @@ export const INSERT_FALLBACK_SECONDS = 3;
 /**
  * Insert a typed line after segment `afterS` (-1 = at the start), timed by estimate: its words are
  * spread evenly from the end of the previous timed line to the start of the next one (or
- * `INSERT_FALLBACK_SECONDS` past it when nothing follows) and flagged `timing_estimated`. When the
+ * `INSERT_FALLBACK_SECONDS` past it when nothing follows, capped at `audioDuration` when given) and flagged
+ * `timing_estimated`. When the
  * room is too small for a minimum-length word each, the words go in untimed (Finish stays blocked
  * until they are synced). Blank text inserts nothing (`insertedAt: -1`).
  */
@@ -231,11 +234,14 @@ export function insertLineEstimated(
   doc: ReviewDoc,
   afterS: number,
   text: string,
+  audioDuration?: number,
 ): { doc: ReviewDoc; insertedAt: number; timed: boolean } {
   const n = splitText(text).length;
   if (n === 0 || afterS < -1 || afterS >= doc.segments.length) return { doc, insertedAt: -1, timed: false };
   const lo = prevTimedEnd(doc.segments, afterS + 1) ?? 0;
-  const hi = nextTimedStart(doc.segments, afterS) ?? lo + INSERT_FALLBACK_SECONDS;
+  const next = nextTimedStart(doc.segments, afterS);
+  // After the last line the fallback window never runs past the end of the audio.
+  const hi = next ?? Math.min(lo + INSERT_FALLBACK_SECONDS, audioDuration ?? Infinity);
   const at = afterS + 1;
   const inserted = insertLine(doc, afterS, text, lo, Math.max(hi, lo));
   const timed = hi - lo >= MIN_WORD_SECONDS * n;
@@ -283,10 +289,12 @@ export function shiftLine(doc: ReviewDoc, s: number, delta: number): ReviewDoc {
   const minDelta = Math.max(before ?? 0, 0) - lineStart;
   const maxDelta = after === null ? Infinity : after - lineEnd;
   const d = Math.min(Math.max(delta, minDelta), maxDelta);
-  // Below a microsecond is float dust from repeated steps against a clamp, not a move.
-  if (Math.abs(d) < TIME_EPSILON) return doc;
+  // Below a microsecond is float dust from repeated steps against a clamp, not a move. A clamp that
+  // reverses the direction (a line already overlapping its neighbour) is not a move either: "earlier"
+  // must never push a line later.
+  if (Math.abs(d) < TIME_EPSILON || Math.sign(d) !== Math.sign(delta)) return doc;
   const words = seg.words.map((x) =>
-    isTimed(x) ? { ...x, start_time: (x.start_time as number) + d, end_time: (x.end_time as number) + d } : x,
+    isTimed(x) ? { ...x, start_time: ms((x.start_time as number) + d), end_time: ms((x.end_time as number) + d) } : x,
   );
   return replaceSegment(doc, s, rebuild(seg, words));
 }

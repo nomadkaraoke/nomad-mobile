@@ -24,6 +24,12 @@ export type ReviewStore = {
   restoredFromDraft: boolean;
   /** Applies an edit: pushes undo, counts it, schedules a draft save. A no-op (same doc) is ignored. */
   apply(op: (d: ReviewDoc) => ReviewDoc): void;
+  /**
+   * Opens a gesture (a held step button): every apply until `endGesture` coalesces into ONE undo
+   * entry and one edit, so a long hold can't flood the capped undo history.
+   */
+  beginGesture(): void;
+  endGesture(): void;
   setDuet(on: boolean): void;
   undoLast(): void;
   /** Drops the draft and every edit, back to what gen sent. */
@@ -39,6 +45,8 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
   const draft = loadDraft(jobId, audioHash);
   const serverDoc = fromCorrectionData(data);
   let timer: ReturnType<typeof setTimeout> | null = null;
+  // Open gesture: null when none; `pushed` once its single undo snapshot is taken.
+  let gesture: { pushed: boolean } | null = null;
 
   return createStore<ReviewStore>()((set, get) => {
     const writeDraft = () => {
@@ -68,8 +76,13 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
       const { doc, undo, editCount } = get();
       const next = op(doc);
       if (next === doc) return;
-      undo.push(doc);
-      set({ doc: next, editCount: editCount + 1, ...extra });
+      if (gesture?.pushed) {
+        set({ doc: next, ...extra });
+      } else {
+        undo.push(doc);
+        if (gesture) gesture.pushed = true;
+        set({ doc: next, editCount: editCount + 1, ...extra });
+      }
       scheduleDraft();
     };
 
@@ -83,8 +96,15 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
       restoredFromDraft: draft !== null,
 
       apply: (op) => applyOp(op),
+      beginGesture() {
+        gesture = { pushed: false };
+      },
+      endGesture() {
+        gesture = null;
+      },
       setDuet: (on) => applyOp((d) => (d.isDuet === on ? d : setDuet(d, on)), { isDuetTouched: true }),
       undoLast() {
+        gesture = null;
         const { doc, undo } = get();
         const prev = undo.undo(doc);
         if (!prev) return;
@@ -92,6 +112,7 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
         scheduleDraft();
       },
       discard() {
+        gesture = null;
         cancelDraft();
         clearDraft(jobId);
         get().undo.clear();

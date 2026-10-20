@@ -13,13 +13,20 @@ type Phase = 'idle' | 'waiting' | 'repeating' | 'ended';
  * A tap calls `fire` once, then `done`. A hold calls `fire` after 400 ms and every 120 ms after
  * that, and `done` once on release (so a replay plays once, not per step). `fire` returning
  * `false` means nothing changed (the step hit a clamp): the repeat stops there and `done` runs.
+ * `gesture.begin` / `gesture.end` bracket a hold's steps (the store coalesces them into one undo).
  */
-export function useRepeatPress(fire: () => boolean | void, done?: () => void) {
+export function useRepeatPress(
+  fire: () => boolean | void,
+  done?: () => void,
+  gesture?: { begin: () => void; end: () => void },
+) {
   const fireRef = useRef(fire);
   const doneRef = useRef(done);
+  const gestureRef = useRef(gesture);
   useEffect(() => {
     fireRef.current = fire;
     doneRef.current = done;
+    gestureRef.current = gesture;
   });
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const phase = useRef<Phase>('idle');
@@ -31,21 +38,30 @@ export function useRepeatPress(fire: () => boolean | void, done?: () => void) {
       timer.current = null;
     }
   }, []);
-  useEffect(() => clear, [clear]);
-
   const end = useCallback(() => {
     clear();
     if (phase.current === 'repeating') {
       phase.current = 'ended';
+      gestureRef.current?.end();
       doneRef.current?.();
     }
   }, [clear]);
+  // Unmounting mid-hold stops the repeat and closes its gesture.
+  useEffect(
+    () => () => {
+      clear();
+      if (phase.current === 'repeating') gestureRef.current?.end();
+      phase.current = 'idle';
+    },
+    [clear],
+  );
 
   const onPressIn = useCallback(() => {
     clear();
     phase.current = 'waiting';
     timer.current = setTimeout(() => {
       phase.current = 'repeating';
+      gestureRef.current?.begin();
       const tick = () => {
         if (fireRef.current() === false) end();
       };

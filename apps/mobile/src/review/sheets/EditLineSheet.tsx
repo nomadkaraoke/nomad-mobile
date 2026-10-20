@@ -13,12 +13,17 @@ export type EditLineTarget = { kind: 'edit'; segment: number } | TextRequest;
 export type EditLineSheetProps = {
   target: EditLineTarget;
   onClose: () => void;
-  /** "Re-sync now?": the screen opens Tap To Sync on that line. */
-  onResyncRequested: (segment: number) => void;
+  /**
+   * "Re-sync now?": the screen opens Tap To Sync on that line, with "keep going into the next
+   * lines" on when several lines were typed at once.
+   */
+  onResyncRequested: (segment: number, opts?: { keepGoing: boolean }) => void;
+  /** The audio's length when known: a line typed after the last one never runs past it. */
+  audioDuration?: number;
 };
 
 /** After a save that guessed timing: which line, how many words, and whether they got any timing at all. */
-type Guessed = { segment: number; count: number; timed: boolean };
+type Guessed = { segment: number; count: number; timed: boolean; keepGoing?: boolean };
 
 const words = (text: string): string[] => text.split(/\s+/).filter(Boolean);
 
@@ -27,7 +32,7 @@ const words = (text: string): string[] => text.split(/\s+/).filter(Boolean);
  * words get estimated timing and the sheet offers "Re-sync now?". The same sheet types new lines
  * (Ruling K: no wordless lines, so Save stays disabled until there is a word).
  */
-export function EditLineSheet({ target, onClose, onResyncRequested }: EditLineSheetProps) {
+export function EditLineSheet({ target, onClose, onResyncRequested, audioDuration }: EditLineSheetProps) {
   const t = useTranslations('review');
   const apply = useReviewStore((s) => s.apply);
   const editSeg = useReviewStore((s) => (target.kind === 'edit' ? s.doc.segments[target.segment] : undefined));
@@ -58,14 +63,16 @@ export function EditLineSheet({ target, onClose, onResyncRequested }: EditLineSh
       });
     } else if (target.kind === 'insertAfter') {
       apply((d) => {
-        const r = insertLineEstimated(d, target.segment, text);
+        const r = insertLineEstimated(d, target.segment, text, audioDuration);
         out.result = r.insertedAt >= 0 ? { segment: r.insertedAt, count: typed.length, timed: r.timed } : null;
         return r.doc;
       });
     } else {
       apply((d) => {
         const r = insertGapText(d, target.gap, text);
-        out.result = r.insertedAt >= 0 ? { segment: r.insertedAt, count: typed.length, timed: true } : null;
+        const lines = text.split(/\r?\n/).filter((l) => words(l).length > 0).length;
+        out.result =
+          r.insertedAt >= 0 ? { segment: r.insertedAt, count: typed.length, timed: true, keepGoing: lines > 1 } : null;
         return r.doc;
       });
     }
@@ -87,7 +94,9 @@ export function EditLineSheet({ target, onClose, onResyncRequested }: EditLineSh
           <Button
             testID="review-line-resync-now"
             label={t('lineSheet.resyncNow')}
-            onPress={() => onResyncRequested(guessed.segment)}
+            onPress={() =>
+              guessed.keepGoing ? onResyncRequested(guessed.segment, { keepGoing: true }) : onResyncRequested(guessed.segment)
+            }
           />
           <Button testID="review-line-done" variant="secondary" label={t('lineSheet.done')} onPress={onClose} />
         </View>

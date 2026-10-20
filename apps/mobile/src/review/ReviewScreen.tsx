@@ -21,7 +21,9 @@ import { useStemsPoll, type StemsState } from './useStemsPoll';
 
 /** The sheet the review wants open ('resync' is mounted by the Tap To Sync task). */
 export type ReviewSheet =
-  | { kind: 'edit' | 'resync' | 'nudge'; segment: number }
+  | { kind: 'edit' | 'nudge'; segment: number }
+  /** `keepGoing`: start Tap To Sync with "Keep going into the next lines" on (several lines were just typed). */
+  | { kind: 'resync'; segment: number; keepGoing?: boolean }
   | { kind: 'word'; segment: number; word: number }
   | { kind: 'text'; request: TextRequest }
   | null;
@@ -75,7 +77,11 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
   const [sheet, setSheet] = useState<ReviewSheet>(null);
   const closeSheet = useCallback(() => setSheet(null), []);
   // Ruling D: "Re-sync" from a sheet swaps it for Tap To Sync on that line.
-  const resync = useCallback((segment: number) => setSheet({ kind: 'resync', segment }), []);
+  const resync = useCallback(
+    (segment: number, opts?: { keepGoing: boolean }) =>
+      setSheet(opts?.keepGoing ? { kind: 'resync', segment, keepGoing: true } : { kind: 'resync', segment }),
+    [],
+  );
   const lyricsRef = useRef<LyricsStepHandle>(null);
   const confirmDiscard = useConfirmDiscard();
 
@@ -91,6 +97,7 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
   const [stemsStart] = useState(() => initialStems(data));
   const stems = useStemsPoll(jobId, stemsStart);
   const player = useReviewPlayer(jobId, { vocalsReady: stems.ready });
+  const audioDuration = player.duration > 0 ? player.duration : undefined;
   const peaks = useVocalsPeaks(jobId, stems.ready);
   const { pause } = player;
 
@@ -184,10 +191,17 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
         />
       ) : null}
       {sheet?.kind === 'text' ? (
-        <EditLineSheet target={sheet.request} onClose={closeSheet} onResyncRequested={resync} />
+        <EditLineSheet
+          key={sheet.request.kind === 'gap' ? `gap-${sheet.request.gap.start}` : `insertAfter-${sheet.request.segment}`}
+          target={sheet.request}
+          onClose={closeSheet}
+          onResyncRequested={resync}
+          audioDuration={audioDuration}
+        />
       ) : null}
       {sheet?.kind === 'edit' ? (
         <EditLineSheet
+          key={`edit-${sheet.segment}`}
           target={{ kind: 'edit', segment: sheet.segment }}
           onClose={closeSheet}
           onResyncRequested={resync}
