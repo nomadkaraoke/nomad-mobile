@@ -2,6 +2,7 @@ import type { CorrectionData, LyricsSegment } from '@nomad/review-core';
 
 import { clearDraft, draftKeyOf, loadDraft, saveDraft, type Draft, type DraftKey } from '../../review/drafts';
 import { createReviewStore } from '../../review/store';
+import { appStorage } from '../../storage';
 
 const seg = (id: string, text: string): LyricsSegment =>
   ({ id, text, words: [{ id: `${id}w`, text, start_time: 1, end_time: 2 }], start_time: 1, end_time: 2 }) as unknown as LyricsSegment;
@@ -19,7 +20,7 @@ const rename = (d: { segments: readonly LyricsSegment[] } & Record<string, unkno
 
 beforeEach(() => {
   jest.useFakeTimers();
-  require('react-native-mmkv').__resetMMKV();
+  (jest.requireMock('react-native-mmkv') as { __resetMMKV(): void }).__resetMMKV();
 });
 afterEach(() => jest.useRealTimers());
 
@@ -78,7 +79,7 @@ describe('review store', () => {
     const draft = loadDraft('j1', draftKeyOf(data()))!;
     expect(draft.segments[0]!.text).toBe('HELLO');
     expect(draft.editCount).toBe(1);
-    const raw = require('../../storage').appStorage.getString('review-draft:j1') as string;
+    const raw = appStorage.getString('review-draft:j1') as string;
     expect(raw).not.toMatch(/http|token/i);
   });
 
@@ -105,7 +106,7 @@ describe('review store', () => {
     const b = createReviewStore('j1', data('new'));
     expect(b.getState().restoredFromDraft).toBe(false);
     expect(b.getState().doc.segments[0]!.text).toBe('hello');
-    expect(require('../../storage').appStorage.getString('review-draft:j1')).toBeUndefined();
+    expect(appStorage.getString('review-draft:j1')).toBeUndefined();
   });
 
   it('does not restore a draft over a server doc that changed (finished on the web), and deletes it', () => {
@@ -117,14 +118,14 @@ describe('review store', () => {
     const b = createReviewStore('j1', web);
     expect(b.getState().restoredFromDraft).toBe(false);
     expect(b.getState().doc.segments[0]!.text).toBe('web');
-    expect(require('../../storage').appStorage.getString('review-draft:j1')).toBeUndefined();
+    expect(appStorage.getString('review-draft:j1')).toBeUndefined();
   });
 
   it('writes a v2 draft carrying the server fingerprint it started from', () => {
     const a = createReviewStore('j1', data());
     a.getState().apply((d) => rename(d as never) as never);
     jest.advanceTimersByTime(1000);
-    const raw = JSON.parse(require('../../storage').appStorage.getString('review-draft:j1') as string);
+    const raw = JSON.parse(appStorage.getString('review-draft:j1') as string);
     expect(raw.v).toBe(2);
     expect(raw.serverFingerprint).toBe(draftKeyOf(data()).serverFingerprint);
     // The fingerprint is of the server doc, not of the edits.
@@ -202,7 +203,7 @@ describe('drafts', () => {
   });
 
   it('drops corrupt or wrong-version drafts (v1 drafts carry no fingerprint)', () => {
-    const { appStorage } = require('../../storage');
+    
     appStorage.set('review-draft:j', '{nope');
     expect(loadDraft('j', k('h'))).toBeNull();
     appStorage.set('review-draft:j', JSON.stringify({ ...draft('h'), v: 1 }));
