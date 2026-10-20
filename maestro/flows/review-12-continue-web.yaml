@@ -3,6 +3,9 @@
 # the edit on the web. Closing the browser comes back to the review.
 appId: com.nomadkaraoke.mobile
 name: review-12-continue-web
+# Never leave the in-app browser open when the flow ends (SafariViewService crashes on iOS).
+onFlowComplete:
+  - runFlow: ../common/close-browser-if-open.yaml
 ---
 - runScript:
     file: ../scripts/stack.js

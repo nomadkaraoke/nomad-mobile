@@ -19,6 +19,7 @@ name: screens-long-title
       STACK: ${STACK}
       NAME: ux
       CREDITS: "3"
+- runFlow: ../common/close-browser-if-open.yaml
 - stopApp
 - runFlow:
     when:

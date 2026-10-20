@@ -9,6 +9,7 @@
 # The conditional steps only matter for a dev build that has no server yet; release/E2E builds skip them.
 appId: com.nomadkaraoke.mobile
 ---
+- runFlow: close-browser-if-open.yaml
 - stopApp
 - runFlow:
     when:

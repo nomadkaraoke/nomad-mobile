@@ -1,6 +1,9 @@
 # 3. Cancelled payment (spec §8.3): fake checkout Cancel → "No payment made", still on credits.
 appId: com.nomadkaraoke.mobile
 name: make-3-cancelled-payment
+# Never leave the in-app browser open when the flow ends (SafariViewService crashes on iOS).
+onFlowComplete:
+  - runFlow: ../common/close-browser-if-open.yaml
 ---
 - runScript:
     file: ../scripts/stack.js

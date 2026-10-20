@@ -168,6 +168,9 @@ set_app_locale() {
   local data prefs rtl=false
   data="$(xcrun simctl get_app_container "$DEVICE" com.nomadkaraoke.mobile data)" || return 1
   prefs="$data/Library/Preferences/com.nomadkaraoke.mobile"
+  # Terminating with an in-app browser still open crashes SafariViewService (macOS crash dialogs). Nothing is
+  # tapped here: every flow that opens one closes it itself (onFlowComplete / maestro/common/close-browser-if-open.yaml
+  # before stopApp), so by the time this runs between groups the browser is already gone.
   xcrun simctl terminate "$DEVICE" com.nomadkaraoke.mobile 2>/dev/null || true
   if [[ -n "$lang" ]]; then
     xcrun simctl spawn "$DEVICE" defaults write "$prefs" AppleLanguages -array "$lang"

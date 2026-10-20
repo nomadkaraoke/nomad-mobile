@@ -4,6 +4,7 @@
 # Android: launchApp would land in the dev launcher, so open Metro again with the dev-client link (no clearState).
 appId: com.nomadkaraoke.mobile
 ---
+- runFlow: close-browser-if-open.yaml
 - stopApp
 - runFlow:
     when:
