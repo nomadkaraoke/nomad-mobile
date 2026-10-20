@@ -93,6 +93,32 @@ describe('a song (online: decide getSongDetail)', () => {
     expect(screen.getByTestId('song-art', { includeHiddenElements: true })).toHaveTextContent('S');
   });
 
+  it('opened from a merged Discover card: lists the same merged versions (main key + `also` keys)', async () => {
+    getSongDetail.mockImplementation(async (key: string) =>
+      key === 'muse|starlight (live)'
+        ? detail([version(0), version(7), version(8, 'commercial', false)], { song_key: key, title: 'Starlight (Live)' })
+        : key === 'muse|gone'
+          ? Promise.reject({ status: 404, detail: 'not found' })
+          : detail([version(0), version(1, 'commercial', false), version(2)]),
+    );
+    const also = encodeURIComponent(JSON.stringify(['muse|starlight (live)', 'muse|gone']));
+    renderRouter(routes(), { initialUrl: `${KEY_URL}?also=${also}` });
+    // 3 + 3 - the shared B0 duplicate = 5; the missing key is skipped; the main key's song is shown.
+    expect(await screen.findByText('Karaoke versions (5)')).toBeTruthy();
+    expect(screen.getByText('Starlight')).toBeTruthy();
+    expect(getSongDetail).toHaveBeenCalledWith('muse|starlight (live)');
+    expect(getSongDetail).toHaveBeenCalledWith('muse|gone');
+    // Playable first (B0, B2, B7), then by rank (B1, B8).
+    expect(screen.getByTestId('version-row-2-youtube')).toBeTruthy();
+    expect(screen.getByTestId('version-row-3')).toHaveTextContent(/In a library or on disc/);
+  });
+
+  it('a malformed `also` param is ignored', async () => {
+    renderRouter(routes(), { initialUrl: `${KEY_URL}?also=not-json` });
+    expect(await screen.findByText('Karaoke versions (2)')).toBeTruthy();
+    expect(getSongDetail).toHaveBeenCalledTimes(1);
+  });
+
   it('a song with no karaoke version: gold badge, no version list, Make it still offered', async () => {
     getSongDetail.mockResolvedValue(detail([]));
     renderRouter(routes(), { initialUrl: KEY_URL });

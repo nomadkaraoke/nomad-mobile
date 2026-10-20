@@ -2,7 +2,7 @@ import { getSongDetail, type SongDetail } from '@nomad/api-decide';
 import { offlineSongGroup } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { ArtTile, Button, Screen, Text, TextField } from '@nomad/ui';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, type ReactNode } from 'react';
 import { ActivityIndicator, Linking, View } from 'react-native';
@@ -10,6 +10,7 @@ import { ActivityIndicator, Linking, View } from 'react-native';
 import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
 import { VersionList } from '../../find/components/VersionList';
+import { mergeVersionSets } from '../../find/outcome';
 import { logEvent } from '../../find/searchSession';
 import { toGroup } from '../../find/useSearch';
 import { identifiedIntent, typedIntent, useMakeIntent, type MakeIntent } from '../../make/intentStore';
@@ -30,6 +31,27 @@ function offlineDetail(key: string): SongDetail | null {
   }
 }
 
+/** Merges the versions of the other same-song keys into `main` (missing keys are skipped). */
+function withAlso(main: SongDetail | null, also: (SongDetail | null | undefined)[]): SongDetail | null {
+  const extra = also.filter((d): d is SongDetail => !!d);
+  if (!main || extra.length === 0) return main;
+  const { versions } = mergeVersionSets(
+    [main, ...extra].map((d) => ({ versions: d.versions, version_count: d.versions.length })),
+  );
+  return { ...main, versions };
+}
+
+/** The `also` route param: a JSON array of song_keys, or nothing. */
+function parseAlso(raw: string | undefined): string[] {
+  if (!raw) return [];
+  try {
+    const v: unknown = JSON.parse(raw);
+    return Array.isArray(v) ? v.filter((k): k is string => typeof k === 'string').slice(0, 8) : [];
+  } catch {
+    return [];
+  }
+}
+
 const isNotFound = (e: unknown) => (e as { status?: unknown } | null)?.status === 404;
 
 const goMake = (intent: MakeIntent, signedIn: boolean) => {
@@ -44,12 +66,12 @@ const goMake = (intent: MakeIntent, signedIn: boolean) => {
  * list when there's no connection or decide can't be reached, and "Make it" with its canonical artist/title.
  * `id=new` is "make any song": a free-text form pre-filled from Discover's current identification.
  *
- * Decide keys "Starlight" and "Starlight (Live)" separately, so this page lists one key's versions; Discover's
- * card merges every same-song group (R24).
+ * Decide keys "Starlight" and "Starlight (Live)" separately. Discover's card merges every same-song group (R24)
+ * and passes the other keys as `also`, so this page lists the same merged versions as the card.
  */
 export default function SongScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  return id === 'new' ? <MakeAnySong /> : <KnownSong songKey={id} />;
+  const { id, also } = useLocalSearchParams<{ id: string; also?: string }>();
+  return id === 'new' ? <MakeAnySong /> : <KnownSong songKey={id} also={parseAlso(also)} />;
 }
 
 function MakeAnySong() {
@@ -74,7 +96,7 @@ function MakeAnySong() {
   );
 }
 
-function KnownSong({ songKey }: { songKey: string }) {
+function KnownSong({ songKey, also = [] }: { songKey: string; also?: string[] }) {
   const t = useTranslations();
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
   const offline = useOffline();
@@ -94,8 +116,27 @@ function KnownSong({ songKey }: { songKey: string }) {
     // A 404 is "not on the server" (the key may only be in the offline list): not an error, never retried.
     retry: (count, e) => !isNotFound(e) && count < 1,
   });
+  // The other keys the Discover card merged in: same sources, merged the same way.
+  const alsoLocal = useQueries({
+    queries: also.map((key) => ({
+      queryKey: ['offline', 'song', run, key],
+      queryFn: () => offlineDetail(key),
+      staleTime: Infinity,
+      retry: false,
+    })),
+  });
+  const alsoCloud = useQueries({
+    queries: also.map((key) => ({
+      queryKey: ['decide', 'song', key],
+      queryFn: () => getSongDetail(key),
+      enabled: !offline && !!cloud.data,
+      retry: false,
+    })),
+  });
   const notOnServer = cloud.isError && isNotFound(cloud.error);
-  const detail = cloud.data ?? local.data ?? null;
+  const detail = cloud.data
+    ? withAlso(cloud.data, alsoCloud.map((q) => q.data))
+    : withAlso(local.data ?? null, alsoLocal.map((q) => q.data));
   const fromOffline = !cloud.data && detail !== null;
   // Online, the offline list fills the page while decide loads without a note; it only says so when it is all
   // there is (no connection, or decide failed).

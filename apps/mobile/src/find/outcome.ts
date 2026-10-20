@@ -1,5 +1,5 @@
 // Which of Discover's search outcomes (spec §4.1) a search answer shows. Pure: the screen renders it.
-import type { Identification, ResolveResponse, SongGroup, SongRef } from '@nomad/api-decide';
+import type { Identification, ResolveResponse, SongGroup, SongRef, Version } from '@nomad/api-decide';
 import { sameSong } from '@nomad/core';
 
 /** How the identified song differs from what was typed (decide `identify_kind`); `null` = nothing to announce. */
@@ -7,7 +7,16 @@ export type Announce = { kind: 'cosmetic' | 'content'; typed: string } | null;
 
 export type Outcome =
   /** Confident (or picked): the song you mean, its versions when it has a group, then the other groups. */
-  | { kind: 'song'; song: SongRef; announce: Announce; group: SongGroup | null; others: SongGroup[]; canNotIt: boolean }
+  | {
+      kind: 'song';
+      song: SongRef;
+      announce: Announce;
+      group: SongGroup | null;
+      /** Every song_key merged into `group` (the song page merges the same keys, so its list matches the card). */
+      keys: string[];
+      others: SongGroup[];
+      canNotIt: boolean;
+    }
   /** Confident, no karaoke version (the index's own flag says so, and no group is that song). */
   | { kind: 'missing'; song: SongRef; others: SongGroup[] }
   /** Not sure: candidate chips over the karaoke results. */
@@ -21,17 +30,17 @@ export const NO_CHOICE: Choice = { keepTyped: false, notIt: false, picked: null 
 
 const without = (groups: SongGroup[], song: SongRef) => groups.filter((g) => !sameSong(g, song));
 
+type VersionSet = { versions: Version[]; version_count: number };
+
 /**
- * Every group that is `song` (sameSong: "Starlight" and "Starlight (Live)" by Muse) as one group: versions
- * merged playable-first then best-first by rank, duplicates (same brand and link) dropped; `version_count` is the merged total.
+ * Several same-song version lists as one: duplicates (same brand and link) dropped, playable (youtube_url)
+ * first, then best rank, like offline groups and decide (stable otherwise); `version_count` is the merged total.
  */
-function mergedGroup(groups: SongGroup[], song: SongRef): SongGroup | null {
-  const same = groups.filter((g) => sameSong(g, song));
-  if (same.length === 0) return null;
-  if (same.length === 1) return same[0]!;
+export function mergeVersionSets(sets: VersionSet[]): VersionSet {
+  if (sets.length === 1) return sets[0]!;
   const seen = new Set<string>();
   let duplicates = 0;
-  const versions = same
+  const versions = sets
     .flatMap((g) => g.versions)
     .filter((v) => {
       const key = `${v.brand_code}|${v.youtube_url ?? ''}`;
@@ -42,18 +51,25 @@ function mergedGroup(groups: SongGroup[], song: SongRef): SongGroup | null {
       seen.add(key);
       return true;
     })
-    // Playable (youtube_url) first, then best rank, like offline groups and decide; stable otherwise.
     .sort((a, b) => Number(!a.youtube_url) - Number(!b.youtube_url) || a.rank - b.rank);
-  const total = same.reduce((n, g) => n + g.version_count, 0) - duplicates;
-  return { ...same[0]!, versions, version_count: Math.max(total, versions.length) };
+  const total = sets.reduce((n, g) => n + g.version_count, 0) - duplicates;
+  return { versions, version_count: Math.max(total, versions.length) };
+}
+
+/** Every group that is `song` (sameSong: "Starlight" and "Starlight (Live)" by Muse) as one group. */
+function mergedGroup(same: SongGroup[]): SongGroup | null {
+  if (same.length === 0) return null;
+  return { ...same[0]!, ...mergeVersionSets(same) };
 }
 
 function songOutcome(song: SongRef, announce: Announce, groups: SongGroup[], canNotIt: boolean): Outcome {
-  const group = mergedGroup(groups, song);
+  const same = groups.filter((g) => sameSong(g, song));
+  const group = mergedGroup(same);
+  const keys = [...new Set([song.song_key, ...same.map((g) => g.song_key)])];
   const others = without(groups, song);
   // kjbox B108: only the index's karaoke flag may claim "no karaoke version yet" ("Killers" vs "The Killers").
   if (!group && song.karaoke === false) return { kind: 'missing', song, others };
-  return { kind: 'song', song, announce, group, others, canNotIt };
+  return { kind: 'song', song, announce, group, keys, others, canNotIt };
 }
 
 /** Candidates other than the song already shown. */

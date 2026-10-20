@@ -122,11 +122,11 @@ describe('1 · confident, has karaoke versions', () => {
     expect(screen.queryByTestId('versions-show-all')).toBeNull();
   });
 
-  it('cosmetic: "Tidied to … · keep what I typed"', async () => {
+  it('cosmetic: "Tidied to … · Keep what I typed"', async () => {
     mockState = { ...mockState, identification: confident(STARLIGHT, 'cosmetic') };
     await renderDiscover();
     expect(screen.getByText('Tidied to ⁨Starlight · Muse⁩')).toBeTruthy();
-    expect(screen.getByText('keep what I typed')).toBeTruthy();
+    expect(screen.getByText('Keep what I typed')).toBeTruthy();
   });
 
   it('same: no announcement and nothing to undo', async () => {
@@ -231,6 +231,18 @@ describe('Review Focus 4: disc-only versions and 50+ versions', () => {
     expect(screen.getByText('Show all 7')).toBeTruthy();
     fireEvent.press(screen.getByTestId('versions-show-all'));
     expect(screen.getByTestId('version-row-6')).toBeTruthy();
+  });
+
+  it('a merged card opens the song page with the other merged keys, so its list matches the card', async () => {
+    mockState = state({
+      identification: confident(STARLIGHT, 'same'),
+      groups: [group(STARLIGHT, [version(0)]), group(ref('Muse', 'Starlight (Live)'), [version(1)])],
+    });
+    const app = await renderDiscover();
+    await act(() => jest.advanceTimersByTimeAsync(300));
+    fireEvent.press(screen.getByTestId('song-card'));
+    await waitFor(() => expect(app.getPathname()).toBe('/song/muse|starlight'));
+    expect(app.getSearchParams()).toMatchObject({ also: JSON.stringify(['muse|starlight (live)']) });
   });
 
   it('"Show all" expands in place when every version is already loaded', async () => {

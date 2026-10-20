@@ -8,8 +8,8 @@ import type { Correction, Song } from './useMatchJudge';
 
 /**
  * gen's two-way tidy/correction toggle (AudioSourceStep MatchNotice): applied → "Tidied to … · keep what I
- * typed" / "Corrected to … — you typed … · Undo"; undone → "Using what you typed: … · use tidied version /
- * use the correction". Toggling changes the name only, never the audio.
+ * typed" / "Corrected to … — you typed … · Undo"; undone → "Using what you typed: … · Use tidied version /
+ * Use the correction". Toggling changes the name only, never the audio.
  */
 export function MatchNotice({ correction, onUndo, onRedo }: { correction: Correction; onUndo: () => void; onRedo: () => void }) {
   const t = useTranslations('discover');

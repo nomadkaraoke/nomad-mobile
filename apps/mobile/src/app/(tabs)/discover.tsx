@@ -77,10 +77,15 @@ function SongRow({
   );
 }
 
-const openSong = (songKey: string) => {
+/** `also`: the other song_keys the card merged with this one, so the song page lists the same versions. */
+const openSong = (songKey: string, also: string[] = []) => {
   Keyboard.dismiss();
   renewSid(); // a pick ends the search session
-  router.push({ pathname: "/song/[id]", params: { id: songKey } });
+  const extra = also.filter((k) => k !== songKey);
+  router.push({
+    pathname: "/song/[id]",
+    params: extra.length ? { id: songKey, also: JSON.stringify(extra) } : { id: songKey },
+  });
 };
 
 /** The missing card's Make it: exactly the identified artist/title (spec §4.1 outcome 2), then sign-in or make. */
@@ -305,7 +310,7 @@ export default function DiscoverScreen() {
             <SongCard
               song={o.song}
               announce={o.announce}
-              onOpen={guard(() => openSong(o.song.song_key))}
+              onOpen={guard(() => openSong(o.song.song_key, o.keys))}
               onUndo={guard(() => {
                 logEvent("keep_typed", { song_key: o.song.song_key });
                 choose({ keepTyped: true });
@@ -324,7 +329,7 @@ export default function DiscoverScreen() {
                 key={o.group.song_key}
                 versions={o.group.versions}
                 total={o.group.version_count}
-                onShowAll={guard(() => openSong(o.group!.song_key))}
+                onShowAll={guard(() => openSong(o.song.song_key, o.keys))}
                 openUrl={guard((url: string) => {
                   logEvent("open_youtube", { song_key: o.song.song_key });
                   Linking.openURL(url).catch(() => {});

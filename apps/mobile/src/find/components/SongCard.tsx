@@ -9,13 +9,13 @@ export type SongCardProps = {
   song: SongRef;
   announce: Announce;
   onOpen: () => void;
-  /** "keep what I typed" (cosmetic) / "Undo" (content). */
+  /** "Keep what I typed" (cosmetic) / "Undo" (content). */
   onUndo: () => void;
   /** Absent when there is nothing else to offer. */
   onNotIt?: () => void;
 };
 
-/** "🎵 The song you mean": the identified song, with gen's "Tidied to … · keep what I typed" / "Corrected to … · Undo". */
+/** "🎵 The song you mean": the identified song, with gen's "Tidied to … · Keep what I typed" / "Corrected to … · Undo". */
 export function SongCard({ song, announce, onOpen, onUndo, onNotIt }: SongCardProps) {
   const t = useTranslations('discover');
   const value = isolate(t('songValue', { title: song.title, artist: song.artist }));
