@@ -46,6 +46,10 @@ export function useReviewPlayer(jobId: string, opts: { vocalsReady: boolean }): 
   const rangeEndRef = useRef<number | null>(null);
   // Bumped by every playback command and by teardown: async continuations bail when it moved on.
   const genRef = useRef(0);
+  // Bumped per source swap: a newer swap invalidates the older swap's continuation entirely.
+  const swapRef = useRef(0);
+  // Whether the swap in flight should resume playback (a rapid second swap inherits it: the first paused).
+  const resumeRef = useRef<boolean | null>(null);
   const loadedSrcRef = useRef<{ jobId: string; source: ReviewSource } | null>(null);
 
   // The player exists per job; the source is swapped inside it so position and play state carry over.
@@ -67,6 +71,8 @@ export function useReviewPlayer(jobId: string, opts: { vocalsReady: boolean }): 
     });
     return () => {
       genRef.current += 1;
+      swapRef.current += 1;
+      resumeRef.current = null;
       sub.remove();
       player.remove();
       if (playerRef.current === player) playerRef.current = null;
@@ -80,29 +86,39 @@ export function useReviewPlayer(jobId: string, opts: { vocalsReady: boolean }): 
     const cur = loadedSrcRef.current;
     if (!player || !cur || cur.jobId !== jobId || cur.source === source) return;
     const at = player.currentTime;
-    const wasPlaying = player.playing;
+    const wasPlaying = resumeRef.current ?? player.playing;
+    resumeRef.current = wasPlaying;
     const gen = ++genRef.current;
+    const swap = ++swapRef.current;
     cur.source = source;
     void replaceAndWait(player, { uri: reviewAudioUrl(jobId, source) })
       .then(async () => {
-        if (playerRef.current !== player) return;
+        if (playerRef.current !== player || swap !== swapRef.current) return;
         player.setPlaybackRate(rateRef.current);
         await player.seekTo(at);
         // A pause/seek/play issued meanwhile wins over the automatic resume.
+        if (swap !== swapRef.current) return;
+        resumeRef.current = null;
         if (wasPlaying && gen === genRef.current && playerRef.current === player) safePlay(player, setError);
       })
       .catch(() => {
-        if (playerRef.current === player) setError('load_failed');
+        if (playerRef.current === player && swap === swapRef.current) {
+          resumeRef.current = null;
+          setError('load_failed');
+        }
       });
   }, [jobId, source]);
 
   const play = useCallback(() => {
     genRef.current += 1;
+    resumeRef.current = null;
+    setError((prev) => (prev === 'play_failed' ? null : prev));
     rangeEndRef.current = null;
     if (playerRef.current) safePlay(playerRef.current, setError);
   }, []);
   const pause = useCallback(() => {
     genRef.current += 1;
+    resumeRef.current = null;
     rangeEndRef.current = null;
     playerRef.current?.pause();
   }, []);
@@ -110,9 +126,13 @@ export function useReviewPlayer(jobId: string, opts: { vocalsReady: boolean }): 
     const p = playerRef.current;
     if (!p) return;
     genRef.current += 1;
+    resumeRef.current = null;
     rangeEndRef.current = null;
     if (p.playing) p.pause();
-    else safePlay(p, setError);
+    else {
+      setError((prev) => (prev === 'play_failed' ? null : prev));
+      safePlay(p, setError);
+    }
   }, []);
   const seekTo = useCallback(async (t: number) => {
     genRef.current += 1;

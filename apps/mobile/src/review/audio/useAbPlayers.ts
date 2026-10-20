@@ -132,7 +132,7 @@ export function useAbPlayers(jobId: string, options: InstrumentalOption[]): AbPl
 
   const setActive = useCallback(
     (c: InstrumentalChoice) => {
-      genRef.current += 1;
+      // Muting is not a playback command: it must not cancel a pending auto-resume.
       activeRef.current = c;
       setActiveState(c);
       if (!pair) return;
@@ -142,6 +142,7 @@ export function useAbPlayers(jobId: string, options: InstrumentalOption[]): AbPl
   );
   const play = useCallback(() => {
     genRef.current += 1;
+    setError((prev) => (prev === 'play_failed' ? null : prev));
     if (pair) IDS.forEach((id) => safePlay(pair[id], setError));
   }, [pair]);
   const pause = useCallback(() => {

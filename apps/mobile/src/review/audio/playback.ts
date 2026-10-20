@@ -22,17 +22,27 @@ export function safePlay(player: Pick<AudioPlayer, 'play'>, onError: (code: Audi
   }
 }
 
+export const REPLACE_LOAD_TIMEOUT_MS = 15_000;
+
 /**
- * Swaps the player's source and resolves once the NEW item reports `isLoaded`. replace() returns before the
- * item is ready and iOS auto-resumes on ready if it was playing, so pause first; the caller seeks and resumes.
+ * Swaps the player's source and resolves once the NEW item reports `isLoaded`. Rejects when a status carries
+ * an `error` or nothing loads within REPLACE_LOAD_TIMEOUT_MS; the listener and timer are always released.
+ * replace() returns before the item is ready and iOS auto-resumes on ready if it was playing, so pause
+ * first; the caller seeks and resumes.
  */
 export function replaceAndWait(player: AudioPlayer, source: { uri: string }): Promise<void> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
     const sub = player.addListener('playbackStatusUpdate', (s) => {
-      if (!s.isLoaded) return;
-      sub.remove();
-      resolve();
+      if (s.error) settle(() => reject(new Error(s.error ?? 'load failed')));
+      else if (s.isLoaded) settle(resolve);
     });
+    const settle = (done: () => void) => {
+      clearTimeout(timer);
+      sub.remove();
+      done();
+    };
+    timer = setTimeout(() => settle(() => reject(new Error('load timeout'))), REPLACE_LOAD_TIMEOUT_MS);
     player.pause();
     player.replace(source);
   });

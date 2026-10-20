@@ -227,6 +227,82 @@ describe('audio: robustness', () => {
     expect(result.current.loading).toBe(false);
   });
 
+  it('A/B reload error after refresh surfaces load_failed, stops loading, and releases the listener', async () => {
+    mockAutoLoad = false;
+    mockGetUrls.mockResolvedValue({ options: OPTIONS });
+    const { result } = renderHook(() => useAbPlayers('j1', OPTIONS));
+    const a = mockPlayers[0]!;
+    const before = a.listeners.length;
+    await act(async () => a.emit({ error: 'boom' }));
+    expect(a.replace).toHaveBeenCalled();
+    await act(async () => a.emit({ error: 'still broken', isLoaded: false }));
+    expect(result.current.error).toBe('load_failed');
+    expect(result.current.loading).toBe(false);
+    expect(a.listeners.length).toBe(before);
+    await act(async () => mockPlayers[1]!.emit({ isLoaded: true })); // settle the sibling's pending reload
+  });
+
+  it('A/B reload that never loads times out after 15 s with load_failed', async () => {
+    jest.useFakeTimers();
+    try {
+      mockAutoLoad = false;
+      mockGetUrls.mockResolvedValue({ options: OPTIONS });
+      const { result } = renderHook(() => useAbPlayers('j1', OPTIONS));
+      await act(async () => mockPlayers[0]!.emit({ error: 'boom' }));
+      expect(result.current.error).toBeNull();
+      await act(async () => void jest.advanceTimersByTime(15_000));
+      expect(result.current.error).toBe('load_failed');
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  it('toggling A/B during a refresh does not cancel the auto-resume', async () => {
+    mockAutoLoad = false;
+    mockGetUrls.mockResolvedValue({ options: OPTIONS });
+    const { result } = renderHook(() => useAbPlayers('j1', OPTIONS));
+    const [a, b] = mockPlayers as [MockPlayer, MockPlayer];
+    a.playing = true;
+    a.currentTime = 7;
+    await act(async () => a.emit({ error: 'boom' }));
+    act(() => result.current.setActive('with_backing'));
+    await act(async () => {
+      a.emit({ isLoaded: true });
+      b.emit({ isLoaded: true });
+    });
+    expect(a.play).toHaveBeenCalled();
+    expect(b.play).toHaveBeenCalled();
+  });
+
+  it('A/B play_failed clears on the next play attempt', () => {
+    const { result } = renderHook(() => useAbPlayers('j1', OPTIONS));
+    mockPlayers[0]!.play.mockImplementationOnce(() => {
+      throw new Error('nope');
+    });
+    act(() => result.current.play());
+    expect(result.current.error).toBe('play_failed');
+    act(() => result.current.play());
+    expect(result.current.error).toBeNull();
+  });
+
+  it('a newer source swap invalidates the older swap continuation', async () => {
+    mockAutoLoad = false;
+    const { result, rerender } = renderHook((p: { ready: boolean }) => useReviewPlayer('j1', { vocalsReady: p.ready }), {
+      initialProps: { ready: false },
+    });
+    const p = mockPlayers[0]!;
+    p.currentTime = 4;
+    p.playing = true;
+    act(() => result.current.setSource('vocals'));
+    rerender({ ready: true }); // swap 1: song -> vocals
+    p.playing = false; // swap 1 paused it
+    act(() => result.current.setSource('song')); // swap 2: vocals -> song
+    expect(p.replace).toHaveBeenCalledTimes(2);
+    await act(async () => p.emit({ isLoaded: true }));
+    expect(p.seekTo).toHaveBeenCalledTimes(1);
+    expect(p.play).toHaveBeenCalledTimes(1);
+  });
+
   it('lockstep ignores a removed (throwing) player', () => {
     jest.useFakeTimers();
     try {
