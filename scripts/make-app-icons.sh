@@ -16,7 +16,7 @@ magick -size 1024x1024 "xc:$BLUE" "$TMP/m800.png" -gravity center -composite -al
 # Android adaptive icon: 1024 foreground with the mark inside the 66% safe zone, brand-blue background.
 mark 580 "$TMP/m580.png"
 magick -size 1024x1024 xc:none "$TMP/m580.png" -gravity center -composite "$OUT/android-icon-foreground.png"
-magick -size 512x512 "xc:$BLUE" "$OUT/android-icon-background.png"
+magick -size 1024x1024 "xc:$BLUE" "$OUT/android-icon-background.png"
 # Themed (monochrome) icon: the mark's silhouette in white.
 magick "$OUT/android-icon-foreground.png" -alpha extract -background white -alpha shape "$OUT/android-icon-monochrome.png"
 
