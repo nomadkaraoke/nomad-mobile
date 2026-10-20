@@ -60,6 +60,18 @@ describe('revertAiSpan', () => {
     expect(revertAiSpan(doc, 'after').segments[0]!.words.map((w) => w.text)).toEqual(['x', 'uh', 'y']);
     expect(revertAiSpan(doc, 'start').segments[0]!.words.map((w) => w.text)).toEqual(['uh', 'x', 'y']);
   });
+  it('reverting a delete span twice is a no-op the second time (no duplicate word ids)', () => {
+    const after: ServerSuggestionUndoInfo = {
+      op: 'delete', new_word_ids: [], removed_words: [W('d', 'uh', 1, 2)],
+      segment_id: 'a', prev_word_id: 'x', removed_segment: null,
+    };
+    const doc = mk([S('a', [W('x', 'x', 0, 1), W('y', 'y', 2, 3)])], { after });
+    const once = revertAiSpan(doc, 'after');
+    const twice = revertAiSpan(once, 'after');
+    expect(twice).toBe(once);
+    const ids = twice.segments[0]!.words.map((w) => w.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
   it('reinserts a segment that a delete removed entirely, once', () => {
     const removed = S('gone', [W('g', 'ghost', 4, 5)]);
     const info: ServerSuggestionUndoInfo = {

@@ -54,6 +54,9 @@ export function revertAiSpan(doc: ReviewDoc, spanId: string): ReviewDoc {
   const seg = doc.segments[segIndex]!;
   const words = [...seg.words];
 
+  // Idempotency: a repeated revert must not re-insert words already present.
+  if (raw.removed_words.some((r) => doc.segments.some((s) => s.words.some((w) => w.id === r.id)))) return doc;
+
   if (raw.new_word_ids.length > 0) {
     const sorted = contiguousIndices(words, raw.new_word_ids);
     if (!sorted) return doc;
