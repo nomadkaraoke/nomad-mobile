@@ -37,7 +37,7 @@ packages/core/        pure TS: session model + input normalizers, job phases + s
 packages/i18n/        messages/<33>.json, resolveLocale, IntlProvider; scripts/ vendored from karaoke-gen
 packages/api-gen/     generated karaoke-gen client + configureClient + facades (auth, credits, make, jobs) + zod overrides
 packages/api-decide/  generated karaoke-decide catalog client (facade `getSong`, legacy by numeric id) + the search service client and its facades (searchSongs, popularSongs, getSongDetail, resolveQuery, getOfflineIndexManifest, logSearchEvent, pingSearch); decide's search service is the app's single song-search backend
-packages/ui/          tokens, Screen/Text/Button/TextField, <List> (FlashList), <WaveformCanvas> (Skia)
+packages/ui/          tokens, Screen/Text/Button/TextField, <List> (FlashList), <WaveformCanvas> + <NomadLoader> (Skia; the brand "N" icon vector in nomadN.ts, exported as apps/mobile/assets/brand/nomad-n-strip.svg)
 openapi/              gen.json + decide.json + decide-search.json snapshots (refresh: pnpm gen:api; point at another stack with GEN_OPENAPI_URL / DECIDE_SEARCH_OPENAPI_URL, see scripts/fetch-openapi.mjs)
 maestro/flows/        E2E flows (make-1…10, search-1…4, review-1…12, smoke-discover) against the gen + decide search local stacks; common/ shared steps; scripts/stack.js
 maestro/screens/      screenshot-only flows for UX reviews, not in the suite (long-title.yaml: any locale, e.g. ar for RTL; review-tour.yaml: the whole native review, run with --screen)

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1602" height="440" viewBox="0 0 1602 440">
+  <!-- Nomad "N" loading strip: one period (3 icons, 534 units apart). Generated from packages/ui/src/nomadN.ts -->
+  <g transform="translate(0 0)">
+    <path d="M9.5 9.5L229.5 122.5L229.5 9.5L434.5 9.5L434.5 429.5L9.5 429.5Z" fill="#E87FAF" stroke="#FCE066" stroke-width="20" stroke-linejoin="round"/>
+    <path d="M58 186.5h98a8 8 0 0 1 0 16h-98a8 8 0 0 1 0 -16ZM188 186.5h75a8 8 0 0 1 0 16h-75a8 8 0 0 1 0 -16ZM297 186.5h92a8 8 0 0 1 0 16h-92a8 8 0 0 1 0 -16ZM85 258.5h161a8 8 0 0 1 0 16h-161a8 8 0 0 1 0 -16ZM286 258.5h76a8 8 0 0 1 0 16h-76a8 8 0 0 1 0 -16ZM56 328.5h47a8 8 0 0 1 0 16h-47a8 8 0 0 1 0 -16ZM139 328.5h171a8 8 0 0 1 0 16h-171a8 8 0 0 1 0 -16ZM344 328.5h47a8 8 0 0 1 0 16h-47a8 8 0 0 1 0 -16Z" fill="#242E75"/>
+  </g>
+  <g transform="translate(534 0)">
+    <path d="M9.5 9.5L229.5 122.5L229.5 9.5L434.5 9.5L434.5 429.5L9.5 429.5Z" fill="#FCE066" stroke="#E87FAF" stroke-width="20" stroke-linejoin="round"/>
+    <path d="M58 186.5h98a8 8 0 0 1 0 16h-98a8 8 0 0 1 0 -16ZM188 186.5h75a8 8 0 0 1 0 16h-75a8 8 0 0 1 0 -16ZM297 186.5h92a8 8 0 0 1 0 16h-92a8 8 0 0 1 0 -16ZM85 258.5h161a8 8 0 0 1 0 16h-161a8 8 0 0 1 0 -16ZM286 258.5h76a8 8 0 0 1 0 16h-76a8 8 0 0 1 0 -16ZM56 328.5h47a8 8 0 0 1 0 16h-47a8 8 0 0 1 0 -16ZM139 328.5h171a8 8 0 0 1 0 16h-171a8 8 0 0 1 0 -16ZM344 328.5h47a8 8 0 0 1 0 16h-47a8 8 0 0 1 0 -16Z" fill="#E87FAF"/>
+  </g>
+  <g transform="translate(1068 0)">
+    <path d="M9.5 9.5L229.5 122.5L229.5 9.5L434.5 9.5L434.5 429.5L9.5 429.5Z" fill="#242E75" stroke="#E87FAF" stroke-width="20" stroke-linejoin="round"/>
+    <path d="M58 186.5h98a8 8 0 0 1 0 16h-98a8 8 0 0 1 0 -16ZM188 186.5h75a8 8 0 0 1 0 16h-75a8 8 0 0 1 0 -16ZM297 186.5h92a8 8 0 0 1 0 16h-92a8 8 0 0 1 0 -16ZM85 258.5h161a8 8 0 0 1 0 16h-161a8 8 0 0 1 0 -16ZM286 258.5h76a8 8 0 0 1 0 16h-76a8 8 0 0 1 0 -16ZM56 328.5h47a8 8 0 0 1 0 16h-47a8 8 0 0 1 0 -16ZM139 328.5h171a8 8 0 0 1 0 16h-171a8 8 0 0 1 0 -16ZM344 328.5h47a8 8 0 0 1 0 16h-47a8 8 0 0 1 0 -16Z" fill="#FCE066"/>
+  </g>
+</svg>

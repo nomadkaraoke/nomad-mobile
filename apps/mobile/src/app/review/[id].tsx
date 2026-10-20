@@ -1,8 +1,8 @@
 import { useTranslations } from '@nomad/i18n';
-import { Button, Screen, Text } from '@nomad/ui';
+import { Button, NomadLoader, Screen, Text } from '@nomad/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
 
 import { openWebHandoff } from '../../jobs/openWebHandoff';
 import { ReviewScreen } from '../../review/ReviewScreen';
@@ -37,7 +37,7 @@ export default function ReviewRoute() {
         </View>
       ) : (
         <View className="flex-1 items-center justify-center gap-3">
-          <ActivityIndicator testID="review-loading" />
+          <NomadLoader testID="review-loading" accessibilityLabel={t('loading')} style={{ width: 240 }} />
           <Text variant="muted">{t('loading')}</Text>
         </View>
       )}

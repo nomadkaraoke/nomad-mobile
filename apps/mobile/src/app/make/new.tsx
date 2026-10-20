@@ -10,7 +10,7 @@ import {
 } from '@nomad/api-gen';
 import { getSearchConfidence } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
-import { Button, Screen, Text, TextField } from '@nomad/ui';
+import { Button, NomadLoader, Screen, Text, TextField } from '@nomad/ui';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -301,7 +301,7 @@ export default function MakeScreen() {
         />
       ) : search.isPending || search.isIdle ? (
         <View testID="make-searching" className="items-center gap-2 py-8">
-          <ActivityIndicator />
+          <NomadLoader testID="make-searching-loader" accessibilityLabel={t('searching')} style={{ width: 240 }} />
           <Text>{t('searching')}</Text>
           <Text variant="muted">{t('searchingHint')}</Text>
         </View>
