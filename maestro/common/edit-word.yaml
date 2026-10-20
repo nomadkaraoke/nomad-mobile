@@ -6,6 +6,28 @@ appId: com.nomadkaraoke.mobile
     file: select-line.yaml
     env:
       LINE: ${LINE}
+# The selected row grows (its toolbar) and a long list can shift under it: bring the word back into view.
+- runFlow:
+    when:
+      notVisible:
+        id: "review-word-${LINE}-${WORD}"
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "review-word-${LINE}-${WORD}"
+          direction: UP
+          speed: 30
+          centerElement: true
+          timeout: 15000
+          optional: true
+      - scrollUntilVisible:
+          element:
+            id: "review-word-${LINE}-${WORD}"
+          direction: DOWN
+          speed: 30
+          centerElement: true
+          timeout: 15000
+          optional: true
 - tapOn:
     id: "review-word-${LINE}-${WORD}"
 - extendedWaitUntil:
@@ -14,13 +36,17 @@ appId: com.nomadkaraoke.mobile
     timeout: 10000
 - tapOn:
     id: "review-word-input"
-# Type only once the field has focus: on an Android dev build, keys that reach no field go to the dev
-# support's key listener, where a double "r" reloads the JS bundle.
-- extendedWaitUntil:
-    visible:
-      id: "review-word-input"
-      focused: true
-    timeout: 5000
+# Android: type only once the field has focus. On a dev build, keys that reach no field go to the dev
+# support's key listener, where a double "r" reloads the JS bundle. (iOS doesn't report focus on it.)
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: "review-word-input"
+            focused: true
+          timeout: 5000
 - eraseText: 30
 - inputText: ${TEXT}
 - tapOn:
