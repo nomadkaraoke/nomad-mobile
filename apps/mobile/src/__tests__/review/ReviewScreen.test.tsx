@@ -1,6 +1,7 @@
 import { ApiError } from '@nomad/api-gen';
 import { IntlProvider } from '@nomad/i18n';
 import type { CorrectionData } from '@nomad/review-core';
+import { WaveformCanvas } from '@nomad/ui';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { router, Slot, Stack } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
@@ -222,6 +223,15 @@ describe('ReviewScreen', () => {
     // A later plain dismissal (e.g. after Mark as duet) raises nothing.
     act(() => sheet.props.onDismiss());
     expect(alert).toHaveBeenCalledTimes(1);
+  });
+
+  it('scales quiet absolute peaks so the scrubber is not flat', async () => {
+    gen.getVocalsPeaks!.mockResolvedValue({ status: 'ready', peaks: 'AAMG', rate: 3 }); // u8 [0, 3, 6]
+    await renderScreen(cleanFixture());
+    const peaks = screen.UNSAFE_getByType(WaveformCanvas).props.peaks as number[];
+    expect(peaks[0]).toBe(0);
+    expect(peaks[1]).toBeCloseTo(Math.SQRT1_2, 10);
+    expect(peaks[2]).toBe(1);
   });
 
   it('reports waveform_failed when the vocals peaks fail', async () => {

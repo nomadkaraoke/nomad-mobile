@@ -1,5 +1,5 @@
 import { ApiError, getVocalsPeaks } from '@nomad/api-gen';
-import { decodePeaks, downsamplePeaks } from '@nomad/review-core';
+import { decodePeaks, downsamplePeaks, normalizePeaks } from '@nomad/review-core';
 import { useEffect, useRef, useState } from 'react';
 
 import { reportThrottled } from '../telemetry';
@@ -43,7 +43,8 @@ export function useVocalsPeaks(jobId: string, stemsReady: boolean): VocalsPeaks 
           const raw = decodePeaks(r.peaks);
           setState({
             status: 'ready',
-            peaks: downsamplePeaks(raw, Math.min(PEAK_BARS, raw.length)),
+            // gen's peaks are absolute (a quiet stem would draw flat): scale them for display.
+            peaks: normalizePeaks(downsamplePeaks(raw, Math.min(PEAK_BARS, raw.length))),
             duration: r.rate > 0 ? raw.length / r.rate : 0,
           });
           return;

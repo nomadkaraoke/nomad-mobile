@@ -1,4 +1,4 @@
-import { decodePeaks, downsamplePeaks } from '../peaks';
+import { decodePeaks, downsamplePeaks, normalizePeaks } from '../peaks';
 
 const b64 = (bytes: number[]): string => {
   const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -42,5 +42,23 @@ describe('downsamplePeaks', () => {
   it('handles more buckets than samples and empty input', () => {
     expect(downsamplePeaks([0.5, 1], 4)).toEqual([0.5, 0.5, 1, 1]);
     expect(downsamplePeaks([], 3)).toEqual([0, 0, 0]);
+  });
+});
+
+describe('normalizePeaks', () => {
+  it('scales the loudest peak to 1 with a square-root curve', () => {
+    const out = normalizePeaks([0, 6 / 255, 1.5 / 255]);
+    expect(out[0]).toBe(0);
+    expect(out[1]).toBe(1);
+    expect(out[2]).toBeCloseTo(0.5, 10);
+  });
+
+  it('keeps all-zero and empty input at zero', () => {
+    expect(normalizePeaks([0, 0, 0])).toEqual([0, 0, 0]);
+    expect(normalizePeaks([])).toEqual([]);
+  });
+
+  it('clamps negatives to zero', () => {
+    expect(normalizePeaks([-0.5, 0.25])).toEqual([0, 1]);
   });
 });

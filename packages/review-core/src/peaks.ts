@@ -43,3 +43,14 @@ export function downsamplePeaks(peaks: ArrayLike<number>, buckets: number): numb
   }
   return out;
 }
+
+/**
+ * Peaks scaled for display: divided by the loudest (gen's u8 peaks are absolute, so a quiet stem would
+ * draw flat), then a square-root curve so quiet passages stay visible. All-zero (or empty) input stays zero.
+ */
+export function normalizePeaks(peaks: readonly number[]): number[] {
+  let max = 0;
+  for (const p of peaks) if (p > max) max = p;
+  if (!(max > 0)) return peaks.map(() => 0);
+  return peaks.map((p) => Math.sqrt(Math.max(0, p) / max));
+}
