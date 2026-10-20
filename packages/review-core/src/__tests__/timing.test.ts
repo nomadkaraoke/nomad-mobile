@@ -1,6 +1,6 @@
 import fixture from './fixtures/correctionData.json';
 import type { LyricsSegment, Word } from '../types';
-import { clampSyncTime, countUntimedWords, firstUntimed, sanitizeSegment } from '../timing';
+import { activeLine, clampSyncTime, countUntimedWords, firstUntimed, sanitizeSegment } from '../timing';
 
 const segs = fixture.corrected_segments as unknown as LyricsSegment[];
 const w = (id: string, s: number | null, e: number | null): Word => ({ id, text: id, start_time: s, end_time: e });
@@ -71,4 +71,30 @@ describe('clampSyncTime', () => {
   it('caps at segEnd + 3', () => expect(clampSyncTime(9, 2, 4)).toBe(7));
   it('allows 3 s before the start', () => expect(clampSyncTime(6, 10, 14)).toBe(7));
   it('lifts times earlier than start - 3', () => expect(clampSyncTime(2, 10, 14)).toBe(7));
+});
+
+describe('activeLine', () => {
+  const L = (s: number | null, e: number | null): LyricsSegment => seg([], s, e);
+  const lines = [L(10, 12), L(12, 14), L(20, 22)];
+
+  it('is -1 before the first line and for an empty list', () => {
+    expect(activeLine(lines, 5)).toBe(-1);
+    expect(activeLine([], 5)).toBe(-1);
+  });
+  it('finds the containing line', () => {
+    expect(activeLine(lines, 10)).toBe(0);
+    expect(activeLine(lines, 13)).toBe(1);
+    expect(activeLine(lines, 21)).toBe(2);
+  });
+  it('stays on the last started line in a gap and after the end', () => {
+    expect(activeLine(lines, 16)).toBe(1);
+    expect(activeLine(lines, 99)).toBe(2);
+  });
+  it('skips untimed lines and uses first timed word when segment start is null', () => {
+    const s = [L(10, 12), L(null, null), seg([w('a', 15, 16)], null, null)];
+    expect(activeLine(s, 11)).toBe(0);
+    expect(activeLine(s, 14)).toBe(0);
+    expect(activeLine(s, 15.5)).toBe(2);
+    expect(activeLine([L(null, null)], 3)).toBe(-1);
+  });
 });

@@ -45,3 +45,32 @@ export function clampSyncTime(t: number, segStart: number, segEnd: number): numb
   const lo = Math.max(0, segStart - SYNC_WINDOW_SECONDS);
   return Math.min(Math.max(t, lo), segEnd + SYNC_WINDOW_SECONDS);
 }
+
+/**
+ * Index of the line playing at time `t`: the last line starting at or before `t` (which is the
+ * line containing `t` whenever lines don't overlap), else -1 before the first line. Binary search
+ * over segment starts; a segment without a start inherits the nearest earlier timed start.
+ */
+export function activeLine(segments: readonly LyricsSegment[], t: number): number {
+  const startOf = (i: number): number => {
+    for (let k = i; k >= 0; k--) {
+      const s = segments[k]!;
+      const v = s.start_time ?? s.words.find((w) => w.start_time !== null)?.start_time ?? null;
+      if (v !== null && v !== undefined) return v;
+    }
+    return -Infinity;
+  };
+  let lo = 0;
+  let hi = segments.length - 1;
+  let found = -1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (startOf(mid) <= t) {
+      found = mid;
+      lo = mid + 1;
+    } else hi = mid - 1;
+  }
+  // Skip trailing untimed lines that merely inherited an earlier start.
+  while (found > 0 && segments[found]!.start_time === null && !segments[found]!.words.some((w) => w.start_time !== null)) found--;
+  return startOf(found) === -Infinity ? -1 : found;
+}
