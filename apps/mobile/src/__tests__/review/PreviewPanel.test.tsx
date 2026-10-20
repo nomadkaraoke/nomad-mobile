@@ -3,11 +3,13 @@ import { act, fireEvent, screen } from '@testing-library/react-native';
 import { createAudioPlayer } from 'expo-audio';
 
 import { PREVIEW_POLL_MS, PREVIEW_SLOW_MS } from '../../review/finish/usePreview';
+import { AudioFocusContext, createAudioFocus } from '../../review/finish/audioFocus';
 import { PreviewPanel } from '../../review/finish/PreviewPanel';
 import { cleanFixture, renderReview } from '../../test-utils/reviewFixtures';
 
-type Listener = () => void;
+type Listener = (e?: { isPlaying: boolean }) => void;
 const mockVideo = {
+  pause: jest.fn(),
   muted: false,
   currentTime: 12,
   playing: true,
@@ -163,14 +165,14 @@ describe('PreviewPanel', () => {
 
     // The stem follows the video's play/pause.
     mockVideo.playing = false;
-    act(() => mockVideo.listeners.forEach((l) => l()));
+    act(() => mockVideo.listeners.forEach((l) => l({ isPlaying: false })));
     expect(stem.pause).toHaveBeenCalled();
     mockVideo.playing = true;
 
     fireEvent.press(screen.getByTestId('review-preview-audio-song'));
     expect(mockVideo.muted).toBe(false);
     expect(stem.remove).toHaveBeenCalled();
-    expect(mockVideo.listeners).toHaveLength(0);
+    expect(mockVideo.listeners).toHaveLength(1); // only the player's own playing-state listener remains
   });
 
   it('no stem (e.g. the singer\'s own instrumental): no audio toggle', async () => {
@@ -178,5 +180,31 @@ describe('PreviewPanel', () => {
     renderPanel({ stemUri: null });
     await start();
     expect(screen.queryByTestId('review-preview-audio-instrumental')).toBeNull();
+  });
+
+  it('one sound at a time: the preview starting pauses the A/B stems, and the stems starting pause the preview', async () => {
+    gen.requestPreview!.mockResolvedValue({ status: 'success', previewHash: 'abc' });
+    const focus = createAudioFocus();
+    const pauseAb = jest.fn();
+    focus.register('ab', pauseAb);
+    renderReview(
+      <AudioFocusContext.Provider value={focus}>
+        <PreviewPanel jobId="j1" stemUri={STEM} onBackToLyrics={jest.fn()} />
+      </AudioFocusContext.Provider>,
+      cleanFixture(),
+    );
+    await start();
+    act(() => mockVideo.listeners.forEach((l) => l({ isPlaying: true })));
+    expect(pauseAb).toHaveBeenCalledTimes(1);
+    act(() => focus.claim('ab'));
+    expect(mockVideo.pause).toHaveBeenCalled();
+  });
+
+  it('tells the step when the preview is ready (so it can scroll it into view)', async () => {
+    gen.requestPreview!.mockResolvedValue({ status: 'success', previewHash: 'abc' });
+    const onReady = jest.fn();
+    renderPanel({ onReady });
+    await start();
+    expect(onReady).toHaveBeenCalledTimes(1);
   });
 });

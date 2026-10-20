@@ -10,6 +10,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useReviewPlayer } from './audio/useReviewPlayer';
 import { continueOnWeb } from './continueOnWeb';
 import { FinishStep } from './finish/FinishStep';
+import { useInstrumentalChoice } from './finish/InstrumentalChooser';
+import { useSubmitReview } from './finish/useSubmitReview';
 import { LyricsStep, type LyricsStepHandle, type TextRequest } from './lyrics/LyricsStep';
 import { useVocalsPeaks } from './lyrics/useVocalsPeaks';
 import { ReviewHeaderButtons, ReviewHeaderTitle } from './ReviewHeader';
@@ -98,6 +100,11 @@ function ReviewBody({ jobId, data }: ReviewScreenProps) {
   useEncoderWarmup(jobId);
   const [stemsStart] = useState(() => initialStems(data));
   const stems = useStemsPoll(jobId, stemsStart);
+  // "Make my video" lives here, not in the Finish step: switching steps must not drop or repeat it.
+  const choice = useInstrumentalChoice(stems);
+  const submitter = useSubmitReview(jobId, plan.showChooser ? choice.submit : 'custom');
+  /** Saving or submitted: what was sent can't change any more. */
+  const locked = submitter.state === 'saving' || submitter.state === 'done';
   const player = useReviewPlayer(jobId, { vocalsReady: stems.ready });
   const audioDuration = player.duration > 0 ? player.duration : undefined;
   const peaks = useVocalsPeaks(jobId, stems.ready);
@@ -105,6 +112,7 @@ function ReviewBody({ jobId, data }: ReviewScreenProps) {
 
   /** Back to Lyrics is always allowed; on to Finish only once every word is timed (else, like the CTA, jump). */
   const goTo = (next: ReviewStep) => {
+    if (locked) return;
     if (next === 'finish' && untimed > 0) {
       if (step === 'lyrics') lyricsRef.current?.jumpToFirstUntimed();
       else setStep('lyrics');
@@ -116,7 +124,8 @@ function ReviewBody({ jobId, data }: ReviewScreenProps) {
 
   // Back (header chevron, Android back) from Finish returns to Lyrics before it leaves the review.
   // Only back actions: a replace (after a successful finish) must still leave. The draft is kept either way.
-  const backToLyrics = step === 'finish' && plan.steps.includes('lyrics');
+  // While saving or after submitting, back simply leaves (the submit carries on; nothing navigates after).
+  const backToLyrics = step === 'finish' && plan.steps.includes('lyrics') && !locked;
   useEffect(() => {
     if (!backToLyrics) return;
     return navigation.addListener('beforeRemove', (e) => {
@@ -137,7 +146,7 @@ function ReviewBody({ jobId, data }: ReviewScreenProps) {
           headerTitle: () => <ReviewHeaderTitle title={title} artist={artist} />,
           headerRight: () => (
             <ReviewHeaderButtons
-              canUndo={canUndo}
+              canUndo={canUndo && !locked}
               onUndo={undoLast}
               onMenu={() => setMenuOpen(true)}
               undoLabel={t('undo')}
@@ -149,7 +158,7 @@ function ReviewBody({ jobId, data }: ReviewScreenProps) {
         }}
       />
 
-      <StepsHeader step={step} onStep={goTo} />
+      <StepsHeader step={step} onStep={goTo} disabled={locked} />
 
       {restored ? (
         <View className="mx-3 mb-1 flex-row items-center rounded-xl border border-border bg-card ps-3">
@@ -158,6 +167,8 @@ function ReviewBody({ jobId, data }: ReviewScreenProps) {
             testID="review-restored-discard"
             accessibilityRole="button"
             accessibilityLabel={t('discard')}
+            accessibilityState={{ disabled: locked }}
+            disabled={locked}
             onPress={() => confirmDiscard(discard)}
             className="min-h-11 justify-center px-3"
           >
@@ -180,7 +191,13 @@ function ReviewBody({ jobId, data }: ReviewScreenProps) {
           onNext={() => goTo('finish')}
         />
       ) : (
-        <FinishStep jobId={jobId} stems={stems} showChooser={plan.showChooser} onBackToLyrics={() => setStep('lyrics')} />
+        <FinishStep
+          jobId={jobId}
+          stems={stems}
+          submitter={submitter}
+          showChooser={plan.showChooser}
+          onBackToLyrics={() => goTo('lyrics')}
+        />
       )}
 
       {sheet?.kind === 'word' ? (
@@ -227,6 +244,7 @@ function ReviewBody({ jobId, data }: ReviewScreenProps) {
         onClose={() => setMenuOpen(false)}
         isDuet={isDuet}
         onSetDuet={setDuet}
+        locked={locked}
         onDiscard={discard}
         onContinueOnWeb={continueWeb}
       />
@@ -253,7 +271,7 @@ function useContinueOnWeb(jobId: string): () => void {
 const STEPS: ReviewStep[] = ['lyrics', 'finish'];
 
 /** Two-part progress, Lyrics · Finish; either part can be tapped. */
-function StepsHeader({ step, onStep }: { step: ReviewStep; onStep: (s: ReviewStep) => void }) {
+function StepsHeader({ step, onStep, disabled }: { step: ReviewStep; onStep: (s: ReviewStep) => void; disabled: boolean }) {
   const t = useTranslations('review.steps');
   return (
     <View className="mx-3 mb-2 flex-row gap-2" accessibilityRole="tablist">
@@ -265,7 +283,8 @@ function StepsHeader({ step, onStep }: { step: ReviewStep; onStep: (s: ReviewSte
             testID={`review-steps-${s}`}
             accessibilityRole="tab"
             accessibilityLabel={t('a11y', { n: i + 1, total: STEPS.length, name: t(s) })}
-            accessibilityState={{ selected: on }}
+            accessibilityState={{ selected: on, disabled }}
+            disabled={disabled}
             onPress={() => onStep(s)}
             className="min-h-11 flex-1 justify-end pb-1"
           >

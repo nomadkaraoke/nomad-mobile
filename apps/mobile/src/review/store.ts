@@ -22,6 +22,8 @@ export type ReviewStore = {
   /** True once the person toggled duet: is_duet is only sent to gen when loaded true or touched. */
   isDuetTouched: boolean;
   restoredFromDraft: boolean;
+  /** Set by `finish()`: the review was submitted; edits and draft writes are ignored from then on. */
+  finished: boolean;
   /** Applies an edit: pushes undo, counts it, schedules a draft save. A no-op (same doc) is ignored. */
   apply(op: (d: ReviewDoc) => ReviewDoc): void;
   /**
@@ -37,6 +39,11 @@ export type ReviewStore = {
   setSelection(c: InstrumentalChoice | null): void;
   /** Writes any pending draft now (call when leaving the screen). */
   flushDraft(): void;
+  /**
+   * The review was submitted: cancels any pending draft write, deletes the draft, and turns every later
+   * edit, selection change and draft write into a no-op (a stale draft must not outlive the submit).
+   */
+  finish(): void;
 };
 
 /** One store per mounted review. Restores a draft saved against the same audio, else starts from `data`. */
@@ -47,10 +54,12 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
   let timer: ReturnType<typeof setTimeout> | null = null;
   // Open gesture: null when none; `pushed` once its single undo snapshot is taken.
   let gesture: { pushed: boolean } | null = null;
+  let finished = false;
 
   return createStore<ReviewStore>()((set, get) => {
     const writeDraft = () => {
       timer = null;
+      if (finished) return;
       const s = get();
       saveDraft(jobId, {
         v: 1,
@@ -64,6 +73,7 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
       });
     };
     const scheduleDraft = () => {
+      if (finished) return;
       if (timer) clearTimeout(timer);
       timer = setTimeout(writeDraft, DRAFT_DEBOUNCE_MS);
     };
@@ -73,6 +83,7 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
     };
 
     const applyOp = (op: (d: ReviewDoc) => ReviewDoc, extra: Partial<ReviewStore> = {}) => {
+      if (finished) return;
       const { doc, undo, editCount } = get();
       const next = op(doc);
       if (next === doc) return;
@@ -94,6 +105,7 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
       selectionTouched: draft?.selection != null,
       isDuetTouched: draft?.isDuetTouched ?? false,
       restoredFromDraft: draft !== null,
+      finished: false,
 
       apply: (op) => applyOp(op),
       beginGesture() {
@@ -104,6 +116,7 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
       },
       setDuet: (on) => applyOp((d) => (d.isDuet === on ? d : setDuet(d, on)), { isDuetTouched: true }),
       undoLast() {
+        if (finished) return;
         gesture = null;
         const { doc, undo } = get();
         const prev = undo.undo(doc);
@@ -112,6 +125,7 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
         scheduleDraft();
       },
       discard() {
+        if (finished) return;
         gesture = null;
         cancelDraft();
         clearDraft(jobId);
@@ -126,6 +140,7 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
         });
       },
       setSelection(c) {
+        if (finished) return;
         set({ selection: c, selectionTouched: true });
         scheduleDraft();
       },
@@ -134,6 +149,13 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
           cancelDraft();
           writeDraft();
         }
+      },
+      finish() {
+        finished = true;
+        gesture = null;
+        cancelDraft();
+        clearDraft(jobId);
+        set({ finished: true });
       },
     };
   });

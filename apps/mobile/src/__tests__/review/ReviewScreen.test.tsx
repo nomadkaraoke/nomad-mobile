@@ -34,6 +34,8 @@ jest.mock('@nomad/api-gen', () => ({
   getJob: jest.fn(() => new Promise(() => {})),
   getWaveformData: jest.fn(() => new Promise(() => {})),
   requestPreview: jest.fn(),
+  saveCorrections: jest.fn(),
+  completeReview: jest.fn(),
 }));
 jest.mock('../../review/continueOnWeb', () => ({ continueOnWeb: jest.fn(async () => {}) }));
 jest.mock('../../jobs/openWebHandoff', () => ({ openWebHandoff: jest.fn(async () => {}) }));
@@ -181,6 +183,25 @@ describe('ReviewScreen', () => {
     await act(async () => fireEvent.press(screen.getByTestId('review-preview-start')));
     fireEvent.press(screen.getByTestId('review-preview-back'));
     expect(screen.getByTestId('review-step-lyrics')).toBeTruthy();
+  });
+
+  it('Finish: while saving, steps, undo, duet and discard are locked, so no second submit can start', async () => {
+    gen.saveCorrections!.mockReturnValue(new Promise(() => {}));
+    await renderScreen(cleanFixture({ ...STEMS, audio_complete: true }));
+    deleteFirstLine();
+    fireEvent.press(screen.getByTestId('review-lyrics-next'));
+    fireEvent.press(screen.getByTestId('review-finish-submit'));
+    expect(gen.saveCorrections).toHaveBeenCalledTimes(1);
+
+    fireEvent.press(screen.getByTestId('review-steps-lyrics'));
+    expect(screen.getByTestId('review-step-finish')).toBeTruthy(); // stayed: the submit is not dropped
+    expect(screen.getByTestId('review-steps-lyrics').props.accessibilityState.disabled).toBe(true);
+    expect(screen.getByTestId('review-undo').props.accessibilityState).toEqual(expect.objectContaining({ disabled: true }));
+    fireEvent.press(screen.getByTestId('review-menu'));
+    expect(screen.getByTestId('review-menu-duet').props.accessibilityState.disabled).toBe(true);
+    expect(screen.getByTestId('review-menu-discard').props.accessibilityState.disabled).toBe(true);
+    fireEvent.press(screen.getByTestId('review-finish-submit'));
+    expect(gen.saveCorrections).toHaveBeenCalledTimes(1);
   });
 
   it('vocals fall back to the song until the stems are ready', async () => {

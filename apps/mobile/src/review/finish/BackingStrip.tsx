@@ -1,6 +1,6 @@
 import { getWaveformData } from '@nomad/api-gen';
 import { useTranslations } from '@nomad/i18n';
-import type { BackingVocalsAnalysis } from '@nomad/review-core';
+import { normalizePeaks, type BackingVocalsAnalysis } from '@nomad/review-core';
 import { colors, WaveformCanvas, type WaveformMarker } from '@nomad/ui';
 import { useEffect, useMemo, useState } from 'react';
 import { Text, View } from 'react-native';
@@ -9,7 +9,7 @@ import { Text, View } from 'react-native';
 export const STRIP_POINTS = 200;
 /** A tap this close (s) to a highlighted region still counts as on it (a fingertip is wide). */
 const TAP_TOLERANCE_S = 0.75;
-const HEIGHT = 36;
+const HEIGHT = 48;
 
 type Props = {
   jobId: string;
@@ -33,7 +33,8 @@ export function BackingStrip({ jobId, analysis, position, onAudition }: Props) {
     let cancelled = false;
     getWaveformData(jobId, STRIP_POINTS)
       .then((r) => {
-        if (!cancelled) setWave({ peaks: r.amplitudes.map((a) => Math.max(0, Math.min(1, a))), duration: r.duration });
+        // Backing vocals are quiet next to the mix: scale them (as the vocals scrubber does) or they draw flat.
+        if (!cancelled) setWave({ peaks: normalizePeaks(r.amplitudes), duration: r.duration });
       })
       .catch(() => undefined); // decoration: the chooser works without it
     return () => {
@@ -54,7 +55,7 @@ export function BackingStrip({ jobId, analysis, position, onAudition }: Props) {
   if (!wave || segments.length === 0 || duration <= 0) return null;
 
   return (
-    <View className="gap-1">
+    <View className="w-full gap-1 self-stretch">
       <Text className="text-xs text-muted">{t('stripTitle')}</Text>
       <WaveformCanvas
         testID="review-backing-strip"

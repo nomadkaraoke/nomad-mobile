@@ -25,11 +25,23 @@ type Props = {
   onDiscard: () => void;
   /** Hidden when undefined. */
   onContinueOnWeb?: () => void;
+  /** Saving or submitted: the duet flag and discard are disabled (the edits were sent). */
+  locked?: boolean;
 };
 
-function Item({ testID, icon, label, danger, onPress }: { testID: string; icon: IconName; label: string; danger?: boolean; onPress: () => void }) {
+type ItemProps = { testID: string; icon: IconName; label: string; danger?: boolean; disabled?: boolean; onPress: () => void };
+
+function Item({ testID, icon, label, danger, disabled, onPress }: ItemProps) {
   return (
-    <Pressable testID={testID} accessibilityRole="button" accessibilityLabel={label} onPress={onPress} className="min-h-12 flex-row items-center gap-3 rounded-lg px-2">
+    <Pressable
+      testID={testID}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ disabled: !!disabled }}
+      disabled={disabled}
+      onPress={onPress}
+      className={`min-h-12 flex-row items-center gap-3 rounded-lg px-2 ${disabled ? 'opacity-50' : ''}`}
+    >
       <Ionicons name={icon} size={20} color={danger ? colors.danger : colors.text} />
       <Text className={`text-base ${danger ? 'text-danger' : 'text-text'}`}>{label}</Text>
     </Pressable>
@@ -37,7 +49,7 @@ function Item({ testID, icon, label, danger, onPress }: { testID: string; icon: 
 }
 
 /** Review overflow menu (spec §4.2): Continue on web, Mark as duet / Not a duet, Discard my edits. */
-export function ReviewMenu({ visible, onClose, isDuet, onSetDuet, onDiscard, onContinueOnWeb }: Props) {
+export function ReviewMenu({ visible, onClose, isDuet, onSetDuet, onDiscard, onContinueOnWeb, locked = false }: Props) {
   const t = useTranslations('review');
   const confirmDiscard = useConfirmDiscard();
   // An action that presents something (the discard Alert) waits until the sheet has gone: iOS drops an
@@ -82,6 +94,7 @@ export function ReviewMenu({ visible, onClose, isDuet, onSetDuet, onDiscard, onC
           testID="review-menu-duet"
           icon="people-outline"
           label={isDuet ? t('notDuet') : t('markDuet')}
+          disabled={locked}
           onPress={() => {
             onClose();
             onSetDuet(!isDuet);
@@ -92,6 +105,7 @@ export function ReviewMenu({ visible, onClose, isDuet, onSetDuet, onDiscard, onC
           icon="trash-outline"
           label={t('discard')}
           danger
+          disabled={locked}
           onPress={() => closeThen(() => confirmDiscard(onDiscard))}
         />
       </View>

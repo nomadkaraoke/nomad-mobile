@@ -9,6 +9,7 @@ import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import { useAbPlayers, type AbPlayers } from '../audio/useAbPlayers';
 import { useReviewStore } from '../store';
 import type { StemsState } from '../useStemsPoll';
+import { useAudioFocus } from './audioFocus';
 import { BackingStrip } from './BackingStrip';
 import type { SubmitSelection } from './useSubmitReview';
 
@@ -43,7 +44,12 @@ export function useInstrumentalChoice(stems: Stems): {
   };
 }
 
-type Props = { jobId: string; stems: Stems };
+type Props = {
+  jobId: string;
+  stems: Stems;
+  /** Saving or submitted: the choice can no longer change (listening still works). */
+  locked?: boolean;
+};
 
 /**
  * Instrumental chooser (spec §4.4): Clean / With backing vocals cards with the recommendation
@@ -51,13 +57,15 @@ type Props = { jobId: string; stems: Stems };
  * position), the backing-vocals strip, and the help line. A confident, untouched verdict collapses to
  * one line with Change. While the stems separate, a spinner stands in for the cards.
  */
-export function InstrumentalChooser({ jobId, stems }: Props) {
+export function InstrumentalChooser({ jobId, stems, locked = false }: Props) {
   const t = useTranslations('review.instrumental');
   const tp = useTranslations('review.player');
   const setSelection = useReviewStore((s) => s.setSelection);
   const choice = useInstrumentalChoice(stems);
   const [expanded, setExpanded] = useState(false);
   const ab = useAbPlayers(jobId, stems.ready ? stems.options : NO_OPTIONS);
+  // The A/B stems and the preview video never play over each other.
+  useAudioFocus('ab', ab.playing, ab.pause);
 
   if (!stems.ready) {
     return (
@@ -79,8 +87,10 @@ export function InstrumentalChooser({ jobId, stems }: Props) {
           testID="review-choice-change"
           accessibilityRole="button"
           accessibilityLabel={t('changeA11y')}
+          accessibilityState={{ disabled: locked }}
+          disabled={locked}
           onPress={() => setExpanded(true)}
-          className="min-h-12 justify-center px-4"
+          className={`min-h-12 justify-center px-4 ${locked ? 'opacity-50' : ''}`}
         >
           <Text className="text-base font-semibold text-primary">{t('change')}</Text>
         </Pressable>
@@ -99,7 +109,7 @@ export function InstrumentalChooser({ jobId, stems }: Props) {
     if (!ab.playing) ab.play();
   };
   const audition = (at: number) => {
-    setSelection('with_backing');
+    if (!locked) setSelection('with_backing');
     ab.setActive('with_backing');
     void ab.seekTo(at).then(() => ab.play());
   };
@@ -115,6 +125,7 @@ export function InstrumentalChooser({ jobId, stems }: Props) {
           recommended={choice.confident && choice.recommended === c}
           playing={ab.playing && ab.active === c}
           loading={ab.loading}
+          locked={locked}
           onSelect={() => select(c)}
           onPlay={() => playChoice(c)}
         />
@@ -137,11 +148,12 @@ type CardProps = {
   recommended: boolean;
   playing: boolean;
   loading: boolean;
+  locked: boolean;
   onSelect: () => void;
   onPlay: () => void;
 };
 
-function ChoiceCard({ choice, selected, recommended, playing, loading, onSelect, onPlay }: CardProps) {
+function ChoiceCard({ choice, selected, recommended, playing, loading, locked, onSelect, onPlay }: CardProps) {
   const t = useTranslations('review.instrumental');
   const name = t(LABEL[choice]);
   return (
@@ -150,7 +162,8 @@ function ChoiceCard({ choice, selected, recommended, playing, loading, onSelect,
         testID={`review-choice-${choice}`}
         accessibilityRole="radio"
         accessibilityLabel={name}
-        accessibilityState={{ selected, checked: selected }}
+        accessibilityState={{ selected, checked: selected, disabled: locked }}
+        disabled={locked}
         onPress={onSelect}
         className="min-h-16 flex-1 justify-center gap-1 py-3 ps-4"
       >

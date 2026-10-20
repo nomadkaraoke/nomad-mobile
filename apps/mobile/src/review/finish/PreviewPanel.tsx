@@ -2,11 +2,12 @@ import { LOCALE_NAMES, useTranslations, type Locale } from '@nomad/i18n';
 import { Button, colors } from '@nomad/ui';
 import { createAudioPlayer } from 'expo-audio';
 import { useVideoPlayer, VideoView, type VideoPlayer } from 'expo-video';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, Text, useWindowDimensions, View } from 'react-native';
 
 import { LOCKSTEP_INTERVAL_MS, lockstepCheck } from '../audio/lockstep';
 import { safePlay } from '../audio/playback';
+import { useAudioFocus } from './audioFocus';
 import { usePreview } from './usePreview';
 
 /** The player takes at most this share of the screen height, so the choice and "Make my video" stay in view. */
@@ -19,6 +20,8 @@ type Props = {
   /** The job's `translation_language` (translations are added after review). */
   translationLanguage?: string | null;
   onBackToLyrics: () => void;
+  /** The video just became ready (the step scrolls it into view). */
+  onReady?: () => void;
 };
 
 /**
@@ -27,9 +30,17 @@ type Props = {
  * to Lyrics. The video is a black-background sync check; its audio is the full song, and the
  * Instrumental toggle mutes it and plays the chosen stem alongside instead.
  */
-export function PreviewPanel({ jobId, stemUri, translationLanguage, onBackToLyrics }: Props) {
+export function PreviewPanel({ jobId, stemUri, translationLanguage, onBackToLyrics, onReady }: Props) {
   const t = useTranslations('review.preview');
   const preview = usePreview(jobId);
+  const isReady = preview.state === 'ready';
+  const onReadyRef = useRef(onReady);
+  useEffect(() => {
+    onReadyRef.current = onReady;
+  });
+  useEffect(() => {
+    if (isReady) onReadyRef.current?.();
+  }, [isReady]);
   const language = translationLanguage ? (LOCALE_NAMES[translationLanguage as Locale] ?? translationLanguage) : null;
 
   return (
@@ -87,6 +98,13 @@ function PreviewPlayer({ uri, stemUri }: { uri: string; stemUri: string | null }
     p.audioMixingMode = 'mixWithOthers';
   });
   const instrumental = audio === 'instrumental' && !!stemUri;
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  useEffect(() => {
+    const sub = video.addListener('playingChange', (e) => setVideoPlaying(!!e?.isPlaying));
+    return () => sub.remove();
+  }, [video]);
+  // The preview and the A/B stems never play over each other.
+  useAudioFocus('preview', videoPlaying, () => video.pause());
 
   // Instrumental: the video goes muted and the stem follows it (play/pause, and a lockstep watchdog).
   useEffect(() => {

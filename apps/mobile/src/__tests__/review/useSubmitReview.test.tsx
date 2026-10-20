@@ -5,20 +5,26 @@ import { router } from 'expo-router';
 import type { ReactNode } from 'react';
 
 import { useSubmitReview, type SubmitSelection } from '../../review/finish/useSubmitReview';
+import { loadDraft } from '../../review/drafts';
 import { createReviewStore, ReviewStoreContext } from '../../review/store';
 import { cleanFixture } from '../../test-utils/reviewFixtures';
 
-jest.mock('expo-router', () => ({ router: { replace: jest.fn() } }));
+jest.mock('expo-router', () => ({ router: { dismissTo: jest.fn() } }));
 jest.mock('@nomad/api-gen', () => ({
   ...jest.requireActual('@nomad/api-gen'),
   saveCorrections: jest.fn(),
   getCorrectionData: jest.fn(),
   completeReview: jest.fn(),
+  getJob: jest.fn(),
 }));
 const gen = jest.requireMock('@nomad/api-gen') as Record<string, jest.Mock>;
 
 function setup(selection: SubmitSelection = 'auto') {
   const store = createReviewStore('j1', cleanFixture());
+  return { store, ...setupWith(store, selection) };
+}
+
+function setupWith(store: ReturnType<typeof createReviewStore>, selection: SubmitSelection) {
   const queryClient = new QueryClient();
   const wrapper = ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={queryClient}>
@@ -72,13 +78,13 @@ describe('useSubmitReview', () => {
     expect(result.current.state).toBe('done');
   });
 
-  it('leaves for the job page with a replace once the success state has shown', async () => {
+  it('leaves for the Make tab (job progress) once the success state has shown', async () => {
     jest.useFakeTimers();
     const { result } = setup();
     await act(async () => result.current.submit());
-    expect(router.replace).not.toHaveBeenCalled();
+    expect(router.dismissTo).not.toHaveBeenCalled();
     act(() => jest.runOnlyPendingTimers());
-    expect(router.replace).toHaveBeenCalledWith({ pathname: '/job/[id]', params: { id: 'j1' } });
+    expect(router.dismissTo).toHaveBeenCalledWith('/make');
     jest.useRealTimers();
   });
 
@@ -88,7 +94,51 @@ describe('useSubmitReview', () => {
     await act(async () => result.current.submit());
     unmount();
     act(() => jest.runOnlyPendingTimers());
-    expect(router.replace).not.toHaveBeenCalled();
+    expect(router.dismissTo).not.toHaveBeenCalled();
+    jest.useRealTimers();
+  });
+
+  it('unmounting during an in-flight submit: it still finishes on gen, but nothing navigates or sets state', async () => {
+    jest.useFakeTimers();
+    let release!: () => void;
+    gen.completeReview!.mockReturnValue(new Promise((r) => (release = () => r({ status: 'success' }))));
+    const { result, unmount, store } = setup();
+    let pending!: Promise<void>;
+    act(() => {
+      pending = result.current.submit();
+    });
+    unmount();
+    await act(async () => {
+      release();
+      await pending;
+    });
+    expect(store.getState().finished).toBe(true); // gen took it: the draft is gone
+    act(() => jest.runOnlyPendingTimers());
+    expect(router.dismissTo).not.toHaveBeenCalled();
+    jest.useRealTimers();
+  });
+
+  it('after success the store is finished: edits are ignored and no stale draft is written', async () => {
+    jest.useFakeTimers();
+    const { result, store } = setup();
+    await act(async () => result.current.submit());
+    act(() => store.getState().apply((d) => ({ ...d, segments: [] })));
+    act(() => store.getState().setSelection('clean'));
+    act(() => jest.advanceTimersByTime(5_000));
+    store.getState().flushDraft();
+    expect(store.getState().doc.segments).toHaveLength(2);
+    expect(store.getState().selection).toBeNull();
+    expect(loadDraft('j1', 'h1')).toBeNull();
+    jest.useRealTimers();
+  });
+
+  it('finish() cancels a draft write that was already scheduled', () => {
+    jest.useFakeTimers();
+    const store = createReviewStore('j1', cleanFixture());
+    store.getState().apply((d) => ({ ...d, segments: d.segments.slice(1) }));
+    store.getState().finish();
+    jest.advanceTimersByTime(5_000);
+    expect(loadDraft('j1', 'h1')).toBeNull();
     jest.useRealTimers();
   });
 });

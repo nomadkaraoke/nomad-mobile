@@ -1,6 +1,7 @@
 import { WaveformCanvas } from '@nomad/ui';
 import { act, fireEvent, screen } from '@testing-library/react-native';
 
+import { AudioFocusContext, createAudioFocus } from '../../review/finish/audioFocus';
 import { InstrumentalChooser } from '../../review/finish/InstrumentalChooser';
 import { cleanFixture, fakeAbPlayers, readyStems, renderReview } from '../../test-utils/reviewFixtures';
 
@@ -114,6 +115,9 @@ describe('InstrumentalChooser', () => {
     expect(screen.getByTestId('review-backing-strip')).toBeTruthy();
     const strip = screen.UNSAFE_getByType(WaveformCanvas);
     expect(strip.props.markers).toEqual([expect.objectContaining({ from: 10 / 30, to: 20 / 30 })]);
+    // Quiet backing vocals are scaled up (normalizePeaks) so the strip isn't a flat bar.
+    expect(strip.props.peaks[2]).toBe(1);
+    expect(strip.props.peaks[0]).toBeCloseTo(Math.sqrt(0.1 / 0.9), 10);
 
     // Outside the highlighted region (with a fingertip's tolerance): nothing happens.
     act(() => strip.props.onSeek(0.1));
@@ -136,5 +140,30 @@ describe('InstrumentalChooser', () => {
     mockAb = fakeAbPlayers({ error: 'load_failed' });
     await renderChooser();
     expect(screen.getByTestId('review-ab-error')).toHaveTextContent(/^We couldn't load the audio/);
+  });
+
+  it('locked (saving or sent): the cards and Change are disabled', async () => {
+    await renderChooser();
+    expect(screen.getByTestId('review-choice-clean').props.accessibilityState.disabled).toBe(false);
+    renderReview(<InstrumentalChooser jobId="j1" stems={readyStems({ autoApproval: CONFIDENT })} locked />, cleanFixture());
+    await act(async () => {});
+    expect(screen.getByTestId('review-choice-change').props.accessibilityState.disabled).toBe(true);
+  });
+
+  it('the A/B stems starting claim the audio (the preview pauses)', async () => {
+    const focus = createAudioFocus();
+    const pausePreview = jest.fn();
+    focus.register('preview', pausePreview);
+    mockAb = fakeAbPlayers({ playing: true });
+    renderReview(
+      <AudioFocusContext.Provider value={focus}>
+        <InstrumentalChooser jobId="j1" stems={readyStems()} />
+      </AudioFocusContext.Provider>,
+      cleanFixture(),
+    );
+    await act(async () => {});
+    expect(pausePreview).toHaveBeenCalled();
+    act(() => focus.claim('preview'));
+    expect(mockAb.pause).toHaveBeenCalled();
   });
 });
