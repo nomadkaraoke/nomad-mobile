@@ -1,0 +1,55 @@
+# Word sheet: replace a word's text. Env: LINE, WORD (indices), TEXT. Taps the line first (selects it), then the
+# word (on a selected line a word tap opens its sheet).
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    file: select-line.yaml
+    env:
+      LINE: ${LINE}
+# The selected row grows (its toolbar) and a long list can shift under it: bring the word fully back into view
+# (a no-op when it already is; a word half under the steps header takes the tap there instead).
+- scrollUntilVisible:
+    element:
+      id: "review-word-${LINE}-${WORD}"
+    direction: UP
+    speed: 30
+    visibilityPercentage: 100
+    centerElement: true
+    timeout: 15000
+    optional: true
+- scrollUntilVisible:
+    element:
+      id: "review-word-${LINE}-${WORD}"
+    direction: DOWN
+    speed: 30
+    visibilityPercentage: 100
+    centerElement: true
+    timeout: 15000
+    optional: true
+- tapOn:
+    id: "review-word-${LINE}-${WORD}"
+- extendedWaitUntil:
+    visible:
+      id: "review-word-input"
+    timeout: 10000
+- tapOn:
+    id: "review-word-input"
+# Android: type only once the field has focus. On a dev build, keys that reach no field go to the dev
+# support's key listener, where a double "r" reloads the JS bundle. (iOS doesn't report focus on it.)
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: "review-word-input"
+            focused: true
+          timeout: 5000
+- eraseText: 30
+- inputText: ${TEXT}
+- tapOn:
+    id: "review-word-save"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-word-sheet"
+    timeout: 10000

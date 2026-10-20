@@ -1,0 +1,54 @@
+# Restart the app WITHOUT clearing anything (the session and the review draft survive), then reopen the review
+# from the Make tab. Env: JOB_ID.
+# iOS: launchApp keeps the keychain; the dev client reopens the last bundle on its own.
+# Android: launchApp would land in the dev launcher, so open Metro again with the dev-client link (no clearState).
+appId: com.nomadkaraoke.mobile
+---
+- runFlow: close-browser-if-open.yaml
+- stopApp
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - launchApp
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
+- runFlow:
+    when:
+      visible: "DEVELOPMENT SERVERS"
+      platform: iOS
+    commands:
+      - tapOn:
+          text: "http://.*:8081"
+# Android shows the dev menu over a fresh load (it hides the app's elements from Maestro), as launch.yaml handles.
+- extendedWaitUntil:
+    visible: "Runtime version.*|Search songs or artists"
+    timeout: 60000
+- runFlow:
+    when:
+      visible: "Runtime version.*"
+    commands:
+      - tapOn: "Close"
+# Android: the Close tap can land after the dev menu has gone, on the launcher behind it (it opened YouTube);
+# bring the app back if it isn't showing (see launch.yaml).
+- runFlow:
+    when:
+      platform: Android
+      notVisible:
+        id: "tab-make"
+    commands:
+      - launchApp:
+          stopApp: false
+- extendedWaitUntil:
+    visible:
+      id: "tab-make"
+    timeout: 30000
+- tapOn:
+    id: "tab-make"
+- runFlow:
+    file: tap-job-review.yaml
+    env:
+      JOB_ID: ${JOB_ID}

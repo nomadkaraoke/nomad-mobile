@@ -4,7 +4,7 @@ import { Button, Screen, Text } from '@nomad/ui';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as Clipboard from 'expo-clipboard';
 import type { File } from 'expo-file-system';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, Linking, Platform, Pressable, Share, View } from 'react-native';
@@ -27,6 +27,7 @@ export default function ReadyScreen() {
   const t = useTranslations('ready');
   const tc = useTranslations('common');
   const tTabs = useTranslations('tabs');
+  const tJobs = useTranslations('jobs');
   const { id } = useLocalSearchParams<{ id: string }>();
   const queryClient = useQueryClient();
 
@@ -95,9 +96,20 @@ export default function ReadyScreen() {
     return (
       <Screen testID="ready-screen">
         <Text variant="title">{data.title}</Text>
-        <Text variant="muted" testID="ready-not-ready">
-          {t('notReady', { tab: tTabs('make') })}
-        </Text>
+        {data.status === 'awaiting_review' || data.status === 'in_review' ? (
+          <>
+            <Text variant="muted">{tJobs('reviewBody')}</Text>
+            <Button
+              testID="ready-review"
+              label={tJobs('reviewLyrics')}
+              onPress={() => router.push({ pathname: '/review/[id]', params: { id } })}
+            />
+          </>
+        ) : (
+          <Text variant="muted" testID="ready-not-ready">
+            {t('notReady', { tab: tTabs('make') })}
+          </Text>
+        )}
       </Screen>
     );
   }

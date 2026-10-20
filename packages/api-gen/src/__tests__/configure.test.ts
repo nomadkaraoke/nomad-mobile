@@ -1,4 +1,5 @@
 import { ApiError, configureClient, getMe, listCreditPackages } from '../index';
+import { MAX_RETRY_AFTER_S, parseRetryAfter } from '../configure';
 
 const fetchMock = jest.fn();
 beforeEach(() => {
@@ -44,4 +45,50 @@ it('surfaces FastAPI detail on other errors', async () => {
   configureClient({ baseUrl: 'https://gen.test', getToken: () => 'tok', getLocale: () => 'en', onUnauthorized });
   await expect(getMe()).rejects.toMatchObject({ status: 500, detail: 'boom' });
   expect(onUnauthorized).not.toHaveBeenCalled();
+});
+
+describe('Retry-After', () => {
+  const withRetryAfter = async (value: string) => {
+    fetchMock.mockResolvedValue(
+      new Response(JSON.stringify({ detail: 'slow down' }), {
+        status: 429,
+        headers: { 'content-type': 'application/json', 'Retry-After': value },
+      }),
+    );
+    configureClient({ baseUrl: 'https://gen.test', getToken: () => 'tok', getLocale: () => 'en', onUnauthorized: jest.fn() });
+    return (await getMe().catch((e: unknown) => e)) as ApiError;
+  };
+
+  it('a 429 with Retry-After: 7 carries retryAfter 7', async () => {
+    expect(await withRetryAfter('7')).toMatchObject({ status: 429, retryAfter: 7 });
+  });
+
+  it('garbage is null', async () => {
+    expect((await withRetryAfter('soon')).retryAfter).toBeNull();
+  });
+
+  it('a huge value is capped at 300 s', async () => {
+    expect((await withRetryAfter('100000')).retryAfter).toBe(300);
+  });
+
+  it('no header is null', async () => {
+    fetchMock.mockResolvedValue(json({ detail: 'busy' }, 503));
+    configureClient({ baseUrl: 'https://gen.test', getToken: () => 'tok', getLocale: () => 'en', onUnauthorized: jest.fn() });
+    expect(((await getMe().catch((e: unknown) => e)) as ApiError).retryAfter).toBeNull();
+  });
+
+  it.each([
+    [null, null],
+    ['', null],
+    ['0', null],
+    ['-3', null],
+    ['Infinity', null],
+    ['1e400', null],
+    ['Wed, 21 Oct 2026 07:28:00 GMT', null],
+    ['2.5', 2.5],
+    ['300', 300],
+    ['301', MAX_RETRY_AFTER_S],
+  ])('parseRetryAfter(%p) → %p', (value, expected) => {
+    expect(parseRetryAfter(value)).toBe(expected);
+  });
 });

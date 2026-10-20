@@ -28,7 +28,7 @@ export function Button({ label, onPress, testID, variant = 'primary', disabled, 
       accessibilityState={{ disabled: inactive, busy: Boolean(loading) }}
       disabled={inactive}
       onPress={onPress}
-      className={`${v.box} min-h-12 items-center justify-center rounded-lg px-4 ${inactive ? 'opacity-50' : ''}`}
+      className={`${v.box} min-h-12 items-center justify-center rounded-lg px-4 py-2.5 ${inactive ? 'opacity-50' : ''}`}
     >
       {loading ? (
         <ActivityIndicator testID={`${testID}-spinner`} color={v.spinner} />

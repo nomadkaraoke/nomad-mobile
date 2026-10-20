@@ -58,8 +58,37 @@ jest.mock('@sentry/react-native', () => ({ init: jest.fn(), wrap: (c) => c, capt
 jest.mock('expo-video', () => {
   const { createElement } = jest.requireActual('react');
   const { View } = jest.requireActual('react-native');
-  return { useVideoPlayer: jest.fn(() => ({ play: jest.fn() })), VideoView: (props) => createElement(View, props) };
+  const player = () => ({
+    play: jest.fn(),
+    pause: jest.fn(),
+    muted: false,
+    currentTime: 0,
+    playing: false,
+    addListener: jest.fn(() => ({ remove: jest.fn() })),
+  });
+  return { useVideoPlayer: jest.fn(() => player()), VideoView: (props) => createElement(View, props) };
 });
+// The review's native audio (expo-audio has no JS fallback under jest) and haptics. Suites that test the
+// audio hooks mock expo-audio themselves; this stub only lets screens that create players render.
+jest.mock('expo-audio', () => ({
+  createAudioPlayer: jest.fn(() => ({
+    muted: false,
+    currentTime: 0,
+    playing: false,
+    play: jest.fn(),
+    pause: jest.fn(),
+    seekTo: jest.fn(async () => {}),
+    replace: jest.fn(),
+    remove: jest.fn(),
+    setPlaybackRate: jest.fn(),
+    addListener: jest.fn(() => ({ remove: jest.fn() })),
+  })),
+}));
+jest.mock('expo-haptics', () => ({
+  selectionAsync: jest.fn(async () => {}),
+  notificationAsync: jest.fn(async () => {}),
+  NotificationFeedbackType: { Success: 'success', Warning: 'warning', Error: 'error' },
+}));
 jest.mock('expo-clipboard', () => ({ setStringAsync: jest.fn(async () => true) }));
 jest.mock('expo-media-library', () => ({ requestPermissionsAsync: jest.fn(), Asset: { create: jest.fn() } }));
 jest.mock('expo-file-system', () => {
@@ -91,3 +120,12 @@ jest.mock('@react-native-community/netinfo', () => require('@react-native-commun
     clearInterval: (id) => clearInterval(id),
   });
 }
+
+// Vector icons load their font asynchronously, which re-renders every icon outside act() (noisy warnings).
+// Icons are decoration under test: every icon set (Ionicons, MaterialIcons, ...) is a plain View.
+jest.mock('@expo/vector-icons', () => {
+  const { createElement } = jest.requireActual('react');
+  const { View } = jest.requireActual('react-native');
+  const Icon = ({ testID }) => createElement(View, { testID });
+  return new Proxy({ __esModule: true }, { get: (target, key) => (key in target ? target[key] : Icon) });
+});

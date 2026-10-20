@@ -1,0 +1,54 @@
+# Review 3 (spec §8.3): Tap To Sync a line on the pad → that line's word timings changed and stay valid
+# (all timed, in order, no overlaps, inside the line) after gen sanitizes them.
+appId: com.nomadkaraoke.mobile
+name: review-3-resync
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review3
+# Keeps line 3's word starts to compare against.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+      SNAPSHOT_LINE: "3"
+- runFlow:
+    file: ../common/open-review.yaml
+    env:
+      EMAIL: ${output.email}
+      JOB_ID: ${output.jobId}
+# Line 3: "Nothing here was ever transcribed" (5 words).
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "3"
+- runFlow:
+    file: ../common/tap-sync-line.yaml
+    env:
+      TAPS: "5"
+- takeScreenshot: ${REVIEW_SHOTS}/review-3-synced
+- tapOn:
+    id: "review-sync-done"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-sync-sheet"
+    timeout: 10000
+- tapOn:
+    id: "review-lyrics-next"
+- runFlow: ../common/finish-review.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      EXPECT_TIMED: "all"
+      EXPECT_RETIMED_LINE: "3"
+      ORIGINAL_STARTS: ${output.lineStarts}
+      # The line is 15.5-19.5 s: the taps landed in it, not in the lead-in (gen's ±3 s clamp would allow that).
+      RETIMED_WINDOW: "14.5,21"

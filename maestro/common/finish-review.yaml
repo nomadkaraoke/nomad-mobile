@@ -1,0 +1,23 @@
+# On the review's Finish step: "Make my video" once it is enabled (it waits for the stems), then the review
+# leaves for the Make tab.
+appId: com.nomadkaraoke.mobile
+---
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-submit"
+      enabled: true
+    timeout: 30000
+- tapOn:
+    id: "review-finish-submit"
+# Success shows for 1.2 s and then the review leaves for the Make tab (only a successful submit leaves). A slow
+# emulator can miss the 1.2 s, so success is a soft check and landing on the Make tab is the hard one; the
+# flows then assert what gen got (stack.js ACTION review).
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-success"
+    timeout: 30000
+    optional: true
+- extendedWaitUntil:
+    visible:
+      id: "make-tab-screen"
+    timeout: 30000

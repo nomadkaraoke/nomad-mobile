@@ -1,0 +1,115 @@
+# Review 10 (spec §8.3): AI corrections, an untimed word and a missing-lyrics gap. Finish is blocked while a
+# word has no timing (the CTA and the Finish tab jump to it instead); Tap To Sync fixes it; an AI change is
+# reverted; the gap's reference line is inserted; then gen gets all of it, the fixed line timed.
+appId: com.nomadkaraoke.mobile
+name: review-10-corrections-untimed
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review10
+      USER_CONFIG: '{"review_fixture":"corrections","audio_duration_seconds":30}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+- runFlow:
+    file: ../common/open-review.yaml
+    env:
+      EMAIL: ${output.email}
+      JOB_ID: ${output.jobId}
+- extendedWaitUntil:
+    visible:
+      id: "review-word-3-3-untimed"
+    timeout: 20000
+- assertVisible:
+    id: "review-word-1-2-ai"
+- takeScreenshot: ${REVIEW_SHOTS}/review-10-issues
+# Blocked: the CTA selects the untimed word's line instead of moving on, and so does the Finish tab.
+- tapOn:
+    id: "review-lyrics-next"
+- extendedWaitUntil:
+    visible:
+      id: "review-line-3"
+      selected: true
+    timeout: 10000
+- tapOn:
+    id: "review-steps-finish"
+- assertVisible:
+    id: "review-step-lyrics"
+- assertNotVisible:
+    id: "review-step-finish"
+# Fix: Tap To Sync line 3 ("Nothing here was ever transcribed", 5 words).
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "3"
+- runFlow:
+    file: ../common/tap-sync-line.yaml
+    env:
+      TAPS: "5"
+- tapOn:
+    id: "review-sync-done"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-sync-sheet"
+    timeout: 10000
+- assertNotVisible:
+    id: "review-word-3-3-untimed"
+# Revert the AI change "arrive" → "arrives" in line 1.
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "1"
+      DIRECTION: UP
+- tapOn:
+    id: "review-word-1-2"
+- extendedWaitUntil:
+    visible:
+      id: "review-word-revert-ai"
+      enabled: true
+    timeout: 10000
+- tapOn:
+    id: "review-word-revert-ai"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-word-sheet"
+    timeout: 10000
+- assertVisible:
+    id: "review-word-1-2"
+    text: "arrive"
+# The evidenced vocal gap after the last line: insert its synced reference line.
+- scrollUntilVisible:
+    element:
+      id: "review-gap-0-insert"
+    direction: DOWN
+    visibilityPercentage: 100
+    centerElement: true
+    timeout: 20000
+- tapOn:
+    id: "review-gap-0-insert"
+- extendedWaitUntil:
+    visible:
+      id: "review-line-6"
+    timeout: 10000
+- takeScreenshot: ${REVIEW_SHOTS}/review-10-fixed
+- tapOn:
+    id: "review-lyrics-next"
+- runFlow: ../common/finish-review.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      # Line 3 (the untimed word, re-synced). Not "all": the inserted gap line keeps the reference's word timings,
+      # and gen's fixture (like a line-level LRC reference) gives every word the whole line's span, so those
+      # words overlap. Same as gen web's insert (parity); see the task-15 report.
+      EXPECT_TIMED: "3"
+      EXPECT_LINE: "1"
+      EXPECT_LINE_TEXT: "Every word arrive right on time"
+      EXPECT_TEXT_CONTAINS: "Thanks for singing along tonight"

@@ -1,0 +1,62 @@
+{
+  "original_segments": [],
+  "reference_lyrics": {},
+  "anchor_sequences": [],
+  "gap_sequences": [],
+  "resized_segments": [],
+  "corrections_made": 1,
+  "confidence": 0.92,
+  "corrections": [],
+  "corrected_segments": [
+    {
+      "id": "seg-0", "text": "Hello darkness my old friend", "start_time": 12.5, "end_time": 15.9, "singer": 1,
+      "words": [
+        { "id": "w-0", "text": "Hello", "start_time": 12.5, "end_time": 13.0, "confidence": 0.99 },
+        { "id": "w-1", "text": "darkness", "start_time": 13.1, "end_time": 13.9 },
+        { "id": "w-2", "text": "my", "start_time": 14.0, "end_time": 14.3 },
+        { "id": "w-3", "text": "old", "start_time": 14.4, "end_time": 15.0, "ai_corrected": true, "original_text": "gold" },
+        { "id": "w-4", "text": "friend", "start_time": 15.1, "end_time": 15.9 }
+      ]
+    },
+    {
+      "id": "seg-1", "text": "I've come to talk with you again", "start_time": null, "end_time": null,
+      "words": [
+        { "id": "w-5", "text": "I've", "start_time": null, "end_time": null },
+        { "id": "w-6", "text": "come", "start_time": null, "end_time": null },
+        { "id": "w-7", "text": "to", "start_time": null, "end_time": null }
+      ]
+    },
+    {
+      "id": "seg-2", "text": "Because a vision", "start_time": 20.0, "end_time": 22.0,
+      "words": [
+        { "id": "w-8", "text": "Because", "start_time": 20.0, "end_time": 20.5 },
+        { "id": "w-9", "text": "a", "start_time": null, "end_time": null },
+        { "id": "w-10", "text": "vision", "start_time": 21.0, "end_time": 22.0 }
+      ]
+    },
+    {
+      "id": "seg-3", "text": "softly creeping", "start_time": 23.0, "end_time": 24.0, "singer": 2,
+      "words": [
+        { "id": "w-11", "text": "softly", "start_time": 23.0, "end_time": 23.5 },
+        { "id": "w-12", "text": "creeping", "start_time": 23.5, "end_time": 24.0 }
+      ]
+    }
+  ],
+  "metadata": {
+    "anchor_sequences_count": 0,
+    "gap_sequences_count": 0,
+    "total_words": 13,
+    "correction_ratio": 0.08,
+    "audio_hash": "abc123",
+    "artist": "Simon & Garfunkel",
+    "title": "The Sound of Silence",
+    "auto_approval": { "pre_applied": true, "applied_suggestion_ids": ["s1"], "undo_info": { "s1": { "x": 1 } } },
+    "future_meta_key": { "nested": [1, 2, 3] }
+  },
+  "correction_steps": [],
+  "word_id_map": {},
+  "segment_id_map": {},
+  "is_duet": true,
+  "replay": { "is_replay": true, "job_status": "complete", "edit_log": { "entries": [] } },
+  "foo": { "bar": [1, "two", null] }
+}

@@ -3,7 +3,7 @@
   "info": {
     "title": "Karaoke Generator API",
     "description": "Backend API for web-based karaoke video generation",
-    "version": "0.278.0"
+    "version": "0.279.3"
   },
   "paths": {
     "/api/health": {
@@ -17827,6 +17827,22 @@
                 }
               ],
               "title": "X-Kjbox-Secret"
+            }
+          },
+          {
+            "name": "x-partner-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Partner-Secret"
             }
           }
         ],

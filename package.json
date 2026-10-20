@@ -4,7 +4,8 @@
   "packageManager": "pnpm@12.6.0",
   "scripts": {
     "lint": "eslint .",
-    "typecheck": "pnpm -r --parallel exec tsc --noEmit",
+    "typecheck": "pnpm -r --parallel exec tsc --noEmit && pnpm typecheck:review-core-nodom",
+    "typecheck:review-core-nodom": "tsc -p packages/review-core/tsconfig.nodom.json --noEmit",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "gen:api": "node scripts/fetch-openapi.mjs && pnpm -r --filter './packages/api-*' run generate",

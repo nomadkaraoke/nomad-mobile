@@ -1,0 +1,77 @@
+# Review 1 (spec §8.3): Make tab → Review lyrics → the native review → Lyrics look good → Make my video. Gen gets
+# the recommended instrumental (clean: the fake backing stem is silent) and the job leaves review. Then a second
+# job with a confident lyrics verdict (review_mode auto + auto_approval lyrics_confident) opens straight on Finish.
+appId: com.nomadkaraoke.mobile
+name: review-1-approve
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review1
+      CREDITS: "3"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+- runFlow:
+    file: ../common/open-review.yaml
+    env:
+      EMAIL: ${output.email}
+      JOB_ID: ${output.jobId}
+- extendedWaitUntil:
+    visible:
+      id: "review-line-5"
+    timeout: 20000
+- takeScreenshot: ${REVIEW_SHOTS}/review-1-lyrics
+- tapOn:
+    id: "review-lyrics-next"
+- extendedWaitUntil:
+    visible:
+      id: "review-choice-clean"
+    timeout: 30000
+- assertVisible:
+    id: "review-choice-with_backing"
+- takeScreenshot: ${REVIEW_SHOTS}/review-1-finish
+- runFlow: ../common/finish-review.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      EXPECT_SELECTION: "clean"
+      EXPECT_DUET: "false"
+      EXPECT_TIMED: "all"
+      EXPECT_TEXT_CONTAINS: "This is a fake song for testing"
+
+# A confident lyrics verdict skips the Lyrics step: the review opens on Finish.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+      USER_CONFIG: '{"review_mode":"auto","auto_approval":"lyrics_confident"}'
+- runFlow:
+    file: ../common/tap-job-review.yaml
+    env:
+      JOB_ID: ${output.jobId}
+- extendedWaitUntil:
+    visible:
+      id: "review-step-finish"
+    timeout: 60000
+- assertNotVisible:
+    id: "review-step-lyrics"
+- takeScreenshot: ${REVIEW_SHOTS}/review-1-confident-finish
+- runFlow: ../common/finish-review.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      EXPECT_TIMED: "all"

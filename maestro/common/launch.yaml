@@ -9,6 +9,7 @@
 # The conditional steps only matter for a dev build that has no server yet; release/E2E builds skip them.
 appId: com.nomadkaraoke.mobile
 ---
+- runFlow: close-browser-if-open.yaml
 - stopApp
 - runFlow:
     when:
@@ -37,6 +38,16 @@ appId: com.nomadkaraoke.mobile
       visible: "Runtime version.*"
     commands:
       - tapOn: "Close"
+# Android: the Close tap above can land after the dev menu has gone, on whatever is behind it; twice that was
+# the launcher's YouTube icon, leaving YouTube in front. Bring the app back if it isn't showing.
+- runFlow:
+    when:
+      platform: Android
+      notVisible:
+        id: "discover-search-input"
+    commands:
+      - launchApp:
+          stopApp: false
 - extendedWaitUntil:
     visible:
       id: "discover-search-input"

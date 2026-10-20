@@ -1,0 +1,50 @@
+# Review 8 (spec §8.3): a duet (per-line singers 1 / 2 / both): the chips show; change line 0's singer
+# (1 → 2) → gen gets is_duet true and the new singer.
+appId: com.nomadkaraoke.mobile
+name: review-8-duet
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review8
+      USER_CONFIG: '{"review_fixture":"duet"}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+- runFlow:
+    file: ../common/open-review.yaml
+    env:
+      EMAIL: ${output.email}
+      JOB_ID: ${output.jobId}
+- extendedWaitUntil:
+    visible:
+      id: "review-line-0-singer"
+    timeout: 20000
+- assertVisible:
+    id: "review-line-1-singer"
+- assertVisible:
+    id: "review-line-2-singer"
+- tapOn:
+    id: "review-line-0-singer"
+- takeScreenshot: ${REVIEW_SHOTS}/review-8-duet
+- tapOn:
+    id: "review-lyrics-next"
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-duet"
+    timeout: 20000
+- runFlow: ../common/finish-review.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      EXPECT_DUET: "true"
+      EXPECT_SINGER_LINE: "0"
+      EXPECT_SINGER: "2"

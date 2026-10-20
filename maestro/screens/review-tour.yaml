@@ -1,0 +1,459 @@
+# Screenshot tour of the native review (Phase 2 UX review): every screen and state, in the app language LOCALE.
+# Not part of the E2E suite. Run it through scripts/e2e-local.sh, which sets the app's language first (and back
+# afterwards) and passes TOUR_SHOTS = docs/screenshots/phase2/review/<platform>/<locale>:
+#
+#   scripts/e2e-local.sh --platform ios --locale de --screen review-tour
+#
+# Seeds four jobs for one user (stack.js scenario knobs), visited in this order:
+#   C  plain lyrics, stems 150 s late, complete fails once: Finish stems pending, restored-draft banner, menu,
+#      Finish unsure, preview generating -> ready, saving, error + retry, success
+#   A  corrections: issues bar, AI / estimated / untimed words, playing, line toolbar (+ More), word sheet (AI
+#      revert, untimed, keyboard), edit-line sheet with the keyboard, nudge sheet, Tap To Sync mid-sync and
+#      stopped, vocal-gap callout
+#   B  duet, review_mode auto with a confident backing verdict, audible backing vocals: duet chips, Finish confident
+#   D  Hebrew/Arabic lyrics
+# then a review that doesn't exist (the load error screen). Targets testIDs only, so it works in any language.
+appId: com.nomadkaraoke.mobile
+name: screens-review-tour
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: tour
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+      USER_CONFIG: '{"review_fixture":"default","stems_delay_seconds":150,"review_complete_fail_once":true}'
+- evalScript: ${output.jobC = output.jobId}
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+      USER_CONFIG: '{"review_fixture":"corrections","stems_delay_seconds":0,"review_complete_fail_once":true}'
+- evalScript: ${output.jobA = output.jobId}
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+      USER_CONFIG: '{"review_fixture":"duet","review_mode":"auto","auto_approval":"backing_confident","backing_vocals":"audible"}'
+- evalScript: ${output.jobB = output.jobId}
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+      USER_CONFIG: '{"review_fixture":"rtl","review_mode":"always_review","auto_approval":"none","backing_vocals":"silent"}'
+- evalScript: ${output.jobD = output.jobId}
+
+# Signed-out launch in the app language set by e2e-local.sh (as review-9): iOS clears the keychain; Android's data
+# was cleared by the script (clearState would drop the per-app language), and a second load applies RTL.
+# No browser check here: the app was just relaunched by e2e-local.sh (locale), so Maestro's view hierarchy 500s.
+- stopApp
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - launchApp:
+          clearKeychain: true
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
+- runFlow:
+    when:
+      visible: "DEVELOPMENT SERVERS"
+      platform: iOS
+    commands:
+      - tapOn:
+          text: "http://.*:8081"
+- runFlow: ../common/dismiss-dev-menu.yaml
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - stopApp
+      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
+      - runFlow: ../common/dismiss-dev-menu.yaml
+- tapOn:
+    id: "tab-make"
+- extendedWaitUntil:
+    visible:
+      id: "make-tab-signin"
+    timeout: 20000
+- tapOn:
+    id: "make-tab-signin"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+
+# ---------- C: plain lyrics, Finish while the stems separate, draft restore, menu, preview, submit ----------
+- runFlow:
+    file: ../common/tap-job-review.yaml
+    env:
+      JOB_ID: ${output.jobC}
+- extendedWaitUntil:
+    visible:
+      id: "review-line-5"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/01-lyrics
+- tapOn:
+    id: "review-lyrics-next"
+- extendedWaitUntil:
+    visible:
+      id: "review-stems-pending"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/02-finish-stems-pending
+- tapOn:
+    id: "review-steps-lyrics"
+# An edit without typing (any keyboard language): delete line 0's last word.
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "0"
+- tapOn:
+    id: "review-word-0-3"
+- extendedWaitUntil:
+    visible:
+      id: "review-word-delete"
+    timeout: 10000
+- tapOn:
+    id: "review-word-delete"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-word-input"
+    timeout: 10000
+- pressKey: home
+- runFlow:
+    file: ../common/relaunch-review.yaml
+    env:
+      JOB_ID: ${output.jobC}
+- extendedWaitUntil:
+    visible:
+      id: "review-restored-discard"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/03-restored-draft
+- runFlow: ../common/move-dev-tools-button.yaml
+# Android in Hebrew: the dev menu's Tools button starts mirrored, top left, over the ⋯ menu. Move it aside for
+# the menu, and back once the menu is done (at the left edge it sits over the mirrored line toolbar's More).
+- runFlow:
+    when:
+      platform: Android
+      true: ${LOCALE == "he"}
+    commands:
+      - swipe:
+          start: 10%, 10%
+          end: 6%, 45%
+          duration: 1500
+- tapOn:
+    id: "review-menu"
+- extendedWaitUntil:
+    visible:
+      id: "review-menu-web"
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/04-menu
+- tapOn:
+    id: "review-menu-sheet-close"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-menu-web"
+    timeout: 10000
+- runFlow:
+    when:
+      platform: Android
+      true: ${LOCALE == "he"}
+    commands:
+      - swipe:
+          start: 6%, 45%
+          end: 10%, 10%
+          duration: 1500
+- tapOn:
+    id: "review-lyrics-next"
+- extendedWaitUntil:
+    visible:
+      id: "review-choice-clean"
+    timeout: 240000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/05-finish-unsure
+- scrollUntilVisible:
+    element:
+      id: "review-preview-start"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "review-preview-start"
+- extendedWaitUntil:
+    visible:
+      id: "review-preview-generating"
+    timeout: 5000
+    optional: true
+- takeScreenshot: ${TOUR_SHOTS}/06-preview-generating
+- extendedWaitUntil:
+    visible:
+      id: "review-preview-player"
+    timeout: 90000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ${TOUR_SHOTS}/07-preview-ready
+- scrollUntilVisible:
+    element:
+      id: "review-finish-submit"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "review-finish-submit"
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-saving"
+    timeout: 3000
+    optional: true
+- takeScreenshot: ${TOUR_SHOTS}/08-saving
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-error"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/09-finish-error
+- tapOn:
+    id: "review-finish-retry"
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-success"
+    timeout: 30000
+    optional: true
+- takeScreenshot: ${TOUR_SHOTS}/10-finish-success
+- extendedWaitUntil:
+    visible:
+      id: "make-tab-screen"
+    timeout: 30000
+
+# ---------- A: corrections (issues, decorations, sheets, Tap To Sync, gap callout) ----------
+- runFlow:
+    file: ../common/tap-job-review.yaml
+    env:
+      JOB_ID: ${output.jobA}
+- extendedWaitUntil:
+    visible:
+      id: "review-word-3-3-untimed"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/11-issues
+- tapOn:
+    id: "review-issues-next"
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/12-issues-next
+- tapOn:
+    id: "review-player-play"
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: "2500"
+- takeScreenshot: ${TOUR_SHOTS}/13-playing
+- tapOn:
+    id: "review-player-play"
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "1"
+      DIRECTION: UP
+- takeScreenshot: ${TOUR_SHOTS}/14-line-toolbar
+- tapOn:
+    id: "review-tool-more"
+- takeScreenshot: ${TOUR_SHOTS}/15-line-toolbar-more
+- tapOn:
+    id: "review-tool-more"
+- tapOn:
+    id: "review-word-1-2"
+- extendedWaitUntil:
+    visible:
+      id: "review-word-revert-ai"
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/16-word-sheet-ai
+- tapOn:
+    id: "review-word-input"
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/17-word-sheet-keyboard
+- tapOn:
+    id: "review-word-sheet-close"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-word-input"
+    timeout: 10000
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "3"
+- tapOn:
+    id: "review-word-3-3"
+- extendedWaitUntil:
+    visible:
+      id: "review-word-resync"
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/18-word-sheet-untimed
+- tapOn:
+    id: "review-word-sheet-close"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-word-input"
+    timeout: 10000
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "0"
+      DIRECTION: UP
+- tapOn:
+    id: "review-tool-edit"
+- extendedWaitUntil:
+    visible:
+      id: "review-line-input"
+    timeout: 10000
+# The field takes focus itself (a second tap would open iOS's edit menu over the sheet).
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/19-edit-line-keyboard
+- tapOn:
+    id: "review-line-sheet-close"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-line-input"
+    timeout: 10000
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "2"
+- tapOn:
+    id: "review-tool-nudge"
+- extendedWaitUntil:
+    visible:
+      id: "review-nudge-line-plus"
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/20-nudge
+- tapOn:
+    id: "review-nudge-sheet-close"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-nudge-line-plus"
+    timeout: 10000
+# Tap To Sync on line 3 at 1x: two taps after the 3 s lead-in (mid-sync), then no more taps until playback stops
+# after the line (the stopped state).
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "3"
+- tapOn:
+    id: "review-tool-resync"
+- extendedWaitUntil:
+    visible:
+      id: "review-sync-pad"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/21-sync-start
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: "3500"
+- tapOn:
+    id: "review-sync-pad"
+- tapOn:
+    id: "review-sync-pad"
+- takeScreenshot: ${TOUR_SHOTS}/22-sync-mid
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: "9000"
+- takeScreenshot: ${TOUR_SHOTS}/23-sync-stopped
+- tapOn:
+    id: "review-sync-done"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-sync-done"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "review-gap-0-play"
+    direction: DOWN
+    visibilityPercentage: 100
+    centerElement: true
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/24-gap-callout
+
+# ---------- B: duet chips, Finish with a confident backing verdict ----------
+- runFlow:
+    file: ../common/relaunch-review.yaml
+    env:
+      JOB_ID: ${output.jobB}
+- extendedWaitUntil:
+    visible:
+      id: "review-line-0-singer"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/25-duet
+- tapOn:
+    id: "review-lyrics-next"
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-duet"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/26-finish-confident
+- runFlow:
+    when:
+      visible:
+        id: "review-choice-change"
+    commands:
+      - tapOn:
+          id: "review-choice-change"
+- extendedWaitUntil:
+    visible:
+      id: "review-choice-clean"
+    timeout: 120000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/27-finish-confident-chooser
+- scrollUntilVisible:
+    element:
+      id: "review-preview-start"
+    direction: DOWN
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/28-finish-confident-bottom
+
+# ---------- D: Hebrew / Arabic lyrics ----------
+- runFlow:
+    file: ../common/relaunch-review.yaml
+    env:
+      JOB_ID: ${output.jobD}
+- extendedWaitUntil:
+    visible:
+      id: "review-line-3"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/29-rtl-lyrics
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "0"
+- takeScreenshot: ${TOUR_SHOTS}/30-rtl-toolbar
+
+# ---------- A review that doesn't exist: the load error screen ----------
+- openLink: "nomadkaraoke://review/tour-missing-job"
+- extendedWaitUntil:
+    visible:
+      id: "review-load-error"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/31-load-error

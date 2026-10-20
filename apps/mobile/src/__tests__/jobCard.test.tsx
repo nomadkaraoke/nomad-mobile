@@ -75,41 +75,23 @@ it('working: a download waiting to retry shows the slow line too', async () => {
   expect(await screen.findByTestId('job-slow-j')).toHaveTextContent("Still working, this one's taking a little longer");
 });
 
-it('review: Needs you, then Review lyrics gets a handoff link, opens it, and refetches when it closes', async () => {
+it('review: Needs you, then Review lyrics opens the native review (no web handoff)', async () => {
   show(job({ job_id: 'r', status: 'awaiting_review' }));
-  gen.createHandoffUrl.mockResolvedValue('https://gen.web/en/auth/verify?token=x&handoff=1');
-  openTab();
+  const app = openTab();
   expect(await screen.findByTestId('job-needs-you-r')).toHaveTextContent('Needs you');
   expect(screen.getByText("Check the lyrics before it's finished")).toBeTruthy();
-  const fetched = gen.listMyJobs.mock.calls.length;
-  let close!: (r: WebBrowser.WebBrowserResult) => void;
-  browser.openBrowserAsync.mockReturnValueOnce(new Promise((r) => (close = r)));
-
-  await act(async () => fireEvent.press(screen.getByTestId('job-review-r')));
-  expect(gen.createHandoffUrl).toHaveBeenCalledWith('r', 'en');
-  expect(browser.openBrowserAsync).toHaveBeenCalledWith('https://gen.web/en/auth/verify?token=x&handoff=1');
-  expect(gen.createHandoffUrl.mock.invocationCallOrder[0]).toBeLessThan(browser.openBrowserAsync.mock.invocationCallOrder[0]!);
-  expect(gen.listMyJobs).toHaveBeenCalledTimes(fetched); // not until the browser closes
-
-  await act(async () => close(CLOSED));
-  await waitFor(() => expect(gen.listMyJobs).toHaveBeenCalledTimes(fetched + 1));
-});
-
-it('review: a 409 (job no longer in review) opens the web app instead', async () => {
-  show(job({ job_id: 'r', status: 'in_review' }));
-  gen.createHandoffUrl.mockRejectedValue(apiError(409, 'not_in_review'));
-  openTab();
-  await act(async () => fireEvent.press(await screen.findByTestId('job-review-r')));
-  expect(browser.openBrowserAsync).toHaveBeenCalledWith(`${GEN_WEB_URL}/app`);
-});
-
-it('review: any other handoff failure says so and opens nothing', async () => {
-  show(job({ job_id: 'r', status: 'awaiting_review' }));
-  gen.createHandoffUrl.mockRejectedValue(apiError(500, 'boom'));
-  openTab();
-  await act(async () => fireEvent.press(await screen.findByTestId('job-review-r')));
-  expect(await screen.findByTestId('job-review-r-error')).toHaveTextContent("Couldn't open the website. Try again.");
+  fireEvent.press(screen.getByTestId('job-review-r'));
+  expect(await screen.findByTestId('review-stub')).toBeTruthy();
+  expect(app.getPathname()).toBe('/review/r');
+  expect(gen.createHandoffUrl).not.toHaveBeenCalled();
   expect(browser.openBrowserAsync).not.toHaveBeenCalled();
+});
+
+it('review: an in_review job opens the native review too', async () => {
+  show(job({ job_id: 'r', status: 'in_review' }));
+  const app = openTab();
+  fireEvent.press(await screen.findByTestId('job-review-r'));
+  await waitFor(() => expect(app.getPathname()).toBe('/review/r'));
 });
 
 it('duration: Needs you and Confirm cost opens the duration sheet', async () => {
@@ -132,6 +114,15 @@ it('other needs-you statuses: Finish this on the website, through the same hando
   await act(async () => fireEvent.press(button));
   expect(gen.createHandoffUrl).toHaveBeenCalledWith('e', 'en');
   expect(browser.openBrowserAsync).toHaveBeenCalledWith(`${GEN_WEB_URL}/app`);
+});
+
+it('web handoff: any failure other than a 409 says so and opens nothing', async () => {
+  show(job({ job_id: 'e', status: 'awaiting_audio_edit' }));
+  gen.createHandoffUrl.mockRejectedValue(apiError(500, 'boom'));
+  openTab();
+  await act(async () => fireEvent.press(await screen.findByTestId('job-web-e')));
+  expect(await screen.findByTestId('job-web-e-error')).toHaveTextContent("Couldn't open the website. Try again.");
+  expect(browser.openBrowserAsync).not.toHaveBeenCalled();
 });
 
 it('failed: the message, collapsible details, and Try again calls retry then refetches', async () => {

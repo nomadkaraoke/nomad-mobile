@@ -1,0 +1,43 @@
+# Select a lyric line (its toolbar shows) and wait until it is. A tap right after a sheet closes can land on the
+# sheet's closing animation, so tap once more if the line isn't selected yet. Env: LINE, DIRECTION (where the
+# line is when it is off screen: DOWN, the default, or UP).
+appId: com.nomadkaraoke.mobile
+---
+# Fully in view: a row half under the player bar gets the tap on the waveform (a seek) instead.
+- runFlow:
+    when:
+      true: ${DIRECTION == "UP"}
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "review-line-${LINE}"
+          direction: UP
+          visibilityPercentage: 100
+          centerElement: true
+          timeout: 20000
+- runFlow:
+    when:
+      true: ${DIRECTION != "UP"}
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "review-line-${LINE}"
+          direction: DOWN
+          visibilityPercentage: 100
+          centerElement: true
+          timeout: 20000
+- tapOn:
+    id: "review-line-${LINE}"
+- runFlow:
+    when:
+      notVisible:
+        id: "review-line-${LINE}"
+        selected: true
+    commands:
+      - tapOn:
+          id: "review-line-${LINE}"
+- extendedWaitUntil:
+    visible:
+      id: "review-line-${LINE}"
+      selected: true
+    timeout: 10000

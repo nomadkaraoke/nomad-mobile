@@ -1,0 +1,28 @@
+# Closes an in-app browser left open, before the app is stopped (iOS only; a no-op when nothing is open).
+# Stopping the app with SFSafariViewController (openBrowserAsync: the review handoff) or an auth session
+# (openAuthSessionAsync: checkout) still on screen crashes SafariViewService in the simulator, which pops
+# macOS crash dialogs. Used as flows' onFlowComplete and before every stopApp in common/ and the screen flows.
+# - The handoff browser shows the local stack's address and a "Done" button.
+# - The checkout auth session (or its "… Wants to Use … to Sign In" alert) has a toolbar "Cancel"; the app's tab
+#   bar is hidden behind it. (The fake checkout page has its own Cancel too: either one closes the session.)
+# Android's Custom Tabs survive a force-stop, and launch.yaml's clearState/openLink brings the app back in front.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    when:
+      platform: iOS
+      visible: ".*127\\.0\\.0\\.1.*"
+    commands:
+      - runFlow:
+          when:
+            visible: "Done"
+          commands:
+            - tapOn: "Done"
+- runFlow:
+    when:
+      platform: iOS
+      visible: "Cancel"
+      notVisible:
+        id: "tab-make"
+    commands:
+      - tapOn: "Cancel"

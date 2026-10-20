@@ -1,0 +1,13 @@
+# Android dev builds: the dev menu's floating "Tools button" starts at the top right, over the header's right
+# buttons (the review's ⋯ menu), and takes their taps. Drag it to the left edge. (iOS: e2e-local.sh turns it off;
+# on Android launch.yaml's clearState resets that preference every launch.) Release builds have no such button.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - swipe:
+          start: 90%, 10%
+          end: 6%, 45%
+          duration: 1500

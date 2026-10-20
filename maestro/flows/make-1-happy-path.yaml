@@ -2,6 +2,9 @@
 #    email code sign-in → credits → fake checkout Pay → back to Make it → job → ready → YouTube block → Copy link.
 appId: com.nomadkaraoke.mobile
 name: make-1-happy-path
+# Never leave the in-app browser open when the flow ends (SafariViewService crashes on iOS).
+onFlowComplete:
+  - runFlow: ../common/close-browser-if-open.yaml
 ---
 - runScript:
     file: ../scripts/stack.js

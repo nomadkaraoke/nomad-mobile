@@ -1,0 +1,54 @@
+# Review 6 (spec §8.3): the stems land 60 s late. The lyrics step works meanwhile; on Finish the chooser shows
+# "separating" and Make my video waits (disabled), then enables once the stems land; finish.
+appId: com.nomadkaraoke.mobile
+name: review-6-stems-pending
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review6
+      USER_CONFIG: '{"stems_delay_seconds":60}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+- runFlow:
+    file: ../common/open-review.yaml
+    env:
+      EMAIL: ${output.email}
+      JOB_ID: ${output.jobId}
+- extendedWaitUntil:
+    visible:
+      id: "review-line-5"
+    timeout: 20000
+- tapOn:
+    id: "review-lyrics-next"
+- extendedWaitUntil:
+    visible:
+      id: "review-stems-pending"
+    timeout: 20000
+- assertVisible:
+    id: "review-finish-waiting-hint"
+- assertVisible:
+    id: "review-finish-submit"
+    enabled: false
+- takeScreenshot: ${REVIEW_SHOTS}/review-6-waiting-stems
+# The stems land (≤ 60 s after the job started) and the chooser replaces the spinner.
+- extendedWaitUntil:
+    visible:
+      id: "review-choice-clean"
+    timeout: 120000
+- assertNotVisible:
+    id: "review-finish-waiting-hint"
+- runFlow: ../common/finish-review.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      EXPECT_SELECTION: "clean"

@@ -1,6 +1,7 @@
-import { Canvas, Group, Rect } from '@shopify/react-native-skia';
-import { useState } from 'react';
+import { Canvas, Group, Path, Rect } from '@shopify/react-native-skia';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 import { colors } from './tokens';
 
@@ -16,6 +17,17 @@ export function buildBars(peaks: readonly number[], width: number, height: numbe
   });
 }
 
+const num = (n: number) => String(Math.round(n * 1000) / 1000);
+
+/** The bars as one SVG path of rectangles (one Skia draw call instead of one node per bar). */
+export function buildBarsPath(peaks: readonly number[], width: number, height: number): string {
+  return buildBars(peaks, width, height)
+    .map((b) => `M${num(b.x)} ${num(b.y)}h${num(b.w)}v${num(b.h)}h${num(-b.w)}Z`)
+    .join('');
+}
+
+export type WaveformMarker = { from: number; to: number; color: string };
+
 export type WaveformCanvasProps = {
   peaks: readonly number[];
   /** Playback position 0..1; bars left of it use playedColor. */
@@ -24,7 +36,23 @@ export type WaveformCanvasProps = {
   testID: string;
   color?: string;
   playedColor?: string;
+  /** Called with a 0..1 fraction of the width on tap and while panning horizontally. */
+  onSeek?: (fraction: number) => void;
+  /** Highlighted ranges (fractions of the width) drawn behind the bars. */
+  markers?: readonly WaveformMarker[];
+  accessibilityLabel?: string;
 };
+
+const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
+
+/** Newest width/onSeek, read from gesture callbacks (which are registered once, not per render). */
+function useLatest<T>(value: T) {
+  const ref = useRef(value);
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref;
+}
 
 /**
  * Our only Skia entry point for waveforms (peaks come from gen's /waveform-data). Skia's
@@ -37,26 +65,69 @@ export function WaveformCanvas({
   testID,
   color = colors.muted,
   playedColor = colors.primary,
+  onSeek,
+  markers,
+  accessibilityLabel,
 }: WaveformCanvasProps) {
   const [width, setWidth] = useState(0);
-  const bars = buildBars(peaks, width, height);
-  const cut = Math.max(0, Math.min(1, progress)) * width;
+  const path = useMemo(() => buildBarsPath(peaks, width, height), [peaks, width, height]);
+  const cut = clamp01(progress) * width;
+
+  const latest = useLatest({ width, onSeek });
+  const gesture = useMemo(() => {
+    const seek = (x: number) => {
+      const { width: w, onSeek: cb } = latest.current;
+      if (w > 0) cb?.(clamp01(x / w));
+    };
+    // runOnJS(true): callbacks run on the JS thread, so no worklet/reanimated plumbing is needed.
+    const tap = Gesture.Tap().runOnJS(true).withTestId(`${testID}-tap`).onEnd((e, success) => {
+        if (success) seek(e.x);
+      });
+    const pan = Gesture.Pan()
+      .runOnJS(true)
+      .withTestId(`${testID}-pan`)
+      .activeOffsetX([-8, 8])
+      .failOffsetY([-16, 16])
+      .onUpdate((e) => seek(e.x));
+    return Gesture.Race(pan, tap);
+  }, [testID, latest]);
+
   return (
-    <View testID={testID} style={{ height }} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
-      <Canvas style={{ flex: 1 }}>
-        <Group>
-          {bars.map((b, i) => (
+    <GestureDetector gesture={gesture}>
+      <View
+        testID={testID}
+        accessible
+        accessibilityRole="adjustable"
+        accessibilityLabel={accessibilityLabel}
+        accessibilityActions={onSeek ? [{ name: 'increment' }, { name: 'decrement' }] : undefined}
+        onAccessibilityAction={(e) => {
+          if (!onSeek) return;
+          const step = e.nativeEvent.actionName === 'increment' ? 0.05 : e.nativeEvent.actionName === 'decrement' ? -0.05 : 0;
+          if (step) onSeek(clamp01(progress + step));
+        }}
+        style={{ height }}
+        onLayout={(e) => {
+          setWidth(e.nativeEvent.layout.width);
+        }}
+      >
+        <Canvas style={{ flex: 1 }}>
+          {markers?.map((m, i) => (
             <Rect
               key={i}
-              x={b.x}
-              y={b.y}
-              width={Math.max(1, b.w - 1)}
-              height={b.h}
-              color={b.x < cut ? playedColor : color}
+              x={clamp01(m.from) * width}
+              y={0}
+              width={Math.max(0, clamp01(m.to) - clamp01(m.from)) * width}
+              height={height}
+              color={m.color}
+              opacity={0.35}
             />
           ))}
-        </Group>
-      </Canvas>
-    </View>
+          <Path path={path} color={color} />
+          <Group clip={{ x: 0, y: 0, width: cut, height }}>
+            <Path path={path} color={playedColor} />
+          </Group>
+        </Canvas>
+      </View>
+    </GestureDetector>
   );
 }

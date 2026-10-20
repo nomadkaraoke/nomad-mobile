@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 
-import { Text } from '../Text';
+import { StartText, Text } from '../Text';
 
 const align = (text: string) => StyleSheet.flatten(screen.getByText(text).props.style)?.textAlign;
 
@@ -19,4 +19,18 @@ it('leaves an explicit alignment class alone, and a caller style still wins', ()
   );
   expect(align('Mid')).toBeUndefined();
   expect(align('End')).toBe('right');
+});
+
+describe('StartText', () => {
+  it('is start-aligned like Text, with no variant classes of its own', () => {
+    render(
+      <>
+        <StartText className="text-xs text-muted">Plain</StartText>
+        <StartText className="text-center">Centred</StartText>
+      </>,
+    );
+    expect(align('Plain')).toBe('left');
+    expect(screen.getByText('Plain').props.className).toBe('text-xs text-muted');
+    expect(align('Centred')).toBeUndefined();
+  });
 });
