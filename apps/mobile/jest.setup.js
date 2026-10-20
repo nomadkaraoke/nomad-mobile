@@ -93,10 +93,10 @@ jest.mock('@react-native-community/netinfo', () => require('@react-native-commun
 }
 
 // Vector icons load their font asynchronously, which re-renders every icon outside act() (noisy warnings).
-// Icons are decoration under test: a plain View is enough.
+// Icons are decoration under test: every icon set (Ionicons, MaterialIcons, ...) is a plain View.
 jest.mock('@expo/vector-icons', () => {
   const { createElement } = jest.requireActual('react');
   const { View } = jest.requireActual('react-native');
   const Icon = ({ testID }) => createElement(View, { testID });
-  return { Ionicons: Icon };
+  return new Proxy({ __esModule: true }, { get: (target, key) => (key in target ? target[key] : Icon) });
 });

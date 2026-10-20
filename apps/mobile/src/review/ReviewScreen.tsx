@@ -1,16 +1,17 @@
 import { useTranslations } from '@nomad/i18n';
-import { planSteps, type CorrectionData, type ReviewStep } from '@nomad/review-core';
+import { countUntimedWords, planSteps, type CorrectionData, type ReviewStep } from '@nomad/review-core';
 import { colors } from '@nomad/ui';
-import { useEffect, useMemo, useState } from 'react';
-import { AppState, BackHandler, Pressable, Text, View } from 'react-native';
+import { Stack, useNavigation } from 'expo-router';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { AppState, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useReviewPlayer } from './audio/useReviewPlayer';
 import { FinishStep } from './finish/FinishStep';
-import { IconButton } from './IconButton';
-import { LyricsStep, type TextRequest } from './lyrics/LyricsStep';
+import { LyricsStep, type LyricsStepHandle, type TextRequest } from './lyrics/LyricsStep';
 import { useVocalsPeaks } from './lyrics/useVocalsPeaks';
-import { ReviewMenu } from './ReviewMenu';
+import { ReviewHeaderButtons, ReviewHeaderTitle } from './ReviewHeader';
+import { ReviewMenu, useConfirmDiscard } from './ReviewMenu';
 import { createReviewStore, ReviewStoreContext, useReviewStore } from './store';
 import { useEncoderWarmup } from './useEncoderWarmup';
 import { useStemsPoll, type StemsState } from './useStemsPoll';
@@ -64,11 +65,14 @@ function initialStems(data: CorrectionData): StemsState {
 
 function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
   const t = useTranslations('review');
+  const navigation = useNavigation();
   const plan = useMemo(() => planSteps(data), [data]);
   const [step, setStep] = useState<ReviewStep>(plan.steps[0] ?? 'finish');
   const [menuOpen, setMenuOpen] = useState(false);
   // Read by the word / line / Tap To Sync sheets once they are mounted here.
   const [, setSheet] = useState<ReviewSheet>(null);
+  const lyricsRef = useRef<LyricsStepHandle>(null);
+  const confirmDiscard = useConfirmDiscard();
 
   const canUndo = useReviewStore((s) => s.undo.canUndo);
   const undoLast = useReviewStore((s) => s.undoLast);
@@ -76,52 +80,60 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
   const setDuet = useReviewStore((s) => s.setDuet);
   const discard = useReviewStore((s) => s.discard);
   const restored = useReviewStore((s) => s.restoredFromDraft);
+  const untimed = useReviewStore((s) => countUntimedWords(s.doc.segments));
 
   useEncoderWarmup(jobId);
   const [stemsStart] = useState(() => initialStems(data));
   const stems = useStemsPoll(jobId, stemsStart);
   const player = useReviewPlayer(jobId, { vocalsReady: stems.ready });
-  const peaks = useVocalsPeaks(jobId);
+  const peaks = useVocalsPeaks(jobId, stems.ready);
   const { pause } = player;
 
+  /** Back to Lyrics is always allowed; on to Finish only once every word is timed (else, like the CTA, jump). */
   const goTo = (next: ReviewStep) => {
+    if (next === 'finish' && untimed > 0) {
+      if (step === 'lyrics') lyricsRef.current?.jumpToFirstUntimed();
+      else setStep('lyrics');
+      return;
+    }
     if (next !== 'lyrics') pause();
     setStep(next);
   };
 
-  // Android back steps back from Finish to Lyrics before it leaves the review (the draft is kept either way).
+  // Back (header chevron, Android back) from Finish returns to Lyrics before it leaves the review.
+  // Only back actions: a replace (after a successful finish) must still leave. The draft is kept either way.
+  const backToLyrics = step === 'finish' && plan.steps.includes('lyrics');
   useEffect(() => {
-    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (step === 'finish' && plan.steps.includes('lyrics')) {
-        setStep('lyrics');
-        return true;
-      }
-      return false;
+    if (!backToLyrics) return;
+    return navigation.addListener('beforeRemove', (e) => {
+      const type = e.data.action.type;
+      if (type !== 'GO_BACK' && type !== 'POP') return;
+      e.preventDefault();
+      setStep('lyrics');
     });
-    return () => sub.remove();
-  }, [step, plan]);
+  }, [navigation, backToLyrics]);
 
   const title = data.metadata?.title;
   const artist = data.metadata?.artist;
 
   return (
     <SafeAreaView testID="review-screen" edges={['bottom', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.bg }}>
-      <View className="flex-row items-center gap-1 ps-4 pe-1">
-        <View className="flex-1">
-          {title ? (
-            <Text numberOfLines={1} className="text-base font-bold text-text">
-              {title}
-            </Text>
-          ) : null}
-          {artist ? (
-            <Text numberOfLines={1} className="text-sm text-muted">
-              {artist}
-            </Text>
-          ) : null}
-        </View>
-        <IconButton testID="review-undo" icon="arrow-undo" label={t('undo')} disabled={!canUndo} onPress={undoLast} />
-        <IconButton testID="review-menu" icon="ellipsis-horizontal-circle" label={t('menu')} onPress={() => setMenuOpen(true)} />
-      </View>
+      <Stack.Screen
+        options={{
+          headerTitle: () => <ReviewHeaderTitle title={title} artist={artist} />,
+          headerRight: () => (
+            <ReviewHeaderButtons
+              canUndo={canUndo}
+              onUndo={undoLast}
+              onMenu={() => setMenuOpen(true)}
+              undoLabel={t('undo')}
+              menuLabel={t('menu')}
+            />
+          ),
+          // iOS swipe-back can't be intercepted: on Finish the back chevron steps back to Lyrics instead.
+          gestureEnabled: !backToLyrics,
+        }}
+      />
 
       <StepsHeader step={step} onStep={goTo} />
 
@@ -132,7 +144,7 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
             testID="review-restored-discard"
             accessibilityRole="button"
             accessibilityLabel={t('discard')}
-            onPress={discard}
+            onPress={() => confirmDiscard(discard)}
             className="min-h-11 justify-center px-3"
           >
             <Text className="text-sm font-semibold text-primary">{t('restoredDiscard')}</Text>
@@ -142,6 +154,7 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
 
       {step === 'lyrics' ? (
         <LyricsStep
+          ref={lyricsRef}
           player={player}
           peaks={peaks}
           vocalsReady={stems.ready}

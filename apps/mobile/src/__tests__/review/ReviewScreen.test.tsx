@@ -1,10 +1,10 @@
 import { ApiError } from '@nomad/api-gen';
 import { IntlProvider } from '@nomad/i18n';
 import type { CorrectionData } from '@nomad/review-core';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
-import { Slot } from 'expo-router';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { router, Slot, Stack } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
-import { Alert } from 'react-native';
+import { Alert, Modal, View, type AlertButton } from 'react-native';
 
 import ReviewRoute from '../../app/review/[id]';
 import { saveDraft } from '../../review/drafts';
@@ -39,34 +39,69 @@ const STEMS = {
   ],
 };
 
-/** Renders the screen and lets the mount-time requests (peaks, warmup) settle. */
+let screenProps: { data: CorrectionData; onContinueOnWeb?: () => void } = { data: cleanFixture() };
+
+const stackLayout = {
+  default: function Layout() {
+    return (
+      <IntlProvider locale="en">
+        <Stack />
+      </IntlProvider>
+    );
+  },
+};
+
+/**
+ * The screen inside a real Stack (it sets its header and listens for back), pushed over a home screen,
+ * with the mount-time requests (peaks, warmup) settled.
+ */
 async function renderScreen(data: CorrectionData, props: { onContinueOnWeb?: () => void } = {}) {
-  const r = render(
-    <IntlProvider locale="en">
-      <ReviewScreen jobId="j1" data={data} {...props} />
-    </IntlProvider>,
+  screenProps = { data, ...props };
+  renderRouter(
+    {
+      _layout: stackLayout,
+      index: () => <View testID="home" />,
+      'review/[id]': () => <ReviewScreen jobId="j1" {...screenProps} />,
+    },
+    { initialUrl: '/' },
   );
+  await act(async () => {
+    router.push('/review/j1');
+  });
   await act(async () => {});
-  return r;
 }
+
+/** Presses the destructive button of the last Alert. */
+function confirmLastAlert(alert: jest.SpyInstance) {
+  const buttons = alert.mock.calls.at(-1)![2] as AlertButton[];
+  act(() => buttons.find((b) => b.style === 'destructive')!.onPress!());
+}
+
+const deleteFirstLine = () => {
+  fireEvent.press(screen.getByTestId('review-line-0'));
+  fireEvent.press(screen.getByTestId('review-tool-more'));
+  fireEvent.press(screen.getByTestId('review-tool-delete'));
+};
 
 beforeEach(() => {
   jest.useRealTimers();
   jest.clearAllMocks();
+  jest.restoreAllMocks();
   (jest.requireMock('react-native-mmkv') as { __resetMMKV(): void }).__resetMMKV();
   mockPlayer = fakePlayer();
   gen.getVocalsPeaks!.mockResolvedValue({ status: 'ready', peaks: 'AAD/', rate: 1 });
 });
 
 describe('ReviewScreen', () => {
-  it('opens on the lyrics step with the song title, warming the encoder', async () => {
+  it('opens on the lyrics step with the song in the header, warming the encoder', async () => {
     await renderScreen(correctionsFixture());
     expect(screen.getByTestId('review-screen')).toBeTruthy();
     expect(screen.getByTestId('review-step-lyrics')).toBeTruthy();
     expect(screen.queryByTestId('review-step-finish')).toBeNull();
     expect(screen.getByText('The Sound of Silence')).toBeTruthy();
+    expect(screen.getByText('Simon & Garfunkel')).toBeTruthy();
     expect(gen.warmupEncoder).toHaveBeenCalledWith('j1');
-    await waitFor(() => expect(gen.getVocalsPeaks).toHaveBeenCalledWith('j1'));
+    expect(gen.getVocalsPeaks).toHaveBeenCalledWith('j1');
   });
 
   it('starts on Finish when the lyrics are confident', async () => {
@@ -84,6 +119,34 @@ describe('ReviewScreen', () => {
     expect(screen.getByTestId('review-step-lyrics')).toBeTruthy();
   });
 
+  it('the Finish step header is gated like the CTA: with an untimed word it jumps to it', async () => {
+    await renderScreen(correctionsFixture());
+    fireEvent.press(screen.getByTestId('review-steps-finish'));
+    expect(screen.getByTestId('review-step-lyrics')).toBeTruthy();
+    expect(screen.queryByTestId('review-step-finish')).toBeNull();
+    // Line 1 holds the untimed word: it is now selected (its toolbar is open).
+    expect(screen.getByTestId('review-line-1').props.accessibilityState).toEqual({ selected: true });
+  });
+
+  it('the Finish step header moves on once every word is timed', async () => {
+    await renderScreen(cleanFixture());
+    fireEvent.press(screen.getByTestId('review-steps-finish'));
+    expect(screen.getByTestId('review-step-finish')).toBeTruthy();
+  });
+
+  it('back from Finish returns to Lyrics instead of leaving', async () => {
+    await renderScreen(cleanFixture());
+    fireEvent.press(screen.getByTestId('review-lyrics-next'));
+    await act(async () => {
+      router.back();
+    });
+    expect(screen.getByTestId('review-step-lyrics')).toBeTruthy();
+    await act(async () => {
+      router.back();
+    });
+    expect(screen.getByTestId('home')).toBeTruthy();
+  });
+
   it('vocals fall back to the song until the stems are ready', async () => {
     await renderScreen(cleanFixture());
     expect(mockPlayerOpts).toHaveBeenLastCalledWith('j1', { vocalsReady: false });
@@ -98,23 +161,24 @@ describe('ReviewScreen', () => {
     await renderScreen(correctionsFixture());
     const undo = () => screen.getByTestId('review-undo');
     expect(undo().props.accessibilityState).toEqual(expect.objectContaining({ disabled: true }));
-    fireEvent.press(screen.getByTestId('review-line-0'));
-    fireEvent.press(screen.getByTestId('review-tool-more'));
-    fireEvent.press(screen.getByTestId('review-tool-delete'));
+    deleteFirstLine();
     expect(screen.queryByText('Hello')).toBeNull();
     expect(undo().props.accessibilityState).toEqual(expect.objectContaining({ disabled: false }));
     fireEvent.press(undo());
     expect(screen.getByText('Hello')).toBeTruthy();
   });
 
-  it('shows the restored-draft banner, and Discard resets to the server data', async () => {
+  it('the restored-draft banner confirms, then Discard resets to the server data', async () => {
+    const alert = jest.spyOn(Alert, 'alert');
     const data = correctionsFixture();
-    const edited = data.corrected_segments.slice(1);
-    saveDraft('j1', { v: 1, audioHash: 'h1', segments: edited, isDuet: false, selection: null, editCount: 1, savedAt: 1 });
+    saveDraft('j1', { v: 1, audioHash: 'h1', segments: data.corrected_segments.slice(1), isDuet: false, selection: null, editCount: 1, savedAt: 1 });
     await renderScreen(data);
     expect(screen.getByText('Restored your edits')).toBeTruthy();
     expect(screen.queryByText('Hello')).toBeNull();
     fireEvent.press(screen.getByTestId('review-restored-discard'));
+    expect(alert).toHaveBeenCalledWith('Discard your edits?', expect.any(String), expect.any(Array));
+    expect(screen.queryByText('Hello')).toBeNull();
+    confirmLastAlert(alert);
     expect(screen.getByText('Hello')).toBeTruthy();
     expect(screen.queryByTestId('review-restored-discard')).toBeNull();
   });
@@ -140,18 +204,24 @@ describe('ReviewScreen', () => {
     expect(onContinueOnWeb).toHaveBeenCalled();
   });
 
-  it('menu: Discard my edits asks first, then resets', async () => {
+  it('menu: Discard closes the sheet, asks once it is dismissed (iOS), then resets', async () => {
     const alert = jest.spyOn(Alert, 'alert');
     await renderScreen(correctionsFixture());
-    fireEvent.press(screen.getByTestId('review-line-0'));
-    fireEvent.press(screen.getByTestId('review-tool-more'));
-    fireEvent.press(screen.getByTestId('review-tool-delete'));
+    deleteFirstLine();
     fireEvent.press(screen.getByTestId('review-menu'));
     fireEvent.press(screen.getByTestId('review-menu-discard'));
+    // The Alert waits for the Modal's dismissal: raised during it, iOS would drop it.
+    expect(alert).not.toHaveBeenCalled();
+    const sheet = screen.UNSAFE_getAllByType(Modal).find((m) => m.props.testID === 'review-menu-sheet')!;
+    expect(sheet.props.visible).toBe(false);
+    act(() => sheet.props.onDismiss());
+    expect(alert).toHaveBeenCalledTimes(1);
     expect(screen.queryByText('Hello')).toBeNull();
-    const buttons = alert.mock.calls[0]![2]!;
-    act(() => buttons.find((b) => b.style === 'destructive')!.onPress!());
+    confirmLastAlert(alert);
     expect(screen.getByText('Hello')).toBeTruthy();
+    // A later plain dismissal (e.g. after Mark as duet) raises nothing.
+    act(() => sheet.props.onDismiss());
+    expect(alert).toHaveBeenCalledTimes(1);
   });
 
   it('reports waveform_failed when the vocals peaks fail', async () => {
@@ -160,13 +230,21 @@ describe('ReviewScreen', () => {
     await waitFor(() => expect(gen.reportClientEvent).toHaveBeenCalledWith('waveform_failed', expect.objectContaining({ jobId: 'j1' })));
   });
 
-  it('polls the peaks while the stems are separating', async () => {
-    jest.useFakeTimers();
+  it('fetches the peaks again once the stems poll says the stems landed (no separate poll)', async () => {
     gen.getVocalsPeaks!.mockResolvedValueOnce({ status: 'pending', retryAfter: 5 });
+    gen.getInstrumentalUrls!.mockResolvedValue({ options: STEMS.instrumental_options, audioComplete: true });
+    jest.useFakeTimers();
     await renderScreen(cleanFixture());
     expect(screen.getByText('Loading the vocals…')).toBeTruthy();
+    expect(gen.getVocalsPeaks).toHaveBeenCalledTimes(1);
+    // Retry-After passes with the stems still separating: no fetch of its own.
     await act(async () => {
-      await jest.advanceTimersByTimeAsync(5000);
+      await jest.advanceTimersByTimeAsync(5_000);
+    });
+    expect(gen.getVocalsPeaks).toHaveBeenCalledTimes(1);
+    // The stems poll (15 s) finds both stems: the peaks are fetched again.
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(10_000);
     });
     expect(gen.getVocalsPeaks).toHaveBeenCalledTimes(2);
     expect(screen.queryByText('Loading the vocals…')).toBeNull();

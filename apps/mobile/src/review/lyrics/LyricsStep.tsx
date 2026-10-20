@@ -20,7 +20,7 @@ import {
   type VocalGap,
 } from '@nomad/review-core';
 import { colors, List, type ListHandle, type WaveformMarker } from '@nomad/ui';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState, type Ref } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 import type { ReviewPlayer } from '../audio/useReviewPlayer';
@@ -35,7 +35,11 @@ import type { VocalsPeaks } from './useVocalsPeaks';
 /** Text the screen must collect (Edit text sheet) before lines can be inserted: no wordless lines (Ruling K). */
 export type TextRequest = { kind: 'insertAfter'; segment: number } | { kind: 'gap'; gap: VocalGap };
 
+/** What the screen can ask of the step (the step header's "Finish" while words are untimed). */
+export type LyricsStepHandle = { jumpToFirstUntimed(): void };
+
 export type LyricsStepProps = {
+  ref?: Ref<LyricsStepHandle>;
   player: ReviewPlayer;
   peaks: VocalsPeaks;
   vocalsReady: boolean;
@@ -57,6 +61,8 @@ const ISSUE_LEAD_S = 1;
 const GAP_TAIL_S = 0.5;
 /** Where a followed or jumped-to row lands (fraction of the list height from the top). */
 const VIEW_POSITION = 0.3;
+/** After a jump (issue, line tap, CTA) auto-follow holds off this long, so it doesn't yank the list back. */
+const FOLLOW_HOLD_MS = 1500;
 const NEXT_SINGER: Record<SingerId, SingerId> = { 1: 2, 2: 0, 0: 1 };
 
 /** Lines in order, with each open vocal gap's callout just before the first line that starts after it. */
@@ -110,7 +116,7 @@ function unreferencedWords(source: CorrectionData): ReadonlySet<string> | undefi
 }
 
 /** Lyrics step (spec §4.2): listen along, check the flagged spots, fix lines, then "Lyrics look good". */
-export function LyricsStep(props: LyricsStepProps) {
+export function LyricsStep({ ref, ...props }: LyricsStepProps) {
   const { player, peaks, vocalsReady, onNext } = props;
   const t = useTranslations('review');
   const store = useContext(ReviewStoreContext)!;
@@ -137,26 +143,49 @@ export function LyricsStep(props: LyricsStepProps) {
     if (item !== undefined) listRef.current?.scrollToIndex(item, { animated: true, viewPosition: VIEW_POSITION });
   }, []);
 
-  // Auto-follow the playing line until the person scrolls by hand.
+  // Newest values for the row callbacks (stable, so memoised rows don't re-render per tick) and for
+  // auto-follow. Declared before the follow effect so that effect reads this render's values.
+  const latestRef = useRef({ props, gaps, follow, lineItem });
   useEffect(() => {
-    if (follow && player.playing && active >= 0) scrollTo(lineItem[active]);
-  }, [active, follow, player.playing, lineItem, scrollTo]);
-
-  // Newest props and gaps for the row callbacks, which stay stable so memoised rows don't re-render per tick.
-  const latestRef = useRef({ props, gaps });
-  useEffect(() => {
-    latestRef.current = { props, gaps };
+    latestRef.current = { props, gaps, follow, lineItem };
   });
+  const holdFollowUntilRef = useRef(0);
+  const holdFollow = useCallback(() => {
+    holdFollowUntilRef.current = Date.now() + FOLLOW_HOLD_MS;
+  }, []);
+  const jumpTo = useCallback(
+    (item: number | undefined) => {
+      holdFollow();
+      scrollTo(item);
+    },
+    [holdFollow, scrollTo],
+  );
+
+  // Auto-follow the playing line, only when the line changes, until the person scrolls by hand.
+  useEffect(() => {
+    const { follow: following, props: p, lineItem: items } = latestRef.current;
+    if (!following || !p.player.playing || active < 0 || Date.now() < holdFollowUntilRef.current) return;
+    scrollTo(items[active]);
+  }, [active, scrollTo]);
+
+  const jumpToFirstUntimed = useCallback(() => {
+    const first = firstUntimed(store.getState().doc.segments);
+    if (!first) return;
+    setSelected(first.segment);
+    jumpTo(latestRef.current.lineItem[first.segment]);
+  }, [store, jumpTo]);
+  useImperativeHandle(ref, () => ({ jumpToFirstUntimed }), [jumpToFirstUntimed]);
 
   const onPressLine = useCallback(
     (i: number) => {
       const segs = store.getState().doc.segments;
       if (!segs[i]) return;
+      holdFollow();
       setSelected(i);
       const { start, end } = lineRange(segs, i);
       latestRef.current.props.player.playRange(Math.max(0, start - LINE_LEAD_S), end);
     },
-    [store],
+    [store, holdFollow],
   );
 
   const onWordPress = useCallback((i: number, j: number) => latestRef.current.props.onWordPress(i, j), []);
@@ -241,20 +270,18 @@ export function LyricsStep(props: LyricsStepProps) {
         end = gaps[gk]!.gap.end;
       }
     }
-    scrollTo(item);
+    jumpTo(item);
     player.playRange(Math.max(0, issue.time - ISSUE_LEAD_S), Math.max(end, issue.time + ISSUE_LEAD_S));
   };
 
   const onCta = () => {
     if (untimed === 0) return onNext();
-    const first = firstUntimed(segments);
-    if (!first) return;
-    setSelected(first.segment);
-    scrollTo(lineItem[first.segment]);
+    jumpToFirstUntimed();
   };
 
   const onFollow = () => {
     setFollow(true);
+    holdFollowUntilRef.current = 0;
     if (active >= 0) scrollTo(lineItem[active]);
   };
 
@@ -310,8 +337,19 @@ export function LyricsStep(props: LyricsStepProps) {
           onScrollBeginDrag={() => setFollow(false)}
           ListEmptyComponent={<Text className="p-6 text-center text-muted">{t('lyrics.empty')}</Text>}
         />
+        {!follow ? (
+          <Pressable
+            testID="review-player-follow"
+            accessibilityRole="button"
+            accessibilityLabel={t('player.followA11y')}
+            onPress={onFollow}
+            className="absolute bottom-3 min-h-11 justify-center self-center rounded-full bg-primary px-5"
+          >
+            <Text className="font-bold text-primary-fg">{t('player.follow')}</Text>
+          </Pressable>
+        ) : null}
       </View>
-      <PlayerBar player={player} peaks={peaks} vocalsReady={vocalsReady} markers={markers} follow={follow} onFollow={onFollow} />
+      <PlayerBar player={player} peaks={peaks} vocalsReady={vocalsReady} markers={markers} />
       <View className="bg-card px-3 pb-2 pt-1">
         <Pressable
           testID="review-lyrics-next"

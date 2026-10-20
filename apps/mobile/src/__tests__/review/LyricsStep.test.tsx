@@ -156,7 +156,7 @@ describe('LyricsStep', () => {
     expect(player.playRange).toHaveBeenLastCalledWith(23, 29);
   });
 
-  it('duet chips show only in a duet and cycle 1 → 2 → Both → 1', () => {
+  it('shows no singer chips outside a duet', () => {
     renderStep();
     expect(screen.queryByTestId('review-line-0-singer')).toBeNull();
   });
@@ -215,6 +215,29 @@ describe('LyricsStep', () => {
     fireEvent.press(screen.getByTestId('review-player-follow'));
     expect(mockScrollToIndex).toHaveBeenLastCalledWith(0, expect.anything());
     expect(screen.queryByTestId('review-player-follow')).toBeNull();
+  });
+
+  it('holds auto-follow off for 1.5 s after a jump (a line tap), then follows again', () => {
+    const now = jest.spyOn(Date, 'now').mockReturnValue(100_000);
+    const { rerenderWith } = renderStep(cleanFixture());
+    rerenderWith({ playing: true, position: 10.2 });
+    fireEvent.press(screen.getByTestId('review-line-1'));
+    mockScrollToIndex.mockClear();
+    rerenderWith({ position: 12.1 });
+    expect(mockScrollToIndex).not.toHaveBeenCalled();
+    now.mockReturnValue(101_600);
+    rerenderWith({ position: 10.3 });
+    expect(mockScrollToIndex).toHaveBeenLastCalledWith(0, expect.anything());
+    now.mockRestore();
+  });
+
+  it('auto-follow reacts to the active line changing, not to every tick', () => {
+    const { rerenderWith } = renderStep(cleanFixture());
+    rerenderWith({ playing: true, position: 10.2 });
+    expect(mockScrollToIndex).toHaveBeenCalledTimes(1);
+    rerenderWith({ position: 10.4 });
+    rerenderWith({ position: 10.6 });
+    expect(mockScrollToIndex).toHaveBeenCalledTimes(1);
   });
 
   it('highlights the active line', () => {

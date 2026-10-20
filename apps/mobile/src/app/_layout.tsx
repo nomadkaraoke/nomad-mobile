@@ -50,7 +50,7 @@ function RootStack() {
         <Stack.Screen name="sign-in/code" options={{ ...SIGN_IN_SHEET, sheetAllowedDetents: [1] }} />
         {/* Duration confirm: a short native sheet over the Make tab (spec §4.6). */}
         <Stack.Screen name="job/duration/[id]" options={{ ...SIGN_IN_SHEET, sheetAllowedDetents: [0.5, 1] }} />
-        {/* Native review (Phase 2 spec §4): the screen draws its own song title, undo and menu below. */}
+        {/* Native review (Phase 2 spec §4): "Review" while loading; ReviewScreen then sets the song title, undo and menu. */}
         <Stack.Screen name="review/[id]" options={{ title: tReview('title') }} />
       </Stack>
     </ThemeProvider>

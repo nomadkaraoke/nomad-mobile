@@ -1,9 +1,20 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslations } from '@nomad/i18n';
 import { colors, Sheet } from '@nomad/ui';
-import { Alert, Pressable, Text, View } from 'react-native';
+import { useCallback, useEffect, useRef } from 'react';
+import { Alert, Platform, Pressable, Text, View } from 'react-native';
 
 import type { IconName } from './IconButton';
+
+/** "Discard your edits?" confirm, shared by the menu and the restored-draft banner. */
+export function useConfirmDiscard(): (onDiscard: () => void) => void {
+  const t = useTranslations('review');
+  return (onDiscard) =>
+    Alert.alert(t('discardTitle'), t('discardBody'), [
+      { text: t('cancel'), style: 'cancel' },
+      { text: t('discardConfirm'), style: 'destructive', onPress: onDiscard },
+    ]);
+}
 
 type Props = {
   visible: boolean;
@@ -28,17 +39,35 @@ function Item({ testID, icon, label, danger, onPress }: { testID: string; icon: 
 /** Review overflow menu (spec §4.2): Continue on web, Mark as duet / Not a duet, Discard my edits. */
 export function ReviewMenu({ visible, onClose, isDuet, onSetDuet, onDiscard, onContinueOnWeb }: Props) {
   const t = useTranslations('review');
+  const confirmDiscard = useConfirmDiscard();
+  // An action that presents something (the discard Alert) waits until the sheet has gone: iOS drops an
+  // Alert raised while a Modal is still dismissing. iOS runs it from the Modal's onDismiss; Android
+  // has no onDismiss, so it runs once the sheet is hidden.
+  const pendingRef = useRef<(() => void) | null>(null);
+  const runPending = useCallback(() => {
+    const action = pendingRef.current;
+    pendingRef.current = null;
+    action?.();
+  }, []);
 
-  const confirmDiscard = () => {
+  useEffect(() => {
+    if (!visible && Platform.OS !== 'ios') runPending();
+  }, [visible, runPending]);
+
+  const closeThen = (action: () => void) => {
+    pendingRef.current = action;
     onClose();
-    Alert.alert(t('discardTitle'), t('discardBody'), [
-      { text: t('cancel'), style: 'cancel' },
-      { text: t('discardConfirm'), style: 'destructive', onPress: onDiscard },
-    ]);
   };
 
   return (
-    <Sheet visible={visible} onClose={onClose} title={t('menuTitle')} testID="review-menu-sheet" closeLabel={t('close')}>
+    <Sheet
+      visible={visible}
+      onClose={onClose}
+      onDismiss={runPending}
+      title={t('menuTitle')}
+      testID="review-menu-sheet"
+      closeLabel={t('close')}
+    >
       <View className="gap-1">
         {onContinueOnWeb ? (
           <Item
@@ -60,7 +89,13 @@ export function ReviewMenu({ visible, onClose, isDuet, onSetDuet, onDiscard, onC
             onSetDuet(!isDuet);
           }}
         />
-        <Item testID="review-menu-discard" icon="trash-outline" label={t('discard')} danger onPress={confirmDiscard} />
+        <Item
+          testID="review-menu-discard"
+          icon="trash-outline"
+          label={t('discard')}
+          danger
+          onPress={() => closeThen(() => confirmDiscard(onDiscard))}
+        />
       </View>
     </Sheet>
   );

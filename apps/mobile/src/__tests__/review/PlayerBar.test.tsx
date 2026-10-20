@@ -13,7 +13,6 @@ const READY: VocalsPeaks = { status: 'ready', peaks: [0.2, 0.5, 0.9], duration: 
 
 function renderBar(over: Record<string, unknown> = {}, props: Partial<Parameters<typeof PlayerBar>[0]> = {}) {
   const player = fakePlayer({ position: 20, ...over });
-  const onFollow = jest.fn();
   render(
     <IntlProvider locale="en">
       <PlayerBar
@@ -21,13 +20,11 @@ function renderBar(over: Record<string, unknown> = {}, props: Partial<Parameters
         peaks={READY}
         vocalsReady
         markers={[]}
-        follow
-        onFollow={onFollow}
         {...props}
       />
     </IntlProvider>,
   );
-  return { player, onFollow };
+  return { player };
 }
 
 describe('PlayerBar', () => {
@@ -85,17 +82,6 @@ describe('PlayerBar', () => {
     const { player } = renderBar({ rate: 0.75 });
     fireEvent.press(screen.getByTestId('review-player-rate'));
     expect(player.setRate).toHaveBeenCalledWith(1);
-  });
-
-  it('shows the Follow pill only when not following', () => {
-    renderBar();
-    expect(screen.queryByTestId('review-player-follow')).toBeNull();
-  });
-
-  it('Follow resumes following', () => {
-    const { onFollow } = renderBar({}, { follow: false });
-    fireEvent.press(screen.getByTestId('review-player-follow'));
-    expect(onFollow).toHaveBeenCalled();
   });
 
   it('labels a pending waveform', () => {

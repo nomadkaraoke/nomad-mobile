@@ -13,12 +13,14 @@ export type SheetProps = {
   closeLabel: string;
   children: ReactNode;
   fullHeight?: boolean;
+  /** iOS only (RN Modal): fires once the sheet has finished closing. Present a follow-up alert from here. */
+  onDismiss?: () => void;
 };
 
 /** Bottom sheet on RN's Modal: slides up over the screen; tapping the dimmed backdrop closes it. */
-export function Sheet({ visible, onClose, title, testID, closeLabel, children, fullHeight }: SheetProps) {
+export function Sheet({ visible, onClose, title, testID, closeLabel, children, fullHeight, onDismiss }: SheetProps) {
   return (
-    <Modal visible={visible} animationType="slide" transparent statusBarTranslucent navigationBarTranslucent onRequestClose={onClose} testID={testID}>
+    <Modal visible={visible} animationType="slide" transparent statusBarTranslucent navigationBarTranslucent onRequestClose={onClose} onDismiss={onDismiss} testID={testID}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1 justify-end"

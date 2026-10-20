@@ -18,13 +18,10 @@ type Props = {
   vocalsReady: boolean;
   /** Vocal gaps and untimed words, as fractions of the song. */
   markers: readonly WaveformMarker[];
-  /** The list is following the playhead; when false a "Follow" pill offers to resume. */
-  follow: boolean;
-  onFollow: () => void;
 };
 
 /** Sticky player: play/pause, back 5 s, the vocals waveform scrubber, Vocals/Song and 1×/0.75×. */
-export function PlayerBar({ player, peaks, vocalsReady, markers, follow, onFollow }: Props) {
+export function PlayerBar({ player, peaks, vocalsReady, markers }: Props) {
   const t = useTranslations('review.player');
   const duration = player.duration > 0 ? player.duration : peaks.duration;
   const progress = duration > 0 ? player.position / duration : 0;
@@ -33,18 +30,6 @@ export function PlayerBar({ player, peaks, vocalsReady, markers, follow, onFollo
 
   return (
     <View className="border-t border-border bg-card px-3 pb-1 pt-2">
-      {!follow ? (
-        <Pressable
-          testID="review-player-follow"
-          accessibilityRole="button"
-          accessibilityLabel={t('followA11y')}
-          onPress={onFollow}
-          className="absolute -top-12 self-center rounded-full bg-primary px-4 py-2"
-        >
-          <Text className="font-bold text-primary-fg">{t('follow')}</Text>
-        </Pressable>
-      ) : null}
-
       <View className="flex-row items-center gap-1">
         <IconButton
           testID="review-player-play"

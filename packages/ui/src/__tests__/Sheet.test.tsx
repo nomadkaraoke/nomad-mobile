@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import { Text } from 'react-native';
+import { Modal, Text } from 'react-native';
 
 import { Sheet } from '../Sheet';
 
@@ -32,4 +32,14 @@ it('closes on backdrop press and labels the backdrop', () => {
   expect(screen.getByLabelText('Close')).toBeTruthy();
   fireEvent.press(screen.getByTestId('s-backdrop'));
   expect(onClose).toHaveBeenCalledTimes(1);
+});
+
+it('passes onDismiss to the Modal (iOS fires it once the sheet has closed)', () => {
+  const onDismiss = jest.fn();
+  render(
+    <Sheet visible onClose={jest.fn()} onDismiss={onDismiss} title="Edit" testID="s" closeLabel="Close">
+      <Text>body</Text>
+    </Sheet>,
+  );
+  expect(screen.UNSAFE_getByType(Modal).props.onDismiss).toBe(onDismiss);
 });
