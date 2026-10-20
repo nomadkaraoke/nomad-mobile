@@ -53,7 +53,7 @@ name: screens-review-tour
 
 # Signed-out launch in the app language set by e2e-local.sh (as review-9): iOS clears the keychain; Android's data
 # was cleared by the script (clearState would drop the per-app language), and a second load applies RTL.
-- runFlow: ../common/close-browser-if-open.yaml
+# No browser check here: the app was just relaunched by e2e-local.sh (locale), so Maestro's view hierarchy 500s.
 - stopApp
 - runFlow:
     when:

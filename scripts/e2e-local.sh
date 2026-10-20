@@ -180,6 +180,10 @@ set_app_locale() {
   fi
   xcrun simctl spawn "$DEVICE" defaults write "$prefs" RCTI18nUtil_allowRTL -bool "$rtl"
   xcrun simctl spawn "$DEVICE" defaults write "$prefs" RCTI18nUtil_forceRTL -bool "$rtl"
+  # Leave the app running: Maestro's first view-hierarchy query (launch.yaml's browser check) 500s
+  # (kAXErrorInvalidUIElement) when the app was just terminated.
+  xcrun simctl launch "$DEVICE" com.nomadkaraoke.mobile >/dev/null 2>&1 || true
+  sleep 6
 }
 run_hebrew() {
   [[ ${#HEBREW[@]} -gt 0 ]] || return 0

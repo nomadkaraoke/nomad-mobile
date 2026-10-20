@@ -21,7 +21,7 @@ tags:
       STACK: ${STACK}
 # Signed-out launch (as launch.yaml), then on Android a relaunch that keeps state: the cleared data had no React
 # Native RTL flag; the first launch set it for the next one.
-- runFlow: ../common/close-browser-if-open.yaml
+# No browser check here: the app was just relaunched by e2e-local.sh (locale), so Maestro's view hierarchy 500s.
 - stopApp
 - runFlow:
     when:

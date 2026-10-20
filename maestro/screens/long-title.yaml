@@ -19,7 +19,7 @@ name: screens-long-title
       STACK: ${STACK}
       NAME: ux
       CREDITS: "3"
-- runFlow: ../common/close-browser-if-open.yaml
+# No browser check here: the app was just relaunched by e2e-local.sh (locale), so Maestro's view hierarchy 500s.
 - stopApp
 - runFlow:
     when:
