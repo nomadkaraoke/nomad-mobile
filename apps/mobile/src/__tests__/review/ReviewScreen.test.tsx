@@ -6,11 +6,13 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { router, Slot, Stack } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
 import { Alert, Modal, View, type AlertButton } from 'react-native';
+import { State } from 'react-native-gesture-handler';
+import { fireGestureHandler, getByGestureTestId } from 'react-native-gesture-handler/jest-utils';
 
 import ReviewRoute from '../../app/review/[id]';
 import { saveDraft } from '../../review/drafts';
 import { ReviewScreen } from '../../review/ReviewScreen';
-import { cleanFixture, correctionsFixture, fakePlayer } from '../../test-utils/reviewFixtures';
+import { cleanFixture, correctionsFixture, fakePlayer, GAP } from '../../test-utils/reviewFixtures';
 
 let mockPlayer = fakePlayer();
 const mockPlayerOpts = jest.fn();
@@ -174,9 +176,13 @@ describe('ReviewScreen', () => {
     fireEvent.press(screen.getByTestId('review-line-1'));
     fireEvent.press(screen.getByTestId('review-word-1-3'));
     expect(screen.getByTestId('review-word-sheet')).toBeTruthy();
-    // The untimed word offers Re-sync, which swaps the word sheet for Tap To Sync (mounted by its own task).
+    // The untimed word offers Re-sync, which swaps the word sheet for Tap To Sync on that line.
     fireEvent.press(screen.getByTestId('review-word-resync'));
     expect(screen.queryByTestId('review-word-sheet')).toBeNull();
+    expect(screen.getByTestId('review-sync-current-word')).toHaveTextContent("I've");
+    expect(screen.getByTestId('review-sync-continue').props.value).toBe(false);
+    fireEvent.press(screen.getByTestId('review-sync-sheet-backdrop'));
+    expect(screen.queryByTestId('review-sync-sheet')).toBeNull();
 
     fireEvent.press(screen.getByTestId('review-line-0'));
     fireEvent.press(screen.getByTestId('review-tool-edit'));
@@ -188,6 +194,37 @@ describe('ReviewScreen', () => {
     fireEvent.press(screen.getByTestId('review-nudge-line-minus'));
     expect(screen.getByText('Start of line 0:09.90')).toBeTruthy();
     expect(mockPlayer.playRange).toHaveBeenLastCalledWith(expect.closeTo(9.6, 6), expect.closeTo(13.2, 6));
+  });
+
+  it('toolbar Re-sync: taps on the pad, Done writes the line as one undo step', async () => {
+    await renderScreen(correctionsFixture());
+    fireEvent.press(screen.getByTestId('review-line-0'));
+    fireEvent.press(screen.getByTestId('review-tool-resync'));
+    await waitFor(() => expect(mockPlayer.play).toHaveBeenCalled());
+    expect(mockPlayer.seekTo).toHaveBeenCalledWith(7);
+    const pad = getByGestureTestId('review-sync-pad');
+    for (const at of [10.2, 10.8, 11.5, 11.9, 12.5]) {
+      mockPlayer.now.mockReturnValueOnce(at).mockReturnValueOnce(at + 0.05);
+      act(() => fireGestureHandler(pad, [{ state: State.BEGAN }, { state: State.ACTIVE }, { state: State.END }]));
+    }
+    fireEvent.press(screen.getByTestId('review-sync-done'));
+    expect(screen.queryByTestId('review-sync-sheet')).toBeNull();
+    expect(mockPlayer.pause).toHaveBeenCalled();
+    const undo = () => screen.getByTestId('review-undo');
+    expect(undo().props.accessibilityState).toEqual(expect.objectContaining({ disabled: false }));
+    // The whole pass is one undo step: one undo and there is nothing left to undo.
+    fireEvent.press(undo());
+    expect(screen.getByTestId('review-undo').props.accessibilityState).toEqual(expect.objectContaining({ disabled: true }));
+  });
+
+  it('typing several lines into a gap re-syncs them with "keep going" on', async () => {
+    await renderScreen(correctionsFixture({ vocal_gaps: { gaps: [{ ...GAP, reference_lines: {} }] } }));
+    fireEvent.press(screen.getByTestId('review-gap-0-insert'));
+    fireEvent.changeText(screen.getByTestId('review-line-input'), 'la la\nyo yo');
+    fireEvent.press(screen.getByTestId('review-line-save'));
+    fireEvent.press(screen.getByTestId('review-line-resync-now'));
+    expect(screen.getByTestId('review-sync-current-word')).toHaveTextContent('la');
+    expect(screen.getByTestId('review-sync-continue').props.value).toBe(true);
   });
 
   it('Insert line after asks for the words first', async () => {

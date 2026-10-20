@@ -16,10 +16,11 @@ import { EditLineSheet } from './sheets/EditLineSheet';
 import { NudgeSheet } from './sheets/NudgeSheet';
 import { WordSheet } from './sheets/WordSheet';
 import { createReviewStore, ReviewStoreContext, useReviewStore } from './store';
+import { TapSyncSheet } from './sync/TapSyncSheet';
 import { useEncoderWarmup } from './useEncoderWarmup';
 import { useStemsPoll, type StemsState } from './useStemsPoll';
 
-/** The sheet the review wants open ('resync' is mounted by the Tap To Sync task). */
+/** The sheet the review wants open. */
 export type ReviewSheet =
   | { kind: 'edit' | 'nudge'; segment: number }
   /** `keepGoing`: start Tap To Sync with "Keep going into the next lines" on (several lines were just typed). */
@@ -209,6 +210,15 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
       ) : null}
       {sheet?.kind === 'nudge' ? (
         <NudgeSheet segment={sheet.segment} player={player} onClose={closeSheet} onResyncRequested={resync} />
+      ) : null}
+      {sheet?.kind === 'resync' ? (
+        <TapSyncSheet
+          key={`resync-${sheet.segment}`}
+          segment={sheet.segment}
+          keepGoing={sheet.keepGoing}
+          player={player}
+          onClose={closeSheet}
+        />
       ) : null}
 
       <ReviewMenu

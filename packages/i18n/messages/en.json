@@ -429,6 +429,20 @@
       "lineLaterA11y": "Move the line 0.1 seconds later",
       "start": "Start of line {time}",
       "end": "End of line {time}"
+    },
+    "sync": {
+      "title": "Tap To Sync",
+      "pad": "Tap",
+      "padA11y": "Tap when each word starts. Hold for long words.",
+      "hint": "Press as each word starts. Hold through long words.",
+      "lineDone": "Line done",
+      "stopped": "Stopped after the line",
+      "playback": "Play it back",
+      "redo": "Redo",
+      "restart": "Restart",
+      "done": "Done",
+      "continue": "Keep going into the next lines",
+      "rateA11y": "Speed {rate}×. Tap to change"
     }
   }
 }
