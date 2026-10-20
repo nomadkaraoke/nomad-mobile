@@ -14,7 +14,8 @@
         "LSApplicationQueriesSchemes": [
           "youtube",
           "vnd.youtube"
-        ]
+        ],
+        "CFBundleDisplayName": "Karaoke"
       }
     },
     "android": {
@@ -40,7 +41,7 @@
         {
           "backgroundColor": "#230a89",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 160
+          "imageWidth": 240
         }
       ],
       "expo-secure-store",
