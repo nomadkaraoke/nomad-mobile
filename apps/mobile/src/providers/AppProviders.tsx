@@ -7,14 +7,19 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { setupApiClients } from '../api/setup';
 import { useAuth } from '../auth/store';
 import { useSessionCheck } from '../auth/useSessionCheck';
+import { fakeSocialEnabled } from '../config';
 import { useSearchWarmup } from '../find/useSearchWarmup';
 import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
+import { installDevWarningTrace } from './devWarnings';
 
 // Before anything formats: Hermes has no Intl.PluralRules (ICU plurals would throw).
 installIntlPolyfills();
 initObservability();
 setupApiClients();
+// Dev only (Ruling T): trace "state update on a component that hasn't mounted yet" to its caller; E2E
+// builds also keep that warning's LogBox toast from covering what Maestro taps.
+installDevWarningTrace({ dev: __DEV__, e2e: fakeSocialEnabled() });
 
 /** Spec §5: re-checks the gen session on launch and on foreground (a 401 signs out). */
 function SessionCheck() {
@@ -48,7 +53,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
   }, [locale]);
 
   if (!hydrated) return null;
-  // Gesture handler root: the review's waveform scrubber and Tap To Sync pad use RNGH gestures.
+  // Gesture handler root: the review's waveform scrubber (@nomad/ui WaveformCanvas) uses RNGH gestures.
+  // Sheets are RN Modals outside this root, where RNGH got no touches on iOS: Tap To Sync's pad uses the
+  // responder system instead.
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <IntlProvider locale={locale}>
