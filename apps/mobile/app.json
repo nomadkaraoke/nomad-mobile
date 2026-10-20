@@ -19,8 +19,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#0f0f0f",
-        "foregroundImage": "./assets/images/android-icon-foreground.png"
+        "backgroundColor": "#230a89",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.nomadkaraoke.mobile"
@@ -36,9 +38,9 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#0f0f0f",
+          "backgroundColor": "#230a89",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 120
+          "imageWidth": 160
         }
       ],
       "expo-secure-store",
