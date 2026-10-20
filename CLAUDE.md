@@ -2,8 +2,9 @@
 
 The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke project (decide recommendations, gen karaoke videos, kjbox nights, a singer's own history). **Read [docs/VISION.md](docs/VISION.md) first**: it has the four use cases, the navigation, the release bar (no publishing until all four have a first usable version) and the phase roadmap.
 
-**Status:** Phase 1 "Make it" (2026-10-17): real gen sign-in → make → pay → watch, verified by nine Maestro flows on iOS and Android against the gen local stack, plus a prod check of the release APK (real email-code sign-in, live Stripe checkout open/cancel, real audio search). Phase 1b "Search parity" (2026-10-19) then rebuilt song search on decide's search service: offline song list, outcomes (did-you-mean, resolve, versions, pick screen), make-flow match judge, flows search-1…4 + make-10. Next: Phase 2 "Native review" (docs/VISION.md). Phase 0 (2026-10-14) laid the workspace, packages, CI and agent tooling.
+**Status:** Phase 1 "Make it" (2026-10-17): real gen sign-in → make → pay → watch, verified by nine Maestro flows on iOS and Android against the gen local stack, plus a prod check of the release APK (real email-code sign-in, live Stripe checkout open/cancel, real audio search). Phase 1b "Search parity" (2026-10-19) then rebuilt song search on decide's search service: offline song list, outcomes (did-you-mean, resolve, versions, pick screen), make-flow match judge, flows search-1…4 + make-10. Phase 2 "Native review" (2026-10-20) is built: lyrics review (line list, issues bar, word/edit/nudge sheets, Tap To Sync, vocal-gap callouts) and Finish (A/B instrumental chooser, preview, three-call submit) run natively, replacing the web bridge; its prod check is pending. Next: see docs/VISION.md. Phase 0 (2026-10-14) laid the workspace, packages, CI and agent tooling.
 
+- Phase 2 spec: [docs/superpowers/specs/2026-10-19-mobile-phase2-native-review-design.md](docs/superpowers/specs/2026-10-19-mobile-phase2-native-review-design.md); plan: [docs/superpowers/plans/2026-10-19-mobile-phase2-native-review.md](docs/superpowers/plans/2026-10-19-mobile-phase2-native-review.md); platform-neutral behaviour doc for gen web: [docs/REVIEW-UX.md](docs/REVIEW-UX.md)
 - Phase 1b spec: [docs/superpowers/specs/2026-10-18-mobile-search-parity-design.md](docs/superpowers/specs/2026-10-18-mobile-search-parity-design.md); plan: [docs/superpowers/plans/2026-10-18-mobile-search-parity.md](docs/superpowers/plans/2026-10-18-mobile-search-parity.md)
 - Phase 1 spec: [docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md](docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md); plan: [docs/superpowers/plans/2026-10-17-mobile-phase1-make-it.md](docs/superpowers/plans/2026-10-17-mobile-phase1-make-it.md)
 - Phase 0 spec: [docs/superpowers/specs/2026-10-14-mobile-phase0-design.md](docs/superpowers/specs/2026-10-14-mobile-phase0-design.md) (MVP flow §2, foundation §3, shared auth + payments §4)
@@ -30,6 +31,8 @@ The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke proj
 
 ```
 apps/mobile/          Expo app (src/app routes, src/auth, src/api, src/find (useSearch, components, outcome.ts), src/offline (opt-in offline song index), src/providers)
+apps/mobile/src/review/  native review (ReviewScreen, lyrics/, sheets/, sync/, finish/, audio/, store.ts, drafts.ts)
+packages/review-core/ pure-TS review logic (doc model, edits, timing, Tap To Sync, issues, vocal gaps, instrumental, peaks, media URLs); to be shared with gen web later (see docs/REVIEW-UX.md)
 packages/core/        pure TS: session model + input normalizers, job phases + steps, audio-search ranking, duration confirm, formatting, search/ (song matcher; Python parity fixtures synced from decide by scripts/sync-search-fixtures.mjs, `DECIDE_DIR`)
 packages/i18n/        messages/<33>.json, resolveLocale, IntlProvider; scripts/ vendored from karaoke-gen
 packages/api-gen/     generated karaoke-gen client + configureClient + facades (auth, credits, make, jobs) + zod overrides
@@ -111,6 +114,12 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - **colima stale lock after a crash or reboot:** `colima start` fails until you remove the symlink `~/.colima/_lima/_disks/colima/in_use_by`.
 - **`make.categoryCount` (`"{label} ({count})"`) is hand-written and format-only**, already in `.en-snapshot.json`, so a plain `pnpm i18n:translate` won't redo it (`--no-cache` will).
 - **`pnpm i18n:translate` needs `gcloud auth login`** (GCS cache + Gemini via ADC) and `env -u GEMINI_API_KEY`. If auth has lapsed, new keys stay out of `.en-snapshot.json` and get translated on the next run.
+- **react-native-gesture-handler gestures inside an RN `Modal` (our `@nomad/ui` Sheet) got no touches on iOS 26**, even with a `GestureHandlerRootView` wrapper. Use RN `Pressable` or the responder system inside sheets: the Tap To Sync pad uses `onResponderGrant` / `onResponderRelease` (and terminate as release).
+- **`npx expo run:android` in a fresh worktree needs `ANDROID_HOME=$HOME/Library/Android/sdk`** (no `local.properties` there).
+- **gen's `/vocals-peaks` u8 values are absolute**, not per-track normalized: run `normalizePeaks` before drawing or quiet vocals render as a flat line.
+- **`pnpm i18n:translate` with a lapsed gcloud user login:** run it through the workspace `scripts/gcp-admin` wrapper (only in sessions where Andrew typed `/gcp-admin`), with `env -u GEMINI_API_KEY`.
+- **iOS drops an `Alert` presented while a `Modal` is dismissing.** Raise it from the Sheet's `onDismiss`, not right after closing the sheet.
+- **Finish leaves via `router.dismissTo('/make')`**; back on Finish goes to Lyrics first (a `beforeRemove` listener that only intercepts GO_BACK / POP, so the post-submit dismiss still leaves).
 - **`renderRouter` (expo-router testing) switches jest to fake timers.** Reset with `jest.useRealTimers()` in `beforeEach` when code uses real delays.
 
 ## Sign-in and session
