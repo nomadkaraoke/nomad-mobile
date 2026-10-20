@@ -11,6 +11,8 @@ export const colors = {
   primaryFg: '#0f0f0f',
   gold: '#ffdf6b',
   purple: '#8b5cf6',
+  // Review: words not matched to reference lyrics (gen web's gap colour).
+  orange: '#fb923c',
   danger: '#ef4444',
   success: '#22c55e',
   waveform: '#0d1117',

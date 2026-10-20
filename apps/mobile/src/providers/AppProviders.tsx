@@ -2,6 +2,7 @@ import { installIntlPolyfills, IntlProvider, RTL_LOCALES } from '@nomad/i18n';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect, useState, type ReactNode } from 'react';
 import { I18nManager } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { setupApiClients } from '../api/setup';
 import { useAuth } from '../auth/store';
@@ -47,13 +48,16 @@ export function AppProviders({ children }: { children: ReactNode }) {
   }, [locale]);
 
   if (!hydrated) return null;
+  // Gesture handler root: the review's waveform scrubber and Tap To Sync pad use RNGH gestures.
   return (
-    <IntlProvider locale={locale}>
-      <QueryClientProvider client={queryClient}>
-        <SessionCheck />
-        <SearchWarmup />
-        {children}
-      </QueryClientProvider>
-    </IntlProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <IntlProvider locale={locale}>
+        <QueryClientProvider client={queryClient}>
+          <SessionCheck />
+          <SearchWarmup />
+          {children}
+        </QueryClientProvider>
+      </IntlProvider>
+    </GestureHandlerRootView>
   );
 }

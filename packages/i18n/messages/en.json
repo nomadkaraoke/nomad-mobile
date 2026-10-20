@@ -291,5 +291,102 @@
     "downloadFailed": "Couldn't download the video. Try again.",
     "play": "Play video",
     "notReady": "This video isn't ready yet. You'll find it on the {tab} tab when it's done."
+  },
+  "review": {
+    "title": "Review",
+    "loading": "Opening your lyrics…",
+    "loadError": "Trouble reaching Nomad Karaoke",
+    "notFound": "We couldn't find this review.",
+    "retry": "Retry",
+    "undo": "Undo",
+    "menu": "More options",
+    "menuTitle": "Options",
+    "close": "Close",
+    "menuWeb": "Continue on web",
+    "markDuet": "Mark as duet",
+    "notDuet": "Not a duet",
+    "discard": "Discard my edits",
+    "discardTitle": "Discard your edits?",
+    "discardBody": "The lyrics go back to how we made them. This can't be undone.",
+    "discardConfirm": "Discard",
+    "cancel": "Cancel",
+    "restored": "Restored your edits",
+    "restoredDiscard": "Discard",
+    "steps": {
+      "lyrics": "Lyrics",
+      "finish": "Finish",
+      "a11y": "Step {n} of {total}: {name}"
+    },
+    "issues": {
+      "count": "{count, plural, one {# thing to check} other {# things to check}}",
+      "position": "{n} of {count} · {kind}",
+      "prev": "Previous thing to check",
+      "next": "Next thing to check",
+      "kind": {
+        "untimed": "Word needs timing",
+        "vocal_gap": "Possible missing lyrics",
+        "ai_corrected": "Changed by AI",
+        "estimated": "Timing guessed",
+        "long_word": "Very long word",
+        "long_gap": "Long pause in a line"
+      }
+    },
+    "lyrics": {
+      "next": "Lyrics look good",
+      "needTiming": "{count, plural, one {# word needs timing} other {# words need timing}}",
+      "needTimingHint": "Takes you to the first one",
+      "empty": "No lyrics to check"
+    },
+    "line": {
+      "untimed": "--:--",
+      "a11y": "Line {n}: {text}",
+      "hint": "Plays this line",
+      "singer1": "1",
+      "singer2": "2",
+      "singerBoth": "Both",
+      "singerA11y": "Singer: {singer}. Tap to change"
+    },
+    "word": {
+      "ai": "Changed by AI",
+      "estimated": "Timing guessed",
+      "untimed": "No timing yet",
+      "gap": "Not matched to the reference lyrics",
+      "hint": "Opens the word"
+    },
+    "tool": {
+      "play": "Play line",
+      "edit": "Edit text",
+      "resync": "Re-sync",
+      "nudge": "Nudge",
+      "more": "More",
+      "split": "Split line here",
+      "merge": "Merge with next",
+      "insert": "Insert line after",
+      "delete": "Delete line"
+    },
+    "player": {
+      "play": "Play",
+      "pause": "Pause",
+      "back5": "Back 5 seconds",
+      "vocals": "Vocals",
+      "song": "Song",
+      "vocalsSoon": "Vocals soon",
+      "sourceA11y": "Listening to: {source}. Tap to switch",
+      "rate": "{rate}×",
+      "rateA11y": "Playback speed {rate}×. Tap to change",
+      "follow": "Follow",
+      "followA11y": "Scroll along with the song",
+      "scrub": "Song position",
+      "waveformLoading": "Loading the vocals…",
+      "time": "{position} / {duration}",
+      "loadFailed": "We couldn't load the audio. Check your connection and try again.",
+      "playFailed": "We couldn't play the audio. Tap play to try again."
+    },
+    "gap": {
+      "title": "Possible missing lyrics · {from}–{to}",
+      "play": "Play",
+      "insert": "Insert lines",
+      "sync": "Sync timing"
+    }
   }
 }
