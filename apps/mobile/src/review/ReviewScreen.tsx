@@ -2,7 +2,7 @@ import { useTranslations } from '@nomad/i18n';
 import { countUntimedWords, planSteps, type CorrectionData, type ReviewStep } from '@nomad/review-core';
 import { colors } from '@nomad/ui';
 import { Stack, useNavigation } from 'expo-router';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AppState, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -12,11 +12,14 @@ import { LyricsStep, type LyricsStepHandle, type TextRequest } from './lyrics/Ly
 import { useVocalsPeaks } from './lyrics/useVocalsPeaks';
 import { ReviewHeaderButtons, ReviewHeaderTitle } from './ReviewHeader';
 import { ReviewMenu, useConfirmDiscard } from './ReviewMenu';
+import { EditLineSheet } from './sheets/EditLineSheet';
+import { NudgeSheet } from './sheets/NudgeSheet';
+import { WordSheet } from './sheets/WordSheet';
 import { createReviewStore, ReviewStoreContext, useReviewStore } from './store';
 import { useEncoderWarmup } from './useEncoderWarmup';
 import { useStemsPoll, type StemsState } from './useStemsPoll';
 
-/** The sheet the review wants open. The sheets themselves are mounted by the editing tasks that follow. */
+/** The sheet the review wants open ('resync' is mounted by the Tap To Sync task). */
 export type ReviewSheet =
   | { kind: 'edit' | 'resync' | 'nudge'; segment: number }
   | { kind: 'word'; segment: number; word: number }
@@ -69,8 +72,10 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
   const plan = useMemo(() => planSteps(data), [data]);
   const [step, setStep] = useState<ReviewStep>(plan.steps[0] ?? 'finish');
   const [menuOpen, setMenuOpen] = useState(false);
-  // Read by the word / line / Tap To Sync sheets once they are mounted here.
-  const [, setSheet] = useState<ReviewSheet>(null);
+  const [sheet, setSheet] = useState<ReviewSheet>(null);
+  const closeSheet = useCallback(() => setSheet(null), []);
+  // Ruling D: "Re-sync" from a sheet swaps it for Tap To Sync on that line.
+  const resync = useCallback((segment: number) => setSheet({ kind: 'resync', segment }), []);
   const lyricsRef = useRef<LyricsStepHandle>(null);
   const confirmDiscard = useConfirmDiscard();
 
@@ -168,6 +173,29 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
       ) : (
         <FinishStep />
       )}
+
+      {sheet?.kind === 'word' ? (
+        <WordSheet
+          segment={sheet.segment}
+          word={sheet.word}
+          player={player}
+          onClose={closeSheet}
+          onResyncRequested={resync}
+        />
+      ) : null}
+      {sheet?.kind === 'text' ? (
+        <EditLineSheet target={sheet.request} onClose={closeSheet} onResyncRequested={resync} />
+      ) : null}
+      {sheet?.kind === 'edit' ? (
+        <EditLineSheet
+          target={{ kind: 'edit', segment: sheet.segment }}
+          onClose={closeSheet}
+          onResyncRequested={resync}
+        />
+      ) : null}
+      {sheet?.kind === 'nudge' ? (
+        <NudgeSheet segment={sheet.segment} player={player} onClose={closeSheet} onResyncRequested={resync} />
+      ) : null}
 
       <ReviewMenu
         visible={menuOpen}

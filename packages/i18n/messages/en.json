@@ -387,6 +387,48 @@
       "play": "Play",
       "insert": "Insert lines",
       "sync": "Sync timing"
+    },
+    "timing": {
+      "start": "Start {time}",
+      "end": "End {time}",
+      "startEarlier": "Start earlier",
+      "startLater": "Start later",
+      "endEarlier": "End earlier",
+      "endLater": "End later",
+      "untimed": "No timing yet",
+      "resync": "Re-sync"
+    },
+    "wordSheet": {
+      "title": "Fix a word",
+      "input": "Word",
+      "inputHint": "Type a space to split it into words. Clear it to delete the word.",
+      "save": "Save",
+      "delete": "Delete word",
+      "merge": "Merge with next word",
+      "aiFrom": "Changed by AI from “{original}”",
+      "aiChanged": "Changed by AI",
+      "revert": "Revert"
+    },
+    "lineSheet": {
+      "editTitle": "Edit text",
+      "newTitle": "New line",
+      "input": "Lyrics",
+      "placeholder": "Type the words you hear",
+      "save": "Save",
+      "guessed": "{count, plural, one {Timing guessed for # new word} other {Timing guessed for # new words}}",
+      "needsTiming": "{count, plural, one {# new word needs timing} other {# new words need timing}}",
+      "resyncNow": "Re-sync now?",
+      "done": "Done"
+    },
+    "nudge": {
+      "title": "Nudge timing",
+      "line": "Move whole line",
+      "lineEarlier": "−0.1 s",
+      "lineLater": "+0.1 s",
+      "lineEarlierA11y": "Move the line 0.1 seconds earlier",
+      "lineLaterA11y": "Move the line 0.1 seconds later",
+      "start": "Start of line {time}",
+      "end": "End of line {time}"
     }
   }
 }

@@ -1,9 +1,11 @@
 import type { LyricsSegment, SingerId, Word } from './types';
 import { replaceSegment, type ReviewDoc } from './doc';
-import { sanitizeSegment } from './timing';
+import { nextTimedStart, prevTimedEnd, sanitizeSegment } from './timing';
 
 /** Minimum word length in seconds. */
 export const MIN_WORD_SECONDS = 0.05;
+/** Timing differences below this (seconds) are rounding noise. */
+const TIME_EPSILON = 1e-6;
 
 let idCounter = 0;
 /** Pure-JS unique id (no nanoid / crypto dependency). */
@@ -215,6 +217,35 @@ export function insertLine(doc: ReviewDoc, afterS: number, text: string, start: 
   return withSegments(doc, [...doc.segments.slice(0, afterS + 1), seg, ...doc.segments.slice(afterS + 1)]);
 }
 
+/** Room given to an inserted line when no later line bounds it. */
+export const INSERT_FALLBACK_SECONDS = 3;
+
+/**
+ * Insert a typed line after segment `afterS` (-1 = at the start), timed by estimate: its words are
+ * spread evenly from the end of the previous timed line to the start of the next one (or
+ * `INSERT_FALLBACK_SECONDS` past it when nothing follows) and flagged `timing_estimated`. When the
+ * room is too small for a minimum-length word each, the words go in untimed (Finish stays blocked
+ * until they are synced). Blank text inserts nothing (`insertedAt: -1`).
+ */
+export function insertLineEstimated(
+  doc: ReviewDoc,
+  afterS: number,
+  text: string,
+): { doc: ReviewDoc; insertedAt: number; timed: boolean } {
+  const n = splitText(text).length;
+  if (n === 0 || afterS < -1 || afterS >= doc.segments.length) return { doc, insertedAt: -1, timed: false };
+  const lo = prevTimedEnd(doc.segments, afterS + 1) ?? 0;
+  const hi = nextTimedStart(doc.segments, afterS) ?? lo + INSERT_FALLBACK_SECONDS;
+  const at = afterS + 1;
+  const inserted = insertLine(doc, afterS, text, lo, Math.max(hi, lo));
+  const timed = hi - lo >= MIN_WORD_SECONDS * n;
+  const seg = inserted.segments[at]!;
+  const words: Word[] = seg.words.map((w) =>
+    timed ? { ...w, timing_estimated: true } : { ...w, start_time: null, end_time: null },
+  );
+  return { doc: replaceSegment(inserted, at, rebuild(seg, words)), insertedAt: at, timed };
+}
+
 // ---------------------------------------------------------------- timing
 
 /** Last timed end strictly before (s, w), searching back across lines. */
@@ -252,7 +283,8 @@ export function shiftLine(doc: ReviewDoc, s: number, delta: number): ReviewDoc {
   const minDelta = Math.max(before ?? 0, 0) - lineStart;
   const maxDelta = after === null ? Infinity : after - lineEnd;
   const d = Math.min(Math.max(delta, minDelta), maxDelta);
-  if (d === 0) return doc;
+  // Below a microsecond is float dust from repeated steps against a clamp, not a move.
+  if (Math.abs(d) < TIME_EPSILON) return doc;
   const words = seg.words.map((x) =>
     isTimed(x) ? { ...x, start_time: (x.start_time as number) + d, end_time: (x.end_time as number) + d } : x,
   );

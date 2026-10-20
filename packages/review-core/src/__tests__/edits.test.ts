@@ -1,7 +1,7 @@
 import type { CorrectionData, LyricsSegment, Word } from '../types';
 import { fromCorrectionData, type ReviewDoc } from '../doc';
 import {
-  applyLineText, deleteLine, deleteWord, editWordText, insertLine, mergeLines, mergeWords,
+  applyLineText, deleteLine, deleteWord, editWordText, insertLine, insertLineEstimated, mergeLines, mergeWords,
   setDuet, setLineSinger, setWordTiming, shiftLine, splitLine, splitWord,
 } from '../edits';
 
@@ -215,6 +215,32 @@ describe('insertLine / deleteLine', () => {
   });
 });
 
+describe('insertLineEstimated', () => {
+  const two = () => mk([S('a', [W('1', 'a', 0, 1)], { singer: 2 }), S('b', [W('2', 'b', 5, 6)])]);
+  it('spreads the words from the previous line end to the next line start, flagged estimated', () => {
+    const r = insertLineEstimated(two(), 0, 'la la');
+    expect(r).toMatchObject({ insertedAt: 1, timed: true });
+    const n = r.doc.segments[1]!;
+    expect(n).toMatchObject({ text: 'la la', start_time: 1, end_time: 5, singer: 2 });
+    expect(n.words.map((w) => [w.start_time, w.end_time, w.timing_estimated])).toEqual([[1, 3, true], [3, 5, true]]);
+  });
+  it('falls back to 3 s after the last line, and starts at 0 before the first', () => {
+    expect(insertLineEstimated(two(), 1, 'end').doc.segments[2]).toMatchObject({ start_time: 6, end_time: 9 });
+    const late = mk([S('a', [W('1', 'a', 4, 5)])]);
+    expect(insertLineEstimated(late, -1, 'intro').doc.segments[0]).toMatchObject({ start_time: 0, end_time: 4 });
+  });
+  it('inserts untimed words when there is no room, and nothing for blank text', () => {
+    const tight = mk([S('a', [W('1', 'a', 0, 1)]), S('b', [W('2', 'b', 1.02, 2)])]);
+    const r = insertLineEstimated(tight, 0, 'x y');
+    expect(r).toMatchObject({ insertedAt: 1, timed: false });
+    expect(r.doc.segments[1]).toMatchObject({ start_time: null, end_time: null });
+    expect(r.doc.segments[1]!.words.every((w) => w.start_time === null && w.end_time === null)).toBe(true);
+    const doc = two();
+    expect(insertLineEstimated(doc, 0, '  ')).toEqual({ doc, insertedAt: -1, timed: false });
+    expect(insertLineEstimated(doc, 5, 'x').insertedAt).toBe(-1);
+  });
+});
+
 describe('shiftLine', () => {
   const three = () =>
     mk([
@@ -241,6 +267,18 @@ describe('shiftLine', () => {
     const un = mk([S('a', [W('1', 'a', null, null)])]);
     expect(shiftLine(un, 0, 1)).toBe(un);
     expect(shiftLine(doc, 9, 1)).toBe(doc);
+  });
+  it('settles at a neighbour after repeated 0.1 s steps (no float-dust moves)', () => {
+    let doc = mk([S('a', [W('1', 'a', 10, 10.5), W('2', 'b', 12.3, 13)]), S('b', [W('3', 'c', 14, 15)])]);
+    let moves = 0;
+    for (let i = 0; i < 15; i++) {
+      const next = shiftLine(doc, 0, 0.1);
+      if (next !== doc) moves++;
+      doc = next;
+    }
+    expect(moves).toBe(10);
+    expect(doc.segments[0]!.end_time).toBeCloseTo(14, 9);
+    expect(shiftLine(doc, 0, 0.1)).toBe(doc);
   });
 });
 

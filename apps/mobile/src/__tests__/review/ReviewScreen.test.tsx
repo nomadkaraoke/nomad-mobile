@@ -169,6 +169,39 @@ describe('ReviewScreen', () => {
     expect(screen.getByText('Hello')).toBeTruthy();
   });
 
+  it('mounts the word, edit-text and nudge sheets; Re-sync hands over to Tap To Sync', async () => {
+    await renderScreen(correctionsFixture());
+    fireEvent.press(screen.getByTestId('review-line-1'));
+    fireEvent.press(screen.getByTestId('review-word-1-3'));
+    expect(screen.getByTestId('review-word-sheet')).toBeTruthy();
+    // The untimed word offers Re-sync, which swaps the word sheet for Tap To Sync (mounted by its own task).
+    fireEvent.press(screen.getByTestId('review-word-resync'));
+    expect(screen.queryByTestId('review-word-sheet')).toBeNull();
+
+    fireEvent.press(screen.getByTestId('review-line-0'));
+    fireEvent.press(screen.getByTestId('review-tool-edit'));
+    expect(screen.getByTestId('review-line-input').props.value).toBe('Hello darkness my old friend');
+    fireEvent.press(screen.getByTestId('review-line-sheet-backdrop'));
+    expect(screen.queryByTestId('review-line-sheet')).toBeNull();
+
+    fireEvent.press(screen.getByTestId('review-tool-nudge'));
+    fireEvent.press(screen.getByTestId('review-nudge-line-minus'));
+    expect(screen.getByText('Start of line 0:09.90')).toBeTruthy();
+    expect(mockPlayer.playRange).toHaveBeenLastCalledWith(expect.closeTo(9.6, 6), expect.closeTo(13.2, 6));
+  });
+
+  it('Insert line after asks for the words first', async () => {
+    await renderScreen(correctionsFixture());
+    fireEvent.press(screen.getByTestId('review-line-0'));
+    fireEvent.press(screen.getByTestId('review-tool-more'));
+    fireEvent.press(screen.getByTestId('review-tool-insert'));
+    fireEvent.changeText(screen.getByTestId('review-line-input'), 'la la');
+    fireEvent.press(screen.getByTestId('review-line-save'));
+    fireEvent.press(screen.getByTestId('review-line-done'));
+    expect(screen.queryByTestId('review-line-sheet')).toBeNull();
+    expect(screen.getAllByText('la').length).toBe(2);
+  });
+
   it('the restored-draft banner confirms, then Discard resets to the server data', async () => {
     const alert = jest.spyOn(Alert, 'alert');
     const data = correctionsFixture();
