@@ -73,6 +73,8 @@ export default function MakeTabScreen() {
       <List
         testID="make-list"
         data={jobs.data}
+        // A job that starts needing the singer sorts to the top: it must show, not land above the viewport.
+        showNewRowsAtTop
         keyExtractor={(j) => j.job_id}
         ListHeaderComponent={
           <View className="w-full gap-1 pb-2">

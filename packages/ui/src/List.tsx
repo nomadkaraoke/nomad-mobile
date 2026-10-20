@@ -21,6 +21,12 @@ export type ListProps<T> = {
   /** Rows of different types recycle separately (cheaper for heterogeneous lists). */
   getItemType?: (item: T, index: number) => string | number | undefined;
   onScrollBeginDrag?: () => void;
+  /**
+   * New rows at the top stay in view instead of the list holding the old first row in place (FlashList's
+   * default keeps the visible content still, so a row added at the top lands above the viewport).
+   * For lists that grow at the top, e.g. the Make tab, where a job needing review sorts first.
+   */
+  showNewRowsAtTop?: boolean;
 };
 
 /**
@@ -28,7 +34,7 @@ export type ListProps<T> = {
  * stalls, swap this body for LegendList/FlatList without touching any caller.
  */
 function ListInner<T>(
-  { data, renderItem, keyExtractor, testID, ...rest }: ListProps<T>,
+  { data, renderItem, keyExtractor, testID, showNewRowsAtTop, ...rest }: ListProps<T>,
   ref: Ref<ListHandle>,
 ) {
   const listRef = useRef<FlashListRef<T>>(null);
@@ -52,6 +58,7 @@ function ListInner<T>(
       keyExtractor={keyExtractor}
       onEndReachedThreshold={0.5}
       keyboardShouldPersistTaps="handled"
+      maintainVisibleContentPosition={showNewRowsAtTop ? { disabled: true } : undefined}
       {...rest}
     />
   );
