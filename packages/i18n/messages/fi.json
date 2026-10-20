@@ -6,7 +6,20 @@
     "language": "Kieli",
     "credits": "{credits, plural, one {# krediitti} other {# krediittiä}}",
     "title": "Minä",
-    "buyCredits": "Osta krediittejä"
+    "buyCredits": "Osta krediittejä",
+    "offlineDownload": "Lataa kappalelista offline-käyttöä varten",
+    "offlineDownloadSize": "Lataa kappalelista offline-käyttöä varten ({size} Mt)",
+    "offlineDownloading": "Ladataan kappalelistaa… {percent} %",
+    "offlineError": "Kappalelistan lataaminen epäonnistui.",
+    "offlineHeading": "Offline-kappalelista",
+    "offlineHint": "Etsi kappaleita ilman verkkoyhteyttä tähän puhelimeen tallennetusta listasta.",
+    "offlineRemove": "Poista offline-kappalelista",
+    "offlineRetry": "Yritä ladata uudelleen",
+    "offlineSaved": "Kappalelista tallennettu tähän puhelimeen ({size} Mt)",
+    "offlineUpdated": "Kappalelista päivitetty {days, plural, =0 {tänään} one {# päivä sitten} other {# päivää sitten}}",
+    "offlineRemoveTitle": "Poistetaanko offline-kappalelista?",
+    "offlineRemoveBody": "Haku ilman verkkoyhteyttä ei toimi, ennen kuin lataat listan uudelleen.",
+    "offlineRemoveConfirm": "Poista"
   },
   "common": {
     "error": "Jokin meni pieleen.",
@@ -61,7 +74,10 @@
     "makeIt": "Luo versio · 1 krediitti",
     "noKaraoke": "Karaokeversiota ei löytynyt",
     "hasKaraokeHint": "Voit silti tehdä omasi valitsemastasi ääniraidasta.",
-    "noKaraokeHint": "Tee siitä oma karaokevideosi, valmiina laulettavaksi ja jaettavaksi."
+    "noKaraokeHint": "Tee siitä oma karaokevideosi, valmiina laulettavaksi ja jaettavaksi.",
+    "offlineMissing": "Olet offline-tilassa, eikä tätä kappaletta löydy tähän puhelimeen tallennetusta kappalelistasta.",
+    "offlineNote": "Offline · tähän puhelimeen tallennetusta kappalelistasta",
+    "cloudErrorNote": "Hakuun ei juuri nyt saada yhteyttä · näytetään tähän puhelimeen tallennettu kappalelista"
   },
   "tabs": {
     "discover": "Löydä uutta",
@@ -106,9 +122,7 @@
     "searchingHint": "Tämä voi kestää jopa minuutin.",
     "seeOtherSources": "Katso muut lähteet ({count})",
     "submit": "Luo versio",
-    "youtubeInvalid": "Tämä ei näytä YouTube-linkiltä.",
     "youtubeLabel": "YouTube-linkki",
-    "youtubeToggle": "Liitä sen sijaan YouTube-linkki",
     "category": {
       "best": "Paras valinta",
       "compilations": "Kokoelmat",
@@ -121,7 +135,37 @@
       "vinyl": "Vinyylikopiot",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Tarkistetaan kappaleen tietoja…",
+    "matchUsingTyped": "Käytetään kirjoittamaasi: {value}",
+    "matchUseTidied": "Käytä siistittyä versiota",
+    "matchUseCorrection": "Käytä korjausta",
+    "communityWatch": "Katso YouTubessa",
+    "communityExists": "Yhteisön tekemä karaokeversio on jo olemassa",
+    "wrongTrack": "Väärä raita?",
+    "moreCount": "+{count} muuta",
+    "showLess": "Näytä vähemmän",
+    "avail": {
+      "high": "Hyvä saatavuus",
+      "medium": "Kohtalainen saatavuus",
+      "low": "Heikko saatavuus"
+    },
+    "linkInvalid": "Tuo ei näytä linkiltä.",
+    "linkUnsupported": "Tätä linkkiä ei tueta. Kokeile toista lähdettä.",
+    "warn": {
+      "fileLooksLike": "Tiedostonimi viittaa eri kappaleeseen: {file}",
+      "fileMayNotMatch": "Tiedostonimi ei välttämättä vastaa kappalettasi",
+      "lowAvailability": "Heikko saatavuus — valmistelussa saattaa kestää hieman kauemmin",
+      "noLossless": "Häviöttömiä lähteitä ei saatavilla — löytyi vain YouTube- tai muita häviöllisiä lähteitä taikka vinyylirippauksia",
+      "lossy": "Tämä on YouTube- tai häviöllinen lähde. Häviötön ääni takaa paremman karaoken, jos sellainen on saatavilla."
+    },
+    "youtubeBlocked": "YouTube estää latauksemme tällä hetkellä, joten emme voi käyttää sitä. Valitse toinen lähde tai yritä uudelleen muutaman minuutin kuluttua.",
+    "youtubeFallbackToggle": "Etkö löydä kappalettasi? Liitä sen sijaan linkki",
+    "filename": "Tiedostonimi:",
+    "release": "Julkaisu:",
+    "titleMatch": "Nimi täsmää",
+    "youtubeFallbackHint": "Löysitkö kappaleen YouTubesta? Liitä linkki, niin teemme karaokevideon siitä.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Ei vielä luotuja kappaleita",
@@ -208,5 +252,44 @@
     "share": "Jaa",
     "savedGallery": "Tallennettu galleriaasi",
     "notReady": "Tämä video ei ole vielä valmis. Löydät sen {tab}-välilehdeltä, kun se valmistuu."
+  },
+  "discover": {
+    "describeLabel": "Kuvaile kappaletta",
+    "describeNothing": "Emme saaneet selvää, mikä kappale on kyseessä. Kokeile kuvailla sitä toisella tavalla.",
+    "describePlaceholder": "esim. se jossa lauletaan ”is this the real life”",
+    "libraryOrDisc": "Kirjastossa tai levyllä",
+    "makeHint": "Luo kappaleen käyttämällä juuri tätä esittäjää ja nimeä",
+    "makeIt": "Tee kappale →",
+    "more": "Lisää…",
+    "needsConnection": "Kappaleen tekeminen vaatii verkkoyhteyden",
+    "noKaraokeYet": "🎵 Ei vielä karaokeversiota",
+    "notIt": "Eikö ole oikea?",
+    "offlineBanner": "Offline-tila · haetaan tähän puhelimeen tallennettuja kappaleita (päivitetty {days, plural, =0 {tänään} one {# päivä sitten} other {# päivää sitten}})",
+    "offlineDownload": "Lataa kappaleluettelo",
+    "offlineNoList": "Offline-tila · tähän puhelimeen ei ole vielä tallennettu kappaleluetteloa",
+    "resultsHeading": "Kappaleet, joista on karaokeversio",
+    "showAll": "Näytä kaikki {count}",
+    "similarHeading": "Muut samannimiset kappaleet ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Tarkoittamasi kappale",
+    "unreachable": "Hakuun ei juuri nyt saada yhteyttä.",
+    "versionsHeading": "Karaokeversiot ({count})",
+    "warmingUp": "Käynnistetään hakua…",
+    "youtube": "▶ YouTube",
+    "commercial": "Kaupallinen",
+    "community": "Yhteisö",
+    "correctedTo": "Korjattu muotoon {value} — kirjoitit ”{typed}”",
+    "describeLink": "Etkö muista nimeä? Kuvaile sitä",
+    "describeSubmit": "Etsi",
+    "didYouMean": "Tarkoititko?",
+    "figuringOut": "Selvitetään, mitä kappaletta tarkoitat…",
+    "keepTyped": "Säilytä kirjoittamani",
+    "makeBarAction": "Luo versio",
+    "makeBarPrompt": "Etkö löydä kappalettasi?",
+    "showMore": "Näytä vielä {count}",
+    "tidiedTo": "Siistitty muotoon {value}",
+    "undo": "Kumoa",
+    "whichOne": "Mitä kappaletta tarkoitat?",
+    "rejected": "Hakua ei voitu suorittaa. Kokeile eri hakusanoja."
   }
 }

@@ -24,16 +24,15 @@ name: make-4-failed-job
     visible:
       id: "make-pick"
     timeout: 30000
-- tapOn:
-    id: "make-submit"
+- runFlow: ../common/make-submit.yaml
 - extendedWaitUntil:
     visible:
       id: "job-retry-.*"
     timeout: 90000
 - assertVisible: "Something went wrong making this one."
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-failed
+- takeScreenshot: ${SHOTS}/make-tab-failed
 - tapOn:
     id: "job-error-.*"
 - assertVisible:
     id: "job-error-text-.*"
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-failed-details
+- takeScreenshot: ${SHOTS}/make-tab-failed-details

@@ -1,0 +1,75 @@
+# Search parity 4 (spec §7.1): download the offline song list from Me, then search with no connection → the
+# offline banner and the song card from the list on the phone. Needs a bundle built with
+# EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1 (search acts as if offline; the Me download still reaches decide), so
+# scripts/e2e-local.sh runs it last, on a Metro restarted with that env.
+appId: com.nomadkaraoke.mobile
+name: search-4-offline
+tags:
+  - force-offline
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: config
+      STACK: ${STACK}
+- runFlow: ../common/launch.yaml
+- tapOn:
+    id: "tab-me"
+# iOS keeps app data between runs (launch.yaml doesn't clearState there): start from no list.
+- runFlow: ../common/remove-offline-list.yaml
+- scrollUntilVisible:
+    element:
+      id: "me-offline-download"
+    direction: DOWN
+- extendedWaitUntil:
+    visible: ".*MB\\)"
+    timeout: 10000
+- takeScreenshot: ${SHOTS}/me-offline-download
+- tapOn:
+    id: "me-offline-download"
+- extendedWaitUntil:
+    visible:
+      id: "me-offline-size"
+    timeout: 60000
+- assertVisible:
+    id: "me-offline-updated"
+- assertVisible:
+    id: "me-offline-remove"
+- takeScreenshot: ${SHOTS}/me-offline-saved
+- tapOn:
+    id: "tab-discover"
+- tapOn:
+    id: "discover-search-input"
+- inputText: "starlite muse"
+- extendedWaitUntil:
+    visible:
+      id: "song-card"
+    timeout: 20000
+- assertVisible:
+    id: "offline-banner"
+- assertVisible:
+    id: "song-card"
+    text: ".*Starlight.*"
+- assertVisible:
+    id: "version-row-.*-kind"
+    text: "Community"
+- pressKey: Enter
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ${SHOTS}/search-offline
+- tapOn:
+    id: "song-card"
+- extendedWaitUntil:
+    visible:
+      id: "song-offline-note"
+    timeout: 20000
+- assertVisible:
+    id: "song-make-offline"
+- takeScreenshot: ${SHOTS}/search-offline-song-page
+- tapOn: "Back|Navigate up"
+# Leave no list behind (and exercise Remove's confirm).
+- tapOn:
+    id: "tab-me"
+- runFlow: ../common/remove-offline-list.yaml
+- assertVisible:
+    id: "me-offline-download"

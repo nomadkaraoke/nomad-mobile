@@ -44,12 +44,14 @@ export const youtube = (index: number, title = 'Muse - Starlight (Official Video
     view_count: 2_000_000,
   });
 
-export const spotify = (index: number): AudioResult =>
+/** gen's Spotify shape (spec A108): `title` is the album, `target_file` the track, `view_count` popularity × 10000. */
+export const spotify = (index: number, track = 'Supermassive Black Hole'): AudioResult =>
   result({
     index,
-    title: 'Starlight',
+    title: 'Black Holes and Revelations',
     artist: 'Muse',
     provider: 'Spotify',
     is_lossless: false,
-    target_file: 'Supermassive',
+    target_file: track,
+    view_count: 720_000,
   });

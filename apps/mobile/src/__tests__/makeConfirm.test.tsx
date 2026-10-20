@@ -12,7 +12,9 @@ import { bestChoice, makeRoutes, spotify, youtube } from '../test-utils/makeFixt
 jest.mock('@nomad/api-decide', () => ({
   searchSongs: jest.fn(),
   popularSongs: jest.fn(async () => []),
-  getSong: jest.fn(),
+  pingSearch: jest.fn(async () => true),
+  getSongDetail: jest.fn(),
+  logSearchEvent: jest.fn(async () => {}),
   configureClient: jest.fn(),
 }));
 jest.mock('@nomad/api-gen', () => ({
@@ -22,6 +24,9 @@ jest.mock('@nomad/api-gen', () => ({
   createJobFromUrl: jest.fn(),
   getMe: jest.fn(),
   listMyJobs: jest.fn(),
+  matchJudge: jest.fn(),
+  communityCheck: jest.fn(),
+  validateUrl: jest.fn(),
 }));
 
 const TIER1 = { sessionId: 's1', results: [bestChoice(0), youtube(1), spotify(2)] };
@@ -31,15 +36,32 @@ beforeEach(async () => {
   jest.useRealTimers();
   jest.clearAllMocks();
   await useAuth.getState().signInWithSession(session());
-  useMakeIntent.getState().set({ artist: 'Muse', title: 'Starlight', decideSongId: 7, createdAt: Date.now() });
+  useMakeIntent.getState().set({ artist: 'Muse', title: 'Starlight', source: 'typed', editedFields: [], createdAt: Date.now() });
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 });
   gen.searchAudio.mockResolvedValue(TIER1);
   gen.createJobFromSearch.mockResolvedValue('job-1');
   gen.createJobFromUrl.mockResolvedValue('job-2');
   gen.listMyJobs.mockResolvedValue([]);
+  // The judge finds nothing to change (its own tests: makeJudge.test.tsx).
+  gen.matchJudge.mockResolvedValue({
+    kind: 'none',
+    confident: true,
+    canonical_artist: 'Muse',
+    canonical_title: 'Starlight',
+    alternatives: [],
+    engine: 'catalog',
+    reason: '',
+    needs_ai: false,
+  });
+  gen.communityCheck.mockResolvedValue({ has_community: false, songs: [], best_youtube_url: null });
+  gen.validateUrl.mockResolvedValue({ supported: true });
 });
 
 const openMake = () => renderRouter(makeRoutes(), { initialUrl: '/make/new' });
+/** Make it, once the judge's gate has opened. */
+// Not inside act(): waitFor can't see updates an open act scope is holding back.
+const readySubmit = () =>
+  waitFor(() => expect(screen.getByTestId('make-submit')).toBeEnabled(), { timeout: 3000 });
 
 it('searches once, then tier 1 shows the pick card, the cost and a single Make it', async () => {
   let finish!: (v: typeof TIER1) => void;
@@ -68,7 +90,8 @@ it('searches once, then tier 1 shows the pick card, the cost and a single Make i
 it('Make it creates the job, clears the intent, refreshes jobs and lands on the Make tab', async () => {
   const invalidate = jest.spyOn(QueryClient.prototype, 'invalidateQueries');
   const app = openMake();
-  await act(async () => fireEvent.press(await screen.findByTestId('make-submit')));
+  await readySubmit();
+  await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
   expect(gen.createJobFromSearch).toHaveBeenCalledWith({ sessionId: 's1', index: 0, artist: 'Muse', title: 'Starlight' });
   expect(await screen.findByTestId('make-tab-screen')).toBeTruthy();
   expect(app.getSegments()).toEqual(['(tabs)', 'make']);
@@ -93,8 +116,8 @@ it('tier 3: no pick card, the grouped list is open, and choosing a row enables M
   openMake();
   expect(await screen.findByTestId('make-source-2')).toBeTruthy();
   expect(screen.queryByTestId('make-pick')).toBeNull();
-  expect(screen.getByText('YouTube')).toBeTruthy();
-  expect(screen.getByText('Spotify')).toBeTruthy();
+  expect(screen.getByText('YouTube (2)')).toBeTruthy();
+  expect(screen.getByText('Spotify (1)')).toBeTruthy();
   expect(screen.getByTestId('make-submit')).toBeDisabled();
   fireEvent.press(screen.getByTestId('make-source-2'));
   expect(screen.getByTestId('make-submit')).toBeEnabled();
@@ -127,7 +150,8 @@ it('402 from the search goes to credits and returns to /make/new', async () => {
 it('402 from create goes to credits and keeps the intent', async () => {
   gen.createJobFromSearch.mockRejectedValue(apiError(402, { credits_available: 0, credits_required: 1 }));
   const app = openMake();
-  await act(async () => fireEvent.press(await screen.findByTestId('make-submit')));
+  await readySubmit();
+  await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
   expect(await screen.findByTestId('credits-stub')).toBeTruthy();
   expect(app.getSearchParams()).toMatchObject({ returnTo: '/make/new' });
   expect(useMakeIntent.getState().get()).toMatchObject({ title: 'Starlight' });
@@ -136,7 +160,8 @@ it('402 from create goes to credits and keeps the intent', async () => {
 it('another create error shows a message and Make it works again', async () => {
   gen.createJobFromSearch.mockRejectedValueOnce(apiError(500, 'boom'));
   openMake();
-  await act(async () => fireEvent.press(await screen.findByTestId('make-submit')));
+  await readySubmit();
+  await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
   expect(await screen.findByTestId('make-error')).toBeTruthy();
   await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
   expect(gen.createJobFromSearch).toHaveBeenCalledTimes(2);
@@ -145,7 +170,7 @@ it('another create error shows a message and Make it works again', async () => {
 
 it('Paste a YouTube link instead → createJobFromUrl', async () => {
   openMake();
-  fireEvent.press(await screen.findByTestId('make-youtube-toggle'));
+  fireEvent.press(await screen.findByTestId('youtube-toggle'));
   fireEvent.changeText(screen.getByTestId('make-youtube-input'), 'not a link');
   expect(screen.getByTestId('make-submit')).toBeDisabled();
   fireEvent.changeText(screen.getByTestId('make-youtube-input'), ' https://youtu.be/abc123 ');
@@ -172,7 +197,7 @@ it('a failed search can be retried', async () => {
 });
 
 it('without a fresh intent there is nothing to make', async () => {
-  useMakeIntent.getState().set({ artist: 'Muse', title: 'Old', createdAt: Date.now() - 31 * 60 * 1000 });
+  useMakeIntent.getState().set({ artist: 'Muse', title: 'Old', source: 'typed', editedFields: [], createdAt: Date.now() - 31 * 60 * 1000 });
   openMake();
   expect(await screen.findByTestId('make-no-intent')).toBeTruthy();
   expect(gen.searchAudio).not.toHaveBeenCalled();
@@ -201,10 +226,12 @@ it('an expired search session (404 on create) searches again for a fresh pick', 
   gen.createJobFromSearch.mockRejectedValueOnce(apiError(404, 'Search expired — please search again'));
   gen.searchAudio.mockResolvedValueOnce(TIER1).mockResolvedValueOnce({ ...TIER1, sessionId: 's1b' });
   openMake();
-  await act(async () => fireEvent.press(await screen.findByTestId('make-submit')));
+  await readySubmit();
+  await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
   expect(await screen.findByText('That search expired, so we looked again.')).toBeTruthy();
   expect(gen.searchAudio).toHaveBeenCalledTimes(2);
-  await act(async () => fireEvent.press(await screen.findByTestId('make-submit')));
+  await readySubmit();
+  await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
   expect(gen.createJobFromSearch).toHaveBeenLastCalledWith(expect.objectContaining({ sessionId: 's1b', index: 0 }));
 });
 
@@ -240,13 +267,17 @@ it('signed out on /make/new (session expired): reopens sign-in and keeps the int
 });
 
 it('Discover → song → Make it → created: the song and make screens are gone, the Make tab shows', async () => {
-  (decide.getSong as jest.Mock).mockResolvedValue({ id: 7, artist: 'Muse', title: 'Starlight', brands: [], brand_count: 0 });
+  (decide.getSongDetail as jest.Mock).mockResolvedValue({
+    song: { artist: 'Muse', title: 'Starlight', song_key: 'muse|starlight', popularity: 80, karaoke: false },
+    versions: [],
+  });
   const app = renderRouter(makeRoutes(), { initialUrl: '/discover' });
   await screen.findByTestId('discover-screen');
-  act(() => router.push('/song/7'));
+  act(() => router.push({ pathname: '/song/[id]', params: { id: 'muse|starlight' } }));
   await screen.findByText('Starlight');
   fireEvent.press(screen.getByTestId('song-make'));
-  await act(async () => fireEvent.press(await screen.findByTestId('make-submit')));
+  await readySubmit();
+  await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
   expect(await screen.findByTestId('make-tab-screen')).toBeTruthy();
   const root = app.getRouterState()?.routes[0]?.state;
   expect(root?.routes?.map((r) => r.name)).toEqual(['(tabs)']);
@@ -255,7 +286,8 @@ it('Discover → song → Make it → created: the song and make screens are gon
 it('after create the screen keeps its song until it is gone (no "Pick a song" flash); unmount clears the intent', async () => {
   const dismiss = jest.spyOn(router, 'dismissTo').mockImplementation(() => {});
   const app = openMake();
-  await act(async () => fireEvent.press(await screen.findByTestId('make-submit')));
+  await readySubmit();
+  await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
   expect(dismiss).toHaveBeenCalledWith('/(tabs)/make');
   expect(screen.queryByTestId('make-no-intent')).toBeNull();
   expect(screen.getByTestId('make-pick')).toBeTruthy();
@@ -266,7 +298,7 @@ it('after create the screen keeps its song until it is gone (no "Pick a song" fl
 
 it('an open pick card outlives the 30-minute resume window (expiry only applies to resuming)', async () => {
   const start = Date.now();
-  useMakeIntent.getState().set({ artist: 'Muse', title: 'Starlight', createdAt: start - 29 * 60 * 1000 });
+  useMakeIntent.getState().set({ artist: 'Muse', title: 'Starlight', source: 'typed', editedFields: [], createdAt: start - 29 * 60 * 1000 });
   openMake();
   expect(await screen.findByTestId('make-pick')).toBeTruthy();
   // Two minutes later the intent is 31 minutes old; any re-render must keep the song and its results.

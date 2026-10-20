@@ -4,9 +4,10 @@
 #
 #   xcrun simctl spawn booted defaults write com.nomadkaraoke.mobile AppleLanguages -array ar
 #   xcrun simctl launch booted com.nomadkaraoke.mobile   # first launch flips RTL; it applies on the next
-#   maestro test -e STACK=http://127.0.0.1:8010 -e PLATFORM=ios -e SHOT=ux-ar maestro/screens/long-title.yaml
+#   maestro test -e STACK=http://127.0.0.1:8010 -e SHOTS=docs/screenshots/phase1b/ios -e SHOT=ux-ar maestro/screens/long-title.yaml
 #   xcrun simctl spawn booted defaults delete com.nomadkaraoke.mobile AppleLanguages   # back to the device language
 #
+# Needs the same stacks and Metro env as scripts/e2e-local.sh (decide's search local stack on :8020).
 # Targets testIDs only (no English text), so it works in any locale. SHOT prefixes the screenshot names.
 appId: com.nomadkaraoke.mobile
 name: screens-long-title
@@ -45,32 +46,33 @@ name: screens-long-title
     visible:
       id: "discover-search-input"
     timeout: 60000
-# A real decide song with a long title (45 characters, plus a long credit line).
+# The search local stack's longest title: Elton John "Rocket Man (I Think It's Going to Be a Long, Long Time)".
 - tapOn:
     id: "discover-search-input"
-- inputText: "born is the king"
+- inputText: "rocket man elton"
 - extendedWaitUntil:
-    visible: ".*Born Is The King.*"
+    visible:
+      id: "song-card"
     timeout: 30000
 # Search key: closes the keyboard and iOS's text edit menu, which can sit over the first result.
 - pressKey: Enter
 - waitForAnimationToEnd:
     timeout: 5000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-discover-results
+- takeScreenshot: ${SHOTS}/${SHOT}-discover-results
 - tapOn:
-    id: "song-row-421104"
+    id: "song-card"
 - extendedWaitUntil:
     visible:
       id: "song-badge"
     timeout: 20000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-song-page
+- takeScreenshot: ${SHOTS}/${SHOT}-song-page
 - tapOn:
     id: "song-make"
 - extendedWaitUntil:
     visible:
       id: "signin-sheet"
     timeout: 10000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-signin-sheet
+- takeScreenshot: ${SHOTS}/${SHOT}-signin-sheet
 - runFlow:
     file: ../common/google-signin.yaml
     env:
@@ -79,21 +81,20 @@ name: screens-long-title
     visible:
       id: "make-pick"
     timeout: 30000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-make-pick
-- tapOn:
-    id: "make-submit"
+- takeScreenshot: ${SHOTS}/${SHOT}-make-pick
+- runFlow: ../common/make-submit.yaml
 - extendedWaitUntil:
     visible:
       id: "make-list"
     timeout: 20000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-make-tab-working
+- takeScreenshot: ${SHOTS}/${SHOT}-make-tab-working
 - extendedWaitUntil:
     visible:
       id: "job-ready-.*"
     timeout: 120000
 - waitForAnimationToEnd:
     timeout: 5000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-make-tab-ready
+- takeScreenshot: ${SHOTS}/${SHOT}-make-tab-ready
 - tapOn:
     id: "job-card-.*"
 - extendedWaitUntil:
@@ -102,4 +103,4 @@ name: screens-long-title
     timeout: 20000
 - waitForAnimationToEnd:
     timeout: 5000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/${SHOT}-ready
+- takeScreenshot: ${SHOTS}/${SHOT}-ready

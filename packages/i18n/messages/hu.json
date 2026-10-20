@@ -6,7 +6,20 @@
     "language": "Nyelv",
     "credits": "{credits, plural, one {# kredit} other {# kredit}}",
     "title": "Profilom",
-    "buyCredits": "Kredit vásárlása"
+    "buyCredits": "Kredit vásárlása",
+    "offlineDownload": "Dallista letöltése offline használatra",
+    "offlineDownloadSize": "Dallista letöltése offline használatra ({size} MB)",
+    "offlineDownloading": "Dallista letöltése… {percent}%",
+    "offlineError": "Nem sikerült letölteni a dallistát.",
+    "offlineHeading": "Offline dallista",
+    "offlineHint": "Keress dalokat internetkapcsolat nélkül, az erre a telefonra mentett listából.",
+    "offlineRemove": "Offline dallista eltávolítása",
+    "offlineRetry": "Letöltés újrapróbálása",
+    "offlineSaved": "Dallista elmentve erre a telefonra ({size} MB)",
+    "offlineUpdated": "Dallista frissítve {days, plural, =0 {ma} one {# napja} other {# napja}}",
+    "offlineRemoveTitle": "Eltávolítod az offline dallistát?",
+    "offlineRemoveBody": "Az internetkapcsolat nélküli keresés nem fog működni, amíg újra le nem töltöd.",
+    "offlineRemoveConfirm": "Eltávolítás"
   },
   "common": {
     "error": "Valami hiba történt.",
@@ -61,7 +74,10 @@
     "makeIt": "Készítsd el · 1 kredit",
     "noKaraoke": "Nem található hozzá karaoke verzió",
     "hasKaraokeHint": "Ettől függetlenül elkészítheted a sajátodat az általad választott hanganyagból.",
-    "noKaraokeHint": "Készíts belőle saját karaoke videót, készen az éneklésre és megosztásra."
+    "noKaraokeHint": "Készíts belőle saját karaoke videót, készen az éneklésre és megosztásra.",
+    "offlineMissing": "Offline módban vagy, és ez a dal nem szerepel az erre a telefonra mentett dallistában.",
+    "offlineNote": "Offline · az erre a telefonra mentett dallistából",
+    "cloudErrorNote": "A keresés jelenleg nem érhető el · az erre a telefonra mentett dallista jelenik meg"
   },
   "tabs": {
     "discover": "Felfedezés",
@@ -106,9 +122,7 @@
     "searchingHint": "Ez akár egy percig is eltarthat.",
     "seeOtherSources": "További források ({count})",
     "submit": "Készítsd el",
-    "youtubeInvalid": "Ez nem tűnik érvényes YouTube-linknek.",
     "youtubeLabel": "YouTube-link",
-    "youtubeToggle": "Inkább illessz be egy YouTube-linket",
     "category": {
       "best": "Legjobb választás",
       "compilations": "Válogatások",
@@ -121,7 +135,37 @@
       "vinyl": "Bakelit felvételek",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "A dal adatainak ellenőrzése…",
+    "matchUsingTyped": "Az általad beírtak használata: {value}",
+    "matchUseTidied": "Letisztított verzió használata",
+    "matchUseCorrection": "Javítás használata",
+    "communityWatch": "Megtekintés YouTube-on",
+    "communityExists": "Már létezik egy közösségi karaoke verzió",
+    "wrongTrack": "Rossz dal?",
+    "moreCount": "+{count} további",
+    "showLess": "Kevesebb mutatása",
+    "avail": {
+      "high": "Jó elérhetőség",
+      "medium": "Közepes elérhetőség",
+      "low": "Alacsony elérhetőség"
+    },
+    "linkInvalid": "Ez nem tűnik érvényes linknek.",
+    "linkUnsupported": "Ez a link nem támogatott. Próbálj meg egy másik forrást.",
+    "warn": {
+      "fileLooksLike": "A fájlnév alapján ez egy másik szám lehet: {file}",
+      "fileMayNotMatch": "Lehet, hogy a fájlnév nem egyezik a daloddal",
+      "lowAvailability": "Korlátozott elérhetőség – az előkészítés kicsit több időt vehet igénybe",
+      "noLossless": "Nem érhető el veszteségmentes forrás – csak YouTube-/veszteséges vagy bakelitről rippelt verzió található",
+      "lossy": "Ez egy YouTube/veszteséges forrás. A veszteségmentes hangból jobb karaoke készül, ha elérhető."
+    },
+    "youtubeBlocked": "A YouTube jelenleg blokkolja a letöltéseinket, így ezt most nem tudjuk használni. Válassz egy másik forrást, vagy próbáld újra pár perc múlva.",
+    "youtubeFallbackToggle": "Nem találod a dalodat? Illessz be inkább egy linket",
+    "filename": "Fájlnév:",
+    "release": "Kiadás:",
+    "titleMatch": "Címegyezés",
+    "youtubeFallbackHint": "Megtaláltad a dalt a YouTube-on? Illeszd be a linket, és abból elkészítjük a karaoke videót.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Még nem készült semmi",
@@ -208,5 +252,44 @@
     "share": "Megosztás",
     "savedGallery": "Elmentve a galériádba",
     "notReady": "Ez a videó még nincs kész. Amint elkészül, a(z) {tab} fülön találod majd."
+  },
+  "discover": {
+    "describeLabel": "Írd le a dalt",
+    "describeNothing": "Nem sikerült rájönnünk, melyik dal lehet az. Próbáld meg máshogy leírni.",
+    "describePlaceholder": "pl. az a dal, amiben az van, hogy „is this the real life”",
+    "libraryOrDisc": "Könyvtárban vagy lemezen",
+    "makeHint": "Pontosan ezt az előadót és címet használja az elkészítéshez",
+    "makeIt": "Készítsd el →",
+    "more": "Továbbiak…",
+    "needsConnection": "A dal elkészítéséhez internetkapcsolat szükséges",
+    "noKaraokeYet": "🎵 Még nincs karaoke verziója",
+    "notIt": "Nem ez az?",
+    "offlineBanner": "Offline · keresés a telefonra mentett dalok között (frissítve: {days, plural, =0 {ma} one {# napja} other {# napja}})",
+    "offlineDownload": "Dallista letöltése",
+    "offlineNoList": "Offline · még nincs dallista mentve erre a telefonra",
+    "resultsHeading": "Dalok karaoke verzióval",
+    "showAll": "Mind a(z) {count} megjelenítése",
+    "similarHeading": "Egyéb hasonló című dalok ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Erre a dalra gondolsz",
+    "unreachable": "A kereső jelenleg nem érhető el.",
+    "versionsHeading": "Karaoke verziók ({count})",
+    "warmingUp": "Kereső bemelegítése…",
+    "youtube": "▶ YouTube",
+    "commercial": "Kereskedelmi",
+    "community": "Közösségi",
+    "correctedTo": "Javítva erre: {value} — ezt írtad: „{typed}”",
+    "describeLink": "Nem jut eszedbe a címe? Írd körül",
+    "describeSubmit": "Keresés",
+    "didYouMean": "Erre gondoltál?",
+    "figuringOut": "Kitaláljuk, melyik dalra gondolsz…",
+    "keepTyped": "Maradjon, amit írtam",
+    "makeBarAction": "Készítsd el",
+    "makeBarPrompt": "Nem találod a dalodat?",
+    "showMore": "Még {count} megjelenítése",
+    "tidiedTo": "Rendezve erre: {value}",
+    "undo": "Visszavonás",
+    "whichOne": "Melyik dalra gondolsz?",
+    "rejected": "Erre nem sikerült rákeresni. Próbálkozz más szavakkal."
   }
 }

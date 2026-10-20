@@ -26,12 +26,16 @@ name: make-8-not-sure
     timeout: 30000
 - assertNotVisible:
     id: "make-pick"
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-not-sure-list
+- takeScreenshot: ${SHOTS}/make-not-sure-list
 - tapOn:
     id: "make-source-.*"
     index: 0
-- tapOn:
-    id: "make-submit"
+# The link box comes first at tier 3 and the rows carry gen's details, so Make it is below the fold.
+- scrollUntilVisible:
+    element:
+      id: "make-submit"
+    direction: DOWN
+- runFlow: ../common/make-submit.yaml
 - extendedWaitUntil:
     visible:
       id: "job-card-.*"

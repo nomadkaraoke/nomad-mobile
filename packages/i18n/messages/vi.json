@@ -6,7 +6,20 @@
     "language": "Ngôn ngữ",
     "credits": "{credits, plural, one {# credit} other {# credit}}",
     "title": "Tôi",
-    "buyCredits": "Mua credit"
+    "buyCredits": "Mua credit",
+    "offlineDownload": "Tải danh sách bài hát để dùng ngoại tuyến",
+    "offlineDownloadSize": "Tải danh sách bài hát để dùng ngoại tuyến ({size} MB)",
+    "offlineDownloading": "Đang tải danh sách bài hát… {percent}%",
+    "offlineError": "Không thể tải danh sách bài hát.",
+    "offlineHeading": "Danh sách bài hát ngoại tuyến",
+    "offlineHint": "Tìm bài hát ngay cả khi không có mạng, từ danh sách đã lưu trên điện thoại này.",
+    "offlineRemove": "Xóa danh sách bài hát ngoại tuyến",
+    "offlineRetry": "Thử tải lại",
+    "offlineSaved": "Đã lưu danh sách bài hát trên điện thoại này ({size} MB)",
+    "offlineUpdated": "Danh sách bài hát được cập nhật {days, plural, =0 {hôm nay} one {# ngày trước} other {# ngày trước}}",
+    "offlineRemoveTitle": "Xóa danh sách bài hát ngoại tuyến?",
+    "offlineRemoveBody": "Bạn sẽ không thể tìm kiếm khi không có mạng cho đến khi tải lại danh sách.",
+    "offlineRemoveConfirm": "Xóa"
   },
   "common": {
     "error": "Đã có lỗi xảy ra.",
@@ -61,7 +74,10 @@
     "makeIt": "Tạo ngay · 1 credit",
     "noKaraoke": "Không tìm thấy bản karaoke",
     "hasKaraokeHint": "Bạn vẫn có thể tự tạo bản riêng từ âm thanh bạn chọn.",
-    "noKaraokeHint": "Tự tạo video karaoke cho bài này, sẵn sàng để hát và chia sẻ."
+    "noKaraokeHint": "Tự tạo video karaoke cho bài này, sẵn sàng để hát và chia sẻ.",
+    "offlineMissing": "Bạn đang ngoại tuyến và bài hát này không có trong danh sách đã lưu trên điện thoại này.",
+    "offlineNote": "Ngoại tuyến · từ danh sách bài hát đã lưu trên điện thoại này",
+    "cloudErrorNote": "Hiện không thể tìm kiếm trực tuyến · đang hiển thị danh sách bài hát đã lưu trên điện thoại này"
   },
   "tabs": {
     "discover": "Khám phá",
@@ -106,9 +122,7 @@
     "searchingHint": "Quá trình này có thể mất tới một phút.",
     "seeOtherSources": "Xem các nguồn khác ({count})",
     "submit": "Tạo bài hát",
-    "youtubeInvalid": "Liên kết này có vẻ không phải là link YouTube.",
     "youtubeLabel": "Liên kết YouTube",
-    "youtubeToggle": "Dán liên kết YouTube thay thế",
     "category": {
       "best": "Lựa chọn tốt nhất",
       "compilations": "Tuyển tập",
@@ -121,7 +135,37 @@
       "vinyl": "Bản rip từ đĩa than",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Đang kiểm tra chi tiết bài hát…",
+    "matchUsingTyped": "Sử dụng nội dung bạn đã nhập: {value}",
+    "matchUseTidied": "Sử dụng bản đã tinh chỉnh",
+    "matchUseCorrection": "Sử dụng bản sửa đổi",
+    "communityWatch": "Xem trên YouTube",
+    "communityExists": "Đã có sẵn một phiên bản karaoke từ cộng đồng",
+    "wrongTrack": "Sai bài hát?",
+    "moreCount": "+{count} phiên bản khác",
+    "showLess": "Ẩn bớt",
+    "avail": {
+      "high": "Độ khả dụng cao",
+      "medium": "Độ khả dụng trung bình",
+      "low": "Nguồn tải hạn chế"
+    },
+    "linkInvalid": "Đây dường như không phải là một liên kết hợp lệ.",
+    "linkUnsupported": "Liên kết này không được hỗ trợ. Bạn hãy thử một nguồn khác nhé.",
+    "warn": {
+      "fileLooksLike": "Tên tệp cho thấy đây là một bài hát khác: {file}",
+      "fileMayNotMatch": "Tên tệp có thể không khớp với bài hát của bạn",
+      "lowAvailability": "Độ khả dụng thấp — có thể mất thêm một chút thời gian để chuẩn bị",
+      "noLossless": "Không có nguồn lossless — chỉ tìm thấy bản trích xuất từ YouTube/lossy hoặc đĩa than (vinyl)",
+      "lossy": "Đây là nguồn YouTube/lossy. Bản audio lossless sẽ cho ra video karaoke chất lượng tốt hơn nếu có sẵn."
+    },
+    "youtubeBlocked": "YouTube hiện đang chặn lượt tải xuống của chúng tôi nên tạm thời chưa dùng được nguồn này. Bạn hãy chọn một nguồn khác hoặc thử lại sau vài phút nhé.",
+    "youtubeFallbackToggle": "Không tìm thấy bài hát của bạn? Dán liên kết vào đây",
+    "filename": "Tên file:",
+    "release": "Phát hành:",
+    "titleMatch": "Khớp tiêu đề",
+    "youtubeFallbackHint": "Bạn tìm thấy bài hát trên YouTube? Hãy dán liên kết và chúng tôi sẽ tạo video karaoke từ đó.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Chưa có bài nào được tạo",
@@ -208,5 +252,44 @@
     "share": "Chia sẻ",
     "savedGallery": "Đã lưu vào bộ sưu tập của bạn",
     "notReady": "Video này vẫn chưa sẵn sàng. Bạn sẽ tìm thấy video ở tab {tab} khi hoàn tất."
+  },
+  "discover": {
+    "describeLabel": "Mô tả bài hát",
+    "describeNothing": "Chưa tìm ra bài hát bạn muốn nói đến. Hãy thử mô tả theo cách khác xem sao nhé.",
+    "describePlaceholder": "vd: bài có câu “is this the real life”",
+    "libraryOrDisc": "Trong thư viện hoặc trên đĩa",
+    "makeHint": "Dùng chính xác tên nghệ sĩ và tên bài hát này để tạo",
+    "makeIt": "Tạo bài hát →",
+    "more": "Thêm…",
+    "needsConnection": "Cần có kết nối mạng để tạo bài hát",
+    "noKaraokeYet": "🎵 Chưa có phiên bản karaoke",
+    "notIt": "Không phải bài này?",
+    "offlineBanner": "Ngoại tuyến · đang tìm trong các bài hát đã lưu trên điện thoại này (cập nhật {days, plural, =0 {hôm nay} one {# ngày trước} other {# ngày trước}})",
+    "offlineDownload": "Tải danh sách bài hát về máy",
+    "offlineNoList": "Ngoại tuyến · chưa có danh sách bài hát nào được lưu trên điện thoại này",
+    "resultsHeading": "Bài hát đã có phiên bản karaoke",
+    "showAll": "Xem tất cả {count}",
+    "similarHeading": "Các bài hát khác có tên tương tự ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Bài hát bạn đang tìm",
+    "unreachable": "Hiện không thể kết nối tới tính năng tìm kiếm.",
+    "versionsHeading": "Phiên bản karaoke ({count})",
+    "warmingUp": "Đang chuẩn bị tìm kiếm…",
+    "youtube": "▶ YouTube",
+    "commercial": "Thương mại",
+    "community": "Cộng đồng",
+    "correctedTo": "Đã sửa thành {value} — bạn đã nhập “{typed}”",
+    "describeLink": "Không nhớ tên bài? Thử mô tả xem",
+    "describeSubmit": "Tìm ngay",
+    "didYouMean": "Có phải ý bạn là?",
+    "figuringOut": "Đang tìm xem ý bạn là bài nào…",
+    "keepTyped": "Giữ nguyên nội dung tôi đã nhập",
+    "makeBarAction": "Tạo bài hát",
+    "makeBarPrompt": "Không thấy bài hát bạn cần?",
+    "showMore": "Xem thêm {count} bài",
+    "tidiedTo": "Đã chỉnh gọn thành {value}",
+    "undo": "Hoàn tác",
+    "whichOne": "Ý bạn là bài hát nào?",
+    "rejected": "Không thể tìm kiếm nội dung đó. Hãy thử các từ khóa khác xem sao."
   }
 }

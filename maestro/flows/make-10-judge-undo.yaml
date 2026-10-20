@@ -1,0 +1,72 @@
+# Make parity 10 (spec §4.3): gen's match judge corrects a typed song ("content") → "Corrected to … · Undo" →
+# Undo puts back exactly what was typed → Make it → the job has the typed artist and title.
+appId: com.nomadkaraoke.mobile
+name: make-10-judge-undo
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: judge
+      CREDITS: "2"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: judge
+      STACK: ${STACK}
+      EMAIL: ${output.email}
+      JUDGE_KIND: content
+      JUDGE_ARTIST: "Fake Artist"
+      JUDGE_TITLE: "Judged Song"
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/make-any.yaml
+    env:
+      ARTIST: "Fake Artst"
+      TITLE: "Judgd Sng"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "match-undo"
+    timeout: 30000
+- assertVisible:
+    id: "make-song-title"
+    text: "Judged Song"
+- assertVisible:
+    id: "make-song-artist"
+    text: "Fake Artist"
+- takeScreenshot: ${SHOTS}/make-judge-corrected
+- tapOn:
+    id: "match-undo"
+- extendedWaitUntil:
+    visible:
+      id: "match-redo"
+    timeout: 10000
+- assertVisible:
+    id: "make-song-title"
+    text: "Judgd Sng"
+- assertVisible:
+    id: "make-song-artist"
+    text: "Fake Artst"
+- takeScreenshot: ${SHOTS}/make-judge-undone
+- extendedWaitUntil:
+    visible:
+      id: "make-pick"
+    timeout: 30000
+- runFlow: ../common/make-submit.yaml
+- extendedWaitUntil:
+    visible:
+      id: "job-card-.*"
+    timeout: 20000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: job
+      STACK: ${STACK}
+      TOKEN: ${output.token}
+      EXPECT_ARTIST: "Fake Artst"
+      EXPECT_TITLE: "Judgd Sng"

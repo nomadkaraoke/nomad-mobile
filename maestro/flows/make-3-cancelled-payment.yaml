@@ -42,4 +42,4 @@ name: make-3-cancelled-payment
     id: "credits-checkout"
 - assertNotVisible:
     id: "credits-added"
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/credits-no-payment
+- takeScreenshot: ${SHOTS}/credits-no-payment

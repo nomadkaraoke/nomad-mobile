@@ -5,7 +5,11 @@ import { useAuth } from '../auth/store';
 import { apiError, gen, session } from '../test-utils/genAuthMock';
 import { signInRoutes } from '../test-utils/signInRoutes';
 
-jest.mock('@nomad/api-decide', () => ({ configureClient: jest.fn(), popularSongs: jest.fn(async () => []) }));
+jest.mock('@nomad/api-decide', () => ({
+  configureClient: jest.fn(),
+  popularSongs: jest.fn(async () => []),
+  pingSearch: jest.fn(async () => true),
+}));
 jest.mock('@nomad/api-gen', () => ({
   ...jest.requireActual('@nomad/api-gen'),
   sendCode: jest.fn(),

@@ -6,7 +6,20 @@
     "language": "Språk",
     "credits": "{credits, plural, one {# kredit} other {# krediter}}",
     "title": "Jag",
-    "buyCredits": "Köp krediter"
+    "buyCredits": "Köp krediter",
+    "offlineDownload": "Ladda ner låtlistan för offlineanvändning",
+    "offlineDownloadSize": "Ladda ner låtlistan för offlineanvändning ({size} MB)",
+    "offlineDownloading": "Laddar ner låtlistan… {percent}%",
+    "offlineError": "Det gick inte att ladda ner låtlistan.",
+    "offlineHeading": "Offlinelåtlista",
+    "offlineHint": "Sök efter låtar utan internetanslutning, från en lista som sparats på den här telefonen.",
+    "offlineRemove": "Ta bort offlinelåtlistan",
+    "offlineRetry": "Försök ladda ner igen",
+    "offlineSaved": "Låtlistan har sparats på den här telefonen ({size} MB)",
+    "offlineUpdated": "Låtlistan uppdaterades {days, plural, =0 {i dag} one {för # dag sedan} other {för # dagar sedan}}",
+    "offlineRemoveTitle": "Ta bort offlinelåtlistan?",
+    "offlineRemoveBody": "Det går inte att söka utan anslutning förrän du laddar ner den igen.",
+    "offlineRemoveConfirm": "Ta bort"
   },
   "common": {
     "error": "Något gick fel.",
@@ -61,7 +74,10 @@
     "makeIt": "Skapa · 1 kredit",
     "noKaraoke": "Hittade ingen karaokeversion",
     "hasKaraokeHint": "Du kan fortfarande göra en egen, utifrån ljudet du väljer.",
-    "noKaraokeHint": "Gör en egen karaokevideo av den, redo att sjungas till och delas."
+    "noKaraokeHint": "Gör en egen karaokevideo av den, redo att sjungas till och delas.",
+    "offlineMissing": "Du är offline och den här låten finns inte i låtlistan som sparats på den här telefonen.",
+    "offlineNote": "Offline · från låtlistan som sparats på den här telefonen",
+    "cloudErrorNote": "Det går inte att nå sökningen just nu · visar låtlistan som sparats på denna telefon"
   },
   "tabs": {
     "discover": "Upptäck",
@@ -106,9 +122,7 @@
     "searchingHint": "Det kan ta upp till en minut.",
     "seeOtherSources": "Se andra källor ({count})",
     "submit": "Skapa",
-    "youtubeInvalid": "Det där ser inte ut som en YouTube-länk.",
     "youtubeLabel": "YouTube-länk",
-    "youtubeToggle": "Klistra in en YouTube-länk i stället",
     "category": {
       "best": "Bästa valet",
       "compilations": "Samlingar",
@@ -121,7 +135,37 @@
       "vinyl": "Vinylrippar",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Kontrollerar låtdetaljer…",
+    "matchUsingTyped": "Använder det du skrev: {value}",
+    "matchUseTidied": "Använd rensad version",
+    "matchUseCorrection": "Använd korrigeringen",
+    "communityWatch": "Titta på YouTube",
+    "communityExists": "Det finns redan en community-karaokeversion",
+    "wrongTrack": "Fel spår?",
+    "moreCount": "+{count} fler",
+    "showLess": "Visa mindre",
+    "avail": {
+      "high": "Hög tillgänglighet",
+      "medium": "Medelhög tillgänglighet",
+      "low": "Låg tillgänglighet"
+    },
+    "linkInvalid": "Det där ser inte ut som en länk.",
+    "linkUnsupported": "Den länken stöds inte. Prova en annan källa.",
+    "warn": {
+      "fileLooksLike": "Filnamnet tyder på ett annat spår: {file}",
+      "fileMayNotMatch": "Filnamnet kanske inte matchar din låt",
+      "lowAvailability": "Låg tillgänglighet – det kan ta lite längre tid att förbereda",
+      "noLossless": "Inga förlustfria källor tillgängliga – hittade bara YouTube/lossy eller vinylrippar",
+      "lossy": "Detta är en YouTube-/komprimerad källa. Förlustfritt ljud ger bättre karaoke när det är tillgängligt."
+    },
+    "youtubeBlocked": "YouTube blockerar våra nedladdningar just nu, så vi kan inte använda den. Välj en annan källa eller försök igen om några minuter.",
+    "youtubeFallbackToggle": "Hittar du inte din låt? Klistra in en länk istället",
+    "filename": "Filnamn:",
+    "release": "Utgåva:",
+    "titleMatch": "Titelmatchning",
+    "youtubeFallbackHint": "Hittade du låten på YouTube? Klistra in länken så gör vi karaokevideon från den.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Inget skapat ännu",
@@ -208,5 +252,44 @@
     "share": "Dela",
     "savedGallery": "Sparat i ditt galleri",
     "notReady": "Den här videon är inte klar än. Du hittar den under fliken {tab} när den är klar."
+  },
+  "discover": {
+    "describeLabel": "Beskriv låten",
+    "describeNothing": "Vi kunde inte lista ut vilken låt det är. Försök att beskriva den på ett annat sätt.",
+    "describePlaceholder": "t.ex. den som går ”is this the real life”",
+    "libraryOrDisc": "I ett bibliotek eller på skiva",
+    "makeHint": "Använder exakt denna artist och titel för att skapa den",
+    "makeIt": "Skapa den →",
+    "more": "Mer…",
+    "needsConnection": "Du behöver vara ansluten för att skapa en låt",
+    "noKaraokeYet": "🎵 Ingen karaokeversion ännu",
+    "notIt": "Inte rätt låt?",
+    "offlineBanner": "Offline · söker bland låtar sparade på denna telefon (uppdaterades {days, plural, =0 {idag} one {för # dag sedan} other {för # dagar sedan}})",
+    "offlineDownload": "Ladda ner låtlistan",
+    "offlineNoList": "Offline · ingen låtlista har sparats på denna telefon ännu",
+    "resultsHeading": "Låtar med karaokeversioner",
+    "showAll": "Visa alla {count}",
+    "similarHeading": "Andra låtar med liknande namn ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Låten du menar",
+    "unreachable": "Det går inte att nå söktjänsten just nu.",
+    "versionsHeading": "Karaokeversioner ({count})",
+    "warmingUp": "Förbereder sökningen…",
+    "youtube": "▶ YouTube",
+    "commercial": "Kommersiell",
+    "community": "Community",
+    "correctedTo": "Korrigerat till {value} — du skrev ”{typed}”",
+    "describeLink": "Kommer du inte ihåg vad den heter? Beskriv den",
+    "describeSubmit": "Hitta den",
+    "didYouMean": "Menade du?",
+    "figuringOut": "Listar ut vilken låt du menar…",
+    "keepTyped": "Behåll det jag skrev",
+    "makeBarAction": "Skapa",
+    "makeBarPrompt": "Hittar du inte din låt?",
+    "showMore": "Visa {count} till",
+    "tidiedTo": "Justerat till {value}",
+    "undo": "Ångra",
+    "whichOne": "Vilken låt menar du?",
+    "rejected": "Det gick inte att söka på det. Prova med andra sökord."
   }
 }

@@ -6,7 +6,20 @@
     "language": "Limbă",
     "credits": "{credits, plural, one {# credit} few {# credite} other {# de credite}}",
     "title": "Eu",
-    "buyCredits": "Cumpără credite"
+    "buyCredits": "Cumpără credite",
+    "offlineDownload": "Descarcă lista de melodii pentru utilizare offline",
+    "offlineDownloadSize": "Descarcă lista de melodii pentru utilizare offline ({size} MB)",
+    "offlineDownloading": "Se descarcă lista de melodii… {percent}%",
+    "offlineError": "Nu s-a putut descărca lista de melodii.",
+    "offlineHeading": "Listă de melodii offline",
+    "offlineHint": "Caută melodii fără conexiune la internet, dintr-o listă salvată pe acest telefon.",
+    "offlineRemove": "Elimină lista de melodii offline",
+    "offlineRetry": "Reîncearcă descărcarea",
+    "offlineSaved": "Listă de melodii salvată pe acest telefon ({size} MB)",
+    "offlineUpdated": "Listă de melodii actualizată {days, plural, =0 {astăzi} one {acum o zi} few {acum # zile} other {acum # de zile}}",
+    "offlineRemoveTitle": "Elimini lista de melodii offline?",
+    "offlineRemoveBody": "Căutarea fără conexiune nu va funcționa până când nu o descarci din nou.",
+    "offlineRemoveConfirm": "Elimină"
   },
   "common": {
     "error": "Ceva nu a funcționat.",
@@ -61,7 +74,10 @@
     "makeIt": "Creează · 1 credit",
     "noKaraoke": "Nu s-a găsit nicio versiune karaoke",
     "hasKaraokeHint": "Poți totuși să-ți creezi propria versiune, din fișierul audio pe care îl alegi.",
-    "noKaraokeHint": "Creează-ți propriul videoclip karaoke cu această piesă, gata de cântat și distribuit."
+    "noKaraokeHint": "Creează-ți propriul videoclip karaoke cu această piesă, gata de cântat și distribuit.",
+    "offlineMissing": "Ești offline, iar această melodie nu se află în lista salvată pe acest telefon.",
+    "offlineNote": "Offline · din lista de melodii salvată pe acest telefon",
+    "cloudErrorNote": "Căutarea nu este disponibilă acum · se afișează lista de melodii salvată pe acest telefon"
   },
   "tabs": {
     "discover": "Descoperă",
@@ -106,9 +122,7 @@
     "searchingHint": "Poate dura până la un minut.",
     "seeOtherSources": "Vezi celelalte surse ({count})",
     "submit": "Creează",
-    "youtubeInvalid": "Acesta nu pare a fi un link de YouTube valid.",
     "youtubeLabel": "Link de YouTube",
-    "youtubeToggle": "Lipește mai degrabă un link de YouTube",
     "category": {
       "best": "Cea mai bună alegere",
       "compilations": "Compilații",
@@ -121,7 +135,37 @@
       "vinyl": "Rip-uri de pe vinil",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Se verifică detaliile melodiei…",
+    "matchUsingTyped": "Folosim ce ai tastat: {value}",
+    "matchUseTidied": "Folosește versiunea curățată",
+    "matchUseCorrection": "Folosește corecția",
+    "communityWatch": "Urmărește pe YouTube",
+    "communityExists": "Există deja o versiune karaoke creată de comunitate",
+    "wrongTrack": "Piesă greșită?",
+    "moreCount": "+{count} mai multe",
+    "showLess": "Arată mai puțin",
+    "avail": {
+      "high": "Disponibilitate ridicată",
+      "medium": "Disponibilitate medie",
+      "low": "Disponibilitate redusă"
+    },
+    "linkInvalid": "Acesta nu pare a fi un link.",
+    "linkUnsupported": "Acest link nu este acceptat. Încearcă o altă sursă.",
+    "warn": {
+      "fileLooksLike": "Numele fișierului sugerează o altă piesă: {file}",
+      "fileMayNotMatch": "Este posibil ca numele fișierului să nu se potrivească cu melodia ta",
+      "lowAvailability": "Disponibilitate redusă — pregătirea ar putea dura puțin mai mult",
+      "noLossless": "Nu există surse lossless disponibile — s-au găsit doar surse YouTube/lossy sau rip-uri de pe vinil",
+      "lossy": "Aceasta este o sursă YouTube/lossy. Audio-ul lossless produce un karaoke mai bun când este disponibil."
+    },
+    "youtubeBlocked": "YouTube ne blochează descărcările în acest moment, așa că nu putem folosi această opțiune. Alege o altă sursă sau încearcă din nou în câteva minute.",
+    "youtubeFallbackToggle": "Nu-ți găsești melodia? Adaugă un link direct",
+    "filename": "Nume fișier:",
+    "release": "Lansare:",
+    "titleMatch": "Potrivire titlu",
+    "youtubeFallbackHint": "Ai găsit piesa pe YouTube? Lipește linkul și vom face videoclipul de karaoke din el.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Nu ai creat nicio piesă încă",
@@ -208,5 +252,44 @@
     "share": "Distribuie",
     "savedGallery": "Salvat în galeria ta",
     "notReady": "Acest videoclip nu este gata încă. Îl vei găsi în fila {tab} când va fi gata."
+  },
+  "discover": {
+    "describeLabel": "Descrie piesa",
+    "describeNothing": "Nu ne-am dat seama despre ce piesă este vorba. Încearcă să o descrii altfel.",
+    "describePlaceholder": "de ex. cea care zice „is this the real life”",
+    "libraryOrDisc": "Într-o bibliotecă sau pe disc",
+    "makeHint": "Folosește exact acest artist și acest titlu pentru a o crea",
+    "makeIt": "Creeaz-o →",
+    "more": "Mai multe…",
+    "needsConnection": "Crearea unei piese necesită conexiune la internet",
+    "noKaraokeYet": "🎵 Nicio versiune karaoke încă",
+    "notIt": "Nu e asta?",
+    "offlineBanner": "Offline · se caută în piesele salvate pe acest telefon (actualizat {days, plural, =0 {astăzi} one {acum # zi} few {acum # zile} other {acum # de zile}})",
+    "offlineDownload": "Descarcă lista de piese",
+    "offlineNoList": "Offline · nicio listă de piese nu este salvată pe acest telefon încă",
+    "resultsHeading": "Piese cu versiuni karaoke",
+    "showAll": "Arată toate cele {count}",
+    "similarHeading": "Alte piese cu titluri similare ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Piesa pe care o cauți",
+    "unreachable": "Căutarea nu este disponibilă momentan.",
+    "versionsHeading": "Versiuni karaoke ({count})",
+    "warmingUp": "Se inițializează căutarea…",
+    "youtube": "▶ YouTube",
+    "commercial": "Comercial",
+    "community": "Comunitate",
+    "correctedTo": "Corectat în {value} — ai scris „{typed}”",
+    "describeLink": "Nu-ți amintești cum se cheamă? Descrie-o",
+    "describeSubmit": "Găsește-o",
+    "didYouMean": "Ai vrut să spui?",
+    "figuringOut": "Încercăm să ne dăm seama la ce piesă te referi…",
+    "keepTyped": "Păstrează ce am scris",
+    "makeBarAction": "Creează",
+    "makeBarPrompt": "Nu-ți găsești piesa?",
+    "showMore": "Arată încă {count}",
+    "tidiedTo": "Ajustat în {value}",
+    "undo": "Anulează",
+    "whichOne": "La ce piesă te referi?",
+    "rejected": "Nu am putut căuta asta. Încearcă alte cuvinte."
   }
 }

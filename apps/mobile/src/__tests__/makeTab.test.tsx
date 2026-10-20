@@ -10,6 +10,7 @@ import { job, jobRoutes } from '../test-utils/jobFixtures';
 jest.mock('@nomad/api-decide', () => ({
   searchSongs: jest.fn(),
   popularSongs: jest.fn(async () => []),
+  pingSearch: jest.fn(async () => true),
   getSong: jest.fn(),
   configureClient: jest.fn(),
 }));

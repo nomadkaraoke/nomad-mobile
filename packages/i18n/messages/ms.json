@@ -6,7 +6,20 @@
     "language": "Bahasa",
     "credits": "{credits, plural, other {# kredit}}",
     "title": "Saya",
-    "buyCredits": "Beli kredit"
+    "buyCredits": "Beli kredit",
+    "offlineDownload": "Muat turun senarai lagu untuk kegunaan luar talian",
+    "offlineDownloadSize": "Muat turun senarai lagu untuk kegunaan luar talian ({size} MB)",
+    "offlineDownloading": "Memuat turun senarai lagu… {percent}%",
+    "offlineError": "Tidak dapat memuat turun senarai lagu.",
+    "offlineHeading": "Senarai lagu luar talian",
+    "offlineHint": "Cari lagu tanpa sambungan, daripada senarai yang disimpan pada telefon ini.",
+    "offlineRemove": "Padamkan senarai lagu luar talian",
+    "offlineRetry": "Cuba muat turun sekali lagi",
+    "offlineSaved": "Senarai lagu disimpan pada telefon ini ({size} MB)",
+    "offlineUpdated": "Senarai lagu dikemas kini {days, plural, =0 {hari ini} one {# hari lalu} other {# hari lalu}}",
+    "offlineRemoveTitle": "Padam senarai lagu luar talian?",
+    "offlineRemoveBody": "Carian tanpa sambungan internet tidak akan berfungsi sehingga anda memuat turunnya semula.",
+    "offlineRemoveConfirm": "Alih keluar"
   },
   "common": {
     "error": "Sesuatu telah berlaku masalah.",
@@ -61,7 +74,10 @@
     "makeIt": "Buat · 1 kredit",
     "noKaraoke": "Tiada versi karaoke ditemui",
     "hasKaraokeHint": "Anda masih boleh cipta versi anda sendiri, daripada audio yang anda pilih.",
-    "noKaraokeHint": "Cipta video karaoke anda sendiri untuk lagu ini, sedia untuk dinyanyikan dan dikongsi."
+    "noKaraokeHint": "Cipta video karaoke anda sendiri untuk lagu ini, sedia untuk dinyanyikan dan dikongsi.",
+    "offlineMissing": "Anda sedang berada di luar talian, dan lagu ini tiada dalam senarai lagu yang disimpan pada telefon ini.",
+    "offlineNote": "Luar talian · daripada senarai lagu yang disimpan pada telefon ini",
+    "cloudErrorNote": "Carian tidak dapat dihubungi buat masa ini · memaparkan senarai lagu yang disimpan pada telefon ini"
   },
   "tabs": {
     "discover": "Teroka",
@@ -106,9 +122,7 @@
     "searchingHint": "Ini mungkin mengambil masa sehingga satu minit.",
     "seeOtherSources": "Lihat sumber lain ({count})",
     "submit": "Buat",
-    "youtubeInvalid": "Itu tidak kelihatan seperti pautan YouTube.",
     "youtubeLabel": "Pautan YouTube",
-    "youtubeToggle": "Tampal pautan YouTube sebagai ganti",
     "category": {
       "best": "Pilihan terbaik",
       "compilations": "Kompilasi",
@@ -121,7 +135,37 @@
       "vinyl": "Rip vinil",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Menyemak butiran lagu…",
+    "matchUsingTyped": "Menggunakan apa yang anda taip: {value}",
+    "matchUseTidied": "Gunakan versi yang dikemaskan",
+    "matchUseCorrection": "Gunakan pembetulan",
+    "communityWatch": "Tonton di YouTube",
+    "communityExists": "Versi karaoke komuniti sudah pun wujud",
+    "wrongTrack": "Trek salah?",
+    "moreCount": "+{count} lagi",
+    "showLess": "Tunjukkan lebih sedikit",
+    "avail": {
+      "high": "Ketersediaan tinggi",
+      "medium": "Ketersediaan sederhana",
+      "low": "Ketersediaan rendah"
+    },
+    "linkInvalid": "Itu nampaknya bukan pautan yang sah.",
+    "linkUnsupported": "Pautan tersebut tidak disokong. Sila cuba sumber lain.",
+    "warn": {
+      "fileLooksLike": "Nama fail menunjukkan lagu/trek yang berbeza: {file}",
+      "fileMayNotMatch": "Nama fail mungkin tidak sepadan dengan lagu anda",
+      "lowAvailability": "Ketersediaan rendah — mungkin mengambil sedikit masa lagi untuk disediakan",
+      "noLossless": "Tiada sumber lossless tersedia — hanya YouTube/lossy atau rakaman vinil yang ditemui",
+      "lossy": "Ini adalah sumber YouTube/lossy. Audio lossless menjadikan karaoke lebih baik jika tersedia."
+    },
+    "youtubeBlocked": "YouTube sedang menyekat muat turun kami buat masa ini, jadi kami tidak dapat menggunakannya. Sila pilih sumber lain atau cuba lagi dalam beberapa minit.",
+    "youtubeFallbackToggle": "Tidak jumpa lagu anda? Tampal pautan sebagai ganti",
+    "filename": "Nama fail:",
+    "release": "Keluaran:",
+    "titleMatch": "Tajuk sepadan",
+    "youtubeFallbackHint": "Jumpa lagu di YouTube? Tampal pautan dan kami akan buatkan video karaoke daripadanya.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Belum ada yang dibuat",
@@ -208,5 +252,44 @@
     "share": "Kongsi",
     "savedGallery": "Disimpan ke galeri anda",
     "notReady": "Video ini belum siap lagi. Anda boleh mencarinya di tab {tab} setelah selesai."
+  },
+  "discover": {
+    "describeLabel": "Huraikan lagu tersebut",
+    "describeNothing": "Kami tidak dapat mengenal pasti lagu itu. Cuba huraikannya dengan cara lain.",
+    "describePlaceholder": "cth. lagu dengan lirik “is this the real life”",
+    "libraryOrDisc": "Dalam pustaka atau pada cakera",
+    "makeHint": "Menggunakan artis dan tajuk tepat ini untuk menghasilkannya",
+    "makeIt": "Hasilkan →",
+    "more": "Lagi…",
+    "needsConnection": "Sambungan internet diperlukan untuk menghasilkan lagu",
+    "noKaraokeYet": "🎵 Belum ada versi karaoke",
+    "notIt": "Bukan lagu ini?",
+    "offlineBanner": "Luar talian · mencari lagu yang disimpan pada telefon ini (dikemas kini {days, plural, =0 {hari ini} other {# hari lalu}})",
+    "offlineDownload": "Muat turun senarai lagu",
+    "offlineNoList": "Luar talian · tiada senarai lagu yang disimpan pada telefon ini lagi",
+    "resultsHeading": "Lagu dengan versi karaoke",
+    "showAll": "Tunjukkan semua {count}",
+    "similarHeading": "Lagu lain dengan nama serupa ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Lagu yang anda maksudkan",
+    "unreachable": "Carian tidak dapat dicapai buat masa ini.",
+    "versionsHeading": "Versi karaoke ({count})",
+    "warmingUp": "Menyediakan carian…",
+    "youtube": "▶ YouTube",
+    "commercial": "Komersial",
+    "community": "Komuniti",
+    "correctedTo": "Dibetulkan kepada {value} — anda menaip “{typed}”",
+    "describeLink": "Tak ingat tajuknya? Cuba terangkan",
+    "describeSubmit": "Cari",
+    "didYouMean": "Maksud anda?",
+    "figuringOut": "Sedang mencari lagu yang anda maksudkan…",
+    "keepTyped": "Kekalkan apa yang saya taip",
+    "makeBarAction": "Buat",
+    "makeBarPrompt": "Lagu anda tiada dalam senarai?",
+    "showMore": "Tunjukkan {count} lagi",
+    "tidiedTo": "Dikemaskan kepada {value}",
+    "undo": "Buat asal",
+    "whichOne": "Lagu mana yang anda maksudkan?",
+    "rejected": "Carian tersebut tidak dapat dilakukan. Cuba gunakan perkataan lain."
   }
 }

@@ -6,7 +6,20 @@
     "language": "Sprog",
     "credits": "{credits, plural, one {# kredit} other {# kreditter}}",
     "title": "Mig",
-    "buyCredits": "Køb kreditter"
+    "buyCredits": "Køb kreditter",
+    "offlineDownload": "Download sangliste til offlinebrug",
+    "offlineDownloadSize": "Download sangliste til offlinebrug ({size} MB)",
+    "offlineDownloading": "Downloader sanglisten… {percent}%",
+    "offlineError": "Kunne ikke downloade sanglisten.",
+    "offlineHeading": "Offline sangliste",
+    "offlineHint": "Søg efter sange uden internetforbindelse fra en liste, der er gemt på denne telefon.",
+    "offlineRemove": "Fjern offline sangliste",
+    "offlineRetry": "Prøv at downloade igen",
+    "offlineSaved": "Sangliste gemt på denne telefon ({size} MB)",
+    "offlineUpdated": "Sangliste opdateret {days, plural, =0 {i dag} one {for # dag siden} other {for # dage siden}}",
+    "offlineRemoveTitle": "Fjern sanglisten til offlinebrug?",
+    "offlineRemoveBody": "Søgning uden internetforbindelse fungerer ikke, før du downloader den igen.",
+    "offlineRemoveConfirm": "Fjern"
   },
   "common": {
     "error": "Der gik noget galt.",
@@ -61,7 +74,10 @@
     "makeIt": "Lav den · 1 kredit",
     "noKaraoke": "Ingen karaoke-version fundet",
     "hasKaraokeHint": "Du kan stadig lave din egen ud fra den lydfil, du vælger.",
-    "noKaraokeHint": "Lav din egen karaokevideo af den, klar til at synge og dele."
+    "noKaraokeHint": "Lav din egen karaokevideo af den, klar til at synge og dele.",
+    "offlineMissing": "Du er offline, og denne sang findes ikke i sanglisten, der er gemt på denne telefon.",
+    "offlineNote": "Offline · fra sanglisten gemt på denne telefon",
+    "cloudErrorNote": "Kan ikke få forbindelse til søgningen lige nu · viser sanglisten, der er gemt på denne telefon"
   },
   "tabs": {
     "discover": "Udforsk",
@@ -106,9 +122,7 @@
     "searchingHint": "Dette kan tage op til et minut.",
     "seeOtherSources": "Se andre kilder ({count})",
     "submit": "Lav den",
-    "youtubeInvalid": "Det ligner ikke et gyldigt YouTube-link.",
     "youtubeLabel": "YouTube-link",
-    "youtubeToggle": "Indsæt et YouTube-link i stedet",
     "category": {
       "best": "Bedste valg",
       "compilations": "Opsamlinger",
@@ -121,7 +135,37 @@
       "vinyl": "Vinyl-rip",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Tjekker sangdetaljer…",
+    "matchUsingTyped": "Bruger det, du indtastede: {value}",
+    "matchUseTidied": "Brug den tilrettede version",
+    "matchUseCorrection": "Brug rettelsen",
+    "communityWatch": "Se på YouTube",
+    "communityExists": "Der findes allerede en fællesskabskaraokeversion",
+    "wrongTrack": "Forkert nummer?",
+    "moreCount": "+{count} mere",
+    "showLess": "Vis mindre",
+    "avail": {
+      "high": "Høj tilgængelighed",
+      "medium": "Middel tilgængelighed",
+      "low": "Lav tilgængelighed"
+    },
+    "linkInvalid": "Det ligner ikke et link.",
+    "linkUnsupported": "Det link understøttes ikke. Prøv en anden kilde.",
+    "warn": {
+      "fileLooksLike": "Filnavnet antyder et andet nummer: {file}",
+      "fileMayNotMatch": "Filnavnet passer muligvis ikke til din sang",
+      "lowAvailability": "Lav tilgængelighed – det tager måske lidt længere tid at forberede",
+      "noLossless": "Ingen tabsfrie kilder tilgængelige – der blev kun fundet YouTube/lossy eller vinyl-rips",
+      "lossy": "Dette er en YouTube/komprimeret kilde. Tabsfri lyd giver bedre karaoke, når det er tilgængeligt."
+    },
+    "youtubeBlocked": "YouTube blokerer vores downloads lige nu, så vi kan ikke bruge den. Vælg en anden kilde, eller prøv igen om et par minutter.",
+    "youtubeFallbackToggle": "Kan du ikke finde din sang? Indsæt et link i stedet",
+    "filename": "Filnavn:",
+    "release": "Udgivelse:",
+    "titleMatch": "Titelmatch",
+    "youtubeFallbackHint": "Fandt du sangen på YouTube? Indsæt linket, så laver vi karaokevideoen ud fra det.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Intet lavet endnu",
@@ -208,5 +252,44 @@
     "share": "Del",
     "savedGallery": "Gemt i dit galleri",
     "notReady": "Denne video er ikke klar endnu. Du finder den under fanen {tab}, når den er færdig."
+  },
+  "discover": {
+    "describeLabel": "Beskriv sangen",
+    "describeNothing": "Vi kunne ikke regne ud, hvilken sang det er. Prøv at beskrive den på en anden måde.",
+    "describePlaceholder": "f.eks. den der går ”is this the real life”",
+    "libraryOrDisc": "I et bibliotek eller på disk",
+    "makeHint": "Bruger præcis denne kunstner og titel til at lave den",
+    "makeIt": "Lav den →",
+    "more": "Mere…",
+    "needsConnection": "Det kræver internetforbindelse at lave en sang",
+    "noKaraokeYet": "🎵 Ingen karaokeversion endnu",
+    "notIt": "Ikke den rigtige?",
+    "offlineBanner": "Offline · søger blandt sange gemt på denne telefon (opdateret {days, plural, =0 {i dag} one {for # dag siden} other {for # dage siden}})",
+    "offlineDownload": "Download sanglisten",
+    "offlineNoList": "Offline · der er endnu ikke gemt nogen sangliste på denne telefon",
+    "resultsHeading": "Sange med karaokeversioner",
+    "showAll": "Vis alle {count}",
+    "similarHeading": "Andre sange med lignende navne ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Sangen du mener",
+    "unreachable": "Kan ikke få forbindelse til søgningen lige nu.",
+    "versionsHeading": "Karaokeversioner ({count})",
+    "warmingUp": "Gør søgningen klar…",
+    "youtube": "▶ YouTube",
+    "commercial": "Kommerciel",
+    "community": "Fællesskab",
+    "correctedTo": "Rettet til {value} — du skrev “{typed}”",
+    "describeLink": "Kan du ikke huske, hvad den hedder? Beskriv den",
+    "describeSubmit": "Find den",
+    "didYouMean": "Mente du?",
+    "figuringOut": "Finder ud af, hvilken sang du mener…",
+    "keepTyped": "Behold det, jeg skrev",
+    "makeBarAction": "Lav den",
+    "makeBarPrompt": "Kan du ikke finde din sang?",
+    "showMore": "Vis {count} mere",
+    "tidiedTo": "Finpudset til {value}",
+    "undo": "Fortryd",
+    "whichOne": "Hvilken sang mener du?",
+    "rejected": "Kunne ikke søge efter det. Prøv med andre ord."
   }
 }

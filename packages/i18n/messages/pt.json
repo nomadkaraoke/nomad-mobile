@@ -6,7 +6,20 @@
     "language": "Idioma",
     "credits": "{credits, plural, one {# crédito} other {# créditos}}",
     "title": "Perfil",
-    "buyCredits": "Comprar créditos"
+    "buyCredits": "Comprar créditos",
+    "offlineDownload": "Baixar lista de músicas para uso offline",
+    "offlineDownloadSize": "Baixar lista de músicas para uso offline ({size} MB)",
+    "offlineDownloading": "Baixando a lista de músicas… {percent}%",
+    "offlineError": "Não foi possível baixar a lista de músicas.",
+    "offlineHeading": "Lista de músicas offline",
+    "offlineHint": "Busque músicas sem conexão, a partir de uma lista salva neste celular.",
+    "offlineRemove": "Remover lista de músicas offline",
+    "offlineRetry": "Tentar baixar novamente",
+    "offlineSaved": "Lista de músicas salva neste celular ({size} MB)",
+    "offlineUpdated": "Lista de músicas atualizada {days, plural, =0 {hoje} one {há # dia} other {há # dias}}",
+    "offlineRemoveTitle": "Remover a lista de músicas offline?",
+    "offlineRemoveBody": "A busca offline não funcionará até que você baixe a lista novamente.",
+    "offlineRemoveConfirm": "Remover"
   },
   "common": {
     "error": "Algo deu errado.",
@@ -61,7 +74,10 @@
     "makeIt": "Criar · 1 crédito",
     "noKaraoke": "Nenhuma versão de karaokê encontrada",
     "hasKaraokeHint": "Você ainda pode criar a sua própria versão a partir do áudio que escolher.",
-    "noKaraokeHint": "Crie seu próprio vídeo de karaokê desta música, pronto para cantar e compartilhar."
+    "noKaraokeHint": "Crie seu próprio vídeo de karaokê desta música, pronto para cantar e compartilhar.",
+    "offlineMissing": "Você está offline e esta música não está na lista salva neste celular.",
+    "offlineNote": "Offline · da lista de músicas salva neste celular",
+    "cloudErrorNote": "Não foi possível acessar a busca no momento · mostrando a lista de músicas salva neste celular"
   },
   "tabs": {
     "discover": "Descobrir",
@@ -106,9 +122,7 @@
     "searchingHint": "Isso pode levar até um minuto.",
     "seeOtherSources": "Ver outras fontes ({count})",
     "submit": "Criar",
-    "youtubeInvalid": "Isso não parece um link do YouTube válido.",
     "youtubeLabel": "Link do YouTube",
-    "youtubeToggle": "Prefiro colar um link do YouTube",
     "category": {
       "best": "Melhor escolha",
       "compilations": "Coletâneas",
@@ -121,7 +135,37 @@
       "vinyl": "Gravações de vinil",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Verificando detalhes da música…",
+    "matchUsingTyped": "Usando o que você digitou: {value}",
+    "matchUseTidied": "Usar a versão ajustada",
+    "matchUseCorrection": "Usar a correção",
+    "communityWatch": "Assistir no YouTube",
+    "communityExists": "Já existe uma versão de karaokê da comunidade",
+    "wrongTrack": "Faixa errada?",
+    "moreCount": "+{count} mais",
+    "showLess": "Mostrar menos",
+    "avail": {
+      "high": "Alta disponibilidade",
+      "medium": "Média disponibilidade",
+      "low": "Baixa disponibilidade"
+    },
+    "linkInvalid": "Isso não parece ser um link.",
+    "linkUnsupported": "Esse link não é compatível. Tente outra fonte.",
+    "warn": {
+      "fileLooksLike": "O nome do arquivo sugere uma faixa diferente: {file}",
+      "fileMayNotMatch": "O nome do arquivo pode não corresponder à sua música",
+      "lowAvailability": "Baixa disponibilidade — pode demorar um pouco mais para preparar",
+      "noLossless": "Nenhuma fonte sem perdas (lossless) disponível — apenas ripagens de vinil ou YouTube/com perdas (lossy) encontradas",
+      "lossy": "Esta é uma fonte do YouTube/com perdas. Áudio sem perdas faz um karaokê melhor quando disponível."
+    },
+    "youtubeBlocked": "O YouTube está bloqueando nossos downloads no momento, então não podemos usar essa opção. Escolha outra fonte ou tente novamente em alguns minutos.",
+    "youtubeFallbackToggle": "Não encontrou sua música? Cole um link",
+    "filename": "Nome do arquivo:",
+    "release": "Lançamento:",
+    "titleMatch": "Título correspondente",
+    "youtubeFallbackHint": "Encontrou a música no YouTube? Cole o link e faremos o vídeo de karaokê a partir dele.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Nada criado ainda",
@@ -208,5 +252,44 @@
     "share": "Compartilhar",
     "savedGallery": "Salvo na sua galeria",
     "notReady": "Este vídeo ainda não está pronto. Você o encontrará na aba {tab} assim que estiver concluído."
+  },
+  "discover": {
+    "describeLabel": "Descreva a música",
+    "describeNothing": "Não conseguimos identificar qual é essa música. Tente descrevê-la de outra forma.",
+    "describePlaceholder": "ex.: aquela que diz “is this the real life”",
+    "libraryOrDisc": "Em uma biblioteca ou em disco",
+    "makeHint": "Usa exatamente este artista e título para criá-la",
+    "makeIt": "Criar →",
+    "more": "Mais…",
+    "needsConnection": "É necessária uma conexão para criar uma música",
+    "noKaraokeYet": "🎵 Nenhuma versão de karaokê ainda",
+    "notIt": "Não é essa?",
+    "offlineBanner": "Offline · pesquisando músicas salvas neste celular (atualizado {days, plural, =0 {hoje} one {há # dia} other {há # dias}})",
+    "offlineDownload": "Baixar a lista de músicas",
+    "offlineNoList": "Offline · nenhuma lista de músicas salva neste celular ainda",
+    "resultsHeading": "Músicas com versões de karaokê",
+    "showAll": "Mostrar todas as {count}",
+    "similarHeading": "Outras músicas com nomes semelhantes ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 A música que você procura",
+    "unreachable": "Não é possível acessar a pesquisa no momento.",
+    "versionsHeading": "Versões de karaokê ({count})",
+    "warmingUp": "Preparando a pesquisa…",
+    "youtube": "▶ YouTube",
+    "commercial": "Comercial",
+    "community": "Comunidade",
+    "correctedTo": "Corrigido para {value} — você digitou “{typed}”",
+    "describeLink": "Não lembra o nome? Descreva",
+    "describeSubmit": "Encontrar",
+    "didYouMean": "Você quis dizer?",
+    "figuringOut": "Descobrindo qual é a música…",
+    "keepTyped": "Manter o que eu digitei",
+    "makeBarAction": "Criar",
+    "makeBarPrompt": "Não encontrou sua música?",
+    "showMore": "Mostrar mais {count}",
+    "tidiedTo": "Ajustado para {value}",
+    "undo": "Desfazer",
+    "whichOne": "Qual música você procura?",
+    "rejected": "Não foi possível pesquisar por isso. Tente palavras diferentes."
   }
 }

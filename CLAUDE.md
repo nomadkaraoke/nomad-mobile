@@ -2,8 +2,9 @@
 
 The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke project (decide recommendations, gen karaoke videos, kjbox nights, a singer's own history). **Read [docs/VISION.md](docs/VISION.md) first**: it has the four use cases, the navigation, the release bar (no publishing until all four have a first usable version) and the phase roadmap.
 
-**Status:** Phase 1 "Make it" (2026-10-17): real gen sign-in → make → pay → watch, verified by nine Maestro flows on iOS and Android against the gen local stack, plus a prod check of the release APK (real email-code sign-in, live Stripe checkout open/cancel, real audio search). Next: Phase 2 "Native review" (docs/VISION.md). Phase 0 (2026-10-14) laid the workspace, packages, CI and agent tooling.
+**Status:** Phase 1 "Make it" (2026-10-17): real gen sign-in → make → pay → watch, verified by nine Maestro flows on iOS and Android against the gen local stack, plus a prod check of the release APK (real email-code sign-in, live Stripe checkout open/cancel, real audio search). Phase 1b "Search parity" (2026-10-19) then rebuilt song search on decide's search service: offline song list, outcomes (did-you-mean, resolve, versions, pick screen), make-flow match judge, flows search-1…4 + make-10. Next: Phase 2 "Native review" (docs/VISION.md). Phase 0 (2026-10-14) laid the workspace, packages, CI and agent tooling.
 
+- Phase 1b spec: [docs/superpowers/specs/2026-10-18-mobile-search-parity-design.md](docs/superpowers/specs/2026-10-18-mobile-search-parity-design.md); plan: [docs/superpowers/plans/2026-10-18-mobile-search-parity.md](docs/superpowers/plans/2026-10-18-mobile-search-parity.md)
 - Phase 1 spec: [docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md](docs/superpowers/specs/2026-10-17-mobile-phase1-make-it-design.md); plan: [docs/superpowers/plans/2026-10-17-mobile-phase1-make-it.md](docs/superpowers/plans/2026-10-17-mobile-phase1-make-it.md)
 - Phase 0 spec: [docs/superpowers/specs/2026-10-14-mobile-phase0-design.md](docs/superpowers/specs/2026-10-14-mobile-phase0-design.md) (MVP flow §2, foundation §3, shared auth + payments §4)
 - Phase 0 plan: [docs/superpowers/plans/2026-10-14-mobile-phase0-foundation.md](docs/superpowers/plans/2026-10-14-mobile-phase0-foundation.md)
@@ -28,16 +29,16 @@ The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke proj
 ## Workspace
 
 ```
-apps/mobile/          Expo app (src/app routes, src/auth, src/api, src/find, src/providers)
-packages/core/        pure TS: session model + input normalizers, job phases + steps, audio-search ranking, duration confirm, formatting
+apps/mobile/          Expo app (src/app routes, src/auth, src/api, src/find (useSearch, components, outcome.ts), src/offline (opt-in offline song index), src/providers)
+packages/core/        pure TS: session model + input normalizers, job phases + steps, audio-search ranking, duration confirm, formatting, search/ (song matcher; Python parity fixtures synced from decide by scripts/sync-search-fixtures.mjs, `DECIDE_DIR`)
 packages/i18n/        messages/<33>.json, resolveLocale, IntlProvider; scripts/ vendored from karaoke-gen
 packages/api-gen/     generated karaoke-gen client + configureClient + facades (auth, credits, make, jobs) + zod overrides
-packages/api-decide/  generated karaoke-decide client + facades (searchSongs, popularSongs, getSong)
+packages/api-decide/  generated karaoke-decide catalog client (facade `getSong`, legacy by numeric id) + the search service client and its facades (searchSongs, popularSongs, getSongDetail, resolveQuery, getOfflineIndexManifest, logSearchEvent, pingSearch); decide's search service is the app's single song-search backend
 packages/ui/          tokens, Screen/Text/Button/TextField, <List> (FlashList), <WaveformCanvas> (Skia)
-openapi/              gen.json + decide.json snapshots (refresh: pnpm gen:api)
-maestro/flows/        E2E flows (make-1…9 against the gen local stack, smoke-discover); common/ shared steps; scripts/stack.js
+openapi/              gen.json + decide.json + decide-search.json snapshots (refresh: pnpm gen:api; point at another stack with GEN_OPENAPI_URL / DECIDE_SEARCH_OPENAPI_URL, see scripts/fetch-openapi.mjs)
+maestro/flows/        E2E flows (make-1…10, search-1…4, smoke-discover) against the gen + decide search local stacks; common/ shared steps; scripts/stack.js
 maestro/screens/      screenshot-only flows for UX reviews (long-title.yaml: any locale, e.g. ar for RTL; not in the suite)
-scripts/e2e-local.sh  gen local stack + Metro + Maestro, per platform
+scripts/e2e-local.sh  gen local stack + decide search local stack + Metro + Maestro, per platform
 ```
 
 ## Commands
@@ -57,19 +58,22 @@ npx expo install <pkg>             # ALWAYS use this for native deps (SDK-compat
 npx expo run:ios --device "iPhone 17 Pro"   # dev build on simulator (needs working CocoaPods)
 npx expo run:android               # dev build on emulator (AVD Pixel_8_API_35_Root)
 
-scripts/e2e-local.sh --platform ios        # (repo root) all flows vs the gen local stack; or --platform android
+scripts/e2e-local.sh --platform ios        # (repo root) all flows vs the gen + decide search local stacks; or --platform android
 scripts/e2e-local.sh --platform android make-4   # flows whose file name contains "make-4"
 ```
 
 CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows Homebrew's. Run iOS builds with `PATH=/opt/homebrew/bin:$PATH`.
 
-## E2E (Maestro against the gen local stack)
+## E2E (Maestro against the gen local stack and decide's search local stack)
 
 - **Stack:** gen's `scripts/local-stack.sh` (real FastAPI on the Firestore/GCS emulators, `FAKE_WORKERS=1`; gen `docs/TESTING.md` § Local stack). API `http://127.0.0.1:8010`, web `:3010`, `LOCAL_STACK_API_URL=http://127.0.0.1:8010`. `scripts/e2e-local.sh` starts it from `GEN_DIR` (default `../karaoke-gen`, the main clone; needs gen ≥ v0.278.2. To test unmerged gen code, `GEN_DIR=../karaoke-gen-<worktree> scripts/e2e-local.sh …`, or run `scripts/local-stack.sh up --frontend` there yourself with `LOCAL_STACK_API_URL=http://127.0.0.1:8010`) when it isn't up.
-- **One URL on both platforms:** Android uses `adb reverse tcp:8010` / `tcp:3010`, so the app, fake checkout and the review handoff all use `http://127.0.0.1`. Metro is started with `EXPO_PUBLIC_GEN_API_URL=http://127.0.0.1:8010 EXPO_PUBLIC_GEN_WEB_URL=http://127.0.0.1:3010 EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1` (inlined at bundle time: restart Metro with `--clear` after changing them). Cleartext http works out of the box (iOS ATS `NSAllowsLocalNetworking`; Android debug manifest `usesCleartextTraffic`).
+- **Search stack:** decide's `scripts/search-local-stack.sh up` (the search service on a fixture song index, :8020; decide `docs/TESTING.md` § Search local stack), started from `DECIDE_DIR` (default `../karaoke-decide-search-parity` while that branch is unmerged, else `../karaoke-decide`). Both stacks get `DECIDE_GEN_PARTNER_SECRET=local-stack-secret` so decide's `/resolve` reaches gen (the fake judge's global verdict). Fixture songs the flows use: "hello" → Adele, "starlite muse" → Muse "Starlight" (Community + Commercial), "machu picchu strokes" (no karaoke version), "baby" (which one?), "rocket man" (long title).
+- **One URL on both platforms:** Android uses `adb reverse tcp:8010` / `tcp:3010` / `tcp:8020`, so the app, fake checkout, the review handoff and the offline-list download all use `http://127.0.0.1`. Metro is started with `EXPO_PUBLIC_GEN_API_URL=http://127.0.0.1:8010 EXPO_PUBLIC_GEN_WEB_URL=http://127.0.0.1:3010 EXPO_PUBLIC_DECIDE_API_URL=http://127.0.0.1:8020 EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1` (inlined at bundle time: restart Metro with `--clear` after changing them). Cleartext http works out of the box (iOS ATS `NSAllowsLocalNetworking`; Android debug manifest `usesCleartextTraffic`).
+- **Force offline:** flows tagged `force-offline` (search-4) run last, on a Metro restarted with `EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1`: search and the song page act as if there were no connection (`useOffline()`), while Me's offline-list download still reaches decide. `config.ts` honours it only against a local decide host.
+- **Match judge:** Make it stays disabled until gen's match judge settles (≤ 12 s); `common/make-submit.yaml` waits for it enabled. Every flow's user gets the fake judge's `none`; `stack.js` `ACTION: judge` sets `judge_kind` (`cosmetic`/`content`/`ambiguous`) and the canonical artist/title per user, and `ACTION: job` asserts the user's newest job's artist/title (`TOKEN` = setup's `output.token`).
 - **Seeding:** each flow calls `maestro/scripts/stack.js` (`ACTION: setup`) for its own `e2e-<name>-<ms>@example.com` user (`CREDITS`, per-user `USER_CONFIG` knobs) and resets the GLOBAL knobs (search is global) to step delay 0.2 s / `perfect`. `ACTION: code` reads the newest sign-in code from `/api/test/emails`. Per-user fake-config **persists for that email** (a scenario's `fail_at`/`audio_duration_seconds` stick to the user), so never reuse an email across flows.
 - **Never run the iOS and Android suites at the same time against one stack.** The search knobs (`search_confidence`, `search_result_count`) and step delay are GLOBAL fake-config: flow 8 sets `unsure` and every flow's setup resets it, so concurrent runs break each other. Run one platform, then the other (or give each its own stack on other ports).
-- **Flows 2–9** use "Make any song" (reached through a no-match search, `common/make-any.yaml`; scrolling the popular list raced FlashList recycling) + the fake Google path; only flow 1 depends on live decide results. Screenshots land in `docs/screenshots/phase1/<platform>/` (paths are relative to the **working directory**, so run Maestro from the repo root).
+- **Flows 2–10** use "Make any song" (reached through a no-match search's make bar, `common/make-any.yaml`) + the fake Google path; flow 1 and the search flows use the search stack's fixture songs. Screenshots land in `${SHOTS}` = `docs/screenshots/phase1b/<platform>/` (`phase1/` keeps Phase 1's set; paths are relative to the **working directory**, so run Maestro from the repo root).
 - **Android emulator:** AVD `Pixel_8_API_35_Root` (`system-images;android-35;google_apis;arm64-v8a`; start it with `-gpu host`), configured with `hw.ramSize = 4096M`, `hw.cpu.ncore = 4`, `hw.gpu.mode = host`. With the default 1.5 GB / software GPU, adb dropped the emulator transport mid-flow ("device offline"), which also wipes every `adb reverse` rule.
 
 ## Rules
@@ -99,6 +103,14 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - **Duration confirm sends the full total.** `durationConfirm` (`@nomad/core`) computes `totalCredits` = the job's `state_data.credits_charged` (`?? 1`: jobs made before gen v0.278.2 never recorded it, and gen charged 1) + the pending extra; the app sends that total and gen (≥ v0.278.2) records `credits_charged` on create and resolves the confirm against it.
 - **RTL text alignment:** iOS "natural" alignment (RN's `auto`) ignores `I18nManager.forceRTL`, so paragraphs stayed left-aligned in ar/he. `@nomad/ui` `Text` defaults to `textAlign: 'left'`, which RN mirrors to the right under RTL. Interpolated titles/emails go through `isolate()` (`@nomad/i18n`) so Latin text doesn't scramble inside an Arabic sentence.
 - **Metro started with `CI=1` doesn't watch files** (`e2e-local.sh` starts it that way): after editing code, restart it, or run your own `npx expo start --dev-client` (same env, no `CI=1`) while iterating.
+- **expo-sqlite closes crash (segfault) after an FTS5 query.** Every open of `offline.db` passes `{useNewConnection: true, finalizeUnusedStatementsBeforeClosing: false}` (a typed but `@hidden` option); go through `openOfflineReader()`. `expo-sqlite` is pinned (see the `"//"` key in package.json). Don't bump it without re-checking on device.
+- **Tests must not live under `src/app`.** expo-router's `require.context` bundles every `.tsx` there as a route. Put screen tests in `apps/mobile/src/__tests__/`.
+- **Never run `PRAGMA quick_check` on the JS thread at open:** 15 s on the 300 MB prod list (release, Android emulator). `openOfflineReader()` only checks `meta`; the full check runs once per download via expo-sqlite's async API. The download/unpack itself streams 256 KiB slices (a whole-file read ran Android out of Java heap on the 104 MB .gz).
+- **Offline identify cost scales with the index.** Median ~50 ms, p95 ~280 ms on big indexes, on the JS thread; `useSearch` debounces it (300 ms) and runs it after the cloud request is sent. Don't call it per keystroke.
+- **`sid` vs the device id:** `sid` is the in-memory search-session id (`find/searchSession.ts`, renewed when a song is picked or the app restarts) that decide logs with each search. The device id (MMKV, so it resets on uninstall) is only sent as the `X-Device-Id` header to decide.
+- **colima stale lock after a crash or reboot:** `colima start` fails until you remove the symlink `~/.colima/_lima/_disks/colima/in_use_by`.
+- **`make.categoryCount` (`"{label} ({count})"`) is hand-written and format-only**, already in `.en-snapshot.json`, so a plain `pnpm i18n:translate` won't redo it (`--no-cache` will).
+- **`pnpm i18n:translate` needs `gcloud auth login`** (GCS cache + Gemini via ADC) and `env -u GEMINI_API_KEY`. If auth has lapsed, new keys stay out of `.en-snapshot.json` and get translated on the next run.
 - **`renderRouter` (expo-router testing) switches jest to fake timers.** Reset with `jest.useRealTimers()` in `beforeEach` when code uses real delays.
 
 ## Sign-in and session
@@ -112,6 +124,7 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 - Sentry Expo config plugin (org/project, source maps, dSYMs) is added together with the Sentry account.
 - EAS: `eas.json` and `.eas/workflows/*` are dormant. `runtimeVersion` / `updates.url` need an EAS project id.
 - Maestro in CI: EAS Workflows `type: maestro` (paid plan) or macOS GitHub runners. This is still a decision to make.
+- Library filter (KaraFun, Karaoke Cloud, Singa): Phase 3 researches which publish an authoritative list; Phase 1b only carries the library tags in the offline list. Me's sung history will be recorded on the phone first and synced later (Phase 4), per VISION's offline principle.
 - Decide personal recommendations, music services and vocal range: Phase 3 "Discover" in docs/VISION.md (needs spec §4.2 `exchange-gen-session`). Sung history, playlists and library are Phase 4 "Me".
 
 ## App identity

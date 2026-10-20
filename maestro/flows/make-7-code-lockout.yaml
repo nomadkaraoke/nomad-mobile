@@ -42,7 +42,7 @@ name: make-7-code-lockout
             id: "signin-error"
           timeout: 15000
 - assertVisible: "Too many tries.*"
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/signin-code-locked
+- takeScreenshot: ${SHOTS}/signin-code-locked
 - tapOn:
     id: "signin-resend"
 - extendedWaitUntil:

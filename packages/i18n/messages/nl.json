@@ -6,7 +6,20 @@
     "language": "Taal",
     "credits": "{credits, plural, one {# credit} other {# credits}}",
     "title": "Account",
-    "buyCredits": "Credits kopen"
+    "buyCredits": "Credits kopen",
+    "offlineDownload": "Download nummerslijst voor offline gebruik",
+    "offlineDownloadSize": "Download nummerslijst voor offline gebruik ({size} MB)",
+    "offlineDownloading": "Nummerslijst downloaden… {percent}%",
+    "offlineError": "Kon de nummerslijst niet downloaden.",
+    "offlineHeading": "Offline nummerslijst",
+    "offlineHint": "Zoek naar nummers zonder internetverbinding, uit een lijst die op deze telefoon is opgeslagen.",
+    "offlineRemove": "Offline nummerslijst verwijderen",
+    "offlineRetry": "Probeer het downloaden opnieuw",
+    "offlineSaved": "Nummerslijst opgeslagen op deze telefoon ({size} MB)",
+    "offlineUpdated": "Nummerslijst bijgewerkt {days, plural, =0 {vandaag} one {# dag geleden} other {# dagen geleden}}",
+    "offlineRemoveTitle": "De offline nummerslijst verwijderen?",
+    "offlineRemoveBody": "Zoeken zonder verbinding werkt pas weer als je deze opnieuw downloadt.",
+    "offlineRemoveConfirm": "Verwijderen"
   },
   "common": {
     "error": "Er is iets misgegaan.",
@@ -61,7 +74,10 @@
     "makeIt": "Maken · 1 credit",
     "noKaraoke": "Geen karaokeversie gevonden",
     "hasKaraokeHint": "Je kunt nog steeds je eigen versie maken, op basis van de audio die je kiest.",
-    "noKaraokeHint": "Maak er je eigen karaokevideo van, klaar om te zingen en te delen."
+    "noKaraokeHint": "Maak er je eigen karaokevideo van, klaar om te zingen en te delen.",
+    "offlineMissing": "Je bent offline en dit nummer staat niet in de nummerslijst die op deze telefoon is opgeslagen.",
+    "offlineNote": "Offline · uit de nummerslijst die op deze telefoon is opgeslagen",
+    "cloudErrorNote": "Kan de zoekfunctie nu niet bereiken · nummerslijst op deze telefoon wordt getoond"
   },
   "tabs": {
     "discover": "Ontdekken",
@@ -106,9 +122,7 @@
     "searchingHint": "Dit kan tot een minuut duren.",
     "seeOtherSources": "Bekijk andere bronnen ({count})",
     "submit": "Maken",
-    "youtubeInvalid": "Dat lijkt geen geldige YouTube-link te zijn.",
     "youtubeLabel": "YouTube-link",
-    "youtubeToggle": "Plak in plaats daarvan een YouTube-link",
     "category": {
       "best": "Beste keuze",
       "compilations": "Compilaties",
@@ -121,7 +135,37 @@
       "vinyl": "Vinyl rips",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Nummergegevens controleren…",
+    "matchUsingTyped": "We gebruiken wat je hebt getypt: {value}",
+    "matchUseTidied": "Gebruik opgeschoonde versie",
+    "matchUseCorrection": "Gebruik de correctie",
+    "communityWatch": "Bekijk op YouTube",
+    "communityExists": "Er bestaat al een karaokeversie van de community",
+    "wrongTrack": "Verkeerde track?",
+    "moreCount": "+{count} meer",
+    "showLess": "Minder tonen",
+    "avail": {
+      "high": "Hoge beschikbaarheid",
+      "medium": "Gemiddelde beschikbaarheid",
+      "low": "Lage beschikbaarheid"
+    },
+    "linkInvalid": "Dat lijkt geen link te zijn.",
+    "linkUnsupported": "Die link wordt niet ondersteund. Probeer een andere bron.",
+    "warn": {
+      "fileLooksLike": "De bestandsnaam wijst op een ander nummer: {file}",
+      "fileMayNotMatch": "De bestandsnaam komt mogelijk niet overeen met je nummer",
+      "lowAvailability": "Lage beschikbaarheid — het kan wat langer duren om voor te bereiden",
+      "noLossless": "Geen lossless bronnen beschikbaar — alleen YouTube/lossy of vinyl-rips gevonden",
+      "lossy": "Dit is een YouTube/lossy bron. Lossless audio levert een betere karaokevideo op, indien beschikbaar."
+    },
+    "youtubeBlocked": "YouTube blokkeert momenteel onze downloads, dus we kunnen deze niet gebruiken. Kies een andere bron of probeer het over een paar minuten opnieuw.",
+    "youtubeFallbackToggle": "Kun je je nummer niet vinden? Plak in plaats daarvan een link",
+    "filename": "Bestandsnaam:",
+    "release": "Release:",
+    "titleMatch": "Titel komt overeen",
+    "youtubeFallbackHint": "Heb je het nummer op YouTube gevonden? Plak de link en we maken daar de karaokevideo van.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Nog niets gemaakt",
@@ -208,5 +252,44 @@
     "share": "Delen",
     "savedGallery": "Opgeslagen in je galerij",
     "notReady": "Deze video is nog niet klaar. Je vindt hem op het tabblad {tab} zodra hij klaar is."
+  },
+  "discover": {
+    "describeLabel": "Beschrijf het nummer",
+    "describeNothing": "We konden niet achterhalen welk nummer dat is. Probeer het op een andere manier te beschrijven.",
+    "describePlaceholder": "bijv. die met de tekst “is this the real life”",
+    "libraryOrDisc": "In een bibliotheek of op schijf",
+    "makeHint": "Gebruikt deze exacte artiest en titel om het te maken",
+    "makeIt": "Maken →",
+    "more": "Meer…",
+    "needsConnection": "Om een nummer te maken heb je een internetverbinding nodig",
+    "noKaraokeYet": "🎵 Nog geen karaokeversie",
+    "notIt": "Niet het juiste nummer?",
+    "offlineBanner": "Offline · zoekt in nummers op deze telefoon ({days, plural, =0 {vandaag} one {# dag geleden} other {# dagen geleden}} bijgewerkt)",
+    "offlineDownload": "Download de lijst met nummers",
+    "offlineNoList": "Offline · er is nog geen lijst met nummers opgeslagen op deze telefoon",
+    "resultsHeading": "Nummers met karaokeversies",
+    "showAll": "Toon alle {count}",
+    "similarHeading": "Andere nummers met vergelijkbare titels ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Het nummer dat je bedoelt",
+    "unreachable": "Zoekfunctie is momenteel niet bereikbaar.",
+    "versionsHeading": "Karaokeversies ({count})",
+    "warmingUp": "Zoekfunctie opstarten…",
+    "youtube": "▶ YouTube",
+    "commercial": "Commercieel",
+    "community": "Community",
+    "correctedTo": "Gecorrigeerd naar {value} — je typte “{typed}”",
+    "describeLink": "Weet je de titel niet meer? Omschrijf het",
+    "describeSubmit": "Vind 'm",
+    "didYouMean": "Bedoelde je?",
+    "figuringOut": "Even uitzoeken welk liedje je bedoelt…",
+    "keepTyped": "Behoud wat ik typte",
+    "makeBarAction": "Maken",
+    "makeBarPrompt": "Staat je nummer er niet tussen?",
+    "showMore": "Toon er nog {count}",
+    "tidiedTo": "Opgeschoond naar {value}",
+    "undo": "Ongedaan maken",
+    "whichOne": "Welk liedje bedoel je?",
+    "rejected": "Kon daar niet naar zoeken. Probeer andere zoekwoorden."
   }
 }

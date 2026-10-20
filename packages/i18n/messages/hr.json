@@ -6,7 +6,20 @@
     "language": "Jezik",
     "credits": "{credits, plural, one {# kredit} few {# kredita} other {# kredita}}",
     "title": "Ja",
-    "buyCredits": "Kupi kredite"
+    "buyCredits": "Kupi kredite",
+    "offlineDownload": "Preuzmi popis pjesama za izvanmrežno korištenje",
+    "offlineDownloadSize": "Preuzmi popis pjesama za izvanmrežno korištenje ({size} MB)",
+    "offlineDownloading": "Preuzimanje popisa pjesama… {percent}%",
+    "offlineError": "Nije uspjelo preuzimanje popisa pjesama.",
+    "offlineHeading": "Izvanmrežni popis pjesama",
+    "offlineHint": "Pretražuj pjesme bez internetske veze, s popisa spremljenog na ovom telefonu.",
+    "offlineRemove": "Ukloni izvanmrežni popis pjesama",
+    "offlineRetry": "Pokušaj ponovno preuzeti",
+    "offlineSaved": "Popis pjesama spremljen je na ovom telefonu ({size} MB)",
+    "offlineUpdated": "Popis pjesama ažuriran je {days, plural, =0 {danas} one {prije # dan} few {prije # dana} other {prije # dana}}",
+    "offlineRemoveTitle": "Želiš li ukloniti izvanmrežni popis pjesama?",
+    "offlineRemoveBody": "Pretraživanje bez internetske veze neće raditi dok ga ponovno ne preuzmeš.",
+    "offlineRemoveConfirm": "Ukloni"
   },
   "common": {
     "error": "Nešto je pošlo po zlu.",
@@ -61,7 +74,10 @@
     "makeIt": "Izradi · 1 kredit",
     "noKaraoke": "Nije pronađena karaoke verzija",
     "hasKaraokeHint": "I dalje možeš napraviti vlastitu verziju, koristeći zvuk koji odabereš.",
-    "noKaraokeHint": "Napravi vlastiti karaoke video za ovu pjesmu, spreman za pjevanje i dijeljenje."
+    "noKaraokeHint": "Napravi vlastiti karaoke video za ovu pjesmu, spreman za pjevanje i dijeljenje.",
+    "offlineMissing": "Nemaš internetsku vezu, a ove pjesme nema na popisu spremljenom na ovom telefonu.",
+    "offlineNote": "Izvanmrežno · s popisa pjesama spremljenog na ovom telefonu",
+    "cloudErrorNote": "Pretraživanje trenutačno nije dostupno · prikazuje se popis pjesama spremljen na ovom telefonu"
   },
   "tabs": {
     "discover": "Otkrij",
@@ -106,9 +122,7 @@
     "searchingHint": "Ovo može potrajati do minute.",
     "seeOtherSources": "Prikaži ostale izvore ({count})",
     "submit": "Izradi",
-    "youtubeInvalid": "Ovo ne izgleda kao YouTube poveznica.",
     "youtubeLabel": "YouTube poveznica",
-    "youtubeToggle": "Zalijepi YouTube poveznicu umjesto toga",
     "category": {
       "best": "Najbolji izbor",
       "compilations": "Kompilacije",
@@ -121,7 +135,37 @@
       "vinyl": "S vinila",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Provjera detalja pjesme…",
+    "matchUsingTyped": "Koristimo ono što si upisao: {value}",
+    "matchUseTidied": "Koristi uređenu verziju",
+    "matchUseCorrection": "Koristi ispravak",
+    "communityWatch": "Gledaj na YouTube",
+    "communityExists": "Karaoke verzija zajednice već postoji",
+    "wrongTrack": "Pogrešna pjesma?",
+    "moreCount": "+{count} više",
+    "showLess": "Prikaži manje",
+    "avail": {
+      "high": "Visoka dostupnost",
+      "medium": "Srednja dostupnost",
+      "low": "Slaba dostupnost"
+    },
+    "linkInvalid": "To ne izgleda kao poveznica.",
+    "linkUnsupported": "Ta poveznica nije podržana. Isprobaj drugi izvor.",
+    "warn": {
+      "fileLooksLike": "Naziv datoteke upućuje na drugu pjesmu: {file}",
+      "fileMayNotMatch": "Naziv datoteke možda ne odgovara tvojoj pjesmi",
+      "lowAvailability": "Niska dostupnost — priprema bi mogla potrajati malo dulje",
+      "noLossless": "Nema dostupnih lossless izvora — pronađeni su samo YouTube/lossy izvori ili snimke s vinila",
+      "lossy": "Ovo je YouTube/lossy izvor. Lossless zvuk daje bolje karaoke kada je dostupan."
+    },
+    "youtubeBlocked": "YouTube trenutno blokira naša preuzimanja, pa ne možemo iskoristiti taj izvor. Odaberi drugi izvor ili pokušaj ponovno za nekoliko minuta.",
+    "youtubeFallbackToggle": "Ne možeš pronaći svoju pjesmu? Umjesto toga zalijepi poveznicu",
+    "filename": "Naziv datoteke:",
+    "release": "Izdanje:",
+    "titleMatch": "Podudaranje naslova",
+    "youtubeFallbackHint": "Pronašao/la si pjesmu na YouTubeu? Zalijepi link i od toga ćemo napraviti karaoke video.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Još ništa nije izrađeno",
@@ -208,5 +252,44 @@
     "share": "Podijeli",
     "savedGallery": "Spremljeno u tvoju galeriju",
     "notReady": "Ovaj videozapis još nije spreman. Pronaći ćeš ga na kartici {tab} kada bude gotov."
+  },
+  "discover": {
+    "describeLabel": "Opiši pjesmu",
+    "describeNothing": "Nismo uspjeli otkriti o kojoj je pjesmi riječ. Pokušaj je opisati na drugi način.",
+    "describePlaceholder": "npr. ona koja ide „is this the real life”",
+    "libraryOrDisc": "U zbirci ili na disku",
+    "makeHint": "Za izradu se koriste točno ovaj izvođač i naslov",
+    "makeIt": "Izradi je →",
+    "more": "Više…",
+    "needsConnection": "Za izradu pjesme potrebna je internetska veza",
+    "noKaraokeYet": "🎵 Još nema karaoke verzije",
+    "notIt": "Nije to ta?",
+    "offlineBanner": "Izvan mreže · pretraživanje pjesama spremljenih na ovom telefonu (ažurirano {days, plural, =0 {danas} one {prije # dan} few {prije # dana} other {prije # dana}})",
+    "offlineDownload": "Preuzmi popis pjesama",
+    "offlineNoList": "Izvan mreže · popis pjesama još nije spremljen na ovom telefonu",
+    "resultsHeading": "Pjesme s karaoke verzijama",
+    "showAll": "Prikaži sve ({count})",
+    "similarHeading": "Ostale pjesme sličnih naziva ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Pjesma na koju misliš",
+    "unreachable": "Pretraživanje trenutno nije dostupno.",
+    "versionsHeading": "Karaoke verzije ({count})",
+    "warmingUp": "Priprema pretraživanja…",
+    "youtube": "▶ YouTube",
+    "commercial": "Komercijalna",
+    "community": "Zajednička",
+    "correctedTo": "Ispravljeno u {value} — tvoj unos: “{typed}”",
+    "describeLink": "Ne sjećaš se naslova? Opiši pjesmu",
+    "describeSubmit": "Pronađi",
+    "didYouMean": "Jesi li mislio/la?",
+    "figuringOut": "Tražimo na koju pjesmu misliš…",
+    "keepTyped": "Zadrži moj unos",
+    "makeBarAction": "Izradi",
+    "makeBarPrompt": "Ne vidiš svoju pjesmu?",
+    "showMore": "Prikaži još {count}",
+    "tidiedTo": "Uređeno u {value}",
+    "undo": "Poništi",
+    "whichOne": "Na koju pjesmu misliš?",
+    "rejected": "Nismo uspjeli pronaći ništa za taj pojam. Pokušaj s drugim riječima."
   }
 }

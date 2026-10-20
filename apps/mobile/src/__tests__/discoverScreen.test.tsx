@@ -4,28 +4,35 @@ import { router } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
 import { AppState, Keyboard } from 'react-native';
 
+import { resetSearchCacheForTests } from '../find/useSearch';
 import { appRoutes } from '../test-utils/routes';
 
 jest.mock('@nomad/api-decide', () => ({
   searchSongs: jest.fn(),
   popularSongs: jest.fn(),
+  resolveQuery: jest.fn(async () => ({})),
+  pingSearch: jest.fn(async () => true),
+  logSearchEvent: jest.fn(async () => {}),
   getSong: jest.fn(),
   configureClient: jest.fn(),
 }));
 const searchSongs = decide.searchSongs as jest.Mock;
 const popularSongs = decide.popularSongs as jest.Mock;
 
+const group = (artist: string, title: string, versionCount: number) => ({
+  song_key: `${artist.toLowerCase()}|${title.toLowerCase()}`,
+  artist,
+  title,
+  version_count: versionCount,
+  versions: [],
+});
+const NONE = { status: 'none', kind: null, best: null, candidates: [] };
+const searchResponse = (groups: unknown[]) => ({ identification: NONE, groups, index: { run: 'r', built_at: 1 }, sid: 's' });
+
 beforeEach(() => {
-  popularSongs.mockReset().mockResolvedValue([
-    { id: 1, artist: 'Lionel Richie', title: 'Hello', brands: [], brand_count: 3, is_popular: true },
-  ]);
-  searchSongs.mockReset().mockResolvedValue({
-    songs: [{ id: 2, artist: 'Adele', title: 'Hello', brands: [], brand_count: 1, is_popular: true }],
-    total: 1,
-    page: 1,
-    per_page: 20,
-    has_more: false,
-  });
+  resetSearchCacheForTests();
+  popularSongs.mockReset().mockResolvedValue([group('Lionel Richie', 'Hello', 3)]);
+  searchSongs.mockReset().mockResolvedValue(searchResponse([group('Adele', 'Hello', 1)]));
 });
 
 it('shows popular songs with a karaoke-version badge, then search results', async () => {
@@ -33,7 +40,8 @@ it('shows popular songs with a karaoke-version badge, then search results', asyn
   expect(await screen.findByTestId('discover-search-input')).toBeTruthy();
   expect(await screen.findByText('3 karaoke versions')).toBeTruthy();
   fireEvent.changeText(screen.getByTestId('discover-search-input'), 'hello');
-  expect(await screen.findByTestId('song-row-2', {}, { timeout: 2000 })).toBeTruthy();
+  expect(await screen.findByText('Adele', {}, { timeout: 2000 })).toBeTruthy();
+  expect(screen.getByTestId('similar-row-0')).toBeTruthy(); // nothing identified: the plain results list
   expect(screen.getByText('1 karaoke version')).toBeTruthy();
 });
 
@@ -82,22 +90,20 @@ it('coming back to the app with another screen on top (the code field waiting fo
   add.mockRestore();
 });
 
-it('shows an error with a working retry button', async () => {
-  // Fail the first load and the query client's one automatic retry, then recover.
-  popularSongs
-    .mockReset()
-    .mockRejectedValueOnce(new Error('offline'))
-    .mockRejectedValueOnce(new Error('offline'))
-    .mockResolvedValue([]);
-  renderRouter(appRoutes(), { initialUrl: '/discover' });
-  const retry = await screen.findByTestId('discover-retry', {}, { timeout: 3000 });
+it('shows an error with a working retry button once search is unreachable', async () => {
+  popularSongs.mockReset().mockRejectedValue(new Error('offline'));
+  renderRouter(appRoutes(), { initialUrl: '/discover' }); // switches jest to fake timers
+  await screen.findByTestId('discover-search-input');
+  await act(() => jest.advanceTimersByTimeAsync(31_000));
+  const retry = await screen.findByTestId('discover-retry');
+  popularSongs.mockReset().mockResolvedValue([]);
   await act(async () => fireEvent.press(retry));
   await waitFor(() => expect(screen.queryByTestId('discover-retry')).toBeNull());
-  expect(popularSongs.mock.calls.length).toBeGreaterThanOrEqual(2);
+  expect(popularSongs).toHaveBeenCalled();
 });
 
 it('shows a no-results message for an empty search', async () => {
-  searchSongs.mockReset().mockResolvedValue({ songs: [], total: 0, page: 1, per_page: 20, has_more: false });
+  searchSongs.mockReset().mockResolvedValue(searchResponse([]));
   renderRouter(appRoutes(), { initialUrl: '/discover' });
   fireEvent.changeText(await screen.findByTestId('discover-search-input'), 'zzzz');
   expect(await screen.findByText('No songs found for “zzzz”.', {}, { timeout: 2000 })).toBeTruthy();
@@ -107,6 +113,8 @@ it('dismisses the search keyboard when a result is opened', async () => {
   const dismiss = jest.spyOn(Keyboard, 'dismiss');
   renderRouter(appRoutes(), { initialUrl: '/discover' });
   fireEvent.changeText(await screen.findByTestId('discover-search-input'), 'hello');
-  fireEvent.press(await screen.findByTestId('song-row-2', {}, { timeout: 2000 }));
+  await screen.findByText('Adele', {}, { timeout: 2000 });
+  await act(() => jest.advanceTimersByTimeAsync(300)); // fresh results ignore taps for 300 ms
+  fireEvent.press(screen.getByTestId('similar-row-0'));
   expect(dismiss).toHaveBeenCalled();
 });

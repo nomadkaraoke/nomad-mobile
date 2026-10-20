@@ -24,13 +24,12 @@ name: make-6-duration-confirm
     visible:
       id: "make-pick"
     timeout: 30000
-- tapOn:
-    id: "make-submit"
+- runFlow: ../common/make-submit.yaml
 - extendedWaitUntil:
     visible:
       id: "job-confirm-.*"
     timeout: 90000
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-tab-duration
+- takeScreenshot: ${SHOTS}/make-tab-duration
 - tapOn:
     id: "job-confirm-.*"
 - extendedWaitUntil:
@@ -40,7 +39,7 @@ name: make-6-duration-confirm
 - assertVisible:
     id: "duration-body"
     text: ".*15:00.*2 credits in total \\(1 more\\).*"
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/duration-sheet
+- takeScreenshot: ${SHOTS}/duration-sheet
 - tapOn:
     id: "duration-confirm"
 - extendedWaitUntil:

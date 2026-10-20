@@ -25,9 +25,8 @@ name: make-2-google
       id: "make-pick"
     timeout: 30000
 - assertVisible: "Google Song"
-- takeScreenshot: docs/screenshots/phase1/${PLATFORM}/make-after-google-signin
-- tapOn:
-    id: "make-submit"
+- takeScreenshot: ${SHOTS}/make-after-google-signin
+- runFlow: ../common/make-submit.yaml
 - extendedWaitUntil:
     visible:
       id: "job-card-.*"

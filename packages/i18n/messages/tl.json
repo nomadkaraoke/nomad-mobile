@@ -6,7 +6,20 @@
     "language": "Wika",
     "credits": "{credits, plural, one {# credit} other {# credits}}",
     "title": "Ako",
-    "buyCredits": "Bumili ng credits"
+    "buyCredits": "Bumili ng credits",
+    "offlineDownload": "I-download ang listahan ng mga kanta para magamit offline",
+    "offlineDownloadSize": "I-download ang listahan ng mga kanta para magamit offline ({size} MB)",
+    "offlineDownloading": "Dina-download ang listahan ng mga kanta… {percent}%",
+    "offlineError": "Hindi ma-download ang listahan ng mga kanta.",
+    "offlineHeading": "Offline na listahan ng mga kanta",
+    "offlineHint": "Maghanap ng mga kanta kahit walang koneksyon, mula sa listahang naka-save sa teleponong ito.",
+    "offlineRemove": "Alisin ang offline na listahan ng mga kanta",
+    "offlineRetry": "Subukang i-download muli",
+    "offlineSaved": "Naka-save ang listahan ng mga kanta sa teleponong ito ({size} MB)",
+    "offlineUpdated": "Na-update ang listahan ng mga kanta {days, plural, =0 {ngayong araw} one {# araw ang nakalipas} other {# araw ang nakalipas}}",
+    "offlineRemoveTitle": "Alisin ang offline na listahan ng mga kanta?",
+    "offlineRemoveBody": "Hindi gagana ang paghahanap nang walang koneksyon hangga't hindi mo ito muling dina-download.",
+    "offlineRemoveConfirm": "Alisin"
   },
   "common": {
     "error": "May nagkaproblema.",
@@ -61,7 +74,10 @@
     "makeIt": "Gawin ito · 1 credit",
     "noKaraoke": "Walang nahanap na karaoke version",
     "hasKaraokeHint": "Maaari ka pa ring gumawa ng sarili mo, mula sa audio na pipiliin mo.",
-    "noKaraokeHint": "Gumawa ng sarili mong karaoke video nito, handa nang kantahin at i-share."
+    "noKaraokeHint": "Gumawa ng sarili mong karaoke video nito, handa nang kantahin at i-share.",
+    "offlineMissing": "Offline ka, at wala ang kantang ito sa listahan ng mga kanta na naka-save sa teleponong ito.",
+    "offlineNote": "Offline · mula sa listahan ng mga kanta na naka-save sa teleponong ito",
+    "cloudErrorNote": "Hindi ma-access ang search sa ngayon · ipinapakita ang listahan ng mga kanta na naka-save sa teleponong ito"
   },
   "tabs": {
     "discover": "Mag-discover",
@@ -106,9 +122,7 @@
     "searchingHint": "Maaari itong tumagal nang hanggang isang minuto.",
     "seeOtherSources": "Tingnan ang iba pang sources ({count})",
     "submit": "Gawin ito",
-    "youtubeInvalid": "Mukhang hindi ito link sa YouTube.",
     "youtubeLabel": "Link sa YouTube",
-    "youtubeToggle": "Mag-paste na lang ng link sa YouTube",
     "category": {
       "best": "Pinakamagandang pagpipilian",
       "compilations": "Mga Compilation",
@@ -121,7 +135,37 @@
       "vinyl": "Mga Vinyl rip",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Sinusuri ang mga detalye ng kanta…",
+    "matchUsingTyped": "Ginagamit ang iyong nai-type: {value}",
+    "matchUseTidied": "Gamitin ang inayos na bersyon",
+    "matchUseCorrection": "Gamitin ang itinama",
+    "communityWatch": "Panoorin sa YouTube",
+    "communityExists": "Mayroon nang karaoke version mula sa komunidad",
+    "wrongTrack": "Maling track?",
+    "moreCount": "+{count} pa",
+    "showLess": "Ipakita ang mas kaunti",
+    "avail": {
+      "high": "Mataas ang availability",
+      "medium": "Katamtamang availability",
+      "low": "Mababang availability"
+    },
+    "linkInvalid": "Mukhang hindi iyan link.",
+    "linkUnsupported": "Hindi suportado ang link na iyan. Subukan ang ibang source.",
+    "warn": {
+      "fileLooksLike": "Ipinapahiwatig ng filename na ibang track ito: {file}",
+      "fileMayNotMatch": "Maaaring hindi tumugma ang filename sa iyong kanta",
+      "lowAvailability": "Mababang availability — maaaring magtagal nang kaunti bago maihanda",
+      "noLossless": "Walang lossless sources na available — YouTube/lossy o mga vinyl rip lang ang nahanap",
+      "lossy": "Ito ay YouTube/lossy source. Mas maganda ang karaoke kapag lossless audio kung available."
+    },
+    "youtubeBlocked": "Bina-block ng YouTube ang aming mga download ngayon, kaya hindi namin magamit iyan. Pumili ng ibang source, o subukang muli pagkalipas ng ilang minuto.",
+    "youtubeFallbackToggle": "Hindi mahanap ang iyong kanta? Mag-paste na lang ng link",
+    "filename": "Filename:",
+    "release": "Release:",
+    "titleMatch": "Tugma ang pamagat",
+    "youtubeFallbackHint": "Nahanap ang kanta sa YouTube? I-paste ang link at gagawin naming karaoke video iyon.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Wala pang nagagawa",
@@ -208,5 +252,44 @@
     "share": "I-share",
     "savedGallery": "Nai-save na sa iyong gallery",
     "notReady": "Hindi pa handa ang video na ito. Makikita mo ito sa {tab} tab kapag tapos na."
+  },
+  "discover": {
+    "describeLabel": "Ilarawan ang kanta",
+    "describeNothing": "Hindi namin matukoy kung aling kanta 'yan. Subukang ilarawan ito sa ibang paraan.",
+    "describePlaceholder": "hal. 'yung may linyang “is this the real life”",
+    "libraryOrDisc": "Nasa library o nasa disc",
+    "makeHint": "Gagamitin ang eksaktong artist at pamagat na ito para gawin",
+    "makeIt": "Gawin ito →",
+    "more": "Higit pa…",
+    "needsConnection": "Kailangan ng koneksyon para makagawa ng kanta",
+    "noKaraokeYet": "🎵 Wala pang karaoke version",
+    "notIt": "Hindi ito 'yon?",
+    "offlineBanner": "Offline · naghahanap sa mga kantang naka-save sa teleponong ito (na-update {days, plural, =0 {ngayong araw} one {# araw ang nakalipas} other {# araw ang nakalipas}})",
+    "offlineDownload": "I-download ang listahan ng mga kanta",
+    "offlineNoList": "Offline · wala pang listahan ng kanta na naka-save sa teleponong ito",
+    "resultsHeading": "Mga kantang may karaoke version",
+    "showAll": "Ipakita ang lahat ({count})",
+    "similarHeading": "Iba pang kantang may katulad na pamagat ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Ang tinutukoy mong kanta",
+    "unreachable": "Hindi ma-access ang search sa ngayon.",
+    "versionsHeading": "Mga karaoke version ({count})",
+    "warmingUp": "Inihahanda ang search…",
+    "youtube": "▶ YouTube",
+    "commercial": "Commercial",
+    "community": "Community",
+    "correctedTo": "Itinama sa {value} — ang tinype mo ay “{typed}”",
+    "describeLink": "Hindi matandaan ang pamagat? Ilarawan ito",
+    "describeSubmit": "Hanapin",
+    "didYouMean": "Ibig mo bang sabihin?",
+    "figuringOut": "Inaalam kung aling kanta ang tinutukoy mo…",
+    "keepTyped": "Panatilihin ang tinype ko",
+    "makeBarAction": "Gawin ito",
+    "makeBarPrompt": "Hindi makita ang kanta mo?",
+    "showMore": "Ipakita ang {count} pa",
+    "tidiedTo": "Inayos sa {value}",
+    "undo": "I-undo",
+    "whichOne": "Aling kanta ang tinutukoy mo?",
+    "rejected": "Hindi maihanap 'yan. Sumubok ng ibang mga salita."
   }
 }

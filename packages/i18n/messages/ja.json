@@ -6,7 +6,20 @@
     "language": "言語",
     "credits": "{credits, plural, one {# クレジット} other {# クレジット}}",
     "title": "マイページ",
-    "buyCredits": "クレジットを購入"
+    "buyCredits": "クレジットを購入",
+    "offlineDownload": "オフライン用の曲リストをダウンロード",
+    "offlineDownloadSize": "オフライン用の曲リストをダウンロード ({size} MB)",
+    "offlineDownloading": "曲リストをダウンロード中… {percent}%",
+    "offlineError": "曲リストをダウンロードできませんでした。",
+    "offlineHeading": "オフライン曲リスト",
+    "offlineHint": "この端末に保存されたリストから、インターネット接続なしで曲を検索できます。",
+    "offlineRemove": "オフライン曲リストを削除",
+    "offlineRetry": "もう一度ダウンロードする",
+    "offlineSaved": "この端末に曲リストを保存済み ({size} MB)",
+    "offlineUpdated": "曲リストの更新: {days, plural, =0 {今日} one {#日前} other {#日前}}",
+    "offlineRemoveTitle": "オフライン曲リストを削除しますか？",
+    "offlineRemoveBody": "もう一度ダウンロードするまで、オフラインでの検索は利用できなくなります。",
+    "offlineRemoveConfirm": "削除"
   },
   "common": {
     "error": "問題が発生しました。",
@@ -61,7 +74,10 @@
     "makeIt": "作成する · 1クレジット",
     "noKaraoke": "カラオケ音源が見つかりません",
     "hasKaraokeHint": "お好みの音源から、自分だけのカラオケ動画を作成することもできます。",
-    "noKaraokeHint": "自分だけのカラオケ動画を作成して、歌ったりシェアしたりしましょう。"
+    "noKaraokeHint": "自分だけのカラオケ動画を作成して、歌ったりシェアしたりしましょう。",
+    "offlineMissing": "オフラインです。この曲はこの端末に保存された曲リストに含まれていません。",
+    "offlineNote": "オフライン · この端末に保存された曲リストより",
+    "cloudErrorNote": "現在検索に接続できません · このスマートフォンに保存されている曲リストを表示しています"
   },
   "tabs": {
     "discover": "見つける",
@@ -106,9 +122,7 @@
     "searchingHint": "最大で1分ほどかかる場合があります。",
     "seeOtherSources": "他の音源を見る ({count})",
     "submit": "作成する",
-    "youtubeInvalid": "YouTubeのリンクではないようです。",
     "youtubeLabel": "YouTubeリンク",
-    "youtubeToggle": "代わりにYouTubeリンクを貼り付ける",
     "category": {
       "best": "おすすめ",
       "compilations": "コンピレーション",
@@ -121,7 +135,37 @@
       "vinyl": "レコード音源",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "曲の詳細を確認しています…",
+    "matchUsingTyped": "入力された内容を使用します: {value}",
+    "matchUseTidied": "整形版を使用する",
+    "matchUseCorrection": "修正を適用する",
+    "communityWatch": "YouTubeで見る",
+    "communityExists": "コミュニティ版のカラオケがすでに存在します",
+    "wrongTrack": "間違ったトラックですか？",
+    "moreCount": "他 {count} 件",
+    "showLess": "折りたたむ",
+    "avail": {
+      "high": "取得しやすさ：高",
+      "medium": "取得しやすさ：中",
+      "low": "入手困難"
+    },
+    "linkInvalid": "有効なリンクではないようです。",
+    "linkUnsupported": "そのリンクには対応していません。別のソースをお試しください。",
+    "warn": {
+      "fileLooksLike": "ファイル名から別の曲の可能性があります: {file}",
+      "fileMayNotMatch": "ファイル名が曲名と一致していない可能性があります",
+      "lowAvailability": "音源の確保が難しいため、準備に少し時間がかかる場合があります",
+      "noLossless": "ロスレス音源が見つかりません — YouTube／非可逆圧縮音源、またはレコード音源のみです",
+      "lossy": "これはYouTubeまたは圧縮音源です。ロスレス音源（高音質）がある場合は、そちらの方がより良いカラオケになります。"
+    },
+    "youtubeBlocked": "現在YouTubeからのダウンロードが制限されているため、この音源は使用できません。別のソースを選択するか、数分後にもう一度お試しください。",
+    "youtubeFallbackToggle": "お探しの曲が見つかりませんか？代わりにリンクを貼り付けてください",
+    "filename": "ファイル名:",
+    "release": "リリース:",
+    "titleMatch": "タイトル一致",
+    "youtubeFallbackHint": "YouTubeで曲を見つけましたか？リンクを貼り付けていただければ、そこからカラオケ動画を作成します。",
+    "categoryCount": "{label}（{count}）"
   },
   "makeTab": {
     "emptyTitle": "作成した曲はまだありません",
@@ -208,5 +252,44 @@
     "share": "共有",
     "savedGallery": "ギャラリーに保存しました",
     "notReady": "この動画はまだ準備ができていません。完了すると{tab}タブに表示されます。"
+  },
+  "discover": {
+    "describeLabel": "曲の特徴を入力",
+    "describeNothing": "曲を特定できませんでした。別の言葉で説明してみてください。",
+    "describePlaceholder": "例: 「is this the real life」で始まる曲",
+    "libraryOrDisc": "ライブラリまたはディスク内",
+    "makeHint": "このアーティスト名と曲名で作成します",
+    "makeIt": "作成する →",
+    "more": "もっと見る…",
+    "needsConnection": "曲の作成にはインターネット接続が必要です",
+    "noKaraokeYet": "🎵 カラオケバージョンはまだありません",
+    "notIt": "お探しの曲ではありませんか？",
+    "offlineBanner": "オフライン · この端末に保存された曲を検索中（最終更新: {days, plural, =0 {今日} one {#日前} other {#日前}}）",
+    "offlineDownload": "曲リストをダウンロード",
+    "offlineNoList": "オフライン · この端末にはまだ曲リストが保存されていません",
+    "resultsHeading": "カラオケバージョンがある曲",
+    "showAll": "全{count}件を表示",
+    "similarHeading": "似た名前の他の曲（{count}件）",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 お探しの曲",
+    "unreachable": "現在、検索に接続できません。",
+    "versionsHeading": "カラオケバージョン（{count}件）",
+    "warmingUp": "検索を準備中…",
+    "youtube": "▶ YouTube",
+    "commercial": "商用",
+    "community": "コミュニティ",
+    "correctedTo": "{value} に修正しました — 入力内容: 「{typed}」",
+    "describeLink": "曲名が思い出せない？特徴から探す",
+    "describeSubmit": "探す",
+    "didYouMean": "もしかして？",
+    "figuringOut": "どの曲か探しています…",
+    "keepTyped": "入力した内容をそのまま使う",
+    "makeBarAction": "作成する",
+    "makeBarPrompt": "歌いたい曲が見つかりませんか？",
+    "showMore": "他{count}件を表示",
+    "tidiedTo": "{value} に整えました",
+    "undo": "元に戻す",
+    "whichOne": "どの曲をお探しですか？",
+    "rejected": "検索できませんでした。別のキーワードで試してみてください。"
   }
 }

@@ -1,0 +1,73 @@
+# UX screenshots of the audio pick screen (gen's Choose Audio parity, spec §4.3 items 6–7) at one search
+# confidence. Not part of the E2E suite (maestro/flows): run it by hand against the gen local stack, e.g.
+#
+#   maestro test -e STACK=http://127.0.0.1:8010 -e GLOBAL_CONFIG='{"search_confidence":"perfect"}' -e SHOT=out/tier1 maestro/screens/pick-screen.yaml
+#   maestro test -e STACK=http://127.0.0.1:8010 -e GLOBAL_CONFIG='{"search_confidence":"unsure"}' -e SHOT=out/tier3 maestro/screens/pick-screen.yaml
+#
+# GLOBAL_CONFIG sets the stack's global search_confidence knob (perfect | recommended | unsure); it is reset at the end.
+# SHOT prefixes the screenshot paths (relative to the working directory).
+appId: com.nomadkaraoke.mobile
+name: screens-pick-screen
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: pick
+      CREDITS: "2"
+      GLOBAL_CONFIG: ${GLOBAL_CONFIG}
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/make-any.yaml
+    env:
+      ARTIST: "Fake Artist"
+      TITLE: "Fake Song"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "make-pick|make-source-.*"
+    timeout: 30000
+# The judge's gate opens Make it once the song details are checked.
+- extendedWaitUntil:
+    notVisible:
+      id: "match-gate-checking"
+    timeout: 20000
+- takeScreenshot: ${SHOT}-pick
+# Tiers 1–2: the link box is behind "Can't find your song?"; open it and the other sources.
+- runFlow:
+    when:
+      visible:
+        id: "youtube-toggle"
+    commands:
+      - tapOn:
+          id: "make-other-sources"
+          optional: true
+      - scrollUntilVisible:
+          element:
+            id: "youtube-toggle"
+          direction: DOWN
+      - tapOn:
+          id: "youtube-toggle"
+      - takeScreenshot: ${SHOT}-sources
+# Tier 3: the link box is first; scroll to the list below it.
+- runFlow:
+    when:
+      notVisible:
+        id: "youtube-toggle"
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "make-source-.*"
+          direction: DOWN
+      - takeScreenshot: ${SHOT}-sources
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: config
+      STACK: ${STACK}
+      # Explicitly empty: the -e GLOBAL_CONFIG above would otherwise be applied again.
+      GLOBAL_CONFIG: "{}"

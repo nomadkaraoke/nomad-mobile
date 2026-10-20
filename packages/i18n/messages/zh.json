@@ -6,7 +6,20 @@
     "language": "语言",
     "credits": "{credits, plural, one {# 点积分} other {# 点积分}}",
     "title": "我的",
-    "buyCredits": "购买点数"
+    "buyCredits": "购买点数",
+    "offlineDownload": "下载离线歌单",
+    "offlineDownloadSize": "下载离线歌单（{size} MB）",
+    "offlineDownloading": "正在下载歌单… {percent}%",
+    "offlineError": "歌单下载失败。",
+    "offlineHeading": "离线歌单",
+    "offlineHint": "即使没有网络，也可以直接搜索已保存在本设备上的歌单。",
+    "offlineRemove": "移除离线歌单",
+    "offlineRetry": "重新下载",
+    "offlineSaved": "歌单已保存在本设备上（{size} MB）",
+    "offlineUpdated": "歌单更新于 {days, plural, =0 {今天} one {# 天前} other {# 天前}}",
+    "offlineRemoveTitle": "移除离线歌曲列表？",
+    "offlineRemoveBody": "重新下载前，离线搜索将无法使用。",
+    "offlineRemoveConfirm": "移除"
   },
   "common": {
     "error": "出错了。",
@@ -61,7 +74,10 @@
     "makeIt": "制作 · 1 点积分",
     "noKaraoke": "未找到卡拉OK版本",
     "hasKaraokeHint": "你仍然可以用自己挑选的音频来制作专属版本。",
-    "noKaraokeHint": "为这首歌制作专属的卡拉OK视频，随时开唱与分享。"
+    "noKaraokeHint": "为这首歌制作专属的卡拉OK视频，随时开唱与分享。",
+    "offlineMissing": "您当前处于离线状态，且本设备保存的歌单中未包含这首歌曲。",
+    "offlineNote": "离线 · 来自保存在本设备上的歌单",
+    "cloudErrorNote": "暂时无法连接搜索 · 正在显示保存在此手机上的歌曲列表"
   },
   "tabs": {
     "discover": "发现",
@@ -106,9 +122,7 @@
     "searchingHint": "这可能需要约一分钟时间。",
     "seeOtherSources": "查看其他来源 ({count})",
     "submit": "立即制作",
-    "youtubeInvalid": "链接看起来不是有效的 YouTube 链接。",
     "youtubeLabel": "YouTube 链接",
-    "youtubeToggle": "改为粘贴 YouTube 链接",
     "category": {
       "best": "最佳选择",
       "compilations": "合辑",
@@ -121,7 +135,37 @@
       "vinyl": "黑胶转录",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "正在检查歌曲详情…",
+    "matchUsingTyped": "使用您输入的内容：{value}",
+    "matchUseTidied": "使用整理后的版本",
+    "matchUseCorrection": "使用修正内容",
+    "communityWatch": "在 YouTube 上观看",
+    "communityExists": "社区中已存在该歌曲的卡拉OK版本",
+    "wrongTrack": "曲目错误？",
+    "moreCount": "还有 {count} 个",
+    "showLess": "显示更少",
+    "avail": {
+      "high": "高可用性",
+      "medium": "中等可用性",
+      "low": "获取较难"
+    },
+    "linkInvalid": "这看起来不像是链接。",
+    "linkUnsupported": "暂不支持该链接。请尝试其他来源。",
+    "warn": {
+      "fileLooksLike": "文件名似乎属于另一首歌曲：{file}",
+      "fileMayNotMatch": "文件名可能与你的歌曲不匹配",
+      "lowAvailability": "可用性较低 — 准备时间可能会稍长一些",
+      "noLossless": "没有可用的无损音源 — 仅找到 YouTube/有损音质或黑胶转录版本",
+      "lossy": "这是 YouTube/有损音源。如果有无损音频，制作出的卡拉OK效果会更好。"
+    },
+    "youtubeBlocked": "YouTube 目前阻止了我们的下载请求，暂时无法使用该链接。请选择其他来源，或稍后重试。",
+    "youtubeFallbackToggle": "找不到想唱的歌？直接粘贴链接试试",
+    "filename": "文件名：",
+    "release": "发行：",
+    "titleMatch": "标题匹配",
+    "youtubeFallbackHint": "在 YouTube 上找到了这首歌？粘贴链接，我们将用它来制作卡拉OK视频。",
+    "categoryCount": "{label}（{count}）"
   },
   "makeTab": {
     "emptyTitle": "尚未制作任何歌曲",
@@ -208,5 +252,44 @@
     "share": "分享",
     "savedGallery": "已保存至您的作品库",
     "notReady": "该视频尚未准备就绪。制作完成后，您可以在“{tab}”标签页中找到它。"
+  },
+  "discover": {
+    "describeLabel": "描述这首歌",
+    "describeNothing": "我们没能识别出是哪首歌。请尝试换种方式描述。",
+    "describePlaceholder": "例如：歌词有“is this the real life”的那首",
+    "libraryOrDisc": "在曲库中或光盘上",
+    "makeHint": "将使用此确切的歌手和歌名进行制作",
+    "makeIt": "去制作 →",
+    "more": "更多…",
+    "needsConnection": "制作歌曲需要连接网络",
+    "noKaraokeYet": "🎵 暂无伴唱版本",
+    "notIt": "不是这首？",
+    "offlineBanner": "离线状态 · 正在搜索保存在此手机上的歌曲（更新于 {days, plural, =0 {今天} one {# 天前} other {# 天前}}）",
+    "offlineDownload": "下载歌曲列表",
+    "offlineNoList": "离线状态 · 此手机上尚未保存歌曲列表",
+    "resultsHeading": "已有伴唱版本的歌曲",
+    "showAll": "查看全部 {count} 首",
+    "similarHeading": "其他名称相似的歌曲 ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 您想找的歌曲",
+    "unreachable": "暂时无法连接搜索服务。",
+    "versionsHeading": "伴唱版本 ({count})",
+    "warmingUp": "正在准备搜索…",
+    "youtube": "▶ YouTube",
+    "commercial": "商业版",
+    "community": "社区版",
+    "correctedTo": "已更正为 {value} — 您输入的是“{typed}”",
+    "describeLink": "记不清歌名？描述一下",
+    "describeSubmit": "帮我找",
+    "didYouMean": "您是不是指？",
+    "figuringOut": "正在识别你想找的是哪首歌…",
+    "keepTyped": "保留我的输入",
+    "makeBarAction": "立即制作",
+    "makeBarPrompt": "没找到你想唱的歌？",
+    "showMore": "展开另外 {count} 首",
+    "tidiedTo": "已整理为 {value}",
+    "undo": "撤销",
+    "whichOne": "你想找哪首歌？",
+    "rejected": "无法搜索该内容。请尝试其他关键词。"
   }
 }

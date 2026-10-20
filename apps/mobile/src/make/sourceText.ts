@@ -1,5 +1,6 @@
 import type { AudioResult } from '@nomad/api-gen';
-import { categorizeResult, formatCount, getDisplayName } from '@nomad/core';
+import { isolate } from '@nomad/i18n';
+import { categorizeResult, checkFilenameMismatch, formatCount, getDisplayName, type SearchConfidence } from '@nomad/core';
 
 /** `useTranslations('make')`. */
 type MakeT = (key: string, values?: Record<string, string | number>) => string;
@@ -57,12 +58,78 @@ function details(r: AudioResult, t: MakeT): string[] {
 
 /** The pick card's reason line, e.g. "Studio album · Black Holes and Revelations · 2006 · lossless · reliable download". */
 export function pickReason(r: AudioResult, t: MakeT): string {
-  // A torrent's title is the release (album) name; YouTube and Spotify titles are the track itself.
-  const release = !isYoutube(r) && !isSpotify(r) && r.title ? [r.title] : [];
+  // A torrent's or Spotify result's title is the release (album) name; a YouTube title is the video itself.
+  // Isolated: a Latin album name inside an RTL sentence otherwise swaps places with its neighbours.
+  const release = !isYoutube(r) && r.title ? [isolate(r.title)] : [];
   return [t(`reason.${kindKey(r)}`), ...release, ...details(r, t)].join(' · ');
 }
 
-/** A source row: its title, then who and how good. */
+/**
+ * A source row: its title, then who and how good. A Spotify result's `title` is the album and its
+ * `target_file` the track (spec A108), so the row leads with the track and names the album after the artist.
+ */
 export function sourceRowText(r: AudioResult, t: MakeT): { title: string; detail: string } {
-  return { title: r.title, detail: [getDisplayName(r), ...details(r, t)].filter(Boolean).join(' · ') };
+  if (isSpotify(r) && r.target_file) {
+    return {
+      title: r.target_file,
+      detail: [r.artist, r.title].filter(Boolean).map(isolate).concat(details(r, t)).join(' · '),
+    };
+  }
+  const name = getDisplayName(r);
+  return { title: r.title, detail: [...(name ? [isolate(name)] : []), ...details(r, t)].join(' · ') };
+}
+
+export type Availability = 'high' | 'medium' | 'low';
+
+/** gen's availability badge: High ≥ 50 seeders, Medium ≥ 10, else Low; none without a seeder count. */
+export function availability(seeders: number | null | undefined): Availability | null {
+  if (seeders == null) return null;
+  return seeders >= 50 ? 'high' : seeders >= 10 ? 'medium' : 'low';
+}
+
+/** The "Title match" / "Wrong track?" badge for a row, or none (gen ResultRow + MismatchBadge). */
+export function titleBadge(r: AudioResult, searchTitle: string, showMatch: boolean): 'match' | 'wrong' | null {
+  const mm = checkFilenameMismatch(searchTitle, r);
+  if (mm.isMismatch) return 'wrong';
+  // "Title match" only when a filename was actually compared.
+  return showMatch && mm.filename !== '' ? 'match' : null;
+}
+
+/**
+ * gen ResultCategories: when a category mixes right and wrong tracks, the matching files go first and both
+ * badges show; at tier 3 (`always`) a category with any match shows them too.
+ */
+export function sortByTitleMatch<R extends AudioResult>(
+  rows: R[],
+  searchTitle: string,
+  always = false,
+): { rows: R[]; showMatch: boolean } {
+  const wrong = rows.map((r) => checkFilenameMismatch(searchTitle, r).isMismatch);
+  const anyMatch = wrong.some((w) => !w);
+  const mixed = anyMatch && wrong.some((w) => w);
+  const sorted = mixed
+    ? rows.map((r, i) => [r, wrong[i]] as const).sort((a, b) => Number(a[1]) - Number(b[1])).map(([r]) => r)
+    : rows;
+  return { rows: sorted, showMatch: mixed || (always && anyMatch) };
+}
+
+/**
+ * The pick card's warnings: gen's `confidence.warnings` in the person's language, plus gen's separate
+ * lossy-source warning when the best is YouTube and no lossless warning already says so.
+ */
+export function pickWarnings(confidence: SearchConfidence, t: MakeT): string[] {
+  const out = confidence.warnings.map((w) => {
+    if (w.startsWith('Filename suggests different track: ')) {
+      // isolate(): a Latin file name inside an Arabic or Hebrew sentence would otherwise be reordered.
+      return t('warn.fileLooksLike', { file: isolate(w.slice('Filename suggests different track: '.length)) });
+    }
+    if (w.startsWith('Filename may not match')) return t('warn.fileMayNotMatch');
+    if (w.startsWith('No lossless sources')) return t('warn.noLossless');
+    if (w.startsWith('Low availability')) return t('warn.lowAvailability');
+    return w;
+  });
+  if (confidence.bestCategory === 'YOUTUBE' && !confidence.warnings.some((w) => w.includes('lossless'))) {
+    out.push(t('warn.lossy'));
+  }
+  return out;
 }

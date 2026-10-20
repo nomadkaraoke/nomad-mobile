@@ -6,7 +6,20 @@
     "language": "Jazyk",
     "credits": "{credits, plural, one {# kredit} few {# kredity} other {# kreditov}}",
     "title": "Profil",
-    "buyCredits": "Kúpiť kredity"
+    "buyCredits": "Kúpiť kredity",
+    "offlineDownload": "Stiahnuť zoznam skladieb na offline použitie",
+    "offlineDownloadSize": "Stiahnuť zoznam skladieb na offline použitie ({size} MB)",
+    "offlineDownloading": "Sťahuje sa zoznam skladieb… {percent} %",
+    "offlineError": "Zoznam skladieb sa nepodarilo stiahnuť.",
+    "offlineHeading": "Offline zoznam skladieb",
+    "offlineHint": "Hľadaj skladby aj bez internetu zo zoznamu uloženého v tomto telefóne.",
+    "offlineRemove": "Odstrániť offline zoznam skladieb",
+    "offlineRetry": "Skúsiť stiahnuť znova",
+    "offlineSaved": "Zoznam skladieb je uložený v tomto telefóne ({size} MB)",
+    "offlineUpdated": "Zoznam skladieb bol aktualizovaný {days, plural, =0 {dnes} one {pred # dňom} few {pred # dňami} other {pred # dňami}}",
+    "offlineRemoveTitle": "Odstrániť offline zoznam skladieb?",
+    "offlineRemoveBody": "Vyhľadávanie bez pripojenia nebude fungovať, kým si ho znova nestiahneš.",
+    "offlineRemoveConfirm": "Odstrániť"
   },
   "common": {
     "error": "Niečo sa pokazilo.",
@@ -61,7 +74,10 @@
     "makeIt": "Vytvoriť · 1 kredit",
     "noKaraoke": "Nenašla sa žiadna karaoke verzia",
     "hasKaraokeHint": "Stále si môžeš vytvoriť vlastnú verziu zo zvuku, ktorý si vyberieš.",
-    "noKaraokeHint": "Vytvor si z nej vlastné karaoke video, pripravené na spievanie a zdieľanie."
+    "noKaraokeHint": "Vytvor si z nej vlastné karaoke video, pripravené na spievanie a zdieľanie.",
+    "offlineMissing": "Si offline a táto skladba nie je v zozname skladieb uloženom v tomto telefóne.",
+    "offlineNote": "Offline · zo zoznamu skladieb uloženého v tomto telefóne",
+    "cloudErrorNote": "Vyhľadávanie je momentálne nedostupné · zobrazuje sa zoznam skladieb uložený v tomto telefóne"
   },
   "tabs": {
     "discover": "Objavovať",
@@ -106,9 +122,7 @@
     "searchingHint": "Môže to trvať až minútu.",
     "seeOtherSources": "Zobraziť ďalšie zdroje ({count})",
     "submit": "Vytvoriť",
-    "youtubeInvalid": "Toto nevyzerá ako odkaz na YouTube.",
     "youtubeLabel": "Odkaz na YouTube",
-    "youtubeToggle": "Namiesto toho vložiť odkaz na YouTube",
     "category": {
       "best": "Najlepšia voľba",
       "compilations": "Kompilácie",
@@ -121,7 +135,37 @@
       "vinyl": "Vinylové nahrávky",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Kontrolujú sa detaily skladby…",
+    "matchUsingTyped": "Používam to, čo si zadal: {value}",
+    "matchUseTidied": "Použiť upravenú verziu",
+    "matchUseCorrection": "Použiť opravu",
+    "communityWatch": "Pozrieť na YouTube",
+    "communityExists": "Komunitná karaoke verzia už existuje",
+    "wrongTrack": "Nesprávna skladba?",
+    "moreCount": "+{count} ďalších",
+    "showLess": "Zobraziť menej",
+    "avail": {
+      "high": "Vysoká dostupnosť",
+      "medium": "Stredná dostupnosť",
+      "low": "Nízka dostupnosť"
+    },
+    "linkInvalid": "Toto nevyzerá ako odkaz.",
+    "linkUnsupported": "Tento odkaz nie je podporovaný. Vyskúšaj iný zdroj.",
+    "warn": {
+      "fileLooksLike": "Názov súboru naznačuje inú skladbu: {file}",
+      "fileMayNotMatch": "Názov súboru sa nemusí zhodovať s tvojou skladbou",
+      "lowAvailability": "Nízka dostupnosť — príprava môže trvať o niečo dlhšie",
+      "noLossless": "Nie sú k dispozícii žiadne bezstratové zdroje — našli sa iba YouTube/stratové zdroje alebo vinylové ripy",
+      "lossy": "Toto je YouTube/stratový zdroj. Bezstratové audio vytvára lepšie karaoke, ak je dostupné."
+    },
+    "youtubeBlocked": "YouTube momentálne blokuje naše sťahovanie, takže toto video nemôžeme použiť. Vyber si iný zdroj alebo to skús znova o pár minút.",
+    "youtubeFallbackToggle": "Nemôžeš nájsť svoju skladbu? Vlož namiesto toho odkaz",
+    "filename": "Názov súboru:",
+    "release": "Vydanie:",
+    "titleMatch": "Zhoda názvu",
+    "youtubeFallbackHint": "Našiel si pieseň na YouTube? Vlož odkaz a my z neho vytvoríme karaoke video.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Zatiaľ si nič nevytvoril",
@@ -208,5 +252,44 @@
     "share": "Zdieľať",
     "savedGallery": "Uložené do tvojej galérie",
     "notReady": "Toto video ešte nie je pripravené. Keď bude hotové, nájdeš ho na karte {tab}."
+  },
+  "discover": {
+    "describeLabel": "Opíš pesničku",
+    "describeNothing": "Nepodarilo sa nám zistiť, o akú pesničku ide. Skús ju opísať inak.",
+    "describePlaceholder": "napr. tá, kde sa spieva „is this the real life“",
+    "libraryOrDisc": "V knižnici alebo na disku",
+    "makeHint": "Na vytvorenie sa použije presne tento interpret a názov",
+    "makeIt": "Vytvoriť →",
+    "more": "Viac…",
+    "needsConnection": "Na vytvorenie pesničky potrebuješ pripojenie k internetu",
+    "noKaraokeYet": "🎵 Zatiaľ bez karaoke verzie",
+    "notIt": "Nie je to ono?",
+    "offlineBanner": "Offline · vyhľadávanie v pesničkách uložených v tomto telefóne (aktualizované {days, plural, =0 {dnes} one {pred # dňom} few {pred # dňami} other {pred # dňami}})",
+    "offlineDownload": "Stiahnuť zoznam pesničiek",
+    "offlineNoList": "Offline · v tomto telefóne zatiaľ nie je uložený žiadny zoznam pesničiek",
+    "resultsHeading": "Pesničky s karaoke verziami",
+    "showAll": "Zobraziť všetkých {count}",
+    "similarHeading": "Ďalšie pesničky s podobným názvom ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Pesnička, ktorú hľadáš",
+    "unreachable": "Vyhľadávanie je momentálne nedostupné.",
+    "versionsHeading": "Karaoke verzie ({count})",
+    "warmingUp": "Pripravuje sa vyhľadávanie…",
+    "youtube": "▶ YouTube",
+    "commercial": "Komerčné",
+    "community": "Komunitné",
+    "correctedTo": "Opravené na {value} — tvoj text: „{typed}“",
+    "describeLink": "Nepamätáš si názov? Opíš pesničku",
+    "describeSubmit": "Nájdi to",
+    "didYouMean": "Mal si na mysli?",
+    "figuringOut": "Zisťujeme, ktorú pesničku myslíš…",
+    "keepTyped": "Ponechať môj text",
+    "makeBarAction": "Vytvoriť",
+    "makeBarPrompt": "Nevidíš svoju pesničku?",
+    "showMore": "Zobraziť ďalšie ({count})",
+    "tidiedTo": "Upravené na {value}",
+    "undo": "Vrátiť späť",
+    "whichOne": "Ktorú pesničku myslíš?",
+    "rejected": "Toto sa nepodarilo vyhľadať. Skús iné slová."
   }
 }

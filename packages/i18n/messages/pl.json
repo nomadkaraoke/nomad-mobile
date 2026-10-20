@@ -6,7 +6,20 @@
     "language": "Język",
     "credits": "{credits, plural, one {# kredyt} few {# kredyty} many {# kredytów} other {# kredytów}}",
     "title": "Moje konto",
-    "buyCredits": "Kup kredyty"
+    "buyCredits": "Kup kredyty",
+    "offlineDownload": "Pobierz listę utworów do użytku offline",
+    "offlineDownloadSize": "Pobierz listę utworów do użytku offline ({size} MB)",
+    "offlineDownloading": "Pobieranie listy utworów… {percent}%",
+    "offlineError": "Nie udało się pobrać listy utworów.",
+    "offlineHeading": "Lista utworów offline",
+    "offlineHint": "Wyszukuj utwory bez połączenia z internetem, korzystając z listy zapisanej na tym telefonie.",
+    "offlineRemove": "Usuń listę utworów offline",
+    "offlineRetry": "Spróbuj pobrać ponownie",
+    "offlineSaved": "Lista utworów zapisana na tym telefonie ({size} MB)",
+    "offlineUpdated": "Lista utworów zaktualizowana {days, plural, =0 {dzisiaj} one {# dzień temu} few {# dni temu} many {# dni temu} other {# dni temu}}",
+    "offlineRemoveTitle": "Usunąć listę utworów offline?",
+    "offlineRemoveBody": "Wyszukiwanie bez połączenia z internetem nie będzie działać, dopóki nie pobierzesz jej ponownie.",
+    "offlineRemoveConfirm": "Usuń"
   },
   "common": {
     "error": "Coś poszło nie tak.",
@@ -61,7 +74,10 @@
     "makeIt": "Stwórz · 1 kredyt",
     "noKaraoke": "Nie znaleziono wersji karaoke",
     "hasKaraokeHint": "Nadal możesz stworzyć własną wersję z wybranego pliku audio.",
-    "noKaraokeHint": "Stwórz własne wideo karaoke z tego utworu – gotowe do śpiewania i udostępniania."
+    "noKaraokeHint": "Stwórz własne wideo karaoke z tego utworu – gotowe do śpiewania i udostępniania.",
+    "offlineMissing": "Jesteś offline, a tego utworu nie ma na liście zapisanej na tym telefonie.",
+    "offlineNote": "Offline · z listy utworów zapisanej na tym telefonie",
+    "cloudErrorNote": "Nie można teraz połączyć się z wyszukiwarką · wyświetlam listę utworów zapisaną na tym telefonie"
   },
   "tabs": {
     "discover": "Odkrywaj",
@@ -106,9 +122,7 @@
     "searchingHint": "To może potrwać do minuty.",
     "seeOtherSources": "Zobacz inne źródła ({count})",
     "submit": "Stwórz",
-    "youtubeInvalid": "To nie wygląda na prawidłowy link do YouTube.",
     "youtubeLabel": "Link do YouTube",
-    "youtubeToggle": "Wklej zamiast tego link do YouTube",
     "category": {
       "best": "Najlepszy wybór",
       "compilations": "Składanki",
@@ -121,7 +135,37 @@
       "vinyl": "Zgrane z winyla",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Sprawdzanie szczegółów utworu…",
+    "matchUsingTyped": "Używam wpisanego tekstu: {value}",
+    "matchUseTidied": "Użyj uporządkowanej wersji",
+    "matchUseCorrection": "Użyj poprawki",
+    "communityWatch": "Obejrzyj na YouTube",
+    "communityExists": "Wersja karaoke stworzona przez społeczność już istnieje",
+    "wrongTrack": "Zły utwór?",
+    "moreCount": "+{count} więcej",
+    "showLess": "Pokaż mniej",
+    "avail": {
+      "high": "Wysoka dostępność",
+      "medium": "Średnia dostępność",
+      "low": "Niska dostępność"
+    },
+    "linkInvalid": "To nie wygląda na prawidłowy link.",
+    "linkUnsupported": "Ten link nie jest obsługiwany. Wypróbuj inne źródło.",
+    "warn": {
+      "fileLooksLike": "Nazwa pliku wskazuje na inny utwór: {file}",
+      "fileMayNotMatch": "Nazwa pliku może nie pasować do twojej piosenki",
+      "lowAvailability": "Niska dostępność — przygotowanie może zająć nieco więcej czasu",
+      "noLossless": "Brak bezstratnych źródeł — znaleziono tylko źródła z YouTube/stratne lub ripy z winyli",
+      "lossy": "To jest źródło z YouTube/stratne. Dźwięk bezstratny daje lepsze karaoke, jeśli jest dostępny."
+    },
+    "youtubeBlocked": "YouTube blokuje obecnie pobieranie, więc nie możemy użyć tego źródła. Wybierz inne źródło lub spróbuj ponownie za kilka minut.",
+    "youtubeFallbackToggle": "Nie możesz znaleźć swojej piosenki? Wklej bezpośredni link",
+    "filename": "Nazwa pliku:",
+    "release": "Wydanie:",
+    "titleMatch": "Dopasowanie tytułu",
+    "youtubeFallbackHint": "Piosenka znaleziona na YouTube? Wklej link, a zrobimy z niego wideo karaoke.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Jeszcze nic tu nie ma",
@@ -208,5 +252,44 @@
     "share": "Udostępnij",
     "savedGallery": "Zapisano w Twojej galerii",
     "notReady": "To wideo nie jest jeszcze gotowe. Znajdziesz je w zakładce {tab}, gdy będzie gotowe."
+  },
+  "discover": {
+    "describeLabel": "Opisz piosenkę",
+    "describeNothing": "Nie udało nam się ustalić, co to za piosenka. Spróbuj opisać ją inaczej.",
+    "describePlaceholder": "np. ta, w której śpiewają „is this the real life”",
+    "libraryOrDisc": "W bibliotece lub na płycie",
+    "makeHint": "Do utworzenia użyty zostanie dokładnie ten wykonawca i tytuł",
+    "makeIt": "Stwórz →",
+    "more": "Więcej…",
+    "needsConnection": "Tworzenie piosenki wymaga połączenia z internetem",
+    "noKaraokeYet": "🎵 Brak jeszcze wersji karaoke",
+    "notIt": "To nie to?",
+    "offlineBanner": "Offline · wyszukiwanie piosenek zapisanych na tym telefonie (zaktualizowano {days, plural, =0 {dzisiaj} one {# dzień temu} few {# dni temu} many {# dni temu} other {# dni temu}})",
+    "offlineDownload": "Pobierz listę piosenek",
+    "offlineNoList": "Offline · na tym telefonie nie ma jeszcze zapisanej listy piosenek",
+    "resultsHeading": "Piosenki z wersjami karaoke",
+    "showAll": "Pokaż wszystkie ({count})",
+    "similarHeading": "Inne piosenki o podobnych tytułach ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 Piosenka, o którą Ci chodzi",
+    "unreachable": "Nie można teraz połączyć się z wyszukiwarką.",
+    "versionsHeading": "Wersje karaoke ({count})",
+    "warmingUp": "Uruchamianie wyszukiwarki…",
+    "youtube": "▶ YouTube",
+    "commercial": "Komercyjne",
+    "community": "Społecznościowe",
+    "correctedTo": "Poprawiono na {value} — Twój wpis: „{typed}”",
+    "describeLink": "Nie pamiętasz tytułu? Opisz piosenkę",
+    "describeSubmit": "Znajdź",
+    "didYouMean": "Czy chodziło Ci o?",
+    "figuringOut": "Sprawdzamy, o którą piosenkę ci chodzi…",
+    "keepTyped": "Zachowaj mój wpis",
+    "makeBarAction": "Stwórz",
+    "makeBarPrompt": "Nie widzisz swojej piosenki?",
+    "showMore": "Pokaż jeszcze {count}",
+    "tidiedTo": "Uporządkowano: {value}",
+    "undo": "Cofnij",
+    "whichOne": "O którą piosenkę ci chodzi?",
+    "rejected": "Nie udało się tego wyszukać. Spróbuj użyć innych słów."
   }
 }

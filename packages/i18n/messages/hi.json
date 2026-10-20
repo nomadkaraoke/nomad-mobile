@@ -6,7 +6,20 @@
     "language": "भाषा",
     "credits": "{credits, plural, one {# क्रेडिट} other {# क्रेडिट}}",
     "title": "मेरी प्रोफ़ाइल",
-    "buyCredits": "क्रेडिट्स खरीदो"
+    "buyCredits": "क्रेडिट्स खरीदो",
+    "offlineDownload": "ऑफ़लाइन इस्तेमाल के लिए गानों की लिस्ट डाउनलोड करो",
+    "offlineDownloadSize": "ऑफ़लाइन इस्तेमाल के लिए गानों की लिस्ट डाउनलोड करो ({size} MB)",
+    "offlineDownloading": "गानों की लिस्ट डाउनलोड हो रही है… {percent}%",
+    "offlineError": "गानों की लिस्ट डाउनलोड नहीं हो सकी।",
+    "offlineHeading": "ऑफ़लाइन गानों की लिस्ट",
+    "offlineHint": "बिना इंटरनेट कनेक्शन के, इस फ़ोन पर सेव की गई लिस्ट से गाने खोजो।",
+    "offlineRemove": "ऑफ़लाइन गानों की लिस्ट हटाओ",
+    "offlineRetry": "फिर से डाउनलोड करने की कोशिश करो",
+    "offlineSaved": "गानों की लिस्ट इस फ़ोन पर सेव हो गई है ({size} MB)",
+    "offlineUpdated": "गानों की लिस्ट अपडेट हुई: {days, plural, =0 {आज} one {# दिन पहले} other {# दिन पहले}}",
+    "offlineRemoveTitle": "ऑफ़लाइन गानों की सूची हटाएं?",
+    "offlineRemoveBody": "बिना इंटरनेट कनेक्शन के सर्च तब तक काम नहीं करेगा जब तक तुम इसे फिर से डाउनलोड नहीं कर लेते।",
+    "offlineRemoveConfirm": "हटाओ"
   },
   "common": {
     "error": "कुछ गड़बड़ हो गई।",
@@ -61,7 +74,10 @@
     "makeIt": "इसे बनाओ · 1 क्रेडिट",
     "noKaraoke": "कोई कराओके वर्शन नहीं मिला",
     "hasKaraokeHint": "तुम अपनी पसंद के ऑडियो से अब भी अपना कराओके बना सकते हो।",
-    "noKaraokeHint": "इसका अपना खुद का कराओके वीडियो बनाओ, गाने और शेयर करने के लिए बिल्कुल तैयार।"
+    "noKaraokeHint": "इसका अपना खुद का कराओके वीडियो बनाओ, गाने और शेयर करने के लिए बिल्कुल तैयार।",
+    "offlineMissing": "तुम ऑफ़लाइन हो, और यह गाना इस फ़ोन पर सेव की गई गानों की लिस्ट में नहीं है।",
+    "offlineNote": "ऑफ़लाइन · इस फ़ोन पर सेव की गई गानों की लिस्ट से",
+    "cloudErrorNote": "अभी सर्च से कनेक्ट नहीं हो पा रहा है · इस फ़ोन पर सेव की गई गानों की सूची दिखाई जा रही है"
   },
   "tabs": {
     "discover": "एक्सप्लोर करो",
@@ -106,9 +122,7 @@
     "searchingHint": "इसमें एक मिनट तक लग सकता है।",
     "seeOtherSources": "अन्य स्रोत देखो ({count})",
     "submit": "इसे बनाओ",
-    "youtubeInvalid": "यह कोई YouTube लिंक नहीं लगता।",
     "youtubeLabel": "YouTube लिंक",
-    "youtubeToggle": "इसके बजाय YouTube लिंक पेस्ट करो",
     "category": {
       "best": "सबसे अच्छा विकल्प",
       "compilations": "संकलन",
@@ -121,7 +135,37 @@
       "vinyl": "विनाइल रिप्स",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "गाने की जानकारी चेक की जा रही है…",
+    "matchUsingTyped": "जो तुमने टाइप किया है, उसका इस्तेमाल हो रहा है: {value}",
+    "matchUseTidied": "व्यवस्थित वर्शन का इस्तेमाल करो",
+    "matchUseCorrection": "सुधार का इस्तेमाल करो",
+    "communityWatch": "YouTube पर देखो",
+    "communityExists": "एक कम्युनिटी कराओके वर्शन पहले से मौजूद है",
+    "wrongTrack": "गलत ट्रैक?",
+    "moreCount": "+{count} और",
+    "showLess": "कम दिखाओ",
+    "avail": {
+      "high": "उच्च उपलब्धता",
+      "medium": "मध्यम उपलब्धता",
+      "low": "कम उपलब्धता"
+    },
+    "linkInvalid": "यह कोई लिंक नहीं लग रहा है।",
+    "linkUnsupported": "यह लिंक समर्थित नहीं है। कोई दूसरा स्रोत आज़माओ।",
+    "warn": {
+      "fileLooksLike": "फ़ाइल के नाम से किसी दूसरे ट्रैक का संकेत मिलता है: {file}",
+      "fileMayNotMatch": "हो सकता है कि फ़ाइल का नाम तुम्हारे गाने से मेल न खाए",
+      "lowAvailability": "कम उपलब्धता — तैयार होने में थोड़ा ज़्यादा समय लग सकता है",
+      "noLossless": "कोई लॉसलेस (lossless) स्रोत उपलब्ध नहीं हैं — केवल YouTube/लॉसी (lossy) या विनाइल रिप्स मिले हैं",
+      "lossy": "यह एक YouTube/लॉसी सोर्स है। उपलब्ध होने पर लॉसलेस ऑडियो से बेहतर कराओके बनता है।"
+    },
+    "youtubeBlocked": "YouTube अभी हमारे डाउनलोड को ब्लॉक कर रहा है, इसलिए हम उसका उपयोग नहीं कर सकते। कोई दूसरा स्रोत चुनो, या कुछ मिनट बाद फिर से कोशिश करो।",
+    "youtubeFallbackToggle": "अपना गाना नहीं ढूँढ पा रहे हो? इसके बजाय कोई लिंक पेस्ट करो",
+    "filename": "फ़ाइल का नाम:",
+    "release": "रिलीज़:",
+    "titleMatch": "टाइटल मैच",
+    "youtubeFallbackHint": "क्या गाना YouTube पर मिल गया? लिंक पेस्ट करो और हम उससे कराओके वीडियो बना देंगे।",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "अभी तक कुछ नहीं बनाया",
@@ -208,5 +252,44 @@
     "share": "शेयर करो",
     "savedGallery": "तुम्हारी गैलरी में सेव हो गया",
     "notReady": "यह वीडियो अभी तैयार नहीं है। जब यह पूरा हो जाएगा, तो तुम्हें यह {tab} टैब पर मिल जाएगा।"
+  },
+  "discover": {
+    "describeLabel": "गाने के बारे में बताओ",
+    "describeNothing": "हम समझ नहीं पाए कि यह कौन सा गाना है। इसे किसी दूसरे तरीके से बताकर देखो।",
+    "describePlaceholder": "जैसे कि, वो गाना जिसके बोल हैं “is this the real life”",
+    "libraryOrDisc": "लाइब्रेरी में या डिस्क पर",
+    "makeHint": "इसे बनाने के लिए इसी कलाकार और शीर्षक का इस्तेमाल किया जाएगा",
+    "makeIt": "इसे बनाओ →",
+    "more": "और…",
+    "needsConnection": "गाना बनाने के लिए कनेक्शन चाहिए",
+    "noKaraokeYet": "🎵 अभी तक कोई कराओके वर्शन नहीं है",
+    "notIt": "यह नहीं है?",
+    "offlineBanner": "ऑफ़लाइन · इस फ़ोन पर सेव किए गए गानों में खोज जारी है ({days, plural, =0 {आज} one {# दिन पहले} other {# दिन पहले}} अपडेट किया गया)",
+    "offlineDownload": "गानों की लिस्ट डाउनलोड करो",
+    "offlineNoList": "ऑफ़लाइन · इस फ़ोन पर अभी तक कोई गानों की लिस्ट सेव नहीं है",
+    "resultsHeading": "कराओके वर्शन वाले गाने",
+    "showAll": "सभी {count} दिखाओ",
+    "similarHeading": "मिलते-जुलते नामों वाले अन्य गाने ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 वो गाना जो तुम ढूंढ रहे हो",
+    "unreachable": "इस समय सर्च से कनेक्ट नहीं हो पा रहा है।",
+    "versionsHeading": "कराओके वर्शन ({count})",
+    "warmingUp": "सर्च तैयार हो रही है…",
+    "youtube": "▶ YouTube",
+    "commercial": "कमर्शियल",
+    "community": "कम्युनिटी",
+    "correctedTo": "सही करके {value} कर दिया गया — तुमने “{typed}” टाइप किया था",
+    "describeLink": "नाम याद नहीं? उसके बारे में बताओ",
+    "describeSubmit": "ढूंढो",
+    "didYouMean": "क्या तुम्हारा मतलब यह था?",
+    "figuringOut": "पता लगा रहे हैं कि तुम किस गाने की बात कर रहे हो…",
+    "keepTyped": "जो मैंने टाइप किया है वही रखो",
+    "makeBarAction": "इसे बनाओ",
+    "makeBarPrompt": "तुम्हारा गाना नहीं मिल रहा?",
+    "showMore": "{count} और दिखाओ",
+    "tidiedTo": "ठीक करके {value} कर दिया गया",
+    "undo": "पूर्ववत करो",
+    "whichOne": "तुम किस गाने की बात कर रहे हो?",
+    "rejected": "यह खोजा नहीं जा सका। दूसरे शब्दों के साथ कोशिश करो।"
   }
 }

@@ -6,7 +6,20 @@
     "language": "Langue",
     "credits": "{credits, plural, one {# crédit} other {# crédits}}",
     "title": "Moi",
-    "buyCredits": "Acheter des crédits"
+    "buyCredits": "Acheter des crédits",
+    "offlineDownload": "Télécharger la liste de chansons pour une utilisation hors ligne",
+    "offlineDownloadSize": "Télécharger la liste de chansons pour une utilisation hors ligne ({size} Mo)",
+    "offlineDownloading": "Téléchargement de la liste de chansons… {percent} %",
+    "offlineError": "Impossible de télécharger la liste de chansons.",
+    "offlineHeading": "Liste de chansons hors ligne",
+    "offlineHint": "Recherche des chansons sans connexion, depuis une liste enregistrée sur ce téléphone.",
+    "offlineRemove": "Supprimer la liste de chansons hors ligne",
+    "offlineRetry": "Réessayer le téléchargement",
+    "offlineSaved": "Liste de chansons enregistrée sur ce téléphone ({size} Mo)",
+    "offlineUpdated": "Liste de chansons mise à jour {days, plural, =0 {aujourd'hui} one {il y a # jour} other {il y a # jours}}",
+    "offlineRemoveTitle": "Supprimer la liste de chansons hors ligne ?",
+    "offlineRemoveBody": "La recherche hors ligne ne fonctionnera plus tant que tu ne l'auras pas téléchargée à nouveau.",
+    "offlineRemoveConfirm": "Retirer"
   },
   "common": {
     "error": "Une erreur s'est produite.",
@@ -61,7 +74,10 @@
     "makeIt": "Créer · 1 crédit",
     "noKaraoke": "Aucune version karaoké trouvée",
     "hasKaraokeHint": "Tu peux quand même créer ta propre version, à partir de l'audio de ton choix.",
-    "noKaraokeHint": "Crée ta propre vidéo karaoké à partir de ce morceau, prête à chanter et à partager."
+    "noKaraokeHint": "Crée ta propre vidéo karaoké à partir de ce morceau, prête à chanter et à partager.",
+    "offlineMissing": "Tu es hors ligne et cette chanson ne figure pas dans la liste enregistrée sur ce téléphone.",
+    "offlineNote": "Hors ligne · depuis la liste de chansons enregistrée sur ce téléphone",
+    "cloudErrorNote": "Impossible d'accéder à la recherche pour l'instant · affichage de la liste de chansons enregistrée sur ce téléphone"
   },
   "tabs": {
     "discover": "Découvrir",
@@ -106,9 +122,7 @@
     "searchingHint": "Cela peut prendre jusqu'à une minute.",
     "seeOtherSources": "Voir les autres sources ({count})",
     "submit": "Créer",
-    "youtubeInvalid": "Ce lien ne ressemble pas à un lien YouTube.",
     "youtubeLabel": "Lien YouTube",
-    "youtubeToggle": "Coller plutôt un lien YouTube",
     "category": {
       "best": "Meilleur choix",
       "compilations": "Compilations",
@@ -121,7 +135,37 @@
       "vinyl": "Rips vinyle",
       "youtube": "YouTube"
     },
-    "youtubePlaceholder": "https://youtube.com/watch?v=…"
+    "youtubePlaceholder": "https://youtube.com/watch?v=…",
+    "matchChecking": "Vérification des détails de la chanson…",
+    "matchUsingTyped": "Utilisation de ce que tu as tapé : {value}",
+    "matchUseTidied": "Utiliser la version nettoyée",
+    "matchUseCorrection": "Utiliser la correction",
+    "communityWatch": "Regarder sur YouTube",
+    "communityExists": "Une version karaoké communautaire existe déjà",
+    "wrongTrack": "Mauvaise piste ?",
+    "moreCount": "+{count} de plus",
+    "showLess": "Afficher moins",
+    "avail": {
+      "high": "Haute disponibilité",
+      "medium": "Disponibilité moyenne",
+      "low": "Faible disponibilité"
+    },
+    "linkInvalid": "Ça ne ressemble pas à un lien.",
+    "linkUnsupported": "Ce lien n'est pas pris en charge. Essaie une autre source.",
+    "warn": {
+      "fileLooksLike": "Le nom du fichier suggère un autre morceau : {file}",
+      "fileMayNotMatch": "Le nom du fichier ne correspond peut-être pas à ton morceau",
+      "lowAvailability": "Faible disponibilité — la préparation peut prendre un peu plus de temps",
+      "noLossless": "Aucune source sans perte disponible — seules des sources YouTube/avec perte ou des rips vinyle ont été trouvés",
+      "lossy": "C'est une source YouTube/avec perte. L'audio sans perte donne un meilleur karaoké quand il est disponible."
+    },
+    "youtubeBlocked": "YouTube bloque nos téléchargements en ce moment, nous ne pouvons donc pas utiliser cette source. Choisis une autre source ou réessaie dans quelques minutes.",
+    "youtubeFallbackToggle": "Tu ne trouves pas ta chanson ? Colle plutôt un lien",
+    "filename": "Nom du fichier :",
+    "release": "Sortie :",
+    "titleMatch": "Titre correspondant",
+    "youtubeFallbackHint": "Tu as trouvé la chanson sur YouTube ? Colle le lien et on créera la vidéo de karaoké à partir de ça.",
+    "categoryCount": "{label} ({count})"
   },
   "makeTab": {
     "emptyTitle": "Rien de créé pour l'instant",
@@ -208,5 +252,44 @@
     "share": "Partager",
     "savedGallery": "Enregistré dans ta galerie",
     "notReady": "Cette vidéo n'est pas encore prête. Tu la trouveras dans l'onglet {tab} quand elle sera terminée."
+  },
+  "discover": {
+    "describeLabel": "Décris la chanson",
+    "describeNothing": "On n'a pas réussi à trouver de quelle chanson il s'agit. Essaie de la décrire autrement.",
+    "describePlaceholder": "ex. : celle qui fait « is this the real life »",
+    "libraryOrDisc": "Dans une bibliothèque ou sur disque",
+    "makeHint": "Utilise exactement cet artiste et ce titre pour la créer",
+    "makeIt": "Créer →",
+    "more": "Plus…",
+    "needsConnection": "Créer une chanson nécessite une connexion",
+    "noKaraokeYet": "🎵 Pas encore de version karaoké",
+    "notIt": "Ce n'est pas ça ?",
+    "offlineBanner": "Hors ligne · recherche parmi les chansons enregistrées sur ce téléphone (mise à jour {days, plural, =0 {aujourd'hui} one {il y a # jour} other {il y a # jours}})",
+    "offlineDownload": "Télécharger la liste des chansons",
+    "offlineNoList": "Hors ligne · aucune liste de chansons n'est encore enregistrée sur ce téléphone",
+    "resultsHeading": "Chansons avec des versions karaoké",
+    "showAll": "Afficher les {count}",
+    "similarHeading": "Autres chansons avec des titres similaires ({count})",
+    "songValue": "{title} · {artist}",
+    "songYouMean": "🎵 La chanson que tu cherches",
+    "unreachable": "Impossible d'accéder à la recherche pour l'instant.",
+    "versionsHeading": "Versions karaoké ({count})",
+    "warmingUp": "Préparation de la recherche…",
+    "youtube": "▶ YouTube",
+    "commercial": "Commercial",
+    "community": "Communautaire",
+    "correctedTo": "Corrigé en {value} — tu as tapé « {typed} »",
+    "describeLink": "Tu ne te souviens plus du titre ? Décris-le",
+    "describeSubmit": "Trouver",
+    "didYouMean": "Tu voulais dire ?",
+    "figuringOut": "On cherche à quelle chanson tu penses…",
+    "keepTyped": "Garder ce que j'ai tapé",
+    "makeBarAction": "Créer",
+    "makeBarPrompt": "Tu ne trouves pas ta chanson ?",
+    "showMore": "Afficher {count} de plus",
+    "tidiedTo": "Ajusté en {value}",
+    "undo": "Annuler",
+    "whichOne": "À quelle chanson tu penses ?",
+    "rejected": "Impossible de lancer cette recherche. Essaie avec d'autres mots."
   }
 }
