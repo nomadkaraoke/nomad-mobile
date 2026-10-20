@@ -45,7 +45,7 @@ The job's Review action (job card, job page, progress screen for `awaiting_revie
 2. `GET correction-data` (idempotent, already AI-pre-applied, no URL signing so it is fast).
 3. Fire-and-forget encoder warmup, then a heartbeat every 60 s while the screen is open (keeps the encoding VM warm for the preview).
 
-The correction doc is turned into an editable `ReviewDoc` with `fromCorrectionData`. The original server doc is kept so the submission can round-trip every field it does not edit (`toSubmission`: the whole doc received, with only the corrected segments and `is_duet` replaced; wordless segments are dropped as a safety net).
+The correction doc is turned into an editable `ReviewDoc` with `fromCorrectionData`. The original server doc is kept so the submission can round-trip every field it does not edit (`toSubmission`: the whole doc received, with only the corrected segments replaced, plus `is_duet` when it is known (see the `is_duet` rules); wordless segments are dropped as a safety net).
 
 Loading shows "Opening your lyrics..." Errors: section 5.
 
@@ -66,19 +66,19 @@ Step header: two-part progress (Lyrics, Finish). Back goes to the previous step;
 
 ### 2.4 Drafts and resume
 
-- After each edit (debounced 1 s) the phone saves, per job: edited segments, duet flag, whether the person touched duet, the instrumental choice, an edit count, the doc's `metadata.audio_hash`. **Never media URLs or tokens.**
-- On reopen: if a draft exists and its audio hash matches the server doc, restore silently and show a banner "Restored your edits, Discard" (Discard asks to confirm). A different hash, a corrupt draft or an unknown version is deleted.
-- The draft is cleared after a successful complete.
+- After each edit (debounced 1 s) the phone saves, per job: edited segments, duet flag, whether the person touched duet, the instrumental choice, an edit count, the doc's `metadata.audio_hash` and a fingerprint of the server doc the edits started from (`docFingerprint`: FNV-1a over every segment id and every word's id, text, timings and singer). **Never media URLs or tokens.**
+- On reopen: if a draft exists and both its audio hash and its server fingerprint match the server doc, restore silently and show a banner "Restored your edits, Discard" (Discard asks to confirm). A different hash or fingerprint (the review was finished on the web and came back with other lyrics), a corrupt draft or an unknown version is deleted.
+- The draft is cleared after a successful complete, and when the person comes back from Continue on web and gen shows the job has left review (finished on the web).
 - Overflow menu "Discard my edits" confirms, then returns to what gen sent.
 - On web, use localStorage keyed by job id with the same shape; gen's existing review-session restore dialog can also serve it.
 
 ### 2.5 Continue on web
 
-Kept in the overflow menu and in error states so web-only tools stay reachable (section 7). It first saves the draft as a gen review session (`POST sessions`, trigger `manual`) so the web restore dialog offers the edits, then opens the existing handoff link (`handoff-token`). On gen web this item is not needed.
+Kept in the overflow menu and in error states (on Finish, a failed submit shows it next to Retry) so web-only tools stay reachable (section 7). It first saves the draft as a gen review session (`POST sessions`, trigger `manual`) so the web restore dialog offers the edits, then opens the existing handoff link (`handoff-token`). On gen web this item is not needed.
 
 ### 2.6 Overflow menu
 
-Continue on web, Mark as duet / Not a duet, Discard my edits, Help. The header also has Undo (disabled when nothing to undo).
+Continue on web, Mark as duet / Not a duet, Discard my edits. While Make my video is saving or done, all three are disabled (the edits were sent). The header also has Undo (disabled when nothing to undo). (A Help item is deferred until there is help content.)
 
 ## 3. Lyrics step
 
@@ -87,7 +87,7 @@ Continue on web, Mark as duet / Not a duet, Discard my edits, Help. The header a
 1. **Header:** artist and title (long titles truncate), Undo, overflow menu.
 2. **"Things to check" bar** (hidden when empty): "3 things to check" with previous / next arrows.
 3. **Line list** (virtualized; 300+ lines and about 2,000 words must scroll smoothly).
-4. **Player bar** (sticky): play/pause, back 5 s, scrubber over the vocals waveform, source toggle Vocals / Song, speed 1x / 0.75x.
+4. **Player bar** (sticky): play/pause, back 5 s, scrubber over the vocals waveform, source toggle Vocals / Song, speed toggle 1x <-> 0.75x.
 5. **Step CTA:** "Lyrics look good" (Next).
 
 Open vocal-gap callouts sit inline in the list (3.7). The selected line expands a toolbar (3.3). Sheets (word, edit text, nudge, Tap To Sync) slide up from the bottom and are keyboard-aware.
@@ -186,7 +186,7 @@ Opens from a word tap. Fields and actions:
 
 Full-height sheet for the selected line. Option "Keep going into the next lines" (off by default; on by default after typing several lines).
 
-**Layout.** Top: the current word large and the next 4. Middle: progress row of the line's words. Bottom half: one big **TAP pad**. Controls: speed 1x / 0.75x / 0.5x, Restart, Done.
+**Layout.** Top: the current word large and the next 4. Middle: progress row of the line's words. Bottom half: one big **TAP pad**. Controls: speed cycling 1x -> 0.75x -> 0.5x (the sheet always opens at 1x and gives the player bar its own speed back on close), Restart, Done.
 
 **Constants** (all in `tapSync.ts` / `timing.ts` unless noted)
 
@@ -239,7 +239,7 @@ Inline between lines: "Possible missing lyrics, 0:42-0:51" with Play and Insert 
 
 - Back 5 s button; scrubber = vocals waveform (tap or drag to seek). Waveform comes from `vocals-peaks` (uint8, base64, 400 per second): `decodePeaks`, `downsamplePeaks` with **fractional bucket strides** (integer strides drift about 0.4 s at 3 min), then `normalizePeaks` so quiet vocals are not a flat line. The app draws 240 bars.
 - Source toggle **Vocals / Song**. Vocals makes words easy to hear. While stems are still separating, `audio/vocals` and `vocals-peaks` return 202 + Retry-After: the toggle reads "Vocals soon", playback falls back to Song, and the waveform shows "Loading the vocals..." with up to 3 ready-retries honouring Retry-After. Never show empty waveforms.
-- Speed 1x / 0.75x. Position updates about 30 Hz for word highlighting.
+- Speed toggles 1x <-> 0.75x (0.5x is only in Tap To Sync). Position updates about 30 Hz for word highlighting.
 - Audio errors: "We couldn't load the audio..." or "We couldn't play the audio. Tap play to try again." A failed play is caught; AbortError is benign. Gate playback until audio is ready.
 
 ## 4. Finish step
@@ -412,7 +412,7 @@ All exist in gen already. Auth is a Bearer token, or `?token=` on media URLs (na
 | POST | `/api/client-events` | Degradation telemetry, throttled 60 s per type |
 | POST | `/api/users/auth/handoff-token` | Continue on web (Phase 1 flow) |
 
-**Round-trip rule.** Send back the whole correction doc that was received, with only the corrected segments (and `is_duet`) replaced. Never rebuild the doc from the client model; unknown fields must survive.
+**Round-trip rule.** Send back the whole correction doc that was received, with only the corrected segments (and `is_duet`, when known) replaced. Never rebuild the doc from the client model; unknown fields must survive.
 
 ## 9. review-core function index
 

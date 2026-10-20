@@ -103,7 +103,7 @@ The layout is phone portrait. Top to bottom:
   - Continue on web
   - Mark as duet / Not a duet
   - Discard my edits
-  - Help
+  - Help (deferred, see "Calls made after the builder check")
 - **"Things to check" bar** (hidden when empty). It reads "3 things to check ‹ ›" and steps through issues in song order. Issue kinds, in priority order:
   1. untimed word (blocks Finish);
   2. evidenced vocal gap ("possible missing lyrics");
@@ -351,6 +351,7 @@ make-5 is updated: the review card now opens the native screen.
 - **Finish:** the web's three calls (corrections → re-fetch → complete), keeping gen's server-side sanitizer.
 - **Steps:** two (Lyrics, Finish with the chooser inline). Approve-as-is is 3 taps.
 - **`is_duet`:** sent like the web (`?? false`). Gen latches it up only.
+- **Help menu item deferred:** no help content yet. The menu ships with Continue on web, Mark as duet / Not a duet and Discard my edits.
 - **The gen local stack gets new knobs:** `review_mode`, `auto_approval`, `backing_vocals`, `stems_delay_seconds`, `review_fixture`, `review_complete_fail_once`, plus the `/audio` Range fix.
 
 ---
