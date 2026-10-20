@@ -16935,6 +16935,10 @@ export type CatalogResolveApiKjboxCatalogResolvePostData = {
          * X-Kjbox-Secret
          */
         'x-kjbox-secret'?: string | null;
+        /**
+         * X-Partner-Secret
+         */
+        'x-partner-secret'?: string | null;
     };
     path?: never;
     query?: never;

@@ -10,7 +10,8 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "0.99.0",
-    "@nomad/core": "workspace:*"
+    "@nomad/core": "workspace:*",
+    "@nomad/review-core": "workspace:*"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^5"

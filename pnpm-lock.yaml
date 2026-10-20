@@ -392,6 +392,9 @@ importers:
       '@nomad/core':
         specifier: workspace:*
         version: link:../core
+      '@nomad/review-core':
+        specifier: workspace:*
+        version: link:../review-core
 
   packages/core:
     devDependencies:
@@ -413,6 +416,8 @@ importers:
       use-intl:
         specifier: 4.14.9
         version: 4.14.9(@types/react@19.2.18)(react@19.2.3)
+
+  packages/review-core: {}
 
   packages/ui:
     dependencies:

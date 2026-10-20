@@ -4,6 +4,13 @@ export { ApiError, configureClient, isApiError, type ClientDeps } from './config
 
 // Zod schemas for responses the OpenAPI snapshot doesn't type (or types too loosely).
 export { AudioResultSchema, type AudioResult } from './overrides/audioSearch';
+export {
+  CorrectionDataSchema,
+  InstrumentalUrlsSchema,
+  PreviewRequestSchema,
+  VocalsPeaksSchema,
+  WaveformDataSchema,
+} from './overrides/review';
 export { JobDetailSchema, JobSummarySchema, type JobDetail, type JobSummary } from './overrides/jobs';
 
 // Readable facades over FastAPI's generated operation names. Every one throws ApiError.
@@ -13,3 +20,4 @@ export * from './facades/auth';
 export { createAppCheckout, listCreditPackages, type CreditPackage } from './facades/credits';
 export * from './facades/make';
 export * from './facades/jobs';
+export * from './facades/review';
