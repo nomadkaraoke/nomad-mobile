@@ -20,7 +20,8 @@ cp "$TMP/bg.png" "$OUT/android-icon-background.png"
 # Themed (monochrome) icon: the logo's silhouette in white.
 magick "$OUT/android-icon-foreground.png" -alpha extract -background white -alpha shape "$OUT/android-icon-monochrome.png"
 
-# Splash image (shown on brand blue) and web favicon.
-magick "$LOGO" -resize 1024x1024 "$OUT/splash-icon.png"
+# Splash image (shown on brand blue). Android 12+ masks the splash icon to the same circle as the adaptive
+# icon, so reuse the circle-safe foreground; iOS shows it unmasked (just smaller). Then the web favicon.
+cp "$OUT/android-icon-foreground.png" "$OUT/splash-icon.png"
 magick "$OUT/icon.png" -resize 48x48 "$OUT/favicon.png"
 echo "icons written to $OUT"
