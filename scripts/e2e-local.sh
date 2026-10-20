@@ -5,6 +5,9 @@
 #
 #   scripts/e2e-local.sh --platform ios                  # every flow in maestro/flows
 #   scripts/e2e-local.sh --platform android make-4       # flows whose file name contains "make-4"
+#   scripts/e2e-local.sh --platform ios --locale he --screen review-tour
+#                                     # a screenshot-only flow (maestro/screens/<name>.yaml) with the app in that
+#                                     # language (default en); shots go to docs/screenshots/phase2/review/<platform>/<locale>
 #
 # Env: GEN_DIR (gen checkout with scripts/local-stack.sh, at least v0.278.2 plus the fake match judge; default
 #      ../karaoke-gen, the main clone: pull it first, or point GEN_DIR at a gen worktree with the code you want),
@@ -40,11 +43,15 @@ SEARCH="http://127.0.0.1:8020"
 MAESTRO="${MAESTRO:-$(command -v maestro || echo "$HOME/.maestro/bin/maestro")}"
 PLATFORM=""
 FILTER=""
+LOCALE=""
+SCREEN=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --platform) PLATFORM="$2"; shift 2 ;;
-    -h|--help) sed -n '2,25p' "$0"; exit 0 ;;
+    --locale) LOCALE="$2"; shift 2 ;;
+    --screen) SCREEN="$2"; shift 2 ;;
+    -h|--help) sed -n '2,28p' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
@@ -182,6 +189,20 @@ run_hebrew() {
 
 run_flows() { "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" "$@"; }
 status=0
+
+# --screen: one screenshot-only flow, with the app in LOCALE (it sets its own app language, so it never mixes with
+# the suite's groups). Uses the running Metro, or starts one.
+if [[ -n "$SCREEN" ]]; then
+  [[ -f "maestro/screens/$SCREEN.yaml" ]] || { echo "no maestro/screens/$SCREEN.yaml" >&2; exit 2; }
+  lang="${LOCALE:-en}"
+  TOUR_SHOTS="docs/screenshots/phase2/review/$PLATFORM/$lang"
+  mkdir -p "$TOUR_SHOTS"
+  metro_up || start_metro
+  set_app_locale "$lang"
+  run_flows -e LOCALE="$lang" -e TOUR_SHOTS="$TOUR_SHOTS" "maestro/screens/$SCREEN.yaml" || status=$?
+  set_app_locale ""
+  exit "$status"
+fi
 if metro_up; then
   echo "Using the Metro already on :8081 (it must have EXPO_PUBLIC_GEN_API_URL=$STACK, EXPO_PUBLIC_DECIDE_API_URL=$SEARCH" \
     "and EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1; the force-offline flows also need EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1)"
