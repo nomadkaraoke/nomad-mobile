@@ -58,6 +58,16 @@ describe('useStemsPoll', () => {
     expect(mockUrls).toHaveBeenCalledTimes(2);
   });
 
+  it('keeps the seeded analysis/autoApproval when a poll omits them', async () => {
+    mockUrls.mockResolvedValue({ options: [opt('clean', 'u1'), opt('with_backing', 'u2')] });
+    const seed = { options: [opt('clean')], audioComplete: false, analysis: { seed: 1 }, autoApproval: { seed: 2 } };
+    const { result } = renderHook(() => useStemsPoll('j', seed as never));
+    await tick(15_000);
+    expect(mockUrls).toHaveBeenCalledTimes(1);
+    expect(result.current.options).toHaveLength(2);
+    expect(result.current).toMatchObject({ analysis: { seed: 1 }, autoApproval: { seed: 2 } });
+  });
+
   it('keeps polling through errors and gives up after 10 min', async () => {
     mockUrls.mockRejectedValue(new Error('net'));
     const { result } = renderHook(() => useStemsPoll('j', { options: [], audioComplete: false }));

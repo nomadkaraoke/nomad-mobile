@@ -293,9 +293,9 @@
     "rejected": "Không thể tìm kiếm nội dung đó. Hãy thử các từ khóa khác xem sao."
   },
   "review": {
-    "discard": "Hủy các chỉnh sửa của tôi",
+    "discard": "Bỏ các chỉnh sửa của tôi",
     "discardBody": "Lời bài hát sẽ trở về phiên bản ban đầu do chúng tôi tạo. Hành động này không thể hoàn tác.",
-    "discardTitle": "Hủy các chỉnh sửa của bạn?",
+    "discardTitle": "Bỏ các chỉnh sửa của bạn?",
     "finish": {
       "duet": "Song ca: 2 người hát",
       "failed": "Chúng tôi không thể bắt đầu tạo video của bạn. Các chỉnh sửa của bạn vẫn được lưu an toàn trên điện thoại này.",
@@ -485,9 +485,9 @@
     },
     "cancel": "Hủy",
     "close": "Đóng",
-    "discardConfirm": "Hủy bỏ",
+    "discardConfirm": "Bỏ chỉnh sửa",
     "markDuet": "Đánh dấu là song ca",
-    "restoredDiscard": "Hủy bỏ",
+    "restoredDiscard": "Bỏ chỉnh sửa",
     "retry": "Thử lại",
     "title": "Xem lại",
     "undo": "Hoàn tác",

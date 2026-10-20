@@ -293,7 +293,7 @@
     "rejected": "Impossibile completare la ricerca. Prova con parole diverse."
   },
   "review": {
-    "discard": "Annulla le mie modifiche",
+    "discard": "Scarta le mie modifiche",
     "discardBody": "Il testo tornerà alla versione originale creata da noi. L'azione non può essere annullata.",
     "discardTitle": "Vuoi annullare le modifiche?",
     "finish": {
@@ -490,7 +490,7 @@
     "restoredDiscard": "Scarta",
     "retry": "Riprova",
     "title": "Revisione",
-    "undo": "Annulla",
+    "undo": "Ripristina",
     "webFailed": "Impossibile aprire il sito web. Riprova."
   }
 }

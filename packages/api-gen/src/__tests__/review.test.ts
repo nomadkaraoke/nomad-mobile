@@ -102,6 +102,11 @@ describe('review facades', () => {
       await expect(getVocalsPeaks('j1')).resolves.toEqual({ status: 'pending', retryAfter: 15 });
     });
 
+    it('caps a huge Retry-After at MAX_RETRY_AFTER_S', async () => {
+      fetchMock.mockResolvedValue(new Response(null, { status: 202, headers: { 'Retry-After': '999999' } }));
+      await expect(getVocalsPeaks('j1')).resolves.toEqual({ status: 'pending', retryAfter: 300 });
+    });
+
     it('defaults retryAfter to 15 when the header is missing', async () => {
       fetchMock.mockResolvedValue(new Response(null, { status: 202 }));
       await expect(getVocalsPeaks('j1')).resolves.toEqual({ status: 'pending', retryAfter: 15 });

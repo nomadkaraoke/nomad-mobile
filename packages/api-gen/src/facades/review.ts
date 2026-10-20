@@ -15,6 +15,7 @@ import {
   submitCorrectionsApiJobsJobIdCorrectionsPost,
   warmupEncodingWorkerApiInternalEncodingWorkerWarmupJobIdPost,
 } from '../client';
+import { parseRetryAfter } from '../configure';
 import { parseResponse } from '../overrides/parse';
 import {
   CompleteReviewSchema,
@@ -66,8 +67,7 @@ export async function getVocalsPeaks(
 ): Promise<{ status: 'ready'; peaks: string; rate: number } | { status: 'pending'; retryAfter: number }> {
   const { data, response } = await getVocalsPeaksApiReviewJobIdVocalsPeaksGet({ path: { job_id: jobId } });
   if (response.status === 202) {
-    const retryAfter = Number(response.headers.get('Retry-After'));
-    return { status: 'pending', retryAfter: retryAfter > 0 ? retryAfter : DEFAULT_RETRY_AFTER_SECONDS };
+    return { status: 'pending', retryAfter: parseRetryAfter(response.headers.get('Retry-After')) ?? DEFAULT_RETRY_AFTER_SECONDS };
   }
   const body = parseResponse(VocalsPeaksSchema, data);
   return { status: 'ready', peaks: body.peaks_b64, rate: body.peaks_per_second };

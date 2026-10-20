@@ -490,7 +490,7 @@
     "restoredDiscard": "Abandonner",
     "retry": "Réessayer",
     "title": "Vérification",
-    "undo": "Annuler",
+    "undo": "Défaire",
     "webFailed": "Impossible d'ouvrir le site web. Réessaie."
   }
 }

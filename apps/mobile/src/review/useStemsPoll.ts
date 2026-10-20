@@ -28,7 +28,13 @@ export function useStemsPoll(jobId: string, initial: StemsState): StemsState & {
       try {
         const r = await getInstrumentalUrls(jobId);
         if (cancelled) return;
-        setState({ options: r.options, audioComplete: r.audioComplete, analysis: r.backingAnalysis, autoApproval: r.autoApproval });
+        // Keep the seed from the correction doc when a poll omits a field (gen sends {} until the analysis exists).
+        setState((prev) => ({
+          options: r.options,
+          audioComplete: r.audioComplete ?? prev.audioComplete,
+          analysis: r.backingAnalysis ?? prev.analysis,
+          autoApproval: r.autoApproval ?? prev.autoApproval,
+        }));
       } catch {
         // transient: try again next tick
       }

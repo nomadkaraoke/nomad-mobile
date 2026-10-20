@@ -485,12 +485,12 @@
     },
     "cancel": "Отмена",
     "close": "Закрыть",
-    "discardConfirm": "Отменить",
+    "discardConfirm": "Сбросить",
     "markDuet": "Отметить как дуэт",
-    "restoredDiscard": "Отменить",
+    "restoredDiscard": "Сбросить",
     "retry": "Повторить",
     "title": "Проверка",
-    "undo": "Отменить",
+    "undo": "Отменить действие",
     "webFailed": "Не удалось открыть сайт. Попробуй еще раз."
   }
 }
