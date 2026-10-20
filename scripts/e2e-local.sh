@@ -20,7 +20,8 @@
 # (see CLAUDE.md § E2E).
 #
 # Flows tagged `force-offline` (search-4) need a bundle built with EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1, so they
-# run after the others, on a Metro restarted with it (only when this script started Metro itself).
+# run after the others, on a Metro restarted with it (only when this script started Metro itself). Flows tagged
+# `locale-he` (review-9) run with the app in Hebrew (RTL), set before and reset after them.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -43,7 +44,7 @@ FILTER=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --platform) PLATFORM="$2"; shift 2 ;;
-    -h|--help) sed -n '2,23p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,25p' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
@@ -82,6 +83,11 @@ else
     NAME="$DEVICE"
     DEVICE="$(xcrun simctl list devices booted | grep -F "$NAME (" | head -1 | grep -oE '[0-9A-F-]{36}' || true)"
     [[ -n "$DEVICE" ]] || { echo "no booted iOS simulator named \"$NAME\" (set IOS_DEVICE to a name or UDID)" >&2; exit 1; }
+  fi
+  # The dev menu's floating gear sits over the header's right buttons (the review's ⋯ menu) and takes their taps.
+  if APP_DATA="$(xcrun simctl get_app_container "$DEVICE" com.nomadkaraoke.mobile data 2>/dev/null)"; then
+    xcrun simctl spawn "$DEVICE" defaults write "$APP_DATA/Library/Preferences/com.nomadkaraoke.mobile" \
+      EXDevMenuShowFloatingActionButton -bool false
   fi
 fi
 
@@ -130,20 +136,61 @@ while IFS= read -r f; do ALL+=("$f"); done < <(ls maestro/flows/*.yaml | { if [[
 [[ ${#ALL[@]} -gt 0 ]] || { echo "no flow matches $FILTER" >&2; exit 2; }
 ONLINE=()
 OFFLINE=()
+HEBREW=()
 for f in "${ALL[@]}"; do
-  if grep -qE '^\s*-\s*force-offline\s*$' "$f"; then OFFLINE+=("$f"); else ONLINE+=("$f"); fi
+  if grep -qE '^\s*-\s*force-offline\s*$' "$f"; then OFFLINE+=("$f")
+  elif grep -qE '^\s*-\s*locale-he\s*$' "$f"; then HEBREW+=("$f")
+  else ONLINE+=("$f"); fi
 done
+
+# Flows tagged `locale-he` (review-9) run with the app's language set to Hebrew, then it goes back to the
+# device language. iOS: the app's own AppleLanguages, plus React Native's stored RTL flags so the very first
+# launch is already mirrored (the app itself only flips them for the next launch). Android: the per-app
+# locale (API 33+); RN's RTL flag lives in the app's data, which launch.yaml's clearState wipes, so the flow
+# relaunches once to apply it.
+set_app_locale() {
+  local lang="$1"
+  if [[ "$PLATFORM" == android ]]; then
+    adb -s "$DEVICE" shell am force-stop com.nomadkaraoke.mobile
+    adb -s "$DEVICE" shell cmd locale set-app-locales com.nomadkaraoke.mobile --locales "$lang"
+    return
+  fi
+  local data prefs rtl=false
+  data="$(xcrun simctl get_app_container "$DEVICE" com.nomadkaraoke.mobile data)" || return 1
+  prefs="$data/Library/Preferences/com.nomadkaraoke.mobile"
+  xcrun simctl terminate "$DEVICE" com.nomadkaraoke.mobile 2>/dev/null || true
+  if [[ -n "$lang" ]]; then
+    xcrun simctl spawn "$DEVICE" defaults write "$prefs" AppleLanguages -array "$lang"
+    [[ "$lang" == he || "$lang" == ar ]] && rtl=true
+  else
+    xcrun simctl spawn "$DEVICE" defaults delete "$prefs" AppleLanguages 2>/dev/null || true
+  fi
+  xcrun simctl spawn "$DEVICE" defaults write "$prefs" RCTI18nUtil_allowRTL -bool "$rtl"
+  xcrun simctl spawn "$DEVICE" defaults write "$prefs" RCTI18nUtil_forceRTL -bool "$rtl"
+}
+run_hebrew() {
+  [[ ${#HEBREW[@]} -gt 0 ]] || return 0
+  set_app_locale he
+  local s=0
+  run_flows "${HEBREW[@]}" || s=$?
+  set_app_locale ""
+  return "$s"
+}
 
 run_flows() { "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" "$@"; }
 status=0
 if metro_up; then
   echo "Using the Metro already on :8081 (it must have EXPO_PUBLIC_GEN_API_URL=$STACK, EXPO_PUBLIC_DECIDE_API_URL=$SEARCH" \
     "and EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1; the force-offline flows also need EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1)"
-  run_flows "${ALL[@]}" || status=$?
+  if [[ $(( ${#ONLINE[@]} + ${#OFFLINE[@]} )) -gt 0 ]]; then
+    run_flows ${ONLINE[@]+"${ONLINE[@]}"} ${OFFLINE[@]+"${OFFLINE[@]}"} || status=$?
+  fi
+  run_hebrew || status=$?
 else
-  if [[ ${#ONLINE[@]} -gt 0 ]]; then
+  if [[ $(( ${#ONLINE[@]} + ${#HEBREW[@]} )) -gt 0 ]]; then
     start_metro
-    run_flows "${ONLINE[@]}" || status=$?
+    if [[ ${#ONLINE[@]} -gt 0 ]]; then run_flows "${ONLINE[@]}" || status=$?; fi
+    run_hebrew || status=$?
   fi
   if [[ ${#OFFLINE[@]} -gt 0 ]]; then
     stop_metro

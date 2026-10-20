@@ -1,0 +1,62 @@
+# Review 12 (spec §8.3): the escape hatch. An edit, then menu → Continue on web: the app hands its edits to
+# gen as a review session and opens gen web's review, signed in, which offers that session; restoring it shows
+# the edit on the web. Closing the browser comes back to the review.
+appId: com.nomadkaraoke.mobile
+name: review-12-continue-web
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review12
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+- runFlow:
+    file: ../common/open-review.yaml
+    env:
+      EMAIL: ${output.email}
+      JOB_ID: ${output.jobId}
+- runFlow:
+    file: ../common/edit-word.yaml
+    env:
+      LINE: "0"
+      WORD: "3"
+      TEXT: "real"
+- tapOn:
+    id: "review-menu"
+- extendedWaitUntil:
+    visible:
+      id: "review-menu-web"
+    timeout: 10000
+- takeScreenshot: ${REVIEW_SHOTS}/review-12-menu
+- tapOn:
+    id: "review-menu-web"
+# The handoff signs gen web in and lands on the review, which offers the session the app saved.
+- runFlow: ../common/web-auth-alert.yaml
+- extendedWaitUntil:
+    visible: ".*127\\.0\\.0\\.1.*"
+    timeout: 30000
+- extendedWaitUntil:
+    visible: "Saved Review Sessions|Failed to load lyrics|.*page could not be found.*"
+    timeout: 90000
+- assertNotVisible: "Failed to load lyrics"
+- assertVisible: "Restore Selected"
+- takeScreenshot: ${REVIEW_SHOTS}/review-12-web-sessions
+- tapOn: "Restore Selected"
+# The web review now has the app's edit.
+- extendedWaitUntil:
+    visible: "real"
+    timeout: 20000
+- takeScreenshot: ${REVIEW_SHOTS}/review-12-web-restored
+- runFlow: ../common/close-browser.yaml
+- extendedWaitUntil:
+    visible:
+      id: "review-screen"
+    timeout: 20000
+- assertVisible:
+    id: "review-word-0-3"
+    text: "real"

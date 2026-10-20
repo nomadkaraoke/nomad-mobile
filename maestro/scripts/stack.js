@@ -28,7 +28,8 @@
 //            lines' text, joined by newlines), EXPECT_LINE + EXPECT_LINE_TEXT (that line's exact text),
 //            EXPECT_SINGER_LINE + EXPECT_SINGER (that line's singer), EXPECT_TIMED ("all" or a line index: every word
 //            timed, end >= start, words in order without overlapping), EXPECT_RETIMED_LINE + ORIGINAL_STARTS (JSON,
-//            from scenario's output.lineStarts: that line's word starts are no longer those)
+//            from scenario's output.lineStarts: that line's word starts are no longer those), RETIMED_WINDOW
+//            ("from,to" seconds: with EXPECT_RETIMED_LINE, every word of that line lies inside it)
 //            -> output.reviewStatus
 // Wrapped in a function: a flow can run this file more than once, and top-level `let`s must not collide.
 (function () {
@@ -194,6 +195,7 @@
       EXPECT_TIMED: typeof EXPECT_TIMED !== 'undefined' ? EXPECT_TIMED : undefined,
       EXPECT_RETIMED_LINE: typeof EXPECT_RETIMED_LINE !== 'undefined' ? EXPECT_RETIMED_LINE : undefined,
       ORIGINAL_STARTS: typeof ORIGINAL_STARTS !== 'undefined' ? ORIGINAL_STARTS : undefined,
+      RETIMED_WINDOW: typeof RETIMED_WINDOW !== 'undefined' ? RETIMED_WINDOW : undefined,
     };
     const want = (name) => envValue(env[name]);
     const lines = r.lines || [];
@@ -247,6 +249,15 @@
       const before = JSON.parse(want('ORIGINAL_STARTS') || '[]');
       const after = lineAt(retimed).words.map((w) => w.start_time);
       if (JSON.stringify(before) === JSON.stringify(after)) fail('line ' + retimed + ' kept its timings ' + JSON.stringify(after));
+      const win = want('RETIMED_WINDOW');
+      if (win !== null) {
+        const [from, to] = win.split(',').map(Number);
+        lineAt(retimed).words.forEach((w, j) => {
+          if (!(w.start_time >= from && w.end_time <= to)) {
+            fail('line ' + retimed + ' word ' + j + ' (' + w.start_time + '-' + w.end_time + ') is outside ' + from + '-' + to);
+          }
+        });
+      }
     }
   } else {
     throw new Error('unknown ACTION ' + action);

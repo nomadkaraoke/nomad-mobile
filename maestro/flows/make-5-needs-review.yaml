@@ -1,4 +1,5 @@
-# 5. Needs review (spec §8.5): auto_approve off → "Needs you" → Review lyrics opens the web review.
+# 5. Needs review (spec §8.5): auto_approve off → "Needs you" → Review lyrics opens the native review
+# (Phase 2); back returns to the Make tab with the job still waiting.
 appId: com.nomadkaraoke.mobile
 name: make-5-needs-review
 ---
@@ -34,35 +35,14 @@ name: make-5-needs-review
 - takeScreenshot: ${SHOTS}/make-tab-needs-review
 - tapOn:
     id: "job-review-.*"
-# The in-app browser opens gen web (the local stack's Next app) on the single-use handoff link
-# (/auth/verify?…&handoff=1), which signs in without a tap and then goes on to the review.
 - extendedWaitUntil:
-    visible: ".*127\\.0\\.0\\.1.*"
-    timeout: 30000
-# Signed in by the handoff: gen web shows "Successfully signed in!" for a moment, then the review page
-# loads (first Next dev compile can be slow; a fast redirect can skip past the interstitial). The review
-# page is only reachable signed in, and it must load. "Failed to load lyrics" here was gen's correction-data
-# race: GET /api/review/{id}/correction-data checks awaiting_review then transitions to in_review, and two
-# concurrent loads made the second one 500 (in_review -> in_review); fixed in gen 45fade64.
-# Wait for the page to settle on the review UI or one of the failures, whichever comes first.
-- extendedWaitUntil:
-    visible: ".*Lyrics Transcription Review.*|Failed to load lyrics|.*page could not be found.*"
-    timeout: 90000
-- assertNotVisible: "Failed to load lyrics"
-- assertNotVisible: ".*page could not be found.*"
-- waitForAnimationToEnd:
-    timeout: 10000
-- takeScreenshot: ${SHOTS}/review-bridge-browser
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn: "Done"
-- runFlow:
-    when:
-      platform: Android
-    commands:
-      - back
+    visible:
+      id: "review-step-lyrics"
+    timeout: 60000
+- assertVisible:
+    id: "review-line-0"
+- takeScreenshot: ${SHOTS}/make-native-review
+- tapOn: "Back|Navigate up"
 - extendedWaitUntil:
     visible:
       id: "job-review-.*"

@@ -1,0 +1,121 @@
+# Review 9 (spec §8.3): Hebrew lyrics (one line also Arabic) with the app in Hebrew, so the whole review is
+# mirrored. Screenshot; edit a Hebrew word (delete its last letter: Maestro can't type Hebrew on Android).
+# Tagged locale-he: scripts/e2e-local.sh sets the app's language before and resets it after. Targets testIDs
+# only (the app text is Hebrew), so it can't use common/launch.yaml's English wait.
+appId: com.nomadkaraoke.mobile
+name: review-9-rtl
+tags:
+  - locale-he
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review9
+      USER_CONFIG: '{"review_fixture":"rtl"}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+# Signed-out launch (as launch.yaml), then a relaunch that keeps state: on Android clearState also wiped React
+# Native's RTL flag, which the first launch set again for the next one.
+- stopApp
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - launchApp:
+          clearKeychain: true
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - clearState
+      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
+- runFlow:
+    when:
+      visible: "DEVELOPMENT SERVERS"
+      platform: iOS
+    commands:
+      - tapOn:
+          text: "http://.*:8081"
+- extendedWaitUntil:
+    visible:
+      id: "tab-make"
+    timeout: 60000
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - stopApp
+      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
+      - extendedWaitUntil:
+          visible:
+            id: "tab-make"
+          timeout: 60000
+# The dev menu (native, English) can open over a fresh load.
+- runFlow:
+    when:
+      visible: "Runtime version.*"
+    commands:
+      - tapOn: "Close"
+- tapOn:
+    id: "tab-make"
+- extendedWaitUntil:
+    visible:
+      id: "make-tab-signin"
+    timeout: 20000
+- tapOn:
+    id: "make-tab-signin"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- runFlow:
+    file: ../common/tap-job-review.yaml
+    env:
+      JOB_ID: ${output.jobId}
+- extendedWaitUntil:
+    visible:
+      id: "review-line-3"
+    timeout: 20000
+- takeScreenshot: ${REVIEW_SHOTS}/review-9-rtl-he
+# Line 0 "שיר בדיקה קטן": its last word loses its last letter (קטן → קט).
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "0"
+- tapOn:
+    id: "review-word-0-2"
+- extendedWaitUntil:
+    visible:
+      id: "review-word-input"
+    timeout: 10000
+- tapOn:
+    id: "review-word-input"
+- eraseText: 1
+- tapOn:
+    id: "review-word-save"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-word-sheet"
+    timeout: 10000
+- assertVisible:
+    id: "review-word-0-2"
+    text: "קט"
+- takeScreenshot: ${REVIEW_SHOTS}/review-9-rtl-edited
+- tapOn:
+    id: "review-lyrics-next"
+- runFlow: ../common/finish-review.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      EXPECT_LINE: "0"
+      EXPECT_LINE_TEXT: "שיר בדיקה קט"
+      EXPECT_TIMED: "all"

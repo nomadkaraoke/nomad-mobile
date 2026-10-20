@@ -1,0 +1,13 @@
+# Close the in-app browser (iOS: Done; Android: back).
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Done"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - back

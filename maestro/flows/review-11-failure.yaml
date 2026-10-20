@@ -1,0 +1,76 @@
+# Review 11 (spec §8.3): an edit survives the app being killed (restored-draft banner, the edit still there);
+# then gen's complete fails once (review_complete_fail_once → 503): the error and Retry show, the retry
+# goes through and gen gets the edit.
+appId: com.nomadkaraoke.mobile
+name: review-11-failure
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review11
+      USER_CONFIG: '{"review_complete_fail_once":true}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+- runFlow:
+    file: ../common/open-review.yaml
+    env:
+      EMAIL: ${output.email}
+      JOB_ID: ${output.jobId}
+- runFlow:
+    file: ../common/edit-word.yaml
+    env:
+      LINE: "0"
+      WORD: "3"
+      TEXT: "real"
+# Home (backgrounding writes the draft at once), then the app is killed and opened again.
+- pressKey: home
+- runFlow:
+    file: ../common/reopen-review.yaml
+    env:
+      JOB_ID: ${output.jobId}
+- extendedWaitUntil:
+    visible:
+      id: "review-restored-discard"
+    timeout: 20000
+- assertVisible:
+    id: "review-word-0-3"
+    text: "real"
+- takeScreenshot: ${REVIEW_SHOTS}/review-11-restored
+- tapOn:
+    id: "review-lyrics-next"
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-submit"
+      enabled: true
+    timeout: 30000
+- tapOn:
+    id: "review-finish-submit"
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-error"
+    timeout: 30000
+- takeScreenshot: ${REVIEW_SHOTS}/review-11-error
+- tapOn:
+    id: "review-finish-retry"
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-success"
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+      id: "make-tab-screen"
+    timeout: 20000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      EXPECT_LINE: "0"
+      EXPECT_LINE_TEXT: "This is a real song for testing"
