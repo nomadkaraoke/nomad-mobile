@@ -91,6 +91,16 @@ describe('mergeWords', () => {
     expect(d.segments[0]!.words[1]).toMatchObject({ text: 'quick brown', start_time: 2, end_time: 4 });
     expect(d.segments[0]!.words).toHaveLength(3);
   });
+  it('never leaves a half-timed merged word', () => {
+    const doc = mk([S('a', [W('1', 'a', 1, 2), W('2', 'b', null, null), W('3', 'c', null, null), W('4', 'd', 5, 6)])]);
+    expect(mergeWords(doc, 0, 0).segments[0]!.words[0]).toMatchObject({ text: 'a b', start_time: 1, end_time: 2 });
+    expect(mergeWords(doc, 0, 1).segments[0]!.words[1]).toMatchObject({ text: 'b c', start_time: null, end_time: null });
+    expect(mergeWords(doc, 0, 2).segments[0]!.words[2]).toMatchObject({ text: 'c d', start_time: 5, end_time: 6 });
+    const half = mk([S('a', [W('1', 'a', 1, null), W('2', 'b', null, 3)])]);
+    expect(mergeWords(half, 0, 0).segments[0]!.words[0]).toMatchObject({ start_time: 1, end_time: 3 });
+    const bad = mk([S('a', [W('1', 'a', 1, null), W('2', 'b', null, null)])]);
+    expect(mergeWords(bad, 0, 0).segments[0]!.words[0]).toMatchObject({ start_time: null, end_time: null });
+  });
   it('is a no-op on the last word', () => {
     const doc = fox();
     expect(mergeWords(doc, 0, 3)).toBe(doc);
@@ -259,6 +269,12 @@ describe('setWordTiming', () => {
   it('clamps end to audioDuration only when given', () => {
     expect(setWordTiming(two(), 1, 1, { end: 99, audioDuration: 7.5 }).segments[1]!.words[1]!.end_time).toBe(7.5);
     expect(setWordTiming(two(), 1, 1, { end: 99 }).segments[1]!.words[1]!.end_time).toBe(99);
+  });
+  it('does nothing when the free window is smaller than the minimum word length', () => {
+    const abut = mk([S('a', [W('1', 'a', 1, 2), W('2', 'b', 2, 2, { timing_estimated: true }), W('3', 'c', 2, 3)])]);
+    expect(setWordTiming(abut, 0, 1, { start: 2, end: 2.5 })).toBe(abut);
+    const tail = mk([S('a', [W('1', 'a', 1, 4.98), W('2', 'b', 4.98, 5)])]);
+    expect(setWordTiming(tail, 0, 1, { end: 9, audioDuration: 5 })).toBe(tail);
   });
   it('floors start at 0 for the very first word', () => {
     expect(setWordTiming(two(), 0, 0, { start: -3 }).segments[0]!.words[0]!.start_time).toBe(0);

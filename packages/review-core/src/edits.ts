@@ -88,7 +88,10 @@ export function mergeWords(doc: ReviewDoc, s: number, w: number): ReviewDoc {
   const a = getWord(doc, s, w);
   const b = getWord(doc, s, w + 1);
   if (!a || !b) return doc;
-  const merged: Word = { ...a.word, text: `${a.word.text} ${b.word.text}`, end_time: b.word.end_time };
+  let start = a.word.start_time ?? b.word.start_time;
+  let end = b.word.end_time ?? a.word.end_time;
+  if (start === null || end === null) start = end = null; // never leave a half-timed word
+  const merged: Word = { ...a.word, text: `${a.word.text} ${b.word.text}`, start_time: start, end_time: end };
   const words = [...a.seg.words.slice(0, w), merged, ...a.seg.words.slice(w + 2)];
   return replaceSegment(doc, s, rebuild(a.seg, words));
 }
@@ -274,6 +277,7 @@ export function setWordTiming(doc: ReviewDoc, s: number, w: number, patch: WordT
   const lo = Math.max(prevEnd(doc, s, w) ?? 0, 0);
   const ns = nextStart(doc, s, w);
   const hi = Math.min(ns ?? Infinity, patch.audioDuration ?? Infinity);
+  if (hi - lo < MIN_WORD_SECONDS) return doc; // no room to place a minimum-length word
   start = Math.max(lo, Math.min(start, hi - MIN_WORD_SECONDS));
   end = Math.max(start + MIN_WORD_SECONDS, Math.min(end, hi));
   if (start === hit.word.start_time && end === hit.word.end_time) return doc;
