@@ -36,7 +36,9 @@ function ListInner<T>(
     ref,
     () => ({
       scrollToIndex: (index, opts) => {
-        void listRef.current?.scrollToIndex({ index, animated: opts?.animated, viewPosition: opts?.viewPosition });
+        listRef.current
+          ?.scrollToIndex({ index, animated: opts?.animated, viewPosition: opts?.viewPosition })
+          .catch(() => {});
       },
     }),
     [],

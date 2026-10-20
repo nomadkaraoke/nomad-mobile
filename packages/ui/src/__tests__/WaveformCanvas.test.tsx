@@ -31,6 +31,24 @@ it('draws the bars once in the base color and once, clipped to the progress cut,
   render(<WaveformCanvas testID="wf" peaks={[1, 1, 1, 1]} progress={0.5} height={40} color="#111" playedColor="#f0f" />);
   layout('wf');
   expect(screen.getAllByTestId('skia-path').map((r) => r.props.color)).toEqual(['#111', '#f0f']);
+  expect(screen.getByTestId('skia-group').props.clip).toEqual({ x: 0, y: 0, width: 50, height: 40 });
+});
+
+it.each([
+  [0, 0],
+  [1, 100],
+])('clips the played bars to %s of the width', (progress, clipWidth) => {
+  render(<WaveformCanvas testID="wf" peaks={[1, 1]} progress={progress} height={40} />);
+  layout('wf');
+  expect(screen.getByTestId('skia-group').props.clip.width).toBe(clipWidth);
+});
+
+it('steps progress by 5% for increment/decrement accessibility actions', () => {
+  const onSeek = jest.fn();
+  render(<WaveformCanvas testID="wf" peaks={[1]} progress={0.5} height={40} onSeek={onSeek} />);
+  fireEvent(screen.getByTestId('wf'), 'accessibilityAction', { nativeEvent: { actionName: 'increment' } });
+  fireEvent(screen.getByTestId('wf'), 'accessibilityAction', { nativeEvent: { actionName: 'decrement' } });
+  expect(onSeek.mock.calls.map((c) => c[0])).toEqual([0.55, 0.45]);
 });
 
 it('draws a translucent rect per marker', () => {

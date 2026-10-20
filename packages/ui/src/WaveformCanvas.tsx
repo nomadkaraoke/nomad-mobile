@@ -80,7 +80,9 @@ export function WaveformCanvas({
       if (w > 0) cb?.(clamp01(x / w));
     };
     // runOnJS(true): callbacks run on the JS thread, so no worklet/reanimated plumbing is needed.
-    const tap = Gesture.Tap().runOnJS(true).withTestId(`${testID}-tap`).onEnd((e) => seek(e.x));
+    const tap = Gesture.Tap().runOnJS(true).withTestId(`${testID}-tap`).onEnd((e, success) => {
+        if (success) seek(e.x);
+      });
     const pan = Gesture.Pan()
       .runOnJS(true)
       .withTestId(`${testID}-pan`)
@@ -94,7 +96,15 @@ export function WaveformCanvas({
     <GestureDetector gesture={gesture}>
       <View
         testID={testID}
+        accessible
+        accessibilityRole="adjustable"
         accessibilityLabel={accessibilityLabel}
+        accessibilityActions={onSeek ? [{ name: 'increment' }, { name: 'decrement' }] : undefined}
+        onAccessibilityAction={(e) => {
+          if (!onSeek) return;
+          const step = e.nativeEvent.actionName === 'increment' ? 0.05 : e.nativeEvent.actionName === 'decrement' ? -0.05 : 0;
+          if (step) onSeek(clamp01(progress + step));
+        }}
         style={{ height }}
         onLayout={(e) => {
           setWidth(e.nativeEvent.layout.width);

@@ -21,7 +21,7 @@ jest.mock('@shopify/react-native-skia', () => {
   const Passthrough = ({ children }) => React.createElement(React.Fragment, null, children);
   return {
     Canvas: ({ children, style }) => React.createElement(View, { style, testID: 'skia-canvas' }, children),
-    Group: Passthrough,
+    Group: (props) => React.createElement(View, { testID: 'skia-group', ...props }),
     Rect: (props) => React.createElement(View, { testID: 'skia-rect', ...props }),
     Path: (props) => React.createElement(View, { testID: 'skia-path', ...props }),
   };

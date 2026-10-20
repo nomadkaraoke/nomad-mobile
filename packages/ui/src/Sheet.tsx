@@ -18,9 +18,9 @@ export type SheetProps = {
 /** Bottom sheet on RN's Modal: slides up over the screen; tapping the dimmed backdrop closes it. */
 export function Sheet({ visible, onClose, title, testID, closeLabel, children, fullHeight }: SheetProps) {
   return (
-    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose} testID={testID}>
+    <Modal visible={visible} animationType="slide" transparent statusBarTranslucent navigationBarTranslucent onRequestClose={onClose} testID={testID}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1 justify-end"
       >
         <Pressable

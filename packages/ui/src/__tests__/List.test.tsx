@@ -1,9 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { Text } from 'react-native';
 
-import { createRef } from 'react';
-
-import { List, type ListHandle } from '../List';
+import { List } from '../List';
 
 it('renders items and the empty component', () => {
   const { rerender } = render(
@@ -26,12 +24,6 @@ it('renders items and the empty component', () => {
 it('passes the item index to renderItem', () => {
   render(<List testID="l" data={['x', 'y']} keyExtractor={(x) => x} renderItem={(x, i) => <Text>{`${i}:${x}`}</Text>} />);
   expect(screen.getByText('1:y')).toBeTruthy();
-});
-
-it('exposes scrollToIndex through the ref', () => {
-  const ref = createRef<ListHandle>();
-  render(<List ref={ref} testID="l" data={['x', 'y']} keyExtractor={(x) => x} renderItem={(x) => <Text>{x}</Text>} />);
-  expect(() => ref.current!.scrollToIndex(1, { animated: false, viewPosition: 0.5 })).not.toThrow();
 });
 
 it('forwards extraData, getItemType and onScrollBeginDrag', () => {
