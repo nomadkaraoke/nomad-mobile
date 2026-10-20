@@ -26,3 +26,16 @@ jest.mock('@shopify/react-native-skia', () => {
     Path: (props) => React.createElement(View, { testID: 'skia-path', ...props }),
   };
 });
+
+// Reanimated's own mock (on worklets' mock), with the animation builders as jest.fns so NomadLoader
+// tests can assert the animation spec. (expo-router's renderRouter swaps in the plain mock.)
+jest.mock('react-native-worklets', () => require('react-native-worklets/src/mock'));
+jest.mock('react-native-reanimated', () => {
+  const mock = jest.requireActual('react-native-reanimated/mock');
+  return {
+    ...mock,
+    withTiming: jest.fn((toValue, config) => ({ toValue, config })),
+    withRepeat: jest.fn((animation, numberOfReps, reverse) => ({ repeat: animation, numberOfReps, reverse })),
+    cancelAnimation: jest.fn(),
+  };
+});
