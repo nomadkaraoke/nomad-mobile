@@ -1,4 +1,6 @@
 /* global jest */
+require('react-native-gesture-handler/jestSetup');
+
 // FlashList 2.0.2's bundled jestSetup swaps in a non-existent `RecyclerView` export, so only take its
 // layout-measurement mock: gives the real FlashList a 400x900 viewport so items render under jest.
 jest.mock('@shopify/flash-list/dist/recyclerview/utils/measureLayout', () => {
@@ -21,5 +23,6 @@ jest.mock('@shopify/react-native-skia', () => {
     Canvas: ({ children, style }) => React.createElement(View, { style, testID: 'skia-canvas' }, children),
     Group: Passthrough,
     Rect: (props) => React.createElement(View, { testID: 'skia-rect', ...props }),
+    Path: (props) => React.createElement(View, { testID: 'skia-path', ...props }),
   };
 });

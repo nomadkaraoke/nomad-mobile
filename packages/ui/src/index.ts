@@ -5,5 +5,6 @@ export { Button, type ButtonProps } from './Button';
 export { ArtTile, initials, type ArtTileProps } from './ArtTile';
 export { TextField, type TextFieldProps } from './TextField';
 export { CodeField, type CodeFieldProps } from './CodeField';
-export { List, type ListProps } from './List';
-export { WaveformCanvas, buildBars, type Bar, type WaveformCanvasProps } from './WaveformCanvas';
+export { List, type ListHandle, type ListProps } from './List';
+export { Sheet, type SheetProps } from './Sheet';
+export { WaveformCanvas, buildBars, buildBarsPath, type Bar, type WaveformMarker, type WaveformCanvasProps } from './WaveformCanvas';
