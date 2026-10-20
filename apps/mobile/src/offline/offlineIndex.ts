@@ -1,11 +1,12 @@
 // The opt-in offline song list (spec §7.1): download decide's offline.db.gz, verify its sha256, gunzip it,
 // check it with SQLite, swap it in, and hand the matcher one SqlReader over it.
+import { sha256 } from '@noble/hashes/sha2.js';
+import { bytesToHex } from '@noble/hashes/utils.js';
 import { getOfflineIndexManifest, type OfflineIndexManifest } from '@nomad/api-decide';
 import { NORMALIZER_VERSION, OFFLINE_SCHEMA_VERSION, type SqlReader } from '@nomad/core';
 import NetInfo from '@react-native-community/netinfo';
-import { CryptoDigestAlgorithm, digest } from 'expo-crypto';
 import { Directory, File, Paths } from 'expo-file-system';
-import { openDatabaseSync, type SQLiteBindValue, type SQLiteDatabase } from 'expo-sqlite';
+import { openDatabaseAsync, openDatabaseSync, type SQLiteBindValue, type SQLiteDatabase } from 'expo-sqlite';
 import { Inflate } from 'pako';
 import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
@@ -123,18 +124,11 @@ function checkOnLaunch(): void {
 
 type Verdict = 'ok' | 'corrupt' | 'incompatible';
 
-/** PRAGMA quick_check, then the file's own schema and normaliser versions. */
-function checkDatabase(db: SQLiteDatabase): Verdict {
-  const check = db.getFirstSync<Record<string, unknown>>('PRAGMA quick_check', []);
-  if (!check || Object.values(check)[0] !== 'ok') return 'corrupt';
-  const meta = new Map(
-    db
-      .getAllSync<{ key: string; value: string }>(
-        "SELECT key, value FROM meta WHERE key IN ('offline_schema_version', 'normalizer_version')",
-        [],
-      )
-      .map((r) => [r.key, Number(r.value)]),
-  );
+const META_SQL = "SELECT key, value FROM meta WHERE key IN ('offline_schema_version', 'normalizer_version')";
+
+/** The file's own schema and normaliser versions (from its `meta` table). */
+function metaVerdict(rows: { key: string; value: string }[]): Verdict {
+  const meta = new Map(rows.map((r) => [r.key, Number(r.value)]));
   return isCompatible({ schema: meta.get('offline_schema_version') ?? null, normalizer: meta.get('normalizer_version') ?? null })
     ? 'ok'
     : 'incompatible';
@@ -148,11 +142,17 @@ function checkDatabase(db: SQLiteDatabase): Verdict {
  */
 const OPEN_OPTIONS = { useNewConnection: true, finalizeUnusedStatementsBeforeClosing: false } as const;
 
-function verdictOf(name: string): { verdict: Verdict; db: SQLiteDatabase | null } {
+/**
+ * Opens the list for reading: only the cheap `meta` check, on the JS thread. PRAGMA quick_check took 15 s on
+ * the 300 MB prod list (release build, Android emulator), so it runs once, off the JS thread, on the
+ * downloaded candidate (`checkCandidate`) instead. A file that breaks later makes queries throw, and search
+ * then uses the cloud only.
+ */
+function openForReading(name: string): { verdict: Verdict; db: SQLiteDatabase | null } {
   let db: SQLiteDatabase | null = null;
   try {
     db = openDatabaseSync(name, OPEN_OPTIONS, offlineDir().uri);
-    return { verdict: checkDatabase(db), db };
+    return { verdict: metaVerdict(db.getAllSync<{ key: string; value: string }>(META_SQL, [])), db };
   } catch {
     try {
       db?.closeSync();
@@ -160,6 +160,25 @@ function verdictOf(name: string): { verdict: Verdict; db: SQLiteDatabase | null 
       // Never opened.
     }
     return { verdict: 'corrupt', db: null };
+  }
+}
+
+/** The full check of a freshly unpacked file, on expo-sqlite's native queue (the UI keeps running). */
+async function checkCandidate(name: string): Promise<Verdict> {
+  let db: SQLiteDatabase | null = null;
+  try {
+    db = await openDatabaseAsync(name, OPEN_OPTIONS, offlineDir().uri);
+    const check = await db.getFirstAsync<Record<string, unknown>>('PRAGMA quick_check', []);
+    if (!check || Object.values(check)[0] !== 'ok') return 'corrupt';
+    return metaVerdict(await db.getAllAsync<{ key: string; value: string }>(META_SQL, []));
+  } catch {
+    return 'corrupt';
+  } finally {
+    try {
+      await db?.closeAsync();
+    } catch {
+      // Already closed.
+    }
   }
 }
 
@@ -177,7 +196,7 @@ export function openOfflineReader(): SqlReader | null {
     useOfflineIndexStore.getState().cleared();
     return null;
   }
-  const { verdict, db } = verdictOf(CURRENT);
+  const { verdict, db } = openForReading(CURRENT);
   if (verdict !== 'ok' || !db) {
     try {
       db?.closeSync();
@@ -208,11 +227,11 @@ const yieldToUi = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
 
 class Cancelled extends Error {}
 
-const toHex = (buf: ArrayBuffer) => Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, '0')).join('');
-
 /**
- * Checks the .gz's sha256 (native: a pure-JS hash ran at ~1 MB/s under Hermes), then gunzips it into `dest`
- * in chunks, yielding to the UI between them.
+ * One streaming pass over the .gz in SLICE-sized reads: each slice feeds an incremental sha256 and pako's
+ * streaming gunzip, whose output is written to `dest` as it comes. Memory stays at a few slices whatever the
+ * file size (the prod list is ~100 MB compressed; reading it whole ran an Android app out of heap). The digest
+ * is compared once the whole file has been read, before anything is swapped in.
  */
 async function verifyAndUnpack(
   src: File,
@@ -221,28 +240,32 @@ async function verifyAndUnpack(
   signal: AbortSignal,
   onProgress: (fraction: number) => void,
 ): Promise<void> {
-  const compressed = await src.bytes();
-  if (toHex(await digest(CryptoDigestAlgorithm.SHA256, compressed)) !== expectedSha256.toLowerCase()) {
-    throw new Error('sha256 mismatch');
-  }
   dest.create({ overwrite: true });
+  const input = src.open();
   const output = dest.open();
   try {
+    const hash = sha256.create();
     const inflate = new Inflate({ chunkSize: SLICE });
     inflate.onData = (chunk) => output.writeBytes(chunk);
-    const total = compressed.length;
-    for (let read = 0; read < total; ) {
-      const next = Math.min(total, read + SLICE);
-      inflate.push(compressed.subarray(read, next), next >= total);
-      read = next;
+    const total = input.size ?? 0;
+    let read = 0;
+    while (read < total) {
+      const slice = input.readBytes(Math.min(SLICE, total - read));
+      if (slice.length === 0) break;
+      read += slice.length;
+      hash.update(slice);
+      if (!inflate.ended) inflate.push(slice, read >= total);
       if (inflate.err) throw new Error(`gunzip: ${inflate.msg}`);
       onProgress(read / total);
       await yieldToUi();
       if (signal.aborted) throw new Cancelled();
     }
+    if (read !== total) throw new Error(`read ${read} of ${total} bytes`);
+    if (bytesToHex(hash.digest()) !== expectedSha256.toLowerCase()) throw new Error('sha256 mismatch');
     // A stream cut off mid-way never reaches its end (pako also checks the gzip CRC and length).
     if (!inflate.ended || inflate.err) throw new Error('gunzip: truncated');
   } finally {
+    input.close();
     output.close();
   }
 }
@@ -303,8 +326,7 @@ async function runDownload(given: OfflineIndexManifest | undefined, signal: Abor
     await verifyAndUnpack(gz, candidate, m.sha256, signal, (f) =>
       store.setProgress(DOWNLOAD_SHARE + (1 - DOWNLOAD_SHARE) * f),
     );
-    const { verdict, db } = verdictOf(dbName);
-    db?.closeSync();
+    const verdict = await checkCandidate(dbName);
     if (verdict !== 'ok') throw new Error(`offline index check: ${verdict}`);
     if (signal.aborted) throw new Cancelled();
 

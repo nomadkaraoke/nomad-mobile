@@ -6,6 +6,7 @@
   "dependencies": {
     "@expo/ui": "~57.0.25",
     "@expo/vector-icons": "^15.1.1",
+    "@noble/hashes": "^2.4.0",
     "@nomad/api-decide": "workspace:*",
     "@nomad/api-gen": "workspace:*",
     "@nomad/core": "workspace:*",

@@ -15,6 +15,9 @@ export const fsState = {
   log: [] as string[],
   /** Called by downloadFileAsync after it has written the file (tests use it to act mid-download). */
   afterDownload: null as null | (() => void | Promise<void>),
+  /** Size of every FileHandle.readBytes call, in order; `onRead` runs after each one. */
+  reads: [] as number[],
+  onRead: null as null | ((readSoFar: number) => void),
   openDbs: [] as MemoryDb[],
   reset() {
     this.files.clear();
@@ -22,6 +25,8 @@ export const fsState = {
     this.remote.clear();
     this.log.length = 0;
     this.afterDownload = null;
+    this.reads.length = 0;
+    this.onRead = null;
     this.openDbs.length = 0;
   },
 };
@@ -64,6 +69,8 @@ export class FileHandle {
     const data = fsState.files.get(this.uri) ?? new Uint8Array();
     const out = data.slice(this.offset, this.offset + n);
     this.offset += out.length;
+    fsState.reads.push(n);
+    fsState.onRead?.(this.offset);
     return out;
   }
   writeBytes(bytes: Uint8Array) {
@@ -112,11 +119,6 @@ export class File {
     fsState.log.push(`move ${this.uri} -> ${dest.uri}`);
     this.uri = dest.uri;
   }
-  async bytes() {
-    const data = fsState.files.get(this.uri);
-    if (!data) throw new Error(`no such file: ${this.uri}`);
-    return data.slice();
-  }
   open() {
     if (!this.exists) throw new Error(`no such file: ${this.uri}`);
     return new FileHandle(this.uri);
@@ -160,18 +162,31 @@ export class MemoryDb {
   private live() {
     if (this.closed) throw new Error('database is closed');
   }
+  /** Every SQL statement run on this connection. */
+  readonly queries: string[] = [];
   getFirstSync(sql: string) {
     this.live();
+    this.queries.push(sql);
     if (sql.startsWith('PRAGMA quick_check')) return { quick_check: this.doc.check ?? 'ok' };
     return null;
   }
   getAllSync(sql: string) {
     this.live();
+    this.queries.push(sql);
     if (sql.includes('FROM meta')) return Object.entries(this.doc.meta).map(([key, value]) => ({ key, value }));
     return this.doc.rows ?? [];
   }
   closeSync() {
     this.closed = true;
+  }
+  async getFirstAsync(sql: string) {
+    return this.getFirstSync(sql);
+  }
+  async getAllAsync(sql: string) {
+    return this.getAllSync(sql);
+  }
+  async closeAsync() {
+    this.closeSync();
   }
 }
 
@@ -181,10 +196,28 @@ export const openDatabaseSync = jest.fn((name: string, _opts: unknown, directory
   return db;
 });
 
+export const openDatabaseAsync = jest.fn(async (name: string, opts: unknown, directory: string) =>
+  openDatabaseSync(name, opts, directory),
+);
+
 /** JSON for a valid offline.db with the given run. */
-export const dbJson = (run: string, over: { schema?: number; normalizer?: number; check?: string } = {}) =>
+/** JSON for a valid offline.db with the given run; `pad` adds that many bytes of poorly compressible filler. */
+export const dbJson = (run: string, over: { schema?: number; normalizer?: number; check?: string; pad?: number } = {}) =>
   JSON.stringify({
     meta: { offline_schema_version: String(over.schema ?? 1), normalizer_version: String(over.normalizer ?? 3), run },
     check: over.check ?? 'ok',
     rows: [{ run }],
+    ...(over.pad ? { pad: filler(over.pad) } : {}),
   });
+
+function filler(n: number): string {
+  let x = 2463534242;
+  let out = '';
+  while (out.length < n) {
+    x ^= x << 13;
+    x ^= x >>> 17;
+    x ^= x << 5;
+    out += (x >>> 0).toString(36);
+  }
+  return out.slice(0, n);
+}

@@ -4,7 +4,7 @@ import { act, renderHook } from '@testing-library/react-native';
 import { gzip } from 'pako';
 
 import { appStorage } from '../../storage';
-import { dbJson, File, fsState, openDatabaseSync } from '../../test-utils/memoryFs';
+import { dbJson, File, fsState, openDatabaseAsync, openDatabaseSync } from '../../test-utils/memoryFs';
 import {
   downloadOfflineIndex,
   maybeRefreshOfflineIndex,
@@ -19,15 +19,10 @@ import { useOfflineIndexStore } from '../offlineIndexStore';
 
 /* eslint-disable @typescript-eslint/no-require-imports -- jest.mock factories can't use imports */
 jest.mock('expo-file-system', () => require('../../test-utils/memoryFs'));
-jest.mock('expo-sqlite', () => ({ openDatabaseSync: require('../../test-utils/memoryFs').openDatabaseSync }));
-// Native SHA-256 stand-in: Node's crypto.
-jest.mock('expo-crypto', () => ({
-  CryptoDigestAlgorithm: { SHA256: 'SHA-256' },
-  digest: jest.fn(async (_alg: string, data: Uint8Array) => {
-    const h: Uint8Array = require('crypto').createHash('sha256').update(data).digest();
-    return h.buffer.slice(h.byteOffset, h.byteOffset + h.length);
-  }),
-}));
+jest.mock('expo-sqlite', () => {
+  const m = require('../../test-utils/memoryFs');
+  return { openDatabaseSync: m.openDatabaseSync, openDatabaseAsync: m.openDatabaseAsync };
+});
 /* eslint-enable @typescript-eslint/no-require-imports */
 jest.mock('@react-native-community/netinfo', () => ({ __esModule: true, default: { fetch: jest.fn() } }));
 jest.mock('@nomad/api-decide', () => ({ getOfflineIndexManifest: jest.fn() }));
@@ -95,6 +90,43 @@ describe('downloadOfflineIndex', () => {
     expect(s.bytes).toBe(dbJson('20261018-abc').length);
     expect(s.downloadedAt).toBeGreaterThanOrEqual(before);
     expect(openOfflineReader()?.all('SELECT run FROM x')).toEqual([{ run: '20261018-abc' }]);
+  });
+
+  it('streams the .gz in 256 KiB reads: never loads the whole file (a 100 MB list ran Android out of heap)', async () => {
+    const big = gzip(new TextEncoder().encode(dbJson('big', { pad: 1_500_000 })));
+    expect(big.length).toBeGreaterThan(3 * 256 * 1024);
+    manifestMock.mockResolvedValueOnce(publish('big', {}, big));
+
+    await downloadOfflineIndex();
+
+    expect(useOfflineIndexStore.getState()).toMatchObject({ status: 'ready', run: 'big' });
+    expect(text(CURRENT)).toBe(dbJson('big', { pad: 1_500_000 }));
+    expect(Math.max(...fsState.reads)).toBeLessThanOrEqual(256 * 1024);
+    expect(fsState.reads.length).toBeGreaterThanOrEqual(Math.ceil(big.length / (256 * 1024)));
+  });
+
+  it('a digest mismatch on a multi-slice file is caught after the last slice; nothing swapped', async () => {
+    await install('old');
+    const big = gzip(new TextEncoder().encode(dbJson('new', { pad: 1_500_000 })));
+    manifestMock.mockResolvedValueOnce(publish('new', { sha256: sha(big.slice(1)) }, big));
+    await downloadOfflineIndex();
+    expect(useOfflineIndexStore.getState()).toMatchObject({ status: 'error', run: 'old' });
+    expect(text(CURRENT)).toBe(dbJson('old'));
+    expect(partFiles()).toEqual([]);
+  });
+
+  it('remove() mid-stream stops the unpack; nothing is kept', async () => {
+    const big = gzip(new TextEncoder().encode(dbJson('big', { pad: 1_500_000 })));
+    manifestMock.mockResolvedValueOnce(publish('big', {}, big));
+    let removing: Promise<void> | undefined;
+    fsState.onRead = (soFar) => {
+      if (!removing && soFar >= 256 * 1024) removing = removeOfflineIndex();
+    };
+    await downloadOfflineIndex();
+    await removing;
+    expect(fsState.reads.length).toBeLessThan(Math.ceil(big.length / (256 * 1024)));
+    expect(fsState.files.size).toBe(0);
+    expect(useOfflineIndexStore.getState()).toMatchObject({ status: 'none', run: null });
   });
 
   it('reports progress while downloading', async () => {
@@ -244,7 +276,7 @@ describe('openOfflineReader', () => {
     await install('r1');
     const a = openOfflineReader();
     expect(openOfflineReader()).toBe(a);
-    expect(openDatabaseSync).toHaveBeenCalledTimes(2); // the candidate check during download + this open
+    expect(openDatabaseSync).toHaveBeenCalledTimes(2); // the candidate check during download (async → sync in the mock) + this open
     // Own connection, and no close-time statement sweep (it double-finalizes FTS5's statements: SIGSEGV).
     expect(openDatabaseSync).toHaveBeenLastCalledWith(
       'current.db',
@@ -253,15 +285,21 @@ describe('openOfflineReader', () => {
     );
   });
 
-  it('returns null and forgets the list when PRAGMA quick_check fails', async () => {
+  it('opening runs no PRAGMA quick_check (15 s on the 300 MB prod list); only the download checks it, off the JS thread', async () => {
     await install('r1');
-    resetOfflineReaderForTests();
-    fsState.files.set(CURRENT, new TextEncoder().encode(dbJson('r1', { check: 'row 7 missing from index' })));
+    expect(openDatabaseAsync).toHaveBeenCalledWith(
+      'r1.db.part',
+      { useNewConnection: true, finalizeUnusedStatementsBeforeClosing: false },
+      'file:///cache/offline',
+    );
+    const candidate = fsState.openDbs.find((d) => d.path.endsWith('r1.db.part'))!;
+    expect(candidate.queries[0]).toBe('PRAGMA quick_check');
+    expect(candidate.closed).toBe(true);
 
-    expect(openOfflineReader()).toBeNull();
-    expect(fsState.openDbs.at(-1)!.closed).toBe(true);
-    expect(fsState.files.has(CURRENT)).toBe(false);
-    expect(useOfflineIndexStore.getState()).toMatchObject({ status: 'none', run: null });
+    expect(openOfflineReader()).not.toBeNull();
+    const reader = fsState.openDbs.at(-1)!;
+    expect(reader.path).toBe(CURRENT);
+    expect(reader.queries.some((q) => q.includes('quick_check'))).toBe(false);
   });
 
   it('returns null when the file is not a database at all', async () => {
