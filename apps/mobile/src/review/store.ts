@@ -9,7 +9,7 @@ import {
 import { createContext, useContext } from 'react';
 import { createStore, useStore, type StoreApi } from 'zustand';
 
-import { clearDraft, loadDraft, saveDraft } from './drafts';
+import { clearDraft, draftKeyOf, loadDraft, saveDraft } from './drafts';
 
 export const DRAFT_DEBOUNCE_MS = 1000;
 
@@ -46,10 +46,13 @@ export type ReviewStore = {
   finish(): void;
 };
 
-/** One store per mounted review. Restores a draft saved against the same audio, else starts from `data`. */
+/**
+ * One store per mounted review. Restores a draft saved against the same server doc (same audio and the
+ * same lyrics fingerprint), else starts from `data`.
+ */
 export function createReviewStore(jobId: string, data: CorrectionData): StoreApi<ReviewStore> {
-  const audioHash = data.metadata?.audio_hash ?? null;
-  const draft = loadDraft(jobId, audioHash);
+  const server = draftKeyOf(data);
+  const draft = loadDraft(jobId, server);
   const serverDoc = fromCorrectionData(data);
   let timer: ReturnType<typeof setTimeout> | null = null;
   // Open gesture: null when none; `pushed` once its single undo snapshot is taken.
@@ -62,8 +65,8 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
       if (finished) return;
       const s = get();
       saveDraft(jobId, {
-        v: 1,
-        audioHash,
+        v: 2,
+        ...server,
         segments: [...s.doc.segments],
         isDuet: s.doc.isDuet,
         isDuetTouched: s.isDuetTouched,
@@ -159,6 +162,14 @@ export function createReviewStore(jobId: string, data: CorrectionData): StoreApi
       },
     };
   });
+}
+
+/**
+ * Ruling M: the duet flag to send gen with the corrections, or undefined when it isn't known (gen
+ * overwrites its stored flag with any non-null value). Known = loaded as true, or toggled by the person.
+ */
+export function duetToSend(s: Pick<ReviewStore, 'doc' | 'isDuetTouched'>): boolean | undefined {
+  return s.doc.source.is_duet === true || s.isDuetTouched ? s.doc.isDuet : undefined;
 }
 
 export const ReviewStoreContext = createContext<StoreApi<ReviewStore> | null>(null);

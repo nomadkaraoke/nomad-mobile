@@ -4,7 +4,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { useAuth } from '../../auth/store';
 import { GEN_API_URL } from '../../config';
-import { ReviewStoreContext } from '../store';
+import { duetToSend, ReviewStoreContext } from '../store';
 
 export const PREVIEW_POLL_MS = 3000;
 export const PREVIEW_POLL_MAX_MS = 5 * 60_000;
@@ -46,8 +46,8 @@ export function usePreview(jobId: string): { start(): void; state: PreviewState;
     };
     setUri(undefined);
     setState('generating');
-    const { doc, isDuetTouched } = store.getState();
-    const isDuetArg = doc.source.is_duet === true || isDuetTouched ? doc.isDuet : undefined;
+    const { doc } = store.getState();
+    const isDuetArg = duetToSend(store.getState());
     const startedAt = Date.now();
 
     const poll = (hash: string) => {
@@ -68,7 +68,7 @@ export function usePreview(jobId: string): { start(): void; state: PreviewState;
       }, PREVIEW_POLL_MS);
     };
 
-    void requestPreview(jobId, toSubmission(doc), isDuetArg)
+    void requestPreview(jobId, toSubmission(doc, isDuetArg), isDuetArg)
       .then((r) => {
         if (!live()) return;
         if (r.status === 'success') ready(r.previewHash);

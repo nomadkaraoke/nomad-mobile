@@ -6,7 +6,7 @@ import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import { ReviewStoreContext } from '../store';
+import { duetToSend, ReviewStoreContext } from '../store';
 
 /** What `instrumental_selection` gen gets: a stem, `auto` (gen resolves its confident verdict) or `custom` (BYO). */
 export type SubmitSelection = InstrumentalChoice | 'auto' | 'custom';
@@ -32,7 +32,7 @@ const mayHaveLanded = (e: unknown): boolean =>
   e instanceof TypeError || (e instanceof ApiError && (e.status === 0 || e.status === 400 || e.status === 409));
 
 /** True when gen shows the job past review (rendering, done, …): the submit went through. */
-async function jobLeftReview(jobId: string): Promise<boolean> {
+export async function jobLeftReview(jobId: string): Promise<boolean> {
   try {
     const { status } = await getJob(jobId);
     return jobPhase(status) === 'done' || (jobPhase(status) === 'working' && jobStep(status).step >= 4);
@@ -78,11 +78,11 @@ export function useSubmitReview(jobId: string, selection: SubmitSelection): Subm
     setError(undefined);
     // The draft is the safety net if any call fails or the app dies mid-submit.
     store.getState().flushDraft();
-    const { doc, isDuetTouched } = store.getState();
+    const { doc } = store.getState();
     // Ruling M: is_duet goes with the corrections only when known (loaded true, or toggled).
-    const isDuetArg = doc.source.is_duet === true || isDuetTouched ? doc.isDuet : undefined;
+    const isDuetArg = duetToSend(store.getState());
     try {
-      await saveCorrections(jobId, toSubmission(doc), isDuetArg);
+      await saveCorrections(jobId, toSubmission(doc, isDuetArg), isDuetArg);
       const fresh = await getCorrectionData(jobId);
       await completeReview(jobId, fresh, selection, doc.isDuet);
     } catch (e) {

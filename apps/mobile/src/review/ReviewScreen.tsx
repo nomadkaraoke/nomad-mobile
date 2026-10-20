@@ -11,7 +11,7 @@ import { useReviewPlayer } from './audio/useReviewPlayer';
 import { continueOnWeb } from './continueOnWeb';
 import { FinishStep } from './finish/FinishStep';
 import { useInstrumentalChoice } from './finish/InstrumentalChooser';
-import { useSubmitReview } from './finish/useSubmitReview';
+import { jobLeftReview, useSubmitReview } from './finish/useSubmitReview';
 import { LyricsStep, type LyricsStepHandle, type TextRequest } from './lyrics/LyricsStep';
 import { useVocalsPeaks } from './lyrics/useVocalsPeaks';
 import { ReviewHeaderButtons, ReviewHeaderTitle } from './ReviewHeader';
@@ -19,7 +19,7 @@ import { ReviewMenu, useConfirmDiscard } from './ReviewMenu';
 import { EditLineSheet } from './sheets/EditLineSheet';
 import { NudgeSheet } from './sheets/NudgeSheet';
 import { WordSheet } from './sheets/WordSheet';
-import { createReviewStore, ReviewStoreContext, useReviewStore } from './store';
+import { createReviewStore, duetToSend, ReviewStoreContext, useReviewStore } from './store';
 import { TapSyncSheet } from './sync/TapSyncSheet';
 import { useEncoderWarmup } from './useEncoderWarmup';
 import { useStemsPoll, type StemsState } from './useStemsPoll';
@@ -254,17 +254,41 @@ function ReviewBody({ jobId, data }: ReviewScreenProps) {
 /**
  * Menu "Continue on web" (spec §4.7): writes the pending draft, hands the edits to gen as a review
  * session, then opens the signed-in web review. A failed handoff says so; the edits stay on the phone.
+ * Back from the browser (iOS: the browser closed; Android: the app is active again, since the Custom Tab
+ * resolves at once), it asks gen for the job: finished on the web means the phone's draft is stale, so the
+ * review is finished here too (draft deleted, edits frozen) and can't be restored over the web's lyrics.
  */
-function useContinueOnWeb(jobId: string): () => void {
+export function useContinueOnWeb(jobId: string): () => void {
   const t = useTranslations('review');
   const store = useContext(ReviewStoreContext);
   const queryClient = useQueryClient();
+  const awaitingReturn = useRef(false);
+
+  const checkReturn = useCallback(async () => {
+    if (!store || !awaitingReturn.current) return;
+    if (await jobLeftReview(jobId)) {
+      awaitingReturn.current = false;
+      store.getState().finish();
+    }
+  }, [store, jobId]);
+
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (s) => {
+      if (s === 'active') void checkReturn();
+    });
+    return () => sub.remove();
+  }, [checkReturn]);
+
   return useCallback(() => {
     if (!store) return;
     store.getState().flushDraft();
-    const { doc, editCount } = store.getState();
-    continueOnWeb(jobId, doc, editCount, queryClient).catch(() => Alert.alert(t('webFailed')));
-  }, [store, jobId, queryClient, t]);
+    const state = store.getState();
+    awaitingReturn.current = true;
+    continueOnWeb(jobId, state.doc, state.editCount, queryClient, duetToSend(state)).then(
+      () => void checkReturn(),
+      () => Alert.alert(t('webFailed')),
+    );
+  }, [store, jobId, queryClient, t, checkReturn]);
 }
 
 const STEPS: ReviewStep[] = ['lyrics', 'finish'];

@@ -5,7 +5,7 @@ import { router } from 'expo-router';
 import type { ReactNode } from 'react';
 
 import { useSubmitReview, type SubmitSelection } from '../../review/finish/useSubmitReview';
-import { loadDraft } from '../../review/drafts';
+import { draftKeyOf, loadDraft } from '../../review/drafts';
 import { createReviewStore, ReviewStoreContext } from '../../review/store';
 import { cleanFixture } from '../../test-utils/reviewFixtures';
 
@@ -128,7 +128,7 @@ describe('useSubmitReview', () => {
     store.getState().flushDraft();
     expect(store.getState().doc.segments).toHaveLength(2);
     expect(store.getState().selection).toBeNull();
-    expect(loadDraft('j1', 'h1')).toBeNull();
+    expect(loadDraft('j1', draftKeyOf(cleanFixture()))).toBeNull();
     jest.useRealTimers();
   });
 
@@ -138,7 +138,7 @@ describe('useSubmitReview', () => {
     store.getState().apply((d) => ({ ...d, segments: d.segments.slice(1) }));
     store.getState().finish();
     jest.advanceTimersByTime(5_000);
-    expect(loadDraft('j1', 'h1')).toBeNull();
+    expect(loadDraft('j1', draftKeyOf(cleanFixture()))).toBeNull();
     jest.useRealTimers();
   });
 });

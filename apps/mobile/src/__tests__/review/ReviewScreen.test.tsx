@@ -6,11 +6,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { router, Slot, Stack } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
-import { Alert, Modal, View, type AlertButton } from 'react-native';
+import { Alert, AppState, Modal, View, type AlertButton, type AppStateStatus } from 'react-native';
 
 import ReviewRoute from '../../app/review/[id]';
-import { saveDraft } from '../../review/drafts';
+import { draftKeyOf, saveDraft } from '../../review/drafts';
 import { ReviewScreen } from '../../review/ReviewScreen';
+import { appStorage } from '../../storage';
 import { cleanFixture, correctionsFixture, fakePlayer, GAP } from '../../test-utils/reviewFixtures';
 
 let mockPlayer = fakePlayer();
@@ -297,7 +298,7 @@ describe('ReviewScreen', () => {
   it('the restored-draft banner confirms, then Discard resets to the server data', async () => {
     const alert = jest.spyOn(Alert, 'alert');
     const data = correctionsFixture();
-    saveDraft('j1', { v: 1, audioHash: 'h1', segments: data.corrected_segments.slice(1), isDuet: false, selection: null, editCount: 1, savedAt: 1 });
+    saveDraft('j1', { v: 2, ...draftKeyOf(data), segments: data.corrected_segments.slice(1), isDuet: false, selection: null, editCount: 1, savedAt: 1 });
     await renderScreen(data);
     expect(screen.getByText('Restored your edits')).toBeTruthy();
     expect(screen.queryByText('Hello')).toBeNull();
@@ -312,7 +313,7 @@ describe('ReviewScreen', () => {
   it('the restored-draft banner goes away once Make my video is pressed (nothing left to discard)', async () => {
     gen.saveCorrections!.mockReturnValue(new Promise(() => {}));
     const data = cleanFixture({ ...STEMS, audio_complete: true });
-    saveDraft('j1', { v: 1, audioHash: 'h1', segments: data.corrected_segments.slice(1), isDuet: false, selection: null, editCount: 1, savedAt: 1 });
+    saveDraft('j1', { v: 2, ...draftKeyOf(data), segments: data.corrected_segments.slice(1), isDuet: false, selection: null, editCount: 1, savedAt: 1 });
     await renderScreen(data);
     expect(screen.getByTestId('review-restored-discard')).toBeTruthy();
     fireEvent.press(screen.getByTestId('review-lyrics-next'));
@@ -347,6 +348,57 @@ describe('ReviewScreen', () => {
     expect(jobId).toBe('j1');
     expect(editCount).toBe(1);
     expect(doc.segments).toHaveLength(3);
+  });
+
+  it('menu: back from the browser with the job finished on the web, the stale draft is deleted', async () => {
+    const storage = appStorage;
+    let release!: () => void;
+    continueOnWeb.mockReturnValueOnce(new Promise<void>((r) => (release = r))); // the browser is open
+    await renderScreen(correctionsFixture());
+    deleteFirstLine();
+    fireEvent.press(screen.getByTestId('review-menu'));
+    fireEvent.press(screen.getByTestId('review-menu-web'));
+    const sheet = screen.UNSAFE_getAllByType(Modal).find((m) => m.props.testID === 'review-menu-sheet')!;
+    act(() => sheet.props.onDismiss());
+    expect(storage.getString('review-draft:j1')).toBeDefined(); // flushed before leaving for the web
+    gen.getJob!.mockResolvedValueOnce({ job_id: 'j1', status: 'review_complete', progress: 60 });
+    await act(async () => release()); // the browser closed (iOS)
+    await waitFor(() => expect(storage.getString('review-draft:j1')).toBeUndefined());
+    expect(gen.getJob).toHaveBeenCalledWith('j1');
+  });
+
+  it('menu: back from the browser with the job still in review keeps the draft', async () => {
+    const storage = appStorage;
+    gen.getJob!.mockResolvedValueOnce({ job_id: 'j1', status: 'in_review', progress: 0 });
+    await renderScreen(correctionsFixture());
+    deleteFirstLine();
+    fireEvent.press(screen.getByTestId('review-menu'));
+    fireEvent.press(screen.getByTestId('review-menu-web'));
+    const sheet = screen.UNSAFE_getAllByType(Modal).find((m) => m.props.testID === 'review-menu-sheet')!;
+    await act(async () => sheet.props.onDismiss());
+    await waitFor(() => expect(gen.getJob).toHaveBeenCalledWith('j1'));
+    expect(storage.getString('review-draft:j1')).toBeDefined();
+  });
+
+  it('menu: Android (the browser call resolves at once) checks again when the app is active', async () => {
+    const storage = appStorage;
+    const listeners: ((s: AppStateStatus) => void)[] = [];
+    jest.spyOn(AppState, 'addEventListener').mockImplementation((_type, fn) => {
+      listeners.push(fn as (s: AppStateStatus) => void);
+      return { remove: () => undefined } as never;
+    });
+    gen.getJob!.mockResolvedValueOnce({ job_id: 'j1', status: 'in_review', progress: 0 });
+    await renderScreen(correctionsFixture());
+    deleteFirstLine();
+    fireEvent.press(screen.getByTestId('review-menu'));
+    fireEvent.press(screen.getByTestId('review-menu-web'));
+    const sheet = screen.UNSAFE_getAllByType(Modal).find((m) => m.props.testID === 'review-menu-sheet')!;
+    await act(async () => sheet.props.onDismiss());
+    expect(storage.getString('review-draft:j1')).toBeDefined();
+    gen.getJob!.mockResolvedValueOnce({ job_id: 'j1', status: 'complete', progress: 100 });
+    await act(async () => listeners.forEach((fn) => fn('active')));
+    await waitFor(() => expect(storage.getString('review-draft:j1')).toBeUndefined());
+    // The spy stays until the next test's restoreAllMocks: the screen still unsubscribes on unmount.
   });
 
   it('menu: a failed handoff says so', async () => {

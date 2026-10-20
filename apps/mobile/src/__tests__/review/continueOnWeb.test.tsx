@@ -34,6 +34,13 @@ describe('continueOnWeb', () => {
     expect(saveReviewSession.mock.invocationCallOrder[0]).toBeLessThan(handoff.mock.invocationCallOrder[0]!);
   });
 
+  it('carries is_duet only when known (Ruling M)', async () => {
+    await continueOnWeb('j1', doc(), 1, queryClient);
+    expect(saveReviewSession.mock.calls[0]![1]).not.toHaveProperty('is_duet');
+    await continueOnWeb('j1', doc(), 1, queryClient, true);
+    expect(saveReviewSession.mock.calls[1]![1].is_duet).toBe(true);
+  });
+
   it('with no edits there is nothing to hand over: no session save', async () => {
     await continueOnWeb('j1', doc(), 0, queryClient);
     expect(saveReviewSession).not.toHaveBeenCalled();

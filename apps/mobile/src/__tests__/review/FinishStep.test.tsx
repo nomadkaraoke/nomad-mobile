@@ -4,7 +4,7 @@ import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { ScrollView } from 'react-native';
 
-import { loadDraft } from '../../review/drafts';
+import { draftKeyOf, loadDraft } from '../../review/drafts';
 import { FinishStep } from '../../review/finish/FinishStep';
 import { useInstrumentalChoice } from '../../review/finish/InstrumentalChooser';
 import { SUCCESS_HOLD_MS, useSubmitReview } from '../../review/finish/useSubmitReview';
@@ -97,6 +97,7 @@ describe('FinishStep', () => {
     expect(jobId).toBe('j1');
     expect(corrections.corrected_segments).toHaveLength(2);
     expect(isDuet).toBeUndefined(); // Ruling M: not loaded as a duet, never toggled → omitted
+    expect(corrections).not.toHaveProperty('is_duet'); // ...and the doc doesn't carry an invented one either
     expect(gen.getCorrectionData).toHaveBeenCalledWith('j1');
     expect(gen.completeReview).toHaveBeenCalledWith('j1', FRESH, 'auto', false);
     const order = ['saveCorrections', 'getCorrectionData', 'completeReview'].map((f) => gen[f]!.mock.invocationCallOrder[0]!);
@@ -116,9 +117,9 @@ describe('FinishStep', () => {
     const { store } = renderReview(finish(), cleanFixture());
     act(() => store.getState().apply((d) => ({ ...d, segments: d.segments.slice(1) })));
     act(() => store.getState().flushDraft());
-    expect(loadDraft('j1', 'h1')).not.toBeNull();
+    expect(loadDraft('j1', draftKeyOf(cleanFixture()))).not.toBeNull();
     await act(async () => fireEvent.press(submitButton()));
-    expect(loadDraft('j1', 'h1')).toBeNull();
+    expect(loadDraft('j1', draftKeyOf(cleanFixture()))).toBeNull();
   });
 
   it('a loaded duet sends is_duet true on both calls', async () => {
@@ -133,6 +134,16 @@ describe('FinishStep', () => {
     act(() => store.getState().setDuet(false));
     await act(async () => fireEvent.press(submitButton()));
     expect(gen.saveCorrections!.mock.calls[0]![2]).toBe(false);
+    expect(gen.saveCorrections!.mock.calls[0]![1].is_duet).toBe(false);
+  });
+
+  it('a duet turned on reaches gen: the flag, the corrections doc and complete', async () => {
+    const { store } = renderReview(finish(), cleanFixture());
+    act(() => store.getState().setDuet(true));
+    await act(async () => fireEvent.press(submitButton()));
+    expect(gen.saveCorrections!.mock.calls[0]![2]).toBe(true);
+    expect(gen.saveCorrections!.mock.calls[0]![1].is_duet).toBe(true);
+    expect(gen.completeReview!.mock.calls[0]![3]).toBe(true);
   });
 
   it('a changed pick is sent as the stem, not auto', async () => {
@@ -178,14 +189,14 @@ describe('FinishStep', () => {
 
     expect(screen.getByTestId('review-finish-error')).toHaveTextContent("We couldn't start your video. Your edits are safe on this phone.");
     expect(screen.queryByTestId('review-finish-submit')).toBeNull();
-    expect(loadDraft('j1', 'h1')).not.toBeNull(); // written at submit, kept on failure
+    expect(loadDraft('j1', draftKeyOf(cleanFixture()))).not.toBeNull(); // written at submit, kept on failure
     expect(router.dismissTo).not.toHaveBeenCalled();
 
     await act(async () => fireEvent.press(screen.getByTestId('review-finish-retry')));
     expect(gen.saveCorrections).toHaveBeenCalledTimes(2); // the whole idempotent sequence again
     expect(gen.completeReview).toHaveBeenCalledTimes(2);
     expect(screen.getByTestId('review-finish-success')).toBeTruthy();
-    expect(loadDraft('j1', 'h1')).toBeNull();
+    expect(loadDraft('j1', draftKeyOf(cleanFixture()))).toBeNull();
   });
 
   it('a dropped connection says so', async () => {
@@ -207,7 +218,7 @@ describe('FinishStep', () => {
     gen.getJob!.mockResolvedValue({ job_id: 'j1', status: 'review_complete', progress: 60 });
     await act(async () => fireEvent.press(screen.getByTestId('review-finish-retry')));
     expect(screen.getByTestId('review-finish-success')).toBeTruthy();
-    expect(loadDraft('j1', 'h1')).toBeNull();
+    expect(loadDraft('j1', draftKeyOf(cleanFixture()))).toBeNull();
     expect(store.getState().finished).toBe(true);
   });
 
