@@ -7,7 +7,7 @@ export const MIN_WORD_SECONDS = 0.05;
 
 let idCounter = 0;
 /** Pure-JS unique id (no nanoid / crypto dependency). */
-function newId(prefix: string): string {
+export function newId(prefix: string): string {
   idCounter += 1;
   return `${prefix}_${Date.now().toString(36)}${idCounter.toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 }

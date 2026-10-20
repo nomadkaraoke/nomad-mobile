@@ -1,8 +1,7 @@
-import type { LyricsSegment, Word } from '../types';
+import type { CorrectionData, LyricsSegment, Word } from '../types';
 import { fromCorrectionData, type ReviewDoc } from '../doc';
 import { commitTapSync, createTapSync, press, release, shouldStop } from '../tapSync';
 import fixture from './fixtures/correctionData.json';
-import type { CorrectionData } from '../types';
 
 const w = (id: string, s: number | null = null, e: number | null = null): Word => ({ id, text: id, start_time: s, end_time: e });
 const docOf = (segments: LyricsSegment[]): ReviewDoc => ({
