@@ -57,14 +57,16 @@ name: review-11-failure
 - takeScreenshot: ${REVIEW_SHOTS}/review-11-error
 - tapOn:
     id: "review-finish-retry"
+# Success (1.2 s, soft: a slow emulator can miss it), then the Make tab: see common/finish-review.yaml.
 - extendedWaitUntil:
     visible:
       id: "review-finish-success"
     timeout: 30000
+    optional: true
 - extendedWaitUntil:
     visible:
       id: "make-tab-screen"
-    timeout: 20000
+    timeout: 30000
 - runScript:
     file: ../scripts/stack.js
     env:
