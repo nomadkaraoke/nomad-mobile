@@ -1,9 +1,9 @@
 import { LOCALE_NAMES, useTranslations, type Locale } from '@nomad/i18n';
-import { Button, colors } from '@nomad/ui';
+import { Button, colors, StartText } from '@nomad/ui';
 import { createAudioPlayer } from 'expo-audio';
 import { useVideoPlayer, VideoView, type VideoPlayer } from 'expo-video';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, Text, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, Pressable, useWindowDimensions, View } from 'react-native';
 
 import { LOCKSTEP_INTERVAL_MS, lockstepCheck } from '../audio/lockstep';
 import { safePlay } from '../audio/playback';
@@ -51,32 +51,32 @@ export function PreviewPanel({ jobId, stemUri, translationLanguage, onBackToLyri
       {preview.state === 'generating' || preview.state === 'slow' ? (
         <View testID="review-preview-generating" className="flex-row items-center gap-3 rounded-xl border border-border bg-card p-4">
           <ActivityIndicator color={colors.primary} />
-          <Text className="flex-1 text-sm text-text" accessibilityLiveRegion="polite">
+          <StartText className="flex-1 text-sm text-text" accessibilityLiveRegion="polite">
             {preview.state === 'slow' ? t('slow') : t('generating')}
-          </Text>
+          </StartText>
         </View>
       ) : null}
       {preview.state === 'error' ? (
         <View className="gap-2">
-          <Text testID="review-preview-error" className="text-sm text-danger">
+          <StartText testID="review-preview-error" className="text-sm text-danger">
             {t('error')}
-          </Text>
+          </StartText>
           <Button testID="review-preview-retry" variant="secondary" label={t('retry')} onPress={preview.start} />
         </View>
       ) : null}
       {preview.state === 'untimed' ? (
         <View className="gap-2">
-          <Text testID="review-preview-untimed" className="text-sm text-text">
+          <StartText testID="review-preview-untimed" className="text-sm text-text">
             {t('untimed')}
-          </Text>
+          </StartText>
           <Button testID="review-preview-back" variant="secondary" label={t('backToLyrics')} onPress={onBackToLyrics} />
         </View>
       ) : null}
       {preview.state === 'ready' && preview.uri ? <PreviewPlayer uri={preview.uri} stemUri={stemUri} /> : null}
       {preview.state !== 'idle' ? (
-        <Text className="text-xs text-muted">
+        <StartText className="text-xs text-muted">
           {language ? `${t('note')} ${t('translationNote', { language })}` : t('note')}
-        </Text>
+        </StartText>
       ) : null}
     </View>
   );
@@ -153,7 +153,7 @@ function PreviewPlayer({ uri, stemUri }: { uri: string; stemUri: string | null }
       />
       {stemUri ? (
         <View className="flex-row items-center gap-2" accessibilityRole="radiogroup" accessibilityLabel={t('audio')}>
-          <Text className="text-sm text-muted">{t('audio')}</Text>
+          <StartText className="text-sm text-muted">{t('audio')}</StartText>
           {(['song', 'instrumental'] as const).map((a) => (
             <Pressable
               key={a}
@@ -164,7 +164,7 @@ function PreviewPlayer({ uri, stemUri }: { uri: string; stemUri: string | null }
               onPress={() => setAudio(a)}
               className={`min-h-11 justify-center rounded-full border px-4 ${audio === a ? 'border-primary' : 'border-border'}`}
             >
-              <Text className={`text-sm font-semibold ${audio === a ? 'text-primary' : 'text-text'}`}>{t(a)}</Text>
+              <StartText className={`text-sm font-semibold ${audio === a ? 'text-primary' : 'text-text'}`}>{t(a)}</StartText>
             </Pressable>
           ))}
         </View>

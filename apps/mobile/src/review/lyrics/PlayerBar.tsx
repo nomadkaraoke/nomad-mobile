@@ -1,7 +1,7 @@
 import { formatClock } from '@nomad/core';
-import { useTranslations } from '@nomad/i18n';
-import { colors, WaveformCanvas, type WaveformMarker } from '@nomad/ui';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { isolateLtr, useTranslations } from '@nomad/i18n';
+import { colors, StartText, WaveformCanvas, type WaveformMarker } from '@nomad/ui';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import type { ReviewPlayer } from '../audio/useReviewPlayer';
 import { IconButton } from '../IconButton';
@@ -30,7 +30,8 @@ export function PlayerBar({ player, peaks, vocalsReady, markers }: Props) {
 
   return (
     <View className="border-t border-border bg-card px-3 pb-1 pt-2">
-      <View className="flex-row items-center gap-1">
+      {/* Media transport, timeline and time read left to right in every language (not mirrored in RTL). */}
+      <View testID="review-player-transport" className="flex-row items-center gap-1" style={{ direction: 'ltr' }}>
         <IconButton
           testID="review-player-play"
           icon={player.playing ? 'pause' : 'play'}
@@ -60,16 +61,16 @@ export function PlayerBar({ player, peaks, vocalsReady, markers }: Props) {
           {peaks.status === 'pending' ? (
             <View className="absolute inset-0 flex-row items-center justify-center gap-2" pointerEvents="none">
               <ActivityIndicator size="small" color={colors.muted} />
-              <Text className="text-xs text-muted">{t('waveformLoading')}</Text>
+              <StartText className="text-xs text-muted">{t('waveformLoading')}</StartText>
             </View>
           ) : null}
         </View>
       </View>
 
-      <View className="flex-row items-center gap-2">
-        <Text className="flex-1 text-xs text-muted" style={{ fontVariant: ['tabular-nums'] }}>
-          {t('time', { position: formatClock(player.position), duration: formatClock(duration) })}
-        </Text>
+      <View testID="review-player-controls" className="flex-row items-center gap-2" style={{ direction: 'ltr' }}>
+        <StartText testID="review-player-time" className="flex-1 text-xs text-muted" style={{ fontVariant: ['tabular-nums'] }}>
+          {isolateLtr(t('time', { position: formatClock(player.position), duration: formatClock(duration) }))}
+        </StartText>
         <Pressable
           testID="review-player-source"
           accessibilityRole="button"
@@ -79,7 +80,7 @@ export function PlayerBar({ player, peaks, vocalsReady, markers }: Props) {
           onPress={() => player.setSource(vocals ? 'song' : 'vocals')}
           className={`min-h-11 justify-center rounded-full border px-3 ${vocals ? 'border-primary' : 'border-border'} ${vocalsReady ? '' : 'opacity-50'}`}
         >
-          <Text className={`text-sm font-semibold ${vocals ? 'text-primary' : 'text-text'}`}>{sourceLabel}</Text>
+          <StartText className={`text-sm font-semibold ${vocals ? 'text-primary' : 'text-text'}`}>{sourceLabel}</StartText>
         </Pressable>
         <Pressable
           testID="review-player-rate"
@@ -88,14 +89,16 @@ export function PlayerBar({ player, peaks, vocalsReady, markers }: Props) {
           onPress={() => player.setRate(player.rate === 1 ? 0.75 : 1)}
           className={`min-h-11 min-w-14 items-center justify-center rounded-full border px-3 ${player.rate === 1 ? 'border-border' : 'border-primary'}`}
         >
-          <Text className={`text-sm font-semibold ${player.rate === 1 ? 'text-text' : 'text-primary'}`}>{t('rate', { rate: player.rate })}</Text>
+          <StartText testID="review-player-rate-label" className={`text-sm font-semibold ${player.rate === 1 ? 'text-text' : 'text-primary'}`}>
+            {isolateLtr(t('rate', { rate: player.rate }))}
+          </StartText>
         </Pressable>
       </View>
 
       {player.error ? (
-        <Text testID="review-player-error" className="pb-1 text-sm text-danger" accessibilityLiveRegion="polite">
+        <StartText testID="review-player-error" className="pb-1 text-sm text-danger" accessibilityLiveRegion="polite">
           {t(ERROR_KEY[player.error])}
-        </Text>
+        </StartText>
       ) : null}
     </View>
   );

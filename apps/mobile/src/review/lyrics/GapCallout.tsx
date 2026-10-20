@@ -1,7 +1,8 @@
 import { formatClock } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import type { OpenVocalGap } from '@nomad/review-core';
-import { Pressable, Text, View } from 'react-native';
+import { StartText } from '@nomad/ui';
+import { Pressable, View } from 'react-native';
 
 type Props = {
   /** Position among the open gaps (testIDs). */
@@ -21,18 +22,18 @@ export function GapCallout({ k, open, onPlay, onInsert, onSync }: Props) {
   const title = t('title', { from: formatClock(open.gap.start), to: formatClock(open.gap.end) });
   return (
     <View className="mx-3 my-1 gap-2 rounded-xl border border-dashed border-orange bg-orange/10 p-3">
-      <Text className="text-sm font-semibold text-orange">{title}</Text>
+      <StartText className="text-sm font-semibold text-orange">{title}</StartText>
       <View className="flex-row gap-2">
         <Pressable testID={`review-gap-${k}-play`} accessibilityRole="button" accessibilityLabel={t('play')} onPress={() => onPlay(k)} className={button}>
-          <Text className="text-sm text-text">{t('play')}</Text>
+          <StartText className="text-sm text-text">{t('play')}</StartText>
         </Pressable>
         {open.pending ? (
           <Pressable testID={`review-gap-${k}-sync`} accessibilityRole="button" accessibilityLabel={t('sync')} onPress={() => onSync(k)} className={button}>
-            <Text className="text-sm text-text">{t('sync')}</Text>
+            <StartText className="text-sm text-text">{t('sync')}</StartText>
           </Pressable>
         ) : (
           <Pressable testID={`review-gap-${k}-insert`} accessibilityRole="button" accessibilityLabel={t('insert')} onPress={() => onInsert(k)} className={button}>
-            <Text className="text-sm text-text">{t('insert')}</Text>
+            <StartText className="text-sm text-text">{t('insert')}</StartText>
           </Pressable>
         )}
       </View>

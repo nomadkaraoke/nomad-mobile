@@ -135,7 +135,9 @@ describe('WordSheet', () => {
       },
     };
     const { words, onClose } = renderSheet(data, 0, 3);
-    expect(screen.getByText('Changed by AI from “gold”')).toBeTruthy();
+    // The Revert button takes its label's width (a fixed w-28 broke "Zurücksetzen" mid-word).
+    expect(screen.getByTestId('review-word-revert-ai-box').props.className).toBe('min-w-28 shrink-0');
+    expect(screen.getByText('Changed by AI from “\u2068gold\u2069”')).toBeTruthy();
     fireEvent.press(screen.getByTestId('review-word-revert-ai'));
     expect(words().map((w) => w.text)).toEqual(['Hello', 'darkness', 'my', 'gold', 'friend']);
     expect(words()[3]!.ai_corrected).toBeUndefined();
@@ -144,7 +146,7 @@ describe('WordSheet', () => {
 
   it('revert AI is disabled without undo info', () => {
     renderSheet(correctionsFixture(), 0, 3);
-    expect(screen.getByText('Changed by AI from “gold”')).toBeTruthy();
+    expect(screen.getByText('Changed by AI from “\u2068gold\u2069”')).toBeTruthy();
     expect(disabled('review-word-revert-ai')).toBe(true);
   });
 

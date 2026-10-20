@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { formatClock } from '@nomad/core';
-import { useTranslations } from '@nomad/i18n';
+import { isolateLtr, useTranslations } from '@nomad/i18n';
 import { recommendInstrumental, type InstrumentalChoice, type InstrumentalOption } from '@nomad/review-core';
-import { colors } from '@nomad/ui';
+import { colors, StartText } from '@nomad/ui';
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { useAbPlayers, type AbPlayers } from '../audio/useAbPlayers';
 import { useReviewStore } from '../store';
@@ -71,7 +71,7 @@ export function InstrumentalChooser({ jobId, stems, locked = false }: Props) {
     return (
       <View testID="review-stems-pending" className="flex-row items-center gap-3 rounded-xl border border-border bg-card p-4">
         <ActivityIndicator color={colors.primary} />
-        <Text className="flex-1 text-sm text-text">{t('separating')}</Text>
+        <StartText className="flex-1 text-sm text-text">{t('separating')}</StartText>
       </View>
     );
   }
@@ -80,9 +80,9 @@ export function InstrumentalChooser({ jobId, stems, locked = false }: Props) {
   if (!showCards) {
     return (
       <View className="flex-row items-center gap-2 rounded-xl border border-border bg-card ps-4">
-        <Text testID="review-choice-summary" className="flex-1 text-base text-text">
+        <StartText testID="review-choice-summary" className="flex-1 text-base text-text">
           {t('summaryConfident', { choice: t(LABEL[choice.chosen]) })}
-        </Text>
+        </StartText>
         <Pressable
           testID="review-choice-change"
           accessibilityRole="button"
@@ -92,7 +92,7 @@ export function InstrumentalChooser({ jobId, stems, locked = false }: Props) {
           onPress={() => setExpanded(true)}
           className={`min-h-12 justify-center px-4 ${locked ? 'opacity-50' : ''}`}
         >
-          <Text className="text-base font-semibold text-primary">{t('change')}</Text>
+          <StartText className="text-base font-semibold text-primary">{t('change')}</StartText>
         </Pressable>
       </View>
     );
@@ -116,7 +116,7 @@ export function InstrumentalChooser({ jobId, stems, locked = false }: Props) {
 
   return (
     <View className="gap-3">
-      <Text className="text-sm text-muted">{choice.confident ? t('title') : t('listen')}</Text>
+      <StartText className="text-sm text-muted">{choice.confident ? t('title') : t('listen')}</StartText>
       {CHOICES.map((c) => (
         <ChoiceCard
           key={c}
@@ -133,11 +133,11 @@ export function InstrumentalChooser({ jobId, stems, locked = false }: Props) {
       <AbScrub ab={ab} label={t('scrub')} />
       <BackingStrip jobId={jobId} analysis={stems.analysis} position={ab.position} onAudition={audition} />
       {ab.error ? (
-        <Text testID="review-ab-error" className="text-sm text-danger" accessibilityLiveRegion="polite">
+        <StartText testID="review-ab-error" className="text-sm text-danger" accessibilityLiveRegion="polite">
           {tp(ERROR_KEY[ab.error])}
-        </Text>
+        </StartText>
       ) : null}
-      <Text className="text-sm text-muted">{t('help')}</Text>
+      <StartText className="text-sm text-muted">{t('help')}</StartText>
     </View>
   );
 }
@@ -168,14 +168,14 @@ function ChoiceCard({ choice, selected, recommended, playing, loading, locked, o
         className="min-h-16 flex-1 justify-center gap-1 py-3 ps-4"
       >
         <View className="flex-row flex-wrap items-center gap-2">
-          <Text className="text-base font-bold text-text">{name}</Text>
+          <StartText className="text-base font-bold text-text">{name}</StartText>
           {recommended ? (
-            <Text testID={`review-choice-${choice}-recommended`} className="overflow-hidden rounded-full bg-success/15 px-2 py-0.5 text-xs font-bold text-success">
+            <StartText testID={`review-choice-${choice}-recommended`} className="overflow-hidden rounded-full bg-success/15 px-2 py-0.5 text-xs font-bold text-success">
               {t('recommended')}
-            </Text>
+            </StartText>
           ) : null}
         </View>
-        <Text className="text-sm text-muted">{t(`${LABEL[choice]}Body`)}</Text>
+        <StartText className="text-sm text-muted">{t(`${LABEL[choice]}Body`)}</StartText>
       </Pressable>
       <Pressable
         testID={`review-choice-play-${choice}`}
@@ -203,8 +203,10 @@ function AbScrub({ ab, label }: { ab: AbPlayers; label: string }) {
   const seekFraction = (f: number) => {
     if (ab.duration > 0) void ab.seekTo(clamp01(f) * ab.duration);
   };
+  // Left to right in every language, like the lyrics player: the fill grows from the left and a tap's
+  // locationX is measured from the left (under RTL the fill grew from the right and taps seeked mirrored).
   return (
-    <View className="gap-1">
+    <View testID="review-ab-timeline" className="gap-1" style={{ direction: 'ltr' }}>
       <Pressable
         testID="review-ab-scrub"
         accessibilityRole="adjustable"
@@ -222,9 +224,9 @@ function AbScrub({ ab, label }: { ab: AbPlayers; label: string }) {
           <View className="h-full bg-primary" style={{ width: `${progress * 100}%` }} />
         </View>
       </Pressable>
-      <Text className="text-xs text-muted" style={{ fontVariant: ['tabular-nums'] }}>
-        {tp('time', { position: formatClock(ab.position), duration: formatClock(ab.duration) })}
-      </Text>
+      <StartText testID="review-ab-time" className="text-xs text-muted" style={{ fontVariant: ['tabular-nums'] }}>
+        {isolateLtr(tp('time', { position: formatClock(ab.position), duration: formatClock(ab.duration) }))}
+      </StartText>
     </View>
   );
 }

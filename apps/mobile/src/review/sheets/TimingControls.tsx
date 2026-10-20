@@ -2,9 +2,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { formatClock } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import type { LyricsSegment, ReviewDoc, Word } from '@nomad/review-core';
-import { Button, colors } from '@nomad/ui';
+import { Button, colors, StartText } from '@nomad/ui';
 import { useContext } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import type { ReviewPlayer } from '../audio/useReviewPlayer';
 import { ReviewStoreContext, useReviewStore } from '../store';
@@ -79,7 +79,7 @@ export function StepButton({ testID, label, text, icon, op, replay }: StepButton
       className={`min-h-11 min-w-11 items-center justify-center rounded-lg border border-border bg-bg px-3 ${enabled ? '' : 'opacity-40'}`}
     >
       {text !== undefined ? (
-        <Text className="text-base font-semibold text-text">{text}</Text>
+        <StartText className="text-base font-semibold text-text">{text}</StartText>
       ) : (
         <Ionicons name={icon ?? 'add'} size={20} color={colors.text} />
       )}
@@ -91,7 +91,7 @@ export function StepButton({ testID, label, text, icon, op, replay }: StepButton
 export function StepRow({ label, minus, plus }: { label: string; minus: StepButtonProps; plus: StepButtonProps }) {
   return (
     <View className="flex-row items-center gap-2">
-      <Text className="flex-1 text-base text-text">{label}</Text>
+      <StartText className="flex-1 text-base text-text">{label}</StartText>
       <StepButton icon="remove" {...minus} />
       <StepButton icon="add" {...plus} />
     </View>
@@ -103,7 +103,7 @@ export function UntimedNotice({ testID, onResync }: { testID: string; onResync: 
   const t = useTranslations('review.timing');
   return (
     <View className="gap-2">
-      <Text className="text-base text-danger">{t('untimed')}</Text>
+      <StartText className="text-base text-danger">{t('untimed')}</StartText>
       <Button testID={testID} variant="secondary" label={t('resync')} onPress={onResync} />
     </View>
   );

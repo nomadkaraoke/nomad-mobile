@@ -109,6 +109,13 @@ describe('InstrumentalChooser', () => {
     expect(mockAb.seekTo).toHaveBeenCalledWith(25);
   });
 
+  it('the scrubber and its time read left to right in every language (the fill and the tap maths agree in RTL)', async () => {
+    mockAb = fakeAbPlayers({ duration: 100, position: 6 });
+    await renderChooser();
+    expect(screen.getByTestId('review-ab-timeline').props.style).toEqual(expect.objectContaining({ direction: 'ltr' }));
+    expect(screen.getByTestId('review-ab-time').props.children).toBe('\u20660:06 / 1:40\u2069');
+  });
+
   it('a tap on a highlighted part of the backing strip selects With backing and plays from there', async () => {
     const { store } = await renderChooser(readyStems({ autoApproval: undefined, analysis: { ...readyStems().analysis, recommended_selection: 'clean' } }));
     expect(selected('clean')).toBe(true);

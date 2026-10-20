@@ -2,7 +2,8 @@ import { formatClock } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { lineDirection, type LyricsSegment, type SingerId, type Word } from '@nomad/review-core';
 import { memo } from 'react';
-import { I18nManager, Pressable, Text, View } from 'react-native';
+import { StartText } from '@nomad/ui';
+import { I18nManager, Pressable, View } from 'react-native';
 
 import { LineToolbar, type LineTool } from './LineToolbar';
 import { WordPill, wordMarks, type WordFill } from './WordPill';
@@ -65,9 +66,9 @@ function LineRowInner({
       className={`mx-3 my-1 rounded-xl px-2 py-2 ${selected ? 'border border-primary bg-card' : active ? 'bg-card' : ''}`}
     >
       <View style={{ flexDirection, alignItems: 'flex-start', gap: 8 }}>
-        <Text className={`mt-2 w-10 text-sm ${active ? 'text-primary' : 'text-muted'}`} style={{ fontVariant: ['tabular-nums'] }}>
+        <StartText className={`mt-2 w-10 text-sm ${active ? 'text-primary' : 'text-muted'}`} style={{ fontVariant: ['tabular-nums'] }}>
           {start === null ? t('untimed') : formatClock(start)}
-        </Text>
+        </StartText>
         <View testID={`review-line-${index}-words`} style={{ flex: 1, flexDirection, flexWrap: 'wrap', gap: 2 }}>
           {segment.words.map((w, j) => (
             <WordPill
@@ -90,7 +91,7 @@ function LineRowInner({
             hitSlop={8}
             className={`mt-1 min-w-9 items-center rounded-full px-2 py-1 ${singer === 2 ? 'bg-gold' : singer === 0 ? 'bg-purple' : 'bg-primary'}`}
           >
-            <Text className="text-sm font-bold text-primary-fg">{t(SINGER_KEY[singer])}</Text>
+            <StartText className="text-sm font-bold text-primary-fg">{t(SINGER_KEY[singer])}</StartText>
           </Pressable>
         ) : null}
       </View>

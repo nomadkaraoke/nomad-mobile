@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslations } from '@nomad/i18n';
-import { colors, Sheet } from '@nomad/ui';
+import { colors, Sheet, StartText } from '@nomad/ui';
 import { useCallback, useEffect, useRef } from 'react';
-import { Alert, Platform, Pressable, Text, View } from 'react-native';
+import { Alert, Platform, Pressable, View } from 'react-native';
 
 import type { IconName } from './IconButton';
 
@@ -43,7 +43,7 @@ function Item({ testID, icon, label, danger, disabled, onPress }: ItemProps) {
       className={`min-h-12 flex-row items-center gap-3 rounded-lg px-2 ${disabled ? 'opacity-50' : ''}`}
     >
       <Ionicons name={icon} size={20} color={danger ? colors.danger : colors.text} />
-      <Text className={`text-base ${danger ? 'text-danger' : 'text-text'}`}>{label}</Text>
+      <StartText className={`text-base ${danger ? 'text-danger' : 'text-text'}`}>{label}</StartText>
     </Pressable>
   );
 }

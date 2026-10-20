@@ -2,10 +2,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { getJob } from '@nomad/api-gen';
 import { useTranslations } from '@nomad/i18n';
 import { countUntimedWords } from '@nomad/review-core';
-import { Button, colors } from '@nomad/ui';
+import { Button, colors, StartText } from '@nomad/ui';
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import { instrumentalUrl } from '../audio/mediaSources';
 import { useReviewStore } from '../store';
@@ -58,8 +58,8 @@ export function FinishStep({ jobId, stems, submitter, showChooser, onBackToLyric
       <View testID="review-step-finish" className="flex-1 items-center justify-center gap-3 px-6">
         <View testID="review-finish-success" className="items-center gap-3" accessibilityLiveRegion="polite">
           <Ionicons name="checkmark-circle" size={64} color={colors.success} />
-          <Text className="text-center text-xl font-bold text-text">{t('success')}</Text>
-          <Text className="text-center text-base text-muted">{t('successBody')}</Text>
+          <StartText className="text-center text-xl font-bold text-text">{t('success')}</StartText>
+          <StartText className="text-center text-base text-muted">{t('successBody')}</StartText>
         </View>
       </View>
     );
@@ -79,13 +79,13 @@ export function FinishStep({ jobId, stems, submitter, showChooser, onBackToLyric
           }}
         >
           <View className="gap-1">
-            <Text testID="review-finish-lyrics" className="text-base text-text">
+            <StartText testID="review-finish-lyrics" className="text-base text-text">
               {editCount > 0 ? t('lyricsFixes', { count: editCount }) : t('lyricsApproved')}
-            </Text>
+            </StartText>
             {isDuet ? (
-              <Text testID="review-finish-duet" className="text-base text-text">
+              <StartText testID="review-finish-duet" className="text-base text-text">
                 {t('duet')}
-              </Text>
+              </StartText>
             ) : null}
           </View>
 
@@ -107,9 +107,9 @@ export function FinishStep({ jobId, stems, submitter, showChooser, onBackToLyric
         <View className="gap-2 border-t border-border bg-card p-3">
           {state === 'error' ? (
             <View className="gap-2">
-              <Text testID="review-finish-error" className="text-sm text-danger" accessibilityLiveRegion="polite">
+              <StartText testID="review-finish-error" className="text-sm text-danger" accessibilityLiveRegion="polite">
                 {error === 'network' ? t('failedNetwork') : t('failed')}
-              </Text>
+              </StartText>
               <Button testID="review-finish-retry" label={t('retry')} onPress={() => void submit()} />
             </View>
           ) : (
@@ -122,19 +122,19 @@ export function FinishStep({ jobId, stems, submitter, showChooser, onBackToLyric
             />
           )}
           {state === 'saving' ? (
-            <Text testID="review-finish-saving" className="text-center text-sm text-muted" accessibilityLiveRegion="polite">
+            <StartText testID="review-finish-saving" className="text-center text-sm text-muted" accessibilityLiveRegion="polite">
               {t('saving')}
-            </Text>
+            </StartText>
           ) : null}
           {waitingStems && state !== 'saving' ? (
-            <Text testID="review-finish-waiting-hint" className="text-center text-sm text-muted">
+            <StartText testID="review-finish-waiting-hint" className="text-center text-sm text-muted">
               {t('waitingStemsHint')}
-            </Text>
+            </StartText>
           ) : null}
           {!waitingStems && untimed > 0 ? (
-            <Text testID="review-finish-untimed" className="text-center text-sm text-muted">
+            <StartText testID="review-finish-untimed" className="text-center text-sm text-muted">
               {tl('needTiming', { count: untimed })}
-            </Text>
+            </StartText>
           ) : null}
         </View>
       </View>

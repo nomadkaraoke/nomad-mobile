@@ -1,4 +1,4 @@
-import { useTranslations } from '@nomad/i18n';
+import { isolate, useTranslations } from '@nomad/i18n';
 import {
   deleteWord,
   editWordText,
@@ -9,9 +9,9 @@ import {
   type ReviewDoc,
   type Word,
 } from '@nomad/review-core';
-import { Button, Sheet, TextField } from '@nomad/ui';
+import { Button, Sheet, StartText, TextField } from '@nomad/ui';
 import { useContext, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import { ReviewStoreContext, useReviewStore } from '../store';
 import {
@@ -128,16 +128,17 @@ function WordBody({ s, wi, seg, word, player, onClose, onResyncRequested }: Body
           returnKeyType="done"
           onSubmitEditing={save}
         />
-        <Text className="text-xs text-muted">{t('wordSheet.inputHint')}</Text>
+        <StartText className="text-xs text-muted">{t('wordSheet.inputHint')}</StartText>
         <Button testID="review-word-save" label={t('wordSheet.save')} onPress={save} />
       </View>
 
       {word.ai_corrected ? (
         <View className="flex-row items-center gap-2 rounded-xl bg-purple/25 ps-3">
-          <Text className="flex-1 text-sm text-text">
-            {original !== undefined ? t('wordSheet.aiFrom', { original }) : t('wordSheet.aiChanged')}
-          </Text>
-          <View className="w-28">
+          <StartText className="flex-1 text-sm text-text">
+            {original !== undefined ? t('wordSheet.aiFrom', { original: isolate(original) }) : t('wordSheet.aiChanged')}
+          </StartText>
+          {/* Sized to its label (at least 112 pt): a fixed width broke "Zurücksetzen" mid-word. */}
+          <View testID="review-word-revert-ai-box" className="min-w-28 shrink-0">
             <Button
               testID="review-word-revert-ai"
               variant="secondary"

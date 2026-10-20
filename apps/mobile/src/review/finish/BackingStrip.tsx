@@ -1,9 +1,9 @@
 import { getWaveformData } from '@nomad/api-gen';
 import { useTranslations } from '@nomad/i18n';
 import { normalizePeaks, type BackingVocalsAnalysis } from '@nomad/review-core';
-import { colors, WaveformCanvas, type WaveformMarker } from '@nomad/ui';
+import { colors, StartText, WaveformCanvas, type WaveformMarker } from '@nomad/ui';
 import { useEffect, useMemo, useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 /** Bars in the strip (gen downsamples server-side). */
 export const STRIP_POINTS = 200;
@@ -56,7 +56,7 @@ export function BackingStrip({ jobId, analysis, position, onAudition }: Props) {
 
   return (
     <View className="w-full gap-1 self-stretch">
-      <Text className="text-xs text-muted">{t('stripTitle')}</Text>
+      <StartText className="text-xs text-muted">{t('stripTitle')}</StartText>
       <WaveformCanvas
         testID="review-backing-strip"
         peaks={wave.peaks}

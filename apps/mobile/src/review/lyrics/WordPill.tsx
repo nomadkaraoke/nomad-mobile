@@ -1,7 +1,7 @@
 import { useTranslations } from '@nomad/i18n';
 import type { Word } from '@nomad/review-core';
-import { colors } from '@nomad/ui';
-import { Pressable, Text } from 'react-native';
+import { colors, StartText } from '@nomad/ui';
+import { Pressable } from 'react-native';
 
 /** Why a word deserves a look; the first one present drives the pill's look and testID suffix. */
 export type WordMark = 'untimed' | 'ai' | 'est' | 'gap';
@@ -67,7 +67,7 @@ export function WordPill({ testID, word, marks, fill, rtl, onPress }: Props) {
       hitSlop={{ top: 6, bottom: 6 }}
       className={`rounded-md px-1.5 py-1 ${box}`}
     >
-      <Text
+      <StartText
         testID={first ? `${testID}-${first}` : undefined}
         className={`text-lg ${color} ${estimated ? 'underline' : ''}`}
         style={[
@@ -76,7 +76,7 @@ export function WordPill({ testID, word, marks, fill, rtl, onPress }: Props) {
         ]}
       >
         {word.text}
-      </Text>
+      </StartText>
     </Pressable>
   );
 }

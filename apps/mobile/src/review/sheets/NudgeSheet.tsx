@@ -1,8 +1,8 @@
 import { useTranslations } from '@nomad/i18n';
 import { setWordTiming, shiftLine, type ReviewDoc } from '@nomad/review-core';
-import { Sheet } from '@nomad/ui';
+import { Sheet, StartText } from '@nomad/ui';
 import { useContext, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import { ReviewStoreContext, useReviewStore } from '../store';
 import {
@@ -68,7 +68,7 @@ export function NudgeSheet({ segment: s, player, onClose, onResyncRequested }: N
       {timed ? (
         <View className="gap-3">
           <View className="flex-row items-center gap-2">
-            <Text className="flex-1 text-base text-text">{t('nudge.line')}</Text>
+            <StartText className="flex-1 text-base text-text">{t('nudge.line')}</StartText>
             <StepButton
               testID="review-nudge-line-minus"
               label={t('nudge.lineEarlierA11y')}

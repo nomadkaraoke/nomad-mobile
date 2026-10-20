@@ -46,9 +46,20 @@ describe('PlayerBar', () => {
     expect(player.seekTo).toHaveBeenCalledWith(0);
   });
 
-  it('shows position and duration', () => {
+  it('shows position and duration, kept left to right (RTL layouts reordered it to "duration / position")', () => {
     renderBar({ position: 65, duration: 200 });
-    expect(screen.getByText('1:05 / 3:20')).toBeTruthy();
+    expect(screen.getByTestId('review-player-time').props.children).toBe('\u20661:05 / 3:20\u2069');
+  });
+
+  it('keeps the rate label left to right', () => {
+    renderBar({ rate: 0.75 });
+    expect(screen.getByTestId('review-player-rate-label').props.children).toBe('\u20660.75×\u2069');
+  });
+
+  it('lays the transport and scrubber out left to right in every language (media controls are not mirrored)', () => {
+    renderBar();
+    expect(screen.getByTestId('review-player-transport').props.style).toEqual(expect.objectContaining({ direction: 'ltr' }));
+    expect(screen.getByTestId('review-player-controls').props.style).toEqual(expect.objectContaining({ direction: 'ltr' }));
   });
 
   it('the scrubber seeks by fraction of the duration', () => {
@@ -73,7 +84,7 @@ describe('PlayerBar', () => {
 
   it('toggles speed between 1× and 0.75×', () => {
     const { player } = renderBar();
-    expect(screen.getByTestId('review-player-rate')).toHaveTextContent('1×');
+    expect(screen.getByTestId('review-player-rate')).toHaveTextContent('\u20661×\u2069');
     fireEvent.press(screen.getByTestId('review-player-rate'));
     expect(player.setRate).toHaveBeenCalledWith(0.75);
   });

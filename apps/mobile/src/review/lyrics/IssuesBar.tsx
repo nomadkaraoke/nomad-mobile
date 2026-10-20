@@ -1,8 +1,9 @@
 import { useTranslations } from '@nomad/i18n';
 import type { Issue } from '@nomad/review-core';
-import { colors } from '@nomad/ui';
-import { Text, View } from 'react-native';
+import { colors, StartText } from '@nomad/ui';
+import { View } from 'react-native';
 
+import { directionalIcon } from '../directionalIcon';
 import { IconButton } from '../IconButton';
 
 type Props = {
@@ -29,11 +30,11 @@ export function IssuesBar({ issues, cursor, onStep }: Props) {
 
   return (
     <View className="mx-3 mb-1 flex-row items-center rounded-xl border border-gold/40 bg-card ps-3">
-      <Text testID="review-issues-label" className="flex-1 text-sm font-semibold text-gold" numberOfLines={1} accessibilityLiveRegion="polite">
+      <StartText testID="review-issues-label" className="flex-1 text-sm font-semibold text-gold" numberOfLines={1} accessibilityLiveRegion="polite">
         {label}
-      </Text>
-      <IconButton testID="review-issues-prev" icon="chevron-back" label={t('prev')} color={colors.gold} onPress={() => step(-1)} />
-      <IconButton testID="review-issues-next" icon="chevron-forward" label={t('next')} color={colors.gold} onPress={() => step(1)} />
+      </StartText>
+      <IconButton testID="review-issues-prev" icon={directionalIcon('chevron-back')} label={t('prev')} color={colors.gold} onPress={() => step(-1)} />
+      <IconButton testID="review-issues-next" icon={directionalIcon('chevron-forward')} label={t('next')} color={colors.gold} onPress={() => step(1)} />
     </View>
   );
 }

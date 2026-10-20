@@ -247,7 +247,8 @@ describe('TapSyncSheet', () => {
     expect(player.setRate).toHaveBeenLastCalledWith(0.75);
     fireEvent.press(rate());
     expect(player.setRate).toHaveBeenLastCalledWith(0.5);
-    expect(rate()).toHaveTextContent('0.5×');
+    // Kept left to right inside RTL text.
+    expect(rate()).toHaveTextContent('\u20660.5×\u2069');
     fireEvent.press(rate());
     expect(player.setRate).toHaveBeenLastCalledWith(1);
   });

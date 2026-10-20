@@ -1,4 +1,4 @@
-import { useTranslations } from '@nomad/i18n';
+import { isolateLtr, useTranslations } from '@nomad/i18n';
 import {
   commitTapSync,
   createTapSync,
@@ -10,10 +10,10 @@ import {
   type ReviewDoc,
   type TapSyncState,
 } from '@nomad/review-core';
-import { Button, colors, Sheet } from '@nomad/ui';
+import { Button, colors, Sheet, StartText } from '@nomad/ui';
 import * as Haptics from 'expo-haptics';
 import { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { I18nManager, Platform, Pressable, Switch, Text, View, type AccessibilityActionEvent } from 'react-native';
+import { I18nManager, Platform, Pressable, Switch, View, type AccessibilityActionEvent } from 'react-native';
 
 import type { ReviewPlayer } from '../audio/useReviewPlayer';
 import { REPLAY_PAD_S } from '../sheets/TimingControls';
@@ -253,7 +253,7 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
     <Sheet visible fullHeight onClose={onClose} title={t('sync.title')} testID="review-sync-sheet" closeLabel={t('close')}>
       <View style={{ flex: 1 }}>
         <View className="items-center gap-1 py-2">
-          <Text
+          <StartText
             testID="review-sync-current-word"
             className="text-4xl font-bold text-text"
             numberOfLines={1}
@@ -261,10 +261,10 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
             accessibilityLiveRegion="polite"
           >
             {current ? current.text : phase === 'done' ? t('sync.lineDone') : t('sync.stopped')}
-          </Text>
-          <Text className="min-h-6 text-base text-muted" numberOfLines={1}>
+          </StartText>
+          <StartText className="min-h-6 text-base text-muted" numberOfLines={1}>
             {upNext}
-          </Text>
+          </StartText>
         </View>
 
         <SyncedWords segment={shown.segment} state={shown.state} playing={hearing} position={player.position} />
@@ -287,8 +287,8 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
             onResponderTerminate={up}
             className={`my-3 flex-1 items-center justify-center rounded-3xl ${st.holding ? 'bg-primary' : 'bg-primary/20'}`}
           >
-            <Text className={`text-3xl font-bold ${st.holding ? 'text-primary-fg' : 'text-primary'}`}>{t('sync.pad')}</Text>
-            <Text className="mt-2 px-6 text-center text-sm text-muted">{t('sync.hint')}</Text>
+            <StartText className={`text-3xl font-bold ${st.holding ? 'text-primary-fg' : 'text-primary'}`}>{t('sync.pad')}</StartText>
+            <StartText className="mt-2 px-6 text-center text-sm text-muted">{t('sync.hint')}</StartText>
           </View>
         ) : (
           <View className="my-3 flex-1 justify-center gap-3">
@@ -300,7 +300,7 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
         )}
 
         <View className="flex-row items-center gap-3 py-2">
-          <Text className="flex-1 text-sm text-text">{t('sync.continue')}</Text>
+          <StartText className="flex-1 text-sm text-text">{t('sync.continue')}</StartText>
           <Switch
             testID="review-sync-continue"
             accessibilityLabel={t('sync.continue')}
@@ -317,7 +317,7 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
             onPress={cycleRate}
             className="min-h-12 min-w-16 items-center justify-center rounded-lg border border-border bg-bg px-3"
           >
-            <Text className="text-base font-semibold text-text">{t('player.rate', { rate })}</Text>
+            <StartText className="text-base font-semibold text-text">{isolateLtr(t('player.rate', { rate }))}</StartText>
           </Pressable>
           <View className="flex-1">
             <Button testID="review-sync-restart" label={t('sync.restart')} variant="secondary" onPress={restart} />
@@ -357,7 +357,7 @@ function SyncedWords({
         // once synced) stopped being drawn at all, so synced words vanished from the row.
         const color = hearing ? colors.primaryFg : current ? colors.text : synced ? colors.primary : colors.muted;
         return (
-          <Text
+          <StartText
             key={w.id}
             testID={`review-sync-word-${i}`}
             accessibilityState={{ selected: synced }}
@@ -365,7 +365,7 @@ function SyncedWords({
             style={{ color }}
           >
             {w.text}
-          </Text>
+          </StartText>
         );
       })}
     </View>
