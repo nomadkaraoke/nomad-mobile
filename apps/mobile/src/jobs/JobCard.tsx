@@ -4,10 +4,10 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, Text } from '@nomad/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import { Image, Pressable, View } from 'react-native';
 
-import { openReview } from './openReview';
+import { openWebHandoff } from './openWebHandoff';
 import { youtubeId, youtubeThumbnail } from './youtube';
 
 type Kind = 'working' | 'review' | 'duration' | 'web' | 'done' | 'failed' | 'cancelled';
@@ -82,8 +82,14 @@ export function JobCard({ job }: { job: JobSummary }) {
     >
       {heading}
       {kind === 'working' ? <Progress job={job} /> : null}
-      {kind === 'review' ? <ReviewAction id={id} body={t('reviewBody')} label={t('reviewLyrics')} testID={`job-review-${id}`} /> : null}
-      {kind === 'web' ? <ReviewAction id={id} label={t('finishOnWeb')} testID={`job-web-${id}`} /> : null}
+      {kind === 'review' ? (
+        <>
+          <Text variant="muted">{t('reviewBody')}</Text>
+          {/* The native review (Phase 2): the web stays reachable from its menu. */}
+          <Button testID={`job-review-${id}`} label={t('reviewLyrics')} onPress={() => router.push({ pathname: '/review/[id]', params: { id } })} />
+        </>
+      ) : null}
+      {kind === 'web' ? <WebHandoffAction id={id} label={t('finishOnWeb')} testID={`job-web-${id}`} /> : null}
       {kind === 'duration' ? (
         <>
           <Text variant="muted">{t('durationBody')}</Text>
@@ -156,15 +162,15 @@ function Progress({ job }: { job: JobSummary }) {
   );
 }
 
-type ReviewActionProps = { id: string; label: string; testID: string; body?: ReactNode; variant?: 'primary' | 'secondary' };
+type WebHandoffActionProps = { id: string; label: string; testID: string; variant?: 'primary' | 'secondary' };
 
-function ReviewAction({ id, label, testID, body, variant }: ReviewActionProps) {
+/** Opens the job on the website (signed-in handoff) for the needs-you steps the app doesn't do natively. */
+function WebHandoffAction({ id, label, testID, variant }: WebHandoffActionProps) {
   const t = useTranslations('jobs');
   const queryClient = useQueryClient();
-  const open = useMutation({ mutationFn: () => openReview(id, queryClient) });
+  const open = useMutation({ mutationFn: () => openWebHandoff(id, queryClient) });
   return (
     <>
-      {body ? <Text variant="muted">{body}</Text> : null}
       <Button testID={testID} variant={variant} label={label} loading={open.isPending} onPress={() => open.mutate()} />
       {open.isError ? (
         <Text variant="error" testID={`${testID}-error`}>
@@ -209,7 +215,7 @@ function StalledDownload({ job }: { job: JobSummary }) {
           {t('retryFailed')}
         </Text>
       ) : null}
-      <ReviewAction id={id} label={t('chooseAudioOnWeb')} testID={`job-web-${id}`} variant="secondary" />
+      <WebHandoffAction id={id} label={t('chooseAudioOnWeb')} testID={`job-web-${id}`} variant="secondary" />
     </>
   );
 }

@@ -443,6 +443,54 @@
       "done": "Done",
       "continue": "Keep going into the next lines",
       "rateA11y": "Speed {rate}×. Tap to change"
+    },
+    "webFailed": "Couldn't open the website. Try again.",
+    "finish": {
+      "lyricsFixes": "{count, plural, one {Lyrics: # fix} other {Lyrics: # fixes}}",
+      "lyricsApproved": "Lyrics: approved as is",
+      "duet": "Duet: 2 singers",
+      "submit": "Make my video",
+      "saving": "Saving…",
+      "waitingStems": "Waiting for the music to finish separating…",
+      "waitingStemsHint": "You can leave now: we'll keep your edits, and the song will say Review again when it's ready.",
+      "failed": "We couldn't start your video. Your edits are safe on this phone.",
+      "failedNetwork": "Trouble reaching Nomad Karaoke. Your edits are safe on this phone.",
+      "retry": "Retry",
+      "success": "Your video is on its way!",
+      "successBody": "We'll show you its progress."
+    },
+    "instrumental": {
+      "title": "Instrumental",
+      "listen": "Have a listen and choose",
+      "clean": "Clean",
+      "cleanBody": "Just the music, no backing singers",
+      "withBacking": "With backing vocals",
+      "withBackingBody": "Keeps the backing singers",
+      "recommended": "✓ Recommended",
+      "help": "If you can hear the lead singer's voice coming through, choose Clean.",
+      "separating": "Separating the music… usually 2–3 minutes",
+      "summaryConfident": "Instrumental: {choice} ✓",
+      "change": "Change",
+      "changeA11y": "Change the instrumental",
+      "playA11y": "Listen to {choice}",
+      "pauseA11y": "Pause {choice}",
+      "scrub": "Instrumental position",
+      "stripTitle": "Backing vocals",
+      "stripA11y": "Backing vocals. Tap a highlighted part to hear it with backing vocals"
+    },
+    "preview": {
+      "start": "Preview the video",
+      "generating": "Making your preview…",
+      "slow": "Starting a video server, this can take a couple of minutes",
+      "error": "We couldn't make the preview.",
+      "retry": "Try again",
+      "untimed": "Some words still need timing before we can make a preview.",
+      "backToLyrics": "Back to lyrics",
+      "audio": "Preview audio",
+      "song": "Song",
+      "instrumental": "Instrumental",
+      "note": "This is a quick check that the lyrics are in sync, on a plain black background.",
+      "translationNote": "Your {language} translation is added after review."
     }
   }
 }

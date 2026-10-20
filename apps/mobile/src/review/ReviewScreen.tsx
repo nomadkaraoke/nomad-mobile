@@ -2,11 +2,13 @@ import { useTranslations } from '@nomad/i18n';
 import { countUntimedWords, planSteps, type CorrectionData, type ReviewStep } from '@nomad/review-core';
 import { colors } from '@nomad/ui';
 import { Stack, useNavigation } from 'expo-router';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AppState, Pressable, Text, View } from 'react-native';
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { Alert, AppState, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useReviewPlayer } from './audio/useReviewPlayer';
+import { continueOnWeb } from './continueOnWeb';
 import { FinishStep } from './finish/FinishStep';
 import { LyricsStep, type LyricsStepHandle, type TextRequest } from './lyrics/LyricsStep';
 import { useVocalsPeaks } from './lyrics/useVocalsPeaks';
@@ -33,8 +35,6 @@ export type ReviewScreenProps = {
   jobId: string;
   /** The loaded correction doc (`useReviewLoader`). */
   data: CorrectionData;
-  /** Menu "Continue on web"; hidden when undefined. */
-  onContinueOnWeb?: () => void;
 };
 
 /** The native review (spec §4): one store per open review, a Lyrics step and a Finish step. */
@@ -69,7 +69,7 @@ function initialStems(data: CorrectionData): StemsState {
   };
 }
 
-function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
+function ReviewBody({ jobId, data }: ReviewScreenProps) {
   const t = useTranslations('review');
   const navigation = useNavigation();
   const plan = useMemo(() => planSteps(data), [data]);
@@ -85,6 +85,7 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
   );
   const lyricsRef = useRef<LyricsStepHandle>(null);
   const confirmDiscard = useConfirmDiscard();
+  const continueWeb = useContinueOnWeb(jobId);
 
   const canUndo = useReviewStore((s) => s.undo.canUndo);
   const undoLast = useReviewStore((s) => s.undoLast);
@@ -179,7 +180,7 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
           onNext={() => goTo('finish')}
         />
       ) : (
-        <FinishStep />
+        <FinishStep jobId={jobId} stems={stems} showChooser={plan.showChooser} onBackToLyrics={() => setStep('lyrics')} />
       )}
 
       {sheet?.kind === 'word' ? (
@@ -227,10 +228,26 @@ function ReviewBody({ jobId, data, onContinueOnWeb }: ReviewScreenProps) {
         isDuet={isDuet}
         onSetDuet={setDuet}
         onDiscard={discard}
-        onContinueOnWeb={onContinueOnWeb}
+        onContinueOnWeb={continueWeb}
       />
     </SafeAreaView>
   );
+}
+
+/**
+ * Menu "Continue on web" (spec §4.7): writes the pending draft, hands the edits to gen as a review
+ * session, then opens the signed-in web review. A failed handoff says so; the edits stay on the phone.
+ */
+function useContinueOnWeb(jobId: string): () => void {
+  const t = useTranslations('review');
+  const store = useContext(ReviewStoreContext);
+  const queryClient = useQueryClient();
+  return useCallback(() => {
+    if (!store) return;
+    store.getState().flushDraft();
+    const { doc, editCount } = store.getState();
+    continueOnWeb(jobId, doc, editCount, queryClient).catch(() => Alert.alert(t('webFailed')));
+  }, [store, jobId, queryClient, t]);
 }
 
 const STEPS: ReviewStep[] = ['lyrics', 'finish'];

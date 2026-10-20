@@ -2,6 +2,7 @@ import { ApiError } from '@nomad/api-gen';
 import { IntlProvider } from '@nomad/i18n';
 import type { CorrectionData } from '@nomad/review-core';
 import { WaveformCanvas } from '@nomad/ui';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { router, Slot, Stack } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
@@ -30,7 +31,14 @@ jest.mock('@nomad/api-gen', () => ({
   reportClientEvent: jest.fn(async () => {}),
   startReview: jest.fn(),
   getCorrectionData: jest.fn(),
+  getJob: jest.fn(() => new Promise(() => {})),
+  getWaveformData: jest.fn(() => new Promise(() => {})),
+  requestPreview: jest.fn(),
 }));
+jest.mock('../../review/continueOnWeb', () => ({ continueOnWeb: jest.fn(async () => {}) }));
+jest.mock('../../jobs/openWebHandoff', () => ({ openWebHandoff: jest.fn(async () => {}) }));
+const { continueOnWeb } = jest.requireMock('../../review/continueOnWeb') as { continueOnWeb: jest.Mock };
+const { openWebHandoff } = jest.requireMock('../../jobs/openWebHandoff') as { openWebHandoff: jest.Mock };
 const gen = jest.requireMock('@nomad/api-gen') as Record<string, jest.Mock>;
 
 const STEMS = {
@@ -40,14 +48,17 @@ const STEMS = {
   ],
 };
 
-let screenProps: { data: CorrectionData; onContinueOnWeb?: () => void } = { data: cleanFixture() };
+let screenProps: { data: CorrectionData } = { data: cleanFixture() };
+let queryClient = new QueryClient();
 
 const stackLayout = {
   default: function Layout() {
     return (
-      <IntlProvider locale="en">
-        <Stack />
-      </IntlProvider>
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <Stack />
+        </IntlProvider>
+      </QueryClientProvider>
     );
   },
 };
@@ -56,8 +67,8 @@ const stackLayout = {
  * The screen inside a real Stack (it sets its header and listens for back), pushed over a home screen,
  * with the mount-time requests (peaks, warmup) settled.
  */
-async function renderScreen(data: CorrectionData, props: { onContinueOnWeb?: () => void } = {}) {
-  screenProps = { data, ...props };
+async function renderScreen(data: CorrectionData) {
+  screenProps = { data };
   renderRouter(
     {
       _layout: stackLayout,
@@ -90,6 +101,7 @@ beforeEach(() => {
   jest.restoreAllMocks();
   (jest.requireMock('react-native-mmkv') as { __resetMMKV(): void }).__resetMMKV();
   mockPlayer = fakePlayer();
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   gen.getVocalsPeaks!.mockResolvedValue({ status: 'ready', peaks: 'AAD/', rate: 1 });
 });
 
@@ -146,6 +158,29 @@ describe('ReviewScreen', () => {
       router.back();
     });
     expect(screen.getByTestId('home')).toBeTruthy();
+  });
+
+  it('Finish: Make my video waits for the stems; the stems poll landing them enables it', async () => {
+    gen.getInstrumentalUrls!.mockResolvedValue({ options: STEMS.instrumental_options, audioComplete: true });
+    jest.useFakeTimers();
+    await renderScreen(cleanFixture({ auto_approval: { lyrics: { confident: true } } }));
+    expect(screen.getByTestId('review-stems-pending')).toBeTruthy();
+    expect(screen.getByTestId('review-finish-submit').props.accessibilityState.disabled).toBe(true);
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(15_000);
+    });
+    expect(screen.queryByTestId('review-stems-pending')).toBeNull();
+    expect(screen.getByTestId('review-finish-submit').props.accessibilityState.disabled).toBe(false);
+    jest.useRealTimers();
+  });
+
+  it('Finish: an untimed preview (422) goes back to the Lyrics step', async () => {
+    gen.requestPreview!.mockRejectedValue(new ApiError(422, 'untimed'));
+    await renderScreen(cleanFixture({ auto_approval: { lyrics: { confident: false } }, ...STEMS }));
+    fireEvent.press(screen.getByTestId('review-lyrics-next'));
+    await act(async () => fireEvent.press(screen.getByTestId('review-preview-start')));
+    fireEvent.press(screen.getByTestId('review-preview-back'));
+    expect(screen.getByTestId('review-step-lyrics')).toBeTruthy();
   });
 
   it('vocals fall back to the song until the stems are ready', async () => {
@@ -256,7 +291,6 @@ describe('ReviewScreen', () => {
   it('menu: Mark as duet shows singer chips; Not a duet hides them', async () => {
     await renderScreen(correctionsFixture());
     fireEvent.press(screen.getByTestId('review-menu'));
-    expect(screen.queryByTestId('review-menu-web')).toBeNull();
     expect(screen.getByTestId('review-menu-duet')).toHaveTextContent('Mark as duet');
     fireEvent.press(screen.getByTestId('review-menu-duet'));
     expect(screen.getByTestId('review-line-0-singer')).toBeTruthy();
@@ -266,12 +300,31 @@ describe('ReviewScreen', () => {
     expect(screen.queryByTestId('review-line-0-singer')).toBeNull();
   });
 
-  it('menu: Continue on web shows when wired', async () => {
-    const onContinueOnWeb = jest.fn();
-    await renderScreen(correctionsFixture(), { onContinueOnWeb });
+  it('menu: Continue on web, once the sheet is gone, hands over the current edits and edit count', async () => {
+    await renderScreen(correctionsFixture());
+    deleteFirstLine();
     fireEvent.press(screen.getByTestId('review-menu'));
     fireEvent.press(screen.getByTestId('review-menu-web'));
-    expect(onContinueOnWeb).toHaveBeenCalled();
+    // The in-app browser waits for the Modal's dismissal, like the discard Alert.
+    expect(continueOnWeb).not.toHaveBeenCalled();
+    const sheet = screen.UNSAFE_getAllByType(Modal).find((m) => m.props.testID === 'review-menu-sheet')!;
+    act(() => sheet.props.onDismiss());
+    expect(continueOnWeb).toHaveBeenCalledTimes(1);
+    const [jobId, doc, editCount] = continueOnWeb.mock.calls[0]!;
+    expect(jobId).toBe('j1');
+    expect(editCount).toBe(1);
+    expect(doc.segments).toHaveLength(3);
+  });
+
+  it('menu: a failed handoff says so', async () => {
+    const alert = jest.spyOn(Alert, 'alert');
+    continueOnWeb.mockRejectedValueOnce(new Error('boom'));
+    await renderScreen(correctionsFixture());
+    fireEvent.press(screen.getByTestId('review-menu'));
+    fireEvent.press(screen.getByTestId('review-menu-web'));
+    const sheet = screen.UNSAFE_getAllByType(Modal).find((m) => m.props.testID === 'review-menu-sheet')!;
+    await act(async () => sheet.props.onDismiss());
+    expect(alert).toHaveBeenCalledWith("Couldn't open the website. Try again.");
   });
 
   it('menu: Discard closes the sheet, asks once it is dismissed (iOS), then resets', async () => {
@@ -335,9 +388,11 @@ describe('review route', () => {
   const layout = {
     default: function Layout() {
       return (
-        <IntlProvider locale="en">
-          <Slot />
-        </IntlProvider>
+        <QueryClientProvider client={queryClient}>
+          <IntlProvider locale="en">
+            <Slot />
+          </IntlProvider>
+        </QueryClientProvider>
       );
     },
   };
@@ -352,5 +407,14 @@ describe('review route', () => {
     gen.getCorrectionData!.mockResolvedValue(cleanFixture());
     fireEvent.press(screen.getByTestId('review-retry'));
     expect(await screen.findByTestId('review-screen')).toBeTruthy();
+  });
+
+  it('a load error also offers Continue on web (the escape hatch)', async () => {
+    jest.useRealTimers();
+    gen.startReview!.mockRejectedValue(new ApiError(404, 'nope'));
+    renderRouter({ _layout: layout, 'review/[id]': { default: ReviewRoute } }, { initialUrl: '/review/j1' });
+    const web = await screen.findByTestId('review-load-error-web');
+    await act(async () => fireEvent.press(web));
+    expect(openWebHandoff).toHaveBeenCalledWith('j1', queryClient);
   });
 });

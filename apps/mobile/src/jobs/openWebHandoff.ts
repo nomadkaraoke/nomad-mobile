@@ -6,12 +6,12 @@ import { GEN_WEB_URL } from '../config';
 import { currentLocale } from '../locale';
 
 /**
- * The review bridge (spec §4.8, minimal; Phase 2 replaces it): a single-use signed-in link to the
+ * The web handoff (Phase 1 §4.8): a single-use signed-in link to the
  * job's web review, opened in the in-app browser. Gen only mints one for a job in review (409
  * otherwise), so other needs-you jobs open the web app instead. When the browser closes the list
  * refetches. (Android resolves as soon as the tab opens; the foreground refetch covers its return.)
  */
-export async function openReview(jobId: string, queryClient: QueryClient): Promise<void> {
+export async function openWebHandoff(jobId: string, queryClient: QueryClient): Promise<void> {
   let url: string;
   try {
     url = await createHandoffUrl(jobId, currentLocale());

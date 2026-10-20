@@ -60,6 +60,27 @@ jest.mock('expo-video', () => {
   const { View } = jest.requireActual('react-native');
   return { useVideoPlayer: jest.fn(() => ({ play: jest.fn() })), VideoView: (props) => createElement(View, props) };
 });
+// The review's native audio (expo-audio has no JS fallback under jest) and haptics. Suites that test the
+// audio hooks mock expo-audio themselves; this stub only lets screens that create players render.
+jest.mock('expo-audio', () => ({
+  createAudioPlayer: jest.fn(() => ({
+    muted: false,
+    currentTime: 0,
+    playing: false,
+    play: jest.fn(),
+    pause: jest.fn(),
+    seekTo: jest.fn(async () => {}),
+    replace: jest.fn(),
+    remove: jest.fn(),
+    setPlaybackRate: jest.fn(),
+    addListener: jest.fn(() => ({ remove: jest.fn() })),
+  })),
+}));
+jest.mock('expo-haptics', () => ({
+  selectionAsync: jest.fn(async () => {}),
+  notificationAsync: jest.fn(async () => {}),
+  NotificationFeedbackType: { Success: 'success', Warning: 'warning', Error: 'error' },
+}));
 jest.mock('expo-clipboard', () => ({ setStringAsync: jest.fn(async () => true) }));
 jest.mock('expo-media-library', () => ({ requestPermissionsAsync: jest.fn(), Asset: { create: jest.fn() } }));
 jest.mock('expo-file-system', () => {

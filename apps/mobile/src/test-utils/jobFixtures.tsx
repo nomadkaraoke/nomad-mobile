@@ -24,7 +24,11 @@ export const job = (over: JobOverrides): JobSummary =>
     ...over,
   }) as JobSummary;
 
-/** App routes with the ready screen (/job/[id]) stubbed, so Make-tab tests need none of its native modules. */
+/** App routes with the ready screen (/job/[id]) and the review (/review/[id]) stubbed, so Make-tab tests need none of their native modules. */
 export function jobRoutes() {
-  return { ...makeRoutes(), 'job/[id]': () => <View testID="job-ready-stub" /> };
+  return {
+    ...makeRoutes(),
+    'job/[id]': () => <View testID="job-ready-stub" />,
+    'review/[id]': () => <View testID="review-stub" />,
+  };
 }

@@ -6,7 +6,7 @@ import { Asset, requestPermissionsAsync } from 'expo-media-library';
 import { router } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
 import { useVideoPlayer } from 'expo-video';
-import { Linking, Platform, Share, StyleSheet } from 'react-native';
+import { Linking, Platform, Share, StyleSheet, View } from 'react-native';
 
 import { useAuth } from '../auth/store';
 import { copiedToast } from '../jobs/readyUi';
@@ -266,6 +266,15 @@ it('a job that is not finished says so', async () => {
   open(ready({ status: 'rendering_video' }));
   expect(await screen.findByTestId('ready-not-ready')).toBeTruthy();
   expect(screen.queryByTestId('ready-download')).toBeNull();
+});
+
+it('a job waiting for review offers Review lyrics, which opens the native review', async () => {
+  gen.getJob.mockResolvedValue(ready({ status: 'awaiting_review' }));
+  const app = renderRouter({ ...appRoutes(), 'review/[id]': () => <View testID="review-stub" /> }, { initialUrl: '/job/r1' });
+  fireEvent.press(await screen.findByTestId('ready-review'));
+  expect(await screen.findByTestId('review-stub')).toBeTruthy();
+  await waitFor(() => expect(app.getPathname()).toBe('/review/r1'));
+  expect(screen.queryByTestId('ready-not-ready')).toBeNull();
 });
 
 it('a failed load offers Try again', async () => {

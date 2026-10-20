@@ -1,6 +1,7 @@
 // Correction-doc fixtures (shaped like gen's local-stack review fixtures) and a render helper for review tests.
 import { IntlProvider } from '@nomad/i18n';
 import type { CorrectionData, LyricsSegment, VocalGap, Word } from '@nomad/review-core';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react-native';
 import type { ReactElement } from 'react';
 
@@ -117,18 +118,63 @@ export function rtlFixture(): CorrectionData {
   ]);
 }
 
-/** Renders `ui` inside English i18n and a fresh review store for `data`. */
+/** Renders `ui` inside English i18n, a fresh query client and a fresh review store for `data`. */
 export function renderReview(ui: ReactElement, data: CorrectionData, jobId = 'j1') {
   const store = createReviewStore(jobId, data);
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   const wrap = (el: ReactElement) => (
-    <IntlProvider locale="en">
-      <ReviewStoreContext.Provider value={store}>{el}</ReviewStoreContext.Provider>
-    </IntlProvider>
+    <QueryClientProvider client={queryClient}>
+      <IntlProvider locale="en">
+        <ReviewStoreContext.Provider value={store}>{el}</ReviewStoreContext.Provider>
+      </IntlProvider>
+    </QueryClientProvider>
   );
   const utils = render(wrap(ui));
   /** Re-render with new props, inside the same providers and store. */
   const rerenderUi = (el: ReactElement) => utils.rerender(wrap(el));
-  return { store, ...utils, rerenderUi };
+  return { store, queryClient, ...utils, rerenderUi };
+}
+
+/** A stand-in for useAbPlayers: every command is a jest.fn; tests mutate the state fields. */
+export function fakeAbPlayers(over: Record<string, unknown> = {}) {
+  return {
+    active: 'clean' as 'clean' | 'with_backing',
+    setActive: jest.fn(),
+    play: jest.fn(),
+    pause: jest.fn(),
+    seekTo: jest.fn(async () => {}),
+    playing: false,
+    position: 0,
+    duration: 60,
+    loading: false,
+    error: null as 'load_failed' | 'play_failed' | null,
+    ...over,
+  };
+}
+
+/** Instrumental stems as the stems poll hands them to Finish (both stems separated). */
+export const STEM_OPTIONS = [
+  { id: 'clean', label: 'Clean', audio_url: '/api/review/j1/instrumental-audio/clean' },
+  { id: 'with_backing', label: 'With backing', audio_url: '/api/review/j1/instrumental-audio/with_backing' },
+];
+
+export function readyStems(over: Record<string, unknown> = {}) {
+  return {
+    options: STEM_OPTIONS,
+    audioComplete: true,
+    analysis: {
+      has_audible_content: true,
+      total_duration_seconds: 30,
+      audible_segments: [{ start_seconds: 10, end_seconds: 20, duration_seconds: 10 }],
+      recommended_selection: 'with_backing',
+      total_audible_duration_seconds: 10,
+      audible_percentage: 33,
+      silence_threshold_db: -40,
+    },
+    autoApproval: undefined as CorrectionData['auto_approval'],
+    ready: true,
+    ...over,
+  };
 }
 
 /** A stand-in for useReviewPlayer: every command is a jest.fn; tests mutate the state fields. */

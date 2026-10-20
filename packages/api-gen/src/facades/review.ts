@@ -95,13 +95,14 @@ export async function saveCorrections(jobId: string, data: CorrectionData, isDue
 }
 
 /**
- * Final call of Finish. `auto` lets gen resolve the instrumental from its own verdict.
+ * Final call of Finish. `auto` lets gen resolve the instrumental from its own verdict; `custom` is the
+ * instrumental the singer uploaded (gen accepts it only for such jobs, as the web does).
  * Always sends `is_duet` (`isDuet ?? false`): on complete gen only latches the flag up, never down.
  */
 export async function completeReview(
   jobId: string,
   data: CorrectionData,
-  selection: 'clean' | 'with_backing' | 'auto',
+  selection: 'clean' | 'with_backing' | 'auto' | 'custom',
   isDuet?: boolean,
 ): Promise<{ status: string }> {
   const { data: body } = await completeReviewApiReviewJobIdCompletePost({

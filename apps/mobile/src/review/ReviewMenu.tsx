@@ -74,10 +74,8 @@ export function ReviewMenu({ visible, onClose, isDuet, onSetDuet, onDiscard, onC
             testID="review-menu-web"
             icon="globe-outline"
             label={t('menuWeb')}
-            onPress={() => {
-              onClose();
-              onContinueOnWeb();
-            }}
+            // Opens the in-app browser: like the Alert, wait until the sheet has gone.
+            onPress={() => closeThen(onContinueOnWeb)}
           />
         ) : null}
         <Item
