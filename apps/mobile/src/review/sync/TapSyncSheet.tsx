@@ -352,19 +352,17 @@ function SyncedWords({
         const hearing =
           playing && synced && w.start_time !== null && w.end_time !== null && position >= w.start_time && position < w.end_time;
         const current = !state.done && i === state.wordIndex;
-        const look = hearing
-          ? 'bg-primary text-primary-fg'
-          : current
-            ? 'border border-primary text-text'
-            : synced
-              ? 'text-primary'
-              : 'text-muted';
+        const look = hearing ? 'border border-primary bg-primary' : current ? 'border border-primary' : 'border border-transparent';
+        // Colour by style, not class: on Android a word whose text-* class changed after mount (to text-primary
+        // once synced) stopped being drawn at all, so synced words vanished from the row.
+        const color = hearing ? colors.primaryFg : current ? colors.text : synced ? colors.primary : colors.muted;
         return (
           <Text
             key={w.id}
             testID={`review-sync-word-${i}`}
             accessibilityState={{ selected: synced }}
             className={`rounded-md px-1.5 py-0.5 text-lg ${look}`}
+            style={{ color }}
           >
             {w.text}
           </Text>

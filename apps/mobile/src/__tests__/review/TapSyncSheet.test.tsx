@@ -1,6 +1,8 @@
 import type { CorrectionData } from '@nomad/review-core';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { colors } from '@nomad/ui';
 import * as Haptics from 'expo-haptics';
+import { StyleSheet } from 'react-native';
 
 import * as latency from '../../review/sync/latency';
 import { TapSyncSheet } from '../../review/sync/TapSyncSheet';
@@ -138,6 +140,18 @@ describe('TapSyncSheet', () => {
     expect(screen.getByTestId('review-sync-current-word')).toHaveTextContent('my');
     expect(screen.getByTestId('review-sync-word-0').props.accessibilityState).toEqual({ selected: true });
     expect(screen.getByTestId('review-sync-word-2').props.accessibilityState).toEqual({ selected: false });
+  });
+
+  it('colours the words by style, not by a text class that changes after mount (Android stopped drawing them)', async () => {
+    const { player } = await renderSheet(0);
+    tap(player, 10.1);
+    const colorOf = (i: number) => StyleSheet.flatten(screen.getByTestId(`review-sync-word-${i}`).props.style).color;
+    expect(colorOf(0)).toBe(colors.primary); // synced
+    expect(colorOf(1)).toBe(colors.text); // current
+    expect(colorOf(2)).toBe(colors.muted); // still to come
+    for (const i of [0, 1, 2]) {
+      expect(screen.getByTestId(`review-sync-word-${i}`).props.className).not.toMatch(/\btext-(primary|text|muted)\b/);
+    }
   });
 
   it('Restart resets the pass and re-seeks to the lead-in', async () => {
