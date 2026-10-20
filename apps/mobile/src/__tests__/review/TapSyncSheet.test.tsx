@@ -1,8 +1,6 @@
 import type { CorrectionData } from '@nomad/review-core';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import * as Haptics from 'expo-haptics';
-import { State } from 'react-native-gesture-handler';
-import { fireGestureHandler, getByGestureTestId } from 'react-native-gesture-handler/jest-utils';
 
 import * as latency from '../../review/sync/latency';
 import { TapSyncSheet } from '../../review/sync/TapSyncSheet';
@@ -38,23 +36,27 @@ function tap(player: ReturnType<typeof fakePlayer>, at: number, opts: { upAt?: n
   const heldMs = opts.heldMs ?? 80;
   player.now.mockReturnValueOnce(at).mockReturnValueOnce(opts.upAt ?? at + heldMs / 1000);
   pressClock.mockReturnValueOnce(1000).mockReturnValueOnce(1000 + heldMs);
-  act(() =>
-    fireGestureHandler(getByGestureTestId('review-sync-pad'), [{ state: State.BEGAN }, { state: State.ACTIVE }, { state: State.END }]),
-  );
+  const pad = screen.getByTestId('review-sync-pad');
+  fireEvent(pad, 'responderGrant');
+  fireEvent(pad, 'responderRelease');
 }
 
-/** Drive one side of the pad gesture directly (fireGestureHandler always runs a full press). */
+/** Finger down only (a hold in progress). */
 function padBegin(player: ReturnType<typeof fakePlayer>, at: number, clockMs = 1000) {
-  const g = getByGestureTestId('review-sync-pad') as unknown as { handlers: { onBegin: (e: unknown) => void } };
   player.now.mockReturnValueOnce(at);
   pressClock.mockReturnValueOnce(clockMs);
-  act(() => g.handlers.onBegin({}));
+  fireEvent(screen.getByTestId('review-sync-pad'), 'responderGrant');
 }
-function padFinalize(player: ReturnType<typeof fakePlayer>, at: number, clockMs: number) {
-  const g = getByGestureTestId('review-sync-pad') as unknown as { handlers: { onFinalize: (e: unknown, ok: boolean) => void } };
+/** Finger up; `how` = 'responderTerminate' when the system takes the touch away. */
+function padFinalize(
+  player: ReturnType<typeof fakePlayer>,
+  at: number,
+  clockMs: number,
+  how: 'responderRelease' | 'responderTerminate' = 'responderRelease',
+) {
   player.now.mockReturnValueOnce(at);
   pressClock.mockReturnValueOnce(clockMs);
-  act(() => g.handlers.onFinalize({}, true));
+  fireEvent(screen.getByTestId('review-sync-pad'), how);
 }
 
 const timings = (s: { words: { start_time: number | null; end_time: number | null }[] }) =>
@@ -323,5 +325,39 @@ describe('TapSyncSheet', () => {
     show(14.7);
     expect(screen.getByTestId('review-sync-word-0')).toHaveTextContent("I've");
     expect(screen.getByTestId('review-sync-word-1').props.className).toMatch(/bg-primary/);
+  });
+
+  it('the pad claims the touch and never hands it over mid-hold', async () => {
+    await renderSheet(0);
+    const pad = screen.getByTestId('review-sync-pad');
+    expect(pad.props.onStartShouldSetResponder()).toBe(true);
+    expect(pad.props.onResponderTerminationRequest()).toBe(false);
+  });
+
+  it('a terminated touch still ends the word (no stuck hold)', async () => {
+    const { player, seg } = await renderSheet(0);
+    padBegin(player, 10.1, 1000);
+    padFinalize(player, 10.5, 1400, 'responderTerminate');
+    // Released: the next press starts word 1.
+    expect(screen.getByTestId('review-sync-current-word')).toHaveTextContent('darkness');
+    tap(player, 10.7);
+    fireEvent.press(screen.getByTestId('review-sync-done'));
+    expect(seg().words[0]!.end_time).toBeCloseTo(10.5, 6);
+  });
+
+  it('a stray release with no press is ignored', async () => {
+    const { player } = await renderSheet(0);
+    padFinalize(player, 10.5, 1400);
+    expect(screen.getByTestId('review-sync-current-word')).toHaveTextContent('Hello');
+  });
+
+  it('screen readers: the activate action is a tap on the pad', async () => {
+    const { player, seg } = await renderSheet(0);
+    player.now.mockReturnValueOnce(10.2).mockReturnValueOnce(10.2);
+    pressClock.mockReturnValueOnce(1000).mockReturnValueOnce(1000);
+    fireEvent(screen.getByTestId('review-sync-pad'), 'accessibilityAction', { nativeEvent: { actionName: 'activate' } });
+    expect(screen.getByTestId('review-sync-current-word')).toHaveTextContent('darkness');
+    fireEvent.press(screen.getByTestId('review-sync-done'));
+    expect(seg().words[0]!.start_time).toBeCloseTo(10.2, 6);
   });
 });

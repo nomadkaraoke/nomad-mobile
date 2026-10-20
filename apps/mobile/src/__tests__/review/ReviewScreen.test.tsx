@@ -6,8 +6,6 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { router, Slot, Stack } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
 import { Alert, Modal, View, type AlertButton } from 'react-native';
-import { State } from 'react-native-gesture-handler';
-import { fireGestureHandler, getByGestureTestId } from 'react-native-gesture-handler/jest-utils';
 
 import ReviewRoute from '../../app/review/[id]';
 import { saveDraft } from '../../review/drafts';
@@ -202,10 +200,11 @@ describe('ReviewScreen', () => {
     fireEvent.press(screen.getByTestId('review-tool-resync'));
     await waitFor(() => expect(mockPlayer.play).toHaveBeenCalled());
     expect(mockPlayer.seekTo).toHaveBeenCalledWith(7);
-    const pad = getByGestureTestId('review-sync-pad');
+    const pad = screen.getByTestId('review-sync-pad');
     for (const at of [10.2, 10.8, 11.5, 11.9, 12.5]) {
       mockPlayer.now.mockReturnValueOnce(at).mockReturnValueOnce(at + 0.05);
-      act(() => fireGestureHandler(pad, [{ state: State.BEGAN }, { state: State.ACTIVE }, { state: State.END }]));
+      fireEvent(pad, 'responderGrant');
+      fireEvent(pad, 'responderRelease');
     }
     fireEvent.press(screen.getByTestId('review-sync-done'));
     expect(screen.queryByTestId('review-sync-sheet')).toBeNull();

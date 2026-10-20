@@ -13,8 +13,7 @@ import {
 import { Button, colors, Sheet } from '@nomad/ui';
 import * as Haptics from 'expo-haptics';
 import { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { I18nManager, Platform, Pressable, Switch, Text, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { I18nManager, Platform, Pressable, Switch, Text, View, type AccessibilityActionEvent } from 'react-native';
 
 import type { ReviewPlayer } from '../audio/useReviewPlayer';
 import { REPLAY_PAD_S } from '../sheets/TimingControls';
@@ -28,6 +27,7 @@ export const STOP_CHECK_MS = 33;
 const RATES = [1, 0.75, 0.5] as const;
 type Rate = (typeof RATES)[number];
 const UP_NEXT = 4;
+const PAD_A11Y_ACTIONS = [{ name: 'activate' as const }];
 
 export type SyncPlayer = Pick<
   ReviewPlayer,
@@ -73,7 +73,7 @@ export const commitPasses = (doc: ReviewDoc, passes: readonly TapSyncState[]): R
  * Nothing touches the doc until Done, which commits every synced line in ONE store apply (one
  * undo entry). Closing any other way leaves the doc as it was.
  *
- * A press and its release can land in the same JS tick, so the gesture callbacks work on a ref
+ * A press and its release can land in the same JS tick, so the pad's touch callbacks work on a ref
  * that mirrors the rendered session synchronously.
  */
 export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: TapSyncSheetProps) {
@@ -82,7 +82,7 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
   const latency = tapLatencyFor(Platform.OS);
   const opts = useMemo(() => ({ fallbackEnd: player.duration > 0 ? player.duration : undefined }), [player.duration]);
 
-  // Rendered from state; the gesture and timer callbacks read and write the ref, which every
+  // Rendered from state; the touch and timer callbacks read and write the ref, which every
   // update keeps in step synchronously.
   const [session, setSession] = useState<Session>(() => {
     const doc = store.getState().doc;
@@ -191,22 +191,12 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
     update({ ...s, state, phase: 'done' });
   }, [latency, update]);
 
-  // One gesture per press: begin = finger down (onBegin, before any activation delay), finalize =
-  // finger up or cancelled. Finalize fires exactly once per begin; `up` also ignores a stray one.
-  /* eslint-disable react-hooks/refs -- the callbacks run on touch (runOnJS), never during render */
-  const pad = useMemo(
-    () =>
-      Gesture.LongPress()
-        .minDuration(0)
-        .maxDistance(10_000)
-        .shouldCancelWhenOutside(false)
-        .runOnJS(true)
-        .withTestId('review-sync-pad')
-        .onBegin(down)
-        .onFinalize(up),
-    [down, up],
-  );
-  /* eslint-enable react-hooks/refs */
+  /** Screen readers can't hold: their activate is a press and an immediate release (a tap). */
+  const onPadA11y = (e: AccessibilityActionEvent) => {
+    if (e.nativeEvent.actionName !== 'activate') return;
+    down();
+    up();
+  };
 
   const done = () => {
     // Done mid-hold: the held word ends now (not a zero-length word).
@@ -280,18 +270,26 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
         <SyncedWords segment={shown.segment} state={shown.state} playing={hearing} position={player.position} />
 
         {syncing ? (
-          <GestureDetector gesture={pad}>
-            <View
-              testID="review-sync-pad"
-              accessible
-              accessibilityRole="button"
-              accessibilityLabel={t('sync.padA11y')}
-              className={`my-3 flex-1 items-center justify-center rounded-3xl ${st.holding ? 'bg-primary' : 'bg-primary/20'}`}
-            >
-              <Text className={`text-3xl font-bold ${st.holding ? 'text-primary-fg' : 'text-primary'}`}>{t('sync.pad')}</Text>
-              <Text className="mt-2 px-6 text-center text-sm text-muted">{t('sync.hint')}</Text>
-            </View>
-          </GestureDetector>
+          <View
+            testID="review-sync-pad"
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel={t('sync.padA11y')}
+            accessibilityActions={PAD_A11Y_ACTIONS}
+            onAccessibilityAction={onPadA11y}
+            // RN's responder system, not gesture-handler: an RNGH gesture inside an RN Modal never
+            // received touches on iOS. Grant = finger down (no activation delay), release or
+            // terminate = finger up; the pad never gives the touch away mid-hold.
+            onStartShouldSetResponder={() => true}
+            onResponderTerminationRequest={() => false}
+            onResponderGrant={down}
+            onResponderRelease={up}
+            onResponderTerminate={up}
+            className={`my-3 flex-1 items-center justify-center rounded-3xl ${st.holding ? 'bg-primary' : 'bg-primary/20'}`}
+          >
+            <Text className={`text-3xl font-bold ${st.holding ? 'text-primary-fg' : 'text-primary'}`}>{t('sync.pad')}</Text>
+            <Text className="mt-2 px-6 text-center text-sm text-muted">{t('sync.hint')}</Text>
+          </View>
         ) : (
           <View className="my-3 flex-1 justify-center gap-3">
             {synced.length ? (
