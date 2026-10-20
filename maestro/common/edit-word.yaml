@@ -6,28 +6,26 @@ appId: com.nomadkaraoke.mobile
     file: select-line.yaml
     env:
       LINE: ${LINE}
-# The selected row grows (its toolbar) and a long list can shift under it: bring the word back into view.
-- runFlow:
-    when:
-      notVisible:
-        id: "review-word-${LINE}-${WORD}"
-    commands:
-      - scrollUntilVisible:
-          element:
-            id: "review-word-${LINE}-${WORD}"
-          direction: UP
-          speed: 30
-          centerElement: true
-          timeout: 15000
-          optional: true
-      - scrollUntilVisible:
-          element:
-            id: "review-word-${LINE}-${WORD}"
-          direction: DOWN
-          speed: 30
-          centerElement: true
-          timeout: 15000
-          optional: true
+# The selected row grows (its toolbar) and a long list can shift under it: bring the word fully back into view
+# (a no-op when it already is; a word half under the steps header takes the tap there instead).
+- scrollUntilVisible:
+    element:
+      id: "review-word-${LINE}-${WORD}"
+    direction: UP
+    speed: 30
+    visibilityPercentage: 100
+    centerElement: true
+    timeout: 15000
+    optional: true
+- scrollUntilVisible:
+    element:
+      id: "review-word-${LINE}-${WORD}"
+    direction: DOWN
+    speed: 30
+    visibilityPercentage: 100
+    centerElement: true
+    timeout: 15000
+    optional: true
 - tapOn:
     id: "review-word-${LINE}-${WORD}"
 - extendedWaitUntil:
