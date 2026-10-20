@@ -12,6 +12,8 @@ export class ApiError extends Error {
   constructor(
     public readonly status: number,
     public readonly detail: unknown,
+    /** Seconds from a `Retry-After` header (429/503), null when absent or not a positive number. */
+    public readonly retryAfter: number | null = null,
   ) {
     super(typeof detail === 'string' ? detail : `HTTP ${status}`);
     this.name = 'ApiError';
@@ -44,7 +46,8 @@ export function configureClient(deps: ClientDeps): void {
     if (response?.status === 401 && !isSignInRequest(request)) deps.onUnauthorized();
     const detail =
       error && typeof error === 'object' && 'detail' in error ? (error as { detail: unknown }).detail : error;
-    return new ApiError(response?.status ?? 0, detail);
+    const retryAfter = Number(response?.headers?.get('Retry-After'));
+    return new ApiError(response?.status ?? 0, detail, retryAfter > 0 ? retryAfter : null);
   });
 }
 
