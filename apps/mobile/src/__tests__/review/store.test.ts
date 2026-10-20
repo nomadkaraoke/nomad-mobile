@@ -203,7 +203,6 @@ describe('drafts', () => {
   });
 
   it('drops corrupt or wrong-version drafts (v1 drafts carry no fingerprint)', () => {
-    
     appStorage.set('review-draft:j', '{nope');
     expect(loadDraft('j', k('h'))).toBeNull();
     appStorage.set('review-draft:j', JSON.stringify({ ...draft('h'), v: 1 }));
