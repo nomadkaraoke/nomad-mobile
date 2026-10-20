@@ -37,6 +37,16 @@ appId: com.nomadkaraoke.mobile
       visible: "Runtime version.*"
     commands:
       - tapOn: "Close"
+# Android: the Close tap above can land after the dev menu has gone, on whatever is behind it; twice that was
+# the launcher's YouTube icon, leaving YouTube in front. Bring the app back if it isn't showing.
+- runFlow:
+    when:
+      platform: Android
+      notVisible:
+        id: "discover-search-input"
+    commands:
+      - launchApp:
+          stopApp: false
 - extendedWaitUntil:
     visible:
       id: "discover-search-input"
