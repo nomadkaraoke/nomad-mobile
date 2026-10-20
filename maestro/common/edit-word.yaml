@@ -1,0 +1,24 @@
+# Word sheet: replace a word's text. Env: LINE, WORD (indices), TEXT. Taps the line first (selects it), then the
+# word (on a selected line a word tap opens its sheet).
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    file: select-line.yaml
+    env:
+      LINE: ${LINE}
+- tapOn:
+    id: "review-word-${LINE}-${WORD}"
+- extendedWaitUntil:
+    visible:
+      id: "review-word-input"
+    timeout: 10000
+- tapOn:
+    id: "review-word-input"
+- eraseText: 30
+- inputText: ${TEXT}
+- tapOn:
+    id: "review-word-save"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-word-sheet"
+    timeout: 10000

@@ -1,0 +1,22 @@
+# On the Make tab: the job card's Review lyrics button, once the job list shows it. The list may be scrolled (the
+# card can sit half under the top edge after coming back from a review), so bring the button fully into view
+# first. Env: JOB_ID.
+appId: com.nomadkaraoke.mobile
+---
+- extendedWaitUntil:
+    visible:
+      id: "make-list"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      id: "job-review-${JOB_ID}"
+    direction: UP
+    centerElement: true
+    visibilityPercentage: 100
+    timeout: 30000
+- tapOn:
+    id: "job-review-${JOB_ID}"
+- extendedWaitUntil:
+    visible:
+      id: "review-screen"
+    timeout: 60000

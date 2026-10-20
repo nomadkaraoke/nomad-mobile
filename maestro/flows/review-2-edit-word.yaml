@@ -1,0 +1,75 @@
+# Review 2 (spec §8.3): fix a word in its sheet, retype a whole line in Edit text → gen gets that text, all timed.
+appId: com.nomadkaraoke.mobile
+name: review-2-edit-word
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review2
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+- runFlow:
+    file: ../common/open-review.yaml
+    env:
+      EMAIL: ${output.email}
+      JOB_ID: ${output.jobId}
+# "fake" → "real" in line 0.
+- runFlow:
+    file: ../common/edit-word.yaml
+    env:
+      LINE: "0"
+      WORD: "3"
+      TEXT: "real"
+- assertVisible:
+    id: "review-word-0-3"
+    text: "real"
+# Line 4: "Workers pretend and the jobs move on" → "Workers pretend and the jobs roll on".
+- runFlow:
+    file: ../common/select-line.yaml
+    env:
+      LINE: "4"
+- tapOn:
+    id: "review-tool-edit"
+- extendedWaitUntil:
+    visible:
+      id: "review-line-input"
+    timeout: 10000
+- eraseText: 60
+- inputText: "Workers pretend and the jobs roll on"
+- tapOn:
+    id: "review-line-save"
+# A new word gets estimated timing: the sheet offers Re-sync now; Done keeps the guess.
+- runFlow:
+    when:
+      visible:
+        id: "review-line-done"
+    commands:
+      - tapOn:
+          id: "review-line-done"
+- extendedWaitUntil:
+    notVisible:
+      id: "review-line-sheet"
+    timeout: 10000
+- assertVisible:
+    id: "review-word-4-5"
+    text: "roll"
+- takeScreenshot: ${REVIEW_SHOTS}/review-2-edited
+- tapOn:
+    id: "review-lyrics-next"
+- runFlow: ../common/finish-review.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      EXPECT_LINE: "0"
+      EXPECT_LINE_TEXT: "This is a real song for testing"
+      EXPECT_TEXT_CONTAINS: "Workers pretend and the jobs roll on"
+      EXPECT_TIMED: "all"

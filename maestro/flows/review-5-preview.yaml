@@ -1,0 +1,66 @@
+# Review 5 (spec §8.3): Preview video (the local stack renders it synchronously) → the player shows; the
+# Song / Instrumental audio toggle switches; then Make my video. (The async poll path is in component tests.)
+appId: com.nomadkaraoke.mobile
+name: review-5-preview
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review5
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+- runFlow:
+    file: ../common/open-review.yaml
+    env:
+      EMAIL: ${output.email}
+      JOB_ID: ${output.jobId}
+- tapOn:
+    id: "review-lyrics-next"
+- extendedWaitUntil:
+    visible:
+      id: "review-choice-clean"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      id: "review-preview-start"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "review-preview-start"
+- extendedWaitUntil:
+    visible:
+      id: "review-preview-player"
+    timeout: 90000
+- scrollUntilVisible:
+    element:
+      id: "review-preview-audio-instrumental"
+    direction: DOWN
+    timeout: 10000
+- assertVisible:
+    id: "review-preview-audio-song"
+    selected: true
+- tapOn:
+    id: "review-preview-audio-instrumental"
+- assertVisible:
+    id: "review-preview-audio-instrumental"
+    selected: true
+- takeScreenshot: ${REVIEW_SHOTS}/review-5-preview
+- tapOn:
+    id: "review-preview-audio-song"
+- assertVisible:
+    id: "review-preview-audio-song"
+    selected: true
+- runFlow: ../common/finish-review.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      EXPECT_SELECTION: "clean"

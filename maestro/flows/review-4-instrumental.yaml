@@ -1,0 +1,59 @@
+# Review 4 (spec §8.3): audible backing vocals → the chooser preselects With backing vocals; A/B listening
+# switches between the stems; choosing the other one (Clean) is what gen gets.
+appId: com.nomadkaraoke.mobile
+name: review-4-instrumental
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review4
+      USER_CONFIG: '{"backing_vocals":"audible"}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+- runFlow:
+    file: ../common/open-review.yaml
+    env:
+      EMAIL: ${output.email}
+      JOB_ID: ${output.jobId}
+- tapOn:
+    id: "review-lyrics-next"
+- extendedWaitUntil:
+    visible:
+      id: "review-choice-with_backing"
+      selected: true
+    timeout: 30000
+- assertVisible:
+    id: "review-choice-clean"
+    selected: false
+# A/B: play With backing, then switch to Clean (same playhead), then pause.
+- extendedWaitUntil:
+    visible:
+      id: "review-choice-play-with_backing"
+      enabled: true
+    timeout: 20000
+- tapOn:
+    id: "review-choice-play-with_backing"
+- tapOn:
+    id: "review-choice-play-clean"
+- takeScreenshot: ${REVIEW_SHOTS}/review-4-ab
+- tapOn:
+    id: "review-choice-play-clean"
+- tapOn:
+    id: "review-choice-clean"
+- assertVisible:
+    id: "review-choice-clean"
+    selected: true
+- runFlow: ../common/finish-review.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      EXPECT_SELECTION: "clean"

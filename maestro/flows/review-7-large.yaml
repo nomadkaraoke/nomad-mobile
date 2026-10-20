@@ -1,0 +1,57 @@
+# Review 7 (spec §8.3): a 300-line song (2,100 words). Scroll down to line 250, fix a word there, finish.
+appId: com.nomadkaraoke.mobile
+name: review-7-large
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review7
+      USER_CONFIG: '{"review_fixture":"large","audio_duration_seconds":320}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+- runFlow:
+    file: ../common/open-review.yaml
+    env:
+      EMAIL: ${output.email}
+      JOB_ID: ${output.jobId}
+- extendedWaitUntil:
+    visible:
+      id: "review-line-0"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      id: "review-line-250"
+    direction: DOWN
+    speed: 90
+    visibilityPercentage: 100
+    centerElement: true
+    timeout: 240000
+# Line 250: "Arrives right on time fake song for".
+- runFlow:
+    file: ../common/edit-word.yaml
+    env:
+      LINE: "250"
+      WORD: "0"
+      TEXT: "Arrivals"
+- assertVisible:
+    id: "review-word-250-0"
+    text: "Arrivals"
+- takeScreenshot: ${REVIEW_SHOTS}/review-7-line-250
+- tapOn:
+    id: "review-lyrics-next"
+- runFlow: ../common/finish-review.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: review
+      STACK: ${STACK}
+      JOB_ID: ${output.jobId}
+      EXPECT_LEFT_REVIEW: "true"
+      EXPECT_LINE: "250"
+      EXPECT_LINE_TEXT: "Arrivals right on time fake song for"
+      EXPECT_TIMED: "all"

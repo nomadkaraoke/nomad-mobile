@@ -1,0 +1,19 @@
+# On the review's Finish step: "Make my video" once it is enabled (it waits for the stems), then the success
+# state, then the review leaves for the Make tab.
+appId: com.nomadkaraoke.mobile
+---
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-submit"
+      enabled: true
+    timeout: 30000
+- tapOn:
+    id: "review-finish-submit"
+- extendedWaitUntil:
+    visible:
+      id: "review-finish-success"
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+      id: "make-tab-screen"
+    timeout: 20000

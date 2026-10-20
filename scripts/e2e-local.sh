@@ -122,7 +122,9 @@ start_metro() {
 # 5. The flows. Run from the repo root: takeScreenshot paths (${SHOTS}/…) are relative to the working directory.
 cd "$ROOT"
 SHOTS="docs/screenshots/phase1b/$PLATFORM"
-mkdir -p "$SHOTS"
+# The native review flows (review-*, Phase 2) keep their shots apart.
+REVIEW_SHOTS="docs/screenshots/phase2/$PLATFORM"
+mkdir -p "$SHOTS" "$REVIEW_SHOTS"
 ALL=()
 while IFS= read -r f; do ALL+=("$f"); done < <(ls maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } || true)
 [[ ${#ALL[@]} -gt 0 ]] || { echo "no flow matches $FILTER" >&2; exit 2; }
@@ -132,7 +134,7 @@ for f in "${ALL[@]}"; do
   if grep -qE '^\s*-\s*force-offline\s*$' "$f"; then OFFLINE+=("$f"); else ONLINE+=("$f"); fi
 done
 
-run_flows() { "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" "$@"; }
+run_flows() { "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" "$@"; }
 status=0
 if metro_up; then
   echo "Using the Metro already on :8081 (it must have EXPO_PUBLIC_GEN_API_URL=$STACK, EXPO_PUBLIC_DECIDE_API_URL=$SEARCH" \

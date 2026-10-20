@@ -1,0 +1,21 @@
+# Signed-out launch → Make tab → sign in (fake Google) as the setup user → the job card's review button → the
+# native review. Env: EMAIL (setup's output.email), JOB_ID (scenario's output.jobId). Targets testIDs only.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow: launch.yaml
+- tapOn:
+    id: "tab-make"
+- extendedWaitUntil:
+    visible:
+      id: "make-tab-signin"
+    timeout: 20000
+- tapOn:
+    id: "make-tab-signin"
+- runFlow:
+    file: google-signin.yaml
+    env:
+      EMAIL: ${EMAIL}
+- runFlow:
+    file: tap-job-review.yaml
+    env:
+      JOB_ID: ${JOB_ID}

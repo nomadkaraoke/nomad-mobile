@@ -1,0 +1,27 @@
+# Tap To Sync on the selected line: 0.5× (Maestro taps take ~0.5-1 s each, the fixture lines ~4 s), restart the
+# pass at that speed, then one tap on the pad per word, back to back. Ends on the finished pass (Redo shows).
+# Env: TAPS (the line's word count, 1-8).
+appId: com.nomadkaraoke.mobile
+---
+- tapOn:
+    id: "review-tool-resync"
+- extendedWaitUntil:
+    visible:
+      id: "review-sync-pad"
+    timeout: 10000
+# 1× → 0.75× → 0.5×, then Restart so the lead-in plays at that speed.
+- tapOn:
+    id: "review-sync-rate"
+- tapOn:
+    id: "review-sync-rate"
+- tapOn:
+    id: "review-sync-restart"
+- repeat:
+    times: ${TAPS}
+    commands:
+      - tapOn:
+          id: "review-sync-pad"
+- extendedWaitUntil:
+    visible:
+      id: "review-sync-redo"
+    timeout: 20000
