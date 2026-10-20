@@ -26,6 +26,7 @@ name: review-12-continue-web
       LINE: "0"
       WORD: "3"
       TEXT: "real"
+- runFlow: ../common/move-dev-tools-button.yaml
 - tapOn:
     id: "review-menu"
 - extendedWaitUntil:

@@ -22,15 +22,19 @@ appId: com.nomadkaraoke.mobile
     commands:
       - tapOn:
           text: "http://.*:8081"
+# Android shows the dev menu over a fresh load (it hides the app's elements from Maestro), as launch.yaml handles.
 - extendedWaitUntil:
-    visible:
-      id: "tab-make"
+    visible: "Runtime version.*|Search songs or artists"
     timeout: 60000
 - runFlow:
     when:
       visible: "Runtime version.*"
     commands:
       - tapOn: "Close"
+- extendedWaitUntil:
+    visible:
+      id: "tab-make"
+    timeout: 30000
 - tapOn:
     id: "tab-make"
 - runFlow:

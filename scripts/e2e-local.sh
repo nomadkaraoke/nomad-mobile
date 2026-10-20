@@ -146,12 +146,15 @@ done
 # Flows tagged `locale-he` (review-9) run with the app's language set to Hebrew, then it goes back to the
 # device language. iOS: the app's own AppleLanguages, plus React Native's stored RTL flags so the very first
 # launch is already mirrored (the app itself only flips them for the next launch). Android: the per-app
-# locale (API 33+); RN's RTL flag lives in the app's data, which launch.yaml's clearState wipes, so the flow
-# relaunches once to apply it.
+# locale (API 33+), after clearing the app's data here (clearing it wipes the per-app locale too); RN's RTL
+# flag is set by the first launch, so the flow relaunches once to apply it.
 set_app_locale() {
   local lang="$1"
   if [[ "$PLATFORM" == android ]]; then
-    adb -s "$DEVICE" shell am force-stop com.nomadkaraoke.mobile
+    # Clearing the app's data also clears its per-app locale, so the flow can't clearState itself: clear here
+    # (signed out, as launch.yaml would), then set the language.
+    if [[ -n "$lang" ]]; then adb -s "$DEVICE" shell pm clear com.nomadkaraoke.mobile >/dev/null
+    else adb -s "$DEVICE" shell am force-stop com.nomadkaraoke.mobile; fi
     adb -s "$DEVICE" shell cmd locale set-app-locales com.nomadkaraoke.mobile --locales "$lang"
     return
   fi

@@ -23,6 +23,8 @@ name: review-7-large
     visible:
       id: "review-line-0"
     timeout: 30000
+# Fast flings get there in a few swipes but can overshoot (Android flung to the end once): then come back up
+# slowly.
 - scrollUntilVisible:
     element:
       id: "review-line-250"
@@ -30,17 +32,31 @@ name: review-7-large
     speed: 90
     visibilityPercentage: 100
     centerElement: true
-    timeout: 240000
+    timeout: 180000
+    optional: true
+- runFlow:
+    when:
+      notVisible:
+        id: "review-line-250"
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "review-line-250"
+          direction: UP
+          speed: 30
+          visibilityPercentage: 100
+          centerElement: true
+          timeout: 120000
 # Line 250: "Arrives right on time fake song for".
 - runFlow:
     file: ../common/edit-word.yaml
     env:
       LINE: "250"
       WORD: "0"
-      TEXT: "Arrivals"
+      TEXT: "Lands"
 - assertVisible:
     id: "review-word-250-0"
-    text: "Arrivals"
+    text: "Lands"
 - takeScreenshot: ${REVIEW_SHOTS}/review-7-line-250
 - tapOn:
     id: "review-lyrics-next"
@@ -53,5 +69,5 @@ name: review-7-large
       JOB_ID: ${output.jobId}
       EXPECT_LEFT_REVIEW: "true"
       EXPECT_LINE: "250"
-      EXPECT_LINE_TEXT: "Arrivals right on time fake song for"
+      EXPECT_LINE_TEXT: "Lands right on time fake song for"
       EXPECT_TIMED: "all"

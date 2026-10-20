@@ -19,8 +19,8 @@ tags:
     env:
       ACTION: scenario
       STACK: ${STACK}
-# Signed-out launch (as launch.yaml), then a relaunch that keeps state: on Android clearState also wiped React
-# Native's RTL flag, which the first launch set again for the next one.
+# Signed-out launch (as launch.yaml), then on Android a relaunch that keeps state: the cleared data had no React
+# Native RTL flag; the first launch set it for the next one.
 - stopApp
 - runFlow:
     when:
@@ -28,11 +28,11 @@ tags:
     commands:
       - launchApp:
           clearKeychain: true
+# Android: e2e-local.sh already cleared the app's data (clearState here would also drop the Hebrew locale).
 - runFlow:
     when:
       platform: Android
     commands:
-      - clearState
       - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
 - runFlow:
     when:
@@ -41,26 +41,14 @@ tags:
     commands:
       - tapOn:
           text: "http://.*:8081"
-- extendedWaitUntil:
-    visible:
-      id: "tab-make"
-    timeout: 60000
+- runFlow: ../common/dismiss-dev-menu.yaml
 - runFlow:
     when:
       platform: Android
     commands:
       - stopApp
       - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
-      - extendedWaitUntil:
-          visible:
-            id: "tab-make"
-          timeout: 60000
-# The dev menu (native, English) can open over a fresh load.
-- runFlow:
-    when:
-      visible: "Runtime version.*"
-    commands:
-      - tapOn: "Close"
+      - runFlow: ../common/dismiss-dev-menu.yaml
 - tapOn:
     id: "tab-make"
 - extendedWaitUntil:

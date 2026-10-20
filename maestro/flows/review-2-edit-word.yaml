@@ -35,9 +35,11 @@ name: review-2-edit-word
       LINE: "4"
 - tapOn:
     id: "review-tool-edit"
+# Focused (autoFocus) before typing: see common/edit-word.yaml.
 - extendedWaitUntil:
     visible:
       id: "review-line-input"
+      focused: true
     timeout: 10000
 - eraseText: 60
 - inputText: "Workers pretend and the jobs roll on"

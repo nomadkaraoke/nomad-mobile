@@ -1,0 +1,18 @@
+# After a dev-client load: wait for the app's tab bar, closing the dev menu (native, English) if it opened over
+# the app (Android opens it on every fresh load; it hides the app's elements from Maestro). Testids only for
+# the app, so it works in any app language.
+appId: com.nomadkaraoke.mobile
+---
+- extendedWaitUntil:
+    visible: "Runtime version.*"
+    timeout: 20000
+    optional: true
+- runFlow:
+    when:
+      visible: "Runtime version.*"
+    commands:
+      - tapOn: "Close"
+- extendedWaitUntil:
+    visible:
+      id: "tab-make"
+    timeout: 60000

@@ -14,6 +14,13 @@ appId: com.nomadkaraoke.mobile
     timeout: 10000
 - tapOn:
     id: "review-word-input"
+# Type only once the field has focus: on an Android dev build, keys that reach no field go to the dev
+# support's key listener, where a double "r" reloads the JS bundle.
+- extendedWaitUntil:
+    visible:
+      id: "review-word-input"
+      focused: true
+    timeout: 5000
 - eraseText: 30
 - inputText: ${TEXT}
 - tapOn:
