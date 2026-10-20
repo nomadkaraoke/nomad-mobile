@@ -112,6 +112,16 @@ describe('useReviewLoader', () => {
     expect(result.current).toMatchObject({ status: 'error', error: 'network' });
   });
 
+  it('an unparseable body (invalid_response) is a final server error, not retried as network', async () => {
+    mockGet.mockRejectedValue(new ApiError(0, 'invalid_response'));
+    const { result } = renderHook(() => useReviewLoader('j6b'));
+    await flush();
+    expect(result.current).toMatchObject({ status: 'error', error: 'server' });
+    expect(mockGet).toHaveBeenCalledTimes(1);
+    await flush(60_000);
+    expect(mockGet).toHaveBeenCalledTimes(1);
+  });
+
   it('reports lyrics_load_failed at most once per 60 s', async () => {
     mockGet.mockRejectedValue(new ApiError(500, 'boom'));
     renderHook(() => useReviewLoader('j7'));

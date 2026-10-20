@@ -12,12 +12,26 @@ export class ApiError extends Error {
   constructor(
     public readonly status: number,
     public readonly detail: unknown,
-    /** Seconds from a `Retry-After` header (429/503), null when absent or not a positive number. */
+    /**
+     * Seconds from a `Retry-After` header (429/503), capped at `MAX_RETRY_AFTER_S`; null when absent or not a
+     * positive finite number (an HTTP-date is not parsed).
+     */
     public readonly retryAfter: number | null = null,
   ) {
     super(typeof detail === 'string' ? detail : `HTTP ${status}`);
     this.name = 'ApiError';
   }
+}
+
+/** The longest `Retry-After` honoured: a broken or hostile header must not park a screen for hours. */
+export const MAX_RETRY_AFTER_S = 300;
+
+/** Seconds from a `Retry-After` header value, or null (absent, garbage, ≤ 0, infinite). Capped at 300 s. */
+export function parseRetryAfter(value: string | null | undefined): number | null {
+  if (value == null || value.trim() === '') return null;
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return Math.min(n, MAX_RETRY_AFTER_S);
 }
 
 // Sign-in attempts made while signed out. Not handoff-token: that one carries the session, so its 401 is real.
@@ -46,8 +60,7 @@ export function configureClient(deps: ClientDeps): void {
     if (response?.status === 401 && !isSignInRequest(request)) deps.onUnauthorized();
     const detail =
       error && typeof error === 'object' && 'detail' in error ? (error as { detail: unknown }).detail : error;
-    const retryAfter = Number(response?.headers?.get('Retry-After'));
-    return new ApiError(response?.status ?? 0, detail, retryAfter > 0 ? retryAfter : null);
+    return new ApiError(response?.status ?? 0, detail, parseRetryAfter(response?.headers?.get('Retry-After')));
   });
 }
 

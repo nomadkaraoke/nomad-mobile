@@ -7,11 +7,14 @@ export type LoadError = 'network' | 'not_found' | 'server';
 
 /**
  * Transient (5xx, 429, network) errors are retried; a 404 is final, and so is a 401 (the gen client
- * has already signed the person out) and any other 4xx (retrying cannot fix them).
+ * has already signed the person out) and any other 4xx (retrying cannot fix them). A body gen sent
+ * that doesn't parse (`ApiError(0, 'invalid_response')`) reached gen: it is a final server error, not
+ * a network one, since asking again returns the same body.
  */
 export function classifyLoadError(e: unknown): { error: LoadError; transient: boolean; status: number } {
   const status = e instanceof ApiError ? e.status : 0;
   if (status === 404) return { error: 'not_found', transient: false, status };
+  if (e instanceof ApiError && status === 0 && e.detail === 'invalid_response') return { error: 'server', transient: false, status };
   if (status === 0) return { error: 'network', transient: true, status };
   return { error: 'server', transient: status >= 500 || status === 429, status };
 }
