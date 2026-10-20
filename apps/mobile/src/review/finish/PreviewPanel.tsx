@@ -1,9 +1,9 @@
 import { LOCALE_NAMES, useTranslations, type Locale } from '@nomad/i18n';
-import { Button, colors, StartText } from '@nomad/ui';
+import { Button, NomadLoader, StartText } from '@nomad/ui';
 import { createAudioPlayer } from 'expo-audio';
 import { useVideoPlayer, VideoView, type VideoPlayer } from 'expo-video';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, useWindowDimensions, View } from 'react-native';
+import { Pressable, useWindowDimensions, View } from 'react-native';
 
 import { LOCKSTEP_INTERVAL_MS, lockstepCheck } from '../audio/lockstep';
 import { safePlay } from '../audio/playback';
@@ -49,9 +49,13 @@ export function PreviewPanel({ jobId, stemUri, translationLanguage, onBackToLyri
         <Button testID="review-preview-start" variant="secondary" label={t('start')} onPress={preview.start} />
       ) : null}
       {preview.state === 'generating' || preview.state === 'slow' ? (
-        <View testID="review-preview-generating" className="flex-row items-center gap-3 rounded-xl border border-border bg-card p-4">
-          <ActivityIndicator color={colors.primary} />
-          <StartText className="flex-1 text-sm text-text" accessibilityLiveRegion="polite">
+        <View testID="review-preview-generating" className="gap-3 rounded-xl border border-border bg-card p-4">
+          <NomadLoader
+            testID="review-preview-generating-loader"
+            height={28}
+            accessibilityLabel={preview.state === 'slow' ? t('slow') : t('generating')}
+          />
+          <StartText className="text-sm text-text" accessibilityLiveRegion="polite">
             {preview.state === 'slow' ? t('slow') : t('generating')}
           </StartText>
         </View>

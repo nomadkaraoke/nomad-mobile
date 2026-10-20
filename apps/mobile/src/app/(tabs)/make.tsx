@@ -1,8 +1,8 @@
 import { useTranslations } from '@nomad/i18n';
-import { Button, List, Screen, Text } from '@nomad/ui';
+import { Button, List, NomadLoader, Screen, Text } from '@nomad/ui';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
 
 import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
@@ -39,7 +39,7 @@ export default function MakeTabScreen() {
     return (
       <Screen testID="make-tab-screen">
         {title}
-        <ActivityIndicator testID="make-loading" />
+        <NomadLoader testID="make-loading" accessibilityLabel={tc('loading')} />
       </Screen>
     );
   }

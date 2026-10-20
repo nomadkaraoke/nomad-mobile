@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { formatClock } from '@nomad/core';
 import { isolateLtr, useTranslations } from '@nomad/i18n';
 import { recommendInstrumental, type InstrumentalChoice, type InstrumentalOption } from '@nomad/review-core';
-import { colors, StartText } from '@nomad/ui';
+import { colors, NomadLoader, StartText } from '@nomad/ui';
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
@@ -69,9 +69,9 @@ export function InstrumentalChooser({ jobId, stems, locked = false }: Props) {
 
   if (!stems.ready) {
     return (
-      <View testID="review-stems-pending" className="flex-row items-center gap-3 rounded-xl border border-border bg-card p-4">
-        <ActivityIndicator color={colors.primary} />
-        <StartText className="flex-1 text-sm text-text">{t('separating')}</StartText>
+      <View testID="review-stems-pending" className="gap-3 rounded-xl border border-border bg-card p-4">
+        <NomadLoader testID="review-stems-pending-loader" height={28} accessibilityLabel={t('separating')} />
+        <StartText className="text-sm text-text">{t('separating')}</StartText>
       </View>
     );
   }

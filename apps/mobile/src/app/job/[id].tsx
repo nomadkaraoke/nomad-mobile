@@ -1,6 +1,6 @@
 import { getJob, type JobDetail } from '@nomad/api-gen';
 import { useTranslations } from '@nomad/i18n';
-import { Button, Screen, Text } from '@nomad/ui';
+import { Button, NomadLoader, Screen, Text } from '@nomad/ui';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as Clipboard from 'expo-clipboard';
 import type { File } from 'expo-file-system';
@@ -85,7 +85,7 @@ export default function ReadyScreen() {
             <Button testID="ready-reload" variant="secondary" label={tc('retry')} onPress={() => void job.refetch()} />
           </>
         ) : (
-          <ActivityIndicator testID="ready-loading" />
+          <NomadLoader testID="ready-loading" accessibilityLabel={tc('loading')} />
         )}
       </Screen>
     );
@@ -123,7 +123,7 @@ export default function ReadyScreen() {
       {ytId ? (
         <YouTubeBlock id={ytId} title={youtubeTitle(data)} />
       ) : job.isPlaceholderData ? (
-        <ActivityIndicator testID="ready-loading" />
+        <NomadLoader testID="ready-loading" accessibilityLabel={tc('loading')} />
       ) : playUri ? (
         <Player uri={playUri} />
       ) : (
