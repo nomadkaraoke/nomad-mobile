@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { Text } from './Text';
 
@@ -21,6 +22,8 @@ export type SheetProps = {
 export function Sheet({ visible, onClose, title, testID, closeLabel, children, fullHeight, onDismiss }: SheetProps) {
   return (
     <Modal visible={visible} animationType="slide" transparent statusBarTranslucent navigationBarTranslucent onRequestClose={onClose} onDismiss={onDismiss} testID={testID}>
+      {/* An RN Modal is outside the app root's GestureHandlerRootView: gestures inside need their own. */}
+      <GestureHandlerRootView testID={`${testID}-gesture-root`} style={{ flex: 1 }}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1 justify-end"
@@ -42,6 +45,7 @@ export function Sheet({ visible, onClose, title, testID, closeLabel, children, f
           {children}
         </View>
       </KeyboardAvoidingView>
+      </GestureHandlerRootView>
     </Modal>
   );
 }

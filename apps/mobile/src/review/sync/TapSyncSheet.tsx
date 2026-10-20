@@ -14,7 +14,7 @@ import { Button, colors, Sheet } from '@nomad/ui';
 import * as Haptics from 'expo-haptics';
 import { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { I18nManager, Platform, Pressable, Switch, Text, View } from 'react-native';
-import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 import type { ReviewPlayer } from '../audio/useReviewPlayer';
 import { REPLAY_PAD_S } from '../sheets/TimingControls';
@@ -46,7 +46,9 @@ export type TapSyncSheetProps = {
 type Phase = 'sync' | 'done' | 'stopped';
 
 type Session = {
-  /** The doc with this session's finished lines applied (keep going); the store's doc is untouched. */
+  /** The store's doc when the sheet opened (untouched until Done). */
+  base: ReviewDoc;
+  /** `base` with this session's finished lines applied (keep going): bounds for the next line. */
   work: ReviewDoc;
   /** Lines already finished in this session (keep going), in order. */
   finished: TapSyncState[];
@@ -57,6 +59,13 @@ type Session = {
 
 /** Every pass with taps, in order: what Done writes. */
 const passesOf = (s: Session): TapSyncState[] => [...s.finished, s.state].filter((p) => p.synced.size > 0);
+
+/**
+ * Writes the passes last line first, so each line's last word is capped against the next line's
+ * NEW start, never its stale pre-resync one (which could crush a held word or leave an overlap).
+ */
+export const commitPasses = (doc: ReviewDoc, passes: readonly TapSyncState[]): ReviewDoc =>
+  [...passes].reverse().reduce(commitTapSync, doc);
 
 /**
  * Tap To Sync (spec §4.3): playback starts 3 s before the line; finger down on the pad = the
@@ -78,7 +87,7 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
   const [session, setSession] = useState<Session>(() => {
     const doc = store.getState().doc;
     const state = createTapSync(doc, segment, opts);
-    return { work: doc, finished: [], state, phase: state.done ? 'done' : 'sync' };
+    return { base: doc, work: doc, finished: [], state, phase: state.done ? 'done' : 'sync' };
   });
   const sessionRef = useRef(session);
   const update = useCallback((next: Session) => {
@@ -173,9 +182,10 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
     const next = state.segmentIndex + 1;
     if (keepRef.current && next < s.work.segments.length) {
       // Carry on into the next line without re-seeking: playback just keeps going.
-      const work = commitTapSync(s.work, state);
+      const finished = [...s.finished, state];
+      const work = commitPasses(s.base, finished);
       const nextState = createTapSync(work, next, optsRef.current);
-      if (!nextState.done) return update({ work, finished: [...s.finished, state], state: nextState, phase: 'sync' });
+      if (!nextState.done) return update({ ...s, work, finished, state: nextState, phase: 'sync' });
     }
     playerRef.current.pause();
     update({ ...s, state, phase: 'done' });
@@ -199,8 +209,10 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
   /* eslint-enable react-hooks/refs */
 
   const done = () => {
+    // Done mid-hold: the held word ends now (not a zero-length word).
+    if (pressedAtRef.current !== null) up();
     const ps = passesOf(sessionRef.current);
-    if (ps.length) store.getState().apply((d) => ps.reduce(commitTapSync, d));
+    if (ps.length) store.getState().apply((d) => commitPasses(d, ps));
     onClose();
   };
 
@@ -208,7 +220,7 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
     const s = sessionRef.current;
     const ps = passesOf(s);
     if (!ps.length) return;
-    const preview = s.state.synced.size ? commitTapSync(s.work, s.state) : s.work;
+    const preview = commitPasses(s.base, ps);
     const first = preview.segments[ps[0]!.segmentIndex];
     const last = preview.segments[ps[ps.length - 1]!.segmentIndex];
     if (first?.start_time == null || last?.end_time == null) return;
@@ -232,9 +244,24 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
         .join(' ')
     : '';
 
+  // Finished: the words row shows the committed result; during Play it back it follows the line
+  // being heard across every synced line.
+  const synced = useMemo(() => passesOf(session), [session]);
+  const preview = useMemo(() => (syncing ? null : commitPasses(session.base, synced)), [syncing, session, synced]);
+  const hearing = !syncing && player.playing;
+  let shown: { segment: LyricsSegment; state: TapSyncState } = { segment: seg, state: st };
+  if (preview) {
+    const atPosition = hearing
+      ? [...synced].reverse().find((p) => (preview.segments[p.segmentIndex]?.start_time ?? Infinity) <= player.position)
+      : undefined;
+    const p = atPosition ?? synced.find((x) => x.segmentIndex === st.segmentIndex) ?? synced[synced.length - 1];
+    const committed = p && preview.segments[p.segmentIndex];
+    if (p && committed) shown = { segment: committed, state: p };
+  }
+
   return (
     <Sheet visible fullHeight onClose={onClose} title={t('sync.title')} testID="review-sync-sheet" closeLabel={t('close')}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <View className="items-center gap-1 py-2">
           <Text
             testID="review-sync-current-word"
@@ -250,7 +277,7 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
           </Text>
         </View>
 
-        <SyncedWords segment={seg} state={st} playing={!syncing && player.playing} position={player.position} />
+        <SyncedWords segment={shown.segment} state={shown.state} playing={hearing} position={player.position} />
 
         {syncing ? (
           <GestureDetector gesture={pad}>
@@ -267,7 +294,9 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
           </GestureDetector>
         ) : (
           <View className="my-3 flex-1 justify-center gap-3">
-            <Button testID="review-sync-playback" label={t('sync.playback')} variant="secondary" onPress={playback} />
+            {synced.length ? (
+              <Button testID="review-sync-playback" label={t('sync.playback')} variant="secondary" onPress={playback} />
+            ) : null}
             <Button testID="review-sync-redo" label={t('sync.redo')} variant="secondary" onPress={restart} />
           </View>
         )}
@@ -299,7 +328,7 @@ export function TapSyncSheet({ segment, keepGoing = false, player, onClose }: Ta
             <Button testID="review-sync-done" label={t('sync.done')} onPress={done} />
           </View>
         </View>
-      </GestureHandlerRootView>
+      </View>
     </Sheet>
   );
 }

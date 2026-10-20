@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { Modal, Text } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { Sheet } from '../Sheet';
 
@@ -42,4 +43,16 @@ it('passes onDismiss to the Modal (iOS fires it once the sheet has closed)', () 
     </Sheet>,
   );
   expect(screen.UNSAFE_getByType(Modal).props.onDismiss).toBe(onDismiss);
+});
+
+it('gives the modal content its own GestureHandlerRootView (gestures inside a Modal need one)', () => {
+  render(
+    <Sheet visible onClose={jest.fn()} title="Edit" testID="s" closeLabel="Close">
+      <Text>body</Text>
+    </Sheet>,
+  );
+  const root = screen.UNSAFE_getByType(GestureHandlerRootView);
+  expect(root.props.style).toEqual({ flex: 1 });
+  expect(screen.getByTestId('s-panel')).toBeTruthy();
+  expect(screen.getByTestId('s-gesture-root')).toBeTruthy();
 });

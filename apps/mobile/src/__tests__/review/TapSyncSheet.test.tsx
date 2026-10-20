@@ -43,6 +43,20 @@ function tap(player: ReturnType<typeof fakePlayer>, at: number, opts: { upAt?: n
   );
 }
 
+/** Drive one side of the pad gesture directly (fireGestureHandler always runs a full press). */
+function padBegin(player: ReturnType<typeof fakePlayer>, at: number, clockMs = 1000) {
+  const g = getByGestureTestId('review-sync-pad') as unknown as { handlers: { onBegin: (e: unknown) => void } };
+  player.now.mockReturnValueOnce(at);
+  pressClock.mockReturnValueOnce(clockMs);
+  act(() => g.handlers.onBegin({}));
+}
+function padFinalize(player: ReturnType<typeof fakePlayer>, at: number, clockMs: number) {
+  const g = getByGestureTestId('review-sync-pad') as unknown as { handlers: { onFinalize: (e: unknown, ok: boolean) => void } };
+  player.now.mockReturnValueOnce(at);
+  pressClock.mockReturnValueOnce(clockMs);
+  act(() => g.handlers.onFinalize({}, true));
+}
+
 const timings = (s: { words: { start_time: number | null; end_time: number | null }[] }) =>
   s.words.map((w) => [w.start_time, w.end_time]);
 
@@ -166,7 +180,7 @@ describe('TapSyncSheet', () => {
     player.now.mockReturnValue(14.05);
     act(() => jest.advanceTimersByTime(200));
     expect(player.pause).toHaveBeenCalled();
-    expect(screen.getByTestId('review-sync-playback')).toBeTruthy();
+    expect(screen.getByTestId('review-sync-redo')).toBeTruthy();
     jest.useRealTimers();
   });
 
@@ -237,5 +251,77 @@ describe('TapSyncSheet', () => {
       [7, expect.closeTo(7.99, 6)],
       [8, 9],
     ]);
+  });
+
+  it('keep going: a held last word past the next line\'s OLD start keeps its release (lines commit last-first)', async () => {
+    const { player, seg } = await renderSheet(0, { keepGoing: true });
+    [10.1, 10.7, 11.4, 11.8].forEach((t) => tap(player, t));
+    // Line 1 used to start at 14; this hold runs to 14.3.
+    tap(player, 12.4, { upAt: 14.3, heldMs: 1900 });
+    [14.5, 14.8, 15.1, 15.4].forEach((t) => tap(player, t));
+    fireEvent.press(screen.getByTestId('review-sync-done'));
+    expect(seg(0).words[4]!.end_time).toBeCloseTo(14.3, 6);
+    expect(seg(1).words[0]!.start_time).toBeCloseTo(14.5, 6);
+  });
+
+  it('keep going: a next line re-tapped earlier than the gap-fill leaves no overlap', async () => {
+    const { player, seg } = await renderSheet(0, { keepGoing: true });
+    [10.1, 10.7, 11.4, 11.8, 12.4].forEach((t) => tap(player, t));
+    [13.2, 13.6, 14, 14.4].forEach((t) => tap(player, t));
+    fireEvent.press(screen.getByTestId('review-sync-done'));
+    expect(seg(0).words[4]!.end_time).toBeCloseTo(13.19, 6);
+    expect(seg(0).end_time!).toBeLessThanOrEqual(seg(1).start_time!);
+  });
+
+  it('Done during a hold ends the held word now (no zero-length word)', async () => {
+    const { player, seg } = await renderSheet(0);
+    padBegin(player, 10.1, 1000);
+    player.now.mockReturnValueOnce(10.45);
+    pressClock.mockReturnValueOnce(1350);
+    fireEvent.press(screen.getByTestId('review-sync-done'));
+    expect(seg().words[0]!.start_time).toBeCloseTo(10.1, 6);
+    expect(seg().words[0]!.end_time).toBeCloseTo(10.45, 6);
+  });
+
+  it('does not auto-stop while a word is held; stops once it is released', async () => {
+    jest.useFakeTimers();
+    const { player } = await renderSheet(0);
+    padBegin(player, 10.1, 1000);
+    player.now.mockReturnValue(14.5);
+    act(() => jest.advanceTimersByTime(200));
+    expect(player.pause).not.toHaveBeenCalled();
+    padFinalize(player, 14.5, 5400);
+    act(() => jest.advanceTimersByTime(100));
+    expect(player.pause).toHaveBeenCalled();
+    expect(screen.getByTestId('review-sync-current-word')).toHaveTextContent('Stopped after the line');
+    jest.useRealTimers();
+  });
+
+  it('Play it back is hidden when nothing was synced', async () => {
+    jest.useFakeTimers();
+    const { player } = await renderSheet(0);
+    player.now.mockReturnValue(14.5);
+    act(() => jest.advanceTimersByTime(100));
+    expect(screen.getByTestId('review-sync-redo')).toBeTruthy();
+    expect(screen.queryByTestId('review-sync-playback')).toBeNull();
+    jest.useRealTimers();
+  });
+
+  it('Play it back follows the heard line across every synced line', async () => {
+    const { player, rerenderUi, onClose } = await renderSheet(0, { keepGoing: true });
+    [10.1, 10.7, 11.4, 11.8, 12.4].forEach((t) => tap(player, t));
+    [14.1, 14.6, 15.1].forEach((t) => tap(player, t));
+    // Stop after line 1.
+    fireEvent(screen.getByTestId('review-sync-continue'), 'valueChange', false);
+    tap(player, 15.5, { upAt: 16, heldMs: 500 });
+    expect(screen.getByTestId('review-sync-playback')).toBeTruthy();
+    const show = (position: number) =>
+      rerenderUi(<TapSyncSheet segment={0} keepGoing player={{ ...player, playing: true, position }} onClose={onClose} />);
+    show(10.3);
+    expect(screen.getByTestId('review-sync-word-0')).toHaveTextContent('Hello');
+    expect(screen.getByTestId('review-sync-word-0').props.className).toMatch(/bg-primary/);
+    show(14.7);
+    expect(screen.getByTestId('review-sync-word-0')).toHaveTextContent("I've");
+    expect(screen.getByTestId('review-sync-word-1').props.className).toMatch(/bg-primary/);
   });
 });
