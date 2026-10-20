@@ -140,7 +140,8 @@ name: screens-review-tour
     timeout: 20000
 - takeScreenshot: ${TOUR_SHOTS}/03-restored-draft
 - runFlow: ../common/move-dev-tools-button.yaml
-# Android in Hebrew: the dev menu's Tools button starts mirrored, top left, over the ⋯ menu.
+# Android in Hebrew: the dev menu's Tools button starts mirrored, top left, over the ⋯ menu. Move it aside for
+# the menu, and back once the menu is done (at the left edge it sits over the mirrored line toolbar's More).
 - runFlow:
     when:
       platform: Android
@@ -165,6 +166,15 @@ name: screens-review-tour
     notVisible:
       id: "review-menu-web"
     timeout: 10000
+- runFlow:
+    when:
+      platform: Android
+      true: ${LOCALE == "he"}
+    commands:
+      - swipe:
+          start: 6%, 45%
+          end: 10%, 10%
+          duration: 1500
 - tapOn:
     id: "review-lyrics-next"
 - extendedWaitUntil:

@@ -17,8 +17,29 @@ const MAIN: { tool: LineTool | 'more'; icon: IconName }[] = [
 ];
 const MORE: LineTool[] = ['split', 'merge', 'insert', 'delete'];
 
-/** Lines a toolbar label may take: one per word, at most two. */
-const labelLines = (label: string) => (label.trim().includes(' ') ? 2 : 1);
+/** Longest label kept on one line (about what a fifth of a phone's width holds at text-xs): "Play line". */
+const ONE_LINE_MAX = 9;
+
+/**
+ * A toolbar label laid out as at most two lines: a long one is broken at the space nearest its middle
+ * ("Neu\nsynchronisieren"). The break is explicit: Android drew a two-word Hebrew label on one line, over its
+ * neighbours, rather than wrapping it in its column. Whatever still doesn't fit shrinks (adjustsFontSizeToFit).
+ */
+export function toolbarLabel(label: string): { text: string; lines: 1 | 2 } {
+  const words = label.trim().split(/\s+/);
+  if (words.length < 2 || words.join(' ').length <= ONE_LINE_MAX) return { text: words.join(' '), lines: 1 };
+  const total = words.join(' ').length;
+  let best = 1;
+  let bestDiff = Infinity;
+  for (let i = 1; i < words.length; i++) {
+    const diff = Math.abs(words.slice(0, i).join(' ').length * 2 - total);
+    if (diff < bestDiff) {
+      best = i;
+      bestDiff = diff;
+    }
+  }
+  return { text: `${words.slice(0, best).join(' ')}\n${words.slice(best).join(' ')}`, lines: 2 };
+}
 
 type Props = {
   index: number;
@@ -38,6 +59,7 @@ export function LineToolbar({ index, canSplit, canMerge, onTool }: Props) {
       <View className="flex-row rounded-xl bg-bg">
         {MAIN.map(({ tool, icon }) => {
           const on = tool === 'more' && more;
+          const label = toolbarLabel(t(tool));
           return (
             <Pressable
               key={tool}
@@ -49,17 +71,16 @@ export function LineToolbar({ index, canSplit, canMerge, onTool }: Props) {
               className="min-h-12 flex-1 items-center justify-start px-0.5 py-1"
             >
               <Ionicons name={icon} size={20} color={on ? colors.text : colors.primary} />
-              {/* Five equal columns: a long label (he, de, ru) wraps onto a second line and shrinks rather than running
-                  into its neighbours. A one-word label keeps to one line, so a word too wide for the column shrinks
-                  instead of breaking mid-word ("Verschiebe-n"). */}
+              {/* Five equal columns: a long label (he, de, ru) takes two lines and shrinks to fit rather than running
+                  into its neighbours or breaking mid-word ("Verschiebe-n"). */}
               <StartText
                 testID={`review-tool-${tool}-label`}
-                className="text-center text-xs text-text"
-                numberOfLines={labelLines(t(tool))}
+                className="self-stretch text-center text-xs text-text"
+                numberOfLines={label.lines}
                 adjustsFontSizeToFit
                 minimumFontScale={0.7}
               >
-                {t(tool)}
+                {label.text}
               </StartText>
             </Pressable>
           );

@@ -176,7 +176,8 @@ describe('LyricsStep', () => {
 
   it('a gap callout plays the gap and inserts the reference lines', () => {
     const { store, player } = renderStep();
-    expect(screen.getByText('Possible missing lyrics · 0:24–0:29')).toBeTruthy();
+    // The range is one left-to-right isolate (Android RTL showed it as 0:29–0:28).
+    expect(screen.getByText('Possible missing lyrics · \u20660:24–0:29\u2069')).toBeTruthy();
     fireEvent.press(screen.getByTestId('review-gap-0-play'));
     expect(player.playRange).toHaveBeenLastCalledWith(23, 29.5);
     fireEvent.press(screen.getByTestId('review-gap-0-insert'));
