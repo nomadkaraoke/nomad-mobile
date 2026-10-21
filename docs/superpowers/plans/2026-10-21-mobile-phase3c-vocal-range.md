@@ -18,15 +18,35 @@
 - 3a spec `2026-10-21-mobile-phase3a-discover-core-design.md` §5 (catalog.db, v2 API), §8 and §9;
 - survey `2026-10-21-mobile-phase3-discover-survey.md` §8, §12, §13.
 
-**3a seam (read before Tasks 12, 14, 19, 20).** This plan assumes 3a and 3b are implemented as specified. No 3a plan existed when this was written, so the names of 3a code are the spec's. Before each task that touches 3a code, open the merged 3a code (or the 3a plan, `docs/superpowers/plans/2026-10-21-mobile-phase3a-discover-core.md`) and use its real names:
-- the catalog builder step in `mb-refresh`;
-- the v2 engine's filter/scoring/RecSong modules;
-- the decide test API and local stack;
-- the Discover filter bar, row and "Improve your picks" card;
-- the music profile screen;
-- the `stack.js` decide actions.
+**3a seam.** This plan assumes 3a and 3b are implemented as their plans describe. The 3a names used here come from `docs/superpowers/plans/2026-10-21-mobile-phase3a-discover-core.md`. If the merged code differs, follow the code.
 
-Where this plan says "3a's X", that is a seam to align, not a new file.
+decide:
+- **Catalog** (`karaoke_decide/catalog/`):
+  - `schema.py`: `DDL`, `CATALOG_SCHEMA_VERSION`;
+  - `build.py`: `SongRow`, `ArtistRow`, `CatalogRows`, `CatalogStats`, `build_catalog_db`;
+  - `bq_source.py`: `fetch_catalog_rows`, `ARTISTS_SQL` with `lead_gender`;
+  - `keys.py`: `artist_key` = `identity_normalize`;
+  - `fixtures.py`: the fixture catalog;
+  - `publish.py`: `build_and_publish_catalog`, `catalog_gate`.
+- **mb-refresh:** the catalog step runs after `publish_mirror`, in `publish_existing()` and in the `catalog` subcommand, behind `--skip-catalog`.
+- **Recommendations** (`backend/services/recs_v2/`):
+  - `filters.py`: `RecFilters`, `Sort`, `where_sql`, `ORDER_SQL`;
+  - `weights.py`, `scoring.py`, `service.py`;
+  - route models in `backend/api/routes/recommendations.py`: `RecSong`, `RecommendationsV2Response` (it already has `has_profile` for the quiz).
+- **Test API:** `backend/api/routes/test_support.py` (`POST /api/test/profile/seed`, `GET /api/test/profile`).
+- **Local stack:** `scripts/local-stack.sh`.
+
+mobile:
+- **core:** `packages/core/src/discover/filters.ts` (`RecFilters`, `RecSort`, `toRecQuery`).
+- **API client:** `packages/api-decide/src/discover.ts`.
+- **Discover components** (`apps/mobile/src/discover/components/`):
+  - `FilterBar.tsx` (chips `filter-chip-*`);
+  - `RecSongRow.tsx` (rows `rec-row-<sectionId>-<i>`);
+  - `ImproveCard.tsx` (`discover-improve-card`).
+- **Routes:**
+  - `apps/mobile/src/app/discover/quiz.tsx`, a modal declared in `_layout.tsx` and listed in `src/test-utils/routes.ts`;
+  - Me → `apps/mobile/src/app/me/music-profile.tsx` + `src/discover/profile/ProfileSection.tsx`.
+- **Maestro:** `maestro/scripts/stack.js` `ACTION: decide-seed` / `decide-reset` with `DECIDE_STACK` (default `http://127.0.0.1:8030`).
 
 **Repos and worktrees:**
 - decide: `/Users/andrew/Projects/nomadkaraoke/karaoke-decide-phase3-discover`.
@@ -502,7 +522,7 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
 - [ ] **Step 2: Run** `poetry run pytest tests/unit/vocal_range/test_gemini.py tests/unit/vocal_range/test_p412.py -q`. Expected: FAIL.
 - [ ] **Step 3: Implement** the pure module and `p412.py`.
 - [ ] **Step 4: Implement** `scripts/vocal_range/gemini_batch.py`. Subcommands:
-  - `prepare --artists 20000 --songs 50000` (BigQuery via ADC, read-only). Top artists by `lb_artist_popularity` listeners among artists with a `karaokenerds_raw` song. Top karaoke songs by 3a's popularity blend (or `lb_recording_popularity` via `karaoke_recording_links` if 3a left no BQ table). Writes `requests.jsonl` plus a `pop_rank` sidecar in the scratchpad.
+  - `prepare --artists 20000 --songs 50000` (BigQuery via ADC, read-only). Top artists by `lb_artist_popularity` listeners among artists with a `karaokenerds_raw` song. Top karaoke songs by `lb_recording_popularity` listeners (`stats_range = 'all_time'`) via `karaoke_recording_links` ⨝ `karaokenerds_raw`, one row per `song_key` (max listeners). 3a's popularity blend only exists inside catalog.db, so it isn't used here. Writes `requests.jsonl` plus a `pop_rank` sidecar in the scratchpad.
   - `estimate`: `count_tokens` on 200 sampled requests, then the cost. Exit 2 if `cost × 1.5 > BUDGET_USD`.
   - `submit`: `client.files.upload(file=…, config={"mime_type": "jsonl"})`, then `client.batches.create(model=…, src=file.name)`. Writes `job.json`.
   - `poll`.
@@ -604,8 +624,8 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
   - `gemini_song_bands`, `gemini_artist_bands` (BandStats);
   - `unmatched_per_source`.
 - **Behaviour:**
-  - `lead_gender` per artist comes from the same SQL 3a's catalog build uses (seam). `mbid` per artist comes from `mb_artists`.
-  - The step runs after the MB publish, and also when the dump was already published. It goes inside `run()` before 3a's catalog step, so the catalog sees fresh tables.
+  - `lead_gender` and `mbid` per artist come from 3a's `bq_source.ARTISTS_SQL` (run it, keyed by `keys.artist_key`). Don't write a second gender query.
+  - Placement: the step runs immediately before `build_and_publish_catalog` wherever that runs (`run()` after `publish_mirror`, `publish_existing()`, the `catalog` subcommand). That way the catalog always sees fresh tables. It has its own `--skip-vocal-range` flag and a `vocal-range` subcommand that runs only this step.
   - A failure in this step logs one ERROR and leaves last week's tables and `latest.json` untouched. It never fails the MB refresh.
   - A missing optional input (no gen_measured yet, no Gemini files) is INFO.
   - **Joining to `song_key`:**
@@ -618,7 +638,8 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
   - `test_tables_written_and_pointer_last`;
   - `test_summary_has_octave_error_rate` (one fixture also present as nomad_measured, an octave off);
   - `test_step_failure_keeps_previous_pointer_and_logs_one_error`;
-  - `test_runs_when_dump_already_published`;
+  - `TestRun.test_vocal_range_runs_before_catalog_in_run_publish_and_catalog_subcommand` (call order recorded on mocks);
+  - `test_skip_vocal_range_flag`;
   - `test_missing_gen_measured_is_info`.
 - [ ] **Step 2: Run** `poetry run pytest tests/unit/etl/test_vocal_range_refresh.py tests/unit/test_musicbrainz_refresh.py -q`. Expected: FAIL.
 - [ ] **Step 3: Implement.**
@@ -629,13 +650,17 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
 
 **Files:**
 - Modify:
-  - 3a's catalog builder (seam: the `songs`/`artists` table writer in the mb-refresh catalog step);
+  - `karaoke_decide/catalog/schema.py` (`CATALOG_SCHEMA_VERSION = 2`; DDL columns below);
+  - `karaoke_decide/catalog/build.py` (`SongRow`/`ArtistRow` gain optional `vr_*` fields; `CatalogStats.coverage` gains `vocal_range`);
+  - `karaoke_decide/catalog/bq_source.py` (`VOCAL_RANGE_SQL`, which reads `song_vocal_range` + `artist_vocal_range` under the byte cap and fills the rows; missing tables → `vr_*` None + WARNING);
+  - `karaoke_decide/catalog/publish.py` (`catalog_gate` ignores the `vocal_range` coverage key: informational only);
+  - `karaoke_decide/catalog/fixtures.py` (fill `vr_*` from the fixture TSVs below);
   - `karaoke_decide/song_search/offline.py` (`OFFLINE_SCHEMA_VERSION = 2`, `_add_offline_tables`, `build_offline_db(..., vocal_range: Path | None)`);
   - `karaoke_decide/etl/song_index_build.py` (download `vocal-range/latest/*.tsv.gz` from `nomadkaraoke-musicbrainz-data`; record `vocal_range_run` in the manifest; rebuild when it changes);
   - `infrastructure/__main__.py` (song-index-build SA: `storage.objectViewer` on `nomadkaraoke-musicbrainz-data`, condition prefix `vocal-range/`);
   - `scripts/emit_search_parity_fixtures.py` + `tests/fixtures/song_search/offline_fixture.db` (re-emit with a fixture vocal-range TSV);
-  - `tests/fixtures/vocal_range/song_vocal_range_fixture.tsv`, `artist_vocal_range_fixture.tsv` (ranges for the search and catalog fixture songs: baritone-fit, soprano, duet, rough-only, none).
-- Test: `tests/unit/song_search/test_offline.py`, `tests/unit/etl/test_song_index_build.py`, 3a's catalog build tests
+  - `tests/fixtures/vocal_range/song_vocal_range_fixture.tsv`, `artist_vocal_range_fixture.tsv`. These hold ranges for the search and catalog fixture songs: baritone-fit (Muse "Starlight", tier measured), `fitsIn −2` for a baritone, soprano (Adele "Hello"), a duet, a rough-only artist and one with no data. The ranges are invented numbers, not measurements.
+- Test: `tests/unit/song_search/test_offline.py`, `tests/unit/etl/test_song_index_build.py`, `tests/unit/catalog/test_build.py`, `tests/unit/catalog/test_bq_source.py`, `tests/unit/catalog/test_publish.py`
 
 **Interfaces:**
 - Produces:
@@ -652,7 +677,9 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
   - `test_offline_builds_without_vocal_range`;
   - `test_index_build_rebuilds_when_vocal_range_run_changes`;
   - `test_index_build_missing_tsv_is_warning`;
-  - `test_catalog_vr_columns_and_rough_fallback` (in 3a's catalog test module).
+  - `test_catalog_vr_columns_and_rough_fallback` (`test_build.py`);
+  - `test_vocal_range_sql_has_byte_cap` (`test_bq_source.py`);
+  - `test_gate_ignores_vocal_range_coverage_drop` (`test_publish.py`).
 - [ ] **Step 2: Run** `poetry run pytest tests/unit/song_search/test_offline.py tests/unit/etl/test_song_index_build.py -q`. Expected: FAIL.
 - [ ] **Step 3: Implement** the changes, then re-emit the parity fixtures with `poetry run python scripts/emit_search_parity_fixtures.py`.
 - [ ] **Step 4: Run** `poetry run pytest tests/unit -q`. Expected: PASS, including `test_parity_fixture_is_fresh`.
@@ -671,7 +698,7 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
 - Modify:
   - `backend/api/routes/__init__.py` (`router.include_router(voice_router, prefix="/my", tags=["voice"])`);
   - `backend/api/deps.py` (`VoiceProfileServiceDep`);
-  - 3a's test API (`/api/test/*`): add `PUT /api/test/voice` `{email, profile}` and include `voice_profile` in its read-profile response.
+  - `backend/api/routes/test_support.py` (3a): add `POST /api/test/voice/seed` `{email, profile}` → 204, and add `voice_profile` to `GET /api/test/profile`.
 - Test: `backend/tests/test_voice_routes.py`
 
 **Interfaces:**
@@ -709,14 +736,15 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
 ### Task 14: Fit in recommendations v2, Singable filter, fit sort, per-song range endpoint
 
 **Files:**
-- Modify (3a seams):
-  - the v2 filter/SQL builder;
-  - the scoring weights module;
-  - the `RecSong` model;
-  - the v2 route params;
-  - the catalog router (`backend/api/routes/catalog.py`);
-  - 3a's fixture catalog source (add the Task 12 fixture TSVs).
-- Test: 3a's `backend/tests/test_recommendations_v2*.py` (new cases), `backend/tests/test_catalog_vocal_range.py`
+- Modify:
+  - `backend/services/recs_v2/filters.py` (`RecFilters.singable: bool = False`; `Sort` gains `"fit"`, ordered in Python, not `ORDER_SQL`; the prefilter goes in `where_sql` when `singable` or `sort == "fit"`);
+  - `backend/services/recs_v2/weights.py` (`W_FIT = 0.15`, `FIT_AFFINITY`);
+  - `backend/services/recs_v2/scoring.py` (the fit term);
+  - `backend/services/recs_v2/service.py` (load the profile, compute fit per candidate);
+  - `backend/api/routes/recommendations.py` (`RecFit` model; `RecSong.fit`; `RecommendationsV2Response.voice`);
+  - `backend/services/catalog_store.py` / `karaoke_decide/catalog/reader.py` (`vocal_range(song_key)`);
+  - `backend/api/routes/catalog.py`.
+- Test: `backend/tests/recs_v2/test_fit.py`, `backend/tests/test_catalog_vocal_range.py`
 
 **Interfaces:**
 - Consumes: `fit_song` (Task 3), `VoiceProfileService.get` (Task 13), catalog `vr_*` (Task 12).
@@ -763,13 +791,15 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
   - `apps/mobile/app.json` (add the plugin `["expo-audio", {"microphonePermission": "Allow $(PRODUCT_NAME) to hear you sing so it can measure your vocal range. Audio stays on your phone.", "recordAudioAndroid": true}]`, and `ios.infoPlist.CFBundleAllowMixedLocalizations: true`);
   - `apps/mobile/app.config.ts` (`locales` = one entry per locale in `@nomad/i18n` `LOCALES`, pointing at `./locales/<code>.json`);
   - `packages/i18n/messages/en.json` (`permissions.microphone` + all `voice.*` and `fit.*` keys used in Tasks 18–19);
-  - `openapi/decide.json` + `packages/api-decide` (regenerate from the decide local stack via 3a's `decide` snapshot command).
+  - `openapi/decide.json` + `packages/api-decide` (regenerate: `DECIDE_OPENAPI_URL=http://127.0.0.1:8030/openapi.json node scripts/fetch-openapi.mjs decide && pnpm gen:api:offline`);
+  - `packages/api-decide/src/discover.ts` (recs v2 params `singable`, `sort: 'fit'`).
+- Create: `packages/api-decide/src/voice.ts` (facades, re-exported from `index.ts`).
 - Create: `scripts/gen-native-locales.mjs` (writes `apps/mobile/locales/<code>.json` = `{"ios": {"NSMicrophoneUsageDescription": <permissions.microphone>}}`; `--check` mode for CI), `apps/mobile/locales/*.json` (33 generated files)
 - Test: `apps/mobile/src/__tests__/appConfig.test.ts` (extend), `scripts/__tests__/genNativeLocales.test.mjs` or a jest test under `apps/mobile/src/__tests__/nativeLocales.test.ts`
 
 **Interfaces:**
 - Produces:
-  - The facades `getVoiceProfile()`, `putVoiceProfile(p)`, `deleteVoiceProfile()`, `getSongVocalRange(songKey)` in `packages/api-decide/src/` (same style as the existing facades).
+  - The facades `getVoiceProfile()`, `putVoiceProfile(p)`, `deleteVoiceProfile()`, `getSongVocalRange(songKey)` in `packages/api-decide/src/voice.ts`.
   - Recs v2 client types now include `singable`, `sort: 'fit'`, `RecSong.fit` and `voice`.
 
 - [ ] **Step 1: Write the failing tests:**
@@ -877,7 +907,7 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
   - `packages/ui/src/PianoStrip.tsx` (export from `packages/ui/src/index.ts`);
   - `apps/mobile/src/voice/VoiceTestScreen.tsx`, `apps/mobile/src/voice/SelfReportStep.tsx`, `apps/mobile/src/voice/VoiceResult.tsx`;
   - `apps/mobile/src/voice/voiceStore.ts`, `apps/mobile/src/voice/useVoiceProfile.ts`;
-  - `apps/mobile/src/app/discover/voice.tsx` (route; registered like 3a's `discover/quiz`, as a modal).
+  - `apps/mobile/src/app/discover/voice.tsx` (route; a `Stack.Screen` with `presentation: 'modal'` in `_layout.tsx`, next to `discover/quiz`, and added to `src/test-utils/routes.ts`).
 - Test: `packages/ui/src/__tests__/PianoStrip.test.tsx`, `apps/mobile/src/__tests__/voiceTestScreen.test.tsx`, `apps/mobile/src/__tests__/voiceProfile.test.ts`
 
 **Interfaces:**
@@ -926,11 +956,12 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
 - Create: `apps/mobile/src/voice/FitBadge.tsx`, `apps/mobile/src/voice/useSongFit.ts`, `apps/mobile/src/voice/VoiceProfileSection.tsx`
 - Modify:
   - `packages/core/src/search/offline.ts` (`offlineVocalRange`; `OFFLINE_SCHEMA_VERSION = 2`), `packages/core/src/index.ts`, `apps/mobile/src/test-utils/memoryFs.ts` (default schema 2);
-  - 3a's Discover filter bar (Singable chip `discover-filter-singable`; sort option `fit`);
-  - 3a's recommendation row (render `FitBadge` from `RecSong.fit`);
-  - 3a's "Improve your picks" card list (`discover-improve-voice` → `/discover/voice`; hidden when a profile exists);
-  - `apps/mobile/src/app/song/[id].tsx` (badge + tier line);
-  - 3a's music profile screen (add `VoiceProfileSection`).
+  - `packages/core/src/discover/filters.ts` (`RecFilters.singable: boolean` default false; `RecSort` gains `'fit'`; `toRecQuery` sends `singable: true` only when set);
+  - `apps/mobile/src/discover/components/FilterBar.tsx` (chip `filter-chip-singable`; the sort sheet gains "Fits my voice" = `fit`);
+  - `apps/mobile/src/discover/components/RecSongRow.tsx` (render `FitBadge` from `RecSong.fit`, testID `fit-badge-<sectionId>-<i>`);
+  - `apps/mobile/src/discover/components/ImproveCard.tsx` (add the `discover-improve-voice` entry → `/discover/voice`, hidden when a profile exists);
+  - `apps/mobile/src/app/song/[id].tsx` (badge `fit-badge-song` + tier line);
+  - `apps/mobile/src/app/me/music-profile.tsx` (add `VoiceProfileSection`).
 - Test: `packages/core/src/search/__tests__/offlineVocalRange.test.ts`, `apps/mobile/src/__tests__/fitBadge.test.tsx`, `discoverScreen.test.tsx` (extend), `songScreen.test.tsx` (extend)
 
 **Interfaces:**
@@ -945,7 +976,7 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
     - stretch → "A stretch";
     - outside → renders nothing.
   - Song page tier line `fit-tier`: "Range measured from the recording" / "from note data" / "estimated" / "rough guess from the artist".
-  - Singable chip: disabled with a "Test your voice" hint (`discover-filter-singable-cta` → `/discover/voice`) when there is no local profile.
+  - Singable chip: disabled with a "Test your voice" hint (`filter-chip-singable-cta` → `/discover/voice`) when there is no local profile.
   - **Me section** (`VoiceProfileSection`): range on `PianoStrip`, type, method, `voice-redo`, and `voice-remove` (DELETE plus local clear).
 
 - [ ] **Step 1: Write the failing tests:**
@@ -954,7 +985,8 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
   - Discover:
     - tapping Singable calls recs v2 with `singable: true`;
     - without a profile the chip shows the CTA;
-    - rows render `fit-badge-<song_key>`;
+    - rows render `fit-badge-<sectionId>-<i>`;
+    - `toRecQuery({...DEFAULT_REC_FILTERS, singable: true, sort: 'fit'})` gives `{singable: true, sort: 'fit'}` (`packages/core/src/discover/__tests__/filters.test.ts`);
   - Song page offline (force-offline) uses `offlineVocalRange` and shows the tier line; with no data, no badge and no tier;
   - the Me section remove clears local and calls DELETE.
 - [ ] **Step 2: Run** `pnpm test -- offlineVocalRange fitBadge discoverScreen songScreen`. Expected: FAIL.
@@ -971,7 +1003,7 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
 **Files:**
 - Create: `maestro/flows/voice-1-test.yaml`, `maestro/flows/voice-2-self-report.yaml`, `maestro/flows/voice-3-singable.yaml`
 - Modify:
-  - `maestro/scripts/stack.js` (decide actions from 3a, plus `ACTION: voice-seed` (`EMAIL`, `PROFILE` JSON → `PUT /api/test/voice`) and `ACTION: voice-assert` (`EMAIL`, `EXPECT_TYPE`, `EXPECT_METHOD` → reads 3a's profile test endpoint));
+  - `maestro/scripts/stack.js` (shared; next to 3a's `decide-seed`, against `DECIDE_STACK`): `ACTION: voice-seed` (`EMAIL`, `PROFILE` JSON → `POST /api/test/voice/seed`) and `ACTION: voice-assert` (`EMAIL`, `EXPECT_TYPE`, `EXPECT_METHOD` → `GET /api/test/profile` `voice_profile`);
   - `scripts/e2e-local.sh` (Metro env adds `EXPO_PUBLIC_FAKE_MIC=baritone-scale`; the decide local stack serves the Task 12 fixture `vr_*`);
   - `CLAUDE.md` (E2E section: fake mic and the voice flows).
 
@@ -983,11 +1015,12 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
   - Assert `voice-result-type` contains "Baritone" → `voice-save` → `voice-saved`.
   - `stack.js voice-assert EXPECT_TYPE=baritone EXPECT_METHOD=mic`.
 - **voice-2-self-report:** → `voice-skip` → `voice-self-tenor` → `voice-self-save` → `voice-assert EXPECT_TYPE=tenor EXPECT_METHOD=self`. Then Me → profile shows "Tenor".
-- **voice-3-singable:** `voice-seed` a baritone profile + 3a quiz seed → Discover → `discover-filter-singable`.
-  - Assert the fixture soprano song is not visible.
-  - Assert `fit-badge-<baritone fixture song_key>` reads "Fits your voice".
-  - Assert a `fitsIn` fixture shows "Try it 2 keys down".
-  - Open that song → `fit-tier` visible.
+- **voice-3-singable:** `voice-seed` a baritone profile + `decide-seed` persona A → Discover → `filter-chip-singable`.
+  - Assert the fixture soprano song's title is not visible.
+  - Assert "Fits your voice" is visible on a `fit-badge-*` row.
+  - Assert the `fitsIn` fixture song shows "Try it 2 keys down".
+  - Open that row → `fit-badge-song` and `fit-tier` visible.
+  - The fixture TSV (Task 12) pins which songs these are; use their titles in the flow.
 
 - [ ] **Step 1: Write the three flows.**
 - [ ] **Step 2: Run** `scripts/e2e-local.sh --platform ios voice-`. Expected: 3/3 PASS. Then run `--platform android voice-` (never concurrently). Expected: 3/3 PASS.
