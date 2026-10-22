@@ -96,7 +96,8 @@
     "signupLimited": "Πάρα πολλοί νέοι λογαριασμοί αυτή τη στιγμή. Δοκίμασε ξανά σε λίγο.",
     "tooManyCodes": "Ζητήθηκαν πάρα πολλοί κωδικοί, δοκίμασε ξανά σε λίγο",
     "resend": "Αποστολή νέου κωδικού",
-    "sheetTitleGeneric": "Συνδέσου στο Nomad Karaoke"
+    "sheetTitleGeneric": "Συνδέσου στο Nomad Karaoke",
+    "or": "ή"
   },
   "song": {
     "artistLabel": "Καλλιτέχνης",

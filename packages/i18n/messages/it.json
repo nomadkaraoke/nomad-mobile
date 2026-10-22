@@ -96,7 +96,8 @@
     "signupLimited": "Troppi nuovi account al momento. Riprova tra poco.",
     "tooManyCodes": "Troppi codici richiesti, riprova tra poco",
     "resend": "Invia un nuovo codice",
-    "sheetTitleGeneric": "Accedi a Nomad Karaoke"
+    "sheetTitleGeneric": "Accedi a Nomad Karaoke",
+    "or": "o"
   },
   "song": {
     "artistLabel": "Artista",

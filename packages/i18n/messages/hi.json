@@ -96,7 +96,8 @@
     "signupLimited": "अभी बहुत सारे नए खाते बन रहे हैं। थोड़ी देर बाद फिर कोशिश करो।",
     "tooManyCodes": "बहुत सारे कोड माँगे जा चुके हैं, थोड़ी देर बाद फिर कोशिश करो",
     "resend": "नया कोड भेजो",
-    "sheetTitleGeneric": "Nomad Karaoke में साइन इन करो"
+    "sheetTitleGeneric": "Nomad Karaoke में साइन इन करो",
+    "or": "या"
   },
   "song": {
     "artistLabel": "कलाकार",

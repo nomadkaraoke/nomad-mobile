@@ -96,7 +96,8 @@
     "signupLimited": "현재 신규 계정 가입이 너무 많습니다. 잠시 후 다시 시도해 주세요.",
     "tooManyCodes": "코드 요청 횟수가 너무 많습니다. 잠시 후 다시 시도해 주세요",
     "resend": "새 코드 보내기",
-    "sheetTitleGeneric": "Nomad Karaoke 로그인"
+    "sheetTitleGeneric": "Nomad Karaoke 로그인",
+    "or": "또는"
   },
   "song": {
     "artistLabel": "아티스트",

@@ -25,7 +25,7 @@ it('defaults to prod gen, the gen web app and the Nomad Google client ids', () =
   expect(c.DECIDE_API_URL).toBe('https://decide.nomadkaraoke.com');
   expect(c.GOOGLE_WEB_CLIENT_ID).toBe('718638054799-fush0smd1e4icq9pt0immp8n59jjlebh.apps.googleusercontent.com');
   expect(c.GOOGLE_IOS_CLIENT_ID).toBe('718638054799-hre535n83p8i85tsqf6ai759nlubhd2o.apps.googleusercontent.com');
-  expect(c.APPLE_SIGNIN_ENABLED).toBe(false);
+  expect(c.APPLE_SIGNIN_ENABLED).toBe(true);
   expect(c.fakeSocialEnabled()).toBe(false);
   expect(c.searchForceOffline()).toBe(false);
 });
@@ -33,11 +33,11 @@ it('defaults to prod gen, the gen web app and the Nomad Google client ids', () =
 it('reads overrides from env', () => {
   process.env.EXPO_PUBLIC_GEN_API_URL = 'http://127.0.0.1:8010';
   process.env.EXPO_PUBLIC_GEN_WEB_URL = 'http://127.0.0.1:3000';
-  process.env.EXPO_PUBLIC_APPLE_SIGNIN = '1';
+  process.env.EXPO_PUBLIC_APPLE_SIGNIN = '0';
   const c = load();
   expect(c.GEN_API_URL).toBe('http://127.0.0.1:8010');
   expect(c.GEN_WEB_URL).toBe('http://127.0.0.1:3000');
-  expect(c.APPLE_SIGNIN_ENABLED).toBe(true);
+  expect(c.APPLE_SIGNIN_ENABLED).toBe(false);
 });
 
 it.each([

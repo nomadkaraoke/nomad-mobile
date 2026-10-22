@@ -96,7 +96,8 @@
     "signupLimited": "Momentálne sa registruje príliš veľa nových účtov. Skús to o chvíľu znova.",
     "tooManyCodes": "Príliš veľa vyžiadaných kódov, skús to o chvíľu",
     "resend": "Poslať nový kód",
-    "sheetTitleGeneric": "Prihlás sa do Nomad Karaoke"
+    "sheetTitleGeneric": "Prihlás sa do Nomad Karaoke",
+    "or": "alebo"
   },
   "song": {
     "artistLabel": "Interpret",

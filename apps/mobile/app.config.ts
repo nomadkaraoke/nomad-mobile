@@ -52,10 +52,11 @@ const withLauncherLabel: ConfigPlugin = (config) =>
   });
 
 export default ({ config }: ConfigContext): ExpoConfig => {
-  // Sign in with Apple adds an entitlement that only a provisioning profile with the capability can sign,
-  // so it is off (no entitlement, no button) until EXPO_PUBLIC_APPLE_SIGNIN=1 and the Apple account is set up.
-  const apple = process.env.EXPO_PUBLIC_APPLE_SIGNIN === '1';
-  // Associated domains are an entitlement too (same reason: the team-signed build), so off until the flag is set.
+  // Sign in with Apple is on: App Store review requires it alongside Google, the App ID has the capability
+  // (team 55B76HN73D) and gen verifies the tokens. EXPO_PUBLIC_APPLE_SIGNIN=0 drops the entitlement and the
+  // button, for a build signed by a team without the capability.
+  const apple = process.env.EXPO_PUBLIC_APPLE_SIGNIN !== '0';
+  // Associated domains are an entitlement too (it needs the team-signed build), so off until the flag is set.
   const associatedDomains = process.env.EXPO_PUBLIC_ASSOCIATED_DOMAINS === '1';
   const resolved: ExpoConfig = {
     ...config,

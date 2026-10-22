@@ -96,7 +96,8 @@
     "signupLimited": "Şu anda çok fazla yeni hesap açılıyor. Birazdan tekrar dene.",
     "tooManyCodes": "Çok fazla kod istendi, birazdan tekrar dene",
     "resend": "Yeni bir kod gönder",
-    "sheetTitleGeneric": "Nomad Karaoke'ye giriş yap"
+    "sheetTitleGeneric": "Nomad Karaoke'ye giriş yap",
+    "or": "veya"
   },
   "song": {
     "artistLabel": "Sanatçı",

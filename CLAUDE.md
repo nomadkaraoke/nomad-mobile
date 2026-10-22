@@ -144,7 +144,7 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 
 ## Sign-in and session
 
-- Gen email code, Google (`react-native-google-auth`) and Apple (`expo-apple-authentication`, off until `EXPO_PUBLIC_APPLE_SIGNIN=1`; `app.config.ts` strips the entitlement otherwise). Against the local stack, `EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1` makes Google/Apple send `fake:<email>`; `config.ts` only honours it when the gen URL is a local host (loopback, 10.0.2.2, private LAN, `*.local`).
+- Gen email code, Google (`react-native-google-auth`) and Apple (`expo-apple-authentication`, iOS only, on unless `EXPO_PUBLIC_APPLE_SIGNIN=0`, which strips the entitlement). The sheet uses `@nomad/ui` `SocialButton` (Apple's white style first on iOS, Google's dark style with the four-colour `GoogleLogo`, then email). Against the local stack, `EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1` makes Google/Apple send `fake:<email>`; `config.ts` only honours it when the gen URL is a local host (loopback, 10.0.2.2, private LAN, `*.local`).
 - `useSessionCheck` (in `AppProviders`) calls `GET /api/users/me` on launch and on every foreground while signed in; a 401 signs out through the gen client's `onUnauthorized`. Open sign-in with `openSignIn(returnTo)` (`auth/signInUi.ts`).
 
 ## Deferred / later-phase notes
@@ -158,7 +158,7 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 
 ## App identity
 
-- Apple: App ID `com.nomadkaraoke.mobile` ("Nomad Karaoke") registered 2026-10-17 in Andrew's Apple Developer account (Individual, team `55B76HN73D`, renews 2027-06-25) with Sign in with Apple enabled. Turning the Apple button on (`EXPO_PUBLIC_APPLE_SIGNIN=1`) and verifying it needs a team-signed iOS build (Xcode signed into Andrew's Apple ID): parked to Phase 6 with TestFlight.
+- Apple: App ID `com.nomadkaraoke.mobile` ("Nomad Karaoke") registered 2026-10-17 in Andrew's Apple Developer account (Individual, team `55B76HN73D`, renews 2027-06-25) with Sign in with Apple enabled. Apple sign-in is **on by default** since 2026-10-22 (`EXPO_PUBLIC_APPLE_SIGNIN=0` turns it off); Xcode on Andrew's Mac is signed into the team, so `xcodebuild … DEVELOPMENT_TEAM=55B76HN73D -allowProvisioningUpdates` builds a signed Release for his iPad (`Lindrew iPad`, install with `xcrun devicectl device install app`). Screenshot a USB iPad with `pymobiledevice3 developer dvt screenshot <file>` (no root needed); open a screen with `xcrun devicectl device process launch --payload-url nomadkaraoke://<route> com.nomadkaraoke.mobile`.
 - Google OAuth clients (project `nomadkaraoke`, created 2026-10-17): web `718638054799-fush0smd1e4icq9pt0immp8n59jjlebh` (the token audience gen verifies), iOS `718638054799-hre535n83p8i85tsqf6ai759nlubhd2o`, Android `718638054799-q0f65m68a31du5nn9h5accsauad232ku` (debug keystore SHA-1 `5E:8F:…:F6:25`; add the release key's SHA-1 when a real signing key exists).
 
 - iOS bundle id / Android package: `com.nomadkaraoke.mobile`

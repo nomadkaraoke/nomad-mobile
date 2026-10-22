@@ -244,7 +244,8 @@
     "disposable": "That looks like a temporary email address. Use your regular email instead.",
     "network": "Couldn't connect. Check your connection and try again.",
     "resend": "Send a new code",
-    "resent": "We sent a new code to {email}."
+    "resent": "We sent a new code to {email}.",
+    "or": "or"
   },
   "account": {
     "signIn": "Sign in",

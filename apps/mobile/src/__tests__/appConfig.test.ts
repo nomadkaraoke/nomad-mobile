@@ -19,7 +19,8 @@ beforeEach(() => {
   delete process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID;
 });
 
-it('adds the Google plugin with the iOS client id, and no Apple entitlement by default', () => {
+it('adds the Google plugin with the iOS client id, and no Apple entitlement with EXPO_PUBLIC_APPLE_SIGNIN=0', () => {
+  process.env.EXPO_PUBLIC_APPLE_SIGNIN = '0';
   const c = resolve();
   expect(c.plugins).toEqual([
     'expo-router',
@@ -31,8 +32,7 @@ it('adds the Google plugin with the iOS client id, and no Apple entitlement by d
   expect(c.ios?.bundleIdentifier).toBe('com.nomadkaraoke.mobile');
 });
 
-it('enables Sign in with Apple only with EXPO_PUBLIC_APPLE_SIGNIN=1', () => {
-  process.env.EXPO_PUBLIC_APPLE_SIGNIN = '1';
+it('enables Sign in with Apple by default', () => {
   const c = resolve();
   expect(c.ios?.usesAppleSignIn).toBe(true);
   expect(c.plugins).toContain('expo-apple-authentication');

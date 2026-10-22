@@ -96,7 +96,8 @@
     "signupLimited": "Sunt prea multe conturi noi în acest moment. Încearcă din nou puțin mai târziu.",
     "tooManyCodes": "Au fost solicitate prea multe coduri. Încearcă din nou puțin mai târziu.",
     "resend": "Trimite un cod nou",
-    "sheetTitleGeneric": "Conectează-te la Nomad Karaoke"
+    "sheetTitleGeneric": "Conectează-te la Nomad Karaoke",
+    "or": "sau"
   },
   "song": {
     "artistLabel": "Artist",

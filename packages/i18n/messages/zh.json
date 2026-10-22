@@ -96,7 +96,8 @@
     "signupLimited": "当前注册人数较多，请稍后再试。",
     "tooManyCodes": "获取验证码过于频繁，请稍后再试",
     "resend": "重新发送验证码",
-    "sheetTitleGeneric": "登录 Nomad Karaoke"
+    "sheetTitleGeneric": "登录 Nomad Karaoke",
+    "or": "或"
   },
   "song": {
     "artistLabel": "歌手",

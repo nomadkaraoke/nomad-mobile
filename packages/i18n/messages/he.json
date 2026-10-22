@@ -96,7 +96,8 @@
     "signupLimited": "יותר מדי חשבונות חדשים נפתחים כרגע. נסו שוב עוד מעט.",
     "tooManyCodes": "ביקשתם יותר מדי קודים, נסו שוב בעוד כמה דקות",
     "resend": "שלחו קוד חדש",
-    "sheetTitleGeneric": "היכנס ל-Nomad Karaoke"
+    "sheetTitleGeneric": "היכנס ל-Nomad Karaoke",
+    "or": "או"
   },
   "song": {
     "artistLabel": "אומן",

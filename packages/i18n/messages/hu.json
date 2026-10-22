@@ -96,7 +96,8 @@
     "signupLimited": "Jelenleg túl sok új fiók regisztrál. Próbáld újra egy kicsit később.",
     "tooManyCodes": "Túl sok kódot kértél le, próbáld újra egy kicsit később",
     "resend": "Új kód küldése",
-    "sheetTitleGeneric": "Jelentkezz be a Nomad Karaoke-ba"
+    "sheetTitleGeneric": "Jelentkezz be a Nomad Karaoke-ba",
+    "or": "vagy"
   },
   "song": {
     "artistLabel": "Előadó",

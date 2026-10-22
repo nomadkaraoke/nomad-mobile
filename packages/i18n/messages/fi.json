@@ -96,7 +96,8 @@
     "signupLimited": "Liian monta uutta tiliä juuri nyt. Yritä hetken kuluttua uudelleen.",
     "tooManyCodes": "Liian monta koodipyyntöä, yritä hetken kuluttua uudelleen",
     "resend": "Lähetä uusi koodi",
-    "sheetTitleGeneric": "Kirjaudu sisään Nomad Karaokeen"
+    "sheetTitleGeneric": "Kirjaudu sisään Nomad Karaokeen",
+    "or": "tai"
   },
   "song": {
     "artistLabel": "Artisti",

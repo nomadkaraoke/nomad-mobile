@@ -96,7 +96,8 @@
     "signupLimited": "Er worden momenteel te veel nieuwe accounts aangemaakt. Probeer het over een tijdje opnieuw.",
     "tooManyCodes": "Te veel codes aangevraagd. Probeer het over een tijdje opnieuw.",
     "resend": "Stuur een nieuwe code",
-    "sheetTitleGeneric": "Log in bij Nomad Karaoke"
+    "sheetTitleGeneric": "Log in bij Nomad Karaoke",
+    "or": "of"
   },
   "song": {
     "artistLabel": "Artiest",

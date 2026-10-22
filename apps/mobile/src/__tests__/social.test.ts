@@ -93,8 +93,9 @@ describe('Apple', () => {
   });
 
   it('appleAvailable needs the build flag, iOS and device support', async () => {
+    process.env.EXPO_PUBLIC_APPLE_SIGNIN = '0';
     expect(await load().appleAvailable()).toBe(false);
-    process.env.EXPO_PUBLIC_APPLE_SIGNIN = '1';
+    delete process.env.EXPO_PUBLIC_APPLE_SIGNIN;
     expect(await load().appleAvailable()).toBe(true);
     apple.isAvailableAsync.mockResolvedValueOnce(false);
     expect(await load().appleAvailable()).toBe(false);

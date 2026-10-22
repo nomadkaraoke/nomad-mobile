@@ -96,7 +96,8 @@
     "signupLimited": "V této chvíli vzniká příliš mnoho nových účtů. Zkus to za chvilku znovu.",
     "tooManyCodes": "Příliš mnoho vyžádaných kódů, zkus to za chvíli znovu",
     "resend": "Poslat nový kód",
-    "sheetTitleGeneric": "Přihlas se do Nomad Karaoke"
+    "sheetTitleGeneric": "Přihlas se do Nomad Karaoke",
+    "or": "nebo"
   },
   "song": {
     "artistLabel": "Umělec",

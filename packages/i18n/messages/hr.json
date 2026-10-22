@@ -96,7 +96,8 @@
     "signupLimited": "Trenutačno je previše novih registracija. Pokušaj ponovno malo kasnije.",
     "tooManyCodes": "Zatraženo je previše kôdova, pokušaj ponovno malo kasnije",
     "resend": "Pošalji novi kod",
-    "sheetTitleGeneric": "Prijavi se u Nomad Karaoke"
+    "sheetTitleGeneric": "Prijavi se u Nomad Karaoke",
+    "or": "ili"
   },
   "song": {
     "artistLabel": "Izvođač",

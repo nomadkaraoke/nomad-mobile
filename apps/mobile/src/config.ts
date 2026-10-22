@@ -28,7 +28,7 @@ export const GOOGLE_IOS_CLIENT_ID =
   process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || '718638054799-hre535n83p8i85tsqf6ai759nlubhd2o.apps.googleusercontent.com';
 
 /** Shows the Apple button (iOS only; the UI checks the platform). Off until the Apple developer account is confirmed. */
-export const APPLE_SIGNIN_ENABLED = process.env.EXPO_PUBLIC_APPLE_SIGNIN === '1';
+export const APPLE_SIGNIN_ENABLED = process.env.EXPO_PUBLIC_APPLE_SIGNIN !== '0';
 
 /**
  * Google/Apple buttons send `fake:<email>` ID tokens (local stack and E2E only). Only against a local gen

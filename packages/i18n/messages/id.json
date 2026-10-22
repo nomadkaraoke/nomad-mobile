@@ -96,7 +96,8 @@
     "signupLimited": "Pendaftaran akun baru sedang penuh. Coba lagi beberapa saat lagi.",
     "tooManyCodes": "Terlalu banyak permintaan kode, coba lagi beberapa saat lagi",
     "resend": "Kirim kode baru",
-    "sheetTitleGeneric": "Masuk ke Nomad Karaoke"
+    "sheetTitleGeneric": "Masuk ke Nomad Karaoke",
+    "or": "atau"
   },
   "song": {
     "artistLabel": "Artis",
