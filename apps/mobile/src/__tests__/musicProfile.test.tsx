@@ -208,6 +208,19 @@ describe('musicProfile', () => {
       await waitFor(() => expect(app.getPathname()).toBe('/me/music-profile'));
     });
 
+    it('untapping a loved song unloves it on finish', async () => {
+      lovedRows = [song('Gamma Group', 'Invented Song'), song('Kappa Crew', 'Fake Ballad')];
+      await signIn();
+      open(editQuiz);
+      fireEvent.press(await screen.findByTestId('quiz-picked-song-0'));
+      await waitFor(() => expect(screen.queryByText(/Gamma Group/)).toBeNull());
+      fireEvent.press(screen.getByTestId('quiz-finish'));
+      await waitFor(() => expect(decide.unloveSong).toHaveBeenCalledWith('gamma group|invented song'));
+      expect(decide.unloveSong).toHaveBeenCalledTimes(1);
+      expect(decide.loveSong).not.toHaveBeenCalledWith('gamma group|invented song', expect.anything());
+      expect(decide.loveSong).toHaveBeenCalledWith('kappa crew|fake ballad', { artist: 'Kappa Crew', title: 'Fake Ballad' });
+    });
+
     it('keeps the love level of profile artists when the quiz is submitted (like only when decide has none)', async () => {
       artistRows = [
         { artist_name: 'Alpha Band', sources: ['quiz'], affinity: 'love' },

@@ -1,4 +1,4 @@
-import { loveSong, submitQuiz, type QuizSubmitRequest } from '@nomad/api-decide';
+import { loveSong, submitQuiz, unloveSong, type QuizSubmitRequest } from '@nomad/api-decide';
 import { canAdvance, mergeSubmit, toSubmitRequest, type QuizDraft } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { Button, colors, Text } from '@nomad/ui';
@@ -110,7 +110,7 @@ function Quiz({ owner }: { owner: string }) {
     setFailed(false);
     const s = useQuizDraft.getState();
     s.flush();
-    const { draft: d, saved, touched } = s;
+    const { draft: d, saved, touched, seededLoved } = s;
     try {
       await submitQuiz(mergeSubmit(saved, toSubmitRequest(d), touched) as QuizSubmitRequest);
     } catch {
@@ -118,8 +118,13 @@ function Quiz({ owner }: { owner: string }) {
       setSubmitting(false);
       return;
     }
-    // The quiz submit doesn't take songs: each loved song goes to "songs you love" (best effort).
-    await Promise.allSettled(d.songs.map((x) => loveSong(x.songKey, { artist: x.artist, title: x.title })));
+    // The quiz submit doesn't take songs: each loved song goes to "songs you love" (best effort). Opened from the
+    // profile, step 4 starts with the loved songs picked: one tapped off is unloved.
+    const kept = new Set(d.songs.map((x) => x.songKey));
+    await Promise.allSettled([
+      ...d.songs.map((x) => loveSong(x.songKey, { artist: x.artist, title: x.title })),
+      ...seededLoved.filter((key) => !kept.has(key)).map((key) => unloveSong(key)),
+    ]);
     // Reset (not just invalidate): Discover shows its picks loading, not the old "take the quiz" card.
     void queryClient.resetQueries({ queryKey: RECS_KEY });
     // The music profile shows the new answers and loved songs (finishing from it returns there).

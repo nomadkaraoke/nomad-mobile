@@ -49,6 +49,11 @@ type QuizStore = {
    * load, so an artist tapped off stays there (also after leaving and re-entering step 3).
    */
   listed: Pick<QuizArtistPick, 'name' | 'mbid' | 'artistId'>[];
+  /**
+   * Song keys decide had as loved when the quiz was opened from the music profile (`load(owner, true)`); empty
+   * otherwise. Finishing unloves those the user tapped off, since step 4 shows them as picked.
+   */
+  seededLoved: readonly string[];
   /** The signed-in email the draft belongs to; null until `load` finishes. */
   owner: string | null;
   /** Suggestions in the order shown. Append-only: an artist once shown is never removed. */
@@ -161,6 +166,7 @@ const INITIAL = {
   saved: null,
   touched: new Set<string>(),
   listed: [],
+  seededLoved: [],
   owner: null,
   suggestions: [],
   suggesting: false,
@@ -208,6 +214,7 @@ export const useQuizDraft = create<QuizStore>((set, get) => {
         saved: fromRemote ? remote : fromLocal ? local : null,
         touched: artistKeys([...draft.artists.map((a) => a.name), ...(current ? staleNames : [])]),
         listed: draft.artists.map(({ name, mbid, artistId }) => ({ name, mbid, artistId })),
+        seededLoved: current?.songs?.map((x) => x.songKey) ?? [],
       });
     },
 
