@@ -7,19 +7,21 @@ export type ChipProps = {
   onPress: () => void;
   testID: string;
   accessibilityHint?: string;
+  /** 'radio' for a single-choice group (also reports checked); default 'button'. */
+  role?: 'button' | 'radio';
 };
 
 /** A selectable pill (filters, segmented choices). Selected = the primary pink, as gen web's active filter. */
-export function Chip({ label, selected, onPress, testID, accessibilityHint }: ChipProps) {
+export function Chip({ label, selected, onPress, testID, accessibilityHint, role = 'button' }: ChipProps) {
   return (
     <Pressable
       testID={testID}
-      accessibilityRole="button"
+      accessibilityRole={role}
       accessibilityLabel={label}
       accessibilityHint={accessibilityHint}
-      accessibilityState={{ selected }}
+      accessibilityState={role === 'radio' ? { selected, checked: selected } : { selected }}
       onPress={onPress}
-      className={`min-h-10 items-center justify-center rounded-full border px-4 py-2 ${
+      className={`min-h-11 items-center justify-center rounded-full border px-4 py-2 ${
         selected ? 'border-primary bg-primary' : 'border-border bg-card'
       }`}
     >

@@ -13,7 +13,7 @@ export function LibraryFilterPicker() {
   const filter = useLibraryFilter((s) => s.filter);
   const set = useLibraryFilter((s) => s.set);
   return (
-    <View testID="library-filter" accessibilityLabel={t('libraryLabel')} className="gap-1.5">
+    <View testID="library-filter" accessibilityRole="radiogroup" accessibilityLabel={t('libraryLabel')} className="gap-1.5">
       <ChipRow testID="library-filter-row">
         {LIBRARY_FILTERS.map((value: LibraryFilter) => (
           <Chip
@@ -22,13 +22,15 @@ export function LibraryFilterPicker() {
             label={t(LABEL_KEY[value])}
             selected={filter === value}
             onPress={() => set(value)}
-            accessibilityHint={value === 'karafun' ? t('libraryInfo') : undefined}
+            role="radio"
           />
         ))}
       </ChipRow>
-      <Text variant="muted" testID="library-filter-info" className="px-4">
-        {t('libraryInfo')}
-      </Text>
+      {filter === 'karafun' ? (
+        <Text variant="muted" testID="library-filter-info" className="px-4">
+          {t('libraryInfo')}
+        </Text>
+      ) : null}
     </View>
   );
 }

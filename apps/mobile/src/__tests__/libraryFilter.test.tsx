@@ -31,9 +31,21 @@ it('tapping KaraFun selects and persists it; a relaunch reads it back', () => {
   expect(relaunch().getState().filter).toBe('karafun');
 });
 
-it('shows the KaraFun catalogue info line under the chips', () => {
+it('is a radiogroup of radios', () => {
   wrap(<LibraryFilterPicker />);
+  expect(screen.getByTestId('library-filter').props.accessibilityRole).toBe('radiogroup');
+  expect(screen.getByTestId('library-filter').props.accessibilityLabel).toBe('Venue library');
+  expect(screen.getByTestId('library-filter-any').props.accessibilityRole).toBe('radio');
+  expect(screen.getByTestId('library-filter-any').props.accessibilityState).toEqual({ selected: true, checked: true });
+});
+
+it('shows the KaraFun catalogue info line only while KaraFun is chosen', () => {
+  wrap(<LibraryFilterPicker />);
+  expect(screen.queryByTestId('library-filter-info')).toBeNull();
+  fireEvent.press(screen.getByTestId('library-filter-karafun'));
   expect(screen.getByText('KaraFun / Karaoke Version catalogue')).toBeTruthy();
+  fireEvent.press(screen.getByTestId('library-filter-community'));
+  expect(screen.queryByTestId('library-filter-info')).toBeNull();
 });
 
 it('a garbage stored value falls back to any and is removed', () => {

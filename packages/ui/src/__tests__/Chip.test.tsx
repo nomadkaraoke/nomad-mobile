@@ -6,13 +6,19 @@ import { Chip, ChipRow } from '../Chip';
 it('exposes accessibilityState.selected and fires onPress', () => {
   const onPress = jest.fn();
   const { rerender } = render(<Chip testID="c" label="Any" selected={false} onPress={onPress} />);
-  expect(screen.getByTestId('c').props.accessibilityState).toEqual(expect.objectContaining({ selected: false }));
+  expect(screen.getByTestId('c').props.accessibilityState).toEqual({ selected: false });
   fireEvent.press(screen.getByTestId('c'));
   expect(onPress).toHaveBeenCalledTimes(1);
   rerender(<Chip testID="c" label="Any" selected onPress={onPress} accessibilityHint="hint" />);
-  expect(screen.getByTestId('c').props.accessibilityState).toEqual(expect.objectContaining({ selected: true }));
+  expect(screen.getByTestId('c').props.accessibilityState).toEqual({ selected: true });
   expect(screen.getByTestId('c').props.accessibilityHint).toBe('hint');
   expect(screen.getByText('Any')).toBeTruthy();
+});
+
+it('role radio reports checked as well as selected', () => {
+  render(<Chip testID="r" label="A" role="radio" selected onPress={jest.fn()} />);
+  expect(screen.getByTestId('r').props.accessibilityRole).toBe('radio');
+  expect(screen.getByTestId('r').props.accessibilityState).toEqual({ selected: true, checked: true });
 });
 
 it('ChipRow renders its children in a horizontal scroller', () => {
