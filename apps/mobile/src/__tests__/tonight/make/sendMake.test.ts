@@ -8,20 +8,21 @@ it('defaults: the last attempt starts by 330 s (with a 95 s call, the spinner to
 });
 
 it('never starts an attempt after lastStartMs, then reports the outcome as still pending', async () => {
-  const saved = { ...makeTiming };
-  Object.assign(makeTiming, { retryMinMs: 10, lastStartMs: 45 });
+  // Fake timers (Date.now included): a real clock with a 45 ms budget was flaky on a loaded machine.
+  jest.useFakeTimers({ now: 0 });
   const starts: number[] = [];
-  const t0 = Date.now();
   try {
-    await expect(
-      sendMake(async () => {
-        starts.push(Date.now() - t0);
-        throw new KjboxError('busy_retry', 409, 0);
-      }),
-    ).rejects.toBeInstanceOf(MakeStillPending);
-    expect(starts.length).toBeGreaterThan(1);
-    expect(Math.max(...starts)).toBeLessThanOrEqual(45);
+    const outcome = sendMake(async () => {
+      starts.push(Date.now());
+      throw new KjboxError('busy_retry', 409, 0);
+    });
+    const settled = expect(outcome).rejects.toBeInstanceOf(MakeStillPending);
+    await jest.advanceTimersByTimeAsync(makeTiming.lastStartMs + 60_000);
+    await settled;
+    // Every 3 s from 0 while the next start still fits in 330 s: 0, 3, …, 330 s.
+    expect(starts.length).toBe(Math.floor(makeTiming.lastStartMs / makeTiming.retryMinMs) + 1);
+    expect(Math.max(...starts)).toBeLessThanOrEqual(makeTiming.lastStartMs);
   } finally {
-    Object.assign(makeTiming, saved);
+    jest.useRealTimers();
   }
 });
