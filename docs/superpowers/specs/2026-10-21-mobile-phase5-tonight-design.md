@@ -243,7 +243,7 @@ Rate limits: as the web (per device, with the per-IP ceiling, A.25, A.26), persi
 ### 6.3 Post-song survey (both modes)
 
 - Shown as a bottom sheet when a song becomes sung (Nomad: when `/me` reports it sung while the app is open, or on next open; Other: when marked sung). Also reachable from any sung row ("How did it go?"). Dismissable; never blocks.
-- Questions (Andrew's list): **How was it to sing?** (great / OK / not for me), **Key** (too low / about right / too high), **Crowd-pleaser?** (yes / not really), **Notes** (free text, optional). All optional; saved as answered.
+- Questions (Andrew's list, which supersedes the older KaraokeHunt "why" list in decide `docs/USER-DATA-VISION.md`; Phase 4 may add those reasons as optional chips): **How was it to sing?** (great / OK / not for me), **Key** (too low / about right / too high), **Crowd-pleaser?** (yes / not really), **Notes** (free text, optional). All optional; saved as answered.
 - Saves to decide (`PUT /api/me/karaoke-log/{history_id}` with the survey), through the local outbox.
 
 ## 7. decide: karaoke log
@@ -259,6 +259,8 @@ night{id, kind (nomad|other), venue_name?, date}, sung_at?, ended_at?, created_a
 survey{feel (great|ok|bad)?, key (too_low|right|too_high)?, crowd_pleaser (bool)?, notes?, answered_at?},
 media{brand_code?, gen_job_id?, source_type?}, deleted (bool)
 ```
+
+**Song identity** (decide CLAUDE.md "Music Data Modeling": store catalog ids, names only as denormalised display fields). Entries the app logs at other bars always come from search, so they carry decide's song id; the app never offers free-text entry *(call: a song not in the catalog is added through "Make it" or not at all)*. kjbox records arrive with artist/title strings (rotation entries are names; brand codes are never identity, A.16), so decide resolves `song_id` asynchronously with its search matcher and keeps `song_id_status: resolved|unresolved|ambiguous`; unresolved records still count in the log and are re-tried when the catalog refreshes. Counters below apply only to resolved records.
 
 On transition to `sung`, decide increments `user_songs.times_sung` and sets `last_sung_at` for the resolved song (creating the `user_songs` row with source `karaoke_log` if needed), and decrements on delete. Survey answers are kept per record; Phase 4 builds aggregates.
 
