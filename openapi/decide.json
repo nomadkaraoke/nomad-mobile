@@ -28,6 +28,28 @@
         }
       }
     },
+    "/api/ready": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Ready",
+        "description": "200 once startup finished. ``catalog: false`` means recommendations v2 is warming up;\nhealth, search and everything else serve regardless.",
+        "operationId": "ready_api_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/health/deep": {
       "get": {
         "tags": [
@@ -358,6 +380,53 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CollectEmailResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/auth/claim-guest": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Claim Guest",
+        "description": "Migrate a guest profile's data onto the gen-signed-in user, then delete the guest.",
+        "operationId": "claim_guest_api_auth_claim_guest_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimGuestRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimGuestResponse"
                 }
               }
             }
@@ -1515,6 +1584,34 @@
       }
     },
     "/api/quiz/progress": {
+      "get": {
+        "tags": [
+          "quiz"
+        ],
+        "summary": "Get Quiz Progress",
+        "description": "The progress saved by ``PUT /progress`` (same shape), or 204 if there is none.\n\nLets a returning user (or the mobile app) resume where they left off.",
+        "operationId": "get_quiz_progress_api_quiz_progress_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuizProgressRequest"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No saved progress"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
       "put": {
         "tags": [
           "quiz"
@@ -1608,6 +1705,248 @@
             "HTTPBearer": []
           }
         ]
+      }
+    },
+    "/api/my/songs/hidden": {
+      "get": {
+        "tags": [
+          "my-songs"
+        ],
+        "summary": "List Hidden",
+        "operationId": "list_hidden_api_my_songs_hidden_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackSongsResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/my/songs/loved": {
+      "get": {
+        "tags": [
+          "my-songs"
+        ],
+        "summary": "List Loved",
+        "operationId": "list_loved_api_my_songs_loved_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackSongsResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/my/songs/{song_key}/hide": {
+      "post": {
+        "tags": [
+          "my-songs"
+        ],
+        "summary": "Hide Song",
+        "operationId": "hide_song_api_my_songs__song_key__hide_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "song_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Song Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/FeedbackBody"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "my-songs"
+        ],
+        "summary": "Unhide Song",
+        "operationId": "unhide_song_api_my_songs__song_key__hide_delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "song_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Song Key"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/my/songs/{song_key}/love": {
+      "post": {
+        "tags": [
+          "my-songs"
+        ],
+        "summary": "Love Song",
+        "operationId": "love_song_api_my_songs__song_key__love_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "song_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Song Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/FeedbackBody"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "my-songs"
+        ],
+        "summary": "Unlove Song",
+        "operationId": "unlove_song_api_my_songs__song_key__love_delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "song_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Song Key"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/my/songs": {
@@ -1998,6 +2337,301 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserArtistsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/my/recommendations/v2": {
+      "get": {
+        "tags": [
+          "my"
+        ],
+        "summary": "Get Recommendations V2",
+        "description": "Catalog-backed recommendations: explained sections for ``sort=best``, else one paged flat list.",
+        "operationId": "get_recommendations_v2_api_my_recommendations_v2_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "genre",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "maxLength": 64
+                  },
+                  "maxItems": 50
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Genre"
+            }
+          },
+          {
+            "name": "mood",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "happy",
+                      "chill",
+                      "sad",
+                      "intense"
+                    ],
+                    "type": "string"
+                  },
+                  "maxItems": 50
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Mood"
+            }
+          },
+          {
+            "name": "energy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "low",
+                    "mid",
+                    "high"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Energy"
+            }
+          },
+          {
+            "name": "decade",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "maxLength": 64
+                  },
+                  "maxItems": 50
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Decade"
+            }
+          },
+          {
+            "name": "popularity",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Popularity"
+            }
+          },
+          {
+            "name": "popularity_max",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Popularity Max"
+            }
+          },
+          {
+            "name": "lead_gender",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "male",
+                    "female",
+                    "mixed"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Lead Gender"
+            }
+          },
+          {
+            "name": "duration",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "short",
+                    "medium",
+                    "long"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Duration"
+            }
+          },
+          {
+            "name": "classic",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Classic"
+            }
+          },
+          {
+            "name": "explicit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "exclude",
+                "include"
+              ],
+              "type": "string",
+              "default": "include",
+              "title": "Explicit"
+            }
+          },
+          {
+            "name": "has_karaoke",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "yes",
+                "make",
+                "any"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Has Karaoke"
+            }
+          },
+          {
+            "name": "library",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "community",
+                "karafun"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Library"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "best",
+                "popular",
+                "newest",
+                "oldest",
+                "shortest",
+                "az"
+              ],
+              "type": "string",
+              "default": "best",
+              "title": "Sort"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendationsV2Response"
                 }
               }
             }
@@ -3808,7 +4442,7 @@
         "properties": {
           "artists": {
             "items": {
-              "$ref": "#/components/schemas/backend__api__routes__my_data__UserArtistResponse"
+              "$ref": "#/components/schemas/UserArtistResponse"
             },
             "type": "array",
             "title": "Artists"
@@ -4265,6 +4899,54 @@
         "title": "CategorizedRecommendationsResponse",
         "description": "Response containing categorized recommendations with rich filters."
       },
+      "ClaimGuestRequest": {
+        "properties": {
+          "guest_token": {
+            "type": "string",
+            "title": "Guest Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "guest_token"
+        ],
+        "title": "ClaimGuestRequest",
+        "description": "Request to claim a guest profile."
+      },
+      "ClaimGuestResponse": {
+        "properties": {
+          "songs_moved": {
+            "type": "integer",
+            "title": "Songs Moved"
+          },
+          "artists_moved": {
+            "type": "integer",
+            "title": "Artists Moved"
+          },
+          "services_moved": {
+            "type": "integer",
+            "title": "Services Moved"
+          },
+          "playlists_moved": {
+            "type": "integer",
+            "title": "Playlists Moved"
+          },
+          "quiz_copied": {
+            "type": "boolean",
+            "title": "Quiz Copied"
+          }
+        },
+        "type": "object",
+        "required": [
+          "songs_moved",
+          "artists_moved",
+          "services_moved",
+          "playlists_moved",
+          "quiz_copied"
+        ],
+        "title": "ClaimGuestResponse",
+        "description": "What a guest claim moved onto the signed-in profile."
+      },
       "CollectEmailRequest": {
         "properties": {
           "email": {
@@ -4712,6 +5394,85 @@
         "title": "ExcludeArtistResponse",
         "description": "Response after excluding/including an artist."
       },
+      "FeedbackBody": {
+        "properties": {
+          "artist": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artist"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "title": "FeedbackBody"
+      },
+      "FeedbackSong": {
+        "properties": {
+          "song_key": {
+            "type": "string",
+            "title": "Song Key"
+          },
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "song_key",
+          "artist",
+          "title"
+        ],
+        "title": "FeedbackSong"
+      },
+      "FeedbackSongsResponse": {
+        "properties": {
+          "songs": {
+            "items": {
+              "$ref": "#/components/schemas/FeedbackSong"
+            },
+            "type": "array",
+            "title": "Songs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "songs"
+        ],
+        "title": "FeedbackSongsResponse"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -5147,6 +5908,14 @@
             "type": "array",
             "title": "Genres",
             "default": []
+          },
+          "decades": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Decades",
+            "default": []
           }
         },
         "type": "object",
@@ -5363,8 +6132,8 @@
         "properties": {
           "step": {
             "type": "integer",
-            "maximum": 5,
-            "minimum": 1,
+            "maximum": 5.0,
+            "minimum": 1.0,
             "title": "Step",
             "description": "Current quiz step (1-5)"
           },
@@ -5688,6 +6457,270 @@
         "title": "QuizSubmitResponse",
         "description": "Response after submitting quiz."
       },
+      "ReadyResponse": {
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          },
+          "catalog": {
+            "type": "boolean",
+            "title": "Catalog"
+          },
+          "availability": {
+            "type": "boolean",
+            "title": "Availability"
+          },
+          "run": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ok",
+          "catalog",
+          "availability",
+          "run"
+        ],
+        "title": "ReadyResponse",
+        "description": "Startup probe: the lifespan (catalog load) has finished."
+      },
+      "RecFacets": {
+        "properties": {
+          "decade": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decade"
+          },
+          "genres": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Genres"
+          },
+          "mood": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mood"
+          },
+          "energy": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Energy"
+          },
+          "lead_gender": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lead Gender"
+          },
+          "duration_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Ms"
+          },
+          "popularity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Popularity"
+          },
+          "is_classic": {
+            "type": "boolean",
+            "title": "Is Classic"
+          },
+          "explicit": {
+            "type": "boolean",
+            "title": "Explicit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "decade",
+          "genres",
+          "mood",
+          "energy",
+          "lead_gender",
+          "duration_ms",
+          "popularity",
+          "is_classic",
+          "explicit"
+        ],
+        "title": "RecFacets"
+      },
+      "RecKaraoke": {
+        "properties": {
+          "community": {
+            "type": "boolean",
+            "title": "Community"
+          },
+          "commercial": {
+            "type": "boolean",
+            "title": "Commercial"
+          },
+          "karafun": {
+            "type": "boolean",
+            "title": "Karafun"
+          },
+          "brand_count": {
+            "type": "integer",
+            "title": "Brand Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "community",
+          "commercial",
+          "karafun",
+          "brand_count"
+        ],
+        "title": "RecKaraoke"
+      },
+      "RecSection": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title_key": {
+            "type": "string",
+            "title": "Title Key"
+          },
+          "reason_key": {
+            "type": "string",
+            "title": "Reason Key"
+          },
+          "title_params": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Title Params"
+          },
+          "songs": {
+            "items": {
+              "$ref": "#/components/schemas/RecSong"
+            },
+            "type": "array",
+            "title": "Songs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title_key",
+          "reason_key",
+          "title_params",
+          "songs"
+        ],
+        "title": "RecSection"
+      },
+      "RecSong": {
+        "properties": {
+          "song_key": {
+            "type": "string",
+            "title": "Song Key"
+          },
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "reason_type": {
+            "type": "string",
+            "title": "Reason Type"
+          },
+          "reason_artist": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason Artist"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          },
+          "has_karaoke_version": {
+            "type": "boolean",
+            "title": "Has Karaoke Version"
+          },
+          "karaoke": {
+            "$ref": "#/components/schemas/RecKaraoke"
+          },
+          "facets": {
+            "$ref": "#/components/schemas/RecFacets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "song_key",
+          "artist",
+          "title",
+          "reason",
+          "reason_type",
+          "reason_artist",
+          "score",
+          "has_karaoke_version",
+          "karaoke",
+          "facets"
+        ],
+        "title": "RecSong"
+      },
       "RecommendationResponse": {
         "properties": {
           "song_id": {
@@ -5779,6 +6812,50 @@
         ],
         "title": "RecommendationsResponse",
         "description": "Response containing recommendations."
+      },
+      "RecommendationsV2Response": {
+        "properties": {
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/RecSection"
+            },
+            "type": "array",
+            "title": "Sections"
+          },
+          "filters_applied": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Filters Applied"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "has_profile": {
+            "type": "boolean",
+            "title": "Has Profile"
+          },
+          "catalog_run": {
+            "type": "string",
+            "title": "Catalog Run"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sections",
+          "filters_applied",
+          "next_cursor",
+          "has_profile",
+          "catalog_run"
+        ],
+        "title": "RecommendationsV2Response"
       },
       "RemoveArtistResponse": {
         "properties": {
@@ -6059,8 +7136,8 @@
           },
           "count": {
             "type": "integer",
-            "maximum": 50,
-            "minimum": 10,
+            "maximum": 50.0,
+            "minimum": 10.0,
             "title": "Count",
             "description": "Number of artists to return",
             "default": 25
@@ -7017,6 +8094,20 @@
               }
             ],
             "title": "Genres"
+          },
+          "decades": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decades"
           }
         },
         "type": "object",
@@ -7072,25 +8163,60 @@
       },
       "UserArtistResponse": {
         "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
+          "mbid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mbid"
           },
           "artist_name": {
             "type": "string",
             "title": "Artist Name"
           },
-          "source": {
-            "type": "string",
-            "title": "Source"
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sources"
           },
-          "rank": {
-            "type": "integer",
-            "title": "Rank"
+          "spotify_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Id"
           },
-          "time_range": {
-            "type": "string",
-            "title": "Time Range"
+          "spotify_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Rank"
+          },
+          "spotify_time_range": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Time Range"
           },
           "popularity": {
             "anyOf": [
@@ -7110,24 +8236,61 @@
             "type": "array",
             "title": "Genres",
             "default": []
+          },
+          "lastfm_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Rank"
+          },
+          "lastfm_playcount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Playcount"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "default": []
+          },
+          "is_excluded": {
+            "type": "boolean",
+            "title": "Is Excluded",
+            "default": false
+          },
+          "is_manual": {
+            "type": "boolean",
+            "title": "Is Manual",
+            "default": false
           }
         },
         "type": "object",
         "required": [
-          "id",
           "artist_name",
-          "source",
-          "rank",
-          "time_range"
+          "sources"
         ],
         "title": "UserArtistResponse",
-        "description": "Artist from user's listening history."
+        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
       },
       "UserArtistsResponse": {
         "properties": {
           "artists": {
             "items": {
-              "$ref": "#/components/schemas/UserArtistResponse"
+              "$ref": "#/components/schemas/backend__api__routes__recommendations__UserArtistResponse"
             },
             "type": "array",
             "title": "Artists"
@@ -7726,62 +8889,27 @@
         "title": "ServiceSummary",
         "description": "Summary of a connected music service."
       },
-      "backend__api__routes__my_data__UserArtistResponse": {
+      "backend__api__routes__recommendations__UserArtistResponse": {
         "properties": {
-          "mbid": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Mbid"
+          "id": {
+            "type": "string",
+            "title": "Id"
           },
           "artist_name": {
             "type": "string",
             "title": "Artist Name"
           },
-          "sources": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Sources"
+          "source": {
+            "type": "string",
+            "title": "Source"
           },
-          "spotify_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Id"
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
           },
-          "spotify_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Rank"
-          },
-          "spotify_time_range": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Time Range"
+          "time_range": {
+            "type": "string",
+            "title": "Time Range"
           },
           "popularity": {
             "anyOf": [
@@ -7801,55 +8929,18 @@
             "type": "array",
             "title": "Genres",
             "default": []
-          },
-          "lastfm_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Rank"
-          },
-          "lastfm_playcount": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Playcount"
-          },
-          "tags": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Tags",
-            "default": []
-          },
-          "is_excluded": {
-            "type": "boolean",
-            "title": "Is Excluded",
-            "default": false
-          },
-          "is_manual": {
-            "type": "boolean",
-            "title": "Is Manual",
-            "default": false
           }
         },
         "type": "object",
         "required": [
+          "id",
           "artist_name",
-          "sources"
+          "source",
+          "rank",
+          "time_range"
         ],
         "title": "UserArtistResponse",
-        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
+        "description": "Artist from user's listening history."
       }
     },
     "securitySchemes": {

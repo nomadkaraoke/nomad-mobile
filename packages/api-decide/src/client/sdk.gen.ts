@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AddArtistApiMyDataArtistsPostData, AddArtistApiMyDataArtistsPostErrors, AddArtistApiMyDataArtistsPostResponses, AddKnownSongApiKnownSongsPostData, AddKnownSongApiKnownSongsPostErrors, AddKnownSongApiKnownSongsPostResponses, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostData, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostErrors, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostResponses, AddSpotifyTrackApiKnownSongsSpotifyPostData, AddSpotifyTrackApiKnownSongsSpotifyPostErrors, AddSpotifyTrackApiKnownSongsSpotifyPostResponses, AdminDeleteUserApiAdminUsersUserIdDeleteData, AdminDeleteUserApiAdminUsersUserIdDeleteErrors, AdminDeleteUserApiAdminUsersUserIdDeleteResponses, BulkAddKnownSongsApiKnownSongsBulkPostData, BulkAddKnownSongsApiKnownSongsBulkPostErrors, BulkAddKnownSongsApiKnownSongsBulkPostResponses, CollectEmailApiAuthCollectEmailPostData, CollectEmailApiAuthCollectEmailPostErrors, CollectEmailApiAuthCollectEmailPostResponses, ConnectLastfmApiServicesLastfmConnectPostData, ConnectLastfmApiServicesLastfmConnectPostErrors, ConnectLastfmApiServicesLastfmConnectPostResponses, ConnectListenbrainzApiServicesListenbrainzConnectPostData, ConnectListenbrainzApiServicesListenbrainzConnectPostErrors, ConnectListenbrainzApiServicesListenbrainzConnectPostResponses, ConnectSpotifyApiServicesSpotifyConnectPostData, ConnectSpotifyApiServicesSpotifyConnectPostResponses, CreateGuestSessionApiAuthGuestPostData, CreateGuestSessionApiAuthGuestPostResponses, CreatePlaylistApiPlaylistsPostData, CreatePlaylistApiPlaylistsPostErrors, CreatePlaylistApiPlaylistsPostResponses, DeepHealthCheckApiHealthDeepGetData, DeepHealthCheckApiHealthDeepGetResponses, DeleteAccountApiAuthMeDeleteData, DeleteAccountApiAuthMeDeleteResponses, DeletePlaylistApiPlaylistsPlaylistIdDeleteData, DeletePlaylistApiPlaylistsPlaylistIdDeleteErrors, DeletePlaylistApiPlaylistsPlaylistIdDeleteResponses, DisconnectServiceApiServicesServiceTypeDeleteData, DisconnectServiceApiServicesServiceTypeDeleteErrors, DisconnectServiceApiServicesServiceTypeDeleteResponses, ExcludeArtistApiMyDataArtistsExcludePostData, ExcludeArtistApiMyDataArtistsExcludePostErrors, ExcludeArtistApiMyDataArtistsExcludePostResponses, GetAdminStatsApiAdminStatsGetData, GetAdminStatsApiAdminStatsGetResponses, GetAllArtistsApiMyDataArtistsGetData, GetAllArtistsApiMyDataArtistsGetErrors, GetAllArtistsApiMyDataArtistsGetResponses, GetArtistIndexApiCatalogArtistsIndexGetData, GetArtistIndexApiCatalogArtistsIndexGetResponses, GetCatalogStatsApiCatalogStatsGetData, GetCatalogStatsApiCatalogStatsGetResponses, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetData, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetErrors, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetResponses, GetCurrentUserEndpointApiAuthMeGetData, GetCurrentUserEndpointApiAuthMeGetResponses, GetDataSummaryApiMyDataSummaryGetData, GetDataSummaryApiMyDataSummaryGetResponses, GetDecadeArtistsApiQuizDecadeArtistsGetData, GetDecadeArtistsApiQuizDecadeArtistsGetErrors, GetDecadeArtistsApiQuizDecadeArtistsGetResponses, GetMyArtistsApiMyArtistsGetData, GetMyArtistsApiMyArtistsGetErrors, GetMyArtistsApiMyArtistsGetResponses, GetMySongsApiMySongsGetData, GetMySongsApiMySongsGetErrors, GetMySongsApiMySongsGetResponses, GetPlaylistApiPlaylistsPlaylistIdGetData, GetPlaylistApiPlaylistsPlaylistIdGetErrors, GetPlaylistApiPlaylistsPlaylistIdGetResponses, GetPopularSongsApiCatalogSongsPopularGetData, GetPopularSongsApiCatalogSongsPopularGetErrors, GetPopularSongsApiCatalogSongsPopularGetResponses, GetPreferencesApiMyDataPreferencesGetData, GetPreferencesApiMyDataPreferencesGetResponses, GetQuizArtistsApiQuizArtistsGetData, GetQuizArtistsApiQuizArtistsGetErrors, GetQuizArtistsApiQuizArtistsGetResponses, GetQuizSongsApiQuizSongsGetData, GetQuizSongsApiQuizSongsGetErrors, GetQuizSongsApiQuizSongsGetResponses, GetQuizStatusApiQuizStatusGetData, GetQuizStatusApiQuizStatusGetResponses, GetRecommendationsApiMyRecommendationsGetData, GetRecommendationsApiMyRecommendationsGetErrors, GetRecommendationsApiMyRecommendationsGetResponses, GetSmartQuizArtistsApiQuizArtistsSmartPostData, GetSmartQuizArtistsApiQuizArtistsSmartPostErrors, GetSmartQuizArtistsApiQuizArtistsSmartPostResponses, GetSongApiCatalogSongsSongIdGetData, GetSongApiCatalogSongsSongIdGetErrors, GetSongApiCatalogSongsSongIdGetResponses, GetSongLinksApiCatalogSongsSongIdLinksGetData, GetSongLinksApiCatalogSongsSongIdLinksGetErrors, GetSongLinksApiCatalogSongsSongIdLinksGetResponses, GetSyncJobDetailApiAdminSyncJobsJobIdGetData, GetSyncJobDetailApiAdminSyncJobsJobIdGetErrors, GetSyncJobDetailApiAdminSyncJobsJobIdGetResponses, GetSyncStatusApiServicesSyncStatusGetData, GetSyncStatusApiServicesSyncStatusGetResponses, GetUserDetailApiAdminUsersUserIdGetData, GetUserDetailApiAdminUsersUserIdGetErrors, GetUserDetailApiAdminUsersUserIdGetResponses, HealthCheckApiHealthGetData, HealthCheckApiHealthGetResponses, ImpersonateUserApiAdminImpersonatePostData, ImpersonateUserApiAdminImpersonatePostErrors, ImpersonateUserApiAdminImpersonatePostResponses, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostData, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostErrors, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponses, IncludeArtistApiMyDataArtistsExcludeDeleteData, IncludeArtistApiMyDataArtistsExcludeDeleteErrors, IncludeArtistApiMyDataArtistsExcludeDeleteResponses, ListKnownSongsApiKnownSongsGetData, ListKnownSongsApiKnownSongsGetErrors, ListKnownSongsApiKnownSongsGetResponses, ListPlaylistsApiPlaylistsGetData, ListPlaylistsApiPlaylistsGetErrors, ListPlaylistsApiPlaylistsGetResponses, ListServicesApiServicesGetData, ListServicesApiServicesGetResponses, ListSyncJobsApiAdminSyncJobsGetData, ListSyncJobsApiAdminSyncJobsGetErrors, ListSyncJobsApiAdminSyncJobsGetResponses, ListUsersApiAdminUsersGetData, ListUsersApiAdminUsersGetErrors, ListUsersApiAdminUsersGetResponses, LogoutApiAuthLogoutPostData, LogoutApiAuthLogoutPostResponses, ProcessSyncTaskInternalSyncProcessPostData, ProcessSyncTaskInternalSyncProcessPostErrors, ProcessSyncTaskInternalSyncProcessPostResponses, RemoveArtistApiMyDataArtistsArtistNameDeleteData, RemoveArtistApiMyDataArtistsArtistNameDeleteErrors, RemoveArtistApiMyDataArtistsArtistNameDeleteResponses, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteData, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteErrors, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteResponses, RemoveKnownSongApiKnownSongsSongIdDeleteData, RemoveKnownSongApiKnownSongsSongIdDeleteErrors, RemoveKnownSongApiKnownSongsSongIdDeleteResponses, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteData, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteErrors, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteResponses, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteData, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteErrors, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteResponses, RequestGuestUpgradeApiAuthUpgradePostData, RequestGuestUpgradeApiAuthUpgradePostErrors, RequestGuestUpgradeApiAuthUpgradePostResponses, RequestMagicLinkApiAuthMagicLinkPostData, RequestMagicLinkApiAuthMagicLinkPostErrors, RequestMagicLinkApiAuthMagicLinkPostResponses, SaveQuizProgressApiQuizProgressPutData, SaveQuizProgressApiQuizProgressPutErrors, SaveQuizProgressApiQuizProgressPutResponses, SearchArtistsApiCatalogArtistsGetData, SearchArtistsApiCatalogArtistsGetErrors, SearchArtistsApiCatalogArtistsGetResponses, SearchCatalogApiCatalogSongsGetData, SearchCatalogApiCatalogSongsGetErrors, SearchCatalogApiCatalogSongsGetResponses, SearchTracksApiCatalogTracksGetData, SearchTracksApiCatalogTracksGetErrors, SearchTracksApiCatalogTracksGetResponses, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostData, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostErrors, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostResponses, SpotifyCallbackApiServicesSpotifyCallbackGetData, SpotifyCallbackApiServicesSpotifyCallbackGetErrors, SpotifyCallbackApiServicesSpotifyCallbackGetResponses, SubmitEnjoySingingApiQuizEnjoySingingPostData, SubmitEnjoySingingApiQuizEnjoySingingPostErrors, SubmitEnjoySingingApiQuizEnjoySingingPostResponses, SubmitQuizApiQuizSubmitPostData, SubmitQuizApiQuizSubmitPostErrors, SubmitQuizApiQuizSubmitPostResponses, TriggerSyncApiServicesSyncPostData, TriggerSyncApiServicesSyncPostResponses, UpdatePlaylistApiPlaylistsPlaylistIdPutData, UpdatePlaylistApiPlaylistsPlaylistIdPutErrors, UpdatePlaylistApiPlaylistsPlaylistIdPutResponses, UpdatePreferencesApiMyDataPreferencesPutData, UpdatePreferencesApiMyDataPreferencesPutErrors, UpdatePreferencesApiMyDataPreferencesPutResponses, UpdateProfileApiAuthProfilePutData, UpdateProfileApiAuthProfilePutErrors, UpdateProfileApiAuthProfilePutResponses, VerifyMagicLinkApiAuthVerifyPostData, VerifyMagicLinkApiAuthVerifyPostErrors, VerifyMagicLinkApiAuthVerifyPostResponses } from './types.gen';
+import type { AddArtistApiMyDataArtistsPostData, AddArtistApiMyDataArtistsPostErrors, AddArtistApiMyDataArtistsPostResponses, AddKnownSongApiKnownSongsPostData, AddKnownSongApiKnownSongsPostErrors, AddKnownSongApiKnownSongsPostResponses, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostData, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostErrors, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostResponses, AddSpotifyTrackApiKnownSongsSpotifyPostData, AddSpotifyTrackApiKnownSongsSpotifyPostErrors, AddSpotifyTrackApiKnownSongsSpotifyPostResponses, AdminDeleteUserApiAdminUsersUserIdDeleteData, AdminDeleteUserApiAdminUsersUserIdDeleteErrors, AdminDeleteUserApiAdminUsersUserIdDeleteResponses, BulkAddKnownSongsApiKnownSongsBulkPostData, BulkAddKnownSongsApiKnownSongsBulkPostErrors, BulkAddKnownSongsApiKnownSongsBulkPostResponses, ClaimGuestApiAuthClaimGuestPostData, ClaimGuestApiAuthClaimGuestPostErrors, ClaimGuestApiAuthClaimGuestPostResponses, CollectEmailApiAuthCollectEmailPostData, CollectEmailApiAuthCollectEmailPostErrors, CollectEmailApiAuthCollectEmailPostResponses, ConnectLastfmApiServicesLastfmConnectPostData, ConnectLastfmApiServicesLastfmConnectPostErrors, ConnectLastfmApiServicesLastfmConnectPostResponses, ConnectListenbrainzApiServicesListenbrainzConnectPostData, ConnectListenbrainzApiServicesListenbrainzConnectPostErrors, ConnectListenbrainzApiServicesListenbrainzConnectPostResponses, ConnectSpotifyApiServicesSpotifyConnectPostData, ConnectSpotifyApiServicesSpotifyConnectPostResponses, CreateGuestSessionApiAuthGuestPostData, CreateGuestSessionApiAuthGuestPostResponses, CreatePlaylistApiPlaylistsPostData, CreatePlaylistApiPlaylistsPostErrors, CreatePlaylistApiPlaylistsPostResponses, DeepHealthCheckApiHealthDeepGetData, DeepHealthCheckApiHealthDeepGetResponses, DeleteAccountApiAuthMeDeleteData, DeleteAccountApiAuthMeDeleteResponses, DeletePlaylistApiPlaylistsPlaylistIdDeleteData, DeletePlaylistApiPlaylistsPlaylistIdDeleteErrors, DeletePlaylistApiPlaylistsPlaylistIdDeleteResponses, DisconnectServiceApiServicesServiceTypeDeleteData, DisconnectServiceApiServicesServiceTypeDeleteErrors, DisconnectServiceApiServicesServiceTypeDeleteResponses, ExcludeArtistApiMyDataArtistsExcludePostData, ExcludeArtistApiMyDataArtistsExcludePostErrors, ExcludeArtistApiMyDataArtistsExcludePostResponses, GetAdminStatsApiAdminStatsGetData, GetAdminStatsApiAdminStatsGetResponses, GetAllArtistsApiMyDataArtistsGetData, GetAllArtistsApiMyDataArtistsGetErrors, GetAllArtistsApiMyDataArtistsGetResponses, GetArtistIndexApiCatalogArtistsIndexGetData, GetArtistIndexApiCatalogArtistsIndexGetResponses, GetCatalogStatsApiCatalogStatsGetData, GetCatalogStatsApiCatalogStatsGetResponses, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetData, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetErrors, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetResponses, GetCurrentUserEndpointApiAuthMeGetData, GetCurrentUserEndpointApiAuthMeGetResponses, GetDataSummaryApiMyDataSummaryGetData, GetDataSummaryApiMyDataSummaryGetResponses, GetDecadeArtistsApiQuizDecadeArtistsGetData, GetDecadeArtistsApiQuizDecadeArtistsGetErrors, GetDecadeArtistsApiQuizDecadeArtistsGetResponses, GetMyArtistsApiMyArtistsGetData, GetMyArtistsApiMyArtistsGetErrors, GetMyArtistsApiMyArtistsGetResponses, GetMySongsApiMySongsGetData, GetMySongsApiMySongsGetErrors, GetMySongsApiMySongsGetResponses, GetPlaylistApiPlaylistsPlaylistIdGetData, GetPlaylistApiPlaylistsPlaylistIdGetErrors, GetPlaylistApiPlaylistsPlaylistIdGetResponses, GetPopularSongsApiCatalogSongsPopularGetData, GetPopularSongsApiCatalogSongsPopularGetErrors, GetPopularSongsApiCatalogSongsPopularGetResponses, GetPreferencesApiMyDataPreferencesGetData, GetPreferencesApiMyDataPreferencesGetResponses, GetQuizArtistsApiQuizArtistsGetData, GetQuizArtistsApiQuizArtistsGetErrors, GetQuizArtistsApiQuizArtistsGetResponses, GetQuizProgressApiQuizProgressGetData, GetQuizProgressApiQuizProgressGetResponses, GetQuizSongsApiQuizSongsGetData, GetQuizSongsApiQuizSongsGetErrors, GetQuizSongsApiQuizSongsGetResponses, GetQuizStatusApiQuizStatusGetData, GetQuizStatusApiQuizStatusGetResponses, GetRecommendationsApiMyRecommendationsGetData, GetRecommendationsApiMyRecommendationsGetErrors, GetRecommendationsApiMyRecommendationsGetResponses, GetRecommendationsV2ApiMyRecommendationsV2GetData, GetRecommendationsV2ApiMyRecommendationsV2GetErrors, GetRecommendationsV2ApiMyRecommendationsV2GetResponses, GetSmartQuizArtistsApiQuizArtistsSmartPostData, GetSmartQuizArtistsApiQuizArtistsSmartPostErrors, GetSmartQuizArtistsApiQuizArtistsSmartPostResponses, GetSongApiCatalogSongsSongIdGetData, GetSongApiCatalogSongsSongIdGetErrors, GetSongApiCatalogSongsSongIdGetResponses, GetSongLinksApiCatalogSongsSongIdLinksGetData, GetSongLinksApiCatalogSongsSongIdLinksGetErrors, GetSongLinksApiCatalogSongsSongIdLinksGetResponses, GetSyncJobDetailApiAdminSyncJobsJobIdGetData, GetSyncJobDetailApiAdminSyncJobsJobIdGetErrors, GetSyncJobDetailApiAdminSyncJobsJobIdGetResponses, GetSyncStatusApiServicesSyncStatusGetData, GetSyncStatusApiServicesSyncStatusGetResponses, GetUserDetailApiAdminUsersUserIdGetData, GetUserDetailApiAdminUsersUserIdGetErrors, GetUserDetailApiAdminUsersUserIdGetResponses, HealthCheckApiHealthGetData, HealthCheckApiHealthGetResponses, HideSongApiMySongsSongKeyHidePostData, HideSongApiMySongsSongKeyHidePostErrors, HideSongApiMySongsSongKeyHidePostResponses, ImpersonateUserApiAdminImpersonatePostData, ImpersonateUserApiAdminImpersonatePostErrors, ImpersonateUserApiAdminImpersonatePostResponses, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostData, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostErrors, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponses, IncludeArtistApiMyDataArtistsExcludeDeleteData, IncludeArtistApiMyDataArtistsExcludeDeleteErrors, IncludeArtistApiMyDataArtistsExcludeDeleteResponses, ListHiddenApiMySongsHiddenGetData, ListHiddenApiMySongsHiddenGetResponses, ListKnownSongsApiKnownSongsGetData, ListKnownSongsApiKnownSongsGetErrors, ListKnownSongsApiKnownSongsGetResponses, ListLovedApiMySongsLovedGetData, ListLovedApiMySongsLovedGetResponses, ListPlaylistsApiPlaylistsGetData, ListPlaylistsApiPlaylistsGetErrors, ListPlaylistsApiPlaylistsGetResponses, ListServicesApiServicesGetData, ListServicesApiServicesGetResponses, ListSyncJobsApiAdminSyncJobsGetData, ListSyncJobsApiAdminSyncJobsGetErrors, ListSyncJobsApiAdminSyncJobsGetResponses, ListUsersApiAdminUsersGetData, ListUsersApiAdminUsersGetErrors, ListUsersApiAdminUsersGetResponses, LogoutApiAuthLogoutPostData, LogoutApiAuthLogoutPostResponses, LoveSongApiMySongsSongKeyLovePostData, LoveSongApiMySongsSongKeyLovePostErrors, LoveSongApiMySongsSongKeyLovePostResponses, ProcessSyncTaskInternalSyncProcessPostData, ProcessSyncTaskInternalSyncProcessPostErrors, ProcessSyncTaskInternalSyncProcessPostResponses, ReadyApiReadyGetData, ReadyApiReadyGetResponses, RemoveArtistApiMyDataArtistsArtistNameDeleteData, RemoveArtistApiMyDataArtistsArtistNameDeleteErrors, RemoveArtistApiMyDataArtistsArtistNameDeleteResponses, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteData, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteErrors, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteResponses, RemoveKnownSongApiKnownSongsSongIdDeleteData, RemoveKnownSongApiKnownSongsSongIdDeleteErrors, RemoveKnownSongApiKnownSongsSongIdDeleteResponses, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteData, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteErrors, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteResponses, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteData, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteErrors, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteResponses, RequestGuestUpgradeApiAuthUpgradePostData, RequestGuestUpgradeApiAuthUpgradePostErrors, RequestGuestUpgradeApiAuthUpgradePostResponses, RequestMagicLinkApiAuthMagicLinkPostData, RequestMagicLinkApiAuthMagicLinkPostErrors, RequestMagicLinkApiAuthMagicLinkPostResponses, SaveQuizProgressApiQuizProgressPutData, SaveQuizProgressApiQuizProgressPutErrors, SaveQuizProgressApiQuizProgressPutResponses, SearchArtistsApiCatalogArtistsGetData, SearchArtistsApiCatalogArtistsGetErrors, SearchArtistsApiCatalogArtistsGetResponses, SearchCatalogApiCatalogSongsGetData, SearchCatalogApiCatalogSongsGetErrors, SearchCatalogApiCatalogSongsGetResponses, SearchTracksApiCatalogTracksGetData, SearchTracksApiCatalogTracksGetErrors, SearchTracksApiCatalogTracksGetResponses, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostData, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostErrors, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostResponses, SpotifyCallbackApiServicesSpotifyCallbackGetData, SpotifyCallbackApiServicesSpotifyCallbackGetErrors, SpotifyCallbackApiServicesSpotifyCallbackGetResponses, SubmitEnjoySingingApiQuizEnjoySingingPostData, SubmitEnjoySingingApiQuizEnjoySingingPostErrors, SubmitEnjoySingingApiQuizEnjoySingingPostResponses, SubmitQuizApiQuizSubmitPostData, SubmitQuizApiQuizSubmitPostErrors, SubmitQuizApiQuizSubmitPostResponses, TriggerSyncApiServicesSyncPostData, TriggerSyncApiServicesSyncPostResponses, UnhideSongApiMySongsSongKeyHideDeleteData, UnhideSongApiMySongsSongKeyHideDeleteErrors, UnhideSongApiMySongsSongKeyHideDeleteResponses, UnloveSongApiMySongsSongKeyLoveDeleteData, UnloveSongApiMySongsSongKeyLoveDeleteErrors, UnloveSongApiMySongsSongKeyLoveDeleteResponses, UpdatePlaylistApiPlaylistsPlaylistIdPutData, UpdatePlaylistApiPlaylistsPlaylistIdPutErrors, UpdatePlaylistApiPlaylistsPlaylistIdPutResponses, UpdatePreferencesApiMyDataPreferencesPutData, UpdatePreferencesApiMyDataPreferencesPutErrors, UpdatePreferencesApiMyDataPreferencesPutResponses, UpdateProfileApiAuthProfilePutData, UpdateProfileApiAuthProfilePutErrors, UpdateProfileApiAuthProfilePutResponses, VerifyMagicLinkApiAuthVerifyPostData, VerifyMagicLinkApiAuthVerifyPostErrors, VerifyMagicLinkApiAuthVerifyPostResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -24,6 +24,14 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
  * Health check endpoint for load balancers and monitoring.
  */
 export const healthCheckApiHealthGet = <ThrowOnError extends boolean = true>(options?: Options<HealthCheckApiHealthGetData, ThrowOnError>): RequestResult<HealthCheckApiHealthGetResponses, unknown, ThrowOnError> => (options?.client ?? client).get<HealthCheckApiHealthGetResponses, unknown, ThrowOnError>({ url: '/api/health', ...options });
+
+/**
+ * Ready
+ *
+ * 200 once startup finished. ``catalog: false`` means recommendations v2 is warming up;
+ * health, search and everything else serve regardless.
+ */
+export const readyApiReadyGet = <ThrowOnError extends boolean = true>(options?: Options<ReadyApiReadyGetData, ThrowOnError>): RequestResult<ReadyApiReadyGetResponses, unknown, ThrowOnError> => (options?.client ?? client).get<ReadyApiReadyGetResponses, unknown, ThrowOnError>({ url: '/api/ready', ...options });
 
 /**
  * Deep Health Check
@@ -196,6 +204,21 @@ export const logoutApiAuthLogoutPost = <ThrowOnError extends boolean = true>(opt
 export const collectEmailApiAuthCollectEmailPost = <ThrowOnError extends boolean = true>(options: Options<CollectEmailApiAuthCollectEmailPostData, ThrowOnError>): RequestResult<CollectEmailApiAuthCollectEmailPostResponses, CollectEmailApiAuthCollectEmailPostErrors, ThrowOnError> => (options.client ?? client).post<CollectEmailApiAuthCollectEmailPostResponses, CollectEmailApiAuthCollectEmailPostErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/auth/collect-email',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Claim Guest
+ *
+ * Migrate a guest profile's data onto the gen-signed-in user, then delete the guest.
+ */
+export const claimGuestApiAuthClaimGuestPost = <ThrowOnError extends boolean = true>(options: Options<ClaimGuestApiAuthClaimGuestPostData, ThrowOnError>): RequestResult<ClaimGuestApiAuthClaimGuestPostResponses, ClaimGuestApiAuthClaimGuestPostErrors, ThrowOnError> => (options.client ?? client).post<ClaimGuestApiAuthClaimGuestPostResponses, ClaimGuestApiAuthClaimGuestPostErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/auth/claim-guest',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -590,6 +613,19 @@ export const getQuizStatusApiQuizStatusGet = <ThrowOnError extends boolean = tru
 });
 
 /**
+ * Get Quiz Progress
+ *
+ * The progress saved by ``PUT /progress`` (same shape), or 204 if there is none.
+ *
+ * Lets a returning user (or the mobile app) resume where they left off.
+ */
+export const getQuizProgressApiQuizProgressGet = <ThrowOnError extends boolean = true>(options?: Options<GetQuizProgressApiQuizProgressGetData, ThrowOnError>): RequestResult<GetQuizProgressApiQuizProgressGetResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetQuizProgressApiQuizProgressGetResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/quiz/progress',
+    ...options
+});
+
+/**
  * Save Quiz Progress
  *
  * Save partial quiz progress (upsert, idempotent).
@@ -635,6 +671,68 @@ export const saveQuizProgressApiQuizProgressPut = <ThrowOnError extends boolean 
 export const submitEnjoySingingApiQuizEnjoySingingPost = <ThrowOnError extends boolean = true>(options: Options<SubmitEnjoySingingApiQuizEnjoySingingPostData, ThrowOnError>): RequestResult<SubmitEnjoySingingApiQuizEnjoySingingPostResponses, SubmitEnjoySingingApiQuizEnjoySingingPostErrors, ThrowOnError> => (options.client ?? client).post<SubmitEnjoySingingApiQuizEnjoySingingPostResponses, SubmitEnjoySingingApiQuizEnjoySingingPostErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/quiz/enjoy-singing',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * List Hidden
+ */
+export const listHiddenApiMySongsHiddenGet = <ThrowOnError extends boolean = true>(options?: Options<ListHiddenApiMySongsHiddenGetData, ThrowOnError>): RequestResult<ListHiddenApiMySongsHiddenGetResponses, unknown, ThrowOnError> => (options?.client ?? client).get<ListHiddenApiMySongsHiddenGetResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/my/songs/hidden',
+    ...options
+});
+
+/**
+ * List Loved
+ */
+export const listLovedApiMySongsLovedGet = <ThrowOnError extends boolean = true>(options?: Options<ListLovedApiMySongsLovedGetData, ThrowOnError>): RequestResult<ListLovedApiMySongsLovedGetResponses, unknown, ThrowOnError> => (options?.client ?? client).get<ListLovedApiMySongsLovedGetResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/my/songs/loved',
+    ...options
+});
+
+/**
+ * Unhide Song
+ */
+export const unhideSongApiMySongsSongKeyHideDelete = <ThrowOnError extends boolean = true>(options: Options<UnhideSongApiMySongsSongKeyHideDeleteData, ThrowOnError>): RequestResult<UnhideSongApiMySongsSongKeyHideDeleteResponses, UnhideSongApiMySongsSongKeyHideDeleteErrors, ThrowOnError> => (options.client ?? client).delete<UnhideSongApiMySongsSongKeyHideDeleteResponses, UnhideSongApiMySongsSongKeyHideDeleteErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/my/songs/{song_key}/hide',
+    ...options
+});
+
+/**
+ * Hide Song
+ */
+export const hideSongApiMySongsSongKeyHidePost = <ThrowOnError extends boolean = true>(options: Options<HideSongApiMySongsSongKeyHidePostData, ThrowOnError>): RequestResult<HideSongApiMySongsSongKeyHidePostResponses, HideSongApiMySongsSongKeyHidePostErrors, ThrowOnError> => (options.client ?? client).post<HideSongApiMySongsSongKeyHidePostResponses, HideSongApiMySongsSongKeyHidePostErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/my/songs/{song_key}/hide',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Unlove Song
+ */
+export const unloveSongApiMySongsSongKeyLoveDelete = <ThrowOnError extends boolean = true>(options: Options<UnloveSongApiMySongsSongKeyLoveDeleteData, ThrowOnError>): RequestResult<UnloveSongApiMySongsSongKeyLoveDeleteResponses, UnloveSongApiMySongsSongKeyLoveDeleteErrors, ThrowOnError> => (options.client ?? client).delete<UnloveSongApiMySongsSongKeyLoveDeleteResponses, UnloveSongApiMySongsSongKeyLoveDeleteErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/my/songs/{song_key}/love',
+    ...options
+});
+
+/**
+ * Love Song
+ */
+export const loveSongApiMySongsSongKeyLovePost = <ThrowOnError extends boolean = true>(options: Options<LoveSongApiMySongsSongKeyLovePostData, ThrowOnError>): RequestResult<LoveSongApiMySongsSongKeyLovePostResponses, LoveSongApiMySongsSongKeyLovePostErrors, ThrowOnError> => (options.client ?? client).post<LoveSongApiMySongsSongKeyLovePostResponses, LoveSongApiMySongsSongKeyLovePostErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/my/songs/{song_key}/love',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -710,6 +808,17 @@ export const getCategorizedRecommendationsApiMyRecommendationsCategorizedGet = <
 export const getMyArtistsApiMyArtistsGet = <ThrowOnError extends boolean = true>(options?: Options<GetMyArtistsApiMyArtistsGetData, ThrowOnError>): RequestResult<GetMyArtistsApiMyArtistsGetResponses, GetMyArtistsApiMyArtistsGetErrors, ThrowOnError> => (options?.client ?? client).get<GetMyArtistsApiMyArtistsGetResponses, GetMyArtistsApiMyArtistsGetErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/my/artists',
+    ...options
+});
+
+/**
+ * Get Recommendations V2
+ *
+ * Catalog-backed recommendations: explained sections for ``sort=best``, else one paged flat list.
+ */
+export const getRecommendationsV2ApiMyRecommendationsV2Get = <ThrowOnError extends boolean = true>(options?: Options<GetRecommendationsV2ApiMyRecommendationsV2GetData, ThrowOnError>): RequestResult<GetRecommendationsV2ApiMyRecommendationsV2GetResponses, GetRecommendationsV2ApiMyRecommendationsV2GetErrors, ThrowOnError> => (options?.client ?? client).get<GetRecommendationsV2ApiMyRecommendationsV2GetResponses, GetRecommendationsV2ApiMyRecommendationsV2GetErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/my/recommendations/v2',
     ...options
 });
 

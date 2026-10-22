@@ -331,6 +331,10 @@ export type SearchApiSearchGetData = {
          */
         limit?: number;
         /**
+         * Library
+         */
+        library?: 'any' | 'community' | 'karafun';
+        /**
          * Sid
          */
         sid?: string | null;
@@ -364,6 +368,10 @@ export type PopularApiSearchPopularGetData = {
          * Limit
          */
         limit?: number;
+        /**
+         * Library
+         */
+        library?: 'any' | 'community' | 'karafun';
     };
     url: '/api/search/popular';
 };

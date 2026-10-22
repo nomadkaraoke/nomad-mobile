@@ -10,6 +10,7 @@ import {
 } from './search-client';
 
 export * from './client';
+export * from './discover';
 export { ApiError, configureClient, type ClientDeps } from './configure';
 // Search-service models (the search client's other generated names would collide with the catalog client's).
 export type {
@@ -25,6 +26,11 @@ export type {
   Version,
 } from './search-client';
 
+/** Library filter (same values as @nomad/core's LibraryFilter). */
+export type LibraryFilter = 'any' | 'community' | 'karafun';
+/** Sent only when narrowing: `any` (the server default) adds no param. */
+const libraryParam = (library?: LibraryFilter) => (library && library !== 'any' ? { library } : {});
+
 // Readable facades over FastAPI's generated operation names.
 
 // Legacy catalog song by numeric id (decide /api/catalog/songs/{id}): the song page until it reads the search service.
@@ -33,11 +39,19 @@ export const getSong = async (id: number) =>
 
 // Search service (decide /api/search/*).
 /** `sid` is the client's search-session id (decide logs it with the search; it makes one up when absent). */
-export const searchSongs = async (q: string, opts: { limit?: number; sid?: string; signal?: AbortSignal } = {}) =>
-  (await searchApiSearchGet({ query: { q, limit: opts.limit, sid: opts.sid }, signal: opts.signal })).data;
+export const searchSongs = async (
+  q: string,
+  opts: { limit?: number; sid?: string; library?: LibraryFilter; signal?: AbortSignal } = {},
+) =>
+  (
+    await searchApiSearchGet({
+      query: { q, limit: opts.limit, sid: opts.sid, ...libraryParam(opts.library) },
+      signal: opts.signal,
+    })
+  ).data;
 
-export const popularSongs = async (limit = 30) =>
-  (await popularApiSearchPopularGet({ query: { limit } })).data;
+export const popularSongs = async (limit = 30, library?: LibraryFilter) =>
+  (await popularApiSearchPopularGet({ query: { limit, ...libraryParam(library) } })).data;
 
 export const getSongDetail = async (key: string) => (await songApiSearchSongGet({ query: { key } })).data;
 
