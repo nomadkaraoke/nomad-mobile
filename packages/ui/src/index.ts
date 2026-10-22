@@ -10,3 +10,4 @@ export { Sheet, type SheetProps } from './Sheet';
 export { WaveformCanvas, buildBars, buildBarsPath, type Bar, type WaveformMarker, type WaveformCanvasProps } from './WaveformCanvas';
 export { NomadLoader, nomadLoaderIconCount, NOMAD_PATTERN_UNITS, type NomadLoaderProps } from './NomadLoader';
 export { NOMAD_COLORWAYS, NOMAD_N, nomadDashesPath, nomadNStripSvg, type NomadColorway, type NomadDash } from './nomadN';
+export { Chip, ChipRow, type ChipProps, type ChipRowProps } from './Chip';

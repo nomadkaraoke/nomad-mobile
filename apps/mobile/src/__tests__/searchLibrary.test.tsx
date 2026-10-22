@@ -62,18 +62,30 @@ it('changing the library re-runs the query and does not reuse the popular cache'
   expect(popularSongs).toHaveBeenCalledTimes(2);
 });
 
-it('offline: the popular list keeps only groups in the chosen library', async () => {
+async function offlineGroups(filter: 'any' | 'community' | 'karafun') {
   (openOfflineReader as jest.Mock).mockReturnValue(reader());
   (useNetInfo as jest.Mock).mockReturnValue({ isConnected: false, isInternetReachable: false });
-  act(() => useLibraryFilter.getState().set('any'));
-  const all = renderHook(() => useSearch(''));
+  act(() => useLibraryFilter.getState().set(filter));
+  const r = renderHook(() => useSearch(''));
   await settle();
-  const anyCount = all.result.current.groups.length;
-  expect(anyCount).toBeGreaterThan(0);
-  all.unmount();
-  act(() => useLibraryFilter.getState().set('karafun'));
-  const kf = renderHook(() => useSearch(''));
-  await settle();
-  for (const g of kf.result.current.groups) expect(g.versions.some((v) => v.brand_code === 'KV')).toBe(true);
-  expect(kf.result.current.groups.length).toBeLessThanOrEqual(anyCount);
+  const groups = r.result.current.groups;
+  r.unmount();
+  return groups;
+}
+
+it('offline: karafun keeps only KV groups and drops at least one group vs any', async () => {
+  const all = await offlineGroups('any');
+  expect(all.length).toBeGreaterThan(0);
+  const kf = await offlineGroups('karafun');
+  expect(kf.length).toBeLessThan(all.length);
+  expect(kf.length).toBeGreaterThan(0);
+  for (const g of kf) expect(g.versions.some((v) => v.brand_code === 'KV')).toBe(true);
+});
+
+it('offline: community keeps only groups with a community version', async () => {
+  const all = await offlineGroups('any');
+  const cm = await offlineGroups('community');
+  expect(cm.length).toBeGreaterThan(0);
+  expect(cm.length).toBeLessThanOrEqual(all.length);
+  for (const g of cm) expect(g.versions.some((v) => v.kind === 'community')).toBe(true);
 });
