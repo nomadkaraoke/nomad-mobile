@@ -94,6 +94,8 @@ export function RenameSheet({ visible, night, userKey, currentName, onClose, onS
               value={name}
               onChangeText={setName}
               autoCapitalize="words"
+              // The sheet is only for this field (UX review): the keyboard comes up with it, cursor after the name.
+              autoFocus
               returnKeyType="done"
               onSubmitEditing={() => void save(name, false)}
             />
