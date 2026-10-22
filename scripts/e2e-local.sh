@@ -20,7 +20,7 @@
 #      ../karaoke-decide-phase3-discover while that branch is unmerged and the worktree exists, else
 #      ../karaoke-decide), DECIDE_GEN_PARTNER_SECRET (shared by both stacks so decide's
 #      /resolve reaches gen; default local-stack-secret), KJBOX_DIR (kjbox checkout with
-#      kj-controller/scripts/local-stack.sh; default ../kjbox), IOS_DEVICE (simulator name or UDID; default
+#      kj-controller/scripts/local-stack.sh; default ../kjbox; reset fresh every run unless KJBOX_KEEP=1), IOS_DEVICE (simulator name or UDID; default
 #      "iPhone 17 Pro"), ANDROID_SERIAL (default emulator-5554).
 #
 # Both platforms use the same http://127.0.0.1 URLs: on Android, `adb reverse` maps the gen API (8010), gen web
@@ -95,9 +95,13 @@ curl -sf -m 5 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"ema
 #     /sing/api/test/*. It verifies app tokens against gen (:8010) and sends sung songs to decide (:8030), so it
 #     starts after both. `up` is idempotent and keeps the night (and its night_id) across restarts.
 kjbox_ready() { [[ "$(curl -s -m 3 -o /dev/null -w '%{http_code}' "$KJBOX/sing/api/v1/night?t=2121")" == 401 ]]; }
-if ! kjbox_ready; then
-  echo "Starting kjbox's local stack from $KJBOX_DIR"
-  (cd "$KJBOX_DIR/kj-controller" && scripts/local-stack.sh up)
+# A fresh box every run (`reset` wipes ~/kjdata-localstack and reseeds the fixture night): a make-it from an earlier
+# run (tonight-7, the tour) lands in the box's library, after which "machu picchu strokes" has a karaoke version.
+# KJBOX_KEEP=1 keeps the running stack as it is.
+if [[ "${KJBOX_KEEP:-}" == 1 ]] && kjbox_ready; then :
+else
+  echo "Starting kjbox's local stack fresh from $KJBOX_DIR"
+  (cd "$KJBOX_DIR/kj-controller" && scripts/local-stack.sh reset)
 fi
 curl -sf -m 5 -o /dev/null "$KJBOX/sing/api/test/state" || { echo "kjbox at $KJBOX has no /sing/api/test (KJBOX_TEST_API off?)" >&2; exit 1; }
 # tonight-9 stops and restarts the kjbox stack mid-flow ("box unreachable"), tonight-10 decide's (the karaoke log
