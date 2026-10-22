@@ -7,6 +7,8 @@ import { renderRouter } from 'expo-router/testing-library';
 import { View } from 'react-native';
 
 import { useAuth } from '../auth/store';
+import { QUIZ_STORAGE_KEY, useQuizDraft } from '../discover/quizStore';
+import { appStorage } from '../storage';
 import { gen, session } from '../test-utils/genAuthMock';
 import { appRoutes } from '../test-utils/routes';
 
@@ -26,6 +28,11 @@ jest.mock('@nomad/api-decide', () => ({
   listHiddenSongs: jest.fn(),
   unhideSong: jest.fn(),
   getQuizProgress: jest.fn(),
+  saveQuizProgress: jest.fn(async () => ({ saved: true })),
+  smartQuizArtists: jest.fn(async () => ({ artists: [], has_more: false })),
+  searchSongs: jest.fn(),
+  submitQuiz: jest.fn(async () => ({ message: 'ok', songs_added: 1, recommendations_ready: true })),
+  loveSong: jest.fn(async () => undefined),
 }));
 jest.mock('@nomad/api-gen', () => ({
   ...jest.requireActual('@nomad/api-gen'),
@@ -52,6 +59,8 @@ const signIn = () => act(() => useAuth.getState().signInWithSession(session()));
 beforeEach(async () => {
   jest.clearAllMocks();
   jest.useRealTimers();
+  act(() => useQuizDraft.getState().reset());
+  appStorage.remove(QUIZ_STORAGE_KEY);
   await useAuth.getState().signOut();
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 } as never);
   artistRows = [userArtist('Alpha Band'), userArtist('Beta Band')];
@@ -153,5 +162,55 @@ describe('musicProfile', () => {
     await signIn();
     fireEvent.press(await screen.findByTestId('me-music-profile'));
     await waitFor(() => expect(app.getPathname()).toBe('/me/music-profile'));
+  });
+
+  describe('editing in the quiz', () => {
+    const editQuiz = '/discover/quiz?step=4&from=profile';
+
+    it('seeds the draft from the profile when there is no saved progress, and submit keeps it', async () => {
+      await signIn();
+      const app = open(editQuiz);
+      fireEvent.press(await screen.findByTestId('quiz-finish'));
+      await waitFor(() => expect(decide.submitQuiz).toHaveBeenCalled());
+      expect(decide.submitQuiz).toHaveBeenCalledWith(
+        expect.objectContaining({
+          genres: ['rock', 'classic-rock'],
+          decade_preferences: ['1990s'],
+          energy_preference: 'high',
+          artist_affinities: [
+            { artist_name: 'Alpha Band', affinity: 'like' },
+            { artist_name: 'Beta Band', affinity: 'like' },
+          ],
+        }),
+      );
+      expect(decide.loveSong).toHaveBeenCalledWith('gamma group|invented song', { artist: 'Gamma Group', title: 'Invented Song' });
+      // Opened from the profile, finishing goes back to it.
+      await waitFor(() => expect(app.getPathname()).toBe('/me/music-profile'));
+    });
+
+    it('an artist removed on the profile does not come back from a stale saved progress', async () => {
+      m(decide.getQuizProgress).mockResolvedValue({
+        step: 3,
+        genres: ['pop'],
+        decades: [],
+        energy_preference: null,
+        artist_affinities: [
+          { artist_name: 'Alpha Band', affinity: 'love' },
+          { artist_name: 'Gone Band', affinity: 'like' },
+        ],
+        manual_artists: [{ artist_name: 'Gone Band', mbid: 'mb-gone' }],
+        enjoy_songs: [],
+      });
+      artistRows = [userArtist('Alpha Band')];
+      await signIn();
+      open(editQuiz);
+      fireEvent.press(await screen.findByTestId('quiz-finish'));
+      await waitFor(() => expect(decide.submitQuiz).toHaveBeenCalled());
+      const body = m(decide.submitQuiz).mock.calls[0][0];
+      // Current preferences win over the stale doc; the removed artist is gone from both lists.
+      expect(body.genres).toEqual(['rock', 'classic-rock']);
+      expect(body.artist_affinities).toEqual([{ artist_name: 'Alpha Band', affinity: 'love' }]);
+      expect(JSON.stringify(body.manual_artists)).not.toContain('Gone Band');
+    });
   });
 });

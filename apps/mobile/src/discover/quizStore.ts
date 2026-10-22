@@ -1,7 +1,10 @@
 // The quiz draft (spec §8.2): resumed from decide's saved progress (or this phone's copy), autosaved as it changes,
 // plus the smart artist suggestions shown on step 3.
 import {
+  getPreferences,
   getQuizProgress,
+  listLovedSongs,
+  listMyArtists,
   saveQuizProgress,
   smartQuizArtists,
   type QuizArtistResponse,
@@ -53,7 +56,11 @@ type QuizStore = {
   suggesting: boolean;
   /** The genres + decades the last suggestion call was made for. */
   suggestedFor: string | null;
-  load(owner: string): Promise<void>;
+  /**
+   * Resumes the draft. `seed` (opened from the music profile to edit it): decide's current preferences, artists
+   * and loved songs are laid over the saved progress, which can be missing or stale.
+   */
+  load(owner: string, seed?: boolean): Promise<void>;
   update(change: (d: QuizDraft) => QuizDraft): void;
   /** Sends a pending autosave now (the quiz is closing). */
   flush(): void;
@@ -103,6 +110,48 @@ function readLocal(owner: string): unknown {
   }
 }
 
+type CurrentProfile = {
+  prefs: Awaited<ReturnType<typeof getPreferences>> | null;
+  artists: string[] | null;
+  songs: QuizDraft['songs'] | null;
+};
+
+/** What decide holds now (each part null when it can't be read): the source of truth for editing. */
+async function currentProfile(): Promise<CurrentProfile> {
+  const [prefs, artists, loved] = await Promise.allSettled([getPreferences(), listMyArtists(), listLovedSongs()]);
+  return {
+    prefs: prefs.status === 'fulfilled' ? prefs.value : null,
+    artists: artists.status === 'fulfilled' ? artists.value.artists.map((a) => a.artist_name) : null,
+    songs:
+      loved.status === 'fulfilled'
+        ? loved.value.map((x) => ({ songKey: x.song_key, artist: x.artist, title: x.title }))
+        : null,
+  };
+}
+
+/** The saved draft with the current profile on top: current answers win, removed artists and songs stay removed. */
+function overlayProfile(d: QuizDraft, c: CurrentProfile): QuizDraft {
+  const out: QuizDraft = { ...d };
+  if (c.prefs) {
+    out.genres = c.prefs.genres ?? [];
+    out.decades = c.prefs.decades ?? [];
+    out.energy = c.prefs.energy_preference ?? null;
+  }
+  if (c.artists) {
+    const have = new Map(d.artists.map((a) => [norm(a.name), a]));
+    out.artists = c.artists.map((name) => have.get(norm(name)) ?? { name, affinity: 'like' as const });
+  }
+  if (c.songs) out.songs = c.songs;
+  return out;
+}
+
+const manualNames = (progress: unknown): string[] => {
+  const list = (progress as { manual_artists?: unknown } | null)?.manual_artists;
+  return Array.isArray(list)
+    ? list.flatMap((m: { artist_name?: unknown }) => (typeof m?.artist_name === 'string' ? [m.artist_name] : []))
+    : [];
+};
+
 const INITIAL = {
   draft: EMPTY_QUIZ,
   saved: null,
@@ -129,7 +178,7 @@ export const useQuizDraft = create<QuizStore>((set, get) => {
   return {
     ...INITIAL,
 
-    async load(owner) {
+    async load(owner, seed = false) {
       stopTimers();
       const gen = ++generation;
       set({ ...INITIAL });
@@ -139,16 +188,21 @@ export const useQuizDraft = create<QuizStore>((set, get) => {
       } catch {
         // Offline or decide unavailable: this phone's copy, if any.
       }
+      const current = seed ? await currentProfile() : null;
       if (gen !== generation) return;
       const local = readLocal(owner);
       const fromRemote = remote ? fromProgress(remote) : null;
       const fromLocal = !fromRemote && local ? fromProgress(local) : null;
-      const draft = fromRemote ?? fromLocal ?? EMPTY_QUIZ;
+      const fromProgressDoc = fromRemote ?? fromLocal ?? EMPTY_QUIZ;
+      const draft = current ? overlayProfile(fromProgressDoc, current) : fromProgressDoc;
+      // Names the saved progress had but the profile no longer lists count as touched, so submit drops them
+      // from the merged manual_artists instead of resurrecting them.
+      const staleNames = [...fromProgressDoc.artists.map((a) => a.name), ...manualNames(remote ?? local)];
       set({
         owner,
         draft,
         saved: fromRemote ? remote : fromLocal ? local : null,
-        touched: artistKeys(draft.artists.map((a) => a.name)),
+        touched: artistKeys([...draft.artists.map((a) => a.name), ...(current ? staleNames : [])]),
         listed: draft.artists.map(({ name, mbid, artistId }) => ({ name, mbid, artistId })),
       });
     },

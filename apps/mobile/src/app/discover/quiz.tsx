@@ -71,7 +71,8 @@ function Quiz({ owner }: { owner: string }) {
   const insets = useSafeAreaInsets();
   const { ref: windowTopRef, top: windowTop, onLayout: onWindowTopLayout } = useWindowTop();
   const queryClient = useQueryClient();
-  const { step: stepParam } = useLocalSearchParams<{ step?: string }>();
+  const { step: stepParam, from } = useLocalSearchParams<{ step?: string; from?: string }>();
+  const fromProfile = from === 'profile';
   const loaded = useQuizDraft((s) => s.owner === owner);
   const draft = useQuizDraft((s) => s.draft);
   const [submitting, setSubmitting] = useState(false);
@@ -83,7 +84,7 @@ function Quiz({ owner }: { owner: string }) {
     let live = true;
     void useQuizDraft
       .getState()
-      .load(owner)
+      .load(owner, stepParam !== undefined)
       .then(() => {
         const want = Number(stepParam);
         if (live && isStep(want) && useQuizDraft.getState().draft.step !== want) {
@@ -134,7 +135,7 @@ function Quiz({ owner }: { owner: string }) {
     await Promise.allSettled(d.songs.map((x) => loveSong(x.songKey, { artist: x.artist, title: x.title })));
     // Reset (not just invalidate): Discover shows its picks loading, not the old "take the quiz" card.
     void queryClient.resetQueries({ queryKey: RECS_KEY });
-    router.dismissTo('/discover' as Href);
+    router.dismissTo((fromProfile ? '/me/music-profile' : '/discover') as Href);
     // After leaving, and without resetting what's on screen, so the closing modal doesn't flash the loader.
     useQuizDraft.getState().clear();
   };

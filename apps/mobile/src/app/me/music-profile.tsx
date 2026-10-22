@@ -71,7 +71,7 @@ export default function MusicProfileScreen() {
             testID="profile-edit-genres"
             label={t('musicProfileEditGenres')}
             variant="secondary"
-            onPress={() => router.push('/discover/quiz?step=1')}
+            onPress={() => router.push('/discover/quiz?step=1&from=profile')}
           />
         </View>
         <View className="gap-1">
@@ -86,7 +86,7 @@ export default function MusicProfileScreen() {
             testID="profile-edit-decades"
             label={t('musicProfileEditDecades')}
             variant="secondary"
-            onPress={() => router.push('/discover/quiz?step=2')}
+            onPress={() => router.push('/discover/quiz?step=2&from=profile')}
           />
         </View>
       </ProfileSection>
