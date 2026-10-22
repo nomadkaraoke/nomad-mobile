@@ -1,4 +1,4 @@
-import { canAdvance, cycleAffinity, EMPTY_QUIZ, fromProgress, mergeProgress, mergeSubmit, toggle, toProgressRequest, toSubmitRequest } from '../index';
+import { artistKeys, canAdvance, cycleAffinity, EMPTY_QUIZ, fromProgress, mergeProgress, mergeSubmit, toggle, toProgressRequest, toSubmitRequest } from '../index';
 import type { QuizDraft } from '../index';
 
 describe('toggle', () => {
@@ -12,11 +12,11 @@ describe('toggle', () => {
 
 describe('cycleAffinity', () => {
   it('cycles none -> like -> love -> none', () => {
-    let d = cycleAffinity(EMPTY_QUIZ, 'Muse', 'm-1');
+    let d = cycleAffinity(EMPTY_QUIZ, 'Muse', { mbid: 'm-1' });
     expect(d.artists).toEqual([{ name: 'Muse', mbid: 'm-1', affinity: 'like' }]);
-    d = cycleAffinity(d, 'Muse', 'm-1');
+    d = cycleAffinity(d, 'Muse', { mbid: 'm-1' });
     expect(d.artists[0]?.affinity).toBe('love');
-    d = cycleAffinity(d, 'Muse', 'm-1');
+    d = cycleAffinity(d, 'Muse', { mbid: 'm-1' });
     expect(d.artists).toEqual([]);
     expect(EMPTY_QUIZ.artists).toEqual([]);
   });
@@ -148,7 +148,7 @@ describe('mergeProgress (decide PUT /api/quiz/progress replaces the whole doc)',
   });
   it('drops removed artists and songs, and is the plain request without a saved doc', () => {
     const removed = { ...cycleAffinity(cycleAffinity(draft, 'Muse'), 'Muse'), songs: [] };
-    const out = mergeProgress(saved, toProgressRequest(removed));
+    const out = mergeProgress(saved, toProgressRequest(removed), artistKeys(['Muse', 'Queen']));
     expect(out.artist_affinities).toEqual([{ artist_name: 'Queen', affinity: 'occasionally' }]);
     expect(out.manual_artists).toEqual([]);
     expect(out.enjoy_songs).toEqual([]);
@@ -172,5 +172,54 @@ describe('mergeSubmit', () => {
     expect(out.artist_affinities).toEqual([{ artist_name: 'Muse', affinity: 'occasionally' }]);
     expect(out).not.toHaveProperty('step');
     expect(mergeSubmit(undefined, toSubmitRequest(d))).toEqual(toSubmitRequest(d));
+  });
+});
+
+describe('decide web manual_artists (their own list, not a copy of the affinities)', () => {
+  const saved = {
+    step: 3,
+    genres: ['rock'],
+    decades: [],
+    artist_affinities: [{ artist_name: 'Muse', affinity: 'like' }],
+    manual_artists: [
+      { artist_name: 'Web Only Band', artist_id: 'sp-web', genres: ['indie'] },
+      { artist_name: 'Muse', artist_id: 'sp-muse' },
+    ],
+  };
+  const draft = fromProgress(saved) as QuizDraft;
+  const touched = artistKeys(draft.artists.map((a) => a.name));
+
+  it('reads artist_id into the draft and sends it back', () => {
+    expect(draft.artists).toEqual([{ name: 'Muse', artistId: 'sp-muse', affinity: 'like' }]);
+    expect(toProgressRequest(draft).manual_artists).toEqual([{ artist_name: 'Muse', artist_id: 'sp-muse' }]);
+    const d = cycleAffinity(EMPTY_QUIZ, 'Found', { mbid: null, artistId: 'sp-found' });
+    expect(toSubmitRequest(d).manual_artists).toEqual([{ artist_name: 'Found', artist_id: 'sp-found' }]);
+  });
+
+  it('a web manual artist mobile never had survives a mobile save and submit, ids intact', () => {
+    const edited = cycleAffinity(draft, 'New Pick', { mbid: 'mb-new' });
+    const allTouched = artistKeys([...touched, 'New Pick']);
+    const progress = mergeProgress(saved, toProgressRequest(edited), allTouched);
+    const submit = mergeSubmit(saved, toSubmitRequest(edited), allTouched);
+    for (const body of [progress, submit]) {
+      expect(body.manual_artists).toEqual([
+        { artist_name: 'Web Only Band', artist_id: 'sp-web', genres: ['indie'] },
+        { artist_name: 'Muse', artist_id: 'sp-muse' },
+        { artist_name: 'New Pick', mbid: 'mb-new' },
+      ]);
+    }
+  });
+
+  it('an artist_id-only entry for a pick mobile still has keeps its id even when the draft lost it', () => {
+    const noIds: QuizDraft = { ...draft, artists: [{ name: 'muse', affinity: 'love' }] };
+    const out = mergeProgress(saved, toProgressRequest(noIds), touched);
+    expect(out.manual_artists).toContainEqual({ artist_name: 'Muse', artist_id: 'sp-muse' });
+  });
+
+  it('drops a manual artist the user removed on mobile, keeps the web-only one', () => {
+    const removed = cycleAffinity(cycleAffinity(draft, 'Muse'), 'Muse');
+    expect(removed.artists).toEqual([]);
+    const out = mergeSubmit(saved, toSubmitRequest(removed), touched);
+    expect(out.manual_artists).toEqual([{ artist_name: 'Web Only Band', artist_id: 'sp-web', genres: ['indie'] }]);
   });
 });

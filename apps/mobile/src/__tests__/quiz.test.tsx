@@ -2,7 +2,7 @@
 import * as decide from '@nomad/api-decide';
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
-import { View } from 'react-native';
+import { BackHandler, View } from 'react-native';
 
 import { useAuth } from '../auth/store';
 import { QUIZ_STORAGE_KEY, useQuizDraft } from '../discover/quizStore';
@@ -95,7 +95,10 @@ beforeEach(async () => {
   getRecs.mockResolvedValue(recs(false));
   getProgress.mockResolvedValue(null);
   saveProgress.mockResolvedValue({ saved: true });
-  smart.mockResolvedValue({ artists: [artist('Alpha Band'), artist('Beta Band', 'Fans of Gamma also like')], has_more: true });
+  smart.mockResolvedValue({
+    artists: [artist('Alpha Band'), artist('Beta Band', 'Fans of Gamma also like')],
+    has_more: true,
+  });
   searchArtists.mockResolvedValue({ artists: [], total: 0 });
   submitQuiz.mockResolvedValue({ message: 'ok', songs_added: 5, recommendations_ready: true });
   loveSong.mockResolvedValue(undefined);
@@ -210,14 +213,24 @@ describe('quiz', () => {
     await signIn();
     getProgress.mockResolvedValue({ step: 3, genres: ['rock'], decades: [] });
     searchArtists.mockResolvedValue({
-      artists: [{ name: 'Found Artist', mbid: 'mb-found', artist_id: 'x', artist_name: 'Found Artist' }],
+      artists: [
+        {
+          name: 'Found Artist',
+          mbid: 'mb-found',
+          spotify_id: 'sp-found',
+          artist_id: 'sp-found',
+          artist_name: 'Found Artist',
+        },
+      ],
       total: 1,
     });
     open();
     fireEvent.changeText(await screen.findByTestId('quiz-artist-search'), 'found');
     fireEvent.press(await screen.findByTestId('quiz-artist-result-0'));
     expect(searchArtists).toHaveBeenCalledWith('found', expect.any(Number));
-    expect(useQuizDraft.getState().draft.artists).toEqual([{ name: 'Found Artist', mbid: 'mb-found', affinity: 'like' }]);
+    expect(useQuizDraft.getState().draft.artists).toEqual([
+      { name: 'Found Artist', mbid: 'mb-found', artistId: 'sp-found', affinity: 'like' },
+    ]);
     expect(within(screen.getByTestId('quiz-picked-artist-0')).getByText('Found Artist')).toBeTruthy();
     // Love, then off: it stays listed (unpicked) so it can be tapped again.
     fireEvent.press(screen.getByTestId('quiz-picked-artist-0'));
@@ -226,11 +239,19 @@ describe('quiz', () => {
     fireEvent.press(screen.getByTestId('quiz-picked-artist-0'));
     expect(screen.getByTestId('quiz-picked-artist-0')).toBeSelected();
 
+    // Off again, then leave step 3 and come back: it is still listed.
+    fireEvent.press(screen.getByTestId('quiz-picked-artist-0'));
+    fireEvent.press(screen.getByTestId('quiz-picked-artist-0'));
+    expect(useQuizDraft.getState().draft.artists).toEqual([]);
+    fireEvent.press(screen.getByTestId('quiz-back'));
+    fireEvent.press(await screen.findByTestId('quiz-skip'));
+    expect(within(await screen.findByTestId('quiz-picked-artist-0')).getByText('Found Artist')).toBeTruthy();
+
     // A query with no match adds nothing.
     searchArtists.mockResolvedValue({ artists: [], total: 0 });
     fireEvent.changeText(screen.getByTestId('quiz-artist-search'), 'zzzz nobody');
     expect(await screen.findByTestId('quiz-artist-no-results')).toBeTruthy();
-    expect(useQuizDraft.getState().draft.artists).toHaveLength(1);
+    expect(useQuizDraft.getState().draft.artists).toEqual([]);
   });
 
   it('suggestions prefetch when leaving step 2', async () => {
@@ -321,5 +342,91 @@ describe('quiz', () => {
     expect(saveProgress).toHaveBeenCalledWith(
       expect.objectContaining({ step: 1, genres: ['pop', 'rock', 'ska'], vocal_comfort_pref: 'any' }),
     );
+  });
+
+  it('the picked artist ids reach the saved progress and the submit', async () => {
+    await signIn();
+    getProgress.mockResolvedValue({
+      step: 3,
+      genres: ['rock'],
+      decades: [],
+      artist_affinities: [],
+      manual_artists: [{ artist_name: 'Web Only Band', artist_id: 'sp-web' }],
+    });
+    searchArtists.mockResolvedValue({
+      artists: [{ name: 'Found Artist', spotify_id: 'sp-found', artist_id: 'sp-found', artist_name: 'Found Artist' }],
+      total: 1,
+    });
+    open();
+    fireEvent.changeText(await screen.findByTestId('quiz-artist-search'), 'found');
+    fireEvent.press(await screen.findByTestId('quiz-artist-result-0'));
+    fireEvent.press(screen.getByTestId('quiz-next'));
+    fireEvent.press(await screen.findByTestId('quiz-finish'));
+    await waitFor(() => expect(submitQuiz).toHaveBeenCalled());
+    const manual = [
+      { artist_name: 'Web Only Band', artist_id: 'sp-web' },
+      { artist_name: 'Found Artist', artist_id: 'sp-found' },
+    ];
+    expect(submitQuiz.mock.calls[0][0].manual_artists).toEqual(manual);
+    expect(saveProgress).toHaveBeenLastCalledWith(expect.objectContaining({ manual_artists: manual }));
+  });
+
+  it('suggests again when genres or decades changed since the last suggestions', async () => {
+    await signIn();
+    getProgress.mockResolvedValue({ step: 3, genres: ['rock'], decades: [] });
+    open();
+    expect(await screen.findByTestId('quiz-artist-suggestion-1')).toBeTruthy();
+    expect(smart).toHaveBeenCalledTimes(1);
+    // Back to step 2 and forward again with nothing changed: no new call.
+    fireEvent.press(screen.getByTestId('quiz-back'));
+    fireEvent.press(await screen.findByTestId('quiz-skip'));
+    expect(await screen.findByTestId('quiz-artist-suggestion-1')).toBeTruthy();
+    expect(smart).toHaveBeenCalledTimes(1);
+    // Add a decade: leaving step 2 asks again, and the earlier suggestions stay.
+    smart.mockResolvedValue({ artists: [artist('Decade Band')], has_more: true });
+    fireEvent.press(screen.getByTestId('quiz-back'));
+    fireEvent.press(await screen.findByTestId('quiz-decade-1980s'));
+    fireEvent.press(screen.getByTestId('quiz-next'));
+    expect(await screen.findByText('Decade Band')).toBeTruthy();
+    expect(smart).toHaveBeenCalledTimes(2);
+    expect(smart).toHaveBeenLastCalledWith(
+      expect.objectContaining({ decades: ['1980s'], exclude: expect.arrayContaining(['Alpha Band', 'Beta Band']) }),
+    );
+    expect(screen.getByText('Alpha Band')).toBeTruthy();
+  });
+
+  it('Android back goes to the previous step, and closes the quiz from step 1', async () => {
+    await signIn();
+    type Handler = () => boolean | null | undefined;
+    const handlers: Handler[] = [];
+    const add = jest.spyOn(BackHandler, 'addEventListener').mockImplementation((_e, h) => {
+      handlers.push(h as Handler);
+      return { remove: () => void handlers.splice(handlers.indexOf(h as Handler), 1) };
+    });
+    getProgress.mockResolvedValue({ step: 2, genres: ['rock'], decades: [] });
+    open();
+    expect(await screen.findByTestId('quiz-decade-1990s')).toBeTruthy();
+    const press = () => handlers.reduceRight<boolean>((done, h) => done || Boolean(h()), false);
+    let handled = false;
+    act(() => {
+      handled = press();
+    });
+    expect(handled).toBe(true);
+    expect(await screen.findByTestId('quiz-genre-rock')).toBeTruthy();
+    act(() => {
+      handled = press();
+    });
+    expect(handled).toBe(false);
+    add.mockRestore();
+  });
+
+  it('finishing does not flash the loader while the quiz closes', async () => {
+    await signIn();
+    getProgress.mockResolvedValue({ step: 4, genres: ['rock'], decades: [] });
+    const app = open();
+    fireEvent.press(await screen.findByTestId('quiz-finish'));
+    await waitFor(() => expect(app.getPathname()).toBe('/discover'));
+    expect(screen.queryByTestId('quiz-loading', { includeHiddenElements: true })).toBeNull();
+    expect(useQuizDraft.getState().owner).toBe('me@example.com');
   });
 });

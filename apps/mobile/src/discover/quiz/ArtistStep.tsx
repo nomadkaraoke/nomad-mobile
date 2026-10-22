@@ -1,5 +1,5 @@
 import { searchArtists, type ArtistSearchResult } from '@nomad/api-decide';
-import { cycleAffinity, type Affinity } from '@nomad/core';
+import { cycleAffinity, type Affinity, type ArtistIds } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { colors, Text, TextField } from '@nomad/ui';
 import { useEffect, useMemo, useState } from 'react';
@@ -63,7 +63,10 @@ function ArtistButton({ testID, name, detail, affinity, onPress, tile }: ArtistB
 /** Artists matching the box (decide's artist search), latest query only. Never free text: only results can be added. */
 function useArtistSearch(query: string) {
   const q = query.trim();
-  const [state, setState] = useState<{ q: string; artists: ArtistSearchResult[] } | null>(null);
+  const [state, setState] = useState<{
+    q: string;
+    artists: ArtistSearchResult[];
+  } | null>(null);
   useEffect(() => {
     if (q.length < MIN_CHARS) return;
     let live = true;
@@ -92,21 +95,19 @@ export function ArtistStep() {
   const suggesting = useQuizDraft((s) => s.suggesting);
   const [query, setQuery] = useState('');
   const results = useArtistSearch(query);
-  // "Your artists" (picks that aren't suggestions) never drops an artist while the step is open, even after a
-  // tap turns it off: the resumed picks, then those added from search.
-  const [listed, setListed] = useState<{ name: string; mbid?: string }[]>(() => useQuizDraft.getState().draft.artists);
+  // "Your artists" (picks that aren't suggestions) never drops an artist, even after a tap turns it off.
+  const listed = useQuizDraft((s) => s.listed);
 
-  // Resumed straight onto this step (or the prefetch failed): ask now.
+  // Resumed straight onto this step, the prefetch failed, or genres/decades changed since: ask now.
   useEffect(() => {
-    const s = useQuizDraft.getState();
-    if (s.suggestions.length === 0 && !s.suggesting) s.suggest();
+    useQuizDraft.getState().suggestIfStale();
   }, []);
 
   const affinityOf = (name: string) => artists.find((a) => norm(a.name) === norm(name))?.affinity;
-  const tap = (name: string, mbid?: string | null) => {
+  const tap = (name: string, ids?: ArtistIds) => {
     const s = useQuizDraft.getState();
     const isNew = !affinityOf(name);
-    s.update((d) => cycleAffinity(d, name, mbid ?? undefined));
+    s.update((d) => cycleAffinity(d, name, ids));
     if (isNew) s.suggestSoon();
   };
 
@@ -149,8 +150,17 @@ export function ArtistStep() {
               detail={r.disambiguation}
               affinity={affinityOf(r.name)}
               onPress={() => {
-                setListed((a) => [...a, { name: r.name, ...(r.mbid ? { mbid: r.mbid } : {}) }]);
-                tap(r.name, r.mbid);
+                // decide web sends the Spotify id as artist_id when there is one (catalog's artist_id falls back to the MBID).
+                const ids = {
+                  mbid: r.mbid,
+                  artistId: r.spotify_id || r.artist_id || null,
+                };
+                useQuizDraft.getState().list({
+                  name: r.name,
+                  ...(ids.mbid ? { mbid: ids.mbid } : {}),
+                  ...(ids.artistId ? { artistId: ids.artistId } : {}),
+                });
+                tap(r.name, ids);
               }}
             />
           ))}
@@ -168,7 +178,7 @@ export function ArtistStep() {
                 testID={`quiz-picked-artist-${i}`}
                 name={a.name}
                 affinity={affinityOf(a.name)}
-                onPress={() => tap(a.name, a.mbid)}
+                onPress={() => tap(a.name, a)}
               />
             ))}
           </View>
@@ -186,7 +196,7 @@ export function ArtistStep() {
               name={a.name}
               detail={a.suggestion_reason?.display_text || t('reasonFallback')}
               affinity={affinityOf(a.name)}
-              onPress={() => tap(a.name, a.mbid)}
+              onPress={() => tap(a.name, { mbid: a.mbid, artistId: a.spotify_id })}
             />
           ))}
         </View>

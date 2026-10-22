@@ -7,7 +7,15 @@ import {
   type QuizArtistResponse,
   type QuizProgressRequest,
 } from '@nomad/api-decide';
-import { EMPTY_QUIZ, fromProgress, mergeProgress, toProgressRequest, type QuizDraft } from '@nomad/core';
+import {
+  artistKeys,
+  EMPTY_QUIZ,
+  fromProgress,
+  mergeProgress,
+  toProgressRequest,
+  type QuizArtistPick,
+  type QuizDraft,
+} from '@nomad/core';
 import { create } from 'zustand';
 
 import { appStorage } from '../storage';
@@ -28,20 +36,39 @@ type QuizStore = {
    * the draft over it (`mergeProgress`) and keeps what decide web saved that mobile doesn't edit.
    */
   saved: unknown;
+  /**
+   * Every artist name (normalized) the draft has had since it was loaded. A saved web manual artist mobile never
+   * had is kept on save; one the user removed here is dropped (core `mergeProgress`).
+   */
+  touched: ReadonlySet<string>;
+  /**
+   * "Your artists" on step 3: the loaded picks, then those added from search. Nothing leaves it until the next
+   * load, so an artist tapped off stays there (also after leaving and re-entering step 3).
+   */
+  listed: Pick<QuizArtistPick, 'name' | 'mbid' | 'artistId'>[];
   /** The signed-in email the draft belongs to; null until `load` finishes. */
   owner: string | null;
   /** Suggestions in the order shown. Append-only: an artist once shown is never removed. */
   suggestions: QuizArtistResponse[];
   suggesting: boolean;
+  /** The genres + decades the last suggestion call was made for. */
+  suggestedFor: string | null;
   load(owner: string): Promise<void>;
   update(change: (d: QuizDraft) => QuizDraft): void;
   /** Sends a pending autosave now (the quiz is closing). */
   flush(): void;
   /** Asks decide for (more) smart suggestions; a call while one is in flight runs once it lands. */
   suggest(): void;
+  /** Suggestions when there are none yet, or when genres/decades changed since the last call (still append-only). */
+  suggestIfStale(): void;
   /** A new pick: refresh the suggestions shortly. */
   suggestSoon(): void;
-  /** Forgets the draft here and on this phone (after submit). */
+  /** Adds an artist (from search) to "Your artists". */
+  list(artist: Pick<QuizArtistPick, 'name' | 'mbid' | 'artistId'>): void;
+  /**
+   * After submit: forgets this phone's copy and stops pending work. The on-screen state stays (no flash while the
+   * modal closes); the next `load` replaces it.
+   */
   clear(): void;
   reset(): void;
 };
@@ -53,6 +80,8 @@ let suggestAgain = false;
 let generation = 0;
 
 const norm = (s: string) => s.trim().toLowerCase();
+/** What a suggestion call depends on besides the picks. */
+const suggestionKey = (d: QuizDraft) => JSON.stringify([[...d.genres].sort(), [...d.decades].sort()]);
 
 function stopTimers() {
   if (saveTimer) clearTimeout(saveTimer);
@@ -77,14 +106,17 @@ function readLocal(owner: string): unknown {
 const INITIAL = {
   draft: EMPTY_QUIZ,
   saved: null,
+  touched: new Set<string>(),
+  listed: [],
   owner: null,
   suggestions: [],
   suggesting: false,
+  suggestedFor: null,
 } satisfies Partial<QuizStore>;
 
 export const useQuizDraft = create<QuizStore>((set, get) => {
   /** The body for decide (and this phone's copy): the draft over the last saved doc. */
-  const body = () => mergeProgress(get().saved, toProgressRequest(get().draft));
+  const body = () => mergeProgress(get().saved, toProgressRequest(get().draft), get().touched);
 
   const send = () => {
     saveTimer = null;
@@ -111,17 +143,23 @@ export const useQuizDraft = create<QuizStore>((set, get) => {
       const local = readLocal(owner);
       const fromRemote = remote ? fromProgress(remote) : null;
       const fromLocal = !fromRemote && local ? fromProgress(local) : null;
+      const draft = fromRemote ?? fromLocal ?? EMPTY_QUIZ;
       set({
         owner,
-        draft: fromRemote ?? fromLocal ?? EMPTY_QUIZ,
+        draft,
         saved: fromRemote ? remote : fromLocal ? local : null,
+        touched: artistKeys(draft.artists.map((a) => a.name)),
+        listed: draft.artists.map(({ name, mbid, artistId }) => ({ name, mbid, artistId })),
       });
     },
 
     update(change) {
       const { owner } = get();
       if (!owner) return;
-      set({ draft: change(get().draft) });
+      const draft = change(get().draft);
+      const touched = new Set(get().touched);
+      for (const a of draft.artists) touched.add(norm(a.name));
+      set({ draft, touched });
       appStorage.set(QUIZ_STORAGE_KEY, JSON.stringify({ owner, progress: body() }));
       if (saveTimer) clearTimeout(saveTimer);
       saveTimer = setTimeout(send, AUTOSAVE_MS);
@@ -142,7 +180,7 @@ export const useQuizDraft = create<QuizStore>((set, get) => {
       const { draft, suggestions } = get();
       const picked = draft.artists.map((a) => a.name);
       const shown = suggestions.map((a) => a.name);
-      set({ suggesting: true });
+      set({ suggesting: true, suggestedFor: suggestionKey(draft) });
       smartQuizArtists({
         genres: draft.genres,
         decades: draft.decades,
@@ -170,6 +208,19 @@ export const useQuizDraft = create<QuizStore>((set, get) => {
         });
     },
 
+    suggestIfStale() {
+      const { draft, suggestions, suggesting, suggestedFor } = get();
+      const changed = suggestedFor !== suggestionKey(draft);
+      if (suggesting) {
+        if (changed) suggestAgain = true;
+      } else if (suggestions.length === 0 || changed) get().suggest();
+    },
+
+    list(artist) {
+      if (get().listed.some((a) => norm(a.name) === norm(artist.name))) return;
+      set({ listed: [...get().listed, artist] });
+    },
+
     suggestSoon() {
       if (suggestTimer) clearTimeout(suggestTimer);
       suggestTimer = setTimeout(() => {
@@ -182,7 +233,6 @@ export const useQuizDraft = create<QuizStore>((set, get) => {
       stopTimers();
       generation++;
       appStorage.remove(QUIZ_STORAGE_KEY);
-      set({ ...INITIAL });
     },
 
     reset() {

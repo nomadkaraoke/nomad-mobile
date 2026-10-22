@@ -3,9 +3,9 @@ import { canAdvance, mergeSubmit, toSubmitRequest, type QuizDraft } from '@nomad
 import { useTranslations } from '@nomad/i18n';
 import { Button, colors, Text } from '@nomad/ui';
 import { useQueryClient } from '@tanstack/react-query';
-import { router, useLocalSearchParams, type Href } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { router, useFocusEffect, useLocalSearchParams, type Href } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, BackHandler, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { openSignIn } from '../../auth/signInUi';
@@ -43,6 +43,22 @@ function SignedOut() {
   );
 }
 
+/**
+ * How far the screen's content starts below the top of the window, for KeyboardAvoidingView's
+ * keyboardVerticalOffset. Measured, because under an iOS page-sheet modal it is the sheet's top inset plus the
+ * header, which no constant gets right on every device.
+ */
+function useWindowTop() {
+  const ref = useRef<View>(null);
+  const [top, setTop] = useState(0);
+  const onLayout = useCallback(() => {
+    ref.current?.measureInWindow?.((_x, y) => {
+      if (Number.isFinite(y)) setTop(y);
+    });
+  }, []);
+  return { ref, top, onLayout };
+}
+
 /** True when step 2 or 3 has no answer yet: its button says Skip instead of Next. */
 function unanswered(d: QuizDraft): boolean {
   if (d.step === 2) return d.decades.length === 0 && d.energy === null;
@@ -53,6 +69,7 @@ function unanswered(d: QuizDraft): boolean {
 function Quiz({ owner }: { owner: string }) {
   const t = useTranslations('quiz');
   const insets = useSafeAreaInsets();
+  const { ref: windowTopRef, top: windowTop, onLayout: onWindowTopLayout } = useWindowTop();
   const queryClient = useQueryClient();
   const { step: stepParam } = useLocalSearchParams<{ step?: string }>();
   const loaded = useQuizDraft((s) => s.owner === owner);
@@ -80,21 +97,34 @@ function Quiz({ owner }: { owner: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- the step param only applies when the quiz opens
   }, [owner]);
 
-  const goTo = (step: Step) => {
+  const goTo = useCallback((step: Step) => {
     const s = useQuizDraft.getState();
     // decide web's latency trick: the slow smart-artist call starts when step 2 is left, before step 3 shows.
-    if (s.draft.step === 2 && step === 3 && s.suggestions.length === 0) s.suggest();
+    if (s.draft.step === 2 && step === 3) s.suggestIfStale();
     s.update((d) => ({ ...d, step }));
-  };
+  }, []);
+
+  // Android back goes to the previous step; on step 1 it closes the quiz as usual.
+  useFocusEffect(
+    useCallback(() => {
+      const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+        const { draft: d, owner: o } = useQuizDraft.getState();
+        if (o !== owner || d.step === 1) return false;
+        goTo((d.step - 1) as Step);
+        return true;
+      });
+      return () => sub.remove();
+    }, [goTo, owner]),
+  );
 
   const finish = async () => {
     setSubmitting(true);
     setFailed(false);
     const s = useQuizDraft.getState();
     s.flush();
-    const { draft: d, saved } = s;
+    const { draft: d, saved, touched } = s;
     try {
-      await submitQuiz(mergeSubmit(saved, toSubmitRequest(d)) as QuizSubmitRequest);
+      await submitQuiz(mergeSubmit(saved, toSubmitRequest(d), touched) as QuizSubmitRequest);
     } catch {
       setFailed(true);
       setSubmitting(false);
@@ -102,10 +132,11 @@ function Quiz({ owner }: { owner: string }) {
     }
     // The quiz submit doesn't take songs: each loved song goes to "songs you love" (best effort).
     await Promise.allSettled(d.songs.map((x) => loveSong(x.songKey, { artist: x.artist, title: x.title })));
-    useQuizDraft.getState().clear();
     // Reset (not just invalidate): Discover shows its picks loading, not the old "take the quiz" card.
     void queryClient.resetQueries({ queryKey: RECS_KEY });
     router.dismissTo('/discover' as Href);
+    // After leaving, and without resetting what's on screen, so the closing modal doesn't flash the loader.
+    useQuizDraft.getState().clear();
   };
 
   if (!loaded) {
@@ -119,56 +150,63 @@ function Quiz({ owner }: { owner: string }) {
   const { step } = draft;
   const skip = unanswered(draft);
   return (
-    <KeyboardAvoidingView
-      testID="quiz-screen"
-      style={{ flex: 1, backgroundColor: colors.bg }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={insets.top}
-    >
-      <ScrollView contentContainerClassName="gap-4 p-4" keyboardShouldPersistTaps="handled">
-        <Text testID="quiz-step" variant="muted">
-          {t('stepOf', { step, total: STEPS })}
-        </Text>
-        {step === 1 ? <GenreStep /> : step === 2 ? <DecadeEnergyStep /> : step === 3 ? <ArtistStep /> : <SongStep />}
-      </ScrollView>
-      {/* Sticky: Next / Skip / Finish never scroll away. */}
-      <View
-        className="gap-2 border-t border-border bg-bg px-4 pt-3"
-        style={{ paddingBottom: Math.max(insets.bottom, 12) }}
+    <View ref={windowTopRef} onLayout={onWindowTopLayout} style={{ flex: 1, backgroundColor: colors.bg }}>
+      <KeyboardAvoidingView
+        testID="quiz-screen"
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={windowTop}
       >
-        {failed ? (
-          <Text testID="quiz-error" variant="error">
-            {t('submitError')}
+        <ScrollView contentContainerClassName="gap-4 p-4" keyboardShouldPersistTaps="handled">
+          <Text testID="quiz-step" variant="muted">
+            {t('stepOf', { step, total: STEPS })}
           </Text>
-        ) : null}
-        <View className="flex-row gap-3">
-          {step > 1 ? (
-            <View className="flex-1">
-              <Button
-                testID="quiz-back"
-                variant="secondary"
-                label={t('back')}
-                disabled={submitting}
-                onPress={() => goTo((step - 1) as Step)}
-              />
-            </View>
+          {step === 1 ? <GenreStep /> : step === 2 ? <DecadeEnergyStep /> : step === 3 ? <ArtistStep /> : <SongStep />}
+        </ScrollView>
+        {/* Sticky: Next / Skip / Finish never scroll away. */}
+        <View
+          className="gap-2 border-t border-border bg-bg px-4 pt-3"
+          style={{ paddingBottom: Math.max(insets.bottom, 12) }}
+        >
+          {failed ? (
+            <Text testID="quiz-error" variant="error">
+              {t('submitError')}
+            </Text>
           ) : null}
-          <View className="flex-[2]">
-            {step === STEPS ? (
-              <Button testID="quiz-finish" label={t('finish')} loading={submitting} onPress={() => void finish()} />
-            ) : skip ? (
-              <Button testID="quiz-skip" variant="secondary" label={t('skip')} onPress={() => goTo((step + 1) as Step)} />
-            ) : (
-              <Button
-                testID="quiz-next"
-                label={t('next')}
-                disabled={!canAdvance(draft)}
-                onPress={() => goTo((step + 1) as Step)}
-              />
-            )}
+          <View className="flex-row gap-3">
+            {step > 1 ? (
+              <View className="flex-1">
+                <Button
+                  testID="quiz-back"
+                  variant="secondary"
+                  label={t('back')}
+                  disabled={submitting}
+                  onPress={() => goTo((step - 1) as Step)}
+                />
+              </View>
+            ) : null}
+            <View className="flex-[2]">
+              {step === STEPS ? (
+                <Button testID="quiz-finish" label={t('finish')} loading={submitting} onPress={() => void finish()} />
+              ) : skip ? (
+                <Button
+                  testID="quiz-skip"
+                  variant="secondary"
+                  label={t('skip')}
+                  onPress={() => goTo((step + 1) as Step)}
+                />
+              ) : (
+                <Button
+                  testID="quiz-next"
+                  label={t('next')}
+                  disabled={!canAdvance(draft)}
+                  onPress={() => goTo((step + 1) as Step)}
+                />
+              )}
+            </View>
           </View>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }

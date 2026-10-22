@@ -4,6 +4,8 @@ export type Affinity = 'like' | 'love';
 export interface QuizArtistPick {
   name: string;
   mbid?: string;
+  /** decide's `artist_id` (the Spotify id when the artist search has one, else the MBID). */
+  artistId?: string;
   affinity: Affinity;
   reason?: string;
 }
@@ -33,16 +35,34 @@ export function toggle(list: string[], v: string): string[] {
 const sameName = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
 
 /** Tap cycle: not picked -> like -> love -> not picked. A cycled artist keeps its list position. */
-export function cycleAffinity(d: QuizDraft, name: string, mbid?: string): QuizDraft {
+export type ArtistIds = { mbid?: string | null; artistId?: string | null };
+
+/** Only the ids that are set (no `undefined` keys, so equality checks and JSON stay clean). */
+function idsOf(ids: ArtistIds | undefined): Pick<QuizArtistPick, 'mbid' | 'artistId'> {
+  return { ...(ids?.mbid ? { mbid: ids.mbid } : {}), ...(ids?.artistId ? { artistId: ids.artistId } : {}) };
+}
+
+export function cycleAffinity(d: QuizDraft, name: string, ids?: ArtistIds): QuizDraft {
   const existing = d.artists.find((a) => sameName(a.name, name));
   if (!existing) {
-    const pick: QuizArtistPick = mbid ? { name, mbid, affinity: 'like' } : { name, affinity: 'like' };
+    const pick: QuizArtistPick = { name, ...idsOf(ids), affinity: 'like' };
     return { ...d, artists: [...d.artists, pick] };
   }
   if (existing.affinity === 'like') {
     return { ...d, artists: d.artists.map((a) => (a === existing ? { ...a, affinity: 'love' as const } : a)) };
   }
   return { ...d, artists: d.artists.filter((a) => a !== existing) };
+}
+
+/** Picks with a catalog id, as decide's ManualArtistInput (only the ids that are set). */
+function manualArtists(d: QuizDraft): { artist_name: string; mbid?: string; artist_id?: string }[] {
+  return d.artists
+    .filter((a) => a.mbid || a.artistId)
+    .map((a) => ({
+      artist_name: a.name,
+      ...(a.mbid ? { mbid: a.mbid } : {}),
+      ...(a.artistId ? { artist_id: a.artistId } : {}),
+    }));
 }
 
 export function canAdvance(d: QuizDraft): boolean {
@@ -56,7 +76,7 @@ export function toSubmitRequest(d: QuizDraft) {
     decade_preferences: d.decades,
     energy_preference: d.energy,
     artist_affinities: d.artists.map((a) => ({ artist_name: a.name, affinity: a.affinity })),
-    manual_artists: d.artists.filter((a) => a.mbid).map((a) => ({ artist_name: a.name, mbid: a.mbid as string })),
+    manual_artists: manualArtists(d),
     known_song_ids: [] as string[],
   };
 }
@@ -69,7 +89,7 @@ export function toProgressRequest(d: QuizDraft) {
     decades: d.decades,
     energy_preference: d.energy,
     artist_affinities: d.artists.map((a) => ({ artist_name: a.name, affinity: a.affinity })),
-    manual_artists: d.artists.filter((a) => a.mbid).map((a) => ({ artist_name: a.name, mbid: a.mbid as string })),
+    manual_artists: manualArtists(d),
     enjoy_songs: d.songs.map((s) => ({ song_id: s.songKey, artist: s.artist, title: s.title })),
   };
 }
@@ -88,11 +108,14 @@ export function fromProgress(p: unknown): QuizDraft | null {
   if (!genres || !decades) return null;
 
   const energy = p.energy_preference;
-  const mbids = new Map<string, string>();
+  const ids = new Map<string, ArtistIds>();
   if (Array.isArray(p.manual_artists)) {
     for (const m of p.manual_artists) {
-      if (isRecord(m) && typeof m.artist_name === 'string' && typeof m.mbid === 'string') {
-        mbids.set(m.artist_name.trim().toLowerCase(), m.mbid);
+      if (isRecord(m) && typeof m.artist_name === 'string') {
+        ids.set(m.artist_name.trim().toLowerCase(), {
+          mbid: typeof m.mbid === 'string' ? m.mbid : null,
+          artistId: typeof m.artist_id === 'string' ? m.artist_id : null,
+        });
       }
     }
   }
@@ -103,8 +126,7 @@ export function fromProgress(p: unknown): QuizDraft | null {
       // decide's third level, "occasionally", has no mobile equivalent: treat it as "like".
       const affinity = a.affinity === 'love' ? 'love' : a.affinity === 'like' || a.affinity === 'occasionally' ? 'like' : null;
       if (!affinity) continue;
-      const mbid = mbids.get(a.artist_name.trim().toLowerCase());
-      artists.push(mbid ? { name: a.artist_name, mbid, affinity } : { name: a.artist_name, affinity });
+      artists.push({ name: a.artist_name, ...idsOf(ids.get(a.artist_name.trim().toLowerCase())), affinity });
     }
   }
   const songs: QuizDraft['songs'] = [];
@@ -155,29 +177,78 @@ function keepExtras<T extends Record<string, unknown>>(saved: unknown, entries: 
   });
 }
 
+/**
+ * decide web's manual_artists are their own list (autocomplete picks, some with only a Spotify `artist_id`), not
+ * a copy of the affinities. Matched by name:
+ * - a saved entry whose artist mobile never had in its draft (`touched`) is kept as it is;
+ * - one mobile still has is kept, with mobile's ids on top;
+ * - one mobile had and the user removed is dropped.
+ * Mobile's own new id'd picks follow.
+ */
+type ManualEntry = Record<string, unknown> & { artist_name: string };
+
+function mergeManualArtists(
+  saved: unknown,
+  req: { artist_name: string }[],
+  current: { artist_name: string }[],
+  touched: ReadonlySet<string>,
+): ManualEntry[] {
+  const mine = new Map(req.map((r) => [norm(r.artist_name), r]));
+  const kept = new Set(current.map((a) => norm(a.artist_name)));
+  const out: ManualEntry[] = [];
+  const used = new Set<string>();
+  for (const s of records(saved)) {
+    if (typeof s.artist_name !== 'string') continue;
+    const entry = s as ManualEntry;
+    const k = norm(entry.artist_name);
+    if (used.has(k)) continue;
+    const r = mine.get(k);
+    if (r) out.push({ ...entry, ...r });
+    else if (!touched.has(k) || kept.has(k)) out.push(entry);
+    else continue;
+    used.add(k);
+  }
+  for (const [k, r] of mine) if (!used.has(k)) out.push(r);
+  return out;
+}
+
+/** Normalized names, for the `touched` argument of the merges. */
+export const artistKeys = (names: Iterable<string>): Set<string> => new Set([...names].map(norm));
+
 type WithWebFields<T> = Omit<T, 'artist_affinities'> & { artist_affinities: AffinityEntry[] } & Record<string, unknown>;
 export type ProgressBody = WithWebFields<ReturnType<typeof toProgressRequest>>;
 export type SubmitBody = WithWebFields<ReturnType<typeof toSubmitRequest>>;
 
-/** The PUT /api/quiz/progress body: `req` over the saved doc (null when nothing was saved). */
-export function mergeProgress(saved: unknown, req: ReturnType<typeof toProgressRequest>): ProgressBody {
+/**
+ * The PUT /api/quiz/progress body: `req` over the saved doc (null when nothing was saved). `touched` is every
+ * artist name (see `artistKeys`) the mobile draft has had since it was loaded; it defaults to the current picks.
+ */
+export function mergeProgress(
+  saved: unknown,
+  req: ReturnType<typeof toProgressRequest>,
+  touched: ReadonlySet<string> = artistKeys(req.artist_affinities.map((a) => a.artist_name)),
+): ProgressBody {
   if (!isRecord(saved)) return req;
   return {
     ...saved,
     ...req,
     artist_affinities: keepOccasionally(saved, req.artist_affinities),
-    manual_artists: keepExtras(saved.manual_artists, req.manual_artists, 'artist_name'),
+    manual_artists: mergeManualArtists(saved.manual_artists, req.manual_artists, req.artist_affinities, touched),
     enjoy_songs: keepExtras(saved.enjoy_songs, req.enjoy_songs, 'song_id'),
   };
 }
 
 /** The POST /api/quiz/submit body: also carries the saved web-only answers into the profile. */
-export function mergeSubmit(saved: unknown, req: ReturnType<typeof toSubmitRequest>): SubmitBody {
+export function mergeSubmit(
+  saved: unknown,
+  req: ReturnType<typeof toSubmitRequest>,
+  touched: ReadonlySet<string> = artistKeys(req.artist_affinities.map((a) => a.artist_name)),
+): SubmitBody {
   if (!isRecord(saved)) return req;
   const out: SubmitBody = {
     ...req,
     artist_affinities: keepOccasionally(saved, req.artist_affinities),
-    manual_artists: keepExtras(saved.manual_artists, req.manual_artists, 'artist_name'),
+    manual_artists: mergeManualArtists(saved.manual_artists, req.manual_artists, req.artist_affinities, touched),
   };
   for (const k of ['vocal_comfort_pref', 'crowd_pleaser_pref'] as const) {
     if (typeof saved[k] === 'string') out[k] = saved[k];
