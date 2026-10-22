@@ -55,6 +55,8 @@ export type OfflineGroup = {
   title: string;
   karaoke: true;
   versionCount: number;
+  /** song_libraries codes for this song (empty when the table has no rows or is missing). */
+  libraries: string[];
   /** Playable (YouTube URL) first, then rank, then index order. */
   versions: OfflineVersion[];
 };

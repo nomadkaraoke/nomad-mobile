@@ -17,6 +17,33 @@ type VersionRow = {
   rank: number;
 };
 
+const LIBRARY_CHUNK = 500;
+
+/**
+ * Library codes per song key from `song_libraries` (no schema bump). Keys without rows are absent. `Map` is empty
+ * on any SQLite error (older offline.db without the table): library filtering must degrade, never break the list.
+ */
+export function offlineSongLibraries(db: SqlReader, songKeys: readonly string[]): Map<string, string[]> {
+  const out = new Map<string, string[]>();
+  try {
+    for (let i = 0; i < songKeys.length; i += LIBRARY_CHUNK) {
+      const chunk = songKeys.slice(i, i + LIBRARY_CHUNK);
+      const rows = db.all<{ song_key: string; library_code: string }>(
+        `SELECT song_key, library_code FROM song_libraries WHERE song_key IN (${chunk.map(() => '?').join(',')})`,
+        chunk,
+      );
+      for (const r of rows) {
+        const list = out.get(r.song_key);
+        if (list) list.push(r.library_code);
+        else out.set(r.song_key, [r.library_code]);
+      }
+    }
+  } catch {
+    return new Map();
+  }
+  return out;
+}
+
 /**
  * `confident` → the identified song's group; `candidates` → one group per candidate
  * (identify order) that has versions; `none` → []. Rivals (no karaoke version) never
@@ -55,7 +82,8 @@ export function offlineSongGroup(db: SqlReader, key: string): OfflineGroup | nul
       rank: v.rank,
     }));
   if (!versions.length) return null;
-  return { songKey: key, artist: song.artist, title: song.title, karaoke: true, versionCount: versions.length, versions };
+  const libraries = offlineSongLibraries(db, [key]).get(key) ?? [];
+  return { songKey: key, artist: song.artist, title: song.title, karaoke: true, versionCount: versions.length, libraries, versions };
 }
 
 // ---------------------------------------------------------------------------------------------------------
@@ -87,13 +115,22 @@ function groupsOf(db: SqlReader, rows: SongRow[]): OfflineGroup[] {
       rank: v.rank,
     });
   }
+  const libs = offlineSongLibraries(db, keys);
   const seen = new Set<string>();
   const groups: OfflineGroup[] = [];
   for (const r of rows) {
     const vs = byKey.get(r.song_key)!;
     if (seen.has(r.song_key) || !vs.length) continue;
     seen.add(r.song_key);
-    groups.push({ songKey: r.song_key, artist: r.artist, title: r.title, karaoke: true, versionCount: vs.length, versions: vs });
+    groups.push({
+      songKey: r.song_key,
+      artist: r.artist,
+      title: r.title,
+      karaoke: true,
+      versionCount: vs.length,
+      libraries: libs.get(r.song_key) ?? [],
+      versions: vs,
+    });
   }
   return groups;
 }

@@ -11,6 +11,7 @@ export {
   OFFLINE_SCHEMA_VERSION,
   offlineGroups,
   offlineSongGroup,
+  offlineSongLibraries,
   popularOffline,
   searchAvailabilityOffline,
 } from './search/offline';
@@ -25,3 +26,11 @@ export {
   songKey,
   songNorm,
 } from './search/normalize';
+export {
+  KARAFUN_LIBRARY_CODE,
+  LIBRARY_FILTERS,
+  matchesLibrary,
+  songLibraries,
+  type LibraryFilter,
+  type LibraryTagged,
+} from './library';
