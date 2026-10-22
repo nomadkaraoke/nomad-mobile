@@ -121,6 +121,10 @@ if [[ "$PLATFORM" == android ]]; then
   # Skip Chrome's first-run screen inside the Custom Tab (the flows also tap past it if it shows).
   adb -s "$SERIAL" shell 'echo "_ --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line'
   adb -s "$SERIAL" shell am set-debug-app --persistent com.android.chrome >/dev/null
+  # tonight-1 opens the printed QR's App Link (https://kjbox.cc/2121). The local debug build's assetlinks can't verify,
+  # so make the app the user-selected handler for the night-link hosts (Android 12+), else a chooser shows.
+  adb -s "$SERIAL" shell pm set-app-links-user-selection --user 0 --package com.nomadkaraoke.mobile true \
+    kjbox.cc www.kjbox.cc sing.nomadkaraoke.com >/dev/null 2>&1 || true
   DEVICE="$SERIAL"
 else
   DEVICE="${IOS_DEVICE:-iPhone 17 Pro}"
