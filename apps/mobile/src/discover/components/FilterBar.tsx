@@ -1,4 +1,4 @@
-import { toRecQuery, type RecFilters } from '@nomad/core';
+import { DEFAULT_REC_FILTERS, type RecFilters } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { Chip, ChipRow } from '@nomad/ui';
 import { useState } from 'react';
@@ -25,7 +25,7 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
     onChange(patch);
     close();
   };
-  const moreCount = Object.keys(toRecQuery(filters, 'any')).filter((k) => MORE_KEYS.includes(k)).length;
+  const moreCount = MORE_KEYS.filter((k) => filters[k] !== DEFAULT_REC_FILTERS[k]).length;
   const chips: { name: SheetName; label: string; count: number }[] = [
     { name: 'sort', label: t('chipSort'), count: filters.sort === 'best' ? 0 : 1 },
     { name: 'genre', label: t('chipGenre'), count: filters.genre.length },

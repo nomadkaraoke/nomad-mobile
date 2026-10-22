@@ -5,7 +5,7 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { useAuth } from '../auth/store';
-import { useRecFilters } from '../discover/filtersStore';
+import { loadFilters, useRecFilters } from '../discover/filtersStore';
 import { useLibraryFilter } from '../find/library';
 import { resetSearchCacheForTests } from '../find/useSearch';
 import { appStorage } from '../storage';
@@ -167,11 +167,23 @@ describe('discoverFilters', () => {
     expect(lastQuery()).toEqual(expected);
   });
 
-  it('single-choice groups can go back to Any', async () => {
+  it.each([
+    ['energy', 'high', 'any'],
+    ['more', 'popularity-50', 'popularity-any'],
+    ['more', 'lead-male', 'lead-any'],
+    ['more', 'duration-long', 'duration-any'],
+    ['more', 'karaoke-make', 'karaoke-any'],
+  ])('%s: %s can go back to Any (%s)', async (sheet, opt, any) => {
     await open();
-    await apply('energy', ['high']);
-    await apply('energy', ['any']);
+    await apply(sheet, [opt]);
+    await apply(sheet, [any]);
     expect(lastQuery()).toEqual({});
+  });
+
+  it('the More chip counts its active options', async () => {
+    await open();
+    await apply('more', ['popularity-70', 'classic', 'explicit-exclude']);
+    expect(screen.getByTestId('filter-chip-more').props.accessibilityLabel).toBe('More… (3)');
   });
 
   it('merges with the library filter', async () => {
@@ -196,15 +208,11 @@ describe('discoverFilters', () => {
     expect(JSON.parse(appStorage.getString('discover.filters.v1') as string)).toEqual(
       expect.objectContaining({ genre: ['jazz'], sort: 'az' }),
     );
-    jest.isolateModules(() => {
-      const fresh = (require('../discover/filtersStore') as typeof import('../discover/filtersStore')).useRecFilters;
-      expect(fresh.getState().filters).toEqual({ ...DEFAULT_REC_FILTERS, genre: ['jazz'], sort: 'az' });
-    });
+    expect(loadFilters()).toEqual({ ...DEFAULT_REC_FILTERS, genre: ['jazz'], sort: 'az' });
     appStorage.set('discover.filters.v1', '{"genre":"nope","sort":"bogus","energy":"x"}');
-    jest.isolateModules(() => {
-      const fresh = (require('../discover/filtersStore') as typeof import('../discover/filtersStore')).useRecFilters;
-      expect(fresh.getState().filters).toEqual(DEFAULT_REC_FILTERS);
-    });
+    expect(loadFilters()).toEqual(DEFAULT_REC_FILTERS);
+    appStorage.set('discover.filters.v1', 'not json');
+    expect(loadFilters()).toEqual(DEFAULT_REC_FILTERS);
   });
 
   it('Clear filters on the empty state resets both the filter store and the library', async () => {

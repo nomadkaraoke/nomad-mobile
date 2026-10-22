@@ -35,7 +35,8 @@ function sanitize(raw: unknown): RecFilters {
   };
 }
 
-function load(): RecFilters {
+/** The stored filters, or the defaults when nothing (valid) is stored. */
+export function loadFilters(): RecFilters {
   try {
     const raw = appStorage.getString(KEY);
     if (raw !== undefined) return sanitize(JSON.parse(raw));
@@ -54,7 +55,7 @@ type FiltersStore = {
 
 /** Discover's recommendation filters and sort (not the venue library, see useLibraryFilter), persisted across launches. */
 export const useRecFilters = create<FiltersStore>((setState, get) => ({
-  filters: load(),
+  filters: loadFilters(),
   set(patch) {
     const filters = { ...get().filters, ...patch };
     appStorage.set(KEY, JSON.stringify(filters));
