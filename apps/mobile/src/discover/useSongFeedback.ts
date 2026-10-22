@@ -103,8 +103,12 @@ export function useSongFeedback() {
     (song: RecSong) => {
       const key = song.song_key;
       const action = nextAction(actions.current, key);
-      // A refetch landing now would bring the song back; a page being loaded is left alone.
-      void queryClient.cancelQueries({ queryKey: RECS_KEY, predicate: (q) => !pagingNow(q) });
+      // A refetch landing now would bring the song back; a page being loaded is left alone, and so is a first
+      // load (no data yet): cancelling it would leave the previous filter's rows standing in (keepPreviousData).
+      void queryClient.cancelQueries({
+        queryKey: RECS_KEY,
+        predicate: (q) => q.state.data !== undefined && !pagingNow(q),
+      });
       const removed = removeEverywhere(queryClient, key);
       setHidden(song);
       const request = hideSong(key, { artist: song.artist, title: song.title });
