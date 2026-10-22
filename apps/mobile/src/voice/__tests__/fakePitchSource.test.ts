@@ -4,7 +4,8 @@ import { join } from 'node:path';
 import type { PitchFrame } from '@nomad/core';
 import { parseWav } from '@nomad/core';
 import { createFramer } from '../framer';
-import { createFakePitchSource, FAKE_MIC_SECTIONS } from '../useFakePitchSource';
+import { renderHook } from '@testing-library/react-native';
+import { createFakePitchSource, FAKE_MIC_SECTIONS, useFakePitchSource } from '../useFakePitchSource';
 import type { PcmBuffer } from '../pitchSource';
 
 const WAV = join(__dirname, '../../../assets/fake-mic/baritone-scale.wav');
@@ -67,4 +68,25 @@ it('the high section reads as C4 once the quiet second is over', async () => {
   expect(voiced.length).toBeGreaterThan(5);
   for (const f of voiced) expect(Math.abs(f.hz! - 261.6)).toBeLessThan(2);
   expect(frames.filter((f) => f.t < 1.0).every((f) => f.rms < 0.003)).toBe(true);
+});
+
+it('a stop() that lands before the asset loads leaves no timer running', async () => {
+  const src = createFakePitchSource('baritone-scale');
+  const got: PcmBuffer[] = [];
+  const started = src.start((b) => got.push(b), 'low');
+  src.stop();
+  await started;
+  jest.advanceTimersByTime(2000);
+  expect(got).toHaveLength(0);
+  expect(jest.getTimerCount()).toBe(0);
+});
+
+it('stops the source on unmount', async () => {
+  const { result, unmount } = renderHook(() => useFakePitchSource());
+  const got: PcmBuffer[] = [];
+  await result.current.start((b) => got.push(b), 'low');
+  jest.advanceTimersByTime(300);
+  unmount();
+  jest.advanceTimersByTime(1000);
+  expect(got).toHaveLength(3);
 });

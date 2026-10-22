@@ -75,3 +75,39 @@ it('drops buffers after stop', async () => {
   onBuffer({ data: Float32Array.of(0.1).buffer, sampleRate: 48000, channels: 1, timestamp: 0 });
   expect(got).toHaveLength(0);
 });
+
+describe('stop() during an in-flight start()', () => {
+  it('undoes recording mode and the stream when stop lands while setAudioModeAsync is pending', async () => {
+    let release!: () => void;
+    mocked.setAudioModeAsync.mockImplementationOnce(() => new Promise<void>((r) => (release = r)));
+    const { result } = renderHook(() => useMicPitchSource());
+    const started = result.current.start(() => {}, 'low');
+    result.current.stop();
+    release();
+    await started;
+    expect(mocked.__stream.start).not.toHaveBeenCalled();
+    expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith({ allowsRecording: false });
+  });
+
+  it('stops the stream when stop lands while stream.start is pending', async () => {
+    let release!: () => void;
+    mocked.__stream.start.mockImplementationOnce(() => new Promise<void>((r) => (release = r)));
+    const { result } = renderHook(() => useMicPitchSource());
+    const started = result.current.start(() => {}, 'low');
+    await Promise.resolve();
+    await Promise.resolve();
+    result.current.stop();
+    mocked.__stream.stop.mockClear();
+    release();
+    await started;
+    expect(mocked.__stream.stop).toHaveBeenCalledTimes(1);
+    expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith({ allowsRecording: false });
+  });
+});
+
+it('stops the stream on unmount', () => {
+  const { unmount } = renderHook(() => useMicPitchSource());
+  mocked.__stream.stop.mockClear();
+  unmount();
+  expect(mocked.__stream.stop).toHaveBeenCalled();
+});

@@ -1,7 +1,7 @@
 import { parseWav } from '@nomad/core';
 import { Asset } from 'expo-asset';
 import { File } from 'expo-file-system';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { FAKE_MIC } from '../config';
 import type { MicPermission, PcmBuffer, PitchSource, VoiceSection } from './pitchSource';
 
@@ -35,7 +35,9 @@ export function createFakePitchSource(name: string): PitchSource {
       return parseWav(await new File(asset.localUri ?? asset.uri).bytes());
     })());
 
+  let gen = 0;
   const stop = () => {
+    gen++;
     if (timer) clearInterval(timer);
     timer = null;
   };
@@ -47,7 +49,9 @@ export function createFakePitchSource(name: string): PitchSource {
     },
     async start(onBuffer, section) {
       stop();
+      const mine = gen;
       const { sampleRate, samples } = await load();
+      if (gen !== mine) return; // stop() or a newer start() landed while the asset loaded
       const [from, to] = FAKE_MIC_SECTIONS[section];
       let pos = Math.round(from * sampleRate);
       const end = Math.min(samples.length, Math.round(to * sampleRate));
@@ -69,5 +73,7 @@ export function createFakePitchSource(name: string): PitchSource {
 
 /** The recording named by FAKE_MIC (config.ts; only ever set against a local stack). */
 export function useFakePitchSource(): PitchSource {
-  return useMemo(() => createFakePitchSource(FAKE_MIC ?? 'baritone-scale'), []);
+  const source = useMemo(() => createFakePitchSource(FAKE_MIC ?? 'baritone-scale'), []);
+  useEffect(() => () => source.stop(), [source]);
+  return source;
 }
