@@ -122,3 +122,50 @@ it('reconfiguring replaces (does not stack) the interceptors', async () => {
   expect(last().headers.get('authorization')).toBeNull();
   expect(last().headers.get('accept-language')).toBe('fr');
 });
+
+describe('unreachable signal', () => {
+  it('fetch rejecting → unreachable, status 0, code internal', async () => {
+    fetchMock.mockImplementation(async () => {
+      throw new TypeError('Network request failed');
+    });
+    const err = await getNow('2121').catch((e) => e);
+    expect(err).toBeInstanceOf(KjboxError);
+    expect(err).toMatchObject({ unreachable: true, status: 0, code: 'internal' });
+  });
+  it('530 with an HTML body → unreachable', async () => {
+    fetchMock.mockImplementation(async () => new Response('<html>tunnel down</html>', { status: 530 }));
+    await expect(getNow('2121')).rejects.toMatchObject({ unreachable: true, code: 'internal', status: 530 });
+  });
+  it('JSON 503 gen_unavailable → not unreachable', async () => {
+    fetchMock.mockImplementation(async () => json({ api_version: '1.0', error: 'gen_unavailable' }, 503));
+    await expect(getNow('2121')).rejects.toMatchObject({ unreachable: false, code: 'gen_unavailable' });
+  });
+  it('a hung request aborts after 10 s as unreachable', async () => {
+    jest.useFakeTimers();
+    try {
+      fetchMock.mockImplementation(
+        (req: Request, init: RequestInit) =>
+          new Promise((_, rej) => init.signal?.addEventListener('abort', () => rej(new DOMException('aborted', 'AbortError')))),
+      );
+      const p = getNow('2121').catch((e) => e);
+      await jest.advanceTimersByTimeAsync(10_000);
+      expect(await p).toMatchObject({ unreachable: true, status: 0 });
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+  it('getRotation rethrows a network error', async () => {
+    fetchMock.mockImplementation(async () => {
+      throw new TypeError('Network request failed');
+    });
+    await expect(getRotation('2121')).rejects.toMatchObject({ unreachable: true });
+  });
+});
+
+it('night_changed carries nightId on submitRequest', async () => {
+  fetchMock.mockImplementation(async () => json({ api_version: '1.0', error: 'night_changed', night_id: 'n9' }, 409));
+  await expect(submitRequest('2121', { client_request_id: 'c', source_type: 'local' })).rejects.toMatchObject({
+    code: 'night_changed',
+    nightId: 'n9',
+  });
+});
