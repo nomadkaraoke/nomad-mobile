@@ -1048,3 +1048,7 @@ test.each(cases.map((c: any) => [c.name, c]))('%s matches decide', (_n, c: any) 
   - a vocal-range step in gen's audio worker for new jobs (spec §5.1);
   - incremental USDB refresh once an account exists;
   - Phase 4 crowd singability into the reserved `crowd_*` fields.
+
+## Corrections (2026-10-22, found while planning 3d)
+- gen's standalone audio-separator service has been disabled since 2026-10-01. The gen-stem analysis task must not call it: use the new separate-only GPU job from the 3d plan (`voice-pool-separate-job`, built from gen's audio-separation image) or reuse its manifest interface.
+- gen's bucket is `karaoke-gen-storage-nomadkaraoke`, not `karaoke-gen-storage`.
