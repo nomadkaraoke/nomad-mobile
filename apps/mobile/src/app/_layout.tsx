@@ -44,6 +44,7 @@ function RootStack() {
   useReminderTapRouting();
   // Android Share -> Nomad Karaoke: a shared export zip/CSV opens the import screen (Phase 3b).
   useSharedFileIntake();
+  const tVoice = useTranslations('voice');
   return (
     <ThemeProvider value={theme}>
       <Stack
@@ -69,6 +70,8 @@ function RootStack() {
         <Stack.Screen name="review/[id]" options={{ title: tReview('title') }} />
         {/* The Discover quiz (Phase 3a spec §8.2): a modal over Discover; finishing dismisses back to it. */}
         <Stack.Screen name="discover/quiz" options={{ presentation: 'modal', title: tQuiz('title') }} />
+        {/* The voice range test (Phase 3c spec §4.2): a modal over Discover, like the quiz. */}
+        <Stack.Screen name="discover/voice" options={{ presentation: 'modal', title: tVoice('title') }} />
         {/* Me -> Your music profile (Phase 3a spec §8.3). */}
         <Stack.Screen name="me/music-profile" options={(p) => ({ title: tAccount('musicProfile'), ...profileBack(p) })} />
         {/* Connect your music (Phase 3b): its own stack with its own headers. */}

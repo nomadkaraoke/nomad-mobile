@@ -1,0 +1,185 @@
+// The singer's voice profile on this phone (Phase 3c): the latest mic result or self-report, kept until decide has
+// it. 18b's useSaveVoiceProfile / useFlushPendingVoice PUT `toVoiceProfileIn(profile)` while `pending` is true.
+import {
+  selfReportProfile,
+  VOICE_TYPES,
+  type Classification,
+  type RangeSummary,
+  type Register,
+  type UserVoiceRange,
+  type VoiceType,
+} from '@nomad/core';
+import { create } from 'zustand';
+
+import { appStorage } from '../storage';
+
+export const VOICE_STORAGE_KEY = 'voice.profile.v1';
+
+export type VoiceConfidence = 'low' | 'medium' | 'high';
+export type VoiceMethod = 'mic' | 'self';
+
+/** decide's `VoiceProfileIn`, camelCase. */
+export type LocalVoiceProfile = {
+  lowMidi: number;
+  highMidi: number;
+  comfortLow: number;
+  comfortHigh: number;
+  voiceType: VoiceType | null;
+  voiceTypeBetween: VoiceType | null;
+  register: Register | null;
+  confidence: VoiceConfidence;
+  method: VoiceMethod;
+  /** ISO 8601. */
+  measuredAt: string;
+};
+
+/** The body of decide's `PUT /api/my/voice` (`VoiceProfileIn`, extra="forbid": no other keys). */
+export type VoiceProfileInBody = {
+  low_midi: number;
+  high_midi: number;
+  comfort_low: number;
+  comfort_high: number;
+  voice_type: VoiceType | null;
+  voice_type_between: VoiceType | null;
+  register: Register | null;
+  confidence: VoiceConfidence;
+  method: VoiceMethod;
+  measured_at: string;
+};
+
+export function profileFromResult(range: RangeSummary, c: Classification, measuredAt: string): LocalVoiceProfile {
+  return {
+    lowMidi: range.low,
+    highMidi: range.high,
+    comfortLow: range.comfortLow,
+    comfortHigh: range.comfortHigh,
+    voiceType: c.type,
+    voiceTypeBetween: c.between,
+    register: null,
+    confidence: c.confidence,
+    method: 'mic',
+    measuredAt,
+  };
+}
+
+export function profileFromSelfReport(choice: VoiceType | Register, measuredAt: string): LocalVoiceProfile {
+  const p = selfReportProfile(choice);
+  return {
+    lowMidi: p.low,
+    highMidi: p.high,
+    comfortLow: p.comfortLow,
+    comfortHigh: p.comfortHigh,
+    voiceType: p.voiceType,
+    voiceTypeBetween: null,
+    register: p.register,
+    confidence: 'low',
+    method: 'self',
+    measuredAt,
+  };
+}
+
+export function toVoiceProfileIn(p: LocalVoiceProfile): VoiceProfileInBody {
+  return {
+    low_midi: p.lowMidi,
+    high_midi: p.highMidi,
+    comfort_low: p.comfortLow,
+    comfort_high: p.comfortHigh,
+    voice_type: p.voiceType,
+    voice_type_between: p.voiceTypeBetween,
+    register: p.register,
+    confidence: p.confidence,
+    method: p.method,
+    measured_at: p.measuredAt,
+  };
+}
+
+/** What `fitSong` needs. */
+export function toUserRange(p: LocalVoiceProfile): UserVoiceRange {
+  return { low: p.lowMidi, high: p.highMidi, comfortLow: p.comfortLow, comfortHigh: p.comfortHigh };
+}
+
+const TYPES: readonly string[] = VOICE_TYPES.map((v) => v.type);
+const REGISTERS: readonly string[] = ['lower', 'middle', 'higher'];
+const int = (v: unknown): v is number => typeof v === 'number' && Number.isInteger(v);
+const oneOrNull = (v: unknown, allowed: readonly string[]) => v === null || (typeof v === 'string' && allowed.includes(v));
+
+/** A stored profile, or null when it isn't one we wrote. */
+function parseProfile(raw: unknown): LocalVoiceProfile | null {
+  if (typeof raw !== 'object' || raw === null) return null;
+  const o = raw as Record<string, unknown>;
+  const ok =
+    int(o.lowMidi) &&
+    int(o.highMidi) &&
+    int(o.comfortLow) &&
+    int(o.comfortHigh) &&
+    oneOrNull(o.voiceType, TYPES) &&
+    oneOrNull(o.voiceTypeBetween, TYPES) &&
+    oneOrNull(o.register, REGISTERS) &&
+    (o.confidence === 'low' || o.confidence === 'medium' || o.confidence === 'high') &&
+    (o.method === 'mic' || o.method === 'self') &&
+    typeof o.measuredAt === 'string';
+  if (!ok) return null;
+  return toLocal(o as LocalVoiceProfile);
+}
+
+/** Only the profile's own fields. */
+const toLocal = (p: LocalVoiceProfile): LocalVoiceProfile => ({
+  lowMidi: p.lowMidi,
+  highMidi: p.highMidi,
+  comfortLow: p.comfortLow,
+  comfortHigh: p.comfortHigh,
+  voiceType: p.voiceType,
+  voiceTypeBetween: p.voiceTypeBetween,
+  register: p.register,
+  confidence: p.confidence,
+  method: p.method,
+  measuredAt: p.measuredAt,
+});
+
+type Persisted = { profile: LocalVoiceProfile | null; pending: boolean };
+const EMPTY: Persisted = { profile: null, pending: false };
+
+/** This phone's copy, or empty when there is none (or it is unreadable, which is then removed). */
+export function loadVoice(): Persisted {
+  try {
+    const raw = appStorage.getString(VOICE_STORAGE_KEY);
+    if (raw === undefined) return EMPTY;
+    const v = JSON.parse(raw) as { profile?: unknown; pending?: unknown };
+    const profile = parseProfile(v?.profile);
+    if (profile) return { profile, pending: v.pending === true };
+  } catch {
+    // fall through: unreadable
+  }
+  appStorage.remove(VOICE_STORAGE_KEY);
+  return EMPTY;
+}
+
+type VoiceStore = Persisted & {
+  /** A new measurement or pick: replaces the profile and waits to be sent to decide. */
+  save(profile: LocalVoiceProfile): void;
+  /** decide has the profile measured at `measuredAt`; a newer local one stays pending. */
+  markSynced(measuredAt: string): void;
+  clear(): void;
+};
+
+const persist = (s: Persisted) => appStorage.set(VOICE_STORAGE_KEY, JSON.stringify(s));
+
+export const useVoiceStore = create<VoiceStore>((set, get) => ({
+  ...loadVoice(),
+  save(profile) {
+    const next = { profile: toLocal(profile), pending: true };
+    persist(next);
+    set(next);
+  },
+  markSynced(measuredAt) {
+    const { profile } = get();
+    if (!profile || profile.measuredAt !== measuredAt) return;
+    const next = { profile, pending: false };
+    persist(next);
+    set(next);
+  },
+  clear() {
+    appStorage.remove(VOICE_STORAGE_KEY);
+    set(EMPTY);
+  },
+}));
