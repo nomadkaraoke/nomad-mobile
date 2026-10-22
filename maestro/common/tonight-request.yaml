@@ -2,6 +2,12 @@
 # on the night screen. Env: QUERY, TITLE (regex: the first result's title).
 appId: com.nomadkaraoke.mobile
 ---
+# Centred first: near the bottom it sits under the tab bar, and the tap would open the Make tab.
+- scrollUntilVisible:
+    element:
+      id: "tonight-request"
+    direction: DOWN
+    centerElement: true
 - tapOn:
     id: "tonight-request"
 - extendedWaitUntil:

@@ -1,13 +1,12 @@
-# The host moves the rotation on (test API) until the singer is on stage ("You're up"), refreshing instead of
-# waiting for the 15 s poll.
+# The host moves the rotation on (test API) until the singer is on stage (the status tile's onStage state, any
+# language), refreshing instead of waiting for the 15 s poll.
 appId: com.nomadkaraoke.mobile
 ---
 - repeat:
     times: 15
     while:
       notVisible:
-        id: "tonight-status-summary"
-        text: ".*You're up.*"
+        id: "tonight-status-onStage"
     commands:
       - runScript:
           file: ../scripts/stack.js
@@ -19,10 +18,14 @@ appId: com.nomadkaraoke.mobile
           element:
             id: "tonight-refresh"
           direction: UP
+          centerElement: true
       - tapOn:
           id: "tonight-refresh"
-      - waitForAnimationToEnd:
-          timeout: 3000
+      # Wait for the refreshed answer, so the loop never moves past the singer's turn (that marks them Done).
+      - extendedWaitUntil:
+          visible:
+            id: "tonight-status-onStage"
+          timeout: 4000
+          optional: true
 - assertVisible:
-    id: "tonight-status-summary"
-    text: ".*You're up.*"
+    id: "tonight-status-onStage"

@@ -13,5 +13,6 @@ appId: com.nomadkaraoke.mobile
     element:
       id: "tonight-refresh"
     direction: UP
+    centerElement: true
 - tapOn:
     id: "tonight-refresh"

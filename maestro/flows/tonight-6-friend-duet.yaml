@@ -21,6 +21,7 @@ tags:
     element:
       id: "tonight-friend-open"
     direction: DOWN
+    centerElement: true
 - tapOn:
     id: "tonight-friend-open"
 - extendedWaitUntil:

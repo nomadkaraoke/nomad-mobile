@@ -68,7 +68,9 @@ onFlowComplete:
       visible: "Allow|OK|While using the app"
     commands:
       - tapOn: "Don.t Allow|Don't allow"
-- tapOn: "Back|Navigate up|رجوع|חזרה"
+# "Enter the night code instead": the code field on the scanner screen (a code there replaces it with the join).
+- tapOn:
+    id: "tonight-scan-enter-code"
 - extendedWaitUntil:
     visible:
       id: "tonight-code-input"
@@ -119,6 +121,7 @@ onFlowComplete:
     element:
       id: "tonight-rotation"
     direction: DOWN
+    centerElement: true
 - takeScreenshot: ${TOUR_SHOTS}/tonight-08-rotation
 - scroll
 - scroll
@@ -144,6 +147,7 @@ onFlowComplete:
     element:
       id: "tonight-refresh"
     direction: UP
+    centerElement: true
 
 # 3. Requesting: results with versions, the version sheet, a correction, no karaoke version, the confirm.
 - tapOn:
@@ -251,17 +255,24 @@ onFlowComplete:
     element:
       id: "tonight-reorder"
     direction: DOWN
+    centerElement: true
 - tapOn:
     id: "tonight-reorder"
 - scrollUntilVisible:
     element:
       id: "tonight-reorder-save"
     direction: UP
+    centerElement: true
 - takeScreenshot: ${TOUR_SHOTS}/tonight-26-reorder
 - tapOn:
     id: "tonight-reorder-cancel"
 
 # 4. Make on the spot: the make screen, then Your songs with a song being made and its quick version.
+- scrollUntilVisible:
+    element:
+      id: "tonight-request"
+    direction: DOWN
+    centerElement: true
 - tapOn:
     id: "tonight-request"
 - tapOn:
@@ -283,6 +294,7 @@ onFlowComplete:
     element:
       id: "tonight-make-submit"
     direction: DOWN
+    centerElement: true
 - takeScreenshot: ${TOUR_SHOTS}/tonight-23-make-bottom
 - tapOn:
     id: "tonight-make-submit"
@@ -301,6 +313,7 @@ onFlowComplete:
           element:
             id: "tonight-refresh"
           direction: UP
+          centerElement: true
       - tapOn:
           id: "tonight-refresh"
       - extendedWaitUntil:
@@ -312,23 +325,15 @@ onFlowComplete:
     element:
       id: "tonight-song-quick-sing-r.*"
     direction: DOWN
+    centerElement: true
 - takeScreenshot: ${TOUR_SHOTS}/tonight-25-quick-ready
 
 # 5. Managing: the name / phone / friend sheets, tips.
-- scrollUntilVisible:
-    element:
-      id: "tonight-edit-name"
-    direction: DOWN
-- runScript:
-    file: ../scripts/wait.js
+- runFlow:
+    file: ../common/tonight-open-sheet.yaml
     env:
-      MS: "1000"
-- tapOn:
-    id: "tonight-edit-name"
-- extendedWaitUntil:
-    visible:
-      id: "tonight-rename-input"
-    timeout: 10000
+      OPENER: "tonight-edit-name"
+      EXPECT: "tonight-rename-input"
 - tapOn:
     id: "tonight-rename-input"
 - eraseText: 20
@@ -342,33 +347,19 @@ onFlowComplete:
 - takeScreenshot: ${TOUR_SHOTS}/tonight-27-rename-guard
 - tapOn:
     id: "tonight-rename-guard-cancel"
-- runScript:
-    file: ../scripts/wait.js
+- runFlow:
+    file: ../common/tonight-open-sheet.yaml
     env:
-      MS: "1000"
-- scrollUntilVisible:
-    element:
-      id: "tonight-phone-add"
-    direction: DOWN
-- tapOn:
-    id: "tonight-phone-add"
-- extendedWaitUntil:
-    visible:
-      id: "tonight-phone-input"
-    timeout: 10000
+      OPENER: "tonight-phone-add"
+      EXPECT: "tonight-phone-input"
 - takeScreenshot: ${TOUR_SHOTS}/tonight-28-phone
 - tapOn:
     id: "tonight-phone-sheet-close"
-- runScript:
-    file: ../scripts/wait.js
+- runFlow:
+    file: ../common/tonight-open-sheet.yaml
     env:
-      MS: "1000"
-- tapOn:
-    id: "tonight-friend-open"
-- extendedWaitUntil:
-    visible:
-      id: "tonight-friend-name"
-    timeout: 10000
+      OPENER: "tonight-friend-open"
+      EXPECT: "tonight-friend-name"
 - tapOn:
     id: "tonight-friend-name"
 - inputText: "Mira"
@@ -399,7 +390,10 @@ onFlowComplete:
       visible:
         id: "tonight-search"
     commands:
-      - tapOn: "Back|Navigate up|رجوع|חזרה"
+      - runFlow:
+          file: ../common/header-back.yaml
+          env:
+            LOCALE: ${LOCALE}
 - extendedWaitUntil:
     visible:
       id: "tonight-your-songs"
@@ -416,7 +410,10 @@ onFlowComplete:
             id: "tonight-tips"
           timeout: 15000
       - takeScreenshot: ${TOUR_SHOTS}/tonight-31-tips
-      - tapOn: "Back|Navigate up|رجوع|חזרה"
+      - runFlow:
+          file: ../common/header-back.yaml
+          env:
+            LOCALE: ${LOCALE}
 
 # 6. Turn awareness: nearly up, the "up next" banner, on stage; then Done → the survey and "Already sung".
 - repeat:
@@ -435,6 +432,7 @@ onFlowComplete:
           element:
             id: "tonight-refresh"
           direction: UP
+          centerElement: true
       - tapOn:
           id: "tonight-refresh"
       - waitForAnimationToEnd:
@@ -461,6 +459,7 @@ onFlowComplete:
     element:
       id: "tonight-sung"
     direction: DOWN
+    centerElement: true
 - tapOn:
     id: "tonight-sung-toggle"
     optional: true
@@ -600,6 +599,7 @@ onFlowComplete:
     element:
       id: "other-end"
     direction: DOWN
+    centerElement: true
 - tapOn:
     id: "other-end"
 - extendedWaitUntil:

@@ -1,22 +1,12 @@
 # Opens "Edit name", types NEW_NAME and saves (the guard, if the box asks, is left open). Env: NEW_NAME.
-# Lets a closing sheet or keyboard finish first (1 s): on iOS 26 a sheet presented while the keyboard or another
-# sheet is still going away came up without its accessibility tree (Maestro saw an empty app until it closed).
+# Opens through tonight-open-sheet.yaml (waits, retries a sheet that came up without its accessibility tree on iOS 26).
 appId: com.nomadkaraoke.mobile
 ---
-- runScript:
-    file: ../scripts/wait.js
+- runFlow:
+    file: tonight-open-sheet.yaml
     env:
-      MS: "1000"
-- scrollUntilVisible:
-    element:
-      id: "tonight-edit-name"
-    direction: DOWN
-- tapOn:
-    id: "tonight-edit-name"
-- extendedWaitUntil:
-    visible:
-      id: "tonight-rename-input"
-    timeout: 10000
+      OPENER: "tonight-edit-name"
+      EXPECT: "tonight-rename-input"
 - tapOn:
     id: "tonight-rename-input"
 - eraseText: 40

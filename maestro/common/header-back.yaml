@@ -1,0 +1,23 @@
+# The native header's back button in any app language (screen tours). Android: the system back. iOS: the button is
+# an unlabelled chevron in RTL locales (its label is translated), top right there and top left otherwise.
+# Env: LOCALE.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - back
+- runFlow:
+    when:
+      platform: iOS
+      true: ${LOCALE == 'ar' || LOCALE == 'he'}
+    commands:
+      - tapOn:
+          point: "92%,9%"
+- runFlow:
+    when:
+      platform: iOS
+      true: ${LOCALE != 'ar' && LOCALE != 'he'}
+    commands:
+      - tapOn: "Back|Navigate up"
