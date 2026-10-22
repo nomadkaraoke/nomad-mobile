@@ -44,8 +44,7 @@ onFlowComplete:
       SINGER: "Vera"
       ARTIST: "Muse"
       TITLE: "Starlight"
-- tapOn:
-    id: "tonight-refresh"
+- runFlow: ../common/tonight-refresh.yaml
 - extendedWaitUntil:
     visible:
       id: "tonight-song-owner-.*"
@@ -159,8 +158,7 @@ onFlowComplete:
       visible:
         id: "tonight-closed"
     commands:
-      - tapOn:
-          id: "tonight-refresh"
+      - runFlow: ../common/tonight-refresh.yaml
       - extendedWaitUntil:
           notVisible:
             id: "tonight-closed"
@@ -198,8 +196,7 @@ onFlowComplete:
       visible:
         id: "tonight-unreachable"
     commands:
-      - tapOn:
-          id: "tonight-refresh"
+      - runFlow: ../common/tonight-refresh.yaml
       - extendedWaitUntil:
           notVisible:
             id: "tonight-unreachable"

@@ -14,13 +14,7 @@ appId: com.nomadkaraoke.mobile
             ACTION: kjbox
             KJBOX_STACK: ${KJBOX_STACK}
             OP: advance
-      - scrollUntilVisible:
-          element:
-            id: "tonight-refresh"
-          direction: UP
-          centerElement: true
-      - tapOn:
-          id: "tonight-refresh"
+      - runFlow: tonight-refresh.yaml
       # Wait for the refreshed answer, so the loop never moves past the singer's turn (that marks them Done).
       - extendedWaitUntil:
           visible:

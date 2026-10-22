@@ -61,8 +61,7 @@ tags:
       notVisible:
         id: "tonight-song-quick-sing-r.*"
     commands:
-      - tapOn:
-          id: "tonight-refresh"
+      - runFlow: ../common/tonight-refresh.yaml
       - extendedWaitUntil:
           visible:
             id: "tonight-song-quick-sing-r.*"

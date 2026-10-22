@@ -117,6 +117,8 @@ fi
 if [[ "$PLATFORM" == android ]]; then
   SERIAL="${ANDROID_SERIAL:-emulator-5554}"
   adb -s "$SERIAL" wait-for-device
+  # An AVD left in airplane mode (a manual offline check) can't reach Metro on 10.0.2.2 (ENETUNREACH on every launch).
+  adb -s "$SERIAL" shell cmd connectivity airplane-mode disable >/dev/null 2>&1 || true
   for port in 8010 3010 8020 8030 8040; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
   # Skip Chrome's first-run screen inside the Custom Tab (the flows also tap past it if it shows).
   adb -s "$SERIAL" shell 'echo "_ --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line'

@@ -28,8 +28,7 @@ tags:
       ACTION: kjbox
       KJBOX_STACK: ${KJBOX_STACK}
       OP: advance
-- tapOn:
-    id: "tonight-refresh"
+- runFlow: ../common/tonight-refresh.yaml
 - extendedWaitUntil:
     visible:
       id: "survey-save"

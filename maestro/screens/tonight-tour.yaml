@@ -95,9 +95,9 @@ onFlowComplete:
       id: "tonight-name-input"
     timeout: 20000
 - takeScreenshot: ${TOUR_SHOTS}/tonight-05-name
-- tapOn:
-    id: "tonight-name-input"
-- eraseText: 60
+- eraseText: 30
+- eraseText: 30
+- eraseText: 30
 - inputText: "Sam"
 - tapOn:
     id: "tonight-name-confirm"
@@ -143,11 +143,6 @@ onFlowComplete:
     commands:
       - tapOn:
           id: "tonight-preview-done"
-- scrollUntilVisible:
-    element:
-      id: "tonight-refresh"
-    direction: UP
-    centerElement: true
 
 # 3. Requesting: results with versions, the version sheet, a correction, no karaoke version, the confirm.
 - tapOn:
@@ -309,13 +304,7 @@ onFlowComplete:
       notVisible:
         id: "tonight-song-quick-sing-r.*"
     commands:
-      - scrollUntilVisible:
-          element:
-            id: "tonight-refresh"
-          direction: UP
-          centerElement: true
-      - tapOn:
-          id: "tonight-refresh"
+      - runFlow: ../common/tonight-refresh.yaml
       - extendedWaitUntil:
           visible:
             id: "tonight-song-quick-sing-r.*"
@@ -334,8 +323,7 @@ onFlowComplete:
     env:
       OPENER: "tonight-edit-name"
       EXPECT: "tonight-rename-input"
-- tapOn:
-    id: "tonight-rename-input"
+- eraseText: 20
 - eraseText: 20
 - inputText: "Alex"
 - tapOn:
@@ -428,13 +416,7 @@ onFlowComplete:
             ACTION: kjbox
             KJBOX_STACK: ${KJBOX_STACK}
             OP: advance
-      - scrollUntilVisible:
-          element:
-            id: "tonight-refresh"
-          direction: UP
-          centerElement: true
-      - tapOn:
-          id: "tonight-refresh"
+      - runFlow: ../common/tonight-refresh.yaml
       - waitForAnimationToEnd:
           timeout: 3000
 - takeScreenshot: ${TOUR_SHOTS}/tonight-32-up-next
@@ -446,8 +428,7 @@ onFlowComplete:
       ACTION: kjbox
       KJBOX_STACK: ${KJBOX_STACK}
       OP: advance
-- tapOn:
-    id: "tonight-refresh"
+- runFlow: ../common/tonight-refresh.yaml
 - extendedWaitUntil:
     visible:
       id: "survey-save"
@@ -489,8 +470,7 @@ onFlowComplete:
       visible:
         id: "tonight-closed"
     commands:
-      - tapOn:
-          id: "tonight-refresh"
+      - runFlow: ../common/tonight-refresh.yaml
       - extendedWaitUntil:
           notVisible:
             id: "tonight-closed"
@@ -526,9 +506,11 @@ onFlowComplete:
       notVisible:
         id: "tonight-start-other"
     commands:
-      - tapOn:
-          id: "tonight-refresh"
-          optional: true
+      - runFlow:
+          when:
+            visible:
+              id: "tonight-refresh"
+          file: ../common/tonight-refresh.yaml
       - extendedWaitUntil:
           visible:
             id: "tonight-start-other"

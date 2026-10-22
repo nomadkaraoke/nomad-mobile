@@ -1,0 +1,11 @@
+# Refresh on the night screen, with the list scrolled all the way up first (to the "Tonight" title), so Refresh sits
+# where it belongs: scrolled part-way, it can end up at the top right under the dev menu's floating Tools button
+# (Android dev builds), whose tap opens the dev menu instead. (centerElement can't centre it at the top of the list.)
+appId: com.nomadkaraoke.mobile
+---
+- scrollUntilVisible:
+    element:
+      id: "tonight-night-title"
+    direction: UP
+- tapOn:
+    id: "tonight-refresh"

@@ -9,10 +9,4 @@ appId: com.nomadkaraoke.mobile
       OP: ${OP}
       BODY: ${BODY}
       ENTRY_ID: ${ENTRY_ID}
-- scrollUntilVisible:
-    element:
-      id: "tonight-refresh"
-    direction: UP
-    centerElement: true
-- tapOn:
-    id: "tonight-refresh"
+- runFlow: tonight-refresh.yaml

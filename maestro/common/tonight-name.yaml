@@ -5,9 +5,12 @@ appId: com.nomadkaraoke.mobile
     visible:
       id: "tonight-name-input"
     timeout: 30000
-- tapOn:
-    id: "tonight-name-input"
-- eraseText: 60
+# No tap: the field has focus with the cursor after the name (a tap would put the cursor mid-name on Android, and
+# eraseText deletes only what is before it, leaving the rest: names like "Tess64943").
+# (Erased in a few passes, generously.)
+- eraseText: 30
+- eraseText: 30
+- eraseText: 30
 - inputText: ${SINGER_NAME}
 - tapOn:
     id: "tonight-name-confirm"

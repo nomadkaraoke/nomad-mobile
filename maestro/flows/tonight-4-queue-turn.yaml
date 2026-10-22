@@ -35,19 +35,19 @@ tags:
             ACTION: kjbox
             KJBOX_STACK: ${KJBOX_STACK}
             OP: advance
-      - tapOn:
-          id: "tonight-refresh"
+      - runFlow: ../common/tonight-refresh.yaml
       - waitForAnimationToEnd:
           timeout: 3000
 - assertVisible:
     id: "tonight-status-urgent"
 - takeScreenshot: ${TONIGHT_SHOTS}/tonight-4-urgent
+# The banner shows for 10 s, so each step waits for it right after the refresh (on a slow emulator, checking the
+# status line first used most of that window).
 - repeat:
     times: 6
     while:
       notVisible:
-        id: "tonight-status-summary"
-        text: ".*You're next.*"
+        id: "tonight-turn-banner"
     commands:
       - runScript:
           file: ../scripts/stack.js
@@ -55,15 +55,17 @@ tags:
             ACTION: kjbox
             KJBOX_STACK: ${KJBOX_STACK}
             OP: advance
-      - tapOn:
-          id: "tonight-refresh"
-      - waitForAnimationToEnd:
-          timeout: 3000
-- extendedWaitUntil:
-    visible:
-      id: "tonight-turn-banner"
-    timeout: 10000
+      - runFlow: ../common/tonight-refresh.yaml
+      - extendedWaitUntil:
+          visible:
+            id: "tonight-turn-banner"
+          timeout: 4000
+          optional: true
+- assertVisible:
+    id: "tonight-turn-banner"
 - takeScreenshot: ${TONIGHT_SHOTS}/tonight-4-next-banner
+- assertVisible:
+    id: "tonight-status-next|tonight-status-afterThis"
 - tapOn:
     id: "tonight-turn-banner-dismiss"
 - runScript:
@@ -72,15 +74,11 @@ tags:
       ACTION: kjbox
       KJBOX_STACK: ${KJBOX_STACK}
       OP: advance
-- tapOn:
-    id: "tonight-refresh"
-- extendedWaitUntil:
-    visible:
-      id: "tonight-status-summary"
-      text: ".*You're up.*"
-    timeout: 15000
+- runFlow: ../common/tonight-refresh.yaml
 - extendedWaitUntil:
     visible:
       id: "tonight-turn-banner"
-    timeout: 10000
+    timeout: 8000
 - takeScreenshot: ${TONIGHT_SHOTS}/tonight-4-on-stage
+- assertVisible:
+    id: "tonight-status-onStage"
