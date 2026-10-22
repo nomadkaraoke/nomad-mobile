@@ -109,6 +109,8 @@ type NightStore = {
   active: ActiveNight | null;
   joinNomad(code: string, nightId: string, kjName: string): void;
   startOther(venueName?: string): void;
+  /** Renames the active "other" night's venue (blank: no venue); counts as activity. No-op for a Nomad night. */
+  renameOther(venueName?: string): void;
   end(): void;
   /** Records activity (keeps an "other" night alive); ends it instead if it is already 12 h idle. */
   touch(): void;
@@ -151,6 +153,14 @@ export const useNightStore = create<NightStore>((set, get) => {
         startedAt: now,
         lastActivityAt: now,
       });
+    },
+
+    renameOther(venueName) {
+      const a = get().current();
+      if (a?.kind !== "other") return;
+      const { venueName: _old, ...rest } = a;
+      const name = venueName?.trim();
+      persist({ ...rest, ...(name ? { venueName: name } : {}), lastActivityAt: clock() });
     },
 
     end() {

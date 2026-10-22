@@ -74,9 +74,23 @@ export const deleteKaraokeLog = async (id: string) =>
   (await deleteKaraokeLogApiMyKaraokeLogEntryIdDelete({ path: { entry_id: id } })).data;
 
 // Search service (decide /api/search/*).
-/** `sid` is the client's search-session id (decide logs it with the search; it makes one up when absent). */
-export const searchSongs = async (q: string, opts: { limit?: number; sid?: string; signal?: AbortSignal } = {}) =>
-  (await searchApiSearchGet({ query: { q, limit: opts.limit, sid: opts.sid }, signal: opts.signal })).data;
+/** Only a real venue library narrows the search (`any`, or none, searches every song). */
+const libraryParam = (library?: string) => (library && library !== 'any' ? { library } : {});
+
+/**
+ * `sid` is the client's search-session id (decide logs it with the search; it makes one up when absent). `library`
+ * narrows results to a venue library (Phase 3's LibraryFilter: `community`, `karafun`; `any` = every song).
+ */
+export const searchSongs = async (
+  q: string,
+  opts: { limit?: number; sid?: string; library?: string; signal?: AbortSignal } = {},
+) =>
+  (
+    await searchApiSearchGet({
+      query: { q, limit: opts.limit, sid: opts.sid, ...libraryParam(opts.library) },
+      signal: opts.signal,
+    })
+  ).data;
 
 export const popularSongs = async (limit = 30) =>
   (await popularApiSearchPopularGet({ query: { limit } })).data;

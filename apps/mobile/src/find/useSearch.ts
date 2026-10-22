@@ -161,13 +161,13 @@ export function resetSearchCacheForTests(): void {
   popularCache = null;
 }
 
-async function cloudResults(q: string, signal: AbortSignal): Promise<Results> {
+async function cloudResults(q: string, library: string | undefined, signal: AbortSignal): Promise<Results> {
   if (q.length < MIN_QUERY_CHARS) {
     const groups = await popularSongs(POPULAR_LIMIT);
     popularCache = { at: Date.now(), groups };
     return { identification: null, groups };
   }
-  const r = await searchSongs(q, { limit: SEARCH_LIMIT, sid: currentSid(), signal });
+  const r = await searchSongs(q, { limit: SEARCH_LIMIT, sid: currentSid(), ...(library ? { library } : {}), signal });
   return { identification: r.identification, groups: r.groups };
 }
 
@@ -200,8 +200,12 @@ const INITIAL: Data = {
  * dropped): the offline list answers first when downloaded, the cloud answer replaces it, a cold service
  * shows `warmingUp` after 1.5 s and `error: 'unreachable'` after 30 s (offline results kept), and a cloud
  * `none` with no groups asks the Gemini resolve once. Under 2 characters: the popular list.
+ *
+ * `library` narrows the cloud search to a venue library (Tonight's add-a-song passes it through; Phase 3 adds the
+ * venue filter and the offline side).
  */
-export function useSearch(rawQuery: string): SearchState {
+export function useSearch(rawQuery: string, opts: { library?: string } = {}): SearchState {
+  const { library } = opts;
   const typed = rawQuery.trim();
   const q = useDebounced(typed);
   // The last keystroke (raw, before the debounce): the resolve waits until the box has been left alone.
@@ -258,7 +262,7 @@ export function useSearch(rawQuery: string): SearchState {
         settleWithoutCloud('unreachable');
       });
       const run = (): void => {
-        cloudResults(q, controller.signal).then(
+        cloudResults(q, library, controller.signal).then(
           (r) => {
             if (!live() || cloudDone) return;
             cloudDone = true;
@@ -333,7 +337,7 @@ export function useSearch(rawQuery: string): SearchState {
       controller.abort();
       timers.forEach(clearTimeout);
     };
-  }, [q, offline, attempt, indexRun]);
+  }, [q, offline, attempt, indexRun, library]);
 
   const retry = useCallback(() => setAttempt((n) => n + 1), []);
   return { ...data, retry };

@@ -31,12 +31,14 @@ export type SearchScreenProps = {
   /** Route params: change mode (A.39) or a song for a friend (A.10). */
   change?: { id: number; title: string };
   friend?: string;
+  /** Starts with this query (the song page's "Request tonight" when nothing matched). */
+  initialQuery?: string;
 };
 
 type Where = 'missing_card' | 'sticky_bar' | 'empty';
 
 /** Tonight's request search (spec §4.1 Search, Versions, Auto-correct, No karaoke version). */
-export function SearchScreen({ change, friend }: SearchScreenProps) {
+export function SearchScreen({ change, friend, initialQuery }: SearchScreenProps) {
   const t = useTranslations('tonight.request');
   const tAll = useTranslations();
   const night = useNightStore((s) => s.active);
@@ -57,7 +59,7 @@ export function SearchScreen({ change, friend }: SearchScreenProps) {
     else store.clear();
   }, [changeId, changeTitle, friend]);
 
-  const [q, setQ] = useState('');
+  const [q, setQ] = useState(initialQuery ?? '');
   const s = useKjboxSearch(q);
   const arm = useListArm();
   const [info, setInfo] = useState<SearchVersion | null>(null);

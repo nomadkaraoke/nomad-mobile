@@ -539,6 +539,41 @@
       "backToSongs": "Back to Your songs",
       "resumeHint": "We sent {title} earlier but didn't hear back. It may already be on its way. Send the same request again to check: it won't make a second copy.",
       "resume": "Send the same request again"
+    },
+    "other": {
+      "title": "Tonight's songs",
+      "venueLabel": "Where are you singing? (optional)",
+      "venuePlaceholder": "Venue name",
+      "addSong": "Add a song",
+      "empty": "Add the songs you plan to sing or have requested tonight. Mark them sung to remember how it went.",
+      "group": {
+        "sung": "Sung ({count})",
+        "requested": "Up next ({count})",
+        "planned": "Maybe ({count})"
+      },
+      "requestedIt": "I've requested it",
+      "maybeLater": "Maybe later",
+      "sangIt": "I sang it",
+      "remove": "Remove",
+      "copyYouTube": "Copy YouTube link",
+      "shareHost": "Share with the host",
+      "shareMessage": "{title} by {artist}: {url}",
+      "endNight": "End night",
+      "startPrompt": "At another karaoke night?",
+      "start": "Start logging tonight",
+      "startTitle": "Start logging tonight",
+      "startConfirm": "Start",
+      "close": "Close",
+      "searchLabel": "Search for a song",
+      "searchPlaceholder": "Song or artist",
+      "logAnyway": "Log “{query}” anyway",
+      "logAnywayHint": "Not in our catalog? Log it with the artist and title.",
+      "typedHint": "Check the artist and title, then log it.",
+      "artistLabel": "Artist",
+      "titleLabel": "Title",
+      "searchAgain": "Search again",
+      "addToTonight": "Add to tonight",
+      "requestTonight": "Request tonight"
     }
   },
   "makeTab": {
