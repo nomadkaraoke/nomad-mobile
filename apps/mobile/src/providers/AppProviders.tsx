@@ -8,6 +8,7 @@ import { setupApiClients } from '../api/setup';
 import { useAuth } from '../auth/store';
 import { useSessionCheck } from '../auth/useSessionCheck';
 import { fakeSocialEnabled } from '../config';
+import { useClearRecsOnSignOut } from '../discover/useClearRecsOnSignOut';
 import { useSearchWarmup } from '../find/useSearchWarmup';
 import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
@@ -30,6 +31,12 @@ function SessionCheck() {
 /** Spec §5.1: wakes the scale-to-zero search service (and checks the offline song list) on launch and foreground. */
 function SearchWarmup() {
   useSearchWarmup();
+  return null;
+}
+
+/** Offline Discover picks belong to the signed-in person: dropped on sign-out. */
+function ClearRecsOnSignOut() {
+  useClearRecsOnSignOut();
   return null;
 }
 
@@ -62,6 +69,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
         <QueryClientProvider client={queryClient}>
           <SessionCheck />
           <SearchWarmup />
+          <ClearRecsOnSignOut />
           {children}
         </QueryClientProvider>
       </IntlProvider>
