@@ -212,8 +212,9 @@ const INITIAL: Data = {
  * dropped): the offline list answers first when downloaded, the cloud answer replaces it, a cold service
  * shows `warmingUp` after 1.5 s and `error: 'unreachable'` after 30 s (offline results kept), and a cloud
  * `none` with no groups asks the Gemini resolve once. Under 2 characters: the popular list.
+ * `library` overrides the venue library filter (the quiz's song step searches every song: `'any'`).
  */
-export function useSearch(rawQuery: string): SearchState {
+export function useSearch(rawQuery: string, opts: { library?: LibraryFilter } = {}): SearchState {
   const typed = rawQuery.trim();
   const q = useDebounced(typed);
   // The last keystroke (raw, before the debounce): the resolve waits until the box has been left alone.
@@ -222,7 +223,8 @@ export function useSearch(rawQuery: string): SearchState {
     keystroke.current = { value: typed, at: Date.now() };
   }, [typed]);
   const offline = useOffline();
-  const library = useLibraryFilter((s) => s.filter);
+  const venueLibrary = useLibraryFilter((s) => s.filter);
+  const library = opts.library ?? venueLibrary;
   const [data, setData] = useState<Data>(INITIAL);
   const [attempt, setAttempt] = useState(0);
   const generation = useRef(0);

@@ -6,6 +6,7 @@ import { BackHandler, View } from 'react-native';
 
 import { useAuth } from '../auth/store';
 import { QUIZ_STORAGE_KEY, useQuizDraft } from '../discover/quizStore';
+import { useLibraryFilter } from '../find/library';
 import { resetSearchCacheForTests } from '../find/useSearch';
 import { appStorage } from '../storage';
 import { gen, session } from '../test-utils/genAuthMock';
@@ -84,6 +85,7 @@ beforeEach(async () => {
   act(() => useQuizDraft.getState().reset());
   appStorage.remove(QUIZ_STORAGE_KEY);
   await useAuth.getState().signOut();
+  act(() => useLibraryFilter.getState().set('any'));
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 } as never);
   popularSongs.mockResolvedValue([group('Band One', 'Invented Song'), group('Band Two', 'Made Up Tune')]);
   searchSongs.mockResolvedValue({
@@ -323,6 +325,19 @@ describe('quiz', () => {
     // Recommendations load again for the new profile; the draft is cleared.
     await waitFor(() => expect(getRecs).toHaveBeenCalled());
     expect(appStorage.getString(QUIZ_STORAGE_KEY)).toBeUndefined();
+  });
+
+  it("step 4 searches every song, not just the venue library's", async () => {
+    act(() => useLibraryFilter.getState().set('karafun'));
+    await signIn();
+    getProgress.mockResolvedValue({ step: 4, genres: ['rock'], decades: [] });
+    open();
+    await screen.findByTestId('quiz-song-1');
+    expect(popularSongs).toHaveBeenCalledWith(expect.any(Number), 'any');
+    expect(popularSongs).not.toHaveBeenCalledWith(expect.any(Number), 'karafun');
+    fireEvent.changeText(screen.getByTestId('quiz-song-search'), 'invented');
+    await waitFor(() => expect(searchSongs).toHaveBeenCalled());
+    expect(searchSongs).toHaveBeenCalledWith('invented', expect.objectContaining({ library: 'any' }));
   });
 
   it('a failed submit stays on the quiz with an error', async () => {

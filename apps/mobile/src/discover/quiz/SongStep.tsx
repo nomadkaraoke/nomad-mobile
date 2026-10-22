@@ -37,7 +37,8 @@ export function SongStep() {
   const songs = useQuizDraft((s) => s.draft.songs);
   const update = useQuizDraft((s) => s.update);
   const [query, setQuery] = useState('');
-  const search = useSearch(query);
+  // Songs you love, wherever they are: the venue library filter (Discover, search) doesn't apply here.
+  const search = useSearch(query, { library: 'any' });
 
   const rows = useMemo<QuizSong[]>(() => {
     const out: QuizSong[] = [];
