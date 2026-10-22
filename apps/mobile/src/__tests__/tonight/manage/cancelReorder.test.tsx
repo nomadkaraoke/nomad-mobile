@@ -155,12 +155,12 @@ describe('reorder survives a /me refresh mid-edit (fix round 1)', () => {
     await waitFor(() => expect(api.reorder).toHaveBeenCalledWith('2121', [{ id: 1 }, { id: 5 }, { id: 3 }], night.nightId));
   });
 
-  it('reorder excludes on-stage and friend rows', () => {
+  it('reorder includes friend rows (A.12) and excludes on-stage rows', () => {
     const rows = [
       song({ request: { id: 1 }, estimate: at(1, 0, true) }),
       song({ owner: 'friend', request: { id: 2, for_friend: true }, estimate: at(4) }),
       song({ request: { id: 3 }, estimate: at(6) }),
     ];
-    expect(reorderable(rows).map((r) => r.item)).toEqual([{ id: 3 }]);
+    expect(reorderable(rows).map((r) => r.item)).toEqual([{ id: 2 }, { id: 3 }]);
   });
 });

@@ -20,7 +20,8 @@ export function reorderable(songs: Song[]): { song: Song; item: ReorderItem }[] 
     if (!isLive(s) || isOnStage(s) || typeof s.estimate?.position !== 'number') continue;
     if (s.request.id == null) {
       if (s.entry_id != null) out.push({ song: s, item: { entry_id: s.entry_id } });
-    } else if (s.owner === 'me' && isOwnRequest(s) && s.request.status === 'approved') {
+    } else if (isOwnRequest(s) && s.request.status === 'approved') {
+      // Own and friend requests: friend songs keep the owner's device, who can reorder them (A.12).
       out.push({ song: s, item: { id: s.request.id } });
     }
   }
