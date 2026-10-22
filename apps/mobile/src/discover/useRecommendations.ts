@@ -69,12 +69,15 @@ function filterByLibrary(recs: Recs, library: LibraryFilter): Recs {
   return { ...recs, sections };
 }
 
-/** A failed request that never reached decide (no HTTP status): fetch's TypeError, a timeout. */
-const isNetworkError = (e: unknown) => e != null && !(e instanceof ApiError);
+/**
+ * A failed request that never reached decide: the client's error interceptor wraps fetch's TypeError (and a
+ * timeout) as `ApiError(0, …)`; a raw non-ApiError (thrown before the interceptor) counts too.
+ */
+const isNetworkError = (e: unknown) => (e instanceof ApiError ? e.status === 0 : e != null);
 
-/** Client errors (401, 404, 422) and the catalog warming up won't change on an immediate retry. */
+/** Client errors (401, 404, 422) and the catalog warming up won't change on an immediate retry; status 0 (network) may. */
 const shouldRetry = (failures: number, e: unknown) =>
-  failures < 1 && !isWarmingUp(e) && !(e instanceof ApiError && e.status < 500);
+  failures < 1 && !isWarmingUp(e) && !(e instanceof ApiError && e.status !== 0 && e.status < 500);
 
 /**
  * Personal recommendations (decide v2) for the current filters and venue library. Only runs signed in. A 503

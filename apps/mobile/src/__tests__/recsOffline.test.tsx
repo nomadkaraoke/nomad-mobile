@@ -161,6 +161,26 @@ describe('recsOffline', () => {
     expect(screen.getByTestId('rec-row-crowd_pleasers-1')).toBeTruthy();
   });
 
+  it('serves the snapshot when decide is unreachable (the client wraps it as ApiError 0), after one retry', async () => {
+    seed();
+    getRecs.mockRejectedValue(new decide.ApiError(0, 'Network request failed'));
+    await signIn();
+    open();
+    expect(await screen.findByTestId('discover-offline-picks', {}, { timeout: 4000 })).toBeTruthy();
+    expect(screen.getByTestId('rec-row-crowd_pleasers-1')).toBeTruthy();
+    expect(getRecs).toHaveBeenCalledTimes(2);
+  });
+
+  it('a server error (500) is not treated as offline', async () => {
+    seed();
+    getRecs.mockRejectedValue(new decide.ApiError(500, 'boom'));
+    await signIn();
+    open();
+    await waitFor(() => expect(getRecs).toHaveBeenCalledTimes(2), { timeout: 4000 });
+    await act(async () => {});
+    expect(screen.queryByTestId('discover-offline-picks')).toBeNull();
+  });
+
   it('song feedback is disabled while offline', async () => {
     seed();
     setNet(false);
