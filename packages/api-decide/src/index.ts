@@ -1,4 +1,10 @@
-import { getSongApiCatalogSongsSongIdGet } from './client';
+import {
+  deleteKaraokeLogApiMyKaraokeLogEntryIdDelete,
+  getSongApiCatalogSongsSongIdGet,
+  listKaraokeLogApiMyKaraokeLogGet,
+  putKaraokeLogApiMyKaraokeLogEntryIdPut,
+} from './client';
+import type { KaraokeLogEntry, LogMedia, LogNight, Survey } from './client';
 import {
   eventApiSearchEventPost,
   offlineIndexApiSearchOfflineIndexGet,
@@ -30,6 +36,42 @@ export type {
 // Legacy catalog song by numeric id (decide /api/catalog/songs/{id}): the song page until it reads the search service.
 export const getSong = async (id: number) =>
   (await getSongApiCatalogSongsSongIdGet({ path: { song_id: id } })).data;
+
+// Karaoke log (decide /api/my/karaoke-log, bearer gen token). Errors are ApiError with `detail` = the code
+// (`invalid` 400, `not_owner` 403, `not_found` 404; 422 for schema errors).
+
+/** The fields the app may write. `app_` ids: any of these (a new entry needs state, artist, title). `kj_` ids: only `survey` and `deleted`. */
+export type KaraokeLogPatch = {
+  state?: NonNullable<KaraokeLogEntry['state']>;
+  artist?: string;
+  title?: string;
+  song_key?: string | null;
+  night?: LogNight;
+  sung_at?: string | null;
+  ended_at?: string | null;
+  media?: LogMedia;
+  survey?: Survey;
+  deleted?: boolean;
+};
+
+/** One page of the user's records, newest `updated_at` first. With `since`, deleted records are included (sync pull). */
+export const listKaraokeLog = async (
+  opts: { since?: string; nightId?: string; limit?: number; cursor?: string; signal?: AbortSignal } = {},
+) =>
+  (
+    await listKaraokeLogApiMyKaraokeLogGet({
+      query: { since: opts.since, night_id: opts.nightId, limit: opts.limit, cursor: opts.cursor },
+      signal: opts.signal,
+    })
+  ).data;
+
+/** Upsert with field-level merge → the entry. */
+export const putKaraokeLog = async (id: string, patch: KaraokeLogPatch) =>
+  (await putKaraokeLogApiMyKaraokeLogEntryIdPut({ path: { entry_id: id }, body: patch })).data;
+
+/** Soft delete → the entry (`deleted: true`). */
+export const deleteKaraokeLog = async (id: string) =>
+  (await deleteKaraokeLogApiMyKaraokeLogEntryIdDelete({ path: { entry_id: id } })).data;
 
 // Search service (decide /api/search/*).
 /** `sid` is the client's search-session id (decide logs it with the search; it makes one up when absent). */

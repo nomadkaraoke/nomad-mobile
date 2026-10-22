@@ -36,7 +36,7 @@ packages/review-core/ pure-TS review logic (doc model, edits, timing, Tap To Syn
 packages/core/        pure TS: session model + input normalizers, job phases + steps, audio-search ranking, duration confirm, formatting, search/ (song matcher; Python parity fixtures synced from decide by scripts/sync-search-fixtures.mjs, `DECIDE_DIR`)
 packages/i18n/        messages/<33>.json, resolveLocale, IntlProvider; scripts/ vendored from karaoke-gen
 packages/api-gen/     generated karaoke-gen client + configureClient + facades (auth, credits, make, jobs) + zod overrides
-packages/api-decide/  generated karaoke-decide catalog client (facade `getSong`, legacy by numeric id) + the search service client and its facades (searchSongs, popularSongs, getSongDetail, resolveQuery, getOfflineIndexManifest, logSearchEvent, pingSearch); decide's search service is the app's single song-search backend
+packages/api-decide/  generated karaoke-decide catalog client (facade `getSong`, legacy by numeric id) + the search service client and its facades (searchSongs, popularSongs, getSongDetail, resolveQuery, getOfflineIndexManifest, logSearchEvent, pingSearch) + karaoke-log facades (listKaraokeLog, putKaraokeLog, deleteKaraokeLog); decide's search service is the app's single song-search backend
 packages/ui/          tokens, Screen/Text/Button/TextField, <List> (FlashList), <WaveformCanvas> + <NomadLoader> (Skia; the brand "N" icon vector in nomadN.ts, exported as apps/mobile/assets/brand/nomad-n-strip.svg)
 openapi/              gen.json + decide.json + decide-search.json snapshots (refresh: pnpm gen:api; point at another stack with GEN_OPENAPI_URL / DECIDE_SEARCH_OPENAPI_URL, see scripts/fetch-openapi.mjs)
 maestro/flows/        E2E flows (make-1…10, search-1…4, review-1…12, smoke-discover) against the gen + decide search local stacks; common/ shared steps; scripts/stack.js
@@ -88,7 +88,7 @@ CocoaPods note (Andrew's Mac): a stale `~/.gem/ruby/3.3.0/bin/pod` shim shadows 
 2. **No hardcoded user-facing strings.** Use `useTranslations()`. ESLint fails on JSX text literals in `apps/mobile/src` and `packages/ui/src`. Any new key in `packages/i18n/messages/en.json` must be translated (`pnpm i18n:translate`) before commit.
 3. **`testID` on every interactive element.** Maestro targets testIDs.
 4. **No `@shopify/flash-list` or `@shopify/react-native-skia` imports outside `packages/ui`.** ESLint enforces this. Shopify is winding down both, and a fork or rename must only touch the wrappers.
-5. **API clients never touch storage.** The app injects `baseUrl/getToken/getLocale/onUnauthorized` in `apps/mobile/src/api/setup.ts`. Gen owns identity (a 401 signs out). Decide is public for the MVP (no token, and a 401 never signs out).
+5. **API clients never touch storage.** The app injects `baseUrl/getToken/getLocale/onUnauthorized` in `apps/mobile/src/api/setup.ts`. Gen owns identity (a 401 signs out). Decide gets the gen token too (its `/api/my/*` karaoke log needs it), but a decide 401 never signs out.
 6. **Gen endpoints with untyped responses** are listed in [docs/gen-untyped-endpoints.md](docs/gen-untyped-endpoints.md). Before calling one, add a zod schema in `packages/api-gen/src/overrides/` and file a gen follow-up to add `response_model`.
 7. **Never create Apple, Google Play, Expo/EAS, RevenueCat, Sentry or PostHog accounts, or run anything that costs money, without asking Andrew first.**
 

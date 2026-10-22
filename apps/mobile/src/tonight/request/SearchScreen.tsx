@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { IdeasPanel } from '../log/IdeasPanel';
 import { useNightStore } from '../nightStore';
 import { CorrectionBanner } from './CorrectionBanner';
 import { errorCopy } from './errorCopy';
@@ -135,6 +136,7 @@ export function SearchScreen({ change, friend }: SearchScreenProps) {
           autoCapitalize="none"
           returnKeyType="search"
         />
+        {q.trim().length === 0 && mode !== 'change' ? <IdeasPanel onPick={setQ} /> : null}
         {q.trim().length > 0 && q.trim().length < KJBOX_MIN_QUERY ? (
           <Text variant="muted">{t('minChars')}</Text>
         ) : null}

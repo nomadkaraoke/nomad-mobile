@@ -38,7 +38,8 @@ export const setNightClock = (fn?: () => number): void => {
   clock = fn ?? (() => Date.now());
 };
 
-const uuid = (): string => {
+/** A v4 uuid (expo-crypto, with a Math.random fallback where it returns nothing, e.g. jest). */
+export const newUuid = (): string => {
   try {
     const id: unknown = randomUUID();
     if (typeof id === "string" && id) return id;
@@ -145,7 +146,7 @@ export const useNightStore = create<NightStore>((set, get) => {
       const name = venueName?.trim();
       persist({
         kind: "other",
-        nightId: uuid(),
+        nightId: newUuid(),
         ...(name ? { venueName: name } : {}),
         startedAt: now,
         lastActivityAt: now,

@@ -17,9 +17,15 @@ export function setupApiClients() {
     getLocale: currentLocale,
     onUnauthorized: () => void useAuth.getState().signOut(),
   });
-  // Decide is public for the MVP catalog: no gen token is sent and a 401 never signs the user out
-  // (spec §4.2 adds a decide token via exchange-gen-session later).
-  configureDecide({ baseUrl: DECIDE_API_URL, getToken: () => null, getLocale: currentLocale, getDeviceId, onUnauthorized: () => {} });
+  // Decide accepts the gen session token (the karaoke log, /api/my/*). Gen still owns identity: a decide 401 never
+  // signs the user out (the karaoke-log outbox just waits for the next sign-in or trigger).
+  configureDecide({
+    baseUrl: DECIDE_API_URL,
+    getToken: () => useAuth.getState().getToken(),
+    getLocale: currentLocale,
+    getDeviceId,
+    onUnauthorized: () => {},
+  });
   // kjbox verifies the gen session token itself. Its 401 only means "could not verify right now": never sign out.
   configureKjbox({ baseUrl: KJBOX_API_URL, getToken: () => useAuth.getState().getToken(), getLocale: currentLocale });
 }

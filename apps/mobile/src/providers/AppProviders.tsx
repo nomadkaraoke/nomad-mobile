@@ -11,6 +11,7 @@ import { fakeSocialEnabled } from '../config';
 import { useSearchWarmup } from '../find/useSearchWarmup';
 import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
+import { useLogSync } from '../tonight/log/useLogSync';
 import { installDevWarningTrace } from './devWarnings';
 
 // Before anything formats: Hermes has no Intl.PluralRules (ICU plurals would throw).
@@ -30,6 +31,12 @@ function SessionCheck() {
 /** Spec §5.1: wakes the scale-to-zero search service (and checks the offline song list) on launch and foreground. */
 function SearchWarmup() {
   useSearchWarmup();
+  return null;
+}
+
+/** Ruling E8-R2: sends the karaoke-log outbox on launch, on reconnect and on foreground. */
+function LogSync() {
+  useLogSync();
   return null;
 }
 
@@ -62,6 +69,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
         <QueryClientProvider client={queryClient}>
           <SessionCheck />
           <SearchWarmup />
+          <LogSync />
           {children}
         </QueryClientProvider>
       </IntlProvider>

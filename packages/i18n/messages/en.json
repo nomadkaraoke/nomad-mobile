@@ -343,6 +343,40 @@
       "conflict": "Something changed in the meantime. Search again and try once more.",
       "internal": "Something went wrong on the host's machine. Try again, or ask the host.",
       "unreachable": "Can't reach tonight's night. Check your connection and try again."
+    },
+    "survey": {
+      "title": "How did it go?",
+      "close": "Close the survey",
+      "song": "{title} by {artist}",
+      "feelQuestion": "How was it to sing?",
+      "feel": {
+        "great": "Great",
+        "ok": "OK",
+        "bad": "Not for me"
+      },
+      "keyQuestion": "How was the key?",
+      "key": {
+        "too_low": "Too low",
+        "right": "About right",
+        "too_high": "Too high"
+      },
+      "crowdQuestion": "Was it a crowd-pleaser?",
+      "crowd": {
+        "yes": "Yes",
+        "no": "Not really"
+      },
+      "notesLabel": "Notes (optional)",
+      "notesPlaceholder": "Anything to remember next time?",
+      "save": "Save",
+      "skip": "Not now"
+    },
+    "ideas": {
+      "title": "Sung here before? Need ideas?",
+      "mine": "Your most-sung songs",
+      "crowd": "Tonight's crowd favourites",
+      "song": "{title} by {artist}",
+      "times": "{count, plural, one {Sung # time} other {Sung # times}}",
+      "plays": "{count, plural, one {# play} other {# plays}}"
     }
   },
   "makeTab": {

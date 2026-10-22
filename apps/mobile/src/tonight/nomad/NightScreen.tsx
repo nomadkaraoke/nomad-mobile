@@ -5,6 +5,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Linking, View } from 'react-native';
 
 import { appStorage } from '../../storage';
+import { SurveySheet } from '../log/SurveySheet';
+import { useSurveyTrigger } from '../log/useSurveyTrigger';
 import { useNightStore, type NomadNight } from '../nightStore';
 import { Freshness, useTick } from './Freshness';
 import { songKey } from './model';
@@ -132,6 +134,9 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
     }
   };
 
+  // Post-song survey (spec §6.3, ruling E8-R3): once per newly sung song with a history_id, while this screen shows.
+  const survey = useSurveyTrigger(me.data?.sung_tonight, focused, night.nightId);
+
   const tick = useTick(5_000);
   const rotationData = rotation.data;
   const elapsedS = rotationData ? Math.max(0, Math.floor((tick - rotationData.receivedAt) / 1000)) : 0;
@@ -206,6 +211,11 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
         ListFooterComponent={nightInfo ? <VenueInfo night={nightInfo} /> : undefined}
         refreshing={refreshing}
         onRefresh={() => void refresh()}
+      />
+      <SurveySheet
+        entryId={survey?.entryId ?? null}
+        artist={survey?.artist ?? ''}
+        title={survey?.title ?? ''}
       />
     </Screen>
   );
