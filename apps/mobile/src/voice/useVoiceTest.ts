@@ -11,14 +11,15 @@ import {
   type VoicedFrame,
 } from '@nomad/core';
 import { useEffect, useState } from 'react';
-import { createFramer } from './framer';
+import { createFramer, FRAME_SIZE } from './framer';
 import type { PitchSource } from './pitchSource';
 
 export type VoiceStep = 'intro' | 'permission-denied' | 'permission-blocked' | 'low' | 'high' | 'sing' | 'result' | 'no-notes';
 export type VoiceResult = { range: RangeSummary; voice: Classification };
 type ActiveStep = 'low' | 'high' | 'sing';
 
-const QUIET_MS = 1000;
+/** Wall-clock fallback for the quiet->listening switch, started when start() resolves; the audio clock normally wins. */
+const QUIET_FALLBACK_MS = 2000;
 const NOTE_TIMEOUT_MS = 20_000;
 const SING_MS = 15_000;
 const PITCH_INTERVAL_MS = 1000 / 15;
@@ -39,6 +40,10 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     gen: 0,
     unmounted: false,
     requesting: false,
+    active: false,
+    beginId: 0,
+    rate: 16000,
+    listening: false,
     step: 'intro' as VoiceStep,
     quiet: [] as PitchFrame[],
     floor: null as number | null,
@@ -58,15 +63,23 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
   /** Invalidates the running step: later buffers and timers do nothing. */
   const stopRun = () => {
     r.gen++;
+    r.active = false;
     for (const t of r.timers) clearTimeout(t);
     r.timers = [];
     r.source.stop();
   };
 
   const onFrame = (f: PitchFrame) => {
-    if (f.t < 1.0) {
+    // Quiet second = frames whose whole window ends by 1.0 s of audio time. The sliver of frames that start
+    // before 1.0 s but end after it is ignored entirely (not floor, not notes).
+    if (f.t + FRAME_SIZE / r.rate <= 1.0 + 1e-9) {
       r.quiet.push(f);
       return;
+    }
+    if (f.t < 1.0) return;
+    if (!r.listening) {
+      r.listening = true;
+      setPhase('listening');
     }
     r.floor ??= noiseFloor(r.quiet);
     const [v] = gateFrames([f], r.floor);
@@ -111,6 +124,8 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     r.gated = [];
     r.stepHeld = [];
     r.lastPitchAt = 0;
+    r.listening = false;
+    r.active = true;
     framer.reset();
     setStepBoth(s);
     setPhase('quiet');
@@ -118,16 +133,9 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     setStepHeldCount(0);
     setHeld(r.committed);
 
-    r.timers.push(
-      setTimeout(() => {
-        if (gen === r.gen) setPhase('listening');
-      }, QUIET_MS),
-    );
-    if (s === 'sing') r.timers.push(setTimeout(() => gen === r.gen && finishSing(), SING_MS));
-    else r.timers.push(setTimeout(() => gen === r.gen && r.stepHeld.length === 0 && fail(s), NOTE_TIMEOUT_MS));
-
     const onBuffer: Parameters<PitchSource['start']>[0] = (b) => {
       if (gen !== r.gen) return;
+      r.rate = b.sampleRate;
       const before = r.gated.length;
       framer.push(b);
       if (gen !== r.gen || r.gated.length === before) return;
@@ -147,14 +155,29 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
       }
       return;
     }
-    // Stopped (step change / unmount) while start() was still pending: don't leave the mic running.
-    if (gen !== r.gen) r.source.stop();
+    if (gen !== r.gen) {
+      // Stopped while start() was pending: don't leave the mic running, unless a newer run now owns the source.
+      if (!r.active) r.source.stop();
+      return;
+    }
+    // Timers start once capture is running, so mic start-up latency isn't charged to the singer.
+    r.timers.push(
+      setTimeout(() => {
+        if (gen === r.gen && !r.listening) {
+          r.listening = true;
+          setPhase('listening');
+        }
+      }, QUIET_FALLBACK_MS),
+    );
+    if (s === 'sing') r.timers.push(setTimeout(() => gen === r.gen && finishSing(), SING_MS));
+    else r.timers.push(setTimeout(() => gen === r.gen && r.stepHeld.length === 0 && fail(s), NOTE_TIMEOUT_MS));
   };
 
   const begin = async (): Promise<void> => {
     if (r.requesting || r.unmounted) return;
     if (r.step !== 'intro' && r.step !== 'permission-denied' && r.step !== 'permission-blocked') return;
     r.requesting = true;
+    const id = ++r.beginId;
     let perm: 'granted' | 'denied' | 'blocked';
     try {
       perm = await r.source.requestPermission();
@@ -163,7 +186,7 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     } finally {
       r.requesting = false;
     }
-    if (r.unmounted) return;
+    if (r.unmounted || id !== r.beginId) return;
     if (perm === 'denied') setStepBoth('permission-denied');
     else if (perm === 'blocked') setStepBoth('permission-blocked');
     else {
@@ -189,6 +212,23 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
       }
     },
     skipSing: finishSing,
+    cancel() {
+      r.beginId++;
+      r.requesting = false;
+      stopRun();
+      r.committed = [];
+      r.stepHeld = [];
+      r.gated = [];
+      setResult(null);
+      setHeld([]);
+      setStepHeldCount(0);
+      setLivePitch(null);
+      setPhase('quiet');
+      setStepBoth('intro');
+    },
+    mount() {
+      r.unmounted = false;
+    },
     setSource(next: PitchSource) {
       r.source = next;
     },
@@ -209,8 +249,12 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
  *   sing --15 s | skipSing()--> result (range from >=2 held notes spanning >=3 semitones) | no-notes --retry()--> low
  *
  * Each of low/high/sing starts with a 1 s `quiet` phase (the step's noise floor), then `listening`. Every step
- * resets the framer so its quiet second is `t < 1.0`. `source.stop()` runs on every step change and on unmount,
- * and buffers from a stopped step are dropped (generation token).
+ * resets the framer. The floor uses only frames whose 2048-sample window ends by 1.0 s of AUDIO time; frames
+ * straddling 1.0 s are ignored; `listening` starts at the first frame at/after 1.0 s (wall-clock fallback 2 s
+ * after start() resolves). The 20 s / 15 s timers also start when start() resolves.
+ * `source.stop()` runs on every step change and on unmount; buffers from a stopped step are dropped.
+ * `cancel()` stops the run and returns to 'intro' with no result: Task 18's screen MUST call it on blur and when
+ * the app is backgrounded.
  */
 export function useVoiceTest(source: PitchSource) {
   const [step, setStep] = useState<VoiceStep>('intro');
@@ -225,7 +269,11 @@ export function useVoiceTest(source: PitchSource) {
   useEffect(() => {
     api.setSource(source);
   }, [api, source]);
-  useEffect(() => () => api.dispose(), [api]);
+  // StrictMode runs setup, cleanup, setup: mount() re-arms the machine that dispose() shut down.
+  useEffect(() => {
+    api.mount();
+    return () => api.dispose();
+  }, [api]);
 
   return {
     step,
@@ -239,5 +287,6 @@ export function useVoiceTest(source: PitchSource) {
     done: api.done,
     retry: api.retry,
     skipSing: api.skipSing,
+    cancel: api.cancel,
   };
 }

@@ -16,6 +16,9 @@ const MAX_HZ = 2000;
  * `reset()` also drops any buffered samples. A sample-rate change mid-stream recreates the detector and drops
  * the partial window (t keeps advancing).
  */
+/** Samples per analysis window (a frame at `t` covers audio up to t + FRAME_SIZE / sampleRate). */
+export const FRAME_SIZE = 2048;
+
 export function createFramer(
   onFrame: (f: PitchFrame) => void,
   opts: { frameSize?: 2048; hop?: 512 } = {},

@@ -1,3 +1,4 @@
+import { StrictMode, createElement, type ReactNode } from 'react';
 import { act, renderHook } from '@testing-library/react-native';
 import type { MicPermission, PcmBuffer, PitchSource, VoiceSection } from '../pitchSource';
 import { useVoiceTest } from '../useVoiceTest';
@@ -56,8 +57,7 @@ function makeSource(permission: MicPermission = 'granted'): FakeSource {
   return src;
 }
 
-// 1.2 s: frame windows are 2048 samples long, so a tone must start >= ~0.13 s after the end of the quiet second.
-const SILENT_SECOND = () => tone(null, 1.2);
+const SILENT_SECOND = () => tone(null, 1.0);
 const feed = (src: FakeSource, s: Float32Array) => act(() => src.feed(s));
 const advance = (ms: number) => act(() => void jest.advanceTimersByTime(ms));
 
@@ -83,12 +83,12 @@ it('walks intro→low→high→sing→result and classifies baritone', async () 
   await advance(1000);
   expect(result.current.phase).toBe('listening');
   expect(result.current.held).toHaveLength(1);
-  act(() => result.current.done());
+  await act(async () => result.current.done());
   expect(result.current.step).toBe('high');
   expect(result.current.phase).toBe('quiet');
 
   await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
-  act(() => result.current.done());
+  await act(async () => result.current.done());
   expect(result.current.step).toBe('sing');
   expect(src.sections).toEqual(['low', 'high', 'sing']);
 
@@ -107,9 +107,9 @@ it('sing ends by itself at 15 s', async () => {
   const src = makeSource();
   const { result } = await begin(src);
   await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
-  act(() => result.current.done());
+  await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
-  act(() => result.current.done());
+  await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(55, 4)));
   await advance(14_900);
   expect(result.current.step).toBe('sing');
@@ -120,10 +120,10 @@ it('sing ends by itself at 15 s', async () => {
 it('done() does nothing before the step has a held note', async () => {
   const src = makeSource();
   const { result } = await begin(src);
-  act(() => result.current.done());
+  await act(async () => result.current.done());
   expect(result.current.step).toBe('low');
   await feed(src, concat(SILENT_SECOND(), tone(45, 0.3)));
-  act(() => result.current.done());
+  await act(async () => result.current.done());
   expect(result.current.step).toBe('low');
 });
 
@@ -176,7 +176,7 @@ it('20 s with no note on high keeps the low note and retry returns to high', asy
   const src = makeSource();
   const { result } = await begin(src);
   await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
-  act(() => result.current.done());
+  await act(async () => result.current.done());
   await advance(20_100);
   expect(result.current.step).toBe('no-notes');
   await act(async () => {
@@ -190,7 +190,7 @@ it('one held note overall → no-notes, never a result', async () => {
   const src = makeSource();
   const { result } = await begin(src);
   await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
-  act(() => result.current.done());
+  await act(async () => result.current.done());
   await advance(20_100); // high: nothing
   expect(result.current.step).toBe('no-notes');
   expect(result.current.result).toBeNull();
@@ -200,9 +200,9 @@ it('two held notes less than 3 semitones apart → no-notes, retry restarts at l
   const src = makeSource();
   const { result } = await begin(src);
   await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
-  act(() => result.current.done());
+  await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(46, 1.2)));
-  act(() => result.current.done());
+  await act(async () => result.current.done());
   act(() => result.current.skipSing());
   expect(result.current.step).toBe('no-notes');
   expect(result.current.result).toBeNull();
@@ -229,7 +229,7 @@ it('buffers from the previous step are ignored after a step change', async () =>
   const src = makeSource();
   const { result } = await begin(src);
   await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
-  act(() => result.current.done());
+  await act(async () => result.current.done());
   // the stale low-step sink would deliver a long note into high if it were not ignored
   expect(result.current.step).toBe('high');
   expect(result.current.held).toHaveLength(1);
@@ -254,7 +254,7 @@ it('control: the same hum starting after a silent second counts as a note', asyn
 it('livePitch follows the voiced midi, throttled to 15 Hz', async () => {
   const src = makeSource();
   const { result } = await begin(src);
-  await feed(src, SILENT_SECOND());
+  await feed(src, tone(null, 1.3));
   expect(result.current.livePitch).toBeNull();
   // Within one 66 ms window only the first frame's value is published.
   await feed(src, tone(57, 1));
@@ -262,4 +262,128 @@ it('livePitch follows the voiced midi, throttled to 15 Hz', async () => {
   await advance(70);
   await feed(src, tone(57, 0.3));
   expect(result.current.livePitch).toBeCloseTo(57, 0);
+});
+
+it('a tone starting exactly at 1.0 s audio time is heard, and phase flips on the audio clock', async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  await feed(src, concat(tone(null, 0.9)));
+  expect(result.current.phase).toBe('quiet');
+  await feed(src, concat(tone(null, 0.2), tone(45, 1.0)));
+  expect(result.current.phase).toBe('listening'); // no wall-clock time has passed
+  expect(result.current.held).toHaveLength(1);
+});
+
+it('phase falls back to the wall clock if no audio arrives', async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  await advance(1500);
+  expect(result.current.phase).toBe('quiet');
+  await advance(600);
+  expect(result.current.phase).toBe('listening');
+});
+
+it('the 20 s no-note timeout starts when start() resolves', async () => {
+  const src = makeSource();
+  let release: () => void = () => {};
+  src.start = (onBuffer, section) =>
+    new Promise<void>((res) => {
+      release = () => {
+        src.sections.push(section);
+        res();
+      };
+      void onBuffer;
+    });
+  const hook = renderHook(() => useVoiceTest(src));
+  act(() => void hook.result.current.begin());
+  await act(async () => {});
+  await advance(30_000);
+  expect(hook.result.current.step).toBe('low');
+  await act(async () => release());
+  await advance(19_900);
+  expect(hook.result.current.step).toBe('low');
+  await advance(200);
+  expect(hook.result.current.step).toBe('no-notes');
+});
+
+it('cancel() stops the run and returns to intro with no result', async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
+  expect(result.current.held).toHaveLength(1);
+  const stops = src.stops;
+  act(() => result.current.cancel());
+  expect(src.stops).toBeGreaterThan(stops);
+  expect(result.current.step).toBe('intro');
+  expect(result.current.result).toBeNull();
+  expect(result.current.held).toHaveLength(0);
+  src.feed(tone(45, 1));
+  await advance(30_000);
+  expect(result.current.step).toBe('intro');
+  await act(async () => {
+    await result.current.begin();
+  });
+  expect(result.current.step).toBe('low');
+});
+
+it('cancel() during a pending permission prompt wins over the late answer', async () => {
+  const src = makeSource();
+  let answer: (p: MicPermission) => void = () => {};
+  src.requestPermission = () => new Promise((res) => (answer = res));
+  const { result } = renderHook(() => useVoiceTest(src));
+  act(() => void result.current.begin());
+  act(() => result.current.cancel());
+  await act(async () => answer('granted'));
+  expect(result.current.step).toBe('intro');
+});
+
+it('survives StrictMode unmount/remount: still runs and still stops on real unmount', async () => {
+  const src = makeSource();
+  const wrapper = ({ children }: { children: ReactNode }) => createElement(StrictMode, null, children);
+  const hook = renderHook(() => useVoiceTest(src), { wrapper });
+  await act(async () => {
+    await hook.result.current.begin();
+  });
+  expect(hook.result.current.step).toBe('low');
+  await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
+  expect(hook.result.current.held).toHaveLength(1);
+  const stops = src.stops;
+  hook.unmount();
+  expect(src.stops).toBeGreaterThan(stops);
+});
+
+it('a stale start() resolving late does not stop the newer run', async () => {
+  const src = makeSource();
+  const releases: (() => void)[] = [];
+  src.start = (_onBuffer, section) =>
+    new Promise<void>((res) => {
+      releases.push(() => {
+        src.sections.push(section);
+        res();
+      });
+    });
+  const { result } = renderHook(() => useVoiceTest(src));
+  act(() => void result.current.begin());
+  await act(async () => {});
+  // low's start() is still pending; cancel and begin again -> a newer run owns the source
+  act(() => result.current.cancel());
+  act(() => void result.current.begin());
+  await act(async () => {});
+  const stops = src.stops;
+  await act(async () => releases[0]!()); // stale low start resolves
+  expect(src.stops).toBe(stops);
+});
+
+it('range is min/max over all held notes when high is sung lower than low', async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  await feed(src, concat(SILENT_SECOND(), tone(60, 1.2)));
+  await act(async () => result.current.done());
+  await feed(src, concat(SILENT_SECOND(), tone(48, 1.2)));
+  await act(async () => result.current.done());
+  act(() => result.current.skipSing());
+  expect(result.current.step).toBe('result');
+  expect(result.current.result?.range.low).toBe(48);
+  expect(result.current.result?.range.high).toBe(60);
+  expect(result.current.result?.range.heldCount).toBe(2);
 });
