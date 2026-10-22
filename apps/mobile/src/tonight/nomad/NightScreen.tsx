@@ -6,8 +6,10 @@ import { Linking, View } from 'react-native';
 
 import { appStorage } from '../../storage';
 import { SurveySheet } from '../log/SurveySheet';
-import { useSurveyTrigger } from '../log/useSurveyTrigger';
+import { useLogStore } from '../log/logStore';
+import { useSurveyTrigger, type SurveyTarget } from '../log/useSurveyTrigger';
 import { useNightStore, type NomadNight } from '../nightStore';
+import { useEditingStore } from './editingStore';
 import { Freshness, useTick } from './Freshness';
 import { songKey } from './model';
 import {
@@ -134,8 +136,20 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
     }
   };
 
-  // Post-song survey (spec §6.3, ruling E8-R3): once per newly sung song with a history_id, while this screen shows.
-  const survey = useSurveyTrigger(me.data?.sung_tonight, focused, night.nightId);
+  // Post-song survey (spec §6.3, ruling E8-R3): once per newly sung song with a history_id, while this screen shows
+  // and no other sheet or edit is in the way. "How did it go?" on a sung row reopens it for that song.
+  const editing = useEditingStore((s) => s.editing);
+  const sheetOpen = useEditingStore((s) => s.sheetOpen);
+  const [manual, setManual] = useState<SurveyTarget | null>(null);
+  const auto = useSurveyTrigger(me.data?.sung_tonight, focused && !editing && !sheetOpen && !manual, night.nightId);
+  const survey = manual ?? auto;
+  const previous = useLogStore((s) => (survey ? s.entries[survey.entryId]?.survey : undefined));
+  const openSurvey = (song: Song) => {
+    if (!song.history_id) return;
+    const target = { entryId: song.history_id, artist: song.request.song_artist, title: song.request.song_title };
+    useLogStore.getState().noteNomad(target.entryId, { artist: target.artist, title: target.title, nightId: night.nightId });
+    setManual(target);
+  };
 
   const tick = useTick(5_000);
   const rotationData = rotation.data;
@@ -183,7 +197,7 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
             onReorder={onReorder}
             {...rowActions}
           />
-          <SungTonight songs={data.sung_tonight} />
+          <SungTonight songs={data.sung_tonight} onSurvey={openSurvey} />
         </>
       ) : me.isPending ? (
         // Same size as the status tile, so nothing jumps when the first read lands (A.44).
@@ -216,6 +230,8 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
         entryId={survey?.entryId ?? null}
         artist={survey?.artist ?? ''}
         title={survey?.title ?? ''}
+        initial={previous ?? undefined}
+        onDone={() => setManual(null)}
       />
     </Screen>
   );

@@ -2,7 +2,7 @@ import * as decide from '@nomad/api-decide';
 
 import { useAuth } from '../../../auth/store';
 import { appStorage } from '../../../storage';
-import { setLogClock, useLogStore } from '../../../tonight/log/logStore';
+import { setLogClock, SURVEYED_TTL_MS, useLogStore } from '../../../tonight/log/logStore';
 import { outboxIdle, useOutbox } from '../../../tonight/log/outbox';
 import { setNightClock, useNightStore, userKeyFor } from '../../../tonight/nightStore';
 
@@ -57,7 +57,7 @@ it('survey save writes to outbox with survey only for kj_ ids', async () => {
   });
   // Mirrored locally and marked surveyed (never asked again).
   expect(useLogStore.getState().entries['kj_0123456789abcdef01234567']).toMatchObject({ source: 'kjbox', state: 'sung', survey: { feel: 'great' } });
-  expect(useLogStore.getState().surveyed['kj_0123456789abcdef01234567']).toBe(true);
+  expect(useLogStore.getState().surveyed['kj_0123456789abcdef01234567']).toBe(NOW);
 });
 
 it('a partial survey sends only the answered fields', async () => {
@@ -105,5 +105,21 @@ it('skipped surveys persist per user', () => {
   useLogStore.getState().rehydrate('other@example.com');
   expect(useLogStore.getState().surveyed).toEqual({});
   useLogStore.getState().rehydrate('sam@example.com');
-  expect(useLogStore.getState().surveyed).toEqual({ kj_z: true });
+  expect(useLogStore.getState().surveyed).toEqual({ kj_z: NOW });
+});
+
+it('surveyed marks older than 30 days are pruned', () => {
+  let now = NOW;
+  setLogClock(() => now);
+  useLogStore.getState().skipSurvey('kj_old');
+  now += SURVEYED_TTL_MS - 1000;
+  useLogStore.getState().skipSurvey('kj_new');
+  expect(Object.keys(useLogStore.getState().surveyed).sort()).toEqual(['kj_new', 'kj_old']);
+  now += 2000;
+  useLogStore.getState().rehydrate('sam@example.com');
+  expect(useLogStore.getState().surveyed).toEqual({ kj_new: NOW + SURVEYED_TTL_MS - 1000 });
+  // A legacy `true` mark is kept (its 30 days start now).
+  appStorage.set(`tonight.surveyed.v1.${userKeyFor('sam@example.com')}`, JSON.stringify({ kj_legacy: true }));
+  useLogStore.getState().rehydrate('sam@example.com');
+  expect(useLogStore.getState().surveyed).toEqual({ kj_legacy: now });
 });

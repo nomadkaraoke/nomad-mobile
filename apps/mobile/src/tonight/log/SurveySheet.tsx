@@ -15,6 +15,8 @@ export type SurveySheetProps = {
   title: string;
   /** Called after save or skip (the sheet is then done with this song). */
   onDone?: () => void;
+  /** Previous answers to start from (reopened from "How did it go?"). */
+  initial?: LogSurvey;
 };
 
 type Feel = NonNullable<LogSurvey['feel']>;
@@ -42,7 +44,7 @@ function Chip({ testID, label, selected, onPress }: { testID: string; label: str
  * The post-song survey (spec §6.3): how it felt, the key, crowd-pleaser and notes. Every answer is optional; it never
  * blocks (closing it skips, ruling E8-R3). Saving goes through the log store and the outbox (`{survey}` only).
  */
-export function SurveySheet({ entryId, artist, title, onDone }: SurveySheetProps) {
+export function SurveySheet({ entryId, artist, title, onDone, initial }: SurveySheetProps) {
   const t = useTranslations('tonight.survey');
   const skip = () => {
     if (entryId) useLogStore.getState().skipSurvey(entryId);
@@ -51,7 +53,7 @@ export function SurveySheet({ entryId, artist, title, onDone }: SurveySheetProps
   return (
     <Sheet visible={entryId !== null} onClose={skip} title={t('title')} testID="survey" closeLabel={t('close')}>
       {/* Keyed by the song: a new song starts with blank answers. */}
-      {entryId ? <SurveyForm key={entryId} entryId={entryId} artist={artist} title={title} onSkip={skip} onDone={onDone} /> : null}
+      {entryId ? <SurveyForm key={entryId} entryId={entryId} artist={artist} title={title} initial={initial} onSkip={skip} onDone={onDone} /> : null}
     </Sheet>
   );
 }
@@ -62,7 +64,9 @@ function SurveyForm({
   title,
   onSkip,
   onDone,
+  initial,
 }: {
+  initial?: LogSurvey;
   entryId: string;
   artist: string;
   title: string;
@@ -70,10 +74,10 @@ function SurveyForm({
   onDone?: () => void;
 }) {
   const t = useTranslations('tonight.survey');
-  const [feel, setFeel] = useState<Feel | null>(null);
-  const [key, setKey] = useState<Key | null>(null);
-  const [crowd, setCrowd] = useState<boolean | null>(null);
-  const [notes, setNotes] = useState('');
+  const [feel, setFeel] = useState<Feel | null>(initial?.feel ?? null);
+  const [key, setKey] = useState<Key | null>(initial?.key ?? null);
+  const [crowd, setCrowd] = useState<boolean | null>(initial?.crowd_pleaser ?? null);
+  const [notes, setNotes] = useState(initial?.notes ?? '');
 
   const save = () => {
     const trimmed = notes.trim();

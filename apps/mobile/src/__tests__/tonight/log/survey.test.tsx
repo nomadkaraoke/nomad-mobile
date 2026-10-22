@@ -8,6 +8,7 @@ import { useLogStore } from '../../../tonight/log/logStore';
 import { outboxIdle, useOutbox } from '../../../tonight/log/outbox';
 import { SurveySheet } from '../../../tonight/log/SurveySheet';
 import { useNightStore, type NomadNight } from '../../../tonight/nightStore';
+import { useEditingStore } from '../../../tonight/nomad/editingStore';
 import { NightScreen } from '../../../tonight/nomad/NightScreen';
 import { nightPoll } from '../../../tonight/nomad/queries';
 import { me, nightOpen, nowResult, renderTonight, rotationResult, song } from '../../../test-utils/tonightFixtures';
@@ -40,6 +41,7 @@ beforeEach(() => {
   jest.useRealTimers();
   jest.clearAllMocks();
   appStorage.clearAll();
+  useEditingStore.setState({ editing: false, sheetOpen: false });
   Object.assign(nightPoll, { meMs: 40, nowMs: 60_000, rotationMs: 60_000, nightMs: 60_000, closedMs: 60_000, backoffMs: [60_000] });
   useAuth.setState({ state: { status: 'signedIn', session: { token: 't', email: 'sam@example.com', createdAt: 0 } } });
   useNightStore.getState().rehydrate('sam@example.com');
@@ -76,7 +78,7 @@ it('survey opens once per newly sung song', async () => {
   // Several more polls of the same /me: it never reopens.
   await sleep(150);
   expect(screen.queryByTestId('survey')).toBeNull();
-  expect(useLogStore.getState().surveyed[KJ1]).toBe(true);
+  expect(useLogStore.getState().surveyed[KJ1]).toEqual(expect.any(Number));
 
   // A friend's song (no history_id) never opens it; the next sung song of their own does.
   api.getMe.mockResolvedValue(
@@ -135,7 +137,49 @@ it('a second tap on a chosen answer clears it; closing the sheet skips', async (
   fireEvent.press(screen.getByTestId('survey-feel-great'));
   fireEvent.press(screen.getByTestId('survey-close'));
   expect(onDone).toHaveBeenCalled();
-  expect(useLogStore.getState().surveyed.kj_q).toBe(true);
+  expect(useLogStore.getState().surveyed.kj_q).toEqual(expect.any(Number));
   await outboxIdle();
   expect(dapi.putKaraokeLog).not.toHaveBeenCalled();
+});
+
+it('"How did it go?" on a sung row reopens the survey after a skip, and saves from it', async () => {
+  api.getMe.mockResolvedValue(
+    me({ sung_tonight: [sung('Starlight', KJ1, { request: { song_artist: 'Muse' } }), sung('Friend Song', null, { owner: 'friend' })] }),
+  );
+  renderTonight(<NightScreen night={night} focused />);
+  fireEvent.press(await screen.findByTestId('survey-skip'));
+  await waitFor(() => expect(screen.queryByTestId('survey') === null).toBe(true));
+
+  fireEvent.press(screen.getByTestId('tonight-sung-toggle'));
+  expect(screen.queryByTestId('sung-null-survey')).toBeNull(); // no history_id: no button
+  fireEvent.press(screen.getByTestId(`sung-${KJ1}-survey`));
+  expect(await screen.findByTestId('survey')).toBeTruthy();
+  fireEvent.press(screen.getByTestId('survey-key-too_low'));
+  fireEvent.press(screen.getByTestId('survey-save'));
+  await waitFor(() => expect(screen.queryByTestId('survey') === null).toBe(true));
+  await outboxIdle();
+  expect(dapi.putKaraokeLog).toHaveBeenCalledWith(KJ1, { survey: { key: 'too_low', answered_at: expect.any(String) } });
+
+  // Reopened again: starts from the saved answers.
+  fireEvent.press(screen.getByTestId(`sung-${KJ1}-survey`));
+  expect(await screen.findByTestId('survey')).toBeTruthy();
+  expect(screen.getByTestId('survey-key-too_low').props.accessibilityState).toMatchObject({ selected: true });
+  expect(screen.getByTestId('survey-feel-great').props.accessibilityState).toMatchObject({ selected: false });
+  fireEvent.press(screen.getByTestId('survey-crowd-yes'));
+  fireEvent.press(screen.getByTestId('survey-save'));
+  await outboxIdle();
+  expect(dapi.putKaraokeLog).toHaveBeenLastCalledWith(KJ1, {
+    survey: { key: 'too_low', crowd_pleaser: true, answered_at: expect.any(String) },
+  });
+});
+
+it('the automatic survey waits while another sheet is open on the night screen', async () => {
+  useEditingStore.setState({ sheetOpen: true });
+  api.getMe.mockResolvedValue(me({ sung_tonight: [sung('Starlight', KJ1)] }));
+  renderTonight(<NightScreen night={night} focused />);
+  await screen.findByTestId('tonight-freshness');
+  await sleep(100);
+  expect(screen.queryByTestId('survey')).toBeNull();
+  act(() => useEditingStore.getState().setSheetOpen(false));
+  expect(await screen.findByTestId('survey')).toBeTruthy();
 });

@@ -68,14 +68,27 @@ function loadEntries(userKey: string | null): Record<string, LogEntry> {
   }
   return out;
 }
-const loadSurveyed = (userKey: string | null): Record<string, true> =>
-  loadJson<Record<string, true>>(userKey ? surveyedKey(userKey) : null, isRecord, {});
+/** Surveyed/skipped marks are kept this long (a night's songs never come back after that). */
+export const SURVEYED_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+/** id → when it was surveyed or skipped (ms epoch); marks older than 30 days are pruned. */
+function pruneSurveyed(marks: Record<string, unknown>): Record<string, number> {
+  const now = clock();
+  const out: Record<string, number> = {};
+  for (const [id, at] of Object.entries(marks)) {
+    const when = typeof at === 'number' ? at : now; // a legacy `true` mark starts its 30 days now
+    if (now - when <= SURVEYED_TTL_MS) out[id] = when;
+  }
+  return out;
+}
+const loadSurveyed = (userKey: string | null): Record<string, number> =>
+  pruneSurveyed(loadJson<Record<string, unknown>>(userKey ? surveyedKey(userKey) : null, isRecord, {}));
 
 type LogStore = {
   userKey: string | null;
   entries: Record<string, LogEntry>;
   /** Ids whose post-song survey was saved or skipped (ruling E8-R3: it opens once per song). */
-  surveyed: Record<string, true>;
+  surveyed: Record<string, number>;
   /** Logs a song at another bar (`app_<uuid>`) under the active Other night; returns the id (null when signed out). */
   addOther(song: LogSong, state: LogState): string | null;
   /** Mirrors a Nomad song kjbox reported sung (local only: kjbox delivers the facts to decide). */
@@ -106,7 +119,7 @@ export const useLogStore = create<LogStore>((set, get) => {
   const markSurveyed = (id: string) => {
     const { userKey } = get();
     if (!userKey || get().surveyed[id]) return;
-    const surveyed = { ...get().surveyed, [id]: true as const };
+    const surveyed = pruneSurveyed({ ...get().surveyed, [id]: clock() });
     appStorage.set(surveyedKey(userKey), JSON.stringify(surveyed));
     set({ surveyed });
   };

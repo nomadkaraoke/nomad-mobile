@@ -42,7 +42,20 @@ export function mergePatch(a: KaraokeLogPatch, b: KaraokeLogPatch): KaraokeLogPa
   return out as KaraokeLogPatch;
 }
 
+/**
+ * Item version counter. It must stay above every stored item's rev: a persisted item and a new write coalesced onto
+ * it while in flight must never share a rev (the in-flight success would then drop the merged patch). Bumped past
+ * the stored maximum on every load, so it survives restarts.
+ */
+let rev = 0;
+
 function load(userKey: string | null): OutboxItem[] {
+  const items = loadRaw(userKey);
+  for (const i of items) if (typeof i.rev === 'number' && i.rev > rev) rev = i.rev;
+  return items;
+}
+
+function loadRaw(userKey: string | null): OutboxItem[] {
   if (!userKey) return [];
   try {
     const raw = appStorage.getString(keyFor(userKey));
@@ -77,7 +90,6 @@ const emailOf = (): string | null => {
   return s.status === 'signedIn' ? s.session.email : null;
 };
 
-let rev = 0;
 let flushing: Promise<void> | null = null;
 let timer: ReturnType<typeof setTimeout> | null = null;
 const clearTimer = () => {
@@ -141,6 +153,9 @@ export const useOutbox = create<OutboxStore>((set, get) => {
       const items = [...get().items];
       const i = items.findIndex((x) => x.id === id);
       const prev = i >= 0 ? items[i] : undefined;
+      // A queued delete wins over a later put for the same id: the record is gone (decide's `deleted: false` would
+      // not reliably revive it, and new songs always get a new id), so the put is dropped and the delete kept.
+      if (op === 'put' && prev?.op === 'delete') return;
       const next: OutboxItem =
         op === 'delete'
           ? { id, op, rev: ++rev }

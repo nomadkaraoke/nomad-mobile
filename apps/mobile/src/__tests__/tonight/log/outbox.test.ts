@@ -214,3 +214,44 @@ it('signed out: nothing is queued', () => {
   expect(useOutbox.getState().items).toEqual([]);
   expect(useLogStore.getState().addOther({ artist: 'A', title: 'T' }, 'sung')).toBeNull();
 });
+
+it('item revs stay unique across restarts: a write coalesced onto a stored item in flight is still sent', async () => {
+  // Learn the rev this launch's counter would hand out next (on a cold start that is 1).
+  api.putKaraokeLog.mockRejectedValueOnce(new ApiError(400, 'invalid'));
+  const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+  useOutbox.getState().enqueue('probe', 'put', {});
+  const nextRev = useOutbox.getState().items[0]!.rev + 1;
+  await outboxIdle();
+  warn.mockRestore();
+  // A previous launch left an item queued with exactly that rev: loading it must move the counter past it.
+  appStorage.set(
+    `tonight.outbox.v1.${userKeyFor('a@example.com')}`,
+    JSON.stringify([{ id: 'app_1', op: 'put', patch: { state: 'planned', artist: 'A', title: 'T' }, rev: nextRev }]),
+  );
+  useOutbox.getState().rehydrate('a@example.com');
+  const release = gate();
+  void useOutbox.getState().flush();
+  useOutbox.getState().enqueue('app_1', 'put', { state: 'sung' });
+  expect(useOutbox.getState().items[0]!.rev).toBeGreaterThan(nextRev);
+  api.putKaraokeLog.mockResolvedValue(entry);
+  release();
+  await outboxIdle();
+  await outboxIdle();
+  expect(api.putKaraokeLog).toHaveBeenLastCalledWith('app_1', { state: 'sung', artist: 'A', title: 'T' });
+  expect(useOutbox.getState().items).toEqual([]);
+});
+
+it('a put after a queued delete for the same id keeps the delete', async () => {
+  const release = gate();
+  useOutbox.getState().enqueue('app_0', 'put', { state: 'planned', artist: 'Z', title: 'Z' });
+  useOutbox.getState().enqueue('app_1', 'delete');
+  useOutbox.getState().enqueue('app_1', 'put', { survey: { feel: 'ok' } });
+  expect(useOutbox.getState().items.map((i) => [i.id, i.op])).toEqual([
+    ['app_0', 'put'],
+    ['app_1', 'delete'],
+  ]);
+  release();
+  await outboxIdle();
+  expect(api.deleteKaraokeLog).toHaveBeenCalledWith('app_1');
+  expect(api.putKaraokeLog).not.toHaveBeenCalledWith('app_1', expect.anything());
+});
