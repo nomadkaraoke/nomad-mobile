@@ -579,6 +579,47 @@
       "endBody": "Tonight's songs stay saved in your karaoke log.",
       "keepLogging": "Keep logging",
       "unknownArtist": "Unknown artist"
+    },
+    "empty": {
+      "intro": "At a Nomad Karaoke night? Join it to request songs and see when you're up.",
+      "scan": "Scan the host's QR code",
+      "enterCode": "Enter the night code"
+    },
+    "code": {
+      "label": "Night code",
+      "placeholder": "The code on the host's screen",
+      "submit": "Join",
+      "invalid": "That doesn't look like a night code. It's the numbers on the host's screen."
+    },
+    "scan": {
+      "title": "Scan the QR code",
+      "hint": "Point your camera at the QR code on the host's screen.",
+      "whyTitle": "Join with your camera",
+      "why": "The app uses your camera only to read the QR code on the host's screen. Nothing is recorded or saved.",
+      "allow": "Allow camera",
+      "denied": "Camera access is off for this app. Turn it on in Settings, or enter the night code instead.",
+      "openSettings": "Open Settings",
+      "enterCodeInstead": "Enter the night code instead"
+    },
+    "join": {
+      "title": "Join tonight",
+      "loading": "Finding tonight's night…",
+      "signIn": "Sign in to join tonight's night.",
+      "signInButton": "Sign in",
+      "badCode": "That code isn't tonight's. Check the code on the host's screen and try again.",
+      "notStarted": "Tonight's night hasn't started yet. Try again once the host opens requests.",
+      "closed": "The host has paused requests for now.",
+      "nameTitle": "What should the host call you?",
+      "nameBody": "The host will call you up with this name.",
+      "nameLabel": "Your name",
+      "namePlaceholder": "Your first name",
+      "nameConfirm": "Join tonight",
+      "nameOpen": "Choose your name",
+      "switchTitle": "Switch to this night?",
+      "switchBody": "You're already in another night. Leave it and join this one?",
+      "switchConfirm": "Switch to this night",
+      "switchKeep": "Stay where I am",
+      "close": "Close"
     }
   },
   "makeTab": {

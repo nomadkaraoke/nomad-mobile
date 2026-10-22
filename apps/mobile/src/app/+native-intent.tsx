@@ -1,5 +1,6 @@
 // Rewrites links the system hands the app before Expo Router routes them (docs: router/advanced/native-intent).
 import { isFreshIntent, useMakeIntent } from '../make/intentStore';
+import { parseNightLink } from '../tonight/links';
 
 /** nomadkaraoke://checkout (any query): gen's checkout bounce back to the app (see credits/useCheckout.ts). */
 const CHECKOUT_RETURN = /^nomadkaraoke:\/\/\/?checkout(?:[?#/]|$)/i;
@@ -15,6 +16,13 @@ export function redirectSystemPath({ path, initial }: { path: string; initial: b
   if (CHECKOUT_RETURN.test(path)) {
     if (!initial) return null;
     return isFreshIntent(useMakeIntent.getState().intent) ? '/make/new' : '/me';
+  }
+  // Night links (spec §4.2, ruling E3-R1): kjbox.cc/<code> (any case: the printed QR is HTTP://KJBOX.CC/<code>),
+  // sing.nomadkaraoke.com/?t=<code> and nomadkaraoke://tonight?t=<code> open the join route. Only full links: a bare
+  // code is never a system path.
+  if (path.includes('://')) {
+    const link = parseNightLink(path);
+    if (link) return `/tonight/join?t=${link.code}`;
   }
   return path;
 }

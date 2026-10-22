@@ -41,9 +41,11 @@ it('opens on Discover and shows four tabs: Discover, Tonight, Make, Me', async (
   expect(screen.getByText('Me')).toBeTruthy();
 });
 
-it('Tonight is a coming-soon placeholder', async () => {
+it('Tonight with no night shows the ways in (E3)', async () => {
   renderRouter(makeRoutes(), { initialUrl: '/tonight' });
-  expect(await screen.findByText("Coming soon: your requests and tonight's queue")).toBeTruthy();
+  expect(await screen.findByTestId('tonight-scan')).toBeTruthy();
+  expect(screen.getByTestId('tonight-enter-code')).toBeTruthy();
+  expect(screen.getByTestId('tonight-start-other')).toBeTruthy();
 });
 
 it('Me (signed in): credits from gen, Buy credits, language, email and sign out', async () => {
