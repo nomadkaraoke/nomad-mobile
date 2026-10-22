@@ -10,6 +10,9 @@ import { useAuth } from '../auth/store';
 import { QUIZ_STORAGE_KEY, useQuizDraft } from '../discover/quizStore';
 import { appStorage } from '../storage';
 import { gen, session } from '../test-utils/genAuthMock';
+
+// Router-rendered screens with optimistic edits run slowly on CI runners (5 s default timed out there).
+jest.setTimeout(20_000);
 import { appRoutes } from '../test-utils/routes';
 
 jest.mock('@nomad/api-decide', () => ({
