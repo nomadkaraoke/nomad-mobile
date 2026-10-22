@@ -93,6 +93,7 @@ export function ArtistStep() {
   const artists = useQuizDraft((s) => s.draft.artists);
   const suggestions = useQuizDraft((s) => s.suggestions);
   const suggesting = useQuizDraft((s) => s.suggesting);
+  const askedForSuggestions = useQuizDraft((s) => s.suggestedFor !== null);
   const [query, setQuery] = useState('');
   const results = useArtistSearch(query);
   // "Your artists" (picks that aren't suggestions) never drops an artist, even after a tap turns it off.
@@ -200,6 +201,11 @@ export function ArtistStep() {
             />
           ))}
         </View>
+        {!suggesting && askedForSuggestions && suggestions.length === 0 ? (
+          <Text testID="quiz-suggestions-none" variant="muted">
+            {t('suggestionsNone')}
+          </Text>
+        ) : null}
         {suggesting ? (
           <View testID="quiz-suggestions-loading" className="flex-row items-center gap-2 py-2">
             <ActivityIndicator color={colors.primary} />

@@ -692,6 +692,7 @@
     "reasonFallback": "Bài hát karaoke phổ biến",
     "skip": "Bỏ qua",
     "songSearchLabel": "Tìm bài hát",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "Hiện chưa có gợi ý nào. Hãy tìm kiếm nghệ sĩ ở trên, hoặc bỏ qua bước này."
   }
 }

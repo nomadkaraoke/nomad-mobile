@@ -692,6 +692,7 @@
     "reasonFallback": "Popularne w karaoke",
     "skip": "Pomiń",
     "songSearchLabel": "Znajdź piosenkę",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "Brak propozycji w tej chwili. Wyszukaj wykonawcę powyżej lub pomiń ten krok."
   }
 }

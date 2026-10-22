@@ -692,6 +692,7 @@
     "reasonFallback": "Populaires en karaoké",
     "skip": "Passer",
     "songSearchLabel": "Trouver un morceau",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "Aucune suggestion pour le moment. Recherche un artiste ci-dessus ou passe cette étape."
   }
 }

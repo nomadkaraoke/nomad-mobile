@@ -692,6 +692,7 @@
     "reasonFallback": "인기 노래방 곡",
     "skip": "건너뛰기",
     "songSearchLabel": "노래 찾기",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "지금은 추천 항목이 없습니다. 위에서 아티스트를 검색하거나 이 단계를 건너뛰세요."
   }
 }

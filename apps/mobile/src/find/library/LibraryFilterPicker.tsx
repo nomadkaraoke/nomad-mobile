@@ -27,7 +27,7 @@ export function LibraryFilterPicker() {
         ))}
       </ChipRow>
       {filter === 'karafun' ? (
-        <Text variant="muted" testID="library-filter-info" className="px-4">
+        <Text variant="muted" testID="library-filter-info">
           {t('libraryInfo')}
         </Text>
       ) : null}

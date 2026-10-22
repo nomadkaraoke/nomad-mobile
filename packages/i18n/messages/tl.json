@@ -692,6 +692,7 @@
     "reasonFallback": "Sikat sa karaoke",
     "skip": "Laktawan",
     "songSearchLabel": "Maghanap ng kanta",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "Walang mga mungkahi sa ngayon. Maghanap ng artist sa itaas, o laktawan ang hakbang na ito."
   }
 }

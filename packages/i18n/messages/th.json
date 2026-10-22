@@ -692,6 +692,7 @@
     "reasonFallback": "คาราโอเกะยอดนิยม",
     "skip": "ข้าม",
     "songSearchLabel": "ค้นหาเพลง",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "ยังไม่มีคำแนะนำในขณะนี้ ค้นหาศิลปินที่ด้านบน หรือข้ามขั้นตอนนี้ไปได้เลย"
   }
 }

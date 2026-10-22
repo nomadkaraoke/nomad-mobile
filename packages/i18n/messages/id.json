@@ -692,6 +692,7 @@
     "reasonFallback": "Populer untuk karaoke",
     "skip": "Lewati",
     "songSearchLabel": "Cari lagu",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "Belum ada saran saat ini. Cari artis di atas, atau lewati langkah ini."
   }
 }

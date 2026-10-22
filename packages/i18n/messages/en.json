@@ -679,6 +679,7 @@
     "yourArtists": "Your artists",
     "suggestionsTitle": "Suggested for you",
     "suggestionsLoading": "Finding artists for you…",
+    "suggestionsNone": "No suggestions right now. Search for an artist above, or skip this step.",
     "reasonFallback": "Popular for karaoke",
     "badgeLike": "✓ Like",
     "badgeLove": "♥ Love",

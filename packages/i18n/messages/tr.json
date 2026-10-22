@@ -692,6 +692,7 @@
     "reasonFallback": "Karaokede popüler",
     "skip": "Geç",
     "songSearchLabel": "Bir şarkı bul",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "Şu anda öneri yok. Yukarıdan bir sanatçı ara veya bu adımı atla."
   }
 }

@@ -4,8 +4,8 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, colors, Text } from '@nomad/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { router, useFocusEffect, useLocalSearchParams, type Href } from 'expo-router';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, BackHandler, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, BackHandler, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { openSignIn } from '../../auth/signInUi';
@@ -15,7 +15,9 @@ import { DecadeEnergyStep } from '../../discover/quiz/DecadeEnergyStep';
 import { GenreStep } from '../../discover/quiz/GenreStep';
 import { SongStep } from '../../discover/quiz/SongStep';
 import { useQuizDraft } from '../../discover/quizStore';
+import { PROFILE_KEY } from '../../discover/profile/useMusicProfile';
 import { RECS_KEY } from '../../discover/useRecommendations';
+import { useKeyboardHeight } from '../../ui/useKeyboardHeight';
 
 const STEPS = 4;
 type Step = QuizDraft['step'];
@@ -43,22 +45,6 @@ function SignedOut() {
   );
 }
 
-/**
- * How far the screen's content starts below the top of the window, for KeyboardAvoidingView's
- * keyboardVerticalOffset. Measured, because under an iOS page-sheet modal it is the sheet's top inset plus the
- * header, which no constant gets right on every device.
- */
-function useWindowTop() {
-  const ref = useRef<View>(null);
-  const [top, setTop] = useState(0);
-  const onLayout = useCallback(() => {
-    ref.current?.measureInWindow?.((_x, y) => {
-      if (Number.isFinite(y)) setTop(y);
-    });
-  }, []);
-  return { ref, top, onLayout };
-}
-
 /** True when step 2 or 3 has no answer yet: its button says Skip instead of Next. */
 function unanswered(d: QuizDraft): boolean {
   if (d.step === 2) return d.decades.length === 0 && d.energy === null;
@@ -69,7 +55,8 @@ function unanswered(d: QuizDraft): boolean {
 function Quiz({ owner }: { owner: string }) {
   const t = useTranslations('quiz');
   const insets = useSafeAreaInsets();
-  const { ref: windowTopRef, top: windowTop, onLayout: onWindowTopLayout } = useWindowTop();
+  // The quiz reaches the bottom of the screen, so its footer rides on the keyboard's height.
+  const keyboard = useKeyboardHeight();
   const queryClient = useQueryClient();
   const { step: stepParam, from } = useLocalSearchParams<{ step?: string; from?: string }>();
   const fromProfile = from === 'profile';
@@ -135,6 +122,8 @@ function Quiz({ owner }: { owner: string }) {
     await Promise.allSettled(d.songs.map((x) => loveSong(x.songKey, { artist: x.artist, title: x.title })));
     // Reset (not just invalidate): Discover shows its picks loading, not the old "take the quiz" card.
     void queryClient.resetQueries({ queryKey: RECS_KEY });
+    // The music profile shows the new answers and loved songs (finishing from it returns there).
+    void queryClient.invalidateQueries({ queryKey: PROFILE_KEY });
     router.dismissTo((fromProfile ? '/me/music-profile' : '/discover') as Href);
     // After leaving, and without resetting what's on screen, so the closing modal doesn't flash the loader.
     useQuizDraft.getState().clear();
@@ -151,63 +140,56 @@ function Quiz({ owner }: { owner: string }) {
   const { step } = draft;
   const skip = unanswered(draft);
   return (
-    <View ref={windowTopRef} onLayout={onWindowTopLayout} style={{ flex: 1, backgroundColor: colors.bg }}>
-      <KeyboardAvoidingView
-        testID="quiz-screen"
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={windowTop}
+    <View testID="quiz-screen" style={{ flex: 1, backgroundColor: colors.bg }}>
+      <ScrollView contentContainerClassName="gap-4 p-4" keyboardShouldPersistTaps="handled">
+        <Text testID="quiz-step" variant="muted">
+          {t('stepOf', { step, total: STEPS })}
+        </Text>
+        {step === 1 ? <GenreStep /> : step === 2 ? <DecadeEnergyStep /> : step === 3 ? <ArtistStep /> : <SongStep />}
+      </ScrollView>
+      {/* Sticky: Next / Skip / Finish never scroll away. */}
+      <View
+        className="gap-2 border-t border-border bg-bg px-4 pt-3"
+        style={{ paddingBottom: keyboard > 0 ? keyboard + 12 : Math.max(insets.bottom, 12) }}
       >
-        <ScrollView contentContainerClassName="gap-4 p-4" keyboardShouldPersistTaps="handled">
-          <Text testID="quiz-step" variant="muted">
-            {t('stepOf', { step, total: STEPS })}
+        {failed ? (
+          <Text testID="quiz-error" variant="error">
+            {t('submitError')}
           </Text>
-          {step === 1 ? <GenreStep /> : step === 2 ? <DecadeEnergyStep /> : step === 3 ? <ArtistStep /> : <SongStep />}
-        </ScrollView>
-        {/* Sticky: Next / Skip / Finish never scroll away. */}
-        <View
-          className="gap-2 border-t border-border bg-bg px-4 pt-3"
-          style={{ paddingBottom: Math.max(insets.bottom, 12) }}
-        >
-          {failed ? (
-            <Text testID="quiz-error" variant="error">
-              {t('submitError')}
-            </Text>
-          ) : null}
-          <View className="flex-row gap-3">
-            {step > 1 ? (
-              <View className="flex-1">
-                <Button
-                  testID="quiz-back"
-                  variant="secondary"
-                  label={t('back')}
-                  disabled={submitting}
-                  onPress={() => goTo((step - 1) as Step)}
-                />
-              </View>
-            ) : null}
-            <View className="flex-[2]">
-              {step === STEPS ? (
-                <Button testID="quiz-finish" label={t('finish')} loading={submitting} onPress={() => void finish()} />
-              ) : skip ? (
-                <Button
-                  testID="quiz-skip"
-                  variant="secondary"
-                  label={t('skip')}
-                  onPress={() => goTo((step + 1) as Step)}
-                />
-              ) : (
-                <Button
-                  testID="quiz-next"
-                  label={t('next')}
-                  disabled={!canAdvance(draft)}
-                  onPress={() => goTo((step + 1) as Step)}
-                />
-              )}
+        ) : null}
+        <View className="flex-row gap-3">
+          {step > 1 ? (
+            <View className="flex-1">
+              <Button
+                testID="quiz-back"
+                variant="secondary"
+                label={t('back')}
+                disabled={submitting}
+                onPress={() => goTo((step - 1) as Step)}
+              />
             </View>
+          ) : null}
+          <View className="flex-[2]">
+            {step === STEPS ? (
+              <Button testID="quiz-finish" label={t('finish')} loading={submitting} onPress={() => void finish()} />
+            ) : skip ? (
+              <Button
+                testID="quiz-skip"
+                variant="secondary"
+                label={t('skip')}
+                onPress={() => goTo((step + 1) as Step)}
+              />
+            ) : (
+              <Button
+                testID="quiz-next"
+                label={t('next')}
+                disabled={!canAdvance(draft)}
+                onPress={() => goTo((step + 1) as Step)}
+              />
+            )}
           </View>
         </View>
-      </KeyboardAvoidingView>
+      </View>
     </View>
   );
 }

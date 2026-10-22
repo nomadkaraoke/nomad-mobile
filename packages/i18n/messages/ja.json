@@ -692,6 +692,7 @@
     "reasonFallback": "カラオケの人気曲",
     "skip": "スキップ",
     "songSearchLabel": "曲を探す",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "現在おすすめはありません。上の検索バーからアーティストを検索するか、このステップをスキップしてください。"
   }
 }

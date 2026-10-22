@@ -276,6 +276,19 @@ describe('quiz', () => {
     expect(screen.getByTestId('quiz-suggestions-loading')).toBeTruthy();
   });
 
+  it('says so when no suggestions came back (a failed call), instead of an empty grid', async () => {
+    await signIn();
+    smart.mockRejectedValue(new Error('500'));
+    open();
+    fireEvent.press(await screen.findByTestId('quiz-genre-punk'));
+    fireEvent.press(screen.getByTestId('quiz-next'));
+    fireEvent.press(await screen.findByTestId('quiz-skip'));
+    expect(await screen.findByTestId('quiz-suggestions-none')).toBeTruthy();
+    expect(screen.queryByTestId('quiz-suggestions-loading')).toBeNull();
+    // Skippable: the step has no answer.
+    expect(screen.getByTestId('quiz-skip')).toBeTruthy();
+  });
+
   it('finish submits, loves songs and returns to Discover', async () => {
     await signIn();
     getProgress.mockResolvedValue({

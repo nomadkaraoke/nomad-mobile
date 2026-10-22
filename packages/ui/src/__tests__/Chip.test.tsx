@@ -28,5 +28,7 @@ it('ChipRow renders its children in a horizontal scroller', () => {
     </ChipRow>,
   );
   expect(screen.getByTestId('row').props.horizontal).toBe(true);
+  // Never grows along a flex column's main axis (it stretched the chips tall above the picks list).
+  expect(screen.getByTestId('row').props.style).toEqual(expect.objectContaining({ flexGrow: 0 }));
   expect(screen.getByText('child')).toBeTruthy();
 });

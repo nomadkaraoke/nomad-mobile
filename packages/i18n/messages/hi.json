@@ -692,6 +692,7 @@
     "reasonFallback": "कराओके के लिए लोकप्रिय",
     "skip": "स्किप करो",
     "songSearchLabel": "गाना ढूंढो",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "अभी कोई सुझाव नहीं हैं। ऊपर किसी कलाकार को खोजो, या इस चरण को छोड़ दो।"
   }
 }

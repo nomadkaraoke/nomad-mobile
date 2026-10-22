@@ -692,6 +692,7 @@
     "reasonFallback": "Популярно в караоке",
     "skip": "Пропустить",
     "songSearchLabel": "Найти песню",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "Сейчас нет рекомендаций. Найди исполнителя выше или пропусти этот шаг."
   }
 }

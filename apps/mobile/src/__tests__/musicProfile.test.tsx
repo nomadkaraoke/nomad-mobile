@@ -188,6 +188,20 @@ describe('musicProfile', () => {
       await waitFor(() => expect(app.getPathname()).toBe('/me/music-profile'));
     });
 
+    it('finishing an edit opened from the profile shows the new answers there (no stale profile)', async () => {
+      await signIn();
+      const app = open();
+      await waitFor(() => expect(screen.getByTestId('profile-genres')).toHaveTextContent('Rock, Classic rock'));
+      fireEvent.press(screen.getByTestId('profile-edit-genres'));
+      await waitFor(() => expect(app.getPathname()).toBe('/discover/quiz'));
+      // decide now has the new answers (what the submit below saves).
+      m(decide.getPreferences).mockResolvedValue({ genres: ['metal'], decades: ['1990s'], energy_preference: 'high' });
+      act(() => useQuizDraft.getState().update((d) => ({ ...d, step: 4 })));
+      fireEvent.press(await screen.findByTestId('quiz-finish'));
+      await waitFor(() => expect(app.getPathname()).toBe('/me/music-profile'));
+      await waitFor(() => expect(screen.getByTestId('profile-genres')).toHaveTextContent('Metal'));
+    });
+
     it('an artist removed on the profile does not come back from a stale saved progress', async () => {
       m(decide.getQuizProgress).mockResolvedValue({
         step: 3,

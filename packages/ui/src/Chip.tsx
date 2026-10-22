@@ -32,14 +32,18 @@ export function Chip({ label, selected, onPress, testID, accessibilityHint, role
 
 export type ChipRowProps = { children: ReactNode; testID: string };
 
-/** Chips in one horizontally scrolling line. */
+/** The row stays one chip high: a ScrollView grows by default, and in a flex column it stretched the chips tall. */
+const ROW_STYLE = { flexGrow: 0 } as const;
+
+/** Chips in one horizontally scrolling line, aligned with the screen's content (no inset of its own). */
 export function ChipRow({ children, testID }: ChipRowProps) {
   return (
     <ScrollView
       testID={testID}
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerClassName="gap-2 px-4"
+      style={ROW_STYLE}
+      contentContainerClassName="gap-2"
     >
       {children}
     </ScrollView>

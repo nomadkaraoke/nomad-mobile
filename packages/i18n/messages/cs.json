@@ -692,6 +692,7 @@
     "reasonFallback": "Oblíbené na karaoke",
     "skip": "Přeskočit",
     "songSearchLabel": "Najít skladbu",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "Právě teď nemáme žádné návrhy. Vyhledej interpreta výše, nebo tento krok přeskoč."
   }
 }

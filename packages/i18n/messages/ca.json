@@ -692,6 +692,7 @@
     "reasonFallback": "Populars per al karaoke",
     "skip": "Omet",
     "songSearchLabel": "Cerca una cançó",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "Ara mateix no hi ha cap suggeriment. Cerca un artista a dalt o omet aquest pas."
   }
 }

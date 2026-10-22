@@ -692,6 +692,7 @@
     "reasonFallback": "热门卡拉OK推荐",
     "skip": "跳过",
     "songSearchLabel": "查找歌曲",
-    "songValue": "{title} · {artist}"
+    "songValue": "{title} · {artist}",
+    "suggestionsNone": "目前没有推荐。请在上方搜索歌手，或跳过此步骤。"
   }
 }
