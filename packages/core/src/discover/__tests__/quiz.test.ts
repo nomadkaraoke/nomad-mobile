@@ -1,4 +1,4 @@
-import { canAdvance, cycleAffinity, EMPTY_QUIZ, fromProgress, toggle, toProgressRequest, toSubmitRequest } from '../index';
+import { canAdvance, cycleAffinity, EMPTY_QUIZ, fromProgress, mergeProgress, mergeSubmit, toggle, toProgressRequest, toSubmitRequest } from '../index';
 import type { QuizDraft } from '../index';
 
 describe('toggle', () => {
@@ -108,5 +108,69 @@ describe('progress', () => {
       artists: [{ name: 'A', mbid: 'a-1', affinity: 'like' }],
       songs: [{ songKey: 's', artist: 'x', title: 'y' }],
     });
+  });
+});
+
+describe('mergeProgress (decide PUT /api/quiz/progress replaces the whole doc)', () => {
+  const saved = {
+    step: 5,
+    genres: ['rock'],
+    decades: ['1990s'],
+    energy_preference: 'high',
+    vocal_comfort_pref: 'easy',
+    crowd_pleaser_pref: 'deep_cuts',
+    artist_affinities: [
+      { artist_name: 'Muse', affinity: 'occasionally' },
+      { artist_name: 'Queen', affinity: 'occasionally' },
+    ],
+    manual_artists: [{ artist_name: 'Muse', mbid: 'm-1', artist_id: 'sp-1', genres: ['rock'] }],
+    enjoy_songs: [{ song_id: 'k1', artist: 'Band', title: 'Invented', singing_tags: ['belter'], notes: 'n' }],
+  };
+  const draft = fromProgress(saved) as QuizDraft;
+
+  it('keeps the web-only fields mobile does not edit', () => {
+    const out = mergeProgress(saved, toProgressRequest({ ...draft, step: 2 }));
+    expect(out.vocal_comfort_pref).toBe('easy');
+    expect(out.crowd_pleaser_pref).toBe('deep_cuts');
+    expect(out.step).toBe(2);
+    expect(out.manual_artists).toEqual([{ artist_name: 'Muse', mbid: 'm-1', artist_id: 'sp-1', genres: ['rock'] }]);
+    expect(out.enjoy_songs).toEqual([
+      { song_id: 'k1', artist: 'Band', title: 'Invented', singing_tags: ['belter'], notes: 'n' },
+    ]);
+  });
+  it('keeps "occasionally" while mobile still says like, and lets mobile edits win', () => {
+    const edited = cycleAffinity(draft, 'Queen'); // like -> love
+    const out = mergeProgress(saved, toProgressRequest(edited));
+    expect(out.artist_affinities).toEqual([
+      { artist_name: 'Muse', affinity: 'occasionally' },
+      { artist_name: 'Queen', affinity: 'love' },
+    ]);
+  });
+  it('drops removed artists and songs, and is the plain request without a saved doc', () => {
+    const removed = { ...cycleAffinity(cycleAffinity(draft, 'Muse'), 'Muse'), songs: [] };
+    const out = mergeProgress(saved, toProgressRequest(removed));
+    expect(out.artist_affinities).toEqual([{ artist_name: 'Queen', affinity: 'occasionally' }]);
+    expect(out.manual_artists).toEqual([]);
+    expect(out.enjoy_songs).toEqual([]);
+    const plain = toProgressRequest(draft);
+    expect(mergeProgress(null, plain)).toEqual(plain);
+  });
+});
+
+describe('mergeSubmit', () => {
+  it('carries the web-only prefs and "occasionally" into the submit body', () => {
+    const saved = {
+      step: 3,
+      vocal_comfort_pref: 'challenging',
+      crowd_pleaser_pref: 'hits',
+      artist_affinities: [{ artist_name: 'Muse', affinity: 'occasionally' }],
+    };
+    const d = fromProgress(saved) as QuizDraft;
+    const out = mergeSubmit(saved, toSubmitRequest(d));
+    expect(out.vocal_comfort_pref).toBe('challenging');
+    expect(out.crowd_pleaser_pref).toBe('hits');
+    expect(out.artist_affinities).toEqual([{ artist_name: 'Muse', affinity: 'occasionally' }]);
+    expect(out).not.toHaveProperty('step');
+    expect(mergeSubmit(undefined, toSubmitRequest(d))).toEqual(toSubmitRequest(d));
   });
 });

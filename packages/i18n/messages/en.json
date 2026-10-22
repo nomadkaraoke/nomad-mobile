@@ -634,5 +634,41 @@
       "note": "This is a quick check that the lyrics are in sync, on a plain black background.",
       "translationNote": "Your {language} translation is added after review."
     }
+  },
+  "quiz": {
+    "title": "Your picks",
+    "stepOf": "Step {step} of {total}",
+    "genresTitle": "What do you love to sing?",
+    "genresHint": "Pick at least one genre.",
+    "decadesTitle": "Which decades?",
+    "decadesHint": "Pick any that fit, or skip.",
+    "energyTitle": "What kind of energy?",
+    "energy": {
+      "chill": "Chill",
+      "medium": "Mixed",
+      "high": "Big energy"
+    },
+    "artistsTitle": "Artists you love",
+    "artistsHint": "Tap once to like, twice to love.",
+    "artistSearchLabel": "Find an artist",
+    "artistSearchPlaceholder": "Search artists",
+    "artistNoResults": "No artists found. Try another spelling.",
+    "yourArtists": "Your artists",
+    "suggestionsTitle": "Suggested for you",
+    "suggestionsLoading": "Finding artists for you…",
+    "reasonFallback": "Popular for karaoke",
+    "badgeLike": "✓ Like",
+    "badgeLove": "♥ Love",
+    "songsTitle": "Songs you love (optional)",
+    "songsHint": "Tap songs you love singing.",
+    "songSearchLabel": "Find a song",
+    "songSearchPlaceholder": "Search songs",
+    "yourSongs": "Your songs",
+    "songValue": "{title} · {artist}",
+    "back": "Back",
+    "skip": "Skip",
+    "next": "Next",
+    "finish": "Finish",
+    "submitError": "Couldn't save your answers. Try again."
   }
 }

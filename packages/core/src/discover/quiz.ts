@@ -124,3 +124,63 @@ export function fromProgress(p: unknown): QuizDraft | null {
     songs,
   };
 }
+
+// decide's PUT /api/quiz/progress replaces the whole progress doc, and decide web edits fields mobile doesn't
+// (the "occasionally" affinity, vocal comfort, hits vs deep cuts, per-song singing notes, Spotify ids). The merges
+// below lay a mobile request over the doc read from GET /api/quiz/progress so mobile's autosave never wipes them.
+
+type AffinityEntry = { artist_name: string; affinity: 'occasionally' | 'like' | 'love' };
+const norm = (s: string) => s.trim().toLowerCase();
+const records = (v: unknown): Record<string, unknown>[] => (Array.isArray(v) ? v.filter(isRecord) : []);
+
+/** Mobile's "like" stays decide web's "occasionally" when that is what was saved; any other edit wins. */
+function keepOccasionally(saved: Record<string, unknown>, entries: AffinityEntry[]): AffinityEntry[] {
+  const occasionally = new Set(
+    records(saved.artist_affinities)
+      .filter((a) => a.affinity === 'occasionally' && typeof a.artist_name === 'string')
+      .map((a) => norm(a.artist_name as string)),
+  );
+  return entries.map((a) =>
+    a.affinity === 'like' && occasionally.has(norm(a.artist_name)) ? { ...a, affinity: 'occasionally' } : a,
+  );
+}
+
+/** Each entry keeps the saved entry's extra fields (same `field` value), with mobile's fields on top. */
+function keepExtras<T extends Record<string, unknown>>(saved: unknown, entries: T[], field: keyof T & string): T[] {
+  const byKey = new Map<string, Record<string, unknown>>();
+  for (const s of records(saved)) if (typeof s[field] === 'string') byKey.set(norm(s[field] as string), s);
+  return entries.map((e) => {
+    const old = byKey.get(norm(e[field] as string));
+    return old ? ({ ...old, ...e } as T) : e;
+  });
+}
+
+type WithWebFields<T> = Omit<T, 'artist_affinities'> & { artist_affinities: AffinityEntry[] } & Record<string, unknown>;
+export type ProgressBody = WithWebFields<ReturnType<typeof toProgressRequest>>;
+export type SubmitBody = WithWebFields<ReturnType<typeof toSubmitRequest>>;
+
+/** The PUT /api/quiz/progress body: `req` over the saved doc (null when nothing was saved). */
+export function mergeProgress(saved: unknown, req: ReturnType<typeof toProgressRequest>): ProgressBody {
+  if (!isRecord(saved)) return req;
+  return {
+    ...saved,
+    ...req,
+    artist_affinities: keepOccasionally(saved, req.artist_affinities),
+    manual_artists: keepExtras(saved.manual_artists, req.manual_artists, 'artist_name'),
+    enjoy_songs: keepExtras(saved.enjoy_songs, req.enjoy_songs, 'song_id'),
+  };
+}
+
+/** The POST /api/quiz/submit body: also carries the saved web-only answers into the profile. */
+export function mergeSubmit(saved: unknown, req: ReturnType<typeof toSubmitRequest>): SubmitBody {
+  if (!isRecord(saved)) return req;
+  const out: SubmitBody = {
+    ...req,
+    artist_affinities: keepOccasionally(saved, req.artist_affinities),
+    manual_artists: keepExtras(saved.manual_artists, req.manual_artists, 'artist_name'),
+  };
+  for (const k of ['vocal_comfort_pref', 'crowd_pleaser_pref'] as const) {
+    if (typeof saved[k] === 'string') out[k] = saved[k];
+  }
+  return out;
+}
