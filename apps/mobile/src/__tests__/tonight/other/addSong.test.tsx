@@ -1,6 +1,8 @@
 import * as decide from '@nomad/api-decide';
 import type { SearchResponse, SongGroup } from '@nomad/api-decide';
-import { fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react-native';
+
+import { useLibraryFilter } from '../../../find/library';
 
 import { UNKNOWN_ARTIST, useLogStore } from '../../../tonight/log/logStore';
 import { outboxIdle, useOutbox } from '../../../tonight/log/outbox';
@@ -47,6 +49,7 @@ beforeEach(() => {
   jest.useRealTimers();
   jest.clearAllMocks();
   mockOffline = false;
+  act(() => useLibraryFilter.setState({ filter: 'any' }));
   signedInClean();
   otherNight();
   dapi.putKaraokeLog.mockResolvedValue({ id: 'x', user_id: 'u', source: 'app' });
@@ -59,21 +62,35 @@ afterEach(async () => {
 
 const entries = () => Object.values(useLogStore.getState().entries);
 
-it('library filter applies to add search (E9-R1: the slot is above the results, the library reaches decide search)', async () => {
+it('library filter applies to add search (E9-R1: Discover\'s picker sits above the results, the choice reaches decide search)', async () => {
+  dapi.searchSongs.mockResolvedValue(response([starlight]));
+  renderTonight(<AddSong />);
+  expect(within(screen.getByTestId('other-add-library-slot')).getByTestId('library-filter')).toBeTruthy();
+  fireEvent.press(screen.getByTestId('library-filter-karafun'));
+  expect(useLibraryFilter.getState().filter).toBe('karafun'); // the shared filter: Discover and search see it too
+  fireEvent.changeText(screen.getByTestId('other-add-query'), 'starlight');
+  expect(await screen.findByTestId('other-add-result-0')).toBeTruthy();
+  expect(dapi.searchSongs).toHaveBeenLastCalledWith('starlight', expect.objectContaining({ library: 'karafun' }));
+});
+
+it('the venue filter chosen elsewhere (Discover) carries into the add search; `any` by default', async () => {
+  dapi.searchSongs.mockResolvedValue(response([starlight]));
+  act(() => useLibraryFilter.getState().set('community'));
+  renderTonight(<AddSong />);
+  expect(screen.getByTestId('library-filter-community').props.accessibilityState).toEqual(expect.objectContaining({ selected: true }));
+  fireEvent.changeText(screen.getByTestId('other-add-query'), 'starlight');
+  expect(await screen.findByTestId('other-add-result-0')).toBeTruthy();
+  expect(dapi.searchSongs).toHaveBeenCalledWith('starlight', expect.objectContaining({ library: 'community' }));
+  fireEvent.press(screen.getByTestId('library-filter-any'));
+  await waitFor(() => expect(dapi.searchSongs).toHaveBeenLastCalledWith('starlight', expect.objectContaining({ library: 'any' })));
+});
+
+it('a library prop overrides the venue filter', async () => {
   dapi.searchSongs.mockResolvedValue(response([starlight]));
   renderTonight(<AddSong library="karafun" />);
-  expect(screen.getByTestId('other-add-library-slot')).toBeTruthy();
   fireEvent.changeText(screen.getByTestId('other-add-query'), 'starlight');
   expect(await screen.findByTestId('other-add-result-0')).toBeTruthy();
   expect(dapi.searchSongs).toHaveBeenCalledWith('starlight', expect.objectContaining({ library: 'karafun' }));
-});
-
-it('without a library the search uses the venue filter (Phase 3 default: any)', async () => {
-  dapi.searchSongs.mockResolvedValue(response([starlight]));
-  renderTonight(<AddSong />);
-  fireEvent.changeText(screen.getByTestId('other-add-query'), 'starlight');
-  expect(await screen.findByTestId('other-add-result-0')).toBeTruthy();
-  expect(dapi.searchSongs.mock.calls[0]?.[1]?.library).toBe('any');
 });
 
 it('picking a result logs it with its song_key in the chosen state', async () => {

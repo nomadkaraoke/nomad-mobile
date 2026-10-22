@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useLibraryFilter } from '../../find/library';
 import { MIN_QUERY_CHARS, useSearch } from '../../find/useSearch';
 import { IdeasPanel } from '../log/IdeasPanel';
 import { SurveySheet } from '../log/SurveySheet';
@@ -30,7 +31,7 @@ type Picked = { song: LogSong; typed: boolean };
 export type AddSongProps = {
   /** A song chosen elsewhere (the song page's "Add to tonight"): skips the search. */
   prefill?: LogSong;
-  /** Venue library override for the search (`useSearch` defaults to Discover's venue filter, `useLibraryFilter()`). */
+  /** Venue library override for the search; by default the picker's choice (Discover's shared `useLibraryFilter()`). */
   library?: LibraryFilter;
 };
 
@@ -45,7 +46,8 @@ export function AddSong({ prefill, library }: AddSongProps) {
   const [q, setQ] = useState('');
   const [picked, setPicked] = useState<Picked | null>(prefill ? { song: prefill, typed: false } : null);
   const [survey, setSurvey] = useState<{ id: string; song: LogSong } | null>(null);
-  const search = useSearch(picked ? '' : q, library ? { library } : {});
+  const venueLibrary = useLibraryFilter((s) => s.filter);
+  const search = useSearch(picked ? '' : q, { library: library ?? venueLibrary });
 
   const query = q.trim();
   const searching = query.length >= MIN_QUERY_CHARS;
