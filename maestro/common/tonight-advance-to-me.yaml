@@ -1,0 +1,25 @@
+# The host moves the rotation on (test API) until the singer is on stage (the status tile's onStage state, any
+# language), refreshing instead of waiting for the 15 s poll.
+appId: com.nomadkaraoke.mobile
+---
+- repeat:
+    times: 15
+    while:
+      notVisible:
+        id: "tonight-status-onStage"
+    commands:
+      - runScript:
+          file: ../scripts/stack.js
+          env:
+            ACTION: kjbox
+            KJBOX_STACK: ${KJBOX_STACK}
+            OP: advance
+      - runFlow: tonight-refresh.yaml
+      # Wait for the refreshed answer, so the loop never moves past the singer's turn (that marks them Done).
+      - extendedWaitUntil:
+          visible:
+            id: "tonight-status-onStage"
+          timeout: 4000
+          optional: true
+- assertVisible:
+    id: "tonight-status-onStage"

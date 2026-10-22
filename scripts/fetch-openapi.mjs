@@ -1,4 +1,5 @@
 // Refresh the committed OpenAPI snapshots from prod. Run via `pnpm gen:api`.
+// kjbox is read from a file (KJBOX_OPENAPI_PATH), not a URL.
 // Pass names to refresh only some (`node scripts/fetch-openapi.mjs gen`).
 // GEN_OPENAPI_URL points gen at another stack, e.g. the local one:
 //   GEN_OPENAPI_URL=http://127.0.0.1:8010/openapi.json node scripts/fetch-openapi.mjs gen
@@ -8,9 +9,14 @@
 // default URL below does not answer yet: pass the decide search local stack (scripts/search-local-stack.sh up in
 // karaoke-decide), identical code to prod:
 //   DECIDE_SEARCH_OPENAPI_URL=http://127.0.0.1:8020/api/search/openapi.json node scripts/fetch-openapi.mjs decide-search
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
+
+// kjbox's contract is a committed file in the kjbox repo, not served by a URL: the main clone's
+// (KJBOX_OPENAPI_PATH overrides, e.g. a kjbox worktree with an unmerged contract change).
+const KJBOX_PATH = process.env.KJBOX_OPENAPI_PATH || '../kjbox/kj-controller/docs/api/singer-v1.openapi.json';
 
 const SOURCES = {
+  kjbox: KJBOX_PATH,
   gen: process.env.GEN_OPENAPI_URL || 'https://api.nomadkaraoke.com/openapi.json',
   // decide.nomadkaraoke.com only routes /api/* to Cloud Run, so fetch the spec from Cloud Run directly.
   decide: process.env.DECIDE_OPENAPI_URL || 'https://karaoke-decide-718638054799.us-central1.run.app/openapi.json',
@@ -23,6 +29,7 @@ const only = process.argv.slice(2);
 for (const name of only) if (!(name in SOURCES)) throw new Error(`unknown snapshot "${name}" (have: ${Object.keys(SOURCES).join(', ')})`);
 
 async function fetchJson(url) {
+  if (!/^https?:/.test(url)) return JSON.parse(await readFile(url, 'utf8'));
   for (let attempt = 1; ; attempt++) {
     try {
       const res = await fetch(url, { signal: AbortSignal.timeout(60_000) });

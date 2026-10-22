@@ -38,3 +38,48 @@ it('enables Sign in with Apple only with EXPO_PUBLIC_APPLE_SIGNIN=1', () => {
   expect(c.plugins).toContain('expo-apple-authentication');
   expect(entitlementsMod(c)).toBeUndefined();
 });
+
+// Ruling E3-R2: night links (spec §4.2). Android App Links for kjbox.cc (the printed QR is HTTP://KJBOX.CC/<code>, and
+// Android matches hosts case-sensitively, so the uppercase host gets its own filter) and sing.nomadkaraoke.com path /.
+describe('night links', () => {
+  const VIEW = { action: 'VIEW', autoVerify: true, category: ['BROWSABLE', 'DEFAULT'] };
+  afterEach(() => {
+    delete process.env.EXPO_PUBLIC_ASSOCIATED_DOMAINS;
+  });
+
+  it('adds verified Android intent filters for kjbox.cc, www.kjbox.cc and sing.nomadkaraoke.com, and a plain one for KJBOX.CC', () => {
+    expect(resolve().android?.intentFilters).toEqual([
+      {
+        ...VIEW,
+        data: [
+          { scheme: 'http', host: 'kjbox.cc' },
+          { scheme: 'https', host: 'kjbox.cc' },
+          { scheme: 'http', host: 'www.kjbox.cc' },
+          { scheme: 'https', host: 'www.kjbox.cc' },
+        ],
+      },
+      { ...VIEW, data: [{ scheme: 'https', host: 'sing.nomadkaraoke.com', path: '/' }] },
+      // Ruling E3-R6: unverified (no autoVerify), so it can never affect the verified hosts; uppercase scheme too.
+      {
+        action: 'VIEW',
+        category: ['BROWSABLE', 'DEFAULT'],
+        data: [
+          { scheme: 'http', host: 'KJBOX.CC' },
+          { scheme: 'https', host: 'KJBOX.CC' },
+          { scheme: 'HTTP', host: 'KJBOX.CC' },
+        ],
+      },
+    ]);
+  });
+
+  it('has no iOS associated domains by default (they need the team-signed build)', () => {
+    expect(resolve().ios?.associatedDomains).toBeUndefined();
+  });
+
+  it('adds iOS associated domains only with EXPO_PUBLIC_ASSOCIATED_DOMAINS=1', () => {
+    process.env.EXPO_PUBLIC_ASSOCIATED_DOMAINS = '1';
+    const c = resolve();
+    expect(c.ios?.associatedDomains).toEqual(['applinks:kjbox.cc', 'applinks:www.kjbox.cc', 'applinks:sing.nomadkaraoke.com']);
+    expect(c.ios?.bundleIdentifier).toBe('com.nomadkaraoke.mobile');
+  });
+});

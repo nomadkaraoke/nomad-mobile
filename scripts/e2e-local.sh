@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Maestro E2E against the gen local stack (real FastAPI backend, fake workers) and decide's local stack (the main
+# Maestro E2E against the gen local stack (real FastAPI backend, fake workers), decide's local stack (the main
 # API on :8030 with a fixture catalog and the test API, plus the search service on a fixture song index on :8020)
+# and kjbox's local stack (the singer API on :8040 with the fixture night, event code 2121, and the test API)
 # on an iOS simulator or an Android emulator. Needs the dev client already installed (npx expo run:ios /
 # run:android in apps/mobile).
 #
@@ -9,18 +10,21 @@
 #   scripts/e2e-local.sh --platform ios --locale he --screen review-tour
 #                                     # a screenshot-only flow (maestro/screens/<name>.yaml) with the app in that
 #                                     # language (default en); shots go to docs/screenshots/phase2/review/<platform>/<locale>
-#                                     # (discover-* screens: docs/screenshots/phase3a/<platform>/<locale>)
+#                                     # (discover-* screens: docs/screenshots/phase3a/<platform>/<locale>;
+#                                     # tonight-* screens: docs/screenshots/phase5/<platform>/<locale>)
+#   scripts/e2e-local.sh --platform ios tonight          # the Tonight flows (tonight-1…11)
 #
 # Env: GEN_DIR (gen checkout with scripts/local-stack.sh, at least v0.278.2 plus the fake match judge; default
 #      ../karaoke-gen, the main clone: pull it first, or point GEN_DIR at a gen worktree with the code you want),
 #      DECIDE_DIR (decide checkout with scripts/local-stack.sh, the main API + search stack; default
 #      ../karaoke-decide-phase3-discover while that branch is unmerged and the worktree exists, else
 #      ../karaoke-decide), DECIDE_GEN_PARTNER_SECRET (shared by both stacks so decide's
-#      /resolve reaches gen; default local-stack-secret), IOS_DEVICE (simulator name or UDID; default
+#      /resolve reaches gen; default local-stack-secret), KJBOX_DIR (kjbox checkout with
+#      kj-controller/scripts/local-stack.sh; default ../kjbox; only used when the run has Tonight flows; reset fresh every such run unless KJBOX_KEEP=1), IOS_DEVICE (simulator name or UDID; default
 #      "iPhone 17 Pro"), ANDROID_SERIAL (default emulator-5554).
 #
 # Both platforms use the same http://127.0.0.1 URLs: on Android, `adb reverse` maps the gen API (8010), gen web
-# (3010), decide search (8020) and decide main API (8030) ports, so one set of stacks serves both and every link opens on either.
+# (3010), decide search (8020), decide main API (8030) and kjbox (8040) ports, so one set of stacks serves both and every link opens on either.
 # Metro is the exception on Android: the dev launcher loads it from 10.0.2.2:8081 (maestro/common/launch.yaml).
 # If adb reports "device offline" mid-run (it wipes the reverse rules), give the AVD more RAM and -gpu host
 # (see CLAUDE.md § E2E).
@@ -42,10 +46,14 @@ if [[ -z "${DECIDE_DIR:-}" ]]; then
   fi
 fi
 PARTNER_SECRET="${DECIDE_GEN_PARTNER_SECRET:-local-stack-secret}"
+KJBOX_DIR="${KJBOX_DIR:-$ROOT/../kjbox}"
 STACK="http://127.0.0.1:8010"
 WEB="http://127.0.0.1:3010"
 SEARCH="http://127.0.0.1:8020"
 DECIDE="http://127.0.0.1:8030"
+KJBOX="http://127.0.0.1:8040"
+# The app's kjbox base: the box serves the singer API under /sing (on sing.nomadkaraoke.com the tunnel maps / to it).
+KJBOX_APP="$KJBOX/sing"
 MAESTRO="${MAESTRO:-$(command -v maestro || echo "$HOME/.maestro/bin/maestro")}"
 PLATFORM=""
 FILTER=""
@@ -57,11 +65,24 @@ while [[ $# -gt 0 ]]; do
     --platform) PLATFORM="$2"; shift 2 ;;
     --locale) LOCALE="$2"; shift 2 ;;
     --screen) SCREEN="$2"; shift 2 ;;
-    -h|--help) sed -n '2,32p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,37p' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
 [[ "$PLATFORM" == ios || "$PLATFORM" == android ]] || { echo "usage: $0 --platform ios|android [flow-filter]" >&2; exit 2; }
+
+# kjbox (and the stack-control helper) only when this run has Tonight flows: a flow tagged `tonight` among the
+# filtered ones, or a tonight* screen tour. Make / Search / Review / Discover runs don't need ../kjbox.
+needs_kjbox() {
+  if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == tonight* ]]; return; fi
+  local f
+  while IFS= read -r f; do
+    grep -qE '^\s*-\s*tonight\s*$' "$f" && return 0
+  done < <(ls "$ROOT"/maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } || true)
+  return 1
+}
+NEED_KJBOX=0
+if needs_kjbox; then NEED_KJBOX=1; fi
 
 # 1. The gen local stack (API :8010, web :3010). LOCAL_STACK_API_URL is what fake-checkout and handoff
 #    links point at; 127.0.0.1 works on both platforms (adb reverse on Android). The partner secret lets
@@ -83,14 +104,46 @@ fi
 curl -sf -m 5 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@example.com"}' \
   "$DECIDE/api/test/profile/reset" || { echo "decide at $DECIDE has no /api/test (DECIDE_TEST_API off?)" >&2; exit 1; }
 
+# 2b. kjbox's local stack (:8040): the real singer API (v1) on the fixture night, event code 2121, with
+#     /sing/api/test/*. It verifies app tokens against gen (:8010) and sends sung songs to decide (:8030), so it
+#     starts after both. `up` is idempotent and keeps the night (and its night_id) across restarts.
+kjbox_ready() { [[ "$(curl -s -m 3 -o /dev/null -w '%{http_code}' "$KJBOX/sing/api/v1/night?t=2121")" == 401 ]]; }
+CONTROL_PID=""
+if [[ "$NEED_KJBOX" == 1 ]]; then
+  # A fresh box every run (`reset` wipes ~/kjdata-localstack and reseeds the fixture night): a make-it from an earlier
+  # run (tonight-7, the tour) lands in the box's library, after which "machu picchu strokes" has a karaoke version.
+  # KJBOX_KEEP=1 keeps the running stack as it is.
+  if [[ "${KJBOX_KEEP:-}" == 1 ]] && kjbox_ready; then :
+  else
+    echo "Starting kjbox's local stack fresh from $KJBOX_DIR"
+    (cd "$KJBOX_DIR/kj-controller" && scripts/local-stack.sh reset)
+  fi
+  curl -sf -m 5 -o /dev/null "$KJBOX/sing/api/test/state" || { echo "kjbox at $KJBOX has no /sing/api/test (KJBOX_TEST_API off?)" >&2; exit 1; }
+  # tonight-9 stops and restarts the kjbox stack mid-flow ("box unreachable"), tonight-10 decide's (the karaoke log
+  # offline); Maestro scripts can only make HTTP calls, so a loopback helper (scripts/stack-control.py, :8049) runs
+  # local-stack.sh down/up for them.
+  if ! curl -sf -m 2 http://127.0.0.1:8049/health >/dev/null; then
+    python3 "$ROOT/scripts/stack-control.py" --kjbox-dir "$KJBOX_DIR" --decide-dir "$DECIDE_DIR" >/tmp/nomad-mobile-stack-control.log 2>&1 &
+    CONTROL_PID=$!
+  fi
+else
+  echo "No Tonight flows in this run: kjbox's local stack not needed"
+fi
+
 # 3. Device prep.
 if [[ "$PLATFORM" == android ]]; then
   SERIAL="${ANDROID_SERIAL:-emulator-5554}"
   adb -s "$SERIAL" wait-for-device
-  for port in 8010 3010 8020 8030; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
+  # An AVD left in airplane mode (a manual offline check) can't reach Metro on 10.0.2.2 (ENETUNREACH on every launch).
+  adb -s "$SERIAL" shell cmd connectivity airplane-mode disable >/dev/null 2>&1 || true
+  for port in 8010 3010 8020 8030 8040; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
   # Skip Chrome's first-run screen inside the Custom Tab (the flows also tap past it if it shows).
   adb -s "$SERIAL" shell 'echo "_ --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line'
   adb -s "$SERIAL" shell am set-debug-app --persistent com.android.chrome >/dev/null
+  # tonight-1 opens the printed QR's App Link (https://kjbox.cc/2121). The local debug build's assetlinks can't verify,
+  # so make the app the user-selected handler for the night-link hosts (Android 12+), else a chooser shows.
+  adb -s "$SERIAL" shell pm set-app-links-user-selection --user 0 --package com.nomadkaraoke.mobile true \
+    kjbox.cc www.kjbox.cc sing.nomadkaraoke.com >/dev/null 2>&1 || true
   DEVICE="$SERIAL"
 else
   DEVICE="${IOS_DEVICE:-iPhone 17 Pro}"
@@ -121,14 +174,19 @@ stop_metro() {
   for _ in $(seq 1 15); do metro_up || break; sleep 1; done
   METRO_PID=""
 }
-trap stop_metro EXIT
+cleanup() {
+  stop_metro
+  [[ -z "$CONTROL_PID" ]] || kill "$CONTROL_PID" 2>/dev/null || true
+}
+trap cleanup EXIT
 # Args: extra VAR=value pairs for the bundle.
 start_metro() {
   echo "Starting Metro (logs: $METRO_LOG) $*"
   # --clear: the EXPO_PUBLIC_* values are baked into cached transforms, and new special route files
   # (e.g. +native-intent) need a fresh route context.
   (cd "$ROOT/apps/mobile" && exec env EXPO_PUBLIC_GEN_API_URL="$STACK" EXPO_PUBLIC_GEN_WEB_URL="$WEB" \
-    EXPO_PUBLIC_DECIDE_API_URL="$DECIDE" EXPO_PUBLIC_DECIDE_SEARCH_URL="$SEARCH" EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 CI=1 "$@" \
+    EXPO_PUBLIC_DECIDE_API_URL="$DECIDE" EXPO_PUBLIC_DECIDE_SEARCH_URL="$SEARCH" EXPO_PUBLIC_KJBOX_API_URL="$KJBOX_APP" \
+    EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 CI=1 "$@" \
     npx expo start --dev-client --port 8081 --clear) >"$METRO_LOG" 2>&1 &
   METRO_PID=$!
   local deadline=$((SECONDS + 120))
@@ -148,7 +206,8 @@ SHOTS="docs/screenshots/phase1b/$PLATFORM"
 # The native review flows (review-*, Phase 2) and Discover (discover-*, Phase 3a) keep their shots apart.
 REVIEW_SHOTS="docs/screenshots/phase2/$PLATFORM"
 DISCOVER_SHOTS="docs/screenshots/phase3a/$PLATFORM"
-mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS"
+TONIGHT_SHOTS="docs/screenshots/phase5/$PLATFORM"
+mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS"
 ALL=()
 while IFS= read -r f; do ALL+=("$f"); done < <(ls maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } || true)
 [[ ${#ALL[@]} -gt 0 ]] || { echo "no flow matches $FILTER" >&2; exit 2; }
@@ -208,8 +267,9 @@ run_hebrew() {
 }
 
 run_flows() {
-  "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e PLATFORM="$PLATFORM" \
-    -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" -e DISCOVER_SHOTS="$DISCOVER_SHOTS" "$@"
+  "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" \
+    -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
+    -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" "$@"
 }
 status=0
 
@@ -219,6 +279,7 @@ if [[ -n "$SCREEN" ]]; then
   [[ -f "maestro/screens/$SCREEN.yaml" ]] || { echo "no maestro/screens/$SCREEN.yaml" >&2; exit 2; }
   lang="${LOCALE:-en}"
   if [[ "$SCREEN" == discover* ]]; then TOUR_SHOTS="$DISCOVER_SHOTS/$lang"
+  elif [[ "$SCREEN" == tonight* ]]; then TOUR_SHOTS="$TONIGHT_SHOTS/$lang"
   else TOUR_SHOTS="docs/screenshots/phase2/review/$PLATFORM/$lang"; fi
   mkdir -p "$TOUR_SHOTS"
   metro_up || start_metro
@@ -232,7 +293,7 @@ fi
 # out on iOS, which drops the picks the phone kept).
 if metro_up; then
   echo "Using the Metro already on :8081 (it must have EXPO_PUBLIC_GEN_API_URL=$STACK, EXPO_PUBLIC_DECIDE_API_URL=$DECIDE," \
-    "EXPO_PUBLIC_DECIDE_SEARCH_URL=$SEARCH and EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1; the force-offline flows also need" \
+    "EXPO_PUBLIC_DECIDE_SEARCH_URL=$SEARCH, EXPO_PUBLIC_KJBOX_API_URL=$KJBOX_APP and EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1; the force-offline flows also need" \
     "EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1)"
   if [[ ${#ONLINE[@]} -gt 0 ]]; then run_flows "${ONLINE[@]}" || status=$?; fi
   run_hebrew || status=$?

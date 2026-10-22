@@ -1,13 +1,11 @@
-import { useTranslations } from '@nomad/i18n';
-import { Screen, Text } from '@nomad/ui';
+import { installPendingMakePurge } from '../../tonight/make/pendingMake';
+import { TonightHome } from '../../tonight/TonightHome';
 
-/** Phase 1 placeholder: kjbox nights land here in a later phase (docs/VISION.md). */
+// App open and every night change: forget other nights' pending makes (their ids are no use to a new night).
+// (Module scope: runs once, when the tab's module first loads.)
+installPendingMakePurge();
+
+/** Tonight: the night home, the Other-night log, or the ways in (TonightHome). */
 export default function TonightScreen() {
-  const t = useTranslations('tonight');
-  return (
-    <Screen testID="tonight-screen">
-      <Text variant="title">{t('title')}</Text>
-      <Text variant="muted">{t('comingSoon')}</Text>
-    </Screen>
-  );
+  return <TonightHome />;
 }

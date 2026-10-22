@@ -20,6 +20,7 @@ export const GEN_WEB_URL = process.env.EXPO_PUBLIC_GEN_WEB_URL || 'https://gen.n
 export const DECIDE_API_URL = process.env.EXPO_PUBLIC_DECIDE_API_URL || 'https://decide.nomadkaraoke.com';
 /** The search service's origin. Same as the main decide API unless split (locally: search :8020, main API :8030). */
 export const DECIDE_SEARCH_URL = process.env.EXPO_PUBLIC_DECIDE_SEARCH_URL || DECIDE_API_URL;
+export const KJBOX_API_URL = process.env.EXPO_PUBLIC_KJBOX_API_URL || 'https://sing.nomadkaraoke.com';
 
 export const GOOGLE_WEB_CLIENT_ID =
   process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || '718638054799-fush0smd1e4icq9pt0immp8n59jjlebh.apps.googleusercontent.com';

@@ -17,6 +17,7 @@ import { identifiedIntent, typedIntent, useMakeIntent, type MakeIntent } from '.
 import { useOffline } from '../../net/useOffline';
 import { openOfflineReader } from '../../offline/offlineIndex';
 import { useOfflineIndexStore } from '../../offline/offlineIndexStore';
+import { SongTonightAction } from '../../tonight/other/SongTonightAction';
 
 /** The song from the offline list on this phone, or null (no list, not in it, or a broken file). */
 function offlineDetail(key: string): SongDetail | null {
@@ -214,6 +215,7 @@ function KnownSong({ songKey, also = [] }: { songKey: string; also?: string[] })
   return (
     <Screen testID="song-screen" scroll>
       {body}
+      {detail ? <SongTonightAction song={detail.song} /> : null}
       {offline ? (
         detail ? (
           <Text testID="song-make-offline" variant="muted">

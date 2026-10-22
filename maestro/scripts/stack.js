@@ -1,6 +1,6 @@
 // Maestro runScript helper for the gen local stack's test API (/api/test/*, fake workers only).
 // Env (pass with runScript `env:`; STACK comes from `maestro test -e STACK=http://127.0.0.1:8010`):
-//   ACTION   setup | code | config | judge | job | scenario | review | decide-seed | decide-reset
+//   ACTION   setup | code | config | judge | job | scenario | review | decide-seed | decide-reset | kjbox | decide | log
 //   setup:   NAME (flow name, used in the unique email), CREDITS (default 2),
 //            USER_CONFIG (JSON, per-user fake-config knobs: fail_at, auto_approve, audio_duration_seconds,
 //            youtube_url_enabled, step_delay_seconds, judge_*), GLOBAL_CONFIG (JSON, merged over the defaults
@@ -37,6 +37,28 @@
 //            docs/TESTING.md § Local stack). DECIDE_STACK defaults to http://127.0.0.1:8030 (decide's main API).
 //            -> output.decideUserId
 //   decide-reset: EMAIL (default output.email) -> deletes that user's decide profile, loved and hidden songs.
+//   kjbox:   OP, one of kjbox's local-stack test API calls (KJBOX_STACK, default http://127.0.0.1:8040; kjbox
+//            docs/TESTING.md § Local stack). BODY (JSON, optional) is sent as is; the shortcuts below build it.
+//            reset       FIXTURE (default|empty) -> a new night (new night_id), event code 2121, fixture flags
+//                        -> output.nightId
+//            seed        SINGER (name), SONGS (JSON [{artist, title}]), EMAIL (an app user: linked to that gen account;
+//                        "me" = output.email), DEVICE_ID (a web phone); neither = host-typed -> output.entryIds (JSON)
+//            advance     TIMES (default 1): the singer on stage → Done, the next one on stage -> output.nowSinging
+//            done        ENTRY_ID (default: whoever is on stage)        undone  ENTRY_ID
+//            flags       BODY {make, simple_mode, ask_photo_consent, open, auto_approve, auto_reorder}
+//            host-add    SINGER, ARTIST, TITLE -> output.entryId       host-remove  ENTRY_ID, DELETE ("true")
+//            rate-limits BODY {per_device, per_ip}                     drain  -> output.sent
+//            state       -> output.kjState (JSON); EXPECT_ENTRY_TITLE (+ EXPECT_ENTRY_STATUS, EXPECT_ENTRY_SINGER):
+//                        fails unless a rotation entry whose song text contains the title has that status / singer
+//            stop | start  stops / starts the kjbox stack itself through scripts/stack-control.py (CONTROL, default
+//                        http://127.0.0.1:8049, started by e2e-local.sh): the "box unreachable" case
+//            Entry ids of the user's own songs: `state` and the app's testIDs (tonight-song-<request id>).
+//   decide:  OP stop | start -> stops / starts decide's local stack (stack-control.py, as kjbox stop/start)
+//   log:     EMAIL (default output.email) -> decide's karaoke log for that user (GET ${DECIDE_STACK}/api/test/karaoke-log),
+//            polled until the expectations hold or WAIT_MS (default 20000) passes (kjbox's outbox sends every 5 s):
+//            EXPECT_COUNT (live, non-deleted records), EXPECT_TITLE (+ EXPECT_STATE sung|requested|planned|…,
+//            EXPECT_SUNG_AT "set", EXPECT_FEEL great|ok|bad, EXPECT_KEY, EXPECT_SOURCE kjbox|app) on the record
+//            with that title -> output.logEntries (JSON)
 // Wrapped in a function: a flow can run this file more than once, and top-level `let`s must not collide.
 (function () {
   const base = (typeof STACK !== 'undefined' && STACK && STACK !== 'undefined' && STACK) || 'http://127.0.0.1:8010';
@@ -44,6 +66,11 @@
   const decideBase =
     (typeof DECIDE_STACK !== 'undefined' && DECIDE_STACK && DECIDE_STACK !== 'undefined' && DECIDE_STACK) ||
     'http://127.0.0.1:8030';
+  const kjboxBase =
+    (typeof KJBOX_STACK !== 'undefined' && KJBOX_STACK && KJBOX_STACK !== 'undefined' && KJBOX_STACK) ||
+    'http://127.0.0.1:8040';
+  const controlBase =
+    (typeof CONTROL !== 'undefined' && CONTROL && CONTROL !== 'undefined' && CONTROL) || 'http://127.0.0.1:8049';
 
   // Every flow starts from these global knobs, so a flow that changed them can't leak into the next one.
   const NO_JUDGE = { judge_kind: 'none', judge_canonical_artist: '', judge_canonical_title: '' };
@@ -285,6 +312,123 @@
         'decide profile seed',
       );
       output.decideUserId = res.user_id;
+    }
+  } else if (action === 'kjbox') {
+    const op = envValue(typeof OP !== 'undefined' ? OP : undefined);
+    if (!op) throw new Error('ACTION kjbox needs OP');
+    const env = (v) => envValue(v);
+    const body = envJson(typeof BODY !== 'undefined' ? BODY : undefined);
+    const entryId = env(typeof ENTRY_ID !== 'undefined' ? ENTRY_ID : undefined);
+    if (entryId !== null) body.entry_id = Number(entryId);
+    const post = (path, b) =>
+      check(
+        http.post(kjboxBase + '/sing/api/test/' + path, { headers: JSON_HEADERS, body: JSON.stringify(b || {}) }),
+        'kjbox ' + path,
+      );
+    const singer = env(typeof SINGER !== 'undefined' ? SINGER : undefined);
+    if (op === 'stop' || op === 'start') {
+      check(http.post(controlBase + '/kjbox/' + op, { headers: JSON_HEADERS, body: '{}' }), 'kjbox ' + op);
+    } else if (op === 'reset') {
+      const fixture = env(typeof FIXTURE !== 'undefined' ? FIXTURE : undefined);
+      if (fixture) body.fixture = fixture;
+      const r = post('reset', body);
+      output.nightId = r.state.night_id;
+    } else if (op === 'seed') {
+      let email = env(typeof EMAIL !== 'undefined' ? EMAIL : undefined);
+      if (email === 'me') email = output.email;
+      const deviceId = env(typeof DEVICE_ID !== 'undefined' ? DEVICE_ID : undefined);
+      const songs = JSON.parse(env(typeof SONGS !== 'undefined' ? SONGS : undefined) || '[]');
+      const one = { name: singer || 'Sam', songs: songs };
+      if (email) one.email = email;
+      if (deviceId) one.device_id = deviceId;
+      const r = post('seed', body.singers ? body : { singers: [one] });
+      output.entryIds = JSON.stringify(r.singers[0].entries.map((e) => e.entry_id));
+    } else if (op === 'advance') {
+      const times = Number(env(typeof TIMES !== 'undefined' ? TIMES : undefined) || 1);
+      let r = null;
+      for (let i = 0; i < times; i++) r = post('advance', {});
+      output.nowSinging = r && r.now_singing ? r.now_singing.song_artist : '';
+    } else if (op === 'host-add') {
+      const r = post('host-add', {
+        name: singer || 'Sam',
+        artist: env(typeof ARTIST !== 'undefined' ? ARTIST : undefined) || undefined,
+        title: env(typeof TITLE !== 'undefined' ? TITLE : undefined),
+      });
+      output.entryId = String(r.entry.id);
+    } else if (op === 'host-remove') {
+      if (env(typeof DELETE !== 'undefined' ? DELETE : undefined) === 'true') body.delete = true;
+      post('host-remove', body);
+    } else if (op === 'drain') {
+      output.sent = String(post('outbox/drain', {}).sent);
+    } else if (op === 'state') {
+      const st = check(http.get(kjboxBase + '/sing/api/test/state'), 'kjbox state');
+      output.kjState = JSON.stringify(st);
+      const title = env(typeof EXPECT_ENTRY_TITLE !== 'undefined' ? EXPECT_ENTRY_TITLE : undefined);
+      if (title !== null) {
+        const status = env(typeof EXPECT_ENTRY_STATUS !== 'undefined' ? EXPECT_ENTRY_STATUS : undefined);
+        const who = env(typeof EXPECT_ENTRY_SINGER !== 'undefined' ? EXPECT_ENTRY_SINGER : undefined);
+        const hits = st.rotation.filter((e) => String(e.song_artist).indexOf(title) >= 0);
+        const ok = hits.filter((e) => (status === null || e.status === status) && (who === null || e.singer === who));
+        if (!ok.length) {
+          throw new Error(
+            'no rotation entry "' + title + '"' + (status ? ' with status ' + status : '') + (who ? ' sung by ' + who : '') +
+              ': ' + JSON.stringify(hits.map((e) => [e.id, e.singer, e.song_artist, e.status])),
+          );
+        }
+        output.entryId = String(ok[0].id);
+      }
+    } else {
+      const paths = { done: 'done', undone: 'undone', flags: 'flags', 'rate-limits': 'rate-limits' };
+      if (!paths[op]) throw new Error('unknown kjbox OP ' + op);
+      post(paths[op], body);
+    }
+  } else if (action === 'decide') {
+    // OP stop | start: decide's local stack itself (stack-control.py), for the karaoke log's offline case.
+    const op = envValue(typeof OP !== 'undefined' ? OP : undefined);
+    if (op !== 'stop' && op !== 'start') throw new Error('ACTION decide needs OP stop|start');
+    check(http.post(controlBase + '/decide/' + op, { headers: JSON_HEADERS, body: '{}' }), 'decide ' + op);
+  } else if (action === 'log') {
+    const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+    if (!email) throw new Error('ACTION log needs EMAIL (or ACTION setup first)');
+    const want = {
+      count: envValue(typeof EXPECT_COUNT !== 'undefined' ? EXPECT_COUNT : undefined),
+      title: envValue(typeof EXPECT_TITLE !== 'undefined' ? EXPECT_TITLE : undefined),
+      state: envValue(typeof EXPECT_STATE !== 'undefined' ? EXPECT_STATE : undefined),
+      sungAt: envValue(typeof EXPECT_SUNG_AT !== 'undefined' ? EXPECT_SUNG_AT : undefined),
+      feel: envValue(typeof EXPECT_FEEL !== 'undefined' ? EXPECT_FEEL : undefined),
+      key: envValue(typeof EXPECT_KEY !== 'undefined' ? EXPECT_KEY : undefined),
+      source: envValue(typeof EXPECT_SOURCE !== 'undefined' ? EXPECT_SOURCE : undefined),
+    };
+    const waitMs = Number(envValue(typeof WAIT_MS !== 'undefined' ? WAIT_MS : undefined) || 20000);
+    const problem = (log) => {
+      const live = log.entries.filter((e) => !e.deleted);
+      if (want.count !== null && live.length !== Number(want.count)) return live.length + ' live records, expected ' + want.count;
+      if (want.title === null) return null;
+      const rec = live.filter((e) => e.title === want.title)[0];
+      if (!rec) return 'no live record titled "' + want.title + '"';
+      if (want.state !== null && rec.state !== want.state) return 'state ' + rec.state + ', expected ' + want.state;
+      if (want.sungAt === 'set' && !rec.sung_at) return 'no sung_at';
+      const survey = rec.survey || {};
+      if (want.feel !== null && survey.feel !== want.feel) return 'survey feel ' + survey.feel + ', expected ' + want.feel;
+      if (want.key !== null && survey.key !== want.key) return 'survey key ' + survey.key + ', expected ' + want.key;
+      if (want.source !== null && rec.source !== want.source) return 'source ' + rec.source + ', expected ' + want.source;
+      return null;
+    };
+    const deadline = new Date().getTime() + waitMs;
+    let log = null;
+    let why = null;
+    do {
+      log = check(http.get(decideBase + '/api/test/karaoke-log?email=' + encodeURIComponent(email)), 'karaoke-log');
+      why = problem(log);
+      if (why === null) break;
+      const pause = new Date().getTime() + 1000;
+      while (new Date().getTime() < pause) {
+        // busy-wait: the script engine has no timers
+      }
+    } while (new Date().getTime() < deadline);
+    output.logEntries = JSON.stringify(log.entries);
+    if (why !== null) {
+      throw new Error('karaoke log of ' + email + ': ' + why + '\n' + JSON.stringify(log.entries.map((e) => [e.id, e.title, e.state, e.deleted, e.sung_at, e.survey])));
     }
   } else {
     throw new Error('unknown ACTION ' + action);

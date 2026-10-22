@@ -1,0 +1,609 @@
+# Screenshot tour of Tonight (Phase 5 UX review): every Tonight screen and state, in the app language LOCALE. Not
+# part of the E2E suite: run it through scripts/e2e-local.sh, which sets the app language first (and back
+# afterwards) and passes TOUR_SHOTS = docs/screenshots/phase5/<platform>/<locale>:
+#
+#   scripts/e2e-local.sh --platform ios --locale ar --screen tonight-tour
+#
+# Targets testIDs only, so it works in any language. Drives kjbox's local stack through stack.js (fixture night).
+appId: com.nomadkaraoke.mobile
+name: screens-tonight-tour
+onFlowComplete:
+  - runScript:
+      file: ../scripts/stack.js
+      env:
+        ACTION: kjbox
+        KJBOX_STACK: ${KJBOX_STACK}
+        OP: start
+  - runScript:
+      file: ../scripts/stack.js
+      env:
+        ACTION: kjbox
+        KJBOX_STACK: ${KJBOX_STACK}
+        OP: flags
+        BODY: '{"open": true, "make": true, "ask_photo_consent": false}'
+  - runFlow: ../common/discover-reset-filters.yaml
+---
+- runFlow:
+    file: ../common/tonight-reset.yaml
+    env:
+      NAME: tonighttour
+      USER_CONFIG: '{"auto_approve": false}'
+# Photo consent on, so the once-a-night question and the per-song toggles show.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: flags
+      BODY: '{"ask_photo_consent": true}'
+- runFlow:
+    file: ../common/tour-launch.yaml
+    env:
+      EMAIL: ${output.email}
+
+# 1. Getting in: the empty state, the code field, the scanner's camera question.
+- tapOn:
+    id: "tab-tonight"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-scan"
+    timeout: 15000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-01-empty
+- tapOn:
+    id: "tonight-enter-code"
+- takeScreenshot: ${TOUR_SHOTS}/tonight-02-code
+- tapOn:
+    id: "tonight-scan"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-scan-screen"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-03-scan
+- tapOn:
+    id: "tonight-scan-allow"
+    optional: true
+- takeScreenshot: ${TOUR_SHOTS}/tonight-03b-scan-permission
+- runFlow:
+    when:
+      visible: "Allow|OK|While using the app"
+    commands:
+      - tapOn: "Don.t Allow|Don't allow"
+# "Enter the night code instead": the code field on the scanner screen (a code there replaces it with the join).
+- runFlow:
+    when:
+      visible:
+        id: "tonight-scan-enter-code"
+    commands:
+      - tapOn:
+          id: "tonight-scan-enter-code"
+# (Camera denied: the code field is already there, under the Settings / ask-again button.)
+- takeScreenshot: ${TOUR_SHOTS}/tonight-03c-scan-code
+- extendedWaitUntil:
+    visible:
+      id: "tonight-code-input"
+    timeout: 10000
+- tapOn:
+    id: "tonight-code-input"
+- inputText: "9999"
+- tapOn:
+    id: "tonight-code-submit"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-join-bad-code"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-04-bad-code
+- tapOn:
+    id: "tonight-code-input"
+- inputText: "2121"
+- tapOn:
+    id: "tonight-code-submit"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-name-input"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-05-name
+- eraseText: 30
+- eraseText: 30
+- eraseText: 30
+- inputText: "Sam"
+- tapOn:
+    id: "tonight-name-confirm"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-your-songs"
+    timeout: 30000
+- runFlow:
+    when:
+      visible:
+        id: "tonight-confirm-consent-.*"
+    commands:
+      - takeScreenshot: ${TOUR_SHOTS}/tonight-06-consent
+      - tapOn:
+          id: "tonight-confirm-consent-yes"
+          optional: true
+
+# 2. The night screen with no songs, its rotation and venue info.
+- takeScreenshot: ${TOUR_SHOTS}/tonight-07-night-empty
+- scrollUntilVisible:
+    element:
+      id: "tonight-rotation"
+    direction: DOWN
+    centerElement: true
+- takeScreenshot: ${TOUR_SHOTS}/tonight-08-rotation
+- scroll
+- scroll
+- takeScreenshot: ${TOUR_SHOTS}/tonight-09-venue
+- tapOn:
+    id: "tonight-rotation-preview-.*"
+    index: 0
+    optional: true
+- extendedWaitUntil:
+    visible:
+      id: "tonight-preview-done"
+    timeout: 10000
+    optional: true
+- takeScreenshot: ${TOUR_SHOTS}/tonight-10-preview
+- runFlow:
+    when:
+      visible:
+        id: "tonight-preview-done"
+    commands:
+      - tapOn:
+          id: "tonight-preview-done"
+
+- scrollUntilVisible:
+    element:
+      id: "tonight-night-title"
+    direction: UP
+
+# 3. Requesting: results with versions, the version sheet, a correction, no karaoke version, the confirm.
+- tapOn:
+    id: "tonight-request"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-search-input"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-11-search
+- tapOn:
+    id: "tonight-search-input"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-result-0"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-12-results
+- tapOn:
+    id: "tonight-result-versions-0"
+    optional: true
+- takeScreenshot: ${TOUR_SHOTS}/tonight-13-versions
+- tapOn:
+    id: "tonight-version-0-0-format"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-version-info-tech"
+    timeout: 10000
+    optional: true
+- takeScreenshot: ${TOUR_SHOTS}/tonight-14-version-info
+- tapOn:
+    id: "tonight-version-info-close"
+    optional: true
+- waitForAnimationToEnd
+- tapOn:
+    id: "tonight-search-input"
+- eraseText: 30
+- inputText: "starlite muse"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-correction|tonight-did-you-mean|tonight-result-0"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-15-correction
+- tapOn:
+    id: "tonight-search-input"
+- eraseText: 30
+- inputText: "machu picchu strokes"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-no-karaoke"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-16-no-karaoke
+- tapOn:
+    id: "tonight-search-input"
+- eraseText: 30
+- inputText: "zzq nothing here"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-empty"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-17-nothing
+- tapOn:
+    id: "tonight-search-input"
+- eraseText: 30
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-result-request-0"
+    timeout: 30000
+- tapOn:
+    id: "tonight-result-request-0"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-confirm-send"
+    timeout: 15000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-18-confirm
+- tapOn:
+    id: "tonight-confirm-duet"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-duet-filter"
+    timeout: 15000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-19-duet
+- tapOn:
+    id: "tonight-duet-singer-.*"
+    index: 0
+- takeScreenshot: ${TOUR_SHOTS}/tonight-20-duet-picked
+- tapOn:
+    id: "tonight-duet-done"
+- waitForAnimationToEnd
+- tapOn:
+    id: "tonight-confirm-send"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-status-tile"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-21-your-song
+# A second song, so reorder mode has two rows to move.
+- runFlow:
+    file: ../common/tonight-request.yaml
+    env:
+      QUERY: "i want it that way"
+      TITLE: "(?i)i want it that way"
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element:
+      id: "tonight-reorder"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "tonight-reorder"
+- scrollUntilVisible:
+    element:
+      id: "tonight-reorder-save"
+    direction: UP
+    centerElement: true
+- takeScreenshot: ${TOUR_SHOTS}/tonight-26-reorder
+- tapOn:
+    id: "tonight-reorder-cancel"
+
+# 4. Make on the spot: the make screen, then Your songs with a song being made and its quick version.
+- scrollUntilVisible:
+    element:
+      id: "tonight-request"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "tonight-request"
+- tapOn:
+    id: "tonight-search-input"
+- inputText: "machu picchu strokes"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-no-karaoke-make"
+    timeout: 30000
+- tapOn:
+    id: "tonight-no-karaoke-make"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-make-submit"
+      enabled: true
+    timeout: 60000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-22-make
+- scrollUntilVisible:
+    element:
+      id: "tonight-make-submit"
+    direction: DOWN
+    centerElement: true
+- takeScreenshot: ${TOUR_SHOTS}/tonight-23-make-bottom
+- tapOn:
+    id: "tonight-make-submit"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-your-songs"
+    timeout: 60000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-24-being-made
+- repeat:
+    times: 20
+    while:
+      notVisible:
+        id: "tonight-song-quick-sing-r.*"
+    commands:
+      - runFlow: ../common/tonight-refresh.yaml
+      - extendedWaitUntil:
+          visible:
+            id: "tonight-song-quick-sing-r.*"
+          timeout: 6000
+          optional: true
+- scrollUntilVisible:
+    element:
+      id: "tonight-song-quick-sing-r.*"
+    direction: DOWN
+    centerElement: true
+- takeScreenshot: ${TOUR_SHOTS}/tonight-25-quick-ready
+
+# 5. Managing: the name / phone / friend sheets, tips.
+- runFlow:
+    file: ../common/tonight-open-sheet.yaml
+    env:
+      OPENER: "tonight-edit-name"
+      EXPECT: "tonight-rename-input"
+- eraseText: 20
+- eraseText: 20
+- inputText: "Alex"
+- tapOn:
+    id: "tonight-rename-save"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-rename-guard-rename"
+    timeout: 15000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-27-rename-guard
+- tapOn:
+    id: "tonight-rename-guard-cancel"
+- runFlow:
+    file: ../common/tonight-open-sheet.yaml
+    env:
+      OPENER: "tonight-phone-add"
+      EXPECT: "tonight-phone-input"
+- takeScreenshot: ${TOUR_SHOTS}/tonight-28-phone
+- tapOn:
+    id: "tonight-phone-sheet-close"
+- runFlow:
+    file: ../common/tonight-open-sheet.yaml
+    env:
+      OPENER: "tonight-friend-open"
+      EXPECT: "tonight-friend-name"
+- tapOn:
+    id: "tonight-friend-name"
+- inputText: "Mira"
+- takeScreenshot: ${TOUR_SHOTS}/tonight-29-friend
+- tapOn:
+    id: "tonight-friend-next"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-friend-banner"
+    timeout: 15000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-30-friend-search
+- tapOn:
+    id: "tonight-friend-cancel"
+- runFlow:
+    when:
+      visible:
+        id: "tonight-search-input"
+    commands:
+      - tapOn:
+          id: "tonight-search-input"
+      - inputText: "hello"
+      - extendedWaitUntil:
+          visible:
+            id: "tonight-result-request-0"
+          timeout: 30000
+- runFlow:
+    when:
+      visible:
+        id: "tonight-search"
+    commands:
+      - runFlow:
+          file: ../common/header-back.yaml
+          env:
+            LOCALE: ${LOCALE}
+- extendedWaitUntil:
+    visible:
+      id: "tonight-your-songs"
+    timeout: 15000
+- runFlow:
+    when:
+      visible:
+        id: "tonight-tips-open"
+    commands:
+      - tapOn:
+          id: "tonight-tips-open"
+      - extendedWaitUntil:
+          visible:
+            id: "tonight-tips"
+          timeout: 15000
+      - takeScreenshot: ${TOUR_SHOTS}/tonight-31-tips
+      - runFlow:
+          file: ../common/header-back.yaml
+          env:
+            LOCALE: ${LOCALE}
+
+# 6. Turn awareness: nearly up, the "up next" banner, on stage; then Done → the survey and "Already sung".
+- repeat:
+    times: 14
+    while:
+      notVisible:
+        id: "tonight-turn-banner"
+    commands:
+      - runScript:
+          file: ../scripts/stack.js
+          env:
+            ACTION: kjbox
+            KJBOX_STACK: ${KJBOX_STACK}
+            OP: advance
+      - runFlow: ../common/tonight-refresh.yaml
+      - waitForAnimationToEnd:
+          timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-32-up-next
+- runFlow: ../common/tonight-advance-to-me.yaml
+- takeScreenshot: ${TOUR_SHOTS}/tonight-33-on-stage
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: advance
+- runFlow: ../common/tonight-refresh.yaml
+- extendedWaitUntil:
+    visible:
+      id: "survey-save"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-34-survey
+- tapOn:
+    id: "survey-skip"
+- scrollUntilVisible:
+    element:
+      id: "tonight-sung"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "tonight-sung-toggle"
+    optional: true
+- takeScreenshot: ${TOUR_SHOTS}/tonight-35-sung
+
+# 7. Paused requests and an unreachable box.
+- runFlow:
+    file: ../common/tonight-kjbox-op.yaml
+    env:
+      OP: flags
+      BODY: '{"open": false}'
+- extendedWaitUntil:
+    visible:
+      id: "tonight-closed"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-36-closed
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: flags
+      BODY: '{"open": true}'
+- repeat:
+    times: 10
+    while:
+      visible:
+        id: "tonight-closed"
+    commands:
+      - runFlow: ../common/tonight-refresh.yaml
+      - extendedWaitUntil:
+          notVisible:
+            id: "tonight-closed"
+          timeout: 5000
+          optional: true
+- runFlow:
+    file: ../common/tonight-kjbox-op.yaml
+    env:
+      OP: stop
+- extendedWaitUntil:
+    visible:
+      id: "tonight-unreachable"
+    timeout: 60000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-37-unreachable
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: start
+
+# 8. Another bar: start a night, add a song (library filter), the log, the survey, ending it. A new night on the box
+#    ends the Nomad night first (the app leaves it on night_changed).
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: reset
+- repeat:
+    times: 10
+    while:
+      notVisible:
+        id: "tonight-start-other"
+    commands:
+      - runFlow:
+          when:
+            visible:
+              id: "tonight-refresh"
+          file: ../common/tonight-refresh.yaml
+      - extendedWaitUntil:
+          visible:
+            id: "tonight-start-other"
+          timeout: 5000
+          optional: true
+- tapOn:
+    id: "tonight-start-other"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-venue-input"
+    timeout: 10000
+- tapOn:
+    id: "tonight-venue-input"
+- inputText: "The Rusty Mic"
+- takeScreenshot: ${TOUR_SHOTS}/tonight-38-start-other
+- tapOn:
+    id: "tonight-start-other-confirm"
+- extendedWaitUntil:
+    visible:
+      id: "other-night-screen"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-39-other-empty
+- tapOn:
+    id: "other-add"
+- tapOn:
+    id: "other-add-query"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "other-add-result-0"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-40-other-add
+- tapOn:
+    id: "other-add-result-0"
+- takeScreenshot: ${TOUR_SHOTS}/tonight-41-other-picked
+- tapOn:
+    id: "other-add-as-requested"
+- tapOn:
+    id: "other-add"
+- tapOn:
+    id: "other-add-query"
+- inputText: "zzq unknown tune"
+- extendedWaitUntil:
+    visible:
+      id: "other-add-log-anyway"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-42-other-log-anyway
+- tapOn:
+    id: "other-add-log-anyway"
+- tapOn:
+    id: "other-add-as-planned"
+- extendedWaitUntil:
+    visible:
+      id: "other-group-planned"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-43-other-night
+- tapOn:
+    id: "other-row-.*-sung"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: "survey-save"
+    timeout: 10000
+- tapOn:
+    id: "survey-skip"
+- takeScreenshot: ${TOUR_SHOTS}/tonight-44-other-sung
+- scrollUntilVisible:
+    element:
+      id: "other-end"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "other-end"
+- extendedWaitUntil:
+    visible:
+      id: "other-end-confirm"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/tonight-45-other-end
+- tapOn:
+    id: "other-end-confirm"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-scan"
+    timeout: 10000

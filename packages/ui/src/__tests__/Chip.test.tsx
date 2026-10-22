@@ -32,3 +32,12 @@ it('ChipRow renders its children in a horizontal scroller', () => {
   expect(screen.getByTestId('row').props.style).toEqual(expect.objectContaining({ flexGrow: 0 }));
   expect(screen.getByText('child')).toBeTruthy();
 });
+
+it('a chip row takes the tap while the keyboard is up (the first tap picks the chip instead of only closing it)', () => {
+  render(
+    <ChipRow testID="row">
+      <Text>x</Text>
+    </ChipRow>,
+  );
+  expect(screen.getByTestId('row').props.keyboardShouldPersistTaps).toBe('handled');
+});

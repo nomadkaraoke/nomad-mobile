@@ -1,0 +1,213 @@
+# Tonight 9 (spec §8.3, §4.1, §4.2, A.27, A.37, A.53): real-night edges against the box.
+# - A song the host types in under the singer's name shows as "Added by the host"; when the host takes the singer's
+#   own request off the list, the row says so honestly and offers Dismiss.
+# - A request over the rate limit gets the specific "sent a lot of requests" copy.
+# - The host pauses requests (closed night): the night stays with the host's state, then resumes.
+# - The box goes away (kjbox stack stopped mid-flow): "Can't reach tonight's night … use the web page" with the
+#   last-known songs read-only; the box comes back (restart keeps the night) and the screen recovers.
+appId: com.nomadkaraoke.mobile
+name: tonight-9-edge
+tags:
+  - tonight
+# Never leave the box down or the budgets lowered for the next flow.
+onFlowComplete:
+  - runScript:
+      file: ../scripts/stack.js
+      env:
+        ACTION: kjbox
+        KJBOX_STACK: ${KJBOX_STACK}
+        OP: start
+  - runScript:
+      file: ../scripts/stack.js
+      env:
+        ACTION: kjbox
+        KJBOX_STACK: ${KJBOX_STACK}
+        OP: rate-limits
+        BODY: '{"per_device": 8, "per_ip": 60}'
+---
+- runFlow:
+    file: ../common/tonight-reset.yaml
+    env:
+      NAME: tonight9
+- runFlow:
+    file: ../common/tonight-join-code.yaml
+    env:
+      EMAIL: ${output.email}
+      SINGER_NAME: "Vera"
+# Host-added, then host-removed.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: host-add
+      SINGER: "Vera"
+      ARTIST: "Muse"
+      TITLE: "Starlight"
+- runFlow: ../common/tonight-refresh.yaml
+- extendedWaitUntil:
+    visible:
+      id: "tonight-song-owner-.*"
+      text: "Added by the host"
+    timeout: 20000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-9-host-added
+# The singer's own request, then the host takes it off the list.
+- runFlow:
+    file: ../common/tonight-request.yaml
+    env:
+      QUERY: "hello"
+      TITLE: "Hello"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: state
+      EXPECT_ENTRY_TITLE: "Hello"
+      EXPECT_ENTRY_SINGER: "Vera"
+- runFlow:
+    file: ../common/tonight-kjbox-op.yaml
+    env:
+      OP: host-remove
+      ENTRY_ID: ${output.entryId}
+- extendedWaitUntil:
+    visible: ".*took this song off the list.*"
+    timeout: 20000
+- assertVisible:
+    id: "tonight-song-dismiss-.*"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-9-host-removed
+- tapOn:
+    id: "tonight-song-dismiss-.*"
+- extendedWaitUntil:
+    notVisible: ".*took this song off the list.*"
+    timeout: 10000
+# Rate limit: one request fits the budget, the next is refused with its own copy.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: rate-limits
+      BODY: '{"per_device": 1, "per_ip": 60}'
+- runFlow:
+    file: ../common/tonight-request.yaml
+    env:
+      QUERY: "i want it that way"
+      TITLE: "(?i)i want it that way"
+- tapOn:
+    id: "tonight-request"
+- tapOn:
+    id: "tonight-search-input"
+- inputText: "adele hello"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-result-title-0"
+      text: "Hello"
+    timeout: 30000
+- tapOn:
+    id: "tonight-result-request-0"
+- tapOn:
+    id: "tonight-confirm-send"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-confirm-error"
+      text: ".*sent a lot of requests.*"
+    timeout: 15000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-9-rate-limited
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: rate-limits
+      BODY: '{"per_device": 8, "per_ip": 60}'
+- tapOn:
+    id: "tonight-confirm-back"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-search-input"
+    timeout: 10000
+- tapOn: "Back|Navigate up"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-refresh"
+    timeout: 10000
+# The host pauses requests, then opens them again.
+- runFlow:
+    file: ../common/tonight-kjbox-op.yaml
+    env:
+      OP: flags
+      BODY: '{"open": false}'
+- extendedWaitUntil:
+    visible:
+      id: "tonight-closed"
+    timeout: 30000
+- assertNotVisible:
+    id: "tonight-request"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-9-closed
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: flags
+      BODY: '{"open": true}'
+# Paused, the app only asks GET /night (every 60 s, or now on Refresh) and resumes when it's open again.
+- repeat:
+    times: 10
+    while:
+      visible:
+        id: "tonight-closed"
+    commands:
+      - runFlow: ../common/tonight-refresh.yaml
+      - extendedWaitUntil:
+          notVisible:
+            id: "tonight-closed"
+          timeout: 5000
+          optional: true
+- extendedWaitUntil:
+    visible:
+      id: "tonight-request"
+    timeout: 30000
+# The box goes away.
+- runFlow:
+    file: ../common/tonight-kjbox-op.yaml
+    env:
+      OP: stop
+- extendedWaitUntil:
+    visible:
+      id: "tonight-unreachable"
+    timeout: 60000
+- assertVisible:
+    id: "tonight-song-title-r.*"
+    text: "(?i).*want it that way.*"
+- assertNotVisible:
+    id: "tonight-request"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-9-unreachable
+# It comes back with the same night: the screen recovers on the next refresh.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: start
+- repeat:
+    times: 10
+    while:
+      visible:
+        id: "tonight-unreachable"
+    commands:
+      - runFlow: ../common/tonight-refresh.yaml
+      - extendedWaitUntil:
+          notVisible:
+            id: "tonight-unreachable"
+          timeout: 5000
+          optional: true
+- extendedWaitUntil:
+    visible:
+      id: "tonight-request"
+    timeout: 30000
+- assertVisible:
+    id: "tonight-song-title-r.*"
+    text: "(?i).*want it that way.*"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-9-recovered

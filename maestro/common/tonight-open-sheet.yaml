@@ -1,0 +1,30 @@
+# Opens a Tonight sheet (tap OPENER) and waits for its EXPECT element, retrying: on iOS 26, once one sheet had come up
+# without its accessibility tree (Maestro saw an empty app until it closed), every later sheet in that app session
+# did too, until the app was relaunched. So a failed attempt relaunches (keeping the app's data: still signed in,
+# still in the night) and opens it again. Env: OPENER, EXPECT (testIDs).
+appId: com.nomadkaraoke.mobile
+---
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: "tab-tonight"
+          commands:
+            - runFlow: relaunch-keep-data-tonight.yaml
+      - scrollUntilVisible:
+          element:
+            id: ${OPENER}
+          direction: DOWN
+          centerElement: true
+      - runScript:
+          file: ../scripts/wait.js
+          env:
+            MS: "1000"
+      - tapOn:
+          id: ${OPENER}
+      - extendedWaitUntil:
+          visible:
+            id: ${EXPECT}
+          timeout: 6000

@@ -1,0 +1,12 @@
+# One kjbox test-API call (stack.js ACTION kjbox) then Refresh on the night screen. Env: OP, BODY, ENTRY_ID.
+appId: com.nomadkaraoke.mobile
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: ${OP}
+      BODY: ${BODY}
+      ENTRY_ID: ${ENTRY_ID}
+- runFlow: tonight-refresh.yaml

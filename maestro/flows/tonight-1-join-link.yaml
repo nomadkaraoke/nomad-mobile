@@ -1,0 +1,54 @@
+# Tonight 1 (spec §8.3, §4.2): a night link opens the app signed out → sign in → "What should the host call you?"
+# (prefilled from the gen account) → the night screen. iOS: the app's scheme link (universal links need the
+# team-signed build); Android: the printed QR's https://kjbox.cc/<code> App Link (e2e-local.sh makes the app the
+# handler for kjbox.cc, since the local build's assetlinks can't verify).
+appId: com.nomadkaraoke.mobile
+name: tonight-1-join-link
+tags:
+  - tonight
+---
+- runFlow:
+    file: ../common/tonight-reset.yaml
+    env:
+      NAME: tonight1
+- runFlow: ../common/launch.yaml
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - openLink: "nomadkaraoke://tonight?t=2121"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - openLink: "https://kjbox.cc/2121"
+- extendedWaitUntil:
+    visible:
+      id: "signin-sheet"
+    timeout: 20000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-1-sign-in
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "tonight-name-input"
+    timeout: 30000
+# The name is prefilled from the account (kjbox's suggested_name: the email's local part here).
+- assertVisible:
+    id: "tonight-name-input"
+    text: ".+"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-1-name
+- runFlow:
+    file: ../common/tonight-name.yaml
+    env:
+      SINGER_NAME: "Lina"
+- assertVisible: "Singing as Lina.*|.*Lina.*"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-1-night
+# The home-screen icon brings a joined, still-open night straight back (spec §4.2).
+- runFlow: ../common/relaunch-keep-data-tonight.yaml
+- extendedWaitUntil:
+    visible:
+      id: "tonight-your-songs"
+    timeout: 30000

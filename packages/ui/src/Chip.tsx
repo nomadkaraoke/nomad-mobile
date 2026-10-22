@@ -44,6 +44,8 @@ export function ChipRow({ children, testID }: ChipRowProps) {
       showsHorizontalScrollIndicator={false}
       style={ROW_STYLE}
       contentContainerClassName="gap-2"
+      // With the keyboard up (a search field above), the first tap picks the chip instead of only closing it.
+      keyboardShouldPersistTaps="handled"
     >
       {children}
     </ScrollView>

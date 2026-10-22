@@ -22,15 +22,25 @@ The use cases overlap: one person can be any of them on a given night.
 
 1. **"What should I sing?" at any karaoke night, anywhere.** Connect your music data, measure your vocal range, and get personal song recommendations. This is karaoke-decide.
 2. **"There's no karaoke version" at any night that plays from YouTube.** Make one with karaoke-gen in the app, including a really easy, mobile-friendly lyrics and instrumental review. Hand the YouTube link to the KJ and sing it the same night. This should drive credit sales. App stores take a cut (up to 30%; the exact fees per platform and region get confirmed in phase 6); if that becomes a problem, emails from the system can include a link and discount code to buy credits on the website instead.
-3. **At Andrew's own nights.** Frictionlessly request songs into the rotation, including making a song on the spot. sing.nomadkaraoke.com (kjbox) does this on the web today.
+3. **At Andrew's own nights.** Frictionlessly request songs into the rotation, including making a song on the spot. sing.nomadkaraoke.com (kjbox) does this on the web today, with only a free-text name, and it stays that way. The app is the richer, signed-in option for patrons who install it (see "Why an app" below).
 4. **Karaoke nerds.** Everything above, plus a history of what they've sung, a personal library of songs they enjoy singing, better data-driven recommendations, suggestions for songs to get made, and later perhaps a subscription that pre-generates tracks for them.
+
+## Why an app (Andrew, 2026-10-21)
+
+The web apps keep working; the app adds three things:
+
+1. **Customer acquisition.** Visibility in the app stores brings in people who discover Nomad Karaoke there, and a solid mobile experience converts some of them into paying karaoke-gen customers.
+2. **A better karaoke experience over time, at any bar.** A persistent profile of the songs you know, the songs you've sung at karaoke and how each one went, which powers much richer recommendations. This needs data stored server-side, so **the app requires sign-in.**
+3. **A richer experience at Andrew's own nights** for patrons who install it. Everything the name-only web singer UI does, plus every song they sing saved to their profile automatically, more reliable push notifications, and a home-screen icon to open whenever they're at a Nomad night instead of re-scanning the QR code.
+
+> i want sing.nomadkaraoke.com to continue to exist as a way for singers who come to my live events using my own kjbox tech to enter and manage their songs in the rotation easily without needing to log in (they only have to enter a free text name).
 
 ## Principles
 
 - **All native.** Every screen is built natively and designed for phones, including the kjbox singer flow and gen's lyrics and instrumental review. The web apps are reference designs. A web view is allowed only as a temporary bridge while its native screen is being built, and is removed in the phase that replaces it.
-- **One account.** The gen user is the identity of record across gen, decide and kjbox ([Phase 0 spec §4](superpowers/specs/2026-10-14-mobile-phase0-design.md)). Credits are shared with the web.
+- **One account, and the app requires it.** The gen user is the identity of record across gen, decide and kjbox ([Phase 0 spec §4](superpowers/specs/2026-10-14-mobile-phase0-design.md)). Credits are shared with the web. The app is signed-in; the kjbox singer web page stays name-only, and any discovery features added to that web page later are gated behind sign-in too.
 - **Singers only.** The app is for singers. KJs, Andrew included, keep running nights from the kjbox KJ dashboard. Other venues are supported through use case 2: the singer hands over a YouTube link.
-- **Offline where possible.** Every feature states what it does offline and what it gives up. Search works offline from an opt-in saved list of karaoke songs, with library tags. Sung history and ratings are recorded on the phone first and synced later (Phase 4). Making a track, the Gemini fallback, songs with no karaoke version, and brand-new uploads need a connection.
+- **Offline where possible.** Every feature states what it does offline and what it gives up. Search works offline from an opt-in saved list of karaoke songs, with library tags. Tonight's karaoke log (songs and survey answers) is recorded on the phone first and synced to decide when there's a connection (Phase 5). Making a track, the Gemini fallback, songs with no karaoke version, and brand-new uploads need a connection.
 - **Same endpoints as the web.** The app calls the same backend endpoints as the web apps, and both are tested against the same local stacks (gen's lives at `karaoke-gen/scripts/local-stack.sh`).
 - **No accounts or spend without asking.** Apple, Google Play, Expo/EAS, RevenueCat, Sentry and PostHog accounts wait for Andrew's go-ahead in phase 6.
 
@@ -41,17 +51,33 @@ Four tabs, organised around what the singer is doing:
 | Tab | Contents |
 |---|---|
 | **Discover** | Search, personal recommendations, filters (use case 1) |
-| **Tonight** | Adapts to where you are. At a Nomad night: your requests, the queue, your turn. At any other bar: tonight's setlist filtered to the venue's library, with YouTube links to hand the KJ. |
+| **Tonight** | Adapts to where you are. At a Nomad night: your requests, the queue, your turn, everything the web singer page does. At any other bar: a personal log of what you requested and sang tonight, with the post-song survey. |
 | **Make** | Your videos, job progress, review tasks (use case 2) |
 | **Me** | Sung history, playlists and library, vocal range, connected music services, credits, account (use case 4) |
 
-Every song page offers the same actions: add to a setlist, request tonight, make it, mark as sung.
+Every song page offers the same actions: add to a setlist, request tonight (at a Nomad night) or add to tonight (anywhere else), make it, mark as sung.
 
 ### Tonight at a Nomad night
 
-- Scanning Andrew's QR code or kjbox.cc link opens the app straight into that night (a deep link, falling back to the web if the app isn't installed).
-- Singing needs only a name, as on the web today. Signing in is offered to save history, and is required only to make a song.
-- Songs a signed-in singer performs are logged to their sung history automatically, followed by a prompt to rate them. Singers who weren't signed in can claim that night's songs by signing in later.
+- Scanning Andrew's QR code or kjbox.cc link opens the app straight into that night (a deep link, plus an in-app scanner and code entry; without the app the link opens the web page as today). Opening the app from the home screen during a night you've joined goes straight back to it.
+- The app is signed in, so the singer only confirms the name the host will call (prefilled from their profile). The web page keeps working with just a name.
+- Everything the web singer page does works in the app: search, versions, request, your songs, the queue and your turn, change, cancel, reorder, song for a friend, duets, make a song on the spot (with the same gen account), photo consent, texts when you're up, tips.
+- Every song an app singer performs is saved to their karaoke log automatically (at the time it started, not when the host ticked Done), followed by the post-song survey.
+- **Claiming from the web:** a singer using the name-only web page can sign in there later that night ("Save tonight's songs to your Nomad account"). That links their web identity for the night to their account, and the songs they sang (and go on to sing) land in their profile as if they'd used the app. When discovery features come to the web page, they use the same sign-in.
+
+### Tonight at any other bar
+
+In Andrew's words, a user at a random karaoke bar uses Tonight "just to record what song(s) they've requested and sung tonight, and optionally answer the post-song survey for any sung song". The value:
+
+> 1) opt-in data collection to let the user see what songs they usually sing at karaoke, record what they do/don't enjoy so they can browse their own personal karaoke song collection easily if they do just want to sing something they've sung before for a given mood/event/headspace etc. 2) leverage that data to give the user truly useful karaoke song recommendations, to help power users get great recs from the app whenever they go to karaoke, whether they're at a nomad night or not
+
+- "I'm at karaoke tonight", with an optional venue name. Add songs from search (with the library filter for KaraFun or community-only bars) as maybe, requested or sung.
+- A YouTube link to hand the KJ appears where one exists: your own gen-made video, or a community version.
+- Works offline; syncs later.
+
+### The post-song survey
+
+After any sung song, at a Nomad night or elsewhere, optional and never blocking: **how was it to sing** (great / OK / not for me), **key** (too low / about right / too high), **crowd-pleaser?**, and **free-text notes**. Notes are stored as written; LLM-powered semantic tagging of them, to sharpen recommendations, comes later (Gemini via the AI Studio key only, never AI spend in the nomadkaraoke GCP project).
 
 ## What's in the release
 
@@ -71,14 +97,15 @@ Every song page offers the same actions: add to a setlist, request tonight, make
 - Push notifications when a video is ready or needs review.
 
 **Me (use case 4)**
-- Sung history with a quick rating: good or bad, difficulty, crowd-pleaser, needed a warm-up.
+- Your karaoke collection: everything you've sung (from Tonight's log, at Nomad nights and elsewhere) with your survey answers, browsable by mood, how it went and how often you sing it.
 - Multiple playlists or setlists, plus a "my songs" library.
 - "Get this made" suggestions: songs you'd love that have no karaoke version, one tap to make them.
 - Crowd singability data, collected from post-song ratings from day one (for example, "72% of singers with your range found this comfortable").
 
-**Tonight (use case 3, plus use case 2 at other bars)**
-- The Nomad night flow described above.
-- Tonight's setlist at other bars, with the library filter and YouTube links.
+**Tonight (use case 3, plus a karaoke log at any bar)**
+- The Nomad night flow described above, at parity with the web singer page.
+- The karaoke log at any other bar, with the library filter and YouTube links where they exist.
+- The post-song survey, and claiming a web night's songs.
 
 Phase specs refine these. decide's own [VISION.md](https://github.com/nomadkaraoke/karaoke-decide/blob/main/docs/VISION.md) has more detail on the discovery modes and the staged vocal-range plan.
 
@@ -91,8 +118,8 @@ Phase specs refine these. decide's own [VISION.md](https://github.com/nomadkarao
 | **1b. Search parity** (built; prod check pending, ✅ after it) | 1, 2 | Song search as good as the websites': decide's search service (the single song-search backend), a TS matcher shared with it, an opt-in offline song list, "Did you mean" and Gemini fallback, versions and a pick screen, and the make flow's match judge | karaoke-decide search service (decide #160); gen decide-partner secret and fake judge knobs (gen #1190) |
 | **2. Native review** (built, prod check pending) | 2 | Lyrics and instrumental review designed for phones; replaces the bridge. Gen web's mobile review should follow [REVIEW-UX.md](REVIEW-UX.md) and share `@nomad/review-core`. | gen local-stack review knobs (gen #1202 v0.279.5); no new prod endpoints |
 | **3. Discover** (3a built; 3b, 3c next) | 1 | 3a (built): quiz, personalised recommendations, filters including the library filter, Me's music profile, offline last picks. 3b: music services (Spotify, Apple Music). 3c: vocal range and singable filter. 3d: guided voice session (song pool + analysis, recordings, adaptive quiz, personal pools) | decide accepts gen session tokens directly (3a spec §4), a decide main-API local stack (:8030), recommendations v2; Apple Music for 3b |
-| **4. Me** | 4 | History and ratings (crowd singability data), playlists and library, "get this made" | decide history and playlist APIs (some exist) |
-| **5. Tonight** | 3 (+2) | Nomad nights natively (deep link, optional account, requests, queue, make on the spot, automatic history), plus tonight's setlist at other bars | kjbox singer API for the app, plus a kjbox local stack |
+| **4. Me** | 4 | The browsable karaoke collection on Tonight's log, crowd singability data from the surveys, playlists and library, "get this made" | decide playlist APIs (some exist); aggregates over `karaoke_log` |
+| **5. Tonight** | 3 (+ any bar) | Nomad nights natively (deep link + scanner, signed in, web parity, make on the spot, automatic karaoke log), the karaoke log at other bars, the post-song survey, web claim. Spec: [2026-10-21-mobile-phase5-tonight-design.md](superpowers/specs/2026-10-21-mobile-phase5-tonight-design.md) | kjbox singer API v1 + history outbox + web claim + local stack; decide `karaoke_log` API |
 | **6. Release readiness** | all | In-app purchases (RevenueCat), push notifications, account deletion, Sentry and PostHog, store listings and privacy labels, test builds (TestFlight and Google Play internal testing), switching on Sign in with Apple (built in phase 1; needs a team-signed iOS build), a real Android release signing key (plus its Google OAuth SHA-1) | RevenueCat webhook, Expo push tokens, `DELETE /api/users/me` |
 
 Push notifications are in the release, but Expo's push service needs an EAS project ID, so they arrive in phase 6 with the account decisions. Until then, job progress is polled.
@@ -103,6 +130,8 @@ Tonight could move ahead of Discover if Andrew wants to try it at his own nights
 
 These are wanted, not dropped. Each has a backlog entry.
 
+- LLM semantic tagging of post-song survey notes, feeding recommendations
+- Discovery features on the kjbox singer web page, behind sign-in
 - Auto-generated setlists (duration, group size, moods)
 - Subscription tier (for example, 1 free generated video a week, or pre-generating tracks a user is likely to want)
 - Commissioning or tipping community creators for a human-made, high-quality version
@@ -118,6 +147,6 @@ These are wanted, not dropped. Each has a backlog entry.
 
 ## Sources
 
-- Andrew's brainstorm answers, 2026-10-17 (this document).
+- Andrew's brainstorm answers, 2026-10-17 (this document), and the Phase 5 brainstorm, 2026-10-21 ("Why an app", Tonight, the survey).
 - [KaraokeHunt app spec and roadmap](https://docs.google.com/document/d/19LS1aJI8YwSmkWmDdpCHpmTGiHL9l0VDJ1SxSl4l6Z8) (2023), the feature pool for use cases 1 and 4. Its tech choices (Flutter, Golang) are superseded by the stack decision (`docs/archive/2026-10-14-mobile-app-stack-research.md` in the nomadkaraoke workspace root, not this repo).
 - [Phase 0 design spec](superpowers/specs/2026-10-14-mobile-phase0-design.md): MVP flow, foundation, shared auth and payments.

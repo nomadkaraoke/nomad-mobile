@@ -18,6 +18,8 @@ appId: com.nomadkaraoke.mobile
             visible: "Done"
           commands:
             - tapOn: "Done"
+# A Tonight sheet (rename guard, night end, …) also has a Cancel and hides the tab bar: not a browser, left alone
+# (stopApp closes it).
 - runFlow:
     when:
       platform: iOS
@@ -25,4 +27,9 @@ appId: com.nomadkaraoke.mobile
       notVisible:
         id: "tab-make"
     commands:
-      - tapOn: "Cancel"
+      - runFlow:
+          when:
+            notVisible:
+              id: "(tonight|other|survey)-.*"
+          commands:
+            - tapOn: "Cancel"

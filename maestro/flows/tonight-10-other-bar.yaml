@@ -1,0 +1,155 @@
+# Tonight 10 (spec §8.3, §6): logging a night at another bar. Start a night with a venue → "Add a song" searches
+# decide with the library filter above the results (Community) → "I've requested it" → a song with no catalog match
+# is logged anyway → decide's karaoke log has both. Then decide goes away (offline): marking a song sung and the
+# survey stay on the phone; decide comes back and the outbox syncs them.
+appId: com.nomadkaraoke.mobile
+name: tonight-10-other-bar
+tags:
+  - tonight
+onFlowComplete:
+  - runScript:
+      file: ../scripts/stack.js
+      env:
+        ACTION: decide
+        OP: start
+  - runFlow: ../common/discover-reset-filters.yaml
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: tonight10
+- runFlow: ../common/launch.yaml
+# Sign in first (Me), so the log syncs under this account.
+- tapOn:
+    id: "discover-signin"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "discover-search-input"
+    timeout: 30000
+- tapOn:
+    id: "tab-tonight"
+- tapOn:
+    id: "tonight-start-other"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-venue-input"
+    timeout: 10000
+- tapOn:
+    id: "tonight-venue-input"
+- inputText: "The Rusty Mic"
+- tapOn:
+    id: "tonight-start-other-confirm"
+- extendedWaitUntil:
+    visible:
+      id: "other-night-screen"
+    timeout: 10000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-10-started
+# Add a song from search, with the library filter.
+- tapOn:
+    id: "other-add"
+- extendedWaitUntil:
+    visible:
+      id: "library-filter"
+    timeout: 10000
+- tapOn:
+    id: "library-filter-community"
+- tapOn:
+    id: "other-add-query"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "other-add-result-0"
+    timeout: 30000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-10-add
+- tapOn:
+    id: "other-add-result-0"
+- tapOn:
+    id: "other-add-as-requested"
+- extendedWaitUntil:
+    visible:
+      id: "other-group-requested"
+    timeout: 10000
+# A song decide doesn't know: logged anyway.
+- tapOn:
+    id: "other-add"
+- tapOn:
+    id: "other-add-query"
+- inputText: "zzq unknown tune"
+- extendedWaitUntil:
+    visible:
+      id: "other-add-log-anyway"
+    timeout: 30000
+- tapOn:
+    id: "other-add-log-anyway"
+- tapOn:
+    id: "other-add-artist"
+- inputText: "The Nobodies"
+- tapOn:
+    id: "other-add-as-planned"
+- extendedWaitUntil:
+    visible:
+      id: "other-group-planned"
+    timeout: 10000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-10-night
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: log
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_COUNT: "2"
+      EXPECT_TITLE: "Hello"
+      EXPECT_STATE: "requested"
+      EXPECT_SOURCE: "app"
+# Offline: decide is down. Sung + survey stay on the phone.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: decide
+      OP: stop
+- tapOn:
+    id: "other-row-.*-sung"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: "survey-save"
+    timeout: 10000
+- tapOn:
+    id: "survey-feel-ok"
+- tapOn:
+    id: "survey-key-too_high"
+- tapOn:
+    id: "survey-save"
+- extendedWaitUntil:
+    visible:
+      id: "other-group-sung"
+    timeout: 10000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-10-sung-offline
+# Back online: decide restarts; the app's next foreground flushes the outbox.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: decide
+      OP: start
+- runFlow: ../common/relaunch-keep-data-tonight.yaml
+- extendedWaitUntil:
+    visible:
+      id: "other-night-screen"
+    timeout: 20000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: log
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_COUNT: "2"
+      EXPECT_TITLE: "Hello"
+      EXPECT_STATE: "sung"
+      EXPECT_SOURCE: "app"
+      EXPECT_FEEL: "ok"
+      EXPECT_KEY: "too_high"
+      WAIT_MS: "60000"
