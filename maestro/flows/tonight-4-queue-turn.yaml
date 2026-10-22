@@ -66,15 +66,30 @@ tags:
 - takeScreenshot: ${TONIGHT_SHOTS}/tonight-4-next-banner
 - assertVisible:
     id: "tonight-status-next|tonight-status-afterThis"
-- tapOn:
-    id: "tonight-turn-banner-dismiss"
+# The banner hides by itself after 10 s. (Not dismissed with OK here: on Android dev builds OK sits under the dev
+# menu's floating Tools button, top right.)
+- extendedWaitUntil:
+    notVisible:
+      id: "tonight-turn-banner"
+    timeout: 20000
 - runScript:
     file: ../scripts/stack.js
     env:
       ACTION: kjbox
       KJBOX_STACK: ${KJBOX_STACK}
       OP: advance
-- runFlow: ../common/tonight-refresh.yaml
+# Watch for the banner from the moment the box moves on: the 15 s poll may bring "you're on" before a Refresh would
+# (and the banner only stays 10 s). Refresh only if the poll hasn't come yet.
+- extendedWaitUntil:
+    visible:
+      id: "tonight-turn-banner"
+    timeout: 4000
+    optional: true
+- runFlow:
+    when:
+      notVisible:
+        id: "tonight-turn-banner"
+    file: ../common/tonight-refresh.yaml
 - extendedWaitUntil:
     visible:
       id: "tonight-turn-banner"
