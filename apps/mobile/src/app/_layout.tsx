@@ -30,6 +30,7 @@ export default function RootLayout() {
 function RootStack() {
   const tReview = useTranslations('review');
   const tQuiz = useTranslations('quiz');
+  const tAccount = useTranslations('account');
   return (
     <ThemeProvider value={theme}>
       <Stack
@@ -55,6 +56,8 @@ function RootStack() {
         <Stack.Screen name="review/[id]" options={{ title: tReview('title') }} />
         {/* The Discover quiz (Phase 3a spec §8.2): a modal over Discover; finishing dismisses back to it. */}
         <Stack.Screen name="discover/quiz" options={{ presentation: 'modal', title: tQuiz('title') }} />
+        {/* Me -> Your music profile (Phase 3a spec §8.3). */}
+        <Stack.Screen name="me/music-profile" options={{ title: tAccount('musicProfile') }} />
       </Stack>
     </ThemeProvider>
   );

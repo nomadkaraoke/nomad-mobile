@@ -7,6 +7,7 @@ import * as tonight from '../app/(tabs)/tonight';
 import * as rootLayout from '../app/_layout';
 import * as quiz from '../app/discover/quiz';
 import * as index from '../app/index';
+import * as musicProfile from '../app/me/music-profile';
 import * as readyScreen from '../app/job/[id]';
 import * as durationSheet from '../app/job/duration/[id]';
 import * as makeFlow from '../app/make/new';
@@ -25,6 +26,7 @@ export function appRoutes() {
     '(tabs)/make': makeTab,
     '(tabs)/me': me,
     'discover/quiz': quiz,
+    'me/music-profile': musicProfile,
     'song/[id]': song,
     'make/new': makeFlow,
     'job/[id]': readyScreen,

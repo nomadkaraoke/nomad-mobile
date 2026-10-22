@@ -111,6 +111,12 @@ export default function MeScreen() {
           )}
           <Button testID="me-buy" label={t('buyCredits')} onPress={() => router.push('/credits')} />
           <Text>{t('signedInAs', { email: isolate(state.session.email) })}</Text>
+          <Button
+            testID="me-music-profile"
+            label={t('musicProfile')}
+            variant="secondary"
+            onPress={() => router.push('/me/music-profile')}
+          />
         </>
       ) : (
         <Button
