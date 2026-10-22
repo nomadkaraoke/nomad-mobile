@@ -7,6 +7,7 @@ const ENV_KEYS = [
   'EXPO_PUBLIC_APPLE_SIGNIN',
   'EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN',
   'EXPO_PUBLIC_SEARCH_FORCE_OFFLINE',
+  'EXPO_PUBLIC_FAKE_MIC',
 ] as const;
 
 beforeEach(() => {
@@ -110,5 +111,26 @@ describe('searchForceOffline (E2E: search as if the device had no connection)', 
     process.env.EXPO_PUBLIC_DECIDE_API_URL = 'http://127.0.0.1:8020';
     process.env.EXPO_PUBLIC_SEARCH_FORCE_OFFLINE = 'true';
     expect(load().searchForceOffline()).toBe(false);
+  });
+});
+
+describe('FAKE_MIC', () => {
+  it('is null by default', () => {
+    expect(load().FAKE_MIC).toBeNull();
+  });
+
+  it('is honoured against a local gen', () => {
+    process.env.EXPO_PUBLIC_GEN_API_URL = 'http://10.0.2.2:8010';
+    process.env.EXPO_PUBLIC_FAKE_MIC = 'baritone-scale';
+    expect(load().FAKE_MIC).toBe('baritone-scale');
+  });
+
+  it('is null for a non-local gen URL, so release builds never use the fake source', () => {
+    process.env.EXPO_PUBLIC_FAKE_MIC = 'baritone-scale';
+    expect(load().FAKE_MIC).toBeNull();
+    process.env.EXPO_PUBLIC_GEN_API_URL = 'https://api.nomadkaraoke.com';
+    expect(load().FAKE_MIC).toBeNull();
+    process.env.EXPO_PUBLIC_GEN_API_URL = 'https://staging.example.com';
+    expect(load().FAKE_MIC).toBeNull();
   });
 });

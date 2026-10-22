@@ -47,3 +47,10 @@ export function fakeSocialEnabled(): boolean {
 export function searchForceOffline(): boolean {
   return process.env.EXPO_PUBLIC_SEARCH_FORCE_OFFLINE === '1' && isLocalUrl(DECIDE_API_URL);
 }
+
+/**
+ * E2E only: name of a bundled synthetic recording the voice test plays instead of the microphone (e.g.
+ * `baritone-scale`). Null unless gen is a local host, so a release build can never use the fake source.
+ */
+export const FAKE_MIC: string | null =
+  (process.env.EXPO_PUBLIC_FAKE_MIC || '') !== '' && isLocalUrl(GEN_API_URL) ? (process.env.EXPO_PUBLIC_FAKE_MIC as string) : null;
