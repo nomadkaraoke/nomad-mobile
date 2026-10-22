@@ -266,6 +266,19 @@ describe('discoverRecs', () => {
     expect(api.loveSong).toHaveBeenCalledWith('band b|song b', { artist: 'Band B', title: 'Song B' });
   });
 
+  it("a love doesn't follow into someone else's session", async () => {
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('rec-menu-crowd_pleasers-1'));
+    fireEvent.press(await screen.findByTestId('song-menu-love'));
+    expect(await screen.findByTestId('rec-loved-crowd_pleasers-1')).toBeTruthy();
+    await act(() => useAuth.getState().signOut());
+    gen.getMe.mockResolvedValue({ email: 'b@example.com', credits: 3 } as never);
+    await act(() => useAuth.getState().signInWithSession(session('b@example.com')));
+    expect(await screen.findByTestId('rec-row-crowd_pleasers-1')).toBeTruthy();
+    expect(screen.queryByTestId('rec-loved-crowd_pleasers-1')).toBeNull();
+  });
+
   it('pages one at a time and merges the same section across pages', async () => {
     await signIn();
     let landPage2: () => void = () => {};

@@ -32,7 +32,7 @@ The combined Nomad Karaoke iOS/Android app: one app for every Nomad Karaoke proj
 
 ```
 apps/mobile/          Expo app (src/app routes, src/auth, src/api, src/find (useSearch, components, outcome.ts), src/offline (opt-in offline song index), src/providers)
-apps/mobile/src/discover/  Discover tab (useRecommendations, filtersStore, quizStore, staleStore, recsSnapshot = MMKV offline picks cleared on sign-out by useClearRecsOnSignOut, components/ RecSection, FilterBar, sheets, quiz/ steps, profile/ Me's music profile)
+apps/mobile/src/discover/  Discover tab (useRecommendations, filtersStore, quizStore, staleStore, recsSnapshot = MMKV offline picks; useClearDiscoverOnSignOut drops the picks, music profile, quiz draft and offline picks on sign-out, components/ RecSection, FilterBar, sheets, quiz/ steps, profile/ Me's music profile)
 apps/mobile/src/find/library/  library filter (any / community / karafun): store, picker, badge, shared by search and Discover
 apps/mobile/src/review/  native review (ReviewScreen, lyrics/, sheets/, sync/, finish/, audio/, store.ts, drafts.ts)
 packages/review-core/ pure-TS review logic (doc model, edits, timing, Tap To Sync, issues, vocal gaps, instrumental, peaks, media URLs); to be shared with gen web later (see docs/REVIEW-UX.md)

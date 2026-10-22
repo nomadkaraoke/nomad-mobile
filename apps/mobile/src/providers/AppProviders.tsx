@@ -8,7 +8,7 @@ import { setupApiClients } from '../api/setup';
 import { useAuth } from '../auth/store';
 import { useSessionCheck } from '../auth/useSessionCheck';
 import { fakeSocialEnabled } from '../config';
-import { useClearRecsOnSignOut } from '../discover/useClearRecsOnSignOut';
+import { useClearDiscoverOnSignOut } from '../discover/useClearDiscoverOnSignOut';
 import { useSearchWarmup } from '../find/useSearchWarmup';
 import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
@@ -34,9 +34,9 @@ function SearchWarmup() {
   return null;
 }
 
-/** Offline Discover picks belong to the signed-in person: dropped on sign-out. */
-function ClearRecsOnSignOut() {
-  useClearRecsOnSignOut();
+/** Discover's picks, music profile and quiz draft belong to the signed-in person: dropped on sign-out. */
+function ClearDiscoverOnSignOut() {
+  useClearDiscoverOnSignOut();
   return null;
 }
 
@@ -69,7 +69,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
         <QueryClientProvider client={queryClient}>
           <SessionCheck />
           <SearchWarmup />
-          <ClearRecsOnSignOut />
+          <ClearDiscoverOnSignOut />
           {children}
         </QueryClientProvider>
       </IntlProvider>

@@ -2,6 +2,7 @@ import { hideSong, loveSong, unhideSong, type RecSong } from '@nomad/api-decide'
 import { useQueryClient, type Query, type QueryClient, type QueryKey } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useAuth } from '../auth/store';
 import { RECS_KEY, type RecsPages } from './useRecommendations';
 
 /** How long the "Hidden from your picks · Undo" toast stays up. */
@@ -79,6 +80,14 @@ export function useSongFeedback() {
   const queryClient = useQueryClient();
   const [hidden, setHidden] = useState<RecSong | null>(null);
   const [loved, setLoved] = useState<ReadonlySet<string>>(() => new Set());
+  // Loves and the undo toast are this person's: a sign-out or another account starts them over (no stale frame).
+  const email = useAuth((s) => (s.state.status === 'signedIn' ? s.state.session.email : null));
+  const [owner, setOwner] = useState(email);
+  if (owner !== email) {
+    setOwner(email);
+    setLoved(new Set());
+    setHidden(null);
+  }
   // song_key -> what hiding it removed, and the raw hide request (an undo waits for it to settle).
   const pending = useRef(new Map<string, { removed: Removed[]; request: Promise<void> }>());
   // song_key -> number of the latest hide/undo: a settled request only acts if its action is still the latest.

@@ -164,6 +164,26 @@ describe('musicProfile', () => {
     await waitFor(() => expect(app.getPathname()).toBe('/me/music-profile'));
   });
 
+  it("never shows the previous person's profile after signing in as someone else", async () => {
+    await signIn();
+    const app = open();
+    expect(await screen.findByText(/Alpha Band/)).toBeTruthy();
+    await act(() => useAuth.getState().signOut());
+    // B's profile is still loading: A's cached rows must not stand in for it.
+    m(decide.listMyArtists).mockImplementation(() => new Promise(() => {}));
+    m(decide.listLovedSongs).mockImplementation(() => new Promise(() => {}));
+    m(decide.listHiddenSongs).mockImplementation(() => new Promise(() => {}));
+    m(decide.getPreferences).mockImplementation(() => new Promise(() => {}));
+    gen.getMe.mockResolvedValue({ email: 'b@example.com', credits: 3 } as never);
+    await act(() => useAuth.getState().signInWithSession(session('b@example.com')));
+    act(() => router.push('/me/music-profile'));
+    await waitFor(() => expect(app.getPathname()).toBe('/me/music-profile'));
+    expect(await screen.findByTestId('profile-screen')).toBeTruthy();
+    expect(screen.queryByText(/Alpha Band/)).toBeNull();
+    expect(screen.queryByText(/Delta Duo/)).toBeNull();
+    expect(screen.queryByText(/Classic rock/)).toBeNull();
+  });
+
   describe('editing in the quiz', () => {
     const editQuiz = '/discover/quiz?step=4&from=profile';
 
