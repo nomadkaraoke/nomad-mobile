@@ -16,8 +16,8 @@
 
 - kjbox `/sing/*` endpoints stay byte-compatible; every existing kjbox test passes untouched (run `cd kj-controller && pytest` before every kjbox merge; CI doesn't run it).
 - Every v1 response carries `"api_version": "1.0"` (minor bumps on additive changes); errors are `{"error": <code>, "message"?: str, "retry_after"?: int}`.
-- v1 error code enum (closed; contract + app copy must list exactly these): `unauthenticated, gen_unavailable, not_open, night_changed, needs_name, not_found, not_owner, already_sung, on_stage, rate_limited, invalid, kj_pick_too_large, make_disabled, youtube_blocked, gen_rejected, already_generating, busy_retry, conflict`.
-- Identity: `app_device_id = sha256("app:" + email.strip().lower()).hexdigest()[:32]`.
+- v1 error code enum (closed; contract + app copy must list exactly these): `unauthenticated, gen_unavailable, not_open, night_changed, needs_name, not_found, not_owner, already_sung, on_stage, rate_limited, invalid, kj_pick_too_large, make_disabled, youtube_blocked, gen_rejected, already_generating, busy_retry, conflict, internal`.
+- Identity: `app_device_id = hmac_sha256(app_identity_secret, "app:" + email.strip().lower()).hexdigest()[:32]` (secret: 32 random bytes persisted on the box, ruling A7-R5, so the id cannot be derived from an email).
 - `night_id = sha256(f"{box_id}:{night_started_at}").hexdigest()[:16]`; config `box_id` default `"nomadpc"`.
 - `history_id = "kj_" + sha256(f"{box_id}:{entry_id}:{email}").hexdigest()[:24]`.
 - Gen token cache: 60 s positive / 10 s negative, keyed by `sha256(token)`; the raw token is never stored, logged or recorded by the ActionRecorder (redact `Authorization`).
