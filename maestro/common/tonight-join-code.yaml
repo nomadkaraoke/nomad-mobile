@@ -1,0 +1,26 @@
+# Signed out on a fresh launch → Tonight → "Enter the night code" 2121 → sign in (fake Google, EMAIL) → the name
+# sheet (prefilled from the gen account) → SINGER_NAME → the night screen. Env: EMAIL, SINGER_NAME.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow: launch.yaml
+- tapOn:
+    id: "tab-tonight"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-enter-code"
+    timeout: 15000
+- tapOn:
+    id: "tonight-enter-code"
+- tapOn:
+    id: "tonight-code-input"
+- inputText: "2121"
+- tapOn:
+    id: "tonight-code-submit"
+- runFlow:
+    file: google-signin.yaml
+    env:
+      EMAIL: ${EMAIL}
+- runFlow:
+    file: tonight-name.yaml
+    env:
+      SINGER_NAME: ${SINGER_NAME}

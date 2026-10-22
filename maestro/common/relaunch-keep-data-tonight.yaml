@@ -1,0 +1,19 @@
+# Relaunch keeping the app's data (signed in, the joined night kept) and land on the Tonight tab: like
+# relaunch-keep-data.yaml, but waiting for the tab bar rather than Discover (the app may reopen on Tonight).
+appId: com.nomadkaraoke.mobile
+---
+- runFlow: close-browser-if-open.yaml
+- stopApp
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - launchApp
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
+- runFlow: dismiss-dev-menu.yaml
+- tapOn:
+    id: "tab-tonight"

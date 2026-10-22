@@ -1,0 +1,80 @@
+# Tonight 3 (spec §8.3, §4.1 Search/Versions/Confirm/Request): search → a song grouped with its versions (the best one
+# picked automatically, "Choose from N versions" opens the rest) → the hardened confirm → Your songs shows it with
+# its place in line, and the box has the entry under the singer's name.
+appId: com.nomadkaraoke.mobile
+name: tonight-3-request
+tags:
+  - tonight
+---
+- runFlow:
+    file: ../common/tonight-reset.yaml
+    env:
+      NAME: tonight3
+- runFlow:
+    file: ../common/tonight-join-code.yaml
+    env:
+      EMAIL: ${output.email}
+      SINGER_NAME: "Tess"
+- assertVisible:
+    id: "tonight-songs-empty"
+- tapOn:
+    id: "tonight-request"
+- tapOn:
+    id: "tonight-search-input"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-result-title-0"
+      text: "Hello"
+    timeout: 30000
+- assertVisible:
+    id: "tonight-version-0-0-class"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-3-results
+- runFlow:
+    when:
+      visible:
+        id: "tonight-result-versions-0"
+    commands:
+      - tapOn:
+          id: "tonight-result-versions-0"
+      - extendedWaitUntil:
+          visible:
+            id: "tonight-version-0-1"
+          timeout: 5000
+      - takeScreenshot: ${TONIGHT_SHOTS}/tonight-3-versions
+- tapOn:
+    id: "tonight-result-request-0"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-confirm-send"
+    timeout: 15000
+- assertVisible:
+    id: "tonight-confirm-title"
+    text: "Hello"
+- assertVisible:
+    id: "tonight-confirm-searched"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-3-confirm
+- tapOn:
+    id: "tonight-confirm-send"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-status-tile"
+    timeout: 30000
+- assertVisible:
+    id: "tonight-status-song"
+    text: ".*Hello.*Adele.*"
+- assertVisible:
+    id: "tonight-status-summary"
+    text: "#\\d+ in line.*"
+- assertVisible:
+    id: "tonight-song-title-r.*"
+    text: ".*Hello.*"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-3-your-songs
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: state
+      EXPECT_ENTRY_TITLE: "Hello"
+      EXPECT_ENTRY_SINGER: "Tess"

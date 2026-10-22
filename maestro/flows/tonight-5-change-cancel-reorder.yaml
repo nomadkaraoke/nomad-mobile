@@ -1,0 +1,114 @@
+# Tonight 5 (spec §8.3, §4.1 Change song / Reorder / Cancel): two requests; "Change song" keeps the queue slot (the
+# "Replacing X" banner shows while searching); ▲/▼ reorder with numbered rows and "✓ New order saved"; Cancel hides
+# the row at once with a "Cancelled: X" notice, and the box marks the entry Cancelled.
+appId: com.nomadkaraoke.mobile
+name: tonight-5-change-cancel-reorder
+tags:
+  - tonight
+---
+- runFlow:
+    file: ../common/tonight-reset.yaml
+    env:
+      NAME: tonight5
+- runFlow:
+    file: ../common/tonight-join-code.yaml
+    env:
+      EMAIL: ${output.email}
+      SINGER_NAME: "Remy"
+- runFlow:
+    file: ../common/tonight-request.yaml
+    env:
+      QUERY: "hello"
+      TITLE: "Hello"
+- runFlow:
+    file: ../common/tonight-request.yaml
+    env:
+      QUERY: "i want it that way"
+      TITLE: "(?i)i want it that way"
+# Change song: Hello → Starlight, in Hello's place.
+- tapOn:
+    id: "tonight-song-change-r.*"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: "tonight-replacing"
+    timeout: 15000
+- assertVisible: "Replacing .*Hello.*"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-5-replacing
+- tapOn:
+    id: "tonight-search-input"
+- inputText: "muse starlight"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-result-title-0"
+      text: "Starlight"
+    timeout: 30000
+- tapOn:
+    id: "tonight-result-request-0"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-confirm-replacing"
+    timeout: 15000
+- tapOn:
+    id: "tonight-confirm-send"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-song-title-r.*"
+      text: ".*Starlight.*"
+      index: 0
+    timeout: 30000
+- assertNotVisible:
+    id: "tonight-song-title-r.*"
+    text: ".*Hello.*"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: state
+      EXPECT_ENTRY_TITLE: "Starlight"
+      EXPECT_ENTRY_SINGER: "Remy"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-5-changed
+# Reorder: move the first song down, save.
+- tapOn:
+    id: "tonight-reorder"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-reorder-save"
+    timeout: 10000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-5-reorder
+- tapOn:
+    id: "tonight-reorder-down-.*"
+    index: 0
+- tapOn:
+    id: "tonight-reorder-save"
+- extendedWaitUntil:
+    visible:
+      text: ".*New order saved.*|.*went to the host.*"
+    timeout: 15000
+- extendedWaitUntil:
+    visible:
+      id: "tonight-song-title-r.*"
+      text: "(?i).*want it that way.*"
+      index: 0
+    timeout: 20000
+# Cancel the song now first (I Want It That Way).
+- tapOn:
+    id: "tonight-song-cancel-r.*"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      text: "(?i)Cancelled: .*want it that way.*"
+    timeout: 15000
+- assertNotVisible:
+    id: "tonight-song-title-r.*"
+    text: "(?i).*want it that way.*"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-5-cancelled
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: state
+      EXPECT_ENTRY_TITLE: "Starlight"
+      EXPECT_ENTRY_STATUS: "Waiting"

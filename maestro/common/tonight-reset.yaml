@@ -1,0 +1,28 @@
+# A fresh gen user for this flow and a fresh kjbox night (new night_id, event code 2121, the fixture's 10 rotation
+# entries and flags unless FIXTURE=empty). Env: NAME (the flow's name, in the user's email), FIXTURE (default|empty),
+# USER_CONFIG (gen fake-config knobs for the user, as stack.js setup).
+# -> output.email, output.token (gen), output.nightId (kjbox)
+appId: com.nomadkaraoke.mobile
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: ${NAME}
+      USER_CONFIG: ${USER_CONFIG}
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: reset
+      FIXTURE: ${FIXTURE}
+# The singer budgets back to the box's defaults (tonight-9 lowers them).
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: rate-limits
+      BODY: '{"per_device": 8, "per_ip": 60}'

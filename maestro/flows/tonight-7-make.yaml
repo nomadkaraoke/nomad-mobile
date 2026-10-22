@@ -1,0 +1,88 @@
+# Tonight 7 (spec §8.3, §4.3): a song with no karaoke version → "Make it now" → the make screen (audio search
+# through gen, the best pick chosen, the ~30 min ETA) → sent through kjbox → Your songs shows it being made → gen's
+# fake workers stop at review with a quick version → "Review it now" and "⚡ Sing it now" → confirmed, the quick version is the one sung.
+appId: com.nomadkaraoke.mobile
+name: tonight-7-make
+tags:
+  - tonight
+---
+- runFlow:
+    file: ../common/tonight-reset.yaml
+    env:
+      NAME: tonight7
+      # The job waits in review (no auto-approve), as most make-its do on a night: the quick version is what the
+      # singer can sing meanwhile. (Auto-approved, the fake job finishes in seconds with no NOMAD code, so kjbox
+      # marks it for the host.)
+      USER_CONFIG: '{"auto_approve": false}'
+- runFlow:
+    file: ../common/tonight-join-code.yaml
+    env:
+      EMAIL: ${output.email}
+      SINGER_NAME: "Iris"
+- tapOn:
+    id: "tonight-request"
+- tapOn:
+    id: "tonight-search-input"
+- inputText: "machu picchu strokes"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-no-karaoke"
+    timeout: 30000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-7-no-karaoke
+- tapOn:
+    id: "tonight-no-karaoke-make"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-make-submit"
+      enabled: true
+    timeout: 60000
+- assertVisible:
+    id: "tonight-make-eta"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-7-make
+- tapOn:
+    id: "tonight-make-submit"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-song-title-r.*"
+      text: ".*Machu Picchu.*"
+    timeout: 60000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-7-being-made
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: state
+      EXPECT_ENTRY_TITLE: "Machu Picchu"
+# The quick version: gen's fake workers make one; kjbox's gen poller (5 s) picks it up; the row offers it.
+- repeat:
+    times: 20
+    while:
+      notVisible:
+        id: "tonight-song-quick-sing-r.*"
+    commands:
+      - tapOn:
+          id: "tonight-refresh"
+      - extendedWaitUntil:
+          visible:
+            id: "tonight-song-quick-sing-r.*"
+          timeout: 6000
+          optional: true
+- assertVisible:
+    id: "tonight-song-quick-sing-r.*"
+- assertVisible:
+    id: "tonight-song-review-r.*"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-7-quick-ready
+- tapOn:
+    id: "tonight-song-quick-sing-r.*"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-quick-confirm-yes"
+    timeout: 10000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-7-quick-confirm
+- tapOn:
+    id: "tonight-quick-confirm-yes"
+- extendedWaitUntil:
+    visible: ".*singing the quick version.*"
+    timeout: 30000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-7-quick-chosen

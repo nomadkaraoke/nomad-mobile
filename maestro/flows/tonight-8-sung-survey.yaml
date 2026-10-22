@@ -1,0 +1,68 @@
+# Tonight 8 (spec §8.3, §6.3, §5.5): the singer's song goes on stage and the host marks it Done → "How did it go?"
+# opens by itself → answers saved → decide's karaoke log has exactly one record for it, sung, with sung_at (the
+# play's start) and the survey; the song moves to "✓ Already sung tonight".
+appId: com.nomadkaraoke.mobile
+name: tonight-8-sung-survey
+tags:
+  - tonight
+---
+- runFlow:
+    file: ../common/tonight-reset.yaml
+    env:
+      NAME: tonight8
+- runFlow:
+    file: ../common/tonight-join-code.yaml
+    env:
+      EMAIL: ${output.email}
+      SINGER_NAME: "Oskar"
+- runFlow:
+    file: ../common/tonight-request.yaml
+    env:
+      QUERY: "hello"
+      TITLE: "Hello"
+- runFlow: ../common/tonight-advance-to-me.yaml
+# Done: the next singer goes up; the box's outbox sends the record to decide (every 5 s).
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: advance
+- tapOn:
+    id: "tonight-refresh"
+- extendedWaitUntil:
+    visible:
+      id: "survey-save"
+    timeout: 30000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-8-survey
+- tapOn:
+    id: "survey-feel-great"
+- tapOn:
+    id: "survey-key-right"
+- tapOn:
+    id: "survey-crowd-yes"
+- tapOn:
+    id: "survey-save"
+- extendedWaitUntil:
+    notVisible:
+      id: "survey-save"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "tonight-sung"
+    direction: DOWN
+- assertVisible: ".*Already sung tonight \\(1\\).*"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-8-sung
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: log
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_COUNT: "1"
+      EXPECT_TITLE: "Hello"
+      EXPECT_STATE: "sung"
+      EXPECT_SUNG_AT: "set"
+      EXPECT_SOURCE: "kjbox"
+      EXPECT_FEEL: "great"
+      EXPECT_KEY: "right"
+      WAIT_MS: "30000"

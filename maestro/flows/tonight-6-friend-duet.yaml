@@ -1,0 +1,129 @@
+# Tonight 6 (spec §8.3, §4.1 Song for a friend / Duet partners): "Song for a friend" → their name → the search shows
+# "Picking a song for X" → confirm says who it's for → Your songs labels it "For X" (and the box has it under the
+# friend's name). Then a duet: confirm → "Add duet partners" picks one of tonight's singers (filtered list) and adds
+# a new one → the row says "With A and B".
+appId: com.nomadkaraoke.mobile
+name: tonight-6-friend-duet
+tags:
+  - tonight
+---
+- runFlow:
+    file: ../common/tonight-reset.yaml
+    env:
+      NAME: tonight6
+- runFlow:
+    file: ../common/tonight-join-code.yaml
+    env:
+      EMAIL: ${output.email}
+      SINGER_NAME: "Noor"
+# Song for a friend.
+- scrollUntilVisible:
+    element:
+      id: "tonight-friend-open"
+    direction: DOWN
+- tapOn:
+    id: "tonight-friend-open"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-friend-name"
+    timeout: 10000
+- tapOn:
+    id: "tonight-friend-name"
+- inputText: "Mira"
+- tapOn:
+    id: "tonight-friend-next"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-friend-banner"
+    timeout: 15000
+- assertVisible: ".*Picking a song for .*Mira.*"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-6-friend-search
+- tapOn:
+    id: "tonight-search-input"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-result-title-0"
+      text: "Hello"
+    timeout: 30000
+- tapOn:
+    id: "tonight-result-request-0"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-confirm-friend"
+    timeout: 15000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-6-friend-confirm
+- tapOn:
+    id: "tonight-confirm-send"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-song-owner-r.*"
+      text: ".*For .*Mira.*"
+    timeout: 30000
+# A friend's song is never "your next song".
+- assertNotVisible:
+    id: "tonight-status-tile"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: state
+      EXPECT_ENTRY_TITLE: "Hello"
+      EXPECT_ENTRY_SINGER: "Mira"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-6-friend-row
+# A duet with one of tonight's singers and a new one.
+- tapOn:
+    id: "tonight-request"
+- tapOn:
+    id: "tonight-search-input"
+- inputText: "muse starlight"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-result-title-0"
+      text: "Starlight"
+    timeout: 30000
+- tapOn:
+    id: "tonight-result-request-0"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-confirm-duet"
+    timeout: 15000
+- tapOn:
+    id: "tonight-confirm-duet"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-duet-filter"
+    timeout: 15000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-6-duet-picker
+- tapOn:
+    id: "tonight-duet-filter"
+- inputText: "Cas"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-duet-singer-Casey"
+    timeout: 10000
+- tapOn:
+    id: "tonight-duet-singer-Casey"
+- tapOn:
+    id: "tonight-duet-filter"
+- eraseText: 10
+- inputText: "Zed"
+- tapOn:
+    id: "tonight-duet-add-new"
+- assertVisible:
+    id: "tonight-duet-chip-Zed"
+- tapOn:
+    id: "tonight-duet-done"
+- extendedWaitUntil:
+    visible: ".*With .*Casey.* and .*Zed.*"
+    timeout: 10000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-6-duet-confirm
+- tapOn:
+    id: "tonight-confirm-send"
+- extendedWaitUntil:
+    visible: ".*With .*Casey.* and .*Zed.*"
+    timeout: 30000
+- assertVisible:
+    id: "tonight-status-tile"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-6-duet-row

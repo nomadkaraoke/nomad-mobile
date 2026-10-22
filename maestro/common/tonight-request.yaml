@@ -1,0 +1,34 @@
+# From the night screen: Request a song → search QUERY → the first result's "Request this song" → confirm → back
+# on the night screen. Env: QUERY, TITLE (regex: the first result's title).
+appId: com.nomadkaraoke.mobile
+---
+- tapOn:
+    id: "tonight-request"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-search-input"
+    timeout: 15000
+- tapOn:
+    id: "tonight-search-input"
+- inputText: ${QUERY}
+- extendedWaitUntil:
+    visible:
+      id: "tonight-result-title-0"
+      text: ${TITLE}
+    timeout: 30000
+- tapOn:
+    id: "tonight-result-request-0"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-confirm-send"
+    timeout: 15000
+- tapOn:
+    id: "tonight-confirm-send"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-your-songs"
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+      id: "tonight-status-tile"
+    timeout: 30000

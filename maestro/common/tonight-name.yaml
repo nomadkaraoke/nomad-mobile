@@ -1,0 +1,17 @@
+# The join's "What should the host call you?" sheet → SINGER_NAME → the night screen. Env: SINGER_NAME.
+appId: com.nomadkaraoke.mobile
+---
+- extendedWaitUntil:
+    visible:
+      id: "tonight-name-input"
+    timeout: 30000
+- tapOn:
+    id: "tonight-name-input"
+- eraseText: 60
+- inputText: ${SINGER_NAME}
+- tapOn:
+    id: "tonight-name-confirm"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-your-songs"
+    timeout: 30000

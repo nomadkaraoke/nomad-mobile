@@ -1,0 +1,91 @@
+# Tonight 11 (spec §8.3, §4.1 Name, A.6–A.11): a change that keeps the first name goes straight through; a different name with songs in
+# the queue asks "Rename yourself to X?": "X is a friend" opens the song-for-a-friend flow instead (cancelled here),
+# and "Yes, I'm X" renames, so the box's entry follows.
+appId: com.nomadkaraoke.mobile
+name: tonight-11-rename-guard
+tags:
+  - tonight
+---
+- runFlow:
+    file: ../common/tonight-reset.yaml
+    env:
+      NAME: tonight11
+- runFlow:
+    file: ../common/tonight-join-code.yaml
+    env:
+      EMAIL: ${output.email}
+      SINGER_NAME: "Wren"
+- runFlow:
+    file: ../common/tonight-request.yaml
+    env:
+      QUERY: "hello"
+      TITLE: "Hello"
+# Same first name (adding an initial; the box folds first names): no question.
+- runFlow:
+    file: ../common/tonight-rename.yaml
+    env:
+      NEW_NAME: "Wren B"
+- extendedWaitUntil:
+    visible: ".*Singing as .*Wren B.*"
+    timeout: 15000
+- assertNotVisible:
+    id: "tonight-rename-guard"
+# Someone else's name: the guard.
+- runFlow:
+    file: ../common/tonight-rename.yaml
+    env:
+      NEW_NAME: "Xander"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-rename-guard-rename"
+    timeout: 15000
+- assertVisible:
+    id: "tonight-rename-guard-friend"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-11-guard
+- tapOn:
+    id: "tonight-rename-guard-friend"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-friend-banner"
+    timeout: 15000
+- assertVisible: ".*Picking a song for .*Xander.*"
+- tapOn:
+    id: "tonight-friend-cancel"
+- runFlow:
+    when:
+      visible:
+        id: "tonight-search-input"
+    commands:
+      - tapOn: "Back|Navigate up"
+- extendedWaitUntil:
+    visible: ".*Singing as .*Wren B.*"
+    timeout: 15000
+# And this time it really is a new name. (Relaunched first: on iOS 26 a third opening of the rename sheet after the
+# friend handoff came up without its accessibility tree, so Maestro saw an empty app; see the E11 report.)
+- runFlow: ../common/relaunch-keep-data-tonight.yaml
+- extendedWaitUntil:
+    visible:
+      id: "tonight-your-songs"
+    timeout: 30000
+- runFlow:
+    file: ../common/tonight-rename.yaml
+    env:
+      NEW_NAME: "Xander"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-rename-guard-rename"
+    timeout: 15000
+- tapOn:
+    id: "tonight-rename-guard-rename"
+- extendedWaitUntil:
+    visible: ".*Singing as .*Xander.*"
+    timeout: 15000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-11-renamed
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: state
+      EXPECT_ENTRY_TITLE: "Hello"
+      EXPECT_ENTRY_SINGER: "Xander"

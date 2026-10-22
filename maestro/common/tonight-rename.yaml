@@ -1,0 +1,27 @@
+# Opens "Edit name", types NEW_NAME and saves (the guard, if the box asks, is left open). Env: NEW_NAME.
+# Lets a closing sheet or keyboard finish first (1 s): on iOS 26 a sheet presented while the keyboard or another
+# sheet is still going away came up without its accessibility tree (Maestro saw an empty app until it closed).
+appId: com.nomadkaraoke.mobile
+---
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: "1000"
+- scrollUntilVisible:
+    element:
+      id: "tonight-edit-name"
+    direction: DOWN
+- tapOn:
+    id: "tonight-edit-name"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-rename-input"
+    timeout: 10000
+- tapOn:
+    id: "tonight-rename-input"
+- eraseText: 40
+- inputText: ${NEW_NAME}
+- tapOn:
+    id: "tonight-rename-save"
+- waitForAnimationToEnd:
+    timeout: 3000

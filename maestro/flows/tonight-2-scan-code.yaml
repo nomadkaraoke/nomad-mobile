@@ -1,0 +1,64 @@
+# Tonight 2 (spec §8.3, §4.2): the ways in without a link. The scanner asks for the camera with a reason (the
+# simulator/emulator has no camera to scan with, so its fallback is the night code); a code that isn't tonight's
+# stays on the join screen with re-entry; the right code joins the night.
+appId: com.nomadkaraoke.mobile
+name: tonight-2-scan-code
+tags:
+  - tonight
+---
+- runFlow:
+    file: ../common/tonight-reset.yaml
+    env:
+      NAME: tonight2
+- runFlow: ../common/launch.yaml
+- tapOn:
+    id: "tab-tonight"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-scan"
+    timeout: 15000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-2-empty
+- tapOn:
+    id: "tonight-scan"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-scan-screen"
+    timeout: 10000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-2-scan
+- tapOn: "Back|Navigate up"
+- tapOn:
+    id: "tonight-enter-code"
+- tapOn:
+    id: "tonight-code-input"
+- inputText: "12"
+- tapOn:
+    id: "tonight-code-submit"
+- assertVisible:
+    id: "tonight-code-error"
+- tapOn:
+    id: "tonight-code-input"
+- eraseText: 10
+- inputText: "9999"
+- tapOn:
+    id: "tonight-code-submit"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "tonight-join-bad-code"
+    timeout: 30000
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-2-bad-code
+- tapOn:
+    id: "tonight-code-input"
+- inputText: "2121"
+- tapOn:
+    id: "tonight-code-submit"
+- runFlow:
+    file: ../common/tonight-name.yaml
+    env:
+      SINGER_NAME: "Tonight Two"
+- assertVisible:
+    id: "tonight-your-songs"
+- takeScreenshot: ${TONIGHT_SHOTS}/tonight-2-night
