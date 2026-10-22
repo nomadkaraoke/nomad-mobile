@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Pressable, View } from 'react-native';
 
 import { useNightStore } from '../nightStore';
+import { artistLabel, UNKNOWN_ARTIST } from './logStore';
 
 /** How many of the singer's most-sung songs the panel shows. */
 export const IDEAS_MINE_MAX = 5;
@@ -36,7 +37,7 @@ export function mostSung(entries: KaraokeLogEntry[], max = IDEAS_MINE_MAX): Idea
 }
 
 export type IdeasPanelProps = {
-  /** Fills the search with "<artist> <title>". */
+  /** Fills the search with "<artist> <title>" (just the title for the unknown-artist sentinel). */
   onPick: (query: string) => void;
 };
 
@@ -47,6 +48,7 @@ export type IdeasPanelProps = {
  */
 export function IdeasPanel({ onPick }: IdeasPanelProps) {
   const t = useTranslations('tonight.ideas');
+  const tOther = useTranslations('tonight.other');
   const userKey = useNightStore((s) => s.userKey);
   const night = useNightStore((s) => s.active);
   const nomad = night?.kind === 'nomad' ? night : null;
@@ -75,10 +77,11 @@ export function IdeasPanel({ onPick }: IdeasPanelProps) {
       key={testID}
       testID={testID}
       accessibilityRole="button"
-      onPress={() => onPick(`${s.artist} ${s.title}`)}
+      // The unknown-artist sentinel is no search term: seed the title alone.
+      onPress={() => onPick(s.artist === UNKNOWN_ARTIST ? s.title : `${s.artist} ${s.title}`)}
       className="min-h-11 flex-row items-center gap-2 py-2"
     >
-      <Text className="flex-1">{t('song', { title: isolate(s.title), artist: isolate(s.artist) })}</Text>
+      <Text className="flex-1">{t('song', { title: isolate(s.title), artist: isolate(artistLabel(s.artist, tOther('unknownArtist'))) })}</Text>
       <Text variant="muted">{meta}</Text>
     </Pressable>
   );

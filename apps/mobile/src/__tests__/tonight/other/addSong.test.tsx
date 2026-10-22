@@ -4,6 +4,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 
 import { UNKNOWN_ARTIST, useLogStore } from '../../../tonight/log/logStore';
 import { outboxIdle, useOutbox } from '../../../tonight/log/outbox';
+import { setNightClock, useNightStore } from '../../../tonight/nightStore';
 import { AddSong, splitQuery } from '../../../tonight/other/AddSong';
 import { renderTonight } from '../../../test-utils/tonightFixtures';
 import { otherNight, signedInClean } from './setup';
@@ -201,6 +202,20 @@ it('"I sang it" from add opens the survey, then leaves', async () => {
   expect(router.back).not.toHaveBeenCalled();
   fireEvent.press(screen.getByTestId('survey-skip'));
   await waitFor(() => expect(router.back).toHaveBeenCalled());
+});
+
+it('AddSong\'s survey onDone touches the night', async () => {
+  let now = Date.UTC(2026, 9, 21, 20, 0, 0);
+  setNightClock(() => now);
+  useNightStore.getState().startOther('The Crown');
+  renderTonight(<AddSong prefill={{ artist: 'Muse', title: 'Starlight', song_key: 'muse|starlight' }} />);
+  fireEvent.press(screen.getByTestId('other-add-as-sung'));
+  now += 3 * 60 * 60 * 1000;
+  fireEvent.press(await screen.findByTestId('survey-feel-great'));
+  fireEvent.press(screen.getByTestId('survey-save'));
+  await waitFor(() => expect(router.back).toHaveBeenCalled());
+  expect((useNightStore.getState().active as { lastActivityAt: number }).lastActivityAt).toBe(now);
+  setNightClock();
 });
 
 it('splitQuery reads "Artist - Title" and "Title by Artist"', () => {

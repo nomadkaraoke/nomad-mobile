@@ -4,12 +4,13 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { useAuth } from '../../../auth/store';
-import { mostSung } from '../../../tonight/log/IdeasPanel';
+import { IdeasPanel, mostSung } from '../../../tonight/log/IdeasPanel';
+import { UNKNOWN_ARTIST } from '../../../tonight/log/logStore';
 import { useNightStore } from '../../../tonight/nightStore';
 import { nightPoll } from '../../../tonight/nomad/queries';
 import { useRequestStore } from '../../../tonight/request/requestStore';
 import { gen, session } from '../../../test-utils/genAuthMock';
-import { me, nightOpen, nowResult, rotationResult } from '../../../test-utils/tonightFixtures';
+import { me, nightOpen, nowResult, renderTonight, rotationResult } from '../../../test-utils/tonightFixtures';
 import { noIdent, requestRoutes, results } from '../request/helpers';
 
 jest.mock('@nomad/api-decide', () => ({
@@ -127,4 +128,20 @@ it('mostSung counts sung records by artist + title across bars, top 5, ignoring 
     'New',
     'Old',
   ]);
+});
+
+it('the unknown-artist sentinel never renders raw and never goes into the query (title only)', async () => {
+  dapi.listKaraokeLog.mockResolvedValue({ entries: [logged(UNKNOWN_ARTIST, 'Our Song'), logged(UNKNOWN_ARTIST, 'Our Song')] });
+  api.getMyStats.mockResolvedValue({ api_version: '1.0', top_songs: [{ artist: UNKNOWN_ARTIST, title: 'Crowd Song', plays: 2 }] });
+  const onPick = jest.fn();
+  renderTonight(<IdeasPanel onPick={onPick} />);
+  const mine = await screen.findByTestId('tonight-ideas-mine-0');
+  const crowd = await screen.findByTestId('tonight-ideas-crowd-0');
+  expect(mine).toHaveTextContent(/Our Song.*Unknown artist/);
+  expect(crowd).toHaveTextContent(/Crowd Song.*Unknown artist/);
+  expect(screen.queryByText(/Unknown Artist/)).toBeNull();
+  fireEvent.press(mine);
+  expect(onPick).toHaveBeenLastCalledWith('Our Song');
+  fireEvent.press(crowd);
+  expect(onPick).toHaveBeenLastCalledWith('Crowd Song');
 });
