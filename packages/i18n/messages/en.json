@@ -534,7 +534,11 @@
       "eta": "It's free tonight. It usually takes about 30 minutes: we'll show it here in your songs and email it to you.",
       "etaRotation": "You'll join the rotation now and stay at the end of the list until it's ready.",
       "stillWorking": "Still working…",
-      "stillPending": "This is taking longer than usual. Check your songs in a minute: if it isn't there, tap Make it now again."
+      "stillPending": "This is taking longer than usual. Your song may already be on its way: check Your songs in a minute.",
+      "alreadyOnItsWay": "{title} is already being made. You'll find it in Your songs.",
+      "backToSongs": "Back to Your songs",
+      "resumeHint": "We sent {title} earlier but didn't hear back. It may already be on its way. Send the same request again to check: it won't make a second copy.",
+      "resume": "Send the same request again"
     }
   },
   "makeTab": {

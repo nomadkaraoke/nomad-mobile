@@ -65,13 +65,12 @@ it("a friend's make-it (made in my gen account) can be reviewed too", async () =
   await waitFor(() => expect(getPathname()).toBe('/review/job-78'));
 });
 
-it('review before gen has the job: says so instead of opening an empty review', async () => {
+it('no "Review it now" before gen has the job (gen_job_id null)', async () => {
   const s = song({ make: 'review', gen_job_id: null, request: { source_type: 'make' } });
   api.getMe.mockResolvedValue(me({ songs: [s] }));
-  const { getPathname } = renderRouter(routes(), { initialUrl: '/tonight' });
-  fireEvent.press(await screen.findByTestId(`tonight-song-review-r${s.request.id}`));
-  expect(await screen.findByTestId('tonight-notice')).toHaveTextContent(/isn't ready to review yet/);
-  expect(getPathname()).toBe('/tonight');
+  renderRouter(routes(), { initialUrl: '/tonight' });
+  await screen.findByTestId(`tonight-song-r${s.request.id}`);
+  expect(screen.queryByTestId(`tonight-song-review-r${s.request.id}`)).toBeNull();
 });
 
 it('sing it now asks first, then uses the quick version', async () => {

@@ -9,8 +9,11 @@ import { KjboxError } from '@nomad/api-kjbox';
 export const makeTiming = {
   /** Shortest wait between attempts (the box's retry_after, usually 2 s, wins when longer). */
   retryMinMs: 3_000,
-  /** Give up asking after this long (the claim's 420 s plus a margin). */
-  budgetMs: 480_000,
+  /**
+   * No new attempt starts after this long. An attempt can itself take MAKE_TIMEOUT_MS (95 s), so the spinner tops out
+   * around 330 + 95 = 425 s, about when the box's 420 s claim ends.
+   */
+  lastStartMs: 330_000,
 };
 
 /** The send's outcome is still unknown after the whole budget: the song may yet appear in Your songs. */
@@ -19,14 +22,14 @@ export class MakeStillPending extends Error {
 }
 
 /** Worth asking again with the same id: the box is still on it (busy_retry) or we lost the answer (unreachable). */
-const retryable = (e: unknown) => e instanceof KjboxError && (e.code === 'busy_retry' || e.unreachable);
+export const retryable = (e: unknown) => e instanceof KjboxError && (e.code === 'busy_retry' || e.unreachable);
 
 /**
  * Sends once, then keeps retrying `send` (which must reuse one client_request_id) while the outcome is unknown.
  * `onWaiting` fires before the first retry ("Still working…"); `alive()` false stops it (the screen left).
  */
 export async function sendMake<T>(send: () => Promise<T>, opts: { onWaiting?: () => void; alive?: () => boolean } = {}): Promise<T> {
-  const deadline = Date.now() + makeTiming.budgetMs;
+  const lastStart = Date.now() + makeTiming.lastStartMs;
   let waited = false;
   for (;;) {
     try {
@@ -36,7 +39,7 @@ export async function sendMake<T>(send: () => Promise<T>, opts: { onWaiting?: ()
       if (opts.alive && !opts.alive()) throw e;
       const retryAfter = e instanceof KjboxError && e.retryAfter ? e.retryAfter * 1000 : 0;
       const delay = Math.max(makeTiming.retryMinMs, retryAfter);
-      if (Date.now() + delay > deadline) throw new MakeStillPending();
+      if (Date.now() + delay > lastStart) throw new MakeStillPending();
       if (!waited) {
         waited = true;
         opts.onWaiting?.();

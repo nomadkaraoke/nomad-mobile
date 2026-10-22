@@ -1,5 +1,5 @@
 import { getMe as getGenMe, type AudioResult } from '@nomad/api-gen';
-import { getNight, KjboxError, makeValidateUrl, submitRequest, type Night } from '@nomad/api-kjbox';
+import { getMe, getNight, KjboxError, makeValidateUrl, submitRequest, type MeResult, type Night } from '@nomad/api-kjbox';
 import { getSearchConfidence } from '@nomad/core';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, NomadLoader, Screen, Text, TextField } from '@nomad/ui';
@@ -23,7 +23,8 @@ import { NIGHT_ROUTE } from '../request/ConfirmScreen';
 import { errorCopy } from '../request/errorCopy';
 import { newRequestId, useRequestStore } from '../request/requestStore';
 import { kjboxJudge, kjboxSearcher } from './kjboxMake';
-import { MakeStillPending, sendMake } from './sendMake';
+import { clearPendingMake, findMakeRow, getPendingMake, setPendingMake, type PendingMake } from './pendingMake';
+import { MakeStillPending, retryable, sendMake } from './sendMake';
 
 // Only a basic shape check: gen downloads from many sites, and the box asks gen (validate-url) before sending.
 const LINK = /^https?:\/\/\S+$/i;
@@ -38,6 +39,13 @@ export type TonightMakeProps = {
   /** A song for a friend (A.10): arrives as a route param, since the request flow clears on leaving search. */
   friend?: string;
 };
+
+/** This screen's own path with its params (sign-in returns here). */
+export function makeHref({ artist, title, friend }: TonightMakeProps): string {
+  const q = [`artist=${encodeURIComponent(artist)}`, `title=${encodeURIComponent(title)}`];
+  if (friend) q.push(`friend=${encodeURIComponent(friend)}`);
+  return `/tonight/make?${q.join('&')}`;
+}
 
 /** The box refused because the gen session didn't check out: ask gen itself, whose 401 is what signs out. */
 const checkGenSession = () => void getGenMe().catch(() => {});
@@ -142,7 +150,7 @@ function MakeGate(props: TonightMakeProps & { night: NomadNight; userKey: string
   } else if (!info.data.features.make || info.data.features.simple_mode) {
     body = <AskHost />;
   } else if (auth.status !== 'signedIn') {
-    body = <Button testID="tonight-make-signin" label={tAll('account.signIn')} onPress={() => openSignIn(NIGHT_ROUTE)} />;
+    body = <Button testID="tonight-make-signin" label={tAll('account.signIn')} onPress={() => openSignIn(makeHref(props))} />;
   } else {
     return <MakeFlow {...props} />;
   }
@@ -160,7 +168,7 @@ function MakeFlow(props: TonightMakeProps & { night: NomadNight; userKey: string
     props.artist.trim() && props.title.trim() ? { artist: props.artist.trim(), title: props.title.trim() } : null,
   );
   const [draft, setDraft] = useState({ artist: props.artist.trim(), title: props.title.trim() });
-  if (song) return <MakeSearch {...props} song={song} />;
+  if (song) return <PendingGate {...props} song={song} />;
   const ready = draft.artist.trim() !== '' && draft.title.trim() !== '';
   return (
     <Screen testID="tonight-make-screen" scroll>
@@ -192,14 +200,229 @@ function MakeFlow(props: TonightMakeProps & { night: NomadNight; userKey: string
   );
 }
 
-function MakeSearch({ night, userKey, friend, song: wanted }: TonightMakeProps & { night: NomadNight; userKey: string | null; song: Song }) {
+type SourceMeta = PendingMake['sourceMeta'];
+type Wanted = { artist: string; title: string; friend?: string };
+type SendArgs = { clientRequestId: string; sourceMeta: SourceMeta; artist: string; title: string };
+
+/**
+ * The make submit (shared by a fresh make and a resumed one). The send is recorded as pending (per account + night,
+ * keyed on the song asked for) before it goes out, so leaving mid-send never loses its client_request_id; the record
+ * is cleared once the outcome is clear. Success: invalidate the night and go back to Tonight (ruling E7-R3).
+ */
+function useMakeSend(night: NomadNight, userKey: string | null, wanted: Wanted) {
+  const t = useTranslations('tonight.make');
+  const tAll = useTranslations();
+  const queryClient = useQueryClient();
+  const [sending, setSending] = useState(false);
+  const [waiting, setWaiting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [askHost, setAskHost] = useState(false);
+  // A ref, not just `disabled`: two taps in one frame still send once (Review Focus 3).
+  const inFlight = useRef(false);
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
+    };
+  }, []);
+
+  /** Resolves 'expired' when the box says the search session expired (409 conflict on a search pick), else void. */
+  const send = async (a: SendArgs): Promise<'expired' | void> => {
+    if (inFlight.current) return;
+    inFlight.current = true;
+    setSending(true);
+    setWaiting(false);
+    setError(null);
+    const { friend } = wanted;
+    setPendingMake(userKey, night.nightId, wanted, {
+      clientRequestId: a.clientRequestId,
+      sourceMeta: a.sourceMeta,
+      songArtist: a.artist,
+      songTitle: a.title,
+      at: Date.now(),
+    });
+    const phone = friend ? null : storedPhone(userKey);
+    const body = {
+      source_type: 'make' as const,
+      song_artist: a.artist,
+      song_title: a.title,
+      source_meta: a.sourceMeta,
+      night_id: night.nightId,
+      client_request_id: a.clientRequestId,
+      ...(friend ? { for_friend: true, friend_name: friend } : {}),
+      ...(phone ? { phone } : {}),
+      // The night's photo answer, only ever given when the host asked (A.91); never on a friend's song.
+      ...(friend ? {} : consentFields(loadNightConsent(userKey, night.nightId))),
+    };
+    try {
+      await sendMake(() => submitRequest(night.code, body), {
+        onWaiting: () => setWaiting(true),
+        alive: () => alive.current,
+      });
+      clearPendingMake(userKey, night.nightId, wanted);
+      void queryClient.invalidateQueries({ queryKey: nightKey(night, userKey) });
+      if (alive.current) router.dismissTo(NIGHT_ROUTE);
+    } catch (e) {
+      // Unknown outcome (it may have landed): keep the record, so making this song again reuses the same id.
+      const unknown = e instanceof MakeStillPending || retryable(e) || !(e instanceof KjboxError) || e.code === 'internal';
+      if (!unknown) clearPendingMake(userKey, night.nightId, wanted);
+      if (!alive.current) return;
+      if (e instanceof KjboxError && e.code === 'night_changed') {
+        useNightStore.getState().end();
+        router.dismissTo(NIGHT_ROUTE);
+        return;
+      }
+      if (e instanceof MakeStillPending) {
+        setError(t('stillPending'));
+        return;
+      }
+      if (e instanceof KjboxError && e.code === 'make_disabled') {
+        setAskHost(true);
+        return;
+      }
+      // The box's 409 search_expired (gen 404/403 on the search session) arrives as a v1 `conflict`.
+      if (e instanceof KjboxError && e.code === 'conflict' && 'search_session_id' in a.sourceMeta) return 'expired';
+      if (e instanceof KjboxError && e.code === 'unauthenticated') checkGenSession();
+      const c = errorCopy(e);
+      setError(tAll(c.key, c.values));
+    } finally {
+      inFlight.current = false;
+      if (alive.current) {
+        setSending(false);
+        setWaiting(false);
+      }
+    }
+  };
+
+  return { send, sending, waiting, error, setError, askHost, inFlight };
+}
+
+function SendStatus({ waiting, error }: { waiting: boolean; error: string | null }) {
+  const t = useTranslations('tonight.make');
+  return (
+    <>
+      {waiting ? (
+        <View className="flex-row items-center gap-2">
+          <ActivityIndicator size="small" />
+          <Text testID="tonight-make-still-working" variant="muted">
+            {t('stillWorking')}
+          </Text>
+        </View>
+      ) : null}
+      {error ? (
+        <Text testID="tonight-make-error" variant="error">
+          {error}
+        </Text>
+      ) : null}
+    </>
+  );
+}
+
+/**
+ * Before searching: an earlier make of this song whose outcome is unknown (fix round 1). If /me shows its make-it
+ * row, it landed: say so and forget the record. Otherwise offer to send it again with the same client_request_id and
+ * source (the box replays it for 24 h), never a fresh search that would mint a new id and maybe a second gen job.
+ */
+function PendingGate(props: TonightMakeProps & { night: NomadNight; userKey: string | null; song: Song }) {
+  const { night, userKey, friend, song } = props;
+  const wanted = useMemo(() => ({ ...song, ...(friend ? { friend } : {}) }), [song, friend]);
+  const [pending, setPending] = useState(() => getPendingMake(userKey, night.nightId, wanted));
+  if (!pending) return <MakeSearch {...props} wanted={wanted} />;
+  return <ResumeMake night={night} userKey={userKey} wanted={wanted} pending={pending} onFresh={() => setPending(null)} />;
+}
+
+function ResumeMake({
+  night,
+  userKey,
+  wanted,
+  pending,
+  onFresh,
+}: {
+  night: NomadNight;
+  userKey: string | null;
+  wanted: Wanted;
+  pending: PendingMake;
+  onFresh: () => void;
+}) {
+  const t = useTranslations('tonight.make');
+  const me = useQuery<MeResult>({
+    queryKey: [...nightKey(night, userKey), 'me'],
+    queryFn: () => getMe(night.code, night.nightId),
+    staleTime: 0,
+    retry: false,
+  });
+  const row = me.data ? findMakeRow(me.data.songs, wanted, pending) : null;
+  useEffect(() => {
+    if (row) clearPendingMake(userKey, night.nightId, wanted);
+  }, [row, userKey, night.nightId, wanted]);
+  const s = useMakeSend(night, userKey, wanted);
+
+  let body;
+  if (me.isPending) {
+    body = (
+      <View testID="tonight-make-checking" className="items-center py-8">
+        <ActivityIndicator />
+      </View>
+    );
+  } else if (row) {
+    body = (
+      <View className="gap-3">
+        <Text testID="tonight-make-already">{t('alreadyOnItsWay', { title: isolate(pending.songTitle) })}</Text>
+        <Button testID="tonight-make-already-back" label={t('backToSongs')} onPress={() => router.dismissTo(NIGHT_ROUTE)} />
+      </View>
+    );
+  } else if (s.askHost) {
+    body = <AskHost />;
+  } else {
+    body = (
+      <View className="gap-3">
+        <Text testID="tonight-make-resume-hint">{t('resumeHint', { title: isolate(pending.songTitle) })}</Text>
+        <SendStatus waiting={s.waiting} error={s.error} />
+        <Button
+          testID="tonight-make-resume"
+          label={t('resume')}
+          loading={s.sending}
+          disabled={s.sending}
+          onPress={() =>
+            void s
+              .send({ clientRequestId: pending.clientRequestId, sourceMeta: pending.sourceMeta, artist: pending.songArtist, title: pending.songTitle })
+              .then((r) => {
+                // The stored search expired before anything was made: nothing landed, so a fresh search is safe.
+                if (r === 'expired') onFresh();
+              })
+          }
+        />
+      </View>
+    );
+  }
+  return (
+    <Screen testID="tonight-make-screen" scroll>
+      <View className="gap-1">
+        <Text testID="tonight-make-song-title" variant="title">
+          {pending.songTitle}
+        </Text>
+        <Text variant="muted">{pending.songArtist}</Text>
+        {wanted.friend ? <FriendLine name={wanted.friend} /> : null}
+      </View>
+      {body}
+    </Screen>
+  );
+}
+
+function MakeSearch({ night, userKey, friend, wanted }: TonightMakeProps & { night: NomadNight; userKey: string | null; wanted: Wanted }) {
   const t = useTranslations('tonight.make');
   const tMake = useTranslations('make');
   const tAll = useTranslations();
-  const queryClient = useQueryClient();
 
   // A typed intent with no pre-fill to protect: the judge may tidy or correct either field (useMatchJudge).
-  const [intent] = useState<MakeIntent>(() => ({ ...wanted, source: 'typed', editedFields: [], createdAt: Date.now() }));
+  const [intent] = useState<MakeIntent>(() => ({
+    artist: wanted.artist,
+    title: wanted.title,
+    source: 'typed',
+    editedFields: [],
+    createdAt: Date.now(),
+  }));
   const searcher = useMemo(() => kjboxSearcher(night), [night]);
   const judgeFn = useMemo(() => kjboxJudge(night), [night]);
 
@@ -208,10 +431,11 @@ function MakeSearch({ night, userKey, friend, song: wanted }: TonightMakeProps &
   const [youtubeOpen, setYoutubeOpen] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [linkError, setLinkError] = useState<string | null>(null);
-  const [sending, setSending] = useState(false);
-  const [waiting, setWaiting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [askHost, setAskHost] = useState(false);
+  const [checkingLink, setCheckingLink] = useState(false);
+  const [searchedAgain, setSearchedAgain] = useState(false);
+  const sender = useMakeSend(night, userKey, wanted);
+  const { sending: submitting, waiting, error, askHost, inFlight } = sender;
+  const sending = submitting || checkingLink;
 
   const search = useAudioSearch(intent, searcher);
   const results: AudioResult[] = useMemo(() => search.data?.results ?? [], [search.data]);
@@ -220,8 +444,6 @@ function MakeSearch({ night, userKey, friend, song: wanted }: TonightMakeProps &
     () => (search.isSuccess && searched ? getSearchConfidence(results, searched.title, searched.artist).tier : null),
     [search.isSuccess, searched, results],
   );
-  // Set while sending (a ref, not just `disabled`: two taps in one frame still send once, Review Focus 3).
-  const inFlight = useRef(false);
   const judge = useMatchJudge(
     intent,
     {
@@ -235,7 +457,7 @@ function MakeSearch({ night, userKey, friend, song: wanted }: TonightMakeProps &
     },
     judgeFn,
   );
-  const song = judge.applied ?? wanted;
+  const song = useMemo(() => judge.applied ?? { artist: wanted.artist, title: wanted.title }, [judge.applied, wanted]);
   const confidence = useMemo(
     () => (search.data ? getSearchConfidence(results, song.title, song.artist) : null),
     [song, search.data, results],
@@ -267,84 +489,54 @@ function MakeSearch({ night, userKey, friend, song: wanted }: TonightMakeProps &
     }
   }, [searchError]);
 
-  const alive = useRef(true);
-  useEffect(() => {
-    alive.current = true;
-    return () => {
-      alive.current = false;
-    };
-  }, []);
-
-  // One client_request_id per song + source: every retry of the same make reuses it, so the box makes one job.
+  // One client_request_id per asked-for song + source pick (never the judge's names: undo/redo mustn't mint a new
+  // id while a send may be pending), and always the pending record's while one exists for this song.
   const requestId = useRef<{ sig: string; id: string } | null>(null);
+  const expiredOnce = useRef(false);
+  const searchAgain = () => {
+    setPicked(null);
+    setSearchedAgain(true);
+    search.run();
+  };
 
   const send = async () => {
-    if (!target || locked || inFlight.current) return;
-    inFlight.current = true;
-    setSending(true);
-    setWaiting(false);
-    setError(null);
-    try {
-      if (target.kind === 'url') {
-        // Like gen's "Use this URL": ask first, so an unsupported link fails here. Fails open (the box checks again).
-        try {
-          const check = await makeValidateUrl(night.code, target.url, night.nightId);
-          if (!check.supported) {
-            const detail = typeof check.detail === 'string' ? check.detail : '';
-            setLinkError(detail || tMake('linkUnsupported'));
-            return;
-          }
-        } catch {
-          // fail open
+    if (!target || locked || inFlight.current || checkingLink) return;
+    sender.setError(null);
+    if (target.kind === 'source' && !target.sessionId) {
+      // No search session to send (the box's search came back without one): search again first.
+      searchAgain();
+      return;
+    }
+    if (target.kind === 'url') {
+      // Like gen's "Use this URL": ask first, so an unsupported link fails here. Fails open (the box checks again).
+      setCheckingLink(true);
+      try {
+        const check = await makeValidateUrl(night.code, target.url, night.nightId);
+        if (!check.supported) {
+          const detail = typeof check.detail === 'string' ? check.detail : '';
+          setLinkError(detail || tMake('linkUnsupported'));
+          return;
         }
+      } catch {
+        // fail open
+      } finally {
+        setCheckingLink(false);
       }
-      const sourceMeta =
-        target.kind === 'url' ? { youtube_url: target.url } : { search_session_id: target.sessionId, selection_index: target.index };
-      const sig = JSON.stringify([song.artist, song.title, sourceMeta, friend ?? null]);
-      if (requestId.current?.sig !== sig) requestId.current = { sig, id: newRequestId() };
-      const phone = friend ? null : storedPhone(userKey);
-      const body = {
-        source_type: 'make' as const,
-        song_artist: song.artist,
-        song_title: song.title,
-        source_meta: sourceMeta,
-        night_id: night.nightId,
-        client_request_id: requestId.current.id,
-        ...(friend ? { for_friend: true, friend_name: friend } : {}),
-        ...(phone ? { phone } : {}),
-        // The night's photo answer, only ever given when the host asked (A.91); never on a friend's song.
-        ...(friend ? {} : consentFields(loadNightConsent(userKey, night.nightId))),
-      };
-      await sendMake(() => submitRequest(night.code, body), {
-        onWaiting: () => setWaiting(true),
-        alive: () => alive.current,
-      });
-      if (!alive.current) return;
-      void queryClient.invalidateQueries({ queryKey: nightKey(night, userKey) });
-      router.dismissTo(NIGHT_ROUTE);
-    } catch (e) {
-      if (!alive.current) return;
-      if (e instanceof KjboxError && e.code === 'night_changed') {
-        useNightStore.getState().end();
-        router.dismissTo(NIGHT_ROUTE);
-        return;
-      }
-      if (e instanceof MakeStillPending) {
-        setError(t('stillPending'));
-        return;
-      }
-      if (e instanceof KjboxError && e.code === 'make_disabled') {
-        setAskHost(true);
-        return;
-      }
-      if (e instanceof KjboxError && e.code === 'unauthenticated') checkGenSession();
-      const c = errorCopy(e);
-      setError(tAll(c.key, c.values));
-    } finally {
-      inFlight.current = false;
-      if (alive.current) {
-        setSending(false);
-        setWaiting(false);
+    }
+    const sourceMeta: SourceMeta =
+      target.kind === 'url' ? { youtube_url: target.url } : { search_session_id: target.sessionId, selection_index: target.index };
+    const pick = target.kind === 'url' ? target.url : `${target.sessionId}#${target.index}`;
+    const sig = JSON.stringify([wanted.artist, wanted.title, friend ?? null, pick]);
+    const prior = getPendingMake(userKey, night.nightId, wanted);
+    if (prior) requestId.current = { sig, id: prior.clientRequestId };
+    else if (requestId.current?.sig !== sig) requestId.current = { sig, id: newRequestId() };
+    const r = await sender.send({ clientRequestId: requestId.current.id, sourceMeta, artist: song.artist, title: song.title });
+    if (r === 'expired') {
+      if (!expiredOnce.current) {
+        expiredOnce.current = true;
+        searchAgain();
+      } else {
+        sender.setError(tAll(errorCopy(new KjboxError('conflict', 409)).key));
       }
     }
   };
@@ -418,6 +610,11 @@ function MakeSearch({ night, userKey, friend, song: wanted }: TonightMakeProps &
         </View>
       ) : (
         <>
+          {searchedAgain ? (
+            <Text testID="tonight-make-searched-again" variant="muted">
+              {tMake('searchExpired')}
+            </Text>
+          ) : null}
           {locked ? (
             <View testID="match-gate-checking" className="flex-row items-center gap-2">
               <ActivityIndicator size="small" />
@@ -481,19 +678,7 @@ function MakeSearch({ night, userKey, friend, song: wanted }: TonightMakeProps &
             <Text testID="tonight-make-eta">{t('eta')}</Text>
             <Text variant="muted">{t('etaRotation')}</Text>
           </View>
-          {waiting ? (
-            <View className="flex-row items-center gap-2">
-              <ActivityIndicator size="small" />
-              <Text testID="tonight-make-still-working" variant="muted">
-                {t('stillWorking')}
-              </Text>
-            </View>
-          ) : null}
-          {error ? (
-            <Text testID="tonight-make-error" variant="error">
-              {error}
-            </Text>
-          ) : null}
+          <SendStatus waiting={waiting} error={error} />
           <Button
             testID="tonight-make-submit"
             label={t('submit')}

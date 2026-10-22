@@ -7,12 +7,14 @@ import { View } from 'react-native';
 import * as makeRoute from '../../../app/tonight/make';
 import { useAuth } from '../../../auth/store';
 import { useNightStore } from '../../../tonight/nightStore';
+import * as signInUi from '../../../auth/signInUi';
+import { clearPendingMake, getPendingMake } from '../../../tonight/make/pendingMake';
 import { makeTiming } from '../../../tonight/make/sendMake';
 import { nightPoll } from '../../../tonight/nomad/queries';
 import { useRequestStore } from '../../../tonight/request/requestStore';
 import { gen, session } from '../../../test-utils/genAuthMock';
 import { bestChoice, youtube } from '../../../test-utils/makeFixtures';
-import { me, nightOpen, nowResult, rotationResult } from '../../../test-utils/tonightFixtures';
+import { me, nightOpen, nowResult, rotationResult, song } from '../../../test-utils/tonightFixtures';
 import { requestRoutes } from '../request/helpers';
 
 jest.mock('@nomad/api-decide', () => ({
@@ -20,6 +22,7 @@ jest.mock('@nomad/api-decide', () => ({
   popularSongs: jest.fn(async () => []),
   pingSearch: jest.fn(async () => true),
   getSong: jest.fn(),
+  logSearchEvent: jest.fn(async () => {}),
   configureClient: jest.fn(),
 }));
 jest.mock('@nomad/api-gen', () => ({
@@ -85,6 +88,10 @@ const made = (): kjbox.RequestResult => ({
   },
 });
 
+const STARLIGHT = { artist: 'Muse', title: 'Starlight' };
+const pending = () => getPendingMake(useNightStore.getState().userKey, NIGHT, STARLIGHT);
+const nav = () => jest.requireActual<typeof import('expo-router')>('expo-router').router;
+
 const routes = () => ({
   ...requestRoutes(),
   'tonight/make': makeRoute,
@@ -99,11 +106,12 @@ beforeEach(async () => {
   jest.clearAllMocks();
   useRequestStore.getState().clear();
   Object.assign(nightPoll, { meMs: 60_000, nowMs: 60_000, rotationMs: 60_000, nightMs: 60_000 });
-  Object.assign(makeTiming, { retryMinMs: 5, budgetMs: 2_000 });
+  Object.assign(makeTiming, { retryMinMs: 5, lastStartMs: 2_000 });
   await useAuth.getState().signInWithSession(session());
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 0 });
   gen.listMyJobs.mockResolvedValue([]);
   useNightStore.getState().joinNomad('2121', NIGHT, 'Andrew');
+  for (const w of [STARLIGHT, { ...STARLIGHT, friend: 'Alex' }]) clearPendingMake(useNightStore.getState().userKey, NIGHT, w);
   api.getMe.mockResolvedValue(me());
   api.getNow.mockResolvedValue(nowResult());
   api.getRotation.mockResolvedValue({ etag: '"1"', data: rotationResult([]) });
@@ -226,12 +234,13 @@ it('busy_retry keeps retrying with the same client_request_id and says "Still wo
 });
 
 it('gives up after the retry budget, keeping the id for the next tap', async () => {
-  Object.assign(makeTiming, { retryMinMs: 5, budgetMs: 60 });
+  Object.assign(makeTiming, { retryMinMs: 5, lastStartMs: 60 });
   api.submitRequest.mockRejectedValue(new KjboxError('busy_retry', 409, 0));
   openMake();
   await submitEnabled();
   fireEvent.press(screen.getByTestId('tonight-make-submit'));
-  expect(await screen.findByTestId('tonight-make-error')).toHaveTextContent(/taking longer than usual/);
+  expect(await screen.findByTestId('tonight-make-error')).toHaveTextContent(/may already be on its way.*Your songs/);
+  expect(screen.getByTestId('tonight-make-error')).not.toHaveTextContent(/tap/i);
   const n = api.submitRequest.mock.calls.length;
   api.submitRequest.mockResolvedValue(made());
   fireEvent.press(screen.getByTestId('tonight-make-submit'));
@@ -304,4 +313,101 @@ it('refuses /tonight/make while the request flow is changing a song (ruling E7-R
   expect(await screen.findByTestId('tonight-make-refused')).toBeTruthy();
   expect(api.makeSearch).not.toHaveBeenCalled();
   expect(screen.queryByTestId('tonight-make-submit')).toBeNull();
+});
+
+describe('an unknown make outcome survives leaving the screen (fix round 1, item 1)', () => {
+  it('leave mid-pending, return, make the same song: same client_request_id and source, no new search', async () => {
+    api.submitRequest.mockImplementationOnce(() => new Promise(() => {})); // the box never answers this one
+    const { getPathname } = openMake();
+    await submitEnabled();
+    fireEvent.press(screen.getByTestId('tonight-make-submit'));
+    await waitFor(() => expect(api.submitRequest).toHaveBeenCalledTimes(1));
+    const first = api.submitRequest.mock.calls[0]![1];
+    await act(async () => nav().dismissTo('/tonight'));
+    await waitFor(() => expect(getPathname()).toBe('/tonight'));
+    expect(pending()?.clientRequestId).toBe(first.client_request_id);
+
+    await act(async () => nav().push('/tonight/make?artist=Muse&title=Starlight'));
+    fireEvent.press(await screen.findByTestId('tonight-make-resume'));
+    await waitFor(() => expect(getPathname()).toBe('/tonight'));
+    expect(api.makeSearch).toHaveBeenCalledTimes(1);
+    const second = api.submitRequest.mock.calls[1]![1];
+    expect(second.client_request_id).toBe(first.client_request_id);
+    expect(second.source_meta).toEqual({ search_session_id: 'kj-s1', selection_index: 0 });
+    expect(pending()).toBeNull();
+  });
+
+  it('/me shows the make-it row: it says so and the record is cleared', async () => {
+    api.submitRequest.mockImplementationOnce(() => new Promise(() => {}));
+    const { getPathname } = openMake();
+    await submitEnabled();
+    fireEvent.press(screen.getByTestId('tonight-make-submit'));
+    await waitFor(() => expect(api.submitRequest).toHaveBeenCalledTimes(1));
+    await act(async () => nav().dismissTo('/tonight'));
+    await waitFor(() => expect(getPathname()).toBe('/tonight'));
+    api.getMe.mockResolvedValue(
+      me({ songs: [song({ make: 'making', request: { source_type: 'make', song_artist: 'Muse', song_title: 'Starlight' } })] }),
+    );
+    await act(async () => nav().push('/tonight/make?artist=Muse&title=Starlight'));
+    expect(await screen.findByTestId('tonight-make-already')).toHaveTextContent(/already being made/);
+    await waitFor(() => expect(pending()).toBeNull());
+    expect(screen.queryByTestId('tonight-make-resume')).toBeNull();
+    expect(api.makeSearch).toHaveBeenCalledTimes(1);
+  });
+});
+
+it('undo/redo of a tidy while a send is pending keeps the same client_request_id (item 3)', async () => {
+  Object.assign(makeTiming, { retryMinMs: 5, lastStartMs: 30 });
+  api.makeCheck.mockResolvedValue(verdict({ kind: 'cosmetic', canonical_artist: 'Muse', canonical_title: 'Starlight' }));
+  api.submitRequest.mockRejectedValue(new KjboxError('busy_retry', 409, 0));
+  openMake('artist=muse&title=starlight');
+  await submitEnabled();
+  fireEvent.press(screen.getByTestId('tonight-make-submit'));
+  await screen.findByTestId('tonight-make-error');
+  fireEvent.press(screen.getByTestId('match-undo'));
+  await submitEnabled();
+  fireEvent.press(screen.getByTestId('tonight-make-submit'));
+  await waitFor(() => expect(api.submitRequest.mock.calls.at(-1)![1].song_artist).toBe('muse'));
+  expect(new Set(api.submitRequest.mock.calls.map(([, b]) => b.client_request_id)).size).toBe(1);
+});
+
+it('signed out: sign-in returns to /tonight/make with the params (item 4)', async () => {
+  const open = jest.spyOn(signInUi, 'openSignIn').mockImplementation(() => {});
+  const night = useNightStore.getState().active;
+  await useAuth.getState().signOut();
+  // Signing out drops the night (E2); force one back so the session lapsing under an open screen reaches the gate.
+  useNightStore.setState({ active: night });
+  openMake('artist=Muse&title=Starlight&friend=Alex');
+  fireEvent.press(await screen.findByTestId('tonight-make-signin'));
+  expect(open).toHaveBeenCalledWith('/tonight/make?artist=Muse&title=Starlight&friend=Alex');
+  open.mockRestore();
+});
+
+describe('search sessions (item 5)', () => {
+  it('no search_session_id: searches again instead of sending an empty one', async () => {
+    api.makeSearch.mockResolvedValueOnce({ ...searchResult(), search_session_id: null });
+    openMake();
+    await submitEnabled();
+    fireEvent.press(screen.getByTestId('tonight-make-submit'));
+    await waitFor(() => expect(api.makeSearch).toHaveBeenCalledTimes(2));
+    expect(api.submitRequest).not.toHaveBeenCalled();
+    await submitEnabled();
+    fireEvent.press(screen.getByTestId('tonight-make-submit'));
+    await waitFor(() => expect(api.submitRequest).toHaveBeenCalled());
+    expect(api.submitRequest.mock.calls[0]![1].source_meta).toEqual({ search_session_id: 'kj-s1', selection_index: 0 });
+  });
+
+  it('an expired session (409 conflict on a make submit) searches again once, then shows the error', async () => {
+    api.submitRequest.mockRejectedValue(new KjboxError('conflict', 409));
+    openMake();
+    await submitEnabled();
+    fireEvent.press(screen.getByTestId('tonight-make-submit'));
+    expect(await screen.findByTestId('tonight-make-searched-again')).toBeTruthy();
+    await waitFor(() => expect(api.makeSearch).toHaveBeenCalledTimes(2));
+    await submitEnabled();
+    fireEvent.press(screen.getByTestId('tonight-make-submit'));
+    expect(await screen.findByTestId('tonight-make-error')).toBeTruthy();
+    expect(api.makeSearch).toHaveBeenCalledTimes(2);
+    expect(pending()).toBeNull();
+  });
 });

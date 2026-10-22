@@ -71,7 +71,7 @@ describe('row actions (ruling E4-R4: placeholders wired by E5–E7, shown only w
   });
 
   it('make-it in review offers "Review it now"; a quick version offers preview and sing it now', () => {
-    const review = song({ make: 'review', request: { source_type: 'make' } });
+    const review = song({ make: 'review', gen_job_id: 'job-1', request: { source_type: 'make' } });
     const quick = song({ make: 'making', quick: 'ready', request: { source_type: 'make' } });
     const props = { onReview: jest.fn(), onQuickPreview: jest.fn(), onSingQuick: jest.fn() };
     renderTonight(<YourSongs songs={[review, quick]} {...props} />);
