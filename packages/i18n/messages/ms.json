@@ -50,7 +50,9 @@
     "appleMusicPitch": "Sambungkan akaun anda dan kami akan menggunakan pustaka serta lagu yang baru dimainkan untuk memilih lagu yang pasti anda gemar nyanyikan.",
     "appleMusicReading": "Sedang membaca pustaka Apple Music anda. Pilihan lagu anda akan dikemas kini setelah selesai.",
     "appleMusicReconnect": "Sambung semula Apple Music",
-    "musicServices": "Perkhidmatan muzik anda"
+    "musicServices": "Perkhidmatan muzik anda",
+    "appleMusicDenied": "Nomad Karaoke tidak mempunyai akses kepada Apple Music. Hidupkannya dalam Tetapan › Nomad Karaoke › Media & Apple Music, kemudian cuba lagi.",
+    "appleMusicNoSubscription": "Apple Music tidak berkongsi pustaka anda. Langganan Apple Music diperlukan untuk menyambung."
   },
   "common": {
     "error": "Sesuatu telah berlaku masalah.",

@@ -298,7 +298,9 @@
     "appleMusicExpired": "Your Apple Music sign-in has expired. Reconnect to keep your picks up to date.",
     "appleMusicReconnect": "Reconnect Apple Music",
     "appleMusicDisconnect": "Disconnect Apple Music",
-    "appleMusicFailed": "Couldn't reach Apple Music. Check your connection and try again."
+    "appleMusicFailed": "Couldn't reach Apple Music. Check your connection and try again.",
+    "appleMusicDenied": "Nomad Karaoke doesn't have access to Apple Music. Turn it on in Settings › Nomad Karaoke › Media & Apple Music, then try again.",
+    "appleMusicNoSubscription": "Apple Music didn't share your library. Connecting needs an Apple Music subscription."
   },
   "tonight": {
     "title": "Tonight",

@@ -50,7 +50,9 @@
     "appleMusicPitch": "Ikonekta ito at gagamitin namin ang iyong library at mga kamakailang pinatugtog para pumili ng mga kantang magugustuhan mong kantahin.",
     "appleMusicReading": "Binabasa ang iyong library sa Apple Music. Mag-a-update ang iyong picks kapag tapos na.",
     "appleMusicReconnect": "Ikonekta ulit ang Apple Music",
-    "musicServices": "Iyong mga music service"
+    "musicServices": "Iyong mga music service",
+    "appleMusicDenied": "Walang access ang Nomad Karaoke sa Apple Music. I-on ito sa Settings › Nomad Karaoke › Media & Apple Music, pagkatapos ay subukang muli.",
+    "appleMusicNoSubscription": "Hindi ibinahagi ng Apple Music ang iyong library. Kinakailangan ng subscription sa Apple Music para makakonekta."
   },
   "common": {
     "error": "May nagkaproblema.",

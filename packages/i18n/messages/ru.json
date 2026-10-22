@@ -50,7 +50,9 @@
     "appleMusicPitch": "Подключи сервис, и мы используем твою медиатеку и историю прослушиваний, чтобы подобрать песни, которые тебе понравится петь.",
     "appleMusicReading": "Считываем твою медиатеку Apple Music. Подборки обновятся, как только всё будет готово.",
     "appleMusicReconnect": "Подключить Apple Music заново",
-    "musicServices": "Музыкальные сервисы"
+    "musicServices": "Музыкальные сервисы",
+    "appleMusicDenied": "У Nomad Karaoke нет доступа к Apple Music. Включи его в меню Настройки › Nomad Karaoke › Мультимедиа и Apple Music, затем попробуй снова.",
+    "appleMusicNoSubscription": "Apple Music не предоставил доступ к твоей медиатеке. Для подключения требуется подписка на Apple Music."
   },
   "common": {
     "error": "Что-то пошло не так.",

@@ -50,7 +50,9 @@
     "appleMusicPitch": "Połącz konto, a my wykorzystamy Twoją bibliotekę i ostatnio odtwarzane utwory, aby wybrać piosenki, które pokochasz śpiewać.",
     "appleMusicReading": "Wczytywanie biblioteki Apple Music. Twoje propozycje zaktualizują się po zakończeniu.",
     "appleMusicReconnect": "Połącz ponownie z Apple Music",
-    "musicServices": "Twoje serwisy muzyczne"
+    "musicServices": "Twoje serwisy muzyczne",
+    "appleMusicDenied": "Nomad Karaoke nie ma dostępu do Apple Music. Włącz go w: Ustawienia › Nomad Karaoke › Multimedia i Apple Music, a następnie spróbuj ponownie.",
+    "appleMusicNoSubscription": "Apple Music nie udostępniło Twojej biblioteki. Połączenie wymaga aktywnej subskrypcji Apple Music."
   },
   "common": {
     "error": "Coś poszło nie tak.",

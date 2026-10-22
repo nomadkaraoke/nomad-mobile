@@ -50,7 +50,9 @@
     "appleMusicPitch": "इसे कनेक्ट करो और हम तुम्हारी लाइब्रेरी और हाल ही में बजाए गए गानों से ऐसे गाने चुनेंगे जिन्हें गाना तुम्हें पसंद आएगा।",
     "appleMusicReading": "तुम्हारी Apple Music लाइब्रेरी पढ़ी जा रही है। पूरा होने पर तुम्हारी पसंद अपडेट हो जाएगी।",
     "appleMusicReconnect": "Apple Music फिर से कनेक्ट करो",
-    "musicServices": "तुम्हारी म्यूजिक सेवाएं"
+    "musicServices": "तुम्हारी म्यूजिक सेवाएं",
+    "appleMusicDenied": "Nomad Karaoke के पास Apple Music का एक्सेस नहीं है। इसे Settings › Nomad Karaoke › Media & Apple Music में जाकर चालू करो, फिर दोबारा कोशिश करो।",
+    "appleMusicNoSubscription": "Apple Music ने तुम्हारी लाइब्रेरी शेयर नहीं की। कनेक्ट करने के लिए Apple Music सब्सक्रिप्शन होना ज़रूरी है।"
   },
   "common": {
     "error": "कुछ गड़बड़ हो गई।",

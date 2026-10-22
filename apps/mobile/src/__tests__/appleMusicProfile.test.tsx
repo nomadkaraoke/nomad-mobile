@@ -25,7 +25,14 @@ jest.mock('@nomad/api-decide', () => ({
   listHiddenSongs: jest.fn(async () => []),
   listMusicServices: jest.fn(),
   startAppleMusicLink: jest.fn(),
+  getAppleMusicAppDeveloperToken: jest.fn(async () => 'dev-token'),
+  connectAppleMusic: jest.fn(async () => undefined),
   disconnectMusicService: jest.fn(async () => undefined),
+}));
+const mockNativeAuth = { available: false, request: jest.fn() };
+jest.mock('../../modules/apple-music-auth', () => ({
+  nativeAppleMusicAvailable: () => mockNativeAuth.available,
+  requestAppleMusicUserToken: (t: string) => mockNativeAuth.request(t),
 }));
 jest.mock('@nomad/api-gen', () => ({
   ...jest.requireActual('@nomad/api-gen'),
@@ -57,6 +64,7 @@ beforeEach(async () => {
   await useAuth.getState().signOut();
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 } as never);
   rows = [];
+  mockNativeAuth.available = false;
   m(decide.listMusicServices).mockImplementation(async () => rows);
   m(decide.startAppleMusicLink).mockResolvedValue(LINK);
   openURL = jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
@@ -148,5 +156,56 @@ describe('Apple Music on the music profile', () => {
     rows = [apple()];
     expect(await screen.findByTestId('profile-apple-connected', {}, { timeout: 8000 })).toBeTruthy();
     await waitFor(() => expect(m(decide.listMyArtists).mock.calls.length).toBeGreaterThan(before));
+  });
+});
+
+// Andrew (iPad): "it launched a web browser rather than doing it natively". On iOS, MusicKit does it in the app.
+describe('Apple Music on iOS (native MusicKit)', () => {
+  beforeEach(() => {
+    mockNativeAuth.available = true;
+  });
+
+  it('gets a user token natively and connects without a browser', async () => {
+    mockNativeAuth.request.mockResolvedValue({ status: 'authorized', token: 'mut' });
+    m(decide.connectAppleMusic).mockImplementation(async () => {
+      rows = [apple({ last_sync_at: null })];
+    });
+    open();
+
+    fireEvent.press(await screen.findByTestId('profile-apple-connect'));
+
+    await waitFor(() => expect(decide.connectAppleMusic).toHaveBeenCalledWith('mut'));
+    expect(mockNativeAuth.request).toHaveBeenCalledWith('dev-token');
+    expect(openURL).not.toHaveBeenCalled();
+    expect(await screen.findByTestId('profile-apple-reading')).toBeTruthy();
+  });
+
+  it('explains how to allow access when Apple Music access is denied', async () => {
+    mockNativeAuth.request.mockResolvedValue({ status: 'denied' });
+    open();
+
+    fireEvent.press(await screen.findByTestId('profile-apple-connect'));
+
+    expect(await screen.findByTestId('profile-apple-denied')).toBeTruthy();
+    expect(decide.connectAppleMusic).not.toHaveBeenCalled();
+  });
+
+  it('says a subscription is needed when decide (Apple) refuses the token', async () => {
+    mockNativeAuth.request.mockResolvedValue({ status: 'authorized', token: 'mut' });
+    m(decide.connectAppleMusic).mockRejectedValue(new decide.ApiError(422, 'refused'));
+    open();
+
+    fireEvent.press(await screen.findByTestId('profile-apple-connect'));
+
+    expect(await screen.findByTestId('profile-apple-noSubscription')).toBeTruthy();
+  });
+
+  it('reports other native failures', async () => {
+    mockNativeAuth.request.mockResolvedValue({ status: 'error', code: 'userNotSignedIn' });
+    open();
+
+    fireEvent.press(await screen.findByTestId('profile-apple-connect'));
+
+    expect(await screen.findByTestId('profile-apple-failed')).toBeTruthy();
   });
 });

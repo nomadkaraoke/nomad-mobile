@@ -50,7 +50,9 @@
     "appleMusicPitch": "Connecta'l i farem servir la teva biblioteca i les reproduccions recents per triar cançons que t'encantarà cantar.",
     "appleMusicReading": "Llegint la teva biblioteca d'Apple Music. La teva selecció s'actualitzarà quan s'acabi el procés.",
     "appleMusicReconnect": "Torna a connectar Apple Music",
-    "musicServices": "Els teus serveis de música"
+    "musicServices": "Els teus serveis de música",
+    "appleMusicDenied": "Nomad Karaoke no té accés a Apple Music. Activa'l a Ajustos › Nomad Karaoke › Contingut multimèdia i Apple Music i torna-ho a provar.",
+    "appleMusicNoSubscription": "Apple Music no ha compartit la teva biblioteca. Per connectar-t'hi cal una subscripció a Apple Music."
   },
   "common": {
     "error": "S'ha produït un error.",

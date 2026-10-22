@@ -50,7 +50,9 @@
     "appleMusicPitch": "关联后，我们将根据你的音乐资料库和最近播放记录，为你推荐你可能爱唱的歌曲。",
     "appleMusicReading": "正在读取你的 Apple Music 资料库。完成后将更新为你推荐的歌曲。",
     "appleMusicReconnect": "重新关联 Apple Music",
-    "musicServices": "已绑定的音乐服务"
+    "musicServices": "已绑定的音乐服务",
+    "appleMusicDenied": "Nomad Karaoke 无权访问 Apple Music。请前往“设置”› Nomad Karaoke ›“媒体与 Apple Music”中开启权限，然后重试。",
+    "appleMusicNoSubscription": "Apple Music 未共享您的资料库。连接需要订阅 Apple Music。"
   },
   "common": {
     "error": "出错了。",

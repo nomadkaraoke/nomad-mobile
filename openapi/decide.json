@@ -1193,6 +1193,33 @@
         }
       }
     },
+    "/api/services/apple-music/app-developer-token": {
+      "get": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Apple Music App Developer Token",
+        "description": "Developer token for the iOS app's native MusicKit sign-in (no origin claim: native requests send no\nOrigin header). Signed-in users only, since an unrestricted token works from anywhere.",
+        "operationId": "apple_music_app_developer_token_api_services_apple_music_app_developer_token_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppleMusicDeveloperTokenResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/api/services/apple-music/link": {
       "post": {
         "tags": [
@@ -1220,13 +1247,57 @@
         ]
       }
     },
+    "/api/services/apple-music/link-info": {
+      "get": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Apple Music Link Info",
+        "description": "The account a hand-off link belongs to, shown before connecting so nobody connects their\nApple Music to someone else's account from a forwarded link. 404 when expired or unknown.",
+        "operationId": "apple_music_link_info_api_services_apple_music_link_info_get",
+        "parameters": [
+          {
+            "name": "state",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "title": "State"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppleMusicLinkInfoResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/services/apple-music/connect": {
       "post": {
         "tags": [
           "services"
         ],
         "summary": "Connect Apple Music",
-        "description": "Connect Apple Music with a Music User Token and start syncing it.\n\nSigned-in callers (decide web) send their own token. The app's browser hand-off sends the\n`state` from /apple-music/link instead; it identifies the user once and is then consumed.\n\n- 401: neither a signed-in user nor a valid, unexpired state\n- 422: Apple refused the Music User Token\n- 503: Apple Music isn't configured on this server",
+        "description": "Connect Apple Music with a Music User Token and start syncing it.\n\nSigned-in callers (decide web) send their own token. The app's browser hand-off sends the\n`state` from /apple-music/link instead; it's consumed once Apple accepts the token.\n\n- 401: neither a signed-in user nor a valid, unexpired state\n- 422: Apple refused the Music User Token\n- 503: Apple Music isn't configured on this server",
         "operationId": "connect_apple_music_api_services_apple_music_connect_post",
         "requestBody": {
           "content": {
@@ -4989,6 +5060,27 @@
         "title": "AppleMusicDeveloperTokenResponse",
         "description": "Developer token for MusicKit JS on decide's web origin."
       },
+      "AppleMusicLinkInfoResponse": {
+        "properties": {
+          "account": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Account"
+          }
+        },
+        "type": "object",
+        "required": [
+          "account"
+        ],
+        "title": "AppleMusicLinkInfoResponse",
+        "description": "Which Nomad Karaoke account a hand-off link connects Apple Music to (masked email)."
+      },
       "AppleMusicLinkResponse": {
         "properties": {
           "connect_url": {
@@ -5630,7 +5722,7 @@
         "properties": {
           "services": {
             "additionalProperties": {
-              "$ref": "#/components/schemas/backend__api__routes__my_data__ServiceSummary"
+              "$ref": "#/components/schemas/ServiceSummary"
             },
             "type": "object",
             "title": "Services"
@@ -6986,8 +7078,8 @@
         "properties": {
           "step": {
             "type": "integer",
-            "maximum": 5,
-            "minimum": 1,
+            "maximum": 5.0,
+            "minimum": 1.0,
             "title": "Step",
             "description": "Current quiz step (1-5)"
           },
@@ -7759,35 +7851,11 @@
       },
       "ServiceSummary": {
         "properties": {
-          "service_type": {
-            "type": "string",
-            "title": "Service Type"
+          "connected": {
+            "type": "boolean",
+            "title": "Connected"
           },
-          "service_username": {
-            "type": "string",
-            "title": "Service Username"
-          },
-          "sync_status": {
-            "type": "string",
-            "title": "Sync Status"
-          },
-          "last_sync_at": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Last Sync At"
-          },
-          "tracks_synced": {
-            "type": "integer",
-            "title": "Tracks Synced"
-          },
-          "sync_error": {
+          "username": {
             "anyOf": [
               {
                 "type": "string"
@@ -7796,17 +7864,56 @@
                 "type": "null"
               }
             ],
-            "title": "Sync Error"
+            "title": "Username"
+          },
+          "tracks_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tracks Synced"
+          },
+          "songs_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Songs Synced"
+          },
+          "artists_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artists Synced"
+          },
+          "last_sync_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sync At"
           }
         },
         "type": "object",
         "required": [
-          "service_type",
-          "service_username",
-          "sync_status",
-          "last_sync_at",
-          "tracks_synced",
-          "sync_error"
+          "connected"
         ],
         "title": "ServiceSummary",
         "description": "Summary of a connected music service."
@@ -7990,8 +8097,8 @@
           },
           "count": {
             "type": "integer",
-            "maximum": 50,
-            "minimum": 10,
+            "maximum": 50.0,
+            "minimum": 10.0,
             "title": "Count",
             "description": "Number of artists to return",
             "default": 25
@@ -9332,7 +9439,7 @@
           },
           "services": {
             "items": {
-              "$ref": "#/components/schemas/ServiceSummary"
+              "$ref": "#/components/schemas/backend__models__admin__ServiceSummary"
             },
             "type": "array",
             "title": "Services"
@@ -9765,75 +9872,6 @@
         "title": "YouTubeMusicImportResponse",
         "description": "Result of a YouTube Music playlist import."
       },
-      "backend__api__routes__my_data__ServiceSummary": {
-        "properties": {
-          "connected": {
-            "type": "boolean",
-            "title": "Connected"
-          },
-          "username": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Username"
-          },
-          "tracks_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Tracks Synced"
-          },
-          "songs_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Songs Synced"
-          },
-          "artists_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Artists Synced"
-          },
-          "last_sync_at": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Last Sync At"
-          }
-        },
-        "type": "object",
-        "required": [
-          "connected"
-        ],
-        "title": "ServiceSummary",
-        "description": "Summary of a connected music service."
-      },
       "backend__api__routes__recommendations__UserArtistResponse": {
         "properties": {
           "id": {
@@ -9886,6 +9924,60 @@
         ],
         "title": "UserArtistResponse",
         "description": "Artist from user's listening history."
+      },
+      "backend__models__admin__ServiceSummary": {
+        "properties": {
+          "service_type": {
+            "type": "string",
+            "title": "Service Type"
+          },
+          "service_username": {
+            "type": "string",
+            "title": "Service Username"
+          },
+          "sync_status": {
+            "type": "string",
+            "title": "Sync Status"
+          },
+          "last_sync_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sync At"
+          },
+          "tracks_synced": {
+            "type": "integer",
+            "title": "Tracks Synced"
+          },
+          "sync_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sync Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "service_type",
+          "service_username",
+          "sync_status",
+          "last_sync_at",
+          "tracks_synced",
+          "sync_error"
+        ],
+        "title": "ServiceSummary",
+        "description": "Summary of a connected music service."
       }
     },
     "securitySchemes": {

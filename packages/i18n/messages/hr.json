@@ -50,7 +50,9 @@
     "appleMusicPitch": "Poveži ga i iskoristit ćemo tvoju zbirku i nedavno slušane pjesme kako bismo predložili pjesme koje ćeš voljeti pjevati.",
     "appleMusicReading": "Učitavanje tvoje Apple Music zbirke. Tvoji će se prijedlozi ažurirati kad završi.",
     "appleMusicReconnect": "Ponovno poveži Apple Music",
-    "musicServices": "Tvoji glazbeni servisi"
+    "musicServices": "Tvoji glazbeni servisi",
+    "appleMusicDenied": "Nomad Karaoke nema pristup servisu Apple Music. Uključi ga u Postavke › Nomad Karaoke › Mediji i Apple Music, pa pokušaj ponovno.",
+    "appleMusicNoSubscription": "Apple Music nije podijelio tvoju zbirku. Za povezivanje je potrebna pretplata na Apple Music."
   },
   "common": {
     "error": "Nešto je pošlo po zlu.",

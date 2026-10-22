@@ -50,7 +50,9 @@
     "appleMusicPitch": "Forbind tjenesten, så bruger vi dit bibliotek og senest afspillede numre til at finde sange, du vil elske at synge.",
     "appleMusicReading": "Indlæser dit Apple Music-bibliotek. Dine anbefalinger opdateres, så snart det er færdigt.",
     "appleMusicReconnect": "Genopret forbindelse til Apple Music",
-    "musicServices": "Dine musiktjenester"
+    "musicServices": "Dine musiktjenester",
+    "appleMusicDenied": "Nomad Karaoke har ikke adgang til Apple Music. Slå det til under Indstillinger › Nomad Karaoke › Medier og Apple Music, og prøv igen.",
+    "appleMusicNoSubscription": "Apple Music delte ikke dit bibliotek. Tilknytning kræver et Apple Music-abonnement."
   },
   "common": {
     "error": "Der gik noget galt.",

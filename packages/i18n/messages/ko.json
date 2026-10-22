@@ -50,7 +50,9 @@
     "appleMusicPitch": "Apple Music을 연결하면 보관함과 최근 재생 목록을 바탕으로 부르기 딱 좋은 곡들을 추천해 드려요.",
     "appleMusicReading": "Apple Music 보관함을 불러오는 중입니다. 완료되면 추천 곡이 업데이트됩니다.",
     "appleMusicReconnect": "Apple Music 다시 연결",
-    "musicServices": "연동된 음악 서비스"
+    "musicServices": "연동된 음악 서비스",
+    "appleMusicDenied": "Nomad Karaoke에 Apple Music 접근 권한이 없습니다. 설정 › Nomad Karaoke › 미디어 및 Apple Music에서 켠 다음 다시 시도해 주세요.",
+    "appleMusicNoSubscription": "Apple Music에서 보관함을 공유하지 않았습니다. 연결하려면 Apple Music 구독이 필요합니다."
   },
   "common": {
     "error": "문제가 발생했습니다.",

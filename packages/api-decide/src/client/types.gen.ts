@@ -266,6 +266,18 @@ export type AppleMusicDeveloperTokenResponse = {
 };
 
 /**
+ * AppleMusicLinkInfoResponse
+ *
+ * Which Nomad Karaoke account a hand-off link connects Apple Music to (masked email).
+ */
+export type AppleMusicLinkInfoResponse = {
+    /**
+     * Account
+     */
+    account: string | null;
+};
+
+/**
  * AppleMusicLinkResponse
  *
  * A one-time link that connects Apple Music from a browser the user isn't signed in to (the app).
@@ -735,7 +747,7 @@ export type DataSummaryResponse = {
      * Services
      */
     services: {
-        [key: string]: BackendApiRoutesMyDataServiceSummary;
+        [key: string]: ServiceSummary;
     };
     artists: ArtistsSummary;
     songs: SongsSummary;
@@ -2054,29 +2066,29 @@ export type ServiceStats = {
  */
 export type ServiceSummary = {
     /**
-     * Service Type
+     * Connected
      */
-    service_type: string;
+    connected: boolean;
     /**
-     * Service Username
+     * Username
      */
-    service_username: string;
-    /**
-     * Sync Status
-     */
-    sync_status: string;
-    /**
-     * Last Sync At
-     */
-    last_sync_at: string | null;
+    username?: string | null;
     /**
      * Tracks Synced
      */
-    tracks_synced: number;
+    tracks_synced?: number | null;
     /**
-     * Sync Error
+     * Songs Synced
      */
-    sync_error: string | null;
+    songs_synced?: number | null;
+    /**
+     * Artists Synced
+     */
+    artists_synced?: number | null;
+    /**
+     * Last Sync At
+     */
+    last_sync_at?: string | null;
 };
 
 /**
@@ -3004,7 +3016,7 @@ export type UserDetail = {
     /**
      * Services
      */
-    services: Array<ServiceSummary>;
+    services: Array<BackendModelsAdminServiceSummary>;
     /**
      * Sync Jobs
      */
@@ -3277,38 +3289,6 @@ export type YouTubeMusicImportResponse = {
 };
 
 /**
- * ServiceSummary
- *
- * Summary of a connected music service.
- */
-export type BackendApiRoutesMyDataServiceSummary = {
-    /**
-     * Connected
-     */
-    connected: boolean;
-    /**
-     * Username
-     */
-    username?: string | null;
-    /**
-     * Tracks Synced
-     */
-    tracks_synced?: number | null;
-    /**
-     * Songs Synced
-     */
-    songs_synced?: number | null;
-    /**
-     * Artists Synced
-     */
-    artists_synced?: number | null;
-    /**
-     * Last Sync At
-     */
-    last_sync_at?: string | null;
-};
-
-/**
  * UserArtistResponse
  *
  * Artist from user's listening history.
@@ -3342,6 +3322,38 @@ export type BackendApiRoutesRecommendationsUserArtistResponse = {
      * Genres
      */
     genres?: Array<string>;
+};
+
+/**
+ * ServiceSummary
+ *
+ * Summary of a connected music service.
+ */
+export type BackendModelsAdminServiceSummary = {
+    /**
+     * Service Type
+     */
+    service_type: string;
+    /**
+     * Service Username
+     */
+    service_username: string;
+    /**
+     * Sync Status
+     */
+    sync_status: string;
+    /**
+     * Last Sync At
+     */
+    last_sync_at: string | null;
+    /**
+     * Tracks Synced
+     */
+    tracks_synced: number;
+    /**
+     * Sync Error
+     */
+    sync_error: string | null;
 };
 
 /**
@@ -4100,6 +4112,22 @@ export type AppleMusicDeveloperTokenApiServicesAppleMusicDeveloperTokenGetRespon
 
 export type AppleMusicDeveloperTokenApiServicesAppleMusicDeveloperTokenGetResponse = AppleMusicDeveloperTokenApiServicesAppleMusicDeveloperTokenGetResponses[keyof AppleMusicDeveloperTokenApiServicesAppleMusicDeveloperTokenGetResponses];
 
+export type AppleMusicAppDeveloperTokenApiServicesAppleMusicAppDeveloperTokenGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/services/apple-music/app-developer-token';
+};
+
+export type AppleMusicAppDeveloperTokenApiServicesAppleMusicAppDeveloperTokenGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: AppleMusicDeveloperTokenResponse;
+};
+
+export type AppleMusicAppDeveloperTokenApiServicesAppleMusicAppDeveloperTokenGetResponse = AppleMusicAppDeveloperTokenApiServicesAppleMusicAppDeveloperTokenGetResponses[keyof AppleMusicAppDeveloperTokenApiServicesAppleMusicAppDeveloperTokenGetResponses];
+
 export type AppleMusicLinkApiServicesAppleMusicLinkPostData = {
     body?: never;
     path?: never;
@@ -4115,6 +4143,36 @@ export type AppleMusicLinkApiServicesAppleMusicLinkPostResponses = {
 };
 
 export type AppleMusicLinkApiServicesAppleMusicLinkPostResponse = AppleMusicLinkApiServicesAppleMusicLinkPostResponses[keyof AppleMusicLinkApiServicesAppleMusicLinkPostResponses];
+
+export type AppleMusicLinkInfoApiServicesAppleMusicLinkInfoGetData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * State
+         */
+        state: string;
+    };
+    url: '/api/services/apple-music/link-info';
+};
+
+export type AppleMusicLinkInfoApiServicesAppleMusicLinkInfoGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AppleMusicLinkInfoApiServicesAppleMusicLinkInfoGetError = AppleMusicLinkInfoApiServicesAppleMusicLinkInfoGetErrors[keyof AppleMusicLinkInfoApiServicesAppleMusicLinkInfoGetErrors];
+
+export type AppleMusicLinkInfoApiServicesAppleMusicLinkInfoGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: AppleMusicLinkInfoResponse;
+};
+
+export type AppleMusicLinkInfoApiServicesAppleMusicLinkInfoGetResponse = AppleMusicLinkInfoApiServicesAppleMusicLinkInfoGetResponses[keyof AppleMusicLinkInfoApiServicesAppleMusicLinkInfoGetResponses];
 
 export type ConnectAppleMusicApiServicesAppleMusicConnectPostData = {
     body: AppleMusicConnectRequest;

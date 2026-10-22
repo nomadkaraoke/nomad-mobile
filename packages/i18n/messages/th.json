@@ -50,7 +50,9 @@
     "appleMusicPitch": "เชื่อมต่อเลย เพื่อให้เราช่วยเลือกเพลงที่คุณน่าจะชอบร้องจากคลังเพลงและประวัติการฟังล่าสุดของคุณ",
     "appleMusicReading": "กำลังอ่านข้อมูลคลังเพลง Apple Music ของคุณ รายการเพลงแนะนำจะอัปเดตเมื่อเสร็จเรียบร้อย",
     "appleMusicReconnect": "เชื่อมต่อ Apple Music อีกครั้ง",
-    "musicServices": "บริการเพลงของคุณ"
+    "musicServices": "บริการเพลงของคุณ",
+    "appleMusicDenied": "Nomad Karaoke ไม่ได้รับสิทธิ์เข้าถึง Apple Music โปรดเปิดการเข้าถึงที่ การตั้งค่า › Nomad Karaoke › สื่อและ Apple Music แล้วลองใหม่อีกครั้ง",
+    "appleMusicNoSubscription": "Apple Music ไม่ได้แชร์คลังเพลงของคุณ การเชื่อมต่อจำเป็นต้องมีการสมัครสมาชิก Apple Music"
   },
   "common": {
     "error": "เกิดข้อผิดพลาดบางอย่าง",

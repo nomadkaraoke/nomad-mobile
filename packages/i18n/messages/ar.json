@@ -50,7 +50,9 @@
     "appleMusicPitch": "اربط حسابك وسنعتمد على مكتبتك وما استمعت إليه مؤخرًا لاقتراح أغانٍ ستعشق غناءها.",
     "appleMusicReading": "جارٍ قراءة مكتبة Apple Music الخاصة بك. ستتحدث اختياراتك فور الانتهاء.",
     "appleMusicReconnect": "إعادة ربط Apple Music",
-    "musicServices": "خدمات الموسيقى الخاصة بك"
+    "musicServices": "خدمات الموسيقى الخاصة بك",
+    "appleMusicDenied": "لا يملك Nomad Karaoke إذن الوصول إلى Apple Music. يرجى تفعيله من الإعدادات › Nomad Karaoke › الوسائط وApple Music، ثم أعد المحاولة.",
+    "appleMusicNoSubscription": "لم تتم مشاركة مكتبتك من Apple Music. يتطلب الربط وجود اشتراك في Apple Music."
   },
   "common": {
     "error": "حدث خطأ ما.",

@@ -50,7 +50,9 @@
     "appleMusicPitch": "Conectează serviciul și îți vom folosi biblioteca și piesele ascultate recent pentru a alege melodii pe care vei adora să le cânți.",
     "appleMusicReading": "Îți citim biblioteca Apple Music. Recomandările tale se vor actualiza când procesul este finalizat.",
     "appleMusicReconnect": "Reconectează Apple Music",
-    "musicServices": "Serviciile tale de muzică"
+    "musicServices": "Serviciile tale de muzică",
+    "appleMusicDenied": "Nomad Karaoke nu are acces la Apple Music. Activează permisiunea din Configurări › Nomad Karaoke › Media și Apple Music, apoi încearcă din nou.",
+    "appleMusicNoSubscription": "Apple Music nu a partajat biblioteca ta. Conectarea necesită un abonament Apple Music."
   },
   "common": {
     "error": "Ceva nu a funcționat.",

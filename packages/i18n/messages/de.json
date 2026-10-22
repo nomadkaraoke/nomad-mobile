@@ -50,7 +50,9 @@
     "appleMusicPitch": "Verbinde deinen Account und wir nutzen deine Mediathek sowie kürzlich gespielte Titel, um Songs auszuwählen, die du gerne mitsingst.",
     "appleMusicReading": "Deine Apple Music-Mediathek wird gelesen. Deine Auswahl wird aktualisiert, sobald der Vorgang abgeschlossen ist.",
     "appleMusicReconnect": "Apple Music erneut verbinden",
-    "musicServices": "Deine Musikdienste"
+    "musicServices": "Deine Musikdienste",
+    "appleMusicDenied": "Nomad Karaoke hat keinen Zugriff auf Apple Music. Aktiviere den Zugriff unter Einstellungen › Nomad Karaoke › Medien & Apple Music und versuche es dann erneut.",
+    "appleMusicNoSubscription": "Apple Music hat deine Mediathek nicht freigegeben. Für die Verbindung ist ein Apple Music-Abo erforderlich."
   },
   "common": {
     "error": "Etwas ist schiefgelaufen.",

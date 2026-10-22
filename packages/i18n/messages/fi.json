@@ -50,7 +50,9 @@
     "appleMusicPitch": "Kun yhdistät tilisi, etsimme kirjastosi ja viimeksi kuuntelemiesi kappaleiden perusteella biisejä, joita rakastat laulaa.",
     "appleMusicReading": "Luetaan Apple Music -kirjastoasi. Suosituksesi päivittyvät, kun se on valmis.",
     "appleMusicReconnect": "Yhdistä Apple Music uudelleen",
-    "musicServices": "Musiikkipalvelusi"
+    "musicServices": "Musiikkipalvelusi",
+    "appleMusicDenied": "Nomad Karaokella ei ole pääsyä Apple Musiciin. Ota se käyttöön kohdassa Asetukset › Nomad Karaoke › Media ja Apple Music ja yritä sitten uudelleen.",
+    "appleMusicNoSubscription": "Apple Music ei jakanut kirjastoasi. Yhdistäminen vaatii Apple Music -tilauksen."
   },
   "common": {
     "error": "Jokin meni pieleen.",
