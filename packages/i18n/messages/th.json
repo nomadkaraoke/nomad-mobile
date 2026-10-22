@@ -38,7 +38,7 @@
     "musicProfileUnhide": "เลิกซ่อน",
     "musicProfileArtistsEmpty": "ยังไม่มีศิลปิน",
     "musicProfileDecades": "ทศวรรษ",
-    "musicProfileGenres": "ประเภทหนัง",
+    "musicProfileGenres": "แนวเพลง",
     "musicProfileNone": "ไม่ได้ตั้งค่า",
     "musicProfileRemove": "นำออก"
   },
@@ -389,7 +389,7 @@
         "shortest": "สั้นที่สุดก่อน"
       },
       "apply": "นำไปใช้",
-      "chipGenre": "ประเภทหนัง",
+      "chipGenre": "แนวเพลง",
       "chipMore": "เพิ่มเติม…",
       "chipSort": "เรียงลำดับ",
       "classic": "คลาสสิกเท่านั้น",
