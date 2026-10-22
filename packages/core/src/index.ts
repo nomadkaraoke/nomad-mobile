@@ -36,3 +36,4 @@ export {
 } from './library';
 export * from './discover';
 export * from './imports';
+export * from './voice';
