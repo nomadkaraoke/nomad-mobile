@@ -244,7 +244,7 @@ Rate limits: as the web (per device, with the per-IP ceiling, A.25, A.26), persi
 
 - Shown as a bottom sheet when a song becomes sung (Nomad: when `/me` reports it sung while the app is open, or on next open; Other: when marked sung). Also reachable from any sung row ("How did it go?"). Dismissable; never blocks.
 - Questions (Andrew's list, which supersedes the older KaraokeHunt "why" list in decide `docs/USER-DATA-VISION.md`; Phase 4 may add those reasons as optional chips): **How was it to sing?** (great / OK / not for me), **Key** (too low / about right / too high), **Crowd-pleaser?** (yes / not really), **Notes** (free text, optional). All optional; saved as answered.
-- Saves to decide (`PUT /api/me/karaoke-log/{history_id}` with the survey), through the local outbox.
+- Saves to decide (`PUT /api/my/karaoke-log/{history_id}` with the survey), through the local outbox.
 
 ## 7. decide: karaoke log
 
@@ -254,23 +254,23 @@ Firestore collection `karaoke_log`, doc id = the record id (`kj_…` from kjbox,
 
 ```
 user_id, email_hash, id, source (kjbox|app), state (planned|requested|sung|sung_unplayed|skipped),
-artist, title, song_id? (decide catalog id, resolved best-effort server-side),
+artist, title, song_key? (decide search service key, resolved best-effort server-side), song_key_status,
 night{id, kind (nomad|other), venue_name?, date}, sung_at?, ended_at?, created_at, updated_at,
 survey{feel (great|ok|bad)?, key (too_low|right|too_high)?, crowd_pleaser (bool)?, notes?, answered_at?},
 media{brand_code?, gen_job_id?, source_type?}, deleted (bool)
 ```
 
-**Song identity** (decide CLAUDE.md "Music Data Modeling": store catalog ids, names only as denormalised display fields). Entries the app logs at other bars normally come from search, so they carry decide's song id. But the catalog link must never get in the way of the experience (Andrew, 2026-10-21: "the rigidness of 'There's no free-text entry' may need to soften to protect some aspects of the user experience gracefully even without a decide catalog link, eg. if we find there are things in the kjbox full song library (4tb ssd + youtube downloads on demand) which don't map to any known song in musicbrainz/spotify data"). So **uncatalogued songs are first-class log entries**: they show, count in "what I sing", take the survey and appear in Me like any other, just without catalog-derived features (recommendation signals, facets) until they resolve. At other bars, search stays the main path; when nothing matches, a "Log "<what you typed>" anyway" row (artist + title fields, prefilled from the query) creates an unresolved entry. kjbox records arrive with artist/title strings (rotation entries are names; brand codes are never identity, A.16), so decide resolves `song_id` asynchronously with its search matcher and keeps `song_id_status: resolved|unresolved|ambiguous`; unresolved records still count in the log and are re-tried when the catalog refreshes (and when decide's search index grows). `user_songs` counters below apply to resolved records; unresolved ones are counted per normalised artist + title so nothing a singer sang goes missing from their history.
+**Song identity** (decide CLAUDE.md "Music Data Modeling": store catalog ids, names only as denormalised display fields). Entries the app logs at other bars normally come from search, so they carry decide's `song_key`. But the catalog link must never get in the way of the experience (Andrew, 2026-10-21: "the rigidness of 'There's no free-text entry' may need to soften to protect some aspects of the user experience gracefully even without a decide catalog link, eg. if we find there are things in the kjbox full song library (4tb ssd + youtube downloads on demand) which don't map to any known song in musicbrainz/spotify data"). So **uncatalogued songs are first-class log entries**: they show, count in "what I sing", take the survey and appear in Me like any other, just without catalog-derived features (recommendation signals, facets) until they resolve. At other bars, search stays the main path; when nothing matches, a "Log "<what you typed>" anyway" row (artist + title fields, prefilled from the query) creates an unresolved entry. kjbox records arrive with artist/title strings (rotation entries are names; brand codes are never identity, A.16), so decide resolves `song_key` asynchronously with its search matcher and keeps `song_key_status: resolved|unresolved|ambiguous`; unresolved records still count in the log and are re-tried when the catalog refreshes (and when decide's search index grows). `user_songs` counters below apply to resolved records; unresolved ones are counted per normalised artist + title so nothing a singer sang goes missing from their history.
 
 On transition to `sung`, decide increments `user_songs.times_sung` and sets `last_sung_at` for the resolved song (creating the `user_songs` row with source `karaoke_log` if needed), and decrements on delete. Survey answers are kept per record; Phase 4 builds aggregates.
 
 ### 7.2 Endpoints
 
-- `GET /api/me/karaoke-log?since=<iso>&night_id=` (bearer gen token, 3a auth): the user's records, newest first, paginated.
-- `PUT /api/me/karaoke-log/{id}`: upsert by id with **field-level merge** (the app's survey and kjbox's facts can arrive in either order; kjbox owns `sung_at/ended_at/state/media`, the user owns `survey`; an app write to a `kj_` id may set only `survey` and `deleted`).
-- `DELETE /api/me/karaoke-log/{id}`: soft delete (user removes a mistaken log).
+- `GET /api/my/karaoke-log?since=<iso>&night_id=` (bearer gen token, 3a auth): the user's records, newest first, paginated.
+- `PUT /api/my/karaoke-log/{id}`: upsert by id with **field-level merge** (the app's survey and kjbox's facts can arrive in either order; kjbox owns `sung_at/ended_at/state/media`, the user owns `survey`; an app write to a `kj_` id may set only `survey` and `deleted`).
+- `DELETE /api/my/karaoke-log/{id}`: soft delete (user removes a mistaken log).
 - `PUT /api/partner/kjbox/karaoke-log/{id}` (header `X-Kjbox-Secret`, secret `decide-kjbox-secret` in Secret Manager; Andrew creates it with `/gcp-admin`), body includes `gen_email`; resolves the decide profile by email the same way 3a does (creating it if missing). `DELETE` likewise for un-done.
-- `song_id` resolution: decide's search/match on artist + title, best effort, async; never blocks the write.
+- `song_key` resolution: decide's search/match on artist + title, best effort, async; never blocks the write.
 
 ### 7.3 Tests
 
