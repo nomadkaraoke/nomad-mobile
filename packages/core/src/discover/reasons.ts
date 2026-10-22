@@ -18,11 +18,18 @@ export interface SectionTitleSource {
   title_params?: Record<string, string>;
 }
 
-/** `recs.section.<x>.title` -> `discover.section.<x>`; unknown shapes fall back to crowd_pleasers. */
+/** The sections the app has copy for (packages/i18n `discover.section.*`). */
+const SECTIONS = new Set(['songs_you_know', 'artists_you_love', 'because', 'crowd_pleasers', 'make_it', 'all']);
+
+/**
+ * `recs.section.<x>.title` -> `discover.section.<x>` for a known section; anything else (an unknown shape, or a
+ * section decide added that the app has no copy for yet) falls back to crowd_pleasers.
+ */
 export function sectionTitle(section: SectionTitleSource & { id?: string }): {
   key: string;
   params: Record<string, string>;
 } {
   const m = /^recs\.section\.([a-z0-9_]+)\.title$/.exec(section.title_key);
-  return { key: `discover.section.${m ? m[1] : 'crowd_pleasers'}`, params: { ...(section.title_params ?? {}) } };
+  const name = m?.[1] && SECTIONS.has(m[1]) ? m[1] : 'crowd_pleasers';
+  return { key: `discover.section.${name}`, params: { ...(section.title_params ?? {}) } };
 }

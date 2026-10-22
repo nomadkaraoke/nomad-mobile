@@ -28,4 +28,12 @@ describe('sectionTitle', () => {
     expect(sectionTitle({ title_key: 'recs.section.all.title' })).toEqual({ key: 'discover.section.all', params: {} });
     expect(sectionTitle({ title_key: 'weird' })).toEqual({ key: 'discover.section.crowd_pleasers', params: {} });
   });
+  it.each(['songs_you_know', 'artists_you_love', 'because', 'crowd_pleasers', 'make_it', 'all'])('knows %s', (x) => {
+    expect(sectionTitle({ title_key: `recs.section.${x}.title` }).key).toBe(`discover.section.${x}`);
+  });
+  it('a well-formed but unknown section (decide added one) falls back to crowd_pleasers', () => {
+    expect(sectionTitle({ title_key: 'recs.section.new_thing.title' }).key).toBe('discover.section.crowd_pleasers');
+    // A message key that exists but is not a section title (the reason copy) is not a section either.
+    expect(sectionTitle({ title_key: 'recs.section.allReason.title' }).key).toBe('discover.section.crowd_pleasers');
+  });
 });
