@@ -309,6 +309,8 @@ export const getArtistIndexApiCatalogArtistsIndexGet = <ThrowOnError extends boo
  * but are deprecated and will be removed in a future version.
  *
  * This endpoint is public (no auth required) for quick autocomplete.
+ *
+ * Answered from catalog.db when BigQuery is disabled (local stack) or fails.
  */
 export const searchArtistsApiCatalogArtistsGet = <ThrowOnError extends boolean = true>(options: Options<SearchArtistsApiCatalogArtistsGetData, ThrowOnError>): RequestResult<SearchArtistsApiCatalogArtistsGetResponses, SearchArtistsApiCatalogArtistsGetErrors, ThrowOnError> => (options.client ?? client).get<SearchArtistsApiCatalogArtistsGetResponses, SearchArtistsApiCatalogArtistsGetErrors, ThrowOnError>({ url: '/api/catalog/artists', ...options });
 

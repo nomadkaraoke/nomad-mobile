@@ -578,6 +578,8 @@ export const searchArtistsApiCatalogArtistsGetQueryKey = (options: Options<Searc
  * but are deprecated and will be removed in a future version.
  *
  * This endpoint is public (no auth required) for quick autocomplete.
+ *
+ * Answered from catalog.db when BigQuery is disabled (local stack) or fails.
  */
 export const searchArtistsApiCatalogArtistsGetOptions = (options: Options<SearchArtistsApiCatalogArtistsGetData>) => queryOptions<SearchArtistsApiCatalogArtistsGetResponse, SearchArtistsApiCatalogArtistsGetError, SearchArtistsApiCatalogArtistsGetResponse, ReturnType<typeof searchArtistsApiCatalogArtistsGetQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {

@@ -760,7 +760,7 @@
           "catalog"
         ],
         "summary": "Search Artists",
-        "description": "Search artists for autocomplete.\n\nReturns artists matching the query prefix, sorted by popularity.\nUses MBID-first search (MusicBrainz as source of truth with Spotify enrichment).\n\nResponse includes:\n- mbid: MusicBrainz ID (primary identifier)\n- name: Artist name\n- disambiguation: Descriptive text to distinguish artists with same name\n- tags: MusicBrainz community tags\n- spotify_id: Spotify artist ID (for images, links)\n- popularity: Spotify popularity score\n- genres: Spotify algorithmic genres\n\nFor backward compatibility, artist_id and artist_name are also included\nbut are deprecated and will be removed in a future version.\n\nThis endpoint is public (no auth required) for quick autocomplete.",
+        "description": "Search artists for autocomplete.\n\nReturns artists matching the query prefix, sorted by popularity.\nUses MBID-first search (MusicBrainz as source of truth with Spotify enrichment).\n\nResponse includes:\n- mbid: MusicBrainz ID (primary identifier)\n- name: Artist name\n- disambiguation: Descriptive text to distinguish artists with same name\n- tags: MusicBrainz community tags\n- spotify_id: Spotify artist ID (for images, links)\n- popularity: Spotify popularity score\n- genres: Spotify algorithmic genres\n\nFor backward compatibility, artist_id and artist_name are also included\nbut are deprecated and will be removed in a future version.\n\nThis endpoint is public (no auth required) for quick autocomplete.\n\nAnswered from catalog.db when BigQuery is disabled (local stack) or fails.",
         "operationId": "search_artists_api_catalog_artists_get",
         "parameters": [
           {
@@ -4788,7 +4788,7 @@
         "properties": {
           "artists": {
             "items": {
-              "$ref": "#/components/schemas/backend__api__routes__my_data__UserArtistResponse"
+              "$ref": "#/components/schemas/UserArtistResponse"
             },
             "type": "array",
             "title": "Artists"
@@ -6799,8 +6799,8 @@
         "properties": {
           "step": {
             "type": "integer",
-            "maximum": 5.0,
-            "minimum": 1.0,
+            "maximum": 5,
+            "minimum": 1,
             "title": "Step",
             "description": "Current quiz step (1-5)"
           },
@@ -7818,8 +7818,8 @@
           },
           "count": {
             "type": "integer",
-            "maximum": 50.0,
-            "minimum": 10.0,
+            "maximum": 50,
+            "minimum": 10,
             "title": "Count",
             "description": "Number of artists to return",
             "default": 25
@@ -8920,25 +8920,60 @@
       },
       "UserArtistResponse": {
         "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
+          "mbid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mbid"
           },
           "artist_name": {
             "type": "string",
             "title": "Artist Name"
           },
-          "source": {
-            "type": "string",
-            "title": "Source"
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sources"
           },
-          "rank": {
-            "type": "integer",
-            "title": "Rank"
+          "spotify_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Id"
           },
-          "time_range": {
-            "type": "string",
-            "title": "Time Range"
+          "spotify_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Rank"
+          },
+          "spotify_time_range": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Time Range"
           },
           "popularity": {
             "anyOf": [
@@ -8958,24 +8993,77 @@
             "type": "array",
             "title": "Genres",
             "default": []
+          },
+          "lastfm_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Rank"
+          },
+          "lastfm_playcount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Playcount"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "default": []
+          },
+          "is_excluded": {
+            "type": "boolean",
+            "title": "Is Excluded",
+            "default": false
+          },
+          "is_manual": {
+            "type": "boolean",
+            "title": "Is Manual",
+            "default": false
+          },
+          "affinity": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "love",
+                  "like",
+                  "occasionally"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Affinity"
           }
         },
         "type": "object",
         "required": [
-          "id",
           "artist_name",
-          "source",
-          "rank",
-          "time_range"
+          "sources"
         ],
         "title": "UserArtistResponse",
-        "description": "Artist from user's listening history."
+        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
       },
       "UserArtistsResponse": {
         "properties": {
           "artists": {
             "items": {
-              "$ref": "#/components/schemas/UserArtistResponse"
+              "$ref": "#/components/schemas/backend__api__routes__recommendations__UserArtistResponse"
             },
             "type": "array",
             "title": "Artists"
@@ -9505,62 +9593,27 @@
         "title": "YouTubeMusicImportResponse",
         "description": "Result of a YouTube Music playlist import."
       },
-      "backend__api__routes__my_data__UserArtistResponse": {
+      "backend__api__routes__recommendations__UserArtistResponse": {
         "properties": {
-          "mbid": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Mbid"
+          "id": {
+            "type": "string",
+            "title": "Id"
           },
           "artist_name": {
             "type": "string",
             "title": "Artist Name"
           },
-          "sources": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Sources"
+          "source": {
+            "type": "string",
+            "title": "Source"
           },
-          "spotify_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Id"
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
           },
-          "spotify_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Rank"
-          },
-          "spotify_time_range": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Time Range"
+          "time_range": {
+            "type": "string",
+            "title": "Time Range"
           },
           "popularity": {
             "anyOf": [
@@ -9580,71 +9633,18 @@
             "type": "array",
             "title": "Genres",
             "default": []
-          },
-          "lastfm_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Rank"
-          },
-          "lastfm_playcount": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Playcount"
-          },
-          "tags": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Tags",
-            "default": []
-          },
-          "is_excluded": {
-            "type": "boolean",
-            "title": "Is Excluded",
-            "default": false
-          },
-          "is_manual": {
-            "type": "boolean",
-            "title": "Is Manual",
-            "default": false
-          },
-          "affinity": {
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "love",
-                  "like",
-                  "occasionally"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Affinity"
           }
         },
         "type": "object",
         "required": [
+          "id",
           "artist_name",
-          "sources"
+          "source",
+          "rank",
+          "time_range"
         ],
         "title": "UserArtistResponse",
-        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
+        "description": "Artist from user's listening history."
       },
       "backend__models__admin__ServiceSummary": {
         "properties": {

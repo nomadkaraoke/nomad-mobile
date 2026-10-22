@@ -201,7 +201,7 @@ export type AllArtistsResponse = {
     /**
      * Artists
      */
-    artists: Array<BackendApiRoutesMyDataUserArtistResponse>;
+    artists: Array<UserArtistResponse>;
     /**
      * Total
      */
@@ -2812,29 +2812,36 @@ export type UpgradeGuestResponse = {
 /**
  * UserArtistResponse
  *
- * Artist from user's listening history.
+ * An artist from user's data with merged source information.
+ *
+ * MBID-first: MusicBrainz ID is the primary identifier when available.
+ * Spotify ID is optional enrichment for images and external links.
  */
 export type UserArtistResponse = {
     /**
-     * Id
+     * Mbid
      */
-    id: string;
+    mbid?: string | null;
     /**
      * Artist Name
      */
     artist_name: string;
     /**
-     * Source
+     * Sources
      */
-    source: string;
+    sources: Array<string>;
     /**
-     * Rank
+     * Spotify Id
      */
-    rank: number;
+    spotify_id?: string | null;
     /**
-     * Time Range
+     * Spotify Rank
      */
-    time_range: string;
+    spotify_rank?: number | null;
+    /**
+     * Spotify Time Range
+     */
+    spotify_time_range?: string | null;
     /**
      * Popularity
      */
@@ -2843,6 +2850,30 @@ export type UserArtistResponse = {
      * Genres
      */
     genres?: Array<string>;
+    /**
+     * Lastfm Rank
+     */
+    lastfm_rank?: number | null;
+    /**
+     * Lastfm Playcount
+     */
+    lastfm_playcount?: number | null;
+    /**
+     * Tags
+     */
+    tags?: Array<string>;
+    /**
+     * Is Excluded
+     */
+    is_excluded?: boolean;
+    /**
+     * Is Manual
+     */
+    is_manual?: boolean;
+    /**
+     * Affinity
+     */
+    affinity?: 'love' | 'like' | 'occasionally' | null;
 };
 
 /**
@@ -2854,7 +2885,7 @@ export type UserArtistsResponse = {
     /**
      * Artists
      */
-    artists: Array<UserArtistResponse>;
+    artists: Array<BackendApiRoutesRecommendationsUserArtistResponse>;
     /**
      * Total
      */
@@ -3187,36 +3218,29 @@ export type YouTubeMusicImportResponse = {
 /**
  * UserArtistResponse
  *
- * An artist from user's data with merged source information.
- *
- * MBID-first: MusicBrainz ID is the primary identifier when available.
- * Spotify ID is optional enrichment for images and external links.
+ * Artist from user's listening history.
  */
-export type BackendApiRoutesMyDataUserArtistResponse = {
+export type BackendApiRoutesRecommendationsUserArtistResponse = {
     /**
-     * Mbid
+     * Id
      */
-    mbid?: string | null;
+    id: string;
     /**
      * Artist Name
      */
     artist_name: string;
     /**
-     * Sources
+     * Source
      */
-    sources: Array<string>;
+    source: string;
     /**
-     * Spotify Id
+     * Rank
      */
-    spotify_id?: string | null;
+    rank: number;
     /**
-     * Spotify Rank
+     * Time Range
      */
-    spotify_rank?: number | null;
-    /**
-     * Spotify Time Range
-     */
-    spotify_time_range?: string | null;
+    time_range: string;
     /**
      * Popularity
      */
@@ -3225,30 +3249,6 @@ export type BackendApiRoutesMyDataUserArtistResponse = {
      * Genres
      */
     genres?: Array<string>;
-    /**
-     * Lastfm Rank
-     */
-    lastfm_rank?: number | null;
-    /**
-     * Lastfm Playcount
-     */
-    lastfm_playcount?: number | null;
-    /**
-     * Tags
-     */
-    tags?: Array<string>;
-    /**
-     * Is Excluded
-     */
-    is_excluded?: boolean;
-    /**
-     * Is Manual
-     */
-    is_manual?: boolean;
-    /**
-     * Affinity
-     */
-    affinity?: 'love' | 'like' | 'occasionally' | null;
 };
 
 /**
