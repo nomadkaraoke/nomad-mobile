@@ -396,7 +396,9 @@
         "methodLabel": "¿Cómo dejaste la propina?",
         "other": "Otro",
         "title": "Propina para el anfitrión",
-        "yours": "Tus propinas de esta noche"
+        "yours": "Tus propinas de esta noche",
+        "methodCard": "Tarjeta",
+        "methodPage": "Da propina con tarjeta, Venmo, Cash App y más"
       },
       "close": "Cerrar"
     },

@@ -396,7 +396,9 @@
         "methodLabel": "Com has donat la propina?",
         "other": "Altre",
         "title": "Dona propina a l'amfitrió",
-        "yours": "Les teves propines d'aquesta nit"
+        "yours": "Les teves propines d'aquesta nit",
+        "methodCard": "Targeta",
+        "methodPage": "Dona propina amb targeta, Venmo, Cash App i més"
       },
       "close": "Tanca"
     },

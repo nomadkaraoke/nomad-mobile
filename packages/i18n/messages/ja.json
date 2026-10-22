@@ -396,7 +396,9 @@
         "methodLabel": "どの方法でチップを送りましたか？",
         "other": "その他",
         "title": "ホストにチップを送る",
-        "yours": "今夜のあなたのチップ"
+        "yours": "今夜のあなたのチップ",
+        "methodCard": "カード",
+        "methodPage": "カード、Venmo、Cash Appなどでチップを送る"
       },
       "close": "閉じる"
     },

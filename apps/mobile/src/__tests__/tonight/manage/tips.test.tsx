@@ -108,3 +108,12 @@ it('tips switched off says so', async () => {
   expect(await screen.findByTestId('tonight-tips-off')).toBeTruthy();
   expect(screen.queryByTestId('tonight-tips-claim')).toBeNull();
 });
+
+it("shows the app's own words for the box's fallback page and card labels (the box sends English sentences)", async () => {
+  const page: kjbox.TipMethod = { key: 'page', label: 'Tip — card, Venmo, Cash App & more', url: 'https://example.com/tip', amount_style: 'none' };
+  api.getTips.mockResolvedValue(tips({ methods: [page, card] }));
+  show();
+  expect(await screen.findByTestId('tonight-tips-method-page')).toHaveTextContent('Tip by card, Venmo, Cash App and more');
+  expect(screen.getByTestId('tonight-tips-method-stripe')).toHaveTextContent('Card');
+  expect(screen.queryByText('Tip — card, Venmo, Cash App & more')).toBeNull();
+});

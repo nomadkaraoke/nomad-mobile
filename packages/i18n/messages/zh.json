@@ -396,7 +396,9 @@
         "methodLabel": "您是怎么打赏的？",
         "other": "其他",
         "title": "打赏主持人",
-        "yours": "您今晚的打赏"
+        "yours": "您今晚的打赏",
+        "methodCard": "银行卡",
+        "methodPage": "通过银行卡、Venmo、Cash App 等方式支付小费"
       },
       "close": "关闭"
     },

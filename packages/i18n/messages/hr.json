@@ -396,7 +396,9 @@
         "methodLabel": "Kako si ostavio/la napojnicu?",
         "other": "Ostalo",
         "title": "Ostavi napojnicu voditelju",
-        "yours": "Tvoje napojnice večeras"
+        "yours": "Tvoje napojnice večeras",
+        "methodCard": "Kartica",
+        "methodPage": "Ostavi napojnicu karticom, putem Venma, Cash Appa i više"
       },
       "close": "Zatvori"
     },

@@ -396,7 +396,9 @@
         "methodLabel": "Hoe heb je fooi gegeven?",
         "other": "Anders",
         "title": "Geef de host een fooi",
-        "yours": "Jouw fooien vanavond"
+        "yours": "Jouw fooien vanavond",
+        "methodCard": "Kaart",
+        "methodPage": "Geef een fooi via kaart, Venmo, Cash App en meer"
       },
       "close": "Sluiten"
     },

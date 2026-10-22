@@ -145,7 +145,10 @@ export function TipsScreen({ night, userKey }: { night: NomadNight; userKey: str
   };
 
   const methods = tips.data?.methods ?? [];
-  const claimMethods = [...methods.map((m) => m.label), t('cash'), t('other')];
+  // The box's own fallback labels are English sentences; show ours (brand names and the host's custom label as sent).
+  const label = (m: (typeof methods)[number]) =>
+    m.key === 'page' ? t('methodPage') : m.key === 'stripe' ? t('methodCard') : m.label;
+  const claimMethods = [...methods.map(label), t('cash'), t('other')];
 
   return (
     <SafeAreaView testID="tonight-tips" style={{ flex: 1, backgroundColor: colors.bg }} edges={['left', 'right', 'bottom']}>
@@ -202,7 +205,7 @@ export function TipsScreen({ night, userKey }: { night: NomadNight; userKey: str
                     onPress={() => void copy(m)}
                     className="min-h-12 justify-center rounded-lg border border-border bg-card px-4"
                   >
-                    <Text className="font-semibold">{m.label}</Text>
+                    <Text className="font-semibold">{label(m)}</Text>
                     <Text variant="muted">{copied === m.key ? t('copied', { value: m.value ?? '' }) : t('copy', { value: m.value ?? '' })}</Text>
                   </Pressable>
                 ) : (
@@ -213,7 +216,7 @@ export function TipsScreen({ night, userKey }: { night: NomadNight; userKey: str
                     onPress={() => open(m)}
                     className="min-h-12 justify-center rounded-lg border border-border bg-card px-4"
                   >
-                    <Text className="font-semibold">{m.label}</Text>
+                    <Text className="font-semibold">{label(m)}</Text>
                     {m.amount_style !== 'none' ? <Text variant="muted">{t('amount', { amount: fmtAmount(amount) })}</Text> : null}
                   </Pressable>
                 ),

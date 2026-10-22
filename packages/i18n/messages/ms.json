@@ -396,7 +396,9 @@
         "methodLabel": "Bagaimana anda memberi tip?",
         "other": "Lain-lain",
         "title": "Beri tip kepada hos",
-        "yours": "Tip anda malam ini"
+        "yours": "Tip anda malam ini",
+        "methodCard": "Kad",
+        "methodPage": "Beri tip melalui kad, Venmo, Cash App dan banyak lagi"
       },
       "close": "Tutup"
     },

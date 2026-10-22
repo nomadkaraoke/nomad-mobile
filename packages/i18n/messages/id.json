@@ -396,7 +396,9 @@
         "methodLabel": "Bagaimana kamu memberi tip?",
         "other": "Lainnya",
         "title": "Beri tip ke host",
-        "yours": "Tipmu malam ini"
+        "yours": "Tipmu malam ini",
+        "methodCard": "Kartu",
+        "methodPage": "Beri tip via kartu, Venmo, Cash App, dan lainnya"
       },
       "close": "Tutup"
     },

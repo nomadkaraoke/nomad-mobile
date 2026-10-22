@@ -396,7 +396,9 @@
         "methodLabel": "Wie hast du Trinkgeld gegeben?",
         "other": "Andere",
         "title": "Trinkgeld für den KJ",
-        "yours": "Deine Trinkgelder heute Abend"
+        "yours": "Deine Trinkgelder heute Abend",
+        "methodCard": "Karte",
+        "methodPage": "Trinkgeld per Karte, Venmo, Cash App und mehr"
       },
       "close": "Schließen"
     },

@@ -396,7 +396,9 @@
         "methodLabel": "Cum ai lăsat bacșiș?",
         "other": "Altele",
         "title": "Lasă bacșiș gazdei",
-        "yours": "Bacșișurile tale de diseară"
+        "yours": "Bacșișurile tale de diseară",
+        "methodCard": "Card",
+        "methodPage": "Lasă bacșiș prin card, Venmo, Cash App și altele"
       },
       "close": "Închide"
     },

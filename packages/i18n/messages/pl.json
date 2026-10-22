@@ -396,7 +396,9 @@
         "methodLabel": "Jak dałeś napiwek?",
         "other": "Inne",
         "title": "Daj napiwek prowadzącemu",
-        "yours": "Twoje dzisiejsze napiwki"
+        "yours": "Twoje dzisiejsze napiwki",
+        "methodCard": "Karta",
+        "methodPage": "Daj napiwek kartą, przez Venmo, Cash App i nie tylko"
       },
       "close": "Zamknij"
     },

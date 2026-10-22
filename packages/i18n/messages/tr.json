@@ -396,7 +396,9 @@
         "methodLabel": "Nasıl bahşiş verdin?",
         "other": "Diğer",
         "title": "Sunucuya bahşiş ver",
-        "yours": "Bu geceki bahşişlerin"
+        "yours": "Bu geceki bahşişlerin",
+        "methodCard": "Kart",
+        "methodPage": "Kart, Venmo, Cash App ve daha fazlasıyla bahşiş ver"
       },
       "close": "Kapat"
     },

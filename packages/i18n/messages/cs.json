@@ -396,7 +396,9 @@
         "methodLabel": "Jak jsi dal dýško?",
         "other": "Jiné",
         "title": "Dýško pro KJ",
-        "yours": "Tvá dnešní dýška"
+        "yours": "Tvá dnešní dýška",
+        "methodCard": "Karta",
+        "methodPage": "Dej dýško kartou, přes Venmo, Cash App a další"
       },
       "close": "Zavřít"
     },

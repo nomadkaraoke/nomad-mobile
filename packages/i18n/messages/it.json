@@ -396,7 +396,9 @@
         "methodLabel": "Come hai lasciato la mancia?",
         "other": "Altro",
         "title": "Mancia all'host",
-        "yours": "Le tue mance di stasera"
+        "yours": "Le tue mance di stasera",
+        "methodCard": "Carta",
+        "methodPage": "Lascia una mancia con carta, Venmo, Cash App e altro"
       },
       "close": "Chiudi"
     },

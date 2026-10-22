@@ -396,7 +396,9 @@
         "methodLabel": "Miten annoit tipin?",
         "other": "Muu",
         "title": "Tippaa vetäjää",
-        "yours": "Tippisi tänä iltana"
+        "yours": "Tippisi tänä iltana",
+        "methodCard": "Kortti",
+        "methodPage": "Tippaa kortilla, Venmolla, Cash Appilla tai muilla tavoilla"
       },
       "close": "Sulje"
     },

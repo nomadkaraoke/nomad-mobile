@@ -396,7 +396,9 @@
         "methodLabel": "Hur dricksade du?",
         "other": "Annat",
         "title": "Ge dricks till värden",
-        "yours": "Din dricks ikväll"
+        "yours": "Din dricks ikväll",
+        "methodCard": "Kort",
+        "methodPage": "Dricksa med kort, Venmo, Cash App med mera"
       },
       "close": "Stäng"
     },

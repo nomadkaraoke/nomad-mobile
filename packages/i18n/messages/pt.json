@@ -396,7 +396,9 @@
         "methodLabel": "Como você deu a gorjeta?",
         "other": "Outro",
         "title": "Gorjeta para o anfitrião",
-        "yours": "Suas gorjetas de hoje"
+        "yours": "Suas gorjetas de hoje",
+        "methodCard": "Cartão",
+        "methodPage": "Dê gorjeta com cartão, Venmo, Cash App e mais"
       },
       "close": "Fechar"
     },

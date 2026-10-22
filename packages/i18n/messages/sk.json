@@ -396,7 +396,9 @@
         "methodLabel": "Ako si dal tringelt?",
         "other": "Iné",
         "title": "Tringelt pre KJ",
-        "yours": "Tvoje dnešné tringelty"
+        "yours": "Tvoje dnešné tringelty",
+        "methodCard": "Karta",
+        "methodPage": "Daj prepitné kartou, cez Venmo, Cash App a ďalšie"
       },
       "close": "Zavrieť"
     },

@@ -396,7 +396,9 @@
         "methodLabel": "어떻게 팁을 주셨나요?",
         "other": "기타",
         "title": "호스트에게 팁 주기",
-        "yours": "오늘 밤 내 팁"
+        "yours": "오늘 밤 내 팁",
+        "methodCard": "카드",
+        "methodPage": "카드, Venmo, Cash App 등으로 팁 보내기"
       },
       "close": "닫기"
     },

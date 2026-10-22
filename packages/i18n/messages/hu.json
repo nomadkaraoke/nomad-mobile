@@ -396,7 +396,9 @@
         "methodLabel": "Hogyan adtál borravalót?",
         "other": "Egyéb",
         "title": "Borravaló a házigazdának",
-        "yours": "A te borravalóid ma este"
+        "yours": "A te borravalóid ma este",
+        "methodCard": "Kártya",
+        "methodPage": "Borravaló kártyával, Venmóval, Cash App-pel és egyéb módokon"
       },
       "close": "Bezárás"
     },

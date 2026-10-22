@@ -396,7 +396,9 @@
         "methodLabel": "Hvordan tipset du?",
         "other": "Annet",
         "title": "Tips verten",
-        "yours": "Dine tips i kveld"
+        "yours": "Dine tips i kveld",
+        "methodCard": "Kort",
+        "methodPage": "Gi tips med kort, Venmo, Cash App og mer"
       },
       "close": "Lukk"
     },

@@ -396,7 +396,9 @@
         "methodLabel": "Bạn đã tip bằng cách nào?",
         "other": "Khác",
         "title": "Tip cho KJ",
-        "yours": "Tiền tip của bạn tối nay"
+        "yours": "Tiền tip của bạn tối nay",
+        "methodCard": "Thẻ",
+        "methodPage": "Típ bằng thẻ, Venmo, Cash App và các phương thức khác"
       },
       "close": "Đóng"
     },

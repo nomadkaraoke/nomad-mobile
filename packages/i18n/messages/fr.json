@@ -396,7 +396,9 @@
         "methodLabel": "Comment as-tu donné un pourboire ?",
         "other": "Autre",
         "title": "Pourboire pour le KJ",
-        "yours": "Tes pourboires ce soir"
+        "yours": "Tes pourboires ce soir",
+        "methodCard": "Carte",
+        "methodPage": "Laisse un pourboire par carte, Venmo, Cash App et bien plus"
       },
       "close": "Fermer"
     },

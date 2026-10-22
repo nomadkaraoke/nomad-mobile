@@ -396,7 +396,9 @@
         "methodLabel": "Paano ka nag-tip?",
         "other": "Iba pa",
         "title": "Mag-tip sa host",
-        "yours": "Mga tip mo ngayong gabi"
+        "yours": "Mga tip mo ngayong gabi",
+        "methodCard": "Card",
+        "methodPage": "Mag-tip gamit ang card, Venmo, Cash App, at iba pa"
       },
       "close": "Isara"
     },

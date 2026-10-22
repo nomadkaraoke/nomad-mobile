@@ -640,6 +640,8 @@
         "failed": "Couldn't save that. Try again in a moment."
       },
       "tips": {
+        "methodPage": "Tip by card, Venmo, Cash App and more",
+        "methodCard": "Card",
         "open": "💜 Tip the host",
         "title": "Tip the host",
         "sub": "Tips go straight to your host and help keep the show going.",

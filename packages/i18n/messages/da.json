@@ -396,7 +396,9 @@
         "methodLabel": "Hvordan gav du drikkepenge?",
         "other": "Andet",
         "title": "Giv værten drikkepenge",
-        "yours": "Dine drikkepenge i aften"
+        "yours": "Dine drikkepenge i aften",
+        "methodCard": "Kort",
+        "methodPage": "Giv drikkepenge med kort, Venmo, Cash App og mere"
       },
       "close": "Luk"
     },
