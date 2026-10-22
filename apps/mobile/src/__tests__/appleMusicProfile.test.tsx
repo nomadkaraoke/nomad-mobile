@@ -1,8 +1,8 @@
 // Apple Music on Me -> "Your music profile": connect through decide web's MusicKit page, read status, reconnect.
 import * as decide from '@nomad/api-decide';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
-import * as WebBrowser from 'expo-web-browser';
 import { renderRouter } from 'expo-router/testing-library';
+import { AppState, Linking } from 'react-native';
 
 import { useAuth } from '../auth/store';
 import { appleMusicStatus } from '../discover/profile/useAppleMusic';
@@ -31,10 +31,11 @@ jest.mock('@nomad/api-gen', () => ({
   ...jest.requireActual('@nomad/api-gen'),
   getMe: jest.fn(),
 }));
-jest.mock('expo-web-browser', () => ({ openAuthSessionAsync: jest.fn(), openBrowserAsync: jest.fn() }));
 
 const m = (f: unknown) => f as jest.Mock;
-const browser = WebBrowser as jest.Mocked<typeof WebBrowser>;
+let openURL: jest.SpyInstance;
+let appStateListener: ((s: string) => void) | undefined;
+const backToApp = () => act(() => appStateListener?.('active'));
 const apple = (over: Partial<decide.ConnectedServiceResponse> = {}): decide.ConnectedServiceResponse => ({
   service_type: 'apple_music',
   service_username: 'Apple Music',
@@ -58,6 +59,11 @@ beforeEach(async () => {
   rows = [];
   m(decide.listMusicServices).mockImplementation(async () => rows);
   m(decide.startAppleMusicLink).mockResolvedValue(LINK);
+  openURL = jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
+  jest.spyOn(AppState, 'addEventListener').mockImplementation((_type, fn) => {
+    appStateListener = fn as (s: string) => void;
+    return { remove: jest.fn() } as never;
+  });
   await act(() => useAuth.getState().signInWithSession(session()));
 });
 
@@ -74,27 +80,25 @@ describe('appleMusicStatus', () => {
 });
 
 describe('Apple Music on the music profile', () => {
-  it('connects through the one-time link in an auth session, then shows the library being read', async () => {
-    browser.openAuthSessionAsync.mockImplementation(async () => {
-      rows = [apple({ last_sync_at: null })];
-      return { type: 'success', url: 'nomadkaraoke://music-connected?service=apple_music' };
-    });
+  // Not an in-app tab: Android custom tabs drop Apple's popup opener, so authorize() never finished (Pixel, Firefox).
+  it('opens the one-time link in the phone browser, and on return shows the library being read', async () => {
     open();
 
     fireEvent.press(await screen.findByTestId('profile-apple-connect'));
 
-    await waitFor(() =>
-      expect(browser.openAuthSessionAsync).toHaveBeenCalledWith(LINK.connect_url, 'nomadkaraoke://music-connected'),
-    );
+    await waitFor(() => expect(openURL).toHaveBeenCalledWith(LINK.connect_url));
+    rows = [apple({ last_sync_at: null })];
+    await backToApp();
     expect(await screen.findByTestId('profile-apple-reading')).toBeTruthy();
     expect(screen.queryByTestId('profile-apple-connect')).toBeNull();
   });
 
-  it('a closed browser leaves it not connected, with nothing to report', async () => {
-    browser.openAuthSessionAsync.mockResolvedValue({ type: 'dismiss' } as WebBrowser.WebBrowserAuthSessionResult);
+  it('coming back without connecting leaves it not connected, with nothing to report', async () => {
     open();
 
     fireEvent.press(await screen.findByTestId('profile-apple-connect'));
+    await waitFor(() => expect(openURL).toHaveBeenCalled());
+    await backToApp();
 
     await waitFor(() => expect(decide.listMusicServices).toHaveBeenCalledTimes(2));
     expect(screen.getByTestId('profile-apple-connect')).toBeTruthy();
@@ -108,7 +112,7 @@ describe('Apple Music on the music profile', () => {
     fireEvent.press(await screen.findByTestId('profile-apple-connect'));
 
     expect(await screen.findByTestId('profile-apple-failed')).toBeTruthy();
-    expect(browser.openAuthSessionAsync).not.toHaveBeenCalled();
+    expect(openURL).not.toHaveBeenCalled();
   });
 
   it('shows the song count once read, and disconnects', async () => {
@@ -127,13 +131,12 @@ describe('Apple Music on the music profile', () => {
 
   it('an expired sign-in offers to reconnect', async () => {
     rows = [apple({ sync_status: 'error', sync_error: 'Apple Music sign-in expired - reconnect Apple Music' })];
-    browser.openAuthSessionAsync.mockResolvedValue({ type: 'dismiss' } as WebBrowser.WebBrowserAuthSessionResult);
     open();
 
     expect(await screen.findByTestId('profile-apple-expired')).toBeTruthy();
     fireEvent.press(screen.getByTestId('profile-apple-reconnect'));
 
-    await waitFor(() => expect(browser.openAuthSessionAsync).toHaveBeenCalled());
+    await waitFor(() => expect(openURL).toHaveBeenCalledWith(LINK.connect_url));
   });
 
   it('refreshes the picks when the first read finishes', async () => {

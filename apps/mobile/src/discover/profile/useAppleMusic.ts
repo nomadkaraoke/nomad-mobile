@@ -6,16 +6,14 @@ import {
   type ConnectedServiceResponse,
 } from '@nomad/api-decide';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import * as WebBrowser from 'expo-web-browser';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { AppState, Linking } from 'react-native';
 
 import { useAuth } from '../../auth/store';
 import { RECS_KEY } from '../useRecommendations';
 import { PROFILE_KEY } from './useMusicProfile';
 
 export const SERVICES_KEY = [...PROFILE_KEY, 'services'] as const;
-/** decide web's connect page sends the browser here when it's done (the auth session closes on it). */
-export const APPLE_MUSIC_RETURN_URL = 'nomadkaraoke://music-connected';
 const POLL_MS = 4000;
 
 export type AppleMusicStatus = 'notConnected' | 'reading' | 'connected' | 'expired';
@@ -29,9 +27,14 @@ export function appleMusicStatus(service: ConnectedServiceResponse | undefined):
 }
 
 /**
- * Apple Music on Me's music profile. Connecting opens decide web's MusicKit page in an auth session with a
+ * Apple Music on Me's music profile. Connecting opens decide web's MusicKit page in the phone's browser with a
  * one-time link (the browser isn't signed in to decide); decide then reads the library in the background,
  * so the services list is polled while it does, and the picks refresh when it's done.
+ *
+ * Not an in-app browser tab: Apple's sign-in is a popup that hands the token back through `window.opener`, and
+ * Android custom tabs (Firefox's, found on Andrew's Pixel) drop that, so authorize() never finished. The page
+ * returns with nomadkaraoke://music-connected (+native-intent keeps this screen); coming back to the app by any
+ * route re-reads the services list.
  */
 export function useAppleMusic() {
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
@@ -59,14 +62,20 @@ export function useAppleMusic() {
     lastStatus.current = status;
   }, [status, queryClient]);
 
+  // Back from the browser (the page's hand-back or the app switcher): did it connect?
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state === 'active') void queryClient.invalidateQueries({ queryKey: SERVICES_KEY });
+    });
+    return () => sub.remove();
+  }, [queryClient]);
+
   const connect = useCallback(async () => {
     setBusy(true);
     setFailed(false);
     try {
       const link = await startAppleMusicLink();
-      await WebBrowser.openAuthSessionAsync(link.connect_url, APPLE_MUSIC_RETURN_URL);
-      // Success or the browser closed early: decide's services list says whether it connected.
-      await queryClient.invalidateQueries({ queryKey: SERVICES_KEY });
+      await Linking.openURL(link.connect_url);
     } catch {
       setFailed(true);
     } finally {
