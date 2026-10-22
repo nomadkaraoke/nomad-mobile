@@ -1,9 +1,10 @@
 import { isolate, useTranslations } from '@nomad/i18n';
-import { Button, Screen, Text, TextField } from '@nomad/ui';
+import { Ionicons } from '@expo/vector-icons';
+import { GoogleLogo, Screen, SocialButton, Text, TextField } from '@nomad/ui';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useState } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { finishSignIn, useSignInErrorText, type SignInParams } from '../../auth/signInUi';
 import { appleAvailable, signInWithApple, signInWithGoogle, type SocialResult } from '../../auth/social';
@@ -13,7 +14,10 @@ import { isFreshIntent, useMakeIntent } from '../../make/intentStore';
 
 const PRIVACY_URL = 'https://nomadkaraoke.com/privacy';
 
-/** The sign-in sheet: Google, Apple (iOS), or email. Opened by the make flow with returnTo=/make/new. */
+/**
+ * The sign-in sheet: Apple (iOS, first, as Apple asks), Google, or email. Opened by the make flow with
+ * returnTo=/make/new. Provider buttons follow each provider's branding for dark backgrounds.
+ */
 export default function SignInSheet() {
   const t = useTranslations('signIn');
   const errorText = useSignInErrorText();
@@ -68,33 +72,40 @@ export default function SignInSheet() {
           autoCapitalize="none"
         />
       ) : null}
-      <Button
+      {showApple ? (
+        <SocialButton
+          testID="signin-apple"
+          variant="apple"
+          label={t('apple')}
+          icon={<Ionicons name="logo-apple" size={22} color="#000000" />}
+          onPress={() => void social('apple', signInWithApple)}
+          loading={busy === 'apple'}
+          disabled={busy !== null}
+        />
+      ) : null}
+      <SocialButton
         testID="signin-google"
+        variant="google"
         label={t('google')}
+        icon={<GoogleLogo size={20} />}
         onPress={() => void social('google', signInWithGoogle)}
         loading={busy === 'google'}
         disabled={busy !== null}
       />
-      {showApple ? (
-        <>
-          <Button
-            testID="signin-apple"
-            label={t('apple')}
-            variant="secondary"
-            onPress={() => void social('apple', signInWithApple)}
-            loading={busy === 'apple'}
-            disabled={busy !== null}
-          />
-          <Text variant="muted">{t('appleRelayNote')}</Text>
-        </>
-      ) : null}
-      <Button
+      <View className="flex-row items-center gap-3 py-1">
+        <View className="h-px flex-1 bg-border" />
+        <Text variant="muted">{t('or')}</Text>
+        <View className="h-px flex-1 bg-border" />
+      </View>
+      <SocialButton
         testID="signin-email-start"
+        variant="outline"
         label={t('email')}
-        variant="secondary"
+        icon={<Ionicons name="mail-outline" size={20} color="#F4F4F5" />}
         disabled={busy !== null}
         onPress={() => router.replace({ pathname: '/sign-in/email', params: returnTo ? { returnTo } : {} })}
       />
+      {showApple ? <Text variant="muted">{t('appleRelayNote')}</Text> : null}
       {error ? (
         <Text testID="signin-error" variant="error">
           {error}

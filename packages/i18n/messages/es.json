@@ -96,7 +96,8 @@
     "signupLimited": "Hay demasiadas cuentas nuevas en este momento. Inténtalo de nuevo en un momento.",
     "tooManyCodes": "Se solicitaron demasiados códigos. Inténtalo de nuevo en un momento.",
     "resend": "Enviar un código nuevo",
-    "sheetTitleGeneric": "Iniciar sesión en Nomad Karaoke"
+    "sheetTitleGeneric": "Iniciar sesión en Nomad Karaoke",
+    "or": "o"
   },
   "song": {
     "artistLabel": "Artista",

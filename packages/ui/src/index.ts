@@ -2,6 +2,7 @@ export { colors } from './tokens';
 export { Screen, type ScreenProps } from './Screen';
 export { StartText, Text, type StartTextProps, type TextProps } from './Text';
 export { Button, type ButtonProps } from './Button';
+export { GoogleLogo, SocialButton, type SocialButtonProps } from './SocialButton';
 export { ArtTile, initials, type ArtTileProps } from './ArtTile';
 export { TextField, type TextFieldProps } from './TextField';
 export { CodeField, type CodeFieldProps } from './CodeField';

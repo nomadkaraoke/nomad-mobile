@@ -96,7 +96,8 @@
     "signupLimited": "Terlalu banyak akaun baharu sekarang. Cuba lagi sebentar lagi.",
     "tooManyCodes": "Terlalu banyak kod diminta, cuba lagi sebentar lagi.",
     "resend": "Hantar kod baharu",
-    "sheetTitleGeneric": "Log masuk ke Nomad Karaoke"
+    "sheetTitleGeneric": "Log masuk ke Nomad Karaoke",
+    "or": "atau"
   },
   "song": {
     "artistLabel": "Artis",

@@ -96,7 +96,8 @@
     "sheetTitle": "Inicia la sessió per crear {title}",
     "signupLimited": "Hi ha massa comptes nous ara mateix. Torna-ho a provar d'aquí a una estona.",
     "tooManyCodes": "S'han demanat massa codis; torna-ho a provar d'aquí a una estona",
-    "sheetTitleGeneric": "Inicia sessió a Nomad Karaoke"
+    "sheetTitleGeneric": "Inicia sessió a Nomad Karaoke",
+    "or": "o"
   },
   "song": {
     "artistLabel": "Artista",

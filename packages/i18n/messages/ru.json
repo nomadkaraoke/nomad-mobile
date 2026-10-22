@@ -96,7 +96,8 @@
     "signupLimited": "Сейчас регистрируется слишком много новых аккаунтов. Попробуй чуть позже.",
     "tooManyCodes": "Слишком много запросов кода. Попробуй чуть позже.",
     "resend": "Отправить новый код",
-    "sheetTitleGeneric": "Войти в Nomad Karaoke"
+    "sheetTitleGeneric": "Войти в Nomad Karaoke",
+    "or": "или"
   },
   "song": {
     "artistLabel": "Исполнитель",

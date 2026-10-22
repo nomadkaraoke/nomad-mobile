@@ -96,7 +96,8 @@
     "sheetTitle": "سجّل الدخول لإنشاء {title}",
     "signupLimited": "هناك ضغط كبير في إنشاء الحسابات الجديدة حاليًا. حاول مجددًا بعد قليل.",
     "tooManyCodes": "تم طلب عدد كبير جدًا من الرموز، حاول مجددًا بعد قليل.",
-    "sheetTitleGeneric": "تسجيل الدخول إلى Nomad Karaoke"
+    "sheetTitleGeneric": "تسجيل الدخول إلى Nomad Karaoke",
+    "or": "أو"
   },
   "song": {
     "artistLabel": "فنان",

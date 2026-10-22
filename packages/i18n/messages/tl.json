@@ -96,7 +96,8 @@
     "signupLimited": "Masyadong maraming bagong account ngayon. Subukan muli mamaya.",
     "tooManyCodes": "Masyadong maraming hiniling na code, subukan muli mamaya",
     "resend": "Magpadala ng bagong code",
-    "sheetTitleGeneric": "Mag-sign in sa Nomad Karaoke"
+    "sheetTitleGeneric": "Mag-sign in sa Nomad Karaoke",
+    "or": "o"
   },
   "song": {
     "artistLabel": "Artist",

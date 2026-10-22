@@ -96,7 +96,8 @@
     "signupLimited": "Зараз створюється забагато нових акаунтів. Спробуй ще раз трохи згодом.",
     "tooManyCodes": "Запитано забагато кодів, спробуй ще раз трохи згодом",
     "resend": "Надіслати новий код",
-    "sheetTitleGeneric": "Увійти до Nomad Karaoke"
+    "sheetTitleGeneric": "Увійти до Nomad Karaoke",
+    "or": "або"
   },
   "song": {
     "artistLabel": "Виконавець",

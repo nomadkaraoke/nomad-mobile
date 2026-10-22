@@ -96,7 +96,8 @@
     "signupLimited": "W tej chwili rejestruje się zbyt wiele nowych kont. Spróbuj ponownie za chwilę.",
     "tooManyCodes": "Zbyt wiele próśb o kod. Spróbuj ponownie za chwilę.",
     "resend": "Wyślij nowy kod",
-    "sheetTitleGeneric": "Zaloguj się do Nomad Karaoke"
+    "sheetTitleGeneric": "Zaloguj się do Nomad Karaoke",
+    "or": "lub"
   },
   "song": {
     "artistLabel": "Wykonawca",

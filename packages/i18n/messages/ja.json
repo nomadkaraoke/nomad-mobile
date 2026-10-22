@@ -96,7 +96,8 @@
     "signupLimited": "現在、新規アカウント作成が集中しています。しばらく経ってからもう一度お試しください。",
     "tooManyCodes": "コードの送信リクエストが上限に達しました。しばらく経ってからもう一度お試しください。",
     "resend": "新しいコードを送信する",
-    "sheetTitleGeneric": "Nomad Karaokeにサインイン"
+    "sheetTitleGeneric": "Nomad Karaokeにサインイン",
+    "or": "または"
   },
   "song": {
     "artistLabel": "アーティスト",

@@ -96,7 +96,8 @@
     "signupLimited": "For mange nye kontoer akkurat nå. Prøv igjen om en liten stund.",
     "tooManyCodes": "For mange koder er forespurt. Prøv igjen om en liten stund",
     "resend": "Send en ny kode",
-    "sheetTitleGeneric": "Logg inn på Nomad Karaoke"
+    "sheetTitleGeneric": "Logg inn på Nomad Karaoke",
+    "or": "eller"
   },
   "song": {
     "artistLabel": "Artist",

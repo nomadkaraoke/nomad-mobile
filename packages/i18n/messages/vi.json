@@ -96,7 +96,8 @@
     "signupLimited": "Hiện có quá nhiều tài khoản mới được tạo lúc này. Hãy thử lại sau một lát nhé.",
     "tooManyCodes": "Đã yêu cầu quá nhiều mã, hãy thử lại sau một lát nhé",
     "resend": "Gửi mã mới",
-    "sheetTitleGeneric": "Đăng nhập vào Nomad Karaoke"
+    "sheetTitleGeneric": "Đăng nhập vào Nomad Karaoke",
+    "or": "hoặc"
   },
   "song": {
     "artistLabel": "Nghệ sĩ",
