@@ -35,6 +35,13 @@ export type KjboxSearchState = {
   songs: SearchSong[];
   identification: IdentifyResult | null;
   correction: Correction | null;
+  /**
+   * Karaoke rows for the confidently identified song when the typed text's rows don't include it (the web's
+   * fetchKaraokeForCorrection): "starlite muse" → Muse "Starlight". Empty until (and unless) that search finds rows.
+   */
+  identifiedSongs: SearchSong[];
+  /** That search is still running: hold the empty state and the no-karaoke card until it settles. */
+  fetchingIdentified: boolean;
   /** The singer tapped Undo on the correction: show what they typed. */
   undone: boolean;
   /** "Did you mean…?" chips (ambiguous). */
@@ -62,6 +69,8 @@ const idle = (query: string): Data => ({
   songs: [],
   identification: null,
   correction: null,
+  identifiedSongs: [],
+  fetchingIdentified: false,
   undone: false,
   alternatives: [],
   makeEnabled: true,
@@ -106,6 +115,8 @@ export function useKjboxSearch(q: string): KjboxSearchState {
         if (!live()) return;
         const songs = r.songs ?? [];
         const needsResolve = songs.length === 0 && (!ident || ident.status === 'none');
+        const meant = ident?.status === 'confident' && ident.song ? ident.song : null;
+        const fetchIdentified = meant !== null && !songs.some((g) => sameSong(g, meant));
         setData({
           ...idle(query),
           resultsQuery: query,
@@ -115,7 +126,18 @@ export function useKjboxSearch(q: string): KjboxSearchState {
           makeEnabled: r.make_requests_enabled,
           simpleMode: r.simple_mode,
           resolving: needsResolve,
+          fetchingIdentified: fetchIdentified,
         });
+        if (meant && fetchIdentified) {
+          try {
+            const m = await searchSongs(code, `${meant.artist} ${meant.title}`, sid, nightId);
+            if (!live()) return;
+            setData((d) => ({ ...d, identifiedSongs: m.songs ?? [], fetchingIdentified: false }));
+          } catch {
+            // keep the typed-text rows
+            if (live()) setData((d) => ({ ...d, fetchingIdentified: false }));
+          }
+        }
         if (!needsResolve) return;
         try {
           const res = await resolve(code, query, sid, nightId);
@@ -142,7 +164,12 @@ export function useKjboxSearch(q: string): KjboxSearchState {
   const undo = useCallback(() => setData((d) => ({ ...d, undone: true })), []);
   const redo = useCallback(() => setData((d) => ({ ...d, undone: false })), []);
   const retry = useCallback(() => setAttempt((n) => n + 1), []);
-  const shown = data.correction && !data.undone ? data.correction.songs : data.songs;
+  const shown =
+    data.correction && !data.undone
+      ? data.correction.songs
+      : data.identifiedSongs.length > 0
+        ? data.identifiedSongs
+        : data.songs;
   return { ...data, shown, sid, undo, redo, retry };
 }
 
@@ -178,9 +205,11 @@ export const confidentSong = (s: Pick<KjboxSearchState, 'identification'>): Arti
  * "No karaoke version yet" (A.31): a confident identification, no row is that song, and the song index doesn't say
  * a karaoke version exists (the `karaoke:true` veto: a false "no version" is worse than a missed offer).
  */
-export function songMissing(s: Pick<KjboxSearchState, 'identification' | 'shown' | 'loading' | 'resolving' | 'error'>): boolean {
+type Settle = Pick<KjboxSearchState, 'identification' | 'shown' | 'loading' | 'resolving' | 'fetchingIdentified' | 'error'>;
+
+export function songMissing(s: Settle): boolean {
   const song = confidentSong(s);
-  if (!song || s.loading || s.resolving || s.error) return false;
+  if (!song || s.loading || s.resolving || s.fetchingIdentified || s.error) return false;
   return song.karaoke !== true && !s.shown.some((g) => sameSong(g, song));
 }
 
@@ -188,8 +217,8 @@ export function songMissing(s: Pick<KjboxSearchState, 'identification' | 'shown'
  * The sticky "Not seeing your song? Make it" bar (A.32): results are showing, and identification isn't confident
  * (with a confident one, the song is either in the rows or the no-karaoke card already offers make-it).
  */
-export function showMakeBar(s: Pick<KjboxSearchState, 'identification' | 'shown' | 'loading' | 'resolving' | 'error'>): boolean {
-  if (s.loading || s.error || s.shown.length === 0) return false;
+export function showMakeBar(s: Settle): boolean {
+  if (s.loading || s.fetchingIdentified || s.error || s.shown.length === 0) return false;
   const song = confidentSong(s);
   if (!song) return true;
   const settled = songMissing(s) || s.shown.some((g) => sameSong(g, song)) || song.karaoke !== true;

@@ -5,7 +5,10 @@ import { defaultChoice, sourceFor, useRequestStore } from '../../../tonight/requ
 const kn = (i: number): SearchVersion => ({ source: 'kn', kn: { brand_code: `B${i}`, youtube_url: `https://youtu.be/${i}` } });
 const song = (versions: SearchVersion[]): SearchSong => ({ key: 'k', artist: 'Muse', title: 'Starlight', version_count: versions.length, versions });
 
-beforeEach(() => useRequestStore.getState().clear());
+beforeEach(() => {
+  useRequestStore.getState().clear();
+  useRequestStore.setState({ ambiguous: null });
+});
 
 describe('kj_pick sends every version (ruling E5-R2, A.24)', () => {
   it('a 60-version song submits all 60; the box trims to 50', () => {
@@ -52,5 +55,26 @@ describe('requestStore', () => {
     expect(p).toMatchObject({ mode: 'change', replaces: { id: 7, title: 'Old Song' } });
     useRequestStore.getState().clear();
     expect(useRequestStore.getState()).toMatchObject({ mode: 'new', pending: null, replaces: undefined });
+  });
+
+  it('re-picking the same song and version after an ambiguous failure keeps the client_request_id; another song mints a new one', () => {
+    const v = kn(1);
+    const first = useRequestStore.getState().pick(song([v, kn(2)]), v, 'starl');
+    useRequestStore.getState().noteSend(first, 'ambiguous');
+    useRequestStore.getState().clear(); // backed out of confirm
+    // a fresh search returns equal (not identical) objects
+    const again = useRequestStore.getState().pick(song([kn(1), kn(2)]), kn(1), 'starlight');
+    expect(again.clientRequestId).toBe(first.clientRequestId);
+    const other = useRequestStore.getState().pick(song([kn(1), kn(2)]), kn(2), 'starl');
+    expect(other.clientRequestId).not.toBe(first.clientRequestId);
+    const auto = useRequestStore.getState().pick(song([kn(1), kn(2)]), 'auto', 'starl');
+    expect(auto.clientRequestId).not.toBe(first.clientRequestId);
+  });
+
+  it('a settled send forgets it', () => {
+    const first = useRequestStore.getState().pick(song([kn(1)]), 'auto');
+    useRequestStore.getState().noteSend(first, 'ambiguous');
+    useRequestStore.getState().noteSend(first, 'settled');
+    expect(useRequestStore.getState().pick(song([kn(1)]), 'auto').clientRequestId).not.toBe(first.clientRequestId);
   });
 });

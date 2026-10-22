@@ -113,13 +113,54 @@ it('no-karaoke card on confident identify (A.31), near-misses capped at 3, make 
   expect(api.logSearchEvent).toHaveBeenCalledWith('2121', expect.objectContaining({ action: 'make_offer_tap', data: { where: 'missing_card' } }));
 });
 
-it('the karaoke:true veto hides the no-karaoke card', async () => {
-  api.searchSongs.mockResolvedValue(results([group('Killers Song', 'Killers')]));
-  api.identify.mockResolvedValue(confident('Mr. Brightside', 'The Killers', true));
+it('the karaoke:true veto: no no-karaoke card, and the identified song\'s own rows show', async () => {
+  api.searchSongs.mockImplementation(async (_t, q) =>
+    q === 'The Killers Mr. Brightside' ? results([group('Mr. Brightside', 'The Killers')]) : results([group('Killers Song', 'Killers')]),
+  );
+  api.identify.mockResolvedValue(confident('Mr. Brightside', 'The Killers', true, 'content'));
   renderRouter(requestRoutes(), { initialUrl: '/tonight/search' });
   await type('brightside');
-  expect(await screen.findByTestId('tonight-result-0')).toBeTruthy();
+  expect(await screen.findByTestId('tonight-identified-heading')).toBeTruthy();
+  expect(screen.getByTestId('tonight-result-title-0').props.children).toBe('Mr. Brightside');
   expect(screen.queryByTestId('tonight-no-karaoke')).toBeNull();
+});
+
+describe('search the identified song (the web\'s fetchKaraokeForCorrection)', () => {
+  const starlight = async (karaoke: boolean, found: kjbox.SearchSong[]) => {
+    api.searchSongs.mockImplementation(async (_t, q) => (q === 'Muse Starlight' ? results(found) : results([])));
+    api.identify.mockResolvedValue(confident('Starlight', 'Muse', karaoke, 'content'));
+    renderRouter(requestRoutes(), { initialUrl: '/tonight/search' });
+    await type('starlite muse');
+    await waitFor(() => expect(api.searchSongs).toHaveBeenCalledWith('2121', 'Muse Starlight', expect.any(String), NIGHT));
+  };
+
+  it('"starlite muse" with karaoke:true and an empty typed search shows Muse "Starlight", no empty state', async () => {
+    await starlight(true, [group('Starlight', 'Muse')]);
+    expect(await screen.findByTestId('tonight-result-0')).toBeTruthy();
+    expect(screen.getByTestId('tonight-result-title-0').props.children).toBe('Starlight');
+    expect(screen.queryByTestId('tonight-empty')).toBeNull();
+    expect(screen.queryByTestId('tonight-no-karaoke')).toBeNull();
+    expect(api.resolve).not.toHaveBeenCalled();
+  });
+
+  it('the same with karaoke:false and nothing found shows the no-karaoke card', async () => {
+    await starlight(false, []);
+    expect(await screen.findByTestId('tonight-no-karaoke')).toBeTruthy();
+    expect(screen.queryByTestId('tonight-empty')).toBeNull();
+  });
+
+  it('holds the empty state and the card while that search runs', async () => {
+    const pending = deferred<kjbox.SearchResult>();
+    api.searchSongs.mockImplementation(async (_t, q) => (q === 'Muse Starlight' ? pending.promise : results([])));
+    api.identify.mockResolvedValue(confident('Starlight', 'Muse', false, 'content'));
+    renderRouter(requestRoutes(), { initialUrl: '/tonight/search' });
+    await type('starlite muse');
+    await waitFor(() => expect(api.searchSongs).toHaveBeenCalledTimes(2));
+    expect(screen.queryByTestId('tonight-empty')).toBeNull();
+    expect(screen.queryByTestId('tonight-no-karaoke')).toBeNull();
+    await act(async () => pending.resolve(results([])));
+    expect(await screen.findByTestId('tonight-no-karaoke')).toBeTruthy();
+  });
 });
 
 it('make bar when not confident (A.32); none when the identified song is in the rows', async () => {
@@ -152,6 +193,20 @@ it('"Request this song" auto-selects the best version by default (E5-R2) and ope
   expect(await screen.findByTestId('tonight-confirm')).toBeTruthy();
   expect(useRequestStore.getState().pending?.version).toBe('auto');
   expect(screen.getByTestId('tonight-confirm-source').props.children).toBe("We'll pick the best version for you.");
+});
+
+it('a double tap on "Request this song" pushes confirm once', async () => {
+  api.searchSongs.mockResolvedValue(results([group('Starlight', 'Muse', [kn(1), kn(2)])]));
+  const { getPathname } = renderRouter(requestRoutes(), { initialUrl: '/tonight/search' });
+  await type('starlight');
+  const cta = await screen.findByTestId('tonight-result-request-0');
+  await act(async () => jest.advanceTimersByTimeAsync(400)); // renderRouter runs on fake timers: leave the arm window
+  fireEvent.press(cta);
+  fireEvent.press(cta);
+  expect(await screen.findByTestId('tonight-confirm')).toBeTruthy();
+  fireEvent.press(screen.getByTestId('tonight-confirm-back'));
+  await waitFor(() => expect(getPathname()).toBe('/tonight/search'));
+  expect(screen.queryByTestId('tonight-confirm') === null).toBe(true);
 });
 
 it('a tap right after the list changed is queued, then lands (E5-R1)', async () => {

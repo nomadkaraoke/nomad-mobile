@@ -20,8 +20,8 @@ export type ResultsListProps = {
   onPreview?: (song: SearchSong, version: SearchVersion) => void;
   /** Rows before "Show N more" (near-misses under a no-karaoke card are capped at 3, A.31); null = all. */
   cap: number | null;
-  /** "Other songs with similar names" above near-misses. */
-  heading?: string;
+  /** "Other songs with similar names" above near-misses, or "Karaoke versions of X" above the identified song's rows. */
+  heading?: { text: string; testID: string };
 };
 
 const keyOf = (s: SearchSong, i: number) => s.key ?? `${s.artist}\u0000${s.title}\u0000${i}`;
@@ -52,8 +52,8 @@ export function ResultsList({ songs, arm, simpleMode, onRequest, onPickVersion, 
   return (
     <View testID="tonight-results" className="gap-3">
       {heading ? (
-        <Text testID="tonight-similar-heading" className="text-xs font-bold uppercase text-muted">
-          {heading}
+        <Text testID={heading.testID} className="text-xs font-bold uppercase text-muted">
+          {heading.text}
         </Text>
       ) : null}
       {shown.map((song, i) => {

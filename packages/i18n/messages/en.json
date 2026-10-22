@@ -252,7 +252,7 @@
       "minChars": "Type at least 3 letters to search.",
       "retry": "Try again",
       "requestCta": "Request this song →",
-      "autoBest": "Best version picked automatically",
+      "autoBest": "Auto-select best version",
       "versionsToggle": "{count, plural, one {Choose from # version →} other {Choose from # versions →}}",
       "hideVersions": "Hide versions ↑",
       "showMore": "Show {count} more",
@@ -315,8 +315,11 @@
         "sendChange": "Yes, swap my song",
         "retry": "Try again",
         "back": "Pick a different song",
-        "missing": "Pick a song first."
-      }
+        "missing": "Pick a song first.",
+        "nightEnded": "Tonight's night has ended, so this request can't be sent. Join the next night from Tonight.",
+        "backToTonight": "Back to Tonight"
+      },
+      "karaokeFor": "Karaoke versions of {song}"
     },
     "errors": {
       "unauthenticated": "Your sign-in needs refreshing. Sign in again, then try once more.",

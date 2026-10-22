@@ -1,8 +1,8 @@
 import { logSearchEvent, type ArtistTitle, type SearchSong, type SearchVersion } from '@nomad/api-kjbox';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, colors, Text, TextField } from '@nomad/ui';
-import { router } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { router, useFocusEffect } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -61,7 +61,11 @@ export function SearchScreen({ change, friend }: SearchScreenProps) {
   const missing = settled && songMissing(s);
   const bar = settled && !missing && showMakeBar(s);
   const offerMake = s.makeEnabled && !s.simpleMode && mode !== 'change';
-  const empty = settled && !s.loading && !s.resolving && !s.error && s.shown.length === 0 && !missing;
+  const empty =
+    settled && !s.loading && !s.resolving && !s.fetchingIdentified && !s.error && s.shown.length === 0 && !missing;
+  // The rows are the identified song's own search (not the typed text's): say whose they are.
+  const identifiedRows = !(s.correction && !s.undone) && s.identifiedSongs.length > 0;
+  const meant = confidentSong(s);
   const missingSong = missing ? confidentSong(s) : null;
 
   const log = (action: string, data?: Record<string, unknown>) => {
@@ -91,7 +95,17 @@ export function SearchScreen({ change, friend }: SearchScreenProps) {
     router.push({ pathname: MAKE_ROUTE as never, params: { artist, title } });
   };
 
+  // One push of confirm per pick: a double tap (or a queued tap landing as the first push starts) is ignored until
+  // search has focus again.
+  const leaving = useRef(false);
+  useFocusEffect(
+    useCallback(() => {
+      leaving.current = false;
+    }, []),
+  );
   const choose = (song: SearchSong, version: SearchVersion | 'auto') => {
+    if (leaving.current) return;
+    leaving.current = true;
     useRequestStore.getState().pick(song, version, s.query);
     log('request_song', { song: `${song.title} — ${song.artist}`, source_type: version === 'auto' ? 'kj_pick' : version.source });
     router.push('/tonight/confirm');
@@ -166,7 +180,16 @@ export function SearchScreen({ change, friend }: SearchScreenProps) {
             arm={arm}
             simpleMode={s.simpleMode}
             cap={missing ? SIMILAR_CAP : null}
-            heading={missing ? t('similarHeading') : undefined}
+            heading={
+              missing
+                ? { text: t('similarHeading'), testID: 'tonight-similar-heading' }
+                : identifiedRows && meant
+                  ? {
+                      text: t('karaokeFor', { song: t('songByArtist', { title: isolate(meant.title), artist: isolate(meant.artist) }) }),
+                      testID: 'tonight-identified-heading',
+                    }
+                  : undefined
+            }
             onRequest={(song) => choose(song, defaultChoice(song))}
             onPickVersion={(song, v) => choose(song, v)}
             onInfo={setInfo}

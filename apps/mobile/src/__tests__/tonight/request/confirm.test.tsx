@@ -1,6 +1,6 @@
 import * as kjbox from '@nomad/api-kjbox';
 import { QueryClient } from '@tanstack/react-query';
-import { fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { useAuth } from '../../../auth/store';
@@ -60,6 +60,7 @@ beforeEach(async () => {
   jest.useRealTimers();
   jest.clearAllMocks();
   useRequestStore.getState().clear();
+  useRequestStore.setState({ ambiguous: null });
   Object.assign(nightPoll, { meMs: 60_000, nowMs: 60_000, rotationMs: 60_000, nightMs: 60_000 });
   await useAuth.getState().signInWithSession(session());
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 1 });
@@ -142,6 +143,26 @@ it('a change keeps the slot: POST /requests/{id}/change with the replaced id, "R
   fireEvent.press(screen.getByTestId('tonight-confirm-send'));
   await waitFor(() => expect(api.changeRequest).toHaveBeenCalledWith('2121', 41, expect.objectContaining({ source_type: 'kj_pick' })));
   expect(api.submitRequest).not.toHaveBeenCalled();
+});
+
+it('busy_retry is ambiguous: re-picking the same song keeps the client_request_id', async () => {
+  const p = useRequestStore.getState().pick(group('Starlight', 'Muse', [kn(1), kn(2)]), 'auto', 'starl');
+  api.submitRequest.mockRejectedValue(new KjboxError('busy_retry', 409, 2));
+  renderRouter(requestRoutes(), { initialUrl: '/tonight/confirm' });
+  fireEvent.press(await screen.findByTestId('tonight-confirm-send'));
+  expect(await screen.findByTestId('tonight-confirm-error')).toBeTruthy();
+  expect(useRequestStore.getState().ambiguous?.clientRequestId).toBe(p.clientRequestId);
+  const again = useRequestStore.getState().pick(group('Starlight', 'Muse', [kn(1), kn(2)]), 'auto', 'starl');
+  expect(again.clientRequestId).toBe(p.clientRequestId);
+});
+
+it('a night that ended while confirm was open says so, not "Pick a song first"', async () => {
+  useRequestStore.getState().pick(group('Starlight', 'Muse', [kn(1), kn(2)]), 'auto', 'starl');
+  renderRouter(requestRoutes(), { initialUrl: '/tonight/confirm' });
+  expect(await screen.findByTestId('tonight-confirm')).toBeTruthy();
+  act(() => useNightStore.getState().end());
+  expect(await screen.findByTestId('tonight-confirm-night-ended')).toBeTruthy();
+  expect(screen.queryByTestId('tonight-confirm-missing')).toBeNull();
 });
 
 it('rate_limited shows the wait from retry_after (E5-R5)', async () => {

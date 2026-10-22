@@ -3,7 +3,7 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useNightStore } from '../nightStore';
 import { nightKey } from '../nomad/queries';
@@ -29,9 +29,24 @@ export function ConfirmScreen() {
   const userKey = useNightStore((s) => s.userKey);
   const queryClient = useQueryClient();
   const [sending, setSending] = useState(false);
+  const inFlight = useRef(false); // a ref: two taps in one frame both see stale `sending` state
   const [error, setError] = useState<string | null>(null);
 
-  if (!pending || night?.kind !== 'nomad') {
+  if (night?.kind !== 'nomad') {
+    // The night ended (night_changed, or ended elsewhere) while confirm was open.
+    return (
+      <Screen testID="tonight-confirm-screen">
+        <Text testID="tonight-confirm-night-ended">{t('nightEnded')}</Text>
+        <Button
+          testID="tonight-confirm-night-ended-back"
+          variant="secondary"
+          label={t('backToTonight')}
+          onPress={() => router.dismissTo(NIGHT_ROUTE)}
+        />
+      </Screen>
+    );
+  }
+  if (!pending) {
     return (
       <Screen testID="tonight-confirm-screen">
         <Text testID="tonight-confirm-missing">{t('missing')}</Text>
@@ -41,7 +56,8 @@ export function ConfirmScreen() {
   }
 
   const send = async () => {
-    if (sending) return;
+    if (inFlight.current) return;
+    inFlight.current = true;
     setSending(true);
     setError(null);
     const p = pending; // the same pick (and client_request_id) for every retry from this confirm
@@ -57,11 +73,16 @@ export function ConfirmScreen() {
           ...(p.mode === 'friend' && p.friendName ? { for_friend: true, friend_name: p.friendName } : {}),
         });
       }
+      useRequestStore.getState().noteSend(p, 'settled');
       void queryClient.invalidateQueries({ queryKey: nightKey(night, userKey) });
       // Leaving search + confirm clears the pick (useRequestFlowScope); clearing here would flash "Pick a song first".
       router.dismissTo(NIGHT_ROUTE);
     } catch (e) {
+      inFlight.current = false;
       setSending(false);
+      // Unknown outcome (it may have landed): re-picking the same song keeps this client_request_id.
+      const ambiguous = !(e instanceof KjboxError) || e.unreachable || e.code === 'busy_retry' || e.code === 'internal';
+      useRequestStore.getState().noteSend(p, ambiguous ? 'ambiguous' : 'settled');
       if (e instanceof KjboxError && e.code === 'night_changed') {
         // The host started a new night (A.89): this request can't land in it.
         useNightStore.getState().end();

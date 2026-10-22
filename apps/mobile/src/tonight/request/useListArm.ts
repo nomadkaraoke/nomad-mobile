@@ -8,14 +8,15 @@ export type ListArm = {
   arm(): void;
   /**
    * Wraps a press handler. Outside the arm window it runs at once. Inside it the tap is queued and replayed when
-   * the window ends (ruling E5-R1: the web's silent swallow, A.18, lost real taps). A later tap replaces a queued one.
+   * the window ends (ruling E5-R1: the web's silent swallow, A.18, lost real taps). A later tap replaces a queued one;
+   * a further list change drops it (its target is gone).
    */
   guard<A extends unknown[]>(fn: (...args: A) => void): (...args: A) => void;
 };
 
 /**
  * Tonight's tap arming for the search results. Unlike find/useTapGuard (which drops early taps, and whose callers
- * rely on that), a tap during the window is never dropped: it runs once the list has been still for LIST_ARM_MS.
+ * rely on that), a tap during the window is queued and runs once the window ends, unless the list changes again first.
  */
 export function useListArm(): ListArm {
   const armedAt = useRef(0);
@@ -43,9 +44,13 @@ export function useListArm(): ListArm {
 
   const arm = useCallback(() => {
     armedAt.current = Date.now();
-    // A tap already waiting replays at the end of the new window, not inside it.
-    if (queued.current) schedule();
-  }, [schedule]);
+    // A tap still waiting was aimed at the list that just went away: drop it rather than replay a stale target.
+    queued.current = null;
+    if (timer.current) {
+      clearTimeout(timer.current);
+      timer.current = null;
+    }
+  }, []);
 
   const guard = useCallback(
     <A extends unknown[]>(fn: (...args: A) => void) =>

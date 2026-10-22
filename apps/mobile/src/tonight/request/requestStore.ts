@@ -30,13 +30,27 @@ type RequestStore = {
   friendName?: string;
   /** The picked song waiting on the confirm screen. */
   pending: PendingRequest | null;
+  /**
+   * The last send whose outcome is unknown (unreachable, busy_retry, internal): it may have landed. Re-picking the
+   * same song and version reuses its client_request_id so the box dedupes it. Kept across clear() (the singer may
+   * back out and come back); forgotten after a send that clearly succeeded or failed.
+   */
+  ambiguous: { signature: string; clientRequestId: string } | null;
   startChange(replaces: Replaces): void;
   startFriend(name: string): void;
-  /** Picks a song: mints a fresh client_request_id for this confirm. */
+  /** Picks a song: a fresh client_request_id for this confirm, or the ambiguous send's when it is the same pick. */
   pick(song: SearchSong, version: SearchVersion | 'auto', searched?: string): PendingRequest;
   /** Forgets the pending pick and any change/friend mode (leaving search and confirm, A.39). */
   clear(): void;
+  /** Records how the pending pick's send ended: 'ambiguous' (may have landed) or 'settled' (it did, or clearly didn't). */
+  noteSend(p: PendingRequest, outcome: 'ambiguous' | 'settled'): void;
 };
+
+/** Same request = same mode, target and song/source (kj_pick by song, not by its version snapshot). */
+export function requestSignature(p: Pick<PendingRequest, 'song' | 'version' | 'mode' | 'replaces' | 'friendName'>): string {
+  const { song_artist, song_title, source_type, source_ref } = sourceFor(p.song, p.version);
+  return JSON.stringify([p.mode, p.replaces?.id ?? null, p.friendName ?? null, song_artist, song_title, source_type, source_ref]);
+}
 
 /** A UUID v4 (expo-crypto, with a Math.random fallback where the native module is missing). */
 export function newRequestId(): string {
@@ -55,6 +69,7 @@ export function newRequestId(): string {
 export const useRequestStore = create<RequestStore>((set, get) => ({
   mode: 'new',
   pending: null,
+  ambiguous: null,
   startChange(replaces) {
     set({ mode: 'change', replaces, friendName: undefined, pending: null });
   },
@@ -62,21 +77,24 @@ export const useRequestStore = create<RequestStore>((set, get) => ({
     set({ mode: 'friend', friendName: name.trim(), replaces: undefined, pending: null });
   },
   pick(song, version, searched) {
-    const { mode, replaces, friendName } = get();
-    const pending: PendingRequest = {
+    const { mode, replaces, friendName, ambiguous } = get();
+    const target = {
       song,
       version,
       mode,
       ...(mode === 'change' && replaces ? { replaces } : {}),
       ...(mode === 'friend' && friendName ? { friendName } : {}),
-      clientRequestId: newRequestId(),
-      ...(searched ? { searched } : {}),
     };
+    const reuse = ambiguous && ambiguous.signature === requestSignature(target) ? ambiguous.clientRequestId : null;
+    const pending: PendingRequest = { ...target, clientRequestId: reuse ?? newRequestId(), ...(searched ? { searched } : {}) };
     set({ pending });
     return pending;
   },
   clear() {
     set({ mode: 'new', replaces: undefined, friendName: undefined, pending: null });
+  },
+  noteSend(p, outcome) {
+    set({ ambiguous: outcome === 'ambiguous' ? { signature: requestSignature(p), clientRequestId: p.clientRequestId } : null });
   },
 }));
 
