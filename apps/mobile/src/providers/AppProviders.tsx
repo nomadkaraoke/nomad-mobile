@@ -8,6 +8,7 @@ import { setupApiClients } from '../api/setup';
 import { useAuth } from '../auth/store';
 import { useSessionCheck } from '../auth/useSessionCheck';
 import { fakeSocialEnabled } from '../config';
+import { useClearDiscoverOnSignOut } from '../discover/useClearDiscoverOnSignOut';
 import { useSearchWarmup } from '../find/useSearchWarmup';
 import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
@@ -37,6 +38,12 @@ function SearchWarmup() {
 /** Ruling E8-R2: sends the karaoke-log outbox on launch, on reconnect and on foreground. */
 function LogSync() {
   useLogSync();
+  return null;
+}
+
+/** Discover's picks, music profile and quiz draft belong to the signed-in person: dropped on sign-out. */
+function ClearDiscoverOnSignOut() {
+  useClearDiscoverOnSignOut();
   return null;
 }
 
@@ -70,6 +77,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
           <SessionCheck />
           <SearchWarmup />
           <LogSync />
+          <ClearDiscoverOnSignOut />
           {children}
         </QueryClientProvider>
       </IntlProvider>

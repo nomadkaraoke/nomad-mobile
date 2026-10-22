@@ -68,12 +68,12 @@ it('library filter applies to add search (E9-R1: the slot is above the results, 
   expect(dapi.searchSongs).toHaveBeenCalledWith('starlight', expect.objectContaining({ library: 'karafun' }));
 });
 
-it('without a library the search call carries none (decide search unchanged)', async () => {
+it('without a library the search uses the venue filter (Phase 3 default: any)', async () => {
   dapi.searchSongs.mockResolvedValue(response([starlight]));
   renderTonight(<AddSong />);
   fireEvent.changeText(screen.getByTestId('other-add-query'), 'starlight');
   expect(await screen.findByTestId('other-add-result-0')).toBeTruthy();
-  expect(dapi.searchSongs.mock.calls[0]?.[1]?.library).toBeUndefined();
+  expect(dapi.searchSongs.mock.calls[0]?.[1]?.library).toBe('any');
 });
 
 it('picking a result logs it with its song_key in the chosen state', async () => {

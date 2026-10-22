@@ -3,6 +3,8 @@ import { client as searchClient } from './search-client/client.gen';
 
 export type ClientDeps = {
   baseUrl: string;
+  /** Search service origin (Phase 3a splits it from the main API). Defaults to `baseUrl`. */
+  searchBaseUrl?: string;
   getToken: () => string | null;
   getLocale: () => string;
   /** Stable anonymous install id, sent as X-Device-Id. The app owns persistence (API clients never touch storage). */
@@ -32,10 +34,13 @@ function retryAfterSeconds(header: string | null | undefined): number | null {
 type Interceptors = { request: number | null; error: number | null };
 const installed = new Map<typeof client, Interceptors>();
 
-/** Point both generated clients (main decide API + search service) at an environment. Storage-agnostic: the app injects getters. */
+/** Point both generated clients (main decide API + search service) at an environment; search uses `searchBaseUrl ?? baseUrl`. Storage-agnostic: the app injects getters. */
 export function configureClient(deps: ClientDeps): void {
-  for (const c of [client, searchClient]) {
-    c.setConfig({ baseUrl: deps.baseUrl, throwOnError: true });
+  for (const [c, baseUrl] of [
+    [client, deps.baseUrl],
+    [searchClient, deps.searchBaseUrl ?? deps.baseUrl],
+  ] as const) {
+    c.setConfig({ baseUrl, throwOnError: true });
     const prev = installed.get(c) ?? { request: null, error: null };
     if (prev.request !== null) c.interceptors.request.eject(prev.request);
     if (prev.error !== null) c.interceptors.error.eject(prev.error);

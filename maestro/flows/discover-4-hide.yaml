@@ -1,0 +1,46 @@
+# Discover core 4 (Phase 3a spec §8.1, §9.2): a pick's ⋯ menu → Not for me hides the song (with an undo toast),
+# and it is gone from the list. Persona A (see discover-3).
+appId: com.nomadkaraoke.mobile
+name: discover-4-hide
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: discover4
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["rock"],"decades":["2000s"],"energy":"high","artists":[{"name":"Muse","affinity":"love"}]}'
+# The first section's first row (iOS reads the row as "title, artist, reason, badges").
+- copyTextFrom:
+    id: "rec-row-.*-0"
+    index: 0
+- runScript:
+    file: ../scripts/remember-text.js
+    env:
+      NAME: hidden
+- tapOn:
+    id: "rec-menu-.*-0"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: "song-menu-hide"
+    timeout: 5000
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-4-song-menu
+- tapOn:
+    id: "song-menu-hide"
+- extendedWaitUntil:
+    visible:
+      id: "discover-hidden-toast"
+    timeout: 10000
+- assertVisible:
+    id: "discover-hidden-undo"
+- extendedWaitUntil:
+    notVisible:
+      id: "rec-row-.*"
+      text: ${output.hidden}
+    timeout: 10000
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-4-hidden-toast

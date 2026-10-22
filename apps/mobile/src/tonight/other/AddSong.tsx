@@ -1,4 +1,5 @@
 import type { SongGroup } from '@nomad/api-decide';
+import type { LibraryFilter } from '@nomad/core';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, colors, Text, TextField } from '@nomad/ui';
 import { router } from 'expo-router';
@@ -29,8 +30,8 @@ type Picked = { song: LogSong; typed: boolean };
 export type AddSongProps = {
   /** A song chosen elsewhere (the song page's "Add to tonight"): skips the search. */
   prefill?: LogSong;
-  /** Venue library override for the search (Phase 3: defaults to Discover's venue filter). */
-  library?: string;
+  /** Venue library override for the search (`useSearch` defaults to Discover's venue filter, `useLibraryFilter()`). */
+  library?: LibraryFilter;
 };
 
 /**

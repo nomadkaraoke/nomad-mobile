@@ -1,0 +1,22 @@
+# A signed-in Discover with a seeded decide profile, showing its picks. Env: EMAIL, PROFILE (see
+# seed-decide-profile.yaml). Seeds before signing in, so the first picks request already has the profile.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    file: seed-decide-profile.yaml
+    env:
+      EMAIL: ${EMAIL}
+      PROFILE: ${PROFILE}
+- runFlow: launch.yaml
+- runFlow:
+    file: discover-signin.yaml
+    env:
+      EMAIL: ${EMAIL}
+- extendedWaitUntil:
+    visible:
+      id: "discover-picks"
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+      id: "rec-row-.*-0"
+    timeout: 30000

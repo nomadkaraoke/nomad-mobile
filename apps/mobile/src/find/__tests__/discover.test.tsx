@@ -1,7 +1,7 @@
 // Discover's four search outcomes (spec §4.1) over mocked useSearch states.
 import * as decide from '@nomad/api-decide';
 import type { SongGroup, SongRef, Version } from '@nomad/api-decide';
-import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 import { Linking } from 'react-native';
 
@@ -11,6 +11,7 @@ import { logEvent } from '../searchSession';
 import type { SearchState } from '../useSearch';
 
 jest.mock('@nomad/api-decide', () => ({
+  ...jest.requireActual<typeof import('../../test-utils/decideDiscoverMock')>('../../test-utils/decideDiscoverMock').discoverMocks(),
   resolveQuery: jest.fn(),
   pingSearch: jest.fn(async () => true),
   logSearchEvent: jest.fn(async () => {}),
@@ -113,8 +114,9 @@ describe('1 · confident, has karaoke versions', () => {
     expect(screen.getByText('Karaoke versions (2)')).toBeTruthy();
     expect(screen.getByTestId('version-row-0')).toBeTruthy();
     expect(screen.getByTestId('version-row-1')).toBeTruthy();
-    expect(screen.getByText('Community')).toBeTruthy();
-    expect(screen.getByText('Commercial')).toBeTruthy();
+    // Scoped: the library filter's "Community" chip is on screen too.
+    expect(within(screen.getByTestId('version-row-0')).getByText('Community')).toBeTruthy();
+    expect(within(screen.getByTestId('version-row-1')).getByText('Commercial')).toBeTruthy();
     expect(screen.getByTestId('similar-row-0')).toBeTruthy();
     expect(screen.getByText('Other songs with similar names (1)')).toBeTruthy();
     expect(screen.queryByTestId('missing-card')).toBeNull();

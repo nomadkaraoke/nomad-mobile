@@ -65,7 +65,11 @@ function ref(r: SongRef) {
 function pyRef(r: PyRef) {
   return { artist: r.artist, title: r.title, songKey: r.song_key, popularity: r.popularity, karaoke: r.karaoke };
 }
-function pyGroup(g: PyGroup): OfflineGroup {
+// The Python reference has no library tags; compare groups without them.
+function withoutLibraries(gs: OfflineGroup[]): Omit<OfflineGroup, 'libraries'>[] {
+  return gs.map(({ libraries: _libraries, ...rest }) => rest);
+}
+function pyGroup(g: PyGroup): Omit<OfflineGroup, 'libraries'> {
   return {
     songKey: g.song_key,
     artist: g.artist,
@@ -124,7 +128,7 @@ describe.each(CASES.map((c, i) => [i, JSON.stringify(c.q).slice(0, 60), c] as co
     });
 
     it('offlineGroups matches Python', () => {
-      expect(offlineGroups(db, got)).toEqual(c.groups.map(pyGroup));
+      expect(withoutLibraries(offlineGroups(db, got))).toEqual(c.groups.map(pyGroup));
     });
   },
 );

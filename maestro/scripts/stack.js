@@ -1,6 +1,6 @@
 // Maestro runScript helper for the gen local stack's test API (/api/test/*, fake workers only).
 // Env (pass with runScript `env:`; STACK comes from `maestro test -e STACK=http://127.0.0.1:8010`):
-//   ACTION   setup | code | config | judge | job | scenario | review
+//   ACTION   setup | code | config | judge | job | scenario | review | decide-seed | decide-reset
 //   setup:   NAME (flow name, used in the unique email), CREDITS (default 2),
 //            USER_CONFIG (JSON, per-user fake-config knobs: fail_at, auto_approve, audio_duration_seconds,
 //            youtube_url_enabled, step_delay_seconds, judge_*), GLOBAL_CONFIG (JSON, merged over the defaults
@@ -31,10 +31,19 @@
 //            from scenario's output.lineStarts: that line's word starts are no longer those), RETIMED_WINDOW
 //            ("from,to" seconds: with EXPECT_RETIMED_LINE, every word of that line lies inside it)
 //            -> output.reviewStatus
+//   decide-seed:  EMAIL (default output.email), PROFILE (JSON: quiz_completed, genres, decades, energy
+//            chill|medium|high, artists [{name, affinity occasionally|like|love}], loved / hidden ["artist|title"
+//            song keys]) -> replaces that user's decide profile (POST ${DECIDE_STACK}/api/test/profile/seed, decide
+//            docs/TESTING.md § Local stack). DECIDE_STACK defaults to http://127.0.0.1:8030 (decide's main API).
+//            -> output.decideUserId
+//   decide-reset: EMAIL (default output.email) -> deletes that user's decide profile, loved and hidden songs.
 // Wrapped in a function: a flow can run this file more than once, and top-level `let`s must not collide.
 (function () {
   const base = (typeof STACK !== 'undefined' && STACK && STACK !== 'undefined' && STACK) || 'http://127.0.0.1:8010';
   const JSON_HEADERS = { 'Content-Type': 'application/json' };
+  const decideBase =
+    (typeof DECIDE_STACK !== 'undefined' && DECIDE_STACK && DECIDE_STACK !== 'undefined' && DECIDE_STACK) ||
+    'http://127.0.0.1:8030';
 
   // Every flow starts from these global knobs, so a flow that changed them can't leak into the next one.
   const NO_JUDGE = { judge_kind: 'none', judge_canonical_artist: '', judge_canonical_title: '' };
@@ -258,6 +267,24 @@
           }
         });
       }
+    }
+  } else if (action === 'decide-seed' || action === 'decide-reset') {
+    const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+    if (!email) throw new Error('ACTION ' + action + ' needs EMAIL (or ACTION setup first)');
+    if (action === 'decide-reset') {
+      // 204, no body to parse.
+      const res = http.post(decideBase + '/api/test/profile/reset', {
+        headers: JSON_HEADERS,
+        body: JSON.stringify({ email: email }),
+      });
+      if (res.status < 200 || res.status >= 300) throw new Error('decide profile reset failed: HTTP ' + res.status + ' ' + res.body);
+    } else {
+      const profile = merge(envJson(typeof PROFILE !== 'undefined' ? PROFILE : undefined), { email: email });
+      const res = check(
+        http.post(decideBase + '/api/test/profile/seed', { headers: JSON_HEADERS, body: JSON.stringify(profile) }),
+        'decide profile seed',
+      );
+      output.decideUserId = res.user_id;
     }
   } else {
     throw new Error('unknown ACTION ' + action);

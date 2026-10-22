@@ -18,6 +18,8 @@ const isLocalUrl = (url: string) => {
 export const GEN_API_URL = process.env.EXPO_PUBLIC_GEN_API_URL || 'https://api.nomadkaraoke.com';
 export const GEN_WEB_URL = process.env.EXPO_PUBLIC_GEN_WEB_URL || 'https://gen.nomadkaraoke.com';
 export const DECIDE_API_URL = process.env.EXPO_PUBLIC_DECIDE_API_URL || 'https://decide.nomadkaraoke.com';
+/** The search service's origin. Same as the main decide API unless split (locally: search :8020, main API :8030). */
+export const DECIDE_SEARCH_URL = process.env.EXPO_PUBLIC_DECIDE_SEARCH_URL || DECIDE_API_URL;
 export const KJBOX_API_URL = process.env.EXPO_PUBLIC_KJBOX_API_URL || 'https://sing.nomadkaraoke.com';
 
 export const GOOGLE_WEB_CLIENT_ID =

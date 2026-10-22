@@ -1,0 +1,11 @@
+# Replaces the user's decide profile (quiz answers, artists, loved and hidden songs) through decide's local-stack
+# test API. Env: EMAIL, PROFILE (JSON, decide's /api/test/profile/seed body without the email), DECIDE_STACK.
+appId: com.nomadkaraoke.mobile
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: decide-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      EMAIL: ${EMAIL}
+      PROFILE: ${PROFILE}

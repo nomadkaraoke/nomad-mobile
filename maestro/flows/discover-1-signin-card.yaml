@@ -1,0 +1,48 @@
+# Discover core 1 (Phase 3a spec §9.2): signed out, Discover offers "Sign in to get your picks" above the popular
+# list; signing in from it (fake Google) comes back to Discover, where a user with no profile gets the quiz card.
+appId: com.nomadkaraoke.mobile
+name: discover-1-signin-card
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: discover1
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: decide-reset
+      DECIDE_STACK: ${DECIDE_STACK}
+- runFlow: ../common/launch.yaml
+- extendedWaitUntil:
+    visible:
+      id: "discover-signin-card"
+    timeout: 20000
+- assertVisible:
+    id: "library-filter"
+- extendedWaitUntil:
+    visible:
+      id: "song-row-0"
+    timeout: 30000
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-1-signed-out
+- tapOn:
+    id: "discover-signin"
+- extendedWaitUntil:
+    visible:
+      id: "signin-sheet"
+    timeout: 10000
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-1-signin-sheet
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "discover-quiz-card"
+    timeout: 30000
+- assertNotVisible:
+    id: "discover-signin-card"
+- assertVisible:
+    id: "discover-quiz-start"
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-1-quiz-card

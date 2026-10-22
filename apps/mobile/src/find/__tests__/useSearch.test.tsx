@@ -89,7 +89,7 @@ describe('the popular list', () => {
   it.each(['', '   ', 'a'])('a query under 2 characters (%j) shows the popular list and never searches', async (q) => {
     const { result } = renderHook(() => useSearch(q));
     await advance(300);
-    expect(popularSongs).toHaveBeenCalledWith(30);
+    expect(popularSongs).toHaveBeenCalledWith(30, 'any');
     expect(searchSongs).not.toHaveBeenCalled();
     expect(result.current).toMatchObject({ source: 'cloud', loading: false, identification: null, error: null });
     expect(result.current.groups.map((g) => g.title)).toEqual(['Popular']);
@@ -163,7 +163,7 @@ describe('typing (generation counter)', () => {
     rerender({ q: 'star' });
     await advance(300);
     expect(searchSongs).toHaveBeenCalledTimes(1);
-    expect(searchSongs).toHaveBeenCalledWith('star', { limit: 20, sid: currentSid(), signal: expect.any(AbortSignal) });
+    expect(searchSongs).toHaveBeenCalledWith('star', { limit: 20, library: 'any', sid: currentSid(), signal: expect.any(AbortSignal) });
   });
 });
 

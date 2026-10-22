@@ -29,6 +29,8 @@ export default function RootLayout() {
 /** Inside AppProviders, so screen titles can be translated. */
 function RootStack() {
   const tReview = useTranslations('review');
+  const tQuiz = useTranslations('quiz');
+  const tAccount = useTranslations('account');
   return (
     <ThemeProvider value={theme}>
       <Stack
@@ -52,6 +54,10 @@ function RootStack() {
         <Stack.Screen name="job/duration/[id]" options={{ ...SIGN_IN_SHEET, sheetAllowedDetents: [0.5, 1] }} />
         {/* Native review (Phase 2 spec §4): "Review" while loading; ReviewScreen then sets the song title, undo and menu. */}
         <Stack.Screen name="review/[id]" options={{ title: tReview('title') }} />
+        {/* The Discover quiz (Phase 3a spec §8.2): a modal over Discover; finishing dismisses back to it. */}
+        <Stack.Screen name="discover/quiz" options={{ presentation: 'modal', title: tQuiz('title') }} />
+        {/* Me -> Your music profile (Phase 3a spec §8.3). */}
+        <Stack.Screen name="me/music-profile" options={{ title: tAccount('musicProfile') }} />
       </Stack>
     </ThemeProvider>
   );

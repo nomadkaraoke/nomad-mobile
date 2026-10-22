@@ -34,7 +34,7 @@ const SEARCH = {
 };
 
 it('searchSongs hits /api/search with q and limit and sends X-Device-Id', async () => {
-  fetchMock.mockResolvedValue(json(SEARCH));
+  fetchMock.mockImplementation(async () => json(SEARCH));
   await expect(searchSongs('hello wor', { limit: 5 })).resolves.toEqual(SEARCH);
   const req = lastRequest();
   expect(req.url).toBe('https://decide.test/api/search?q=hello%20wor&limit=5');
@@ -43,13 +43,13 @@ it('searchSongs hits /api/search with q and limit and sends X-Device-Id', async 
 });
 
 it('searchSongs sends the search-session id when given', async () => {
-  fetchMock.mockResolvedValue(json(SEARCH));
+  fetchMock.mockImplementation(async () => json(SEARCH));
   await searchSongs('hey', { sid: 'abc123' });
   expect(lastRequest().url).toBe('https://decide.test/api/search?q=hey&sid=abc123');
 });
 
 it('searchSongs omits limit by default and forwards the abort signal', async () => {
-  fetchMock.mockResolvedValue(json(SEARCH));
+  fetchMock.mockImplementation(async () => json(SEARCH));
   const ctrl = new AbortController();
   await searchSongs('x', { signal: ctrl.signal });
   expect(lastRequest().url).toBe('https://decide.test/api/search?q=x');
@@ -78,7 +78,7 @@ it('popularSongs, getSongDetail, resolveQuery and getOfflineIndexManifest hit th
 });
 
 it('logSearchEvent POSTs the event body', async () => {
-  fetchMock.mockResolvedValue(json({ ok: true }));
+  fetchMock.mockImplementation(async () => json({ ok: true }));
   await logSearchEvent({ sid: 's1', type: 'tap', data: { rank: 2 } });
   const req = lastRequest();
   expect(req.method).toBe('POST');
@@ -104,6 +104,19 @@ it('pingSearch is true when ready, false on 503 or network error', async () => {
 });
 
 it('search-service 401 and errors surface as ApiError via the shared interceptor', async () => {
-  fetchMock.mockResolvedValue(json({ detail: 'bad' }, 422));
+  fetchMock.mockImplementation(async () => json({ detail: 'bad' }, 422));
   await expect(searchSongs('x')).rejects.toMatchObject({ name: 'ApiError', status: 422, detail: 'bad' });
+});
+
+it('searchSongs and popularSongs send library only when it is not "any"', async () => {
+  fetchMock.mockImplementation(async () => json(SEARCH));
+  await searchSongs('abc', { library: 'community' });
+  expect(lastRequest().url).toBe('https://decide.test/api/search?q=abc&library=community');
+  await searchSongs('abc', { library: 'any' });
+  expect(new URL(lastRequest().url).searchParams.has('library')).toBe(false);
+  fetchMock.mockImplementation(async () => json([]));
+  await popularSongs(30, 'karafun');
+  expect(lastRequest().url).toBe('https://decide.test/api/search/popular?limit=30&library=karafun');
+  await popularSongs(30, 'any');
+  expect(lastRequest().url).toBe('https://decide.test/api/search/popular?limit=30');
 });

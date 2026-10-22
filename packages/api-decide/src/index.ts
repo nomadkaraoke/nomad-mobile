@@ -16,6 +16,7 @@ import {
 } from './search-client';
 
 export * from './client';
+export * from './discover';
 export { ApiError, configureClient, type ClientDeps } from './configure';
 // Search-service models (the search client's other generated names would collide with the catalog client's).
 export type {
@@ -30,6 +31,11 @@ export type {
   Split,
   Version,
 } from './search-client';
+
+/** Library filter (same values as @nomad/core's LibraryFilter). */
+export type LibraryFilter = 'any' | 'community' | 'karafun';
+/** Sent only when narrowing: `any` (the server default) adds no param. */
+const libraryParam = (library?: LibraryFilter) => (library && library !== 'any' ? { library } : {});
 
 // Readable facades over FastAPI's generated operation names.
 
@@ -74,16 +80,10 @@ export const deleteKaraokeLog = async (id: string) =>
   (await deleteKaraokeLogApiMyKaraokeLogEntryIdDelete({ path: { entry_id: id } })).data;
 
 // Search service (decide /api/search/*).
-/** Only a real venue library narrows the search (`any`, or none, searches every song). */
-const libraryParam = (library?: string) => (library && library !== 'any' ? { library } : {});
-
-/**
- * `sid` is the client's search-session id (decide logs it with the search; it makes one up when absent). `library`
- * narrows results to a venue library (Phase 3's LibraryFilter: `community`, `karafun`; `any` = every song).
- */
+/** `sid` is the client's search-session id (decide logs it with the search; it makes one up when absent). */
 export const searchSongs = async (
   q: string,
-  opts: { limit?: number; sid?: string; library?: string; signal?: AbortSignal } = {},
+  opts: { limit?: number; sid?: string; library?: LibraryFilter; signal?: AbortSignal } = {},
 ) =>
   (
     await searchApiSearchGet({
@@ -92,8 +92,8 @@ export const searchSongs = async (
     })
   ).data;
 
-export const popularSongs = async (limit = 30) =>
-  (await popularApiSearchPopularGet({ query: { limit } })).data;
+export const popularSongs = async (limit = 30, library?: LibraryFilter) =>
+  (await popularApiSearchPopularGet({ query: { limit, ...libraryParam(library) } })).data;
 
 export const getSongDetail = async (key: string) => (await songApiSearchSongGet({ query: { key } })).data;
 

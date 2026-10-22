@@ -1,0 +1,37 @@
+# Back to Discover's default picks filters (library Any, no decade): both persist on the phone, and on iOS the app's
+# data survives launch.yaml, so a flow that changes them puts them back (as onFlowComplete, so a failure can't leak
+# them into the next flow; search and make flows depend on the library being Any).
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    when:
+      visible:
+        id: "song-menu-panel"
+    commands:
+      - tapOn:
+          id: "song-menu-close"
+- runFlow:
+    when:
+      visible:
+        id: "filter-sheet-.*-panel"
+    commands:
+      - tapOn:
+          id: "filter-sheet-.*-close"
+- runFlow:
+    when:
+      visible:
+        id: "library-filter-any"
+    commands:
+      - tapOn:
+          id: "library-filter-any"
+- runFlow:
+    when:
+      visible:
+        id: "filter-chip-decade"
+    commands:
+      - tapOn:
+          id: "filter-chip-decade"
+      - tapOn:
+          id: "filter-clear-decade"
+      - tapOn:
+          id: "filter-apply-decade"

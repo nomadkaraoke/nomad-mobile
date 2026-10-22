@@ -1,13 +1,15 @@
 import {
   resolveQuery,
+  type RecSection as RecSectionData,
+  type RecSong,
   type ResolveResponse,
   type SongGroup,
-  type SongRef,
 } from "@nomad/api-decide";
+import { activeFilterCount } from "@nomad/core";
 import { useTranslations } from "@nomad/i18n";
 import { Button, List, Screen, Text, TextField } from "@nomad/ui";
-import { router, useIsFocused } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { router, useIsFocused, type Href } from "expo-router";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   ActivityIndicator,
@@ -22,6 +24,17 @@ import {
 
 import { openSignIn } from "../../auth/signInUi";
 import { useAuth } from "../../auth/store";
+import { ImproveCard } from "../../discover/components/ImproveCard";
+import { PicksState } from "../../discover/components/PicksState";
+import { QuizCard } from "../../discover/components/QuizCard";
+import { FilterBar } from "../../discover/components/FilterBar";
+import { RecSection, sectionTestId } from "../../discover/components/RecSection";
+import { RecSongRow } from "../../discover/components/RecSongRow";
+import { SignInCard } from "../../discover/components/SignInCard";
+import { SongMenuSheet } from "../../discover/components/SongMenuSheet";
+import { useRecFilters } from "../../discover/filtersStore";
+import { useRecommendations } from "../../discover/useRecommendations";
+import { useSongFeedback } from "../../discover/useSongFeedback";
 import { MakeBar } from "../../find/components/MakeBar";
 import { MissingCard } from "../../find/components/MissingCard";
 import { OfflineBanner } from "../../find/components/OfflineBanner";
@@ -29,6 +42,7 @@ import { SimilarList } from "../../find/components/SimilarList";
 import { SongCard } from "../../find/components/SongCard";
 import { VersionList } from "../../find/components/VersionList";
 import { WhichOne } from "../../find/components/WhichOne";
+import { LibraryFilterPicker, useLibraryFilter } from "../../find/library";
 import {
   describeOutcome,
   makeOfferWhere,
@@ -88,10 +102,17 @@ const openSong = (songKey: string, also: string[] = []) => {
   });
 };
 
-/** The missing card's Make it: exactly the identified artist/title (spec §4.1 outcome 2), then sign-in or make. */
-const makeIdentified = (song: SongRef, signedIn: boolean) => {
+/**
+ * Make it on an identified song (the missing card, spec §4.1 outcome 2; a "Make it" picks row): exactly that
+ * artist/title, then sign-in or make.
+ */
+const makeIdentified = (
+  song: Required<SongIdentity>,
+  signedIn: boolean,
+  where: "missing_card" | "picks" = "missing_card",
+) => {
   logEvent("make_offer_tap", {
-    where: "missing_card",
+    where,
     song_key: song.song_key,
   });
   renewSid();
@@ -105,6 +126,14 @@ const openMakeAny = () => {
   Keyboard.dismiss();
   router.push({ pathname: "/song/[id]", params: { id: "new" } });
 };
+
+/** A picks list item: a section header, or one of its songs. */
+type PicksItem =
+  | { kind: "header"; section: RecSectionData }
+  | { kind: "row"; section: RecSectionData; song: RecSong; index: number };
+
+/** What sits where the picks go: a card or state above the popular list, or the picks themselves. */
+type PicksMode = "signin" | "quiz" | "picks" | "loading" | "warming" | "error" | "offline";
 
 type Describe = {
   open: boolean;
@@ -134,6 +163,39 @@ export default function DiscoverScreen() {
   const signedIn = useAuth((s) => s.state.status === "signedIn");
   const insets = useSafeAreaInsets();
   const popular = search.query.length < MIN_QUERY_CHARS;
+
+  // Picks (spec §8.1): the persisted filters, edited from the FilterBar.
+  const filters = useRecFilters((s) => s.filters);
+  const library = useLibraryFilter((s) => s.filter);
+  const recs = useRecommendations(filters);
+  const feedback = useSongFeedback();
+  const [menuSong, setMenuSong] = useState<RecSong | null>(null);
+  const [pulling, setPulling] = useState(false);
+  const filtersActive = activeFilterCount(filters) > 0 || library !== "any";
+  const picks: PicksMode = !signedIn
+    ? "signin"
+    : recs.data
+      ? recs.data.hasProfile
+        ? "picks"
+        : "quiz"
+      : recs.offlineEmpty
+        ? "offline"
+        : recs.warming
+        ? "warming"
+        : recs.status === "error"
+          ? "error"
+          : "loading";
+  // The bar stays up while a filtered load is pending or failed, so a filter that returns nothing can be undone.
+  const showFilterBar =
+    signedIn && (picks === "picks" || (activeFilterCount(filters) > 0 && picks !== "quiz" && picks !== "signin"));
+  const picksItems = useMemo<PicksItem[]>(
+    () =>
+      recs.data?.sections.flatMap((section) => [
+        { kind: "header" as const, section },
+        ...section.songs.map((song, index) => ({ kind: "row" as const, section, song, index })),
+      ]) ?? [],
+    [recs.data],
+  );
   // The identification, groups and resolve answer the current query (never the previous query's card).
   const fresh = search.resultsQuery === search.query;
 
@@ -257,6 +319,34 @@ export default function DiscoverScreen() {
       }));
     }
   };
+
+  const clearFilters = () => {
+    useRecFilters.getState().clear();
+    useLibraryFilter.getState().set("any");
+  };
+
+  const refreshPicks = async () => {
+    setPulling(true);
+    try {
+      await recs.refetch();
+    } finally {
+      setPulling(false);
+    }
+  };
+
+  const openPick = (section: RecSectionData, song: RecSong) => {
+    if (section.id === "make_it") makeIdentified(song, signedIn, "picks");
+    else openSong(song.song_key);
+  };
+
+  const picksCard =
+    picks === "signin" ? (
+      <SignInCard onSignIn={() => openSignIn("/discover")} />
+    ) : picks === "quiz" ? (
+      <QuizCard onStart={() => router.push("/discover/quiz" as Href)} />
+    ) : picks === "picks" ? null : (
+      <PicksState kind={picks} onRetry={() => void recs.refetch()} />
+    );
 
   const makeFromBar = () => {
     logEvent("make_offer_tap", { where: "make_bar" });
@@ -476,6 +566,7 @@ export default function DiscoverScreen() {
           </Pressable>
         )}
       </View>
+      <LibraryFilterPicker />
       {describe.loading ? (
         <Text variant="muted" testID="discover-figuring-out">
           {t("discover.figuringOut")}
@@ -501,8 +592,66 @@ export default function DiscoverScreen() {
         behavior="padding"
         keyboardVerticalOffset={insets.top}
       >
-        {popular && !describing ? (
+        {popular && !describing && showFilterBar ? (
+          <FilterBar filters={filters} onChange={(patch) => useRecFilters.getState().set(patch)} />
+        ) : null}
+        {popular && !describing && picks === "picks" ? (
+          <View className="flex-1">
+            {recs.offlineSnapshot ? (
+              <Text variant="muted" testID="discover-offline-picks" accessibilityLiveRegion="polite">
+                {t("discover.offlinePicks")}
+              </Text>
+            ) : null}
+            <List
+              testID="discover-picks"
+              data={picksItems}
+              keyExtractor={(it) =>
+                it.kind === "header" ? `h:${it.section.id}` : `r:${it.section.id}:${it.song.song_key}`
+              }
+              getItemType={(it) => it.kind}
+              extraData={feedback.loved}
+              renderItem={(it) =>
+                it.kind === "header" ? (
+                  <RecSection section={it.section} />
+                ) : (
+                  <RecSongRow
+                    song={it.song}
+                    idPart={`${sectionTestId(it.section.id)}-${it.index}`}
+                    loved={feedback.loved.has(it.song.song_key)}
+                    onOpen={() => openPick(it.section, it.song)}
+                    onMenu={() => setMenuSong(it.song)}
+                  />
+                )
+              }
+              ListEmptyComponent={
+                filtersActive ? (
+                  <PicksState kind="empty" onClear={clearFilters} />
+                ) : (
+                  <PicksState kind="none" />
+                )
+              }
+              ListFooterComponent={
+                <View className="pb-4">
+                  <ImproveCard onAddArtists={() => router.push("/discover/quiz?step=3" as Href)} />
+                  <Button
+                    testID="discover-make-any"
+                    label={t("find.makeAnySong")}
+                    variant="secondary"
+                    onPress={openMakeAny}
+                  />
+                </View>
+              }
+              refreshing={pulling}
+              onRefresh={() => void refreshPicks()}
+              onEndReached={() => {
+                // One page at a time: a second call would cancel the one in flight.
+                if (recs.hasNextPage && !recs.isFetchingNextPage) void recs.fetchNextPage();
+              }}
+            />
+          </View>
+        ) : popular && !describing ? (
           <>
+            {picksCard}
             {status}
             {search.error ? null : (
               <Text variant="title">{t("find.popularHeading")}</Text>
@@ -578,6 +727,31 @@ export default function DiscoverScreen() {
           </>
         )}
       </KeyboardAvoidingView>
+      <SongMenuSheet
+        song={menuSong}
+        onClose={() => setMenuSong(null)}
+        onHide={feedback.hide}
+        onLove={feedback.love}
+        disabled={recs.offlineSnapshot}
+      />
+      {feedback.hidden ? (
+        <View
+          testID="discover-hidden-toast"
+          accessibilityLiveRegion="polite"
+          className="absolute bottom-4 start-4 end-4 flex-row items-center gap-3 rounded-xl border border-border bg-card p-3"
+        >
+          <Text className="flex-1">{t("discover.hiddenToast")}</Text>
+          <Pressable
+            testID="discover-hidden-undo"
+            accessibilityRole="button"
+            hitSlop={8}
+            onPress={() => feedback.hidden && feedback.undoHide(feedback.hidden)}
+            className="min-h-11 justify-center"
+          >
+            <Text className="font-bold text-primary">{t("discover.undo")}</Text>
+          </Pressable>
+        </View>
+      ) : null}
     </Screen>
   );
 }

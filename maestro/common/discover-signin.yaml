@@ -1,0 +1,18 @@
+# Signed out on Discover: the sign-in card's button → the sign-in sheet's fake Google path → back on Discover.
+# Env: EMAIL.
+appId: com.nomadkaraoke.mobile
+---
+- extendedWaitUntil:
+    visible:
+      id: "discover-signin-card"
+    timeout: 20000
+- tapOn:
+    id: "discover-signin"
+- runFlow:
+    file: google-signin.yaml
+    env:
+      EMAIL: ${EMAIL}
+- extendedWaitUntil:
+    visible:
+      id: "discover-search-input"
+    timeout: 30000
