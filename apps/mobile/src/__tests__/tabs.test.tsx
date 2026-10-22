@@ -8,6 +8,7 @@ import { gen, session } from '../test-utils/genAuthMock';
 import { makeRoutes } from '../test-utils/makeFixtures';
 
 jest.mock('@nomad/api-decide', () => ({
+  ...require('../test-utils/decideDiscoverMock').discoverMocks(),
   searchSongs: jest.fn(),
   popularSongs: jest.fn(async () => []),
   pingSearch: jest.fn(async () => true),

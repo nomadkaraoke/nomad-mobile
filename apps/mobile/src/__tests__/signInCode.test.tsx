@@ -6,6 +6,7 @@ import { apiError, gen, session } from '../test-utils/genAuthMock';
 import { signInRoutes } from '../test-utils/signInRoutes';
 
 jest.mock('@nomad/api-decide', () => ({
+  ...require('../test-utils/decideDiscoverMock').discoverMocks(),
   configureClient: jest.fn(),
   popularSongs: jest.fn(async () => []),
   pingSearch: jest.fn(async () => true),
