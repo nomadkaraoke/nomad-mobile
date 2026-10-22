@@ -20,7 +20,7 @@
 #      ../karaoke-decide-phase3-discover while that branch is unmerged and the worktree exists, else
 #      ../karaoke-decide), DECIDE_GEN_PARTNER_SECRET (shared by both stacks so decide's
 #      /resolve reaches gen; default local-stack-secret), KJBOX_DIR (kjbox checkout with
-#      kj-controller/scripts/local-stack.sh; default ../kjbox; reset fresh every run unless KJBOX_KEEP=1), IOS_DEVICE (simulator name or UDID; default
+#      kj-controller/scripts/local-stack.sh; default ../kjbox; only used when the run has Tonight flows; reset fresh every such run unless KJBOX_KEEP=1), IOS_DEVICE (simulator name or UDID; default
 #      "iPhone 17 Pro"), ANDROID_SERIAL (default emulator-5554).
 #
 # Both platforms use the same http://127.0.0.1 URLs: on Android, `adb reverse` maps the gen API (8010), gen web
@@ -71,6 +71,19 @@ while [[ $# -gt 0 ]]; do
 done
 [[ "$PLATFORM" == ios || "$PLATFORM" == android ]] || { echo "usage: $0 --platform ios|android [flow-filter]" >&2; exit 2; }
 
+# kjbox (and the stack-control helper) only when this run has Tonight flows: a flow tagged `tonight` among the
+# filtered ones, or a tonight* screen tour. Make / Search / Review / Discover runs don't need ../kjbox.
+needs_kjbox() {
+  if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == tonight* ]]; return; fi
+  local f
+  while IFS= read -r f; do
+    grep -qE '^\s*-\s*tonight\s*$' "$f" && return 0
+  done < <(ls "$ROOT"/maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } || true)
+  return 1
+}
+NEED_KJBOX=0
+if needs_kjbox; then NEED_KJBOX=1; fi
+
 # 1. The gen local stack (API :8010, web :3010). LOCAL_STACK_API_URL is what fake-checkout and handoff
 #    links point at; 127.0.0.1 works on both platforms (adb reverse on Android). The partner secret lets
 #    decide's /resolve call gen's catalog resolve (the fake judge's global verdict).
@@ -95,22 +108,26 @@ curl -sf -m 5 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"ema
 #     /sing/api/test/*. It verifies app tokens against gen (:8010) and sends sung songs to decide (:8030), so it
 #     starts after both. `up` is idempotent and keeps the night (and its night_id) across restarts.
 kjbox_ready() { [[ "$(curl -s -m 3 -o /dev/null -w '%{http_code}' "$KJBOX/sing/api/v1/night?t=2121")" == 401 ]]; }
-# A fresh box every run (`reset` wipes ~/kjdata-localstack and reseeds the fixture night): a make-it from an earlier
-# run (tonight-7, the tour) lands in the box's library, after which "machu picchu strokes" has a karaoke version.
-# KJBOX_KEEP=1 keeps the running stack as it is.
-if [[ "${KJBOX_KEEP:-}" == 1 ]] && kjbox_ready; then :
-else
-  echo "Starting kjbox's local stack fresh from $KJBOX_DIR"
-  (cd "$KJBOX_DIR/kj-controller" && scripts/local-stack.sh reset)
-fi
-curl -sf -m 5 -o /dev/null "$KJBOX/sing/api/test/state" || { echo "kjbox at $KJBOX has no /sing/api/test (KJBOX_TEST_API off?)" >&2; exit 1; }
-# tonight-9 stops and restarts the kjbox stack mid-flow ("box unreachable"), tonight-10 decide's (the karaoke log
-# offline); Maestro scripts can only make HTTP calls, so a loopback helper (scripts/stack-control.py, :8049) runs
-# local-stack.sh down/up for them.
 CONTROL_PID=""
-if ! curl -sf -m 2 http://127.0.0.1:8049/health >/dev/null; then
-  python3 "$ROOT/scripts/stack-control.py" --kjbox-dir "$KJBOX_DIR" --decide-dir "$DECIDE_DIR" >/tmp/nomad-mobile-stack-control.log 2>&1 &
-  CONTROL_PID=$!
+if [[ "$NEED_KJBOX" == 1 ]]; then
+  # A fresh box every run (`reset` wipes ~/kjdata-localstack and reseeds the fixture night): a make-it from an earlier
+  # run (tonight-7, the tour) lands in the box's library, after which "machu picchu strokes" has a karaoke version.
+  # KJBOX_KEEP=1 keeps the running stack as it is.
+  if [[ "${KJBOX_KEEP:-}" == 1 ]] && kjbox_ready; then :
+  else
+    echo "Starting kjbox's local stack fresh from $KJBOX_DIR"
+    (cd "$KJBOX_DIR/kj-controller" && scripts/local-stack.sh reset)
+  fi
+  curl -sf -m 5 -o /dev/null "$KJBOX/sing/api/test/state" || { echo "kjbox at $KJBOX has no /sing/api/test (KJBOX_TEST_API off?)" >&2; exit 1; }
+  # tonight-9 stops and restarts the kjbox stack mid-flow ("box unreachable"), tonight-10 decide's (the karaoke log
+  # offline); Maestro scripts can only make HTTP calls, so a loopback helper (scripts/stack-control.py, :8049) runs
+  # local-stack.sh down/up for them.
+  if ! curl -sf -m 2 http://127.0.0.1:8049/health >/dev/null; then
+    python3 "$ROOT/scripts/stack-control.py" --kjbox-dir "$KJBOX_DIR" --decide-dir "$DECIDE_DIR" >/tmp/nomad-mobile-stack-control.log 2>&1 &
+    CONTROL_PID=$!
+  fi
+else
+  echo "No Tonight flows in this run: kjbox's local stack not needed"
 fi
 
 # 3. Device prep.

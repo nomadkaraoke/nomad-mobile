@@ -270,3 +270,13 @@ it('kj_: a put after a queued delete replaces it (last write wins) and is sent',
   expect(api.putKaraokeLog).toHaveBeenCalledWith('kj_abc', { survey: { feel: 'great' } });
   expect(api.deleteKaraokeLog).not.toHaveBeenCalled();
 });
+
+it('counts every write decide accepted (the Ideas panel refreshes on it; final review)', async () => {
+  const before = useOutbox.getState().synced;
+  api.putKaraokeLog.mockRejectedValueOnce(new ApiError(503, 'boom'));
+  useOutbox.getState().enqueue('app_9', 'put', { state: 'sung' });
+  await outboxIdle();
+  expect(useOutbox.getState().synced).toBe(before);
+  await useOutbox.getState().flush();
+  expect(useOutbox.getState().synced).toBe(before + 1);
+});

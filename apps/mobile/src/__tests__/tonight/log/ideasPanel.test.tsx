@@ -1,16 +1,18 @@
 import * as decide from '@nomad/api-decide';
 import * as kjbox from '@nomad/api-kjbox';
-import { fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { useAuth } from '../../../auth/store';
-import { IdeasPanel, mostSung } from '../../../tonight/log/IdeasPanel';
+import { IdeasPanel, mostSung, useKaraokeLogFreshness } from '../../../tonight/log/IdeasPanel';
+import { useOutbox } from '../../../tonight/log/outbox';
 import { UNKNOWN_ARTIST } from '../../../tonight/log/logStore';
 import { useNightStore } from '../../../tonight/nightStore';
-import { nightPoll } from '../../../tonight/nomad/queries';
+import { nightKey, nightPoll } from '../../../tonight/nomad/queries';
+import type { NomadNight } from '../../../tonight/nightStore';
 import { useRequestStore } from '../../../tonight/request/requestStore';
 import { gen, session } from '../../../test-utils/genAuthMock';
-import { me, nightOpen, nowResult, renderTonight, rotationResult } from '../../../test-utils/tonightFixtures';
+import { me, nightOpen, nowResult, renderTonight, rotationResult, song } from '../../../test-utils/tonightFixtures';
 import { noIdent, requestRoutes, results } from '../request/helpers';
 
 jest.mock('@nomad/api-decide', () => ({
@@ -144,4 +146,39 @@ it('the unknown-artist sentinel never renders raw and never goes into the query 
   expect(onPick).toHaveBeenLastCalledWith('Our Song');
   fireEvent.press(crowd);
   expect(onPick).toHaveBeenLastCalledWith('Crowd Song');
+});
+
+describe('the most-sung list refreshes when the log changes (final review)', () => {
+  function Panel() {
+    useKaraokeLogFreshness();
+    return <IdeasPanel onPick={() => {}} />;
+  }
+  beforeEach(() => {
+    dapi.listKaraokeLog.mockResolvedValue({ entries: [logged('Muse', 'Starlight')] });
+    api.getMyStats.mockResolvedValue({ api_version: '1.0', top_songs: [] });
+  });
+
+  it('a song becoming sung tonight refetches the karaoke log', async () => {
+    const { client } = renderTonight(<Panel />);
+    await screen.findByTestId('tonight-ideas-mine-0');
+    expect(dapi.listKaraokeLog).toHaveBeenCalledTimes(1);
+    const night = useNightStore.getState().active as NomadNight;
+    const key = [...nightKey(night, useNightStore.getState().userKey), 'me'];
+    act(() => client.setQueryData(key, me()));
+    // Query notifications are batched on a 0 ms timer: let the first /me read land on its own.
+    await act(() => new Promise<void>((r) => setTimeout(r, 20)));
+    expect(dapi.listKaraokeLog).toHaveBeenCalledTimes(1);
+    dapi.listKaraokeLog.mockResolvedValue({ entries: [logged('Muse', 'Starlight'), logged('Adele', 'Hello')] });
+    act(() => client.setQueryData(key, me({ sung_tonight: [song({ performed: true, request: { id: 1 } })] })));
+    await waitFor(() => expect(dapi.listKaraokeLog).toHaveBeenCalledTimes(2));
+    expect(await screen.findByTestId('tonight-ideas-mine-1')).toHaveTextContent(/Hello/);
+  });
+
+  it('a survey or log write reaching decide refetches the karaoke log', async () => {
+    renderTonight(<Panel />);
+    await screen.findByTestId('tonight-ideas-mine-0');
+    expect(dapi.listKaraokeLog).toHaveBeenCalledTimes(1);
+    act(() => useOutbox.setState({ synced: useOutbox.getState().synced + 1 }));
+    await waitFor(() => expect(dapi.listKaraokeLog).toHaveBeenCalledTimes(2));
+  });
 });

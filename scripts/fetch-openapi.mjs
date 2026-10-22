@@ -9,16 +9,11 @@
 // default URL below does not answer yet: pass the decide search local stack (scripts/search-local-stack.sh up in
 // karaoke-decide), identical code to prod:
 //   DECIDE_SEARCH_OPENAPI_URL=http://127.0.0.1:8020/api/search/openapi.json node scripts/fetch-openapi.mjs decide-search
-import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 
-// kjbox's contract is a committed file in the kjbox repo, not served by a URL. KJBOX_OPENAPI_PATH overrides;
-// otherwise prefer the singer-app-api worktree while that branch is unmerged, else the main clone.
-const KJBOX_REL = 'kj-controller/docs/api/singer-v1.openapi.json';
-const KJBOX_PATH =
-  process.env.KJBOX_OPENAPI_PATH ||
-  [`../kjbox-singer-app-api/${KJBOX_REL}`, `../kjbox/${KJBOX_REL}`].find((p) => existsSync(p)) ||
-  `../kjbox/${KJBOX_REL}`;
+// kjbox's contract is a committed file in the kjbox repo, not served by a URL: the main clone's
+// (KJBOX_OPENAPI_PATH overrides, e.g. a kjbox worktree with an unmerged contract change).
+const KJBOX_PATH = process.env.KJBOX_OPENAPI_PATH || '../kjbox/kj-controller/docs/api/singer-v1.openapi.json';
 
 const SOURCES = {
   kjbox: KJBOX_PATH,

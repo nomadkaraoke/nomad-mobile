@@ -12,6 +12,7 @@ import { useClearDiscoverOnSignOut } from '../discover/useClearDiscoverOnSignOut
 import { useSearchWarmup } from '../find/useSearchWarmup';
 import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
+import { useKaraokeLogFreshness } from '../tonight/log/IdeasPanel';
 import { useLogSync } from '../tonight/log/useLogSync';
 import { installDevWarningTrace } from './devWarnings';
 
@@ -35,9 +36,10 @@ function SearchWarmup() {
   return null;
 }
 
-/** Ruling E8-R2: sends the karaoke-log outbox on launch, on reconnect and on foreground. */
+/** Ruling E8-R2: sends the karaoke-log outbox on launch, on reconnect and on foreground; keeps Ideas' log fresh. */
 function LogSync() {
   useLogSync();
+  useKaraokeLogFreshness();
   return null;
 }
 

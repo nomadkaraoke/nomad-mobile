@@ -31,7 +31,7 @@ const isUnreachable = (e: unknown) => !(e instanceof KjboxError) || e.unreachabl
 /**
  * Joining a Nomad night from a QR, link or typed code (spec §4.2, ruling E3-R4). Needs sign-in (opens it and comes
  * back here), then asks the box about tonight: closed/not started → the host's message and retry; a code that isn't
- * tonight's → re-entry; another night active → "Switch to this night?"; first time → "What should the host call you?"
+ * tonight's (or the same box's previous night) → re-entry; another night active → "Switch to this night?"; first time → "What should the host call you?"
  * (prefilled from `suggested_name`) → POST /join; then records the night and lands on Tonight.
  */
 export function JoinScreen() {
@@ -55,7 +55,8 @@ export function JoinScreen() {
 
   const proceed = (c: string, night: NightOpen, switchConfirmed: boolean) => {
     const current = useNightStore.getState().current();
-    const elsewhere = current !== null && !(current.kind === 'nomad' && current.nightId === night.night_id);
+    // The same event code with another night_id is that box's previous night (the host started a new one): no question.
+    const elsewhere = current !== null && !(current.kind === 'nomad' && (current.nightId === night.night_id || current.code === c));
     if (elsewhere && !switchConfirmed) {
       setSheetOpen(true);
       setPhase({ kind: 'switch', night });

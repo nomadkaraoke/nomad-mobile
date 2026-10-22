@@ -872,7 +872,7 @@ export type GetNightErrors = {
      */
     409: NightChangedError;
     /**
-     * Too many wrong event codes or sign-in checks from this network (error rate_limited); retry after retry_after seconds (also the Retry-After header)
+     * Too many wrong event codes from this account's device (10 per 5 min) or from this network (100 per 5 min across all devices), or too many sign-in checks from this network (error rate_limited); retry after retry_after seconds (also the Retry-After header). The bearer is checked before the event code, so a missing or rejected token is always 401 and a wrong code on one phone doesn't lock out others on the same wifi.
      */
     429: Error;
     /**
@@ -930,7 +930,7 @@ export type JoinNightErrors = {
      */
     409: NightChangedError;
     /**
-     * Too many wrong event codes or sign-in checks from this network (error rate_limited); retry after retry_after seconds (also the Retry-After header)
+     * Too many wrong event codes from this account's device (10 per 5 min) or from this network (100 per 5 min across all devices), or too many sign-in checks from this network (error rate_limited); retry after retry_after seconds (also the Retry-After header). The bearer is checked before the event code, so a missing or rejected token is always 401 and a wrong code on one phone doesn't lock out others on the same wifi.
      */
     429: Error;
     /**
@@ -992,7 +992,7 @@ export type CreateRequestErrors = {
      */
     409: Error;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1059,7 +1059,7 @@ export type CancelRequestErrors = {
      */
     409: Error;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1126,7 +1126,7 @@ export type ChangeRequestErrors = {
      */
     409: Error;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1188,7 +1188,7 @@ export type ReorderRequestsErrors = {
      */
     409: Error;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1255,7 +1255,7 @@ export type SetRequestConsentErrors = {
      */
     409: Error;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1309,7 +1309,7 @@ export type GetMeErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1367,7 +1367,7 @@ export type UpdateMeErrors = {
      */
     409: RenameGuardError | NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1433,7 +1433,7 @@ export type SearchSongsErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1499,7 +1499,7 @@ export type IdentifySongErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1565,7 +1565,7 @@ export type ResolveSearchErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1614,7 +1614,7 @@ export type LogSearchEventErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1672,7 +1672,7 @@ export type ListSingersErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1730,7 +1730,7 @@ export type GetNowErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1794,7 +1794,7 @@ export type GetRotationErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1843,7 +1843,7 @@ export type ResolvePreviewErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1892,7 +1892,7 @@ export type ClosePreviewErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1950,7 +1950,7 @@ export type GetTipsErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -1999,7 +1999,7 @@ export type ClaimTipErrors = {
      */
     409: Error;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -2057,7 +2057,7 @@ export type GetMyStatsErrors = {
      */
     409: NightChangedError;
     /**
-     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes / sign-in checks; retry after retry_after seconds (also the Retry-After header)
+     * rate_limited: this account's device (8 per 5 min by default) or this network is over the singer mutation budget, or too many wrong event codes (this device: 10 per 5 min; this network: 100 per 5 min) / sign-in checks; retry after retry_after seconds (also the Retry-After header)
      */
     429: Error;
     /**
@@ -2356,7 +2356,7 @@ export type RegisterPushTokenErrors = {
      */
     409: NightChangedError;
     /**
-     * Too many wrong event codes or sign-in checks from this network (error rate_limited); retry after retry_after seconds (also the Retry-After header)
+     * Too many wrong event codes from this account's device (10 per 5 min) or from this network (100 per 5 min across all devices), or too many sign-in checks from this network (error rate_limited); retry after retry_after seconds (also the Retry-After header). The bearer is checked before the event code, so a missing or rejected token is always 401 and a wrong code on one phone doesn't lock out others on the same wifi.
      */
     429: Error;
     /**

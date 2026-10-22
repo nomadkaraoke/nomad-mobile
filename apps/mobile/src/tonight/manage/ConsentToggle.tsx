@@ -1,10 +1,12 @@
 import { KjboxError, setSongConsent, updateMe, type Song } from '@nomad/api-kjbox';
 import { useTranslations } from '@nomad/i18n';
 import { Text } from '@nomad/ui';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { songKey } from '../nomad/model';
+import { recordNightOptOut } from './NightConsent';
 import { errorCopy } from '../request/errorCopy';
 import { manageTiming, useInvalidateNight, useManage, type ManageContextValue } from './SongActions';
 
@@ -42,6 +44,7 @@ function ConsentButton({ song, m }: { song: Song; m: ManageContextValue }) {
   const nightConsent = m.profile?.photo_consent ?? null;
   const server = effectiveConsent(song.request.media_consent, nightConsent);
   const invalidate = useInvalidateNight(m.night, m.userKey);
+  const queryClient = useQueryClient();
 
   const [shown, setShown] = useState<Consent>(server);
   const desired = useRef<Consent>(server);
@@ -129,6 +132,8 @@ function ConsentButton({ song, m }: { song: Song; m: ManageContextValue }) {
     inFlight.current = true;
     try {
       await updateMe(m.night.code, { photo_consent: 'no', night_id: m.night.nightId });
+      // The next own request reads the stored answer: it must say no too, or it would opt the singer back in.
+      recordNightOptOut(queryClient, m.night, m.userKey);
       const yeses = m.allSongs.filter((s) => showsConsent(s) && s.request.media_consent === 'yes');
       for (const s of yeses) await setSongConsent(m.night.code, s.request.id!, null, m.night.nightId);
       confirmed.current = 'no';

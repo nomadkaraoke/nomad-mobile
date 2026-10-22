@@ -7,7 +7,15 @@ import { useRef, useState } from 'react';
 import { View } from 'react-native';
 
 import { DuetPicker } from '../manage/DuetPicker';
-import { consentFields, loadNightConsent, NightConsentQuestion, saveNightConsent, useAskPhotoConsent, type NightConsent } from '../manage/NightConsent';
+import {
+  consentFields,
+  loadNightConsent,
+  NightConsentQuestion,
+  saveNightConsent,
+  serverNightConsent,
+  useAskPhotoConsent,
+  type NightConsent,
+} from '../manage/NightConsent';
 import { storedPhone } from '../manage/PhoneSheet';
 import { useNightStore } from '../nightStore';
 import { nightKey } from '../nomad/queries';
@@ -99,7 +107,8 @@ export function ConfirmScreen() {
         const phone = friend ? null : storedPhone(userKey);
         // Own requests carry the night answer (only ever given when the host asked); unknown is never sent (A.91);
         // never on a friend's.
-        const media = friend ? {} : consentFields(consent);
+        // The box's own answer (/me) wins over this device's.
+        const media = friend ? {} : consentFields(consent, serverNightConsent(queryClient, night, userKey));
         await submitRequest(night.code, {
           ...src,
           night_id: night.nightId,
@@ -145,7 +154,7 @@ export function ConfirmScreen() {
         disabled={sending}
         onPress={() => setPicking(true)}
       />
-      {askConsent && pending.mode === 'new' && !answeredBefore ? (
+      {askConsent && pending.mode === 'new' && !answeredBefore && serverNightConsent(queryClient, night, userKey) == null ? (
         <NightConsentQuestion
           value={consent}
           onChange={(v) => {

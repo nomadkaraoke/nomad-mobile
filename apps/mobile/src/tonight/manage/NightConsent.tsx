@@ -1,7 +1,7 @@
-import { getNight, type Night } from '@nomad/api-kjbox';
+import { getNight, type MeResult, type Night } from '@nomad/api-kjbox';
 import { useTranslations } from '@nomad/i18n';
 import { Text, TextField } from '@nomad/ui';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type QueryClient } from '@tanstack/react-query';
 import { Pressable, View } from 'react-native';
 
 import { appStorage } from '../../storage';
@@ -43,11 +43,29 @@ export function saveNightConsent(userKey: string | null, nightId: string, value:
   }
 }
 
-/** The submit fields for an own request: nothing while unknown (A.91), the handle only with a yes. */
-export function consentFields(c: NightConsent): { photo_consent?: 'yes' | 'no'; instagram?: string } {
-  if (!c.consent) return {};
-  const handle = sanitizeInstagram(c.instagram);
-  return { photo_consent: c.consent, ...(c.consent === 'yes' && handle ? { instagram: handle } : {}) };
+/**
+ * The submit fields for an own request: nothing while unknown (A.91), the handle only with a yes. The box's own
+ * night-wide answer (`/me` photo_consent), when it knows one, is the truth: a "Nothing from tonight" or an answer
+ * given elsewhere wins over this device's stored one, so a request never opts the singer back in.
+ */
+export function consentFields(c: NightConsent, server?: 'yes' | 'no' | null): { photo_consent?: 'yes' | 'no'; instagram?: string } {
+  const consent = server === 'yes' || server === 'no' ? server : c.consent;
+  if (!consent) return {};
+  const handle = c.consent === 'yes' ? sanitizeInstagram(c.instagram) : '';
+  return { photo_consent: consent, ...(consent === 'yes' && handle ? { instagram: handle } : {}) };
+}
+
+/** The night-wide answer in the cached `/me` read (null when the box has none, undefined before the first read). */
+export function serverNightConsent(queryClient: QueryClient, night: NomadNight, userKey: string | null): 'yes' | 'no' | null | undefined {
+  return queryClient.getQueryData<MeResult>([...nightKey(night, userKey), 'me'])?.me.photo_consent;
+}
+
+/** After "Nothing from tonight": this device's answer and the cached `/me` both say no, and the handle is dropped. */
+export function recordNightOptOut(queryClient: QueryClient, night: NomadNight, userKey: string | null): void {
+  saveNightConsent(userKey, night.nightId, { consent: 'no' });
+  queryClient.setQueryData<MeResult>([...nightKey(night, userKey), 'me'], (old) =>
+    old ? { ...old, me: { ...old.me, photo_consent: 'no', instagram: null } } : old,
+  );
 }
 
 /** GET /night features.ask_photo_consent (shares the night screen's cached /night read). */

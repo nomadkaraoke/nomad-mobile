@@ -78,6 +78,8 @@ type OutboxStore = {
   attempts: number;
   /** When the next backoff retry fires (ms epoch), or null. */
   retryAt: number | null;
+  /** Writes decide has accepted this session (the Ideas panel's most-sung list refreshes when it moves). */
+  synced: number;
   enqueue(id: string, op: 'put', patch: KaraokeLogPatch): void;
   enqueue(id: string, op: 'delete'): void;
   /** Sends the queue in order; resolves when it is empty, blocked (401 / transient error) or the user changed. */
@@ -135,7 +137,7 @@ export const useOutbox = create<OutboxStore>((set, get) => {
         return;
       }
       if (get().userKey !== owner) return;
-      set({ attempts: 0, retryAt: null });
+      set({ attempts: 0, retryAt: null, synced: get().synced + 1 });
       // Coalesced while in flight (a newer rev): keep it, it is sent again with the merged patch.
       save(get().items.filter((i) => !(i.id === head.id && i.rev === head.rev)));
     }
@@ -147,6 +149,7 @@ export const useOutbox = create<OutboxStore>((set, get) => {
     items: load(initialKey),
     attempts: 0,
     retryAt: null,
+    synced: 0,
 
     enqueue(id: string, op: 'put' | 'delete', patch?: KaraokeLogPatch) {
       if (!get().userKey) return;

@@ -15,7 +15,7 @@ import { DidYouMean, MatchNotice } from '../../make/JudgeNotices';
 import { PickCard, SourceGroups } from '../../make/SourcePicker';
 import { useAudioSearch } from '../../make/useAudioSearch';
 import { useMatchJudge } from '../../make/useMatchJudge';
-import { consentFields, loadNightConsent } from '../manage/NightConsent';
+import { consentFields, loadNightConsent, serverNightConsent } from '../manage/NightConsent';
 import { storedPhone } from '../manage/PhoneSheet';
 import { useNightStore, type NomadNight } from '../nightStore';
 import { nightKey } from '../nomad/queries';
@@ -252,8 +252,9 @@ function useMakeSend(night: NomadNight, userKey: string | null, wanted: Wanted) 
       client_request_id: a.clientRequestId,
       ...(friend ? { for_friend: true, friend_name: friend } : {}),
       ...(phone ? { phone } : {}),
-      // The night's photo answer, only ever given when the host asked (A.91); never on a friend's song.
-      ...(friend ? {} : consentFields(loadNightConsent(userKey, night.nightId))),
+      // The night's photo answer, only ever given when the host asked (A.91); never on a friend's song. The box's own
+      // answer (/me) wins over this device's.
+      ...(friend ? {} : consentFields(loadNightConsent(userKey, night.nightId), serverNightConsent(queryClient, night, userKey))),
     };
     try {
       await sendMake(() => submitRequest(night.code, body), {

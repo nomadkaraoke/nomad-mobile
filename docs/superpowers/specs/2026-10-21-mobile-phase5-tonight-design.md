@@ -141,7 +141,7 @@ The app must cover every singer capability of sing.nomadkaraoke.com (kjbox `docs
 - **iOS universal links**: `associatedDomains` (`applinks:kjbox.cc`, `applinks:sing.nomadkaraoke.com`) behind `EXPO_PUBLIC_ASSOCIATED_DOMAINS=1` (off; same reason as Apple sign-in: needs the team-signed build), and `apple-app-site-association` served alongside `assetlinks.json` with team `55B76HN73D`. Universal links require https, so the uppercase `HTTP://` QR only reaches the app on iOS through the in-app scanner until the QR changes (a Phase 6 decision: switching the printed QR to https costs a larger QR, A.87).
 - **Web fallback**: without the app the link just opens the web page, as today. No store badge until there's a listing (Phase 6).
 - **No internet at the venue** (Andrew, 2026-10-21: the app needs internet; point to the web): the app reaches the box only through sing.nomadkaraoke.com and checks the account with gen. When it can't reach the box (network error, tunnel down, 503 `gen_unavailable`), Tonight shows "Can't reach tonight's night. Connect to the Nomad KJ Box wifi and use the web page" with a button opening `http://l.kjbox.cc/` in the browser, keeps the last-known Your songs read-only, and retries. No LAN fallback inside the app in this phase.
-- **Not signed in** (fresh install via a link): sign-in first (`openSignIn('/tonight?t=…')`), then straight into the night.
+- **Not signed in** (fresh install via a link): sign-in first (`openSignIn('/tonight/join?t=…')`), then straight into the night.
 - **The home-screen icon**: opening the app on a night where the user has joined a still-open Nomad night lands on Tonight's night screen. "Still open" = the box's current night marker equals the one recorded at join (§5.2); otherwise Tonight shows the empty state. A deep link always wins.
 
 ### 4.3 Make on the spot
@@ -285,7 +285,7 @@ Unit + API tests for merge rules, idempotency, the partner secret, `user_songs` 
   - `decide_api_url = http://127.0.0.1:8030` with a local partner secret, so the outbox reaches decide's local stack.
   - A **fixture night** built by a committed script from the redacted 2026-09-24 recording (`~/nomad-nights/2026-09-24/`, via `night_fixture.py`): real first names, fake phones, the catalog subset those songs need (local, divebar, KN and community rows, including a >50-version song for kj_pick, A.24). The generated fixture is committed under `tests/fixtures/localstack/` only after checking it contains no phone numbers, tokens or emails *(call: first names are OK to publish, per the night-recording record)*. Event code `2121`.
   - A **test API** under `/sing/api/test/*`, mounted only when `KJBOX_TEST_API=1` and never on a non-loopback bind: reset, seed singers/entries, advance the rotation (start next, mark Done, un-done), set flags (make on/off, simple mode, ask photo consent, closed night), host-add an entry for a name, host-remove, set rate-limit knobs, and drain the outbox now.
-- Maestro's `stack.js` gains `ACTION: kjbox` for those calls; `scripts/e2e-local.sh` starts the kjbox stack (from `KJBOX_DIR`, default `../kjbox`) after gen and decide, `adb reverse tcp:8040`, and Metro gets `EXPO_PUBLIC_KJBOX_API_URL=http://127.0.0.1:8040` (local-host allowlisted in `config.ts` like the others; prod default `https://sing.nomadkaraoke.com`).
+- Maestro's `stack.js` gains `ACTION: kjbox` for those calls; `scripts/e2e-local.sh` starts the kjbox stack (from `KJBOX_DIR`, default `../kjbox`) after gen and decide, `adb reverse tcp:8040`, and Metro gets `EXPO_PUBLIC_KJBOX_API_URL=http://127.0.0.1:8040/sing` (the box serves the singer API under `/sing`; the bare origin 404s every call) (local-host allowlisted in `config.ts` like the others; prod default `https://sing.nomadkaraoke.com`).
 
 ### 8.2 kjbox tests
 
@@ -339,6 +339,14 @@ After deploys: v1 `GET /night` and `GET /rotation` against sing.nomadkaraoke.com
 - Other nights auto-end after 12 h idle.
 - YouTube links only where one exists (your gen video, else a community version).
 - The committed local-stack fixture keeps real first names from the recorded night.
+
+### 10.1 As built (2026-10-22): recorded deviations
+
+- **No tip-claim status polling yet.** The tips screen sends the claim but doesn't poll its status: that needs kjbox `/me` to report `tip_claims`.
+- **Brand blurbs and the format tech sheet are deferred.**
+- **The failed-outbox dashboard notice is deferred**: a karaoke-log write decide drops for good is logged on the phone only.
+- **Remote push is Phase 6** (with token registration); turn alerts this phase are the in-app banner while the app is open.
+- The kjbox source for `pnpm gen:api` is the kjbox main clone's `kj-controller/docs/api/singer-v1.openapi.json` (`KJBOX_OPENAPI_PATH` overrides); `scripts/e2e-local.sh` starts the kjbox stack only for runs with Tonight flows.
 
 ## Appendix A. Learnings from the kjbox singer web UI
 

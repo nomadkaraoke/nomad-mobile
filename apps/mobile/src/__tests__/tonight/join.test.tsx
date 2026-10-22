@@ -227,6 +227,15 @@ describe('switching nights (ruling E3-R4)', () => {
     expect(useNightStore.getState().active).toMatchObject({ code: '5555', nightId: OTHER });
   });
 
+  it('the same event code with a new night_id (the previous night): switches without asking (final review)', async () => {
+    useNightStore.getState().joinNomad('2121', OTHER, 'Andrew');
+    const app = open();
+    await waitFor(() => expect(useNightStore.getState().active).toMatchObject({ code: '2121', nightId: TONIGHT }));
+    await waitFor(() => expect(app.getPathname()).toBe('/tonight'));
+    expect(screen.queryByTestId('tonight-switch-sheet')).toBeNull();
+    expect(screen.queryByTestId('tonight-join-switch')).toBeNull();
+  });
+
   it('the same night again: no question', async () => {
     useNightStore.getState().joinNomad('2121', TONIGHT, 'Andrew');
     const app = open();

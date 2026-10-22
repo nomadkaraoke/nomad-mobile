@@ -1,12 +1,15 @@
 import { listKaraokeLog, type KaraokeLogEntry } from '@nomad/api-decide';
-import { getMyStats } from '@nomad/api-kjbox';
+import { getMyStats, type MeResult } from '@nomad/api-kjbox';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Text } from '@nomad/ui';
-import { useQuery } from '@tanstack/react-query';
+import { skipToken, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { useNightStore } from '../nightStore';
+import { nightKey } from '../nomad/queries';
 import { artistLabel, UNKNOWN_ARTIST } from './logStore';
+import { useOutbox } from './outbox';
 
 /** How many of the singer's most-sung songs the panel shows. */
 export const IDEAS_MINE_MAX = 5;
@@ -36,6 +39,36 @@ export function mostSung(entries: KaraokeLogEntry[], max = IDEAS_MINE_MAX): Idea
     .map(({ artist, title, count }) => ({ artist, title, count }));
 }
 
+/** The decide karaoke-log queries of one account (the Ideas panel's most-sung list). */
+const karaokeLogKey = (userKey: string | null) => ['decide', userKey, 'karaoke-log'];
+
+/**
+ * Keeps the most-sung list fresh: invalidates the karaoke-log queries when a song becomes sung tonight (the night's
+ * cached `/me` gains a sung song; kjbox's outbox then delivers it to decide) and whenever the karaoke-log outbox lands
+ * a write (a survey, a logged or removed song). Mounted once, in AppProviders, so changes made while the panel is
+ * closed still reach it.
+ */
+export function useKaraokeLogFreshness(): void {
+  const queryClient = useQueryClient();
+  const userKey = useNightStore((s) => s.userKey);
+  const night = useNightStore((s) => s.active);
+  const nomad = night?.kind === 'nomad' ? night : null;
+  // Reads the night's /me from the cache only (the night screen polls it); never fetches.
+  const sung = useQuery({
+    queryKey: nomad ? [...nightKey(nomad, userKey), 'me'] : ['kjbox', 'none'],
+    queryFn: skipToken,
+    select: (d: MeResult) => d.sung_tonight.length,
+  }).data;
+  const synced = useOutbox((s) => s.synced);
+  const seen = useRef({ nightId: nomad?.nightId, sung, synced });
+  useEffect(() => {
+    const prev = seen.current;
+    seen.current = { nightId: nomad?.nightId, sung, synced };
+    const moreSung = prev.nightId === nomad?.nightId && sung !== undefined && prev.sung !== undefined && sung > prev.sung;
+    if (moreSung || synced !== prev.synced) void queryClient.invalidateQueries({ queryKey: karaokeLogKey(userKey) });
+  }, [queryClient, userKey, nomad?.nightId, sung, synced]);
+}
+
 export type IdeasPanelProps = {
   /** Fills the search with "<artist> <title>" (just the title for the unknown-artist sentinel). */
   onPick: (query: string) => void;
@@ -54,7 +87,7 @@ export function IdeasPanel({ onPick }: IdeasPanelProps) {
   const nomad = night?.kind === 'nomad' ? night : null;
 
   const mine = useQuery({
-    queryKey: ['decide', userKey, 'karaoke-log', 'most-sung'],
+    queryKey: [...karaokeLogKey(userKey), 'most-sung'],
     queryFn: async () => mostSung((await listKaraokeLog({ limit: LOG_PAGE })).entries),
     enabled: userKey !== null,
     staleTime: 5 * 60_000,

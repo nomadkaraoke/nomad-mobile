@@ -4,6 +4,8 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 import { create } from 'zustand';
 
+import { useNightStore } from '../nightStore';
+
 /** new = a request; change = swap one of my songs, keeping its queue slot (A.39); friend = a song for someone else (A.10). */
 export type RequestMode = 'new' | 'change' | 'friend';
 
@@ -17,6 +19,8 @@ export type PendingRequest = {
   mode: RequestMode;
   replaces?: Replaces;
   friendName?: string;
+  /** The Nomad night this pick is for; part of the signature, so a later night never reuses an ambiguous send's id. */
+  nightId?: string;
   /** Duet partners (up to 3); part of the signature, so other partners never reuse an ambiguous send's id. */
   partners?: string[];
   /** Idempotency key: minted once when the singer reaches confirm, reused for every retry (Review Focus 3). */
@@ -50,11 +54,11 @@ type RequestStore = {
   noteSend(p: PendingRequest, outcome: 'ambiguous' | 'settled'): void;
 };
 
-/** Same request = same mode, target and song/source (kj_pick by song, not by its version snapshot). */
-export function requestSignature(p: Pick<PendingRequest, 'song' | 'version' | 'mode' | 'replaces' | 'friendName' | 'partners'>): string {
+/** Same request = same night, mode, target and song/source (kj_pick by song, not by its version snapshot). */
+export function requestSignature(p: Pick<PendingRequest, 'song' | 'version' | 'mode' | 'replaces' | 'friendName' | 'partners' | 'nightId'>): string {
   const { song_artist, song_title, source_type, source_ref } = sourceFor(p.song, p.version);
   const partners = (p.partners ?? []).map((n) => n.trim().toLocaleLowerCase()).sort();
-  return JSON.stringify([p.mode, p.replaces?.id ?? null, p.friendName ?? null, song_artist, song_title, source_type, source_ref, partners]);
+  return JSON.stringify([p.nightId ?? null, p.mode, p.replaces?.id ?? null, p.friendName ?? null, song_artist, song_title, source_type, source_ref, partners]);
 }
 
 /** A UUID v4 (expo-crypto, with a Math.random fallback where the native module is missing). */
@@ -83,7 +87,9 @@ export const useRequestStore = create<RequestStore>((set, get) => ({
   },
   pick(song, version, searched) {
     const { mode, replaces, friendName, ambiguous } = get();
+    const active = useNightStore.getState().active;
     const target = {
+      ...(active?.kind === 'nomad' ? { nightId: active.nightId } : {}),
       song,
       version,
       mode,

@@ -11,9 +11,9 @@ import { consentFields, loadNightConsent, sanitizeInstagram, saveNightConsent } 
 import { usePhoneStore } from '../../../tonight/manage/PhoneSheet';
 import { useNightStore } from '../../../tonight/nightStore';
 import { nightPoll } from '../../../tonight/nomad/queries';
-import { useRequestStore } from '../../../tonight/request/requestStore';
+import { requestSignature, useRequestStore } from '../../../tonight/request/requestStore';
 import { gen, session } from '../../../test-utils/genAuthMock';
-import { me, nightOpen, nowResult, rotationResult } from '../../../test-utils/tonightFixtures';
+import { at, me, nightOpen, nowResult, rotationResult, song } from '../../../test-utils/tonightFixtures';
 import { group, kn, requestRoutes, results } from '../request/helpers';
 import { requestResult, restoreTiming } from './setup';
 
@@ -40,6 +40,8 @@ jest.mock('@nomad/api-kjbox', () => ({
   changeRequest: jest.fn(),
   getSingers: jest.fn(),
   getTips: jest.fn(),
+  setSongConsent: jest.fn(),
+  updateMe: jest.fn(),
 }));
 
 const api = kjbox as jest.Mocked<typeof kjbox>;
@@ -304,4 +306,75 @@ it('confirm re-reads the stored consent when the night changes (fix round 3)', a
   fireEvent.press(screen.getByTestId('tonight-confirm-send'));
   await waitFor(() => expect(api.submitRequest).toHaveBeenCalled());
   expect(api.submitRequest.mock.calls[0]![1]).not.toHaveProperty('photo_consent');
+});
+
+describe('"Nothing from tonight" sticks across later requests (final review, privacy)', () => {
+  const asking = () =>
+    nightOpen({ night_id: NIGHT, features: { make: true, simple_mode: false, ask_photo_consent: true, quick_version: true, tips: true } });
+  const sung = (consent: 'yes' | 'no') =>
+    me({
+      me: { name: 'Sam', phone: null, photo_consent: consent, instagram: consent === 'yes' ? 'samk' : null },
+      songs: [song({ request: { id: 2, media_consent: 'yes' }, estimate: at(4) })],
+      sung_tonight: [song({ performed: true, request: { id: 1 }, history_id: `kj_${'a'.repeat(24)}` })],
+    });
+
+  beforeEach(() => {
+    api.getNight.mockResolvedValue(asking());
+    api.setSongConsent.mockResolvedValue(requestResult());
+    api.updateMe.mockResolvedValue({ api_version: '1.0', me: { name: 'Sam', phone: null, photo_consent: 'no', instagram: null } });
+  });
+
+  it('opting out of the night, then requesting, never sends yes or the handle', async () => {
+    const userKey = useNightStore.getState().userKey;
+    saveNightConsent(userKey, NIGHT, { consent: 'yes', instagram: 'samk' });
+    api.getMe.mockResolvedValue(sung('yes'));
+    renderRouter(requestRoutes(), { initialUrl: '/tonight' });
+    fireEvent.press(await screen.findByTestId('tonight-sung-toggle'));
+    fireEvent.press(await screen.findByTestId('tonight-song-consent-r1'));
+    // The box now answers no (as kjbox does after the PUT).
+    api.getMe.mockResolvedValue(sung('no'));
+    fireEvent.press(await screen.findByTestId('tonight-consent-scope-all-r1'));
+    await waitFor(() => expect(api.updateMe).toHaveBeenCalledWith('2121', { photo_consent: 'no', night_id: NIGHT }));
+    await waitFor(() => expect(loadNightConsent(userKey, NIGHT)).toEqual({ consent: 'no' }));
+
+    useRequestStore.getState().pick(starlight(), 'auto', 'starl');
+    act(() => router.push('/tonight/confirm'));
+    fireEvent.press(await screen.findByTestId('tonight-confirm-send'));
+    await waitFor(() => expect(api.submitRequest).toHaveBeenCalled());
+    const body = api.submitRequest.mock.calls[0]![1];
+    expect(body.photo_consent).not.toBe('yes');
+    expect(body).not.toHaveProperty('instagram');
+  });
+
+  it('/me saying no wins over a stored yes', async () => {
+    saveNightConsent(useNightStore.getState().userKey, NIGHT, { consent: 'yes', instagram: 'samk' });
+    api.getMe.mockResolvedValue(me({ me: { name: 'Sam', phone: null, photo_consent: 'no', instagram: null } }));
+    renderRouter(requestRoutes(), { initialUrl: '/tonight' });
+    await waitFor(() => expect(api.getMe).toHaveBeenCalled());
+    useRequestStore.getState().pick(starlight(), 'auto', 'starl');
+    act(() => router.push('/tonight/confirm'));
+    fireEvent.press(await screen.findByTestId('tonight-confirm-send'));
+    await waitFor(() => expect(api.submitRequest).toHaveBeenCalled());
+    const body = api.submitRequest.mock.calls[0]![1];
+    expect(body.photo_consent).toBe('no');
+    expect(body).not.toHaveProperty('instagram');
+  });
+
+  it('consentFields defers to a known /me value', () => {
+    expect(consentFields({ consent: 'yes', instagram: 'samk' }, 'no')).toEqual({ photo_consent: 'no' });
+    expect(consentFields({ consent: 'yes', instagram: 'samk' }, null)).toEqual({ photo_consent: 'yes', instagram: 'samk' });
+    expect(consentFields({}, 'no')).toEqual({ photo_consent: 'no' });
+    expect(consentFields({ consent: 'no' }, undefined)).toEqual({ photo_consent: 'no' });
+  });
+});
+
+it('requestSignature includes the night: an ambiguous id never carries into a later night (final review)', () => {
+  const p = { song: starlight(), version: 'auto' as const, mode: 'new' as const };
+  expect(requestSignature({ ...p, nightId: 'n1' })).not.toBe(requestSignature({ ...p, nightId: 'n2' }));
+  const s = useRequestStore.getState();
+  const a = s.pick(starlight(), 'auto', 'starl');
+  s.noteSend(a, 'ambiguous');
+  expect(s.pick(starlight(), 'auto', 'starl').clientRequestId).toBe(a.clientRequestId);
+  act(() => useNightStore.getState().joinNomad('2121', 'bbbbbbbbbbbbbbbb', 'Andrew'));
+  expect(useRequestStore.getState().pick(starlight(), 'auto', 'starl').clientRequestId).not.toBe(a.clientRequestId);
 });
