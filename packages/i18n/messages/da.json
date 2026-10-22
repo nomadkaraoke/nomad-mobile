@@ -40,7 +40,17 @@
     "musicProfileDecades": "Årtier",
     "musicProfileGenres": "Genrer",
     "musicProfileNone": "Ikke indstillet",
-    "musicProfileRemove": "Fjern"
+    "musicProfileRemove": "Fjern",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Forbind Apple Music",
+    "appleMusicConnected": "Forbundet · {count, plural, one {# sang} other {# sange}} indlæst",
+    "appleMusicDisconnect": "Afbryd Apple Music",
+    "appleMusicExpired": "Dit Apple Music-login er udløbet. Forbind igen for at holde dine anbefalinger opdaterede.",
+    "appleMusicFailed": "Kunne ikke få forbindelse til Apple Music. Tjek din internetforbindelse, og prøv igen.",
+    "appleMusicPitch": "Forbind tjenesten, så bruger vi dit bibliotek og senest afspillede numre til at finde sange, du vil elske at synge.",
+    "appleMusicReading": "Indlæser dit Apple Music-bibliotek. Dine anbefalinger opdateres, så snart det er færdigt.",
+    "appleMusicReconnect": "Genopret forbindelse til Apple Music",
+    "musicServices": "Dine musiktjenester"
   },
   "common": {
     "error": "Der gik noget galt.",

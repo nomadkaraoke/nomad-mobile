@@ -40,7 +40,17 @@
     "musicProfileDecades": "ทศวรรษ",
     "musicProfileGenres": "แนวเพลง",
     "musicProfileNone": "ไม่ได้ตั้งค่า",
-    "musicProfileRemove": "นำออก"
+    "musicProfileRemove": "นำออก",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "เชื่อมต่อ Apple Music",
+    "appleMusicConnected": "เชื่อมต่อแล้ว · โหลดข้อมูลแล้ว {count, plural, one {# เพลง} other {# เพลง}}",
+    "appleMusicDisconnect": "ยกเลิกการเชื่อมต่อ Apple Music",
+    "appleMusicExpired": "เซสชันการเข้าสู่ระบบ Apple Music ของคุณหมดอายุแล้ว เชื่อมต่อใหม่อีกครั้งเพื่อให้รายการเพลงแนะนำของคุณเป็นปัจจุบันอยู่เสมอ",
+    "appleMusicFailed": "ไม่สามารถเชื่อมต่อ Apple Music ได้ ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณแล้วลองอีกครั้ง",
+    "appleMusicPitch": "เชื่อมต่อเลย เพื่อให้เราช่วยเลือกเพลงที่คุณน่าจะชอบร้องจากคลังเพลงและประวัติการฟังล่าสุดของคุณ",
+    "appleMusicReading": "กำลังอ่านข้อมูลคลังเพลง Apple Music ของคุณ รายการเพลงแนะนำจะอัปเดตเมื่อเสร็จเรียบร้อย",
+    "appleMusicReconnect": "เชื่อมต่อ Apple Music อีกครั้ง",
+    "musicServices": "บริการเพลงของคุณ"
   },
   "common": {
     "error": "เกิดข้อผิดพลาดบางอย่าง",

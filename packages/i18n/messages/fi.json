@@ -40,7 +40,17 @@
     "musicProfileDecades": "Vuosikymmenet",
     "musicProfileGenres": "Genret",
     "musicProfileNone": "Ei asetettu",
-    "musicProfileRemove": "Poista"
+    "musicProfileRemove": "Poista",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Yhdistä Apple Music",
+    "appleMusicConnected": "Yhdistetty · {count, plural, one {# kappale} other {# kappaletta}} luettu",
+    "appleMusicDisconnect": "Katkaise Apple Music -yhteys",
+    "appleMusicExpired": "Apple Music -kirjautumisesi on vanhentunut. Yhdistä uudelleen pitääksesi suosituksesi ajan tasalla.",
+    "appleMusicFailed": "Yhteyttä Apple Musiciin ei saatu muodostettua. Tarkista verkkoyhteytesi ja yritä uudelleen.",
+    "appleMusicPitch": "Kun yhdistät tilisi, etsimme kirjastosi ja viimeksi kuuntelemiesi kappaleiden perusteella biisejä, joita rakastat laulaa.",
+    "appleMusicReading": "Luetaan Apple Music -kirjastoasi. Suosituksesi päivittyvät, kun se on valmis.",
+    "appleMusicReconnect": "Yhdistä Apple Music uudelleen",
+    "musicServices": "Musiikkipalvelusi"
   },
   "common": {
     "error": "Jokin meni pieleen.",

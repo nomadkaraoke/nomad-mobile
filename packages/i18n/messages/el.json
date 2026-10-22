@@ -40,7 +40,17 @@
     "musicProfileDecades": "Δεκαετίες",
     "musicProfileGenres": "Είδη",
     "musicProfileNone": "Δεν έχει οριστεί",
-    "musicProfileRemove": "Αφαίρεση"
+    "musicProfileRemove": "Αφαίρεση",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Σύνδεση Apple Music",
+    "appleMusicConnected": "Συνδέθηκε · {count, plural, one {διαβάστηκε # τραγούδι} other {διαβάστηκαν # τραγούδια}}",
+    "appleMusicDisconnect": "Αποσύνδεση Apple Music",
+    "appleMusicExpired": "Η σύνδεσή σου στο Apple Music έχει λήξει. Επανασυνδέσου για να παραμένουν οι επιλογές σου ενημερωμένες.",
+    "appleMusicFailed": "Δεν ήταν δυνατή η επικοινωνία με το Apple Music. Έλεγξε τη σύνδεσή σου και δοκίμασε ξανά.",
+    "appleMusicPitch": "Σύνδεσέ το και θα χρησιμοποιήσουμε τη βιβλιοθήκη σου και τις πρόσφατες αναπαραγωγές για να επιλέξουμε τραγούδια που θα λατρέψεις να τραγουδάς.",
+    "appleMusicReading": "Γίνεται ανάγνωση της βιβλιοθήκης σου στο Apple Music. Οι επιλογές σου θα ενημερωθούν μόλις ολοκληρωθεί.",
+    "appleMusicReconnect": "Επανασύνδεση Apple Music",
+    "musicServices": "Οι μουσικές υπηρεσίες σου"
   },
   "common": {
     "error": "Κάτι πήγε στραβά.",

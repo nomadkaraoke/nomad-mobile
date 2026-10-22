@@ -40,7 +40,17 @@
     "musicProfileDecades": "Decenii",
     "musicProfileGenres": "Genuri",
     "musicProfileNone": "Nesetat",
-    "musicProfileRemove": "Elimină"
+    "musicProfileRemove": "Elimină",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Conectează Apple Music",
+    "appleMusicConnected": "Conectat · {count, plural, one {# melodie citită} few {# melodii citite} other {# de melodii citite}}",
+    "appleMusicDisconnect": "Deconectează Apple Music",
+    "appleMusicExpired": "Sesiunea ta Apple Music a expirat. Reconectează-te pentru a-ți menține recomandările la zi.",
+    "appleMusicFailed": "Nu s-a putut realiza conexiunea cu Apple Music. Verifică conexiunea la internet și încearcă din nou.",
+    "appleMusicPitch": "Conectează serviciul și îți vom folosi biblioteca și piesele ascultate recent pentru a alege melodii pe care vei adora să le cânți.",
+    "appleMusicReading": "Îți citim biblioteca Apple Music. Recomandările tale se vor actualiza când procesul este finalizat.",
+    "appleMusicReconnect": "Reconectează Apple Music",
+    "musicServices": "Serviciile tale de muzică"
   },
   "common": {
     "error": "Ceva nu a funcționat.",

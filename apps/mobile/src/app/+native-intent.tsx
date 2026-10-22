@@ -4,6 +4,8 @@ import { parseNightLink } from '../tonight/links';
 
 /** nomadkaraoke://checkout (any query): gen's checkout bounce back to the app (see credits/useCheckout.ts). */
 const CHECKOUT_RETURN = /^nomadkaraoke:\/\/\/?checkout(?:[?#/]|$)/i;
+/** nomadkaraoke://music-connected: decide web's Apple Music connect page handing back (see useAppleMusic). */
+const MUSIC_CONNECTED = /^nomadkaraoke:\/\/\/?music-connected(?:[?#/]|$)/i;
 
 /** http(s) links on the hosts the app claims: kjbox.cc, www.kjbox.cc, sing.nomadkaraoke.com (any case). */
 const CLAIMED_HOST = /^https?:\/\/(?:(?:www\.)?kjbox\.cc|sing\.nomadkaraoke\.com)(?:[:/?#]|$)/i;
@@ -20,6 +22,8 @@ export function redirectSystemPath({ path, initial }: { path: string; initial: b
     if (!initial) return null;
     return isFreshIntent(useMakeIntent.getState().intent) ? '/make/new' : '/me';
   }
+  // Same double delivery as checkout; on a cold start the music profile shows the new connection.
+  if (MUSIC_CONNECTED.test(path)) return initial ? '/me/music-profile' : null;
   // Night links (spec §4.2, ruling E3-R1): kjbox.cc/<code> (any case: the printed QR is HTTP://KJBOX.CC/<code>),
   // sing.nomadkaraoke.com/?t=<code> and nomadkaraoke://tonight?t=<code> open the join route. Only full links: a bare
   // code is never a system path.

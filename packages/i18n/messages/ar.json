@@ -40,7 +40,17 @@
     "musicProfileDecades": "عقود",
     "musicProfileGenres": "تصنيفات",
     "musicProfileNone": "لم يتم التعيين",
-    "musicProfileRemove": "إزالة"
+    "musicProfileRemove": "إزالة",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "ربط Apple Music",
+    "appleMusicConnected": "تم الربط · تمت قراءة {count, plural, zero {ولا أي أغنية} one {أغنية واحدة} two {أغنيتين} few {# أغانٍ} many {# أغنية} other {# أغنية}}",
+    "appleMusicDisconnect": "إلغاء ربط Apple Music",
+    "appleMusicExpired": "انتهت صلاحية تسجيل دخولك إلى Apple Music. أعد الربط لإبقاء اختياراتك محدّثة.",
+    "appleMusicFailed": "تعذر الاتصال بـ Apple Music. تحقق من اتصالك بالإنترنت وحاول مجددًا.",
+    "appleMusicPitch": "اربط حسابك وسنعتمد على مكتبتك وما استمعت إليه مؤخرًا لاقتراح أغانٍ ستعشق غناءها.",
+    "appleMusicReading": "جارٍ قراءة مكتبة Apple Music الخاصة بك. ستتحدث اختياراتك فور الانتهاء.",
+    "appleMusicReconnect": "إعادة ربط Apple Music",
+    "musicServices": "خدمات الموسيقى الخاصة بك"
   },
   "common": {
     "error": "حدث خطأ ما.",

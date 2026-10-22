@@ -40,7 +40,17 @@
     "musicProfileDecades": "Årtionden",
     "musicProfileGenres": "Genrer",
     "musicProfileNone": "Inte angivet",
-    "musicProfileRemove": "Ta bort"
+    "musicProfileRemove": "Ta bort",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Anslut Apple Music",
+    "appleMusicConnected": "Ansluten · {count, plural, one {# låt inläst} other {# låtar inlästa}}",
+    "appleMusicDisconnect": "Koppla från Apple Music",
+    "appleMusicExpired": "Din Apple Music-inloggning har gått ut. Återanslut för att hålla dina låtförslag uppdaterade.",
+    "appleMusicFailed": "Det gick inte att nå Apple Music. Kontrollera din anslutning och försök igen.",
+    "appleMusicPitch": "Anslut tjänsten så använder vi ditt bibliotek och din senaste historik för att hitta låtar du kommer älska att sjunga.",
+    "appleMusicReading": "Läser in ditt Apple Music-bibliotek. Dina låtförslag uppdateras så fort det är klart.",
+    "appleMusicReconnect": "Återanslut Apple Music",
+    "musicServices": "Dina musiktjänster"
   },
   "common": {
     "error": "Något gick fel.",

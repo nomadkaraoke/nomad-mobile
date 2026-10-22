@@ -40,7 +40,17 @@
     "musicProfileDecades": "Décadas",
     "musicProfileGenres": "Géneros",
     "musicProfileNone": "No establecido",
-    "musicProfileRemove": "Quitar"
+    "musicProfileRemove": "Quitar",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Conectar Apple Music",
+    "appleMusicConnected": "Conectado · {count, plural, one {# canción leída} other {# canciones leídas}}",
+    "appleMusicDisconnect": "Desconectar Apple Music",
+    "appleMusicExpired": "Tu inicio de sesión de Apple Music ha caducado. Vuelve a conectarte para mantener tus selecciones al día.",
+    "appleMusicFailed": "No se pudo conectar con Apple Music. Comprueba tu conexión e inténtalo de nuevo.",
+    "appleMusicPitch": "Conéctalo y usaremos tu biblioteca y reproducciones recientes para elegir canciones que te encantará cantar.",
+    "appleMusicReading": "Leyendo tu biblioteca de Apple Music. Tus selecciones se actualizarán cuando termine.",
+    "appleMusicReconnect": "Reconectar Apple Music",
+    "musicServices": "Tus servicios de música"
   },
   "common": {
     "error": "Algo salió mal.",
