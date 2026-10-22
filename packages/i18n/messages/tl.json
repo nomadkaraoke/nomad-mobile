@@ -301,7 +301,7 @@
         "scopeQuestion": "Ang kantang ito lang, o wala mula ngayong gabi?",
         "yesLabel": "Maaaring i-post ang mga litrato at video clip ng kantang ito. I-tap para baguhin.",
         "no": "📷 Huwag i-post",
-        "scopeAll": "Kahit ano mula ngayong gabi",
+        "scopeAll": "Walang ipo-post mula ngayong gabi",
         "yes": "📷 Pwedeng i-post"
       },
       "duet": {
@@ -400,7 +400,7 @@
         "plain": "${amount}",
         "rejected": "Hindi nahanap ng host ang tip na ito. Makipag-usap sa kanila.",
         "sub": "Diretsong napupunta ang mga tip sa iyong host at nakatutulong para magpatuloy ang show.",
-        "venmoNote": "Karaoke tip",
+        "venmoNote": "Tip sa karaoke",
         "via": "${amount} sa pamamagitan ng {method}",
         "cash": "Cash",
         "methodLabel": "Paano ka nag-tip?",
@@ -597,9 +597,9 @@
       "autoBest": "Awtomatikong piliin ang pinakamagandang bersyon",
       "confirm": {
         "back": "Pumili ng ibang kanta",
-        "backToTonight": "Bumalik sa Tonight",
+        "backToTonight": "Bumalik sa Ngayong Gabi",
         "missing": "Pumili muna ng kanta.",
-        "nightEnded": "Tapos na ang gabing ito, kaya wala nang maipapadala rito. Bumalik sa Tonight para sumali sa gabing kasalukuyang nagaganap.",
+        "nightEnded": "Tapos na ang gabing ito, kaya wala nang maipapadala rito. Bumalik sa Ngayong Gabi para sumali sa gabing kasalukuyang nagaganap.",
         "searched": "Hinanap mo: “{query}”",
         "send": "Oo, ipadala",
         "sendChange": "Oo, palitan ang kanta ko",

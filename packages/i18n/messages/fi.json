@@ -530,7 +530,7 @@
         "title": "Juontajalta",
         "email": "Sähköposti",
         "message": "Viesti vetäjältäsi",
-        "text": "Tekstin väri"
+        "text": "Tekstiviesti"
       },
       "wait": "{hours, plural, =0 {{minutes} min} other {{hours} t {minutes} min}}",
       "retry": "Yritä uudelleen",

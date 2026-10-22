@@ -599,7 +599,7 @@
         "back": "Kies een ander nummer",
         "backToTonight": "Terug naar Vanavond",
         "missing": "Kies eerst een nummer.",
-        "nightEnded": "Deze avond is afgelopen, dus er kan niets meer worden aangevraagd. Ga terug naar Tonight om mee te doen met de avond die nu bezig is.",
+        "nightEnded": "Deze avond is afgelopen, dus er kan niets meer worden aangevraagd. Ga terug naar Vanavond om mee te doen met de avond die nu bezig is.",
         "searched": "Je hebt gezocht op: “{query}”",
         "send": "Ja, versturen",
         "sendChange": "Ja, wissel mijn nummer",

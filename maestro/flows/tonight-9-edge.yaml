@@ -64,6 +64,7 @@ onFlowComplete:
       KJBOX_STACK: ${KJBOX_STACK}
       OP: state
       EXPECT_ENTRY_TITLE: "Hello"
+      EXPECT_ENTRY_SINGER: "Vera"
 - runFlow:
     file: ../common/tonight-kjbox-op.yaml
     env:

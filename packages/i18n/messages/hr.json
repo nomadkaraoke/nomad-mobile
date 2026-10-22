@@ -599,7 +599,7 @@
         "back": "Odaberi drugu pjesmu",
         "backToTonight": "Natrag na Večeras",
         "missing": "Prvo odaberi pjesmu.",
-        "nightEnded": "Ova je večer završila pa se više ništa ne može poslati. Vrati se na Tonight kako bi se pridružio večeri koja je upravo u tijeku.",
+        "nightEnded": "Ova je večer završila pa se više ništa ne može poslati. Vrati se na Večeras kako bi se pridružio večeri koja je upravo u tijeku.",
         "searched": "Tražio si: „{query}”",
         "send": "Da, pošalji",
         "sendChange": "Da, zamijeni moju pjesmu",

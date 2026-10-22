@@ -599,7 +599,7 @@
         "back": "Elegir una canción diferente",
         "backToTonight": "Volver a Esta noche",
         "missing": "Elige una canción primero.",
-        "nightEnded": "Esta noche ha terminado, así que ya no se puede enviar nada más. Vuelve a Tonight para unirte a la noche que está en curso ahora.",
+        "nightEnded": "Esta noche ha terminado, así que ya no se puede enviar nada más. Vuelve a Esta noche para unirte a la noche que está en curso ahora.",
         "searched": "Buscaste: “{query}”",
         "send": "Sí, enviar",
         "sendChange": "Sí, cambiar mi canción",
