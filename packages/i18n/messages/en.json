@@ -126,7 +126,121 @@
   },
   "tonight": {
     "title": "Tonight",
-    "comingSoon": "Coming soon: your requests and tonight's queue"
+    "comingSoon": "Coming soon: your requests and tonight's queue",
+    "night": {
+      "status": {
+        "label": "Your next song",
+        "labelOf": "Your next song (of {count})",
+        "urgent": "Nearly your turn",
+        "onStage": "You're up. Head to the stage!",
+        "next": "You're next. Get ready!",
+        "afterThis": "You're next, right after this song.",
+        "almost": "Almost up: 1 song to go.",
+        "position": "#{position} in line · about {wait}",
+        "making": "Being made for you",
+        "pending": "Waiting for the host…",
+        "queued": "In the queue"
+      },
+      "wait": "{hours, plural, =0 {{minutes} min} other {{hours}h {minutes}m}}",
+      "songByArtist": "{title} by {artist}",
+      "stage": {
+        "label": "Now on stage",
+        "between": "Between singers. Next up soon.",
+        "empty": "The rotation hasn't started yet. You could be the first!",
+        "upNext": "Up next: {name}"
+      },
+      "songs": {
+        "title": "Your songs tonight",
+        "empty": "You have no songs in the queue yet.",
+        "request": "Request a song",
+        "reorder": "Change the order of my songs"
+      },
+      "song": {
+        "addedByHost": "Added by the host",
+        "addedBy": "Added by {name}",
+        "forFriend": "For {name}",
+        "fromWeb": "Requested on the web page",
+        "with": "With {names}",
+        "statusPosition": "#{position} in line · about {wait}",
+        "statusApproved": "In the queue",
+        "statusPending": "Waiting for the host to approve it…",
+        "statusRejected": "The host needs a word. Please see them at the desk.",
+        "statusRemoved": "The host took this song off the list. Ask them if that's a surprise.",
+        "makeMaking": "Being made for you. It joins the rotation once it's ready.",
+        "makeReview": "Being made. It needs a lyrics sync review: review it yourself now, or the host will as soon as possible.",
+        "makeReviewHost": "Being made. The host has started the lyrics sync review. You can review it yourself too.",
+        "makeReviewSelf": "Being made. Your lyrics sync review is in progress.",
+        "makeRendering": "Being made. The review is done and it's rendering: it should be ready in about 10 minutes.",
+        "makeNeedsHost": "Being made. The host needs to sort something out first. It joins the rotation once it's ready.",
+        "quickReady": "A quick version is ready now. It has scrolling lyrics, without word-by-word highlighting. Sing it now, or wait for the full version.",
+        "quickChosen": "You're singing the quick version. If the full version is ready before you're up, we'll switch to it automatically.",
+        "quickUpgraded": "The full version is ready and has replaced the quick version.",
+        "cancel": "Cancel",
+        "change": "Change song",
+        "preview": "Preview",
+        "dismiss": "Dismiss",
+        "review": "Review it now",
+        "quickPreview": "Preview the quick version",
+        "quickSing": "Sing it now"
+      },
+      "sung": {
+        "title": "✓ Already sung tonight ({count})"
+      },
+      "rotation": {
+        "title": "Tonight's rotation",
+        "caveat": "The order can change: new singers move up and times are rough. Treat this as a guide.",
+        "empty": "Nobody is in the rotation yet.",
+        "onNow": "On now",
+        "beingMade": "Being made",
+        "eta": "about {wait}",
+        "preview": "Preview {song}"
+      },
+      "freshness": {
+        "now": "Updated just now",
+        "seconds": "Updated {count}s ago",
+        "minutes": "{count, plural, one {Updated 1 min ago} other {Updated # min ago}}",
+        "refresh": "Refresh"
+      },
+      "unreachable": {
+        "message": "Can't reach tonight's night. Connect to the Nomad KJ Box wifi and use the web page.",
+        "openWeb": "Open the web page",
+        "lastKnown": "Your songs as of the last update:"
+      },
+      "unlinked": {
+        "message": "Requested songs on the web page too? Open it and tap Save tonight's songs.",
+        "open": "Open the web page"
+      },
+      "closed": "The host has paused requests for now.",
+      "venue": {
+        "title": "From your host",
+        "message": "A note from your host",
+        "contact": "Contact the host",
+        "text": "Text",
+        "call": "Call",
+        "email": "Email",
+        "followUs": "Follow the host",
+        "notices": {
+          "chargers": "🔌 Phone chargers are at the host's table. Ask if you're running low.",
+          "lyricsScreen": "📺 The lyrics are on the big screen, so you don't need your phone while you sing.",
+          "duets": "🎤 Duets and groups are welcome. Add singers when you request a song.",
+          "moreSongs": "📱 You can add more songs any time.",
+          "tipsHelp": "💜 Tips help keep the show going.",
+          "wifi": "📶 Free wifi: ask the host for the password.",
+          "water": "💧 Free water and ice are available near the bar.",
+          "photos": "📸 Photos and videos are welcome."
+        },
+        "social": {
+          "instagram": "Instagram",
+          "facebook": "Facebook",
+          "tiktok": "TikTok",
+          "youtube": "YouTube",
+          "x": "X",
+          "website": "Website"
+        }
+      },
+      "loadFailed": "Couldn't load tonight's night. Please try again.",
+      "retry": "Try again"
+    }
   },
   "makeTab": {
     "title": "Make",
