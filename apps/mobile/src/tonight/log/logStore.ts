@@ -29,6 +29,15 @@ export type LogEntry = {
 };
 export type LogSong = { song_key?: string; artist: string; title: string };
 
+/**
+ * The artist stored for a song logged without one (decide needs an artist). Fixed and untranslated, so every
+ * locale's unknowns are one artist; the UI shows it as the translated "Unknown artist" (`artistLabel`).
+ */
+export const UNKNOWN_ARTIST = 'Unknown Artist';
+
+/** The artist to show: the sentinel becomes the caller's translated "Unknown artist". */
+export const artistLabel = (artist: string, unknownLabel: string): string => (artist === UNKNOWN_ARTIST ? unknownLabel : artist);
+
 const logKey = (userKey: string) => `tonight.log.v1.${userKey}`;
 const surveyedKey = (userKey: string) => `tonight.surveyed.v1.${userKey}`;
 

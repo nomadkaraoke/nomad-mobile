@@ -9,7 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MIN_QUERY_CHARS, useSearch } from '../../find/useSearch';
 import { IdeasPanel } from '../log/IdeasPanel';
 import { SurveySheet } from '../log/SurveySheet';
-import { useLogStore, type LogSong, type LogState } from '../log/logStore';
+import { artistLabel, UNKNOWN_ARTIST, useLogStore, type LogSong, type LogState } from '../log/logStore';
 import { useNightStore } from '../nightStore';
 import { LibraryFilterSlot } from './LibraryFilterSlot';
 
@@ -55,16 +55,16 @@ export function AddSong({ prefill, library }: AddSongProps) {
   const figuringOut = fresh && search.loading && search.source === 'cloud' && search.groups.length === 0;
   const groups = fresh ? (search.groups.length > 0 ? search.groups : (search.resolve?.groups ?? [])) : [];
 
-  // "Log … anyway" prefill: the auto-correct's artist/title split, else the typed text's; decide needs an artist,
-  // so a missing one starts as "Unknown artist" for the singer to correct.
+  // "Log … anyway" prefill: the auto-correct's artist/title split, else the typed text's. A missing artist stays
+  // empty (hint: "Unknown artist") and is saved as the untranslated UNKNOWN_ARTIST (decide needs an artist).
   const logAnyway = () => {
     const split = search.resolve?.split ?? splitQuery(query);
-    setPicked({ song: { artist: split.artist.trim() || t('unknownArtist'), title: split.title.trim() }, typed: true });
+    setPicked({ song: { artist: split.artist.trim(), title: split.title.trim() }, typed: true });
   };
 
   const add = (state: LogState) => {
     if (!picked) return;
-    const artist = picked.song.artist.trim();
+    const artist = picked.song.artist.trim() || (picked.typed ? UNKNOWN_ARTIST : '');
     const title = picked.song.title.trim();
     if (!artist || !title) return;
     const song: LogSong = { artist, title, ...(picked.typed || !picked.song.song_key ? {} : { song_key: picked.song.song_key }) };
@@ -76,7 +76,7 @@ export function AddSong({ prefill, library }: AddSongProps) {
 
   const pickGroup = (g: SongGroup) => setPicked({ song: { artist: g.artist, title: g.title, song_key: g.song_key }, typed: false });
   const edit = (field: 'artist' | 'title', v: string) => setPicked((p) => (p ? { ...p, song: { ...p.song, [field]: v } } : p));
-  const ready = !!picked && picked.song.artist.trim() !== '' && picked.song.title.trim() !== '';
+  const ready = !!picked && (picked.typed || picked.song.artist.trim() !== '') && picked.song.title.trim() !== '';
 
   return (
     <SafeAreaView testID="other-add-screen" style={{ flex: 1, backgroundColor: colors.bg }} edges={['left', 'right', 'bottom']}>
@@ -86,7 +86,7 @@ export function AddSong({ prefill, library }: AddSongProps) {
             {picked.typed ? (
               <>
                 <Text variant="muted">{t('typedHint')}</Text>
-                <TextField testID="other-add-artist" label={t('artistLabel')} value={picked.song.artist} onChangeText={(v) => edit('artist', v)} autoCapitalize="words" />
+                <TextField testID="other-add-artist" label={t('artistLabel')} placeholder={t('unknownArtist')} value={picked.song.artist} onChangeText={(v) => edit('artist', v)} autoCapitalize="words" />
                 <TextField testID="other-add-title" label={t('titleLabel')} value={picked.song.title} onChangeText={(v) => edit('title', v)} autoCapitalize="words" />
               </>
             ) : (
@@ -158,7 +158,7 @@ export function AddSong({ prefill, library }: AddSongProps) {
       </ScrollView>
       <SurveySheet
         entryId={survey?.id ?? null}
-        artist={survey?.song.artist ?? ''}
+        artist={artistLabel(survey?.song.artist ?? '', t('unknownArtist'))}
         title={survey?.song.title ?? ''}
         onDone={() => {
           setSurvey(null);

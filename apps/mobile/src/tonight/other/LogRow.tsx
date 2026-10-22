@@ -5,7 +5,7 @@ import * as Clipboard from 'expo-clipboard';
 import { useEffect, useState } from 'react';
 import { Pressable, Share, View } from 'react-native';
 
-import { useLogStore, type LogEntry, type LogState } from '../log/logStore';
+import { artistLabel, useLogStore, type LogEntry, type LogState } from '../log/logStore';
 import { useNightStore } from '../nightStore';
 import { useYouTubeLink } from './YouTubeLink';
 
@@ -43,6 +43,7 @@ export function LogRow({ entry, jobs, onSurvey }: LogRowProps) {
   const tSurvey = useTranslations('tonight.survey');
   const link = useYouTubeLink(entry, jobs);
   const id = entry.id;
+  const artist = artistLabel(entry.artist, t('unknownArtist'));
   const sang = () => {
     setLogState(id, 'sung');
     onSurvey({ ...entry, state: 'sung' });
@@ -65,7 +66,7 @@ export function LogRow({ entry, jobs, onSurvey }: LogRowProps) {
     );
   };
   const share = () => {
-    if (link) void Share.share({ message: t('shareMessage', { title: entry.title, artist: entry.artist, url: link }) }).catch(() => {});
+    if (link) void Share.share({ message: t('shareMessage', { title: entry.title, artist, url: link }) }).catch(() => {});
   };
 
   return (
@@ -73,7 +74,7 @@ export function LogRow({ entry, jobs, onSurvey }: LogRowProps) {
       <Text testID={`other-row-title-${id}`} className="font-semibold">
         {entry.title}
       </Text>
-      {entry.artist ? <Text variant="muted">{isolate(entry.artist)}</Text> : null}
+      {artist ? <Text variant="muted">{isolate(artist)}</Text> : null}
       <View className="flex-row flex-wrap gap-x-4">
         {entry.state === 'planned' || entry.state === 'skipped' ? (
           <Action testID={`other-row-${id}-requested`} label={t('requestedIt')} onPress={() => setLogState(id, 'requested')} strong />

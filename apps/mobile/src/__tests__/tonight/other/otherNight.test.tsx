@@ -4,7 +4,7 @@ import { act, fireEvent, screen, waitFor, within } from '@testing-library/react-
 import { renderRouter } from 'expo-router/testing-library';
 
 import { useAuth } from '../../../auth/store';
-import { setLogClock, useLogStore } from '../../../tonight/log/logStore';
+import { setLogClock, UNKNOWN_ARTIST, useLogStore } from '../../../tonight/log/logStore';
 import { outboxIdle, useOutbox } from '../../../tonight/log/outbox';
 import { setNightClock, useNightStore } from '../../../tonight/nightStore';
 import { OtherNightScreen } from '../../../tonight/other/OtherNightScreen';
@@ -79,6 +79,17 @@ it('other night groups: Sung / Up next / Maybe, each newest first, only tonight\
   expect(titlesIn('requested')).toEqual(['Requested B', 'Requested A']);
   expect(titlesIn('planned')).toEqual(['New planned', 'Old planned']);
   expect(screen.queryByText('Last week')).toBeNull();
+});
+
+it('the unknown-artist sentinel shows as the translated "Unknown artist" in rows', () => {
+  const night = otherNight();
+  const id = useLogStore.getState().addOther({ artist: UNKNOWN_ARTIST, title: 'Our Song' }, 'planned')!;
+  const known = useLogStore.getState().addOther({ artist: 'Local Band', title: 'Other Song' }, 'planned')!;
+  renderTonight(<OtherNightScreen night={night} />);
+  // Artists are bidi-isolated (isolate()), hence the regexes.
+  expect(within(screen.getByTestId(`other-row-${id}`)).getByText(/Unknown artist/)).toBeTruthy();
+  expect(screen.queryByText(/Unknown Artist/)).toBeNull();
+  expect(within(screen.getByTestId(`other-row-${known}`)).getByText(/Local Band/)).toBeTruthy();
 });
 
 it('an empty night shows a hint and no groups', () => {

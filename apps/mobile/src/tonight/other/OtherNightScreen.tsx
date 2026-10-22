@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { SurveySheet } from '../log/SurveySheet';
-import { useLogStore, type LogEntry, type LogState } from '../log/logStore';
+import { artistLabel, useLogStore, type LogEntry, type LogState } from '../log/logStore';
 import { useNightStore, type OtherNight } from '../nightStore';
 import { TonightSheet } from '../TonightSheet';
 import { LogRow } from './LogRow';
@@ -75,7 +75,7 @@ export function OtherNightScreen({ night }: { night: OtherNight }) {
       </ScrollView>
       <SurveySheet
         entryId={survey?.id ?? null}
-        artist={survey?.artist ?? ''}
+        artist={artistLabel(survey?.artist ?? '', t('unknownArtist'))}
         title={survey?.title ?? ''}
         initial={survey ? useLogStore.getState().entries[survey.id]?.survey : undefined}
         onDone={() => {

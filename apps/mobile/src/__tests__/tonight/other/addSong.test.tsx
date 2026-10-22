@@ -2,7 +2,7 @@ import * as decide from '@nomad/api-decide';
 import type { SearchResponse, SongGroup } from '@nomad/api-decide';
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 
-import { useLogStore } from '../../../tonight/log/logStore';
+import { UNKNOWN_ARTIST, useLogStore } from '../../../tonight/log/logStore';
 import { outboxIdle, useOutbox } from '../../../tonight/log/outbox';
 import { AddSong, splitQuery } from '../../../tonight/other/AddSong';
 import { renderTonight } from '../../../test-utils/tonightFixtures';
@@ -112,19 +112,33 @@ it('log anyway is always offered once results settle, as the last row after the 
   expect(order).toEqual(['other-add-result-0', 'other-add-log-anyway']);
 });
 
-it('log anyway with no artist in the query prefills "Unknown artist" (decide needs one); clearing it blocks logging', async () => {
+it('log anyway with no artist: empty field with a translated hint; left empty it saves the untranslated sentinel', async () => {
   dapi.searchSongs.mockResolvedValue(response([]));
   renderTonight(<AddSong />);
   fireEvent.changeText(screen.getByTestId('other-add-query'), 'our song');
   fireEvent.press(await screen.findByTestId('other-add-log-anyway'));
   expect(screen.getByTestId('other-add-title').props.value).toBe('our song');
-  expect(screen.getByTestId('other-add-artist').props.value).toBe('Unknown artist');
-  fireEvent.changeText(screen.getByTestId('other-add-artist'), ' ');
+  expect(screen.getByTestId('other-add-artist').props.value).toBe('');
+  expect(screen.getByTestId('other-add-artist').props.placeholder).toBe('Unknown artist');
+  fireEvent.changeText(screen.getByTestId('other-add-artist'), '  ');
+  fireEvent.press(screen.getByTestId('other-add-as-planned'));
+  expect(entries()).toEqual([expect.objectContaining({ artist: UNKNOWN_ARTIST, title: 'our song' })]);
+  expect(UNKNOWN_ARTIST).toBe('Unknown Artist');
+  await waitFor(() => expect(dapi.putKaraokeLog).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({ artist: 'Unknown Artist' })));
+});
+
+it('a typed artist is kept; the title is still required', async () => {
+  dapi.searchSongs.mockResolvedValue(response([]));
+  renderTonight(<AddSong />);
+  fireEvent.changeText(screen.getByTestId('other-add-query'), 'our song');
+  fireEvent.press(await screen.findByTestId('other-add-log-anyway'));
+  fireEvent.changeText(screen.getByTestId('other-add-title'), ' ');
   fireEvent.press(screen.getByTestId('other-add-as-planned'));
   expect(entries()).toEqual([]);
-  fireEvent.changeText(screen.getByTestId('other-add-artist'), 'Unknown artist');
+  fireEvent.changeText(screen.getByTestId('other-add-title'), 'Our Song');
+  fireEvent.changeText(screen.getByTestId('other-add-artist'), 'Local Band');
   fireEvent.press(screen.getByTestId('other-add-as-planned'));
-  expect(entries()).toEqual([expect.objectContaining({ artist: 'Unknown artist', title: 'our song' })]);
+  expect(entries()).toEqual([expect.objectContaining({ artist: 'Local Band', title: 'Our Song' })]);
 });
 
 describe('search states, as Discover shows them', () => {
