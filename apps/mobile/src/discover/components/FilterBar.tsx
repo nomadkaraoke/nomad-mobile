@@ -12,7 +12,7 @@ import { SortSheet } from './sheets/SortSheet';
 
 type SheetName = 'sort' | 'genre' | 'decade' | 'mood' | 'energy' | 'more';
 
-const MORE_KEYS = ['popularity', 'lead_gender', 'duration', 'classic', 'explicit', 'has_karaoke'];
+const MORE_KEYS = ['popularity', 'leadGender', 'duration', 'classic', 'explicit', 'hasKaraoke'] as const;
 
 export type FilterBarProps = { filters: RecFilters; onChange: (patch: Partial<RecFilters>) => void };
 
