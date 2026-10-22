@@ -34,3 +34,4 @@ export {
   type LibraryFilter,
   type LibraryTagged,
 } from './library';
+export * from './discover';
