@@ -20,12 +20,15 @@ export const TIP_PRESETS = [3, 5, 10, 20];
 /** "5" or "5.50" (the copy adds the currency sign). */
 export const fmtAmount = (a: number) => (a % 1 === 0 ? String(a) : a.toFixed(2));
 
-/** Amount-first deep link (A.64): Cash App / PayPal.me take /<amount>, Venmo a pay intent; the rest open as they are. */
-export function tipUrl(m: TipMethod, amount: number): string | null {
+/**
+ * Amount-first deep link (A.64): Cash App / PayPal.me take /<amount>, Venmo a pay intent with the (translated) note; the
+ * rest open as they are.
+ */
+export function tipUrl(m: TipMethod, amount: number, note: string): string | null {
   if (!m.url) return null;
   if (!(amount > 0)) return m.url;
   if (m.amount_style === 'path') return `${m.url}/${fmtAmount(amount)}`;
-  if (m.amount_style === 'venmo') return `${m.url}?txn=pay&amount=${fmtAmount(amount)}&note=${encodeURIComponent('Karaoke tip')}`;
+  if (m.amount_style === 'venmo') return `${m.url}?txn=pay&amount=${fmtAmount(amount)}&note=${encodeURIComponent(note)}`;
   return m.url;
 }
 
@@ -95,7 +98,7 @@ export function TipsScreen({ night, userKey }: { night: NomadNight; userKey: str
   const inFlight = useRef(false);
 
   const open = (m: TipMethod) => {
-    const url = tipUrl(m, amount);
+    const url = tipUrl(m, amount, t('venmoNote'));
     if (url) void Linking.openURL(url);
   };
   const copy = async (m: TipMethod) => {

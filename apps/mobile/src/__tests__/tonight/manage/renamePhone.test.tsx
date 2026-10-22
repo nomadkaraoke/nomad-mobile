@@ -114,6 +114,16 @@ describe('phone: text me when I\'m up (A.80, A.114, ruling E6-R5)', () => {
     expect(api.updateMe).not.toHaveBeenCalled();
   });
 
+  it('with songs: a failed PUT /me keeps nothing and says it wasn\'t saved', async () => {
+    api.updateMe.mockRejectedValue(new KjboxError('internal', 0, undefined, {}, true));
+    showNight(night);
+    fireEvent.press(await screen.findByTestId('tonight-phone-add'));
+    fireEvent.changeText(await screen.findByTestId('tonight-phone-input'), '+1 555 123 4567');
+    fireEvent.press(screen.getByTestId('tonight-phone-save'));
+    expect(await screen.findByTestId('tonight-phone-error')).toHaveTextContent("Your number wasn't saved. Try again.");
+    expect(storedPhone(useNightStore.getState().userKey)).toBeNull();
+  });
+
   it('an invalid number is caught before sending', async () => {
     showNight(night);
     fireEvent.press(await screen.findByTestId('tonight-phone-add'));

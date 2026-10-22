@@ -134,8 +134,14 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
     appStorage.set(storageKey, JSON.stringify([...next]));
   };
 
+  // Managing songs (E6): cancel with a 15 s notice, reorder mode, name/phone/friend/tips, per-song consent.
+  const { notice, show: notify } = useNotice();
+  const { hidden, cancel } = useCancelSong(night, userKey, notify);
+  const [reordering, setReordering] = useState(false);
+
   const [refreshing, setRefreshing] = useState(false);
   const refresh = async () => {
+    if (reordering) return; // rows must not move under the singer's finger (ruling E6-R3)
     setRefreshing(true);
     try {
       await Promise.all([me.refetch(), now.refetch(), rotation.refetch(), info.refetch()]);
@@ -171,11 +177,6 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
     const { title, artist } = songParts(song.request);
     preview({ source, entryId, title, artist });
   };
-  // Managing songs (E6): cancel with a 15 s notice, reorder mode, name/phone/friend/tips, per-song consent.
-  const { notice, show: notify } = useNotice();
-  const { hidden, cancel } = useCancelSong(night, userKey, notify);
-  const [reordering, setReordering] = useState(false);
-
   const actions = {
     ...rowActions,
     onCancel: rowActions.onCancel ?? ((song: Song) => void cancel(song)),
@@ -233,7 +234,7 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
               />
             </View>
           ) : null}
-          <Freshness updatedAt={me.dataUpdatedAt} onRefresh={() => void refresh()} refreshing={refreshing} />
+          <Freshness updatedAt={me.dataUpdatedAt} onRefresh={() => void refresh()} refreshing={refreshing} disabled={reordering} />
           <NoticeLine notice={notice} />
           {reordering && !readOnly ? (
             <ReorderList
@@ -293,7 +294,7 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
           ListHeaderComponent={header}
           ListFooterComponent={nightInfo ? <VenueInfo night={nightInfo} /> : undefined}
           refreshing={refreshing}
-          onRefresh={() => void refresh()}
+          onRefresh={reordering ? undefined : () => void refresh()}
         />
         <PreviewSheet owner="night" focused={focused} />
         <SurveySheet

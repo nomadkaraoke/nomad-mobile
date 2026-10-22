@@ -17,7 +17,18 @@ export function useTick(ms: number): number {
 }
 
 /** "Updated 20s ago" + ↻ (spec §4.1 Freshness). `updatedAt` 0 = nothing loaded yet. */
-export function Freshness({ updatedAt, onRefresh, refreshing }: { updatedAt: number; onRefresh: () => void; refreshing?: boolean }) {
+export function Freshness({
+  updatedAt,
+  onRefresh,
+  refreshing,
+  disabled,
+}: {
+  updatedAt: number;
+  onRefresh: () => void;
+  refreshing?: boolean;
+  /** No manual refresh right now (reorder mode: rows must not move under the singer's finger). */
+  disabled?: boolean;
+}) {
   const t = useTranslations('tonight.night');
   const now = useTick(FRESHNESS_TICK_MS);
   const age = Math.max(0, Math.round((now - updatedAt) / 1000));
@@ -35,8 +46,8 @@ export function Freshness({ updatedAt, onRefresh, refreshing }: { updatedAt: num
         testID="tonight-refresh"
         accessibilityRole="button"
         accessibilityLabel={t('freshness.refresh')}
-        accessibilityState={{ busy: Boolean(refreshing) }}
-        disabled={refreshing}
+        accessibilityState={{ busy: Boolean(refreshing), disabled: Boolean(refreshing || disabled) }}
+        disabled={refreshing || disabled}
         onPress={onRefresh}
         className="min-h-11 justify-center rounded-md border border-border px-3"
       >

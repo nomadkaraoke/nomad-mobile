@@ -1,5 +1,5 @@
 import * as kjbox from '@nomad/api-kjbox';
-import { fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 
 import type { NomadNight } from '../../../tonight/nightStore';
 import { useEditingStore } from '../../../tonight/nomad/editingStore';
@@ -116,5 +116,51 @@ describe('reorder (A.57, ruling E6-R3)', () => {
     await sleep(10);
     expect(api.reorder).not.toHaveBeenCalled();
     expect(useEditingStore.getState().editing).toBe(false);
+  });
+});
+
+describe('reorder survives a /me refresh mid-edit (fix round 1)', () => {
+  const base = () => [
+    song({ request: { id: 1, song_title: 'One' }, estimate: at(3) }),
+    song({ request: { id: 2, song_title: 'Two' }, estimate: at(6) }),
+    song({ request: { id: 3, song_title: 'Three' }, estimate: at(9) }),
+  ];
+
+  it('rows that left drop out, new ones are appended, save sends only current rows; refresh is disabled', async () => {
+    api.getMe.mockResolvedValue(me({ songs: base() }));
+    api.reorder.mockResolvedValue(requestResult({ source_type: 'reorder' }));
+    const { client } = showNight(night);
+    fireEvent.press(await screen.findByTestId('tonight-reorder'));
+    fireEvent.press(await screen.findByTestId('tonight-reorder-down-r1'));
+    expect(screen.getByTestId('tonight-refresh')).toBeDisabled();
+
+    // r2 was sung meanwhile; r5 arrived.
+    api.getMe.mockResolvedValue(
+      me({
+        songs: [
+          song({ request: { id: 1, song_title: 'One' }, estimate: at(3) }),
+          song({ request: { id: 3, song_title: 'Three' }, estimate: at(9) }),
+          song({ request: { id: 5, song_title: 'Five' }, estimate: at(12) }),
+        ],
+      }),
+    );
+    await act(() => client.refetchQueries());
+    await waitFor(() => expect(screen.queryByTestId('tonight-reorder-row-r2') === null).toBe(true));
+    // The singer's move (r1 below r2) is kept for the rows still here: r1, r3, then the new r5.
+    expect(screen.getByTestId('tonight-reorder-number-r1')).toHaveTextContent('1.');
+    expect(screen.getByTestId('tonight-reorder-number-r3')).toHaveTextContent('2.');
+    expect(screen.getByTestId('tonight-reorder-number-r5')).toHaveTextContent('3.');
+    fireEvent.press(screen.getByTestId('tonight-reorder-up-r5'));
+    fireEvent.press(screen.getByTestId('tonight-reorder-save'));
+    await waitFor(() => expect(api.reorder).toHaveBeenCalledWith('2121', [{ id: 1 }, { id: 5 }, { id: 3 }], night.nightId));
+  });
+
+  it('reorder excludes on-stage and friend rows', () => {
+    const rows = [
+      song({ request: { id: 1 }, estimate: at(1, 0, true) }),
+      song({ owner: 'friend', request: { id: 2, for_friend: true }, estimate: at(4) }),
+      song({ request: { id: 3 }, estimate: at(6) }),
+    ];
+    expect(reorderable(rows).map((r) => r.item)).toEqual([{ id: 3 }]);
   });
 });

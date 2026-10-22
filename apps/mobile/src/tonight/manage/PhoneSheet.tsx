@@ -8,7 +8,6 @@ import { create } from 'zustand';
 
 import { appStorage } from '../../storage';
 import { useNightStore, type NomadNight } from '../nightStore';
-import { errorCopy } from '../request/errorCopy';
 import { TonightSheet } from '../TonightSheet';
 import { useInvalidateNight } from './SongActions';
 
@@ -91,7 +90,6 @@ export type PhoneSheetProps = {
 export function PhoneSheet({ visible, night, userKey, hasOwnSongs, onClose }: PhoneSheetProps) {
   const t = useTranslations('tonight.manage.phone');
   const tManage = useTranslations('tonight.manage');
-  const tAll = useTranslations();
   const invalidate = useInvalidateNight(night, userKey);
   const [phone, setPhone] = useState(() => storedPhone(userKey) ?? '');
   const [saving, setSaving] = useState(false);
@@ -114,8 +112,9 @@ export function PhoneSheet({ visible, night, userKey, hasOwnSongs, onClose }: Ph
       setError(t('invalid'));
       return;
     }
-    usePhoneStore.getState().set(userKey, value);
     if (!hasOwnSongs) {
+      // Kept here and sent with the next request (kjbox stores a phone only on requests).
+      usePhoneStore.getState().set(userKey, value);
       onClose();
       return;
     }
@@ -124,6 +123,8 @@ export function PhoneSheet({ visible, night, userKey, hasOwnSongs, onClose }: Ph
     setError(null);
     try {
       await updateMe(night.code, { phone: value, night_id: night.nightId });
+      // Only once the box has it: a failed save must not read as "We'll text you".
+      usePhoneStore.getState().set(userKey, value);
       invalidate();
       onClose();
     } catch (e) {
@@ -132,8 +133,7 @@ export function PhoneSheet({ visible, night, userKey, hasOwnSongs, onClose }: Ph
         onClose();
         return;
       }
-      const c = e instanceof KjboxError && e.code === 'invalid' ? { key: 'tonight.manage.phone.invalid' } : errorCopy(e);
-      setError(tAll(c.key, 'values' in c ? c.values : undefined));
+      setError(e instanceof KjboxError && e.code === 'invalid' ? t('invalid') : t('notSaved'));
     } finally {
       inFlight.current = false;
       setSaving(false);

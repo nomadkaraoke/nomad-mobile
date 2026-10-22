@@ -121,3 +121,15 @@ describe('yes→no after singing asks "Just this song" / "Nothing from tonight" 
     await waitFor(() => expect(api.setSongConsent).toHaveBeenCalledWith('2121', 2, 'no', night.nightId));
   });
 });
+
+it('consent is hidden on host, partner and web rows', async () => {
+  const other = (owner: 'host' | 'partner' | 'web', entry: number) =>
+    song({ owner, request: { id: null, source_type: 'rotation', linked_entry_id: null }, entry_id: entry, estimate: at(entry) });
+  api.getMe.mockResolvedValue(me({ songs: [song({ request: { id: 1 }, estimate: at(2) }), other('host', 3), other('partner', 4), other('web', 5)] }));
+  showNight(night);
+  expect(await screen.findByTestId('tonight-song-consent-r1')).toBeTruthy();
+  for (const k of ['e3', 'e4', 'e5']) {
+    expect(screen.getByTestId(`tonight-song-${k}`)).toBeTruthy();
+    expect(screen.queryByTestId(`tonight-song-consent-${k}`)).toBeNull();
+  }
+});

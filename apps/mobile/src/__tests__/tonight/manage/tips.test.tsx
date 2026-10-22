@@ -43,10 +43,11 @@ afterAll(restoreTiming);
 const show = () => renderTonight(<TipsScreen night={night} userKey={null} />);
 
 it('builds amount-first links: path, Venmo pay intent, as-is for card', () => {
-  expect(tipUrl(cash, 5)).toBe('https://cash.app/$nomad/5');
-  expect(tipUrl(venmo, 7.5)).toBe('https://venmo.com/nomad?txn=pay&amount=7.50&note=Karaoke%20tip');
-  expect(tipUrl(card, 5)).toBe('https://buy.stripe.com/x');
-  expect(tipUrl(zelle, 5)).toBeNull();
+  expect(tipUrl(cash, 5, 'n')).toBe('https://cash.app/$nomad/5');
+  expect(tipUrl(venmo, 7.5, 'Karaoke tip')).toBe('https://venmo.com/nomad?txn=pay&amount=7.50&note=Karaoke%20tip');
+  expect(tipUrl(venmo, 5, 'Propina')).toBe('https://venmo.com/nomad?txn=pay&amount=5&note=Propina');
+  expect(tipUrl(card, 5, 'n')).toBe('https://buy.stripe.com/x');
+  expect(tipUrl(zelle, 5, 'n')).toBeNull();
 });
 
 it('amount first, then a method opens the payment app with it; Zelle copies (A.64, ruling E6-R6)', async () => {
@@ -85,7 +86,7 @@ it('claims with a client_request_id, reused on retry after a timeout; shows the 
   expect(a).toMatchObject({ amount: 10, method: 'Venmo', night_id: night.nightId });
   expect(a!.client_request_id).toMatch(/^[0-9a-f-]{36}$/);
   expect(b!.client_request_id).toBe(a!.client_request_id);
-  expect(await screen.findByTestId('tonight-tips-claims')).toHaveTextContent(/\$10 via Venmo.*Waiting for the host to confirm it/);
+  expect(await screen.findByTestId('tonight-tips-claims')).toHaveTextContent(/\$10 via Venmo.*Sent to the host/);
 });
 
 it('a new tip after a settled one gets a new id', async () => {

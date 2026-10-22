@@ -5,6 +5,7 @@ import { renderRouter } from 'expo-router/testing-library';
 
 import * as tipsRoute from '../../../app/tonight/tips';
 import { useAuth } from '../../../auth/store';
+import { appStorage } from '../../../storage';
 import { sortedSingers } from '../../../tonight/manage/DuetPicker';
 import { usePhoneStore } from '../../../tonight/manage/PhoneSheet';
 import { useNightStore } from '../../../tonight/nightStore';
@@ -51,6 +52,7 @@ beforeEach(async () => {
   useRequestStore.getState().clear();
   useRequestStore.setState({ ambiguous: null });
   usePhoneStore.setState({ phones: {} });
+  appStorage.clearAll();
   Object.assign(nightPoll, { meMs: 60_000, nowMs: 60_000, rotationMs: 60_000, nightMs: 60_000 });
   await useAuth.getState().signInWithSession(session());
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 1 });
@@ -172,4 +174,96 @@ it('"Tip the host" (when tips are on) opens the tips route', async () => {
   renderRouter({ ...requestRoutes(), 'tonight/tips': tipsRoute }, { initialUrl: '/tonight' });
   fireEvent.press(await screen.findByTestId('tonight-tips-open'));
   expect(await screen.findByTestId('tonight-tips-claim')).toBeTruthy();
+});
+
+describe('once-per-night photo consent + Instagram on confirm (ruling E6-R8, A.92)', () => {
+  const asking = (on: boolean) =>
+    nightOpen({ night_id: NIGHT, features: { make: true, simple_mode: false, ask_photo_consent: on, quick_version: true, tips: true } });
+  const confirmOnce = async () => {
+    useRequestStore.getState().pick(starlight(), 'auto', 'starl');
+    const view = renderRouter(requestRoutes(), { initialUrl: '/tonight/confirm' });
+    await screen.findByTestId('tonight-confirm-send');
+    return view;
+  };
+
+  it('asked once per night; the answer and handle go with this and later own submits', async () => {
+    api.getNight.mockResolvedValue(asking(true));
+    const first = await confirmOnce();
+    expect(await screen.findByTestId('tonight-confirm-consent')).toBeTruthy();
+    fireEvent.press(screen.getByTestId('tonight-confirm-consent-yes'));
+    fireEvent.changeText(await screen.findByTestId('tonight-confirm-instagram'), '@sam');
+    fireEvent.press(screen.getByTestId('tonight-confirm-send'));
+    await waitFor(() =>
+      expect(api.submitRequest).toHaveBeenLastCalledWith('2121', expect.objectContaining({ photo_consent: 'yes', instagram: '@sam' })),
+    );
+    first.unmount();
+
+    await confirmOnce();
+    await waitFor(() => expect(api.getNight).toHaveBeenCalled());
+    expect(screen.queryByTestId('tonight-confirm-consent')).toBeNull();
+    fireEvent.press(screen.getByTestId('tonight-confirm-send'));
+    await waitFor(() => expect(api.submitRequest).toHaveBeenCalledTimes(2));
+    expect(api.submitRequest.mock.calls[1]![1]).toMatchObject({ photo_consent: 'yes', instagram: '@sam' });
+  });
+
+  it('unanswered (unknown) sends nothing; the question never blocks the send', async () => {
+    api.getNight.mockResolvedValue(asking(true));
+    await confirmOnce();
+    expect(await screen.findByTestId('tonight-confirm-consent')).toBeTruthy();
+    fireEvent.press(screen.getByTestId('tonight-confirm-send'));
+    await waitFor(() => expect(api.submitRequest).toHaveBeenCalled());
+    expect(api.submitRequest.mock.calls[0]![1]).not.toHaveProperty('photo_consent');
+    expect(api.submitRequest.mock.calls[0]![1]).not.toHaveProperty('instagram');
+  });
+
+  it('not asked or sent for friend submits', async () => {
+    api.getNight.mockResolvedValue(asking(true));
+    const first = await confirmOnce();
+    fireEvent.press(await screen.findByTestId('tonight-confirm-consent-no'));
+    first.unmount();
+    useRequestStore.getState().startFriend('Bob');
+    useRequestStore.getState().pick(starlight(), 'auto', 'starl');
+    renderRouter(requestRoutes(), { initialUrl: '/tonight/confirm' });
+    await screen.findByTestId('tonight-confirm-friend');
+    await waitFor(() => expect(api.getNight).toHaveBeenCalled());
+    expect(screen.queryByTestId('tonight-confirm-consent')).toBeNull();
+    fireEvent.press(screen.getByTestId('tonight-confirm-send'));
+    await waitFor(() => expect(api.submitRequest).toHaveBeenCalled());
+    expect(api.submitRequest.mock.calls[0]![1]).not.toHaveProperty('photo_consent');
+  });
+
+  it('not asked when the host does not ask', async () => {
+    api.getNight.mockResolvedValue(asking(false));
+    await confirmOnce();
+    await waitFor(() => expect(api.getNight).toHaveBeenCalled());
+    expect(screen.queryByTestId('tonight-confirm-consent')).toBeNull();
+    fireEvent.press(screen.getByTestId('tonight-confirm-send'));
+    await waitFor(() => expect(api.submitRequest).toHaveBeenCalled());
+    expect(api.submitRequest.mock.calls[0]![1]).not.toHaveProperty('photo_consent');
+  });
+});
+
+describe('request signature (fix round 1)', () => {
+  it('duet partners are part of it: other partners get a new id, the same ones reuse the ambiguous id', () => {
+    const s = useRequestStore.getState();
+    s.pick(starlight(), 'auto', 'starl');
+    s.setPartners(['Ben']);
+    const sent = useRequestStore.getState().pending!;
+    s.noteSend(sent, 'ambiguous');
+    s.setPartners(['Ben', 'Zoe']);
+    expect(useRequestStore.getState().pending!.clientRequestId).not.toBe(sent.clientRequestId);
+    s.setPartners(['Ben']);
+    expect(useRequestStore.getState().pending!.clientRequestId).toBe(sent.clientRequestId);
+  });
+
+  it('a change-mode retry id differs for a different replaces.id', () => {
+    const s = useRequestStore.getState();
+    s.startChange({ id: 41, title: 'Old' });
+    const a = s.pick(starlight(), 'auto', 'starl');
+    s.noteSend(a, 'ambiguous');
+    s.startChange({ id: 41, title: 'Old' });
+    expect(s.pick(starlight(), 'auto', 'starl').clientRequestId).toBe(a.clientRequestId);
+    s.startChange({ id: 42, title: 'Other' });
+    expect(s.pick(starlight(), 'auto', 'starl').clientRequestId).not.toBe(a.clientRequestId);
+  });
 });

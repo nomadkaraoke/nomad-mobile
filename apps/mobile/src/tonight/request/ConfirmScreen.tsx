@@ -7,6 +7,7 @@ import { useRef, useState } from 'react';
 import { View } from 'react-native';
 
 import { DuetPicker } from '../manage/DuetPicker';
+import { consentFields, loadNightConsent, NightConsentQuestion, saveNightConsent, useAskPhotoConsent, type NightConsent } from '../manage/NightConsent';
 import { storedPhone } from '../manage/PhoneSheet';
 import { useNightStore } from '../nightStore';
 import { nightKey } from '../nomad/queries';
@@ -34,10 +35,15 @@ export function ConfirmScreen() {
   const [sending, setSending] = useState(false);
   const inFlight = useRef(false); // a ref: two taps in one frame both see stale `sending` state
   const [error, setError] = useState<string | null>(null);
-  // Duet partners (spec §4.1, ruling E6-R7): up to 3, picked from tonight's singers. Not offered on a change (the
-  // change body has no singers; the song keeps its own).
-  const [partners, setPartners] = useState<string[]>([]);
+  // Duet partners (spec §4.1, ruling E6-R7): up to 3, picked from tonight's singers, kept on the pending pick (they
+  // are part of its signature). Not offered on a change (the change body has no singers; the song keeps its own).
+  const partners = pending?.partners ?? [];
   const [picking, setPicking] = useState(false);
+  // The once-per-night photo consent (ruling E6-R8): asked here only until answered for this account and night.
+  const nomad = night?.kind === 'nomad' ? night : null;
+  const askConsent = useAskPhotoConsent(nomad, userKey);
+  const [consent, setConsent] = useState<NightConsent>(() => (nomad ? loadNightConsent(userKey, nomad.nightId) : {}));
+  const [answeredBefore] = useState(() => consent.consent !== undefined);
   const tManage = useTranslations('tonight.manage.duet');
   const tSong = useTranslations('tonight.night.song');
 
@@ -80,13 +86,17 @@ export function ConfirmScreen() {
         const friend = p.mode === 'friend' && p.friendName;
         // The phone kept on this device (ruling E6-R5): kjbox stores a phone only on requests. Never on a friend's.
         const phone = friend ? null : storedPhone(userKey);
+        // Own requests carry the night answer (only ever given when the host asked); unknown is never sent (A.91);
+        // never on a friend's.
+        const media = friend ? {} : consentFields(consent);
         await submitRequest(night.code, {
           ...src,
           night_id: night.nightId,
           client_request_id: p.clientRequestId,
           ...(friend ? { for_friend: true, friend_name: p.friendName } : {}),
           ...(phone ? { phone } : {}),
-          ...(partners.length ? { additional_singers: partners.map((name) => ({ name })) } : {}),
+          ...media,
+          ...(p.partners?.length ? { additional_singers: p.partners.map((name) => ({ name })) } : {}),
         });
       }
       useRequestStore.getState().noteSend(p, 'settled');
@@ -124,6 +134,15 @@ export function ConfirmScreen() {
         disabled={sending}
         onPress={() => setPicking(true)}
       />
+      {askConsent && pending.mode === 'new' && !answeredBefore ? (
+        <NightConsentQuestion
+          value={consent}
+          onChange={(v) => {
+            setConsent(v);
+            saveNightConsent(userKey, night.nightId, v);
+          }}
+        />
+      ) : null}
     </View>
   );
 
@@ -147,7 +166,7 @@ export function ConfirmScreen() {
         night={night}
         userKey={userKey}
         selected={partners}
-        onChange={setPartners}
+        onChange={(names) => useRequestStore.getState().setPartners(names)}
         onClose={() => setPicking(false)}
         exclude={ownName ? [ownName] : []}
       />

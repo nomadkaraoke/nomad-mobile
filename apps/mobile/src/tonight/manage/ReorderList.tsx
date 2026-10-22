@@ -20,11 +20,19 @@ export function reorderable(songs: Song[]): { song: Song; item: ReorderItem }[] 
     if (!isLive(s) || isOnStage(s) || typeof s.estimate?.position !== 'number') continue;
     if (s.request.id == null) {
       if (s.entry_id != null) out.push({ song: s, item: { entry_id: s.entry_id } });
-    } else if (isOwnRequest(s) && s.request.status === 'approved') {
+    } else if (s.owner === 'me' && isOwnRequest(s) && s.request.status === 'approved') {
       out.push({ song: s, item: { id: s.request.id } });
     }
   }
   return out;
+}
+
+/** `order` restricted to `current` keys, then any current key it lacks, in `current`'s order. */
+export function reconcileOrder(order: string[], current: string[]): string[] {
+  const live = new Set(current);
+  const kept = order.filter((k) => live.has(k));
+  const seen = new Set(kept);
+  return [...kept, ...current.filter((k) => !seen.has(k))];
 }
 
 export type ReorderListProps = {
@@ -45,7 +53,10 @@ export function ReorderList({ night, userKey, songs, onDone }: ReorderListProps)
   const tAll = useTranslations();
   const invalidate = useInvalidateNight(night, userKey);
   const rows = useMemo(() => reorderable(songs), [songs]);
-  const [order, setOrder] = useState(() => rows.map((r) => songKey(r.song)));
+  const [moved, setOrder] = useState(() => rows.map((r) => songKey(r.song)));
+  // /me can refresh under the list (a pull, an invalidation): keep the singer's order for rows still here, drop the
+  // ones that left, append new ones. Save only ever sends current rows.
+  const order = reconcileOrder(moved, rows.map((r) => songKey(r.song)));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inFlight = useRef(false);
@@ -57,7 +68,8 @@ export function ReorderList({ night, userKey, songs, onDone }: ReorderListProps)
 
   const byKey = new Map(rows.map((r) => [songKey(r.song), r]));
   const move = (i: number, by: -1 | 1) =>
-    setOrder((o) => {
+    setOrder(() => {
+      const o = order;
       const j = i + by;
       if (j < 0 || j >= o.length) return o;
       const next = [...o];

@@ -17,6 +17,8 @@ export type PendingRequest = {
   mode: RequestMode;
   replaces?: Replaces;
   friendName?: string;
+  /** Duet partners (up to 3); part of the signature, so other partners never reuse an ambiguous send's id. */
+  partners?: string[];
   /** Idempotency key: minted once when the singer reaches confirm, reused for every retry (Review Focus 3). */
   clientRequestId: string;
   /** What the singer typed (the confirm's "you searched" breadcrumb, A.19). */
@@ -42,14 +44,17 @@ type RequestStore = {
   pick(song: SearchSong, version: SearchVersion | 'auto', searched?: string): PendingRequest;
   /** Forgets the pending pick and any change/friend mode (leaving search and confirm, A.39). */
   clear(): void;
+  /** Sets the pending pick's duet partners; its id follows the signature (the ambiguous send's id only for the same request). */
+  setPartners(names: string[]): void;
   /** Records how the pending pick's send ended: 'ambiguous' (may have landed) or 'settled' (it did, or clearly didn't). */
   noteSend(p: PendingRequest, outcome: 'ambiguous' | 'settled'): void;
 };
 
 /** Same request = same mode, target and song/source (kj_pick by song, not by its version snapshot). */
-export function requestSignature(p: Pick<PendingRequest, 'song' | 'version' | 'mode' | 'replaces' | 'friendName'>): string {
+export function requestSignature(p: Pick<PendingRequest, 'song' | 'version' | 'mode' | 'replaces' | 'friendName' | 'partners'>): string {
   const { song_artist, song_title, source_type, source_ref } = sourceFor(p.song, p.version);
-  return JSON.stringify([p.mode, p.replaces?.id ?? null, p.friendName ?? null, song_artist, song_title, source_type, source_ref]);
+  const partners = (p.partners ?? []).map((n) => n.trim().toLocaleLowerCase()).sort();
+  return JSON.stringify([p.mode, p.replaces?.id ?? null, p.friendName ?? null, song_artist, song_title, source_type, source_ref, partners]);
 }
 
 /** A UUID v4 (expo-crypto, with a Math.random fallback where the native module is missing). */
@@ -89,6 +94,16 @@ export const useRequestStore = create<RequestStore>((set, get) => ({
     const pending: PendingRequest = { ...target, clientRequestId: reuse ?? newRequestId(), ...(searched ? { searched } : {}) };
     set({ pending });
     return pending;
+  },
+  setPartners(names) {
+    const { pending, ambiguous } = get();
+    if (!pending) return;
+    const next = { ...pending, partners: names };
+    const sig = requestSignature(next);
+    let id = pending.clientRequestId;
+    if (ambiguous && ambiguous.signature === sig) id = ambiguous.clientRequestId;
+    else if (sig !== requestSignature(pending)) id = newRequestId();
+    set({ pending: { ...next, clientRequestId: id } });
   },
   clear() {
     set({ mode: 'new', replaces: undefined, friendName: undefined, pending: null });

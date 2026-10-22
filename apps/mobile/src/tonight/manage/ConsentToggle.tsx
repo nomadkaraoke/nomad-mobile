@@ -65,18 +65,26 @@ function ConsentButton({ song, m }: { song: Song; m: ManageContextValue }) {
     m.notify(e instanceof KjboxError && !e.unreachable && e.code === 'rate_limited' ? tAll(c.key, c.values) : t('failed'), 'error');
   };
 
+  // flush can run from a timer or the unmount cleanup, after later renders: it reads the latest values, never the
+  // closure of the render that scheduled it.
+  const latest = useRef({ m, nightConsent, invalidate, fail });
+  useEffect(() => {
+    latest.current = { m, nightConsent, invalidate, fail };
+  });
+
   const flush = async () => {
     timer.current = null;
     const value = desired.current;
     if (value === confirmed.current || inFlight.current) return; // unchanged: no request (A.95)
+    const L = latest.current;
     inFlight.current = true;
     try {
       // Matching the night-wide choice clears the per-song override instead of pinning it (as the web does).
-      await setSongConsent(m.night.code, id, value === nightConsent ? null : value, m.night.nightId);
+      await setSongConsent(L.m.night.code, id, value === L.nightConsent ? null : value, L.m.night.nightId);
       confirmed.current = value;
-      invalidate();
+      L.invalidate();
     } catch (e) {
-      fail(e);
+      latest.current.fail(e);
     } finally {
       inFlight.current = false;
       // A tap that landed while this one was in flight.

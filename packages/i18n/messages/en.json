@@ -462,7 +462,8 @@
         "status": "We'll text {phone} when you're nearly up.",
         "statusNext": "We'll text {phone} when you're nearly up. It starts with your next request.",
         "change": "Change number",
-        "invalid": "That doesn't look like a phone number. Check it and try again."
+        "invalid": "That doesn't look like a phone number. Check it and try again.",
+        "notSaved": "Your number wasn't saved. Try again."
       },
       "consent": {
         "yes": "📷 OK to post",
@@ -496,9 +497,18 @@
         "yours": "Your tips tonight",
         "via": "${amount} via {method}",
         "plain": "${amount}",
-        "pending": "Waiting for the host to confirm it",
+        "pending": "Sent to the host",
         "approved": "✓ The host confirmed it. Thank you!",
-        "rejected": "The host couldn't find this tip. Have a word with them."
+        "rejected": "The host couldn't find this tip. Have a word with them.",
+        "venmoNote": "Karaoke tip"
+      },
+      "nightConsent": {
+        "question": "Is it OK for the host to post photos and clips of you singing tonight?",
+        "optional": "Optional. You can change it for each song later.",
+        "yes": "📷 OK to post",
+        "no": "📷 Don't post",
+        "instagram": "Your Instagram handle (optional), so the host can tag you",
+        "instagramPlaceholder": "@yourname"
       }
     }
   },
