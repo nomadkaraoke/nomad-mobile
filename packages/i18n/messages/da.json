@@ -1418,5 +1418,8 @@
     "connected": "Forbundet",
     "back": "Tilbage",
     "alreadyImported": "Du har allerede importeret denne fil, så der var ikke noget nyt at tilføje."
+  },
+  "permissions": {
+    "microphone": "Giv Nomad Karaoke adgang til mikrofonen, så appen kan måle dit stemmeomfang, når du synger. Lyden forbliver på din telefon."
   }
 }

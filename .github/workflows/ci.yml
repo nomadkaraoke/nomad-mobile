@@ -32,6 +32,8 @@ jobs:
       - run: pnpm test:coverage
       - name: i18n completeness (hard fail)
         run: pnpm i18n:check
+      - name: Native locale files match messages (iOS permission strings)
+        run: node scripts/gen-native-locales.mjs --check
       - name: OpenAPI drift (generated clients match committed snapshots)
         run: |
           pnpm gen:api:offline

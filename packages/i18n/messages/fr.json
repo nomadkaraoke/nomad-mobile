@@ -1418,5 +1418,8 @@
     "connected": "Connecté",
     "back": "Retour",
     "alreadyImported": "Tu as déjà importé ce fichier, il n'y avait donc rien de nouveau à ajouter."
+  },
+  "permissions": {
+    "microphone": "Autorise Nomad Karaoke à t'écouter chanter pour mesurer ta tessiture vocale. L'audio reste sur ton téléphone."
   }
 }

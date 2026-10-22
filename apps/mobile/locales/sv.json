@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "Tillåt Nomad Karaoke att höra dig sjunga så att ditt röstomfång kan mätas. Ljudet stannar på din telefon."
+  }
+}

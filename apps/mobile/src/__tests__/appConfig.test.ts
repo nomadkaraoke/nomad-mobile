@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import type { ExpoConfig } from 'expo/config';
 import { withPlugins } from 'expo/config-plugins';
 import path from 'path';
@@ -40,6 +42,27 @@ it('adds the Google plugin with the iOS client id, and no Apple entitlement with
   // prebuild auto-applies expo-apple-authentication's entitlement; a mod strips it again
   expect(entitlementsMod(c)).toBeDefined();
   expect(c.ios?.bundleIdentifier).toBe('com.nomadkaraoke.mobile');
+});
+
+describe('microphone (vocal range test)', () => {
+  it('configures expo-audio with the iOS permission string and Android RECORD_AUDIO', () => {
+    const app = require('../../app.json').expo;
+    const entry = (app.plugins as unknown[]).find((p) => Array.isArray(p) && p[0] === 'expo-audio') as [string, Record<string, unknown>];
+    expect(entry[1]).toMatchObject({ recordAudioAndroid: true });
+    expect(entry[1].microphonePermission).toMatch(/vocal range/);
+    expect(app.ios.infoPlist.CFBundleAllowMixedLocalizations).toBe(true);
+  });
+
+  it('declares one native locale file per app locale, and every file exists', () => {
+    const { LOCALES } = require('@nomad/i18n');
+    const locales = resolve().locales as Record<string, string>;
+    expect(Object.keys(locales).sort()).toEqual([...LOCALES].sort());
+    expect(LOCALES).toHaveLength(33);
+    for (const [code, file] of Object.entries(locales)) {
+      expect(file).toBe(`./locales/${code}.json`);
+      expect(fs.existsSync(path.resolve(__dirname, '../..', file))).toBe(true);
+    }
+  });
 });
 
 it('enables Sign in with Apple by default', () => {

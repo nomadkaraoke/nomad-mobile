@@ -1418,5 +1418,8 @@
     "connected": "Conectat",
     "back": "Înapoi",
     "alreadyImported": "Ai importat deja acest fișier, așa că nu a fost nimic nou de adăugat."
+  },
+  "permissions": {
+    "microphone": "Permite aplicației Nomad Karaoke să te audă cântând, ca să-ți poată măsura ambitusul vocal. Înregistrarea audio rămâne pe telefonul tău."
   }
 }

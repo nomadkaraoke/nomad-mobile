@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "Povol Nomad Karaoke poslouchat tvůj zpěv, aby ti změřil hlasový rozsah. Zvuk zůstane jen ve tvém telefonu."
+  }
+}

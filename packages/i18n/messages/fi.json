@@ -1418,5 +1418,8 @@
     "connected": "Yhdistetty",
     "back": "Takaisin",
     "alreadyImported": "Olet jo tuonut tämän tiedoston, joten mitään uutta lisättävää ei ollut."
+  },
+  "permissions": {
+    "microphone": "Anna Nomad Karaoken kuulla lauluasi, jotta se voi mitata äänialasi. Ääni pysyy puhelimessasi."
   }
 }

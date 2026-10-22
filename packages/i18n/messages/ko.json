@@ -1418,5 +1418,8 @@
     "connected": "연결됨",
     "back": "뒤로",
     "alreadyImported": "이미 가져온 파일이어서 새로 추가된 내용이 없습니다."
+  },
+  "permissions": {
+    "microphone": "음역대를 측정할 수 있도록 Nomad Karaoke의 마이크 접근을 허용해 주세요. 오디오는 기기 외부로 전송되지 않습니다."
   }
 }

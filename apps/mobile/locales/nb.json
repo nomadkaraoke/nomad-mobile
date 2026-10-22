@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "Gi Nomad Karaoke tilgang til å høre deg synge, slik at appen kan måle stemmeomfanget ditt. Lydopptaket forblir på telefonen din."
+  }
+}

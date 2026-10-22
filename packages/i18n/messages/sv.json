@@ -1418,5 +1418,8 @@
     "connected": "Ansluten",
     "back": "Tillbaka",
     "alreadyImported": "Du har redan importerat den här filen, så det fanns inget nytt att lägga till."
+  },
+  "permissions": {
+    "microphone": "Tillåt Nomad Karaoke att höra dig sjunga så att ditt röstomfång kan mätas. Ljudet stannar på din telefon."
   }
 }

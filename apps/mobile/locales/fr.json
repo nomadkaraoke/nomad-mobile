@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "Autorise Nomad Karaoke à t'écouter chanter pour mesurer ta tessiture vocale. L'audio reste sur ton téléphone."
+  }
+}

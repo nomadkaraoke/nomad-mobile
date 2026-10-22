@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "음역대를 측정할 수 있도록 Nomad Karaoke의 마이크 접근을 허용해 주세요. 오디오는 기기 외부로 전송되지 않습니다."
+  }
+}

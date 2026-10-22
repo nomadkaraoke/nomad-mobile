@@ -1418,5 +1418,8 @@
     "connected": "Konektado",
     "back": "Bumalik",
     "alreadyImported": "Na-import mo na ang file na ito, kaya walang bagong naidagdag."
+  },
+  "permissions": {
+    "microphone": "Payagan ang Nomad Karaoke na marinig kang kumanta upang masukat nito ang iyong vocal range. Mananatili ang audio sa iyong telepono."
   }
 }

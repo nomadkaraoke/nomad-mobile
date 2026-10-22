@@ -1418,5 +1418,8 @@
     "connected": "Pripojené",
     "back": "Späť",
     "alreadyImported": "Tento súbor si už importoval/a, takže nebolo čo nové pridať."
+  },
+  "permissions": {
+    "microphone": "Povoľ aplikácii Nomad Karaoke počúvať tvoj spev, aby mohla zmerať tvoj hlasový rozsah. Zvuk zostáva v tvojom telefóne."
   }
 }

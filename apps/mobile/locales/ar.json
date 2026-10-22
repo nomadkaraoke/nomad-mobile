@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "اسمح لـ Nomad Karaoke بالاستماع إلى غنائك ليتمكن من قياس نطاقك الصوتي. يبقى الصوت على هاتفك."
+  }
+}

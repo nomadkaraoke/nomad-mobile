@@ -1415,5 +1415,8 @@
       "username": "Last.fm username",
       "submit": "Connect"
     }
+  },
+  "permissions": {
+    "microphone": "Allow Nomad Karaoke to hear you sing so it can measure your vocal range. Audio stays on your phone."
   }
 }

@@ -1418,5 +1418,8 @@
     "connected": "Verbonden",
     "back": "Terug",
     "alreadyImported": "Je hebt dit bestand al geïmporteerd, dus er viel niets nieuws toe te voegen."
+  },
+  "permissions": {
+    "microphone": "Geef Nomad Karaoke toestemming om je te horen zingen, zodat het je stembereik kan meten. Audio blijft op je telefoon."
   }
 }

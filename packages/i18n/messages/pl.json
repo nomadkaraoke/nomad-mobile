@@ -1418,5 +1418,8 @@
     "connected": "Połączono",
     "back": "Wstecz",
     "alreadyImported": "Ten plik został już przez Ciebie zaimportowany, więc nie ma nic nowego do dodania."
+  },
+  "permissions": {
+    "microphone": "Zezwól Nomad Karaoke na dostęp do mikrofonu podczas śpiewania, aby zmierzyć Twoją skalę głosu. Dźwięk nie opuszcza Twojego telefonu."
   }
 }

@@ -1418,5 +1418,8 @@
     "connected": "Csatlakoztatva",
     "back": "Vissza",
     "alreadyImported": "Ezt a fájlt már importáltad, így nem volt új hozzáadnivaló."
+  },
+  "permissions": {
+    "microphone": "Engedélyezd, hogy a Nomad Karaoke hallja az éneklésedet, és megmérhesse a hangterjedelmedet. A hangfelvétel nem hagyja el a telefonodat."
   }
 }

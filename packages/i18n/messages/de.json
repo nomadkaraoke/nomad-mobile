@@ -1418,5 +1418,8 @@
     "connected": "Verbunden",
     "back": "Zurück",
     "alreadyImported": "Du hast diese Datei bereits importiert, daher gab es nichts Neues hinzuzufügen."
+  },
+  "permissions": {
+    "microphone": "Erlaube Nomad Karaoke, dich singen zu hören, damit dein Stimmumfang gemessen werden kann. Die Audiodaten bleiben auf deinem Smartphone."
   }
 }

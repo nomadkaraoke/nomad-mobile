@@ -1418,5 +1418,8 @@
     "connected": "Conectado",
     "back": "Voltar",
     "alreadyImported": "Você já importou este arquivo, então não havia nada de novo para adicionar."
+  },
+  "permissions": {
+    "microphone": "Permita que o Nomad Karaoke ouça você cantar para poder medir seu alcance vocal. O áudio não sai do seu celular."
   }
 }

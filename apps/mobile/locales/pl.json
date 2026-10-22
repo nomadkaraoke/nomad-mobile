@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "Zezwól Nomad Karaoke na dostęp do mikrofonu podczas śpiewania, aby zmierzyć Twoją skalę głosu. Dźwięk nie opuszcza Twojego telefonu."
+  }
+}

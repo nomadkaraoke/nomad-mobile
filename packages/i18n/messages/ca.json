@@ -1418,5 +1418,8 @@
     "connected": "Connectat",
     "back": "Enrere",
     "alreadyImported": "Ja has importat aquest fitxer, així que no hi havia res de nou per afegir."
+  },
+  "permissions": {
+    "microphone": "Permet que Nomad Karaoke et senti cantar per poder mesurar el teu rang vocal. L'àudio no sortirà del teu telèfon."
   }
 }

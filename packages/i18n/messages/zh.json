@@ -1418,5 +1418,8 @@
     "connected": "已连接",
     "back": "返回",
     "alreadyImported": "您已经导入过此文件，因此没有可添加的新内容。"
+  },
+  "permissions": {
+    "microphone": "允许 Nomad Karaoke 听您唱歌，以便测定您的音域。音频只会保留在您的手机上。"
   }
 }

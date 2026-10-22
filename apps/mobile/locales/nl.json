@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "Geef Nomad Karaoke toestemming om je te horen zingen, zodat het je stembereik kan meten. Audio blijft op je telefoon."
+  }
+}

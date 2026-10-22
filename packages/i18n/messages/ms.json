@@ -1418,5 +1418,8 @@
     "connected": "Disambungkan",
     "back": "Kembali",
     "alreadyImported": "Anda sudah mengimport fail ini, jadi tiada apa-apa yang baharu untuk ditambah."
+  },
+  "permissions": {
+    "microphone": "Benarkan Nomad Karaoke mendengar anda menyanyi supaya ia dapat mengukur julat vokal anda. Audio hanya kekal dalam telefon anda."
   }
 }
