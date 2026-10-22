@@ -1,0 +1,22 @@
+# Discover core 6, part 1 (online): a signed-in user's picks load, and the phone keeps them for offline use.
+# Tagged offline-warmup: scripts/e2e-local.sh runs it right before the force-offline group (discover-6b), after
+# every flow that signs out or clears the app. Persona A (see discover-3).
+appId: com.nomadkaraoke.mobile
+name: discover-6a-offline-warmup
+tags:
+  - offline-warmup
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: discover6
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["rock"],"decades":["2000s"],"energy":"high","artists":[{"name":"Muse","affinity":"love"}]}'
+- assertNotVisible:
+    id: "discover-offline-picks"
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-6a-online-picks

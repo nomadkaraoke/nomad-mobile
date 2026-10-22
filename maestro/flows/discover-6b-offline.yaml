@@ -1,0 +1,35 @@
+# Discover core 6, part 2 (Phase 3a spec §8.4, §9.2): with no connection (a bundle built with
+# EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1), Discover shows the picks the phone kept from discover-6a (same app data, still
+# signed in) under "your last picks". Run through scripts/e2e-local.sh, which runs 6a just before this group.
+appId: com.nomadkaraoke.mobile
+name: discover-6b-offline
+tags:
+  - force-offline
+---
+- runFlow: ../common/relaunch-keep-data.yaml
+- extendedWaitUntil:
+    visible:
+      id: "discover-offline-picks"
+    timeout: 30000
+- assertVisible:
+    id: "rec-row-.*-0"
+- assertNotVisible:
+    id: "discover-signin-card"
+# Feedback needs a connection: the menu's actions are inert.
+- tapOn:
+    id: "rec-menu-.*-0"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: "song-menu-hide"
+    timeout: 5000
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-6b-offline-menu
+- tapOn:
+    id: "song-menu-close"
+- extendedWaitUntil:
+    notVisible:
+      id: "song-menu-panel"
+    timeout: 5000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-6b-offline-picks

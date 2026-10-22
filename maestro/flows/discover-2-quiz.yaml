@@ -1,0 +1,109 @@
+# Discover core 2 (Phase 3a spec §8.2, §9.2): the 4-step taste quiz from the Discover card → genres → decades and
+# energy → artists (a suggestion tapped twice = love) → a song you love → Finish → personal picks in sections.
+# decide's local stack has no BigQuery, so its smart artist suggestions (and artist search) fail there: step 3 then
+# shows no suggestion and the flow skips it (the love tap runs whenever a suggestion is shown).
+appId: com.nomadkaraoke.mobile
+name: discover-2-quiz
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: discover2
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: decide-reset
+      DECIDE_STACK: ${DECIDE_STACK}
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/discover-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "discover-quiz-card"
+    timeout: 30000
+- tapOn:
+    id: "discover-quiz-start"
+# Step 1: genres (at least one before Next).
+- extendedWaitUntil:
+    visible:
+      id: "quiz-genre-rock"
+    timeout: 20000
+- tapOn:
+    id: "quiz-genre-rock"
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-2-quiz-1-genres
+- tapOn:
+    id: "quiz-next"
+# Step 2: decades and energy.
+- extendedWaitUntil:
+    visible:
+      id: "quiz-decade-2000s"
+    timeout: 10000
+- tapOn:
+    id: "quiz-decade-2000s"
+- tapOn:
+    id: "quiz-energy-high"
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-2-quiz-2-decades-energy
+- tapOn:
+    id: "quiz-next"
+# Step 3: artists. Suggestions load after leaving step 2.
+- extendedWaitUntil:
+    visible:
+      id: "quiz-artist-search"
+    timeout: 10000
+- extendedWaitUntil:
+    visible:
+      id: "quiz-artist-suggestion-0"
+    timeout: 20000
+    optional: true
+- runFlow:
+    when:
+      visible:
+        id: "quiz-artist-suggestion-0"
+    commands:
+      - tapOn:
+          id: "quiz-artist-suggestion-0"
+      - tapOn:
+          id: "quiz-artist-suggestion-0"
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-2-quiz-3-artists
+- tapOn:
+    id: "quiz-next|quiz-skip"
+# Step 4: a song you love, from song search (the keyboard is up: Finish must stay above it).
+- extendedWaitUntil:
+    visible:
+      id: "quiz-song-search"
+    timeout: 10000
+- tapOn:
+    id: "quiz-song-search"
+- inputText: "starlite muse"
+- extendedWaitUntil:
+    visible:
+      id: "quiz-song-0"
+      text: ".*Starlight.*"
+    timeout: 20000
+- tapOn:
+    id: "quiz-song-0"
+- assertVisible:
+    id: "quiz-picked-song-0"
+- assertVisible:
+    id: "quiz-finish"
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-2-quiz-4-songs-keyboard
+- tapOn:
+    id: "quiz-finish"
+# Back on Discover with picks in sections.
+- extendedWaitUntil:
+    visible:
+      id: "discover-picks"
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+      id: "rec-section-(artists_you_love|crowd_pleasers|songs_you_know)"
+    timeout: 30000
+- assertNotVisible:
+    id: "discover-quiz-card"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-2-picks

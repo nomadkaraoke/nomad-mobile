@@ -1,0 +1,83 @@
+# Discover core 5 (Phase 3a spec §8.5, §9.2): Me → Your music profile → edit genres (the quiz from step 1, seeded
+# with the profile) → swap pop for metal → Finish → back on the profile → Discover's picks change.
+appId: com.nomadkaraoke.mobile
+name: discover-5-profile
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: discover5
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["pop"]}'
+- copyTextFrom:
+    id: "rec-row-.*-0"
+    index: 0
+- runScript:
+    file: ../scripts/remember-text.js
+    env:
+      NAME: before
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- extendedWaitUntil:
+    visible:
+      id: "profile-genres"
+    timeout: 20000
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-5-profile
+- tapOn:
+    id: "profile-edit-genres"
+# The quiz opens on step 1 with the profile's genres on.
+- extendedWaitUntil:
+    visible:
+      id: "quiz-genre-pop"
+    timeout: 20000
+- assertVisible:
+    id: "quiz-genre-pop"
+    selected: true
+- tapOn:
+    id: "quiz-genre-pop"
+- tapOn:
+    id: "quiz-genre-metal"
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-5-edit-genres
+- tapOn:
+    id: "quiz-next"
+- tapOn:
+    id: "quiz-next|quiz-skip"
+- tapOn:
+    id: "quiz-next|quiz-skip"
+- extendedWaitUntil:
+    visible:
+      id: "quiz-finish"
+    timeout: 10000
+- tapOn:
+    id: "quiz-finish"
+# Finish returns to the profile, which now says metal.
+- extendedWaitUntil:
+    visible:
+      id: "profile-genres"
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: "profile-genres"
+      text: ".*Metal.*"
+    timeout: 10000
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-5-profile-edited
+- tapOn: "Back|Navigate up"
+- tapOn:
+    id: "tab-discover"
+- extendedWaitUntil:
+    visible:
+      id: "rec-row-.*-0"
+    timeout: 30000
+- extendedWaitUntil:
+    notVisible:
+      id: "rec-row-.*-0"
+      text: ${output.before}
+    timeout: 20000
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-5-picks-after

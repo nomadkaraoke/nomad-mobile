@@ -1,0 +1,29 @@
+# Relaunch the app keeping its data (still signed in, the phone's saved picks kept), unlike launch.yaml.
+# iOS: a plain relaunch reconnects to the remembered Metro. Android: the dev-client link (as launch.yaml, without
+# clearState) loads the bundle from Metro again.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow: close-browser-if-open.yaml
+- stopApp
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - launchApp
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
+- extendedWaitUntil:
+    visible: "Runtime version.*|Search songs or artists"
+    timeout: 60000
+- runFlow:
+    when:
+      visible: "Runtime version.*"
+    commands:
+      - tapOn: "Close"
+- extendedWaitUntil:
+    visible:
+      id: "discover-search-input"
+    timeout: 60000

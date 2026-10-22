@@ -1,0 +1,88 @@
+# Discover core 3 (Phase 3a spec §8.1, §8.3, §9.2): the venue library filter (KaraFun) changes the picks and every
+# row then carries the KaraFun badge; a sheet filter (Decade → 1980s) changes them again.
+# Persona A: rock, 2000s, high energy, loves Muse (decide's fixture catalog).
+appId: com.nomadkaraoke.mobile
+name: discover-3-filters
+onFlowComplete:
+  - runFlow: ../common/discover-reset-filters.yaml
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: discover3
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["rock"],"decades":["2000s"],"energy":"high","artists":[{"name":"Muse","affinity":"love"}]}'
+- assertVisible:
+    id: "library-filter-any"
+    selected: true
+# Row 1 (row 0 is Muse "Starlight", which KaraFun has too).
+- copyTextFrom:
+    id: "rec-row-.*-1"
+    index: 0
+- runScript:
+    file: ../scripts/remember-text.js
+    env:
+      NAME: before
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-3-picks
+# KaraFun only: the list changes and the rows show the KaraFun badge.
+- tapOn:
+    id: "library-filter-karafun"
+- extendedWaitUntil:
+    visible:
+      id: "library-filter-info"
+    timeout: 5000
+- extendedWaitUntil:
+    notVisible:
+      id: "rec-row-.*-1"
+      text: ${output.before}
+    timeout: 20000
+# Every row is in the KaraFun catalogue (the visible ones say so).
+- assertVisible:
+    id: "rec-row-.*-0"
+    text: ".*KaraFun.*"
+- assertVisible:
+    id: "rec-row-.*-1"
+    text: ".*KaraFun.*"
+- assertVisible:
+    id: "library-badge-karafun"
+- copyTextFrom:
+    id: "rec-row-.*-0"
+    index: 0
+- runScript:
+    file: ../scripts/remember-text.js
+    env:
+      NAME: karafun
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-3-karafun
+# Decade sheet → 1980s → Apply: the first row changes again.
+- tapOn:
+    id: "filter-chip-decade"
+- extendedWaitUntil:
+    visible:
+      id: "filter-sheet-decade-panel"
+    timeout: 5000
+- tapOn:
+    id: "filter-opt-decade-1980s"
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-3-decade-sheet
+- tapOn:
+    id: "filter-apply-decade"
+- extendedWaitUntil:
+    notVisible:
+      id: "filter-sheet-decade-panel"
+    timeout: 5000
+- extendedWaitUntil:
+    notVisible:
+      id: "rec-row-.*-0"
+      text: ${output.karafun}
+    timeout: 20000
+- assertVisible:
+    id: "rec-row-.*-0"
+- assertVisible:
+    id: "library-badge-karafun"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ${DISCOVER_SHOTS}/discover-3-karafun-1980s
