@@ -86,6 +86,7 @@ describe('youtube link only when one exists (rows)', () => {
     renderTonight(<OtherNightScreen night={night} />);
     fireEvent.press(await screen.findByTestId(`other-row-${id}-copy-yt`));
     expect(Clipboard.setStringAsync).toHaveBeenCalledWith('https://youtu.be/comm0000000');
+    expect(await screen.findByText('Copied')).toBeTruthy();
     fireEvent.press(screen.getByTestId(`other-row-${id}-share-yt`));
     expect(share).toHaveBeenCalledWith(expect.objectContaining({ message: expect.stringContaining('https://youtu.be/comm0000000') }));
   });

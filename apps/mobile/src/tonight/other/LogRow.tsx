@@ -2,11 +2,15 @@ import type { JobSummary } from '@nomad/api-gen';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Text } from '@nomad/ui';
 import * as Clipboard from 'expo-clipboard';
+import { useEffect, useState } from 'react';
 import { Pressable, Share, View } from 'react-native';
 
 import { useLogStore, type LogEntry, type LogState } from '../log/logStore';
 import { useNightStore } from '../nightStore';
 import { useYouTubeLink } from './YouTubeLink';
+
+/** How long "Copied" replaces "Copy YouTube link" after a copy. */
+export const COPIED_MS = 2000;
 
 /** Moves an entry along (logStore → outbox) and keeps the night alive (ruling E9-R3). */
 export function setLogState(id: string, state: LogState): void {
@@ -47,8 +51,18 @@ export function LogRow({ entry, jobs, onSurvey }: LogRowProps) {
     useLogStore.getState().remove(id);
     useNightStore.getState().touch();
   };
+  const [copied, setCopied] = useState(false);
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(false), COPIED_MS);
+    return () => clearTimeout(timer);
+  }, [copied]);
   const copy = () => {
-    if (link) void Clipboard.setStringAsync(link);
+    if (!link) return;
+    void Clipboard.setStringAsync(link).then(
+      () => setCopied(true),
+      () => {},
+    );
   };
   const share = () => {
     if (link) void Share.share({ message: t('shareMessage', { title: entry.title, artist: entry.artist, url: link }) }).catch(() => {});
@@ -69,7 +83,7 @@ export function LogRow({ entry, jobs, onSurvey }: LogRowProps) {
           <Action testID={`other-row-${id}-planned`} label={t('maybeLater')} onPress={() => setLogState(id, 'planned')} />
         ) : null}
         {entry.state === 'sung' ? <Action testID={`other-row-${id}-survey`} label={tSurvey('title')} onPress={() => onSurvey(entry)} strong /> : null}
-        {link ? <Action testID={`other-row-${id}-copy-yt`} label={t('copyYouTube')} onPress={copy} /> : null}
+        {link ? <Action testID={`other-row-${id}-copy-yt`} label={copied ? t('copied') : t('copyYouTube')} onPress={copy} /> : null}
         {link ? <Action testID={`other-row-${id}-share-yt`} label={t('shareHost')} onPress={share} /> : null}
         <Action testID={`other-row-${id}-remove`} label={t('remove')} onPress={remove} />
       </View>

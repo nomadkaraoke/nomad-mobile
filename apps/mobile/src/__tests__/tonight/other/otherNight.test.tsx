@@ -143,13 +143,53 @@ it('sang it opens survey; saving sends {survey} only; "How did it go?" reopens i
   expect(screen.getByTestId('survey-key-too_high').props.accessibilityState.selected).toBe(true);
 });
 
-it('the venue name is editable and End night ends it', async () => {
+it('the venue name is editable', () => {
   const night = otherNight();
   renderTonight(<OtherNightScreen night={night} />);
   fireEvent.changeText(screen.getByTestId('other-venue'), 'The Anchor');
   expect((useNightStore.getState().active as { venueName?: string }).venueName).toBe('The Anchor');
+});
+
+it('End night asks first, says the songs stay saved, and Cancel keeps the night', async () => {
+  const night = otherNight();
+  renderTonight(<OtherNightScreen night={night} />);
   fireEvent.press(screen.getByTestId('other-end'));
+  expect(await screen.findByTestId('other-end-sheet')).toBeTruthy();
+  expect(screen.getByText("Tonight's songs stay saved in your karaoke log.")).toBeTruthy();
+  expect(useNightStore.getState().active).not.toBeNull();
+  fireEvent.press(screen.getByTestId('other-end-cancel'));
+  await waitFor(() => expect(screen.queryByTestId('other-end-sheet')).toBeNull());
+  expect(useNightStore.getState().active).not.toBeNull();
+  fireEvent.press(screen.getByTestId('other-end'));
+  fireEvent.press(await screen.findByTestId('other-end-confirm'));
   expect(useNightStore.getState().active).toBeNull();
+});
+
+it('queued outbox items and the local log survive end()', async () => {
+  dapi.putKaraokeLog.mockRejectedValue(new TypeError('Network request failed'));
+  otherNight();
+  const id = add('Starlight', 'sung');
+  await outboxIdle();
+  useNightStore.getState().end();
+  expect(useNightStore.getState().active).toBeNull();
+  expect(useOutbox.getState().items.map((i) => i.id)).toEqual([id]);
+  expect(useLogStore.getState().entries[id]?.title).toBe('Starlight');
+  dapi.putKaraokeLog.mockResolvedValue({ id, user_id: 'u', source: 'app' });
+  await useOutbox.getState().flush();
+  await outboxIdle();
+  expect(useOutbox.getState().items).toEqual([]);
+});
+
+it('saving a survey from the Other screen touches the night', async () => {
+  const night = otherNight();
+  const id = add('Starlight', 'sung');
+  renderTonight(<OtherNightScreen night={night} />);
+  tick(2 * 60 * 60 * 1000);
+  fireEvent.press(screen.getByTestId(`other-row-${id}-survey`));
+  fireEvent.press(await screen.findByTestId('survey-feel-great'));
+  fireEvent.press(screen.getByTestId('survey-save'));
+  await waitFor(() => expect(screen.queryByTestId('survey')).toBeNull());
+  expect((useNightStore.getState().active as { lastActivityAt: number }).lastActivityAt).toBe(now);
 });
 
 describe('Tonight tab (E9-R2)', () => {

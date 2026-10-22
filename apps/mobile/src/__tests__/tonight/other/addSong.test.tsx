@@ -3,7 +3,7 @@ import type { SearchResponse, SongGroup } from '@nomad/api-decide';
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 
 import { useLogStore } from '../../../tonight/log/logStore';
-import { outboxIdle } from '../../../tonight/log/outbox';
+import { outboxIdle, useOutbox } from '../../../tonight/log/outbox';
 import { AddSong, splitQuery } from '../../../tonight/other/AddSong';
 import { renderTonight } from '../../../test-utils/tonightFixtures';
 import { otherNight, signedInClean } from './setup';
@@ -20,6 +20,8 @@ jest.mock('@nomad/api-decide', () => ({
   logSearchEvent: jest.fn(async () => {}),
 }));
 jest.mock('../../../offline/offlineIndex', () => ({ openOfflineReader: () => null }));
+let mockOffline = false;
+jest.mock('../../../net/useOffline', () => ({ useOffline: () => mockOffline }));
 jest.mock('expo-router', () => ({ ...jest.requireActual('expo-router'), router: { back: jest.fn(), push: jest.fn(), canGoBack: () => true } }));
 
 const dapi = decide as jest.Mocked<typeof decide>;
@@ -43,6 +45,7 @@ const response = (groups: SongGroup[]): SearchResponse => ({
 beforeEach(() => {
   jest.useRealTimers();
   jest.clearAllMocks();
+  mockOffline = false;
   signedInClean();
   otherNight();
   dapi.putKaraokeLog.mockResolvedValue({ id: 'x', user_id: 'u', source: 'app' });
@@ -100,22 +103,80 @@ it('log anyway creates unresolved entry (E9-R6): only on no match, fields prefil
   expect(dapi.putKaraokeLog.mock.calls[0]?.[1]).not.toHaveProperty('song_key');
 });
 
-it('log anyway is not offered while there are matches', async () => {
+it('log anyway is always offered once results settle, as the last row after the matches (E9-R7)', async () => {
   dapi.searchSongs.mockResolvedValue(response([starlight]));
   renderTonight(<AddSong />);
   fireEvent.changeText(screen.getByTestId('other-add-query'), 'starlight');
-  expect(await screen.findByTestId('other-add-result-0')).toBeTruthy();
-  expect(screen.queryByTestId('other-add-log-anyway')).toBeNull();
+  expect(await screen.findByTestId('other-add-log-anyway')).toBeTruthy();
+  const order = screen.getAllByTestId(/^other-add-(result-\d+|log-anyway)$/).map((n) => n.props.testID as string);
+  expect(order).toEqual(['other-add-result-0', 'other-add-log-anyway']);
 });
 
-it('log anyway needs an artist and a title', async () => {
+it('log anyway with no artist in the query prefills "Unknown artist" (decide needs one); clearing it blocks logging', async () => {
   dapi.searchSongs.mockResolvedValue(response([]));
   renderTonight(<AddSong />);
   fireEvent.changeText(screen.getByTestId('other-add-query'), 'our song');
   fireEvent.press(await screen.findByTestId('other-add-log-anyway'));
   expect(screen.getByTestId('other-add-title').props.value).toBe('our song');
+  expect(screen.getByTestId('other-add-artist').props.value).toBe('Unknown artist');
+  fireEvent.changeText(screen.getByTestId('other-add-artist'), ' ');
   fireEvent.press(screen.getByTestId('other-add-as-planned'));
   expect(entries()).toEqual([]);
+  fireEvent.changeText(screen.getByTestId('other-add-artist'), 'Unknown artist');
+  fireEvent.press(screen.getByTestId('other-add-as-planned'));
+  expect(entries()).toEqual([expect.objectContaining({ artist: 'Unknown artist', title: 'our song' })]);
+});
+
+describe('search states, as Discover shows them', () => {
+  it('a cold search says it is warming up', async () => {
+    dapi.searchSongs.mockReturnValue(new Promise(() => {}));
+    renderTonight(<AddSong />);
+    fireEvent.changeText(screen.getByTestId('other-add-query'), 'starlight');
+    expect(await screen.findByTestId('other-add-warming', {}, { timeout: 3000 })).toBeTruthy();
+  });
+
+  it('a refused search shows the error with retry, and still offers log anyway', async () => {
+    dapi.searchSongs.mockRejectedValue(Object.assign(new Error('bad'), { status: 400 }));
+    renderTonight(<AddSong />);
+    fireEvent.changeText(screen.getByTestId('other-add-query'), 'starlight');
+    expect(await screen.findByText("Couldn't search for that. Try different words.")).toBeTruthy();
+    expect(screen.getByTestId('other-add-log-anyway')).toBeTruthy();
+    dapi.searchSongs.mockResolvedValue(response([starlight]));
+    fireEvent.press(screen.getByTestId('other-add-retry'));
+    expect(await screen.findByTestId('other-add-result-0')).toBeTruthy();
+  });
+
+  it('the auto-correct answer fills the results and the log-anyway split', async () => {
+    dapi.searchSongs.mockResolvedValue(response([]));
+    dapi.resolveQuery.mockResolvedValue({ groups: [starlight], split: { artist: 'Muse', title: 'Starlite' }, kind: 'content', typed: 'starlite muse' } as never);
+    renderTonight(<AddSong />);
+    fireEvent.changeText(screen.getByTestId('other-add-query'), 'starlite muse');
+    expect(await screen.findByTestId('other-add-figuring-out')).toBeTruthy();
+    expect(await screen.findByTestId('other-add-result-0', {}, { timeout: 3000 })).toBeTruthy();
+    fireEvent.press(screen.getByTestId('other-add-log-anyway'));
+    expect(screen.getByTestId('other-add-artist').props.value).toBe('Muse');
+    expect(screen.getByTestId('other-add-title').props.value).toBe('Starlite');
+  });
+});
+
+it('offline with no offline list: log anyway, kept in the outbox, sent after reconnect', async () => {
+  mockOffline = true;
+  dapi.putKaraokeLog.mockRejectedValue(new TypeError('Network request failed'));
+  renderTonight(<AddSong />);
+  fireEvent.changeText(screen.getByTestId('other-add-query'), 'Local Band - Our Song');
+  fireEvent.press(await screen.findByTestId('other-add-log-anyway'));
+  expect(dapi.searchSongs).not.toHaveBeenCalled();
+  fireEvent.press(screen.getByTestId('other-add-as-requested'));
+  const [e] = entries();
+  expect(e).toEqual(expect.objectContaining({ artist: 'Local Band', title: 'Our Song', state: 'requested' }));
+  await outboxIdle();
+  expect(useOutbox.getState().items.map((i) => i.id)).toEqual([e!.id]);
+  // Reconnect: LogSync flushes (logSync.test covers the trigger); the queued put now goes through.
+  dapi.putKaraokeLog.mockResolvedValue({ id: e!.id, user_id: 'u', source: 'app' });
+  await useOutbox.getState().flush();
+  await outboxIdle();
+  expect(dapi.putKaraokeLog).toHaveBeenLastCalledWith(e!.id, expect.objectContaining({ artist: 'Local Band', title: 'Our Song', state: 'requested' }));
+  expect(useOutbox.getState().items).toEqual([]);
 });
 
 it('"I sang it" from add opens the survey, then leaves', async () => {

@@ -10,15 +10,29 @@ import { useNightStore } from '../nightStore';
 import { defaultChoice, useRequestStore } from '../request/requestStore';
 import { ADD_ROUTE } from './OtherNightScreen';
 
+const norm = (s: string) => s.normalize('NFKC').toLocaleLowerCase().replace(/\s+/g, ' ').trim();
+
 /**
- * "Request tonight" at a Nomad night: the box's search for "<artist> <title>"; the song whose artist + title match
- * opens the confirm with its default version, anything else (no match, an error) opens the results for that query.
+ * The one box group that is this song, or null when none or several are: the groups matching by artist + title
+ * (`sameSong`, which also accepts a credit overlap such as "Muse feat. X"), narrowed to exact-artist matches when
+ * there are any. Only a single survivor is preselected; anything else is the singer's choice in the results.
+ */
+export function unambiguousMatch<T extends { artist: string; title: string }>(groups: readonly T[], song: LogSong): T | null {
+  const matches = groups.filter((g) => sameSong(g, song));
+  const exact = matches.filter((g) => norm(g.artist) === norm(song.artist));
+  const pool = exact.length > 0 ? exact : matches;
+  return pool.length === 1 ? pool[0]! : null;
+}
+
+/**
+ * "Request tonight" at a Nomad night: the box's search for "<artist> <title>"; an unambiguous match opens the
+ * confirm with its default version, anything else (none, several, an error) opens the results for that query.
  */
 async function requestTonight(code: string, nightId: string, song: LogSong): Promise<void> {
   const q = `${song.artist} ${song.title}`;
   try {
     const r = await searchSongs(code, q, undefined, nightId);
-    const best = (r.songs ?? []).find((g) => sameSong(g, song));
+    const best = unambiguousMatch(r.songs ?? [], song);
     if (best) {
       const store = useRequestStore.getState();
       store.clear();

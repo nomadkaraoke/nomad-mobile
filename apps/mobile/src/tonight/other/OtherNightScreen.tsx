@@ -7,6 +7,7 @@ import { ScrollView, View } from 'react-native';
 import { SurveySheet } from '../log/SurveySheet';
 import { useLogStore, type LogEntry, type LogState } from '../log/logStore';
 import { useNightStore, type OtherNight } from '../nightStore';
+import { TonightSheet } from '../TonightSheet';
 import { LogRow } from './LogRow';
 import { useMyJobsForLinks } from './YouTubeLink';
 
@@ -36,6 +37,7 @@ export function OtherNightScreen({ night }: { night: OtherNight }) {
   const jobs = useMyJobsForLinks();
   const [venue, setVenue] = useState(night.venueName ?? '');
   const [survey, setSurvey] = useState<LogEntry | null>(null);
+  const [confirmEnd, setConfirmEnd] = useState(false);
   const empty = GROUPS.every((g) => groups[g].length === 0);
 
   return (
@@ -69,15 +71,33 @@ export function OtherNightScreen({ night }: { night: OtherNight }) {
             </View>
           ) : null,
         )}
-        <Button testID="other-end" variant="secondary" label={t('endNight')} onPress={() => useNightStore.getState().end()} />
+        <Button testID="other-end" variant="secondary" label={t('endNight')} onPress={() => setConfirmEnd(true)} />
       </ScrollView>
       <SurveySheet
         entryId={survey?.id ?? null}
         artist={survey?.artist ?? ''}
         title={survey?.title ?? ''}
         initial={survey ? useLogStore.getState().entries[survey.id]?.survey : undefined}
-        onDone={() => setSurvey(null)}
+        onDone={() => {
+          setSurvey(null);
+          // A saved (or skipped) survey is activity: the night stays open (ruling E9-R3).
+          useNightStore.getState().touch();
+        }}
       />
+      <TonightSheet visible={confirmEnd} onClose={() => setConfirmEnd(false)} title={t('endTitle')} testID="other-end-sheet" closeLabel={t('close')}>
+        <View className="gap-3 pb-2">
+          <Text variant="muted">{t('endBody')}</Text>
+          <Button
+            testID="other-end-confirm"
+            label={t('endNight')}
+            onPress={() => {
+              setConfirmEnd(false);
+              useNightStore.getState().end();
+            }}
+          />
+          <Button testID="other-end-cancel" variant="secondary" label={t('keepLogging')} onPress={() => setConfirmEnd(false)} />
+        </View>
+      </TonightSheet>
     </View>
   );
 }

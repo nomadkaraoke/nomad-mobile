@@ -10,6 +10,7 @@ import { MIN_QUERY_CHARS, useSearch } from '../../find/useSearch';
 import { IdeasPanel } from '../log/IdeasPanel';
 import { SurveySheet } from '../log/SurveySheet';
 import { useLogStore, type LogSong, type LogState } from '../log/logStore';
+import { useNightStore } from '../nightStore';
 import { LibraryFilterSlot } from './LibraryFilterSlot';
 
 /** "Artist - Title" or "Title by Artist" → the fields; anything else is the title (spec §7.1 "Log … anyway"). */
@@ -39,15 +40,27 @@ export type AddSongProps = {
  */
 export function AddSong({ prefill, library }: AddSongProps) {
   const t = useTranslations('tonight.other');
+  const tAll = useTranslations();
   const [q, setQ] = useState('');
   const [picked, setPicked] = useState<Picked | null>(prefill ? { song: prefill, typed: false } : null);
   const [survey, setSurvey] = useState<{ id: string; song: LogSong } | null>(null);
   const search = useSearch(picked ? '' : q, library ? { library } : {});
 
   const query = q.trim();
-  const settled = query.length >= MIN_QUERY_CHARS && search.resultsQuery === query && !search.loading;
-  const groups = query.length >= MIN_QUERY_CHARS && search.resultsQuery === query ? search.groups : [];
-  const noMatch = settled && groups.length === 0;
+  const searching = query.length >= MIN_QUERY_CHARS;
+  // Only answers for the current query count (useSearch keeps the previous query's rows up meanwhile).
+  const fresh = searching && search.resultsQuery === query;
+  const settled = fresh && !search.loading;
+  // The cloud found nothing and the Gemini auto-correct is running (as Discover's "Figuring out…").
+  const figuringOut = fresh && search.loading && search.source === 'cloud' && search.groups.length === 0;
+  const groups = fresh ? (search.groups.length > 0 ? search.groups : (search.resolve?.groups ?? [])) : [];
+
+  // "Log … anyway" prefill: the auto-correct's artist/title split, else the typed text's; decide needs an artist,
+  // so a missing one starts as "Unknown artist" for the singer to correct.
+  const logAnyway = () => {
+    const split = search.resolve?.split ?? splitQuery(query);
+    setPicked({ song: { artist: split.artist.trim() || t('unknownArtist'), title: split.title.trim() }, typed: true });
+  };
 
   const add = (state: LogState) => {
     if (!picked) return;
@@ -96,30 +109,50 @@ export function AddSong({ prefill, library }: AddSongProps) {
             <TextField testID="other-add-query" label={t('searchLabel')} placeholder={t('searchPlaceholder')} value={q} onChangeText={setQ} autoFocus returnKeyType="search" />
             <LibraryFilterSlot />
             {query.length === 0 ? <IdeasPanel onPick={setQ} /> : null}
-            {query.length >= MIN_QUERY_CHARS && !settled && groups.length === 0 ? <ActivityIndicator testID="other-add-loading" /> : null}
-            {groups.map((g, i) => (
-              <Pressable
-                key={g.song_key}
-                testID={`other-add-result-${i}`}
-                accessibilityRole="button"
-                onPress={() => pickGroup(g)}
-                className="min-h-11 gap-0.5 rounded-xl border border-border bg-card p-3"
-              >
-                <Text className="font-semibold">{g.title}</Text>
-                <Text variant="muted">{isolate(g.artist)}</Text>
-              </Pressable>
-            ))}
-            {noMatch ? (
-              <Pressable
-                testID="other-add-log-anyway"
-                accessibilityRole="button"
-                onPress={() => setPicked({ song: splitQuery(query), typed: true })}
-                className="min-h-11 justify-center rounded-xl border border-dashed border-border p-3"
-              >
-                <Text className="font-semibold text-primary">{t('logAnyway', { query: isolate(query) })}</Text>
-                <Text variant="muted">{t('logAnywayHint')}</Text>
-              </Pressable>
+            {searching && search.warmingUp ? (
+              <Text testID="other-add-warming" variant="muted">
+                {tAll('discover.warmingUp')}
+              </Text>
             ) : null}
+            {fresh && search.error ? (
+              <View className="items-start gap-2">
+                <Text variant="error">{search.error === 'rejected' ? tAll('discover.rejected') : tAll('discover.unreachable')}</Text>
+                <Button testID="other-add-retry" label={tAll('common.retry')} variant="secondary" onPress={search.retry} />
+              </View>
+            ) : null}
+            {figuringOut ? (
+              <Text testID="other-add-figuring-out" variant="muted">
+                {tAll('discover.figuringOut')}
+              </Text>
+            ) : searching && !settled && groups.length === 0 && !search.warmingUp ? (
+              <ActivityIndicator testID="other-add-loading" />
+            ) : null}
+            <View testID="other-add-results" className="gap-3">
+              {groups.map((g, i) => (
+                <Pressable
+                  key={g.song_key}
+                  testID={`other-add-result-${i}`}
+                  accessibilityRole="button"
+                  onPress={() => pickGroup(g)}
+                  className="min-h-11 gap-0.5 rounded-xl border border-border bg-card p-3"
+                >
+                  <Text className="font-semibold">{g.title}</Text>
+                  <Text variant="muted">{isolate(g.artist)}</Text>
+                </Pressable>
+              ))}
+              {/* Uncatalogued songs are first-class (spec §7.1, ruling E9-R7): always offered, last, once settled. */}
+              {settled ? (
+                <Pressable
+                  testID="other-add-log-anyway"
+                  accessibilityRole="button"
+                  onPress={logAnyway}
+                  className="min-h-11 justify-center rounded-xl border border-dashed border-border p-3"
+                >
+                  <Text className="font-semibold text-primary">{t('logAnyway', { query: isolate(query) })}</Text>
+                  <Text variant="muted">{t('logAnywayHint')}</Text>
+                </Pressable>
+              ) : null}
+            </View>
           </>
         )}
       </ScrollView>
@@ -129,6 +162,7 @@ export function AddSong({ prefill, library }: AddSongProps) {
         title={survey?.song.title ?? ''}
         onDone={() => {
           setSurvey(null);
+          useNightStore.getState().touch();
           router.back();
         }}
       />

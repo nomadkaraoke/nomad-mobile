@@ -567,13 +567,18 @@
       "searchLabel": "Search for a song",
       "searchPlaceholder": "Song or artist",
       "logAnyway": "Log “{query}” anyway",
-      "logAnywayHint": "Not in our catalog? Log it with the artist and title.",
+      "logAnywayHint": "Not listed? Log it with its artist and title.",
       "typedHint": "Check the artist and title, then log it.",
       "artistLabel": "Artist",
       "titleLabel": "Title",
       "searchAgain": "Search again",
       "addToTonight": "Add to tonight",
-      "requestTonight": "Request tonight"
+      "requestTonight": "Request tonight",
+      "copied": "Copied",
+      "endTitle": "End tonight's night?",
+      "endBody": "Tonight's songs stay saved in your karaoke log.",
+      "keepLogging": "Keep logging",
+      "unknownArtist": "Unknown artist"
     }
   },
   "makeTab": {

@@ -99,6 +99,26 @@ describe('song page action adapts to night kind (E9-R5)', () => {
     expect(useRequestStore.getState().pending).toBeNull();
   });
 
+  it('"Request tonight" with two matching groups opens the results (no guessing)', async () => {
+    useNightStore.getState().joinNomad('2121', 'n1', 'Andrew');
+    kapi.searchSongs.mockResolvedValue(results([group('Starlight', 'Muse', [kn(1)]), group('Starlight', 'muse', [kn(2)])]));
+    renderRouter(routes(), { initialUrl: '/song/muse%7Cstarlight' });
+    fireEvent.press(await screen.findByTestId('song-tonight-action'));
+    expect(await screen.findByTestId('search-stub')).toBeTruthy();
+    expect(params('search-stub')).toEqual(expect.objectContaining({ q: 'Muse Starlight' }));
+    expect(useRequestStore.getState().pending).toBeNull();
+  });
+
+  it('"Request tonight" prefers the one exact-artist match over a credit overlap', async () => {
+    useNightStore.getState().joinNomad('2121', 'n1', 'Andrew');
+    const exact = group('Starlight', 'Muse', [kn(1)]);
+    kapi.searchSongs.mockResolvedValue(results([group('Starlight', 'Muse feat. Someone', [kn(2)]), exact]));
+    renderRouter(routes(), { initialUrl: '/song/muse%7Cstarlight' });
+    fireEvent.press(await screen.findByTestId('song-tonight-action'));
+    expect(await screen.findByTestId('confirm-stub')).toBeTruthy();
+    expect(useRequestStore.getState().pending?.song).toBe(exact);
+  });
+
   it('"Request tonight" opens the results when the box search fails', async () => {
     useNightStore.getState().joinNomad('2121', 'n1', 'Andrew');
     kapi.searchSongs.mockRejectedValue(new Error('down'));
