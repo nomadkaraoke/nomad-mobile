@@ -77,7 +77,7 @@ export const cancelRequest = <ThrowOnError extends boolean = true>(options: Opti
 /**
  * Change the song of one of the account's requests
  *
- * Keeps the queue slot: a pending request is updated in place; an approved one gets a new request that supersedes it (auto-approved when the host has auto-approve on, taking over the old slot). Can't change into a make-it (400 make_disabled), once sung (409 already_sung) or while on stage (409 on_stage).
+ * Keeps the queue slot: a pending request is updated in place; an approved one gets a new request that supersedes it (auto-approved when the host has auto-approve on, taking over the old slot). A replay (same client_request_id on the same request) returns the new (superseding) request; `request.id` may differ from the path id. Can't change into a make-it (400 make_disabled), once sung (409 already_sung) or while on stage (409 on_stage).
  */
 export const changeRequest = <ThrowOnError extends boolean = true>(options: Options<ChangeRequestData, ThrowOnError>): RequestResult<ChangeRequestResponses, ChangeRequestErrors, ThrowOnError> => (options.client ?? client).post<ChangeRequestResponses, ChangeRequestErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],

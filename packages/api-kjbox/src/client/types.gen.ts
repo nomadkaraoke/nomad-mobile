@@ -249,6 +249,10 @@ export type SubmitRequest = {
 export type ChangeSongRequest = {
     t?: string;
     night_id?: string;
+    /**
+     * Idempotency key: a retry with the same id returns the first response (even though the original request is now superseded) and never makes a second change
+     */
+    client_request_id: string;
     song_artist?: string;
     song_title?: string;
     source_type: 'local' | 'divebar' | 'kn' | 'youtube' | 'make' | 'kj_pick';
@@ -387,6 +391,10 @@ export type Song = {
      * Make-it quick (draft) version state
      */
     quick?: 'ready' | 'chosen' | 'upgraded';
+    /**
+     * Make-it songs of owner me or friend only: the karaoke-gen job id of the account's own job (the app opens its native review with it); null until gen has created the job. Absent on every other song.
+     */
+    gen_job_id?: string | null;
     /**
      * Host- and partner-added rows: the rotation entry
      */

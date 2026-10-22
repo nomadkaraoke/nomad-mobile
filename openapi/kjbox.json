@@ -251,7 +251,7 @@
       "post": {
         "operationId": "changeRequest",
         "summary": "Change the song of one of the account's requests",
-        "description": "Keeps the queue slot: a pending request is updated in place; an approved one gets a new request that supersedes it (auto-approved when the host has auto-approve on, taking over the old slot). Can't change into a make-it (400 make_disabled), once sung (409 already_sung) or while on stage (409 on_stage).",
+        "description": "Keeps the queue slot: a pending request is updated in place; an approved one gets a new request that supersedes it (auto-approved when the host has auto-approve on, taking over the old slot). A replay (same client_request_id on the same request) returns the new (superseding) request; `request.id` may differ from the path id. Can't change into a make-it (400 make_disabled), once sung (409 already_sung) or while on stage (409 on_stage).",
         "parameters": [
           {
             "name": "id",
@@ -1464,9 +1464,6 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
           "409": {
             "$ref": "#/components/responses/RequestConflict"
           },
@@ -1478,6 +1475,9 @@
           },
           "default": {
             "$ref": "#/components/responses/Default"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -2296,6 +2296,7 @@
       "ChangeSongRequest": {
         "type": "object",
         "required": [
+          "client_request_id",
           "source_type"
         ],
         "properties": {
@@ -2304,6 +2305,11 @@
           },
           "night_id": {
             "type": "string"
+          },
+          "client_request_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Idempotency key: a retry with the same id returns the first response (even though the original request is now superseded) and never makes a second change"
           },
           "song_artist": {
             "type": "string"
@@ -2658,6 +2664,13 @@
               "upgraded"
             ],
             "description": "Make-it quick (draft) version state"
+          },
+          "gen_job_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Make-it songs of owner me or friend only: the karaoke-gen job id of the account's own job (the app opens its native review with it); null until gen has created the job. Absent on every other song."
           },
           "entry_id": {
             "type": "integer",

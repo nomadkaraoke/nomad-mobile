@@ -3,6 +3,7 @@ import { isolate, useTranslations } from '@nomad/i18n';
 import { Text } from '@nomad/ui';
 import { Pressable, View } from 'react-native';
 
+import { ConsentToggle } from '../manage/ConsentToggle';
 import { isLive, isOnStage, isOwnRequest, songKey, songParts, splitWait } from './model';
 
 /**
@@ -124,6 +125,7 @@ export function SongRow({ song, readOnly, onDismiss, ...actions }: SongRowProps)
         {status}
       </Text>
       {quick && live && !song.performed ? <Text variant="muted">{quick}</Text> : null}
+      <ConsentToggle song={song} />
       {shown.length ? (
         <View className="mt-1 flex-row flex-wrap gap-2">
           {shown.map((b) => (

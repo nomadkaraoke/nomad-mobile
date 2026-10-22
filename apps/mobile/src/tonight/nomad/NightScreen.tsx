@@ -7,6 +7,9 @@ import { Linking, View } from 'react-native';
 import { appStorage } from '../../storage';
 import { singWebUrl } from '../links';
 import { SurveySheet } from '../log/SurveySheet';
+import { MyNightPanel } from '../manage/MyNightPanel';
+import { ReorderList } from '../manage/ReorderList';
+import { ManageProvider, NoticeLine, useCancelSong, useNotice } from '../manage/SongActions';
 import { useLogStore } from '../log/logStore';
 import { useSurveyTrigger, type SurveyTarget } from '../log/useSurveyTrigger';
 import { useNightStore, type NomadNight } from '../nightStore';
@@ -14,7 +17,7 @@ import { PreviewSheet } from '../preview/PreviewSheet';
 import { usePreviewStore, type PreviewTarget } from '../preview/previewStore';
 import { useEditingStore } from './editingStore';
 import { Freshness, useTick } from './Freshness';
-import { entryIdOf, songKey, songParts } from './model';
+import { entryIdOf, isLive, songKey, songParts } from './model';
 import {
   isNightOver,
   isNotOpen,
@@ -45,7 +48,7 @@ export type NightScreenProps = SongRowActions & {
   focused: boolean;
   /** E5: open the request flow. */
   onRequest?: () => void;
-  /** E6: enter reorder mode. */
+  /** Enter reorder mode (default: the in-screen ▲/▼ list, ruling E6-R3). */
   onReorder?: () => void;
   /** ▶ on a rotation row (default: the in-app preview sheet, E10). */
   onPreviewEntry?: (entry: RotationEntry) => void;
@@ -71,6 +74,7 @@ function loadDismissed(key: string): Set<string> {
  */
 export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEntry, ...rowActions }: NightScreenProps) {
   const t = useTranslations('tonight.night');
+  const tManage = useTranslations('tonight.manage');
   const userKey = useNightStore((s) => s.userKey);
   const active = usePollingActive(focused);
   const me = useMe(night, userKey, active);
@@ -167,8 +171,14 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
     const { title, artist } = songParts(song.request);
     preview({ source, entryId, title, artist });
   };
+  // Managing songs (E6): cancel with a 15 s notice, reorder mode, name/phone/friend/tips, per-song consent.
+  const { notice, show: notify } = useNotice();
+  const { hidden, cancel } = useCancelSong(night, userKey, notify);
+  const [reordering, setReordering] = useState(false);
+
   const actions = {
     ...rowActions,
+    onCancel: rowActions.onCancel ?? ((song: Song) => void cancel(song)),
     onPreview: rowActions.onPreview ?? songPreview('entry'),
     onQuickPreview: rowActions.onQuickPreview ?? songPreview('entry_quick'),
   };
@@ -184,10 +194,20 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
 
   const unreachable = isUnreachable(me.error);
   const data = me.data;
-  const songs = (data?.songs ?? []).filter((s) => !dismissed.has(songKey(s)));
+  const songs = (data?.songs ?? []).filter((s) => !dismissed.has(songKey(s)) && !hidden.has(songKey(s)));
   const nightInfo = info.data?.open ? info.data : null;
   const closed = pausedInfo;
   const readOnly = unreachable || pausedByError || closed !== null;
+  const manage = {
+    night,
+    userKey,
+    readOnly,
+    askConsent: Boolean(nightInfo?.features.ask_photo_consent),
+    profile: data?.me ?? null,
+    allSongs: [...songs, ...(data?.sung_tonight ?? [])],
+    notify,
+  };
+  const hasOwnSongs = songs.some((s) => s.owner === 'me' && isLive(s));
 
   const header = (
     <View className="gap-4 pb-2">
@@ -214,14 +234,37 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
             </View>
           ) : null}
           <Freshness updatedAt={me.dataUpdatedAt} onRefresh={() => void refresh()} refreshing={refreshing} />
-          <YourSongs
-            songs={songs}
-            readOnly={readOnly}
-            onDismiss={dismiss}
-            onRequest={onRequest}
-            onReorder={onReorder}
-            {...actions}
-          />
+          <NoticeLine notice={notice} />
+          {reordering && !readOnly ? (
+            <ReorderList
+              night={night}
+              userKey={userKey}
+              songs={songs}
+              onDone={(result) => {
+                setReordering(false);
+                if (result) notify(tManage(result === 'saved' ? 'reorder.saved' : 'reorder.requested'));
+              }}
+            />
+          ) : (
+            <YourSongs
+              songs={songs}
+              readOnly={readOnly}
+              onDismiss={dismiss}
+              onRequest={onRequest}
+              onReorder={onReorder ?? (() => setReordering(true))}
+              {...actions}
+            />
+          )}
+          {!readOnly && !reordering ? (
+            <MyNightPanel
+              night={night}
+              userKey={userKey}
+              profile={data.me}
+              hasOwnSongs={hasOwnSongs}
+              tips={Boolean(nightInfo?.features.tips)}
+              notify={notify}
+            />
+          ) : null}
           <SungTonight songs={data.sung_tonight} onSurvey={openSurvey} />
         </>
       ) : me.isPending ? (
@@ -239,26 +282,28 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
   );
 
   return (
-    <Screen testID="tonight-night">
-      <List
-        testID="tonight-night-list"
-        data={entries}
-        keyExtractor={(e) => String(e.entry_id)}
-        renderItem={(e) => <RotationRow entry={e} elapsedS={elapsedS} onPreview={previewEntry} />}
-        extraData={elapsedS}
-        ListHeaderComponent={header}
-        ListFooterComponent={nightInfo ? <VenueInfo night={nightInfo} /> : undefined}
-        refreshing={refreshing}
-        onRefresh={() => void refresh()}
-      />
-      <PreviewSheet owner="night" focused={focused} />
-      <SurveySheet
-        entryId={survey?.entryId ?? null}
-        artist={survey?.artist ?? ''}
-        title={survey?.title ?? ''}
-        initial={previous ?? undefined}
-        onDone={() => setManual(null)}
-      />
-    </Screen>
+    <ManageProvider value={manage}>
+      <Screen testID="tonight-night">
+        <List
+          testID="tonight-night-list"
+          data={entries}
+          keyExtractor={(e) => String(e.entry_id)}
+          renderItem={(e) => <RotationRow entry={e} elapsedS={elapsedS} onPreview={previewEntry} />}
+          extraData={elapsedS}
+          ListHeaderComponent={header}
+          ListFooterComponent={nightInfo ? <VenueInfo night={nightInfo} /> : undefined}
+          refreshing={refreshing}
+          onRefresh={() => void refresh()}
+        />
+        <PreviewSheet owner="night" focused={focused} />
+        <SurveySheet
+          entryId={survey?.entryId ?? null}
+          artist={survey?.artist ?? ''}
+          title={survey?.title ?? ''}
+          initial={previous ?? undefined}
+          onDone={() => setManual(null)}
+        />
+      </Screen>
+    </ManageProvider>
   );
 }

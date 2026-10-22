@@ -1,6 +1,7 @@
 import type { SearchVersion } from '@nomad/api-kjbox';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, Text } from '@nomad/ui';
+import type { ReactNode } from 'react';
 import { View } from 'react-native';
 
 import { availability } from './VersionRow';
@@ -18,6 +19,8 @@ export type ConfirmCardProps = {
   replacing?: string;
   /** Friend mode: who it's for. */
   friendName?: string;
+  /** Shown above the buttons (the duet partners block, E6). */
+  extra?: ReactNode;
   sending: boolean;
   /** Already-translated error copy. */
   error?: string | null;
@@ -26,7 +29,7 @@ export type ConfirmCardProps = {
 };
 
 /** The mandatory, hardened confirm (A.19): title and artist dominate, a source line, the breadcrumb, two clear buttons. */
-export function ConfirmCard({ title, artist, source, searched, replacing, friendName, sending, error, onSend, onBack }: ConfirmCardProps) {
+export function ConfirmCard({ title, artist, source, searched, replacing, friendName, extra, sending, error, onSend, onBack }: ConfirmCardProps) {
   const t = useTranslations('tonight.request.confirm');
   const sourceLine =
     source === 'make'
@@ -64,6 +67,7 @@ export function ConfirmCard({ title, artist, source, searched, replacing, friend
           {t('searched', { query: isolate(searched) })}
         </Text>
       ) : null}
+      {extra}
       {error ? (
         <Text testID="tonight-confirm-error" variant="error">
           {error}

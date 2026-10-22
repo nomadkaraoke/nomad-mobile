@@ -7,6 +7,7 @@ import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { IdeasPanel } from '../log/IdeasPanel';
+import { FriendBanner } from '../manage/FriendBanner';
 import { useNightStore } from '../nightStore';
 import { PreviewSheet, versionPreview } from '../preview/PreviewSheet';
 import { usePreviewStore } from '../preview/previewStore';
@@ -44,6 +45,7 @@ export function SearchScreen({ change, friend }: SearchScreenProps) {
   useRequestFlowScope();
   const mode = useRequestStore((s) => s.mode);
   const replaces = useRequestStore((s) => s.replaces);
+  const friendName = useRequestStore((s) => s.friendName);
 
   // The route params set the flow once, when the screen opens.
   const changeId = change?.id;
@@ -133,6 +135,10 @@ export function SearchScreen({ change, friend }: SearchScreenProps) {
               <Text className="text-sm font-semibold text-primary">{t('keepSong')}</Text>
             </Pressable>
           </View>
+        ) : null}
+        {mode === 'friend' && friendName ? (
+          // "Cancel: it's for me" turns this back into a request for yourself (A.14).
+          <FriendBanner name={friendName} onCancel={() => useRequestStore.getState().clear()} />
         ) : null}
         <TextField
           testID="tonight-search-input"

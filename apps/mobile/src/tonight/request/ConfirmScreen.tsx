@@ -1,10 +1,13 @@
-import { changeRequest, KjboxError, submitRequest } from '@nomad/api-kjbox';
-import { useTranslations } from '@nomad/i18n';
+import { changeRequest, KjboxError, submitRequest, type MeResult } from '@nomad/api-kjbox';
+import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { useRef, useState } from 'react';
+import { View } from 'react-native';
 
+import { DuetPicker } from '../manage/DuetPicker';
+import { storedPhone } from '../manage/PhoneSheet';
 import { useNightStore } from '../nightStore';
 import { nightKey } from '../nomad/queries';
 import { ConfirmCard } from './ConfirmCard';
@@ -31,6 +34,12 @@ export function ConfirmScreen() {
   const [sending, setSending] = useState(false);
   const inFlight = useRef(false); // a ref: two taps in one frame both see stale `sending` state
   const [error, setError] = useState<string | null>(null);
+  // Duet partners (spec §4.1, ruling E6-R7): up to 3, picked from tonight's singers. Not offered on a change (the
+  // change body has no singers; the song keeps its own).
+  const [partners, setPartners] = useState<string[]>([]);
+  const [picking, setPicking] = useState(false);
+  const tManage = useTranslations('tonight.manage.duet');
+  const tSong = useTranslations('tonight.night.song');
 
   if (night?.kind !== 'nomad') {
     // The night ended (night_changed, or ended elsewhere) while confirm was open.
@@ -64,13 +73,20 @@ export function ConfirmScreen() {
     const src = sourceFor(p.song, p.version);
     try {
       if (p.mode === 'change' && p.replaces) {
-        await changeRequest(night.code, p.replaces.id, { ...src, night_id: night.nightId });
+        // Idempotent like submit (ruling E5-R9): a retry reuses the confirm's id. A replay answers with the superseding
+        // request, whose id may differ from the path id; nothing here relies on it (the night queries refetch).
+        await changeRequest(night.code, p.replaces.id, { ...src, night_id: night.nightId, client_request_id: p.clientRequestId });
       } else {
+        const friend = p.mode === 'friend' && p.friendName;
+        // The phone kept on this device (ruling E6-R5): kjbox stores a phone only on requests. Never on a friend's.
+        const phone = friend ? null : storedPhone(userKey);
         await submitRequest(night.code, {
           ...src,
           night_id: night.nightId,
           client_request_id: p.clientRequestId,
-          ...(p.mode === 'friend' && p.friendName ? { for_friend: true, friend_name: p.friendName } : {}),
+          ...(friend ? { for_friend: true, friend_name: p.friendName } : {}),
+          ...(phone ? { phone } : {}),
+          ...(partners.length ? { additional_singers: partners.map((name) => ({ name })) } : {}),
         });
       }
       useRequestStore.getState().noteSend(p, 'settled');
@@ -94,6 +110,23 @@ export function ConfirmScreen() {
     }
   };
 
+  const ownName = queryClient.getQueryData<MeResult>([...nightKey(night, userKey), 'me'])?.me.name;
+  const [a = '', b = '', ...rest] = partners.map((n) => isolate(n));
+  const withLine =
+    partners.length === 0 ? null : partners.length === 1 ? tSong('with1', { a }) : partners.length === 2 ? tSong('with2', { a, b }) : tSong('with3', { a, b, c: rest.join(', ') });
+  const partnersBlock = (
+    <View className="gap-2">
+      {withLine ? <Text testID="tonight-confirm-partners">{withLine}</Text> : null}
+      <Button
+        testID="tonight-confirm-duet"
+        variant="secondary"
+        label={partners.length ? tManage('edit') : tManage('add')}
+        disabled={sending}
+        onPress={() => setPicking(true)}
+      />
+    </View>
+  );
+
   return (
     <Screen testID="tonight-confirm-screen" scroll>
       <ConfirmCard
@@ -103,10 +136,20 @@ export function ConfirmScreen() {
         searched={pending.searched}
         replacing={pending.mode === 'change' ? pending.replaces?.title : undefined}
         friendName={pending.mode === 'friend' ? pending.friendName : undefined}
+        extra={pending.mode === 'change' ? null : partnersBlock}
         sending={sending}
         error={error}
         onSend={() => void send()}
         onBack={() => router.back()}
+      />
+      <DuetPicker
+        visible={picking}
+        night={night}
+        userKey={userKey}
+        selected={partners}
+        onChange={setPartners}
+        onClose={() => setPicking(false)}
+        exclude={ownName ? [ownName] : []}
       />
     </Screen>
   );
