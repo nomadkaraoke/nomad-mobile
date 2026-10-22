@@ -42,8 +42,19 @@ export function ConfirmScreen() {
   // The once-per-night photo consent (ruling E6-R8): asked here only until answered for this account and night.
   const nomad = night?.kind === 'nomad' ? night : null;
   const askConsent = useAskPhotoConsent(nomad, userKey);
-  const [consent, setConsent] = useState<NightConsent>(() => (nomad ? loadNightConsent(userKey, nomad.nightId) : {}));
-  const [answeredBefore] = useState(() => consent.consent !== undefined);
+  // Read per account + night: another account or a new night never inherits the answer (state adjusted during render).
+  const consentKey = nomad ? `${userKey ?? 'anon'}:${nomad.nightId}` : null;
+  const [loaded, setLoaded] = useState(() => {
+    const c = nomad ? loadNightConsent(userKey, nomad.nightId) : {};
+    return { key: consentKey, consent: c, answeredBefore: c.consent !== undefined };
+  });
+  if (loaded.key !== consentKey) {
+    const c = nomad ? loadNightConsent(userKey, nomad.nightId) : {};
+    setLoaded({ key: consentKey, consent: c, answeredBefore: c.consent !== undefined });
+  }
+  const consent = loaded.consent;
+  const answeredBefore = loaded.answeredBefore;
+  const setConsent = (c: NightConsent) => setLoaded((l) => ({ ...l, consent: c }));
   const tManage = useTranslations('tonight.manage.duet');
   const tSong = useTranslations('tonight.night.song');
 

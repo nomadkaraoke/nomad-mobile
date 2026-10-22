@@ -7,6 +7,7 @@ import * as tipsRoute from '../../../app/tonight/tips';
 import { useAuth } from '../../../auth/store';
 import { appStorage } from '../../../storage';
 import { sortedSingers } from '../../../tonight/manage/DuetPicker';
+import { consentFields, loadNightConsent, sanitizeInstagram, saveNightConsent } from '../../../tonight/manage/NightConsent';
 import { usePhoneStore } from '../../../tonight/manage/PhoneSheet';
 import { useNightStore } from '../../../tonight/nightStore';
 import { nightPoll } from '../../../tonight/nomad/queries';
@@ -194,7 +195,7 @@ describe('once-per-night photo consent + Instagram on confirm (ruling E6-R8, A.9
     fireEvent.changeText(await screen.findByTestId('tonight-confirm-instagram'), '@sam');
     fireEvent.press(screen.getByTestId('tonight-confirm-send'));
     await waitFor(() =>
-      expect(api.submitRequest).toHaveBeenLastCalledWith('2121', expect.objectContaining({ photo_consent: 'yes', instagram: '@sam' })),
+      expect(api.submitRequest).toHaveBeenLastCalledWith('2121', expect.objectContaining({ photo_consent: 'yes', instagram: 'sam' })),
     );
     first.unmount();
 
@@ -203,7 +204,7 @@ describe('once-per-night photo consent + Instagram on confirm (ruling E6-R8, A.9
     expect(screen.queryByTestId('tonight-confirm-consent')).toBeNull();
     fireEvent.press(screen.getByTestId('tonight-confirm-send'));
     await waitFor(() => expect(api.submitRequest).toHaveBeenCalledTimes(2));
-    expect(api.submitRequest.mock.calls[1]![1]).toMatchObject({ photo_consent: 'yes', instagram: '@sam' });
+    expect(api.submitRequest.mock.calls[1]![1]).toMatchObject({ photo_consent: 'yes', instagram: 'sam' });
   });
 
   it('unanswered (unknown) sends nothing; the question never blocks the send', async () => {
@@ -266,4 +267,41 @@ describe('request signature (fix round 1)', () => {
     s.startChange({ id: 42, title: 'Other' });
     expect(s.pick(starlight(), 'auto', 'starl').clientRequestId).not.toBe(a.clientRequestId);
   });
+});
+
+describe('Instagram handle sanitising (fix round 3)', () => {
+  it('strips leading @s and spaces, keeps [A-Za-z0-9._], caps at 30, omits when empty', () => {
+    expect(sanitizeInstagram('  @@sam.k_9 ')).toBe('sam.k_9');
+    expect(sanitizeInstagram('sa m!#$%é/<script>')).toBe('samscript');
+    expect(sanitizeInstagram('a'.repeat(40))).toBe('a'.repeat(30));
+    expect(sanitizeInstagram('@@ !!')).toBe('');
+    expect(consentFields({ consent: 'yes', instagram: '@ ✨' })).toEqual({ photo_consent: 'yes' });
+    expect(consentFields({ consent: 'yes', instagram: `@${'b'.repeat(35)}` })).toEqual({ photo_consent: 'yes', instagram: 'b'.repeat(30) });
+  });
+
+  it('stores the sanitised handle', () => {
+    saveNightConsent('u', 'n1', { consent: 'yes', instagram: '@Sam!' });
+    expect(loadNightConsent('u', 'n1')).toEqual({ consent: 'yes', instagram: 'Sam' });
+  });
+});
+
+it('confirm re-reads the stored consent when the night changes (fix round 3)', async () => {
+  api.getNight.mockResolvedValue(
+    nightOpen({ night_id: NIGHT, features: { make: true, simple_mode: false, ask_photo_consent: true, quick_version: true, tips: true } }),
+  );
+  saveNightConsent(useNightStore.getState().userKey, NIGHT, { consent: 'no' });
+  useRequestStore.getState().pick(starlight(), 'auto', 'starl');
+  renderRouter(requestRoutes(), { initialUrl: '/tonight/confirm' });
+  await screen.findByTestId('tonight-confirm-send');
+  await waitFor(() => expect(api.getNight).toHaveBeenCalled());
+  expect(screen.queryByTestId('tonight-confirm-consent')).toBeNull();
+  const OTHER = 'bbbbbbbbbbbbbbbb';
+  api.getNight.mockResolvedValue(
+    nightOpen({ night_id: OTHER, features: { make: true, simple_mode: false, ask_photo_consent: true, quick_version: true, tips: true } }),
+  );
+  act(() => useNightStore.getState().joinNomad('2121', OTHER, 'Andrew'));
+  expect(await screen.findByTestId('tonight-confirm-consent')).toBeTruthy();
+  fireEvent.press(screen.getByTestId('tonight-confirm-send'));
+  await waitFor(() => expect(api.submitRequest).toHaveBeenCalled());
+  expect(api.submitRequest.mock.calls[0]![1]).not.toHaveProperty('photo_consent');
 });

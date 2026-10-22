@@ -11,6 +11,15 @@ import { nightKey } from '../nomad/queries';
 /** The singer's night-wide photo/clip answer and optional Instagram handle, per account and night (ruling E6-R8). */
 export type NightConsent = { consent?: 'yes' | 'no'; instagram?: string };
 
+/** Instagram's own limit and charset: leading @s and whitespace stripped, only [A-Za-z0-9._], at most 30. */
+export function sanitizeInstagram(raw: string | null | undefined): string {
+  return (raw ?? '')
+    .trim()
+    .replace(/^[@\s]+/, '')
+    .replace(/[^A-Za-z0-9._]/g, '')
+    .slice(0, 30);
+}
+
 const key = (userKey: string | null, nightId: string) => `tonight.consent.v1.${userKey ?? 'anon'}.${nightId}`;
 
 export function loadNightConsent(userKey: string | null, nightId: string): NightConsent {
@@ -18,7 +27,7 @@ export function loadNightConsent(userKey: string | null, nightId: string): Night
     const v = JSON.parse(appStorage.getString(key(userKey, nightId)) ?? '{}') as Record<string, unknown>;
     return {
       ...(v.consent === 'yes' || v.consent === 'no' ? { consent: v.consent } : {}),
-      ...(typeof v.instagram === 'string' && v.instagram ? { instagram: v.instagram } : {}),
+      ...(typeof v.instagram === 'string' && sanitizeInstagram(v.instagram) ? { instagram: sanitizeInstagram(v.instagram) } : {}),
     };
   } catch {
     return {};
@@ -27,7 +36,8 @@ export function loadNightConsent(userKey: string | null, nightId: string): Night
 
 export function saveNightConsent(userKey: string | null, nightId: string, value: NightConsent): void {
   try {
-    appStorage.set(key(userKey, nightId), JSON.stringify(value));
+    const instagram = sanitizeInstagram(value.instagram);
+    appStorage.set(key(userKey, nightId), JSON.stringify({ ...(value.consent ? { consent: value.consent } : {}), ...(instagram ? { instagram } : {}) }));
   } catch {
     // best effort: the question is asked again next time
   }
@@ -36,7 +46,7 @@ export function saveNightConsent(userKey: string | null, nightId: string, value:
 /** The submit fields for an own request: nothing while unknown (A.91), the handle only with a yes. */
 export function consentFields(c: NightConsent): { photo_consent?: 'yes' | 'no'; instagram?: string } {
   if (!c.consent) return {};
-  const handle = c.instagram?.trim();
+  const handle = sanitizeInstagram(c.instagram);
   return { photo_consent: c.consent, ...(c.consent === 'yes' && handle ? { instagram: handle } : {}) };
 }
 
