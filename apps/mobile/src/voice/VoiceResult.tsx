@@ -35,7 +35,10 @@ export function VoiceResult({ profile: p, saved, signedIn, onSave, onTryAgain, o
   const labels = useVoiceLabels();
   const [lo, hi] = stripBounds(p.lowMidi, p.highMidi);
   const marks = [];
-  for (let m = p.lowMidi; m <= p.highMidi; m++) marks.push({ midi: m, color: colors.primary });
+  // The range in pink, its comfortable middle in gold (the colours of the range and comfort lines below).
+  for (let m = p.lowMidi; m <= p.highMidi; m++) {
+    marks.push({ midi: m, color: m >= p.comfortLow && m <= p.comfortHigh ? colors.gold : colors.primary });
+  }
 
   return (
     <StepLayout
@@ -80,7 +83,6 @@ export function VoiceResult({ profile: p, saved, signedIn, onSave, onTryAgain, o
         highMidi={hi}
         height={72}
         marks={marks}
-        band={{ from: p.comfortLow, to: p.comfortHigh, color: colors.gold }}
         accessibilityLabel={t('rangeKeysLabel')}
       />
       <StartText testID="voice-result-comfort" className="text-base text-gold">

@@ -1,0 +1,76 @@
+# Voice test screen tour (Phase 3c Task 18a): every step of /discover/voice with the fake mic
+# (Metro with EXPO_PUBLIC_FAKE_MIC=baritone-scale against the gen local stack). Signed out: intro, self-report,
+# low / high / sing, the result ("Likely Baritone"), then Save → sign-in (fake Google, EMAIL) → saved.
+# Shots in ${VOICE_SHOTS} (docs/screenshots/phase3c/<platform>/). Run from the repo root:
+#   maestro test -e VOICE_SHOTS=docs/screenshots/phase3c/ios -e EMAIL=e2e-voice-<n>@example.com maestro/screens/voice-tour.yaml
+# The mic-off and no-notes screens need the real mic (a denied permission, a silent room), not the fake one.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow: ../common/launch.yaml
+- openLink: "nomadkaraoke://discover/voice"
+- extendedWaitUntil:
+    visible:
+      id: "voice-start"
+    timeout: 15000
+- takeScreenshot: ${VOICE_SHOTS}/voice-intro
+- tapOn:
+    id: "voice-skip"
+- extendedWaitUntil:
+    visible:
+      id: "voice-self-save"
+    timeout: 5000
+- tapOn:
+    id: "voice-self-baritone"
+- takeScreenshot: ${VOICE_SHOTS}/voice-self-report
+- tapOn:
+    id: "voice-self-take-test"
+- tapOn:
+    id: "voice-start"
+- extendedWaitUntil:
+    visible: "Stay quiet for a second…"
+    timeout: 10000
+- takeScreenshot: ${VOICE_SHOTS}/voice-low-quiet
+- extendedWaitUntil:
+    visible:
+      id: "voice-low-done"
+      enabled: true
+    timeout: 15000
+- takeScreenshot: ${VOICE_SHOTS}/voice-low
+- tapOn:
+    id: "voice-low-done"
+- extendedWaitUntil:
+    visible:
+      id: "voice-high-done"
+      enabled: true
+    timeout: 15000
+- takeScreenshot: ${VOICE_SHOTS}/voice-high
+- tapOn:
+    id: "voice-high-done"
+- extendedWaitUntil:
+    visible: "Keep singing.*"
+    timeout: 10000
+- takeScreenshot: ${VOICE_SHOTS}/voice-sing
+# The sing step ends by itself after 15 s.
+- extendedWaitUntil:
+    visible:
+      id: "voice-result-type"
+    timeout: 25000
+- assertVisible: "Likely Baritone"
+- takeScreenshot: ${VOICE_SHOTS}/voice-result
+- tapOn:
+    id: "voice-save"
+- extendedWaitUntil:
+    visible:
+      id: "signin-sheet"
+    timeout: 10000
+- takeScreenshot: ${VOICE_SHOTS}/voice-save-signin
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${EMAIL}
+- extendedWaitUntil:
+    visible:
+      id: "voice-saved"
+    timeout: 20000
+- assertVisible: "Likely Baritone"
+- takeScreenshot: ${VOICE_SHOTS}/voice-saved
