@@ -1477,6 +1477,9 @@
     "save": "Kaydet",
     "singFinish": "Bitir",
     "start": "Başla",
-    "stepOf": "{total} adımdan {step}. adım"
+    "stepOf": "{total} adımdan {step}. adım",
+    "heldCaption": "Şu ana kadarki en pes ve en tiz tonun",
+    "singLeft": "{seconds, plural, one {# saniye kaldı} other {# saniye kaldı}}",
+    "singProgressLabel": "Şarkı söylemek için kalan süre"
   }
 }

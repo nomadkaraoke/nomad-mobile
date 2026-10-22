@@ -1477,6 +1477,9 @@
     "save": "Mentés",
     "singFinish": "Befejezés",
     "start": "Indítás",
-    "stepOf": "{step}. / {total} lépés"
+    "stepOf": "{step}. / {total} lépés",
+    "heldCaption": "Az eddigi legmélyebb és legmagasabb hangod",
+    "singLeft": "{seconds, plural, one {# másodperc van hátra} other {# másodperc van hátra}}",
+    "singProgressLabel": "Hátralévő éneklési idő"
   }
 }

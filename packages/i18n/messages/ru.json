@@ -1477,6 +1477,9 @@
     "save": "Сохранить",
     "singFinish": "Готово",
     "start": "Начать",
-    "stepOf": "Шаг {step} из {total}"
+    "stepOf": "Шаг {step} из {total}",
+    "heldCaption": "Твои самые низкие и высокие ноты на данный момент",
+    "singLeft": "{seconds, plural, one {Осталась # секунда} few {Осталось # секунды} many {Осталось # секунд} other {Осталось # секунд}}",
+    "singProgressLabel": "Сколько осталось петь"
   }
 }

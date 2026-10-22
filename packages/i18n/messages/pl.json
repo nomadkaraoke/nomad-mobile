@@ -1477,6 +1477,9 @@
     "save": "Zapisz",
     "singFinish": "Zakończ",
     "start": "Rozpocznij",
-    "stepOf": "Krok {step} z {total}"
+    "stepOf": "Krok {step} z {total}",
+    "heldCaption": "Twój dotychczasowy najniższy i najwyższy dźwięk",
+    "singLeft": "{seconds, plural, one {została # sekunda} few {zostały # sekundy} many {zostało # sekund} other {zostało # sekund}}",
+    "singProgressLabel": "Pozostały czas na śpiewanie"
   }
 }

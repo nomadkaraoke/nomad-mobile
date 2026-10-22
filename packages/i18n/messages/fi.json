@@ -1477,6 +1477,9 @@
     "save": "Tallenna",
     "singFinish": "Valmis",
     "start": "Aloita",
-    "stepOf": "Vaihe {step} / {total}"
+    "stepOf": "Vaihe {step} / {total}",
+    "heldCaption": "Matalin ja korkein sävelesi tähän mennessä",
+    "singLeft": "{seconds, plural, one {# sekunti jäljellä} other {# sekuntia jäljellä}}",
+    "singProgressLabel": "Lauluaikaa jäljellä"
   }
 }

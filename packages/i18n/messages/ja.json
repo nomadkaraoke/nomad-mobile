@@ -1477,6 +1477,9 @@
     "save": "保存",
     "singFinish": "完了",
     "start": "スタート",
-    "stepOf": "ステップ {step} / {total}"
+    "stepOf": "ステップ {step} / {total}",
+    "heldCaption": "ここまでの最低音と最高音",
+    "singLeft": "{seconds, plural, other {残り#秒}}",
+    "singProgressLabel": "歌唱の残り時間"
   }
 }

@@ -1477,6 +1477,9 @@
     "save": "Lưu",
     "singFinish": "Hoàn tất",
     "start": "Bắt đầu",
-    "stepOf": "Bước {step}/{total}"
+    "stepOf": "Bước {step}/{total}",
+    "heldCaption": "Nốt thấp nhất và cao nhất của bạn cho đến hiện tại",
+    "singLeft": "{seconds, plural, other {Còn # giây}}",
+    "singProgressLabel": "Thời gian hát còn lại"
   }
 }

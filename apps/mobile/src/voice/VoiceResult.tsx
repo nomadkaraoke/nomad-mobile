@@ -70,13 +70,15 @@ export function VoiceResult({ profile: p, saved, signedIn, onSave, onTryAgain, o
         )
       }
     >
-      <Text variant="muted">{t('resultTitle')}</Text>
-      <StartText testID="voice-result-range" className="text-4xl font-bold text-primary">
-        {noteRange(p.lowMidi, p.highMidi)}
-      </StartText>
-      <Text testID="voice-result-type" className="text-2xl font-bold">
+      <Text testID="voice-result-type" className="text-4xl font-bold">
         {labels.likely(p)}
       </Text>
+      <View className="gap-1">
+        <Text variant="muted">{t('resultTitle')}</Text>
+        <StartText testID="voice-result-range" className="text-2xl font-bold text-primary">
+          {noteRange(p.lowMidi, p.highMidi)}
+        </StartText>
+      </View>
       <PianoStrip
         testID="voice-result-keys"
         lowMidi={lo}

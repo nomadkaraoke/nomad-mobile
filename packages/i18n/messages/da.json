@@ -1477,6 +1477,9 @@
     "save": "Gem",
     "singFinish": "Afslut",
     "start": "Start",
-    "stepOf": "Trin {step} af {total}"
+    "stepOf": "Trin {step} af {total}",
+    "heldCaption": "Dine dybeste og højeste toner indtil videre",
+    "singLeft": "{seconds, plural, one {# sekund tilbage} other {# sekunder tilbage}}",
+    "singProgressLabel": "Resterende tid til at synge"
   }
 }

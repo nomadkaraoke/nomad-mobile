@@ -1477,6 +1477,9 @@
     "save": "Зберегти",
     "singFinish": "Завершити",
     "start": "Почати",
-    "stepOf": "Крок {step} із {total}"
+    "stepOf": "Крок {step} із {total}",
+    "heldCaption": "Твої найнижча та найвища ноти на цей момент",
+    "singLeft": "{seconds, plural, one {Залишилася # секунда} few {Залишилося # секунди} many {Залишилося # секунд} other {Залишилося # секунд}}",
+    "singProgressLabel": "Скільки часу залишилося співати"
   }
 }

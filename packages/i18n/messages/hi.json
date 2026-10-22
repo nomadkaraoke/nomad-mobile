@@ -1477,6 +1477,9 @@
     "save": "सेव करो",
     "singFinish": "पूरा करें",
     "start": "शुरू करो",
-    "stepOf": "कदम {step} / {total}"
+    "stepOf": "कदम {step} / {total}",
+    "heldCaption": "अब तक तुम्हारा सबसे निचला और सबसे ऊंचा सुर",
+    "singLeft": "{seconds, plural, one {# सेकंड बचा है} other {# सेकंड बचे हैं}}",
+    "singProgressLabel": "गाने के लिए बचा समय"
   }
 }

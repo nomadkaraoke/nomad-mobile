@@ -1477,6 +1477,9 @@
     "save": "Desa",
     "singFinish": "Finalitza",
     "start": "Comença",
-    "stepOf": "Pas {step} de {total}"
+    "stepOf": "Pas {step} de {total}",
+    "heldCaption": "El teu to més greu i més agut fins ara",
+    "singLeft": "{seconds, plural, one {Queda # segon} other {Queden # segons}}",
+    "singProgressLabel": "Temps que et queda per cantar"
   }
 }

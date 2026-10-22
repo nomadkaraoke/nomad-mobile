@@ -1477,6 +1477,9 @@
     "save": "Simpan",
     "singFinish": "Selesai",
     "start": "Mulai",
-    "stepOf": "Langkah {step} dari {total}"
+    "stepOf": "Langkah {step} dari {total}",
+    "heldCaption": "Nada terendah dan tertinggi Anda sejauh ini",
+    "singLeft": "{seconds, plural, other {Tersisa # detik}}",
+    "singProgressLabel": "Sisa waktu bernyanyi"
   }
 }

@@ -17,6 +17,26 @@ const GAP = 1;
 const LIVE_W = 3;
 /** The live pitch line's colour (stands out on white, black and lit keys). */
 export const PIANO_LIVE_COLOR = colors.purple;
+/** Unlit black keys: dark grey, so they read as keys and not as notches of the page background. */
+export const PIANO_BLACK_KEY = '#3a3a3a';
+/** Frame around every black key, so a lit black key stays separate from lit white neighbours. */
+export const PIANO_KEY_OUTLINE = '#050505';
+const OUTLINE = 1.5;
+/** A lit black key is its mark colour darkened by this much. */
+const LIT_BLACK_SHADE = 0.6;
+
+/** `hex` (#rgb or #rrggbb) scaled towards black: factor 1 keeps it, 0 is black. Other formats come back as is. */
+export function pianoShade(hex: string, factor = LIT_BLACK_SHADE): string {
+  const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex);
+  if (!m) return hex;
+  const digits = m[1]!.length === 3 ? [...m[1]!].map((c) => c + c).join('') : m[1]!;
+  const n = parseInt(digits, 16);
+  const ch = (shift: number) =>
+    Math.round(((n >> shift) & 0xff) * factor)
+      .toString(16)
+      .padStart(2, '0');
+  return `#${ch(16)}${ch(8)}${ch(0)}`;
+}
 
 /**
  * White keys share the width equally; each black key is centred on the seam between its white neighbours
@@ -112,9 +132,27 @@ export function PianoStrip({ lowMidi, highMidi, marks, band, live, height, testI
             opacity={0.45}
           />
         ) : null}
-        {layout.black.map((k) => (
-          <Rect key={`b${k.midi}`} x={k.x} y={0} width={k.w} height={height * BLACK_H} color={lit.get(k.midi) ?? colors.bg} />
-        ))}
+        {layout.black.map((k) => {
+          const mark = lit.get(k.midi);
+          return [
+            <Rect
+              key={`o${k.midi}`}
+              x={k.x - OUTLINE}
+              y={0}
+              width={k.w + 2 * OUTLINE}
+              height={height * BLACK_H + OUTLINE}
+              color={PIANO_KEY_OUTLINE}
+            />,
+            <Rect
+              key={`b${k.midi}`}
+              x={k.x}
+              y={0}
+              width={k.w}
+              height={height * BLACK_H}
+              color={mark ? pianoShade(mark) : PIANO_BLACK_KEY}
+            />,
+          ];
+        })}
         {liveX !== null ? (
           <Rect x={liveX - LIVE_W / 2} y={0} width={LIVE_W} height={height} color={PIANO_LIVE_COLOR} />
         ) : null}

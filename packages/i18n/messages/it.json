@@ -1477,6 +1477,9 @@
     "save": "Salva",
     "singFinish": "Fine",
     "start": "Inizia",
-    "stepOf": "Passaggio {step} di {total}"
+    "stepOf": "Passaggio {step} di {total}",
+    "heldCaption": "Le tue note più bassa e più alta finora",
+    "singLeft": "{seconds, plural, one {Ancora # secondo} other {Ancora # secondi}}",
+    "singProgressLabel": "Tempo rimasto per cantare"
   }
 }

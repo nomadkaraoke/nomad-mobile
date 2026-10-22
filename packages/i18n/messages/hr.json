@@ -1477,6 +1477,9 @@
     "save": "Spremi",
     "singFinish": "Završi",
     "start": "Započni",
-    "stepOf": "Korak {step} od {total}"
+    "stepOf": "Korak {step} od {total}",
+    "heldCaption": "Tvoj najniži i najviši ton do sada",
+    "singLeft": "{seconds, plural, one {Preostala je # sekunda} few {Preostale su # sekunde} other {Preostalo je # sekundi}}",
+    "singProgressLabel": "Preostalo vrijeme za pjevanje"
   }
 }

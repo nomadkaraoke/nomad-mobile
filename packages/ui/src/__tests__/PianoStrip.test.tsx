@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
 
-import { PIANO_LIVE_COLOR, PianoStrip, pianoKeyLayout, pianoX } from '../PianoStrip';
+import { PIANO_BLACK_KEY, PIANO_KEY_OUTLINE, PIANO_LIVE_COLOR, PianoStrip, pianoKeyLayout, pianoShade, pianoX } from '../PianoStrip';
+import { colors } from '../tokens';
 
 it('lays A2..E4 (45..64) out as 12 white keys with the black keys between them', () => {
   const { white, black } = pianoKeyLayout(45, 64, 300);
@@ -59,7 +60,9 @@ it('colours marked keys, draws the band and the live pitch line', () => {
   const rects = screen.getAllByTestId('skia-rect').map((r) => r.props);
   // D4 (white) lit, C#4 (black) lit.
   expect(rects.find((r) => r.color === '#f0f')).toMatchObject({ x: 100 });
-  expect(rects.find((r) => r.color === '#0ff')).toBeTruthy();
+  // A lit black key is a darker shade of its mark, so it stays distinct from lit white neighbours.
+  expect(rects.find((r) => r.color === '#0ff')).toBeUndefined();
+  expect(rects.find((r) => r.color === pianoShade('#0ff'))).toBeTruthy();
   // The band spans C4's left edge to D4's right edge.
   expect(rects.find((r) => r.color === '#ff0')).toMatchObject({ x: 0, width: 200 });
   expect(rects.find((r) => r.color === PIANO_LIVE_COLOR)).toMatchObject({ x: 150 - 1.5 });
@@ -74,4 +77,24 @@ it('draws no live line when there is no pitch', () => {
 it('passes the accessibility label through', () => {
   render(<PianoStrip testID="piano" lowMidi={60} highMidi={64} height={60} accessibilityLabel="Keyboard" />);
   expect(screen.getByLabelText('Keyboard')).toBeTruthy();
+});
+
+it('pianoShade darkens a colour towards black', () => {
+  expect(pianoShade('#ff7acc', 0.5)).toBe('#803d66');
+  expect(pianoShade('#ffffff', 0)).toBe('#000000');
+});
+
+it('every black key has a dark outline; unlit ones are dark grey, not the page background', () => {
+  render(<PianoStrip testID="piano" lowMidi={60} highMidi={64} height={60} marks={[{ midi: 61, color: '#f0f' }]} />);
+  layout();
+  const rects = screen.getAllByTestId('skia-rect').map((r) => r.props);
+  const outlines = rects.filter((r) => r.color === PIANO_KEY_OUTLINE);
+  expect(outlines).toHaveLength(2); // C#4 and D#4
+  const unlit = rects.filter((r) => r.color === PIANO_BLACK_KEY);
+  expect(unlit).toHaveLength(1); // D#4
+  expect(PIANO_BLACK_KEY).not.toBe(colors.bg);
+  // The outline is wider than the key it frames.
+  const dSharp = unlit[0]!;
+  const frame = outlines.find((o) => o.x < dSharp.x && o.x + o.width > dSharp.x + dSharp.width);
+  expect(frame).toBeTruthy();
 });

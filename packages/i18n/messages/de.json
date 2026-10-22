@@ -1477,6 +1477,9 @@
     "save": "Speichern",
     "singFinish": "Fertigstellen",
     "start": "Starten",
-    "stepOf": "Schritt {step} von {total}"
+    "stepOf": "Schritt {step} von {total}",
+    "heldCaption": "Dein bisheriger tiefster und höchster Ton",
+    "singLeft": "{seconds, plural, one {Noch # Sekunde} other {Noch # Sekunden}}",
+    "singProgressLabel": "Verbleibende Singzeit"
   }
 }

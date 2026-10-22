@@ -1477,6 +1477,9 @@
     "save": "שמור",
     "singFinish": "סיום",
     "start": "התחלה",
-    "stepOf": "שלב {step} מתוך {total}"
+    "stepOf": "שלב {step} מתוך {total}",
+    "heldCaption": "הנמוך והגבוה שלך עד כה",
+    "singLeft": "{seconds, plural, one {נותרה שנייה אחת} two {נותרו שתי שניות} other {נותרו # שניות}}",
+    "singProgressLabel": "הזמן שנותר לשיר"
   }
 }

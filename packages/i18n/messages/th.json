@@ -1477,6 +1477,9 @@
     "save": "บันทึก",
     "singFinish": "เสร็จสิ้น",
     "start": "เริ่มต้น",
-    "stepOf": "ขั้นตอนที่ {step} จาก {total}"
+    "stepOf": "ขั้นตอนที่ {step} จาก {total}",
+    "heldCaption": "โน้ตต่ำสุดและสูงสุดของคุณในตอนนี้",
+    "singLeft": "{seconds, plural, other {เหลืออีก # วินาที}}",
+    "singProgressLabel": "เวลาที่เหลือสำหรับการร้อง"
   }
 }

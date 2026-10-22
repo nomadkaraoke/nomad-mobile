@@ -1477,6 +1477,9 @@
     "save": "Salvează",
     "singFinish": "Finalizare",
     "start": "Începe",
-    "stepOf": "Pasul {step} din {total}"
+    "stepOf": "Pasul {step} din {total}",
+    "heldCaption": "Cea mai joasă și cea mai înaltă notă a ta de până acum",
+    "singLeft": "{seconds, plural, one {încă # secundă} few {încă # secunde} other {încă # de secunde}}",
+    "singProgressLabel": "Timp rămas de cântat"
   }
 }

@@ -1477,6 +1477,9 @@
     "save": "保存",
     "singFinish": "完成",
     "start": "开始",
-    "stepOf": "第 {step} 步，共 {total} 步"
+    "stepOf": "第 {step} 步，共 {total} 步",
+    "heldCaption": "您目前测得的最低音和最高音",
+    "singLeft": "{seconds, plural, one {还剩 # 秒} other {还剩 # 秒}}",
+    "singProgressLabel": "剩余演唱时间"
   }
 }

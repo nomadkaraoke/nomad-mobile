@@ -119,6 +119,9 @@ function parseProfile(raw: unknown): LocalVoiceProfile | null {
     (o.method === 'mic' || o.method === 'self') &&
     typeof o.measuredAt === 'string';
   if (!ok) return null;
+  // decide's rule: low ≤ comfortLow ≤ comfortHigh ≤ high.
+  const { lowMidi, highMidi, comfortLow, comfortHigh } = o as LocalVoiceProfile;
+  if (!(lowMidi <= comfortLow && comfortLow <= comfortHigh && comfortHigh <= highMidi)) return null;
   return toLocal(o as LocalVoiceProfile);
 }
 

@@ -1477,6 +1477,9 @@
     "save": "Opslaan",
     "singFinish": "Afronden",
     "start": "Start",
-    "stepOf": "Stap {step} van {total}"
+    "stepOf": "Stap {step} van {total}",
+    "heldCaption": "Je laagste en hoogste noot tot nu toe",
+    "singLeft": "{seconds, plural, one {nog # seconde} other {nog # seconden}}",
+    "singProgressLabel": "Resterende zangtijd"
   }
 }

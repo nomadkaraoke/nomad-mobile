@@ -1477,6 +1477,9 @@
     "save": "حفظ",
     "singFinish": "إنهاء",
     "start": "ابدأ",
-    "stepOf": "الخطوة {step} من {total}"
+    "stepOf": "الخطوة {step} من {total}",
+    "heldCaption": "أدنى وأعلى طبقة صوتية لك حتى الآن",
+    "singLeft": "{seconds, plural, zero {لم يتبقَّ أي ثوانٍ} one {بقيت ثانية واحدة} two {بقيت ثانيتان} few {بقيت # ثوانٍ} many {بقيت # ثانية} other {بقيت # ثانية}}",
+    "singProgressLabel": "الوقت المتبقي للغناء"
   }
 }

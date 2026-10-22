@@ -1477,6 +1477,9 @@
     "save": "I-save",
     "singFinish": "Tapusin",
     "start": "Simulan",
-    "stepOf": "Hakbang {step} ng {total}"
+    "stepOf": "Hakbang {step} ng {total}",
+    "heldCaption": "Ang iyong pinakamababa at pinakamataas na tono sa ngayon",
+    "singLeft": "{seconds, plural, one {# segundo na lang} other {# segundo na lang}}",
+    "singProgressLabel": "Natitirang oras para kumanta"
   }
 }

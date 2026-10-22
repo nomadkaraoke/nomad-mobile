@@ -148,6 +148,17 @@ describe('useVoiceStore', () => {
     expect(loadVoice().profile).toBeNull();
   });
 
+  it.each([
+    ['low above high', { lowMidi: 70, highMidi: 60 }],
+    ['comfort below low', { comfortLow: 40 }],
+    ['comfort above high', { comfortHigh: 80 }],
+    ['comfort inverted', { comfortLow: 65, comfortHigh: 55 }],
+  ])('loadVoice() drops an impossible range (%s)', (_name, patch) => {
+    const p = { ...profileFromSelfReport('tenor', AT), ...patch }; // tenor: 48..72, comfort 53..67
+    appStorage.set(VOICE_STORAGE_KEY, JSON.stringify({ profile: p, pending: true }));
+    expect(loadVoice()).toEqual({ profile: null, pending: false });
+  });
+
   it('loadVoice() reads a mic profile back', () => {
     const held = [45, 50, 55, 59, 64].map((note, i) => ({ note, midi: note, start: i, end: i + 1 }));
     const r = summarizeRange(held, [])!;

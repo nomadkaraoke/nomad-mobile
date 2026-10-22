@@ -1477,6 +1477,9 @@
     "save": "Uložit",
     "singFinish": "Dokončit",
     "start": "Začít",
-    "stepOf": "Krok {step} z {total}"
+    "stepOf": "Krok {step} z {total}",
+    "heldCaption": "Tvé dosavadní nejnižší a nejvyšší tóny",
+    "singLeft": "{seconds, plural, one {Zbývá # sekunda} few {Zbývají # sekundy} other {Zbývá # sekund}}",
+    "singProgressLabel": "Zbývající čas na zpěv"
   }
 }

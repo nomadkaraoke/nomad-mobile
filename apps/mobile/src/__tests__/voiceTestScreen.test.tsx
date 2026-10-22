@@ -272,6 +272,42 @@ describe('voice test', () => {
     expect(text('voice-result-type')).toBe('Likely Baritone');
   });
 
+  it('a "background" during the permission request (the Android dialog) does not cancel the test', async () => {
+    const handlers: ((s: AppStateStatus) => void)[] = [];
+    jest.spyOn(AppState, 'addEventListener').mockImplementation((_t, h) => {
+      handlers.push(h as (s: AppStateStatus) => void);
+      return { remove: () => {} } as never;
+    });
+    let allow: (p: MicPermission) => void = () => {};
+    mockSource.current!.requestPermission = () => new Promise<MicPermission>((r) => (allow = r));
+    open();
+    await screen.findByTestId('voice-start');
+    await press('voice-start');
+    // Android pauses the activity for the permission dialog; RN reports that as "background".
+    act(() => handlers.forEach((h) => h('background')));
+    await act(async () => allow('granted'));
+    expect(screen.getByTestId('voice-low-done')).toBeTruthy();
+    expect(mockSource.current!.sections).toEqual(['low']);
+  });
+
+  it('sing shows a 15 s countdown and captions the keys already lit', async () => {
+    open();
+    await screen.findByTestId('voice-start');
+    jest.useFakeTimers();
+    await press('voice-start');
+    await press('voice-low-done');
+    await press('voice-high-done');
+    expect(screen.getByText('Your low and high so far')).toBeTruthy();
+    const progress = () => screen.getByTestId('voice-sing-progress');
+    expect(progress().props.accessibilityValue).toMatchObject({ min: 0, max: 15, now: 0 });
+    expect(screen.getByText('15 seconds left')).toBeTruthy();
+    act(() => void jest.advanceTimersByTime(5000));
+    expect(progress().props.accessibilityValue).toMatchObject({ now: 5 });
+    expect(screen.getByText('10 seconds left')).toBeTruthy();
+    act(() => void jest.advanceTimersByTime(9000));
+    expect(screen.getByText('1 second left')).toBeTruthy();
+  });
+
   it('Try again from the result starts a new measurement', async () => {
     open();
     await screen.findByTestId('voice-start');
@@ -314,6 +350,13 @@ describe('VoiceResult', () => {
       </Shell>,
     );
     expect(text('voice-result-type')).toBe('Between Baritone and Tenor');
+    // Hierarchy: the type first, then the range, the keyboard, comfort and confidence.
+    const ids = screen
+      .getByTestId('voice-result')
+      .findAll((n) => typeof n.props.testID === 'string' && n.props.testID.startsWith('voice-result-'), { deep: true })
+      .map((n) => n.props.testID as string)
+      .filter((id, i, all) => all.indexOf(id) === i);
+    expect(ids).toEqual(['voice-result-type', 'voice-result-range', 'voice-result-keys', 'voice-result-comfort', 'voice-result-confidence']);
     expect(screen.getByText('Medium confidence. Try again somewhere quiet for a sharper read.')).toBeTruthy();
   });
 });

@@ -3,7 +3,7 @@ import { midiToName, type Register, type VoiceType } from '@nomad/core';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, colors, PianoStrip, StartText, Text } from '@nomad/ui';
 import { router, useFocusEffect } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppState, Linking, View } from 'react-native';
 
 import { openSignIn } from '../auth/signInUi';
@@ -19,6 +19,9 @@ import { profileFromResult, profileFromSelfReport, useVoiceStore, type LocalVoic
 const STRIP_LOW = 36;
 const STRIP_HIGH = 84;
 const CAPTURE_STEPS = 3;
+/** The sing step ends by itself after this long (useVoiceTest's SING_MS). */
+const SING_S = 15;
+const LISTENING_STEPS: ReadonlySet<string> = new Set(['low', 'high', 'sing']);
 
 /**
  * `/discover/voice` (spec §4.2): the ~60 s mic test (intro → lowest → highest → sing → result), the
@@ -51,11 +54,17 @@ export function VoiceTestScreen() {
   }
 
   // The mic is released when the screen loses focus (back, the sign-in sheet, a tab switch) or the app goes to the
-  // background. Not on "inactive": the iOS permission prompt and Control Centre make the app inactive.
+  // background while it is listening. Not on "inactive" (the iOS permission prompt, Control Centre), and not
+  // during the permission request: Android pauses the activity for its dialog and RN reports that as
+  // "background", so cancelling there would drop the pending begin() and land back on the intro.
+  const stepRef = useRef(test.step);
+  useEffect(() => {
+    stepRef.current = test.step;
+  }, [test.step]);
   useFocusEffect(useCallback(() => () => cancel(), [cancel]));
   useEffect(() => {
     const sub = AppState.addEventListener('change', (s) => {
-      if (s === 'background') cancel();
+      if (s === 'background' && LISTENING_STEPS.has(stepRef.current)) cancel();
     });
     return () => sub.remove();
   }, [cancel]);
@@ -115,9 +124,46 @@ export function VoiceTestScreen() {
   return <TestStep test={test} onSkip={toSelfReport} />;
 }
 
+/** Whole seconds since `active` became true (0 while inactive). */
+function useElapsedSeconds(active: boolean): number {
+  const [elapsed, setElapsed] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    const t0 = Date.now();
+    const id = setInterval(() => setElapsed(Math.floor((Date.now() - t0) / 1000)), 250);
+    return () => {
+      clearInterval(id);
+      setElapsed(0);
+    };
+  }, [active]);
+  return active ? elapsed : 0;
+}
+
+/** The sing step's countdown: a bar plus "N seconds left". */
+function SingProgress({ elapsed }: { elapsed: number }) {
+  const t = useTranslations('voice');
+  const done = Math.min(SING_S, elapsed);
+  return (
+    <View className="gap-1">
+      <View
+        testID="voice-sing-progress"
+        accessible
+        accessibilityRole="progressbar"
+        accessibilityLabel={t('singProgressLabel')}
+        accessibilityValue={{ min: 0, max: SING_S, now: done }}
+        className="h-2 overflow-hidden rounded-full bg-card"
+      >
+        <View className="h-2 rounded-full bg-primary" style={{ width: `${(done / SING_S) * 100}%` }} />
+      </View>
+      <Text variant="muted">{t('singLeft', { seconds: Math.max(1, SING_S - done) })}</Text>
+    </View>
+  );
+}
+
 function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onSkip: () => void }) {
   const t = useTranslations('voice');
   const { step } = test;
+  const singElapsed = useElapsedSeconds(step === 'sing');
 
   if (step === 'intro') {
     return (
@@ -213,12 +259,18 @@ function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onS
         {t('stepOf', { step: index, total: CAPTURE_STEPS })}
       </Text>
       <Text className="text-2xl font-bold">{prompt}</Text>
-      {step === 'sing' ? <Text variant="muted">{t('singHint')}</Text> : null}
+      {step === 'sing' ? (
+        <>
+          <Text variant="muted">{t('singHint')}</Text>
+          <SingProgress elapsed={singElapsed} />
+        </>
+      ) : null}
       <View className="items-center py-4">
         <StartText testID="voice-live-note" className="h-14 text-5xl font-bold text-primary">
           {listening && test.livePitch !== null ? isolate(midiToName(test.livePitch)) : ''}
         </StartText>
       </View>
+      {step === 'sing' && test.held.length > 0 ? <Text variant="muted">{t('heldCaption')}</Text> : null}
       <PianoStrip
         testID="voice-keys"
         lowMidi={STRIP_LOW}

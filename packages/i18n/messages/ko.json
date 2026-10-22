@@ -1477,6 +1477,9 @@
     "save": "저장",
     "singFinish": "완료",
     "start": "시작하기",
-    "stepOf": "{total}단계 중 {step}단계"
+    "stepOf": "{total}단계 중 {step}단계",
+    "heldCaption": "지금까지 기록한 최저음과 최고음",
+    "singLeft": "{seconds, plural, other {#초 남음}}",
+    "singProgressLabel": "노래 부를 수 있는 남은 시간"
   }
 }

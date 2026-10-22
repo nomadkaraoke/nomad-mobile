@@ -1477,6 +1477,9 @@
     "save": "Spara",
     "singFinish": "Slutför",
     "start": "Starta",
-    "stepOf": "Steg {step} av {total}"
+    "stepOf": "Steg {step} av {total}",
+    "heldCaption": "Dina lägsta och högsta toner hittills",
+    "singLeft": "{seconds, plural, one {# sekund kvar} other {# sekunder kvar}}",
+    "singProgressLabel": "Tid kvar att sjunga"
   }
 }

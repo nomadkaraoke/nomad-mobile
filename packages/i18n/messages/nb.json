@@ -1477,6 +1477,9 @@
     "save": "Lagre",
     "singFinish": "Fullfør",
     "start": "Start",
-    "stepOf": "Trinn {step} av {total}"
+    "stepOf": "Trinn {step} av {total}",
+    "heldCaption": "Din laveste og høyeste tone så langt",
+    "singLeft": "{seconds, plural, one {# sekund igjen} other {# sekunder igjen}}",
+    "singProgressLabel": "Tid igjen å synge"
   }
 }
