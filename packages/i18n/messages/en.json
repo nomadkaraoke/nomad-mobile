@@ -105,6 +105,99 @@
       "make_itReason": "No karaoke version yet: tap one to make your own",
       "all": "Your picks",
       "allReason": "All your picks, sorted your way"
+    },
+    "filter": {
+      "chipCount": "{label} ({count})",
+      "chipSort": "Sort",
+      "chipGenre": "Genre",
+      "chipDecade": "Decade",
+      "chipMood": "Mood",
+      "chipEnergy": "Energy",
+      "chipMore": "More…",
+      "apply": "Apply",
+      "clear": "Clear",
+      "sort": {
+        "best": "Best for you",
+        "popular": "Most popular",
+        "newest": "Newest first",
+        "oldest": "Oldest first",
+        "shortest": "Shortest first",
+        "az": "A to Z"
+      },
+      "genre": {
+        "pop": "Pop",
+        "rock": "Rock",
+        "hiphop": "Hip hop",
+        "rnb": "R&B",
+        "country": "Country",
+        "electronic": "Electronic",
+        "metal": "Metal",
+        "punk": "Punk",
+        "emo": "Emo",
+        "grunge": "Grunge",
+        "jazz": "Jazz",
+        "latin": "Latin",
+        "indie": "Indie",
+        "kpop": "K-pop",
+        "disco": "Disco",
+        "classicRock": "Classic rock",
+        "folk": "Folk",
+        "blues": "Blues",
+        "ska": "Ska",
+        "musical": "Musicals",
+        "reggae": "Reggae",
+        "other": "Something else"
+      },
+      "decade": {
+        "d1950s": "1950s",
+        "d1960s": "1960s",
+        "d1970s": "1970s",
+        "d1980s": "1980s",
+        "d1990s": "1990s",
+        "d2000s": "2000s",
+        "d2010s": "2010s",
+        "d2020s": "2020s"
+      },
+      "mood": {
+        "happy": "Happy",
+        "chill": "Chill",
+        "sad": "Sad",
+        "intense": "Intense"
+      },
+      "energy": {
+        "any": "Any",
+        "low": "Chill",
+        "mid": "Mixed",
+        "high": "Big energy"
+      },
+      "popularity": {
+        "heading": "Popularity",
+        "any": "Any",
+        "popular": "Popular 50+",
+        "chart": "Chart toppers 70+"
+      },
+      "leadGender": {
+        "heading": "Lead singer",
+        "any": "Any",
+        "male": "Male",
+        "female": "Female",
+        "mixed": "Mixed"
+      },
+      "duration": {
+        "heading": "Length",
+        "any": "Any",
+        "short": "Short (under 3 min)",
+        "medium": "Medium (3 to 5 min)",
+        "long": "Long (over 5 min)"
+      },
+      "classic": "Classics only",
+      "explicit": "Hide explicit",
+      "karaoke": {
+        "heading": "Karaoke version",
+        "any": "Any",
+        "yes": "Has karaoke",
+        "make": "Make it"
+      }
     }
   },
   "song": {

@@ -5,7 +5,7 @@ import {
   type ResolveResponse,
   type SongGroup,
 } from "@nomad/api-decide";
-import { activeFilterCount, DEFAULT_REC_FILTERS } from "@nomad/core";
+import { activeFilterCount } from "@nomad/core";
 import { useTranslations } from "@nomad/i18n";
 import { Button, List, Screen, Text, TextField } from "@nomad/ui";
 import { router, useIsFocused, type Href } from "expo-router";
@@ -27,10 +27,12 @@ import { useAuth } from "../../auth/store";
 import { ImproveCard } from "../../discover/components/ImproveCard";
 import { PicksState } from "../../discover/components/PicksState";
 import { QuizCard } from "../../discover/components/QuizCard";
+import { FilterBar } from "../../discover/components/FilterBar";
 import { RecSection, sectionTestId } from "../../discover/components/RecSection";
 import { RecSongRow } from "../../discover/components/RecSongRow";
 import { SignInCard } from "../../discover/components/SignInCard";
 import { SongMenuSheet } from "../../discover/components/SongMenuSheet";
+import { useRecFilters } from "../../discover/filtersStore";
 import { useRecommendations } from "../../discover/useRecommendations";
 import { useSongFeedback } from "../../discover/useSongFeedback";
 import { MakeBar } from "../../find/components/MakeBar";
@@ -162,8 +164,8 @@ export default function DiscoverScreen() {
   const insets = useSafeAreaInsets();
   const popular = search.query.length < MIN_QUERY_CHARS;
 
-  // Picks (spec §8.1). Task E7 swaps the defaults for the persisted filter store and its FilterBar.
-  const filters = DEFAULT_REC_FILTERS;
+  // Picks (spec §8.1): the persisted filters, edited from the FilterBar.
+  const filters = useRecFilters((s) => s.filters);
   const library = useLibraryFilter((s) => s.filter);
   const recs = useRecommendations(filters);
   const feedback = useSongFeedback();
@@ -181,6 +183,9 @@ export default function DiscoverScreen() {
         : recs.status === "error"
           ? "error"
           : "loading";
+  // The bar stays up while a filtered load is pending or failed, so a filter that returns nothing can be undone.
+  const showFilterBar =
+    signedIn && (picks === "picks" || (activeFilterCount(filters) > 0 && picks !== "quiz" && picks !== "signin"));
   const picksItems = useMemo<PicksItem[]>(
     () =>
       recs.data?.sections.flatMap((section) => [
@@ -313,7 +318,10 @@ export default function DiscoverScreen() {
     }
   };
 
-  const clearFilters = () => useLibraryFilter.getState().set("any");
+  const clearFilters = () => {
+    useRecFilters.getState().clear();
+    useLibraryFilter.getState().set("any");
+  };
 
   const refreshPicks = async () => {
     setPulling(true);
@@ -582,6 +590,9 @@ export default function DiscoverScreen() {
         behavior="padding"
         keyboardVerticalOffset={insets.top}
       >
+        {popular && !describing && showFilterBar ? (
+          <FilterBar filters={filters} onChange={(patch) => useRecFilters.getState().set(patch)} />
+        ) : null}
         {popular && !describing && picks === "picks" ? (
           <View className="flex-1">
             <List

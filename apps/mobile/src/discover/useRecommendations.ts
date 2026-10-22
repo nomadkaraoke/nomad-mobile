@@ -6,7 +6,7 @@ import {
   type RecSection,
 } from '@nomad/api-decide';
 import { filtersKey, toRecQuery, type RecFilters } from '@nomad/core';
-import { useInfiniteQuery, useQueryClient, type InfiniteData } from '@tanstack/react-query';
+import { keepPreviousData, useInfiniteQuery, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { useAuth } from '../auth/store';
@@ -61,6 +61,8 @@ export function useRecommendations(filters: RecFilters) {
     queryFn: ({ pageParam }) => getRecommendationsV2(toRecQuery(filters, library), pageParam),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (last) => last.next_cursor ?? undefined,
+    // Changing a filter keeps the old picks on screen until the new ones land (no flash to the loader).
+    placeholderData: keepPreviousData,
     retry: shouldRetry,
     refetchInterval: (q) => (isWarmingUp(q.state.error) ? WARMING_POLL_MS : false),
   });
