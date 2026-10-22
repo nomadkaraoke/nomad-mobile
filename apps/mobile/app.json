@@ -63,7 +63,9 @@
         "expo-audio",
         {
           "microphonePermission": "Allow $(PRODUCT_NAME) to hear you sing so it can measure your vocal range. Audio stays on your phone.",
-          "recordAudioAndroid": true
+          "recordAudioAndroid": true,
+          "enableBackgroundPlayback": false,
+          "enableBackgroundRecording": false
         }
       ],
       [

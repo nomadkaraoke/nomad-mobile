@@ -48,7 +48,7 @@ describe('microphone (vocal range test)', () => {
   it('configures expo-audio with the iOS permission string and Android RECORD_AUDIO', () => {
     const app = require('../../app.json').expo;
     const entry = (app.plugins as unknown[]).find((p) => Array.isArray(p) && p[0] === 'expo-audio') as [string, Record<string, unknown>];
-    expect(entry[1]).toMatchObject({ recordAudioAndroid: true });
+    expect(entry[1]).toMatchObject({ recordAudioAndroid: true, enableBackgroundPlayback: false, enableBackgroundRecording: false });
     expect(entry[1].microphonePermission).toMatch(/vocal range/);
     expect(app.ios.infoPlist.CFBundleAllowMixedLocalizations).toBe(true);
   });

@@ -1420,6 +1420,6 @@
     "alreadyImported": "Već si uvezao ovu datoteku, pa nije bilo ničeg novog za dodavanje."
   },
   "permissions": {
-    "microphone": "Dopusti platformi Nomad Karaoke pristup mikrofonu dok pjevaš kako bi mogla izmjeriti tvoj vokalni raspon. Zvuk ostaje na tvom telefonu."
+    "microphone": "Dopusti aplikaciji Nomad Karaoke da te čuje dok pjevaš kako bi mogla izmjeriti tvoj vokalni raspon. Zvuk ostaje na tvom telefonu."
   }
 }
