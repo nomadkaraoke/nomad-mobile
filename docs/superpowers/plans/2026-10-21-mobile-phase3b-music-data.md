@@ -838,6 +838,8 @@ export function importErrorKey(e: unknown, route: 'screenshot' | 'playlist' | 'e
 
 ### Task 22: Apple Music export screen
 
+> **Update 2026-10-22: Apple MusicKit connect has shipped** (decide v0.20.0, nomad-mobile Apple Music PR). The `apple` connect card should open the MusicKit flow first (`useAppleMusic().connect`, `src/discover/profile/useAppleMusic.ts`), and keep this privacy-export screen as the fallback for people without an Apple Music subscription (decide answers 422 → the web page says a subscription is needed).
+
 **Files:**
 - Create: `apps/mobile/src/app/discover/connect/apple.tsx`, `src/discover/connect/AppleExportGuide.tsx`
 - Test: `apps/mobile/src/__tests__/connect/appleExport.test.tsx`

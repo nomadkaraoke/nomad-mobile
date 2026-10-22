@@ -40,7 +40,17 @@
     "musicProfileDecades": "Desetljeća",
     "musicProfileGenres": "Žanrovi",
     "musicProfileNone": "Nije postavljeno",
-    "musicProfileRemove": "Ukloni"
+    "musicProfileRemove": "Ukloni",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Poveži Apple Music",
+    "appleMusicConnected": "Povezano · pročitano: {count, plural, one {# pjesma} few {# pjesme} other {# pjesama}}",
+    "appleMusicDisconnect": "Prekini vezu s Apple Musicom",
+    "appleMusicExpired": "Tvoja prijava na Apple Music je istekla. Ponovno se poveži kako bi tvoji prijedlozi bili ažurirani.",
+    "appleMusicFailed": "Povezivanje s Apple Musicom nije uspjelo. Provjeri internetsku vezu i pokušaj ponovno.",
+    "appleMusicPitch": "Poveži ga i iskoristit ćemo tvoju zbirku i nedavno slušane pjesme kako bismo predložili pjesme koje ćeš voljeti pjevati.",
+    "appleMusicReading": "Učitavanje tvoje Apple Music zbirke. Tvoji će se prijedlozi ažurirati kad završi.",
+    "appleMusicReconnect": "Ponovno poveži Apple Music",
+    "musicServices": "Tvoji glazbeni servisi"
   },
   "common": {
     "error": "Nešto je pošlo po zlu.",

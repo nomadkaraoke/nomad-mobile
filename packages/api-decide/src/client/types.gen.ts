@@ -221,6 +221,67 @@ export type AllArtistsResponse = {
 };
 
 /**
+ * AppleMusicConnectRequest
+ *
+ * Music User Token from MusicKit JS; `state` comes from /apple-music/link when not signed in.
+ */
+export type AppleMusicConnectRequest = {
+    /**
+     * Music User Token
+     */
+    music_user_token: string;
+    /**
+     * State
+     */
+    state?: string | null;
+};
+
+/**
+ * AppleMusicConnectResponse
+ *
+ * The connected service, plus the sync job that started reading the library.
+ */
+export type AppleMusicConnectResponse = {
+    service: ConnectedServiceResponse;
+    /**
+     * Sync Job Id
+     */
+    sync_job_id: string | null;
+};
+
+/**
+ * AppleMusicDeveloperTokenResponse
+ *
+ * Developer token for MusicKit JS on decide's web origin.
+ */
+export type AppleMusicDeveloperTokenResponse = {
+    /**
+     * Developer Token
+     */
+    developer_token: string;
+    /**
+     * Expires At
+     */
+    expires_at: number;
+};
+
+/**
+ * AppleMusicLinkResponse
+ *
+ * A one-time link that connects Apple Music from a browser the user isn't signed in to (the app).
+ */
+export type AppleMusicLinkResponse = {
+    /**
+     * Connect Url
+     */
+    connect_url: string;
+    /**
+     * Expires In
+     */
+    expires_in: number;
+};
+
+/**
  * ArtistAffinityEntry
  *
  * Artist with user's affinity level.
@@ -674,7 +735,7 @@ export type DataSummaryResponse = {
      * Services
      */
     services: {
-        [key: string]: ServiceSummary;
+        [key: string]: BackendApiRoutesMyDataServiceSummary;
     };
     artists: ArtistsSummary;
     songs: SongsSummary;
@@ -1993,29 +2054,29 @@ export type ServiceStats = {
  */
 export type ServiceSummary = {
     /**
-     * Connected
+     * Service Type
      */
-    connected: boolean;
+    service_type: string;
     /**
-     * Username
+     * Service Username
      */
-    username?: string | null;
+    service_username: string;
     /**
-     * Tracks Synced
+     * Sync Status
      */
-    tracks_synced?: number | null;
-    /**
-     * Songs Synced
-     */
-    songs_synced?: number | null;
-    /**
-     * Artists Synced
-     */
-    artists_synced?: number | null;
+    sync_status: string;
     /**
      * Last Sync At
      */
-    last_sync_at?: string | null;
+    last_sync_at: string | null;
+    /**
+     * Tracks Synced
+     */
+    tracks_synced: number;
+    /**
+     * Sync Error
+     */
+    sync_error: string | null;
 };
 
 /**
@@ -2943,7 +3004,7 @@ export type UserDetail = {
     /**
      * Services
      */
-    services: Array<BackendModelsAdminServiceSummary>;
+    services: Array<ServiceSummary>;
     /**
      * Sync Jobs
      */
@@ -3216,6 +3277,38 @@ export type YouTubeMusicImportResponse = {
 };
 
 /**
+ * ServiceSummary
+ *
+ * Summary of a connected music service.
+ */
+export type BackendApiRoutesMyDataServiceSummary = {
+    /**
+     * Connected
+     */
+    connected: boolean;
+    /**
+     * Username
+     */
+    username?: string | null;
+    /**
+     * Tracks Synced
+     */
+    tracks_synced?: number | null;
+    /**
+     * Songs Synced
+     */
+    songs_synced?: number | null;
+    /**
+     * Artists Synced
+     */
+    artists_synced?: number | null;
+    /**
+     * Last Sync At
+     */
+    last_sync_at?: string | null;
+};
+
+/**
  * UserArtistResponse
  *
  * Artist from user's listening history.
@@ -3249,38 +3342,6 @@ export type BackendApiRoutesRecommendationsUserArtistResponse = {
      * Genres
      */
     genres?: Array<string>;
-};
-
-/**
- * ServiceSummary
- *
- * Summary of a connected music service.
- */
-export type BackendModelsAdminServiceSummary = {
-    /**
-     * Service Type
-     */
-    service_type: string;
-    /**
-     * Service Username
-     */
-    service_username: string;
-    /**
-     * Sync Status
-     */
-    sync_status: string;
-    /**
-     * Last Sync At
-     */
-    last_sync_at: string | null;
-    /**
-     * Tracks Synced
-     */
-    tracks_synced: number;
-    /**
-     * Sync Error
-     */
-    sync_error: string | null;
 };
 
 /**
@@ -4022,6 +4083,63 @@ export type ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponses
 };
 
 export type ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponse = ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponses[keyof ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponses];
+
+export type AppleMusicDeveloperTokenApiServicesAppleMusicDeveloperTokenGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/services/apple-music/developer-token';
+};
+
+export type AppleMusicDeveloperTokenApiServicesAppleMusicDeveloperTokenGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: AppleMusicDeveloperTokenResponse;
+};
+
+export type AppleMusicDeveloperTokenApiServicesAppleMusicDeveloperTokenGetResponse = AppleMusicDeveloperTokenApiServicesAppleMusicDeveloperTokenGetResponses[keyof AppleMusicDeveloperTokenApiServicesAppleMusicDeveloperTokenGetResponses];
+
+export type AppleMusicLinkApiServicesAppleMusicLinkPostData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/services/apple-music/link';
+};
+
+export type AppleMusicLinkApiServicesAppleMusicLinkPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: AppleMusicLinkResponse;
+};
+
+export type AppleMusicLinkApiServicesAppleMusicLinkPostResponse = AppleMusicLinkApiServicesAppleMusicLinkPostResponses[keyof AppleMusicLinkApiServicesAppleMusicLinkPostResponses];
+
+export type ConnectAppleMusicApiServicesAppleMusicConnectPostData = {
+    body: AppleMusicConnectRequest;
+    path?: never;
+    query?: never;
+    url: '/api/services/apple-music/connect';
+};
+
+export type ConnectAppleMusicApiServicesAppleMusicConnectPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ConnectAppleMusicApiServicesAppleMusicConnectPostError = ConnectAppleMusicApiServicesAppleMusicConnectPostErrors[keyof ConnectAppleMusicApiServicesAppleMusicConnectPostErrors];
+
+export type ConnectAppleMusicApiServicesAppleMusicConnectPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: AppleMusicConnectResponse;
+};
+
+export type ConnectAppleMusicApiServicesAppleMusicConnectPostResponse = ConnectAppleMusicApiServicesAppleMusicConnectPostResponses[keyof ConnectAppleMusicApiServicesAppleMusicConnectPostResponses];
 
 export type DisconnectServiceApiServicesServiceTypeDeleteData = {
     body?: never;

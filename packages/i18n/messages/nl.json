@@ -40,7 +40,17 @@
     "musicProfileDecades": "Decennia",
     "musicProfileGenres": "Genres",
     "musicProfileNone": "Niet ingesteld",
-    "musicProfileRemove": "Verwijderen"
+    "musicProfileRemove": "Verwijderen",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Koppel Apple Music",
+    "appleMusicConnected": "Gekoppeld · {count, plural, one {# nummer} other {# nummers}} gelezen",
+    "appleMusicDisconnect": "Ontkoppel Apple Music",
+    "appleMusicExpired": "Je Apple Music-sessie is verlopen. Koppel opnieuw om je aanbevelingen up-to-date te houden.",
+    "appleMusicFailed": "Kon geen verbinding maken met Apple Music. Controleer je internetverbinding en probeer het opnieuw.",
+    "appleMusicPitch": "Koppel je account, dan gebruiken we je bibliotheek en recent afgespeelde nummers om nummers te vinden die je met plezier zult zingen.",
+    "appleMusicReading": "Je Apple Music-bibliotheek wordt ingelezen. Je aanbevelingen worden bijgewerkt zodra dit klaar is.",
+    "appleMusicReconnect": "Koppel Apple Music opnieuw",
+    "musicServices": "Je muziekdiensten"
   },
   "common": {
     "error": "Er is iets misgegaan.",

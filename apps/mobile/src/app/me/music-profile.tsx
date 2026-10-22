@@ -6,6 +6,7 @@ import { ActivityIndicator, View } from 'react-native';
 
 import { useAuth } from '../../auth/store';
 import { ProfileSection } from '../../discover/profile/ProfileSection';
+import { useAppleMusic } from '../../discover/profile/useAppleMusic';
 import { useMusicProfile } from '../../discover/profile/useMusicProfile';
 
 /** decide's genre ids to their message keys (`classic-rock` is `classicRock`). */
@@ -29,6 +30,7 @@ export default function MusicProfileScreen() {
   const tq = useTranslations('quiz.energy');
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
   const p = useMusicProfile();
+  const apple = useAppleMusic();
 
   if (!signedIn) {
     return (
@@ -142,7 +144,63 @@ export default function MusicProfileScreen() {
         ))}
       </ProfileSection>
 
-      {/* Phase 3b adds "Your music services" (connect Spotify/Last.fm) here; Phase 3c adds vocal range. */}
+      <ProfileSection testID="profile-services" title={t('musicServices')} isEmpty={false} empty="">
+        <View className="gap-2">
+          <Text className="font-semibold">{t('appleMusic')}</Text>
+          {apple.loading ? <ActivityIndicator testID="profile-apple-loading" /> : null}
+          {!apple.loading && apple.status === 'notConnected' ? (
+            <>
+              <Text variant="muted">{t('appleMusicPitch')}</Text>
+              <Button
+                testID="profile-apple-connect"
+                label={t('appleMusicConnect')}
+                onPress={() => void apple.connect()}
+                loading={apple.busy}
+              />
+            </>
+          ) : null}
+          {apple.status === 'reading' ? (
+            <View className="flex-row items-center gap-2">
+              <ActivityIndicator />
+              <Text testID="profile-apple-reading" className="flex-1">
+                {t('appleMusicReading')}
+              </Text>
+            </View>
+          ) : null}
+          {apple.status === 'connected' ? (
+            <Text testID="profile-apple-connected">{t('appleMusicConnected', { count: apple.songs })}</Text>
+          ) : null}
+          {apple.status === 'expired' ? (
+            <>
+              <Text testID="profile-apple-expired" variant="error">
+                {t('appleMusicExpired')}
+              </Text>
+              <Button
+                testID="profile-apple-reconnect"
+                label={t('appleMusicReconnect')}
+                onPress={() => void apple.connect()}
+                loading={apple.busy}
+              />
+            </>
+          ) : null}
+          {apple.status === 'connected' || apple.status === 'reading' ? (
+            <Button
+              testID="profile-apple-disconnect"
+              label={t('appleMusicDisconnect')}
+              variant="secondary"
+              onPress={() => void apple.disconnect()}
+              loading={apple.busy}
+            />
+          ) : null}
+          {apple.failed ? (
+            <Text testID="profile-apple-failed" variant="error">
+              {t('appleMusicFailed')}
+            </Text>
+          ) : null}
+        </View>
+      </ProfileSection>
+
+      {/* Phase 3b adds the other music services (Spotify export, ListenBrainz, Last.fm) here; Phase 3c adds vocal range. */}
     </Screen>
   );
 }

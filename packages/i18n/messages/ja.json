@@ -40,7 +40,17 @@
     "musicProfileDecades": "年代",
     "musicProfileGenres": "ジャンル",
     "musicProfileNone": "未設定",
-    "musicProfileRemove": "削除"
+    "musicProfileRemove": "削除",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Apple Musicを連携",
+    "appleMusicConnected": "連携済み · {count, plural, one {#曲} other {#曲}}を読み込みました",
+    "appleMusicDisconnect": "Apple Musicの連携を解除",
+    "appleMusicExpired": "Apple Musicのログイン有効期限が切れました。おすすめ曲を最新に保つには、再度連携してください。",
+    "appleMusicFailed": "Apple Musicに接続できませんでした。通信環境を確認して、もう一度お試しください。",
+    "appleMusicPitch": "連携すると、ライブラリや最近再生した曲をもとに、歌いたくなるおすすめの曲をご提案します。",
+    "appleMusicReading": "Apple Musicのライブラリを読み込んでいます。完了するとおすすめの曲が更新されます。",
+    "appleMusicReconnect": "Apple Musicを再連携",
+    "musicServices": "連携中の音楽サービス"
   },
   "common": {
     "error": "問題が発生しました。",

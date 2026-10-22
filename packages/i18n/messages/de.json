@@ -40,7 +40,17 @@
     "musicProfileDecades": "Jahrzehnte",
     "musicProfileGenres": "Genres",
     "musicProfileNone": "Nicht festgelegt",
-    "musicProfileRemove": "Entfernen"
+    "musicProfileRemove": "Entfernen",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Apple Music verbinden",
+    "appleMusicConnected": "Verbunden · {count, plural, one {# Song} other {# Songs}} gelesen",
+    "appleMusicDisconnect": "Apple Music trennen",
+    "appleMusicExpired": "Deine Apple Music-Anmeldung ist abgelaufen. Verbinde dich erneut, um deine Auswahl aktuell zu halten.",
+    "appleMusicFailed": "Apple Music konnte nicht erreicht werden. Überprüfe deine Verbindung und versuche es erneut.",
+    "appleMusicPitch": "Verbinde deinen Account und wir nutzen deine Mediathek sowie kürzlich gespielte Titel, um Songs auszuwählen, die du gerne mitsingst.",
+    "appleMusicReading": "Deine Apple Music-Mediathek wird gelesen. Deine Auswahl wird aktualisiert, sobald der Vorgang abgeschlossen ist.",
+    "appleMusicReconnect": "Apple Music erneut verbinden",
+    "musicServices": "Deine Musikdienste"
   },
   "common": {
     "error": "Etwas ist schiefgelaufen.",

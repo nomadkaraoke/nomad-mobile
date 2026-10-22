@@ -40,7 +40,17 @@
     "musicProfileDecades": "Dècades",
     "musicProfileGenres": "Gèneres",
     "musicProfileNone": "No establert",
-    "musicProfileRemove": "Elimina"
+    "musicProfileRemove": "Elimina",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Connecta Apple Music",
+    "appleMusicConnected": "Connectat · {count, plural, one {# cançó llegida} other {# cançons llegides}}",
+    "appleMusicDisconnect": "Desconnecta Apple Music",
+    "appleMusicExpired": "La teva sessió d'Apple Music ha caducat. Torna a connectar-te per mantenir la teva selecció al dia.",
+    "appleMusicFailed": "No s'ha pogut connectar amb Apple Music. Comprova la connexió i torna-ho a provar.",
+    "appleMusicPitch": "Connecta'l i farem servir la teva biblioteca i les reproduccions recents per triar cançons que t'encantarà cantar.",
+    "appleMusicReading": "Llegint la teva biblioteca d'Apple Music. La teva selecció s'actualitzarà quan s'acabi el procés.",
+    "appleMusicReconnect": "Torna a connectar Apple Music",
+    "musicServices": "Els teus serveis de música"
   },
   "common": {
     "error": "S'ha produït un error.",

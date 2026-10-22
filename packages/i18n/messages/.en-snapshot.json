@@ -287,7 +287,17 @@
     "musicProfileHiddenEmpty": "You haven't hidden any songs.",
     "musicProfileSong": "{artist} - {title}",
     "musicProfileRemove": "Remove",
-    "musicProfileUnhide": "Unhide"
+    "musicProfileUnhide": "Unhide",
+    "musicServices": "Your music services",
+    "appleMusic": "Apple Music",
+    "appleMusicPitch": "Connect it and we'll use your library and recent plays to pick songs you'll love singing.",
+    "appleMusicConnect": "Connect Apple Music",
+    "appleMusicReading": "Reading your Apple Music library. Your picks update when it's done.",
+    "appleMusicConnected": "Connected · {count, plural, one {# song} other {# songs}} read",
+    "appleMusicExpired": "Your Apple Music sign-in has expired. Reconnect to keep your picks up to date.",
+    "appleMusicReconnect": "Reconnect Apple Music",
+    "appleMusicDisconnect": "Disconnect Apple Music",
+    "appleMusicFailed": "Couldn't reach Apple Music. Check your connection and try again."
   },
   "tonight": {
     "title": "Tonight",

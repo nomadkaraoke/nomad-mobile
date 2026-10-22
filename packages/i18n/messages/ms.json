@@ -40,7 +40,17 @@
     "musicProfileDecades": "Dekad",
     "musicProfileGenres": "Genre",
     "musicProfileNone": "Tidak ditetapkan",
-    "musicProfileRemove": "Alih keluar"
+    "musicProfileRemove": "Alih keluar",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Sambungkan Apple Music",
+    "appleMusicConnected": "Disambungkan · {count, plural, other {# lagu}} dibaca",
+    "appleMusicDisconnect": "Putuskan sambungan Apple Music",
+    "appleMusicExpired": "Log masuk Apple Music anda telah tamat tempoh. Sambung semula untuk memastikan pilihan lagu anda sentiasa dikemas kini.",
+    "appleMusicFailed": "Tidak dapat menyambung ke Apple Music. Semak sambungan internet anda dan cuba lagi.",
+    "appleMusicPitch": "Sambungkan akaun anda dan kami akan menggunakan pustaka serta lagu yang baru dimainkan untuk memilih lagu yang pasti anda gemar nyanyikan.",
+    "appleMusicReading": "Sedang membaca pustaka Apple Music anda. Pilihan lagu anda akan dikemas kini setelah selesai.",
+    "appleMusicReconnect": "Sambung semula Apple Music",
+    "musicServices": "Perkhidmatan muzik anda"
   },
   "common": {
     "error": "Sesuatu telah berlaku masalah.",

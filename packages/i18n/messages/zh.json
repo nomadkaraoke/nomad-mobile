@@ -40,7 +40,17 @@
     "musicProfileDecades": "年代",
     "musicProfileGenres": "类型",
     "musicProfileNone": "未设置",
-    "musicProfileRemove": "移除"
+    "musicProfileRemove": "移除",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "关联 Apple Music",
+    "appleMusicConnected": "已关联 · 已读取 {count, plural, one {# 首歌曲} other {# 首歌曲}}",
+    "appleMusicDisconnect": "断开 Apple Music 关联",
+    "appleMusicExpired": "你的 Apple Music 登录已过期。请重新关联，以保持为你精选的歌单处于最新状态。",
+    "appleMusicFailed": "无法连接到 Apple Music。请检查网络连接后重试。",
+    "appleMusicPitch": "关联后，我们将根据你的音乐资料库和最近播放记录，为你推荐你可能爱唱的歌曲。",
+    "appleMusicReading": "正在读取你的 Apple Music 资料库。完成后将更新为你推荐的歌曲。",
+    "appleMusicReconnect": "重新关联 Apple Music",
+    "musicServices": "已绑定的音乐服务"
   },
   "common": {
     "error": "出错了。",

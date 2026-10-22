@@ -40,7 +40,17 @@
     "musicProfileDecades": "עשורים",
     "musicProfileGenres": "ז'אנרים",
     "musicProfileNone": "לא מוגדר",
-    "musicProfileRemove": "הסרה"
+    "musicProfileRemove": "הסרה",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "התחברות ל-Apple Music",
+    "appleMusicConnected": "מחובר · נקראו {count, plural, one {שיר אחד (#)} other {# שירים}}",
+    "appleMusicDisconnect": "התנתקות מ-Apple Music",
+    "appleMusicExpired": "תוקף ההתחברות ל-Apple Music פג. כדאי להתחבר מחדש כדי לשמור את ההמלצות מעודכנות.",
+    "appleMusicFailed": "לא הצלחנו להתחבר ל-Apple Music. כדאי לבדוק את החיבור לאינטרנט ולנסות שוב.",
+    "appleMusicPitch": "מחברים את החשבון, ואנחנו נעזר בספרייה ובשירים האחרונים שהאזנת להם כדי לבחור שירים שיהיה לך כיף לשיר.",
+    "appleMusicReading": "קורא את ספריית ה-Apple Music שלך. ההמלצות יתעדכנו ברגע שנסיים.",
+    "appleMusicReconnect": "התחברות מחדש ל-Apple Music",
+    "musicServices": "שירותי המוזיקה שלך"
   },
   "common": {
     "error": "משהו השתבש.",

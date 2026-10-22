@@ -3,6 +3,8 @@ import { isFreshIntent, useMakeIntent } from '../make/intentStore';
 
 /** nomadkaraoke://checkout (any query): gen's checkout bounce back to the app (see credits/useCheckout.ts). */
 const CHECKOUT_RETURN = /^nomadkaraoke:\/\/\/?checkout(?:[?#/]|$)/i;
+/** nomadkaraoke://music-connected: decide web's Apple Music connect page handing back (see useAppleMusic). */
+const MUSIC_CONNECTED = /^nomadkaraoke:\/\/\/?music-connected(?:[?#/]|$)/i;
 
 /**
  * Android delivers the checkout return to the app as an intent as well as to the in-app browser session that
@@ -16,5 +18,7 @@ export function redirectSystemPath({ path, initial }: { path: string; initial: b
     if (!initial) return null;
     return isFreshIntent(useMakeIntent.getState().intent) ? '/make/new' : '/me';
   }
+  // Same double delivery as checkout; on a cold start the music profile shows the new connection.
+  if (MUSIC_CONNECTED.test(path)) return initial ? '/me/music-profile' : null;
   return path;
 }
