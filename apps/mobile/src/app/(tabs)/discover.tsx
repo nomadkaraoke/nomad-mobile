@@ -606,15 +606,28 @@ export default function DiscoverScreen() {
                 )
               }
               ListEmptyComponent={
-                filtersActive ? <PicksState kind="empty" onClear={clearFilters} /> : undefined
+                filtersActive ? (
+                  <PicksState kind="empty" onClear={clearFilters} />
+                ) : (
+                  <PicksState kind="none" />
+                )
               }
               ListFooterComponent={
-                <ImproveCard onAddArtists={() => router.push("/discover/quiz?step=3" as Href)} />
+                <View className="pb-4">
+                  <ImproveCard onAddArtists={() => router.push("/discover/quiz?step=3" as Href)} />
+                  <Button
+                    testID="discover-make-any"
+                    label={t("find.makeAnySong")}
+                    variant="secondary"
+                    onPress={openMakeAny}
+                  />
+                </View>
               }
               refreshing={pulling}
               onRefresh={() => void refreshPicks()}
               onEndReached={() => {
-                if (recs.hasNextPage) void recs.fetchNextPage();
+                // One page at a time: a second call would cancel the one in flight.
+                if (recs.hasNextPage && !recs.isFetchingNextPage) void recs.fetchNextPage();
               }}
             />
           </View>

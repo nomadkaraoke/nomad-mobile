@@ -1,5 +1,5 @@
 import { hideSong, loveSong, unhideSong, type RecSong } from '@nomad/api-decide';
-import { useQueryClient, type QueryClient, type QueryKey } from '@tanstack/react-query';
+import { useQueryClient, type Query, type QueryClient, type QueryKey } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { RECS_KEY, type RecsPages } from './useRecommendations';
@@ -10,6 +10,18 @@ export const HIDDEN_TOAST_MS = 5_000;
 /** Where a removed song sat: put back at the same spot on undo or a failed hide. */
 type Spot = { page: number; section: string; index: number };
 type Removed = { queryKey: QueryKey; spots: Spot[] };
+
+/** Numbers a new action on `key` (a hide or an undo) as the latest one. */
+function nextAction(actions: Map<string, number>, key: string): number {
+  const n = (actions.get(key) ?? 0) + 1;
+  actions.set(key, n);
+  return n;
+}
+
+/** True while this query is loading another page (an optimistic hide must not cancel that). */
+const pagingNow = (q: Query): boolean =>
+  q.state.fetchStatus === 'fetching' &&
+  Boolean((q.state.fetchMeta as { fetchMore?: unknown } | null | undefined)?.fetchMore);
 
 export function removeSong(data: RecsPages, songKey: string): { data: RecsPages; spots: Spot[] } {
   const spots: Spot[] = [];
@@ -67,8 +79,10 @@ export function useSongFeedback() {
   const queryClient = useQueryClient();
   const [hidden, setHidden] = useState<RecSong | null>(null);
   const [loved, setLoved] = useState<ReadonlySet<string>>(() => new Set());
-  // song_key -> what hiding it removed, and the hide request (an undo waits for it).
-  const pending = useRef(new Map<string, { removed: Removed[]; request: Promise<unknown> }>());
+  // song_key -> what hiding it removed, and the raw hide request (an undo waits for it to settle).
+  const pending = useRef(new Map<string, { removed: Removed[]; request: Promise<void> }>());
+  // song_key -> number of the latest hide/undo: a settled request only acts if its action is still the latest.
+  const actions = useRef(new Map<string, number>());
 
   useEffect(() => {
     if (!hidden) return;
@@ -79,17 +93,20 @@ export function useSongFeedback() {
   const hide = useCallback(
     (song: RecSong) => {
       const key = song.song_key;
-      void queryClient.cancelQueries({ queryKey: RECS_KEY });
+      const action = nextAction(actions.current, key);
+      // A refetch landing now would bring the song back; a page being loaded is left alone.
+      void queryClient.cancelQueries({ queryKey: RECS_KEY, predicate: (q) => !pagingNow(q) });
       const removed = removeEverywhere(queryClient, key);
       setHidden(song);
-      const request = hideSong(key, { artist: song.artist, title: song.title }).catch(() => {
-        // Only roll back if this hide is still the live one (no undo in between).
-        if (pending.current.get(key)?.request !== request) return;
+      const request = hideSong(key, { artist: song.artist, title: song.title });
+      pending.current.set(key, { removed, request });
+      request.catch(() => {
+        // Only roll back if this hide is still the latest action (no undo or re-hide in between).
+        if (actions.current.get(key) !== action) return;
         pending.current.delete(key);
         putBack(queryClient, song, removed);
         setHidden((h) => (h?.song_key === key ? null : h));
       });
-      pending.current.set(key, { removed, request });
     },
     [queryClient],
   );
@@ -101,11 +118,15 @@ export function useSongFeedback() {
       pending.current.delete(key);
       setHidden((h) => (h?.song_key === key ? null : h));
       if (!entry) return;
+      const action = nextAction(actions.current, key);
       putBack(queryClient, song, entry.removed);
-      // After the hide has landed, so decide never sees the unhide first.
-      void entry.request.then(() => unhideSong(key)).catch(() => {
-        removeEverywhere(queryClient, key); // decide still has it hidden
-      });
+      // After the hide has settled, so decide never sees the unhide first; skipped if the song was hidden again.
+      void entry.request
+        .catch(() => {})
+        .then(() => (actions.current.get(key) === action ? unhideSong(key) : undefined))
+        .catch(() => {
+          if (actions.current.get(key) === action) removeEverywhere(queryClient, key); // decide still has it hidden
+        });
     },
     [queryClient],
   );
@@ -122,5 +143,5 @@ export function useSongFeedback() {
     });
   }, []);
 
-  return { hide, love, undoHide, hidden, loved, dismissHidden: () => setHidden(null) };
+  return { hide, love, undoHide, hidden, loved };
 }

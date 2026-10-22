@@ -11,7 +11,7 @@ import { logEvent } from '../searchSession';
 import type { SearchState } from '../useSearch';
 
 jest.mock('@nomad/api-decide', () => ({
-  ...require('../../test-utils/decideDiscoverMock').discoverMocks(),
+  ...jest.requireActual<typeof import('../../test-utils/decideDiscoverMock')>('../../test-utils/decideDiscoverMock').discoverMocks(),
   resolveQuery: jest.fn(),
   pingSearch: jest.fn(async () => true),
   logSearchEvent: jest.fn(async () => {}),

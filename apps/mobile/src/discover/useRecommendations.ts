@@ -19,7 +19,7 @@ export const WARMING_POLL_MS = 15_000;
 /** Every recommendations query (all filter keys) lives under this prefix. */
 export const RECS_KEY = ['recs'] as const;
 
-export type RecsPages = InfiniteData<RecommendationsV2Response, string | null>;
+export type RecsPages = InfiniteData<RecommendationsV2Response, string | undefined>;
 
 /** The merged pages: a later page's section with the same id continues it (a non-`best` sort pages `all`). */
 export type Recs = { sections: RecSection[]; hasProfile: boolean };
@@ -58,8 +58,8 @@ export function useRecommendations(filters: RecFilters) {
   const query = useInfiniteQuery({
     queryKey: [...RECS_KEY, filtersKey(filters, library)],
     enabled: signedIn,
-    queryFn: ({ pageParam }) => getRecommendationsV2(toRecQuery(filters, library), pageParam ?? undefined),
-    initialPageParam: null as string | null,
+    queryFn: ({ pageParam }) => getRecommendationsV2(toRecQuery(filters, library), pageParam),
+    initialPageParam: undefined as string | undefined,
     getNextPageParam: (last) => last.next_cursor ?? undefined,
     retry: shouldRetry,
     refetchInterval: (q) => (isWarmingUp(q.state.error) ? WARMING_POLL_MS : false),
@@ -94,5 +94,6 @@ export function useRecommendations(filters: RecFilters) {
     refetch: query.refetch,
     fetchNextPage: query.fetchNextPage,
     hasNextPage: query.hasNextPage,
+    isFetchingNextPage: query.isFetchingNextPage,
   };
 }

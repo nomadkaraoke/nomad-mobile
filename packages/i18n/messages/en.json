@@ -74,6 +74,7 @@
     "picksRetry": "Try again",
     "picksEmpty": "No picks match these filters",
     "picksClear": "Clear filters",
+    "picksNone": "No picks yet. Add artists and songs you love to get some.",
     "improveTitle": "Improve your picks",
     "improveArtists": "Add artists and songs you love",
     "menuTitle": "{title} · {artist}",

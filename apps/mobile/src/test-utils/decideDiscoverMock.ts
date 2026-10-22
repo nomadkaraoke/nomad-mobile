@@ -1,5 +1,5 @@
 // Discover's recommendations/feedback facades for tests that mock @nomad/api-decide for search only. Use inside
-// a jest.mock factory: `jest.mock('@nomad/api-decide', () => ({ ...require('../test-utils/decideDiscoverMock').discoverMocks(), … }))`.
+// a jest.mock factory: `...jest.requireActual<typeof import('…/decideDiscoverMock')>('…/decideDiscoverMock').discoverMocks()`.
 // Picks never load (the Discover tab shows its loading state above the popular list), so screens keep
 // their Phase 1b layout.
 export function discoverMocks() {

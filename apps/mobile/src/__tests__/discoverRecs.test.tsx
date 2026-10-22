@@ -266,6 +266,65 @@ describe('discoverRecs', () => {
     expect(api.loveSong).toHaveBeenCalledWith('band b|song b', { artist: 'Band B', title: 'Song B' });
   });
 
+  it('pages one at a time and merges the same section across pages', async () => {
+    await signIn();
+    let landPage2: () => void = () => {};
+    getRecs.mockImplementation((_q: unknown, cursor?: string) =>
+      cursor === 'c2'
+        ? new Promise((r) => (landPage2 = () => r(recs([section('all', 'all', [song('Band C', 'Song C')])]))))
+        : Promise.resolve(
+            recs([section('all', 'all', [song('Band A', 'Song A'), song('Band B', 'Song B')])], { next_cursor: 'c2' }),
+          ),
+    );
+    open();
+    expect(await screen.findByTestId('discover-picks')).toBeTruthy();
+    expect(await screen.findByTestId('rec-section-all')).toBeTruthy();
+    // The list reports its end again while page 2 is still loading: that must not start (and cancel) another request.
+    // (TanStack notifies on a timer: let it re-render between the events, as frames would on device.)
+    const endReached = async () => {
+      await act(async () => fireEvent(screen.getByTestId('discover-picks'), 'endReached'));
+      await act(() => jest.advanceTimersByTimeAsync(0));
+    };
+    // FlashList itself reports the end once the short first page commits; then the user scrolls to the end twice.
+    await act(() => jest.advanceTimersByTimeAsync(0));
+    await endReached();
+    await endReached();
+    await act(async () => landPage2());
+    expect(await screen.findByText('Song C')).toBeTruthy();
+    expect(getRecs.mock.calls.filter(([, c]) => c === 'c2')).toHaveLength(1);
+    expect(screen.getAllByTestId(/^rec-section-/)).toHaveLength(1);
+    expect(within(screen.getByTestId('rec-row-all-2')).getByText('Song C')).toBeTruthy();
+    // The last page has no cursor: no more requests.
+    await endReached();
+    expect(getRecs).toHaveBeenCalledTimes(2);
+  });
+
+  it('no picks and no filters shows a one-line state; Make any song is still there', async () => {
+    await signIn();
+    getRecs.mockResolvedValue(recs([]));
+    open();
+    expect(await screen.findByTestId('discover-picks-none')).toBeTruthy();
+    expect(screen.queryByTestId('discover-picks-empty')).toBeNull();
+    expect(screen.getByTestId('discover-improve-card')).toBeTruthy();
+    expect(screen.getByTestId('discover-make-any')).toBeTruthy();
+  });
+
+  it('undo then hide again before the first hide lands never unhides', async () => {
+    await signIn();
+    let land: () => void = () => {};
+    api.hideSong.mockImplementationOnce(() => new Promise<void>((r) => (land = r)));
+    open();
+    fireEvent.press(await screen.findByTestId('rec-menu-crowd_pleasers-0'));
+    fireEvent.press(await screen.findByTestId('song-menu-hide'));
+    fireEvent.press(await screen.findByTestId('discover-hidden-undo'));
+    fireEvent.press(await screen.findByTestId('rec-menu-crowd_pleasers-0'));
+    fireEvent.press(await screen.findByTestId('song-menu-hide'));
+    await act(async () => land());
+    await waitFor(() => expect(api.hideSong).toHaveBeenCalledTimes(2));
+    expect(api.unhideSong).not.toHaveBeenCalled();
+    expect(screen.queryByText('Song A')).toBeNull();
+  });
+
   it('make_it row opens the make flow', async () => {
     await signIn();
     const app = open();
