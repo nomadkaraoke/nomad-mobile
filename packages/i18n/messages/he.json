@@ -50,7 +50,9 @@
     "appleMusicPitch": "מחברים את החשבון, ואנחנו נעזר בספרייה ובשירים האחרונים שהאזנת להם כדי לבחור שירים שיהיה לך כיף לשיר.",
     "appleMusicReading": "קורא את ספריית ה-Apple Music שלך. ההמלצות יתעדכנו ברגע שנסיים.",
     "appleMusicReconnect": "התחברות מחדש ל-Apple Music",
-    "musicServices": "שירותי המוזיקה שלך"
+    "musicServices": "שירותי המוזיקה שלך",
+    "appleMusicDenied": "ל-Nomad Karaoke אין גישה ל-Apple Music. יש להפעיל את הגישה ב'הגדרות' › Nomad Karaoke ‏› 'מדיה ו-Apple Music', ואז לנסות שוב.",
+    "appleMusicNoSubscription": "Apple Music לא שיתף את הספרייה שלך. כדי להתחבר דרוש מנוי ל-Apple Music."
   },
   "common": {
     "error": "משהו השתבש.",

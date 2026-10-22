@@ -50,7 +50,9 @@
     "appleMusicPitch": "Kapcsold össze, és a könyvtárad, valamint a nemrég játszott számaid alapján olyan dalokat válogatunk össze neked, amelyeket imádni fogsz énekelni.",
     "appleMusicReading": "Apple Music-könyvtárad beolvasása folyamatban. Amint kész, a válogatásaid azonnal frissülnek.",
     "appleMusicReconnect": "Apple Music újrakapcsolása",
-    "musicServices": "Zenei szolgáltatásaid"
+    "musicServices": "Zenei szolgáltatásaid",
+    "appleMusicDenied": "A Nomad Karaoke nem fér hozzá az Apple Music szolgáltatáshoz. Kapcsold be a Beállítások › Nomad Karaoke › Média és Apple Music menüpontban, majd próbáld újra.",
+    "appleMusicNoSubscription": "Az Apple Music nem osztotta meg a könyvtáradat. Az összekapcsoláshoz Apple Music-előfizetés szükséges."
   },
   "common": {
     "error": "Valami hiba történt.",

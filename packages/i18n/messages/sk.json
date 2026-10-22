@@ -50,7 +50,9 @@
     "appleMusicPitch": "Pripoj si Apple Music a my podľa tvojej knižnice a nedávno prehrávaných skladieb vyberieme piesne, ktoré budeš milovať spievať.",
     "appleMusicReading": "Načítava sa tvoja knižnica Apple Music. Tvoje výbery sa aktualizujú hneď po dokončení.",
     "appleMusicReconnect": "Znova pripojiť Apple Music",
-    "musicServices": "Tvoje hudobné služby"
+    "musicServices": "Tvoje hudobné služby",
+    "appleMusicDenied": "Nomad Karaoke nemá prístup k Apple Music. Zapni ho v Nastavenia › Nomad Karaoke › Médiá a Apple Music a skús to znova.",
+    "appleMusicNoSubscription": "Služba Apple Music nezdieľala tvoju knižnicu. Na pripojenie je potrebné predplatné Apple Music."
   },
   "common": {
     "error": "Niečo sa pokazilo.",

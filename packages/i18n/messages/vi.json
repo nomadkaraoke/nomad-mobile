@@ -50,7 +50,9 @@
     "appleMusicPitch": "Kết nối Apple Music để chúng tôi dựa vào thư viện và lịch sử nghe gần đây gợi ý những bài hát bạn sẽ thích hát.",
     "appleMusicReading": "Đang đọc thư viện Apple Music của bạn. Danh sách gợi ý sẽ được cập nhật khi hoàn tất.",
     "appleMusicReconnect": "Kết nối lại Apple Music",
-    "musicServices": "Dịch vụ âm nhạc của bạn"
+    "musicServices": "Dịch vụ âm nhạc của bạn",
+    "appleMusicDenied": "Nomad Karaoke không có quyền truy cập Apple Music. Hãy bật quyền này trong Cài đặt › Nomad Karaoke › Phương tiện & Apple Music, rồi thử lại.",
+    "appleMusicNoSubscription": "Apple Music không chia sẻ thư viện của bạn. Bạn cần có gói đăng ký Apple Music để kết nối."
   },
   "common": {
     "error": "Đã có lỗi xảy ra.",

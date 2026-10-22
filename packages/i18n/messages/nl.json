@@ -50,7 +50,9 @@
     "appleMusicPitch": "Koppel je account, dan gebruiken we je bibliotheek en recent afgespeelde nummers om nummers te vinden die je met plezier zult zingen.",
     "appleMusicReading": "Je Apple Music-bibliotheek wordt ingelezen. Je aanbevelingen worden bijgewerkt zodra dit klaar is.",
     "appleMusicReconnect": "Koppel Apple Music opnieuw",
-    "musicServices": "Je muziekdiensten"
+    "musicServices": "Je muziekdiensten",
+    "appleMusicDenied": "Nomad Karaoke heeft geen toegang tot Apple Music. Schakel dit in via Instellingen › Nomad Karaoke › Media en Apple Music en probeer het opnieuw.",
+    "appleMusicNoSubscription": "Apple Music heeft je bibliotheek niet gedeeld. Om te verbinden heb je een Apple Music-abonnement nodig."
   },
   "common": {
     "error": "Er is iets misgegaan.",

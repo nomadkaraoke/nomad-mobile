@@ -1,6 +1,8 @@
 // Music service facades: which services are connected, and the Apple Music browser hand-off.
 import {
+  appleMusicAppDeveloperTokenApiServicesAppleMusicAppDeveloperTokenGet,
   appleMusicLinkApiServicesAppleMusicLinkPost,
+  connectAppleMusicApiServicesAppleMusicConnectPost,
   disconnectServiceApiServicesServiceTypeDelete,
   listServicesApiServicesGet,
   type AppleMusicLinkResponse,
@@ -24,4 +26,13 @@ export const startAppleMusicLink = async (): Promise<AppleMusicLinkResponse> =>
 /** Disconnect a music service (decide keeps the songs it already read). */
 export const disconnectMusicService = async (serviceType: string): Promise<void> => {
   await disconnectServiceApiServicesServiceTypeDelete({ path: { service_type: serviceType } });
+};
+
+/** Developer token for the iOS app's native MusicKit sign-in (signed in; no origin restriction). */
+export const getAppleMusicAppDeveloperToken = async (): Promise<string> =>
+  (await appleMusicAppDeveloperTokenApiServicesAppleMusicAppDeveloperTokenGet()).data.developer_token;
+
+/** Connect Apple Music with a Music User Token from native MusicKit; decide checks it with Apple and starts a sync. */
+export const connectAppleMusic = async (musicUserToken: string): Promise<void> => {
+  await connectAppleMusicApiServicesAppleMusicConnectPost({ body: { music_user_token: musicUserToken } });
 };

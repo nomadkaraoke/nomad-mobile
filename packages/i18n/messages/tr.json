@@ -50,7 +50,9 @@
     "appleMusicPitch": "Hesabını bağla; arşivinden ve son dinlediklerinden yola çıkarak söylemekten keyif alacağın şarkılar seçelim.",
     "appleMusicReading": "Apple Music arşivin taranıyor. İşlem tamamlandığında önerilerin güncellenecek.",
     "appleMusicReconnect": "Apple Music'e Tekrar Bağlan",
-    "musicServices": "Müzik servislerin"
+    "musicServices": "Müzik servislerin",
+    "appleMusicDenied": "Nomad Karaoke'nin Apple Music'e erişimi yok. Ayarlar › Nomad Karaoke › Ortamlar ve Apple Music bölümünden bu izni aç, ardından tekrar dene.",
+    "appleMusicNoSubscription": "Apple Music arşivini paylaşmadı. Bağlanmak için Apple Music aboneliği gerekir."
   },
   "common": {
     "error": "Bir şeyler ters gitti.",

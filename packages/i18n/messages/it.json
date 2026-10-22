@@ -50,7 +50,9 @@
     "appleMusicPitch": "Collegalo e useremo la tua libreria e gli ascolti recenti per consigliarti brani che adorerai cantare.",
     "appleMusicReading": "Lettura della tua libreria Apple Music in corso. I tuoi brani consigliati si aggiorneranno al termine.",
     "appleMusicReconnect": "Riconnetti Apple Music",
-    "musicServices": "I tuoi servizi musicali"
+    "musicServices": "I tuoi servizi musicali",
+    "appleMusicDenied": "Nomad Karaoke non ha accesso ad Apple Music. Attivalo in Impostazioni › Nomad Karaoke › File multimediali e Apple Music, poi riprova.",
+    "appleMusicNoSubscription": "Apple Music non ha condiviso la tua libreria. Per connetterti è necessario un abbonamento ad Apple Music."
   },
   "common": {
     "error": "Qualcosa è andato storto.",

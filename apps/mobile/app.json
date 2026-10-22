@@ -15,7 +15,8 @@
           "youtube",
           "vnd.youtube"
         ],
-        "CFBundleDisplayName": "Karaoke"
+        "CFBundleDisplayName": "Karaoke",
+        "NSAppleMusicUsageDescription": "Nomad Karaoke reads your Apple Music library and recent plays to pick karaoke songs you'll love singing."
       }
     },
     "android": {

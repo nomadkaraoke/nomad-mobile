@@ -192,9 +192,15 @@ export default function MusicProfileScreen() {
               loading={apple.busy}
             />
           ) : null}
-          {apple.failed ? (
-            <Text testID="profile-apple-failed" variant="error">
-              {t('appleMusicFailed')}
+          {apple.problem ? (
+            <Text testID={`profile-apple-${apple.problem}`} variant="error">
+              {t(
+                apple.problem === 'denied'
+                  ? 'appleMusicDenied'
+                  : apple.problem === 'noSubscription'
+                    ? 'appleMusicNoSubscription'
+                    : 'appleMusicFailed',
+              )}
             </Text>
           ) : null}
         </View>
