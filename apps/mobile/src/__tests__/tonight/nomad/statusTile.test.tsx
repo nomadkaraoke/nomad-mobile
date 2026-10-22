@@ -58,6 +58,7 @@ describe('StageTile', () => {
   it('shows who is on stage and up next', () => {
     renderTonight(<StageTile now={nowResult()} />);
     expect(screen.getByTestId('tonight-stage-now')).toHaveTextContent(iso('Ana'));
+    expect(screen.getByText(iso('Valerie - Amy Winehouse'))).toBeTruthy();
     expect(screen.getByTestId('tonight-stage-next')).toHaveTextContent(`Up next: ${iso('Ben')}`);
   });
 });

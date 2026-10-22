@@ -160,8 +160,11 @@
         "addedBy": "Added by {name}",
         "forFriend": "For {name}",
         "fromWeb": "Requested on the web page",
-        "with": "With {names}",
+        "with1": "With {a}",
+        "with2": "With {a} and {b}",
+        "with3": "With {a}, {b} and {c}",
         "statusPosition": "#{position} in line · about {wait}",
+        "statusSung": "✓ Sung tonight",
         "statusApproved": "In the queue",
         "statusPending": "Waiting for the host to approve it…",
         "statusRejected": "The host needs a word. Please see them at the desk.",
@@ -207,7 +210,7 @@
         "lastKnown": "Your songs as of the last update:"
       },
       "unlinked": {
-        "message": "Requested songs on the web page too? Open it and tap Save tonight's songs.",
+        "message": "Requested songs on the web page too? Open the web page to save them to your account.",
         "open": "Open the web page"
       },
       "closed": "The host has paused requests for now.",

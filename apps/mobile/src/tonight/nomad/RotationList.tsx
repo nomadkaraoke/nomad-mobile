@@ -42,14 +42,14 @@ export function RotationRow({ entry, elapsedS, onPreview }: { entry: RotationEnt
       <Text className="w-8 text-center font-bold text-muted">{entry.position}</Text>
       <View className="flex-1">
         <Text className={entry.now_singing ? 'font-bold text-success' : 'font-semibold'}>{name}</Text>
-        {entry.song_artist ? <Text variant="muted">{entry.song_artist}</Text> : null}
+        {entry.song_artist ? <Text variant="muted">{isolate(entry.song_artist)}</Text> : null}
         {label ? <Text variant="muted">{label}</Text> : null}
       </View>
       {entry.previewable ? (
         <Pressable
           testID={`tonight-rotation-preview-${entry.entry_id}`}
           accessibilityRole="button"
-          accessibilityLabel={t('rotation.preview', { song: entry.song_artist })}
+          accessibilityLabel={t('rotation.preview', { song: isolate(entry.song_artist) })}
           onPress={() => onPreview?.(entry)}
           className="min-h-11 min-w-11 items-center justify-center rounded-md border border-border"
         >

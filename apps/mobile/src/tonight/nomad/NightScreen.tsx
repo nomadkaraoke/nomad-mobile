@@ -10,8 +10,10 @@ import { Freshness, useTick } from './Freshness';
 import { songKey } from './model';
 import {
   isNightOver,
+  isNotOpen,
   isUnreachable,
   nightGone,
+  nightPaused,
   useMe,
   useNightInfo,
   useNow,
@@ -55,8 +57,9 @@ function loadDismissed(key: string): Set<string> {
 
 /**
  * The Nomad-night home (spec §4.1): status tile, Your songs, sung tonight, now on stage, the rotation and venue info.
- * Paints cached data first and refreshes in place; polls only while visible; ends the night on night_changed /
- * not_open (ruling E4-R1); keeps the last-known songs read-only when the box is unreachable (ruling E4-R2).
+ * Paints cached data first and refreshes in place; polls only while visible; ends the night on night_changed or a
+ * code that stopped working (rulings E4-R1, E4-R6); while requests are paused, keeps the night with the host's
+ * message and watches GET /night every 60 s; keeps the last-known songs read-only when the box is unreachable (E4-R2).
  */
 export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEntry, ...rowActions }: NightScreenProps) {
   const t = useTranslations('tonight.night');
@@ -65,10 +68,29 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
   const me = useMe(night, userKey, active);
   const now = useNow(night, userKey, active);
   const rotation = useRotation(night, userKey, active);
-  const info = useNightInfo(night, userKey, active);
+  // Ruling E4-R6: a 403 not_open stopped these polls (nextPollDelay). GET /night says why: bad_code ends the night;
+  // closed / no_night (E4-R7) keep it; open with this night's id resumes them.
+  const notOpen = [me, now, rotation].filter((q) => isNotOpen(q.error));
+  const pausedByError = notOpen.length > 0;
+  const pausedSince = Math.max(0, ...notOpen.map((q) => q.errorUpdatedAt));
+  const info = useNightInfo(night, userKey, active, pausedByError);
+  const pausedInfo = nightPaused(info.data);
 
-  // Ruling E4-R1 / Review Focus 2: the box moved on (new night, or the code stopped working). Leave this night: the
-  // Tonight tab then shows the empty state, never yesterday's songs. Polling already stopped (nextPollDelay).
+  useEffect(() => {
+    if (pausedByError) void info.refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- refetch is stable; only the pause edge matters
+  }, [pausedByError]);
+
+  // Resume only on a /night answer newer than the not_open, so a failed resume waits for the next /night poll.
+  const reopened = pausedByError && info.data?.open === true && info.data.night_id === night.nightId && info.dataUpdatedAt > pausedSince;
+  useEffect(() => {
+    if (!reopened) return;
+    for (const q of [me, now, rotation]) if (isNotOpen(q.error)) void q.refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- runs once per newer /night answer
+  }, [reopened, info.dataUpdatedAt]);
+
+  // Rulings E4-R1/R6, Review Focus 2: the box moved on (new night, or the code stopped working). Leave this night:
+  // the Tonight tab then shows the empty state, never yesterday's songs. Polling already stopped (nextPollDelay).
   const over = [me.error, now.error, rotation.error, info.error].some(isNightOver) || nightGone(info.data, night.nightId);
   useEffect(() => {
     if (!over) return;
@@ -80,9 +102,13 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
   const wasActive = useRef(active);
   useEffect(() => {
     if (active && !wasActive.current) {
-      void me.refetch();
-      void now.refetch();
-      void rotation.refetch();
+      // Paused requests: only /night may be asked (E4-R6); it resumes the rest.
+      if (pausedByError) void info.refetch();
+      else {
+        void me.refetch();
+        void now.refetch();
+        void rotation.refetch();
+      }
     }
     wasActive.current = active;
     // eslint-disable-next-line react-hooks/exhaustive-deps -- refetch fns are stable; only the active edge matters
@@ -117,7 +143,8 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
   const data = me.data;
   const songs = (data?.songs ?? []).filter((s) => !dismissed.has(songKey(s)));
   const nightInfo = info.data?.open ? info.data : null;
-  const closed = info.data && !info.data.open && info.data.reason === 'closed' ? info.data : null;
+  const closed = pausedInfo;
+  const readOnly = unreachable || pausedByError || closed !== null;
 
   const header = (
     <View className="gap-4 pb-2">
@@ -131,7 +158,7 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
       {data ? (
         <>
           <StatusTile me={{ ...data, songs }} now={now.data} />
-          {!unreachable && data.unlinked_identity_entries > 0 ? (
+          {!readOnly && data.unlinked_identity_entries > 0 ? (
             <View testID="tonight-unlinked-hint" className="gap-2 rounded-xl border border-border bg-card p-4">
               <Text>{t('unlinked.message')}</Text>
               <Button
@@ -145,7 +172,7 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
           <Freshness updatedAt={me.dataUpdatedAt} onRefresh={() => void refresh()} refreshing={refreshing} />
           <YourSongs
             songs={songs}
-            readOnly={unreachable}
+            readOnly={readOnly}
             onDismiss={dismiss}
             onRequest={onRequest}
             onReorder={onReorder}
@@ -156,7 +183,7 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
       ) : me.isPending ? (
         // Same size as the status tile, so nothing jumps when the first read lands (A.44).
         <View testID="tonight-loading" className="h-28 rounded-xl border border-border bg-card" />
-      ) : !unreachable ? (
+      ) : !unreachable && !pausedByError ? (
         <View testID="tonight-error" className="gap-2">
           <Text variant="error">{t('loadFailed')}</Text>
           <Button testID="tonight-retry" variant="secondary" label={t('retry')} onPress={() => void refresh()} />

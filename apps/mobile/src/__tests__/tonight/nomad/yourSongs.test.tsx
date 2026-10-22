@@ -27,6 +27,14 @@ it('host-added and partner rows labelled', () => {
   expect(screen.getByTestId(`tonight-song-cancel-r${friend.request.id}`)).toBeTruthy();
 });
 
+it('duet partners are listed through a localised message', () => {
+  const two = song({ request: { additional_singers: [{ name: 'Ana' }, { name: 'Ben' }] } });
+  const three = song({ request: { additional_singers: [{ name: 'Ana' }, { name: 'Ben' }, { name: 'Cy' }] } });
+  renderTonight(<YourSongs songs={[two, three]} />);
+  expect(screen.getByText(`With ${iso('Ana')} and ${iso('Ben')}`)).toBeTruthy();
+  expect(screen.getByText(`With ${iso('Ana')}, ${iso('Ben')} and ${iso('Cy')}`)).toBeTruthy();
+});
+
 it('host-removed shows honest copy and dismiss', () => {
   const removed = song({ removed: true, request: { song_title: 'Gone' } });
   const onDismiss = jest.fn();

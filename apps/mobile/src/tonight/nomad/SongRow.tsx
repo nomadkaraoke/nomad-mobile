@@ -61,10 +61,21 @@ export function SongRow({ song, readOnly, onDismiss, ...actions }: SongRowProps)
           : song.owner === 'web'
             ? t('song.fromWeb')
             : null;
-  const partners = (req.additional_singers ?? []).map((s) => s.name).filter(Boolean);
+  const partners = (req.additional_singers ?? []).map((s) => isolate(s.name)).filter(Boolean);
+  // Up to 3 duet partners (spec §4.1); Hermes has no Intl.ListFormat, so the list is an ICU message per count.
+  const [a = '', b = '', ...rest] = partners;
+  const withLine =
+    partners.length === 0
+      ? null
+      : partners.length === 1
+        ? t('song.with1', { a })
+        : partners.length === 2
+          ? t('song.with2', { a, b })
+          : t('song.with3', { a, b, c: rest.join(', ') });
 
   let status: string;
-  if (song.removed) status = t('song.statusRemoved');
+  if (song.performed) status = t('song.statusSung');
+  else if (song.removed) status = t('song.statusRemoved');
   else if (req.status === 'rejected') status = t('song.statusRejected');
   else if (onStage) status = t('status.onStage');
   else if (song.make === 'making') status = t('song.makeMaking');
@@ -108,11 +119,11 @@ export function SongRow({ song, readOnly, onDismiss, ...actions }: SongRowProps)
           {owner}
         </Text>
       ) : null}
-      {partners.length ? <Text variant="muted">{t('song.with', { names: isolate(partners.join(', ')) })}</Text> : null}
+      {withLine ? <Text variant="muted">{withLine}</Text> : null}
       <Text testID={`tonight-song-status-${key}`} className={onStage ? 'font-bold text-success' : ''}>
         {status}
       </Text>
-      {quick && live ? <Text variant="muted">{quick}</Text> : null}
+      {quick && live && !song.performed ? <Text variant="muted">{quick}</Text> : null}
       {shown.length ? (
         <View className="mt-1 flex-row flex-wrap gap-2">
           {shown.map((b) => (

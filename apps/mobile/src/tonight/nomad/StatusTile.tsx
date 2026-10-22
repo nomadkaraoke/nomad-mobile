@@ -62,7 +62,7 @@ export function StageTile({ now }: { now: NowResult }) {
           <Text testID="tonight-stage-now" className="text-lg font-bold">
             {who(now.now_singing)}
           </Text>
-          {now.now_singing.song_artist ? <Text variant="muted">{now.now_singing.song_artist}</Text> : null}
+          {now.now_singing.song_artist ? <Text variant="muted">{isolate(now.now_singing.song_artist)}</Text> : null}
         </>
       ) : (
         <Text testID="tonight-stage-now">{now.queued_count ? t('stage.between') : t('stage.empty')}</Text>

@@ -17,14 +17,17 @@ import type { NomadNight } from '../nightStore';
 import { useEditingStore } from './editingStore';
 
 /**
- * Poll intervals (spec §4.1 Freshness): Your songs every 15 s, the rotation every 30 s (ETag/304), venue info rarely.
- * While the box is unreachable, retries back off 15 s → 30 s → 60 s (capped, ruling E4-R2). Mutable so tests can shrink them.
+ * Poll intervals (spec §4.1 Freshness): Your songs every 15 s, now on stage and the rotation every 30 s (A.62
+ * throttle; the rotation with ETag/304), venue info rarely, and GET /night every 60 s while requests are paused
+ * (ruling E4-R6). While the box is unreachable, retries back off 15 s → 30 s → 60 s (capped, ruling E4-R2).
+ * Mutable so tests can shrink them.
  */
 export const nightPoll = {
   meMs: 15_000,
-  nowMs: 15_000,
+  nowMs: 30_000,
   rotationMs: 30_000,
   nightMs: 120_000,
+  closedMs: 60_000,
   backoffMs: [15_000, 30_000, 60_000],
 };
 
@@ -39,28 +42,41 @@ export function isUnreachable(e: unknown): boolean {
   return e instanceof KjboxError && (e.unreachable || e.code === 'gen_unavailable');
 }
 
-/**
- * The night this app holds is over (ruling E4-R1): 409 night_changed (the host started a new night, A.89) or 403
- * not_open (the event code no longer works). The app ends the night and stops polling: the box rate-limits failed
- * event codes per IP, and a phone polling a stale code would lock out everyone on the venue wifi.
- */
+/** 409 night_changed from any endpoint: the host started a new night (A.89). The app ends the night (ruling E4-R1). */
 export function isNightOver(e: unknown): boolean {
-  return e instanceof KjboxError && (e.code === 'night_changed' || e.code === 'not_open');
+  return e instanceof KjboxError && e.code === 'night_changed';
 }
 
-/** GET /night answered "not open" because the code or night is gone (not merely closed for requests). */
-export const nightGone = (n: Night | undefined, nightId: string): boolean =>
-  n !== undefined && (n.open ? n.night_id !== nightId : n.reason !== 'closed');
+/**
+ * 403 not_open from /me, /now or /rotation: requests are paused, or the code stopped working. The box doesn't say
+ * which, so the app stops those polls (the box rate-limits failed event codes per IP: a phone polling a stale code
+ * would lock out the venue wifi) and asks GET /night (ruling E4-R6).
+ */
+export function isNotOpen(e: unknown): boolean {
+  return e instanceof KjboxError && e.code === 'not_open';
+}
 
-/** Next poll delay after a fetch: off once the night is over, backoff while unreachable, honour retry_after. */
+/** GET /night says this night is gone: the code is wrong now (bad_code), or an open night with another id. */
+export const nightGone = (n: Night | undefined, nightId: string): boolean =>
+  n !== undefined && (n.open ? n.night_id !== nightId : n.reason === 'bad_code');
+
+/** GET /night says requests are paused: `closed`, or no night marker (`no_night`, ruling E4-R7). The night is kept. */
+export const nightPaused = (n: Night | undefined) =>
+  n !== undefined && !n.open && (n.reason === 'closed' || n.reason === 'no_night') ? n : null;
+
+/**
+ * Next poll delay after a fetch: off after night_changed or not_open, backoff while unreachable, and never sooner
+ * than the box's retry_after.
+ */
 export function nextPollDelay(baseMs: number, failures: number, error: unknown): number | false {
-  if (isNightOver(error)) return false;
+  if (isNightOver(error) || isNotOpen(error)) return false;
+  let delay = baseMs;
   if (failures > 0 && isUnreachable(error)) {
     const steps = nightPoll.backoffMs;
-    return steps[Math.min(failures, steps.length) - 1]!;
+    delay = steps[Math.min(failures, steps.length) - 1]!;
   }
-  if (error instanceof KjboxError && error.retryAfter) return Math.max(baseMs, error.retryAfter * 1000);
-  return baseMs;
+  if (error instanceof KjboxError && error.retryAfter) delay = Math.max(delay, error.retryAfter * 1000);
+  return delay;
 }
 
 /** The app is in the foreground (AppState active or inactive, not background). */
@@ -87,7 +103,12 @@ export const nightKey = (night: NomadNight, userKey: string | null): QueryKey =>
  * backoff. The last good data stays in the cache through errors, so an unreachable box keeps the last-known state.
  * The key carries the user and the night id, so another account or a new night never sees this one's data.
  */
-function usePolled<T>(key: QueryKey, fetcher: (prev: T | undefined) => Promise<T>, baseMs: number, active: boolean) {
+function usePolled<T>(
+  key: QueryKey,
+  fetcher: (prev: T | undefined) => Promise<T>,
+  baseMs: number | ((data: T | undefined) => number),
+  active: boolean,
+) {
   const failures = useRef(0);
   const queryClient = useQueryClient();
   return useQuery({
@@ -104,7 +125,11 @@ function usePolled<T>(key: QueryKey, fetcher: (prev: T | undefined) => Promise<T
     },
     retry: false,
     refetchOnWindowFocus: false,
-    refetchInterval: (query) => (active ? nextPollDelay(baseMs, failures.current, query.state.error) : false),
+    refetchInterval: (query) => {
+      if (!active) return false;
+      const base = typeof baseMs === 'function' ? baseMs(query.state.data) : baseMs;
+      return nextPollDelay(base, failures.current, query.state.error);
+    },
   });
 }
 
@@ -118,9 +143,18 @@ export function useNow(night: NomadNight, userKey: string | null, active: boolea
   return usePolled<NowResult>([...nightKey(night, userKey), 'now'], () => getNow(night.code, night.nightId), nightPoll.nowMs, active);
 }
 
-/** GET /night: venue info and feature flags (rarely changes), and whether the night is still this one. */
-export function useNightInfo(night: NomadNight, userKey: string | null, active: boolean) {
-  return usePolled<Night>([...nightKey(night, userKey), 'night'], () => getNight(night.code, night.nightId), nightPoll.nightMs, active);
+/**
+ * GET /night: venue info and feature flags (rarely changes), and whether the night is still this one. While requests
+ * are paused (`paused`: a not_open from the other reads, or /night itself says closed/no_night) it polls every 60 s
+ * to notice when they reopen.
+ */
+export function useNightInfo(night: NomadNight, userKey: string | null, active: boolean, paused = false) {
+  return usePolled<Night>(
+    [...nightKey(night, userKey), 'night'],
+    () => getNight(night.code, night.nightId),
+    (data) => (paused || nightPaused(data) ? nightPoll.closedMs : nightPoll.nightMs),
+    active,
+  );
 }
 
 /** The rotation as last received. Its wait estimates are relative to `receivedAt` (a 304 keeps the earlier ones). */
