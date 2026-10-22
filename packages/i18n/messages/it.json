@@ -587,7 +587,7 @@
         "back": "Scegli un'altra canzone",
         "backToTonight": "Torna a Stasera",
         "missing": "Prima scegli una canzone.",
-        "nightEnded": "La serata di stasera è terminata, quindi non è più possibile inviare questa richiesta. Unisciti alla prossima serata da Stasera.",
+        "nightEnded": "Questa serata è terminata, quindi non è più possibile inviare richieste. Torna a Stasera per unirti alla serata in corso.",
         "searched": "Hai cercato: “{query}”",
         "send": "Sì, invia",
         "sendChange": "Sì, cambia la mia canzone",

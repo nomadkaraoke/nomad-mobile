@@ -145,6 +145,26 @@ describe('search the identified song (the web\'s fetchKaraokeForCorrection)', ()
     expect(api.resolve).not.toHaveBeenCalled();
   });
 
+  it('only the identified song\'s own rows sit under its heading; other songs from that search are dropped', async () => {
+    await starlight(true, [group('Uprising', 'Muse'), group('Starlight', 'Muse')]);
+    expect(await screen.findByTestId('tonight-identified-heading')).toBeTruthy();
+    expect(screen.getByTestId('tonight-result-title-0').props.children).toBe('Starlight');
+    expect(screen.queryByTestId('tonight-result-1')).toBeNull();
+  });
+
+  it('no heading when that search finds none of the identified song\'s rows', async () => {
+    api.searchSongs.mockImplementation(async (_t, q) =>
+      q === 'Muse Starlight' ? results([group('Uprising', 'Muse')]) : results([group('Starlite Express', 'Cast')]),
+    );
+    api.identify.mockResolvedValue(confident('Starlight', 'Muse', true, 'content'));
+    renderRouter(requestRoutes(), { initialUrl: '/tonight/search' });
+    await type('starlite muse');
+    await waitFor(() => expect(api.searchSongs).toHaveBeenCalledWith('2121', 'Muse Starlight', expect.any(String), NIGHT));
+    expect(await screen.findByTestId('tonight-result-0')).toBeTruthy();
+    expect(screen.getByTestId('tonight-result-title-0').props.children).toBe('Starlite Express');
+    expect(screen.queryByTestId('tonight-identified-heading')).toBeNull();
+  });
+
   it('the same with karaoke:false and nothing found shows the no-karaoke card', async () => {
     await starlight(false, []);
     expect(await screen.findByTestId('tonight-no-karaoke')).toBeTruthy();

@@ -167,6 +167,20 @@ describe('night screen banner', () => {
     await waitFor(() => expect(screen.queryByTestId('tonight-turn-banner') === null).toBe(true));
   });
 
+  it('the banner stays on screen above the list, not inside it (it never scrolls away; UX review)', async () => {
+    api.getMe.mockResolvedValue(me({ songs: [mine()], next: next(1) }));
+    renderTonight(<NightScreen night={night} focused />);
+    const banner = await screen.findByTestId('tonight-turn-banner');
+    const list = screen.getByTestId('tonight-night-list');
+    let n: { parent: unknown } | null = banner as unknown as { parent: unknown };
+    let inList = false;
+    while (n) {
+      if (n === (list as unknown)) inList = true;
+      n = n.parent as { parent: unknown } | null;
+    }
+    expect(inList).toBe(false);
+  });
+
   it('no banner while further back in line', async () => {
     api.getMe.mockResolvedValue(me({ songs: [mine(501, 'Starlight', at(4))], next: next(4) }));
     renderTonight(<NightScreen night={night} focused />);

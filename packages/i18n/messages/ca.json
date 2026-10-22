@@ -587,7 +587,7 @@
         "back": "Tria una altra cançó",
         "backToTonight": "Torna a Aquesta nit",
         "missing": "Tria una cançó primer.",
-        "nightEnded": "La sessió d'aquesta nit ha acabat, de manera que aquesta sol·licitud no es pot enviar. Uneix-te a la propera sessió des d'Aquesta nit.",
+        "nightEnded": "Aquesta nit s'ha acabat, així que ja no s'hi pot enviar res més. Torna a «Aquesta nit» per unir-te a la nit que està en marxa ara.",
         "searched": "Has cercat: «{query}»",
         "send": "Sí, envia",
         "sendChange": "Sí, canvia la meva cançó",

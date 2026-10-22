@@ -587,7 +587,7 @@
         "back": "Chọn một bài hát khác",
         "backToTonight": "Quay lại Buổi tối nay",
         "missing": "Vui lòng chọn một bài hát trước.",
-        "nightEnded": "Buổi hát tối nay đã kết thúc, vì vậy không thể gửi yêu cầu này. Hãy tham gia buổi hát tiếp theo từ Buổi tối nay.",
+        "nightEnded": "Đêm tiệc này đã kết thúc, nên bạn không thể gửi thêm yêu cầu nào nữa. Hãy quay lại mục Tonight để tham gia đêm tiệc đang diễn ra nhé.",
         "searched": "Bạn đã tìm: “{query}”",
         "send": "Đúng, gửi đi",
         "sendChange": "Đúng, đổi bài hát của tôi",

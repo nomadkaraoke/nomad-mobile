@@ -587,7 +587,7 @@
         "back": "Kies een ander nummer",
         "backToTonight": "Terug naar Vanavond",
         "missing": "Kies eerst een nummer.",
-        "nightEnded": "De avond van vanavond is afgelopen, dus dit verzoek kan niet worden verzonden. Doe mee met de volgende avond vanuit Vanavond.",
+        "nightEnded": "Deze avond is afgelopen, dus er kan niets meer worden aangevraagd. Ga terug naar Tonight om mee te doen met de avond die nu bezig is.",
         "searched": "Je hebt gezocht op: “{query}”",
         "send": "Ja, versturen",
         "sendChange": "Ja, wissel mijn nummer",

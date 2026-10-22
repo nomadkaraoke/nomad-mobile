@@ -587,7 +587,7 @@
         "back": "Vybrať inú pesničku",
         "backToTonight": "Späť na Dnešný večer",
         "missing": "Najprv si vyber pesničku.",
-        "nightEnded": "Dnešný večer sa skončil, takže túto požiadavku nie je možné odoslať. Pripoj sa k ďalšiemu večeru zo sekcie Dnešný večer.",
+        "nightEnded": "Tento večer sa už skončil, takže sem už nemožno nič poslať. Vráť sa do sekcie Dnes večer a pridaj sa k večeru, ktorý práve prebieha.",
         "searched": "Vyhľadal si: „{query}“",
         "send": "Áno, odoslať",
         "sendChange": "Áno, vymeniť moju pesničku",

@@ -88,7 +88,7 @@ export function TonightMake({ artist, title, friend }: TonightMakeProps) {
 
   if (night?.kind !== 'nomad') {
     return (
-      <Screen testID="tonight-make-screen">
+      <Screen underHeader testID="tonight-make-screen">
         <Text testID="tonight-make-night-ended">{tConfirm('nightEnded')}</Text>
         <Button
           testID="tonight-make-night-ended-back"
@@ -101,7 +101,7 @@ export function TonightMake({ artist, title, friend }: TonightMakeProps) {
   }
   if (changing) {
     return (
-      <Screen testID="tonight-make-screen">
+      <Screen underHeader testID="tonight-make-screen">
         <Text testID="tonight-make-refused">{t('refusedChange')}</Text>
         <Button testID="tonight-make-back" variant="secondary" label={t('back')} onPress={() => router.back()} />
       </Screen>
@@ -155,7 +155,7 @@ function MakeGate(props: TonightMakeProps & { night: NomadNight; userKey: string
     return <MakeFlow {...props} />;
   }
   return (
-    <Screen testID="tonight-make-screen" scroll>
+    <Screen underHeader testID="tonight-make-screen" scroll>
       {body}
     </Screen>
   );
@@ -171,7 +171,7 @@ function MakeFlow(props: TonightMakeProps & { night: NomadNight; userKey: string
   if (song) return <PendingGate {...props} song={song} />;
   const ready = draft.artist.trim() !== '' && draft.title.trim() !== '';
   return (
-    <Screen testID="tonight-make-screen" scroll>
+    <Screen underHeader testID="tonight-make-screen" scroll>
       <View testID="tonight-make-song-form" className="gap-3">
         <Text variant="title">{t('formTitle')}</Text>
         <Text variant="muted">{t('formHint')}</Text>
@@ -398,7 +398,7 @@ function ResumeMake({
     );
   }
   return (
-    <Screen testID="tonight-make-screen" scroll>
+    <Screen underHeader testID="tonight-make-screen" scroll>
       <View className="gap-1">
         <Text testID="tonight-make-song-title" variant="title">
           {pending.songTitle}
@@ -546,7 +546,7 @@ function MakeSearch({ night, userKey, friend, wanted }: TonightMakeProps & { nig
 
   if (askHost || searchDisabled) {
     return (
-      <Screen testID="tonight-make-screen" scroll>
+      <Screen underHeader testID="tonight-make-screen" scroll>
         <AskHost />
       </Screen>
     );
@@ -585,7 +585,7 @@ function MakeSearch({ night, userKey, friend, wanted }: TonightMakeProps & { nig
   const searchErr = search.isError && !searchDisabled ? errorCopy(search.error) : null;
 
   return (
-    <Screen testID="tonight-make-screen" scroll>
+    <Screen underHeader testID="tonight-make-screen" scroll>
       <View className="gap-1">
         <Text testID="tonight-make-song-title" variant="title">
           {song.title}

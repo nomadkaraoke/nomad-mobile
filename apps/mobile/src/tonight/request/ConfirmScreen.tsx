@@ -61,7 +61,7 @@ export function ConfirmScreen() {
   if (night?.kind !== 'nomad') {
     // The night ended (night_changed, or ended elsewhere) while confirm was open.
     return (
-      <Screen testID="tonight-confirm-screen">
+      <Screen underHeader testID="tonight-confirm-screen">
         <Text testID="tonight-confirm-night-ended">{t('nightEnded')}</Text>
         <Button
           testID="tonight-confirm-night-ended-back"
@@ -74,7 +74,7 @@ export function ConfirmScreen() {
   }
   if (!pending) {
     return (
-      <Screen testID="tonight-confirm-screen">
+      <Screen underHeader testID="tonight-confirm-screen">
         <Text testID="tonight-confirm-missing">{t('missing')}</Text>
         <Button testID="tonight-confirm-missing-back" variant="secondary" label={t('back')} onPress={() => router.back()} />
       </Screen>
@@ -158,7 +158,7 @@ export function ConfirmScreen() {
   );
 
   return (
-    <Screen testID="tonight-confirm-screen" scroll>
+    <Screen underHeader testID="tonight-confirm-screen" scroll>
       <ConfirmCard
         title={pending.song.title}
         artist={pending.song.artist}

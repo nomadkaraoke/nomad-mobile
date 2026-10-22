@@ -173,7 +173,7 @@ export function JoinScreen() {
   // One sheet for both questions: swapping two RN Modals at once drops the second on iOS.
   const asking = (phase.kind === 'switch' || phase.kind === 'name') && sheetOpen;
   return (
-    <Screen testID="tonight-join" scroll>
+    <Screen underHeader testID="tonight-join" scroll>
       <Text variant="title">{t('title')}</Text>
       {body}
       <TonightSheet

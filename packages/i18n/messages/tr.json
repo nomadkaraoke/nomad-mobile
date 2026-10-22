@@ -587,7 +587,7 @@
         "back": "Farklı bir şarkı seç",
         "backToTonight": "Bu Gece'ye geri dön",
         "missing": "Önce bir şarkı seç.",
-        "nightEnded": "Bu geceki etkinlik sona erdi, bu yüzden bu istek gönderilemez. Bu Gece bölümünden bir sonraki etkinliğe katıl.",
+        "nightEnded": "Bu gece sona erdi, bu yüzden artık istek gönderilemez. Şu anda devam eden geceye katılmak için Bu Gece'ye geri dön.",
         "searched": "Aradığın: “{query}”",
         "send": "Evet, gönder",
         "sendChange": "Evet, şarkımı değiştir",

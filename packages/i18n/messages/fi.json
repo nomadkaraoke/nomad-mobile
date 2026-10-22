@@ -587,7 +587,7 @@
         "back": "Valitse toinen kappale",
         "backToTonight": "Takaisin Tänä iltana -näkymään",
         "missing": "Valitse ensin kappale.",
-        "nightEnded": "Tämän illan tapahtuma on päättynyt, joten tätä toivetta ei voi lähettää. Liity seuraavaan iltaan Tänä iltana -näkymästä.",
+        "nightEnded": "Tämä ilta on päättynyt, eikä sille voi enää lähettää pyyntöjä. Palaa Tänä iltana -osioon liittyäksesi parhaillaan käynnissä olevaan iltaan.",
         "searched": "Hait: ”{query}”",
         "send": "Kyllä, lähetä",
         "sendChange": "Kyllä, vaihda kappaleeni",

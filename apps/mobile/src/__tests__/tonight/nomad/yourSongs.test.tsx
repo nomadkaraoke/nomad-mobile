@@ -101,7 +101,7 @@ describe('row actions (ruling E4-R4: placeholders wired by E5–E7, shown only w
     expect(screen.queryByTestId('tonight-reorder')).toBeNull();
     fireEvent.press(screen.getByTestId('tonight-request'));
     expect(onRequest).toHaveBeenCalled();
-    rerender(<YourSongs songs={[song(), song()]} onRequest={onRequest} onReorder={onReorder} />);
+    rerender(<YourSongs songs={[song({ estimate: at(3) }), song({ estimate: at(5) })]} onRequest={onRequest} onReorder={onReorder} />);
     fireEvent.press(screen.getByTestId('tonight-reorder'));
     expect(onReorder).toHaveBeenCalled();
   });
@@ -113,4 +113,13 @@ it('place 2 reads "right after this song" while someone is on stage, as the stat
   expect(screen.getByTestId(/^tonight-song-status-/)).toHaveTextContent("You're next, right after this song.");
   rerender(<YourSongs songs={[s]} />);
   expect(screen.getByTestId(/^tonight-song-status-/)).toHaveTextContent(/#2 in line/);
+});
+
+it('offers reorder only when two songs can move (a make-it being made has no queue place yet)', () => {
+  const queued = song({ request: { song_title: 'Queued', status: 'approved' }, estimate: at(4) });
+  const making = song({ request: { song_title: 'Making', status: 'approved' }, make: 'making' });
+  const { rerender } = renderTonight(<YourSongs songs={[queued, making]} onReorder={jest.fn()} />);
+  expect(screen.queryByTestId('tonight-reorder')).toBeNull();
+  rerender(<YourSongs songs={[queued, song({ request: { song_title: 'Second', status: 'approved' }, estimate: at(6) })]} onReorder={jest.fn()} />);
+  expect(screen.getByTestId('tonight-reorder')).toBeTruthy();
 });

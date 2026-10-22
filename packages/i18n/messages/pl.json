@@ -587,7 +587,7 @@
         "back": "Wybierz inną piosenkę",
         "backToTonight": "Wróć do ekranu głównego",
         "missing": "Najpierw wybierz piosenkę.",
-        "nightEnded": "Dzisiejsza impreza dobiegła końca, więc to zamówienie nie może zostać wysłane. Dołącz do kolejnej imprezy z poziomu ekranu głównego.",
+        "nightEnded": "Ta impreza dobiegła końca, więc nie można już nic do niej dodać. Wróć do sekcji Tonight, aby dołączyć do aktualnie trwającej imprezy.",
         "searched": "Wyszukiwano: „{query}”",
         "send": "Tak, wyślij",
         "sendChange": "Tak, zmień moją piosenkę",

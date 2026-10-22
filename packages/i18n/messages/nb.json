@@ -587,7 +587,7 @@
         "back": "Velg en annen sang",
         "backToTonight": "Tilbake til I kveld",
         "missing": "Velg en sang først.",
-        "nightEnded": "Kveldens økt er avsluttet, så dette ønsket kan ikke sendes. Bli med på neste kveld fra I kveld.",
+        "nightEnded": "Denne kvelden er over, så du kan ikke sende inn mer til den. Gå tilbake til I kveld for å bli med på kvelden som pågår nå.",
         "searched": "Du søkte etter: «{query}»",
         "send": "Ja, send",
         "sendChange": "Ja, bytt ut sangen min",

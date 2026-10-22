@@ -587,7 +587,7 @@
         "back": "Anderen Song wählen",
         "backToTonight": "Zurück zu Heute",
         "missing": "Wähle zuerst einen Song aus.",
-        "nightEnded": "Der heutige Abend ist beendet, daher kann diese Anfrage nicht gesendet werden. Tritt dem nächsten Abend über „Heute“ bei.",
+        "nightEnded": "Dieser Abend ist vorbei, daher kann nichts mehr eingereicht werden. Gehe zurück zu „Heute Abend“, um dem aktuellen Abend beizutreten.",
         "searched": "Deine Suche: „{query}“",
         "send": "Ja, absenden",
         "sendChange": "Ja, meinen Song austauschen",

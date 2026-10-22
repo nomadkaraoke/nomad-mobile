@@ -132,7 +132,10 @@ export function useKjboxSearch(q: string): KjboxSearchState {
           try {
             const m = await searchSongs(code, `${meant.artist} ${meant.title}`, sid, nightId);
             if (!live()) return;
-            setData((d) => ({ ...d, identifiedSongs: m.songs ?? [], fetchingIdentified: false }));
+            // Only the identified song's own rows (UX review): searching "artist title" also brings other songs, which
+            // must not sit under the "Karaoke versions of X" heading. None of them → the typed-text rows stay.
+            const own = (m.songs ?? []).filter((x) => sameSong(x, meant));
+            setData((d) => ({ ...d, identifiedSongs: own, fetchingIdentified: false }));
           } catch {
             // keep the typed-text rows
             if (live()) setData((d) => ({ ...d, fetchingIdentified: false }));

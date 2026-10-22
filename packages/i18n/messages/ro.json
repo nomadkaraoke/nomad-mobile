@@ -587,7 +587,7 @@
         "back": "Alege o altă melodie",
         "backToTonight": "Înapoi la În această seară",
         "missing": "Alege mai întâi o melodie.",
-        "nightEnded": "Sesiunea din această seară s-a încheiat, așa că solicitarea nu poate fi trimisă. Alătură-te următoarei sesiuni din În această seară.",
+        "nightEnded": "Această seară s-a încheiat, așa că nu se mai poate trimite nimic către ea. Întoarce-te la În această seară pentru a te alătura serii în desfășurare.",
         "searched": "Ai căutat: „{query}”",
         "send": "Da, trimite",
         "sendChange": "Da, înlocuiește melodia mea",

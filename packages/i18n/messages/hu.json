@@ -587,7 +587,7 @@
         "back": "Másik dal választása",
         "backToTonight": "Vissza a Mai esthez",
         "missing": "Először válassz egy dalt.",
-        "nightEnded": "A mai est véget ért, így ez a kérés nem küldhető el. Csatlakozz a következő esthez a Mai est képernyőről.",
+        "nightEnded": "Ez az este véget ért, így már nem lehet többet beküldeni. Térj vissza a Ma este felületre, hogy csatlakozz a most zajló estéhez.",
         "searched": "Keresésed: „{query}”",
         "send": "Igen, küldés",
         "sendChange": "Igen, dal cseréje",

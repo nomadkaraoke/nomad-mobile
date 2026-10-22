@@ -587,7 +587,7 @@
         "back": "Choisir une autre chanson",
         "backToTonight": "Retour à Ce soir",
         "missing": "Choisis d'abord une chanson.",
-        "nightEnded": "La soirée de ce soir est terminée, cette demande ne peut donc pas être envoyée. Rejoins la prochaine soirée depuis Ce soir.",
+        "nightEnded": "Cette soirée est terminée, tu ne peux plus rien y envoyer. Retourne sur « Ce soir » pour rejoindre la soirée en cours.",
         "searched": "Tu as recherché : « {query} »",
         "send": "Oui, envoyer",
         "sendChange": "Oui, remplacer ma chanson",

@@ -587,7 +587,7 @@
         "back": "选择其他歌曲",
         "backToTonight": "返回“今晚”",
         "missing": "请先选择歌曲。",
-        "nightEnded": "今晚活动已结束，无法发送该点歌请求。请从“今晚”页面加入下一场活动。",
+        "nightEnded": "今晚的活动已结束，无法再提交点歌了。返回“Tonight”即可加入当前正在进行的活动。",
         "searched": "您搜索了：“{query}”",
         "send": "确认发送",
         "sendChange": "确认换歌",

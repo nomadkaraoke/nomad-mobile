@@ -39,12 +39,12 @@ export function ScanScreen() {
     join(link.code);
   };
 
-  if (!permission) return <Screen testID="tonight-scan-screen">{null}</Screen>;
+  if (!permission) return <Screen underHeader testID="tonight-scan-screen">{null}</Screen>;
 
   if (!permission.granted) {
     const denied = permission.status === 'denied';
     return (
-      <Screen testID="tonight-scan-screen" scroll>
+      <Screen underHeader testID="tonight-scan-screen" scroll>
         <Text variant="title">{t('whyTitle')}</Text>
         {denied ? (
           <Text testID="tonight-scan-denied" variant="muted">
@@ -66,7 +66,7 @@ export function ScanScreen() {
   }
 
   return (
-    <Screen testID="tonight-scan-screen" scroll>
+    <Screen underHeader testID="tonight-scan-screen" scroll>
       <Text variant="muted">{t('hint')}</Text>
       <View className="aspect-square w-full overflow-hidden rounded-2xl border border-border">
         <CameraView

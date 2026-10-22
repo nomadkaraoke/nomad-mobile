@@ -587,7 +587,7 @@
         "back": "Escolher uma música diferente",
         "backToTonight": "Voltar para Hoje à noite",
         "missing": "Escolha uma música primeiro.",
-        "nightEnded": "A noite de hoje já terminou, então este pedido não pode ser enviado. Entre na próxima noite a partir de Hoje à noite.",
+        "nightEnded": "Esta noite acabou, então nada mais pode ser enviado para ela. Volte para Tonight para entrar na noite que está rolando agora.",
         "searched": "Você buscou: “{query}”",
         "send": "Sim, enviar",
         "sendChange": "Sim, trocar minha música",

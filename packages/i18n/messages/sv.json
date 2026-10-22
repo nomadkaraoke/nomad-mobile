@@ -587,7 +587,7 @@
         "back": "Välj en annan låt",
         "backToTonight": "Tillbaka till Ikväll",
         "missing": "Välj en låt först.",
-        "nightEnded": "Kvällens omgång har avslutats, så den här förfrågan kan inte skickas. Gå med i nästa kväll från Ikväll.",
+        "nightEnded": "Den här kvällen är slut, så du kan inte skicka in något mer till den. Gå tillbaka till I kväll för att ansluta till kvällen som pågår nu.",
         "searched": "Du sökte på: ”{query}”",
         "send": "Ja, skicka",
         "sendChange": "Ja, byt min låt",

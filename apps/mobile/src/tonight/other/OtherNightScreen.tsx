@@ -3,6 +3,7 @@ import { Button, Text, TextField } from '@nomad/ui';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { SurveySheet } from '../log/SurveySheet';
 import { artistLabel, useLogStore, type LogEntry, type LogState } from '../log/logStore';
@@ -41,7 +42,8 @@ export function OtherNightScreen({ night }: { night: OtherNight }) {
   const empty = GROUPS.every((g) => groups[g].length === 0);
 
   return (
-    <View testID="other-night-screen" className="flex-1 bg-bg">
+    // A tab screen with no header: clear the status bar (UX review: the title sat under the clock).
+    <SafeAreaView testID="other-night-screen" className="flex-1 bg-bg" edges={['top', 'left', 'right']}>
       <ScrollView contentContainerClassName="gap-4 p-4 pb-24" keyboardShouldPersistTaps="handled">
         <Text variant="title">{t('title')}</Text>
         <TextField
@@ -98,6 +100,6 @@ export function OtherNightScreen({ night }: { night: OtherNight }) {
           <Button testID="other-end-cancel" variant="secondary" label={t('keepLogging')} onPress={() => setConfirmEnd(false)} />
         </View>
       </TonightSheet>
-    </View>
+    </SafeAreaView>
   );
 }

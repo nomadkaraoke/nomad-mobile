@@ -587,7 +587,7 @@
         "back": "Pumili ng ibang kanta",
         "backToTonight": "Bumalik sa Tonight",
         "missing": "Pumili muna ng kanta.",
-        "nightEnded": "Tapos na ang night ngayong gabi, kaya hindi na maipapadala ang request na ito. Sumali sa susunod na night mula sa Tonight.",
+        "nightEnded": "Tapos na ang gabing ito, kaya wala nang maipapadala rito. Bumalik sa Tonight para sumali sa gabing kasalukuyang nagaganap.",
         "searched": "Hinanap mo: “{query}”",
         "send": "Oo, ipadala",
         "sendChange": "Oo, palitan ang kanta ko",

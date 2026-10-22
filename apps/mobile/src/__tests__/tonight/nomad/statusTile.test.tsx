@@ -20,10 +20,10 @@ describe('StatusTile', () => {
     expect(screen.getByTestId('tonight-status-summary')).toHaveTextContent('#4 in line · about 1h 28m');
   });
 
-  it('is urgent and says so when the singer is on stage', () => {
+  it('says so when the singer is on stage, without the "Nearly your turn" pill (UX review: it is their turn)', () => {
     const s = song({ estimate: at(1, 0, true) });
     renderTonight(<StatusTile me={me({ songs: [s] })} />);
-    expect(screen.getByTestId('tonight-status-urgent')).toBeTruthy();
+    expect(screen.queryByTestId('tonight-status-urgent')).toBeNull();
     expect(screen.getByTestId('tonight-status-summary')).toHaveTextContent("You're up. Head to the stage!");
   });
 

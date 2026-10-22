@@ -236,3 +236,9 @@ describe('Tonight tab (E9-R2)', () => {
     expect(useOutbox.getState().items).toEqual([]);
   });
 });
+
+it('keeps clear of the status bar (top safe-area inset; UX review: the title sat under the clock)', () => {
+  const night = otherNight();
+  renderTonight(<OtherNightScreen night={night} />);
+  expect(screen.getByTestId('other-night-screen').props.edges).toMatchObject({ top: 'additive' });
+});

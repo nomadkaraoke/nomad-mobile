@@ -34,7 +34,7 @@ export function StatusTile({ me, now }: { me: MeResult; now?: NowResult }) {
     >
       <View className="flex-row items-center justify-between gap-2">
         <Text variant="muted">{live.length > 1 ? t('status.labelOf', { count: live.length }) : t('status.label')}</Text>
-        {urgent ? (
+        {urgent && summary.kind !== 'onStage' ? (
           <View testID="tonight-status-urgent" className="rounded-full bg-success px-2 py-0.5">
             <Text className="text-xs font-bold text-primary-fg">{t('status.urgent')}</Text>
           </View>

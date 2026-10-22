@@ -75,6 +75,7 @@ function loadDismissed(key: string): Set<string> {
  */
 export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEntry, ...rowActions }: NightScreenProps) {
   const t = useTranslations('tonight.night');
+  const tTonight = useTranslations('tonight');
   const tManage = useTranslations('tonight.manage');
   const userKey = useNightStore((s) => s.userKey);
   const active = usePollingActive(focused);
@@ -218,7 +219,10 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
 
   const header = (
     <View className="gap-4 pb-2">
-      {turn.alert ? <TurnBanner alert={turn.alert} onDismiss={turn.dismiss} /> : null}
+      {/* The tab's heading, as on the empty state (UX review: the screen opened on "Updated just now"). */}
+      <Text testID="tonight-night-title" variant="title">
+        {tTonight('title')}
+      </Text>
       {unreachable ? <Unreachable hasSongs={songs.length > 0} /> : null}
       {closed ? (
         <View testID="tonight-closed" className="gap-1 rounded-xl border border-border bg-card p-4">
@@ -292,6 +296,8 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
   return (
     <ManageProvider value={manage}>
       <Screen testID="tonight-night">
+        {/* Above the list, not in its header: the banner must show however far down the singer has scrolled. */}
+        {turn.alert ? <TurnBanner alert={turn.alert} onDismiss={turn.dismiss} /> : null}
         <List
           testID="tonight-night-list"
           data={entries}

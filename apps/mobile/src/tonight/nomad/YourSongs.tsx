@@ -3,6 +3,7 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, Text } from '@nomad/ui';
 import { View } from 'react-native';
 
+import { reorderable } from '../manage/ReorderList';
 import { SongRow, type SongRowActions } from './SongRow';
 import { songKey } from './model';
 
@@ -32,7 +33,9 @@ export function YourSongs({ songs, readOnly, onDismiss, onRequest, onReorder, so
       ) : (
         songs.map((s) => <SongRow key={songKey(s)} song={s} readOnly={readOnly} onDismiss={onDismiss} someoneOnStage={someoneOnStage} {...actions} />)
       )}
-      {!readOnly && songs.length > 1 ? (
+      {/* Only when two songs can actually move (UX review: a make-it still being made can't, and the button led to
+          "You need at least two songs"). */}
+      {!readOnly && reorderable(songs).length > 1 ? (
         <Button testID="tonight-reorder" variant="secondary" label={t('songs.reorder')} onPress={() => onReorder?.()} />
       ) : null}
       {!readOnly ? <Button testID="tonight-request" label={t('songs.request')} onPress={() => onRequest?.()} /> : null}

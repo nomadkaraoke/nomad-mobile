@@ -587,7 +587,7 @@
         "back": "Vælg en anden sang",
         "backToTonight": "Tilbage til I aften",
         "missing": "Vælg en sang først.",
-        "nightEnded": "Aftenens arrangement er slut, så dette ønske kan ikke sendes. Tilmeld dig det næste arrangement fra I aften.",
+        "nightEnded": "Denne aften er slut, så der kan ikke sendes mere til den. Gå tilbage til I aften for at deltage i den aften, der er i gang nu.",
         "searched": "Du søgte efter: ”{query}”",
         "send": "Ja, send",
         "sendChange": "Ja, skift min sang",

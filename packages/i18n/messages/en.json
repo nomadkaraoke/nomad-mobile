@@ -489,7 +489,7 @@
         "retry": "Try again",
         "back": "Pick a different song",
         "missing": "Pick a song first.",
-        "nightEnded": "Tonight's night has ended, so this request can't be sent. Join the next night from Tonight.",
+        "nightEnded": "This night is over, so nothing more can be sent to it. Go back to Tonight to join the night that's on now.",
         "backToTonight": "Back to Tonight"
       },
       "karaokeFor": "Karaoke versions of {song}"

@@ -587,7 +587,7 @@
         "back": "Pilih lagu lain",
         "backToTonight": "Kembali ke Malam Ini",
         "missing": "Pilih lagu terlebih dahulu.",
-        "nightEnded": "Sesi malam ini telah berakhir, jadi permintaan ini tidak dapat dihantar. Sertai sesi malam seterusnya dari Malam Ini.",
+        "nightEnded": "Sesi malam ini telah tamat, jadi tiada apa-apa lagi yang boleh dihantar. Kembali ke Tonight untuk menyertai sesi malam yang sedang berlangsung sekarang.",
         "searched": "Anda mencari: “{query}”",
         "send": "Ya, hantar",
         "sendChange": "Ya, tukar lagu saya",
