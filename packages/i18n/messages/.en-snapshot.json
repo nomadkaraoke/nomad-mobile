@@ -125,8 +125,7 @@
     "offlineRemoveConfirm": "Remove"
   },
   "tonight": {
-    "title": "Tonight",
-    "comingSoon": "Coming soon: your requests and tonight's queue"
+    "title": "Tonight"
   },
   "makeTab": {
     "title": "Make",

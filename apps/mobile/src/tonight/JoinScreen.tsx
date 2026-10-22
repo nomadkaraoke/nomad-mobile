@@ -114,6 +114,11 @@ export function JoinScreen() {
     if (code) reload(code);
   };
 
+  const keep = () => {
+    setSheetOpen(false);
+    router.replace('/tonight');
+  };
+
   let body: ReactNode;
   if (!code || phase.kind === 'badCode') {
     body = (
@@ -145,7 +150,17 @@ export function JoinScreen() {
         <Button testID="tonight-join-retry" variant="secondary" label={tNight('retry')} onPress={retry} />
       </>
     );
-  } else if (phase.kind === 'name' && !sheetOpen) {
+  } else if (phase.kind === 'switch') {
+    // Always on the page as well as in the sheet: if iOS drops the sheet, the singer is never stuck here.
+    const night = phase.night;
+    body = (
+      <>
+        <Text variant="muted">{t('switchBody')}</Text>
+        <Button testID="tonight-join-switch" label={t('switchConfirm')} onPress={() => proceed(code, night, true)} />
+        <Button testID="tonight-join-keep" variant="secondary" label={t('switchKeep')} onPress={keep} />
+      </>
+    );
+  } else if (phase.kind === 'name') {
     body = <Button testID="tonight-join-name-open" label={t('nameOpen')} onPress={() => setSheetOpen(true)} />;
   } else {
     body = (
@@ -157,10 +172,6 @@ export function JoinScreen() {
 
   // One sheet for both questions: swapping two RN Modals at once drops the second on iOS.
   const asking = (phase.kind === 'switch' || phase.kind === 'name') && sheetOpen;
-  const keep = () => {
-    setSheetOpen(false);
-    router.replace('/tonight');
-  };
   return (
     <Screen testID="tonight-join" scroll>
       <Text variant="title">{t('title')}</Text>
@@ -193,6 +204,9 @@ export function JoinScreen() {
   );
 }
 
+/** Longest name the app sends (the field stops there; a longer prefill must be shortened first). */
+const NAME_MAX = 100;
+
 type NameFormProps = { code: string; night: NightOpen; onJoined: () => void; onNightMoved: () => void };
 
 /** "What should the host call you?" (A.87–A.90): prefilled from the gen account when kjbox suggests a name. */
@@ -203,9 +217,10 @@ function NameForm({ code, night, onJoined, onNightMoved }: NameFormProps) {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const trimmed = name.trim();
+  const valid = trimmed.length > 0 && trimmed.length <= NAME_MAX;
 
   const confirm = async () => {
-    if (!trimmed || sending) return;
+    if (!valid || sending) return;
     setSending(true);
     setError(null);
     try {
@@ -237,13 +252,14 @@ function NameForm({ code, night, onJoined, onNightMoved }: NameFormProps) {
         autoFocus
         returnKeyType="go"
         onSubmitEditing={() => void confirm()}
+        maxLength={NAME_MAX}
       />
       {error ? (
         <Text testID="tonight-name-error" variant="error">
           {error}
         </Text>
       ) : null}
-      <Button testID="tonight-name-confirm" label={t('nameConfirm')} disabled={!trimmed} loading={sending} onPress={() => void confirm()} />
+      <Button testID="tonight-name-confirm" label={t('nameConfirm')} disabled={!valid} loading={sending} onPress={() => void confirm()} />
     </View>
   );
 }

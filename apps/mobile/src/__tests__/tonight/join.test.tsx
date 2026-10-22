@@ -1,6 +1,6 @@
 import * as kjbox from '@nomad/api-kjbox';
 import type { NightClosed } from '@nomad/api-kjbox';
-import { fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { useAuth } from '../../auth/store';
@@ -55,6 +55,18 @@ it('signed out: opens sign-in that comes back to this join', async () => {
   expect(openSignIn).toHaveBeenCalledTimes(2);
 });
 
+it('signing in after openSignIn loads the night and lands on Tonight', async () => {
+  useAuth.setState({ state: { status: 'signedOut' } });
+  useNightStore.getState().rehydrate(null);
+  const app = open();
+  await waitFor(() => expect(openSignIn).toHaveBeenCalledWith('/tonight/join?t=2121'));
+  expect(api.getNight).not.toHaveBeenCalled();
+  act(() => signedInClean());
+  await waitFor(() => expect(api.getNight).toHaveBeenCalledWith('2121'));
+  await waitFor(() => expect(app.getPathname()).toBe('/tonight'));
+  expect(useNightStore.getState().active).toMatchObject({ kind: 'nomad', code: '2121', nightId: TONIGHT });
+});
+
 it('already named: joins and lands on the night', async () => {
   const app = open();
   await waitFor(() => expect(app.getPathname()).toBe('/tonight'));
@@ -88,6 +100,32 @@ describe('first time: name confirm (spec §4.1 Join tonight)', () => {
     fireEvent.press(screen.getByTestId('tonight-name-confirm'));
     expect(api.joinNight).not.toHaveBeenCalled();
     expect(useNightStore.getState().active).toBeNull();
+  });
+
+  it('names are capped at 100 characters', async () => {
+    api.getNight.mockResolvedValue(nightOpen({ night_id: TONIGHT, needs_name: true, suggested_name: 'x'.repeat(101) }));
+    open();
+    const input = await screen.findByTestId('tonight-name-input');
+    expect(input).toHaveProp('maxLength', 100);
+    // A longer prefill is refused as is…
+    fireEvent.press(screen.getByTestId('tonight-name-confirm'));
+    expect(api.joinNight).not.toHaveBeenCalled();
+    // …100 (after trimming) is fine.
+    fireEvent.changeText(input, ` ${'y'.repeat(100)} `);
+    fireEvent.press(screen.getByTestId('tonight-name-confirm'));
+    await waitFor(() => expect(api.joinNight).toHaveBeenCalledWith('2121', 'y'.repeat(100), TONIGHT));
+  });
+
+  it('the page always offers the name sheet again (iOS can drop a sheet)', async () => {
+    api.getNight.mockResolvedValue(nightOpen({ night_id: TONIGHT, needs_name: true, suggested_name: 'Sam' }));
+    open();
+    await screen.findByTestId('tonight-name-input');
+    // Visible while the sheet is up too, not only after it was closed.
+    expect(screen.getByTestId('tonight-join-name-open')).toBeTruthy();
+    fireEvent.press(screen.getByTestId('tonight-name-sheet-backdrop'));
+    await waitFor(() => expect(screen.queryByTestId('tonight-name-input')).toBeNull());
+    fireEvent.press(screen.getByTestId('tonight-join-name-open'));
+    expect(await screen.findByTestId('tonight-name-input')).toHaveProp('value', 'Sam');
   });
 
   it('a failed join keeps the sheet with the error and does not join', async () => {
@@ -168,6 +206,25 @@ describe('switching nights (ruling E3-R4)', () => {
     fireEvent.press(await screen.findByTestId('tonight-switch-confirm'));
     fireEvent.press(await screen.findByTestId('tonight-name-confirm'));
     await waitFor(() => expect(useNightStore.getState().active).toMatchObject({ kind: 'nomad', nightId: TONIGHT }));
+  });
+
+  it('the page always has its own switch and keep buttons (iOS can drop a sheet)', async () => {
+    useNightStore.getState().joinNomad('5555', OTHER, 'Someone');
+    const app = open();
+    await screen.findByTestId('tonight-switch-sheet');
+    expect(screen.getByTestId('tonight-join-switch')).toBeTruthy();
+    expect(screen.getByTestId('tonight-join-keep')).toBeTruthy();
+    fireEvent.press(screen.getByTestId('tonight-join-switch'));
+    await waitFor(() => expect(useNightStore.getState().active).toMatchObject({ code: '2121', nightId: TONIGHT }));
+    await waitFor(() => expect(app.getPathname()).toBe('/tonight'));
+  });
+
+  it('the in-page keep leaves the old night', async () => {
+    useNightStore.getState().joinNomad('5555', OTHER, 'Someone');
+    const app = open();
+    fireEvent.press(await screen.findByTestId('tonight-join-keep'));
+    await waitFor(() => expect(app.getPathname()).toBe('/tonight'));
+    expect(useNightStore.getState().active).toMatchObject({ code: '5555', nightId: OTHER });
   });
 
   it('the same night again: no question', async () => {

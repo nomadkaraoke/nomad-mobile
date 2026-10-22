@@ -10,7 +10,7 @@ export type TextFieldProps = {
   testID: string;
   error?: string;
   placeholder?: string;
-} & Pick<TextInputProps, 'keyboardType' | 'autoComplete' | 'autoFocus' | 'autoCapitalize' | 'returnKeyType' | 'onSubmitEditing' | 'textContentType'>;
+} & Pick<TextInputProps, 'keyboardType' | 'maxLength' | 'autoComplete' | 'autoFocus' | 'autoCapitalize' | 'returnKeyType' | 'onSubmitEditing' | 'textContentType'>;
 
 export function TextField({ label, error, testID, ...input }: TextFieldProps) {
   return (

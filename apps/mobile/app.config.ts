@@ -11,7 +11,7 @@ const GOOGLE_IOS_CLIENT_ID =
 /**
  * Night links (spec §4.2, ruling E3-R2): Android App Links for kjbox.cc (http + https, any path; the printed QR is
  * `HTTP://KJBOX.CC/<code>`) and sing.nomadkaraoke.com (`/?t=<code>`). Android matches hosts case-sensitively, so the
- * uppercase QR host gets its own filter (kept apart so it can't affect the lowercase hosts' verification).
+ * uppercase QR host gets its own plain (unverified) filter.
  * kjbox.cc and sing.nomadkaraoke.com serve /.well-known/assetlinks.json.
  */
 const VERIFIED_VIEW = { action: 'VIEW', autoVerify: true, category: ['BROWSABLE', 'DEFAULT'] };
@@ -19,7 +19,13 @@ const httpAndHttps = (...hosts: string[]) => hosts.flatMap((host) => [{ scheme: 
 const NIGHT_LINK_FILTERS = [
   { ...VERIFIED_VIEW, data: httpAndHttps('kjbox.cc', 'www.kjbox.cc') },
   { ...VERIFIED_VIEW, data: [{ scheme: 'https', host: 'sing.nomadkaraoke.com', path: '/' }] },
-  { ...VERIFIED_VIEW, data: httpAndHttps('KJBOX.CC') },
+  // Ruling E3-R6: unverified (no autoVerify), so an uppercase-host verification can never unverify the hosts above
+  // (pre-Android 12 verification is all-or-nothing). The QR's scheme is uppercase too.
+  {
+    action: 'VIEW',
+    category: ['BROWSABLE', 'DEFAULT'],
+    data: [...httpAndHttps('KJBOX.CC'), { scheme: 'HTTP', host: 'KJBOX.CC' }],
+  },
 ];
 
 /** iOS universal links for the same hosts (https only; the uppercase HTTP:// QR reaches iOS via the in-app scanner). */

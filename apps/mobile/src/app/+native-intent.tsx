@@ -5,6 +5,9 @@ import { parseNightLink } from '../tonight/links';
 /** nomadkaraoke://checkout (any query): gen's checkout bounce back to the app (see credits/useCheckout.ts). */
 const CHECKOUT_RETURN = /^nomadkaraoke:\/\/\/?checkout(?:[?#/]|$)/i;
 
+/** http(s) links on the hosts the app claims: kjbox.cc, www.kjbox.cc, sing.nomadkaraoke.com (any case). */
+const CLAIMED_HOST = /^https?:\/\/(?:(?:www\.)?kjbox\.cc|sing\.nomadkaraoke\.com)(?:[:/?#]|$)/i;
+
 /**
  * Android delivers the checkout return to the app as an intent as well as to the in-app browser session that
  * waits for it, so without this Expo Router opens an "Unmatched Route" over the credits screen. Returning null
@@ -23,6 +26,8 @@ export function redirectSystemPath({ path, initial }: { path: string; initial: b
   if (path.includes('://')) {
     const link = parseNightLink(path);
     if (link) return `/tonight/join?t=${link.code}`;
+    // Any other link on a host the app claims (intent filters / associated domains) would be an Unmatched Route.
+    if (CLAIMED_HOST.test(path)) return '/tonight';
   }
   return path;
 }

@@ -126,7 +126,6 @@
   },
   "tonight": {
     "title": "Tonight",
-    "comingSoon": "Coming soon: your requests and tonight's queue",
     "night": {
       "status": {
         "label": "Your next song",

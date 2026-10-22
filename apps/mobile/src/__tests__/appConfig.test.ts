@@ -47,7 +47,7 @@ describe('night links', () => {
     delete process.env.EXPO_PUBLIC_ASSOCIATED_DOMAINS;
   });
 
-  it('adds verified Android intent filters for kjbox.cc, www.kjbox.cc, KJBOX.CC and sing.nomadkaraoke.com', () => {
+  it('adds verified Android intent filters for kjbox.cc, www.kjbox.cc and sing.nomadkaraoke.com, and a plain one for KJBOX.CC', () => {
     expect(resolve().android?.intentFilters).toEqual([
       {
         ...VIEW,
@@ -59,11 +59,14 @@ describe('night links', () => {
         ],
       },
       { ...VIEW, data: [{ scheme: 'https', host: 'sing.nomadkaraoke.com', path: '/' }] },
+      // Ruling E3-R6: unverified (no autoVerify), so it can never affect the verified hosts; uppercase scheme too.
       {
-        ...VIEW,
+        action: 'VIEW',
+        category: ['BROWSABLE', 'DEFAULT'],
         data: [
           { scheme: 'http', host: 'KJBOX.CC' },
           { scheme: 'https', host: 'KJBOX.CC' },
+          { scheme: 'HTTP', host: 'KJBOX.CC' },
         ],
       },
     ]);

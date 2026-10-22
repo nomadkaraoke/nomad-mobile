@@ -31,7 +31,11 @@ export function ScanScreen() {
     // A bare number on some other QR is not a night link: only full links count from the camera.
     if (!link || !data.includes('://')) return;
     hit.current = true;
-    void Promise.resolve(Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)).catch(() => undefined);
+    try {
+      void Promise.resolve(Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)).catch(() => undefined);
+    } catch {
+      // no haptics engine: the join still happens
+    }
     join(link.code);
   };
 
