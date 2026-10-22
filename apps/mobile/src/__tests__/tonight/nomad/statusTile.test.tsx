@@ -25,6 +25,7 @@ describe('StatusTile', () => {
     renderTonight(<StatusTile me={me({ songs: [s] })} />);
     expect(screen.queryByTestId('tonight-status-urgent')).toBeNull();
     expect(screen.getByTestId('tonight-status-summary')).toHaveTextContent("You're up. Head to the stage!");
+    expect(screen.getByTestId('tonight-status-onStage')).toBeTruthy();
   });
 
   it('reads "right after this song" at position 2 while someone is singing, else "almost up"', () => {

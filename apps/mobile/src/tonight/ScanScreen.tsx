@@ -65,6 +65,15 @@ export function ScanScreen() {
     );
   }
 
+  // Typing the code replaces the camera (UX review): under it, the field and Join sat behind the keyboard.
+  if (codeOpen) {
+    return (
+      <Screen underHeader testID="tonight-scan-screen" scroll>
+        <CodeEntry autoFocus onCode={join} />
+      </Screen>
+    );
+  }
+
   return (
     <Screen underHeader testID="tonight-scan-screen" scroll>
       <Text variant="muted">{t('hint')}</Text>
@@ -76,11 +85,7 @@ export function ScanScreen() {
           onBarcodeScanned={onScanned}
         />
       </View>
-      {codeOpen ? (
-        <CodeEntry autoFocus onCode={join} />
-      ) : (
-        <Button testID="tonight-scan-enter-code" variant="secondary" label={t('enterCodeInstead')} onPress={() => setCodeOpen(true)} />
-      )}
+      <Button testID="tonight-scan-enter-code" variant="secondary" label={t('enterCodeInstead')} onPress={() => setCodeOpen(true)} />
     </Screen>
   );
 }

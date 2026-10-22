@@ -43,9 +43,12 @@ export function StatusTile({ me, now }: { me: MeResult; now?: NowResult }) {
       <Text testID="tonight-status-song" className="text-lg font-bold">
         {artist ? t('songByArtist', { title: isolate(title), artist: isolate(artist) }) : title}
       </Text>
-      <Text testID="tonight-status-summary" className={urgent ? 'font-bold text-success' : ''}>
-        {text(summary)}
-      </Text>
+      {/* The wrapper names the turn state (tonight-status-onStage, -next, -position, …) for E2E in any language. */}
+      <View testID={`tonight-status-${summary.kind}`}>
+        <Text testID="tonight-status-summary" className={urgent ? 'font-bold text-success' : ''}>
+          {text(summary)}
+        </Text>
+      </View>
     </View>
   );
 }

@@ -81,6 +81,14 @@ describe('permission (ruling E3-R3)', () => {
 });
 
 describe('scanning (ruling E3-R3)', () => {
+  it('"Enter the night code instead" swaps the camera for the code field (it sat behind the keyboard under it)', async () => {
+    renderRouter(getInRoutes(), { initialUrl: '/tonight/scan' });
+    await screen.findByTestId('camera-view');
+    fireEvent.press(screen.getByTestId('tonight-scan-enter-code'));
+    expect(screen.getByTestId('tonight-code-input')).toBeTruthy();
+    expect(screen.queryByTestId('camera-view')).toBeNull();
+  });
+
   it('scans QR codes only', async () => {
     renderRouter(getInRoutes(), { initialUrl: '/tonight/scan' });
     await screen.findByTestId('camera-view');
