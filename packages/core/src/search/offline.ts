@@ -20,8 +20,9 @@ type VersionRow = {
 const LIBRARY_CHUNK = 500;
 
 /**
- * Library codes per song key from `song_libraries` (no schema bump). Keys without rows are absent. `Map` is empty
- * on any SQLite error (older offline.db without the table): library filtering must degrade, never break the list.
+ * Library codes per song key from `song_libraries` (no schema bump). Keys without rows are absent. Only a missing
+ * `song_libraries` table (older offline.db) is swallowed, with a warning, and gives an empty map; any other error is
+ * re-thrown so a real failure never silently turns every song into "no library".
  */
 export function offlineSongLibraries(db: SqlReader, songKeys: readonly string[]): Map<string, string[]> {
   const out = new Map<string, string[]>();
@@ -38,8 +39,12 @@ export function offlineSongLibraries(db: SqlReader, songKeys: readonly string[])
         else out.set(r.song_key, [r.library_code]);
       }
     }
-  } catch {
-    return new Map();
+  } catch (e) {
+    if (e instanceof Error && /no such table:\s*song_libraries/i.test(e.message)) {
+      console.warn('offline.db has no song_libraries table; library filters will match nothing');
+      return new Map();
+    }
+    throw e;
   }
   return out;
 }

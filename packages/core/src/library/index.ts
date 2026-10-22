@@ -13,12 +13,16 @@ export const LIBRARY_FILTERS: readonly LibraryFilter[] = ['any', 'community', 'k
 /** KaraokeNerds brand / library code for KaraFun (Karaoke Version). */
 export const KARAFUN_LIBRARY_CODE = 'KV';
 
-/** The concrete library tags a song has (never contains 'any'). */
+/**
+ * The concrete library tags a song has (never contains 'any'). Community membership comes from versions only
+ * (a version with kind 'community'): a song known only by library codes is not tagged community. KaraFun comes
+ * from either the library codes or a KV version.
+ */
 export function songLibraries(song: LibraryTagged): Set<'community' | 'karafun'> {
   const tags = new Set<'community' | 'karafun'>();
-  if (song.libraries?.includes(KARAFUN_LIBRARY_CODE) || song.versions?.some((v) => v.brand_code === KARAFUN_LIBRARY_CODE)) {
-    tags.add('karafun');
-  }
+  const inLibraries = song.libraries?.includes(KARAFUN_LIBRARY_CODE) ?? false;
+  const inVersions = song.versions?.some((v) => v.brand_code === KARAFUN_LIBRARY_CODE) ?? false;
+  if (inLibraries || inVersions) tags.add('karafun');
   if (song.versions?.some((v) => v.kind === 'community')) tags.add('community');
   return tags;
 }

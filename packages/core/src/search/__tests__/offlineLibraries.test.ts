@@ -3,8 +3,8 @@ import Database from 'better-sqlite3';
 import path from 'node:path';
 
 import { matchesLibrary } from '../../library';
-import { offlineSongGroup, offlineSongLibraries, popularOffline, searchAvailabilityOffline } from '../offline';
-import type { SqlReader } from '../types';
+import { offlineGroups, offlineSongGroup, offlineSongLibraries, popularOffline, searchAvailabilityOffline } from '../offline';
+import type { IdentifyResult, SqlReader } from '../types';
 
 let raw: Database.Database;
 let db: SqlReader;
@@ -30,7 +30,37 @@ describe('offlineSongLibraries', () => {
   });
 });
 
+describe('offlineSongLibraries errors', () => {
+  it('swallows only a missing song_libraries table, with a warning', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const old: SqlReader = {
+      all: () => {
+        throw new Error('no such table: song_libraries');
+      },
+    };
+    expect(offlineSongLibraries(old, ['a|b']).size).toBe(0);
+    expect(warn).toHaveBeenCalledTimes(1);
+    warn.mockRestore();
+  });
+  it('re-throws any other error', () => {
+    const bad: SqlReader = {
+      all: () => {
+        throw new Error('database disk image is malformed');
+      },
+    };
+    expect(() => offlineSongLibraries(bad, ['a|b'])).toThrow('malformed');
+  });
+});
+
 describe('groups carry libraries', () => {
+  it('offlineGroups (identify path) fills libraries via offlineSongGroup', () => {
+    const g = offlineGroups(db, {
+      status: 'confident',
+      best: { artist: 'Muse', title: 'Starlight', detail: {} },
+      candidates: [],
+    } as unknown as IdentifyResult);
+    expect(g[0]!.libraries).toContain('KV');
+  });
   it('offlineSongGroup fills libraries', () => {
     expect(offlineSongGroup(db, 'muse|starlight')!.libraries).toContain('KV');
   });
@@ -39,8 +69,13 @@ describe('groups carry libraries', () => {
     expect(groups.length).toBeGreaterThan(0);
     for (const g of groups) expect(Array.isArray(g.libraries)).toBe(true);
     expect(groups.some((g) => g.libraries.length > 0)).toBe(true);
-    const kf = groups.filter((g) => matchesLibrary({ libraries: g.libraries, versions: g.versions.map((v) => ({ kind: v.kind, brand_code: v.brandCode })) }, 'karafun'));
-    for (const g of kf) expect(g.libraries.includes('KV') || g.versions.some((v) => v.brandCode === 'KV')).toBe(true);
+    const starlight = offlineSongGroup(db, 'muse|starlight')!;
+    const tagged = {
+      libraries: starlight.libraries,
+      versions: starlight.versions.map((v) => ({ kind: v.kind, brand_code: v.brandCode })),
+    };
+    expect(matchesLibrary(tagged, 'karafun')).toBe(true);
+    expect(matchesLibrary(tagged, 'community')).toBe(true);
   });
   it('searchAvailabilityOffline groups carry libraries', () => {
     expect(searchAvailabilityOffline(db, 'starlight')[0]!.libraries).toBeDefined();
