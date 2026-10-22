@@ -20,9 +20,11 @@ onFlowComplete:
 - assertVisible:
     id: "library-filter-any"
     selected: true
+# Songs are compared by TITLE: each row's menu button is labelled "More options for <title>" (the row's own
+# label also carries its badges, so the same song gaining a "KaraFun" badge would look like a change).
 # Row 1 (row 0 is Muse "Starlight", which KaraFun has too).
 - copyTextFrom:
-    id: "rec-row-.*-1"
+    id: "rec-menu-.*-1"
     index: 0
 - runScript:
     file: ../scripts/remember-text.js
@@ -38,7 +40,7 @@ onFlowComplete:
     timeout: 5000
 - extendedWaitUntil:
     notVisible:
-      id: "rec-row-.*-1"
+      id: "rec-menu-.*-1"
       text: ${output.before}
     timeout: 20000
 # Every row is in the KaraFun catalogue (the visible ones say so).
@@ -50,15 +52,19 @@ onFlowComplete:
     text: ".*KaraFun.*"
 - assertVisible:
     id: "library-badge-karafun"
+# Re-checked with the new rows on screen (the wait above also passes while the list is reloading).
+- assertNotVisible:
+    id: "rec-menu-.*-1"
+    text: ${output.before}
 - copyTextFrom:
-    id: "rec-row-.*-0"
+    id: "rec-menu-.*-0"
     index: 0
 - runScript:
     file: ../scripts/remember-text.js
     env:
       NAME: karafun
 - takeScreenshot: ${DISCOVER_SHOTS}/discover-3-karafun
-# Decade sheet → 1980s → Apply: the first row changes again.
+# Decade sheet → 1980s → Apply: the first row is a different song again.
 - tapOn:
     id: "filter-chip-decade"
 - extendedWaitUntil:
@@ -76,11 +82,14 @@ onFlowComplete:
     timeout: 5000
 - extendedWaitUntil:
     notVisible:
-      id: "rec-row-.*-0"
+      id: "rec-menu-.*-0"
       text: ${output.karafun}
     timeout: 20000
 - assertVisible:
     id: "rec-row-.*-0"
+- assertNotVisible:
+    id: "rec-menu-.*-0"
+    text: ${output.karafun}
 - assertVisible:
     id: "library-badge-karafun"
 - waitForAnimationToEnd:

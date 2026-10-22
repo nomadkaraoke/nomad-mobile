@@ -49,6 +49,7 @@ module.exports = defineConfig([
         STACK: 'readonly',
         DECIDE_STACK: 'readonly',
         PROFILE: 'readonly',
+        FIRST_PART: 'readonly',
         ACTION: 'readonly',
         NAME: 'readonly',
         CREDITS: 'readonly',
