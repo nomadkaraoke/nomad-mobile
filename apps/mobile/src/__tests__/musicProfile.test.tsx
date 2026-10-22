@@ -188,6 +188,27 @@ describe('musicProfile', () => {
       await waitFor(() => expect(app.getPathname()).toBe('/me/music-profile'));
     });
 
+    it('keeps the love level of profile artists when the quiz is submitted (like only when decide has none)', async () => {
+      artistRows = [
+        { artist_name: 'Alpha Band', sources: ['quiz'], affinity: 'love' },
+        { artist_name: 'Beta Band', sources: ['quiz'], affinity: 'occasionally' },
+        { artist_name: 'Gamma Synced', sources: ['spotify'], affinity: null },
+      ];
+      await signIn();
+      open(editQuiz);
+      fireEvent.press(await screen.findByTestId('quiz-finish'));
+      await waitFor(() => expect(decide.submitQuiz).toHaveBeenCalled());
+      expect(decide.submitQuiz).toHaveBeenCalledWith(
+        expect.objectContaining({
+          artist_affinities: [
+            { artist_name: 'Alpha Band', affinity: 'love' },
+            { artist_name: 'Beta Band', affinity: 'like' },
+            { artist_name: 'Gamma Synced', affinity: 'like' },
+          ],
+        }),
+      );
+    });
+
     it('finishing an edit opened from the profile shows the new answers there (no stale profile)', async () => {
       await signIn();
       const app = open();

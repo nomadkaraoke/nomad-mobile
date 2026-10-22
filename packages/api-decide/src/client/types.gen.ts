@@ -201,7 +201,7 @@ export type AllArtistsResponse = {
     /**
      * Artists
      */
-    artists: Array<UserArtistResponse>;
+    artists: Array<BackendApiRoutesMyDataUserArtistResponse>;
     /**
      * Total
      */
@@ -674,7 +674,7 @@ export type DataSummaryResponse = {
      * Services
      */
     services: {
-        [key: string]: BackendApiRoutesMyDataServiceSummary;
+        [key: string]: ServiceSummary;
     };
     artists: ArtistsSummary;
     songs: SongsSummary;
@@ -1016,6 +1016,102 @@ export type KaraokeLinkResponse = {
 };
 
 /**
+ * KaraokeLogEntry
+ *
+ * A karaoke-log record as the API returns it.
+ *
+ * ``state`` is None only for a placeholder the app created by writing a survey to a
+ * ``kj_`` id before kjbox delivered the facts; ``list_for_user`` leaves those out.
+ */
+export type KaraokeLogEntry = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * User Id
+     */
+    user_id: string;
+    /**
+     * Email Hash
+     */
+    email_hash?: string | null;
+    /**
+     * Source
+     */
+    source: 'kjbox' | 'app';
+    /**
+     * State
+     */
+    state?: 'planned' | 'requested' | 'sung' | 'sung_unplayed' | 'skipped' | null;
+    /**
+     * Artist
+     */
+    artist?: string;
+    /**
+     * Title
+     */
+    title?: string;
+    /**
+     * Song Key
+     */
+    song_key?: string | null;
+    /**
+     * Song Key Status
+     */
+    song_key_status?: 'resolved' | 'unresolved';
+    night?: LogNight | null;
+    /**
+     * Sung At
+     */
+    sung_at?: string | null;
+    /**
+     * Ended At
+     */
+    ended_at?: string | null;
+    /**
+     * Created At
+     */
+    created_at?: string | null;
+    /**
+     * Updated At
+     */
+    updated_at?: string | null;
+    survey?: Survey | null;
+    media?: LogMedia | null;
+    /**
+     * Deleted
+     */
+    deleted?: boolean;
+    /**
+     * Box Id
+     */
+    box_id?: string | null;
+    /**
+     * Entry Id
+     */
+    entry_id?: string | null;
+    /**
+     * Singers
+     */
+    singers?: Array<string>;
+};
+
+/**
+ * KaraokeLogPage
+ */
+export type KaraokeLogPage = {
+    /**
+     * Entries
+     */
+    entries: Array<KaraokeLogEntry>;
+    /**
+     * Next Cursor
+     */
+    next_cursor?: string | null;
+};
+
+/**
  * KnownSongResponse
  *
  * Response for a single known song.
@@ -1101,6 +1197,46 @@ export type ListenBrainzConnectRequest = {
      * Username
      */
     username: string;
+};
+
+/**
+ * LogMedia
+ */
+export type LogMedia = {
+    /**
+     * Brand Code
+     */
+    brand_code?: string | null;
+    /**
+     * Gen Job Id
+     */
+    gen_job_id?: string | null;
+    /**
+     * Source Type
+     */
+    source_type?: string | null;
+};
+
+/**
+ * LogNight
+ */
+export type LogNight = {
+    /**
+     * Id
+     */
+    id?: string | null;
+    /**
+     * Kind
+     */
+    kind?: 'nomad' | 'other' | null;
+    /**
+     * Venue Name
+     */
+    venue_name?: string | null;
+    /**
+     * Date
+     */
+    date?: string | null;
 };
 
 /**
@@ -1857,29 +1993,29 @@ export type ServiceStats = {
  */
 export type ServiceSummary = {
     /**
-     * Service Type
+     * Connected
      */
-    service_type: string;
+    connected: boolean;
     /**
-     * Service Username
+     * Username
      */
-    service_username: string;
-    /**
-     * Sync Status
-     */
-    sync_status: string;
-    /**
-     * Last Sync At
-     */
-    last_sync_at: string | null;
+    username?: string | null;
     /**
      * Tracks Synced
      */
-    tracks_synced: number;
+    tracks_synced?: number | null;
     /**
-     * Sync Error
+     * Songs Synced
      */
-    sync_error: string | null;
+    songs_synced?: number | null;
+    /**
+     * Artists Synced
+     */
+    artists_synced?: number | null;
+    /**
+     * Last Sync At
+     */
+    last_sync_at?: string | null;
 };
 
 /**
@@ -2112,6 +2248,34 @@ export type SuggestionReasonResponse = {
      * Related To
      */
     related_to?: string | null;
+};
+
+/**
+ * Survey
+ *
+ * The optional post-song survey. Every answer is optional.
+ */
+export type Survey = {
+    /**
+     * Feel
+     */
+    feel?: 'great' | 'ok' | 'bad' | null;
+    /**
+     * Key
+     */
+    key?: 'too_low' | 'right' | 'too_high' | null;
+    /**
+     * Crowd Pleaser
+     */
+    crowd_pleaser?: boolean | null;
+    /**
+     * Notes
+     */
+    notes?: string | null;
+    /**
+     * Answered At
+     */
+    answered_at?: string | null;
 };
 
 /**
@@ -2648,36 +2812,29 @@ export type UpgradeGuestResponse = {
 /**
  * UserArtistResponse
  *
- * An artist from user's data with merged source information.
- *
- * MBID-first: MusicBrainz ID is the primary identifier when available.
- * Spotify ID is optional enrichment for images and external links.
+ * Artist from user's listening history.
  */
 export type UserArtistResponse = {
     /**
-     * Mbid
+     * Id
      */
-    mbid?: string | null;
+    id: string;
     /**
      * Artist Name
      */
     artist_name: string;
     /**
-     * Sources
+     * Source
      */
-    sources: Array<string>;
+    source: string;
     /**
-     * Spotify Id
+     * Rank
      */
-    spotify_id?: string | null;
+    rank: number;
     /**
-     * Spotify Rank
+     * Time Range
      */
-    spotify_rank?: number | null;
-    /**
-     * Spotify Time Range
-     */
-    spotify_time_range?: string | null;
+    time_range: string;
     /**
      * Popularity
      */
@@ -2686,26 +2843,6 @@ export type UserArtistResponse = {
      * Genres
      */
     genres?: Array<string>;
-    /**
-     * Lastfm Rank
-     */
-    lastfm_rank?: number | null;
-    /**
-     * Lastfm Playcount
-     */
-    lastfm_playcount?: number | null;
-    /**
-     * Tags
-     */
-    tags?: Array<string>;
-    /**
-     * Is Excluded
-     */
-    is_excluded?: boolean;
-    /**
-     * Is Manual
-     */
-    is_manual?: boolean;
 };
 
 /**
@@ -2717,7 +2854,7 @@ export type UserArtistsResponse = {
     /**
      * Artists
      */
-    artists: Array<BackendApiRoutesRecommendationsUserArtistResponse>;
+    artists: Array<UserArtistResponse>;
     /**
      * Total
      */
@@ -2775,7 +2912,7 @@ export type UserDetail = {
     /**
      * Services
      */
-    services: Array<ServiceSummary>;
+    services: Array<BackendModelsAdminServiceSummary>;
     /**
      * Sync Jobs
      */
@@ -3048,63 +3185,38 @@ export type YouTubeMusicImportResponse = {
 };
 
 /**
- * ServiceSummary
- *
- * Summary of a connected music service.
- */
-export type BackendApiRoutesMyDataServiceSummary = {
-    /**
-     * Connected
-     */
-    connected: boolean;
-    /**
-     * Username
-     */
-    username?: string | null;
-    /**
-     * Tracks Synced
-     */
-    tracks_synced?: number | null;
-    /**
-     * Songs Synced
-     */
-    songs_synced?: number | null;
-    /**
-     * Artists Synced
-     */
-    artists_synced?: number | null;
-    /**
-     * Last Sync At
-     */
-    last_sync_at?: string | null;
-};
-
-/**
  * UserArtistResponse
  *
- * Artist from user's listening history.
+ * An artist from user's data with merged source information.
+ *
+ * MBID-first: MusicBrainz ID is the primary identifier when available.
+ * Spotify ID is optional enrichment for images and external links.
  */
-export type BackendApiRoutesRecommendationsUserArtistResponse = {
+export type BackendApiRoutesMyDataUserArtistResponse = {
     /**
-     * Id
+     * Mbid
      */
-    id: string;
+    mbid?: string | null;
     /**
      * Artist Name
      */
     artist_name: string;
     /**
-     * Source
+     * Sources
      */
-    source: string;
+    sources: Array<string>;
     /**
-     * Rank
+     * Spotify Id
      */
-    rank: number;
+    spotify_id?: string | null;
     /**
-     * Time Range
+     * Spotify Rank
      */
-    time_range: string;
+    spotify_rank?: number | null;
+    /**
+     * Spotify Time Range
+     */
+    spotify_time_range?: string | null;
     /**
      * Popularity
      */
@@ -3113,6 +3225,62 @@ export type BackendApiRoutesRecommendationsUserArtistResponse = {
      * Genres
      */
     genres?: Array<string>;
+    /**
+     * Lastfm Rank
+     */
+    lastfm_rank?: number | null;
+    /**
+     * Lastfm Playcount
+     */
+    lastfm_playcount?: number | null;
+    /**
+     * Tags
+     */
+    tags?: Array<string>;
+    /**
+     * Is Excluded
+     */
+    is_excluded?: boolean;
+    /**
+     * Is Manual
+     */
+    is_manual?: boolean;
+    /**
+     * Affinity
+     */
+    affinity?: 'love' | 'like' | 'occasionally' | null;
+};
+
+/**
+ * ServiceSummary
+ *
+ * Summary of a connected music service.
+ */
+export type BackendModelsAdminServiceSummary = {
+    /**
+     * Service Type
+     */
+    service_type: string;
+    /**
+     * Service Username
+     */
+    service_username: string;
+    /**
+     * Sync Status
+     */
+    sync_status: string;
+    /**
+     * Last Sync At
+     */
+    last_sync_at: string | null;
+    /**
+     * Tracks Synced
+     */
+    tracks_synced: number;
+    /**
+     * Sync Error
+     */
+    sync_error: string | null;
 };
 
 /**
@@ -5266,6 +5434,201 @@ export type RemoveKnownSongApiKnownSongsSongIdDeleteResponses = {
 };
 
 export type RemoveKnownSongApiKnownSongsSongIdDeleteResponse = RemoveKnownSongApiKnownSongsSongIdDeleteResponses[keyof RemoveKnownSongApiKnownSongsSongIdDeleteResponses];
+
+export type ListKaraokeLogApiMyKaraokeLogGetData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Since
+         *
+         * ISO time: records updated after it, deleted ones too
+         */
+        since?: string | null;
+        /**
+         * Night Id
+         */
+        night_id?: string | null;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Cursor
+         */
+        cursor?: string | null;
+    };
+    url: '/api/my/karaoke-log';
+};
+
+export type ListKaraokeLogApiMyKaraokeLogGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListKaraokeLogApiMyKaraokeLogGetError = ListKaraokeLogApiMyKaraokeLogGetErrors[keyof ListKaraokeLogApiMyKaraokeLogGetErrors];
+
+export type ListKaraokeLogApiMyKaraokeLogGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: KaraokeLogPage;
+};
+
+export type ListKaraokeLogApiMyKaraokeLogGetResponse = ListKaraokeLogApiMyKaraokeLogGetResponses[keyof ListKaraokeLogApiMyKaraokeLogGetResponses];
+
+export type DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * Entry Id
+         */
+        entry_id: string;
+    };
+    query?: never;
+    url: '/api/my/karaoke-log/{entry_id}';
+};
+
+export type DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteError = DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteErrors[keyof DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteErrors];
+
+export type DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    200: KaraokeLogEntry;
+};
+
+export type DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteResponse = DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteResponses[keyof DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteResponses];
+
+export type PutKaraokeLogApiMyKaraokeLogEntryIdPutData = {
+    /**
+     * Patch
+     */
+    body: {
+        [key: string]: unknown;
+    };
+    path: {
+        /**
+         * Entry Id
+         */
+        entry_id: string;
+    };
+    query?: never;
+    url: '/api/my/karaoke-log/{entry_id}';
+};
+
+export type PutKaraokeLogApiMyKaraokeLogEntryIdPutErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type PutKaraokeLogApiMyKaraokeLogEntryIdPutError = PutKaraokeLogApiMyKaraokeLogEntryIdPutErrors[keyof PutKaraokeLogApiMyKaraokeLogEntryIdPutErrors];
+
+export type PutKaraokeLogApiMyKaraokeLogEntryIdPutResponses = {
+    /**
+     * Successful Response
+     */
+    200: KaraokeLogEntry;
+};
+
+export type PutKaraokeLogApiMyKaraokeLogEntryIdPutResponse = PutKaraokeLogApiMyKaraokeLogEntryIdPutResponses[keyof PutKaraokeLogApiMyKaraokeLogEntryIdPutResponses];
+
+export type PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Kjbox-Secret
+         */
+        'x-kjbox-secret'?: string | null;
+    };
+    path: {
+        /**
+         * Entry Id
+         */
+        entry_id: string;
+    };
+    query?: {
+        /**
+         * Gen Email
+         */
+        gen_email?: string | null;
+    };
+    url: '/api/partner/kjbox/karaoke-log/{entry_id}';
+};
+
+export type PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteError = PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteErrors[keyof PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteErrors];
+
+export type PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteResponse = PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteResponses[keyof PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteResponses];
+
+export type PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutData = {
+    /**
+     * Record
+     */
+    body: {
+        [key: string]: unknown;
+    };
+    headers?: {
+        /**
+         * X-Kjbox-Secret
+         */
+        'x-kjbox-secret'?: string | null;
+    };
+    path: {
+        /**
+         * Entry Id
+         */
+        entry_id: string;
+    };
+    query?: never;
+    url: '/api/partner/kjbox/karaoke-log/{entry_id}';
+};
+
+export type PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutError = PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutErrors[keyof PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutErrors];
+
+export type PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutResponses = {
+    /**
+     * Response Partner Put Karaoke Log Api Partner Kjbox Karaoke Log  Entry Id  Put
+     *
+     * Successful Response
+     */
+    200: {
+        [key: string]: unknown;
+    };
+};
+
+export type PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutResponse = PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutResponses[keyof PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutResponses];
 
 export type GetAdminStatsApiAdminStatsGetData = {
     body?: never;

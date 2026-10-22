@@ -112,7 +112,7 @@ function readLocal(owner: string): unknown {
 
 type CurrentProfile = {
   prefs: Awaited<ReturnType<typeof getPreferences>> | null;
-  artists: string[] | null;
+  artists: { name: string; affinity: 'love' | 'like' }[] | null;
   songs: QuizDraft['songs'] | null;
 };
 
@@ -121,7 +121,11 @@ async function currentProfile(): Promise<CurrentProfile> {
   const [prefs, artists, loved] = await Promise.allSettled([getPreferences(), listMyArtists(), listLovedSongs()]);
   return {
     prefs: prefs.status === 'fulfilled' ? prefs.value : null,
-    artists: artists.status === 'fulfilled' ? artists.value.artists.map((a) => a.artist_name) : null,
+    artists: artists.status === 'fulfilled' ? artists.value.artists.map((a) => ({
+            name: a.artist_name,
+            // decide's quiz level; the draft has no "occasionally", and artists with none (synced) default to like.
+            affinity: a.affinity === 'love' ? ('love' as const) : ('like' as const),
+          })) : null,
     songs:
       loved.status === 'fulfilled'
         ? loved.value.map((x) => ({ songKey: x.song_key, artist: x.artist, title: x.title }))
@@ -139,7 +143,7 @@ function overlayProfile(d: QuizDraft, c: CurrentProfile): QuizDraft {
   }
   if (c.artists) {
     const have = new Map(d.artists.map((a) => [norm(a.name), a]));
-    out.artists = c.artists.map((name) => have.get(norm(name)) ?? { name, affinity: 'like' as const });
+    out.artists = c.artists.map(({ name, affinity }) => have.get(norm(name)) ?? { name, affinity });
   }
   if (c.songs) out.songs = c.songs;
   return out;
