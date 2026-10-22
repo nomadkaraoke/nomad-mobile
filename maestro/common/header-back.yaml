@@ -7,6 +7,8 @@ appId: com.nomadkaraoke.mobile
     when:
       platform: Android
     commands:
+      # With the keyboard up, the first back only closes the keyboard.
+      - hideKeyboard
       - back
 - runFlow:
     when:

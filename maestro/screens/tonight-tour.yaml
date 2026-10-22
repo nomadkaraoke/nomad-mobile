@@ -69,8 +69,15 @@ onFlowComplete:
     commands:
       - tapOn: "Don.t Allow|Don't allow"
 # "Enter the night code instead": the code field on the scanner screen (a code there replaces it with the join).
-- tapOn:
-    id: "tonight-scan-enter-code"
+- runFlow:
+    when:
+      visible:
+        id: "tonight-scan-enter-code"
+    commands:
+      - tapOn:
+          id: "tonight-scan-enter-code"
+# (Camera denied: the code field is already there, under the Settings / ask-again button.)
+- takeScreenshot: ${TOUR_SHOTS}/tonight-03c-scan-code
 - extendedWaitUntil:
     visible:
       id: "tonight-code-input"
@@ -143,6 +150,11 @@ onFlowComplete:
     commands:
       - tapOn:
           id: "tonight-preview-done"
+
+- scrollUntilVisible:
+    element:
+      id: "tonight-night-title"
+    direction: UP
 
 # 3. Requesting: results with versions, the version sheet, a correction, no karaoke version, the confirm.
 - tapOn:

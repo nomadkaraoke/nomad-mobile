@@ -23,6 +23,17 @@ appId: com.nomadkaraoke.mobile
       visible: "Runtime version.*"
     commands:
       - tapOn: "Close|Continue"
+# The dev menu can also come up late (a cold Metro bundle): close it if it is in front now.
+- extendedWaitUntil:
+    visible:
+      id: "discover-signin"
+    timeout: 60000
+    optional: true
+- runFlow:
+    when:
+      visible: "Runtime version.*"
+    commands:
+      - tapOn: "Close|Continue"
 - extendedWaitUntil:
     visible:
       id: "discover-signin"
