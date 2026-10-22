@@ -10,11 +10,13 @@ import { SearchScreen } from '../../tonight/request/SearchScreen';
  */
 export default function TonightSearchRoute() {
   const t = useTranslations('tonight.request');
+  const tNight = useTranslations('tonight.night');
   const { change, replacing, friend, q } = useLocalSearchParams<{ change?: string; replacing?: string; friend?: string; q?: string }>();
   const id = change !== undefined && /^\d+$/.test(change) ? Number(change) : undefined;
   return (
     <>
-      <Stack.Screen options={{ title: t('title') }} />
+      {/* Change mode says so in the header too (UX review): the banner below names the song being replaced. */}
+      <Stack.Screen options={{ title: id !== undefined ? tNight('song.change') : t('title') }} />
       <SearchScreen change={id !== undefined ? { id, title: replacing ?? '' } : undefined} friend={friend || undefined} initialQuery={q || undefined} />
     </>
   );

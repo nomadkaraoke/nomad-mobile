@@ -115,6 +115,15 @@ describe('useTurnAlerts', () => {
     expect(haptic).toHaveBeenCalledTimes(3);
   });
 
+  it('place 2 while someone is on stage is "up next" (the box\'s Up Next), not while the stage is empty', () => {
+    const at2 = me({ songs: [mine(501, 'Starlight', at(2))], next: next(2) });
+    expect(turnOf(at2)).toBeNull();
+    expect(turnOf(at2, true)?.state).toBe('up_next');
+    const { result } = renderHook(() => useTurnAlerts(at2, Date.now(), 'u1', NIGHT, true));
+    expect(result.current.alert?.state).toBe('up_next');
+    expect(haptic).toHaveBeenCalledTimes(1);
+  });
+
   it("a friend's song on stage is not the singer's turn", () => {
     const friend = song({ owner: 'friend', request: { linked_entry_id: 9, for_friend: true }, estimate: at(1, 0, true) });
     expect(turnOf(me({ songs: [friend] }))).toBeNull();

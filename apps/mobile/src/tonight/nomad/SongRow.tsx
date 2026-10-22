@@ -25,6 +25,8 @@ export type SongRowProps = SongRowActions & {
   readOnly?: boolean;
   /** Removed or rejected rows: hide it from the list (the night screen remembers this per night). */
   onDismiss?: (song: Song) => void;
+  /** Someone is singing now: place 2 is "right after this song" (the status tile's wording, turnSummary). */
+  someoneOnStage?: boolean;
 };
 
 function RowButton({ testID, label, onPress, tone = 'default' }: { testID: string; label: string; onPress: () => void; tone?: 'default' | 'primary' }) {
@@ -44,7 +46,7 @@ function RowButton({ testID, label, onPress, tone = 'default' }: { testID: strin
 const REVIEWABLE = new Set(['review', 'review_self', 'review_host']);
 
 /** One Your-songs row (spec §4.1 Your songs + Make-its, A.3, A.50–A.54, A.70, A.75). */
-export function SongRow({ song, readOnly, onDismiss, ...actions }: SongRowProps) {
+export function SongRow({ song, readOnly, onDismiss, someoneOnStage, ...actions }: SongRowProps) {
   const t = useTranslations('tonight.night');
   const key = songKey(song);
   const { title, artist } = songParts(song.request);
@@ -87,7 +89,12 @@ export function SongRow({ song, readOnly, onDismiss, ...actions }: SongRowProps)
   else if (song.make === 'needs_host') status = t('song.makeNeedsHost');
   else if (song.estimate?.position != null) {
     const position = song.estimate.position;
-    status = position <= 1 ? t('status.next') : t('song.statusPosition', { position, wait: t('wait', splitWait(song.estimate.expected_s)) });
+    status =
+      position <= 1
+        ? t('status.next')
+        : position === 2 && someoneOnStage
+          ? t('status.afterThis')
+          : t('song.statusPosition', { position, wait: t('wait', splitWait(song.estimate.expected_s)) });
   } else if (req.status === 'pending') status = t('song.statusPending');
   else status = t('song.statusApproved');
 

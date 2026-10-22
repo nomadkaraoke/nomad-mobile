@@ -16,9 +16,13 @@ export const turnAlertTiming = { bannerMs: 10_000 };
 
 /**
  * The singer's turn right now, from `/me`: on stage (their own live song is now singing; a friend's never counts,
- * A.13) or up next (`next.position` 1). `key` names the rotation entry, so each entry alerts once per state.
+ * A.13) or up next: `next.position` 1, or 2 while someone is on stage (the box's "Up Next", the status tile's
+ * "You're next, right after this song"). `key` names the rotation entry, so each entry alerts once per state.
  */
-export function turnOf(me: MeResult | undefined): { key: string; state: TurnState; alert: TurnAlert } | null {
+export function turnOf(
+  me: MeResult | undefined,
+  someoneOnStage = false,
+): { key: string; state: TurnState; alert: TurnAlert } | null {
   if (!me) return null;
   const onStage = me.songs.find((s) => s.owner !== 'friend' && isLive(s) && isOnStage(s));
   if (onStage) {
@@ -26,7 +30,7 @@ export function turnOf(me: MeResult | undefined): { key: string; state: TurnStat
     const id = entryIdOf(onStage);
     return { key: id != null ? `e${id}` : songKey(onStage), state: 'now_singing', alert: { state: 'now_singing', title, artist } };
   }
-  if (me.next && me.next.position <= 1) {
+  if (me.next && (me.next.position <= 1 || (someoneOnStage && me.next.position === 2))) {
     const song = nextSong(me);
     const parts = song ? songParts(song.request) : null;
     return {
@@ -82,11 +86,17 @@ function useForegroundSince(): { foreground: boolean; since: number } {
  * return; the refetch on return alerts if the turn still holds. The fired set is kept per user and night in MMKV, so a
  * restart never alerts twice. The banner hides after 10 s or when dismissed.
  */
-export function useTurnAlerts(me: MeResult | undefined, dataUpdatedAt: number, userKey: string | null, nightId: string) {
+export function useTurnAlerts(
+  me: MeResult | undefined,
+  dataUpdatedAt: number,
+  userKey: string | null,
+  nightId: string,
+  someoneOnStage = false,
+) {
   const { foreground, since } = useForegroundSince();
   const fresh = dataUpdatedAt >= since;
   const alert = useTurnBanner((s) => s.alert);
-  const turn = turnOf(me);
+  const turn = turnOf(me, someoneOnStage);
   const turnId = turn ? `${turn.key}:${turn.state}` : null;
 
   useEffect(() => {

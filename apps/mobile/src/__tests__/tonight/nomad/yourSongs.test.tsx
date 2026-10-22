@@ -106,3 +106,11 @@ describe('row actions (ruling E4-R4: placeholders wired by E5–E7, shown only w
     expect(onReorder).toHaveBeenCalled();
   });
 });
+
+it('place 2 reads "right after this song" while someone is on stage, as the status tile does', () => {
+  const s = song({ request: { song_title: 'Second' }, estimate: at(2) });
+  const { rerender } = renderTonight(<YourSongs songs={[s]} someoneOnStage />);
+  expect(screen.getByTestId(/^tonight-song-status-/)).toHaveTextContent("You're next, right after this song.");
+  rerender(<YourSongs songs={[s]} />);
+  expect(screen.getByTestId(/^tonight-song-status-/)).toHaveTextContent(/#2 in line/);
+});
