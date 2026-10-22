@@ -1,5 +1,6 @@
 import {
   KjboxError,
+  MAKE_TIMEOUT_MS,
   cancelRequest,
   claimTip,
   configureKjbox,
@@ -152,6 +153,32 @@ describe('unreachable signal', () => {
       const p = getNow('2121').catch((e) => e);
       await jest.advanceTimersByTimeAsync(10_000);
       expect(await p).toMatchObject({ unreachable: true, status: 0 });
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+  it('make search and a make submit wait longer than 10 s (gen search ~45 s, create-job up to minutes)', async () => {
+    jest.useFakeTimers();
+    try {
+      let aborted = 0;
+      fetchMock.mockImplementation(
+        (req: Request, init: RequestInit) =>
+          new Promise((_, rej) =>
+            init.signal?.addEventListener('abort', () => {
+              aborted += 1;
+              rej(new DOMException('aborted', 'AbortError'));
+            }),
+          ),
+      );
+      const search = makeSearch('2121', 'Muse', 'Starlight').catch((e) => e);
+      const submit = submitRequest('2121', { client_request_id: 'c', source_type: 'make' }).catch((e) => e);
+      const plain = submitRequest('2121', { client_request_id: 'd', source_type: 'local' }).catch((e) => e);
+      await jest.advanceTimersByTimeAsync(10_000);
+      expect(await plain).toMatchObject({ unreachable: true });
+      expect(aborted).toBe(1);
+      await jest.advanceTimersByTimeAsync(MAKE_TIMEOUT_MS - 10_000);
+      expect(await search).toMatchObject({ unreachable: true, status: 0 });
+      expect(await submit).toMatchObject({ unreachable: true, status: 0 });
     } finally {
       jest.useRealTimers();
     }

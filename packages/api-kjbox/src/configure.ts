@@ -13,12 +13,23 @@ export type ClientDeps = {
 
 /** Per-request cap. Hermes may lack AbortSignal.timeout, so use a plain AbortController. */
 export const REQUEST_TIMEOUT_MS = 10_000;
+/**
+ * Make-it calls wait on gen: the audio search (up to ~60 s on the box) and the make submit (gen's create-job). Just
+ * under Cloudflare's 100 s origin timeout; a make submit that takes longer is retried with the same client_request_id
+ * and answered busy_retry until the box finishes (the app's retry loop).
+ */
+export const MAKE_TIMEOUT_MS = 95_000;
 
 /** fetch with a timeout; any thrown failure (network, abort, timeout) becomes an `unreachable` KjboxError. */
-async function timedFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+export const fetchWithTimeout =
+  (ms: number) =>
+  (input: RequestInfo | URL, init?: RequestInit): Promise<Response> =>
+    timedFetch(input, init, ms);
+
+async function timedFetch(input: RequestInfo | URL, init?: RequestInit, ms = REQUEST_TIMEOUT_MS): Promise<Response> {
   const request = input instanceof Request ? input : new Request(input, init);
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), REQUEST_TIMEOUT_MS);
+  const timer = setTimeout(() => ctrl.abort(), ms);
   if (request.signal?.aborted) ctrl.abort();
   else request.signal?.addEventListener('abort', () => ctrl.abort(), { once: true });
   try {
@@ -34,7 +45,7 @@ let installed: { request: number; error: number } | null = null;
 
 /** Point the generated kjbox client at an environment. Storage-agnostic: the app injects getters. */
 export function configureClient(deps: ClientDeps): void {
-  client.setConfig({ baseUrl: `${deps.baseUrl.replace(/\/+$/, '')}/api/v1`, throwOnError: true, fetch: timedFetch });
+  client.setConfig({ baseUrl: `${deps.baseUrl.replace(/\/+$/, '')}/api/v1`, throwOnError: true, fetch: fetchWithTimeout(REQUEST_TIMEOUT_MS) });
   if (installed) {
     client.interceptors.request.eject(installed.request);
     client.interceptors.error.eject(installed.error);

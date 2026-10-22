@@ -1,4 +1,5 @@
 import * as sdk from './client';
+import { fetchWithTimeout, MAKE_TIMEOUT_MS } from './configure';
 import type {
   ChangeSongRequest,
   MakeCheckRequest,
@@ -43,9 +44,13 @@ export const logSearchEvent = async (t: string, e: Omit<SearchEventRequest, 't'>
   }
 };
 
-// Requests. `body.client_request_id` makes a retried submit idempotent: reuse the same id when retrying.
+/** Make-it calls wait on gen, so they get MAKE_TIMEOUT_MS instead of the 10 s default. */
+const makeFetch = fetchWithTimeout(MAKE_TIMEOUT_MS);
+
+// Requests. `body.client_request_id` makes a retried submit idempotent: reuse the same id when retrying. A make-it
+// submit waits on gen's create-job, so it gets the longer make timeout.
 export const submitRequest = async (t: string, body: Omit<SubmitRequest, 't'>) =>
-  (await sdk.createRequest({ body: { ...body, t } })).data;
+  (await sdk.createRequest({ body: { ...body, t }, ...(body.source_type === 'make' ? { fetch: makeFetch } : {}) })).data;
 export const cancelRequest = async (t: string, id: number, nightId?: string) =>
   (await sdk.cancelRequest({ path: { id }, body: q(t, nightId) })).data;
 export const changeRequest = async (t: string, id: number, body: Omit<ChangeSongRequest, 't'>) =>
@@ -108,7 +113,7 @@ export const getMyStats = async (t: string, nightId?: string) => (await sdk.getM
 export const makeCheck = async (t: string, body: Omit<MakeCheckRequest, 't'>) =>
   (await sdk.checkMake({ body: { ...body, t } })).data;
 export const makeSearch = async (t: string, artist: string, title: string, nightId?: string) =>
-  (await sdk.makeSearch({ body: { ...q(t, nightId), artist, title } })).data;
+  (await sdk.makeSearch({ body: { ...q(t, nightId), artist, title }, fetch: makeFetch })).data;
 export const makeValidateUrl = async (t: string, url: string, nightId?: string) =>
   (await sdk.validateMakeUrl({ body: { ...q(t, nightId), url } })).data;
 export const useQuick = async (t: string, id: number, nightId?: string) =>

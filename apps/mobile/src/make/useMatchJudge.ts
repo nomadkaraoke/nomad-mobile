@@ -7,6 +7,9 @@ import type { MakeField, MakeIntent } from './intentStore';
 
 export type Song = { artist: string; title: string };
 
+/** Asks a judge pass: gen's own (default), or another service's (Tonight's goes through kjbox). */
+export type MatchJudgeFn = typeof matchJudge;
+
 /** The audio search, as the judge sees it. */
 export type JudgeSearch = {
   /** The confidence tier of the latest results; null while searching. Only the first one counts. */
@@ -57,9 +60,14 @@ function protectedFields(intent: MakeIntent): MakeField[] {
  * - undo/redo swap the metadata only;
  * - `gateOpen` stays false until the judge settles, or JUDGE_GATE_TIMEOUT_MS after the first search lands.
  *
- * At most two gen catalogue calls per make (the /api/catalog/* bucket is 20/min per user).
+ * At most two gen catalogue calls per make (the /api/catalog/* bucket is 20/min per user). `judge` replaces gen's
+ * judge call (Tonight's make asks through kjbox).
  */
-export function useMatchJudge(intent: MakeIntent | null, search: JudgeSearch) {
+export function useMatchJudge(intent: MakeIntent | null, search: JudgeSearch, judge: MatchJudgeFn = matchJudge) {
+  const judgeRef = useRef(judge);
+  useEffect(() => {
+    judgeRef.current = judge;
+  });
   const [applied, setApplied] = useState<Song | null>(() =>
     intent ? { artist: intent.artist, title: intent.title } : null,
   );
@@ -125,7 +133,7 @@ export function useMatchJudge(intent: MakeIntent | null, search: JudgeSearch) {
     fastStarted.current = true;
     locked.current = protectedFields(intent);
     show({ artist: intent.artist, title: intent.title }, null);
-    matchJudge({ artist: intent.artist, title: intent.title, stage: 'fast' })
+    judgeRef.current({ artist: intent.artist, title: intent.title, stage: 'fast' })
       .then((v) => {
         if (mayApply() && v.kind === 'cosmetic' && v.confident && !v.needs_ai) {
           setVerdict(v);
@@ -155,7 +163,7 @@ export function useMatchJudge(intent: MakeIntent | null, search: JudgeSearch) {
     fullStarted.current = true;
     const song = appliedRef.current ?? { artist: '', title: '' };
     const t = tier;
-    matchJudge({ ...song, stage: 'full', audio_confidence_tier: t })
+    judgeRef.current({ ...song, stage: 'full', audio_confidence_tier: t })
       .then((v) => {
         if (!mayApply()) return;
         setVerdict(v);

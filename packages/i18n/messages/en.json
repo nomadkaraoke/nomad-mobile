@@ -509,7 +509,32 @@
         "no": "📷 Don't post",
         "instagram": "Your Instagram handle (optional), so the host can tag you",
         "instagramPlaceholder": "@yourname"
+      },
+      "quick": {
+        "confirmTitle": "Sing the quick version?",
+        "confirmBody": "It has scrolling lyrics, without word-by-word highlighting. If the full version is ready before you're up, we'll switch to it automatically.",
+        "yes": "Sing the quick version",
+        "no": "Not now",
+        "chosen": "You'll sing the quick version of {title}.",
+        "reviewNotReady": "{title} isn't ready to review yet. Try again in a minute."
       }
+    },
+    "make": {
+      "title": "Make it",
+      "back": "Back",
+      "retry": "Try again",
+      "submit": "Make it now",
+      "refusedChange": "You can't make a new song while you're changing one. Go back and pick a song from the list, or ask the host.",
+      "formTitle": "Which song should we make?",
+      "formHint": "Check the artist and the song title, then we'll find the audio.",
+      "artistLabel": "Artist",
+      "titleLabel": "Song title",
+      "findAudio": "Find the audio",
+      "forFriend": "For {name}",
+      "eta": "It's free tonight. It usually takes about 30 minutes: we'll show it here in your songs and email it to you.",
+      "etaRotation": "You'll join the rotation now and stay at the end of the list until it's ready.",
+      "stillWorking": "Still working…",
+      "stillPending": "This is taking longer than usual. Check your songs in a minute: if it isn't there, tap Make it now again."
     }
   },
   "makeTab": {

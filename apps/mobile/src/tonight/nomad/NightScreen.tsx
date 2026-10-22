@@ -7,6 +7,7 @@ import { Linking, View } from 'react-native';
 import { appStorage } from '../../storage';
 import { singWebUrl } from '../links';
 import { SurveySheet } from '../log/SurveySheet';
+import { useMakeRowActions } from '../make/MakeRowActions';
 import { MyNightPanel } from '../manage/MyNightPanel';
 import { ReorderList } from '../manage/ReorderList';
 import { ManageProvider, NoticeLine, useCancelSong, useNotice } from '../manage/SongActions';
@@ -137,6 +138,8 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
   // Managing songs (E6): cancel with a 15 s notice, reorder mode, name/phone/friend/tips, per-song consent.
   const { notice, show: notify } = useNotice();
   const { hidden, cancel } = useCancelSong(night, userKey, notify);
+  // Make-it rows (E7): "Review it now" opens the native review; "⚡ Sing it now" asks, then uses the quick version.
+  const makeRow = useMakeRowActions(night, userKey, notify);
   const [reordering, setReordering] = useState(false);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -182,6 +185,8 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
     onCancel: rowActions.onCancel ?? ((song: Song) => void cancel(song)),
     onPreview: rowActions.onPreview ?? songPreview('entry'),
     onQuickPreview: rowActions.onQuickPreview ?? songPreview('entry_quick'),
+    onReview: rowActions.onReview ?? makeRow.onReview,
+    onSingQuick: rowActions.onSingQuick ?? makeRow.onSingQuick,
   };
   const previewEntry =
     onPreviewEntry ?? ((e: RotationEntry) => preview({ source: 'entry', entryId: e.entry_id, title: e.song_artist }));
@@ -297,6 +302,7 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
           onRefresh={reordering ? undefined : () => void refresh()}
         />
         <PreviewSheet owner="night" focused={focused} />
+        {makeRow.sheet}
         <SurveySheet
           entryId={survey?.entryId ?? null}
           artist={survey?.artist ?? ''}

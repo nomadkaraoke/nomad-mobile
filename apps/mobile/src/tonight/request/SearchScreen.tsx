@@ -103,7 +103,9 @@ export function SearchScreen({ change, friend }: SearchScreenProps) {
   const make = (where: Where) => {
     log('make_offer_tap', { where });
     const { artist, title } = makePrefill();
-    router.push({ pathname: MAKE_ROUTE as never, params: { artist, title } });
+    // The request flow clears on leaving search, so a friend's song carries the friend as a param (E7).
+    const params = mode === 'friend' && friendName ? { artist, title, friend: friendName } : { artist, title };
+    router.push({ pathname: MAKE_ROUTE as never, params });
   };
 
   // One push of confirm per pick: a double tap (or a queued tap landing as the first push starts) is ignored until

@@ -98,7 +98,8 @@ export function SongRow({ song, readOnly, onDismiss, ...actions }: SongRowProps)
   const act = !readOnly && live && !onStage;
   const own = isOwnRequest(song);
   const buttons: { id: string; label: string; run?: (s: Song) => void; primary?: boolean }[] = [];
-  if (act && song.make && REVIEWABLE.has(song.make) && song.owner === 'me')
+  // Own and friend make-its: both were made in this account's gen account (gen_job_id, E7).
+  if (act && song.make && REVIEWABLE.has(song.make) && (song.owner === 'me' || song.owner === 'friend'))
     buttons.push({ id: 'review', label: t('song.review'), run: actions.onReview, primary: true });
   if (act && song.quick === 'ready' && own) {
     buttons.push({ id: 'quick-preview', label: t('song.quickPreview'), run: actions.onQuickPreview });
