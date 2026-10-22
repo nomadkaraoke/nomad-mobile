@@ -397,8 +397,12 @@ describe('search sessions (item 5)', () => {
     expect(api.submitRequest.mock.calls[0]![1].source_meta).toEqual({ search_session_id: 'kj-s1', selection_index: 0 });
   });
 
-  it('an expired session (409 conflict on a make submit) searches again once, then shows the error', async () => {
-    api.submitRequest.mockRejectedValue(new KjboxError('conflict', 409));
+  // kjbox: gen 404/403 on create-from-search → web 409 {error: 'search_expired'} → v1 409 conflict, message
+  // 'search_expired' (no map entry, so the status fallback, with the web code as the message).
+  const expired = () => new KjboxError('conflict', 409, undefined, { error: 'conflict', message: 'search_expired' });
+
+  it('an expired session (409 conflict, message search_expired) searches again once, then shows the error', async () => {
+    api.submitRequest.mockRejectedValue(expired());
     openMake();
     await submitEnabled();
     fireEvent.press(screen.getByTestId('tonight-make-submit'));
@@ -410,4 +414,30 @@ describe('search sessions (item 5)', () => {
     expect(api.makeSearch).toHaveBeenCalledTimes(2);
     expect(pending()).toBeNull();
   });
+
+  it('any other conflict is an error, not a re-search', async () => {
+    api.submitRequest.mockRejectedValue(new KjboxError('conflict', 409));
+    openMake();
+    await submitEnabled();
+    fireEvent.press(screen.getByTestId('tonight-make-submit'));
+    expect(await screen.findByTestId('tonight-make-error')).toHaveTextContent(/Something changed in the meantime/);
+    expect(api.makeSearch).toHaveBeenCalledTimes(1);
+    expect(screen.queryByTestId('tonight-make-searched-again')).toBeNull();
+  });
+});
+
+it('a pending send, then a different source: a new client_request_id (reuse only for the same source, round 2 item 3)', async () => {
+  Object.assign(makeTiming, { retryMinMs: 5, lastStartMs: 30 });
+  api.submitRequest.mockRejectedValue(new KjboxError('busy_retry', 409, 0));
+  openMake();
+  await submitEnabled();
+  fireEvent.press(screen.getByTestId('tonight-make-submit'));
+  await screen.findByTestId('tonight-make-error');
+  const firstId = api.submitRequest.mock.calls[0]![1].client_request_id;
+  fireEvent.press(screen.getByTestId('make-other-sources'));
+  fireEvent.press(await screen.findByTestId('make-source-1'));
+  fireEvent.press(screen.getByTestId('tonight-make-submit'));
+  await waitFor(() => expect(api.submitRequest.mock.calls.at(-1)![1].source_meta).toEqual({ search_session_id: 'kj-s1', selection_index: 1 }));
+  expect(api.submitRequest.mock.calls.at(-1)![1].client_request_id).not.toBe(firstId);
+  expect(pending()?.clientRequestId).toBe(api.submitRequest.mock.calls.at(-1)![1].client_request_id);
 });

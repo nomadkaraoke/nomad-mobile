@@ -23,7 +23,7 @@ import { NIGHT_ROUTE } from '../request/ConfirmScreen';
 import { errorCopy } from '../request/errorCopy';
 import { newRequestId, useRequestStore } from '../request/requestStore';
 import { kjboxJudge, kjboxSearcher } from './kjboxMake';
-import { clearPendingMake, findMakeRow, getPendingMake, setPendingMake, type PendingMake } from './pendingMake';
+import { clearPendingMake, findMakeRow, getPendingMake, sameSource, setPendingMake, type PendingMake } from './pendingMake';
 import { MakeStillPending, retryable, sendMake } from './sendMake';
 
 // Only a basic shape check: gen downloads from many sites, and the box asks gen (validate-url) before sending.
@@ -281,8 +281,9 @@ function useMakeSend(night: NomadNight, userKey: string | null, wanted: Wanted) 
         setAskHost(true);
         return;
       }
-      // The box's 409 search_expired (gen 404/403 on the search session) arrives as a v1 `conflict`.
-      if (e instanceof KjboxError && e.code === 'conflict' && 'search_session_id' in a.sourceMeta) return 'expired';
+      // kjbox sing_make.create_job turns gen's 404/403 on the search session into web 409 {error: 'search_expired'};
+      // v1's map_web_error has no entry for it, so it answers 409 `conflict` with message 'search_expired'.
+      if (e instanceof KjboxError && e.code === 'conflict' && e.body.message === 'search_expired') return 'expired';
       if (e instanceof KjboxError && e.code === 'unauthenticated') checkGenSession();
       const c = errorCopy(e);
       setError(tAll(c.key, c.values));
@@ -528,7 +529,9 @@ function MakeSearch({ night, userKey, friend, wanted }: TonightMakeProps & { nig
     const pick = target.kind === 'url' ? target.url : `${target.sessionId}#${target.index}`;
     const sig = JSON.stringify([wanted.artist, wanted.title, friend ?? null, pick]);
     const prior = getPendingMake(userKey, night.nightId, wanted);
-    if (prior) requestId.current = { sig, id: prior.clientRequestId };
+    // Reuse the pending id only for the same source: a different pick is a different request (a new id; if the
+    // first one did land, the singer sees both in Your songs and can cancel one).
+    if (prior && sameSource(prior.sourceMeta, sourceMeta)) requestId.current = { sig, id: prior.clientRequestId };
     else if (requestId.current?.sig !== sig) requestId.current = { sig, id: newRequestId() };
     const r = await sender.send({ clientRequestId: requestId.current.id, sourceMeta, artist: song.artist, title: song.title });
     if (r === 'expired') {

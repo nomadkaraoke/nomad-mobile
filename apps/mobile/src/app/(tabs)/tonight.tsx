@@ -2,8 +2,13 @@ import { useTranslations } from '@nomad/i18n';
 import { Screen, Text } from '@nomad/ui';
 import { router, useIsFocused } from 'expo-router';
 
+import { installPendingMakePurge } from '../../tonight/make/pendingMake';
 import { useNightStore } from '../../tonight/nightStore';
 import { NightScreen } from '../../tonight/nomad/NightScreen';
+
+// App open and every night change: forget other nights' pending makes (their ids are no use to a new night).
+// (Module scope: runs once, when the tab's module first loads.)
+installPendingMakePurge();
 
 /** Tonight: the Nomad night home while a Nomad night is active; otherwise a placeholder until E3's empty state. */
 export default function TonightScreen() {
