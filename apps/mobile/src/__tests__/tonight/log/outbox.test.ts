@@ -241,7 +241,7 @@ it('item revs stay unique across restarts: a write coalesced onto a stored item 
   expect(useOutbox.getState().items).toEqual([]);
 });
 
-it('a put after a queued delete for the same id keeps the delete', async () => {
+it('app_: a put after a queued delete for the same id keeps the delete', async () => {
   const release = gate();
   useOutbox.getState().enqueue('app_0', 'put', { state: 'planned', artist: 'Z', title: 'Z' });
   useOutbox.getState().enqueue('app_1', 'delete');
@@ -254,4 +254,19 @@ it('a put after a queued delete for the same id keeps the delete', async () => {
   await outboxIdle();
   expect(api.deleteKaraokeLog).toHaveBeenCalledWith('app_1');
   expect(api.putKaraokeLog).not.toHaveBeenCalledWith('app_1', expect.anything());
+});
+
+it('kj_: a put after a queued delete replaces it (last write wins) and is sent', async () => {
+  const release = gate();
+  useOutbox.getState().enqueue('app_0', 'put', { state: 'planned', artist: 'Z', title: 'Z' });
+  useOutbox.getState().enqueue('kj_abc', 'delete');
+  useOutbox.getState().enqueue('kj_abc', 'put', { survey: { feel: 'great' } });
+  expect(useOutbox.getState().items.map((i) => [i.id, i.op])).toEqual([
+    ['app_0', 'put'],
+    ['kj_abc', 'put'],
+  ]);
+  release();
+  await outboxIdle();
+  expect(api.putKaraokeLog).toHaveBeenCalledWith('kj_abc', { survey: { feel: 'great' } });
+  expect(api.deleteKaraokeLog).not.toHaveBeenCalled();
 });

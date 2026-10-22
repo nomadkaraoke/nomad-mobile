@@ -153,9 +153,12 @@ export const useOutbox = create<OutboxStore>((set, get) => {
       const items = [...get().items];
       const i = items.findIndex((x) => x.id === id);
       const prev = i >= 0 ? items[i] : undefined;
-      // A queued delete wins over a later put for the same id: the record is gone (decide's `deleted: false` would
-      // not reliably revive it, and new songs always get a new id), so the put is dropped and the delete kept.
-      if (op === 'put' && prev?.op === 'delete') return;
+      // A put after a queued delete for the same id:
+      // - app_ ids: the delete wins and the put is dropped. The record is gone (decide's `deleted: false` would not
+      //   reliably revive it), and a song logged again always gets a new id.
+      // - kj_ ids: last write wins (the put replaces the delete). The id is kjbox's, fixed per performance, so a
+      //   later survey or re-add for that performance must reach decide.
+      if (op === 'put' && prev?.op === 'delete' && !id.startsWith('kj_')) return;
       const next: OutboxItem =
         op === 'delete'
           ? { id, op, rev: ++rev }

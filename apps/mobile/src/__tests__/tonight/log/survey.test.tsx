@@ -7,6 +7,7 @@ import { appStorage } from '../../../storage';
 import { useLogStore } from '../../../tonight/log/logStore';
 import { outboxIdle, useOutbox } from '../../../tonight/log/outbox';
 import { SurveySheet } from '../../../tonight/log/SurveySheet';
+import { VersionInfoSheet } from '../../../tonight/request/VersionInfoSheet';
 import { useNightStore, type NomadNight } from '../../../tonight/nightStore';
 import { useEditingStore } from '../../../tonight/nomad/editingStore';
 import { NightScreen } from '../../../tonight/nomad/NightScreen';
@@ -41,7 +42,7 @@ beforeEach(() => {
   jest.useRealTimers();
   jest.clearAllMocks();
   appStorage.clearAll();
-  useEditingStore.setState({ editing: false, sheetOpen: false });
+  useEditingStore.setState({ editing: false, sheets: 0 });
   Object.assign(nightPoll, { meMs: 40, nowMs: 60_000, rotationMs: 60_000, nightMs: 60_000, closedMs: 60_000, backoffMs: [60_000] });
   useAuth.setState({ state: { status: 'signedIn', session: { token: 't', email: 'sam@example.com', createdAt: 0 } } });
   useNightStore.getState().rehydrate('sam@example.com');
@@ -173,13 +174,52 @@ it('"How did it go?" on a sung row reopens the survey after a skip, and saves fr
   });
 });
 
-it('the automatic survey waits while another sheet is open on the night screen', async () => {
-  useEditingStore.setState({ sheetOpen: true });
+it('the automatic survey waits while another Tonight sheet is open (the real version info sheet)', async () => {
+  const version = { source: 'kn', priority_class: 'community', priority_display: 'Nomad', kn: { brand_code: 'NOMAD' } };
+  function Screen({ info }: { info: boolean }) {
+    return (
+      <>
+        <NightScreen night={night} focused />
+        <VersionInfoSheet version={info ? version : null} onClose={() => {}} />
+      </>
+    );
+  }
   api.getMe.mockResolvedValue(me({ sung_tonight: [sung('Starlight', KJ1)] }));
-  renderTonight(<NightScreen night={night} focused />);
+  const view = renderTonight(<Screen info />);
+  expect(await screen.findByTestId('tonight-version-info')).toBeTruthy();
   await screen.findByTestId('tonight-freshness');
   await sleep(100);
   expect(screen.queryByTestId('survey')).toBeNull();
-  act(() => useEditingStore.getState().setSheetOpen(false));
+  view.rerender(<Screen info={false} />);
   expect(await screen.findByTestId('survey')).toBeTruthy();
+  expect(useEditingStore.getState().sheets).toBe(0);
+});
+
+it('a sheet that unmounts while open releases its hold', () => {
+  const version = { source: 'kn', kn: {} };
+  const view = renderTonight(<VersionInfoSheet version={version} onClose={() => {}} />);
+  expect(useEditingStore.getState().sheets).toBe(1);
+  view.unmount();
+  expect(useEditingStore.getState().sheets).toBe(0);
+});
+
+it('every Tonight sheet goes through TonightSheet', () => {
+  const fs = jest.requireActual<typeof import('fs')>('fs');
+  const path = jest.requireActual<typeof import('path')>('path');
+  const root = path.join(__dirname, '../../../tonight');
+  const files: string[] = [];
+  const walk = (d: string) =>
+    fs.readdirSync(d, { withFileTypes: true }).forEach((e) => {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (/\.tsx?$/.test(e.name)) files.push(p);
+    });
+  walk(root);
+  walk(path.join(__dirname, '../../../app/tonight'));
+  const offenders = files.filter((f) => {
+    if (f.endsWith('TonightSheet.tsx')) return false;
+    const src = fs.readFileSync(f, 'utf8');
+    return /import\s*\{[^}]*\bSheet\b[^}]*\}\s*from\s*'@nomad\/ui'/.test(src) || /<Modal\b/.test(src);
+  });
+  expect(offenders).toEqual([]);
 });

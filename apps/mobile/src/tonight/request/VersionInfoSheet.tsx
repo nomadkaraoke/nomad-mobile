@@ -1,8 +1,9 @@
 import type { SearchVersion } from '@nomad/api-kjbox';
 import { useTranslations } from '@nomad/i18n';
-import { Sheet, Text } from '@nomad/ui';
+import { Text } from '@nomad/ui';
 import { View } from 'react-native';
 
+import { TonightSheet } from '../TonightSheet';
 import { availability, brandName, humanSize, versionClass, versionFormat } from './VersionRow';
 
 export type VersionInfoSheetProps = {
@@ -20,7 +21,7 @@ export function VersionInfoSheet({ version, onClose }: VersionInfoSheetProps) {
   const cls = version ? versionClass(version) : 'unknown';
   const avail = version ? availability(version) : null;
   return (
-    <Sheet
+    <TonightSheet
       visible={version !== null}
       onClose={onClose}
       title={(version && brandName(version)) || t('unknownBrand')}
@@ -47,6 +48,6 @@ export function VersionInfoSheet({ version, onClose }: VersionInfoSheetProps) {
           </View>
         </View>
       ) : null}
-    </Sheet>
+    </TonightSheet>
   );
 }

@@ -1,8 +1,9 @@
 import { isolate, useTranslations } from '@nomad/i18n';
-import { Button, Sheet, Text, TextField } from '@nomad/ui';
+import { Button, Text, TextField } from '@nomad/ui';
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
+import { TonightSheet } from '../TonightSheet';
 import { useLogStore, type LogSurvey } from './logStore';
 
 /** decide caps survey notes at 2000 characters. */
@@ -51,10 +52,19 @@ export function SurveySheet({ entryId, artist, title, onDone, initial }: SurveyS
     onDone?.();
   };
   return (
-    <Sheet visible={entryId !== null} onClose={skip} title={t('title')} testID="survey" closeLabel={t('close')}>
+    // holdsSurvey={false}: the survey must not hold itself back (the night screen already keeps the automatic one
+    // closed while a manual "How did it go?" is open).
+    <TonightSheet
+      holdsSurvey={false}
+      visible={entryId !== null}
+      onClose={skip}
+      title={t('title')}
+      testID="survey"
+      closeLabel={t('close')}
+    >
       {/* Keyed by the song: a new song starts with blank answers. */}
       {entryId ? <SurveyForm key={entryId} entryId={entryId} artist={artist} title={title} initial={initial} onSkip={skip} onDone={onDone} /> : null}
-    </Sheet>
+    </TonightSheet>
   );
 }
 

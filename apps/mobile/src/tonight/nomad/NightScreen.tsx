@@ -139,7 +139,7 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
   // Post-song survey (spec §6.3, ruling E8-R3): once per newly sung song with a history_id, while this screen shows
   // and no other sheet or edit is in the way. "How did it go?" on a sung row reopens it for that song.
   const editing = useEditingStore((s) => s.editing);
-  const sheetOpen = useEditingStore((s) => s.sheetOpen);
+  const sheetOpen = useEditingStore((s) => s.sheets > 0);
   const [manual, setManual] = useState<SurveyTarget | null>(null);
   const auto = useSurveyTrigger(me.data?.sung_tonight, focused && !editing && !sheetOpen && !manual, night.nightId);
   const survey = manual ?? auto;
