@@ -40,7 +40,17 @@
     "musicProfileDecades": "Décennies",
     "musicProfileGenres": "Genres",
     "musicProfileNone": "Non défini",
-    "musicProfileRemove": "Retirer"
+    "musicProfileRemove": "Retirer",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Connecter Apple Music",
+    "appleMusicConnected": "Connecté · {count, plural, one {# morceau lu} other {# morceaux lus}}",
+    "appleMusicDisconnect": "Déconnecter Apple Music",
+    "appleMusicExpired": "Ta session Apple Music a expiré. Reconnecte-toi pour garder tes suggestions à jour.",
+    "appleMusicFailed": "Impossible de joindre Apple Music. Vérifie ta connexion et réessaie.",
+    "appleMusicPitch": "Connecte ton compte et nous utiliserons ta bibliothèque ainsi que tes écoutes récentes pour te proposer des morceaux que tu vas adorer chanter.",
+    "appleMusicReading": "Lecture de ta bibliothèque Apple Music en cours. Tes suggestions seront mises à jour dès que ce sera terminé.",
+    "appleMusicReconnect": "Reconnecter Apple Music",
+    "musicServices": "Tes services de musique"
   },
   "common": {
     "error": "Une erreur s'est produite.",

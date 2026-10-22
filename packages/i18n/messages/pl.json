@@ -40,7 +40,17 @@
     "musicProfileDecades": "Dekady",
     "musicProfileGenres": "Gatunki",
     "musicProfileNone": "Nie ustawiono",
-    "musicProfileRemove": "Usuń"
+    "musicProfileRemove": "Usuń",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Połącz z Apple Music",
+    "appleMusicConnected": "Połączono · wczytano {count, plural, one {# utwór} few {# utwory} many {# utworów} other {# utworów}}",
+    "appleMusicDisconnect": "Odłącz Apple Music",
+    "appleMusicExpired": "Twoja sesja Apple Music wygasła. Połącz ponownie, aby Twoje propozycje były zawsze aktualne.",
+    "appleMusicFailed": "Nie udało się połączyć z Apple Music. Sprawdź połączenie z internetem i spróbuj ponownie.",
+    "appleMusicPitch": "Połącz konto, a my wykorzystamy Twoją bibliotekę i ostatnio odtwarzane utwory, aby wybrać piosenki, które pokochasz śpiewać.",
+    "appleMusicReading": "Wczytywanie biblioteki Apple Music. Twoje propozycje zaktualizują się po zakończeniu.",
+    "appleMusicReconnect": "Połącz ponownie z Apple Music",
+    "musicServices": "Twoje serwisy muzyczne"
   },
   "common": {
     "error": "Coś poszło nie tak.",

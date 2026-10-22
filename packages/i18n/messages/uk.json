@@ -40,7 +40,17 @@
     "musicProfileDecades": "Десятиліття",
     "musicProfileGenres": "Жанри",
     "musicProfileNone": "Не встановлено",
-    "musicProfileRemove": "Видалити"
+    "musicProfileRemove": "Видалити",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Підключити Apple Music",
+    "appleMusicConnected": "Підключено · зчитано {count, plural, one {# пісню} few {# пісні} many {# пісень} other {# пісень}}",
+    "appleMusicDisconnect": "Відключити Apple Music",
+    "appleMusicExpired": "Термін дії входу в Apple Music минув. Підключися знову, щоб рекомендації залишалися актуальними.",
+    "appleMusicFailed": "Не вдалося зв'язатися з Apple Music. Перевір інтернет-з'єднання та спробуй ще раз.",
+    "appleMusicPitch": "Підключи сервіс, і ми використаємо твою медіатеку та нещодавно прослухані треки, щоб підібрати пісні, які тобі сподобається співати.",
+    "appleMusicReading": "Зчитуємо твою медіатеку Apple Music. Твої рекомендації оновляться, щойно все буде готово.",
+    "appleMusicReconnect": "Перепідключити Apple Music",
+    "musicServices": "Твої музичні сервіси"
   },
   "common": {
     "error": "Щось пішло не так.",

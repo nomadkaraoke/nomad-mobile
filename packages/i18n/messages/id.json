@@ -40,7 +40,17 @@
     "musicProfileDecades": "Dekade",
     "musicProfileGenres": "Genre",
     "musicProfileNone": "Belum diatur",
-    "musicProfileRemove": "Hapus"
+    "musicProfileRemove": "Hapus",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Hubungkan Apple Music",
+    "appleMusicConnected": "Terhubung · {count, plural, other {# lagu}} terbaca",
+    "appleMusicDisconnect": "Putuskan Apple Music",
+    "appleMusicExpired": "Sesi masuk Apple Music Anda telah berakhir. Hubungkan kembali agar rekomendasi lagu Anda tetap terbarui.",
+    "appleMusicFailed": "Tidak dapat terhubung ke Apple Music. Periksa koneksi Anda dan coba lagi.",
+    "appleMusicPitch": "Hubungkan akun Anda dan kami akan menggunakan perpustakaan serta riwayat putar Anda untuk memilihkan lagu yang pasti Anda sukai.",
+    "appleMusicReading": "Membaca perpustakaan Apple Music Anda. Rekomendasi lagu akan diperbarui setelah selesai.",
+    "appleMusicReconnect": "Hubungkan Kembali Apple Music",
+    "musicServices": "Layanan musik Anda"
   },
   "common": {
     "error": "Terjadi kesalahan.",

@@ -40,7 +40,17 @@
     "musicProfileDecades": "Desaťročia",
     "musicProfileGenres": "Žánre",
     "musicProfileNone": "Nenastavené",
-    "musicProfileRemove": "Odstrániť"
+    "musicProfileRemove": "Odstrániť",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Pripojiť Apple Music",
+    "appleMusicConnected": "Pripojené · {count, plural, one {# načítaná skladba} few {# načítané skladby} other {# načítaných skladieb}}",
+    "appleMusicDisconnect": "Odpojiť Apple Music",
+    "appleMusicExpired": "Tvoje prihlásenie do Apple Music vypršalo. Znova sa pripoj, aby boli tvoje výbery stále aktuálne.",
+    "appleMusicFailed": "Nepodarilo sa spojiť s Apple Music. Skontroluj pripojenie a skús to znova.",
+    "appleMusicPitch": "Pripoj si Apple Music a my podľa tvojej knižnice a nedávno prehrávaných skladieb vyberieme piesne, ktoré budeš milovať spievať.",
+    "appleMusicReading": "Načítava sa tvoja knižnica Apple Music. Tvoje výbery sa aktualizujú hneď po dokončení.",
+    "appleMusicReconnect": "Znova pripojiť Apple Music",
+    "musicServices": "Tvoje hudobné služby"
   },
   "common": {
     "error": "Niečo sa pokazilo.",

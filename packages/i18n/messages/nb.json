@@ -40,7 +40,17 @@
     "musicProfileDecades": "Tiår",
     "musicProfileGenres": "Sjangere",
     "musicProfileNone": "Ikke satt",
-    "musicProfileRemove": "Fjern"
+    "musicProfileRemove": "Fjern",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Koble til Apple Music",
+    "appleMusicConnected": "Tilkoblet · {count, plural, one {# sang} other {# sanger}} lest",
+    "appleMusicDisconnect": "Koble fra Apple Music",
+    "appleMusicExpired": "Apple Music-innloggingen din har utløpt. Koble til på nytt for å holde sangvalgene dine oppdatert.",
+    "appleMusicFailed": "Kunne ikke nå Apple Music. Sjekk internettforbindelsen din og prøv igjen.",
+    "appleMusicPitch": "Koble til, så bruker vi biblioteket ditt og nylig spilte sanger til å velge låter du vil elske å synge.",
+    "appleMusicReading": "Leser Apple Music-biblioteket ditt. Sangvalgene dine oppdateres når det er fullført.",
+    "appleMusicReconnect": "Koble til Apple Music på nytt",
+    "musicServices": "Dine musikktjenester"
   },
   "common": {
     "error": "Noe gikk galt.",

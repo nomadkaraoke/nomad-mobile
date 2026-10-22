@@ -40,7 +40,17 @@
     "musicProfileDecades": "On Yıllar",
     "musicProfileGenres": "Türler",
     "musicProfileNone": "Ayarlanmadı",
-    "musicProfileRemove": "Kaldır"
+    "musicProfileRemove": "Kaldır",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Apple Music'i Bağla",
+    "appleMusicConnected": "Bağlandı · {count, plural, one {# şarkı} other {# şarkı}} okundu",
+    "appleMusicDisconnect": "Apple Music Bağlantısını Kes",
+    "appleMusicExpired": "Apple Music oturumunun süresi doldu. Seçimlerini güncel tutmak için tekrar bağlan.",
+    "appleMusicFailed": "Apple Music'e ulaşılamadı. İnternet bağlantını kontrol edip tekrar dene.",
+    "appleMusicPitch": "Hesabını bağla; arşivinden ve son dinlediklerinden yola çıkarak söylemekten keyif alacağın şarkılar seçelim.",
+    "appleMusicReading": "Apple Music arşivin taranıyor. İşlem tamamlandığında önerilerin güncellenecek.",
+    "appleMusicReconnect": "Apple Music'e Tekrar Bağlan",
+    "musicServices": "Müzik servislerin"
   },
   "common": {
     "error": "Bir şeyler ters gitti.",

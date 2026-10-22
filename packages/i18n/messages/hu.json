@@ -40,7 +40,17 @@
     "musicProfileDecades": "Évtizedek",
     "musicProfileGenres": "Műfajok",
     "musicProfileNone": "Nincs beállítva",
-    "musicProfileRemove": "Eltávolítás"
+    "musicProfileRemove": "Eltávolítás",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Apple Music összekapcsolása",
+    "appleMusicConnected": "Összekapcsolva · {count, plural, one {# dal} other {# dal}} beolvasva",
+    "appleMusicDisconnect": "Apple Music szétkapcsolása",
+    "appleMusicExpired": "Az Apple Music-bejelentkezésed lejárt. Kapcsold össze újra, hogy a válogatásaid naprakészek maradjanak.",
+    "appleMusicFailed": "Nem sikerült elérni az Apple Musicot. Ellenőrizd a kapcsolatodat, és próbáld újra.",
+    "appleMusicPitch": "Kapcsold össze, és a könyvtárad, valamint a nemrég játszott számaid alapján olyan dalokat válogatunk össze neked, amelyeket imádni fogsz énekelni.",
+    "appleMusicReading": "Apple Music-könyvtárad beolvasása folyamatban. Amint kész, a válogatásaid azonnal frissülnek.",
+    "appleMusicReconnect": "Apple Music újrakapcsolása",
+    "musicServices": "Zenei szolgáltatásaid"
   },
   "common": {
     "error": "Valami hiba történt.",

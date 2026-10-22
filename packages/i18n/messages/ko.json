@@ -40,7 +40,17 @@
     "musicProfileDecades": "연대",
     "musicProfileGenres": "장르",
     "musicProfileNone": "설정되지 않음",
-    "musicProfileRemove": "제거"
+    "musicProfileRemove": "제거",
+    "appleMusic": "Apple Music",
+    "appleMusicConnect": "Apple Music 연결",
+    "appleMusicConnected": "연결됨 · {count, plural, one {#곡} other {#곡}} 불러옴",
+    "appleMusicDisconnect": "Apple Music 연결 해제",
+    "appleMusicExpired": "Apple Music 로그인 세션이 만료되었습니다. 추천 곡을 최신 상태로 유지하려면 다시 연결해 주세요.",
+    "appleMusicFailed": "Apple Music에 연결할 수 없습니다. 인터넷 연결을 확인하고 다시 시도해 주세요.",
+    "appleMusicPitch": "Apple Music을 연결하면 보관함과 최근 재생 목록을 바탕으로 부르기 딱 좋은 곡들을 추천해 드려요.",
+    "appleMusicReading": "Apple Music 보관함을 불러오는 중입니다. 완료되면 추천 곡이 업데이트됩니다.",
+    "appleMusicReconnect": "Apple Music 다시 연결",
+    "musicServices": "연동된 음악 서비스"
   },
   "common": {
     "error": "문제가 발생했습니다.",

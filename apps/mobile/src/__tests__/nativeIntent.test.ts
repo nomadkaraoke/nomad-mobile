@@ -35,3 +35,14 @@ describe('redirectSystemPath', () => {
     expect(redirectSystemPath({ path: 'nomadkaraoke://checkouts', initial: false })).toBe('nomadkaraoke://checkouts');
   });
 });
+
+// decide web's Apple Music page hands back to nomadkaraoke://music-connected; Android also delivers it as an intent.
+describe('redirectSystemPath: Apple Music hand-back', () => {
+  it('keeps the current screen while the app is open', () => {
+    expect(redirectSystemPath({ path: 'nomadkaraoke://music-connected?service=apple_music', initial: false })).toBeNull();
+  });
+
+  it('a cold start opens the music profile', () => {
+    expect(redirectSystemPath({ path: 'nomadkaraoke://music-connected', initial: true })).toBe('/me/music-profile');
+  });
+});

@@ -36,6 +36,7 @@ jest.mock('@nomad/api-decide', () => ({
   searchSongs: jest.fn(),
   submitQuiz: jest.fn(async () => ({ message: 'ok', songs_added: 1, recommendations_ready: true })),
   loveSong: jest.fn(async () => undefined),
+  listMusicServices: jest.fn(async () => []),
 }));
 jest.mock('@nomad/api-gen', () => ({
   ...jest.requireActual('@nomad/api-gen'),
