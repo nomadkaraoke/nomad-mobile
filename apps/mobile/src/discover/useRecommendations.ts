@@ -5,12 +5,20 @@ import {
   type RecommendationsV2Response,
   type RecSection,
 } from '@nomad/api-decide';
-import { filtersKey, toRecQuery, type RecFilters } from '@nomad/core';
+import { filtersKey, matchesLibrary, toRecQuery, type LibraryFilter, type RecFilters } from '@nomad/core';
 import { keepPreviousData, useInfiniteQuery, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { useAuth } from '../auth/store';
 import { useLibraryFilter } from '../find/library';
+import { useOffline } from '../net/useOffline';
+import {
+  clearRecsSnapshot,
+  loadRecsSnapshot,
+  ownsRecsSnapshot,
+  recsSnapshotKey,
+  saveRecsSnapshot,
+} from './recsSnapshot';
 import { useDiscoverStale } from './staleStore';
 
 /** While decide's catalog is still loading (503 warming_up), Discover polls this often. */
@@ -41,6 +49,29 @@ export function mergePages(pages: readonly RecommendationsV2Response[]): Recs {
   return { sections: sections.filter((s) => s.songs.length > 0), hasProfile: pages[0]?.has_profile ?? false };
 }
 
+/** Saved rows carry decide's karaoke flags; map them to the shape the shared library filter reads. */
+function filterByLibrary(recs: Recs, library: LibraryFilter): Recs {
+  if (library === 'any') return recs;
+  const sections = recs.sections
+    .map((s) => ({
+      ...s,
+      songs: s.songs.filter((song) =>
+        matchesLibrary(
+          {
+            libraries: song.karaoke.karafun ? ['KV'] : [],
+            versions: song.karaoke.community ? [{ kind: 'community' }] : [],
+          },
+          library,
+        ),
+      ),
+    }))
+    .filter((s) => s.songs.length > 0);
+  return { ...recs, sections };
+}
+
+/** A failed request that never reached decide (no HTTP status): fetch's TypeError, a timeout. */
+const isNetworkError = (e: unknown) => e != null && !(e instanceof ApiError);
+
 /** Client errors (401, 404, 422) and the catalog warming up won't change on an immediate retry. */
 const shouldRetry = (failures: number, e: unknown) =>
   failures < 1 && !isWarmingUp(e) && !(e instanceof ApiError && e.status < 500);
@@ -52,12 +83,14 @@ const shouldRetry = (failures: number, e: unknown) =>
 export function useRecommendations(filters: RecFilters) {
   const queryClient = useQueryClient();
   const library = useLibraryFilter((s) => s.filter);
-  const signedIn = useAuth((s) => s.state.status === 'signedIn');
+  const email = useAuth((s) => (s.state.status === 'signedIn' ? s.state.session.email : null));
+  const signedIn = email !== null;
+  const offline = useOffline();
   const stale = useDiscoverStale((s) => s.stale);
 
   const query = useInfiniteQuery({
     queryKey: [...RECS_KEY, filtersKey(filters, library)],
-    enabled: signedIn,
+    enabled: signedIn && !offline,
     queryFn: ({ pageParam }) => getRecommendationsV2(toRecQuery(filters, library), pageParam),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (last) => last.next_cursor ?? undefined,
@@ -69,7 +102,10 @@ export function useRecommendations(filters: RecFilters) {
 
   // Someone else's picks must never show after a sign-out (or a sign-in as someone else).
   useEffect(() => {
-    if (!signedIn) queryClient.removeQueries({ queryKey: RECS_KEY });
+    if (!signedIn) {
+      queryClient.removeQueries({ queryKey: RECS_KEY });
+      clearRecsSnapshot();
+    }
   }, [signedIn, queryClient]);
 
   // A decide 401 marked Discover stale; a good load means decide accepts the session again.
@@ -86,10 +122,36 @@ export function useRecommendations(filters: RecFilters) {
   }, [stale, ok, queryClient]);
 
   const pages = query.data?.pages;
-  const data = useMemo(() => (pages ? mergePages(pages) : undefined), [pages]);
+  const firstPage = pages?.[0];
+  const loadedKey = query.isPlaceholderData ? undefined : query.dataUpdatedAt;
+  // Keep the last good first page for offline use. Re-saved on every change, so hides are reflected.
+  const currentKey = recsSnapshotKey(email ?? '', filtersKey(filters, library));
+  useEffect(() => {
+    if (email && firstPage && loadedKey !== undefined && !offline) saveRecsSnapshot(currentKey, firstPage);
+  }, [email, firstPage, loadedKey, offline, currentKey]);
+
+  // Offline (or decide unreachable): show what was last fetched, if it is this user's and under 7 days old.
+  const useSnapshot = signedIn && (offline || (query.isError && isNetworkError(query.error)));
+  const snapshot = useMemo(() => {
+    if (!useSnapshot || !email) return null;
+    const snap = loadRecsSnapshot();
+    return snap && ownsRecsSnapshot(snap, email) ? snap : null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-read when the live data changes (a hide re-saves)
+  }, [useSnapshot, email, firstPage]);
+
+  const live = useMemo(() => (pages ? mergePages(pages) : undefined), [pages]);
+  const offlineSnapshot = useSnapshot && (live !== undefined || snapshot !== null);
+  const data = useMemo(() => {
+    if (!useSnapshot) return live;
+    if (live) return filterByLibrary(live, library);
+    return snapshot ? filterByLibrary(mergePages([snapshot.data]), library) : undefined;
+  }, [useSnapshot, live, snapshot, library]);
 
   return {
     data,
+    offlineSnapshot,
+    /** Offline with nothing usable saved (none, too old, or someone else's). */
+    offlineEmpty: useSnapshot && data === undefined,
     status: query.status,
     warming: isWarmingUp(query.error),
     error: query.error,

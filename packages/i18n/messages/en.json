@@ -71,6 +71,8 @@
     "picksLoading": "Loading your picks…",
     "picksWarming": "Getting your picks ready…",
     "picksError": "Couldn't load your picks right now.",
+    "offlinePicks": "Offline: showing your last picks",
+    "picksOffline": "You're offline, and there are no recent picks saved on this phone.",
     "picksRetry": "Try again",
     "picksEmpty": "No picks match these filters",
     "picksClear": "Clear filters",

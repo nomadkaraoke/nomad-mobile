@@ -133,7 +133,7 @@ type PicksItem =
   | { kind: "row"; section: RecSectionData; song: RecSong; index: number };
 
 /** What sits where the picks go: a card or state above the popular list, or the picks themselves. */
-type PicksMode = "signin" | "quiz" | "picks" | "loading" | "warming" | "error";
+type PicksMode = "signin" | "quiz" | "picks" | "loading" | "warming" | "error" | "offline";
 
 type Describe = {
   open: boolean;
@@ -178,7 +178,9 @@ export default function DiscoverScreen() {
       ? recs.data.hasProfile
         ? "picks"
         : "quiz"
-      : recs.warming
+      : recs.offlineEmpty
+        ? "offline"
+        : recs.warming
         ? "warming"
         : recs.status === "error"
           ? "error"
@@ -595,6 +597,11 @@ export default function DiscoverScreen() {
         ) : null}
         {popular && !describing && picks === "picks" ? (
           <View className="flex-1">
+            {recs.offlineSnapshot ? (
+              <Text variant="muted" testID="discover-offline-picks" accessibilityLiveRegion="polite">
+                {t("discover.offlinePicks")}
+              </Text>
+            ) : null}
             <List
               testID="discover-picks"
               data={picksItems}
@@ -725,6 +732,7 @@ export default function DiscoverScreen() {
         onClose={() => setMenuSong(null)}
         onHide={feedback.hide}
         onLove={feedback.love}
+        disabled={recs.offlineSnapshot}
       />
       {feedback.hidden ? (
         <View

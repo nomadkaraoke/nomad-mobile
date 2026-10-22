@@ -9,14 +9,16 @@ export type SongMenuSheetProps = {
   onClose: () => void;
   onHide: (song: RecSong) => void;
   onLove: (song: RecSong) => void;
+  /** Feedback needs a connection: both actions are inert while offline. */
+  disabled?: boolean;
 };
 
 /** A picks row's ⋯ menu: Not for me (hide, with undo) and Love it. */
-export function SongMenuSheet({ song, onClose, onHide, onLove }: SongMenuSheetProps) {
+export function SongMenuSheet({ song, onClose, onHide, onLove, disabled = false }: SongMenuSheetProps) {
   const t = useTranslations('discover');
   const tc = useTranslations('common');
   const act = (fn: (s: RecSong) => void) => () => {
-    if (!song) return;
+    if (!song || disabled) return;
     onClose();
     fn(song);
   };
@@ -32,16 +34,18 @@ export function SongMenuSheet({ song, onClose, onHide, onLove }: SongMenuSheetPr
         <Pressable
           testID="song-menu-hide"
           accessibilityRole="button"
+          accessibilityState={{ disabled }}
           onPress={act(onHide)}
-          className="min-h-11 justify-center py-2"
+          className={`min-h-11 justify-center py-2 ${disabled ? 'opacity-50' : ''}`}
         >
           <Text>{t('menuNotForMe')}</Text>
         </Pressable>
         <Pressable
           testID="song-menu-love"
           accessibilityRole="button"
+          accessibilityState={{ disabled }}
           onPress={act(onLove)}
-          className="min-h-11 justify-center py-2"
+          className={`min-h-11 justify-center py-2 ${disabled ? 'opacity-50' : ''}`}
         >
           <Text>{t('menuLoveIt')}</Text>
         </Pressable>

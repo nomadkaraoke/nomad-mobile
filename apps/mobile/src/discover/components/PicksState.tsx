@@ -2,7 +2,7 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, NomadLoader, Text } from '@nomad/ui';
 import { View } from 'react-native';
 
-export type PicksStateKind = 'loading' | 'warming' | 'error' | 'empty' | 'none';
+export type PicksStateKind = 'loading' | 'warming' | 'error' | 'empty' | 'none' | 'offline';
 
 /**
  * Everything the picks area shows instead of sections: loading, warming up, an error, no match for the filters,
@@ -39,6 +39,12 @@ export function PicksState({
             <Button testID="discover-picks-retry" label={t('picksRetry')} variant="secondary" onPress={onRetry} />
           ) : null}
         </View>
+      );
+    case 'offline':
+      return (
+        <Text variant="muted" testID="discover-picks-offline" className="py-4">
+          {t('picksOffline')}
+        </Text>
       );
     case 'none':
       return (
