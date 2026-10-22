@@ -83,8 +83,17 @@ export const getNow = async (t: string, nightId?: string) => (await sdk.getNow({
 export const getSingers = async (t: string, nightId?: string) => (await sdk.listSingers({ query: q(t, nightId) })).data;
 
 // Preview
-export const previewResolve = async (t: string, source: PreviewRequest['source'], entryId?: number, nightId?: string) =>
-  (await sdk.resolvePreview({ body: { ...q(t, nightId), source, entry_id: entryId } })).data;
+/**
+ * `extra` carries the search result's own source fields (the web's descriptor: local `file_path`, divebar `file_id` +
+ * `format`, youtube `youtube_url`, plus a display `title`); entry sources need only `entryId`.
+ */
+export const previewResolve = async (
+  t: string,
+  source: PreviewRequest['source'],
+  entryId?: number,
+  nightId?: string,
+  extra?: Record<string, unknown>,
+) => (await sdk.resolvePreview({ body: { ...extra, ...q(t, nightId), source, entry_id: entryId } })).data;
 export const previewClose = async (t: string, token?: string, nightId?: string) =>
   (await sdk.closePreview({ body: { ...q(t, nightId), token } })).data;
 

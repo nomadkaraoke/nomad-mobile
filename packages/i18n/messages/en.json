@@ -242,7 +242,16 @@
         }
       },
       "loadFailed": "Couldn't load tonight's night. Please try again.",
-      "retry": "Try again"
+      "retry": "Try again",
+      "alert": {
+        "upNext": "You're up next: {song}. Get ready!",
+        "upNextNoSong": "You're up next. Get ready!",
+        "onStage": "You're on! Time to sing {song}.",
+        "onStageNoSong": "You're on! Head to the stage.",
+        "song": "{title} by {artist}",
+        "dismiss": "Dismiss this message",
+        "ok": "OK"
+      }
     },
     "request": {
       "title": "Request a song",
@@ -377,6 +386,20 @@
       "song": "{title} by {artist}",
       "times": "{count, plural, one {Sung # time} other {Sung # times}}",
       "plays": "{count, plural, one {# play} other {# plays}}"
+    },
+    "preview": {
+      "title": "Preview",
+      "close": "Close",
+      "loading": "Loading the preview…",
+      "unavailable": "Preview isn't available right now",
+      "play": "Play",
+      "pause": "Pause",
+      "progress": "Preview progress",
+      "audioOnly": "Audio preview",
+      "cdg": "This version only previews on the web page.",
+      "openWeb": "Preview on the web",
+      "youtube": "This version is a YouTube video.",
+      "openYoutube": "Watch on YouTube"
     }
   },
   "makeTab": {

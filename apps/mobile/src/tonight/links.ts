@@ -38,3 +38,6 @@ export function parseNightLink(input: string): { code: string } | null {
   }
   return code !== null && CODE.test(code) ? { code } : null;
 }
+
+/** The singer's web page for this event code (ruling E4-R5: "Save tonight's songs"; E10: CD+G previews play there). */
+export const singWebUrl = (code: string) => `https://sing.nomadkaraoke.com/?t=${encodeURIComponent(code)}`;

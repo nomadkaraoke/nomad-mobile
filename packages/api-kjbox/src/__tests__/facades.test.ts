@@ -104,6 +104,8 @@ it('preview, tips, make and quick facades', async () => {
   await previewResolve('2121', 'local', 4);
   expect(new URL(last().url).pathname).toBe('/api/v1/preview/resolve');
   expect(await lastBody()).toMatchObject({ t: '2121', source: 'local', entry_id: 4 });
+  await previewResolve('2121', 'divebar', undefined, 'n1', { file_id: 'f1', format: 'mp4', title: 'T', t: 'spoof' });
+  expect(await lastBody()).toMatchObject({ t: '2121', night_id: 'n1', source: 'divebar', file_id: 'f1', format: 'mp4', title: 'T' });
   await getTips('2121');
   expect(new URL(last().url).pathname).toBe('/api/v1/tips');
   await claimTip('2121', { amount: 5, client_request_id: 'c-2' });

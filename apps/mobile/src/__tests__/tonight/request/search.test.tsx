@@ -8,7 +8,7 @@ import { nightPoll } from '../../../tonight/nomad/queries';
 import { useRequestStore } from '../../../tonight/request/requestStore';
 import { gen, session } from '../../../test-utils/genAuthMock';
 import { me, nightOpen, nowResult, rotationResult, song } from '../../../test-utils/tonightFixtures';
-import { confident, deferred, group, kn, noIdent, requestRoutes, results } from './helpers';
+import { confident, deferred, group, kn, local, noIdent, requestRoutes, results } from './helpers';
 
 jest.mock('@nomad/api-decide', () => ({
   searchSongs: jest.fn(),
@@ -30,6 +30,8 @@ jest.mock('@nomad/api-kjbox', () => ({
   logSearchEvent: jest.fn(async () => {}),
   submitRequest: jest.fn(),
   changeRequest: jest.fn(),
+  previewResolve: jest.fn(),
+  previewClose: jest.fn(async () => ({ api_version: '1.0', ok: true })),
 }));
 
 const api = kjbox as jest.Mocked<typeof kjbox>;
@@ -238,4 +240,20 @@ describe('change mode (A.39, E5-R4)', () => {
     fireEvent.press(screen.getByTestId('tonight-replacing-keep'));
     await waitFor(() => expect(useRequestStore.getState().mode).toBe('new'), { timeout: 2000 });
   });
+});
+
+it('▶ on a version previews its source in a sheet; Close releases its token (E10)', async () => {
+  api.searchSongs.mockResolvedValue(results([group('Starlight', 'Muse', [local('/lib/starlight.mp4')])]));
+  api.previewResolve.mockResolvedValue({ api_version: '1.0', mode: 'cdg', title: 'Starlight', token: 'k9' });
+  renderRouter(requestRoutes(), { initialUrl: '/tonight/search' });
+  await type('starlight');
+  const play = await screen.findByTestId('tonight-version-0-0-preview');
+  await act(async () => fireEvent.press(play));
+  expect(api.previewResolve).toHaveBeenCalledWith('2121', 'local', undefined, NIGHT, {
+    file_path: '/lib/starlight.mp4',
+    title: 'Starlight — Muse',
+  });
+  expect(await screen.findByTestId('tonight-preview-web')).toBeTruthy();
+  fireEvent.press(screen.getByTestId('tonight-preview-close'));
+  await waitFor(() => expect(api.previewClose).toHaveBeenCalledWith('2121', 'k9', NIGHT));
 });

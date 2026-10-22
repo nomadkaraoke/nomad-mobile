@@ -1,13 +1,15 @@
 import { logSearchEvent, type ArtistTitle, type SearchSong, type SearchVersion } from '@nomad/api-kjbox';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, colors, Text, TextField } from '@nomad/ui';
-import { router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, useIsFocused } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { IdeasPanel } from '../log/IdeasPanel';
 import { useNightStore } from '../nightStore';
+import { PreviewSheet, versionPreview } from '../preview/PreviewSheet';
+import { usePreviewStore } from '../preview/previewStore';
 import { CorrectionBanner } from './CorrectionBanner';
 import { errorCopy } from './errorCopy';
 import { MakeBar } from './MakeBar';
@@ -57,6 +59,12 @@ export function SearchScreen({ change, friend }: SearchScreenProps) {
   const s = useKjboxSearch(q);
   const arm = useListArm();
   const [info, setInfo] = useState<SearchVersion | null>(null);
+  const focused = useIsFocused();
+  // ▶ on a version row (spec §4.1 Preview, ruling E10-R1/R2).
+  const preview = (song: SearchSong, v: SearchVersion) => {
+    if (!code) return;
+    void usePreviewStore.getState().open(code, nightId, { owner: 'search', title: song.title, artist: song.artist, ...versionPreview(song, v) });
+  };
 
   const settled = s.resultsQuery === s.query && s.query.length >= KJBOX_MIN_QUERY;
   const missing = settled && songMissing(s);
@@ -195,6 +203,7 @@ export function SearchScreen({ change, friend }: SearchScreenProps) {
             onRequest={(song) => choose(song, defaultChoice(song))}
             onPickVersion={(song, v) => choose(song, v)}
             onInfo={setInfo}
+            onPreview={preview}
           />
         ) : null}
       </ScrollView>
@@ -204,6 +213,7 @@ export function SearchScreen({ change, friend }: SearchScreenProps) {
         </View>
       ) : null}
       <VersionInfoSheet version={info} onClose={() => setInfo(null)} />
+      <PreviewSheet owner="search" focused={focused} />
     </SafeAreaView>
   );
 }

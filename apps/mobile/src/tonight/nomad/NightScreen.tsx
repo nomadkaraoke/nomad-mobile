@@ -5,13 +5,16 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Linking, View } from 'react-native';
 
 import { appStorage } from '../../storage';
+import { singWebUrl } from '../links';
 import { SurveySheet } from '../log/SurveySheet';
 import { useLogStore } from '../log/logStore';
 import { useSurveyTrigger, type SurveyTarget } from '../log/useSurveyTrigger';
 import { useNightStore, type NomadNight } from '../nightStore';
+import { PreviewSheet } from '../preview/PreviewSheet';
+import { usePreviewStore, type PreviewTarget } from '../preview/previewStore';
 import { useEditingStore } from './editingStore';
 import { Freshness, useTick } from './Freshness';
-import { songKey } from './model';
+import { entryIdOf, songKey, songParts } from './model';
 import {
   isNightOver,
   isNotOpen,
@@ -28,12 +31,13 @@ import { RotationHeader, RotationRow, visibleRotation } from './RotationList';
 import type { SongRowActions } from './SongRow';
 import { StageTile, StatusTile } from './StatusTile';
 import { SungTonight } from './SungTonight';
+import { TurnBanner } from './TurnBanner';
 import { Unreachable } from './Unreachable';
+import { useTurnAlerts } from './useTurnAlerts';
 import { VenueInfo } from './VenueInfo';
 import { YourSongs } from './YourSongs';
 
-/** The singer's web page for this event code (ruling E4-R5: "Save tonight's songs" links web requests to the account). */
-export const singWebUrl = (code: string) => `https://sing.nomadkaraoke.com/?t=${encodeURIComponent(code)}`;
+export { singWebUrl } from '../links';
 
 export type NightScreenProps = SongRowActions & {
   night: NomadNight;
@@ -43,7 +47,7 @@ export type NightScreenProps = SongRowActions & {
   onRequest?: () => void;
   /** E6: enter reorder mode. */
   onReorder?: () => void;
-  /** E6: ▶ on a rotation row. */
+  /** ▶ on a rotation row (default: the in-app preview sheet, E10). */
   onPreviewEntry?: (entry: RotationEntry) => void;
 };
 
@@ -151,6 +155,26 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
     setManual(target);
   };
 
+  // Turn awareness (spec §4.4, ruling E10-R3): haptic + banner at "up next" and "you're on", foreground only.
+  const turn = useTurnAlerts(me.data, userKey, night.nightId);
+
+  // Previews (spec §4.1 Preview, ruling E10-R1/R2): Your songs ▶, the quick version ▶ and rotation ▶ open the sheet.
+  const preview = (target: Omit<PreviewTarget, 'owner'>) =>
+    void usePreviewStore.getState().open(night.code, night.nightId, { ...target, owner: 'night' });
+  const songPreview = (source: 'entry' | 'entry_quick') => (song: Song) => {
+    const entryId = entryIdOf(song);
+    if (entryId == null) return;
+    const { title, artist } = songParts(song.request);
+    preview({ source, entryId, title, artist });
+  };
+  const actions = {
+    ...rowActions,
+    onPreview: rowActions.onPreview ?? songPreview('entry'),
+    onQuickPreview: rowActions.onQuickPreview ?? songPreview('entry_quick'),
+  };
+  const previewEntry =
+    onPreviewEntry ?? ((e: RotationEntry) => preview({ source: 'entry', entryId: e.entry_id, title: e.song_artist }));
+
   const tick = useTick(5_000);
   const rotationData = rotation.data;
   const elapsedS = rotationData ? Math.max(0, Math.floor((tick - rotationData.receivedAt) / 1000)) : 0;
@@ -167,6 +191,7 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
 
   const header = (
     <View className="gap-4 pb-2">
+      {turn.alert ? <TurnBanner alert={turn.alert} onDismiss={turn.dismiss} /> : null}
       {unreachable ? <Unreachable hasSongs={songs.length > 0} /> : null}
       {closed ? (
         <View testID="tonight-closed" className="gap-1 rounded-xl border border-border bg-card p-4">
@@ -195,7 +220,7 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
             onDismiss={dismiss}
             onRequest={onRequest}
             onReorder={onReorder}
-            {...rowActions}
+            {...actions}
           />
           <SungTonight songs={data.sung_tonight} onSurvey={openSurvey} />
         </>
@@ -219,13 +244,14 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
         testID="tonight-night-list"
         data={entries}
         keyExtractor={(e) => String(e.entry_id)}
-        renderItem={(e) => <RotationRow entry={e} elapsedS={elapsedS} onPreview={onPreviewEntry} />}
+        renderItem={(e) => <RotationRow entry={e} elapsedS={elapsedS} onPreview={previewEntry} />}
         extraData={elapsedS}
         ListHeaderComponent={header}
         ListFooterComponent={nightInfo ? <VenueInfo night={nightInfo} /> : undefined}
         refreshing={refreshing}
         onRefresh={() => void refresh()}
       />
+      <PreviewSheet owner="night" focused={focused} />
       <SurveySheet
         entryId={survey?.entryId ?? null}
         artist={survey?.artist ?? ''}
