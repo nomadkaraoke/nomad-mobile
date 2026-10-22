@@ -201,7 +201,7 @@ export type AllArtistsResponse = {
     /**
      * Artists
      */
-    artists: Array<UserArtistResponse>;
+    artists: Array<BackendApiRoutesMyDataUserArtistResponse>;
     /**
      * Total
      */
@@ -2213,6 +2213,7 @@ export type RecSong = {
     has_karaoke_version: boolean;
     karaoke: RecKaraoke;
     facets: RecFacets;
+    fit?: RecFit | null;
 };
 
 /**
@@ -2309,6 +2310,7 @@ export type RecommendationsV2Response = {
      * Catalog Run
      */
     catalog_run: string;
+    voice: RecVoice;
 };
 
 /**
@@ -3323,36 +3325,13 @@ export type UpgradeGuestResponse = {
 /**
  * UserArtistResponse
  *
- * An artist from user's data with merged source information.
- *
- * MBID-first: MusicBrainz ID is the primary identifier when available.
- * Spotify ID is optional enrichment for images and external links.
+ * Artist from user's listening history.
  */
 export type UserArtistResponse = {
-    /**
-     * Mbid
-     */
-    mbid?: string | null;
     /**
      * Artist Name
      */
     artist_name: string;
-    /**
-     * Sources
-     */
-    sources: Array<string>;
-    /**
-     * Spotify Id
-     */
-    spotify_id?: string | null;
-    /**
-     * Spotify Rank
-     */
-    spotify_rank?: number | null;
-    /**
-     * Spotify Time Range
-     */
-    spotify_time_range?: string | null;
     /**
      * Popularity
      */
@@ -3362,29 +3341,21 @@ export type UserArtistResponse = {
      */
     genres?: Array<string>;
     /**
-     * Lastfm Rank
+     * Id
      */
-    lastfm_rank?: number | null;
+    id: string;
     /**
-     * Lastfm Playcount
+     * Source
      */
-    lastfm_playcount?: number | null;
+    source: string;
     /**
-     * Tags
+     * Rank
      */
-    tags?: Array<string>;
+    rank: number;
     /**
-     * Is Excluded
+     * Time Range
      */
-    is_excluded?: boolean;
-    /**
-     * Is Manual
-     */
-    is_manual?: boolean;
-    /**
-     * Affinity
-     */
-    affinity?: 'love' | 'like' | 'occasionally' | null;
+    time_range: string;
 };
 
 /**
@@ -3396,7 +3367,7 @@ export type UserArtistsResponse = {
     /**
      * Artists
      */
-    artists: Array<BackendApiRoutesRecommendationsUserArtistResponse>;
+    artists: Array<UserArtistResponse>;
     /**
      * Total
      */
@@ -3727,42 +3698,6 @@ export type YouTubeMusicImportResponse = {
 };
 
 /**
- * UserArtistResponse
- *
- * Artist from user's listening history.
- */
-export type BackendApiRoutesRecommendationsUserArtistResponse = {
-    /**
-     * Id
-     */
-    id: string;
-    /**
-     * Artist Name
-     */
-    artist_name: string;
-    /**
-     * Source
-     */
-    source: string;
-    /**
-     * Rank
-     */
-    rank: number;
-    /**
-     * Time Range
-     */
-    time_range: string;
-    /**
-     * Popularity
-     */
-    popularity?: number | null;
-    /**
-     * Genres
-     */
-    genres?: Array<string>;
-};
-
-/**
  * ServiceSummary
  *
  * Summary of a connected music service.
@@ -3792,6 +3727,265 @@ export type BackendModelsAdminServiceSummary = {
      * Sync Error
      */
     sync_error: string | null;
+};
+
+/**
+ * RecFit
+ *
+ * How the user's voice meets the song: bucket, the key shift (semitones) and octave shift to use.
+ */
+export type RecFit = {
+    /**
+     * Bucket
+     */
+    bucket: 'fits' | 'fitsIn' | 'stretch' | 'outside';
+    /**
+     * Transpose
+     */
+    transpose: number;
+    /**
+     * Octave
+     */
+    octave: number;
+    /**
+     * Tier
+     */
+    tier: 'measured' | 'notes' | 'estimated' | 'rough';
+};
+
+/**
+ * RecVoice
+ */
+export type RecVoice = {
+    /**
+     * Has Profile
+     */
+    has_profile: boolean;
+    /**
+     * Method
+     */
+    method: 'mic' | 'self' | null;
+};
+
+/**
+ * SongVocalRangeOut
+ *
+ * MIDI note numbers (fractional); ``tier`` rough = the artist's range standing in for the song's.
+ */
+export type SongVocalRangeOut = {
+    /**
+     * Low
+     */
+    low: number;
+    /**
+     * High
+     */
+    high: number;
+    /**
+     * P10
+     */
+    p10: number;
+    /**
+     * P50
+     */
+    p50: number;
+    /**
+     * P90
+     */
+    p90: number;
+    /**
+     * Tier
+     */
+    tier: 'measured' | 'notes' | 'estimated' | 'rough';
+    /**
+     * Octave Confidence
+     */
+    octave_confidence: number | null;
+    /**
+     * Is Duet
+     */
+    is_duet: boolean | null;
+};
+
+/**
+ * SongVocalRangeResponse
+ */
+export type SongVocalRangeResponse = {
+    /**
+     * Song Key
+     */
+    song_key: string;
+    range: SongVocalRangeOut | null;
+};
+
+/**
+ * VoiceProfileIn
+ */
+export type VoiceProfileIn = {
+    /**
+     * Low Midi
+     */
+    low_midi: number;
+    /**
+     * High Midi
+     */
+    high_midi: number;
+    /**
+     * Comfort Low
+     */
+    comfort_low: number;
+    /**
+     * Comfort High
+     */
+    comfort_high: number;
+    /**
+     * Voice Type
+     */
+    voice_type: 'bass' | 'baritone' | 'tenor' | 'alto' | 'mezzo' | 'soprano' | null;
+    /**
+     * Voice Type Between
+     */
+    voice_type_between?: 'bass' | 'baritone' | 'tenor' | 'alto' | 'mezzo' | 'soprano' | null;
+    /**
+     * Register
+     */
+    register: 'lower' | 'middle' | 'higher' | null;
+    /**
+     * Confidence
+     */
+    confidence: 'low' | 'medium' | 'high';
+    /**
+     * Method
+     */
+    method: 'mic' | 'self';
+    /**
+     * Measured At
+     */
+    measured_at: string;
+};
+
+/**
+ * VoiceProfileOut
+ */
+export type VoiceProfileOut = {
+    /**
+     * Low Midi
+     */
+    low_midi: number;
+    /**
+     * High Midi
+     */
+    high_midi: number;
+    /**
+     * Comfort Low
+     */
+    comfort_low: number;
+    /**
+     * Comfort High
+     */
+    comfort_high: number;
+    /**
+     * Voice Type
+     */
+    voice_type: 'bass' | 'baritone' | 'tenor' | 'alto' | 'mezzo' | 'soprano' | null;
+    /**
+     * Voice Type Between
+     */
+    voice_type_between?: 'bass' | 'baritone' | 'tenor' | 'alto' | 'mezzo' | 'soprano' | null;
+    /**
+     * Register
+     */
+    register: 'lower' | 'middle' | 'higher' | null;
+    /**
+     * Confidence
+     */
+    confidence: 'low' | 'medium' | 'high';
+    /**
+     * Method
+     */
+    method: 'mic' | 'self';
+    /**
+     * Measured At
+     */
+    measured_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
+ * VoiceProfileResponse
+ */
+export type VoiceProfileResponse = {
+    profile: VoiceProfileOut | null;
+};
+
+/**
+ * UserArtistResponse
+ *
+ * An artist from user's data with merged source information.
+ *
+ * MBID-first: MusicBrainz ID is the primary identifier when available.
+ * Spotify ID is optional enrichment for images and external links.
+ */
+export type BackendApiRoutesMyDataUserArtistResponse = {
+    /**
+     * Mbid
+     */
+    mbid?: string | null;
+    /**
+     * Artist Name
+     */
+    artist_name: string;
+    /**
+     * Sources
+     */
+    sources: Array<string>;
+    /**
+     * Spotify Id
+     */
+    spotify_id?: string | null;
+    /**
+     * Spotify Rank
+     */
+    spotify_rank?: number | null;
+    /**
+     * Spotify Time Range
+     */
+    spotify_time_range?: string | null;
+    /**
+     * Popularity
+     */
+    popularity?: number | null;
+    /**
+     * Genres
+     */
+    genres?: Array<string>;
+    /**
+     * Lastfm Rank
+     */
+    lastfm_rank?: number | null;
+    /**
+     * Lastfm Playcount
+     */
+    lastfm_playcount?: number | null;
+    /**
+     * Tags
+     */
+    tags?: Array<string>;
+    /**
+     * Is Excluded
+     */
+    is_excluded?: boolean;
+    /**
+     * Is Manual
+     */
+    is_manual?: boolean;
+    /**
+     * Affinity
+     */
+    affinity?: 'love' | 'like' | 'occasionally' | null;
 };
 
 /**
@@ -5630,9 +5824,13 @@ export type GetRecommendationsV2ApiMyRecommendationsV2GetData = {
          */
         library?: 'any' | 'community' | 'karafun';
         /**
+         * Singable
+         */
+        singable?: boolean;
+        /**
          * Sort
          */
-        sort?: 'best' | 'popular' | 'newest' | 'oldest' | 'shortest' | 'az';
+        sort?: 'best' | 'popular' | 'newest' | 'oldest' | 'shortest' | 'az' | 'fit';
         /**
          * Cursor
          */
@@ -6759,3 +6957,90 @@ export type ProcessSyncTaskInternalSyncProcessPostResponses = {
 };
 
 export type ProcessSyncTaskInternalSyncProcessPostResponse = ProcessSyncTaskInternalSyncProcessPostResponses[keyof ProcessSyncTaskInternalSyncProcessPostResponses];
+
+export type GetSongVocalRangeApiCatalogSongsSongKeyVocalRangeGetData = {
+    body?: never;
+    path: {
+        /**
+         * Song Key
+         */
+        song_key: string;
+    };
+    query?: never;
+    url: '/api/catalog/songs/{song_key}/vocal-range';
+};
+
+export type GetSongVocalRangeApiCatalogSongsSongKeyVocalRangeGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetSongVocalRangeApiCatalogSongsSongKeyVocalRangeGetError = GetSongVocalRangeApiCatalogSongsSongKeyVocalRangeGetErrors[keyof GetSongVocalRangeApiCatalogSongsSongKeyVocalRangeGetErrors];
+
+export type GetSongVocalRangeApiCatalogSongsSongKeyVocalRangeGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: SongVocalRangeResponse;
+};
+
+export type GetSongVocalRangeApiCatalogSongsSongKeyVocalRangeGetResponse = GetSongVocalRangeApiCatalogSongsSongKeyVocalRangeGetResponses[keyof GetSongVocalRangeApiCatalogSongsSongKeyVocalRangeGetResponses];
+
+export type DeleteVoiceApiMyVoiceDeleteData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/my/voice';
+};
+
+export type DeleteVoiceApiMyVoiceDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteVoiceApiMyVoiceDeleteResponse = DeleteVoiceApiMyVoiceDeleteResponses[keyof DeleteVoiceApiMyVoiceDeleteResponses];
+
+export type GetVoiceApiMyVoiceGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/my/voice';
+};
+
+export type GetVoiceApiMyVoiceGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: VoiceProfileResponse;
+};
+
+export type GetVoiceApiMyVoiceGetResponse = GetVoiceApiMyVoiceGetResponses[keyof GetVoiceApiMyVoiceGetResponses];
+
+export type PutVoiceApiMyVoicePutData = {
+    body: VoiceProfileIn;
+    path?: never;
+    query?: never;
+    url: '/api/my/voice';
+};
+
+export type PutVoiceApiMyVoicePutErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type PutVoiceApiMyVoicePutError = PutVoiceApiMyVoicePutErrors[keyof PutVoiceApiMyVoicePutErrors];
+
+export type PutVoiceApiMyVoicePutResponses = {
+    /**
+     * Successful Response
+     */
+    200: VoiceProfileOut;
+};
+
+export type PutVoiceApiMyVoicePutResponse = PutVoiceApiMyVoicePutResponses[keyof PutVoiceApiMyVoicePutResponses];

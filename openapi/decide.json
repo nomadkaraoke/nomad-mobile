@@ -3037,7 +3037,7 @@
           "my"
         ],
         "summary": "Get Recommendations V2",
-        "description": "Catalog-backed recommendations: explained sections for ``sort=best``, else one paged flat list.",
+        "description": "Catalog-backed recommendations: explained sections for ``sort=best``, else one paged flat list.\n\nWith a voice profile every song carries ``fit``; ``singable`` keeps fits / fitsIn songs and\n``sort=fit`` orders by fit. Without a profile ``singable`` is ignored (not echoed).",
         "operationId": "get_recommendations_v2_api_my_recommendations_v2_get",
         "security": [
           {
@@ -3267,6 +3267,16 @@
             }
           },
           {
+            "name": "singable",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Singable"
+            }
+          },
+          {
             "name": "sort",
             "in": "query",
             "required": false,
@@ -3277,7 +3287,8 @@
                 "newest",
                 "oldest",
                 "shortest",
-                "az"
+                "az",
+                "fit"
               ],
               "type": "string",
               "default": "best",
@@ -5209,6 +5220,136 @@
           }
         }
       }
+    },
+    "/api/catalog/songs/{song_key}/vocal-range": {
+      "get": {
+        "tags": [
+          "catalog"
+        ],
+        "summary": "Get Song Vocal Range",
+        "description": "A song's vocal range from catalog.db (public). ``range`` is null for an unknown song or no data;\n503 ``warming_up`` while catalog.db loads.",
+        "operationId": "get_song_vocal_range_api_catalog_songs__song_key__vocal_range_get",
+        "parameters": [
+          {
+            "name": "song_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Song Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SongVocalRangeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/my/voice": {
+      "get": {
+        "tags": [
+          "voice"
+        ],
+        "summary": "Get Voice",
+        "operationId": "get_voice_api_my_voice_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceProfileResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "voice"
+        ],
+        "summary": "Put Voice",
+        "operationId": "put_voice_api_my_voice_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoiceProfileIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceProfileOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "voice"
+        ],
+        "summary": "Delete Voice",
+        "operationId": "delete_voice_api_my_voice_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -5465,7 +5606,7 @@
         "properties": {
           "artists": {
             "items": {
-              "$ref": "#/components/schemas/UserArtistResponse"
+              "$ref": "#/components/schemas/backend__api__routes__my_data__UserArtistResponse"
             },
             "type": "array",
             "title": "Artists"
@@ -8595,6 +8736,16 @@
           },
           "facets": {
             "$ref": "#/components/schemas/RecFacets"
+          },
+          "fit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RecFit"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -8736,6 +8887,9 @@
           "catalog_run": {
             "type": "string",
             "title": "Catalog Run"
+          },
+          "voice": {
+            "$ref": "#/components/schemas/RecVoice"
           }
         },
         "type": "object",
@@ -8744,7 +8898,8 @@
           "filters_applied",
           "next_cursor",
           "has_profile",
-          "catalog_run"
+          "catalog_run",
+          "voice"
         ],
         "title": "RecommendationsV2Response"
       },
@@ -10405,60 +10560,9 @@
       },
       "UserArtistResponse": {
         "properties": {
-          "mbid": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Mbid"
-          },
           "artist_name": {
             "type": "string",
             "title": "Artist Name"
-          },
-          "sources": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Sources"
-          },
-          "spotify_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Id"
-          },
-          "spotify_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Rank"
-          },
-          "spotify_time_range": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Time Range"
           },
           "popularity": {
             "anyOf": [
@@ -10479,76 +10583,39 @@
             "title": "Genres",
             "default": []
           },
-          "lastfm_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Rank"
+          "id": {
+            "type": "string",
+            "title": "Id"
           },
-          "lastfm_playcount": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Playcount"
+          "source": {
+            "type": "string",
+            "title": "Source"
           },
-          "tags": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Tags",
-            "default": []
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
           },
-          "is_excluded": {
-            "type": "boolean",
-            "title": "Is Excluded",
-            "default": false
-          },
-          "is_manual": {
-            "type": "boolean",
-            "title": "Is Manual",
-            "default": false
-          },
-          "affinity": {
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "love",
-                  "like",
-                  "occasionally"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Affinity"
+          "time_range": {
+            "type": "string",
+            "title": "Time Range"
           }
         },
         "type": "object",
         "required": [
+          "id",
           "artist_name",
-          "sources"
+          "source",
+          "rank",
+          "time_range"
         ],
         "title": "UserArtistResponse",
-        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
+        "description": "Artist from user's listening history."
       },
       "UserArtistsResponse": {
         "properties": {
           "artists": {
             "items": {
-              "$ref": "#/components/schemas/backend__api__routes__recommendations__UserArtistResponse"
+              "$ref": "#/components/schemas/UserArtistResponse"
             },
             "type": "array",
             "title": "Artists"
@@ -11078,59 +11145,6 @@
         "title": "YouTubeMusicImportResponse",
         "description": "Result of a YouTube Music playlist import."
       },
-      "backend__api__routes__recommendations__UserArtistResponse": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "artist_name": {
-            "type": "string",
-            "title": "Artist Name"
-          },
-          "source": {
-            "type": "string",
-            "title": "Source"
-          },
-          "rank": {
-            "type": "integer",
-            "title": "Rank"
-          },
-          "time_range": {
-            "type": "string",
-            "title": "Time Range"
-          },
-          "popularity": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Popularity"
-          },
-          "genres": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Genres",
-            "default": []
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "artist_name",
-          "source",
-          "rank",
-          "time_range"
-        ],
-        "title": "UserArtistResponse",
-        "description": "Artist from user's listening history."
-      },
       "backend__models__admin__ServiceSummary": {
         "properties": {
           "service_type": {
@@ -11184,6 +11198,571 @@
         ],
         "title": "ServiceSummary",
         "description": "Summary of a connected music service."
+      },
+      "RecFit": {
+        "properties": {
+          "bucket": {
+            "type": "string",
+            "enum": [
+              "fits",
+              "fitsIn",
+              "stretch",
+              "outside"
+            ],
+            "title": "Bucket"
+          },
+          "transpose": {
+            "type": "integer",
+            "title": "Transpose"
+          },
+          "octave": {
+            "type": "integer",
+            "title": "Octave"
+          },
+          "tier": {
+            "type": "string",
+            "enum": [
+              "measured",
+              "notes",
+              "estimated",
+              "rough"
+            ],
+            "title": "Tier"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bucket",
+          "transpose",
+          "octave",
+          "tier"
+        ],
+        "title": "RecFit",
+        "description": "How the user's voice meets the song: bucket, the key shift (semitones) and octave shift to use."
+      },
+      "RecVoice": {
+        "properties": {
+          "has_profile": {
+            "type": "boolean",
+            "title": "Has Profile"
+          },
+          "method": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "mic",
+                  "self"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method"
+          }
+        },
+        "type": "object",
+        "required": [
+          "has_profile",
+          "method"
+        ],
+        "title": "RecVoice"
+      },
+      "SongVocalRangeOut": {
+        "properties": {
+          "low": {
+            "type": "number",
+            "title": "Low"
+          },
+          "high": {
+            "type": "number",
+            "title": "High"
+          },
+          "p10": {
+            "type": "number",
+            "title": "P10"
+          },
+          "p50": {
+            "type": "number",
+            "title": "P50"
+          },
+          "p90": {
+            "type": "number",
+            "title": "P90"
+          },
+          "tier": {
+            "type": "string",
+            "enum": [
+              "measured",
+              "notes",
+              "estimated",
+              "rough"
+            ],
+            "title": "Tier"
+          },
+          "octave_confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Octave Confidence"
+          },
+          "is_duet": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Duet"
+          }
+        },
+        "type": "object",
+        "required": [
+          "low",
+          "high",
+          "p10",
+          "p50",
+          "p90",
+          "tier",
+          "octave_confidence",
+          "is_duet"
+        ],
+        "title": "SongVocalRangeOut",
+        "description": "MIDI note numbers (fractional); ``tier`` rough = the artist's range standing in for the song's."
+      },
+      "SongVocalRangeResponse": {
+        "properties": {
+          "song_key": {
+            "type": "string",
+            "title": "Song Key"
+          },
+          "range": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SongVocalRangeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "song_key",
+          "range"
+        ],
+        "title": "SongVocalRangeResponse"
+      },
+      "VoiceProfileIn": {
+        "properties": {
+          "low_midi": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Low Midi"
+          },
+          "high_midi": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "High Midi"
+          },
+          "comfort_low": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Comfort Low"
+          },
+          "comfort_high": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Comfort High"
+          },
+          "voice_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bass",
+                  "baritone",
+                  "tenor",
+                  "alto",
+                  "mezzo",
+                  "soprano"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Type"
+          },
+          "voice_type_between": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bass",
+                  "baritone",
+                  "tenor",
+                  "alto",
+                  "mezzo",
+                  "soprano"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Type Between"
+          },
+          "register": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "lower",
+                  "middle",
+                  "higher"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Register"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Confidence"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "mic",
+              "self"
+            ],
+            "title": "Method"
+          },
+          "measured_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Measured At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "low_midi",
+          "high_midi",
+          "comfort_low",
+          "comfort_high",
+          "voice_type",
+          "register",
+          "confidence",
+          "method",
+          "measured_at"
+        ],
+        "title": "VoiceProfileIn"
+      },
+      "VoiceProfileOut": {
+        "properties": {
+          "low_midi": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Low Midi"
+          },
+          "high_midi": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "High Midi"
+          },
+          "comfort_low": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Comfort Low"
+          },
+          "comfort_high": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Comfort High"
+          },
+          "voice_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bass",
+                  "baritone",
+                  "tenor",
+                  "alto",
+                  "mezzo",
+                  "soprano"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Type"
+          },
+          "voice_type_between": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bass",
+                  "baritone",
+                  "tenor",
+                  "alto",
+                  "mezzo",
+                  "soprano"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Type Between"
+          },
+          "register": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "lower",
+                  "middle",
+                  "higher"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Register"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Confidence"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "mic",
+              "self"
+            ],
+            "title": "Method"
+          },
+          "measured_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Measured At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "low_midi",
+          "high_midi",
+          "comfort_low",
+          "comfort_high",
+          "voice_type",
+          "register",
+          "confidence",
+          "method",
+          "measured_at",
+          "updated_at"
+        ],
+        "title": "VoiceProfileOut"
+      },
+      "VoiceProfileResponse": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VoiceProfileOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "profile"
+        ],
+        "title": "VoiceProfileResponse"
+      },
+      "backend__api__routes__my_data__UserArtistResponse": {
+        "properties": {
+          "mbid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mbid"
+          },
+          "artist_name": {
+            "type": "string",
+            "title": "Artist Name"
+          },
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "spotify_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Id"
+          },
+          "spotify_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Rank"
+          },
+          "spotify_time_range": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Time Range"
+          },
+          "popularity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Popularity"
+          },
+          "genres": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Genres",
+            "default": []
+          },
+          "lastfm_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Rank"
+          },
+          "lastfm_playcount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Playcount"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "default": []
+          },
+          "is_excluded": {
+            "type": "boolean",
+            "title": "Is Excluded",
+            "default": false
+          },
+          "is_manual": {
+            "type": "boolean",
+            "title": "Is Manual",
+            "default": false
+          },
+          "affinity": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "love",
+                  "like",
+                  "occasionally"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Affinity"
+          }
+        },
+        "type": "object",
+        "required": [
+          "artist_name",
+          "sources"
+        ],
+        "title": "UserArtistResponse",
+        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
       }
     },
     "securitySchemes": {
