@@ -18,6 +18,7 @@ const isLocalUrl = (url: string) => {
 export const GEN_API_URL = process.env.EXPO_PUBLIC_GEN_API_URL || 'https://api.nomadkaraoke.com';
 export const GEN_WEB_URL = process.env.EXPO_PUBLIC_GEN_WEB_URL || 'https://gen.nomadkaraoke.com';
 export const DECIDE_API_URL = process.env.EXPO_PUBLIC_DECIDE_API_URL || 'https://decide.nomadkaraoke.com';
+export const KJBOX_API_URL = process.env.EXPO_PUBLIC_KJBOX_API_URL || 'https://sing.nomadkaraoke.com';
 
 export const GOOGLE_WEB_CLIENT_ID =
   process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || '718638054799-fush0smd1e4icq9pt0immp8n59jjlebh.apps.googleusercontent.com';

@@ -215,6 +215,9 @@ importers:
       '@nomad/api-gen':
         specifier: workspace:*
         version: link:../../packages/api-gen
+      '@nomad/api-kjbox':
+        specifier: workspace:*
+        version: link:../../packages/api-kjbox
       '@nomad/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -404,6 +407,16 @@ importers:
       '@nomad/review-core':
         specifier: workspace:*
         version: link:../review-core
+
+  packages/api-kjbox:
+    dependencies:
+      '@tanstack/react-query':
+        specifier: ^5
+        version: 5.104.2(react@19.2.3)
+    devDependencies:
+      '@hey-api/openapi-ts':
+        specifier: 0.99.0
+        version: 0.99.0(typescript@6.0.3)
 
   packages/core:
     devDependencies:

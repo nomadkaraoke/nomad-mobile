@@ -1,8 +1,9 @@
 import { configureClient as configureDecide } from '@nomad/api-decide';
 import { configureClient as configureGen } from '@nomad/api-gen';
+import { configureKjbox } from '@nomad/api-kjbox';
 
 import { useAuth } from '../auth/store';
-import { DECIDE_API_URL, GEN_API_URL } from '../config';
+import { DECIDE_API_URL, GEN_API_URL, KJBOX_API_URL } from '../config';
 import { currentLocale } from '../locale';
 import { getDeviceId } from '../device/deviceId';
 
@@ -19,4 +20,6 @@ export function setupApiClients() {
   // Decide is public for the MVP catalog: no gen token is sent and a 401 never signs the user out
   // (spec §4.2 adds a decide token via exchange-gen-session later).
   configureDecide({ baseUrl: DECIDE_API_URL, getToken: () => null, getLocale: currentLocale, getDeviceId, onUnauthorized: () => {} });
+  // kjbox verifies the gen session token itself. Its 401 only means "could not verify right now": never sign out.
+  configureKjbox({ baseUrl: KJBOX_API_URL, getToken: () => useAuth.getState().getToken(), getLocale: currentLocale });
 }

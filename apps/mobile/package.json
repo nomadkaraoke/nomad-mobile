@@ -9,6 +9,7 @@
     "@noble/hashes": "^2.4.0",
     "@nomad/api-decide": "workspace:*",
     "@nomad/api-gen": "workspace:*",
+    "@nomad/api-kjbox": "workspace:*",
     "@nomad/core": "workspace:*",
     "@nomad/i18n": "workspace:*",
     "@nomad/review-core": "workspace:*",
