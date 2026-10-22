@@ -1,6 +1,7 @@
 import { previewClose, previewResolve, type PreviewRequest, type PreviewResult } from '@nomad/api-kjbox';
-import { setAudioModeAsync } from 'expo-audio';
 import { create } from 'zustand';
+
+import { ensurePlaybackAudioMode } from '../../audio/playbackMode';
 
 /** What to preview: a search version (with the web's descriptor fields) or a rotation entry. */
 export type PreviewTarget = {
@@ -42,20 +43,6 @@ function release(code: string, token: string | undefined, nightId?: string): voi
   }
 }
 
-/**
- * Ruling E10-R6: previews play with the ringer switch off. `mixWithOthers` is expo-audio's default, which the native
- * review relies on (it never sets a mode), so leaving it set after a preview changes nothing for the review.
- */
-export const PREVIEW_AUDIO_MODE = { playsInSilentMode: true, interruptionMode: 'mixWithOthers' } as const;
-
-async function previewAudioMode(): Promise<void> {
-  try {
-    await setAudioModeAsync(PREVIEW_AUDIO_MODE);
-  } catch {
-    /* no audio session: the preview still tries to play */
-  }
-}
-
 let seq = 0;
 
 export const usePreviewStore = create<PreviewState>((set, get) => ({
@@ -73,8 +60,9 @@ export const usePreviewStore = create<PreviewState>((set, get) => ({
         return;
       }
       const playable = !!result && result.mode !== 'unavailable';
-      // Before the player is created (it plays as soon as it mounts).
-      if (playable) await previewAudioMode();
+      // Rulings E10-R6/R7: the app's playback mode (plays with the ringer off), set before the player is created
+      // (it plays as soon as it mounts). Shared with the native review; set once per launch.
+      if (playable) await ensurePlaybackAudioMode();
       if (get().current?.id !== id) {
         release(code, result.token, nightId);
         return;

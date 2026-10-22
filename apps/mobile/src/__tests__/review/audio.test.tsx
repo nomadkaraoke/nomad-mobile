@@ -1,5 +1,8 @@
 import { act, renderHook } from '@testing-library/react-native';
 
+import { setAudioModeAsync } from 'expo-audio';
+
+import { resetPlaybackAudioModeForTests } from '../../audio/playbackMode';
 import { lockstepCheck } from '../../review/audio/lockstep';
 import { useAbPlayers } from '../../review/audio/useAbPlayers';
 import { useReviewPlayer } from '../../review/audio/useReviewPlayer';
@@ -53,6 +56,7 @@ class MockPlayer {
 const mockPlayers: MockPlayer[] = [];
 let mockAutoLoad = true;
 jest.mock('expo-audio', () => ({
+  setAudioModeAsync: jest.fn(async () => {}),
   createAudioPlayer: jest.fn((source: unknown) => {
     const p = new MockPlayer(source);
     mockPlayers.push(p);
@@ -383,5 +387,41 @@ describe('audio: useAbPlayers', () => {
     expect(mockGetUrls).toHaveBeenCalledTimes(3);
     expect(a.replace).toHaveBeenCalledTimes(3);
     expect(result.current.error).toBe('load_failed');
+  });
+});
+
+describe('audio: playback mode (ruling E10-R7)', () => {
+  const mode = setAudioModeAsync as jest.Mock;
+  beforeEach(() => {
+    resetPlaybackAudioModeForTests();
+    mode.mockClear();
+  });
+
+  it('the review player sets the ringer-off playback mode before its first play, once per launch', async () => {
+    const { result } = renderHook(() => useReviewPlayer('job-mode', { vocalsReady: false }));
+    await act(async () => {});
+    expect(mode).toHaveBeenCalledWith({ playsInSilentMode: true, interruptionMode: 'mixWithOthers' });
+    const player = mockPlayers.at(-1)!;
+    expect(mode.mock.invocationCallOrder[0]!).toBeLessThan(player.play.mock.invocationCallOrder[0] ?? Infinity);
+    act(() => result.current.play());
+    expect(player.play).toHaveBeenCalled();
+    expect(mode.mock.invocationCallOrder[0]!).toBeLessThan(player.play.mock.invocationCallOrder[0]!);
+    await act(async () => {});
+    expect(mode).toHaveBeenCalledTimes(1);
+  });
+
+  it('the A/B players set it too', async () => {
+    renderHook(() => useAbPlayers('j1', OPTIONS));
+    await act(async () => {});
+    expect(mode).toHaveBeenCalledWith(expect.objectContaining({ playsInSilentMode: true }));
+  });
+
+  it('a failed attempt is retried on the next play', async () => {
+    mode.mockRejectedValueOnce(new Error('session busy'));
+    const { result } = renderHook(() => useReviewPlayer('job-retry', { vocalsReady: false }));
+    await act(async () => {});
+    act(() => result.current.play());
+    await act(async () => {});
+    expect(mode).toHaveBeenCalledTimes(2);
   });
 });

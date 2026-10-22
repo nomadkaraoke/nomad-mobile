@@ -3,6 +3,7 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { createAudioPlayer, setAudioModeAsync } from 'expo-audio';
 import { AppState, Linking, type AppStateStatus } from 'react-native';
 
+import { resetPlaybackAudioModeForTests } from '../../audio/playbackMode';
 import { useAuth } from '../../auth/store';
 import { appStorage } from '../../storage';
 import { useNightStore, type NomadNight } from '../../tonight/nightStore';
@@ -66,6 +67,7 @@ const emit = (s: AppStateStatus) =>
 
 let night: NomadNight;
 beforeEach(() => {
+  resetPlaybackAudioModeForTests();
   jest.useRealTimers();
   jest.clearAllMocks();
   appStorage.clearAll();

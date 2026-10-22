@@ -2,6 +2,7 @@ import type { InstrumentalChoice, InstrumentalOption } from '@nomad/review-core'
 import { createAudioPlayer, type AudioPlayer } from 'expo-audio';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { ensurePlaybackAudioMode } from '../../audio/playbackMode';
 import { useLockstep } from './lockstep';
 import { instrumentalUrl, MAX_URL_REFRESHES, refreshInstrumentalOptions } from './mediaSources';
 import { replaceAndWait, safePlay, type AudioErrorCode } from './playback';
@@ -58,6 +59,8 @@ export function useAbPlayers(jobId: string, options: InstrumentalOption[]): AbPl
       setPair(null);
       return;
     }
+    // Ruling E10-R7: set the playback audio mode before the first play.
+    void ensurePlaybackAudioMode();
     const make = (uri: string, id: InstrumentalChoice) => {
       const p = createAudioPlayer({ uri }, { updateInterval: UPDATE_INTERVAL_MS });
       setMuted(p, id !== activeRef.current);

@@ -89,7 +89,8 @@ function VideoPreview({ uri, hls, onError }: { uri: string; hls: boolean; onErro
     const subs = [
       player.addListener('playingChange', (e) => setClock((c) => ({ ...c, playing: !!e?.isPlaying }))),
       player.addListener('timeUpdate', (e) =>
-        setClock((c) => ({ playing: !!player.playing, current: e.currentTime, duration: player.duration || c.duration })),),
+        setClock((c) => ({ playing: !!player.playing, current: e.currentTime, duration: player.duration || c.duration })),
+      ),
       player.addListener('statusChange', (e) => {
         if (e.status === 'error') onErrorRef.current();
       }),

@@ -1,5 +1,7 @@
 import type { AudioPlayer } from 'expo-audio';
 
+import { ensurePlaybackAudioMode } from '../../audio/playbackMode';
+
 /** UI-facing error codes (the screen maps them to i18n copy; raw native strings never leave the hooks). */
 export type AudioErrorCode = 'load_failed' | 'play_failed';
 
@@ -11,6 +13,8 @@ export function isBenignAbort(e: unknown): boolean {
 
 /** play() can throw synchronously or reject (iOS session activation). Failures become an error code. */
 export function safePlay(player: Pick<AudioPlayer, 'play'>, onError: (code: AudioErrorCode) => void): void {
+  // Ruling E10-R7: explicit playback plays with the ringer off. Normally already set when the players were created.
+  void ensurePlaybackAudioMode();
   const fail = (e: unknown) => {
     if (!isBenignAbort(e)) onError('play_failed');
   };

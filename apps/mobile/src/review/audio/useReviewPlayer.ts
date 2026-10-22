@@ -1,6 +1,7 @@
 import { createAudioPlayer, type AudioPlayer } from 'expo-audio';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { ensurePlaybackAudioMode } from '../../audio/playbackMode';
 import { reviewAudioUrl, type ReviewSource } from './mediaSources';
 import { replaceAndWait, safePlay, type AudioErrorCode } from './playback';
 
@@ -54,6 +55,8 @@ export function useReviewPlayer(jobId: string, opts: { vocalsReady: boolean }): 
 
   // The player exists per job; the source is swapped inside it so position and play state carry over.
   useEffect(() => {
+    // Ruling E10-R7: set the playback audio mode before the first play (the singer taps play well after this).
+    void ensurePlaybackAudioMode();
     const player = createAudioPlayer({ uri: reviewAudioUrl(jobId, 'song') }, { updateInterval: UPDATE_INTERVAL_MS });
     playerRef.current = player;
     loadedSrcRef.current = { jobId, source: 'song' };
