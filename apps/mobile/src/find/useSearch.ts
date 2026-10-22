@@ -13,11 +13,13 @@ import {
 import {
   identify,
   identifyKind,
+  matchesLibrary,
   OFFLINE_MARGIN_BONUS,
   offlineGroups,
   popularOffline,
   searchAvailabilityOffline,
   type IdentifyResult,
+  type LibraryFilter,
   type OfflineGroup,
   type SongRef as CoreSongRef,
   type SqlReader,
@@ -27,6 +29,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useOffline } from '../net/useOffline';
 import { openOfflineReader } from '../offline/offlineIndex';
 import { useOfflineIndexStore } from '../offline/offlineIndexStore';
+import { useLibraryFilter } from './library';
 import { currentSid } from './searchSession';
 
 /** Shorter queries show the popular list (decide search's MIN_QUERY_CHARS). */
@@ -114,6 +117,14 @@ function toIdentification(q: string, r: IdentifyResult): Identification {
   };
 }
 
+/** The groups in the chosen venue library (`any` keeps all); a song without library codes or a KV version drops out of `karafun`. */
+function* inLibrary(groups: Iterable<OfflineGroup>, library: LibraryFilter): Generator<OfflineGroup> {
+  for (const g of groups) {
+    const tagged = { libraries: g.libraries, versions: g.versions.map((v) => ({ kind: v.kind, brand_code: v.brandCode })) };
+    if (matchesLibrary(tagged, library)) yield g;
+  }
+}
+
 /**
  * decide SearchService.search over offline.db: the identified song's group(s) first, then the typed-word matches.
  * Throws on SQLite errors.
@@ -123,7 +134,7 @@ function toIdentification(q: string, r: IdentifyResult): Identification {
  * group per karaoke candidate (identify order) ahead of the typed-word groups, where the cloud returns only
  * the typed-word groups for candidates.
  */
-function searchOffline(db: SqlReader, q: string): Results {
+function searchOffline(db: SqlReader, q: string, library: LibraryFilter): Results {
   const ident = identify(db, q, { marginBonus: OFFLINE_MARGIN_BONUS });
   const merged = new Map<string, OfflineGroup>();
   const add = (gs: OfflineGroup[]) => gs.forEach((g) => merged.has(g.songKey) || merged.set(g.songKey, g));
@@ -132,16 +143,17 @@ function searchOffline(db: SqlReader, q: string): Results {
     add(searchAvailabilityOffline(db, `${ident.best.artist} ${ident.best.title}`, SEARCH_LIMIT));
   }
   add(searchAvailabilityOffline(db, q, SEARCH_LIMIT));
-  return { identification: toIdentification(q, ident), groups: [...merged.values()].slice(0, SEARCH_LIMIT).map(toGroup) };
+  const groups = [...inLibrary(merged.values(), library)].slice(0, SEARCH_LIMIT).map(toGroup);
+  return { identification: toIdentification(q, ident), groups };
 }
 
 /** The offline answer for `q`, or null with no usable list. Never throws (a broken list → cloud only). */
-function offlineResults(q: string): Results | null {
+function offlineResults(q: string, library: LibraryFilter): Results | null {
   try {
     const db = openOfflineReader();
     if (!db) return null;
-    if (q.length < MIN_QUERY_CHARS) return { identification: null, groups: popularOffline(db, POPULAR_LIMIT).map(toGroup) };
-    return searchOffline(db, q);
+    if (q.length < MIN_QUERY_CHARS) return { identification: null, groups: [...inLibrary(popularOffline(db, POPULAR_LIMIT), library)].map(toGroup) };
+    return searchOffline(db, q, library);
   } catch {
     return null;
   }
@@ -154,20 +166,20 @@ function clientError(e: unknown): Pick<ApiError, 'status' | 'retryAfter'> | null
   return typeof status === 'number' && status >= 400 && status < 500 ? { status, retryAfter: retryAfter ?? null } : null;
 }
 
-let popularCache: { at: number; groups: SongGroup[] } | null = null;
+let popularCache: { at: number; library: LibraryFilter; groups: SongGroup[] } | null = null;
 
 /** Test hook: forget the cached popular list. */
 export function resetSearchCacheForTests(): void {
   popularCache = null;
 }
 
-async function cloudResults(q: string, signal: AbortSignal): Promise<Results> {
+async function cloudResults(q: string, library: LibraryFilter, signal: AbortSignal): Promise<Results> {
   if (q.length < MIN_QUERY_CHARS) {
-    const groups = await popularSongs(POPULAR_LIMIT);
-    popularCache = { at: Date.now(), groups };
+    const groups = await popularSongs(POPULAR_LIMIT, library);
+    popularCache = { at: Date.now(), library, groups };
     return { identification: null, groups };
   }
-  const r = await searchSongs(q, { limit: SEARCH_LIMIT, sid: currentSid(), signal });
+  const r = await searchSongs(q, { limit: SEARCH_LIMIT, sid: currentSid(), library, signal });
   return { identification: r.identification, groups: r.groups };
 }
 
@@ -200,8 +212,9 @@ const INITIAL: Data = {
  * dropped): the offline list answers first when downloaded, the cloud answer replaces it, a cold service
  * shows `warmingUp` after 1.5 s and `error: 'unreachable'` after 30 s (offline results kept), and a cloud
  * `none` with no groups asks the Gemini resolve once. Under 2 characters: the popular list.
+ * `library` overrides the venue library filter (the quiz's song step searches every song: `'any'`).
  */
-export function useSearch(rawQuery: string): SearchState {
+export function useSearch(rawQuery: string, opts: { library?: LibraryFilter } = {}): SearchState {
   const typed = rawQuery.trim();
   const q = useDebounced(typed);
   // The last keystroke (raw, before the debounce): the resolve waits until the box has been left alone.
@@ -210,6 +223,8 @@ export function useSearch(rawQuery: string): SearchState {
     keystroke.current = { value: typed, at: Date.now() };
   }, [typed]);
   const offline = useOffline();
+  const venueLibrary = useLibraryFilter((s) => s.filter);
+  const library = opts.library ?? venueLibrary;
   const [data, setData] = useState<Data>(INITIAL);
   const [attempt, setAttempt] = useState(0);
   const generation = useRef(0);
@@ -232,7 +247,7 @@ export function useSearch(rawQuery: string): SearchState {
     let cloudDone = false;
     let local: Results | null = null;
 
-    const cached = q.length < MIN_QUERY_CHARS && popularCache && Date.now() - popularCache.at < POPULAR_FRESH_MS;
+    const cached = q.length < MIN_QUERY_CHARS && popularCache?.library === library && Date.now() - popularCache.at < POPULAR_FRESH_MS;
     if (cached) {
       cloudDone = true;
       set({ query: q, resultsQuery: q, offline, source: 'cloud', identification: null, groups: popularCache!.groups, resolve: null, loading: false, warmingUp: false, error: null });
@@ -258,7 +273,7 @@ export function useSearch(rawQuery: string): SearchState {
         settleWithoutCloud('unreachable');
       });
       const run = (): void => {
-        cloudResults(q, controller.signal).then(
+        cloudResults(q, library, controller.signal).then(
           (r) => {
             if (!live() || cloudDone) return;
             cloudDone = true;
@@ -314,7 +329,7 @@ export function useSearch(rawQuery: string): SearchState {
 
     later(0, () => {
       if (!live() || cloudDone) return;
-      local = offlineResults(q);
+      local = offlineResults(q, library);
       if (!live() || cloudDone) return; // The cloud answered while the matcher ran.
       const found = local;
       if (!found) {
@@ -333,7 +348,7 @@ export function useSearch(rawQuery: string): SearchState {
       controller.abort();
       timers.forEach(clearTimeout);
     };
-  }, [q, offline, attempt, indexRun]);
+  }, [q, offline, attempt, indexRun, library]);
 
   const retry = useCallback(() => setAttempt((n) => n + 1), []);
   return { ...data, retry };

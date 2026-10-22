@@ -3,7 +3,7 @@
   "info": {
     "title": "Karaoke Generator API",
     "description": "Backend API for web-based karaoke video generation",
-    "version": "0.279.3"
+    "version": "0.280.2"
   },
   "paths": {
     "/api/health": {
@@ -3969,6 +3969,85 @@
               "type": "boolean",
               "default": false,
               "title": "Dry Run"
+            }
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/internal/youtube-comments/run": {
+      "post": {
+        "tags": [
+          "internal"
+        ],
+        "summary": "Youtube Comments Run Endpoint",
+        "description": "Reply to song requests in new YouTube channel comments (requests-board links).\n\nCalled by Cloud Scheduler (hourly). Does nothing unless\nYOUTUBE_COMMENT_AUTOREPLY_ENABLED is true, except ``?dry_run=true``, which logs\nevery reply it would post (YOUTUBE_COMMENT_BOT) and writes nothing.",
+        "operationId": "youtube_comments_run_endpoint_api_internal_youtube_comments_run_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dry_run",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Dry Run"
+            }
+          },
+          {
+            "name": "max_replies",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Max Replies"
             }
           },
           {
@@ -28903,7 +28982,8 @@
             "type": "string",
             "enum": [
               "human",
-              "trending_agent"
+              "trending_agent",
+              "youtube_comment"
             ],
             "title": "Source"
           },

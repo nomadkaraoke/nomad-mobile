@@ -156,11 +156,7 @@ nomad-mobile/
 - **Session lifetime is unchanged** (7 days idle / 30 days absolute). The app calls `GET /api/users/me` on launch and foreground, which slides the idle window. A 401 clears the session and returns to Find, and the next make action asks for a code again. There are no refresh tokens.
 
 ### 4.2 Decide linking (post-MVP, needed for recommendations)
-- New decide endpoint `POST /api/auth/exchange-gen-session`, called with a Bearer gen token:
-  1. Decide reads gen's `sessions` collection (same Firestore project, read-only) to validate the token.
-  2. It upserts the `decide_users` record by email, migrating an existing guest through the upgrade path.
-  3. It returns a decide JWT.
-- The app keeps the decide token alongside the gen session and re-exchanges it when it expires.
+- **Superseded:** the `exchange-gen-session` endpoint was never built. Decide accepts gen session tokens directly, and the app sends its gen token to decide (see the [Phase 3a spec §4](2026-10-21-mobile-phase3a-discover-core-design.md)). The app keeps no separate decide token.
 
 ### 4.3 Web handoff (in-app review + US web checkout)
 - `POST /api/users/auth/handoff-token` (authenticated) returns a single-use token that expires in 60 seconds. This follows the `create_admin_login_token` pattern.

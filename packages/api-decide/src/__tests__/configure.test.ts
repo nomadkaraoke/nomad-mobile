@@ -1,4 +1,4 @@
-import { ApiError, configureClient, getSong } from '../index';
+import { ApiError, configureClient, getSong, searchSongs } from '../index';
 
 const fetchMock = jest.fn();
 beforeEach(() => {
@@ -75,4 +75,29 @@ it('carries a numeric Retry-After (seconds) on the ApiError; an HTTP-date or non
   await expect(getSong(1)).rejects.toMatchObject({ status: 429, retryAfter: null });
   fetchMock.mockResolvedValueOnce(limited());
   await expect(getSong(1)).rejects.toMatchObject({ status: 429, retryAfter: null });
+});
+
+it('searchBaseUrl routes search to the search host while the main client keeps baseUrl', async () => {
+  configureClient({
+    baseUrl: 'https://decide.test',
+    searchBaseUrl: 'https://search.test',
+    getToken: () => 'tok',
+    getLocale: () => 'en',
+    getDeviceId: () => 'dev-1',
+    onUnauthorized: jest.fn(),
+  });
+  fetchMock.mockResolvedValueOnce(json({ groups: [], identification: {}, index: {}, sid: 's' }));
+  await searchSongs('abc');
+  expect(lastRequest().url).toBe('https://search.test/api/search?q=abc');
+  expect(lastRequest().headers.get('authorization')).toBe('Bearer tok');
+  fetchMock.mockResolvedValueOnce(json(SONG));
+  await getSong(1);
+  expect(lastRequest().url).toBe('https://decide.test/api/catalog/songs/1');
+});
+
+it('search defaults to baseUrl when searchBaseUrl is omitted', async () => {
+  configureClient({ baseUrl: 'https://decide.test', getToken: () => null, getLocale: () => 'en', getDeviceId: () => 'dev-1', onUnauthorized: jest.fn() });
+  fetchMock.mockResolvedValueOnce(json({ groups: [], identification: {}, index: {}, sid: 's' }));
+  await searchSongs('abc');
+  expect(lastRequest().url).toBe('https://decide.test/api/search?q=abc');
 });

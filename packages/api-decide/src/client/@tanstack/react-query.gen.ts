@@ -3,8 +3,8 @@
 import { type DefaultError, type InfiniteData, infiniteQueryOptions, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { addArtistApiMyDataArtistsPost, addKnownSongApiKnownSongsPost, addSongToPlaylistApiPlaylistsPlaylistIdSongsPost, addSpotifyTrackApiKnownSongsSpotifyPost, adminDeleteUserApiAdminUsersUserIdDelete, bulkAddKnownSongsApiKnownSongsBulkPost, collectEmailApiAuthCollectEmailPost, connectLastfmApiServicesLastfmConnectPost, connectListenbrainzApiServicesListenbrainzConnectPost, connectSpotifyApiServicesSpotifyConnectPost, createGuestSessionApiAuthGuestPost, createPlaylistApiPlaylistsPost, deepHealthCheckApiHealthDeepGet, deleteAccountApiAuthMeDelete, deletePlaylistApiPlaylistsPlaylistIdDelete, disconnectServiceApiServicesServiceTypeDelete, excludeArtistApiMyDataArtistsExcludePost, getAdminStatsApiAdminStatsGet, getAllArtistsApiMyDataArtistsGet, getArtistIndexApiCatalogArtistsIndexGet, getCatalogStatsApiCatalogStatsGet, getCategorizedRecommendationsApiMyRecommendationsCategorizedGet, getCurrentUserEndpointApiAuthMeGet, getDataSummaryApiMyDataSummaryGet, getDecadeArtistsApiQuizDecadeArtistsGet, getMyArtistsApiMyArtistsGet, getMySongsApiMySongsGet, getPlaylistApiPlaylistsPlaylistIdGet, getPopularSongsApiCatalogSongsPopularGet, getPreferencesApiMyDataPreferencesGet, getQuizArtistsApiQuizArtistsGet, getQuizSongsApiQuizSongsGet, getQuizStatusApiQuizStatusGet, getRecommendationsApiMyRecommendationsGet, getSmartQuizArtistsApiQuizArtistsSmartPost, getSongApiCatalogSongsSongIdGet, getSongLinksApiCatalogSongsSongIdLinksGet, getSyncJobDetailApiAdminSyncJobsJobIdGet, getSyncStatusApiServicesSyncStatusGet, getUserDetailApiAdminUsersUserIdGet, healthCheckApiHealthGet, impersonateUserApiAdminImpersonatePost, importYoutubeMusicPlaylistApiServicesYoutubeMusicImportPost, includeArtistApiMyDataArtistsExcludeDelete, listKnownSongsApiKnownSongsGet, listPlaylistsApiPlaylistsGet, listServicesApiServicesGet, listSyncJobsApiAdminSyncJobsGet, listUsersApiAdminUsersGet, logoutApiAuthLogoutPost, type Options, processSyncTaskInternalSyncProcessPost, removeArtistApiMyDataArtistsArtistNameDelete, removeEnjoySingingApiKnownSongsEnjoySingingDelete, removeKnownSongApiKnownSongsSongIdDelete, removeSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDelete, removeSpotifyTrackApiKnownSongsSpotifyTrackIdDelete, requestGuestUpgradeApiAuthUpgradePost, requestMagicLinkApiAuthMagicLinkPost, saveQuizProgressApiQuizProgressPut, searchArtistsApiCatalogArtistsGet, searchCatalogApiCatalogSongsGet, searchTracksApiCatalogTracksGet, setEnjoySingingByQueryApiKnownSongsEnjoySingingPost, spotifyCallbackApiServicesSpotifyCallbackGet, submitEnjoySingingApiQuizEnjoySingingPost, submitQuizApiQuizSubmitPost, triggerSyncApiServicesSyncPost, updatePlaylistApiPlaylistsPlaylistIdPut, updatePreferencesApiMyDataPreferencesPut, updateProfileApiAuthProfilePut, verifyMagicLinkApiAuthVerifyPost } from '../sdk.gen';
-import type { AddArtistApiMyDataArtistsPostData, AddArtistApiMyDataArtistsPostError, AddArtistApiMyDataArtistsPostResponse, AddKnownSongApiKnownSongsPostData, AddKnownSongApiKnownSongsPostError, AddKnownSongApiKnownSongsPostResponse, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostData, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostError, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostResponse, AddSpotifyTrackApiKnownSongsSpotifyPostData, AddSpotifyTrackApiKnownSongsSpotifyPostError, AddSpotifyTrackApiKnownSongsSpotifyPostResponse, AdminDeleteUserApiAdminUsersUserIdDeleteData, AdminDeleteUserApiAdminUsersUserIdDeleteError, AdminDeleteUserApiAdminUsersUserIdDeleteResponse, BulkAddKnownSongsApiKnownSongsBulkPostData, BulkAddKnownSongsApiKnownSongsBulkPostError, BulkAddKnownSongsApiKnownSongsBulkPostResponse, CollectEmailApiAuthCollectEmailPostData, CollectEmailApiAuthCollectEmailPostError, CollectEmailApiAuthCollectEmailPostResponse, ConnectLastfmApiServicesLastfmConnectPostData, ConnectLastfmApiServicesLastfmConnectPostError, ConnectLastfmApiServicesLastfmConnectPostResponse, ConnectListenbrainzApiServicesListenbrainzConnectPostData, ConnectListenbrainzApiServicesListenbrainzConnectPostError, ConnectListenbrainzApiServicesListenbrainzConnectPostResponse, ConnectSpotifyApiServicesSpotifyConnectPostData, ConnectSpotifyApiServicesSpotifyConnectPostResponse, CreateGuestSessionApiAuthGuestPostData, CreateGuestSessionApiAuthGuestPostResponse, CreatePlaylistApiPlaylistsPostData, CreatePlaylistApiPlaylistsPostError, CreatePlaylistApiPlaylistsPostResponse, DeepHealthCheckApiHealthDeepGetData, DeepHealthCheckApiHealthDeepGetResponse, DeleteAccountApiAuthMeDeleteData, DeleteAccountApiAuthMeDeleteResponse, DeletePlaylistApiPlaylistsPlaylistIdDeleteData, DeletePlaylistApiPlaylistsPlaylistIdDeleteError, DeletePlaylistApiPlaylistsPlaylistIdDeleteResponse, DisconnectServiceApiServicesServiceTypeDeleteData, DisconnectServiceApiServicesServiceTypeDeleteError, DisconnectServiceApiServicesServiceTypeDeleteResponse, ExcludeArtistApiMyDataArtistsExcludePostData, ExcludeArtistApiMyDataArtistsExcludePostError, ExcludeArtistApiMyDataArtistsExcludePostResponse, GetAdminStatsApiAdminStatsGetData, GetAdminStatsApiAdminStatsGetResponse, GetAllArtistsApiMyDataArtistsGetData, GetAllArtistsApiMyDataArtistsGetError, GetAllArtistsApiMyDataArtistsGetResponse, GetArtistIndexApiCatalogArtistsIndexGetData, GetArtistIndexApiCatalogArtistsIndexGetResponse, GetCatalogStatsApiCatalogStatsGetData, GetCatalogStatsApiCatalogStatsGetResponse, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetData, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetError, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetResponse, GetCurrentUserEndpointApiAuthMeGetData, GetCurrentUserEndpointApiAuthMeGetResponse, GetDataSummaryApiMyDataSummaryGetData, GetDataSummaryApiMyDataSummaryGetResponse, GetDecadeArtistsApiQuizDecadeArtistsGetData, GetDecadeArtistsApiQuizDecadeArtistsGetError, GetDecadeArtistsApiQuizDecadeArtistsGetResponse, GetMyArtistsApiMyArtistsGetData, GetMyArtistsApiMyArtistsGetError, GetMyArtistsApiMyArtistsGetResponse, GetMySongsApiMySongsGetData, GetMySongsApiMySongsGetError, GetMySongsApiMySongsGetResponse, GetPlaylistApiPlaylistsPlaylistIdGetData, GetPlaylistApiPlaylistsPlaylistIdGetError, GetPlaylistApiPlaylistsPlaylistIdGetResponse, GetPopularSongsApiCatalogSongsPopularGetData, GetPopularSongsApiCatalogSongsPopularGetError, GetPopularSongsApiCatalogSongsPopularGetResponse, GetPreferencesApiMyDataPreferencesGetData, GetPreferencesApiMyDataPreferencesGetResponse, GetQuizArtistsApiQuizArtistsGetData, GetQuizArtistsApiQuizArtistsGetError, GetQuizArtistsApiQuizArtistsGetResponse, GetQuizSongsApiQuizSongsGetData, GetQuizSongsApiQuizSongsGetError, GetQuizSongsApiQuizSongsGetResponse, GetQuizStatusApiQuizStatusGetData, GetQuizStatusApiQuizStatusGetResponse, GetRecommendationsApiMyRecommendationsGetData, GetRecommendationsApiMyRecommendationsGetError, GetRecommendationsApiMyRecommendationsGetResponse, GetSmartQuizArtistsApiQuizArtistsSmartPostData, GetSmartQuizArtistsApiQuizArtistsSmartPostError, GetSmartQuizArtistsApiQuizArtistsSmartPostResponse, GetSongApiCatalogSongsSongIdGetData, GetSongApiCatalogSongsSongIdGetError, GetSongApiCatalogSongsSongIdGetResponse, GetSongLinksApiCatalogSongsSongIdLinksGetData, GetSongLinksApiCatalogSongsSongIdLinksGetError, GetSongLinksApiCatalogSongsSongIdLinksGetResponse, GetSyncJobDetailApiAdminSyncJobsJobIdGetData, GetSyncJobDetailApiAdminSyncJobsJobIdGetError, GetSyncJobDetailApiAdminSyncJobsJobIdGetResponse, GetSyncStatusApiServicesSyncStatusGetData, GetSyncStatusApiServicesSyncStatusGetResponse, GetUserDetailApiAdminUsersUserIdGetData, GetUserDetailApiAdminUsersUserIdGetError, GetUserDetailApiAdminUsersUserIdGetResponse, HealthCheckApiHealthGetData, HealthCheckApiHealthGetResponse, ImpersonateUserApiAdminImpersonatePostData, ImpersonateUserApiAdminImpersonatePostError, ImpersonateUserApiAdminImpersonatePostResponse, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostData, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostError, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponse, IncludeArtistApiMyDataArtistsExcludeDeleteData, IncludeArtistApiMyDataArtistsExcludeDeleteError, IncludeArtistApiMyDataArtistsExcludeDeleteResponse, ListKnownSongsApiKnownSongsGetData, ListKnownSongsApiKnownSongsGetError, ListKnownSongsApiKnownSongsGetResponse, ListPlaylistsApiPlaylistsGetData, ListPlaylistsApiPlaylistsGetError, ListPlaylistsApiPlaylistsGetResponse, ListServicesApiServicesGetData, ListServicesApiServicesGetResponse, ListSyncJobsApiAdminSyncJobsGetData, ListSyncJobsApiAdminSyncJobsGetError, ListSyncJobsApiAdminSyncJobsGetResponse, ListUsersApiAdminUsersGetData, ListUsersApiAdminUsersGetError, ListUsersApiAdminUsersGetResponse, LogoutApiAuthLogoutPostData, LogoutApiAuthLogoutPostResponse, ProcessSyncTaskInternalSyncProcessPostData, ProcessSyncTaskInternalSyncProcessPostError, ProcessSyncTaskInternalSyncProcessPostResponse, RemoveArtistApiMyDataArtistsArtistNameDeleteData, RemoveArtistApiMyDataArtistsArtistNameDeleteError, RemoveArtistApiMyDataArtistsArtistNameDeleteResponse, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteData, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteError, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteResponse, RemoveKnownSongApiKnownSongsSongIdDeleteData, RemoveKnownSongApiKnownSongsSongIdDeleteError, RemoveKnownSongApiKnownSongsSongIdDeleteResponse, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteData, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteError, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteResponse, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteData, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteError, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteResponse, RequestGuestUpgradeApiAuthUpgradePostData, RequestGuestUpgradeApiAuthUpgradePostError, RequestGuestUpgradeApiAuthUpgradePostResponse, RequestMagicLinkApiAuthMagicLinkPostData, RequestMagicLinkApiAuthMagicLinkPostError, RequestMagicLinkApiAuthMagicLinkPostResponse, SaveQuizProgressApiQuizProgressPutData, SaveQuizProgressApiQuizProgressPutError, SaveQuizProgressApiQuizProgressPutResponse, SearchArtistsApiCatalogArtistsGetData, SearchArtistsApiCatalogArtistsGetError, SearchArtistsApiCatalogArtistsGetResponse, SearchCatalogApiCatalogSongsGetData, SearchCatalogApiCatalogSongsGetError, SearchCatalogApiCatalogSongsGetResponse, SearchTracksApiCatalogTracksGetData, SearchTracksApiCatalogTracksGetError, SearchTracksApiCatalogTracksGetResponse, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostData, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostError, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostResponse, SpotifyCallbackApiServicesSpotifyCallbackGetData, SpotifyCallbackApiServicesSpotifyCallbackGetError, SubmitEnjoySingingApiQuizEnjoySingingPostData, SubmitEnjoySingingApiQuizEnjoySingingPostError, SubmitEnjoySingingApiQuizEnjoySingingPostResponse, SubmitQuizApiQuizSubmitPostData, SubmitQuizApiQuizSubmitPostError, SubmitQuizApiQuizSubmitPostResponse, TriggerSyncApiServicesSyncPostData, TriggerSyncApiServicesSyncPostResponse, UpdatePlaylistApiPlaylistsPlaylistIdPutData, UpdatePlaylistApiPlaylistsPlaylistIdPutError, UpdatePlaylistApiPlaylistsPlaylistIdPutResponse, UpdatePreferencesApiMyDataPreferencesPutData, UpdatePreferencesApiMyDataPreferencesPutError, UpdatePreferencesApiMyDataPreferencesPutResponse, UpdateProfileApiAuthProfilePutData, UpdateProfileApiAuthProfilePutError, UpdateProfileApiAuthProfilePutResponse, VerifyMagicLinkApiAuthVerifyPostData, VerifyMagicLinkApiAuthVerifyPostError, VerifyMagicLinkApiAuthVerifyPostResponse } from '../types.gen';
+import { addArtistApiMyDataArtistsPost, addKnownSongApiKnownSongsPost, addSongToPlaylistApiPlaylistsPlaylistIdSongsPost, addSpotifyTrackApiKnownSongsSpotifyPost, adminDeleteUserApiAdminUsersUserIdDelete, bulkAddKnownSongsApiKnownSongsBulkPost, claimGuestApiAuthClaimGuestPost, collectEmailApiAuthCollectEmailPost, connectLastfmApiServicesLastfmConnectPost, connectListenbrainzApiServicesListenbrainzConnectPost, connectSpotifyApiServicesSpotifyConnectPost, createGuestSessionApiAuthGuestPost, createPlaylistApiPlaylistsPost, deepHealthCheckApiHealthDeepGet, deleteAccountApiAuthMeDelete, deleteKaraokeLogApiMyKaraokeLogEntryIdDelete, deletePlaylistApiPlaylistsPlaylistIdDelete, disconnectServiceApiServicesServiceTypeDelete, excludeArtistApiMyDataArtistsExcludePost, getAdminStatsApiAdminStatsGet, getAllArtistsApiMyDataArtistsGet, getArtistIndexApiCatalogArtistsIndexGet, getCatalogStatsApiCatalogStatsGet, getCategorizedRecommendationsApiMyRecommendationsCategorizedGet, getCurrentUserEndpointApiAuthMeGet, getDataSummaryApiMyDataSummaryGet, getDecadeArtistsApiQuizDecadeArtistsGet, getMyArtistsApiMyArtistsGet, getMySongsApiMySongsGet, getPlaylistApiPlaylistsPlaylistIdGet, getPopularSongsApiCatalogSongsPopularGet, getPreferencesApiMyDataPreferencesGet, getQuizArtistsApiQuizArtistsGet, getQuizProgressApiQuizProgressGet, getQuizSongsApiQuizSongsGet, getQuizStatusApiQuizStatusGet, getRecommendationsApiMyRecommendationsGet, getRecommendationsV2ApiMyRecommendationsV2Get, getSmartQuizArtistsApiQuizArtistsSmartPost, getSongApiCatalogSongsSongIdGet, getSongLinksApiCatalogSongsSongIdLinksGet, getSyncJobDetailApiAdminSyncJobsJobIdGet, getSyncStatusApiServicesSyncStatusGet, getUserDetailApiAdminUsersUserIdGet, healthCheckApiHealthGet, hideSongApiMySongsSongKeyHidePost, impersonateUserApiAdminImpersonatePost, importYoutubeMusicPlaylistApiServicesYoutubeMusicImportPost, includeArtistApiMyDataArtistsExcludeDelete, listHiddenApiMySongsHiddenGet, listKaraokeLogApiMyKaraokeLogGet, listKnownSongsApiKnownSongsGet, listLovedApiMySongsLovedGet, listPlaylistsApiPlaylistsGet, listServicesApiServicesGet, listSyncJobsApiAdminSyncJobsGet, listUsersApiAdminUsersGet, logoutApiAuthLogoutPost, loveSongApiMySongsSongKeyLovePost, type Options, partnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDelete, partnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPut, processSyncTaskInternalSyncProcessPost, putKaraokeLogApiMyKaraokeLogEntryIdPut, readyApiReadyGet, removeArtistApiMyDataArtistsArtistNameDelete, removeEnjoySingingApiKnownSongsEnjoySingingDelete, removeKnownSongApiKnownSongsSongIdDelete, removeSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDelete, removeSpotifyTrackApiKnownSongsSpotifyTrackIdDelete, requestGuestUpgradeApiAuthUpgradePost, requestMagicLinkApiAuthMagicLinkPost, saveQuizProgressApiQuizProgressPut, searchArtistsApiCatalogArtistsGet, searchCatalogApiCatalogSongsGet, searchTracksApiCatalogTracksGet, setEnjoySingingByQueryApiKnownSongsEnjoySingingPost, spotifyCallbackApiServicesSpotifyCallbackGet, submitEnjoySingingApiQuizEnjoySingingPost, submitQuizApiQuizSubmitPost, triggerSyncApiServicesSyncPost, unhideSongApiMySongsSongKeyHideDelete, unloveSongApiMySongsSongKeyLoveDelete, updatePlaylistApiPlaylistsPlaylistIdPut, updatePreferencesApiMyDataPreferencesPut, updateProfileApiAuthProfilePut, verifyMagicLinkApiAuthVerifyPost } from '../sdk.gen';
+import type { AddArtistApiMyDataArtistsPostData, AddArtistApiMyDataArtistsPostError, AddArtistApiMyDataArtistsPostResponse, AddKnownSongApiKnownSongsPostData, AddKnownSongApiKnownSongsPostError, AddKnownSongApiKnownSongsPostResponse, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostData, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostError, AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostResponse, AddSpotifyTrackApiKnownSongsSpotifyPostData, AddSpotifyTrackApiKnownSongsSpotifyPostError, AddSpotifyTrackApiKnownSongsSpotifyPostResponse, AdminDeleteUserApiAdminUsersUserIdDeleteData, AdminDeleteUserApiAdminUsersUserIdDeleteError, AdminDeleteUserApiAdminUsersUserIdDeleteResponse, BulkAddKnownSongsApiKnownSongsBulkPostData, BulkAddKnownSongsApiKnownSongsBulkPostError, BulkAddKnownSongsApiKnownSongsBulkPostResponse, ClaimGuestApiAuthClaimGuestPostData, ClaimGuestApiAuthClaimGuestPostError, ClaimGuestApiAuthClaimGuestPostResponse, CollectEmailApiAuthCollectEmailPostData, CollectEmailApiAuthCollectEmailPostError, CollectEmailApiAuthCollectEmailPostResponse, ConnectLastfmApiServicesLastfmConnectPostData, ConnectLastfmApiServicesLastfmConnectPostError, ConnectLastfmApiServicesLastfmConnectPostResponse, ConnectListenbrainzApiServicesListenbrainzConnectPostData, ConnectListenbrainzApiServicesListenbrainzConnectPostError, ConnectListenbrainzApiServicesListenbrainzConnectPostResponse, ConnectSpotifyApiServicesSpotifyConnectPostData, ConnectSpotifyApiServicesSpotifyConnectPostResponse, CreateGuestSessionApiAuthGuestPostData, CreateGuestSessionApiAuthGuestPostResponse, CreatePlaylistApiPlaylistsPostData, CreatePlaylistApiPlaylistsPostError, CreatePlaylistApiPlaylistsPostResponse, DeepHealthCheckApiHealthDeepGetData, DeepHealthCheckApiHealthDeepGetResponse, DeleteAccountApiAuthMeDeleteData, DeleteAccountApiAuthMeDeleteResponse, DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteData, DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteError, DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteResponse, DeletePlaylistApiPlaylistsPlaylistIdDeleteData, DeletePlaylistApiPlaylistsPlaylistIdDeleteError, DeletePlaylistApiPlaylistsPlaylistIdDeleteResponse, DisconnectServiceApiServicesServiceTypeDeleteData, DisconnectServiceApiServicesServiceTypeDeleteError, DisconnectServiceApiServicesServiceTypeDeleteResponse, ExcludeArtistApiMyDataArtistsExcludePostData, ExcludeArtistApiMyDataArtistsExcludePostError, ExcludeArtistApiMyDataArtistsExcludePostResponse, GetAdminStatsApiAdminStatsGetData, GetAdminStatsApiAdminStatsGetResponse, GetAllArtistsApiMyDataArtistsGetData, GetAllArtistsApiMyDataArtistsGetError, GetAllArtistsApiMyDataArtistsGetResponse, GetArtistIndexApiCatalogArtistsIndexGetData, GetArtistIndexApiCatalogArtistsIndexGetResponse, GetCatalogStatsApiCatalogStatsGetData, GetCatalogStatsApiCatalogStatsGetResponse, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetData, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetError, GetCategorizedRecommendationsApiMyRecommendationsCategorizedGetResponse, GetCurrentUserEndpointApiAuthMeGetData, GetCurrentUserEndpointApiAuthMeGetResponse, GetDataSummaryApiMyDataSummaryGetData, GetDataSummaryApiMyDataSummaryGetResponse, GetDecadeArtistsApiQuizDecadeArtistsGetData, GetDecadeArtistsApiQuizDecadeArtistsGetError, GetDecadeArtistsApiQuizDecadeArtistsGetResponse, GetMyArtistsApiMyArtistsGetData, GetMyArtistsApiMyArtistsGetError, GetMyArtistsApiMyArtistsGetResponse, GetMySongsApiMySongsGetData, GetMySongsApiMySongsGetError, GetMySongsApiMySongsGetResponse, GetPlaylistApiPlaylistsPlaylistIdGetData, GetPlaylistApiPlaylistsPlaylistIdGetError, GetPlaylistApiPlaylistsPlaylistIdGetResponse, GetPopularSongsApiCatalogSongsPopularGetData, GetPopularSongsApiCatalogSongsPopularGetError, GetPopularSongsApiCatalogSongsPopularGetResponse, GetPreferencesApiMyDataPreferencesGetData, GetPreferencesApiMyDataPreferencesGetResponse, GetQuizArtistsApiQuizArtistsGetData, GetQuizArtistsApiQuizArtistsGetError, GetQuizArtistsApiQuizArtistsGetResponse, GetQuizProgressApiQuizProgressGetData, GetQuizProgressApiQuizProgressGetResponse, GetQuizSongsApiQuizSongsGetData, GetQuizSongsApiQuizSongsGetError, GetQuizSongsApiQuizSongsGetResponse, GetQuizStatusApiQuizStatusGetData, GetQuizStatusApiQuizStatusGetResponse, GetRecommendationsApiMyRecommendationsGetData, GetRecommendationsApiMyRecommendationsGetError, GetRecommendationsApiMyRecommendationsGetResponse, GetRecommendationsV2ApiMyRecommendationsV2GetData, GetRecommendationsV2ApiMyRecommendationsV2GetError, GetRecommendationsV2ApiMyRecommendationsV2GetResponse, GetSmartQuizArtistsApiQuizArtistsSmartPostData, GetSmartQuizArtistsApiQuizArtistsSmartPostError, GetSmartQuizArtistsApiQuizArtistsSmartPostResponse, GetSongApiCatalogSongsSongIdGetData, GetSongApiCatalogSongsSongIdGetError, GetSongApiCatalogSongsSongIdGetResponse, GetSongLinksApiCatalogSongsSongIdLinksGetData, GetSongLinksApiCatalogSongsSongIdLinksGetError, GetSongLinksApiCatalogSongsSongIdLinksGetResponse, GetSyncJobDetailApiAdminSyncJobsJobIdGetData, GetSyncJobDetailApiAdminSyncJobsJobIdGetError, GetSyncJobDetailApiAdminSyncJobsJobIdGetResponse, GetSyncStatusApiServicesSyncStatusGetData, GetSyncStatusApiServicesSyncStatusGetResponse, GetUserDetailApiAdminUsersUserIdGetData, GetUserDetailApiAdminUsersUserIdGetError, GetUserDetailApiAdminUsersUserIdGetResponse, HealthCheckApiHealthGetData, HealthCheckApiHealthGetResponse, HideSongApiMySongsSongKeyHidePostData, HideSongApiMySongsSongKeyHidePostError, HideSongApiMySongsSongKeyHidePostResponse, ImpersonateUserApiAdminImpersonatePostData, ImpersonateUserApiAdminImpersonatePostError, ImpersonateUserApiAdminImpersonatePostResponse, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostData, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostError, ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponse, IncludeArtistApiMyDataArtistsExcludeDeleteData, IncludeArtistApiMyDataArtistsExcludeDeleteError, IncludeArtistApiMyDataArtistsExcludeDeleteResponse, ListHiddenApiMySongsHiddenGetData, ListHiddenApiMySongsHiddenGetResponse, ListKaraokeLogApiMyKaraokeLogGetData, ListKaraokeLogApiMyKaraokeLogGetError, ListKaraokeLogApiMyKaraokeLogGetResponse, ListKnownSongsApiKnownSongsGetData, ListKnownSongsApiKnownSongsGetError, ListKnownSongsApiKnownSongsGetResponse, ListLovedApiMySongsLovedGetData, ListLovedApiMySongsLovedGetResponse, ListPlaylistsApiPlaylistsGetData, ListPlaylistsApiPlaylistsGetError, ListPlaylistsApiPlaylistsGetResponse, ListServicesApiServicesGetData, ListServicesApiServicesGetResponse, ListSyncJobsApiAdminSyncJobsGetData, ListSyncJobsApiAdminSyncJobsGetError, ListSyncJobsApiAdminSyncJobsGetResponse, ListUsersApiAdminUsersGetData, ListUsersApiAdminUsersGetError, ListUsersApiAdminUsersGetResponse, LogoutApiAuthLogoutPostData, LogoutApiAuthLogoutPostResponse, LoveSongApiMySongsSongKeyLovePostData, LoveSongApiMySongsSongKeyLovePostError, LoveSongApiMySongsSongKeyLovePostResponse, PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteData, PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteError, PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteResponse, PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutData, PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutError, PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutResponse, ProcessSyncTaskInternalSyncProcessPostData, ProcessSyncTaskInternalSyncProcessPostError, ProcessSyncTaskInternalSyncProcessPostResponse, PutKaraokeLogApiMyKaraokeLogEntryIdPutData, PutKaraokeLogApiMyKaraokeLogEntryIdPutError, PutKaraokeLogApiMyKaraokeLogEntryIdPutResponse, ReadyApiReadyGetData, ReadyApiReadyGetResponse, RemoveArtistApiMyDataArtistsArtistNameDeleteData, RemoveArtistApiMyDataArtistsArtistNameDeleteError, RemoveArtistApiMyDataArtistsArtistNameDeleteResponse, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteData, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteError, RemoveEnjoySingingApiKnownSongsEnjoySingingDeleteResponse, RemoveKnownSongApiKnownSongsSongIdDeleteData, RemoveKnownSongApiKnownSongsSongIdDeleteError, RemoveKnownSongApiKnownSongsSongIdDeleteResponse, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteData, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteError, RemoveSongFromPlaylistApiPlaylistsPlaylistIdSongsSongIdDeleteResponse, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteData, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteError, RemoveSpotifyTrackApiKnownSongsSpotifyTrackIdDeleteResponse, RequestGuestUpgradeApiAuthUpgradePostData, RequestGuestUpgradeApiAuthUpgradePostError, RequestGuestUpgradeApiAuthUpgradePostResponse, RequestMagicLinkApiAuthMagicLinkPostData, RequestMagicLinkApiAuthMagicLinkPostError, RequestMagicLinkApiAuthMagicLinkPostResponse, SaveQuizProgressApiQuizProgressPutData, SaveQuizProgressApiQuizProgressPutError, SaveQuizProgressApiQuizProgressPutResponse, SearchArtistsApiCatalogArtistsGetData, SearchArtistsApiCatalogArtistsGetError, SearchArtistsApiCatalogArtistsGetResponse, SearchCatalogApiCatalogSongsGetData, SearchCatalogApiCatalogSongsGetError, SearchCatalogApiCatalogSongsGetResponse, SearchTracksApiCatalogTracksGetData, SearchTracksApiCatalogTracksGetError, SearchTracksApiCatalogTracksGetResponse, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostData, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostError, SetEnjoySingingByQueryApiKnownSongsEnjoySingingPostResponse, SpotifyCallbackApiServicesSpotifyCallbackGetData, SpotifyCallbackApiServicesSpotifyCallbackGetError, SubmitEnjoySingingApiQuizEnjoySingingPostData, SubmitEnjoySingingApiQuizEnjoySingingPostError, SubmitEnjoySingingApiQuizEnjoySingingPostResponse, SubmitQuizApiQuizSubmitPostData, SubmitQuizApiQuizSubmitPostError, SubmitQuizApiQuizSubmitPostResponse, TriggerSyncApiServicesSyncPostData, TriggerSyncApiServicesSyncPostResponse, UnhideSongApiMySongsSongKeyHideDeleteData, UnhideSongApiMySongsSongKeyHideDeleteError, UnhideSongApiMySongsSongKeyHideDeleteResponse, UnloveSongApiMySongsSongKeyLoveDeleteData, UnloveSongApiMySongsSongKeyLoveDeleteError, UnloveSongApiMySongsSongKeyLoveDeleteResponse, UpdatePlaylistApiPlaylistsPlaylistIdPutData, UpdatePlaylistApiPlaylistsPlaylistIdPutError, UpdatePlaylistApiPlaylistsPlaylistIdPutResponse, UpdatePreferencesApiMyDataPreferencesPutData, UpdatePreferencesApiMyDataPreferencesPutError, UpdatePreferencesApiMyDataPreferencesPutResponse, UpdateProfileApiAuthProfilePutData, UpdateProfileApiAuthProfilePutError, UpdateProfileApiAuthProfilePutResponse, VerifyMagicLinkApiAuthVerifyPostData, VerifyMagicLinkApiAuthVerifyPostError, VerifyMagicLinkApiAuthVerifyPostResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -57,6 +57,27 @@ export const healthCheckApiHealthGetOptions = (options?: Options<HealthCheckApiH
         return data;
     },
     queryKey: healthCheckApiHealthGetQueryKey(options)
+});
+
+export const readyApiReadyGetQueryKey = (options?: Options<ReadyApiReadyGetData>) => createQueryKey('readyApiReadyGet', options);
+
+/**
+ * Ready
+ *
+ * 200 once startup finished. ``catalog: false`` means recommendations v2 is warming up;
+ * health, search and everything else serve regardless.
+ */
+export const readyApiReadyGetOptions = (options?: Options<ReadyApiReadyGetData>) => queryOptions<ReadyApiReadyGetResponse, DefaultError, ReadyApiReadyGetResponse, ReturnType<typeof readyApiReadyGetQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await readyApiReadyGet({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: readyApiReadyGetQueryKey(options)
 });
 
 export const deepHealthCheckApiHealthDeepGetQueryKey = (options?: Options<DeepHealthCheckApiHealthDeepGetData>) => createQueryKey('deepHealthCheckApiHealthDeepGet', options);
@@ -309,6 +330,25 @@ export const collectEmailApiAuthCollectEmailPostMutation = (options?: Partial<Op
     return mutationOptions;
 };
 
+/**
+ * Claim Guest
+ *
+ * Migrate a guest profile's data onto the gen-signed-in user, then delete the guest.
+ */
+export const claimGuestApiAuthClaimGuestPostMutation = (options?: Partial<Options<ClaimGuestApiAuthClaimGuestPostData>>): UseMutationOptions<ClaimGuestApiAuthClaimGuestPostResponse, ClaimGuestApiAuthClaimGuestPostError, Options<ClaimGuestApiAuthClaimGuestPostData>> => {
+    const mutationOptions: UseMutationOptions<ClaimGuestApiAuthClaimGuestPostResponse, ClaimGuestApiAuthClaimGuestPostError, Options<ClaimGuestApiAuthClaimGuestPostData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await claimGuestApiAuthClaimGuestPost({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
 export const searchCatalogApiCatalogSongsGetQueryKey = (options?: Options<SearchCatalogApiCatalogSongsGetData>) => createQueryKey('searchCatalogApiCatalogSongsGet', options);
 
 /**
@@ -538,6 +578,8 @@ export const searchArtistsApiCatalogArtistsGetQueryKey = (options: Options<Searc
  * but are deprecated and will be removed in a future version.
  *
  * This endpoint is public (no auth required) for quick autocomplete.
+ *
+ * Answered from catalog.db when BigQuery is disabled (local stack) or fails.
  */
 export const searchArtistsApiCatalogArtistsGetOptions = (options: Options<SearchArtistsApiCatalogArtistsGetData>) => queryOptions<SearchArtistsApiCatalogArtistsGetResponse, SearchArtistsApiCatalogArtistsGetError, SearchArtistsApiCatalogArtistsGetResponse, ReturnType<typeof searchArtistsApiCatalogArtistsGetQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -976,6 +1018,28 @@ export const getQuizStatusApiQuizStatusGetOptions = (options?: Options<GetQuizSt
     queryKey: getQuizStatusApiQuizStatusGetQueryKey(options)
 });
 
+export const getQuizProgressApiQuizProgressGetQueryKey = (options?: Options<GetQuizProgressApiQuizProgressGetData>) => createQueryKey('getQuizProgressApiQuizProgressGet', options);
+
+/**
+ * Get Quiz Progress
+ *
+ * The progress saved by ``PUT /progress`` (same shape), or 204 if there is none.
+ *
+ * Lets a returning user (or the mobile app) resume where they left off.
+ */
+export const getQuizProgressApiQuizProgressGetOptions = (options?: Options<GetQuizProgressApiQuizProgressGetData>) => queryOptions<GetQuizProgressApiQuizProgressGetResponse, DefaultError, GetQuizProgressApiQuizProgressGetResponse, ReturnType<typeof getQuizProgressApiQuizProgressGetQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await getQuizProgressApiQuizProgressGet({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: getQuizProgressApiQuizProgressGetQueryKey(options)
+});
+
 /**
  * Save Quiz Progress
  *
@@ -1027,6 +1091,110 @@ export const submitEnjoySingingApiQuizEnjoySingingPostMutation = (options?: Part
     const mutationOptions: UseMutationOptions<SubmitEnjoySingingApiQuizEnjoySingingPostResponse, SubmitEnjoySingingApiQuizEnjoySingingPostError, Options<SubmitEnjoySingingApiQuizEnjoySingingPostData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await submitEnjoySingingApiQuizEnjoySingingPost({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const listHiddenApiMySongsHiddenGetQueryKey = (options?: Options<ListHiddenApiMySongsHiddenGetData>) => createQueryKey('listHiddenApiMySongsHiddenGet', options);
+
+/**
+ * List Hidden
+ */
+export const listHiddenApiMySongsHiddenGetOptions = (options?: Options<ListHiddenApiMySongsHiddenGetData>) => queryOptions<ListHiddenApiMySongsHiddenGetResponse, DefaultError, ListHiddenApiMySongsHiddenGetResponse, ReturnType<typeof listHiddenApiMySongsHiddenGetQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await listHiddenApiMySongsHiddenGet({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: listHiddenApiMySongsHiddenGetQueryKey(options)
+});
+
+export const listLovedApiMySongsLovedGetQueryKey = (options?: Options<ListLovedApiMySongsLovedGetData>) => createQueryKey('listLovedApiMySongsLovedGet', options);
+
+/**
+ * List Loved
+ */
+export const listLovedApiMySongsLovedGetOptions = (options?: Options<ListLovedApiMySongsLovedGetData>) => queryOptions<ListLovedApiMySongsLovedGetResponse, DefaultError, ListLovedApiMySongsLovedGetResponse, ReturnType<typeof listLovedApiMySongsLovedGetQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await listLovedApiMySongsLovedGet({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: listLovedApiMySongsLovedGetQueryKey(options)
+});
+
+/**
+ * Unhide Song
+ */
+export const unhideSongApiMySongsSongKeyHideDeleteMutation = (options?: Partial<Options<UnhideSongApiMySongsSongKeyHideDeleteData>>): UseMutationOptions<UnhideSongApiMySongsSongKeyHideDeleteResponse, UnhideSongApiMySongsSongKeyHideDeleteError, Options<UnhideSongApiMySongsSongKeyHideDeleteData>> => {
+    const mutationOptions: UseMutationOptions<UnhideSongApiMySongsSongKeyHideDeleteResponse, UnhideSongApiMySongsSongKeyHideDeleteError, Options<UnhideSongApiMySongsSongKeyHideDeleteData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await unhideSongApiMySongsSongKeyHideDelete({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Hide Song
+ */
+export const hideSongApiMySongsSongKeyHidePostMutation = (options?: Partial<Options<HideSongApiMySongsSongKeyHidePostData>>): UseMutationOptions<HideSongApiMySongsSongKeyHidePostResponse, HideSongApiMySongsSongKeyHidePostError, Options<HideSongApiMySongsSongKeyHidePostData>> => {
+    const mutationOptions: UseMutationOptions<HideSongApiMySongsSongKeyHidePostResponse, HideSongApiMySongsSongKeyHidePostError, Options<HideSongApiMySongsSongKeyHidePostData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await hideSongApiMySongsSongKeyHidePost({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Unlove Song
+ */
+export const unloveSongApiMySongsSongKeyLoveDeleteMutation = (options?: Partial<Options<UnloveSongApiMySongsSongKeyLoveDeleteData>>): UseMutationOptions<UnloveSongApiMySongsSongKeyLoveDeleteResponse, UnloveSongApiMySongsSongKeyLoveDeleteError, Options<UnloveSongApiMySongsSongKeyLoveDeleteData>> => {
+    const mutationOptions: UseMutationOptions<UnloveSongApiMySongsSongKeyLoveDeleteResponse, UnloveSongApiMySongsSongKeyLoveDeleteError, Options<UnloveSongApiMySongsSongKeyLoveDeleteData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await unloveSongApiMySongsSongKeyLoveDelete({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Love Song
+ */
+export const loveSongApiMySongsSongKeyLovePostMutation = (options?: Partial<Options<LoveSongApiMySongsSongKeyLovePostData>>): UseMutationOptions<LoveSongApiMySongsSongKeyLovePostResponse, LoveSongApiMySongsSongKeyLovePostError, Options<LoveSongApiMySongsSongKeyLovePostData>> => {
+    const mutationOptions: UseMutationOptions<LoveSongApiMySongsSongKeyLovePostResponse, LoveSongApiMySongsSongKeyLovePostError, Options<LoveSongApiMySongsSongKeyLovePostData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await loveSongApiMySongsSongKeyLovePost({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -1178,6 +1346,58 @@ export const getMyArtistsApiMyArtistsGetOptions = (options?: Options<GetMyArtist
     },
     queryKey: getMyArtistsApiMyArtistsGetQueryKey(options)
 });
+
+export const getRecommendationsV2ApiMyRecommendationsV2GetQueryKey = (options?: Options<GetRecommendationsV2ApiMyRecommendationsV2GetData>) => createQueryKey('getRecommendationsV2ApiMyRecommendationsV2Get', options);
+
+/**
+ * Get Recommendations V2
+ *
+ * Catalog-backed recommendations: explained sections for ``sort=best``, else one paged flat list.
+ */
+export const getRecommendationsV2ApiMyRecommendationsV2GetOptions = (options?: Options<GetRecommendationsV2ApiMyRecommendationsV2GetData>) => queryOptions<GetRecommendationsV2ApiMyRecommendationsV2GetResponse, GetRecommendationsV2ApiMyRecommendationsV2GetError, GetRecommendationsV2ApiMyRecommendationsV2GetResponse, ReturnType<typeof getRecommendationsV2ApiMyRecommendationsV2GetQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await getRecommendationsV2ApiMyRecommendationsV2Get({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: getRecommendationsV2ApiMyRecommendationsV2GetQueryKey(options)
+});
+
+export const getRecommendationsV2ApiMyRecommendationsV2GetInfiniteQueryKey = (options?: Options<GetRecommendationsV2ApiMyRecommendationsV2GetData>): QueryKey<Options<GetRecommendationsV2ApiMyRecommendationsV2GetData>> => createQueryKey('getRecommendationsV2ApiMyRecommendationsV2Get', options, true);
+
+/**
+ * Get Recommendations V2
+ *
+ * Catalog-backed recommendations: explained sections for ``sort=best``, else one paged flat list.
+ */
+export const getRecommendationsV2ApiMyRecommendationsV2GetInfiniteOptions = (options?: Options<GetRecommendationsV2ApiMyRecommendationsV2GetData>) => {
+    const opts = infiniteQueryOptions<GetRecommendationsV2ApiMyRecommendationsV2GetResponse, GetRecommendationsV2ApiMyRecommendationsV2GetError, InfiniteData<GetRecommendationsV2ApiMyRecommendationsV2GetResponse>, QueryKey<Options<GetRecommendationsV2ApiMyRecommendationsV2GetData>>, string | null | Pick<QueryKey<Options<GetRecommendationsV2ApiMyRecommendationsV2GetData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<GetRecommendationsV2ApiMyRecommendationsV2GetData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    cursor: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await getRecommendationsV2ApiMyRecommendationsV2Get({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: getRecommendationsV2ApiMyRecommendationsV2GetInfiniteQueryKey(options)
+    });
+    return opts as Omit<typeof opts, 'initialData'>;
+};
 
 export const getDataSummaryApiMyDataSummaryGetQueryKey = (options?: Options<GetDataSummaryApiMyDataSummaryGetData>) => createQueryKey('getDataSummaryApiMyDataSummaryGet', options);
 
@@ -1829,6 +2049,137 @@ export const removeKnownSongApiKnownSongsSongIdDeleteMutation = (options?: Parti
     const mutationOptions: UseMutationOptions<RemoveKnownSongApiKnownSongsSongIdDeleteResponse, RemoveKnownSongApiKnownSongsSongIdDeleteError, Options<RemoveKnownSongApiKnownSongsSongIdDeleteData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await removeKnownSongApiKnownSongsSongIdDelete({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const listKaraokeLogApiMyKaraokeLogGetQueryKey = (options?: Options<ListKaraokeLogApiMyKaraokeLogGetData>) => createQueryKey('listKaraokeLogApiMyKaraokeLogGet', options);
+
+/**
+ * List Karaoke Log
+ *
+ * The user's records, newest ``updated_at`` first; ``next_cursor`` pages on.
+ */
+export const listKaraokeLogApiMyKaraokeLogGetOptions = (options?: Options<ListKaraokeLogApiMyKaraokeLogGetData>) => queryOptions<ListKaraokeLogApiMyKaraokeLogGetResponse, ListKaraokeLogApiMyKaraokeLogGetError, ListKaraokeLogApiMyKaraokeLogGetResponse, ReturnType<typeof listKaraokeLogApiMyKaraokeLogGetQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await listKaraokeLogApiMyKaraokeLogGet({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: listKaraokeLogApiMyKaraokeLogGetQueryKey(options)
+});
+
+export const listKaraokeLogApiMyKaraokeLogGetInfiniteQueryKey = (options?: Options<ListKaraokeLogApiMyKaraokeLogGetData>): QueryKey<Options<ListKaraokeLogApiMyKaraokeLogGetData>> => createQueryKey('listKaraokeLogApiMyKaraokeLogGet', options, true);
+
+/**
+ * List Karaoke Log
+ *
+ * The user's records, newest ``updated_at`` first; ``next_cursor`` pages on.
+ */
+export const listKaraokeLogApiMyKaraokeLogGetInfiniteOptions = (options?: Options<ListKaraokeLogApiMyKaraokeLogGetData>) => {
+    const opts = infiniteQueryOptions<ListKaraokeLogApiMyKaraokeLogGetResponse, ListKaraokeLogApiMyKaraokeLogGetError, InfiniteData<ListKaraokeLogApiMyKaraokeLogGetResponse>, QueryKey<Options<ListKaraokeLogApiMyKaraokeLogGetData>>, string | null | Pick<QueryKey<Options<ListKaraokeLogApiMyKaraokeLogGetData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<ListKaraokeLogApiMyKaraokeLogGetData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    cursor: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await listKaraokeLogApiMyKaraokeLogGet({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: listKaraokeLogApiMyKaraokeLogGetInfiniteQueryKey(options)
+    });
+    return opts as Omit<typeof opts, 'initialData'>;
+};
+
+/**
+ * Delete Karaoke Log
+ *
+ * Soft delete (a mistaken log); reverses its sung count.
+ */
+export const deleteKaraokeLogApiMyKaraokeLogEntryIdDeleteMutation = (options?: Partial<Options<DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteData>>): UseMutationOptions<DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteResponse, DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteError, Options<DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteData>> => {
+    const mutationOptions: UseMutationOptions<DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteResponse, DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteError, Options<DeleteKaraokeLogApiMyKaraokeLogEntryIdDeleteData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await deleteKaraokeLogApiMyKaraokeLogEntryIdDelete({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Put Karaoke Log
+ *
+ * Upsert by id with field-level merge. ``kj_`` ids: only ``survey`` and ``deleted``.
+ */
+export const putKaraokeLogApiMyKaraokeLogEntryIdPutMutation = (options?: Partial<Options<PutKaraokeLogApiMyKaraokeLogEntryIdPutData>>): UseMutationOptions<PutKaraokeLogApiMyKaraokeLogEntryIdPutResponse, PutKaraokeLogApiMyKaraokeLogEntryIdPutError, Options<PutKaraokeLogApiMyKaraokeLogEntryIdPutData>> => {
+    const mutationOptions: UseMutationOptions<PutKaraokeLogApiMyKaraokeLogEntryIdPutResponse, PutKaraokeLogApiMyKaraokeLogEntryIdPutError, Options<PutKaraokeLogApiMyKaraokeLogEntryIdPutData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await putKaraokeLogApiMyKaraokeLogEntryIdPut({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Partner Delete Karaoke Log
+ *
+ * The host un-did Done. ``gen_email`` as a query parameter or in a JSON body. Idempotent:
+ * 204 whether or not the record exists.
+ */
+export const partnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteMutation = (options?: Partial<Options<PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteData>>): UseMutationOptions<PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteResponse, PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteError, Options<PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteData>> => {
+    const mutationOptions: UseMutationOptions<PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteResponse, PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteError, Options<PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await partnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDelete({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Partner Put Karaoke Log
+ *
+ * One history-outbox record (spec 5.5) for the singer ``gen_email`` (profile created if new).
+ *
+ * Idempotent. The reply carries no survey or other user data.
+ */
+export const partnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutMutation = (options?: Partial<Options<PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutData>>): UseMutationOptions<PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutResponse, PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutError, Options<PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutData>> => {
+    const mutationOptions: UseMutationOptions<PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutResponse, PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutError, Options<PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await partnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPut({
                 ...options,
                 ...fnOptions,
                 throwOnError: true

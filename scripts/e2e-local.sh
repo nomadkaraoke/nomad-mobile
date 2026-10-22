@@ -1,37 +1,42 @@
 #!/usr/bin/env bash
-# Maestro E2E against the gen local stack (real FastAPI backend, fake workers) and decide's search local stack
-# (the search service on a fixture song index) on an iOS simulator or an Android emulator. Needs the dev client
-# already installed (npx expo run:ios / run:android in apps/mobile).
+# Maestro E2E against the gen local stack (real FastAPI backend, fake workers) and decide's local stack (the main
+# API on :8030 with a fixture catalog and the test API, plus the search service on a fixture song index on :8020)
+# on an iOS simulator or an Android emulator. Needs the dev client already installed (npx expo run:ios /
+# run:android in apps/mobile).
 #
 #   scripts/e2e-local.sh --platform ios                  # every flow in maestro/flows
 #   scripts/e2e-local.sh --platform android make-4       # flows whose file name contains "make-4"
 #   scripts/e2e-local.sh --platform ios --locale he --screen review-tour
 #                                     # a screenshot-only flow (maestro/screens/<name>.yaml) with the app in that
 #                                     # language (default en); shots go to docs/screenshots/phase2/review/<platform>/<locale>
+#                                     # (discover-* screens: docs/screenshots/phase3a/<platform>/<locale>)
 #
 # Env: GEN_DIR (gen checkout with scripts/local-stack.sh, at least v0.278.2 plus the fake match judge; default
 #      ../karaoke-gen, the main clone: pull it first, or point GEN_DIR at a gen worktree with the code you want),
-#      DECIDE_DIR (decide checkout with scripts/search-local-stack.sh; default ../karaoke-decide-search-parity
-#      when it exists, else ../karaoke-decide), DECIDE_GEN_PARTNER_SECRET (shared by both stacks so decide's
+#      DECIDE_DIR (decide checkout with scripts/local-stack.sh, the main API + search stack; default
+#      ../karaoke-decide-phase3-discover while that branch is unmerged and the worktree exists, else
+#      ../karaoke-decide), DECIDE_GEN_PARTNER_SECRET (shared by both stacks so decide's
 #      /resolve reaches gen; default local-stack-secret), IOS_DEVICE (simulator name or UDID; default
 #      "iPhone 17 Pro"), ANDROID_SERIAL (default emulator-5554).
 #
 # Both platforms use the same http://127.0.0.1 URLs: on Android, `adb reverse` maps the gen API (8010), gen web
-# (3010) and decide search (8020) ports, so one set of stacks serves both and every link opens on either.
+# (3010), decide search (8020) and decide main API (8030) ports, so one set of stacks serves both and every link opens on either.
 # Metro is the exception on Android: the dev launcher loads it from 10.0.2.2:8081 (maestro/common/launch.yaml).
 # If adb reports "device offline" mid-run (it wipes the reverse rules), give the AVD more RAM and -gpu host
 # (see CLAUDE.md § E2E).
 #
 # Flows tagged `force-offline` (search-4) need a bundle built with EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1, so they
 # run after the others, on a Metro restarted with it (only when this script started Metro itself). Flows tagged
-# `locale-he` (review-9) run with the app in Hebrew (RTL), set before and reset after them.
+# `offline-warmup` (discover-6a: loads a signed-in user's picks so the phone keeps them) run right before the
+# force-offline ones, after every flow that signs out or clears the app. Flows tagged `locale-he` (review-9) run
+# with the app in Hebrew (RTL), set before and reset after them.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 GEN_DIR="${GEN_DIR:-$ROOT/../karaoke-gen}"
 if [[ -z "${DECIDE_DIR:-}" ]]; then
-  if [[ -x "$ROOT/../karaoke-decide-search-parity/scripts/search-local-stack.sh" ]]; then
-    DECIDE_DIR="$ROOT/../karaoke-decide-search-parity"
+  if [[ -x "$ROOT/../karaoke-decide-phase3-discover/scripts/local-stack.sh" ]]; then
+    DECIDE_DIR="$ROOT/../karaoke-decide-phase3-discover"
   else
     DECIDE_DIR="$ROOT/../karaoke-decide"
   fi
@@ -40,6 +45,7 @@ PARTNER_SECRET="${DECIDE_GEN_PARTNER_SECRET:-local-stack-secret}"
 STACK="http://127.0.0.1:8010"
 WEB="http://127.0.0.1:3010"
 SEARCH="http://127.0.0.1:8020"
+DECIDE="http://127.0.0.1:8030"
 MAESTRO="${MAESTRO:-$(command -v maestro || echo "$HOME/.maestro/bin/maestro")}"
 PLATFORM=""
 FILTER=""
@@ -51,7 +57,7 @@ while [[ $# -gt 0 ]]; do
     --platform) PLATFORM="$2"; shift 2 ;;
     --locale) LOCALE="$2"; shift 2 ;;
     --screen) SCREEN="$2"; shift 2 ;;
-    -h|--help) sed -n '2,28p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,32p' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
@@ -67,17 +73,21 @@ fi
 curl -sf -m 5 "$STACK/api/test/status" >/dev/null || { echo "gen stack at $STACK has no /api/test (FAKE_WORKERS off?)" >&2; exit 1; }
 curl -sf -m 5 -o /dev/null "$WEB" || echo "warning: gen web isn't answering on $WEB (make-5 opens the web review there)" >&2
 
-# 2. decide's search local stack (:8020, fixture song index). Its offline-list URL is on 127.0.0.1 too.
-if ! curl -sf -m 3 "$SEARCH/api/search/ready" >/dev/null; then
-  echo "Starting decide's search local stack from $DECIDE_DIR"
-  (cd "$DECIDE_DIR" && DECIDE_GEN_PARTNER_SECRET="$PARTNER_SECRET" GEN_API_URL="$STACK" scripts/search-local-stack.sh up)
+# 2. decide's local stack: the main API (:8030, fixture catalog, /api/test/*) on gen's Firestore emulator, so gen
+#    sessions validate there, and the search service (:8020, fixture song index; its offline-list URL is on
+#    127.0.0.1 too). `up` is idempotent.
+if ! curl -sf -m 3 "$SEARCH/api/search/ready" >/dev/null || ! curl -sf -m 3 "$DECIDE/api/ready" >/dev/null; then
+  echo "Starting decide's local stack from $DECIDE_DIR"
+  (cd "$DECIDE_DIR" && GEN_API_URL="$STACK" scripts/local-stack.sh up)
 fi
+curl -sf -m 5 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@example.com"}' \
+  "$DECIDE/api/test/profile/reset" || { echo "decide at $DECIDE has no /api/test (DECIDE_TEST_API off?)" >&2; exit 1; }
 
 # 3. Device prep.
 if [[ "$PLATFORM" == android ]]; then
   SERIAL="${ANDROID_SERIAL:-emulator-5554}"
   adb -s "$SERIAL" wait-for-device
-  for port in 8010 3010 8020; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
+  for port in 8010 3010 8020 8030; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
   # Skip Chrome's first-run screen inside the Custom Tab (the flows also tap past it if it shows).
   adb -s "$SERIAL" shell 'echo "_ --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line'
   adb -s "$SERIAL" shell am set-debug-app --persistent com.android.chrome >/dev/null
@@ -118,7 +128,7 @@ start_metro() {
   # --clear: the EXPO_PUBLIC_* values are baked into cached transforms, and new special route files
   # (e.g. +native-intent) need a fresh route context.
   (cd "$ROOT/apps/mobile" && exec env EXPO_PUBLIC_GEN_API_URL="$STACK" EXPO_PUBLIC_GEN_WEB_URL="$WEB" \
-    EXPO_PUBLIC_DECIDE_API_URL="$SEARCH" EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 CI=1 "$@" \
+    EXPO_PUBLIC_DECIDE_API_URL="$DECIDE" EXPO_PUBLIC_DECIDE_SEARCH_URL="$SEARCH" EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 CI=1 "$@" \
     npx expo start --dev-client --port 8081 --clear) >"$METRO_LOG" 2>&1 &
   METRO_PID=$!
   local deadline=$((SECONDS + 120))
@@ -135,17 +145,20 @@ start_metro() {
 # 5. The flows. Run from the repo root: takeScreenshot paths (${SHOTS}/…) are relative to the working directory.
 cd "$ROOT"
 SHOTS="docs/screenshots/phase1b/$PLATFORM"
-# The native review flows (review-*, Phase 2) keep their shots apart.
+# The native review flows (review-*, Phase 2) and Discover (discover-*, Phase 3a) keep their shots apart.
 REVIEW_SHOTS="docs/screenshots/phase2/$PLATFORM"
-mkdir -p "$SHOTS" "$REVIEW_SHOTS"
+DISCOVER_SHOTS="docs/screenshots/phase3a/$PLATFORM"
+mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS"
 ALL=()
 while IFS= read -r f; do ALL+=("$f"); done < <(ls maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } || true)
 [[ ${#ALL[@]} -gt 0 ]] || { echo "no flow matches $FILTER" >&2; exit 2; }
 ONLINE=()
+WARMUP=()
 OFFLINE=()
 HEBREW=()
 for f in "${ALL[@]}"; do
   if grep -qE '^\s*-\s*force-offline\s*$' "$f"; then OFFLINE+=("$f")
+  elif grep -qE '^\s*-\s*offline-warmup\s*$' "$f"; then WARMUP+=("$f")
   elif grep -qE '^\s*-\s*locale-he\s*$' "$f"; then HEBREW+=("$f")
   else ONLINE+=("$f"); fi
 done
@@ -194,7 +207,10 @@ run_hebrew() {
   return "$s"
 }
 
-run_flows() { "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" "$@"; }
+run_flows() {
+  "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e PLATFORM="$PLATFORM" \
+    -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" -e DISCOVER_SHOTS="$DISCOVER_SHOTS" "$@"
+}
 status=0
 
 # --screen: one screenshot-only flow, with the app in LOCALE (it sets its own app language, so it never mixes with
@@ -202,26 +218,33 @@ status=0
 if [[ -n "$SCREEN" ]]; then
   [[ -f "maestro/screens/$SCREEN.yaml" ]] || { echo "no maestro/screens/$SCREEN.yaml" >&2; exit 2; }
   lang="${LOCALE:-en}"
-  TOUR_SHOTS="docs/screenshots/phase2/review/$PLATFORM/$lang"
+  if [[ "$SCREEN" == discover* ]]; then TOUR_SHOTS="$DISCOVER_SHOTS/$lang"
+  else TOUR_SHOTS="docs/screenshots/phase2/review/$PLATFORM/$lang"; fi
   mkdir -p "$TOUR_SHOTS"
   metro_up || start_metro
   set_app_locale "$lang"
-  run_flows -e LOCALE="$lang" -e TOUR_SHOTS="$TOUR_SHOTS" "maestro/screens/$SCREEN.yaml" || status=$?
+  # SHOT: the name prefix long-title.yaml gives its shots (in ${SHOTS}).
+  run_flows -e LOCALE="$lang" -e TOUR_SHOTS="$TOUR_SHOTS" -e SHOT="ux-$lang" "maestro/screens/$SCREEN.yaml" || status=$?
   set_app_locale ""
   exit "$status"
 fi
+# The warm-up flows go last before the force-offline ones (the Hebrew group clears the app on Android and signs
+# out on iOS, which drops the picks the phone kept).
 if metro_up; then
-  echo "Using the Metro already on :8081 (it must have EXPO_PUBLIC_GEN_API_URL=$STACK, EXPO_PUBLIC_DECIDE_API_URL=$SEARCH" \
-    "and EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1; the force-offline flows also need EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1)"
-  if [[ $(( ${#ONLINE[@]} + ${#OFFLINE[@]} )) -gt 0 ]]; then
-    run_flows ${ONLINE[@]+"${ONLINE[@]}"} ${OFFLINE[@]+"${OFFLINE[@]}"} || status=$?
-  fi
+  echo "Using the Metro already on :8081 (it must have EXPO_PUBLIC_GEN_API_URL=$STACK, EXPO_PUBLIC_DECIDE_API_URL=$DECIDE," \
+    "EXPO_PUBLIC_DECIDE_SEARCH_URL=$SEARCH and EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1; the force-offline flows also need" \
+    "EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1)"
+  if [[ ${#ONLINE[@]} -gt 0 ]]; then run_flows "${ONLINE[@]}" || status=$?; fi
   run_hebrew || status=$?
+  if [[ $(( ${#WARMUP[@]} + ${#OFFLINE[@]} )) -gt 0 ]]; then
+    run_flows ${WARMUP[@]+"${WARMUP[@]}"} ${OFFLINE[@]+"${OFFLINE[@]}"} || status=$?
+  fi
 else
-  if [[ $(( ${#ONLINE[@]} + ${#HEBREW[@]} )) -gt 0 ]]; then
+  if [[ $(( ${#ONLINE[@]} + ${#HEBREW[@]} + ${#WARMUP[@]} )) -gt 0 ]]; then
     start_metro
     if [[ ${#ONLINE[@]} -gt 0 ]]; then run_flows "${ONLINE[@]}" || status=$?; fi
     run_hebrew || status=$?
+    if [[ ${#WARMUP[@]} -gt 0 ]]; then run_flows "${WARMUP[@]}" || status=$?; fi
   fi
   if [[ ${#OFFLINE[@]} -gt 0 ]]; then
     stop_metro

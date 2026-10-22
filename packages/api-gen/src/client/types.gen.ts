@@ -6024,7 +6024,7 @@ export type SongRequestPublic = {
     /**
      * Source
      */
-    source: 'human' | 'trending_agent';
+    source: 'human' | 'trending_agent' | 'youtube_comment';
     /**
      * Vote Count
      */
@@ -9883,6 +9883,42 @@ export type YoutubeBackfillRunEndpointApiInternalYoutubeBackfillRunPostErrors = 
 export type YoutubeBackfillRunEndpointApiInternalYoutubeBackfillRunPostError = YoutubeBackfillRunEndpointApiInternalYoutubeBackfillRunPostErrors[keyof YoutubeBackfillRunEndpointApiInternalYoutubeBackfillRunPostErrors];
 
 export type YoutubeBackfillRunEndpointApiInternalYoutubeBackfillRunPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type YoutubeCommentsRunEndpointApiInternalYoutubeCommentsRunPostData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Dry Run
+         */
+        dry_run?: boolean;
+        /**
+         * Max Replies
+         */
+        max_replies?: number | null;
+        /**
+         * Token
+         */
+        token?: string | null;
+    };
+    url: '/api/internal/youtube-comments/run';
+};
+
+export type YoutubeCommentsRunEndpointApiInternalYoutubeCommentsRunPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type YoutubeCommentsRunEndpointApiInternalYoutubeCommentsRunPostError = YoutubeCommentsRunEndpointApiInternalYoutubeCommentsRunPostErrors[keyof YoutubeCommentsRunEndpointApiInternalYoutubeCommentsRunPostErrors];
+
+export type YoutubeCommentsRunEndpointApiInternalYoutubeCommentsRunPostResponses = {
     /**
      * Successful Response
      */

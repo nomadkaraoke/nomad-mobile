@@ -71,6 +71,21 @@
             }
           },
           {
+            "name": "library",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "community",
+                "karafun"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Library"
+            }
+          },
+          {
             "name": "sid",
             "in": "query",
             "required": false,
@@ -125,6 +140,21 @@
               "type": "integer",
               "default": 30,
               "title": "Limit"
+            }
+          },
+          {
+            "name": "library",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "community",
+                "karafun"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Library"
             }
           }
         ],

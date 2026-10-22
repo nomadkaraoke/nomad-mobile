@@ -8,6 +8,7 @@ import { resetSearchCacheForTests } from '../find/useSearch';
 import { appRoutes } from '../test-utils/routes';
 
 jest.mock('@nomad/api-decide', () => ({
+  ...jest.requireActual<typeof import('../test-utils/decideDiscoverMock')>('../test-utils/decideDiscoverMock').discoverMocks(),
   searchSongs: jest.fn(),
   popularSongs: jest.fn(),
   resolveQuery: jest.fn(async () => ({})),
