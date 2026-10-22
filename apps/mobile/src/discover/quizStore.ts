@@ -31,6 +31,8 @@ export const SUGGEST_REFRESH_MS = 600;
 /** decide web's batch sizes (useInfiniteArtists): 15 first, then 10 more. */
 export const FIRST_SUGGESTIONS = 15;
 export const MORE_SUGGESTIONS = 10;
+/** Step 3 stops asking for more once this many suggestions are shown (the list is append-only). */
+export const MAX_SUGGESTIONS = 60;
 
 type QuizStore = {
   draft: QuizDraft;
@@ -243,6 +245,10 @@ export const useQuizDraft = create<QuizStore>((set, get) => {
       }
       const gen = generation;
       const { draft, suggestions } = get();
+      if (suggestions.length >= MAX_SUGGESTIONS) {
+        suggestAgain = false;
+        return;
+      }
       const picked = draft.artists.map((a) => a.name);
       const shown = suggestions.map((a) => a.name);
       set({ suggesting: true, suggestedFor: suggestionKey(draft) });
@@ -258,7 +264,8 @@ export const useQuizDraft = create<QuizStore>((set, get) => {
           if (gen !== generation) return;
           const seen = new Set(get().suggestions.map((a) => norm(a.name)));
           const fresh = res.artists.filter((a) => !seen.has(norm(a.name)) && seen.add(norm(a.name)));
-          if (fresh.length) set({ suggestions: [...get().suggestions, ...fresh] });
+          const room = MAX_SUGGESTIONS - get().suggestions.length;
+          if (fresh.length && room > 0) set({ suggestions: [...get().suggestions, ...fresh.slice(0, room)] });
         })
         .catch(() => {
           // Suggestions are optional: the search box still works.
