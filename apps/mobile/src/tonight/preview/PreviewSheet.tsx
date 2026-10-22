@@ -78,7 +78,9 @@ function VideoPreview({ uri, hls, onError }: { uri: string; hls: boolean; onErro
     p.timeUpdateEventInterval = 0.5;
     p.play();
   });
-  const [clock, setClock] = useState<Clock>({ playing: false, current: 0, duration: 0 });
+  // Seeded from the player (setup already called play()), and re-read on every time update, so the first tap
+  // pauses instead of calling play() again.
+  const [clock, setClock] = useState<Clock>(() => ({ playing: !!player.playing, current: 0, duration: 0 }));
   const onErrorRef = useRef(onError);
   useEffect(() => {
     onErrorRef.current = onError;
@@ -86,7 +88,8 @@ function VideoPreview({ uri, hls, onError }: { uri: string; hls: boolean; onErro
   useEffect(() => {
     const subs = [
       player.addListener('playingChange', (e) => setClock((c) => ({ ...c, playing: !!e?.isPlaying }))),
-      player.addListener('timeUpdate', (e) => setClock((c) => ({ ...c, current: e.currentTime, duration: player.duration || c.duration }))),
+      player.addListener('timeUpdate', (e) =>
+        setClock((c) => ({ playing: !!player.playing, current: e.currentTime, duration: player.duration || c.duration })),),
       player.addListener('statusChange', (e) => {
         if (e.status === 'error') onErrorRef.current();
       }),

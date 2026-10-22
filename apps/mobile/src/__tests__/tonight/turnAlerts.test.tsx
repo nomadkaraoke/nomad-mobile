@@ -43,8 +43,10 @@ beforeEach(() => {
   turnAlertTiming.bannerMs = 10_000;
 });
 
-const hook = (initial: kjbox.MeResult | undefined, userKey = 'u1', nightId = NIGHT) =>
-  renderHook(({ m }: { m: kjbox.MeResult | undefined }) => useTurnAlerts(m, userKey, nightId), { initialProps: { m: initial } });
+type Props = { m: kjbox.MeResult | undefined; at?: number };
+/** `at` = the query's dataUpdatedAt (default: just received). */
+const hook = (initial: kjbox.MeResult | undefined, userKey = 'u1', nightId = NIGHT, at?: number) =>
+  renderHook(({ m, at: when }: Props) => useTurnAlerts(m, when ?? Date.now(), userKey, nightId), { initialProps: { m: initial, at } as Props });
 
 describe('useTurnAlerts', () => {
   it('alerts fire once per transition (up next, then on stage), never again for the same entry and state', () => {
@@ -74,14 +76,31 @@ describe('useTurnAlerts', () => {
     expect(haptic).toHaveBeenCalledTimes(3);
   });
 
-  it('no alert when backgrounded; the turn alerts on return if it still holds', () => {
+  it('no alert when backgrounded; on return only fresh /me data alerts, never the stale cache', () => {
     (AppState as { currentState: AppStateStatus }).currentState = 'background';
-    const { result } = hook(me({ songs: [mine()], next: next(1) }));
+    const m = me({ songs: [mine()], next: next(1) });
+    const stale = Date.now() - 60_000;
+    const { result, rerender } = hook(m, 'u1', NIGHT, stale);
     expect(haptic).not.toHaveBeenCalled();
     expect(result.current.alert).toBeNull();
     emit('active');
+    // The cached /me is from before the return: no buzz.
+    expect(haptic).not.toHaveBeenCalled();
+    expect(result.current.alert).toBeNull();
+    // The refetch on return lands: the turn still holds, so it alerts.
+    rerender({ m, at: Date.now() + 1 });
     expect(haptic).toHaveBeenCalledTimes(1);
     expect(result.current.alert?.state).toBe('up_next');
+  });
+
+  it('a turn in data fetched before backgrounding does not alert after the return', () => {
+    const { rerender } = hook(me({ songs: [mine(501, 'Starlight', at(3))], next: next(3) }), 'u1', NIGHT, Date.now());
+    const before = Date.now();
+    emit('background');
+    emit('active');
+    // Same old dataUpdatedAt, but now showing up next (e.g. a re-render with older cached data).
+    rerender({ m: me({ songs: [mine()], next: next(1) }), at: before - 1 });
+    expect(haptic).not.toHaveBeenCalled();
   });
 
   it('the fired set survives a restart, per user and night (ruling E10-R3)', () => {

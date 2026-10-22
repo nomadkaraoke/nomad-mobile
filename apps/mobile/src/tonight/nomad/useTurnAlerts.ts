@@ -1,11 +1,11 @@
 import type { MeResult } from '@nomad/api-kjbox';
 import * as Haptics from 'expo-haptics';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { AppState } from 'react-native';
 import { create } from 'zustand';
 
 import { appStorage } from '../../storage';
 import { entryIdOf, isLive, isOnStage, nextSong, songKey, songParts } from './model';
-import { useAppForeground } from './queries';
 
 export type TurnState = 'up_next' | 'now_singing';
 
@@ -57,19 +57,40 @@ function loadFired(key: string): Set<string> {
 }
 
 /**
- * Turn awareness without remote push (spec §4.4, ruling E10-R3): one haptic and an in-app banner when the singer
- * becomes up next and when they're on, once per entry per state. Only while the app is in the foreground (a turn
- * reached in the background alerts on return if it still holds). The fired set is kept per user and night in MMKV, so
- * a restart never alerts twice. The banner hides after 10 s or when dismissed.
+ * Whether the app is in the foreground, and since when (ms epoch). An app that starts in the foreground counts from
+ * 0: everything it has fetched was fetched in the foreground. `inactive` (a call, Control Center) counts as foreground.
  */
-export function useTurnAlerts(me: MeResult | undefined, userKey: string | null, nightId: string) {
-  const foreground = useAppForeground();
+function useForegroundSince(): { foreground: boolean; since: number } {
+  const [state, setState] = useState(() => {
+    const foreground = AppState.currentState !== 'background';
+    return { foreground, since: foreground ? 0 : Date.now() };
+  });
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (s) => {
+      const foreground = s !== 'background';
+      setState((prev) => (prev.foreground === foreground ? prev : { foreground, since: foreground ? Date.now() : prev.since }));
+    });
+    return () => sub?.remove(); // jest-expo's AppState mock returns no subscription
+  }, []);
+  return state;
+}
+
+/**
+ * Turn awareness without remote push (spec §4.4, ruling E10-R3): one haptic and an in-app banner when the singer
+ * becomes up next and when they're on, once per entry per state. Only while the app is in the foreground, and only on
+ * `/me` data received in the foreground (`dataUpdatedAt` at or after the last return), so a stale cache never buzzes on
+ * return; the refetch on return alerts if the turn still holds. The fired set is kept per user and night in MMKV, so a
+ * restart never alerts twice. The banner hides after 10 s or when dismissed.
+ */
+export function useTurnAlerts(me: MeResult | undefined, dataUpdatedAt: number, userKey: string | null, nightId: string) {
+  const { foreground, since } = useForegroundSince();
+  const fresh = dataUpdatedAt >= since;
   const alert = useTurnBanner((s) => s.alert);
   const turn = turnOf(me);
   const turnId = turn ? `${turn.key}:${turn.state}` : null;
 
   useEffect(() => {
-    if (!foreground || !turn || !turnId) return;
+    if (!foreground || !fresh || !turn || !turnId) return;
     const key = firedKey(userKey, nightId);
     const fired = loadFired(key);
     if (fired.has(turnId)) return;
@@ -82,7 +103,7 @@ export function useTurnAlerts(me: MeResult | undefined, userKey: string | null, 
       /* no haptics engine: the banner still shows */
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- turnId captures the turn; the alert text rides along
-  }, [turnId, foreground, userKey, nightId]);
+  }, [turnId, foreground, fresh, userKey, nightId]);
 
   useEffect(() => {
     if (!alert) return;

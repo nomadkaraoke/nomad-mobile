@@ -156,7 +156,7 @@ export function NightScreen({ night, focused, onRequest, onReorder, onPreviewEnt
   };
 
   // Turn awareness (spec §4.4, ruling E10-R3): haptic + banner at "up next" and "you're on", foreground only.
-  const turn = useTurnAlerts(me.data, userKey, night.nightId);
+  const turn = useTurnAlerts(me.data, me.dataUpdatedAt, userKey, night.nightId);
 
   // Previews (spec §4.1 Preview, ruling E10-R1/R2): Your songs ▶, the quick version ▶ and rotation ▶ open the sheet.
   const preview = (target: Omit<PreviewTarget, 'owner'>) =>

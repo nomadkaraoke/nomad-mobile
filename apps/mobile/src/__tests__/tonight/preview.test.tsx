@@ -1,6 +1,6 @@
 import * as kjbox from '@nomad/api-kjbox';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
-import { createAudioPlayer } from 'expo-audio';
+import { createAudioPlayer, setAudioModeAsync } from 'expo-audio';
 import { AppState, Linking, type AppStateStatus } from 'react-native';
 
 import { useAuth } from '../../auth/store';
@@ -15,7 +15,10 @@ import { deferred, group, kn, local } from './request/helpers';
 
 type Listener = (e: Record<string, unknown>) => void;
 const mockVideo = {
-  play: jest.fn(),
+  playing: false,
+  play: jest.fn(() => {
+    mockVideo.playing = true;
+  }),
   pause: jest.fn(),
   duration: 0,
   timeUpdateEventInterval: 0,
@@ -69,6 +72,7 @@ beforeEach(() => {
   usePreviewStore.setState({ current: null });
   mockVideo.listeners = new Map();
   mockVideo.duration = 0;
+  mockVideo.playing = false;
   Object.assign(nightPoll, { meMs: 60_000, nowMs: 60_000, rotationMs: 60_000, nightMs: 60_000 });
   useAuth.setState({ state: { status: 'signedIn', session: { token: 't', email: 'sam@example.com', createdAt: 0 } } });
   useNightStore.getState().rehydrate('sam@example.com');
@@ -112,8 +116,11 @@ it('native video plays in the sheet with play/pause and progress; Close releases
   expect(screen.getByTestId('tonight-preview-song')).toHaveTextContent(iso('Starlight'));
   expect(mockUseVideoPlayer).toHaveBeenCalledWith({ uri: 'https://sing/preview/stream/k1?t=2121', contentType: 'auto' });
   expect(mockVideo.play).toHaveBeenCalled();
+  // No playingChange yet: the first tap must still pause (the state is seeded from player.playing).
+  fireEvent.press(screen.getByTestId('tonight-preview-toggle'));
+  expect(mockVideo.pause).toHaveBeenCalledTimes(1);
+  mockVideo.pause.mockClear();
   mockVideo.duration = 100;
-  videoEvent('playingChange', { isPlaying: true });
   videoEvent('timeUpdate', { currentTime: 25 });
   expect(screen.getByTestId('tonight-preview-progress').props.accessibilityValue).toMatchObject({ now: 25 });
   fireEvent.press(screen.getByTestId('tonight-preview-toggle'));
@@ -129,6 +136,17 @@ it('hls uses the hls content type', async () => {
   await tapPreview();
   expect(await screen.findByTestId('tonight-preview-video')).toBeTruthy();
   expect(mockUseVideoPlayer).toHaveBeenCalledWith({ uri: 'https://sing/preview/hls/k1/index.m3u8?t=2121', contentType: 'hls' });
+});
+
+it('a preview sets the audio session to play in silent mode before playing (ruling E10-R6)', async () => {
+  api.previewResolve.mockResolvedValue(result({ mode: 'native_audio', token: 'k1', stream_url: 'https://s/a' }));
+  show();
+  await tapPreview();
+  expect(await screen.findByTestId('tonight-preview-audio')).toBeTruthy();
+  expect(setAudioModeAsync).toHaveBeenCalledWith(expect.objectContaining({ playsInSilentMode: true, interruptionMode: 'mixWithOthers' }));
+  const modeAt = (setAudioModeAsync as jest.Mock).mock.invocationCallOrder[0]!;
+  const createdAt = (createAudioPlayer as jest.Mock).mock.invocationCallOrder.at(-1)!;
+  expect(modeAt).toBeLessThan(createdAt);
 });
 
 it('native audio plays through expo-audio with a simple visual', async () => {

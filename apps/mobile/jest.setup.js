@@ -71,6 +71,7 @@ jest.mock('expo-video', () => {
 // The review's native audio (expo-audio has no JS fallback under jest) and haptics. Suites that test the
 // audio hooks mock expo-audio themselves; this stub only lets screens that create players render.
 jest.mock('expo-audio', () => ({
+  setAudioModeAsync: jest.fn(async () => {}),
   createAudioPlayer: jest.fn(() => ({
     muted: false,
     currentTime: 0,

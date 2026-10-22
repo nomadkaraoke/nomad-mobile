@@ -1,4 +1,5 @@
 import { previewClose, previewResolve, type PreviewRequest, type PreviewResult } from '@nomad/api-kjbox';
+import { setAudioModeAsync } from 'expo-audio';
 import { create } from 'zustand';
 
 /** What to preview: a search version (with the web's descriptor fields) or a rotation entry. */
@@ -41,6 +42,20 @@ function release(code: string, token: string | undefined, nightId?: string): voi
   }
 }
 
+/**
+ * Ruling E10-R6: previews play with the ringer switch off. `mixWithOthers` is expo-audio's default, which the native
+ * review relies on (it never sets a mode), so leaving it set after a preview changes nothing for the review.
+ */
+export const PREVIEW_AUDIO_MODE = { playsInSilentMode: true, interruptionMode: 'mixWithOthers' } as const;
+
+async function previewAudioMode(): Promise<void> {
+  try {
+    await setAudioModeAsync(PREVIEW_AUDIO_MODE);
+  } catch {
+    /* no audio session: the preview still tries to play */
+  }
+}
+
 let seq = 0;
 
 export const usePreviewStore = create<PreviewState>((set, get) => ({
@@ -57,7 +72,14 @@ export const usePreviewStore = create<PreviewState>((set, get) => ({
         release(code, result?.token, nightId);
         return;
       }
-      set({ current: { ...cur, status: result && result.mode !== 'unavailable' ? 'ready' : 'error', result } });
+      const playable = !!result && result.mode !== 'unavailable';
+      // Before the player is created (it plays as soon as it mounts).
+      if (playable) await previewAudioMode();
+      if (get().current?.id !== id) {
+        release(code, result.token, nightId);
+        return;
+      }
+      set({ current: { ...cur, status: playable ? 'ready' : 'error', result } });
     } catch {
       // Rate limit, not found, unreachable…: the sheet says "Preview isn't available right now" (ruling E10-R2).
       const cur = get().current;
