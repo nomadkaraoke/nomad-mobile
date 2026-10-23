@@ -3,11 +3,10 @@
 // through offline, 5xx/503 and signed-out states until a PUT succeeds. A decide 401 only marks Discover stale.
 import { ApiError, getVoiceProfile, putVoiceProfile, type VoiceProfileOut } from '@nomad/api-decide';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 
 import { useAuth } from '../auth/store';
-import { useDiscoverStale } from '../discover/staleStore';
 import { useOffline } from '../net/useOffline';
 import { toVoiceProfileIn, useVoiceStore, type LocalVoiceProfile } from './voiceStore';
 
@@ -47,8 +46,14 @@ export function sendPendingVoice(): Promise<boolean> {
       try {
         await putVoiceProfile(toVoiceProfileIn(profile));
       } catch (e) {
-        // A 401 means decide doesn't accept the session right now: Discover shows its refresh prompt. Never sign out.
-        if (e instanceof ApiError && e.status === 401) useDiscoverStale.getState().markStale();
+        // 400/422: decide will never take this measurement; keep it for badges and stop retrying (not an error).
+        // Everything else (401 — api/setup.ts marks Discover stale and never signs out —, 403, 404, 408, 429, 5xx,
+        // status 0) stays pending for the next trigger.
+        if (e instanceof ApiError && (e.status === 400 || e.status === 422)) {
+          console.warn(`voice profile rejected by decide (${e.status})`);
+          useVoiceStore.getState().markRejected(profile.measuredAt);
+          continue;
+        }
         return;
       }
       useVoiceStore.getState().markSynced(profile.measuredAt);
@@ -103,15 +108,34 @@ export function useSaveVoiceProfile() {
   }, []);
 }
 
-/** Sends a pending profile when signed in: on mount and whenever the app comes to the foreground. */
+/**
+ * Sends a pending profile when signed in: on mount, when the connection comes back and when the app returns to the
+ * foreground (the pattern of the karaoke-log outbox, `useLogSync`). Mounted once in AppProviders.
+ */
 export function useFlushPendingVoice() {
   const email = useAuth((s) => (s.state.status === 'signedIn' ? s.state.session.email : null));
+  const offline = useOffline();
+  const wasOffline = useRef(offline);
+
   useEffect(() => {
     if (!email) return;
     void sendPendingVoice();
     const sub = AppState.addEventListener('change', (s) => {
       if (s === 'active') void sendPendingVoice();
     });
-    return () => sub.remove();
+    return () => sub?.remove();
   }, [email]);
+
+  useEffect(() => {
+    if (wasOffline.current && !offline && email) void sendPendingVoice();
+    wasOffline.current = offline;
+  }, [offline, email]);
+}
+
+/** Discover's own trigger: tries a pending profile whenever the tab mounts while signed in. */
+export function useFlushVoiceOnDiscoverMount() {
+  const signedIn = useAuth((s) => s.state.status === 'signedIn');
+  useEffect(() => {
+    if (signedIn) void sendPendingVoice();
+  }, [signedIn]);
 }

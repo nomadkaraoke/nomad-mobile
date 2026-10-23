@@ -60,6 +60,7 @@ import {
   type SongIdentity,
 } from "../../make/intentStore";
 import { useOfflineIndex } from "../../offline/offlineIndex";
+import { useFlushVoiceOnDiscoverMount } from "../../voice/useVoiceProfile";
 
 /** A popular-list row (empty search box). */
 function SongRow({
@@ -156,6 +157,7 @@ const DESCRIBE_CLOSED: Describe = {
 };
 
 export default function DiscoverScreen() {
+  useFlushVoiceOnDiscoverMount();
   const t = useTranslations();
   const [query, setQuery] = useState("");
   const search = useSearch(query);

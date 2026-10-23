@@ -2,6 +2,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 import type { ReactNode } from 'react';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { AppState, type AppStateStatus } from 'react-native';
 
 import { setupApiClients } from '../api/setup';
@@ -9,8 +10,12 @@ import { useAuth } from '../auth/store';
 import { useDiscoverStale } from '../discover/staleStore';
 import { appStorage } from '../storage';
 import { session } from '../test-utils/genAuthMock';
-import { useFlushPendingVoice, useSaveVoiceProfile, useVoiceProfile } from '../voice/useVoiceProfile';
+import { sendPendingVoice, useFlushPendingVoice, useFlushVoiceOnDiscoverMount, useSaveVoiceProfile, useVoiceProfile } from '../voice/useVoiceProfile';
 import { profileFromSelfReport, toVoiceProfileIn, useVoiceStore, VOICE_STORAGE_KEY } from '../voice/voiceStore';
+
+jest.mock('@react-native-community/netinfo', () => ({ useNetInfo: jest.fn() }));
+const setConnected = (c: boolean) =>
+  (useNetInfo as jest.Mock).mockReturnValue({ isConnected: c, isInternetReachable: c });
 
 const fetchMock = jest.fn();
 const json = (body: unknown, status = 200) =>
@@ -39,6 +44,7 @@ const wrapperFor = () => {
 
 beforeEach(async () => {
   jest.useRealTimers();
+  setConnected(true);
   fetchMock.mockReset();
   (AppState.addEventListener as jest.Mock).mockClear();
   globalThis.fetch = fetchMock as unknown as typeof fetch;
@@ -177,5 +183,104 @@ describe('useVoiceProfile', () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     await act(async () => {});
     expect(useVoiceStore.getState()).toMatchObject({ profile: local(T1), pending: true });
+  });
+});
+
+describe('retry triggers', () => {
+  const ok = () => fetchMock.mockImplementation(async (req: Request) => json({ ...(await req.clone().json()), updated_at: T1 }));
+
+  it('Discover mount sends a pending profile', async () => {
+    useVoiceStore.getState().save(local());
+    ok();
+    renderHook(() => useFlushVoiceOnDiscoverMount(), { wrapper: wrapperFor() });
+    await waitFor(() => expect(useVoiceStore.getState().pending).toBe(false));
+    expect(voiceCalls('PUT')).toHaveLength(1);
+  });
+
+  it('Discover mount signed out sends nothing', async () => {
+    await useAuth.getState().signOut();
+    useVoiceStore.getState().save(local());
+    renderHook(() => useFlushVoiceOnDiscoverMount(), { wrapper: wrapperFor() });
+    await act(async () => {});
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('coming back online while in the foreground sends it', async () => {
+    setConnected(false);
+    useVoiceStore.getState().save(local());
+    fetchMock.mockRejectedValue(new TypeError('Network request failed'));
+    const { rerender } = renderHook(() => useFlushPendingVoice(), { wrapper: wrapperFor() });
+    await waitFor(() => expect(voiceCalls('PUT')).toHaveLength(1)); // the mount attempt fails
+    expect(useVoiceStore.getState().pending).toBe(true);
+    ok();
+    setConnected(true);
+    rerender({});
+    await waitFor(() => expect(useVoiceStore.getState().pending).toBe(false));
+    expect(voiceCalls('PUT')).toHaveLength(2);
+  });
+});
+
+describe('rejections', () => {
+  it.each([400, 422])('%i keeps the profile for badges, stops retrying and logs a warning', async (status) => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const err = jest.spyOn(console, 'error').mockImplementation(() => {});
+    fetchMock.mockResolvedValue(json({ detail: 'invalid' }, status));
+    const { result } = renderHook(() => useSaveVoiceProfile(), { wrapper: wrapperFor() });
+    await act(async () => void (await result.current(local())));
+    expect(useVoiceStore.getState()).toMatchObject({ pending: false, profile: local() });
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(err).not.toHaveBeenCalled();
+    warn.mockRestore();
+    err.mockRestore();
+  });
+
+  it.each([401, 403, 404, 408, 429, 500, 503])('%i stays pending', async (status) => {
+    fetchMock.mockResolvedValue(json({ detail: 'x' }, status));
+    const { result } = renderHook(() => useSaveVoiceProfile(), { wrapper: wrapperFor() });
+    await act(async () => void (await result.current(local())));
+    expect(useVoiceStore.getState()).toMatchObject({ pending: true, profile: local() });
+    expect(useAuth.getState().state.status).toBe('signedIn');
+  });
+});
+
+describe('concurrency', () => {
+  it('a save and a flush at the same moment send one PUT', async () => {
+    fetchMock.mockImplementation(async (req: Request) => {
+      await new Promise((r) => setTimeout(r, 20));
+      return json({ ...(await req.clone().json()), updated_at: T1 });
+    });
+    const save = renderHook(() => useSaveVoiceProfile(), { wrapper: wrapperFor() });
+    await act(async () => {
+      // The flush hooks call sendPendingVoice(): fire it while the save's PUT is in flight.
+      const p = save.result.current(local());
+      await Promise.all([p, sendPendingVoice(), sendPendingVoice()]);
+    });
+    await waitFor(() => expect(useVoiceStore.getState().pending).toBe(false));
+    expect(voiceCalls('PUT')).toHaveLength(1);
+  });
+
+  it('a second save during an in-flight PUT is sent next; the first only syncs its own measurement', async () => {
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    let n = 0;
+    fetchMock.mockImplementation(async (req: Request) => {
+      if (n++ === 0) await gate;
+      return json({ ...(await req.clone().json()), updated_at: T1 });
+    });
+    const { result } = renderHook(() => useSaveVoiceProfile(), { wrapper: wrapperFor() });
+    let first!: Promise<boolean>;
+    let second!: Promise<boolean>;
+    await act(async () => {
+      first = result.current(local(T1));
+      await Promise.resolve();
+      second = result.current(local(T2));
+      expect(useVoiceStore.getState().profile?.measuredAt).toBe(T2);
+      release();
+      await Promise.all([first, second]);
+    });
+    const bodies = await Promise.all(voiceCalls('PUT').map((r) => r.json()));
+    expect(bodies.map((b) => b.measured_at)).toEqual([T1, T2]);
+    expect(useVoiceStore.getState()).toMatchObject({ pending: false });
+    expect(useVoiceStore.getState().profile?.measuredAt).toBe(T2);
   });
 });
