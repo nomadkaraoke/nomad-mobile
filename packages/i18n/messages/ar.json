@@ -1547,7 +1547,8 @@
       "title": "تصحيح أخطاء الصوت",
       "unknown": "-",
       "verdictGood": "جيد",
-      "verdictNotGood": "غير جيد"
+      "verdictNotGood": "غير جيد",
+      "notAvailable": "شاشة تصحيح أخطاء الصوت مخصصة للمسؤولين فقط."
     }
   }
 }

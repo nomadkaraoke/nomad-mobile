@@ -1547,7 +1547,8 @@
       "title": "Depuração de voz",
       "unknown": "-",
       "verdictGood": "bom",
-      "verdictNotGood": "não bom"
+      "verdictNotGood": "não bom",
+      "notAvailable": "A tela de depuração de voz é apenas para administradores."
     }
   }
 }

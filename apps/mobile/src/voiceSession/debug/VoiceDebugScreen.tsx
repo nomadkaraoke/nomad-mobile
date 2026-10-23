@@ -6,7 +6,7 @@ import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, List, Screen, Text } from '@nomad/ui';
 import { ActivityIndicator, View } from 'react-native';
 
-import { type PlaybackState, useRecordingPlayback, useVoiceDebugSongs } from './useVoiceDebug';
+import { type PlaybackState, useRecordingPlayback, useVoiceDebugSongs, useVoiceFlags } from './useVoiceDebug';
 
 type Translate = ReturnType<typeof useTranslations>;
 type Attempt = UserSongOut['attempts'][number];
@@ -105,13 +105,21 @@ function SongRow({
 
 export function VoiceDebugScreen() {
   const t = useTranslations('voiceSession.debug');
+  const flags = useVoiceFlags();
   const songs = useVoiceDebugSongs();
+  const isAdmin = flags.data?.is_admin === true;
   const { state, toggle } = useRecordingPlayback();
 
   return (
     <Screen testID="vs-debug" underHeader>
-      {songs.isPending ? <ActivityIndicator testID="vs-debug-loading" accessibilityLabel={t('loading')} /> : null}
-      {songs.isError ? (
+      {flags.isPending ? <ActivityIndicator testID="vs-debug-loading" accessibilityLabel={t('loading')} /> : null}
+      {!flags.isPending && !isAdmin ? (
+        <Text testID="vs-debug-unavailable" variant="muted">
+          {t('notAvailable')}
+        </Text>
+      ) : null}
+      {isAdmin && songs.isPending ? <ActivityIndicator testID="vs-debug-loading" accessibilityLabel={t('loading')} /> : null}
+      {isAdmin && songs.isError ? (
         <Text testID="vs-debug-error" variant="error">
           {t('error')}
         </Text>
@@ -123,10 +131,10 @@ export function VoiceDebugScreen() {
       ) : null}
       <List
         testID="vs-debug-list"
-        data={songs.data ?? []}
+        data={isAdmin ? (songs.data ?? []) : []}
         keyExtractor={(s) => s.song_key}
         extraData={state}
-        ListEmptyComponent={songs.isSuccess ? <Text variant="muted">{t('empty')}</Text> : undefined}
+        ListEmptyComponent={isAdmin && songs.isSuccess ? <Text variant="muted">{t('empty')}</Text> : undefined}
         renderItem={(song, index) => <SongRow song={song} index={index} playback={state} onPlay={toggle} t={t} />}
       />
     </Screen>

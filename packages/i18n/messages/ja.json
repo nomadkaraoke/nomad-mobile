@@ -1547,7 +1547,8 @@
       "title": "音声デバッグ",
       "unknown": "-",
       "verdictGood": "良好",
-      "verdictNotGood": "不良"
+      "verdictNotGood": "不良",
+      "notAvailable": "音声デバッグ画面は管理者専用です。"
     }
   }
 }

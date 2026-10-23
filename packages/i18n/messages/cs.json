@@ -1547,7 +1547,8 @@
       "title": "Ladění hlasu",
       "unknown": "-",
       "verdictGood": "dobré",
-      "verdictNotGood": "nevyhovující"
+      "verdictNotGood": "nevyhovující",
+      "notAvailable": "Obrazovka ladění hlasu je určena pouze pro správce."
     }
   }
 }

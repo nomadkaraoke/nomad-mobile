@@ -1547,7 +1547,8 @@
       "title": "Hanghibakeresés",
       "unknown": "-",
       "verdictGood": "jó",
-      "verdictNotGood": "nem jó"
+      "verdictNotGood": "nem jó",
+      "notAvailable": "A hang hibakeresési képernyője csak rendszergazdák számára érhető el."
     }
   }
 }

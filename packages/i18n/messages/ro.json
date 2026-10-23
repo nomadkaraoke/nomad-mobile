@@ -1547,7 +1547,8 @@
       "title": "Depanare voce",
       "unknown": "-",
       "verdictGood": "bun",
-      "verdictNotGood": "nu e bun"
+      "verdictNotGood": "nu e bun",
+      "notAvailable": "Ecranul de depanare vocală este destinat doar administratorilor."
     }
   }
 }

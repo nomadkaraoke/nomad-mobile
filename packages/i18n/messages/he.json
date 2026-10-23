@@ -1547,7 +1547,8 @@
       "title": "דיבאג קולי",
       "unknown": "-",
       "verdictGood": "טוב",
-      "verdictNotGood": "לא טוב"
+      "verdictNotGood": "לא טוב",
+      "notAvailable": "מסך ניפוי השגיאות הקולי מיועד למנהלי מערכת בלבד."
     }
   }
 }

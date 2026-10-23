@@ -1547,7 +1547,8 @@
       "title": "Voice debug",
       "unknown": "-",
       "verdictGood": "maganda",
-      "verdictNotGood": "hindi maganda"
+      "verdictNotGood": "hindi maganda",
+      "notAvailable": "Ang voice debug screen ay para lamang sa mga admin."
     }
   }
 }

@@ -1547,7 +1547,8 @@
       "title": "Stem-debug",
       "unknown": "-",
       "verdictGood": "goed",
-      "verdictNotGood": "niet goed"
+      "verdictNotGood": "niet goed",
+      "notAvailable": "Het spraak-debugscherm is alleen voor beheerders."
     }
   }
 }

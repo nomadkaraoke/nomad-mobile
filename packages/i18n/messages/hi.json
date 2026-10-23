@@ -1547,7 +1547,8 @@
       "title": "वॉइस डीबग",
       "unknown": "-",
       "verdictGood": "अच्छा",
-      "verdictNotGood": "अच्छा नहीं"
+      "verdictNotGood": "अच्छा नहीं",
+      "notAvailable": "वॉइस डीबग स्क्रीन केवल एडमिन के लिए है।"
     }
   }
 }

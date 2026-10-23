@@ -1547,7 +1547,8 @@
       "title": "Ses hata ayıklama",
       "unknown": "-",
       "verdictGood": "iyi",
-      "verdictNotGood": "iyi değil"
+      "verdictNotGood": "iyi değil",
+      "notAvailable": "Ses hata ayıklama ekranı yalnızca yöneticiler içindir."
     }
   }
 }

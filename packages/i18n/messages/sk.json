@@ -1547,7 +1547,8 @@
       "title": "Ladenie hlasu",
       "unknown": "-",
       "verdictGood": "dobré",
-      "verdictNotGood": "nevyhovujúce"
+      "verdictNotGood": "nevyhovujúce",
+      "notAvailable": "Obrazovka ladenia hlasu je určená len pre administrátorov."
     }
   }
 }

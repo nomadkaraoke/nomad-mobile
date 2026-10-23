@@ -1547,7 +1547,8 @@
       "title": "Debugowanie głosu",
       "unknown": "-",
       "verdictGood": "dobre",
-      "verdictNotGood": "niedobre"
+      "verdictNotGood": "niedobre",
+      "notAvailable": "Ekran debugowania głosu jest dostępny tylko dla administratorów."
     }
   }
 }

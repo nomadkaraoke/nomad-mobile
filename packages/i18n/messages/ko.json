@@ -1547,7 +1547,8 @@
       "title": "보이스 디버그",
       "unknown": "-",
       "verdictGood": "적합",
-      "verdictNotGood": "부적합"
+      "verdictNotGood": "부적합",
+      "notAvailable": "음성 디버그 화면은 관리자 전용입니다."
     }
   }
 }

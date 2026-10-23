@@ -19,12 +19,22 @@ export function useVoiceFlags() {
 /** Every song the signed-in admin labelled or attempted, with voice.db markers and the model's prediction. */
 export function useVoiceDebugSongs() {
   const email = useAuth((s) => (s.state.status === 'signedIn' ? s.state.session.email : null));
+  // The admin endpoints 403 for anyone else: never ask unless decide's flags say this user is an admin.
+  const isAdmin = useVoiceFlags().data?.is_admin === true;
   return useQuery<UserSongOut[]>({
     queryKey: ['voiceSession', 'debugSongs', email],
-    enabled: !!email,
+    enabled: !!email && isAdmin,
     queryFn: () => adminVoiceSongs(email as string),
     retry: false,
   });
+}
+
+const DIR_NAME = 'voice-debug';
+
+/** `.wav` for RIFF....WAVE, otherwise `.m4a` (the app's AAC takes carry an `ftyp` box at offset 4). */
+export function audioExtension(head: Uint8Array): 'wav' | 'm4a' {
+  const at = (o: number, s: string) => [...s].every((c, i) => head[o + i] === c.charCodeAt(0));
+  return head.length >= 12 && at(0, 'RIFF') && at(8, 'WAVE') ? 'wav' : 'm4a';
 }
 
 export type PlaybackState = { key: string | null; status: 'idle' | 'loading' | 'playing' | 'failed' };
@@ -46,6 +56,16 @@ export function useRecordingPlayback() {
       f?.delete();
     } catch {
       // Already gone.
+    }
+  }, []);
+
+  // Files left by a crash or a kill are swept when the screen opens.
+  useEffect(() => {
+    try {
+      const dir = new Directory(Paths.cache, DIR_NAME);
+      if (dir.exists) dir.delete();
+    } catch {
+      // Nothing to sweep.
     }
   }, []);
 
@@ -80,18 +100,32 @@ export function useRecordingPlayback() {
       }
       setState({ key, status: 'loading' });
       try {
-        const dir = new Directory(Paths.cache, 'voice-debug');
+        const dir = new Directory(Paths.cache, DIR_NAME);
         if (!dir.exists) dir.create();
         const token = useAuth.getState().getToken();
-        const downloaded = await File.downloadFileAsync(adminRecordingUrl(recordingId), dir, {
+        // Its own path per take; decide sends a Content-Type but no filename, so the extension is sniffed below.
+        const downloaded = await File.downloadFileAsync(adminRecordingUrl(recordingId), new File(dir, `${recordingId}.bin`), {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
           idempotent: true,
         });
-        file.current = downloaded;
         if (mine !== run.current) {
-          discard();
+          // A newer take (or the unmount) owns the player now: only drop what this download left.
+          try {
+            downloaded.delete();
+          } catch {
+            // Already gone.
+          }
           return;
         }
+        file.current = downloaded;
+        const handle = downloaded.open();
+        let head: Uint8Array;
+        try {
+          head = handle.readBytes(12);
+        } finally {
+          handle.close();
+        }
+        downloaded.rename(`${recordingId}.${audioExtension(head)}`);
         player.replace(downloaded.uri);
         player.play();
         setState({ key, status: 'playing' });

@@ -1547,7 +1547,8 @@
       "title": "Gỡ lỗi giọng hát",
       "unknown": "-",
       "verdictGood": "tốt",
-      "verdictNotGood": "không tốt"
+      "verdictNotGood": "không tốt",
+      "notAvailable": "Màn hình gỡ lỗi giọng nói chỉ dành cho quản trị viên."
     }
   }
 }

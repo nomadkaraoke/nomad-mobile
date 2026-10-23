@@ -1547,7 +1547,8 @@
       "title": "Debug suara",
       "unknown": "-",
       "verdictGood": "bagus",
-      "verdictNotGood": "kurang bagus"
+      "verdictNotGood": "kurang bagus",
+      "notAvailable": "Layar debug suara hanya untuk admin."
     }
   }
 }

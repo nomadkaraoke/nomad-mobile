@@ -1547,7 +1547,8 @@
       "title": "Nyahpepijat suara",
       "unknown": "-",
       "verdictGood": "baik",
-      "verdictNotGood": "tidak baik"
+      "verdictNotGood": "tidak baik",
+      "notAvailable": "Skrin nyahpepijat suara hanya untuk pentadbir."
     }
   }
 }

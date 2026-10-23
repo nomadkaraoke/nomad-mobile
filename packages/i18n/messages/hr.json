@@ -1547,7 +1547,8 @@
       "title": "Otklanjanje pogrešaka glasa",
       "unknown": "-",
       "verdictGood": "dobro",
-      "verdictNotGood": "nije dobro"
+      "verdictNotGood": "nije dobro",
+      "notAvailable": "Zaslon za otklanjanje pogrešaka glasovnih sesija dostupan je samo administratorima."
     }
   }
 }

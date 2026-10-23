@@ -1547,7 +1547,8 @@
       "title": "Stemmedebug",
       "unknown": "-",
       "verdictGood": "god",
-      "verdictNotGood": "ikke god"
+      "verdictNotGood": "ikke god",
+      "notAvailable": "Fejlfindingssiden for stemme er kun for administratorer."
     }
   }
 }

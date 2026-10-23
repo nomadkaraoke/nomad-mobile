@@ -1547,7 +1547,8 @@
       "title": "Äänen virheenkorjaus",
       "unknown": "-",
       "verdictGood": "hyvä",
-      "verdictNotGood": "ei hyvä"
+      "verdictNotGood": "ei hyvä",
+      "notAvailable": "Äänen virheenkorjausnäkymä on vain ylläpitäjille."
     }
   }
 }

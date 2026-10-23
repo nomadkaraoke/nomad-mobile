@@ -1547,7 +1547,8 @@
       "title": "ดีบั๊กเสียงร้อง",
       "unknown": "-",
       "verdictGood": "ดี",
-      "verdictNotGood": "ไม่ดี"
+      "verdictNotGood": "ไม่ดี",
+      "notAvailable": "หน้าจอดีบักเสียงนี้สำหรับผู้ดูแลระบบเท่านั้น"
     }
   }
 }

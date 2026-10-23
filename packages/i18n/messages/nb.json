@@ -1547,7 +1547,8 @@
       "title": "Stemmefeilsøking",
       "unknown": "-",
       "verdictGood": "bra",
-      "verdictNotGood": "ikke bra"
+      "verdictNotGood": "ikke bra",
+      "notAvailable": "Feilsøkingsskjermen for stemme er kun for administratorer."
     }
   }
 }

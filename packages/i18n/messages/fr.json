@@ -1547,7 +1547,8 @@
       "title": "Débogage vocal",
       "unknown": "-",
       "verdictGood": "bon",
-      "verdictNotGood": "pas bon"
+      "verdictNotGood": "pas bon",
+      "notAvailable": "L'écran de débogage vocal est réservé aux administrateurs."
     }
   }
 }

@@ -1547,7 +1547,8 @@
       "play": "Play recording",
       "stop": "Stop",
       "playFailed": "Could not play that recording.",
-      "unknown": "-"
+      "unknown": "-",
+      "notAvailable": "The voice debug screen is only for admins."
     }
   }
 }

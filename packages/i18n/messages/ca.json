@@ -1547,7 +1547,8 @@
       "title": "Depuració de veu",
       "unknown": "-",
       "verdictGood": "bo",
-      "verdictNotGood": "no bo"
+      "verdictNotGood": "no bo",
+      "notAvailable": "La pantalla de depuració de veu només és per a administradors."
     }
   }
 }

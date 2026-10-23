@@ -1547,7 +1547,8 @@
       "title": "Stimm-Debug",
       "unknown": "-",
       "verdictGood": "gut",
-      "verdictNotGood": "nicht gut"
+      "verdictNotGood": "nicht gut",
+      "notAvailable": "Der Sprach-Debug-Bildschirm ist nur für Admins verfügbar."
     }
   }
 }

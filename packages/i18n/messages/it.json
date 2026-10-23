@@ -1547,7 +1547,8 @@
       "title": "Debug voce",
       "unknown": "-",
       "verdictGood": "adatto",
-      "verdictNotGood": "non adatto"
+      "verdictNotGood": "non adatto",
+      "notAvailable": "La schermata di debug vocale è riservata agli amministratori."
     }
   }
 }

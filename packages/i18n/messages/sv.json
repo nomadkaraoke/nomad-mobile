@@ -1547,7 +1547,8 @@
       "title": "Röstfelsökning",
       "unknown": "-",
       "verdictGood": "bra",
-      "verdictNotGood": "inte bra"
+      "verdictNotGood": "inte bra",
+      "notAvailable": "Felsökningssidan för röst är endast till för administratörer."
     }
   }
 }

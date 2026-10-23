@@ -1547,7 +1547,8 @@
       "title": "声音调试",
       "unknown": "-",
       "verdictGood": "良好",
-      "verdictNotGood": "不佳"
+      "verdictNotGood": "不佳",
+      "notAvailable": "语音调试界面仅供管理员使用。"
     }
   }
 }
