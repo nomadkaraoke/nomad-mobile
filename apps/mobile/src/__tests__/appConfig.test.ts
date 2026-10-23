@@ -114,6 +114,17 @@ describe('share intake', () => {
   type AndroidManifestFixture = {
     manifest: { $: Record<string, string>; application: { $: Record<string, string>; activity: { $: Record<string, string>; 'intent-filter'?: IntentFilter[] }[] }[] };
   };
+  // Filters the plugin must leave alone: a deep link, and someone else's SEND (images).
+  const VIEW_FILTER: IntentFilter = {
+    action: [{ $: { 'android:name': 'android.intent.action.VIEW' } }],
+    category: [{ $: { 'android:name': 'android.intent.category.DEFAULT' } }, { $: { 'android:name': 'android.intent.category.BROWSABLE' } }],
+    data: [{ $: { 'android:scheme': 'nomadkaraoke' } }],
+  };
+  const OTHER_SEND: IntentFilter = {
+    action: [{ $: { 'android:name': 'android.intent.action.SEND' } }],
+    category: [{ $: { 'android:name': 'android.intent.category.DEFAULT' } }],
+    data: [{ $: { 'android:mimeType': 'image/*' } }],
+  };
   const fixture = (): AndroidManifestFixture => ({
     manifest: {
       $: { 'xmlns:android': 'http://schemas.android.com/apk/res/android' },
@@ -125,6 +136,8 @@ describe('share intake', () => {
               $: { 'android:name': '.MainActivity' },
               'intent-filter': [
                 { action: [{ $: { 'android:name': 'android.intent.action.MAIN' } }], category: [{ $: { 'android:name': 'android.intent.category.LAUNCHER' } }] },
+                VIEW_FILTER,
+                OTHER_SEND,
               ],
             },
           ],
@@ -151,6 +164,7 @@ describe('share intake', () => {
     expect(c.plugins).toContain('./plugins/withShareIntake');
     const m = await manifestAfterPrebuild(plugin()(c));
     expect(sendFilters(m)).toEqual([
+      OTHER_SEND,
       {
         action: [{ $: { 'android:name': 'android.intent.action.SEND' } }],
         category: [{ $: { 'android:name': 'android.intent.category.DEFAULT' } }],
@@ -162,12 +176,14 @@ describe('share intake', () => {
         ],
       },
     ]);
-    // The launcher filter is kept.
-    expect(m.manifest.application[0]!.activity[0]!['intent-filter']).toHaveLength(2);
+    // The launcher, the deep link and the other SEND filter are kept.
+    const filters = m.manifest.application[0]!.activity[0]!['intent-filter']!;
+    expect(filters).toHaveLength(4);
+    expect(filters).toContainEqual(VIEW_FILTER);
   });
 
   it('adds the SEND filter once, however often prebuild runs', async () => {
     const twice = plugin()(plugin()({ name: 'x', slug: 'x' }));
-    expect(sendFilters(await manifestAfterPrebuild(twice))).toHaveLength(1);
+    expect(sendFilters(await manifestAfterPrebuild(twice))).toHaveLength(2); // ours once + OTHER_SEND
   });
 });
