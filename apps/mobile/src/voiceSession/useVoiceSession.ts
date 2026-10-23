@@ -72,6 +72,8 @@ export type VoiceSession = {
   error: VsErrorKind | null;
   /** True while the stored session is being checked with decide on mount. */
   restoring: boolean;
+  /** A user action is running (its button's second tap is ignored): disable the session's buttons. */
+  busy: boolean;
   /** intro → setup (a finished or broken session is forgotten first). */
   openSetup(): void;
   begin(setup: SessionSetup, floor?: number): Promise<void>;
@@ -190,75 +192,32 @@ export function useVoiceSession(): VoiceSession {
   /** A song is being stopped (ended / stop early / unplayable / finish all race for it). */
   const stopping = useRef(false);
 
+  /** Bumped by reset() and by a new begin(): async work from before then must not touch the session. */
+  const generation = useRef(0);
+  /** A user action (begin, pick, submit, finish, context change, retry) is running: further taps are ignored. */
+  const inFlight = useRef(false);
+  const [busy, setBusy] = useState(false);
+
   const actions = useMemo(() => {
-    /**
-     * Runs one decide call: clears the error, and on failure records how to retry it and moves the step. `then` runs
-     * after a success (also after a retried one) and handles its own failures: never nest attempt() inside `fn`, or
-     * the outer success would clear the inner failure's retry.
-     */
-    const attempt = async (fn: () => Promise<void>, then?: () => Promise<void>): Promise<void> => {
-      retryRef.current = () => attempt(fn, then);
-      setError(null);
-      try {
-        await fn();
-        retryRef.current = null;
-      } catch (e) {
-        const f = classify(e);
-        if (f.kind === 'disabled') {
-          retryRef.current = null;
-          update({ step: 'disabled' });
-        } else if (f.kind === 'ended') {
-          retryRef.current = null;
-          await goResult();
-        } else {
-          if (f.kind === 'fatal') update({ step: 'error' });
-          setError(f.error);
-          // Offline and warming up are expected (the screen offers retry); anything else is worth a log line.
-          if (f.error === 'server') warn('call failed', e);
+    /** True while the session (and the hook's generation) is still the one `id` / `gen` were captured from. */
+    const current = (id: string | null, gen: number) => generation.current === gen && get().sessionId === id;
+
+    /** One user action at a time (double taps are dropped); `busy` mirrors it for the screens. */
+    const guarded =
+      <A extends unknown[]>(fn: (...a: A) => Promise<void>) =>
+      async (...a: A): Promise<void> => {
+        if (inFlight.current) return;
+        inFlight.current = true;
+        setBusy(true);
+        try {
+          await fn(...a);
+        } finally {
+          inFlight.current = false;
+          setBusy(false);
         }
-        return;
-      }
-      await then?.();
-    };
+      };
 
-    const goResult = (): Promise<void> =>
-      attempt(async () => {
-        const id = get().sessionId;
-        if (!id) return;
-        const r = await getVoiceResult(id);
-        discardTake();
-        setResult(r);
-        update({ step: 'result' });
-      });
-
-    /** The next offer. The song the singer already said they know (a version skip) goes straight back to play. */
-    const loadNext = (autoPlayKey: string | null = null): Promise<void> => {
-      const reply = { done: false };
-      return attempt(
-        async () => {
-          const id = get().sessionId;
-          if (!id) return;
-          update({ step: 'loading' });
-          const n = await nextVoiceSong(id);
-          if (n.kind === 'done') {
-            reply.done = true;
-            return;
-          }
-          const { kind: _kind, ...song } = n;
-          update({
-            ...FRESH_SONG,
-            song,
-            attemptN: song.attempt_n,
-            step: song.song_key === autoPlayKey ? 'play' : 'pick',
-          });
-        },
-        async () => {
-          if (reply.done) await goResult();
-        },
-      );
-    };
-
-    /** Stops the running take; returns it (null when no song was playing or another stop got there first). */
+    /** Stops the running take; returns it (null when another stop got there first). */
     const stopTake = async () => {
       if (stopping.current) return null;
       stopping.current = true;
@@ -272,6 +231,106 @@ export function useVoiceSession(): VoiceSession {
       }
     };
 
+    /** Leaving `play` other than into the quiz (error, result, disabled, reset): the take is stopped and dropped. */
+    const dropRunningTake = async () => {
+      if (get().step !== 'play') return;
+      const take = await stopTake();
+      deleteFileQuietly(take?.file?.uri);
+    };
+
+    type Stage = {
+      /** The decide call; `ok()` says whether its result may still be applied (call it after every await). */
+      fn: (ok: () => boolean) => Promise<void>;
+      /** Runs after a success (also a retried one) and handles its own failures. */
+      then?: () => Promise<void>;
+      /** Instead of going to the result on 409 session_not_active / max_attempts. */
+      onEnded?: () => Promise<void>;
+      /** begin(): the stage creates the session, so only the generation is checked. */
+      createsSession?: boolean;
+    };
+
+    /**
+     * Runs one decide call for the session as it is now: clears the error, and on failure records how to retry it
+     * and moves the step. Never nest attempt() inside `fn` (the outer success would clear the inner retry): chain
+     * with `then`. Work for a session that has since been reset or replaced is dropped silently.
+     */
+    const attempt = async (stage: Stage, id: string | null = get().sessionId): Promise<void> => {
+      const gen = generation.current;
+      const ok = () => (stage.createsSession ? generation.current === gen : current(id, gen));
+      retryRef.current = () => attempt(stage, id);
+      setError(null);
+      try {
+        await stage.fn(ok);
+      } catch (e) {
+        if (!ok()) return;
+        const f = classify(e);
+        if (f.kind === 'disabled') {
+          retryRef.current = null;
+          await dropRunningTake();
+          if (ok()) update({ step: 'disabled' });
+        } else if (f.kind === 'ended') {
+          retryRef.current = null;
+          await (stage.onEnded ?? goResult)();
+        } else {
+          if (f.kind === 'fatal') {
+            await dropRunningTake();
+            if (!ok()) return;
+            update({ step: 'error' });
+          }
+          setError(f.error);
+          // Offline and warming up are expected (the screen offers retry); anything else is worth a log line.
+          if (f.error === 'server') warn('call failed', e);
+        }
+        return;
+      }
+      if (!ok()) return;
+      retryRef.current = null;
+      await stage.then?.();
+    };
+
+    const goResult = (): Promise<void> =>
+      attempt({
+        fn: async (ok) => {
+          const id = get().sessionId;
+          if (!id) return;
+          const r = await getVoiceResult(id);
+          if (!ok()) return;
+          await dropRunningTake();
+          if (!ok()) return;
+          discardTake();
+          setResult(r);
+          update({ step: 'result' });
+        },
+      });
+
+    /** The next offer. The song the singer already said they know (a version skip) goes straight back to play. */
+    const loadNext = (autoPlayKey: string | null = null): Promise<void> => {
+      const reply = { done: false };
+      return attempt({
+        fn: async (ok) => {
+          const id = get().sessionId;
+          if (!id) return;
+          update({ step: 'loading' });
+          const n = await nextVoiceSong(id);
+          if (!ok()) return;
+          if (n.kind === 'done') {
+            reply.done = true;
+            return;
+          }
+          const { kind: _kind, ...song } = n;
+          update({
+            ...FRESH_SONG,
+            song,
+            attemptN: song.attempt_n,
+            step: song.song_key === autoPlayKey ? 'play' : 'pick',
+          });
+        },
+        then: async () => {
+          if (reply.done) await goResult();
+        },
+      });
+    };
+
     const endSong = async (stoppedEarly: boolean) => {
       if (get().step !== 'play' || stopping.current) return;
       const take = await stopTake();
@@ -281,6 +340,7 @@ export function useVoiceSession(): VoiceSession {
       }
       const keep = take.file && takeConsent.current && get().setup?.record === true ? take.file : null;
       if (take.file && !keep) deleteFileQuietly(take.file.uri);
+      // The attempt's times are fixed here, once: a retried or re-sent attempt carries the same ones.
       const now = Date.now();
       update({
         step: 'quiz',
@@ -297,15 +357,9 @@ export function useVoiceSession(): VoiceSession {
       if (step !== 'play' || !song || !sessionId) return;
       const take = await stopTake();
       deleteFileQuietly(take?.file?.uri);
-      const body: SkipIn = {
-        song_key: song.song_key,
-        reason: 'not_embeddable',
-        video_id: song.version.video_id,
-      };
-      await attempt(
-        () => skipVoiceSong(sessionId, body),
-        () => loadNext(song.song_key),
-      );
+      if (get().sessionId !== sessionId) return;
+      const body: SkipIn = { song_key: song.song_key, reason: 'not_embeddable', video_id: song.version.video_id };
+      await attempt({ fn: () => skipVoiceSong(sessionId, body), then: () => loadNext(song.song_key) });
     };
 
     const onPlayer = async (e: PlayerEvent) => {
@@ -337,38 +391,123 @@ export function useVoiceSession(): VoiceSession {
       }
     };
 
+    /** Queues the finished song's take as attempt `n` when recording consent is on now; otherwise deletes it. */
+    const queueTake = (sessionId: string, n: number, device: string | null) => {
+      const take = get().take;
+      if (!take) return;
+      if (get().setup?.record === true) {
+        const queue = useRecordingQueue.getState();
+        queue.enqueue({
+          sessionId,
+          attemptN: n,
+          uri: take.uri,
+          contentType: take.contentType,
+          durationS: take.durationS,
+          device,
+        });
+        void queue.flush();
+      } else {
+        deleteFileQuietly(take.uri);
+      }
+      update({ take: null });
+    };
+
+    /**
+     * Posts the quiz's attempt. Also used on a relaunch whose attempt decide may already have: decide dedupes on
+     * session + song + started_at and returns the existing `n`, so the body (times included) must be the stored one.
+     */
+    const postAttempt = async (): Promise<void> => {
+      const st = get();
+      if (st.step !== 'quiz' || !st.song || !st.sessionId || !st.setup || !canSubmitQuiz(st.quiz)) return;
+      const { sessionId, song, setup, quiz, attemptN } = st;
+      // endSong / a relaunch set both; fix them in the store if an older copy lacks one, so they never move.
+      const startedAt = st.playStartedAt ?? Date.now();
+      const endedAt = st.playEndedAt ?? startedAt;
+      if (st.playStartedAt === null || st.playEndedAt === null)
+        update({ playStartedAt: startedAt, playEndedAt: endedAt });
+      const body: AttemptIn = {
+        song_key: song.song_key,
+        video_id: song.version.video_id,
+        started_at: new Date(startedAt).toISOString(),
+        ended_at: new Date(endedAt).toISOString(),
+        stopped_early: st.stoppedEarly,
+        quiz: toQuizIn(quiz),
+        pitch: toPitchIn(st.pitch),
+      };
+      const device = setup.device ?? null;
+      const posted = { done: false };
+      await attempt({
+        fn: async (ok) => {
+          const out = await postVoiceAttempt(sessionId, body);
+          if (!ok()) return;
+          posted.done = out.done;
+          queueTake(sessionId, out.n, device);
+          // Q7 "Warm": the singer has warmed up since the setup (decide reads the attempt's quiz itself).
+          const now = get().setup ?? setup;
+          update({
+            ...FRESH_SONG,
+            step: 'loading',
+            setup: quiz.voiceNow === 'warm' ? { ...now, warmth: 'warm' } : now,
+          });
+        },
+        then: () => (posted.done ? goResult() : loadNext()),
+        // A retry after a lost response whose attempt ended the session: the attempt is there as `attemptN` when
+        // decide counts it; then the take still belongs to it.
+        onEnded: async () => {
+          if (get().take) {
+            try {
+              const so = await getVoiceSession(sessionId);
+              if (get().sessionId !== sessionId) return;
+              if (so.attempts >= attemptN) queueTake(sessionId, attemptN, device);
+              else warn('attempt not recorded, take dropped', `session ${sessionId} attempt ${attemptN}`);
+            } catch (e) {
+              warn('take dropped (session unreadable)', e);
+            }
+            discardTake();
+          }
+          await goResult();
+        },
+      });
+    };
+
+    const reset = () => {
+      generation.current++;
+      void dropRunningTake();
+      discardTake();
+      get().clear();
+      retryRef.current = null;
+      setResult(null);
+      setError(null);
+    };
+
     return {
-      attempt,
       goResult,
       loadNext,
       unplayable,
       onPlayer,
+      reset,
       openSetup() {
         const step = get().step;
         if (step === 'intro' || step === 'result' || step === 'error') {
-          if (step !== 'intro') get().clear();
-          setResult(null);
-          setError(null);
+          if (step !== 'intro') reset();
           update({ step: 'setup' });
         }
       },
-      async begin(setup: SessionSetup, floor?: number) {
+      begin: guarded(async (setup: SessionSetup, floor?: number) => {
+        // A new session: anything still running for an older one is dropped.
+        generation.current++;
         const f = floor ?? get().floor;
-        await attempt(
-          async () => {
+        await attempt({
+          fn: async (ok) => {
             const { session_id } = await createVoiceSession(setup);
-            update({
-              ...EMPTY_SESSION,
-              sessionId: session_id,
-              setup,
-              floor: f,
-              step: 'loading',
-            });
+            if (!ok()) return;
+            update({ ...EMPTY_SESSION, sessionId: session_id, setup, floor: f, step: 'loading' });
             setResult(null);
           },
-          () => loadNext(),
-        );
-      },
+          then: () => loadNext(),
+          createsSession: true,
+        });
+      }),
       async startWarmup(floor?: number) {
         // The recorder starts in an effect, once its options (no recording, this floor) have rendered.
         update({ step: 'warmup', ...(floor !== undefined && { floor }) });
@@ -379,79 +518,33 @@ export function useVoiceSession(): VoiceSession {
         deleteFileQuietly(take?.file?.uri);
         update({ step: 'setup' });
       },
-      async pickKnow() {
+      pickKnow: guarded(async () => {
         if (get().step !== 'pick') return;
         readyFor.current = null;
         update({ ...FRESH_SONG, step: 'play' });
-      },
-      async pickSkip(reason: SkipReason) {
+      }),
+      pickSkip: guarded(async (reason: SkipReason) => {
         const { step, song, sessionId } = get();
         if (step !== 'pick' || !song || !sessionId) return;
-        await attempt(
-          () => skipVoiceSong(sessionId, { song_key: song.song_key, reason }),
-          () => loadNext(),
-        );
-      },
+        await attempt({
+          fn: () => skipVoiceSong(sessionId, { song_key: song.song_key, reason }),
+          then: () => loadNext(),
+        });
+      }),
       stopEarly: () => endSong(true),
       setAnswer(patch: Partial<QuizAnswers>) {
         update({ quiz: { ...get().quiz, ...patch } });
       },
-      async submitQuiz() {
-        const st = get();
-        if (st.step !== 'quiz' || !st.song || !st.sessionId || !st.setup || !canSubmitQuiz(st.quiz)) return;
-        const { sessionId, song, setup, quiz } = st;
-        const body: AttemptIn = {
-          song_key: song.song_key,
-          video_id: song.version.video_id,
-          started_at: new Date(st.playStartedAt ?? st.savedAt).toISOString(),
-          ended_at: new Date(st.playEndedAt ?? st.savedAt).toISOString(),
-          stopped_early: st.stoppedEarly,
-          quiz: toQuizIn(quiz),
-          pitch: toPitchIn(st.pitch),
-        };
-        const posted = { done: false };
-        await attempt(
-          async () => {
-            const out = await postVoiceAttempt(sessionId, body);
-            posted.done = out.done;
-            // Recording consent as it stands now: turned off since the song, the take is not uploaded.
-            const take = get().take;
-            if (take && get().setup?.record === true) {
-              const queue = useRecordingQueue.getState();
-              queue.enqueue({
-                sessionId,
-                attemptN: out.n,
-                uri: take.uri,
-                contentType: take.contentType,
-                durationS: take.durationS,
-                device: setup.device ?? null,
-              });
-              void queue.flush();
-            } else if (take) {
-              deleteFileQuietly(take.uri);
-            }
-            // Q7 "Warm": the singer has warmed up since the setup (decide reads the attempt's quiz itself).
-            const now = get().setup ?? setup;
-            update({
-              ...FRESH_SONG,
-              step: 'loading',
-              setup: quiz.voiceNow === 'warm' ? { ...now, warmth: 'warm' } : now,
-            });
-          },
-          () => (posted.done ? goResult() : loadNext()),
-        );
-      },
-      async finish() {
-        const { step } = get();
-        if (!get().sessionId) return;
-        if (step === 'play') {
-          const take = await stopTake();
-          deleteFileQuietly(take?.file?.uri);
-        }
+      submitQuiz: guarded(postAttempt),
+      finish: guarded(async () => {
+        const id = get().sessionId;
+        if (!id) return;
+        await dropRunningTake();
+        if (get().sessionId !== id) return;
         discardTake();
         await goResult();
-      },
-      async patchContext(patch: SessionPatch) {
+      }),
+      patchContext: guarded(async (patch: SessionPatch) => {
         const { sessionId, setup } = get();
         if (!sessionId || !setup) return;
         const changes = Object.fromEntries(Object.entries(patch).filter(([, v]) => v !== null && v !== undefined));
@@ -462,18 +555,11 @@ export function useVoiceSession(): VoiceSession {
           useRecordingQueue.getState().dropSession(sessionId);
           discardTake();
         }
-        await attempt(() => patchVoiceSession(sessionId, patch));
-      },
-      async retry() {
+        await attempt({ fn: () => patchVoiceSession(sessionId, patch) });
+      }),
+      retry: guarded(async () => {
         await retryRef.current?.();
-      },
-      reset() {
-        discardTake();
-        get().clear();
-        retryRef.current = null;
-        setResult(null);
-        setError(null);
-      },
+      }),
     };
   }, []);
 
@@ -489,32 +575,45 @@ export function useVoiceSession(): VoiceSession {
         setRestoring(false);
         return;
       }
-      const { sessionId, step, attemptN } = get();
+      const { sessionId, step, attemptN, quiz } = get();
       if (!sessionId) {
         if (step === 'disabled' && flags) update({ step: 'intro' });
         setRestoring(false);
         return;
       }
       let server: Awaited<ReturnType<typeof getVoiceSession>> | null = null;
+      let fatal = false;
       try {
         server = await getVoiceSession(sessionId);
       } catch (e) {
-        const f = classify(e);
-        // Offline: carry on from the phone's copy. Gone or refused: start fresh.
-        if (f.kind === 'fatal') get().clear();
+        fatal = classify(e).kind === 'fatal';
       }
-      if (!live) return;
+      if (!live || get().sessionId !== sessionId) return;
       setRestoring(false);
-      if (!server) return;
+      // Gone or refused: start fresh.
+      if (fatal) return actions.reset();
+      const waiting = step === 'loading' || step === 'error' || step === 'disabled';
+      if (!server) {
+        // Offline: carry on from the phone's copy. A step that waits on decide asks again, so the error and its
+        // retry show instead of a spinner.
+        if (waiting) await actions.loadNext();
+        else if (step === 'result') await actions.goResult();
+        return;
+      }
       if (server.state === 'abandoned') {
         actions.reset();
       } else if (server.state === 'done' || step === 'result') {
         await actions.goResult();
       } else if (step === 'quiz' && server.attempts >= attemptN) {
-        // decide already has this song's attempt (the app died right after posting it).
-        discardTake();
-        await actions.loadNext();
-      } else if (step === 'loading' || step === 'error' || step === 'disabled') {
+        // decide may already have this song's attempt (the app died right after posting it): send the same body
+        // again (decide returns the existing n) so the take is queued under it.
+        if (canSubmitQuiz(quiz))
+          await actions.submitQuiz(); // guarded: a tap while restoring cannot post it twice
+        else {
+          discardTake();
+          await actions.loadNext();
+        }
+      } else if (waiting) {
         await actions.loadNext();
       }
     })();
@@ -557,6 +656,7 @@ export function useVoiceSession(): VoiceSession {
     playerRef,
     error,
     restoring,
+    busy,
     openSetup: actions.openSetup,
     begin: actions.begin,
     startWarmup: actions.startWarmup,

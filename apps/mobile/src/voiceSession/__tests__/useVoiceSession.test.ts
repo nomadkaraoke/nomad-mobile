@@ -114,6 +114,12 @@ const takeWithFile = (name: string): SongTake => {
 };
 
 const network = () => new TypeError('Network request failed');
+/** A promise the test settles by hand (a call still in flight). */
+function deferred<T>() {
+  let resolve!: (v: T) => void;
+  const promise = new Promise<T>((r) => (resolve = r));
+  return { promise, resolve };
+}
 const store = () => useVoiceSessionStore.getState();
 const flush = async () => {
   await act(async () => {
@@ -615,6 +621,9 @@ describe('useVoiceSession', () => {
   it('a 409 max_attempts on an attempt goes to the result', async () => {
     mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 12));
     mockApi.postVoiceAttempt.mockRejectedValue(new ApiError(409, 'max_attempts'));
+    // decide never recorded this attempt (11 < 12): the take has no attempt to belong to.
+    mockApi.getVoiceSession.mockResolvedValue({ session_id: 's1', state: 'done', attempts: 11, last_offer: null });
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
     mockRec.nextTake = takeWithFile('a');
     const { result: r } = await mount();
     await act(() => r.current.begin(SETUP));
@@ -625,6 +634,8 @@ describe('useVoiceSession', () => {
     expect(r.current.step).toBe('result');
     expect(useRecordingQueue.getState().items).toHaveLength(0);
     expect(fsState.files.has(`${DIR}/a.wav`)).toBe(false);
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('attempt not recorded, take dropped'));
+    warn.mockRestore();
   });
 
   it('a done reply from next goes to the result', async () => {
@@ -747,5 +758,166 @@ describe('useVoiceSession', () => {
     expect(fsState.files.has(orphanAac)).toBe(false);
     expect(fsState.files.has(otherAac)).toBe(false);
     expect(fsState.files.has(unrelated)).toBe(true);
+  });
+
+  describe('fix round 1', () => {
+    it('double taps: begin, pickSkip and submitQuiz each call decide once', async () => {
+      const created = deferred<{ session_id: string; state: string }>();
+      mockApi.createVoiceSession.mockReturnValueOnce(created.promise);
+      mockApi.nextVoiceSong
+        .mockResolvedValueOnce(song('a', 1))
+        .mockResolvedValueOnce(song('b', 1))
+        .mockResolvedValueOnce(song('c', 2));
+      const skipped = deferred<void>();
+      mockApi.skipVoiceSong.mockReturnValueOnce(skipped.promise);
+      const posted = deferred<unknown>();
+      mockApi.postVoiceAttempt.mockReturnValueOnce(posted.promise);
+      const { result: r } = await mount();
+
+      let first!: Promise<void>;
+      await act(async () => {
+        first = r.current.begin(SETUP);
+        void r.current.begin(SETUP);
+      });
+      expect(r.current.busy).toBe(true);
+      await act(async () => {
+        created.resolve({ session_id: 's1', state: 'active' });
+        await first;
+      });
+      expect(mockApi.createVoiceSession).toHaveBeenCalledTimes(1);
+      expect(r.current.busy).toBe(false);
+      expect(r.current.step).toBe('pick');
+
+      await act(async () => {
+        first = r.current.pickSkip('dont_know');
+        void r.current.pickSkip('dont_know');
+      });
+      await act(async () => {
+        skipped.resolve();
+        await first;
+      });
+      expect(mockApi.skipVoiceSong).toHaveBeenCalledTimes(1);
+      expect(r.current.song?.song_key).toBe('b');
+
+      await singIt(r);
+      act(() => r.current.setAnswer({ feel: 'fine', position: 'comfortable' }));
+      await act(async () => {
+        first = r.current.submitQuiz();
+        void r.current.submitQuiz();
+      });
+      await act(async () => {
+        posted.resolve({ attempt_id: 'x1', n: 1, done: false, done_reason: null, top_p: 0.4 });
+        await first;
+      });
+      expect(mockApi.postVoiceAttempt).toHaveBeenCalledTimes(1);
+      expect(r.current.song?.song_key).toBe('c');
+    });
+
+    it('reset() during an in-flight next song leaves the session cleared (no stray pick)', async () => {
+      const next = deferred<NextVoiceSong>();
+      mockApi.nextVoiceSong.mockReturnValueOnce(next.promise);
+      const { result: r } = await mount();
+      let begun!: Promise<void>;
+      await act(async () => {
+        begun = r.current.begin(SETUP);
+      });
+      expect(r.current.step).toBe('loading');
+      act(() => r.current.reset());
+      await act(async () => {
+        next.resolve(song('a', 1));
+        await begun;
+      });
+      expect(store().sessionId).toBeNull();
+      expect(store().song).toBeNull();
+      expect(r.current.step).toBe('intro');
+      expect(appStorage.getString(VOICE_SESSION_KEY)).toBeUndefined();
+    });
+
+    it('an offline relaunch at loading asks for the next song again, so the error and retry show', async () => {
+      mockApi.nextVoiceSong.mockRejectedValueOnce(network());
+      const first = await mount();
+      await act(() => first.result.current.begin(SETUP));
+      expect(first.result.current.step).toBe('loading');
+      first.unmount();
+
+      restoreVoiceSession();
+      mockApi.getVoiceFlags.mockRejectedValue(network());
+      mockApi.getVoiceSession.mockRejectedValue(network());
+      mockApi.nextVoiceSong.mockRejectedValueOnce(network()).mockResolvedValueOnce(song('a', 1));
+      const { result: r } = await mount();
+      expect(r.current.step).toBe('loading');
+      expect(r.current.error).toBe('network');
+      await act(() => r.current.retry());
+      expect(r.current.error).toBeNull();
+      expect(r.current.step).toBe('pick');
+    });
+
+    it('a relaunch whose attempt decide already has re-sends the same body and queues the take under its n', async () => {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1)).mockResolvedValueOnce(song('b', 2));
+      mockApi.postVoiceAttempt.mockReturnValueOnce(new Promise(() => {})); // the app dies while it is in flight
+      mockRec.nextTake = takeWithFile('a');
+      const first = await mount();
+      await act(() => first.result.current.begin(SETUP));
+      await singIt(first.result);
+      act(() => first.result.current.setAnswer({ feel: 'loved', position: 'comfortable' }));
+      await act(async () => {
+        void first.result.current.submitQuiz();
+      });
+      const sent = mockApi.postVoiceAttempt.mock.calls[0]![1];
+      first.unmount();
+
+      jest.advanceTimersByTime(3600_000);
+      restoreVoiceSession();
+      mockApi.getVoiceSession.mockResolvedValue({ session_id: 's1', state: 'active', attempts: 1, last_offer: null });
+      // decide dedupes on session + song + started_at and answers with the existing attempt.
+      mockApi.postVoiceAttempt.mockResolvedValueOnce({
+        attempt_id: 'x1',
+        n: 1,
+        done: false,
+        done_reason: null,
+        top_p: 0.4,
+      });
+      const { result: r } = await mount();
+      expect(mockApi.postVoiceAttempt).toHaveBeenCalledTimes(2);
+      expect(mockApi.postVoiceAttempt.mock.calls[1]![1]).toEqual(sent);
+      expect(useRecordingQueue.getState().items).toEqual([
+        expect.objectContaining({ sessionId: 's1', attemptN: 1, uri: `${DIR}/a.wav` }),
+      ]);
+      expect(r.current.step).toBe('pick');
+      expect(r.current.song?.song_key).toBe('b');
+    });
+
+    it('a retried attempt refused with 409 (the lost reply ended the session) still queues the take under its n', async () => {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 3));
+      mockApi.postVoiceAttempt
+        .mockRejectedValueOnce(network())
+        .mockRejectedValueOnce(new ApiError(409, 'session_not_active'));
+      mockApi.getVoiceSession.mockResolvedValue({ session_id: 's1', state: 'done', attempts: 3, last_offer: null });
+      mockRec.nextTake = takeWithFile('a');
+      const { result: r } = await mount();
+      await act(() => r.current.begin(SETUP));
+      await singIt(r);
+      act(() => r.current.setAnswer({ feel: 'fine', position: 'comfortable' }));
+      await act(() => r.current.submitQuiz());
+      await act(() => r.current.retry());
+      expect(useRecordingQueue.getState().items).toEqual([
+        expect.objectContaining({ attemptN: 3, uri: `${DIR}/a.wav` }),
+      ]);
+      expect(r.current.step).toBe('result');
+    });
+
+    it('leaving play for disabled stops and drops the running take', async () => {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1));
+      mockApi.patchVoiceSession.mockRejectedValueOnce(new ApiError(403, 'voice_session_disabled'));
+      mockRec.nextTake = takeWithFile('a');
+      const { result: r } = await mount();
+      await act(() => r.current.begin(SETUP));
+      await act(() => r.current.pickKnow());
+      await act(() => r.current.onPlayer({ kind: 'ready' }));
+      await act(() => r.current.patchContext({ posture: 'sitting' }));
+      expect(r.current.step).toBe('disabled');
+      expect(mockRec.stop).toHaveBeenCalled();
+      expect(fsState.files.has(`${DIR}/a.wav`)).toBe(false);
+    });
   });
 });
