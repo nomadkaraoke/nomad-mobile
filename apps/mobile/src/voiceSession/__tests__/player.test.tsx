@@ -5,18 +5,20 @@ import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { createRef } from 'react';
 import { AppState, Linking, type AppStateStatus } from 'react-native';
 
+import * as media from '../../media/youtube';
 import * as notifications from '../player/notifications';
 import { KaraokePlayer, type KaraokePlayerHandle, type PlayerEvent } from '../player/KaraokePlayer';
-import { playerHtml } from '../player/YouTubeEmbed';
+import { allowEmbedLoad, playerHtml } from '../player/YouTubeEmbed';
 
 const mockInject = jest.fn();
+const mockReload = jest.fn();
 let mockWebViewProps: Record<string, unknown> = {};
 jest.mock('react-native-webview', () => {
   const { useImperativeHandle } = jest.requireActual('react');
   const { View } = jest.requireActual('react-native');
   function WebView(props: Record<string, unknown> & { ref?: unknown; testID?: string }) {
     mockWebViewProps = props;
-    useImperativeHandle(props.ref, () => ({ injectJavaScript: mockInject }));
+    useImperativeHandle(props.ref, () => ({ injectJavaScript: mockInject, reload: mockReload }));
     return <View testID={props.testID} />;
   }
   return { WebView };
@@ -25,6 +27,12 @@ jest.mock('react-native-webview', () => {
 jest.mock('../../config', () => ({ ...jest.requireActual('../../config'), FAKE_YT: false, FAKE_YT_SECONDS: 5 }));
 // The components read `config.FAKE_YT` at render time, so flipping the mock's export switches the player.
 const config = jest.requireMock('../../config') as { FAKE_YT: boolean };
+
+jest.mock('../../media/youtube', () => {
+  const actual = jest.requireActual('../../media/youtube');
+  return { ...actual, openYouTubeUrl: jest.fn(actual.openYouTubeUrl) };
+});
+const openYouTubeUrl = media.openYouTubeUrl as jest.Mock;
 
 jest.mock('../player/notifications', () => ({
   ensureLocalPermission: jest.fn(async () => true),
@@ -47,8 +55,9 @@ function show(mode: 'embed-hosted' | 'linkout', over: { videoId?: string; durati
   return { onEvent, ref };
 }
 
-const message = (m: object) =>
-  act(() => (mockWebViewProps.onMessage as (e: unknown) => void)({ nativeEvent: { data: JSON.stringify(m) } }));
+const PAGE_URL = 'https://nomadkaraoke.com/';
+const message = (m: object, url = PAGE_URL) =>
+  act(() => (mockWebViewProps.onMessage as (e: unknown) => void)({ nativeEvent: { data: JSON.stringify(m), url } }));
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -111,9 +120,60 @@ describe('YouTubeEmbed (embed-hosted)', () => {
 
   it('ignores messages that are not ours', () => {
     const { onEvent } = show('embed-hosted');
-    act(() => (mockWebViewProps.onMessage as (e: unknown) => void)({ nativeEvent: { data: 'not json' } }));
+    act(() => (mockWebViewProps.onMessage as (e: unknown) => void)({ nativeEvent: { data: 'not json', url: PAGE_URL } }));
     message({ t: 'something' });
     expect(onEvent).not.toHaveBeenCalled();
+  });
+
+  it('reports ready once, even if the page posts it again', () => {
+    const { onEvent } = show('embed-hosted');
+    message({ t: 'ready' });
+    message({ t: 'ready' });
+    expect(onEvent).toHaveBeenCalledTimes(1);
+  });
+
+  it('ignores messages from any page but ours (a navigated-away youtube.com page)', () => {
+    const { onEvent } = show('embed-hosted');
+    message({ t: 'error', v: 150 }, 'https://www.youtube.com/watch?v=6X2eVajeqz8');
+    message({ t: 'ready' }, 'https://nomadkaraoke.com.evil.example/');
+    expect(onEvent).not.toHaveBeenCalled();
+  });
+
+  it('stays on our page: only https origins, no new windows, reload when iOS kills the web process', () => {
+    show('embed-hosted');
+    expect(mockWebViewProps.originWhitelist).toEqual(['https://*']);
+    expect(mockWebViewProps.setSupportMultipleWindows).toBe(false);
+    expect(mockWebViewProps.onShouldStartLoadWithRequest).toBe(allowEmbedLoad);
+    (mockWebViewProps.onContentProcessDidTerminate as () => void)();
+    expect(mockReload).toHaveBeenCalled();
+  });
+
+  it('a top-frame youtube.com watch request is blocked and opens in YouTube instead', () => {
+    expect(allowEmbedLoad({ url: 'https://www.youtube.com/watch?v=6X2eVajeqz8', isTopFrame: true })).toBe(false);
+    expect(openYouTubeUrl).toHaveBeenCalledWith('https://www.youtube.com/watch?v=6X2eVajeqz8');
+  });
+
+  it('blocks other top-frame pages without opening anything', () => {
+    expect(allowEmbedLoad({ url: 'https://accounts.google.com/signin', isTopFrame: true })).toBe(false);
+    expect(allowEmbedLoad({ url: 'https://www.youtube.com/', isTopFrame: true })).toBe(false);
+    expect(openYouTubeUrl).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    { url: 'https://nomadkaraoke.com/', isTopFrame: true },
+    { url: 'https://nomadkaraoke.com', isTopFrame: true },
+    { url: 'about:blank', isTopFrame: true },
+    { url: 'https://www.youtube.com/embed/6X2eVajeqz8?origin=x', isTopFrame: true },
+    { url: 'https://googleads.g.doubleclick.net/pagead/id', isTopFrame: false },
+  ])('allows our page, about:blank, the player iframe and sub-frame loads (%j)', (req) => {
+    expect(allowEmbedLoad(req)).toBe(true);
+    expect(openYouTubeUrl).not.toHaveBeenCalled();
+  });
+
+  it('a link that opens a new window goes to YouTube too', () => {
+    show('embed-hosted');
+    (mockWebViewProps.onOpenWindow as (e: unknown) => void)({ nativeEvent: { targetUrl: 'https://youtu.be/6X2eVajeqz8' } });
+    expect(openYouTubeUrl).toHaveBeenCalledWith('https://youtu.be/6X2eVajeqz8');
   });
 
   it('play() and pause() through the ref inject the player commands', () => {
@@ -200,6 +260,40 @@ describe('LinkOutPlayer', () => {
     await act(async () => fireEvent.press(screen.getByTestId('vs-linkout-back')));
     expect(onEvent).toHaveBeenLastCalledWith({ kind: 'ended' });
     expect(N.cancelBackNotification).toHaveBeenCalledWith('back-id');
+  });
+
+  it('unmounted during the permission prompt: nothing is scheduled or opened', async () => {
+    let grant: (v: boolean) => void = () => {};
+    N.ensureLocalPermission.mockImplementationOnce(() => new Promise<boolean>((res) => (grant = res)));
+    show('linkout');
+    fireEvent.press(screen.getByTestId('vs-linkout-open'));
+    screen.unmount();
+    await act(async () => grant(true));
+    expect(N.scheduleBackNotification).not.toHaveBeenCalled();
+    expect(Linking.openURL).not.toHaveBeenCalled();
+  });
+
+  it('unmounted while scheduling: the new reminder is cancelled and YouTube is not opened', async () => {
+    let scheduled: (v: string | null) => void = () => {};
+    N.scheduleBackNotification.mockImplementationOnce(() => new Promise<string | null>((res) => (scheduled = res)));
+    show('linkout');
+    await act(async () => fireEvent.press(screen.getByTestId('vs-linkout-open')));
+    screen.unmount();
+    await act(async () => scheduled('late-id'));
+    expect(N.cancelBackNotification).toHaveBeenCalledWith('late-id');
+    expect(Linking.openURL).not.toHaveBeenCalled();
+  });
+
+  it('no playing after the song already ended (returned before openURL resolved)', async () => {
+    let opened: (v: boolean) => void = () => {};
+    (Linking.openURL as jest.Mock).mockImplementationOnce(() => new Promise<boolean>((res) => (opened = res)));
+    const { onEvent } = show('linkout');
+    await act(async () => fireEvent.press(screen.getByTestId('vs-linkout-open')));
+    await act(async () => appStateListener('background'));
+    await act(async () => appStateListener('active'));
+    expect(onEvent).toHaveBeenLastCalledWith({ kind: 'ended' });
+    await act(async () => opened(true));
+    expect(onEvent).not.toHaveBeenCalledWith({ kind: 'playing' });
   });
 
   it('cancels the reminder when YouTube fails to open, and stays on the card', async () => {

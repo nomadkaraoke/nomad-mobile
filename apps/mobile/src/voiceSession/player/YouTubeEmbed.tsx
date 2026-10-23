@@ -3,6 +3,7 @@ import { useEffect, useImperativeHandle, useRef, type Ref } from 'react';
 import { View } from 'react-native';
 import { WebView, type WebViewMessageEvent } from 'react-native-webview';
 
+import { openYouTubeUrl, youtubeId } from '../../media/youtube';
 import type { PlayerEvent, PlayerHandle } from './KaraokePlayer';
 
 /**
@@ -15,6 +16,27 @@ import type { PlayerEvent, PlayerHandle } from './KaraokePlayer';
 export const EMBED_BASE_URL = 'https://nomadkaraoke.com';
 
 const VIDEO_ID = /^[A-Za-z0-9_-]{11}$/;
+
+/** Our player page's own URL (the HTML string's base URL), or a path under it. */
+const isOurPage = (url: string | undefined) => !!url && (url === EMBED_BASE_URL || url.startsWith(`${EMBED_BASE_URL}/`));
+/** The YouTube player's own iframe document (Android reports every navigation as top-frame, so allow it by URL). */
+const EMBED_FRAME = /^https:\/\/(?:www\.)?youtube(?:-nocookie)?\.com\/embed\//i;
+
+/** A link out of the player (the YouTube logo, title, "Watch on YouTube") opens in the YouTube app, not in the page. */
+function handOff(url: string): void {
+  if (youtubeId(url) && !EMBED_FRAME.test(url)) void openYouTubeUrl(url).catch(() => {});
+}
+
+/**
+ * Keeps the WebView on our player page: only sub-frame loads (the YouTube iframe and its own resources), our page and
+ * about:blank may load. A blocked top-frame YouTube link goes to the YouTube app instead. Navigating away would
+ * stall the session and hand our postMessage bridge to youtube.com.
+ */
+export function allowEmbedLoad(req: { url: string; isTopFrame?: boolean }): boolean {
+  if (req.isTopFrame === false || isOurPage(req.url) || req.url.startsWith('about:') || EMBED_FRAME.test(req.url)) return true;
+  handOff(req.url);
+  return false;
+}
 
 export function playerHtml(videoId: string): string {
   return `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -60,6 +82,7 @@ export function YouTubeEmbed({ videoId, onEvent, ref }: YouTubeEmbedProps) {
   useEffect(() => {
     emit.current = onEvent;
   });
+  const readied = useRef(false);
   const played = useRef(false);
   const done = useRef(false);
   const valid = VIDEO_ID.test(videoId);
@@ -79,14 +102,18 @@ export function YouTubeEmbed({ videoId, onEvent, ref }: YouTubeEmbedProps) {
   useImperativeHandle(ref, () => ({ play: () => command('play'), pause: () => command('pause') }), []);
 
   const onMessage = (e: WebViewMessageEvent) => {
-    if (done.current) return;
+    if (done.current || !isOurPage(e.nativeEvent.url)) return;
     let m: { t?: unknown; v?: unknown };
     try {
       m = JSON.parse(e.nativeEvent.data) as typeof m;
     } catch {
       return;
     }
-    if (m.t === 'ready') emit.current({ kind: 'ready' });
+    if (m.t === 'ready') {
+      if (readied.current) return;
+      readied.current = true;
+      emit.current({ kind: 'ready' });
+    }
     else if (m.t === 'error') finish({ kind: 'unplayable', code: typeof m.v === 'number' || typeof m.v === 'string' ? m.v : 'unknown' });
     else if (m.t === 'state' && m.v === PLAYING && !played.current) {
       played.current = true;
@@ -102,7 +129,7 @@ export function YouTubeEmbed({ videoId, onEvent, ref }: YouTubeEmbedProps) {
           testID="vs-player-embed"
           accessibilityLabel={t('video')}
           style={{ flex: 1, backgroundColor: '#000' }}
-          originWhitelist={['*']}
+          originWhitelist={['https://*']}
           source={{ html: playerHtml(videoId), baseUrl: EMBED_BASE_URL }}
           allowsInlineMediaPlayback
           allowsFullscreenVideo
@@ -110,6 +137,11 @@ export function YouTubeEmbed({ videoId, onEvent, ref }: YouTubeEmbedProps) {
           javaScriptEnabled
           domStorageEnabled
           onMessage={onMessage}
+          onShouldStartLoadWithRequest={allowEmbedLoad}
+          setSupportMultipleWindows={false}
+          onOpenWindow={(e) => handOff(e.nativeEvent.targetUrl)}
+          // iOS can kill the web content process (memory pressure): reload our page rather than show a blank box.
+          onContentProcessDidTerminate={() => web.current?.reload()}
         />
       ) : null}
     </View>

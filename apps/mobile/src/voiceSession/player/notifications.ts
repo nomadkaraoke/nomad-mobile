@@ -108,6 +108,7 @@ export async function cancelBackNotification(id: string | null): Promise<void> {
  * arrived while it was running. Register once, near the root. 3b's `useReminderTapRouting` does the same for every
  * local notification: once 3b is on this branch, register only one of the two, or a tap pushes the screen twice.
  */
+// TODO(D5, after the 3b rebase): register exactly one of 3b's useReminderTapRouting and this hook.
 export function useNotificationOpens(): void {
   useEffect(() => {
     const N = notificationsModule();

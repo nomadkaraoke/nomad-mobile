@@ -32,6 +32,7 @@ export function LinkOutPlayer({ videoId, durationS, onEvent }: LinkOutPlayerProp
   const left = useRef(false);
   const ended = useRef(false);
   const played = useRef(false);
+  const mounted = useRef(true);
   const [busy, setBusy] = useState(false);
   const [opened, setOpened] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -54,6 +55,7 @@ export function LinkOutPlayer({ videoId, durationS, onEvent }: LinkOutPlayerProp
   });
 
   useEffect(() => {
+    mounted.current = true;
     emit.current({ kind: 'ready' });
     const sub = AppState.addEventListener('change', (state) => {
       if (!armed.current || ended.current) return;
@@ -61,6 +63,7 @@ export function LinkOutPlayer({ videoId, durationS, onEvent }: LinkOutPlayerProp
       else if (left.current) finishRef.current();
     });
     return () => {
+      mounted.current = false;
       sub.remove();
       dropReminder();
     };
@@ -72,23 +75,32 @@ export function LinkOutPlayer({ videoId, durationS, onEvent }: LinkOutPlayerProp
     setFailed(false);
     dropReminder();
     const allowed = await ensureLocalPermission(t('notify.channel'));
+    // The session may have moved on (stop early, a new song) while the permission prompt was up.
+    if (!mounted.current) return;
     if (allowed) {
-      reminder.current = await scheduleBackNotification(durationS, { title: t('notify.title'), body: t('notify.body'), channelName: t('notify.channel') });
+      const id = await scheduleBackNotification(durationS, { title: t('notify.title'), body: t('notify.body'), channelName: t('notify.channel') });
+      if (!mounted.current) {
+        void cancelBackNotification(id);
+        return;
+      }
+      reminder.current = id;
     }
     armed.current = true;
     left.current = false;
     try {
       await openYouTube(videoId);
     } catch {
+      if (!mounted.current) return;
       armed.current = false;
       dropReminder();
       setFailed(true);
       setBusy(false);
       return;
     }
+    if (!mounted.current) return;
     setOpened(true);
     setBusy(false);
-    if (!played.current) {
+    if (!played.current && !ended.current) {
       played.current = true;
       emit.current({ kind: 'playing' });
     }
