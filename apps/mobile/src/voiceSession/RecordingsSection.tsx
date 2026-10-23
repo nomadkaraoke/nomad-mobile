@@ -5,23 +5,38 @@ import { voiceRecordingCount } from '@nomad/api-decide';
 import { useTranslations } from '@nomad/i18n';
 import { Button, Text } from '@nomad/ui';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, Switch, View } from 'react-native';
 
 import { useAuth } from '../auth/store';
 import { ProfileSection } from '../discover/profile/ProfileSection';
 import { readRecordDefault, writeRecordDefault } from './recordDefault';
-import { deleteMyRecordings } from './recording/recordingQueue';
+import { deleteMyRecordings, onRecordingsUploaded } from './recording/recordingQueue';
 
-const COUNT_KEY = ['voiceSession', 'recordingCount'] as const;
+/** The recordings count's query key (a session or an upload changes it). */
+export const RECORDING_COUNT_KEY = ['voiceSession', 'recordingCount'] as const;
 
 export function RecordingsSection() {
   const t = useTranslations('voiceSession.recordings');
   const tc = useTranslations('common');
   const queryClient = useQueryClient();
   const email = useAuth((s) => (s.state.status === 'signedIn' ? s.state.session.email : null));
-  const key = [...COUNT_KEY, email] as const;
+  const key = [...RECORDING_COUNT_KEY, email] as const;
   const count = useQuery({ queryKey: key, enabled: !!email, queryFn: voiceRecordingCount, retry: false });
+  const refetch = count.refetch;
+  // Me stays mounted under the session modal: read the count again on coming back, and after any upload.
+  const firstFocus = useRef(true);
+  useFocusEffect(
+    useCallback(() => {
+      if (firstFocus.current) {
+        firstFocus.current = false; // the query's own mount fetch covers this one
+        return;
+      }
+      if (email) void refetch();
+    }, [email, refetch]),
+  );
+  useEffect(() => onRecordingsUploaded(() => void queryClient.invalidateQueries({ queryKey: RECORDING_COUNT_KEY })), [queryClient]);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   const [recordDefault, setRecordDefault] = useState(() => readRecordDefault() ?? false);
@@ -39,8 +54,12 @@ export function RecordingsSection() {
     try {
       await deleteMyRecordings();
       queryClient.setQueryData(key, 0);
+      // Consent is withdrawn: the setup question stops being pre-filled "yes".
+      writeRecordDefault(false);
+      setRecordDefault(false);
     } catch {
       setFailed(true);
+      void refetch();
     } finally {
       setBusy(false);
     }

@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# gravação guardada} other {# gravações guardadas}} com privacidade",
       "delete": "Excluir todas as minhas gravações",
       "failed": "Não foi possível excluir suas gravações. Verifique sua conexão e tente novamente.",
-      "loading": "Contando suas gravações...",
       "recordDefault": "Gravar por padrão",
       "recordDefaultBody": "Deixa pré-marcado \"Gravar minha voz cantando?\" ao iniciar uma sessão de voz. Você ainda pode alterar essa opção a cada vez.",
       "title": "Suas gravações",

@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# inspelning} other {# inspelningar}} sparas privat",
       "delete": "Ta bort alla mina inspelningar",
       "failed": "Det gick inte att ta bort dina inspelningar. Kontrollera anslutningen och försök igen.",
-      "loading": "Räknar dina inspelningar...",
       "recordDefault": "Spela in mig som standard",
       "recordDefaultBody": "Förväljer \"Spela in när jag sjunger?\" när du startar en röstsession. Du kan fortfarande ändra det varje gång.",
       "title": "Dina inspelningar",

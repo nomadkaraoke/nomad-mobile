@@ -115,6 +115,13 @@ type RecordingQueue = {
 
 let flushing: Promise<void> | null = null;
 
+const uploadedListeners = new Set<() => void>();
+/** Calls `fn` after a flush that uploaded at least one recording (the Me recordings count is then stale). */
+export function onRecordingsUploaded(fn: () => void): () => void {
+  uploadedListeners.add(fn);
+  return () => void uploadedListeners.delete(fn);
+}
+
 export const useRecordingQueue = create<RecordingQueue>((set, get) => {
   const save = (items: QueuedRecording[]) => {
     if (items.length) appStorage.set(RECORDING_QUEUE_KEY, JSON.stringify({ items: items.map(toItem) }));
@@ -137,10 +144,14 @@ export const useRecordingQueue = create<RecordingQueue>((set, get) => {
 
   async function run(): Promise<void> {
     const tried = new Set<string>();
+    let uploaded = false;
+    const done = () => {
+      if (uploaded) for (const fn of uploadedListeners) fn();
+    };
     for (;;) {
       const now = Date.now();
       const item = get().items.find((i) => !tried.has(i.id) && i.nextAt <= now);
-      if (!item) return;
+      if (!item) return done();
       tried.add(item.id);
       if (!fileExists(item.uri)) {
         update(item.id, () => null);
@@ -155,6 +166,7 @@ export const useRecordingQueue = create<RecordingQueue>((set, get) => {
           fileUri: item.uri,
           contentType: item.contentType,
         });
+        uploaded = true;
         remove(item.id, item.uri);
       } catch (e) {
         if (isTerminalUploadError(e)) {

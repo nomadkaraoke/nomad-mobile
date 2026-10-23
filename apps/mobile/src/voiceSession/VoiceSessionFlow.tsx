@@ -14,6 +14,7 @@ import { StepLayout } from '../voice/StepLayout';
 import { VOICE_KEY } from '../voice/useVoiceProfile';
 import { ContextChip } from './ContextChip';
 import { readRecordDefault } from './recordDefault';
+import { RECORDING_COUNT_KEY } from './RecordingsSection';
 import { PickCard } from './screens/PickCard';
 import { PlayScreen } from './screens/PlayScreen';
 import { QuizScreen } from './screens/QuizScreen';
@@ -99,6 +100,15 @@ export function VoiceSessionFlow() {
       savedFor.current = vs.result;
       void queryClient.invalidateQueries({ queryKey: VOICE_KEY });
     }
+  }, [vs.result, queryClient]);
+
+  // Recordings queued or uploaded by this session change Me's count.
+  useEffect(
+    () => () => void queryClient.invalidateQueries({ queryKey: RECORDING_COUNT_KEY }),
+    [queryClient],
+  );
+  useEffect(() => {
+    if (vs.result) void queryClient.invalidateQueries({ queryKey: RECORDING_COUNT_KEY });
   }, [vs.result, queryClient]);
 
   const close = () => (router.canGoBack() ? router.back() : router.replace('/discover'));

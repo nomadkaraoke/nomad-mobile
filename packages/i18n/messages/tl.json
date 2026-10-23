@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# recording} other {# recording}} na pribadong nakatago",
       "delete": "Burahin ang lahat ng aking recording",
       "failed": "Hindi mabura ang iyong mga recording. Pakisuri ang iyong koneksyon at subukan muli.",
-      "loading": "Binibilang ang iyong mga recording...",
       "recordDefault": "I-record ako bilang default",
       "recordDefaultBody": "Awtomatikong pipiliin ang \"I-record ang aking pagkanta?\" kapag nagsimula ka ng voice session. Maaari mo pa rin itong baguhin bawat pagkakataon.",
       "title": "Iyong mga recording",

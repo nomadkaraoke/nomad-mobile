@@ -1746,7 +1746,6 @@
       "count": "Gizli olarak saklanan {count, plural, one {# kayıt} other {# kayıt}}",
       "delete": "Tüm kayıtlarımı sil",
       "failed": "Kayıtların silinemedi. Bağlantını kontrol edip tekrar dene.",
-      "loading": "Kayıtların sayılıyor...",
       "recordDefault": "Beni varsayılan olarak kaydet",
       "recordDefaultBody": "Bir ses seansı başlattığında \"Şarkı söylerken beni kaydet?\" seçeneğini önceden seçili getirir. Bunu her zaman değiştirebilirsin.",
       "title": "Kayıtların",

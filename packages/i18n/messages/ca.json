@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# gravació guardada} other {# gravacions guardades}} de manera privada",
       "delete": "Elimina totes les meves gravacions",
       "failed": "No s'han pogut eliminar les teves gravacions. Comprova la connexió i torna-ho a provar.",
-      "loading": "S'estan comptant les teves gravacions...",
       "recordDefault": "Grava'm per defecte",
       "recordDefaultBody": "Marca prèviament l'opció «Grava'm cantant?» quan iniciïs una sessió de veu. Ho podràs canviar cada vegada.",
       "title": "Les teves gravacions",

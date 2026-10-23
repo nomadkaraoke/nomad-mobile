@@ -1746,7 +1746,6 @@
       "count": "已私密保存 {count, plural, one {# 条录音} other {# 条录音}}",
       "delete": "删除我的所有录音",
       "failed": "无法删除您的录音。请检查网络连接后重试。",
-      "loading": "正在统计您的录音...",
       "recordDefault": "默认录制我的声音",
       "recordDefaultBody": "在您开始练唱环节时，自动勾选“录制我的演唱？”。您每次仍可手动更改该选项。",
       "title": "您的录音",

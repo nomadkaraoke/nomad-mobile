@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# registrazione conservata} other {# registrazioni conservate}} privatamente",
       "delete": "Elimina tutte le mie registrazioni",
       "failed": "Impossibile eliminare le tue registrazioni. Controlla la connessione e riprova.",
-      "loading": "Conteggio delle registrazioni in corso...",
       "recordDefault": "Registrami per impostazione predefinita",
       "recordDefaultBody": "Seleziona automaticamente \"Vuoi registrare la tua voce?\" quando avvii una sessione vocale. Potrai comunque modificarla ogni volta.",
       "title": "Le tue registrazioni",

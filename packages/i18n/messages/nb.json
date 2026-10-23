@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# opptak} other {# opptak}} lagret privat",
       "delete": "Slett alle opptakene mine",
       "failed": "Kunne ikke slette opptakene dine. Sjekk internettforbindelsen og prøv igjen.",
-      "loading": "Teller opptakene dine...",
       "recordDefault": "Gjør opptak som standard",
       "recordDefaultBody": "Forhåndsvelger «Gjør opptak når jeg synger?» når du starter en stemmeøkt. Du kan fortsatt endre dette hver gang.",
       "title": "Opptakene dine",

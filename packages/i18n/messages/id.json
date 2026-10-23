@@ -1746,7 +1746,6 @@
       "count": "{count, plural, other {# rekaman}} disimpan secara privat",
       "delete": "Hapus semua rekaman saya",
       "failed": "Gagal menghapus rekaman Anda. Periksa koneksi internet Anda dan coba lagi.",
-      "loading": "Menghitung rekaman Anda...",
       "recordDefault": "Rekam saya secara default",
       "recordDefaultBody": "Otomatis memilih \"Rekam saat saya bernyanyi?\" saat Anda memulai sesi suara. Anda tetap bisa mengubahnya setiap saat.",
       "title": "Rekaman Anda",

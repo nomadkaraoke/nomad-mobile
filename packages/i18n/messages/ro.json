@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# înregistrare păstrată} few {# înregistrări păstrate} other {# de înregistrări păstrate}} în mod privat",
       "delete": "Șterge toate înregistrările mele",
       "failed": "Nu am putut șterge înregistrările tale. Verifică conexiunea și încearcă din nou.",
-      "loading": "Se numără înregistrările tale...",
       "recordDefault": "Înregistrează-mă în mod prestabilit",
       "recordDefaultBody": "Bifează automat „Mă înregistrezi când cânt?” când începi o sesiune vocală. O poți modifica oricând.",
       "title": "Înregistrările tale",

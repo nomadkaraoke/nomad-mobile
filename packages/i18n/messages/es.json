@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# grabación guardada} other {# grabaciones guardadas}} de forma privada",
       "delete": "Eliminar todas mis grabaciones",
       "failed": "No se pudieron eliminar tus grabaciones. Comprueba tu conexión e inténtalo de nuevo.",
-      "loading": "Contando tus grabaciones...",
       "recordDefault": "Grabarme de forma predeterminada",
       "recordDefaultBody": "Marca automáticamente \"¿Grabarme cantando?\" cuando inicias una sesión de voz. Podrás cambiarlo cada vez.",
       "title": "Tus grabaciones",

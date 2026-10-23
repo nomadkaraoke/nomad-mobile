@@ -1746,7 +1746,6 @@
       "count": "{count, plural, other {# rakaman}} disimpan secara peribadi",
       "delete": "Padamkan semua rakaman saya",
       "failed": "Tidak dapat memadamkan rakaman anda. Semak sambungan anda dan cuba lagi.",
-      "loading": "Mengira rakaman anda...",
       "recordDefault": "Rakam saya secara lalai",
       "recordDefaultBody": "Memilih awal-siap \"Rakam saya menyanyi?\" apabila anda memulakan sesi suara. Anda masih boleh mengubahnya pada bila-bila masa.",
       "title": "Rakaman anda",

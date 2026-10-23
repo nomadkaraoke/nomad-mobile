@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# optagelse} other {# optagelser}} gemt privat",
       "delete": "Slet alle mine optagelser",
       "failed": "Kunne ikke slette dine optagelser. Tjek din internetforbindelse, og prøv igen.",
-      "loading": "Tæller dine optagelser...",
       "recordDefault": "Optag mig som standard",
       "recordDefaultBody": "Vælger automatisk \"Optag, når jeg synger?\" på forhånd, når du starter en stemmesession. Du kan stadig ændre det hver gang.",
       "title": "Dine optagelser",

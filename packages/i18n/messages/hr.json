@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# snimka pohranjena} few {# snimke pohranjene} other {# snimaka pohranjeno}} privatno",
       "delete": "Obriši sve moje snimke",
       "failed": "Brisanje tvojih snimki nije uspjelo. Provjeri vezu i pokušaj ponovno.",
-      "loading": "Brojanje tvojih snimki...",
       "recordDefault": "Automatski me snimaj",
       "recordDefaultBody": "Unaprijed označava opciju „Snimati me dok pjevam?” kad pokreneš glasovnu sesiju. To i dalje možeš promijeniti svaki put.",
       "title": "Tvoje snimke",

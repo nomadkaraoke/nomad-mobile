@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# nagranie przechowywane prywatnie} few {# nagrania przechowywane prywatnie} many {# nagrań przechowywanych prywatnie} other {# nagrań przechowywanych prywatnie}}",
       "delete": "Usuń wszystkie moje nagrania",
       "failed": "Nie udało się usunąć Twoich nagrań. Sprawdź połączenie i spróbuj ponownie.",
-      "loading": "Liczenie Twoich nagrań...",
       "recordDefault": "Domyślnie nagrywaj mój głos",
       "recordDefaultBody": "Automatycznie zaznacza opcję „Nagrać mój śpiew?”, gdy zaczynasz sesję głosową. Nadal możesz to zmienić za każdym razem.",
       "title": "Twoje nagrania",

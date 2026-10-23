@@ -14,9 +14,16 @@ import { gen, session } from '../test-utils/genAuthMock';
 import { appRoutes } from '../test-utils/routes';
 import { RECORD_DEFAULT_KEY } from '../voiceSession/recordDefault';
 import { useRecordingQueue } from '../voiceSession/recording/recordingQueue';
-import { RecordingsSection } from '../voiceSession/RecordingsSection';
+import { RECORDING_COUNT_KEY, RecordingsSection } from '../voiceSession/RecordingsSection';
 
 jest.setTimeout(20_000);
+
+// The section runs outside a navigator here: a focus effect is just an effect (the first call is mount).
+jest.mock('expo-router', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { useEffect } = require('react');
+  return { ...jest.requireActual('expo-router'), useFocusEffect: (cb: () => void) => useEffect(cb, [cb]) };
+});
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports -- jest.mock factories can't use imports
 jest.mock('expo-file-system', () => require('../test-utils/memoryFs'));
@@ -37,6 +44,7 @@ jest.mock('@nomad/api-decide', () => ({
   getVoiceProfile: jest.fn(async () => null),
   getVoiceFlags: jest.fn(),
   voiceRecordingCount: jest.fn(),
+  uploadVoiceRecording: jest.fn(),
   deleteVoiceRecordings: jest.fn(),
 }));
 
@@ -44,16 +52,19 @@ const m = (f: unknown) => f as jest.Mock;
 const METRICS = { frame: { x: 0, y: 0, width: 390, height: 844 }, insets: { top: 0, left: 0, right: 0, bottom: 0 } };
 const flags = (session_enabled: boolean) => ({ session_enabled, is_admin: false, voice_data: true, active_session_id: null });
 
-const renderSection = () =>
-  render(
+let client: QueryClient;
+const renderSection = () => {
+  client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  return render(
     <SafeAreaProvider initialMetrics={METRICS}>
       <IntlProvider locale="en">
-        <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+        <QueryClientProvider client={client}>
           <RecordingsSection />
         </QueryClientProvider>
       </IntlProvider>
     </SafeAreaProvider>,
   );
+};
 
 /** Taps the confirmation's destructive button. */
 const confirmDelete = async () => {
@@ -111,6 +122,38 @@ describe('RecordingsSection', () => {
     clearAll.mockRestore();
   });
 
+  it('invalidating the count key shows the new count', async () => {
+    renderSection();
+    await screen.findByText('3 recordings kept privately');
+    m(decide.voiceRecordingCount).mockResolvedValue(5);
+    await act(async () => void client.invalidateQueries({ queryKey: RECORDING_COUNT_KEY }));
+    expect(await screen.findByText('5 recordings kept privately')).toBeTruthy();
+  });
+
+  it('refetches the count when the queue uploaded something', async () => {
+    renderSection();
+    await screen.findByText('3 recordings kept privately');
+    m(decide.voiceRecordingCount).mockResolvedValue(4);
+    m(decide.uploadVoiceRecording).mockResolvedValue({ recording_id: 'r1' });
+    const { fsState } = jest.requireActual('../test-utils/memoryFs');
+    fsState.files.set('file:///document/voice-recordings/s1-1.m4a', new Uint8Array(10));
+    useRecordingQueue.getState().enqueue({
+      sessionId: 's1', attemptN: 1, uri: 'file:///document/voice-recordings/s1-1.m4a', contentType: 'audio/mp4', durationS: 60, device: null,
+    });
+    await act(async () => void (await useRecordingQueue.getState().flush()));
+    expect(await screen.findByText('4 recordings kept privately')).toBeTruthy();
+  });
+
+  it('deleting turns the record default off', async () => {
+    appStorage.set(RECORD_DEFAULT_KEY, true);
+    renderSection();
+    await screen.findByTestId('vs-recordings-count');
+    fireEvent.press(screen.getByTestId('vs-recordings-delete'));
+    await confirmDelete();
+    await waitFor(() => expect(appStorage.getBoolean(RECORD_DEFAULT_KEY)).toBe(false));
+    expect(screen.getByTestId('vs-record-default').props.value).toBe(false);
+  });
+
   it('a failed delete keeps the count and says so', async () => {
     m(decide.deleteVoiceRecordings).mockRejectedValue(new Error('offline'));
     renderSection();
@@ -118,6 +161,8 @@ describe('RecordingsSection', () => {
     fireEvent.press(screen.getByTestId('vs-recordings-delete'));
     await confirmDelete();
     expect(await screen.findByTestId('vs-recordings-error')).toBeTruthy();
+    // Unknown how far the server got: the count is read again.
+    await waitFor(() => expect(decide.voiceRecordingCount).toHaveBeenCalledTimes(2));
     expect(screen.getByTestId('vs-recordings-count')).toHaveTextContent('3 recordings kept privately');
   });
 

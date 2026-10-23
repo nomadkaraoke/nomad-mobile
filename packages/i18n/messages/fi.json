@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# äänite} other {# äänitettä}} säilytetty yksityisenä",
       "delete": "Poista kaikki äänitteeni",
       "failed": "Äänitteidesi poistaminen epäonnistui. Tarkista verkkoyhteytesi ja yritä uudelleen.",
-      "loading": "Lasketaan äänitteitäsi...",
       "recordDefault": "Tallenna lauluni oletusarvoisesti",
       "recordDefaultBody": "Valitsee valmiiksi kohdan ”Tallenna lauluni?”, kun aloitat äänisession. Voit silti muuttaa valintaa joka kerta.",
       "title": "Omat äänitteet",

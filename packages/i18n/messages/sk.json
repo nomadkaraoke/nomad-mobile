@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# nahrávka uchovávaná} few {# nahrávky uchovávané} other {# nahrávok uchovávaných}} v súkromí",
       "delete": "Vymazať všetky moje nahrávky",
       "failed": "Tvoje nahrávky sa nepodarilo vymazať. Skontroluj pripojenie a skús to znova.",
-      "loading": "Počítajú sa tvoje nahrávky...",
       "recordDefault": "Nahrávať ma automaticky",
       "recordDefaultBody": "Automaticky predvolí možnosť „Nahrávať ma pri spievaní?“, keď spustíš hlasovú reláciu. Vždy to však môžeš zmeniť.",
       "title": "Tvoje nahrávky",

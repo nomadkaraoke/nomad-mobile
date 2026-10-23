@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# Aufnahme} other {# Aufnahmen}} privat gespeichert",
       "delete": "Alle meine Aufnahmen löschen",
       "failed": "Deine Aufnahmen konnten nicht gelöscht werden. Überprüfe deine Verbindung und versuche es erneut.",
-      "loading": "Deine Aufnahmen werden gezählt...",
       "recordDefault": "Mich standardmäßig aufnehmen",
       "recordDefaultBody": "Wählt standardmäßig „Mich beim Singen aufnehmen?“ aus, wenn du eine Gesangssitzung startest. Du kannst dies jedes Mal ändern.",
       "title": "Deine Aufnahmen",

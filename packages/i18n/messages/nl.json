@@ -1746,7 +1746,6 @@
       "count": "{count, plural, one {# opname} other {# opnames}} privé bewaard",
       "delete": "Al mijn opnames verwijderen",
       "failed": "We konden je opnames niet verwijderen. Controleer je verbinding en probeer het opnieuw.",
-      "loading": "Je opnames tellen...",
       "recordDefault": "Mij standaard opnemen",
       "recordDefaultBody": "Vinkt automatisch \"Mij opnemen terwijl ik zing?\" aan wanneer je een stemsessie start. Je kunt dit elke keer nog aanpassen.",
       "title": "Je opnames",
