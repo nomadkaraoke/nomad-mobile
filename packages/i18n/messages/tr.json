@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Kaldırılamadı. Bağlantını kontrol et ve tekrar dene.",
     "profileTest": "Ses testini yap",
     "singable": "Söylenebilir",
-    "singableCta": "Söylenebilir: sesini test et",
     "singableCtaHint": "Ses testini açar. Söylenebilir, ses aralığındaki şarkıları gösterir.",
     "singableEmptyBody": "Şarkıları ölçmeye devam ediyoruz. Tüm seçimlerini görmek için Söylenebilir filtresini kapat.",
     "singableEmptyTitle": "Bu şarkılar için henüz ses aralığı verisi yok",

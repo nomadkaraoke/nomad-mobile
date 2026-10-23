@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Nem sikerült törölni. Ellenőrizd az internetkapcsolatodat, és próbáld újra.",
     "profileTest": "Csináld meg a hangtesztet",
     "singable": "Énekelhető",
-    "singableCta": "Énekelhető: teszteld a hangod",
     "singableCtaHint": "Megnyitja a hangtesztet. Az Énekelhető funkció a hangterjedelmedbe vágó dalokat mutatja.",
     "singableEmptyBody": "Még folyamatban van a dalok felmérése. Kapcsold ki az Énekelhető szűrőt az összes találat megtekintéséhez.",
     "singableEmptyTitle": "Ezekhez a dalokhoz még nincs hangterjedelem-adat",

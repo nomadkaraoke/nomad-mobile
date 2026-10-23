@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Impossibile rimuoverla. Controlla la connessione e riprova.",
     "profileTest": "Fai il test vocale",
     "singable": "Cantabile",
-    "singableCta": "Cantabile: fai il test vocale",
     "singableCtaHint": "Apre il test vocale. Cantabile mostra i brani adatti alla tua estensione.",
     "singableEmptyBody": "Stiamo ancora analizzando i brani. Disattiva Cantabile per vedere tutte le tue scelte.",
     "singableEmptyTitle": "Nessun dato sull'estensione per questi brani",

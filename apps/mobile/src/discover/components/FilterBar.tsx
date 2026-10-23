@@ -46,16 +46,7 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
   return (
     <>
       <ChipRow testID="filter-bar">
-        {chips.map((c) => (
-          <Chip
-            key={c.name}
-            testID={`filter-chip-${c.name}`}
-            label={c.count > 0 ? t('chipCount', { label: c.label, count: c.count }) : c.label}
-            selected={c.count > 0}
-            onPress={() => setOpen(c.name)}
-          />
-        ))}
-        {/* Singable (Phase 3c): a toggle; without a voice profile on the phone it opens the voice test instead. */}
+        {/* Singable (Phase 3c), first so it is on screen: a toggle; without a voice profile on the phone it opens the voice test instead. */}
         {hasVoice ? (
           <Chip
             testID="filter-chip-singable"
@@ -66,12 +57,21 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
         ) : (
           <Chip
             testID="filter-chip-singable-cta"
-            label={tf('singableCta')}
+            label={tf('singable')}
             accessibilityHint={tf('singableCtaHint')}
             selected={false}
             onPress={testVoice}
           />
         )}
+        {chips.map((c) => (
+          <Chip
+            key={c.name}
+            testID={`filter-chip-${c.name}`}
+            label={c.count > 0 ? t('chipCount', { label: c.label, count: c.count }) : c.label}
+            selected={c.count > 0}
+            onPress={() => setOpen(c.name)}
+          />
+        ))}
       </ChipRow>
       <SortSheet
         visible={open === 'sort'}

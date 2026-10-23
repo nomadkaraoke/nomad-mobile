@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Kunde inte ta bort den. Kontrollera din anslutning och försök igen.",
     "profileTest": "Gör rösttestet",
     "singable": "Sångbar",
-    "singableCta": "Sångbar: testa din röst",
     "singableCtaHint": "Öppnar rösttestet. Sångbar visar låtar inom ditt omfång.",
     "singableEmptyBody": "Vi mäter fortfarande låtar. Stäng av Sångbar för att se alla dina låtar.",
     "singableEmptyTitle": "Ingen information om omfång för dessa låtar ännu",

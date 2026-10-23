@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Poistaminen epäonnistui. Tarkista verkkoyhteytesi ja yritä uudelleen.",
     "profileTest": "Tee äänitesti",
     "singable": "Singable",
-    "singableCta": "Singable: testaa äänesi",
     "singableCtaHint": "Avaa äänitestin. Singable näyttää äänialaasi sopivat kappaleet.",
     "singableEmptyBody": "Mittaamme kappaleita parhaillaan. Kytke Singable pois päältä nähdäksesi kaikki valintasi.",
     "singableEmptyTitle": "Näille kappaleille ei ole vielä äänialatietoja",

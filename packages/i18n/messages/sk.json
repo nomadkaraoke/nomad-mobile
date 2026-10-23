@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Nepodarilo sa ho odstrániť. Skontroluj pripojenie a skús to znova.",
     "profileTest": "Urobiť hlasový test",
     "singable": "Zaspievateľné",
-    "singableCta": "Zaspievateľné: otestuj si hlas",
     "singableCtaHint": "Otvorí hlasový test. Funkcia Zaspievateľné zobrazuje skladby v tvojom rozsahu.",
     "singableEmptyBody": "Rozsahy skladieb stále meriame. Vypni filter Zaspievateľné, aby sa zobrazili všetky tvoje výbery.",
     "singableEmptyTitle": "K týmto skladbám zatiaľ chýbajú údaje o rozsahu",

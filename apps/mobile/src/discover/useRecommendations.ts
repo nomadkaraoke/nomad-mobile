@@ -19,6 +19,7 @@ import {
   recsSnapshotKey,
   saveRecsSnapshot,
 } from './recsSnapshot';
+import { useVoiceStore } from '../voice/voiceStore';
 import { useDiscoverStale } from './staleStore';
 
 /** While decide's catalog is still loading (503 warming_up), Discover polls this often. */
@@ -125,6 +126,14 @@ export function useRecommendations(filters: RecFilters) {
   useEffect(() => {
     if (ok && stale) useDiscoverStale.getState().clear();
   }, [ok, stale]);
+
+  // A voice profile decide now has (saved, then synced): reload so the rows carry their fit (Phase 3c).
+  const voiceSynced = useVoiceStore((s) => (s.profile && !s.pending ? s.profile.measuredAt : null));
+  const lastVoice = useRef(voiceSynced);
+  useEffect(() => {
+    if (voiceSynced !== null && voiceSynced !== lastVoice.current) void queryClient.invalidateQueries({ queryKey: RECS_KEY });
+    lastVoice.current = voiceSynced;
+  }, [voiceSynced, queryClient]);
 
   // Stale flipped back (cleared elsewhere, e.g. a new sign-in) while this query is still failing: reload.
   const wasStale = useRef(stale);

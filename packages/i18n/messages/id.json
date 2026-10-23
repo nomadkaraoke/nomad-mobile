@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Tidak dapat menghapus. Periksa koneksi Anda dan coba lagi.",
     "profileTest": "Ikuti tes vokal",
     "singable": "Bisa Dinyanyikan",
-    "singableCta": "Bisa Dinyanyikan: tes vokal Anda",
     "singableCtaHint": "Membuka tes vokal. Fitur Bisa Dinyanyikan menampilkan lagu yang sesuai dengan rentang nada Anda.",
     "singableEmptyBody": "Kami masih mengukur lagu-lagu lainnya. Nonaktifkan fitur Bisa Dinyanyikan untuk melihat semua pilihan Anda.",
     "singableEmptyTitle": "Belum ada data rentang nada untuk lagu-lagu ini",

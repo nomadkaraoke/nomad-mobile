@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Kunne ikke fjerne den. Sjekk internettforbindelsen din og prøv igjen.",
     "profileTest": "Ta stemmetesten",
     "singable": "Sangbar",
-    "singableCta": "Sangbar: test stemmen din",
     "singableCtaHint": "Åpner stemmetesten. Sangbar viser sanger innenfor toneomfanget ditt.",
     "singableEmptyBody": "Vi måler fortsatt sanger. Slå av Sangbar for å se alle sangene du har valgt.",
     "singableEmptyTitle": "Ingen data om toneomfang for disse sangene ennå",

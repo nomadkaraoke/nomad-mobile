@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "移除失败。请检查网络连接后重试。",
     "profileTest": "测试声线",
     "singable": "适唱歌曲",
-    "singableCta": "适唱歌曲：测试你的声线",
     "singableCtaHint": "打开声线测试。“适唱歌曲”会显示符合你音域的歌曲。",
     "singableEmptyBody": "我们仍在分析歌曲音域。关闭“适唱歌曲”即可查看全部自选内容。",
     "singableEmptyTitle": "这些歌曲暂无音域数据",

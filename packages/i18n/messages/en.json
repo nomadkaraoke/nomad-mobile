@@ -1500,7 +1500,6 @@
     "tierRough": "Rough guess from the artist",
     "songCta": "Test your voice to see if this song fits you",
     "singable": "Singable",
-    "singableCta": "Singable: test your voice",
     "singableCtaHint": "Opens the voice test. Singable shows songs in your range.",
     "sortFitCta": "Fits my voice: test your voice first",
     "singableEmptyTitle": "No range data for these songs yet",

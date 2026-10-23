@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Kunne ikke fjerne den. Tjek din internetforbindelse og prøv igen.",
     "profileTest": "Tag stemmetesten",
     "singable": "Kan synges",
-    "singableCta": "Kan synges: test din stemme",
     "singableCtaHint": "Åbner stemmetesten. 'Kan synges' viser sange inden for dit toneomfang.",
     "singableEmptyBody": "Vi er stadig i gang med at måle sange. Slå 'Kan synges' fra for at se alle dine valg.",
     "singableEmptyTitle": "Ingen data om toneomfang for disse sange endnu",

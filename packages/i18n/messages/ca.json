@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "No s'ha pogut eliminar. Comprova la connexió i torna-ho a provar.",
     "profileTest": "Fes la prova de veu",
     "singable": "Cantable",
-    "singableCta": "Cantable: posa a prova la teva veu",
     "singableCtaHint": "Obre la prova de veu. «Cantable» mostra cançons dins de la teva tessitura.",
     "singableEmptyBody": "Encara estem mesurant cançons. Desactiva «Cantable» per veure totes les teves seleccions.",
     "singableEmptyTitle": "Encara no hi ha dades de tessitura per a aquestes cançons",

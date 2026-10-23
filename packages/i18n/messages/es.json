@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "No se pudo eliminar. Revisa tu conexión e inténtalo de nuevo.",
     "profileTest": "Hacer la prueba de voz",
     "singable": "Cantable",
-    "singableCta": "Cantable: prueba tu voz",
     "singableCtaHint": "Abre la prueba de voz. Cantable muestra canciones dentro de tu rango.",
     "singableEmptyBody": "Todavía estamos analizando canciones. Desactiva Cantable para ver todas tus selecciones.",
     "singableEmptyTitle": "Aún no hay datos de rango para estas canciones",

@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Impossible de la supprimer. Vérifie ta connexion et réessaie.",
     "profileTest": "Faire le test vocal",
     "singable": "Chantable",
-    "singableCta": "Chantable : teste ta voix",
     "singableCtaHint": "Ouvre le test vocal. « Chantable » affiche les chansons dans ta tessiture.",
     "singableEmptyBody": "Nous sommes encore en train d'analyser les chansons. Désactive « Chantable » pour voir toute ta sélection.",
     "singableEmptyTitle": "Pas encore de données de tessiture pour ces chansons",

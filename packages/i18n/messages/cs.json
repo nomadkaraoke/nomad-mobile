@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Nepodařilo se ho odstranit. Zkontroluj připojení a zkus to znovu.",
     "profileTest": "Udělat si hlasový test",
     "singable": "Zpívatelné",
-    "singableCta": "Zpívatelné: otestuj svůj hlas",
     "singableCtaHint": "Otevře hlasový test. Zpívatelné zobrazuje písničky ve tvém rozsahu.",
     "singableEmptyBody": "Skladby stále analyzujeme. Vypni filtr Zpívatelné a zobrazí se ti všechny tvé výběry.",
     "singableEmptyTitle": "U těchto skladeb zatím nemáme údaje o rozsahu",

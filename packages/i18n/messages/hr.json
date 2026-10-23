@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Uklanjanje nije uspjelo. Provjeri internetsku vezu i pokušaj ponovno.",
     "profileTest": "Riješi glasovni test",
     "singable": "Pjevljivo",
-    "singableCta": "Pjevljivo: testiraj svoj glas",
     "singableCtaHint": "Otvara glasovni test. Filter „Pjevljivo” prikazuje pjesme u tvom rasponu.",
     "singableEmptyBody": "Još uvijek mjerimo pjesme. Isključi „Pjevljivo” kako bi se prikazali svi tvoji odabiri.",
     "singableEmptyTitle": "Za ove pjesme još nema podataka o rasponu",

@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Não foi possível remover. Verifique sua conexão e tente novamente.",
     "profileTest": "Fazer o teste de voz",
     "singable": "Cantável",
-    "singableCta": "Cantável: teste sua voz",
     "singableCtaHint": "Abre o teste de voz. O filtro Cantável mostra músicas na sua extensão.",
     "singableEmptyBody": "Ainda estamos analisando as músicas. Desative o filtro Cantável para ver todas as suas opções.",
     "singableEmptyTitle": "Ainda não há dados de extensão para estas músicas",

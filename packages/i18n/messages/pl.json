@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Nie udało się usunąć. Sprawdź połączenie i spróbuj ponownie.",
     "profileTest": "Zrób test głosu",
     "singable": "W Twoim zasięgu",
-    "singableCta": "W Twoim zasięgu: przetestuj swój głos",
     "singableCtaHint": "Otwiera test głosu. Filtr „W Twoim zasięgu” pokazuje piosenki w Twojej skali.",
     "singableEmptyBody": "Wciąż mierzymy piosenki. Wyłącz filtr „W Twoim zasięgu”, aby zobaczyć wszystkie propozycje.",
     "singableEmptyTitle": "Brak danych o skali dla tych utworów",

@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "삭제하지 못했습니다. 인터넷 연결을 확인하고 다시 시도해 주세요.",
     "profileTest": "음역대 테스트하기",
     "singable": "부르기 가능",
-    "singableCta": "부르기 가능: 음역대 테스트하기",
     "singableCtaHint": "음역대 테스트가 열립니다. '부르기 가능'은 내 음역대에 맞는 노래를 보여줍니다.",
     "singableEmptyBody": "아직 곡들의 음역대를 측정하는 중입니다. 모든 곡을 보려면 '부르기 가능'을 꺼보세요.",
     "singableEmptyTitle": "이 곡들의 음역대 데이터가 아직 없습니다",

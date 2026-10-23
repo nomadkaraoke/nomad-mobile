@@ -108,6 +108,18 @@ describe('fit badges on the picks', () => {
   });
 });
 
+describe('a new voice profile reaching decide', () => {
+  it('reloads the picks once decide has it (so rows get their fit)', async () => {
+    await open();
+    const calls = getRecs.mock.calls.length;
+    act(() => useVoiceStore.getState().save(profileFromSelfReport('baritone', '2026-10-22T11:00:00Z')));
+    // Saved on the phone but not yet on decide: nothing to reload.
+    expect(getRecs.mock.calls.length).toBe(calls);
+    act(() => useVoiceStore.getState().markSynced('2026-10-22T11:00:00Z'));
+    await waitFor(() => expect(getRecs.mock.calls.length).toBeGreaterThan(calls));
+  });
+});
+
 describe('the Singable chip', () => {
   it('with a voice profile: tapping it asks recs v2 for singable=true, and again turns it off', async () => {
     withVoice();

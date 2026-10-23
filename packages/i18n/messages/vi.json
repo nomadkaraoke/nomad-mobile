@@ -1503,7 +1503,6 @@
     "profileRemoveFailed": "Không thể xóa. Kiểm tra lại kết nối mạng và thử lại nhé.",
     "profileTest": "Làm bài kiểm tra giọng",
     "singable": "Hát được",
-    "singableCta": "Hát được: kiểm tra giọng của bạn",
     "singableCtaHint": "Mở bài kiểm tra giọng. Mục 'Hát được' sẽ hiển thị các bài hát trong âm vực của bạn.",
     "singableEmptyBody": "Chúng tôi vẫn đang phân tích âm vực các bài hát. Tắt mục 'Hát được' để xem tất cả bài hát bạn đã chọn.",
     "singableEmptyTitle": "Chưa có dữ liệu âm vực cho những bài hát này",
