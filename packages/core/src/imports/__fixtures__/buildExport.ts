@@ -1,8 +1,8 @@
 // Synthetic Spotify / Apple export builders for tests. Songs come from the decide fixture
 // catalog; no real exports, no lyrics.
+// Imports only fflate: scripts/make-import-fixtures.ts loads this file with plain node (type stripping), which
+// can't resolve the package's extensionless relative imports. readZip lives in readZip.ts for that reason.
 import { strToU8, Zip, ZipDeflate, ZipPassThrough, zipSync, type Zippable } from 'fflate';
-import { ExportAggregator } from '../aggregator';
-import type { ExportSummary } from '../types';
 
 export const SONGS = {
   hello: { artist: 'Adele', title: 'Hello' },
@@ -93,16 +93,3 @@ export function csv(headers: string[], rows: (string | number)[][], opts: { bom?
   const body = [headers, ...rows].map((r) => r.map(q).join(',')).join(eol) + eol;
   return (opts.bom ? '\uFEFF' : '') + body;
 }
-
-/** Reads a whole zip through the streaming reader, `chunk` bytes at a time. */
-export function readZip(zip: Uint8Array, chunk = zip.length): ExportSummary | null {
-  const agg = new ExportAggregator();
-  const reader = agg.createReader();
-  for (let off = 0; off < zip.length; off += chunk) {
-    const end = Math.min(zip.length, off + chunk);
-    reader.push(zip.subarray(off, end), end === zip.length);
-  }
-  if (zip.length === 0) reader.push(new Uint8Array(0), true);
-  return agg.summary();
-}
-

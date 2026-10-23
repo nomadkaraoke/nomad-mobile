@@ -73,3 +73,6 @@ apps/mobile/uniwind-types.d.ts
 # Python
 __pycache__/
 *.pyc
+
+# Maestro fixtures written by scripts/make-import-fixtures.ts
+maestro/fixtures/generated/

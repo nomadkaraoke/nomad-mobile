@@ -1,0 +1,27 @@
+# In the system document picker (opened by "Pick the zip"): the synthetic Spotify Extended export that
+# maestro/scripts/push-fixtures.sh put in iOS Files' "On My iPhone" / Android's Downloads.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - extendedWaitUntil:
+          visible: "Browse"
+          timeout: 20000
+      - tapOn: "Browse"
+      # Browse reopens the last folder (On My iPhone after the first pick), or the locations list.
+      - waitForAnimationToEnd
+      - runFlow:
+          when:
+            notVisible:
+              id: "spotify-extended\\.zip.*"
+          commands:
+            - tapOn: "On My iPhone"
+      - extendedWaitUntil:
+          visible:
+            id: "spotify-extended\\.zip.*"
+          timeout: 15000
+      # The file cell (its id is "spotify-extended.zip, zip"); a tap on its name label doesn't pick it.
+      - tapOn:
+          id: "spotify-extended\\.zip.*"

@@ -1,5 +1,6 @@
 import { ExportAggregator, type ExportSummary } from '../index';
-import { buildZip, csv, readZip, SONGS } from '../__fixtures__/buildExport';
+import { buildZip, csv, SONGS } from '../__fixtures__/buildExport';
+import { readZip } from '../__fixtures__/readZip';
 
 const BOM = String.fromCharCode(0xfeff);
 const ACTIVITY_HEADERS = ['Apple Id Number', 'Artist Name', 'Song Name', 'Event Start Timestamp', 'Event End Timestamp', 'Play Duration Milliseconds', 'Media Type'];

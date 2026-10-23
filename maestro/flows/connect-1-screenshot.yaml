@@ -1,0 +1,47 @@
+# Connect 1 (Phase 3b spec §5.2): Discover → Improve → Connect → Screenshot import → pick a photo (pushed by
+# maestro/scripts/push-fixtures.sh) → decide's fake extractor reads Muse (artist), Adele "Hello" (song) and
+# "The Invented Band" (not in the catalog) → confirm all → what it added → decide has the screenshot source's song.
+appId: com.nomadkaraoke.mobile
+name: connect-1-screenshot
+tags:
+  - connect
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: connect1
+- runFlow:
+    file: ../common/connect-open.yaml
+    env:
+      EMAIL: ${output.email}
+- takeScreenshot: ${SHOTS3B}/connect-1-hub
+- tapOn:
+    id: "connect-card-screenshot"
+- tapOn:
+    id: "connect-shot-pick"
+- runFlow: ../common/connect-pick-photo.yaml
+- extendedWaitUntil:
+    visible:
+      id: "connect-shot-item-2"
+    timeout: 30000
+- assertVisible: ".*Muse.*"
+- assertVisible: ".*Hello.*"
+- assertVisible: ".*The Invented Band.*"
+- takeScreenshot: ${SHOTS3B}/connect-1-confirm
+- tapOn:
+    id: "connect-shot-confirm"
+- extendedWaitUntil:
+    visible:
+      id: "connect-import-result"
+      text: "Added 2 artists and 1 song.*"
+    timeout: 30000
+- takeScreenshot: ${SHOTS3B}/connect-1-result
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: source-counts
+      DECIDE_STACK: ${DECIDE_STACK}
+      SOURCE: screenshot
+      MIN_SONGS: "1"

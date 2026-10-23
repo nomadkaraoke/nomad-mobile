@@ -1,0 +1,55 @@
+# Connect 4 (Phase 3b spec §5.5): a fake ListenBrainz user with listens of fixture songs → Connect → ListenBrainz →
+# the username → the sync's result → decide's daily poller runs → Me's "Connected" list shows ListenBrainz with songs.
+appId: com.nomadkaraoke.mobile
+name: connect-4-listenbrainz-username
+tags:
+  - connect
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: connect4
+- runFlow:
+    file: ../common/connect-open.yaml
+    env:
+      EMAIL: ${output.email}
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: fake-lb-user
+      DECIDE_STACK: ${DECIDE_STACK}
+- tapOn:
+    id: "connect-card-listenbrainz"
+- tapOn:
+    id: "connect-lb-username"
+- inputText: ${output.lbUsername}
+- tapOn:
+    id: "connect-lb-submit"
+- extendedWaitUntil:
+    visible:
+      id: "connect-import-result"
+    timeout: 60000
+- extendedWaitUntil:
+    visible:
+      id: "connect-lb-account"
+    timeout: 20000
+- takeScreenshot: ${SHOTS3B}/connect-4-connected
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: lb-poll
+      DECIDE_STACK: ${DECIDE_STACK}
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: source-counts
+      DECIDE_STACK: ${DECIDE_STACK}
+      SOURCE: listenbrainz
+      MIN_SONGS: "1"
+- runFlow:
+    file: ../common/connect-profile-row.yaml
+    env:
+      SOURCE: listenbrainz
+- takeScreenshot: ${SHOTS3B}/connect-4-profile

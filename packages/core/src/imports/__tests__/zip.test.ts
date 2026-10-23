@@ -1,6 +1,7 @@
 import { strToU8 } from 'fflate';
 import { ExportAggregator, ExportZipReader, wantExportEntry } from '../index';
-import { accountHistory, buildStreamedZip, buildZip, csv, extendedHistory, readZip, SONGS } from '../__fixtures__/buildExport';
+import { accountHistory, buildStreamedZip, buildZip, csv, extendedHistory, SONGS } from '../__fixtures__/buildExport';
+import { readZip } from '../__fixtures__/readZip';
 
 function entries(zip: Uint8Array, chunk = zip.length, want = wantExportEntry): Record<string, string> {
   const out: Record<string, string> = {};

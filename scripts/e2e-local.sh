@@ -21,11 +21,17 @@
 #      ../karaoke-decide), DECIDE_GEN_PARTNER_SECRET (shared by both stacks so decide's
 #      /resolve reaches gen; default local-stack-secret), KJBOX_DIR (kjbox checkout with
 #      kj-controller/scripts/local-stack.sh; default ../kjbox; only used when the run has Tonight flows; reset fresh every such run unless KJBOX_KEEP=1), IOS_DEVICE (simulator name or UDID; default
-#      "iPhone 17 Pro"), ANDROID_SERIAL (default emulator-5554).
+#      "iPhone 17 Pro"), ANDROID_SERIAL (default emulator-5554), METRO_PORT (default 8081), DECIDE_PORT / SEARCH_PORT
+#      (decide's main API and search service, default 8030 / 8020; passed to decide's local-stack.sh as
+#      DECIDE_LOCAL_PORT / SEARCH_LOCAL_PORT when this script starts it). Another port set lets a second session run
+#      its own Metro and decide stack beside the default one (on its own simulator / emulator).
+#
+# Connect flows (connect-*, Phase 3b) pick fixture files: when the run has any, scripts/make-import-fixtures.ts
+# writes the Spotify export zip and maestro/scripts/push-fixtures.sh puts it and a screenshot on the device.
 #
 # Both platforms use the same http://127.0.0.1 URLs: on Android, `adb reverse` maps the gen API (8010), gen web
 # (3010), decide search (8020), decide main API (8030) and kjbox (8040) ports, so one set of stacks serves both and every link opens on either.
-# Metro is the exception on Android: the dev launcher loads it from 10.0.2.2:8081 (maestro/common/launch.yaml).
+# Metro is the exception on Android: the dev launcher loads it from 10.0.2.2:$METRO_PORT (maestro/common/launch.yaml).
 # If adb reports "device offline" mid-run (it wipes the reverse rules), give the AVD more RAM and -gpu host
 # (see CLAUDE.md § E2E).
 #
@@ -49,8 +55,11 @@ PARTNER_SECRET="${DECIDE_GEN_PARTNER_SECRET:-local-stack-secret}"
 KJBOX_DIR="${KJBOX_DIR:-$ROOT/../kjbox}"
 STACK="http://127.0.0.1:8010"
 WEB="http://127.0.0.1:3010"
-SEARCH="http://127.0.0.1:8020"
-DECIDE="http://127.0.0.1:8030"
+METRO_PORT="${METRO_PORT:-8081}"
+DECIDE_PORT="${DECIDE_PORT:-8030}"
+SEARCH_PORT="${SEARCH_PORT:-8020}"
+SEARCH="http://127.0.0.1:$SEARCH_PORT"
+DECIDE="http://127.0.0.1:$DECIDE_PORT"
 KJBOX="http://127.0.0.1:8040"
 # The app's kjbox base: the box serves the singer API under /sing (on sing.nomadkaraoke.com the tunnel maps / to it).
 KJBOX_APP="$KJBOX/sing"
@@ -65,7 +74,7 @@ while [[ $# -gt 0 ]]; do
     --platform) PLATFORM="$2"; shift 2 ;;
     --locale) LOCALE="$2"; shift 2 ;;
     --screen) SCREEN="$2"; shift 2 ;;
-    -h|--help) sed -n '2,37p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,44p' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
@@ -99,7 +108,7 @@ curl -sf -m 5 -o /dev/null "$WEB" || echo "warning: gen web isn't answering on $
 #    127.0.0.1 too). `up` is idempotent.
 if ! curl -sf -m 3 "$SEARCH/api/search/ready" >/dev/null || ! curl -sf -m 3 "$DECIDE/api/ready" >/dev/null; then
   echo "Starting decide's local stack from $DECIDE_DIR"
-  (cd "$DECIDE_DIR" && GEN_API_URL="$STACK" scripts/local-stack.sh up)
+  (cd "$DECIDE_DIR" && GEN_API_URL="$STACK" DECIDE_LOCAL_PORT="$DECIDE_PORT" SEARCH_LOCAL_PORT="$SEARCH_PORT" scripts/local-stack.sh up)
 fi
 curl -sf -m 5 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@example.com"}' \
   "$DECIDE/api/test/profile/reset" || { echo "decide at $DECIDE has no /api/test (DECIDE_TEST_API off?)" >&2; exit 1; }
@@ -136,7 +145,7 @@ if [[ "$PLATFORM" == android ]]; then
   adb -s "$SERIAL" wait-for-device
   # An AVD left in airplane mode (a manual offline check) can't reach Metro on 10.0.2.2 (ENETUNREACH on every launch).
   adb -s "$SERIAL" shell cmd connectivity airplane-mode disable >/dev/null 2>&1 || true
-  for port in 8010 3010 8020 8030 8040; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
+  for port in 8010 3010 "$SEARCH_PORT" "$DECIDE_PORT" 8040; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
   # Skip Chrome's first-run screen inside the Custom Tab (the flows also tap past it if it shows).
   adb -s "$SERIAL" shell 'echo "_ --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line'
   adb -s "$SERIAL" shell am set-debug-app --persistent com.android.chrome >/dev/null
@@ -162,13 +171,13 @@ else
 fi
 
 # 4. Metro with the local-stack env (EXPO_PUBLIC_* are inlined at bundle time, so a Metro started without them
-#    must be restarted). Started here only if nothing is serving :8081; stopped again on exit.
+#    must be restarted). Started here only if nothing is serving :$METRO_PORT; stopped again on exit.
 METRO_PID=""
-METRO_LOG=/tmp/nomad-mobile-metro.log
-metro_up() { curl -sf -m 2 http://127.0.0.1:8081/status | grep -q running; }
+if [[ "$METRO_PORT" == 8081 ]]; then METRO_LOG=/tmp/nomad-mobile-metro.log; else METRO_LOG="/tmp/nomad-mobile-metro-$METRO_PORT.log"; fi
+metro_up() { curl -sf -m 2 "http://127.0.0.1:$METRO_PORT/status" | grep -q running; }
 stop_metro() {
   [[ -n "$METRO_PID" ]] || return 0
-  # npx → node: stop the children too. Never kill by port: the Android emulator holds a connection to 8081.
+  # npx → node: stop the children too. Never kill by port: the Android emulator holds a connection to Metro's.
   pkill -P "$METRO_PID" 2>/dev/null || true
   kill "$METRO_PID" 2>/dev/null || true
   for _ in $(seq 1 15); do metro_up || break; sleep 1; done
@@ -187,7 +196,7 @@ start_metro() {
   (cd "$ROOT/apps/mobile" && exec env EXPO_PUBLIC_GEN_API_URL="$STACK" EXPO_PUBLIC_GEN_WEB_URL="$WEB" \
     EXPO_PUBLIC_DECIDE_API_URL="$DECIDE" EXPO_PUBLIC_DECIDE_SEARCH_URL="$SEARCH" EXPO_PUBLIC_KJBOX_API_URL="$KJBOX_APP" \
     EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 CI=1 "$@" \
-    npx expo start --dev-client --port 8081 --clear) >"$METRO_LOG" 2>&1 &
+    npx expo start --dev-client --port "$METRO_PORT" --clear) >"$METRO_LOG" 2>&1 &
   METRO_PID=$!
   local deadline=$((SECONDS + 120))
   until metro_up; do
@@ -200,6 +209,15 @@ start_metro() {
   done
 }
 
+# iOS on another Metro port: point the dev client at it once Metro is up. A fresh `expo run:ios` build opens the
+# default :8081 (another session's Metro), and launch.yaml relaunches whatever server the dev client last used.
+point_dev_client() {
+  [[ "$PLATFORM" == ios && "$METRO_PORT" != 8081 ]] || return 0
+  xcrun simctl terminate "$DEVICE" com.nomadkaraoke.mobile 2>/dev/null || true
+  xcrun simctl openurl "$DEVICE" "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F127.0.0.1%3A$METRO_PORT" || true
+  sleep 8
+}
+
 # 5. The flows. Run from the repo root: takeScreenshot paths (${SHOTS}/…) are relative to the working directory.
 cd "$ROOT"
 SHOTS="docs/screenshots/phase1b/$PLATFORM"
@@ -207,10 +225,17 @@ SHOTS="docs/screenshots/phase1b/$PLATFORM"
 REVIEW_SHOTS="docs/screenshots/phase2/$PLATFORM"
 DISCOVER_SHOTS="docs/screenshots/phase3a/$PLATFORM"
 TONIGHT_SHOTS="docs/screenshots/phase5/$PLATFORM"
-mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS"
+SHOTS3B="docs/screenshots/phase3b/$PLATFORM"
+mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B"
 ALL=()
 while IFS= read -r f; do ALL+=("$f"); done < <(ls maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } || true)
 [[ ${#ALL[@]} -gt 0 ]] || { echo "no flow matches $FILTER" >&2; exit 2; }
+# The connect flows pick a screenshot and a Spotify export zip from the device: write the zip, push both.
+if printf '%s\n' "${ALL[@]}" | grep -q '/connect-'; then
+  node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/make-import-fixtures.ts
+  if [[ "$PLATFORM" == android ]]; then ANDROID_SERIAL="$DEVICE" maestro/scripts/push-fixtures.sh android
+  else IOS_DEVICE="$DEVICE" maestro/scripts/push-fixtures.sh ios; fi
+fi
 ONLINE=()
 WARMUP=()
 OFFLINE=()
@@ -269,7 +294,7 @@ run_hebrew() {
 run_flows() {
   "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" \
     -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
-    -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" "$@"
+    -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" "$@"
 }
 status=0
 
@@ -283,6 +308,7 @@ if [[ -n "$SCREEN" ]]; then
   else TOUR_SHOTS="docs/screenshots/phase2/review/$PLATFORM/$lang"; fi
   mkdir -p "$TOUR_SHOTS"
   metro_up || start_metro
+  point_dev_client
   set_app_locale "$lang"
   # SHOT: the name prefix long-title.yaml gives its shots (in ${SHOTS}).
   run_flows -e LOCALE="$lang" -e TOUR_SHOTS="$TOUR_SHOTS" -e SHOT="ux-$lang" "maestro/screens/$SCREEN.yaml" || status=$?
@@ -292,9 +318,10 @@ fi
 # The warm-up flows go last before the force-offline ones (the Hebrew group clears the app on Android and signs
 # out on iOS, which drops the picks the phone kept).
 if metro_up; then
-  echo "Using the Metro already on :8081 (it must have EXPO_PUBLIC_GEN_API_URL=$STACK, EXPO_PUBLIC_DECIDE_API_URL=$DECIDE," \
+  echo "Using the Metro already on :$METRO_PORT (it must have EXPO_PUBLIC_GEN_API_URL=$STACK, EXPO_PUBLIC_DECIDE_API_URL=$DECIDE," \
     "EXPO_PUBLIC_DECIDE_SEARCH_URL=$SEARCH, EXPO_PUBLIC_KJBOX_API_URL=$KJBOX_APP and EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1; the force-offline flows also need" \
     "EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1)"
+  point_dev_client
   if [[ ${#ONLINE[@]} -gt 0 ]]; then run_flows "${ONLINE[@]}" || status=$?; fi
   run_hebrew || status=$?
   if [[ $(( ${#WARMUP[@]} + ${#OFFLINE[@]} )) -gt 0 ]]; then
@@ -303,6 +330,7 @@ if metro_up; then
 else
   if [[ $(( ${#ONLINE[@]} + ${#HEBREW[@]} + ${#WARMUP[@]} )) -gt 0 ]]; then
     start_metro
+    point_dev_client
     if [[ ${#ONLINE[@]} -gt 0 ]]; then run_flows "${ONLINE[@]}" || status=$?; fi
     run_hebrew || status=$?
     if [[ ${#WARMUP[@]} -gt 0 ]]; then run_flows "${WARMUP[@]}" || status=$?; fi
@@ -310,6 +338,7 @@ else
   if [[ ${#OFFLINE[@]} -gt 0 ]]; then
     stop_metro
     start_metro EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1
+    point_dev_client
     run_flows "${OFFLINE[@]}" || status=$?
   fi
 fi

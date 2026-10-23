@@ -1,0 +1,19 @@
+# Back to the tabs, then Me → Your music profile → the "Connected" list shows SOURCE's row with at least one song (the row's own
+# testID doesn't carry its text on iOS, so the counts line is matched by text). Env: SOURCE (decide source id).
+appId: com.nomadkaraoke.mobile
+---
+- runFlow: connect-back-to-tabs.yaml
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- scrollUntilVisible:
+    element:
+      id: "connected-row-${SOURCE}"
+    direction: DOWN
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      text: ".*[0-9]+ artists? · [1-9][0-9]* songs?.*"
+    direction: DOWN
+    timeout: 20000

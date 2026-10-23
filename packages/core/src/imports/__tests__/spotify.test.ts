@@ -1,5 +1,6 @@
 import { MIN_PLAY_MS, wantExportEntry, type ExportSummary } from '../index';
-import { accountHistory, buildZip, extendedHistory, playlistFile, readZip, SONGS, yourLibrary } from '../__fixtures__/buildExport';
+import { accountHistory, buildZip, extendedHistory, playlistFile, SONGS, yourLibrary } from '../__fixtures__/buildExport';
+import { readZip } from '../__fixtures__/readZip';
 
 const byTitle = (s: ExportSummary | null, title: string) => s?.tracks.find((t) => t.title === title);
 const sec = (iso: string) => Date.parse(iso) / 1000;
