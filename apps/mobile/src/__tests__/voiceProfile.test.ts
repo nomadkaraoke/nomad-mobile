@@ -136,6 +136,61 @@ describe('toVoiceProfileIn', () => {
   });
 });
 
+describe('session profiles (written by decide, Phase 3d)', () => {
+  const sessionProfile = (patch: Partial<LocalVoiceProfile> = {}): LocalVoiceProfile => ({
+    ...profileFromSelfReport('tenor', AT),
+    voiceTypeBetween: 'baritone',
+    confidence: 'medium',
+    method: 'session',
+    evidenceCount: 5,
+    sessionId: 'sess-1',
+    ...patch,
+  });
+
+  it('toVoiceProfileIn refuses a session profile (the public PUT rejects method session)', () => {
+    expect(() => toVoiceProfileIn(sessionProfile())).toThrow(/session/);
+  });
+
+  it('a mic/self body never carries evidence_count or session_id', () => {
+    const p = { ...profileFromSelfReport('tenor', AT), evidenceCount: 3, sessionId: 'x' } as LocalVoiceProfile;
+    expect(Object.keys(toVoiceProfileIn(p)).sort()).toEqual(API_KEYS);
+  });
+
+  it('loadVoice() reads a session profile back with its evidence count and session id', () => {
+    const p = sessionProfile();
+    appStorage.set(VOICE_STORAGE_KEY, JSON.stringify({ profile: p, pending: false }));
+    expect(loadVoice()).toEqual({ profile: p, pending: false });
+  });
+
+  it('loadVoice() reads a session profile whose evidence count and session id are null', () => {
+    const p = sessionProfile({ evidenceCount: null, sessionId: null });
+    appStorage.set(VOICE_STORAGE_KEY, JSON.stringify({ profile: p, pending: false }));
+    expect(loadVoice().profile).toEqual(p);
+  });
+
+  it('adopt() keeps the session fields', () => {
+    act(() => useVoiceStore.getState().adopt(sessionProfile()));
+    expect(useVoiceStore.getState().profile).toMatchObject({ method: 'session', evidenceCount: 5, sessionId: 'sess-1' });
+    expect(loadVoice().profile).toMatchObject({ method: 'session', evidenceCount: 5, sessionId: 'sess-1' });
+  });
+
+  it('a mic/self profile stays without session keys', () => {
+    act(() => useVoiceStore.getState().save(profileFromSelfReport('alto', AT)));
+    expect(Object.keys(useVoiceStore.getState().profile!)).not.toContain('evidenceCount');
+    expect(Object.keys(useVoiceStore.getState().profile!)).not.toContain('sessionId');
+  });
+
+  it.each([
+    ['a negative evidence count', { evidenceCount: -1 }],
+    ['a fractional evidence count', { evidenceCount: 1.5 }],
+    ['a numeric session id', { sessionId: 7 as unknown as string }],
+    ['an unknown method', { method: 'guess' as never }],
+  ])('loadVoice() drops %s', (_n, patch) => {
+    appStorage.set(VOICE_STORAGE_KEY, JSON.stringify({ profile: sessionProfile(patch), pending: false }));
+    expect(loadVoice().profile).toBeNull();
+  });
+});
+
 it('toUserRange gives fitSong its four numbers', () => {
   expect(toUserRange(profileFromSelfReport('tenor', AT))).toEqual({ low: 48, high: 72, comfortLow: 53, comfortHigh: 67 });
 });

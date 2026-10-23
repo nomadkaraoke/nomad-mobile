@@ -13,7 +13,8 @@ export type RangeSummary = {
 const MIN_FREE_S = 3;
 const MIN_SPAN = 3;
 
-function medianSpacing(frames: VoicedFrame[]): number {
+/** Median gap between consecutive frame times (s): the hop, robust to dropped frames. */
+export function medianSpacing(frames: VoicedFrame[]): number {
   if (frames.length < 2) return 0;
   const ts = frames.map((f) => f.t).sort((a, b) => a - b);
   const diffs: number[] = [];

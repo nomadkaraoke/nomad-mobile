@@ -33,6 +33,8 @@ export function fromServer(o: VoiceProfileOut): LocalVoiceProfile {
     confidence: o.confidence,
     method: o.method,
     measuredAt: o.measured_at,
+    evidenceCount: o.evidence_count ?? null,
+    sessionId: o.session_id ?? null,
   };
 }
 
@@ -55,6 +57,11 @@ export function sendPendingVoice(): Promise<boolean> {
     for (let guard = 0; guard < 3; guard++) {
       const { profile, pending } = useVoiceStore.getState();
       if (!pending || !profile || !isSignedIn()) return;
+      // decide writes session profiles itself (the public PUT rejects them): nothing to send.
+      if (profile.method === 'session') {
+        useVoiceStore.getState().markSynced(profile.measuredAt);
+        return;
+      }
       try {
         lastPutStartedAt = Date.now();
         await putVoiceProfile(toVoiceProfileIn(profile));
