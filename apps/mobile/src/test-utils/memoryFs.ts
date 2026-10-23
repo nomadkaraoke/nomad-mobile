@@ -19,6 +19,8 @@ export const fsState = {
   reads: [] as number[],
   onRead: null as null | ((readSoFar: number) => void),
   openDbs: [] as MemoryDb[],
+  /** Every File.write call, in order (bytes written and whether it appended). */
+  writes: [] as { uri: string; bytes: number; append: boolean }[],
   reset() {
     this.files.clear();
     this.dirs.clear();
@@ -28,6 +30,7 @@ export const fsState = {
     this.reads.length = 0;
     this.onRead = null;
     this.openDbs.length = 0;
+    this.writes.length = 0;
   },
 };
 
@@ -139,8 +142,14 @@ export class File {
     if (!data) throw new Error(`no such file: ${this.uri}`);
     return new TextDecoder().decode(data);
   }
-  write(content: string | Uint8Array) {
-    fsState.files.set(this.uri, typeof content === 'string' ? new TextEncoder().encode(content) : content);
+  write(content: string | Uint8Array, { append = false }: { append?: boolean } = {}) {
+    const bytes = typeof content === 'string' ? new TextEncoder().encode(content) : content;
+    fsState.writes.push({ uri: this.uri, bytes: bytes.length, append });
+    const prev = append ? (fsState.files.get(this.uri) ?? new Uint8Array()) : new Uint8Array();
+    const next = new Uint8Array(prev.length + bytes.length);
+    next.set(prev);
+    next.set(bytes, prev.length);
+    fsState.files.set(this.uri, next);
   }
 
   static downloadFileAsync = jest.fn(

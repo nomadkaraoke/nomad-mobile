@@ -40,7 +40,8 @@ function concat(...parts: Float32Array[]): Float32Array {
 }
 
 /** A baritone run: A2 held low, A4 held high, then a short tune around the middle. */
-const SCRIPT: Record<VoiceSection, Float32Array> = {
+// The voice test's sections ('song' is the voice session's, never played here: it falls back to 'sing').
+const SCRIPT: Record<Exclude<VoiceSection, 'song'>, Float32Array> = {
   low: concat(tone(null, 1), tone(45, 1.2)),
   high: concat(tone(null, 1), tone(69, 1.2)),
   sing: concat(tone(null, 1), ...[52, 55, 59, 62, 57, 54].map((m) => tone(m, 0.8))),
@@ -57,7 +58,7 @@ function scripted(): Scripted {
     // Plays the whole section at once, as the real source would over a few seconds.
     start: async (onBuffer: (b: PcmBuffer) => void, section: VoiceSection) => {
       src.sections.push(section);
-      const s = SCRIPT[section];
+      const s = SCRIPT[section === 'song' ? 'sing' : section];
       for (let off = 0; off < s.length; off += CHUNK) {
         onBuffer({ samples: s.subarray(off, off + CHUNK), sampleRate: RATE, timestamp: off / RATE });
       }

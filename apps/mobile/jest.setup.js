@@ -72,6 +72,16 @@ jest.mock('expo-video', () => {
 // audio hooks mock expo-audio themselves; this stub only lets screens that create players render.
 jest.mock('expo-audio', () => ({
   setAudioModeAsync: jest.fn(async () => {}),
+  // The voice session's song recorder (useSongRecorder): enough for screens that use it to render.
+  useAudioRecorder: jest.fn(() => ({
+    uri: null,
+    prepareToRecordAsync: jest.fn(async () => {}),
+    record: jest.fn(),
+    stop: jest.fn(async () => {}),
+    getStatus: jest.fn(() => ({ durationMillis: 0 })),
+  })),
+  IOSOutputFormat: { MPEG4AAC: 'aac ' },
+  AudioQuality: { MEDIUM: 64 },
   createAudioPlayer: jest.fn(() => ({
     muted: false,
     currentTime: 0,
