@@ -1,4 +1,6 @@
 import type { ExpoConfig } from 'expo/config';
+import { withPlugins } from 'expo/config-plugins';
+import path from 'path';
 
 const base = { name: 'Nomad Karaoke', slug: 'nomad-karaoke', ios: { bundleIdentifier: 'com.nomadkaraoke.mobile' }, plugins: ['expo-router'] };
 
@@ -196,5 +198,39 @@ describe('share intake', () => {
   it('adds the SEND filter once, however often prebuild runs', async () => {
     const twice = plugin()(plugin()({ name: 'x', slug: 'x' }));
     expect(sendFilters(await manifestAfterPrebuild(twice))).toHaveLength(2); // ours once + OTHER_SEND
+  });
+});
+
+// Final review C1: a plugin option set to `false` (expo-image-picker's cameraPermission / microphonePermission) adds
+// `<uses-permission tools:node="remove"/>`, which strips the permission app-wide (Tonight's QR scanner, 3c's mic).
+// Applies every app.json plugin, as prebuild does, and runs the Android manifest mods over an empty manifest.
+describe('android permissions', () => {
+  type UsesPermission = { $: Record<string, string> };
+  type ManifestMod = (c: object) => Promise<{ modResults: { manifest: { 'uses-permission'?: UsesPermission[] } } }>;
+
+  const permissionsAfterPrebuild = async () => {
+    const appJson = require('../../app.json') as { expo: ExpoConfig };
+    const projectRoot = path.resolve(__dirname, '../..');
+    const c = withPlugins(
+      { name: 'Nomad Karaoke', slug: 'nomad-karaoke', _internal: { projectRoot } } as ExpoConfig,
+      appJson.expo.plugins ?? [],
+    );
+    const mod = (c as { mods?: { android?: { manifest?: ManifestMod } } }).mods?.android?.manifest;
+    expect(mod).toBeDefined();
+    const application = { $: { 'android:name': '.MainApplication' }, activity: [{ $: { 'android:name': '.MainActivity' } }] };
+    const start = { manifest: { $: { 'xmlns:android': 'http://schemas.android.com/apk/res/android' }, application: [application] } };
+    const out = await mod!({ ...c, modResults: start, modRequest: { projectRoot, platform: 'android', introspect: true } });
+    return out.modResults.manifest['uses-permission'] ?? [];
+  };
+
+  it.each(['android.permission.CAMERA', 'android.permission.RECORD_AUDIO'])('does not block %s', async (name) => {
+    const perms = await permissionsAfterPrebuild();
+    const entries = perms.filter((p) => p.$['android:name'] === name);
+    expect(entries.some((p) => p.$['tools:node'] === 'remove')).toBe(false);
+  });
+
+  it('declares CAMERA for the Tonight QR scanner', async () => {
+    const perms = await permissionsAfterPrebuild();
+    expect(perms.map((p) => p.$['android:name'])).toContain('android.permission.CAMERA');
   });
 });

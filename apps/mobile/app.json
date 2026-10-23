@@ -83,9 +83,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Allow $(PRODUCT_NAME) to read the screenshots you pick of your music app.",
-          "cameraPermission": false,
-          "microphonePermission": false
+          "photosPermission": "Allow $(PRODUCT_NAME) to read the screenshots you pick of your music app."
         }
       ]
     ],
