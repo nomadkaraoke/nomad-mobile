@@ -7,8 +7,10 @@ import * as tonight from '../app/(tabs)/tonight';
 import * as rootLayout from '../app/_layout';
 import * as connectLayout from '../app/discover/connect/_layout';
 import * as connectHub from '../app/discover/connect/index';
+import * as connectImportFile from '../app/discover/connect/import-file';
 import * as connectPlaylist from '../app/discover/connect/playlist';
 import * as connectScreenshot from '../app/discover/connect/screenshot';
+import * as connectSpotifyExport from '../app/discover/connect/spotify-export';
 import * as quiz from '../app/discover/quiz';
 import * as index from '../app/index';
 import * as musicProfile from '../app/me/music-profile';
@@ -34,6 +36,8 @@ export function appRoutes() {
     'discover/connect/index': connectHub,
     'discover/connect/playlist': connectPlaylist,
     'discover/connect/screenshot': connectScreenshot,
+    'discover/connect/spotify-export': connectSpotifyExport,
+    'discover/connect/import-file': connectImportFile,
     'me/music-profile': musicProfile,
     'song/[id]': song,
     'make/new': makeFlow,

@@ -5,6 +5,7 @@ import { colors } from '@nomad/ui';
 import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
 
 import { useImportQueueRunner } from '../discover/connect/importQueue';
+import { useReminderTapRouting } from '../discover/connect/reminders';
 import { AppProviders } from '../providers/AppProviders';
 
 // Sign-in is a bottom sheet over whatever asked for it (spec §4.3). Its screens replace one another.
@@ -34,6 +35,8 @@ function RootStack() {
   const tAccount = useTranslations('account');
   // Sends privacy-export uploads parsed on the phone once online and signed in (Phase 3b).
   useImportQueueRunner();
+  // A tapped Spotify-export reminder opens its screen (Phase 3b).
+  useReminderTapRouting();
   return (
     <ThemeProvider value={theme}>
       <Stack

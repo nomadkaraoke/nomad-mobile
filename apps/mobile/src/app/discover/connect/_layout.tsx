@@ -23,6 +23,8 @@ export default function ConnectLayout() {
       <Stack.Screen name="index" options={{ title: t('title') }} />
       <Stack.Screen name="screenshot" options={{ title: t('cards.screenshot.title') }} />
       <Stack.Screen name="playlist" options={{ title: t('cards.playlist.title') }} />
+      <Stack.Screen name="spotify-export" options={{ title: t('cards.spotifyExport.title') }} />
+      <Stack.Screen name="import-file" options={{ title: t('importFile.title') }} />
     </Stack>
   );
 }

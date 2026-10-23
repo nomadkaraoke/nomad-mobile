@@ -1321,6 +1321,46 @@
         "step4": "Open the new playlist, tap Share → Copy link, and paste it here.",
         "anyPlaylist": "Any public or unlisted playlist of songs you love works too, e.g. your party or workout mix."
       }
+    },
+    "spotifyExport": {
+      "intro": "Spotify can send you your whole listening history. It takes them a few days, so start now and we will take it from there.",
+      "step1": "Request your data at spotify.com/account/privacy. Tick Account data (ready in about 5 days) and Extended streaming history (up to 30 days): Extended has your whole history.",
+      "open": "Open Spotify privacy settings",
+      "step2": "We'll remind you when it should be ready.",
+      "remind": "Remind me",
+      "reminded": "Done. We'll remind you in about 5 days, and again in 25.",
+      "denied": "Notifications are off for Nomad Karaoke. Turn them on in Settings to get a reminder.",
+      "openSettings": "Open Settings",
+      "step3": "When Spotify's email arrives, download the zip, then Share → Nomad Karaoke (Android), or come back here and pick the file.",
+      "pick": "Pick the file"
+    },
+    "reminders": {
+      "title": "Your Spotify data may be ready",
+      "body": "Open the email from Spotify, then share the zip with Nomad Karaoke.",
+      "channel": "Reminders"
+    },
+    "importFile": {
+      "title": "Import your history",
+      "reading": "Reading your file…",
+      "preview": "{tracks, plural, one {# song} other {# songs}} from {kind}",
+      "kind": {
+        "spotifyAccount": "your Spotify account data",
+        "spotifyExtended": "your Spotify streaming history",
+        "apple": "your Apple Music history"
+      },
+      "truncated": "This file looks incomplete, so some of your history may be missing. If you can, download it again from Spotify's email.",
+      "nothing": "We didn't find any songs to add in this file.",
+      "skipped": "Skipped: {podcasts} podcast, audiobook or video plays, {short} plays under 30 seconds, {malformed} unreadable entries.",
+      "start": "Add to my music",
+      "waiting": "Waiting for connection",
+      "sending": "Adding your songs…",
+      "lbAlso": "Also add it to ListenBrainz so new listens keep flowing",
+      "lbTooBig": "Too big to send from the app: upload it on listenbrainz.org",
+      "lbSending": "Sending it to ListenBrainz…",
+      "lbSent": "Sent to ListenBrainz. It may take them a while to import it.",
+      "lbBusy": "ListenBrainz is already importing a file for you. Try again once it's done.",
+      "lbReconnect": "Reconnect ListenBrainz, then try again.",
+      "pickAnother": "Pick another file"
     }
   }
 }

@@ -12,7 +12,14 @@ const resolve = (): ExpoConfig => {
 };
 
 // Plugins applied in app.config.ts register their mods on the returned config.
-const entitlementsMod = (c: ExpoConfig) => (c as { mods?: { ios?: { entitlements?: unknown } } }).mods?.ios?.entitlements;
+type EntitlementsMod = (c: object) => Promise<{ modResults: Record<string, unknown> }>;
+const entitlementsMod = (c: ExpoConfig) =>
+  (c as { mods?: { ios?: { entitlements?: EntitlementsMod } } }).mods?.ios?.entitlements;
+/** Runs the iOS entitlements mods registered on `c` over `start`, as prebuild does. */
+const entitlementsAfterPrebuild = async (c: ExpoConfig, start: Record<string, unknown>) => {
+  const mod = entitlementsMod(c);
+  return mod ? (await mod({ ...c, modResults: { ...start }, modRequest: {} })).modResults : start;
+};
 
 beforeEach(() => {
   delete process.env.EXPO_PUBLIC_APPLE_SIGNIN;
@@ -36,7 +43,22 @@ it('enables Sign in with Apple by default', () => {
   const c = resolve();
   expect(c.ios?.usesAppleSignIn).toBe(true);
   expect(c.plugins).toContain('expo-apple-authentication');
-  expect(entitlementsMod(c)).toBeUndefined();
+  // the Apple entitlement survives (only aps-environment is stripped)
+  return expect(entitlementsAfterPrebuild(c, { 'com.apple.developer.applesignin': ['Default'] })).resolves.toEqual({
+    'com.apple.developer.applesignin': ['Default'],
+  });
+});
+
+// Local reminders only (Phase 3b Task 21): expo-notifications' plugin adds aps-environment (a push entitlement the
+// App ID doesn't have); app.config.ts strips it again.
+it('appConfig has no aps-environment', async () => {
+  const c = resolve();
+  // Plugins listed in app.json are applied after app.config.ts, so their mods wrap (and run before) ours.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const withNotifications = (require('expo-notifications/app.plugin') as { default: (c: ExpoConfig, p?: object) => ExpoConfig }).default;
+  const prebuilt = withNotifications(c, {});
+  const out = await entitlementsAfterPrebuild(prebuilt, {});
+  expect(out).not.toHaveProperty('aps-environment');
 });
 
 // Ruling E3-R2: night links (spec §4.2). Android App Links for kjbox.cc (the printed QR is HTTP://KJBOX.CC/<code>, and

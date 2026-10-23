@@ -41,6 +41,16 @@ const withoutAppleSignIn: ConfigPlugin = (config) =>
     return c;
   });
 
+/**
+ * expo-notifications' plugin adds `aps-environment` (a push entitlement). The app only schedules local reminders,
+ * which need no entitlement, and the App ID has no push capability: strip it (this mod runs after that one).
+ */
+const withoutPushEntitlement: ConfigPlugin = (config) =>
+  withEntitlementsPlist(config, (c) => {
+    delete c.modResults['aps-environment'];
+    return c;
+  });
+
 /** Android's launcher label is the `app_name` string, which prebuild otherwise sets from `name`. */
 const withLauncherLabel: ConfigPlugin = (config) =>
   withStringsXml(config, (c) => {
@@ -76,6 +86,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ...(apple ? ['expo-apple-authentication'] : []),
     ],
   };
-  const labelled = withLauncherLabel(resolved);
+  const labelled = withoutPushEntitlement(withLauncherLabel(resolved));
   return apple ? labelled : withoutAppleSignIn(labelled);
 };
