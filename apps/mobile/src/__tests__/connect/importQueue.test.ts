@@ -1,0 +1,384 @@
+// The offline upload queue for on-phone parsed exports (Phase 3b Task 17).
+import * as decide from '@nomad/api-decide';
+import type { ExportUploadChunk } from '@nomad/core';
+import { act, renderHook } from '@testing-library/react-native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createElement, type ReactNode } from 'react';
+
+import { useAuth } from '../../auth/store';
+import {
+  importQueueIdle,
+  isAlreadyImported,
+  retryDelayMs,
+  setImportQueueOnline,
+  useImportQueue,
+  useImportQueueRunner,
+} from '../../discover/connect/importQueue';
+import { SERVICES_SUMMARY_KEY } from '../../discover/connect/queries';
+import { RECS_KEY } from '../../discover/useRecommendations';
+import { appStorage } from '../../storage';
+import { File, fsState } from '../../test-utils/memoryFs';
+import { userKeyFor } from '../../auth/userKey';
+
+jest.mock('expo-file-system', () => require('../../test-utils/memoryFs'));
+jest.mock('@nomad/api-decide', () => ({
+  ...jest.requireActual('@nomad/api-decide'),
+  uploadExportChunk: jest.fn(),
+}));
+let mockOffline = false;
+jest.mock('../../net/useOffline', () => ({ useOffline: () => mockOffline }));
+
+const api = decide as jest.Mocked<typeof decide>;
+const { ApiError } = jest.requireActual<typeof decide>('@nomad/api-decide');
+
+const OK = {
+  source: 'spotify_export',
+  artists_added: 2,
+  songs_added: 3,
+  songs_updated: 0,
+  tracks_matched: 3,
+  duplicate: false,
+  chunks_done: 1,
+  chunk_count: 1,
+};
+const chunk = (i: number, count = 2): ExportUploadChunk => ({
+  endpoint: 'spotify-export',
+  body: { kind: 'extended', generated_at: '2024-05-01', chunk_index: i, chunk_count: count, tracks: [], liked: [], playlists: [] },
+});
+const signIn = (email: string) =>
+  useAuth.setState({ state: { status: 'signedIn', session: { token: 't', email, createdAt: 0 } } });
+const signOut = () => useAuth.setState({ state: { status: 'signedOut' } });
+const sentIndexes = () => api.uploadExportChunk.mock.calls.map(([c]) => c.body.chunk_index);
+const payloadFiles = () => [...fsState.files.keys()].filter((k) => k.startsWith('file:///document/imports/'));
+
+beforeEach(async () => {
+  jest.useRealTimers();
+  jest.clearAllMocks();
+  await importQueueIdle();
+  fsState.reset();
+  appStorage.clearAll();
+  setImportQueueOnline(false);
+  useImportQueue.getState().rehydrate();
+  signIn('a@example.com');
+  api.uploadExportChunk.mockResolvedValue(OK);
+});
+
+afterEach(async () => {
+  setImportQueueOnline(false);
+  await importQueueIdle();
+});
+
+it('retry schedule is 5/15/30/60 s, then stays at 60 s, and a Retry-After wins', () => {
+  expect([1, 2, 3, 4, 5, 9].map((a) => retryDelayMs(a, null))).toEqual([5_000, 15_000, 30_000, 60_000, 60_000, 60_000]);
+  expect(retryDelayMs(1, 42)).toBe(42_000);
+});
+
+it('Retry-After of 0 is floored at 1 s', () => {
+  expect(retryDelayMs(1, 0)).toBe(1_000);
+});
+
+it('offline keeps pending', async () => {
+  const batch = useImportQueue.getState().enqueue([chunk(0), chunk(1)], 'spotify');
+  await importQueueIdle();
+
+  expect(batch).toEqual(expect.any(String));
+  expect(api.uploadExportChunk).not.toHaveBeenCalled();
+  const { pending, batches } = useImportQueue.getState();
+  expect(pending).toHaveLength(2);
+  expect(pending.every((p) => p.label === 'spotify' && p.attempts === 0 && p.batch === batch)).toBe(true);
+  expect(batches[batch!]).toMatchObject({ label: 'spotify', chunks: 2, sent: 0, failed: 0 });
+  // Bodies live in files, never in MMKV.
+  expect(payloadFiles()).toHaveLength(2);
+  expect(appStorage.getString('connect.importQueue')).not.toContain('generated_at');
+});
+
+/** decide's export responses: totals are cumulative over the export's chunks (imports_export.py `response`). */
+const cumulative = (perChunk: { artists: number; songs: number }[], duplicate = false) => {
+  let artists = 0;
+  let songs = 0;
+  return perChunk.map((c, i) => {
+    artists += c.artists;
+    songs += c.songs;
+    return { ...OK, artists_added: artists, songs_added: songs, tracks_matched: songs, duplicate, chunks_done: i + 1, chunk_count: perChunk.length };
+  });
+};
+
+it('online flushes in order', async () => {
+  for (const r of cumulative([{ artists: 2, songs: 3 }, { artists: 2, songs: 3 }, { artists: 2, songs: 3 }])) {
+    api.uploadExportChunk.mockResolvedValueOnce(r);
+  }
+  const batch = useImportQueue.getState().enqueue([chunk(0, 3), chunk(1, 3), chunk(2, 3)], 'spotify')!;
+  setImportQueueOnline(true);
+  await importQueueIdle();
+
+  expect(sentIndexes()).toEqual([0, 1, 2]);
+  expect(api.uploadExportChunk.mock.calls[0]?.[0]).toEqual(chunk(0, 3));
+  const s = useImportQueue.getState();
+  expect(s.pending).toEqual([]);
+  expect(s.batches[batch]).toMatchObject({ chunks: 3, sent: 3, failed: 0, artistsAdded: 6, songsAdded: 9 });
+  expect(payloadFiles()).toEqual([]);
+  expect(isAlreadyImported(s.batches[batch])).toBe(false);
+});
+
+it('re-importing the same export (every chunk duplicate) keeps the totals and reports it as already imported', async () => {
+  for (const r of cumulative([{ artists: 4, songs: 10 }, { artists: 1, songs: 5 }], true)) {
+    api.uploadExportChunk.mockResolvedValueOnce({ ...r, artists_added: 5, songs_added: 15, chunks_done: 2 });
+  }
+  const batch = useImportQueue.getState().enqueue([chunk(0), chunk(1)], 'spotify')!;
+  setImportQueueOnline(true);
+  await importQueueIdle();
+
+  const b = useImportQueue.getState().batches[batch];
+  expect(b).toMatchObject({ sent: 2, artistsAdded: 5, songsAdded: 15, duplicates: 2 });
+  expect(isAlreadyImported(b)).toBe(true);
+});
+
+it('a partly duplicate import (a retry after a lost response) is not "already imported"', async () => {
+  const [first, second] = cumulative([{ artists: 4, songs: 10 }, { artists: 1, songs: 5 }]);
+  api.uploadExportChunk.mockResolvedValueOnce({ ...first!, duplicate: true }).mockResolvedValueOnce(second!);
+  const batch = useImportQueue.getState().enqueue([chunk(0), chunk(1)], 'spotify')!;
+  setImportQueueOnline(true);
+  await importQueueIdle();
+
+  const b = useImportQueue.getState().batches[batch];
+  expect(b).toMatchObject({ artistsAdded: 5, songsAdded: 15, duplicates: 1 });
+  expect(isAlreadyImported(b)).toBe(false);
+});
+
+it('signed out keeps pending; signing back in sends', async () => {
+  useImportQueue.getState().enqueue([chunk(0, 1)], 'apple');
+  signOut();
+  setImportQueueOnline(true);
+  await importQueueIdle();
+  expect(api.uploadExportChunk).not.toHaveBeenCalled();
+
+  signIn('a@example.com');
+  await importQueueIdle();
+  expect(sentIndexes()).toEqual([0]);
+});
+
+it("signing in as another account purges the first account's import (items, files, batch, error)", async () => {
+  const batch = useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify')!;
+  useImportQueue.setState({
+    lastError: { owner: userKeyFor('a@example.com'), batch, label: 'spotify', status: 400, detail: 'x', at: 1 },
+  });
+  signIn('b@example.com');
+  setImportQueueOnline(true);
+  await importQueueIdle();
+  expect(api.uploadExportChunk).not.toHaveBeenCalled();
+  const s = useImportQueue.getState();
+  expect(s.pending).toEqual([]);
+  expect(s.batches).toEqual({});
+  expect(s.lastError).toBeNull();
+  expect(payloadFiles()).toEqual([]);
+});
+
+it('signing out keeps the queue for the same account but hides its error', async () => {
+  const batch = useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify')!;
+  useImportQueue.setState({
+    lastError: { owner: userKeyFor('a@example.com'), batch, label: 'spotify', status: 400, detail: 'x', at: 1 },
+  });
+  signOut();
+  expect(useImportQueue.getState().pending).toHaveLength(1);
+  expect(useImportQueue.getState().lastError).toBeNull();
+});
+
+it('does not send when the account changes while the payload file is being read', async () => {
+  useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify');
+  const real = File.prototype.text;
+  const spy = jest.spyOn(File.prototype, 'text').mockImplementation(async function (this: InstanceType<typeof File>) {
+    const text = await real.call(this);
+    signIn('b@example.com');
+    return text;
+  });
+  setImportQueueOnline(true);
+  await importQueueIdle();
+  spy.mockRestore();
+  expect(api.uploadExportChunk).not.toHaveBeenCalled();
+});
+
+it('three 401s in a row pause sending until the next sign-in or foreground; the payload is kept', async () => {
+  jest.useFakeTimers({ now: 3_000_000 });
+  api.uploadExportChunk.mockRejectedValue(new ApiError(401, 'expired'));
+  useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify');
+  setImportQueueOnline(true);
+  await importQueueIdle();
+  for (const ms of [5_000, 15_000]) {
+    await act(async () => {
+      jest.advanceTimersByTime(ms);
+    });
+    await importQueueIdle();
+  }
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(3);
+  await act(async () => {
+    jest.advanceTimersByTime(10 * 60_000);
+  });
+  await importQueueIdle();
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(3);
+  expect(useImportQueue.getState().pending).toHaveLength(1);
+  expect(payloadFiles()).toHaveLength(1);
+
+  // The next sign-in resumes it.
+  api.uploadExportChunk.mockResolvedValue(OK);
+  signIn('a@example.com');
+  await importQueueIdle();
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(4);
+  expect(useImportQueue.getState().pending).toEqual([]);
+});
+
+it('finished batches older than 24 h are pruned', () => {
+  const owner = userKeyFor('a@example.com');
+  const old = { label: 'spotify', owner, chunks: 1, sent: 1, failed: 0, artistsAdded: 1, songsAdded: 1, finishedAt: Date.now() - 25 * 3600_000 };
+  appStorage.set('connect.importQueue', JSON.stringify({ pending: [], batches: { old, fresh: { ...old, finishedAt: Date.now() } }, lastError: null }));
+  useImportQueue.getState().rehydrate();
+  expect(Object.keys(useImportQueue.getState().batches)).toEqual(['fresh']);
+});
+
+it('enqueue while signed out does nothing', () => {
+  signOut();
+  expect(useImportQueue.getState().enqueue([chunk(0)], 'spotify')).toBeNull();
+  expect(useImportQueue.getState().pending).toEqual([]);
+});
+
+it('503 retries with backoff', async () => {
+  jest.useFakeTimers({ now: 1_000_000 });
+  api.uploadExportChunk
+    .mockRejectedValueOnce(new ApiError(503, 'busy'))
+    .mockRejectedValueOnce(new ApiError(0, 'network'))
+    .mockResolvedValue(OK);
+  useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify');
+  setImportQueueOnline(true);
+  await importQueueIdle();
+
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(1);
+  expect(useImportQueue.getState().pending[0]).toMatchObject({ attempts: 1, nextAt: 1_005_000 });
+
+  await act(async () => {
+    jest.advanceTimersByTime(4_999);
+  });
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(1);
+  await act(async () => {
+    jest.advanceTimersByTime(1);
+  });
+  await importQueueIdle();
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(2);
+  expect(useImportQueue.getState().pending[0]).toMatchObject({ attempts: 2, nextAt: 1_005_000 + 15_000 });
+
+  await act(async () => {
+    jest.advanceTimersByTime(15_000);
+  });
+  await importQueueIdle();
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(3);
+  expect(useImportQueue.getState().pending).toEqual([]);
+  expect(useImportQueue.getState().lastError).toBeNull();
+});
+
+it('429 honours Retry-After', async () => {
+  jest.useFakeTimers({ now: 2_000_000 });
+  api.uploadExportChunk.mockRejectedValueOnce(new ApiError(429, 'slow down', 90)).mockResolvedValue(OK);
+  useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify');
+  setImportQueueOnline(true);
+  await importQueueIdle();
+  expect(useImportQueue.getState().pending[0]?.nextAt).toBe(2_090_000);
+
+  await act(async () => {
+    jest.advanceTimersByTime(60_000);
+  });
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(1);
+  await act(async () => {
+    jest.advanceTimersByTime(30_000);
+  });
+  await importQueueIdle();
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(2);
+});
+
+it('400 drops and sets lastError', async () => {
+  api.uploadExportChunk.mockRejectedValueOnce(new ApiError(400, 'bad_chunk')).mockResolvedValue(OK);
+  const batch = useImportQueue.getState().enqueue([chunk(0), chunk(1)], 'spotify')!;
+  setImportQueueOnline(true);
+  await importQueueIdle();
+
+  // The bad chunk is dropped; the next one still goes.
+  expect(sentIndexes()).toEqual([0, 1]);
+  const s = useImportQueue.getState();
+  expect(s.pending).toEqual([]);
+  expect(s.lastError).toMatchObject({ batch, label: 'spotify', status: 400, detail: 'bad_chunk' });
+  expect(s.batches[batch]).toMatchObject({ sent: 1, failed: 1 });
+  expect(payloadFiles()).toEqual([]);
+
+  s.clearError();
+  expect(useImportQueue.getState().lastError).toBeNull();
+});
+
+it('a missing payload file is dropped, not retried forever', async () => {
+  useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify');
+  fsState.files.clear();
+  setImportQueueOnline(true);
+  await importQueueIdle();
+  expect(api.uploadExportChunk).not.toHaveBeenCalled();
+  expect(useImportQueue.getState().pending).toEqual([]);
+  expect(useImportQueue.getState().lastError).toMatchObject({ status: null });
+});
+
+it('survives restart (MMKV)', async () => {
+  const batch = useImportQueue.getState().enqueue([chunk(0), chunk(1)], 'spotify')!;
+  // A "restart": the in-memory store is gone, MMKV and the payload files are not.
+  useImportQueue.setState({ pending: [], batches: {}, lastError: null });
+  useImportQueue.getState().rehydrate();
+
+  expect(useImportQueue.getState().pending.map((p) => p.batch)).toEqual([batch, batch]);
+  setImportQueueOnline(true);
+  await importQueueIdle();
+  expect(sentIndexes()).toEqual([0, 1]);
+});
+
+it('remove drops the item and its payload file', () => {
+  useImportQueue.getState().enqueue([chunk(0), chunk(1)], 'spotify');
+  const [first] = useImportQueue.getState().pending;
+  useImportQueue.getState().remove(first!.id);
+  expect(useImportQueue.getState().pending).toHaveLength(1);
+  expect(payloadFiles()).toHaveLength(1);
+});
+
+it('payload files nobody references are swept on the first flush', async () => {
+  fsState.dirs.add('file:///document/imports');
+  fsState.files.set('file:///document/imports/orphan.json', new TextEncoder().encode('{}'));
+  useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify');
+  api.uploadExportChunk.mockImplementation(async () => {
+    expect(payloadFiles()).not.toContain('file:///document/imports/orphan.json');
+    return OK;
+  });
+  setImportQueueOnline(true);
+  await importQueueIdle();
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(1);
+});
+
+describe('useImportQueueRunner', () => {
+  const wrapper = (client: QueryClient) =>
+    function Wrapper({ children }: { children: ReactNode }) {
+      return createElement(QueryClientProvider, { client }, children);
+    };
+
+  it('flushes when the connection comes back and refreshes the summary and picks when an import lands', async () => {
+    const client = new QueryClient();
+    const invalidate = jest.spyOn(client, 'invalidateQueries');
+    mockOffline = true;
+    useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify');
+    const { rerender, unmount } = renderHook(() => useImportQueueRunner(), { wrapper: wrapper(client) });
+    await act(async () => {
+      await importQueueIdle();
+    });
+    expect(api.uploadExportChunk).not.toHaveBeenCalled();
+
+    mockOffline = false;
+    rerender({});
+    await act(async () => {
+      await importQueueIdle();
+    });
+    expect(sentIndexes()).toEqual([0]);
+    expect(invalidate).toHaveBeenCalledWith({ queryKey: SERVICES_SUMMARY_KEY });
+    expect(invalidate).toHaveBeenCalledWith({ queryKey: RECS_KEY });
+    unmount();
+    mockOffline = false;
+  });
+});

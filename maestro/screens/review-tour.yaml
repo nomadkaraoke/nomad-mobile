@@ -65,21 +65,21 @@ name: screens-review-tour
     when:
       platform: Android
     commands:
-      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
+      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A${typeof METRO_PORT !== 'undefined' && METRO_PORT ? METRO_PORT : '8081'}"
 - runFlow:
     when:
       visible: "DEVELOPMENT SERVERS"
       platform: iOS
     commands:
       - tapOn:
-          text: "http://.*:8081"
+          text: "http://.*:${typeof METRO_PORT !== 'undefined' && METRO_PORT ? METRO_PORT : '8081'}"
 - runFlow: ../common/dismiss-dev-menu.yaml
 - runFlow:
     when:
       platform: Android
     commands:
       - stopApp
-      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A8081"
+      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A${typeof METRO_PORT !== 'undefined' && METRO_PORT ? METRO_PORT : '8081'}"
       - runFlow: ../common/dismiss-dev-menu.yaml
 - tapOn:
     id: "tab-make"

@@ -17,6 +17,8 @@ jest.setTimeout(20_000);
 
 jest.mock('@nomad/api-decide', () => ({
   ...jest.requireActual('@nomad/api-decide'),
+  // Phase 3b: the Improve card and the profile's Connected section read the services summary.
+  getServicesSummary: jest.fn(async () => ({ sources: [], capabilities: { screenshot_import: false, listenbrainz_oauth: false } })),
   popularSongs: jest.fn(async () => []),
   pingSearch: jest.fn(async () => true),
   logSearchEvent: jest.fn(async () => {}),

@@ -1202,5 +1202,221 @@
     "next": "Next",
     "finish": "Finish",
     "submitError": "Couldn't save your answers. Try again."
+  },
+  "connect": {
+    "errors": {
+      "badUrl": "That isn't a Spotify or YouTube Music playlist link.",
+      "notFound": "We couldn't find that username. Check the spelling and try again.",
+      "private": "We couldn't open that playlist. Make sure it's public, then try again.",
+      "likedPrivate": "Liked Music is always private. Copy it into a public or unlisted playlist, then share that link.",
+      "unparseable": "We couldn't read that playlist right now. Try a YouTube Music link or a screenshot instead.",
+      "rateLimited": "That's a lot of imports for now. Try again later.",
+      "unavailable": "We couldn't reach the service just now. Try again in a few minutes.",
+      "tooLarge": "That file is too big to send from the app.",
+      "notAnExport": "This doesn't look like a Spotify or Apple data export.",
+      "generic": "Something went wrong. Please try again."
+    },
+    "title": "Connect your music",
+    "back": "Back",
+    "intro": "Tell us what you really listen to and your picks get much better. Each of these adds to the others.",
+    "offline": "You're offline",
+    "connected": "Connected",
+    "cards": {
+      "screenshot": {
+        "title": "Screenshot your music app",
+        "detail": "Artists in seconds"
+      },
+      "playlist": {
+        "title": "Paste a playlist link",
+        "detail": "Spotify or YouTube Music · seconds"
+      },
+      "spotifyExport": {
+        "title": "Your Spotify history",
+        "detail": "Your whole listening history · takes Spotify 5–30 days"
+      },
+      "listenbrainz": {
+        "title": "ListenBrainz",
+        "detail": "Keeps your picks fresh as you listen"
+      },
+      "lastfm": {
+        "title": "Last.fm",
+        "detail": "Your scrobbles · a few minutes"
+      },
+      "apple": {
+        "title": "Apple Music",
+        "detail": "Your library and recent plays · seconds"
+      }
+    },
+    "appleExport": "No Apple Music subscription? Import your play history instead",
+    "appleReading": "Reading your library…",
+    "improve": {
+      "connect": "Connect your music",
+      "stale": "Connect Spotify to ListenBrainz so new listens arrive"
+    },
+    "sources": {
+      "title": "Connected",
+      "addMore": "Add more",
+      "empty": "Nothing connected yet. Add a music service or import your history to sharpen your picks.",
+      "counts": "{artists, plural, one {# artist} other {# artists}} · {songs, plural, one {# song} other {# songs}}",
+      "lastImport": "Last import {days, plural, =0 {today} one {# day ago} other {# days ago}}",
+      "remove": "Remove",
+      "removeTitle": "Remove {name}?",
+      "removeBody": "This removes the artists and songs {name} added to your music profile. Your picks will update.",
+      "cancel": "Cancel",
+      "reconnect": "Reconnect",
+      "stale": "Connect Spotify to ListenBrainz so new listens arrive",
+      "removeFailed": "We couldn't remove that just now. Please try again.",
+      "status": {
+        "ok": "Up to date",
+        "needsReconnect": "Needs reconnecting",
+        "importing": "Importing",
+        "stale": "No new listens",
+        "error": "Problem"
+      },
+      "loadFailed": "We couldn't load your connected sources. Please try again in a moment."
+    },
+    "source": {
+      "spotify": "Spotify",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "appleMusic": "Apple Music",
+      "youtubeMusic": "YouTube Music",
+      "screenshot": "Screenshots",
+      "spotifyPlaylist": "Spotify playlists",
+      "spotifyExport": "Spotify history",
+      "appleExport": "Apple Music history"
+    },
+    "result": "Added {artists, plural, one {# artist} other {# artists}} and {songs, plural, one {# song} other {# songs}} you know",
+    "alreadyImported": "You've already imported this file, so there was nothing new to add.",
+    "screenshot": {
+      "intro": "Pick screenshots of your library, playlists or top artists from any music app. We'll read the names and you check them before anything is saved.",
+      "pick": "Choose screenshots",
+      "pickMore": "Choose different screenshots",
+      "limit": "Up to 5 screenshots at a time.",
+      "reading": "Reading your screenshots…",
+      "confirmTitle": "Is this right?",
+      "confirmBody": "Untick anything we got wrong.",
+      "confirm": "{count, plural, =0 {Nothing to add} one {Add # item} other {Add # items}}",
+      "unmatched": "Not in our karaoke catalog yet",
+      "empty": "We couldn't find any artists or songs in those screenshots. Try a clearer one.",
+      "item": "{artist} · {title}",
+      "dailyLimit": "You've used today's 10 screenshots. Try again tomorrow.",
+      "again": "Pick more screenshots",
+      "retry": "Try again"
+    },
+    "playlist": {
+      "intro": "Paste a link to a public Spotify or YouTube Music playlist and we'll add its songs to what we know you sing.",
+      "placeholder": "Playlist link",
+      "paste": "Paste",
+      "submit": "Import playlist",
+      "importing": "Importing your playlist…",
+      "notPlaylist": "That isn't a Spotify or YouTube Music playlist link",
+      "done": "Imported {title}",
+      "matched": "{matched} of {fetched} have karaoke versions",
+      "again": "Import another playlist",
+      "howTo": {
+        "title": "How do I share my Liked Music?",
+        "step1": "1. On music.youtube.com, open Library → Liked Music.",
+        "step2": "2. Select the songs (tap one, then tap the others).",
+        "step3": "3. Choose \"Add to playlist\" → New playlist, and set visibility to Unlisted or Public.",
+        "step4": "4. Open the new playlist, tap Share → Copy link, and paste it here.",
+        "anyPlaylist": "Any public or unlisted playlist of songs you love works too, e.g. your party or workout mix."
+      }
+    },
+    "stepNumber": "{n, number}",
+    "spotifyExport": {
+      "intro": "Spotify can send you your whole listening history. It takes them a few days, so start now and we will take it from there.",
+      "step1": "Request your data at spotify.com/account/privacy. Tick Account data (ready in about 5 days) and Extended streaming history (up to 30 days): Extended has your whole history.",
+      "open": "Open Spotify privacy settings",
+      "step2": "We'll remind you when it should be ready.",
+      "remind": "Remind me",
+      "reminded": "Done. We'll remind you in about 5 days, and again in 25.",
+      "denied": "Notifications are off for Nomad Karaoke. Turn them on in Settings to get a reminder.",
+      "openSettings": "Open Settings",
+      "step3Ios": "When Spotify's email arrives, save the zip to Files, then come back here and pick it.",
+      "step3Android": "When Spotify's email arrives, download the zip, then Share → Nomad Karaoke, or come back here and pick the file.",
+      "pick": "Pick the file"
+    },
+    "appleGuide": {
+      "intro": "No Apple Music subscription? Apple can still send you your play history. It takes them a few days.",
+      "step1": "Go to privacy.apple.com and sign in.",
+      "open": "Open privacy.apple.com",
+      "step2": "Choose Request a copy of your data, tick Apple Media Services information, and submit. Apple emails you in a few days.",
+      "step3": "Download the files, then pick the zip or the Play Activity CSV here.",
+      "pick": "Pick the file"
+    },
+    "reminders": {
+      "title": "Your Spotify data may be ready",
+      "bodyIos": "Open the email from Spotify, save the zip to Files, then pick it in Nomad Karaoke.",
+      "bodyAndroid": "Open the email from Spotify, then share the zip with Nomad Karaoke.",
+      "channel": "Reminders"
+    },
+    "importFile": {
+      "title": "Import your history",
+      "reading": "Reading your file…",
+      "preview": "{tracks, plural, one {# song} other {# songs}} from {kind}",
+      "libraryBoth": "Plus {liked, plural, one {# liked song} other {# liked songs}} and {playlists, plural, one {# playlist} other {# playlists}}",
+      "libraryLiked": "Plus {liked, plural, one {# liked song} other {# liked songs}}",
+      "libraryPlaylists": "Plus {playlists, plural, one {# playlist} other {# playlists}}",
+      "kind": {
+        "spotifyAccount": "your Spotify account data",
+        "spotifyExtended": "your Spotify streaming history",
+        "apple": "your Apple Music history"
+      },
+      "truncated": "This file looks incomplete, so some of your history may be missing. If you can, download it again from Spotify's email.",
+      "nothing": "We didn't find any songs to add in this file.",
+      "skippedTitle": "Skipped",
+      "skippedPodcasts": "{count, plural, one {# podcast, audiobook or video play} other {# podcast, audiobook or video plays}}",
+      "skippedShort": "{count, plural, one {# play under 30 seconds} other {# plays under 30 seconds}}",
+      "skippedMalformed": "{count, plural, one {# unreadable entry} other {# unreadable entries}}",
+      "start": "Add to my music",
+      "waiting": "Waiting for connection",
+      "sending": "Adding your songs…",
+      "lbAlso": "Also add it to ListenBrainz so new listens keep flowing",
+      "lbTooBig": "Too big to send from the app: upload it on listenbrainz.org",
+      "lbSending": "Sending it to ListenBrainz…",
+      "lbSent": "Sent to ListenBrainz. It may take them a while to import it.",
+      "lbBusy": "ListenBrainz is already importing a file for you. Try again once it's done.",
+      "lbReconnect": "Reconnect ListenBrainz, then try again.",
+      "pickAnother": "Pick another file"
+    },
+    "sync": {
+      "reading": "Reading your listening history…",
+      "done": "Done. Your picks now include what you listen to.",
+      "slow": "Still reading your history. Your picks will update when it's done.",
+      "failed": "We connected your account but couldn't read your history just now. We'll try again later."
+    },
+    "lb": {
+      "intro": "ListenBrainz keeps a free, open record of what you listen to. Connect it and your new listens keep your picks fresh.",
+      "oauth": "Sign in with ListenBrainz",
+      "or": "Or enter your ListenBrainz username",
+      "username": "ListenBrainz username",
+      "submit": "Connect",
+      "opening": "Opening ListenBrainz…",
+      "account": "Connected as {username}",
+      "accountHint": "Not your account? Remove ListenBrainz under Connected, then sign in again.",
+      "signup": "Don't have one? Create a free account",
+      "checklist": {
+        "step1": "1. Create a MetaBrainz account",
+        "step2": "2. Verify your email",
+        "step3": "3. Come back and enter your username"
+      },
+      "spotifyGuide": "Connect Spotify to ListenBrainz",
+      "spotifyGuideBody": "Then everything you play on Spotify reaches your picks by itself.",
+      "oauthUnavailable": "Signing in with ListenBrainz isn't available right now. Enter your username instead.",
+      "oauthError": {
+        "denied": "You didn't allow access, so nothing was connected. Try again whenever you like.",
+        "missing_params": "ListenBrainz didn't send back everything we need. Please try again.",
+        "invalid_state": "That sign-in expired or was already used. Please try again.",
+        "exchange_failed": "We couldn't finish connecting to ListenBrainz. Please try again.",
+        "validate_failed": "Your MetaBrainz account isn't on ListenBrainz yet. Sign in at listenbrainz.org once, then try again.",
+        "generic": "Something went wrong connecting ListenBrainz. Please try again."
+      }
+    },
+    "lastfm": {
+      "intro": "Enter your Last.fm username and we'll read your scrobbles to find songs you know.",
+      "username": "Last.fm username",
+      "submit": "Connect"
+    }
   }
 }

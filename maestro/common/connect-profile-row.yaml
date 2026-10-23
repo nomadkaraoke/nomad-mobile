@@ -1,0 +1,21 @@
+# Back to the tabs, then Me → Your music profile → the "Connected" list shows SOURCE's row with at least one song (the row's own
+# testID doesn't carry its text, so the counts line is matched by its own id). Env: SOURCE (decide source id).
+appId: com.nomadkaraoke.mobile
+---
+- runFlow: connect-back-to-tabs.yaml
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- scrollUntilVisible:
+    element:
+      id: "connected-row-${SOURCE}"
+    direction: DOWN
+    timeout: 30000
+    # Whole row on screen: Android leaves off-screen children out of the hierarchy.
+    centerElement: true
+# That row's own counts line (the profile can list other sources' rows too; the row's children aren't nested
+# under it in Android's hierarchy, so the line has its own id).
+- assertVisible:
+    id: "connected-counts-${SOURCE}"
+    text: ".*[0-9]+ artists? · [1-9][0-9]* songs?.*"

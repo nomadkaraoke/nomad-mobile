@@ -23,6 +23,7 @@ minimumReleaseAgeExclude:
   - babel-preset-expo@57.0.16
   - '@expo/config-plugins@57.0.11'
   - expo-modules-jsi@57.1.3
+  - expo-notifications@57.0.24
 nodeLinker: hoisted
 overrides:
   expo: 57.0.31

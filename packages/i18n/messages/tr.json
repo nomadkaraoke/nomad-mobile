@@ -1202,5 +1202,221 @@
     "songSearchLabel": "Bir şarkı bul",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Şu anda öneri yok. Yukarıdan bir sanatçı ara veya bu adımı atla."
+  },
+  "connect": {
+    "appleExport": "Apple Music aboneliğin yok mu? Bunun yerine çalma geçmişini içe aktar",
+    "appleGuide": {
+      "intro": "Apple Music aboneliğin yok mu? Apple yine de dinleme geçmişini sana gönderebilir. Bu işlem birkaç gün sürer.",
+      "open": "privacy.apple.com adresini aç",
+      "pick": "Dosyayı seç",
+      "step1": "privacy.apple.com adresine git ve giriş yap.",
+      "step2": "Verilerinizin bir kopyasını isteyin seçeneğini belirle, Apple Media Services bilgileri kutucuğunu işaretle ve gönder. Apple birkaç gün içinde sana e-posta gönderecektir.",
+      "step3": "Dosyaları indir, ardından zip dosyasını veya Play Activity CSV dosyasını buradan seç."
+    },
+    "appleReading": "Kitaplığın okunuyor…",
+    "cards": {
+      "apple": {
+        "detail": "Kitaplığın ve son çaldıkların · saniyeler içinde",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Scrobble'ların · birkaç dakika",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Sen dinledikçe seçimlerini güncel tutar",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify veya YouTube Music · saniyeler içinde",
+        "title": "Çalma listesi bağlantısı yapıştır"
+      },
+      "screenshot": {
+        "detail": "Saniyeler içinde sanatçılar",
+        "title": "Müzik uygulamasının ekran görüntüsünü al"
+      },
+      "spotifyExport": {
+        "detail": "Tüm dinleme geçmişin · Spotify'ın hazırlaması 5–30 gün sürer",
+        "title": "Spotify geçmişin"
+      }
+    },
+    "errors": {
+      "badUrl": "Bu bir Spotify veya YouTube Music çalma listesi bağlantısı değil.",
+      "likedPrivate": "Beğenilen Müzikler her zaman gizlidir. Bunu herkese açık veya liste dışı bir çalma listesine kopyala, ardından o bağlantıyı paylaş.",
+      "notAnExport": "Bu bir Spotify veya Apple veri dışa aktarma dosyasına benzemiyor.",
+      "notFound": "Bu kullanıcı adını bulamadık. Yazılışını kontrol edip tekrar dene.",
+      "private": "Bu çalma listesini açamadık. Herkese açık olduğundan emin ol ve tekrar dene.",
+      "rateLimited": "Şu an için çok fazla içe aktarma yapıldı. Daha sonra tekrar dene.",
+      "tooLarge": "Bu dosya uygulamadan gönderilemeyecek kadar büyük.",
+      "unavailable": "Hizmete şu anda ulaşılamadı. Birkaç dakika sonra tekrar dene.",
+      "unparseable": "Bu çalma listesi şu anda okunamadı. Bunun yerine bir YouTube Music bağlantısı veya ekran görüntüsü dene.",
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar dene."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "Apple Music geçmişin",
+        "spotifyAccount": "Spotify hesap verilerin",
+        "spotifyExtended": "Spotify dinleme geçmişin"
+      },
+      "lbAlso": "Yeni dinlemelerin akmaya devam etmesi için bunu ListenBrainz'e de ekle",
+      "lbBusy": "ListenBrainz zaten senin için bir dosyayı içe aktarıyor. Tamamlandığında tekrar dene.",
+      "lbReconnect": "ListenBrainz bağlantısını yenile, ardından tekrar dene.",
+      "lbSending": "ListenBrainz'e gönderiliyor…",
+      "lbSent": "ListenBrainz'e gönderildi. İçe aktarmaları biraz zaman alabilir.",
+      "lbTooBig": "Uygulamadan göndermek için çok büyük: listenbrainz.org üzerinden yükle",
+      "libraryBoth": "Ayrıca {liked, plural, one {# beğenilen şarkı} other {# beğenilen şarkı}} ve {playlists, plural, one {# çalma listesi} other {# çalma listesi}}",
+      "libraryLiked": "Ayrıca {liked, plural, one {# beğenilen şarkı} other {# beğenilen şarkı}}",
+      "libraryPlaylists": "Ayrıca {playlists, plural, one {# çalma listesi} other {# çalma listesi}}",
+      "nothing": "Bu dosyada eklenecek şarkı bulamadık.",
+      "pickAnother": "Başka bir dosya seç",
+      "preview": "{kind} içinden {tracks, plural, one {# şarkı} other {# şarkı}}",
+      "reading": "Dosyan okunuyor…",
+      "sending": "Şarkıların ekleniyor…",
+      "skippedMalformed": "{count, plural, one {# okunamayan kayıt} other {# okunamayan kayıt}}",
+      "skippedPodcasts": "{count, plural, one {# podcast, sesli kitap veya video oynatımı} other {# podcast, sesli kitap veya video oynatımı}}",
+      "skippedShort": "{count, plural, one {# 30 saniyenin altındaki dinleme} other {# 30 saniyenin altındaki dinleme}}",
+      "skippedTitle": "Atlandı",
+      "start": "Müziğime ekle",
+      "title": "Geçmişini içe aktar",
+      "truncated": "Bu dosya eksik görünüyor, bu nedenle geçmişinin bir kısmı eksik olabilir. Mümkünse Spotify'ın e-postasından tekrar indir.",
+      "waiting": "Bağlantı bekleniyor"
+    },
+    "improve": {
+      "connect": "Müziğini bağla",
+      "stale": "Yeni dinlemelerin gelmesi için Spotify'ı ListenBrainz'e bağla"
+    },
+    "intro": "Gerçekte ne dinlediğini bize söyle, sana özel seçimler çok daha iyi olsun. Bunların her biri diğerine katkı sağlar.",
+    "lastfm": {
+      "intro": "Bildiğin şarkıları bulabilmemiz için Last.fm kullanıcı adını gir, scrobble'larını okuyalım.",
+      "submit": "Bağla",
+      "username": "Last.fm kullanıcı adı"
+    },
+    "lb": {
+      "account": "{username} olarak bağlandı",
+      "accountHint": "Hesap senin değil mi? Bağlı Kaynaklar altından ListenBrainz'i kaldır, ardından tekrar giriş yap.",
+      "checklist": {
+        "step1": "1. Bir MetaBrainz hesabı oluştur",
+        "step2": "2. E-postanı doğrula",
+        "step3": "3. Buraya geri dön ve kullanıcı adını gir"
+      },
+      "intro": "ListenBrainz dinlediklerinin ücretsiz ve açık bir kaydını tutar. Bağla, yeni dinlemelerin seçimlerini daima güncel tutsun.",
+      "oauth": "ListenBrainz ile giriş yap",
+      "oauthError": {
+        "denied": "Erişime izin vermedin, bu yüzden hiçbir şey bağlanmadı. İstediğin zaman tekrar dene.",
+        "exchange_failed": "ListenBrainz bağlantısı tamamlanamadı. Lütfen tekrar dene.",
+        "generic": "ListenBrainz bağlanırken bir sorun oluştu. Lütfen tekrar dene.",
+        "invalid_state": "Oturum açma süresi doldu veya bu bağlantı zaten kullanıldı. Lütfen tekrar dene.",
+        "missing_params": "ListenBrainz ihtiyacımız olan tüm bilgileri göndermedi. Lütfen tekrar dene.",
+        "validate_failed": "MetaBrainz hesabın henüz ListenBrainz'de değil. listenbrainz.org adresinde bir kez oturum aç, ardından tekrar dene."
+      },
+      "oauthUnavailable": "ListenBrainz ile giriş yapma şu anda kullanılamıyor. Bunun yerine kullanıcı adını gir.",
+      "opening": "ListenBrainz açılıyor…",
+      "or": "Veya ListenBrainz kullanıcı adını gir",
+      "signup": "Hesabın yok mu? Ücretsiz bir hesap oluştur",
+      "spotifyGuide": "Spotify'ı ListenBrainz'e bağla",
+      "spotifyGuideBody": "Böylece Spotify'da çaldığın her şey otomatik olarak seçimlerine eklenir.",
+      "submit": "Bağla",
+      "username": "ListenBrainz kullanıcı adı"
+    },
+    "offline": "Çevrimdışısın",
+    "playlist": {
+      "again": "Başka bir çalma listesi içe aktar",
+      "done": "{title} içe aktarıldı",
+      "howTo": {
+        "step1": "1. music.youtube.com adresinde Kitaplık → Beğenilen Müzikler'i aç.",
+        "step2": "2. Şarkıları seç (birine dokun, ardından diğerlerine dokun).",
+        "step3": "3. \"Çalma listesine ekle\" → Yeni çalma listesi'ni seç ve görünürlüğü Liste Dışı veya Herkese Açık olarak ayarla.",
+        "step4": "4. Yeni çalma listesini aç, Paylaş → Bağlantıyı kopyala'ya dokun ve buraya yapıştır.",
+        "anyPlaylist": "Sevdiğin şarkılardan oluşan herkese açık veya liste dışı herhangi bir çalma listesi de olur (örneğin parti veya antrenman listen).",
+        "title": "Beğenilen Müzikler listemi nasıl paylaşırım?"
+      },
+      "importing": "Çalma listen içe aktarılıyor…",
+      "intro": "Herkese açık bir Spotify veya YouTube Music çalma listesi bağlantısı yapıştır; şarkıları söylediğini bildiğimiz parçalara ekleyelim.",
+      "matched": "{fetched} şarkıdan {matched} tanesinin karaoke versiyonu var",
+      "notPlaylist": "Bu bir Spotify veya YouTube Music çalma listesi bağlantısı değil",
+      "paste": "Yapıştır",
+      "placeholder": "Çalma listesi bağlantısı",
+      "submit": "Çalma listesini içe aktar"
+    },
+    "reminders": {
+      "channel": "Hatırlatıcılar",
+      "title": "Spotify verilerin hazır olabilir",
+      "bodyAndroid": "Spotify'dan gelen e-postayı aç, ardından zip dosyasını Nomad Karaoke ile paylaş.",
+      "bodyIos": "Spotify'ın e-postasını aç, zip dosyasını Dosyalar'a kaydet, ardından Nomad Karaoke'de seç."
+    },
+    "result": "Bildiğin {artists, plural, one {# sanatçı} other {# sanatçı}} ve {songs, plural, one {# şarkı} other {# şarkı}} eklendi",
+    "screenshot": {
+      "again": "Daha fazla ekran görüntüsü seç",
+      "confirm": "{count, plural, =0 {Eklenecek bir şey yok} one {# ögeyi ekle} other {# ögeyi ekle}}",
+      "confirmBody": "Yanlış olanların işaretini kaldır.",
+      "confirmTitle": "Doğru mu?",
+      "dailyLimit": "Bugünkü 10 ekran görüntüsü hakkını doldurdun. Yarın tekrar dene.",
+      "empty": "Bu ekran görüntülerinde hiçbir sanatçı veya şarkı bulamadık. Daha net bir görüntü dene.",
+      "intro": "Herhangi bir müzik uygulamasından kitaplığının, çalma listelerinin veya en çok dinlediğin sanatçıların ekran görüntülerini seç. İsimleri okuyalım, kaydedilmeden önce sen kontrol et.",
+      "item": "{artist} · {title}",
+      "limit": "Tek seferde en fazla 5 ekran görüntüsü.",
+      "pick": "Ekran görüntülerini seç",
+      "pickMore": "Farklı ekran görüntüleri seç",
+      "reading": "Ekran görüntülerin okunuyor…",
+      "unmatched": "Henüz karaoke kataloğumuzda yok",
+      "retry": "Tekrar dene"
+    },
+    "source": {
+      "appleExport": "Apple Music geçmişi",
+      "screenshot": "Ekran görüntüleri",
+      "spotifyExport": "Spotify geçmişi",
+      "spotifyPlaylist": "Spotify çalma listeleri",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Daha fazla ekle",
+      "counts": "{artists, plural, one {# sanatçı} other {# sanatçı}} · {songs, plural, one {# şarkı} other {# şarkı}}",
+      "empty": "Henüz hiçbir şey bağlanmadı. Seçimlerini netleştirmek için bir müzik servisi bağla veya geçmişini içe aktar.",
+      "lastImport": "Son içe aktarma {days, plural, =0 {bugün} one {# gün önce} other {# gün önce}}",
+      "loadFailed": "Bağlı kaynakların yüklenemedi. Lütfen birazdan tekrar dene.",
+      "reconnect": "Yeniden bağlan",
+      "removeBody": "Bu işlem, {name} tarafından müzik profiline eklenen sanatçıları ve şarkıları kaldırır. Seçimlerin güncellenir.",
+      "removeFailed": "Bu şu anda kaldırılamadı. Lütfen tekrar dene.",
+      "removeTitle": "{name} kaldırılsın mı?",
+      "stale": "Yeni dinlemelerin gelmesi için Spotify'ı ListenBrainz'e bağla",
+      "status": {
+        "error": "Sorun",
+        "importing": "İçe aktarılıyor",
+        "needsReconnect": "Yeniden bağlanması gerekiyor",
+        "ok": "Güncel",
+        "stale": "Yeni dinleme yok"
+      },
+      "cancel": "İptal",
+      "remove": "Kaldır",
+      "title": "Bağlandı"
+    },
+    "spotifyExport": {
+      "denied": "Nomad Karaoke için bildirimler kapalı. Hatırlatıcı almak için Ayarlar'dan aç.",
+      "intro": "Spotify tüm dinleme geçmişini sana gönderebilir. Bu işlem birkaç gün sürer; şimdiden başla, gerisini biz hallederiz.",
+      "open": "Spotify gizlilik ayarlarını aç",
+      "pick": "Dosyayı seç",
+      "remind": "Bana hatırlat",
+      "reminded": "Tamamlandı. Yaklaşık 5 gün sonra ve tekrar 25 gün sonra sana hatırlatacağız.",
+      "step1": "spotify.com/account/privacy adresinden verilerini talep et. Hesap verileri (yaklaşık 5 günde hazır olur) ve Genişletilmiş dinleme geçmişi (30 güne kadar sürer) kutucuklarını işaretle: Genişletilmiş geçmiş tüm dinleme geçmişini içerir.",
+      "step2": "Hazır olması gereken zamanda sana hatırlatacağız.",
+      "openSettings": "Ayarlar'ı Aç",
+      "step3Ios": "Spotify'ın e-postası geldiğinde zip dosyasını Dosyalar'a kaydet, ardından buraya dönüp dosyayı seç.",
+      "step3Android": "Spotify'ın e-postası geldiğinde zip dosyasını indir, ardından Paylaş → Nomad Karaoke yolunu izle ya da buraya dönüp dosyayı seç."
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Tamamlandı. Seçimlerin artık dinlediklerini de içeriyor.",
+      "failed": "Hesabını bağladık ancak dinleme geçmişini şu anda okuyamadık. Daha sonra tekrar deneyeceğiz.",
+      "reading": "Dinleme geçmişin okunuyor…",
+      "slow": "Geçmişin hâlâ okunuyor. Tamamlandığında seçimlerin güncellenecektir."
+    },
+    "title": "Müziğini bağla",
+    "connected": "Bağlandı",
+    "back": "Geri",
+    "alreadyImported": "Bu dosyayı zaten içe aktardın, bu yüzden eklenecek yeni bir şey yoktu."
   }
 }

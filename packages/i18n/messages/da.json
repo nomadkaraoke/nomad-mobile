@@ -1202,5 +1202,221 @@
     "songSearchLabel": "Find en sang",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Ingen forslag lige nu. Søg efter en kunstner ovenfor, eller spring dette trin over."
+  },
+  "connect": {
+    "appleExport": "Intet Apple Music-abonnement? Importer din afspilningshistorik i stedet",
+    "appleGuide": {
+      "intro": "Intet Apple Music-abonnement? Apple kan stadig sende dig din afspilningshistorik. Det tager dem et par dage.",
+      "open": "Åbn privacy.apple.com",
+      "pick": "Vælg filen",
+      "step1": "Gå til privacy.apple.com og log ind.",
+      "step2": "Vælg Anmod om en kopi af dine data, sæt kryds ved Oplysninger om Apple Media-tjenester, og indsend. Apple sender dig en e-mail om et par dage.",
+      "step3": "Download filerne, og vælg derefter zip-filen eller CSV-filen med Play Activity her."
+    },
+    "appleReading": "Indlæser dit bibliotek…",
+    "cards": {
+      "apple": {
+        "detail": "Dit bibliotek og seneste afspilninger · sekunder",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Dine scrobbles · et par minutter",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Holder dine anbefalinger opdaterede, mens du lytter",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify eller YouTube Music · sekunder",
+        "title": "Indsæt et playlistelink"
+      },
+      "screenshot": {
+        "detail": "Kunstnere på få sekunder",
+        "title": "Tag et screenshot af din musikapp"
+      },
+      "spotifyExport": {
+        "detail": "Hele din lyttehistorik · tager Spotify 5–30 dage",
+        "title": "Din Spotify-historik"
+      }
+    },
+    "errors": {
+      "badUrl": "Det er ikke et playlistelink fra Spotify eller YouTube Music.",
+      "likedPrivate": "Sange, du kan lide, er altid private. Kopiér dem over i en offentlig eller skjult playliste, og del så det link.",
+      "notAnExport": "Dette ligner ikke en dataeksport fra Spotify eller Apple.",
+      "notFound": "Vi kunne ikke finde det brugernavn. Tjek stavningen, og prøv igen.",
+      "private": "Vi kunne ikke åbne den playliste. Sørg for, at den er offentlig, og prøv igen.",
+      "rateLimited": "Det er mange importer lige nu. Prøv igen senere.",
+      "tooLarge": "Filen er for stor til at blive sendt fra appen.",
+      "unavailable": "Vi kunne ikke få forbindelse til tjenesten lige nu. Prøv igen om et par minutter.",
+      "unparseable": "Vi kunne ikke indlæse den playliste lige nu. Prøv et YouTube Music-link eller et screenshot i stedet.",
+      "generic": "Noget gik galt. Prøv venligst igen."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "din Apple Music-historik",
+        "spotifyAccount": "dine Spotify-kontodata",
+        "spotifyExtended": "din udvidede streaminghistorik fra Spotify"
+      },
+      "lbAlso": "Føj den også til ListenBrainz, så nye afspilninger løbende kommer med",
+      "lbBusy": "ListenBrainz er allerede i gang med at importere en fil for dig. Prøv igen, når den er færdig.",
+      "lbReconnect": "Genopret forbindelsen til ListenBrainz, og prøv igen.",
+      "lbSending": "Sender den til ListenBrainz…",
+      "lbSent": "Sendt til ListenBrainz. Det kan tage et stykke tid at importere den.",
+      "lbTooBig": "Filen er for stor til at sende fra appen: upload den på listenbrainz.org",
+      "libraryBoth": "Plus {liked, plural, one {# liket sang} other {# likede sange}} og {playlists, plural, one {# playliste} other {# playlister}}",
+      "libraryLiked": "Plus {liked, plural, one {# liket sang} other {# likede sange}}",
+      "libraryPlaylists": "Plus {playlists, plural, one {# playliste} other {# playlister}}",
+      "nothing": "Vi fandt ingen sange at tilføje i denne fil.",
+      "pickAnother": "Vælg en anden fil",
+      "preview": "{tracks, plural, one {# sang} other {# sange}} fra {kind}",
+      "reading": "Indlæser din fil…",
+      "sending": "Tilføjer dine sange…",
+      "skippedMalformed": "{count, plural, one {# ulæselig post} other {# ulæselige poster}}",
+      "skippedPodcasts": "{count, plural, one {# afspilning af podcast, lydbog eller video} other {# afspilninger af podcasts, lydbøger eller videoer}}",
+      "skippedShort": "{count, plural, one {# afspilning under 30 sekunder} other {# afspilninger under 30 sekunder}}",
+      "skippedTitle": "Sprunget over",
+      "start": "Føj til min musik",
+      "title": "Importer din historik",
+      "truncated": "Denne fil ser ufuldstændig ud, så noget af din historik mangler muligvis. Hvis du kan, så download den igen fra e-mailen fra Spotify.",
+      "waiting": "Venter på forbindelse"
+    },
+    "improve": {
+      "connect": "Forbind din musik",
+      "stale": "Forbind Spotify til ListenBrainz, så nye afspilninger kommer med"
+    },
+    "intro": "Fortæl os, hvad du virkelig lytter til, så bliver dine anbefalinger meget bedre. Hver kilde bygger oven på de andre.",
+    "lastfm": {
+      "intro": "Indtast dit Last.fm-brugernavn, så indlæser vi dine scrobbles for at finde sange, du kender.",
+      "submit": "Forbind",
+      "username": "Last.fm-brugernavn"
+    },
+    "lb": {
+      "account": "Forbundet som {username}",
+      "accountHint": "Ikke din konto? Fjern ListenBrainz under Forbundet, og log ind igen.",
+      "checklist": {
+        "step1": "1. Opret en MetaBrainz-konto",
+        "step2": "2. Bekræft din e-mail",
+        "step3": "3. Vend tilbage og indtast dit brugernavn"
+      },
+      "intro": "ListenBrainz fører en gratis, åben oversigt over, hvad du lytter til. Forbind den, så dine nye afspilninger holder dine anbefalinger opdaterede.",
+      "oauth": "Log ind med ListenBrainz",
+      "oauthError": {
+        "denied": "Du gav ikke tilladelse, så intet blev forbundet. Prøv igen, når du vil.",
+        "exchange_failed": "Vi kunne ikke fuldføre forbindelsen til ListenBrainz. Prøv igen.",
+        "generic": "Noget gik galt under forbindelsen til ListenBrainz. Prøv igen.",
+        "invalid_state": "Det login er udløbet eller er allerede blevet brugt. Prøv igen.",
+        "missing_params": "ListenBrainz sendte ikke alle nødvendige oplysninger retur. Prøv igen.",
+        "validate_failed": "Din MetaBrainz-konto findes ikke på ListenBrainz endnu. Log ind på listenbrainz.org én gang, og prøv så igen."
+      },
+      "oauthUnavailable": "Login med ListenBrainz er ikke tilgængeligt lige nu. Indtast dit brugernavn i stedet.",
+      "opening": "Åbner ListenBrainz…",
+      "or": "Eller indtast dit ListenBrainz-brugernavn",
+      "signup": "Har du ikke en? Opret en gratis konto",
+      "spotifyGuide": "Forbind Spotify til ListenBrainz",
+      "spotifyGuideBody": "Så finder alt, hvad du afspiller på Spotify, automatisk vej til dine anbefalinger.",
+      "submit": "Forbind",
+      "username": "ListenBrainz-brugernavn"
+    },
+    "offline": "Du er offline",
+    "playlist": {
+      "again": "Importer en anden playliste",
+      "done": "Importerede {title}",
+      "howTo": {
+        "step1": "1. På music.youtube.com åbner du Bibliotek → Likede sange.",
+        "step2": "2. Markér sangene (tryk på én, og vælg derefter de andre).",
+        "step3": "3. Vælg \"Føj til playliste\" → Ny playliste, og sæt synligheden til Skjult eller Offentlig.",
+        "step4": "4. Åbn den nye playliste, tryk på Del → Kopiér link, og indsæt det her.",
+        "anyPlaylist": "Enhver offentlig eller skjult playliste med sange, du elsker, kan også bruges – f.eks. dit fest- eller træningsmix.",
+        "title": "Hvordan deler jeg mine Likede sange?"
+      },
+      "importing": "Importerer din playliste…",
+      "intro": "Indsæt et link til en offentlig playliste fra Spotify eller YouTube Music, så føjer vi sangene til dem, vi ved, du synger.",
+      "matched": "{matched} ud af {fetched} har karaokeversioner",
+      "notPlaylist": "Det er ikke et playlistelink fra Spotify eller YouTube Music",
+      "paste": "Indsæt",
+      "placeholder": "Link til playliste",
+      "submit": "Importer playliste"
+    },
+    "reminders": {
+      "channel": "Påmindelser",
+      "title": "Dine Spotify-data er måske klar",
+      "bodyAndroid": "Åbn e-mailen fra Spotify, og del derefter zip-filen med Nomad Karaoke.",
+      "bodyIos": "Åbn e-mailen fra Spotify, gem zip-filen i Filer, og vælg den derefter i Nomad Karaoke."
+    },
+    "result": "Tilføjede {artists, plural, one {# kunstner} other {# kunstnere}} og {songs, plural, one {# sang} other {# sange}}, du kender",
+    "screenshot": {
+      "again": "Vælg flere screenshots",
+      "confirm": "{count, plural, =0 {Intet at tilføje} one {Tilføj # element} other {Tilføj # elementer}}",
+      "confirmBody": "Fjern markeringen ved alt det, vi fik galt i halsen.",
+      "confirmTitle": "Ser det rigtigt ud?",
+      "dailyLimit": "Du har brugt dagens 10 screenshots. Prøv igen i morgen.",
+      "empty": "Vi kunne ikke finde nogen kunstnere eller sange på de screenshots. Prøv med et mere tydeligt billede.",
+      "intro": "Vælg screenshots af dit bibliotek, dine playlister eller yndlingskunstnere fra enhver musikapp. Vi aflæser navnene, og du tjekker dem, før noget gemmes.",
+      "item": "{artist} · {title}",
+      "limit": "Op til 5 screenshots ad gangen.",
+      "pick": "Vælg screenshots",
+      "pickMore": "Vælg andre screenshots",
+      "reading": "Læser dine screenshots…",
+      "unmatched": "Ikke i vores karaokekatalog endnu",
+      "retry": "Prøv igen"
+    },
+    "source": {
+      "appleExport": "Apple Music-historik",
+      "screenshot": "Screenshots",
+      "spotifyExport": "Spotify-historik",
+      "spotifyPlaylist": "Spotify-playlister",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Tilføj mere",
+      "counts": "{artists, plural, one {# kunstner} other {# kunstnere}} · {songs, plural, one {# sang} other {# sange}}",
+      "empty": "Intet forbundet endnu. Tilføj en musiktjeneste eller importer din historik for at gøre dine anbefalinger skarpere.",
+      "lastImport": "Sidste import {days, plural, =0 {i dag} one {# dag siden} other {# dage siden}}",
+      "loadFailed": "Vi kunne ikke hente dine forbundne kilder. Prøv igen om et øjeblik.",
+      "reconnect": "Genopret forbindelse",
+      "removeBody": "Dette fjerner de kunstnere og sange, som {name} føjede til din musikprofil. Dine anbefalinger vil blive opdateret.",
+      "removeFailed": "Vi kunne ikke fjerne det lige nu. Prøv igen.",
+      "removeTitle": "Fjern {name}?",
+      "stale": "Forbind Spotify til ListenBrainz, så nye afspilninger kommer med",
+      "status": {
+        "error": "Problem",
+        "importing": "Importerer",
+        "needsReconnect": "Skal forbindes igen",
+        "ok": "Opdateret",
+        "stale": "Ingen nye afspilninger"
+      },
+      "cancel": "Annuller",
+      "remove": "Fjern",
+      "title": "Forbundet"
+    },
+    "spotifyExport": {
+      "denied": "Notifikationer er slået fra for Nomad Karaoke. Slå dem til i Indstillinger for at få en påmindelse.",
+      "intro": "Spotify kan sende dig hele din lyttehistorik. Det tager dem et par dage, så start nu, så klarer vi resten.",
+      "open": "Åbn Spotifys privatlivsindstillinger",
+      "pick": "Vælg filen",
+      "remind": "Mind mig om det",
+      "reminded": "Modtaget. Vi minder dig om det om ca. 5 dage og igen om 25 dage.",
+      "step1": "Anmod om dine data på spotify.com/account/privacy. Sæt kryds ved Kontodata (klar om ca. 5 dage) og Udvidet streaminghistorik (op til 30 dage): Udvidet indeholder hele din historik.",
+      "step2": "Vi minder dig om det, når det burde være klar.",
+      "openSettings": "Åbn Indstillinger",
+      "step3Ios": "Når e-mailen fra Spotify lander, så gem zip-filen i Filer, og vend derefter tilbage hertil og vælg den.",
+      "step3Android": "Når e-mailen fra Spotify lander, skal du downloade zip-filen og vælge Del → Nomad Karaoke, eller vende tilbage hertil og vælge filen."
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Færdig! Dine anbefalinger inkluderer nu det, du lytter til.",
+      "failed": "Vi forbandt din konto, men kunne ikke indlæse din historik lige nu. Vi prøver igen senere.",
+      "reading": "Læser din lyttehistorik…",
+      "slow": "Læser stadig din historik. Dine anbefalinger opdateres, når det er færdigt."
+    },
+    "title": "Forbind din musik",
+    "connected": "Forbundet",
+    "back": "Tilbage",
+    "alreadyImported": "Du har allerede importeret denne fil, så der var ikke noget nyt at tilføje."
   }
 }

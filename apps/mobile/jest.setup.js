@@ -91,6 +91,19 @@ jest.mock('expo-haptics', () => ({
   NotificationFeedbackType: { Success: 'success', Warning: 'warning', Error: 'error' },
 }));
 jest.mock('expo-clipboard', () => ({ setStringAsync: jest.fn(async () => true) }));
+// Local reminders (Connect → Spotify export): the root layout listens for reminder taps. Suites drive the jest.fns.
+jest.mock('expo-notifications', () => ({
+  requestPermissionsAsync: jest.fn(async () => ({ granted: true, status: 'granted', canAskAgain: true })),
+  setNotificationChannelAsync: jest.fn(async () => null),
+  scheduleNotificationAsync: jest.fn(async () => 'reminder-id'),
+  cancelScheduledNotificationAsync: jest.fn(async () => {}),
+  getLastNotificationResponse: jest.fn(() => null),
+  clearLastNotificationResponse: jest.fn(),
+  addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+  AndroidImportance: { DEFAULT: 5 },
+  SchedulableTriggerInputTypes: { DATE: 'date' },
+}));
+jest.mock('expo-document-picker', () => ({ getDocumentAsync: jest.fn(async () => ({ canceled: true, assets: null })) }));
 jest.mock('expo-media-library', () => ({ requestPermissionsAsync: jest.fn(), Asset: { create: jest.fn() } }));
 jest.mock('expo-file-system', () => {
   class File {

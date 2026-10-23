@@ -1202,5 +1202,221 @@
     "songSearchLabel": "Tìm bài hát",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Hiện chưa có gợi ý nào. Hãy tìm kiếm nghệ sĩ ở trên, hoặc bỏ qua bước này."
+  },
+  "connect": {
+    "appleExport": "Không có gói đăng ký Apple Music? Hãy nhập lịch sử nghe nhạc của bạn",
+    "appleGuide": {
+      "intro": "Không có gói đăng ký Apple Music? Apple vẫn có thể gửi cho bạn lịch sử nghe nhạc. Quá trình này mất vài ngày.",
+      "open": "Mở privacy.apple.com",
+      "pick": "Chọn tệp",
+      "step1": "Truy cập privacy.apple.com và đăng nhập.",
+      "step2": "Chọn Yêu cầu bản sao dữ liệu của bạn, đánh dấu vào Thông tin dịch vụ Apple Media, rồi gửi yêu cầu. Apple sẽ gửi email cho bạn sau vài ngày.",
+      "step3": "Tải các tệp xuống, sau đó chọn tệp zip hoặc tệp CSV Play Activity tại đây."
+    },
+    "appleReading": "Đang đọc thư viện của bạn…",
+    "cards": {
+      "apple": {
+        "detail": "Thư viện và các bài nghe gần đây của bạn · vài giây",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Các scrobble của bạn · vài phút",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Giữ cho gợi ý luôn mới mẻ theo những gì bạn nghe",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify hoặc YouTube Music · vài giây",
+        "title": "Dán liên kết danh sách phát"
+      },
+      "screenshot": {
+        "detail": "Tìm nghệ sĩ trong vài giây",
+        "title": "Chụp màn hình ứng dụng âm nhạc"
+      },
+      "spotifyExport": {
+        "detail": "Toàn bộ lịch sử nghe nhạc · Spotify cần từ 5–30 ngày",
+        "title": "Lịch sử Spotify của bạn"
+      }
+    },
+    "errors": {
+      "badUrl": "Đó không phải là liên kết danh sách phát Spotify hoặc YouTube Music.",
+      "likedPrivate": "Danh sách Bài hát đã thích luôn ở chế độ riêng tư. Hãy sao chép danh sách này vào một danh sách phát công khai hoặc không công khai, sau đó chia sẻ liên kết đó.",
+      "notAnExport": "Tệp này không giống tệp xuất dữ liệu của Spotify hoặc Apple.",
+      "notFound": "Chúng tôi không tìm thấy tên người dùng đó. Hãy kiểm tra lại chính tả rồi thử lại.",
+      "private": "Chúng tôi không thể mở danh sách phát đó. Hãy đảm bảo danh sách phát ở chế độ công khai rồi thử lại.",
+      "rateLimited": "Hiện tại có quá nhiều yêu cầu nhập dữ liệu. Hãy thử lại sau nhé.",
+      "tooLarge": "Tệp này quá lớn để gửi từ ứng dụng.",
+      "unavailable": "Hiện tại chúng tôi không thể kết nối tới dịch vụ. Hãy thử lại sau vài phút.",
+      "unparseable": "Hiện tại chúng tôi chưa thể đọc danh sách phát đó. Bạn hãy thử dùng liên kết YouTube Music hoặc ảnh chụp màn hình xem sao.",
+      "generic": "Đã xảy ra lỗi. Vui lòng thử lại."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "lịch sử Apple Music của bạn",
+        "spotifyAccount": "dữ liệu tài khoản Spotify của bạn",
+        "spotifyExtended": "lịch sử nghe nhạc Spotify mở rộng của bạn"
+      },
+      "lbAlso": "Đồng thời thêm vào ListenBrainz để các bài nghe mới liên tục được cập nhật",
+      "lbBusy": "ListenBrainz đang nhập một tệp cho bạn. Vui lòng thử lại sau khi hoàn tất.",
+      "lbReconnect": "Kết nối lại với ListenBrainz, sau đó thử lại.",
+      "lbSending": "Đang gửi đến ListenBrainz…",
+      "lbSent": "Đã gửi đến ListenBrainz. Có thể mất một lúc để hệ thống hoàn tất nhập dữ liệu.",
+      "lbTooBig": "Tệp quá lớn để gửi từ ứng dụng: vui lòng tải lên tại listenbrainz.org",
+      "libraryBoth": "Cùng với {liked, plural, other {# bài hát đã thích}} và {playlists, plural, other {# danh sách phát}}",
+      "libraryLiked": "Cùng với {liked, plural, other {# bài hát đã thích}}",
+      "libraryPlaylists": "Cùng với {playlists, plural, other {# danh sách phát}}",
+      "nothing": "Chúng tôi không tìm thấy bài hát nào để thêm từ tệp này.",
+      "pickAnother": "Chọn tệp khác",
+      "preview": "{tracks, plural, other {# bài hát}} từ {kind}",
+      "reading": "Đang đọc tệp của bạn…",
+      "sending": "Đang thêm các bài hát của bạn…",
+      "skippedMalformed": "{count, plural, other {# mục không thể đọc}}",
+      "skippedPodcasts": "{count, plural, other {# lượt nghe podcast, sách nói hoặc video}}",
+      "skippedShort": "{count, plural, other {# lượt nghe dưới 30 giây}}",
+      "skippedTitle": "Đã bỏ qua",
+      "start": "Thêm vào danh sách nhạc của tôi",
+      "title": "Nhập lịch sử của bạn",
+      "truncated": "Tệp này có vẻ chưa hoàn chỉnh, nên một phần lịch sử của bạn có thể bị thiếu. Nếu có thể, bạn hãy tải lại tệp từ email của Spotify.",
+      "waiting": "Đang chờ kết nối"
+    },
+    "improve": {
+      "connect": "Kết nối âm nhạc của bạn",
+      "stale": "Kết nối Spotify với ListenBrainz để cập nhật các bài nghe mới"
+    },
+    "intro": "Hãy chia sẻ những gì bạn thực sự nghe để nhận được gợi ý chuẩn xác hơn nhiều. Mỗi nguồn kết nối đều sẽ bổ sung thêm cho nhau.",
+    "lastfm": {
+      "intro": "Nhập tên người dùng Last.fm của bạn và chúng tôi sẽ đọc các scrobble để tìm những bài hát bạn quen thuộc.",
+      "submit": "Kết nối",
+      "username": "Tên người dùng Last.fm"
+    },
+    "lb": {
+      "account": "Đã kết nối với tư cách {username}",
+      "accountHint": "Không phải tài khoản của bạn? Hãy gỡ bỏ ListenBrainz trong mục Đã kết nối, sau đó đăng nhập lại.",
+      "checklist": {
+        "step1": "1. Tạo tài khoản MetaBrainz",
+        "step2": "2. Xác minh email của bạn",
+        "step3": "3. Quay lại và nhập tên người dùng của bạn"
+      },
+      "intro": "ListenBrainz lưu trữ miễn phí và mở lịch sử nghe nhạc của bạn. Hãy kết nối để các bài nghe mới liên tục làm mới gợi ý dành cho bạn.",
+      "oauth": "Đăng nhập bằng ListenBrainz",
+      "oauthError": {
+        "denied": "Bạn chưa cấp quyền truy cập nên chưa có gì được kết nối. Bạn có thể thử lại bất cứ lúc nào.",
+        "exchange_failed": "Chúng tôi không thể hoàn tất kết nối với ListenBrainz. Vui lòng thử lại.",
+        "generic": "Đã xảy ra lỗi khi kết nối với ListenBrainz. Vui lòng thử lại.",
+        "invalid_state": "Phiên đăng nhập đã hết hạn hoặc đã được sử dụng. Vui lòng thử lại.",
+        "missing_params": "ListenBrainz không gửi lại đầy đủ thông tin cần thiết. Vui lòng thử lại.",
+        "validate_failed": "Tài khoản MetaBrainz của bạn chưa kích hoạt trên ListenBrainz. Hãy đăng nhập một lần tại listenbrainz.org rồi thử lại."
+      },
+      "oauthUnavailable": "Tính năng đăng nhập bằng ListenBrainz hiện không khả dụng. Bạn hãy nhập tên người dùng để thay thế.",
+      "opening": "Đang mở ListenBrainz…",
+      "or": "Hoặc nhập tên người dùng ListenBrainz",
+      "signup": "Chưa có tài khoản? Tạo tài khoản miễn phí",
+      "spotifyGuide": "Kết nối Spotify với ListenBrainz",
+      "spotifyGuideBody": "Khi đó, mọi bài hát bạn nghe trên Spotify sẽ tự động chuyển tới gợi ý của bạn.",
+      "submit": "Kết nối",
+      "username": "Tên người dùng ListenBrainz"
+    },
+    "offline": "Bạn đang ngoại tuyến",
+    "playlist": {
+      "again": "Nhập danh sách phát khác",
+      "done": "Đã nhập {title}",
+      "howTo": {
+        "step1": "1. Trên music.youtube.com, mở Thư viện → Bản nhạc đã thích.",
+        "step2": "2. Chọn các bài hát (nhấn vào một bài, sau đó chọn các bài khác).",
+        "step3": "3. Chọn \"Thêm vào danh sách phát\" → Danh sách phát mới, rồi đặt chế độ hiển thị thành Không công khai hoặc Công khai.",
+        "step4": "4. Mở danh sách phát mới, nhấn Chia sẻ → Sao chép liên kết, rồi dán vào đây.",
+        "anyPlaylist": "Bất kỳ danh sách phát công khai hoặc không công khai nào chứa các bài hát bạn yêu thích đều dùng được, ví dụ: danh sách nhạc quẩy tiệc tùng hoặc nhạc tập luyện của bạn.",
+        "title": "Làm thế nào để chia sẻ danh sách Bài hát đã thích của tôi?"
+      },
+      "importing": "Đang nhập danh sách phát của bạn…",
+      "intro": "Dán liên kết danh sách phát Spotify hoặc YouTube Music công khai và chúng tôi sẽ thêm những bài hát đó vào danh sách bài bạn biết hát.",
+      "matched": "{matched}/{fetched} bài có phiên bản karaoke",
+      "notPlaylist": "Đó không phải là liên kết danh sách phát Spotify hoặc YouTube Music",
+      "paste": "Dán",
+      "placeholder": "Liên kết danh sách phát",
+      "submit": "Nhập danh sách phát"
+    },
+    "reminders": {
+      "channel": "Lời nhắc",
+      "title": "Dữ liệu Spotify của bạn có thể đã sẵn sàng",
+      "bodyAndroid": "Hãy mở email từ Spotify, sau đó chia sẻ tệp zip với Nomad Karaoke.",
+      "bodyIos": "Mở email từ Spotify, lưu tệp zip vào Tệp, sau đó chọn tệp đó trong Nomad Karaoke."
+    },
+    "result": "Đã thêm {artists, plural, other {# nghệ sĩ}} và {songs, plural, other {# bài hát}} bạn biết",
+    "screenshot": {
+      "again": "Chọn thêm ảnh chụp màn hình",
+      "confirm": "{count, plural, =0 {Không có gì để thêm} other {Thêm # mục}}",
+      "confirmBody": "Bỏ chọn những mục chúng tôi nhận diện chưa đúng.",
+      "confirmTitle": "Thông tin này đúng chưa?",
+      "dailyLimit": "Bạn đã dùng hết hạn mức 10 ảnh chụp màn hình cho hôm nay. Hãy thử lại vào ngày mai nhé.",
+      "empty": "Chúng tôi không tìm thấy nghệ sĩ hoặc bài hát nào trong các ảnh chụp màn hình đó. Hãy thử với hình ảnh rõ nét hơn.",
+      "intro": "Chọn ảnh chụp màn hình thư viện, danh sách phát hoặc nghệ sĩ nghe nhiều nhất từ bất kỳ ứng dụng âm nhạc nào. Chúng tôi sẽ nhận diện tên bài hát/nghệ sĩ để bạn kiểm tra trước khi lưu.",
+      "item": "{artist} · {title}",
+      "limit": "Tối đa 5 ảnh chụp màn hình mỗi lần.",
+      "pick": "Chọn ảnh chụp màn hình",
+      "pickMore": "Chọn các ảnh chụp màn hình khác",
+      "reading": "Đang đọc ảnh chụp màn hình của bạn…",
+      "unmatched": "Chưa có trong danh mục karaoke của chúng tôi",
+      "retry": "Thử lại"
+    },
+    "source": {
+      "appleExport": "Lịch sử Apple Music",
+      "screenshot": "Ảnh chụp màn hình",
+      "spotifyExport": "Lịch sử Spotify",
+      "spotifyPlaylist": "Danh sách phát Spotify",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Thêm nguồn khác",
+      "counts": "{artists, plural, other {# nghệ sĩ}} · {songs, plural, other {# bài hát}}",
+      "empty": "Chưa có nguồn kết nối nào. Hãy thêm một dịch vụ âm nhạc hoặc nhập lịch sử để gợi ý của bạn chuẩn xác hơn.",
+      "lastImport": "Lần nhập gần nhất: {days, plural, =0 {hôm nay} other {# ngày trước}}",
+      "loadFailed": "Chúng tôi không thể tải các nguồn đã kết nối của bạn. Vui lòng thử lại sau giây lát.",
+      "reconnect": "Kết nối lại",
+      "removeBody": "Thao tác này sẽ xóa các nghệ sĩ và bài hát mà {name} đã thêm vào hồ sơ âm nhạc của bạn. Gợi ý dành cho bạn sẽ được cập nhật.",
+      "removeFailed": "Hiện tại chúng tôi không thể xóa nguồn đó. Vui lòng thử lại.",
+      "removeTitle": "Xóa {name}?",
+      "stale": "Kết nối Spotify với ListenBrainz để cập nhật các bài nghe mới",
+      "status": {
+        "error": "Có sự cố",
+        "importing": "Đang nhập",
+        "needsReconnect": "Cần kết nối lại",
+        "ok": "Đã cập nhật",
+        "stale": "Không có bài nghe mới"
+      },
+      "cancel": "Hủy",
+      "remove": "Xóa",
+      "title": "Đã kết nối"
+    },
+    "spotifyExport": {
+      "denied": "Thông báo đang tắt cho Nomad Karaoke. Hãy bật thông báo trong Cài đặt để nhận lời nhắc nhé.",
+      "intro": "Spotify có thể gửi cho bạn toàn bộ lịch sử nghe nhạc. Quá trình này mất vài ngày, vì vậy hãy bắt đầu ngay và chúng tôi sẽ hỗ trợ các bước tiếp theo.",
+      "open": "Mở cài đặt quyền riêng tư của Spotify",
+      "pick": "Chọn tệp",
+      "remind": "Nhắc tôi",
+      "reminded": "Xong! Chúng tôi sẽ nhắc bạn sau khoảng 5 ngày, và nhắc lại sau 25 ngày.",
+      "step1": "Yêu cầu dữ liệu của bạn tại spotify.com/account/privacy. Đánh dấu vào Dữ liệu tài khoản (sẵn sàng sau khoảng 5 ngày) và Lịch sử nghe nhạc mở rộng (tối đa 30 ngày): Gói mở rộng chứa toàn bộ lịch sử của bạn.",
+      "step2": "Chúng tôi sẽ nhắc bạn khi dữ liệu sẵn sàng.",
+      "openSettings": "Mở Cài đặt",
+      "step3Ios": "Khi email từ Spotify tới, hãy lưu tệp zip vào Tệp, sau đó quay lại đây và chọn tệp đó.",
+      "step3Android": "Khi email từ Spotify tới, hãy tải tệp zip xuống, sau đó chọn Chia sẻ → Nomad Karaoke, hoặc quay lại đây và chọn tệp."
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Xong! Giờ đây gợi ý của bạn đã bao gồm những bản nhạc bạn yêu thích.",
+      "failed": "Chúng tôi đã kết nối tài khoản nhưng hiện chưa thể đọc lịch sử nghe của bạn. Chúng tôi sẽ thử lại sau.",
+      "reading": "Đang đọc lịch sử nghe nhạc của bạn…",
+      "slow": "Vẫn đang đọc lịch sử nghe nhạc của bạn. Các gợi ý sẽ được cập nhật ngay khi hoàn tất."
+    },
+    "title": "Kết nối âm nhạc của bạn",
+    "connected": "Đã kết nối",
+    "back": "Quay lại",
+    "alreadyImported": "Bạn đã nhập tệp này rồi, nên không có nội dung mới nào để thêm."
   }
 }

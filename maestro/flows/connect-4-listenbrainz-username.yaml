@@ -1,0 +1,73 @@
+# Connect 4 (Phase 3b spec §5.5): a fake ListenBrainz user with listens of fixture songs → Connect → ListenBrainz →
+# the username → the sync's result → a new listen of another song → decide's daily poller adds it (one more song) →
+# Me's "Connected" list shows ListenBrainz with songs.
+appId: com.nomadkaraoke.mobile
+name: connect-4-listenbrainz-username
+tags:
+  - connect
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: connect4
+- runFlow:
+    file: ../common/connect-open.yaml
+    env:
+      EMAIL: ${output.email}
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: fake-lb-user
+      DECIDE_STACK: ${DECIDE_STACK}
+- tapOn:
+    id: "connect-card-listenbrainz"
+- tapOn:
+    id: "connect-lb-username"
+- inputText: ${output.lbUsername}
+- tapOn:
+    id: "connect-lb-submit"
+- extendedWaitUntil:
+    visible:
+      id: "connect-import-result"
+    timeout: 60000
+- extendedWaitUntil:
+    visible:
+      id: "connect-lb-account"
+    timeout: 20000
+- takeScreenshot: ${SHOTS3B}/connect-4-connected
+# What the connect's own sync added.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: source-counts
+      DECIDE_STACK: ${DECIDE_STACK}
+      SOURCE: listenbrainz
+      MIN_SONGS: "1"
+# A new listen of a song the user doesn't have yet (Adele "Hello"; the fixture listens are Starlight and Rocket Man):
+# decide's daily poller must pick it up and add the song.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: fake-lb-user
+      DECIDE_STACK: ${DECIDE_STACK}
+      ADD: '[{"artist":"Adele","title":"Hello"}]'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: lb-poll
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_ADDED: "1"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: source-counts
+      DECIDE_STACK: ${DECIDE_STACK}
+      SOURCE: listenbrainz
+      MIN_SONGS_ADDED: "1"
+- runFlow:
+    file: ../common/connect-profile-row.yaml
+    env:
+      SOURCE: listenbrainz
+- takeScreenshot: ${SHOTS3B}/connect-4-profile

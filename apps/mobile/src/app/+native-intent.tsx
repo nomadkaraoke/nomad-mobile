@@ -1,4 +1,5 @@
 // Rewrites links the system hands the app before Expo Router routes them (docs: router/advanced/native-intent).
+import { LB_RETURN, lbReturnFromUrl, lbScreenPath } from '../discover/connect/lbReturn';
 import { isFreshIntent, useMakeIntent } from '../make/intentStore';
 import { parseNightLink } from '../tonight/links';
 
@@ -6,6 +7,29 @@ import { parseNightLink } from '../tonight/links';
 const CHECKOUT_RETURN = /^nomadkaraoke:\/\/\/?checkout(?:[?#/]|$)/i;
 /** nomadkaraoke://music-connected: decide web's Apple Music connect page handing back (see useAppleMusic). */
 const MUSIC_CONNECTED = /^nomadkaraoke:\/\/\/?music-connected(?:[?#/]|$)/i;
+/** nomadkaraoke://services/listenbrainz?status=…: decide's ListenBrainz OAuth callback (see useListenBrainzOAuth). */
+const SERVICES_RETURN = LB_RETURN;
+/**
+ * The import screen reads and deletes a cache file named in its query: only the app's own picker and share intake
+ * open it. Matched loosely (any scheme, host, case or encoding of the path); a false match only lands on the hub.
+ */
+const IMPORT_FILE_ROUTE = /import-file/i;
+const CONNECT_HUB = '/discover/connect';
+
+/** `path` percent-decoded until stable (a few rounds), so an encoded route name can't slip past the checks. */
+function decoded(path: string): string {
+  let out = path;
+  for (let i = 0; i < 3; i++) {
+    try {
+      const next = decodeURIComponent(out);
+      if (next === out) break;
+      out = next;
+    } catch {
+      break;
+    }
+  }
+  return out;
+}
 
 /** http(s) links on the hosts the app claims: kjbox.cc, www.kjbox.cc, sing.nomadkaraoke.com (any case). */
 const CLAIMED_HOST = /^https?:\/\/(?:(?:www\.)?kjbox\.cc|sing\.nomadkaraoke\.com)(?:[:/?#]|$)/i;
@@ -18,12 +42,17 @@ const CLAIMED_HOST = /^https?:\/\/(?:(?:www\.)?kjbox\.cc|sing\.nomadkaraoke\.com
  * MMKV, read synchronously) resumes the make flow, which re-reads the balance; otherwise Me shows the balance.
  */
 export function redirectSystemPath({ path, initial }: { path: string; initial: boolean }): string | null {
+  // Final review I2: a link must never pick the file the import screen reads (and deletes); send it to the hub.
+  if (IMPORT_FILE_ROUTE.test(decoded(path.split(/[?#]/, 1)[0] ?? ''))) return CONNECT_HUB;
   if (CHECKOUT_RETURN.test(path)) {
     if (!initial) return null;
     return isFreshIntent(useMakeIntent.getState().intent) ? '/make/new' : '/me';
   }
   // Same double delivery as checkout; on a cold start the music profile shows the new connection.
   if (MUSIC_CONNECTED.test(path)) return initial ? '/me/music-profile' : null;
+  // Same again for ListenBrainz OAuth (the auth session reads the URL). On a cold start (Android killed the app
+  // while the user signed in) the LB screen opens and applies the result itself.
+  if (SERVICES_RETURN.test(path)) return initial ? lbScreenPath(lbReturnFromUrl(path)) : null;
   // Night links (spec §4.2, ruling E3-R1): kjbox.cc/<code> (any case: the printed QR is HTTP://KJBOX.CC/<code>),
   // sing.nomadkaraoke.com/?t=<code> and nomadkaraoke://tonight?t=<code> open the join route. Only full links: a bare
   // code is never a system path.

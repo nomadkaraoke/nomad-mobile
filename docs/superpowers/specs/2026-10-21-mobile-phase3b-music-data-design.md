@@ -106,3 +106,25 @@ All of 5.x needs a connection except parsing; a picked file is parsed offline an
 1. Register a MetaBrainz OAuth application (callback `https://decide.nomadkaraoke.com/api/services/listenbrainz/oauth/callback`), put client id/secret in Secret Manager (`metabrainz-client-id`, `metabrainz-client-secret`), flip `LISTENBRAINZ_OAUTH_ENABLED`.
 2. Optionally ask MetaBrainz for `registration-requests` and `listenbrainz:connect-services` (in-app sign-up and in-app "connect Spotify to ListenBrainz").
 3. Decide on Apple MusicKit (key in the Apple Developer account).
+
+## 9. As built (2026-10-23)
+
+Rulings made during execution (plan, "Execution amendments"), where the build differs from the sections above:
+
+- **A1 Apple Music:** MusicKit connect shipped first (decide #172–176, mobile #12/#15). The privacy export stays as a "No Apple Music subscription?" link on the Apple card. §2's non-goal and §8 item 3 are superseded.
+- **A2 ListenBrainz OAuth is live,** not dark. Andrew registered the MetaBrainz app. The button still hides itself if a secret is missing. Uploading the Spotify zip to ListenBrainz works end to end.
+- **A3 Shared `user_songs` rows with Tonight:** imports merge into the row `{user_id}:{kn_id}`, else `loved_doc_id`, additively, using the same rule as the karaoke log.
+- **A4 New sources** (`screenshot`, `spotify_playlist`, `spotify_export`, `apple_export`) are added to every source enumeration (models, recs v2, web badge, disconnect allowlist).
+- **A5 Versions:** decide shipped as v0.21 to v0.26 (one minor per PR), not 0.15.x.
+- **A6 Four decide PRs:** #177, #179, #182, #183 (Parts A to D), one per part.
+- **A7 Ports:** the 3b stack runs decide on :8031 and search on :8022 (macOS launchd holds :8021), Metro :8083.
+- **A8 The ListenBrainz poller is a Cloud Run Job,** not a request on the API service, like `mb-refresh` and `lb-refresh`.
+- **A9 Capacity:** decide returned 0 s 500s during an Apple sync, which led to Task 27.
+- **A10 Names:** test API router `test_support.py`, Maestro helper `maestro/scripts/stack.js`.
+- **A11 `decide-token-key`** was created by hand (Fernet), not declared in Pulumi. CI mounts it unconditionally.
+- **Spotify playlist embed:** at most 50 tracks (the plan said 100 at first), best-effort, canary posts to #noise.
+- **Upload of screenshots and the LB export** sends expo-file-system `File`s: SDK 57's fetch rejects React Native `{uri}` parts.
+- **The Connect hub got a back button** (found by connect-1…5).
+- **Android share intake** accepts only other apps' `content://` URIs and caps the copy at 256 MiB.
+- **Not yet done:** the screen tour (ar, en), the release APK and its prod check run after the PR merges. Open asks to MetaBrainz and the iOS share extension are tracked in BACKLOG.md.
+

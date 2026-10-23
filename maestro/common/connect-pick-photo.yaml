@@ -1,0 +1,29 @@
+# In the system photo picker (multiple selection, opened by Screenshot import): pick one photo pushed today by
+# maestro/scripts/push-fixtures.sh and confirm. decide's fake extractor ignores the pixels.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      # PHPicker labels photos "Photo, <date>, <time>" (days and hours not zero-padded, 12-hour clocks add AM/PM);
+      # this year's have no year in the date: ours.
+      - extendedWaitUntil:
+          visible: "Photo, [A-Z][a-z]+ [0-9]{1,2}, [0-9]{1,2}:[0-9]{2}.*"
+          timeout: 20000
+      - tapOn:
+          text: "Photo, [A-Z][a-z]+ [0-9]{1,2}, [0-9]{1,2}:[0-9]{2}.*"
+          index: 0
+      - tapOn: "Done"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      # The system photo picker: items are "Photo taken on <date>"; the newest (ours) is first.
+      - extendedWaitUntil:
+          visible: "Photo taken on .*"
+          timeout: 20000
+      - tapOn:
+          text: "Photo taken on .*"
+          index: 0
+      - tapOn: "Add.*"

@@ -1202,5 +1202,221 @@
     "songSearchLabel": "Keress egy dalt",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Jelenleg nincsenek javaslatok. Keress egy előadóra fent, vagy ugord át ezt a lépést."
+  },
+  "connect": {
+    "appleExport": "Nincs Apple Music-előfizetésed? Importáld inkább a lejátszási előzményeidet",
+    "appleGuide": {
+      "intro": "Nincs Apple Music-előfizetésed? Az Apple ettől még el tudja küldeni a lejátszási előzményeidet. Ez eltart nekik néhány napig.",
+      "open": "A privacy.apple.com megnyitása",
+      "pick": "Fájl kiválasztása",
+      "step1": "Lépj a privacy.apple.com oldalra, és jelentkezz be.",
+      "step2": "Válaszd az Adatmásolat kérése lehetőséget, jelöld be az Apple Media Services-információk elemet, majd küldd el. Az Apple néhány napon belül e-mailt küld.",
+      "step3": "Töltsd le a fájlokat, majd válaszd ki itt a zip-fájlt vagy a Play Activity CSV-t."
+    },
+    "appleReading": "A könyvtárad beolvasása…",
+    "cards": {
+      "apple": {
+        "detail": "A könyvtárad és a legutóbbi lejátszásaid · pár másodperc",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "A scrobble-jeid · néhány perc",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Frissen tartja az ajánlataidat zenehallgatás közben",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify vagy YouTube Music · pár másodperc",
+        "title": "Lejátszási lista linkjének beillesztése"
+      },
+      "screenshot": {
+        "detail": "Előadók másodpercek alatt",
+        "title": "Készíts képernyőképet a zenei appodról"
+      },
+      "spotifyExport": {
+        "detail": "A teljes hallgatási előzményed · a Spotify-nak 5–30 napba telik",
+        "title": "A Spotify-előzményeid"
+      }
+    },
+    "errors": {
+      "badUrl": "Ez nem egy Spotify vagy YouTube Music lejátszási lista linkje.",
+      "likedPrivate": "A Kedvelt zenék mindig privátak. Másold át egy nyilvános vagy nem listázott lejátszási listába, majd oszd meg annak a linkjét.",
+      "notAnExport": "Ez nem tűnik Spotify vagy Apple adatexportnak.",
+      "notFound": "Nem találtuk ezt a felhasználónevet. Ellenőrizd a helyesírást, és próbáld újra.",
+      "private": "Nem tudtuk megnyitni ezt a lejátszási listát. Győződj meg róla, hogy nyilvános, majd próbáld újra.",
+      "rateLimited": "Most túl sok importálás történt. Próbáld újra később.",
+      "tooLarge": "Ez a fájl túl nagy ahhoz, hogy az appból küldd el.",
+      "unavailable": "Jelenleg nem tudtuk elérni a szolgáltatást. Próbáld újra néhány perc múlva.",
+      "unparseable": "Jelenleg nem tudtuk beolvasni ezt a lejátszási listát. Próbálkozz inkább egy YouTube Music linkkel vagy egy képernyőképpel.",
+      "generic": "Valami hiba történt. Kérlek, próbáld újra."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "az Apple Music-előzményeid",
+        "spotifyAccount": "a Spotify-fiókadataid",
+        "spotifyExtended": "a Spotify-streamelési előzményeid"
+      },
+      "lbAlso": "Add hozzá a ListenBrainz-hez is, hogy az új meghallgatások folyamatosan érkezzenek",
+      "lbBusy": "A ListenBrainz már éppen importál egy fájlt neked. Próbáld újra, ha befejezte.",
+      "lbReconnect": "Csatlakoztasd újra a ListenBrainz-et, majd próbáld újra.",
+      "lbSending": "Küldés a ListenBrainz-nek…",
+      "lbSent": "Elküldve a ListenBrainz-nek. Eltarthat egy ideig, mire importálják.",
+      "lbTooBig": "Túl nagy az appból való elküldéshez: töltsd fel a listenbrainz.org oldalon",
+      "libraryBoth": "Plusz {liked, plural, one {# kedvelt dal} other {# kedvelt dal}} és {playlists, plural, one {# lejátszási lista} other {# lejátszási lista}}",
+      "libraryLiked": "Plusz {liked, plural, one {# kedvelt dal} other {# kedvelt dal}}",
+      "libraryPlaylists": "Plusz {playlists, plural, one {# lejátszási lista} other {# lejátszási lista}}",
+      "nothing": "Nem találtunk hozzáadható dalokat ebben a fájlban.",
+      "pickAnother": "Válassz másik fájlt",
+      "preview": "{tracks, plural, one {# dal} other {# dal}} innen: {kind}",
+      "reading": "A fájlod beolvasása…",
+      "sending": "A dalaid hozzáadása…",
+      "skippedMalformed": "{count, plural, one {# olvashatatlan bejegyzés} other {# olvashatatlan bejegyzés}}",
+      "skippedPodcasts": "{count, plural, one {# podcast-, hangoskönyv- vagy videólejátszás} other {# podcast-, hangoskönyv- vagy videólejátszás}}",
+      "skippedShort": "{count, plural, one {# 30 másodpercnél rövidebb lejátszás} other {# 30 másodpercnél rövidebb lejátszás}}",
+      "skippedTitle": "Kihagyva",
+      "start": "Hozzáadás a zenéimhez",
+      "title": "Előzmények importálása",
+      "truncated": "Ez a fájl hiányosnak tűnik, így előfordulhat, hogy az előzményeid egy része hiányzik. Ha teheted, töltsd le újra a Spotify e-mailjéből.",
+      "waiting": "Várakozás a kapcsolatra"
+    },
+    "improve": {
+      "connect": "Csatlakoztasd a zenéidet",
+      "stale": "Csatlakoztasd a Spotify-t a ListenBrainz-hez, hogy megérkezzenek az új meghallgatások"
+    },
+    "intro": "Mondd el nekünk, mit hallgatsz valójában, és az ajánlataid sokkal jobbak lesznek. Mindegyik kiegészíti a többit.",
+    "lastfm": {
+      "intro": "Add meg a Last.fm-felhasználónevedet, és beolvassuk a scrobble-jeidet, hogy megtaláljuk az általad ismert dalokat.",
+      "submit": "Csatlakoztatás",
+      "username": "Last.fm-felhasználónév"
+    },
+    "lb": {
+      "account": "Csatlakoztatva mint {username}",
+      "accountHint": "Nem a te fiókod? Távolítsd el a ListenBrainz-et a Csatlakoztatva alatt, majd jelentkezz be újra.",
+      "checklist": {
+        "step1": "1. Hozz létre egy MetaBrainz-fiókot",
+        "step2": "2. Erősítsd meg az e-mail-címedet",
+        "step3": "3. Gyere vissza, és add meg a felhasználónevedet"
+      },
+      "intro": "A ListenBrainz ingyenes, nyílt nyilvántartást vezet arról, amit hallgatsz. Csatlakoztasd, és az új meghallgatásaid frissen tartják az ajánlataidat.",
+      "oauth": "Bejelentkezés ListenBrainz-fiókkal",
+      "oauthError": {
+        "denied": "Nem engedélyezted a hozzáférést, így semmi sem lett csatlakoztatva. Próbáld újra, amikor csak szeretnéd.",
+        "exchange_failed": "Nem sikerült befejezni a csatlakozást a ListenBrainz-hez. Kérjük, próbáld újra.",
+        "generic": "Hiba történt a ListenBrainz csatlakoztatása közben. Kérjük, próbáld újra.",
+        "invalid_state": "Ez a bejelentkezés lejárt vagy már felhasználták. Kérjük, próbáld újra.",
+        "missing_params": "A ListenBrainz nem küldött vissza minden szükséges adatot. Kérjük, próbáld újra.",
+        "validate_failed": "A MetaBrainz-fiókod még nincs a ListenBrainz-en. Jelentkezz be egyszer a listenbrainz.org oldalon, majd próbáld újra."
+      },
+      "oauthUnavailable": "A ListenBrainz-fiókkal való bejelentkezés jelenleg nem érhető el. Add meg inkább a felhasználónevedet.",
+      "opening": "A ListenBrainz megnyitása…",
+      "or": "Vagy add meg a ListenBrainz-felhasználónevedet",
+      "signup": "Nincs még fiókod? Hozz létre egy ingyenes fiókot",
+      "spotifyGuide": "Csatlakoztasd a Spotify-t a ListenBrainz-hez",
+      "spotifyGuideBody": "Így minden, amit a Spotify-on játszol le, magától bekerül az ajánlataid közé.",
+      "submit": "Csatlakoztatás",
+      "username": "ListenBrainz-felhasználónév"
+    },
+    "offline": "Offline vagy",
+    "playlist": {
+      "again": "Másik lejátszási lista importálása",
+      "done": "{title} importálva",
+      "howTo": {
+        "step1": "1. A music.youtube.com oldalon nyisd meg a Könyvtár → Kedvelt zenék menüpontot.",
+        "step2": "2. Válaszd ki a dalokat (koppints az egyikre, majd a többire).",
+        "step3": "3. Válaszd a „Hozzáadás lejátszási listához” → Új lejátszási lista lehetőséget, és állítsd a láthatóságot Nem listázottra vagy Nyilvánosra.",
+        "step4": "4. Nyisd meg az új lejátszási listát, koppints a Megosztás → Link másolása elemre, és illeszd be ide.",
+        "anyPlaylist": "Bármilyen nyilvános vagy nem listázott lejátszási lista megfelel a kedvenc számaiddal, például egy buli- vagy edzésmix.",
+        "title": "Hogyan oszthatom meg a Kedvelt zenéimet?"
+      },
+      "importing": "A lejátszási listád importálása…",
+      "intro": "Illeszd be egy nyilvános Spotify vagy YouTube Music lejátszási lista linkjét, és a benne lévő dalokat hozzáadjuk azokhoz, amikről tudjuk, hogy énekled őket.",
+      "matched": "{matched} / {fetched} dalhoz van karaoke verzió",
+      "notPlaylist": "Ez nem egy Spotify vagy YouTube Music lejátszási lista linkje",
+      "paste": "Beillesztés",
+      "placeholder": "Lejátszási lista linkje",
+      "submit": "Lejátszási lista importálása"
+    },
+    "reminders": {
+      "channel": "Emlékeztetők",
+      "title": "A Spotify-adataid készen állhatnak",
+      "bodyAndroid": "Nyisd meg a Spotify-tól kapott e-mailt, majd oszd meg a zip-fájlt a Nomad Karaoke alkalmazással.",
+      "bodyIos": "Nyisd meg a Spotify e-mailjét, mentsd a zip-fájlt a Fájlok appba, majd válaszd ki a Nomad Karaokéban."
+    },
+    "result": "Hozzáadva: {artists, plural, one {# előadó} other {# előadó}} és {songs, plural, one {# dal} other {# dal}}, amit ismersz",
+    "screenshot": {
+      "again": "További képernyőképek kiválasztása",
+      "confirm": "{count, plural, =0 {Nincs mit hozzáadni} one {# elem hozzáadása} other {# elem hozzáadása}}",
+      "confirmBody": "Töröld a pipát minden mellől, amit elrontottunk.",
+      "confirmTitle": "Helyes ez így?",
+      "dailyLimit": "Kihasználtad a mai 10 képernyőképedet. Próbáld újra holnap.",
+      "empty": "Nem találtunk előadókat vagy dalokat ezeken a képernyőképeken. Próbálj meg tisztább képet feltölteni.",
+      "intro": "Válassz ki képernyőképeket a könyvtáradról, lejátszási listáidról vagy kedvenc előadóidról bármelyik zenei appból. Beolvassuk a neveket, te pedig ellenőrizheted őket, mielőtt bármi mentésre kerülne.",
+      "item": "{artist} · {title}",
+      "limit": "Egyszerre legfeljebb 5 képernyőkép.",
+      "pick": "Képernyőképek kiválasztása",
+      "pickMore": "Másik képernyőképek kiválasztása",
+      "reading": "A képernyőképeid beolvasása…",
+      "unmatched": "Még nem szerepel a karaoke katalógusunkban",
+      "retry": "Próbáld újra"
+    },
+    "source": {
+      "appleExport": "Apple Music-előzmények",
+      "screenshot": "Képernyőképek",
+      "spotifyExport": "Spotify-előzmények",
+      "spotifyPlaylist": "Spotify-lejátszási listák",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Továbbiak hozzáadása",
+      "counts": "{artists, plural, one {# előadó} other {# előadó}} · {songs, plural, one {# dal} other {# dal}}",
+      "empty": "Még semmi sincs csatlakoztatva. Csatlakoztass egy zenei szolgáltatást, vagy importáld az előzményeidet az ajánlataid finomításához.",
+      "lastImport": "Utolsó importálás: {days, plural, =0 {ma} one {# napja} other {# napja}}",
+      "loadFailed": "Nem sikerült betölteni a csatlakoztatott forrásaidat. Kérjük, próbáld újra egy pillanat múlva.",
+      "reconnect": "Újracsatlakozás",
+      "removeBody": "Ez eltávolítja azokat az előadókat és dalokat, amelyeket a(z) {name} hozzáadott a zenei profilodhoz. Az ajánlataid frissülni fognak.",
+      "removeFailed": "Nem sikerült eltávolítani. Kérjük, próbáld újra.",
+      "removeTitle": "Eltávolítod a következőt: {name}?",
+      "stale": "Csatlakoztasd a Spotify-t a ListenBrainz-hez, hogy megérkezzenek az új meghallgatások",
+      "status": {
+        "error": "Probléma",
+        "importing": "Importálás",
+        "needsReconnect": "Újracsatlakozás szükséges",
+        "ok": "Naprakész",
+        "stale": "Nincsenek új meghallgatások"
+      },
+      "cancel": "Mégse",
+      "remove": "Eltávolítás",
+      "title": "Csatlakoztatva"
+    },
+    "spotifyExport": {
+      "denied": "Az értesítések ki vannak kapcsolva a Nomad Karaoke számára. Kapcsold be őket a Beállításokban, hogy emlékeztetőt kapj.",
+      "intro": "A Spotify el tudja küldeni a teljes hallgatási előzményedet. Ez eltart nekik néhány napig, úgyhogy kezdd el most, a többit pedig mi intézzük.",
+      "open": "A Spotify adatvédelmi beállításainak megnyitása",
+      "pick": "Fájl kiválasztása",
+      "remind": "Emlékeztess",
+      "reminded": "Kész. Körülbelül 5 nap múlva emlékeztetünk, majd 25 nap múlva újra.",
+      "step1": "Kérd ki az adataidat a spotify.com/account/privacy oldalon. Jelöld be a Fiókadatok (kb. 5 nap múlva kész) és a Bővített streamelési előzmények (legfeljebb 30 nap) lehetőséget: a Bővített tartalmazza a teljes előzményedet.",
+      "step2": "Emlékeztetni fogunk, amikor elkészülhet.",
+      "openSettings": "Beállítások megnyitása",
+      "step3Ios": "Amikor megérkezik a Spotify e-mailje, mentsd a zip-fájlt a Fájlok appba, majd térj vissza ide, és válaszd ki.",
+      "step3Android": "Amikor megérkezik a Spotify e-mailje, töltsd le a zip-fájlt, majd válaszd a Megosztás → Nomad Karaoke lehetőséget, vagy térj vissza ide, és válaszd ki a fájlt."
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Kész. Az ajánlataid mostantól tartalmazzák azt is, amit hallgatsz.",
+      "failed": "Csatlakoztattuk a fiókodat, de most nem sikerült beolvasni az előzményeidet. Később újra megpróbáljuk.",
+      "reading": "A hallgatási előzményeid beolvasása…",
+      "slow": "Még mindig olvassuk az előzményeidet. Az ajánlataid frissülni fognak, amint elkészül."
+    },
+    "title": "Csatlakoztasd a zenéidet",
+    "connected": "Csatlakoztatva",
+    "back": "Vissza",
+    "alreadyImported": "Ezt a fájlt már importáltad, így nem volt új hozzáadnivaló."
   }
 }

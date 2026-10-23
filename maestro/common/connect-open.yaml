@@ -1,0 +1,25 @@
+# Signed in on Discover with a seeded profile (so there are picks), then Improve → "Connect your music".
+# Resets decide's fakes first (seeded fake users, knobs). Env: EMAIL.
+appId: com.nomadkaraoke.mobile
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: fake-externals
+      DECIDE_STACK: ${DECIDE_STACK}
+- runFlow:
+    file: discover-seeded.yaml
+    env:
+      EMAIL: ${EMAIL}
+      PROFILE: '{"genres":["pop","rock"]}'
+- scrollUntilVisible:
+    element:
+      id: "discover-improve-connect"
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: "discover-improve-connect"
+- extendedWaitUntil:
+    visible:
+      id: "connect-hub"
+    timeout: 20000

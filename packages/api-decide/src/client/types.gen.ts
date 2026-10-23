@@ -221,6 +221,28 @@ export type AllArtistsResponse = {
 };
 
 /**
+ * AppleExportRequest
+ */
+export type AppleExportRequest = {
+    /**
+     * Generated At
+     */
+    generated_at: string;
+    /**
+     * Chunk Index
+     */
+    chunk_index: number;
+    /**
+     * Chunk Count
+     */
+    chunk_count: number;
+    /**
+     * Tracks
+     */
+    tracks: Array<ExportTrack>;
+};
+
+/**
  * AppleMusicConnectRequest
  *
  * Music User Token from MusicKit JS; `state` comes from /apple-music/link when not signed in.
@@ -474,6 +496,26 @@ export type AuthResponse = {
 };
 
 /**
+ * Body_extract_screenshot_api_services_screenshot_extract_post
+ */
+export type BodyExtractScreenshotApiServicesScreenshotExtractPost = {
+    /**
+     * Images
+     */
+    images?: Array<Blob | File> | null;
+};
+
+/**
+ * Body_upload_listenbrainz_export_api_services_listenbrainz_upload_export_post
+ */
+export type BodyUploadListenbrainzExportApiServicesListenbrainzUploadExportPost = {
+    /**
+     * File
+     */
+    file: Blob | File;
+};
+
+/**
  * BulkAddKnownSongsRequest
  *
  * Request to add multiple known songs.
@@ -509,6 +551,56 @@ export type BulkAddKnownSongsResponse = {
      * Total Requested
      */
     total_requested: number;
+};
+
+/**
+ * Candidate
+ */
+export type Candidate = {
+    /**
+     * Kind
+     */
+    kind: 'artist' | 'song';
+    /**
+     * Artist
+     */
+    artist: string;
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * Confidence
+     */
+    confidence: number;
+    /**
+     * Matched
+     */
+    matched: boolean;
+    /**
+     * Song Key
+     */
+    song_key?: string | null;
+};
+
+/**
+ * Capabilities
+ *
+ * Which optional import features this deployment has enabled.
+ */
+export type Capabilities = {
+    /**
+     * Screenshot Import
+     */
+    screenshot_import: boolean;
+    /**
+     * Listenbrainz Oauth
+     */
+    listenbrainz_oauth: boolean;
+    /**
+     * Listenbrainz Upload Max Bytes
+     */
+    listenbrainz_upload_max_bytes?: number;
 };
 
 /**
@@ -662,6 +754,24 @@ export type CollectEmailResponse = {
 };
 
 /**
+ * ConfirmItem
+ */
+export type ConfirmItem = {
+    /**
+     * Kind
+     */
+    kind: 'artist' | 'song';
+    /**
+     * Artist
+     */
+    artist: string;
+    /**
+     * Title
+     */
+    title?: string | null;
+};
+
+/**
  * ConnectedServiceResponse
  *
  * Connected music service information.
@@ -695,6 +805,22 @@ export type ConnectedServiceResponse = {
      * Songs Synced
      */
     songs_synced: number;
+    /**
+     * Artists
+     */
+    artists?: number;
+    /**
+     * Songs
+     */
+    songs?: number;
+    /**
+     * Last Import At
+     */
+    last_import_at?: string | null;
+    /**
+     * Status
+     */
+    status?: string;
 };
 
 /**
@@ -949,6 +1075,102 @@ export type ExcludeArtistResponse = {
 };
 
 /**
+ * ExportImportResponse
+ */
+export type ExportImportResponse = {
+    /**
+     * Source
+     */
+    source: string;
+    /**
+     * Artists Added
+     */
+    artists_added: number;
+    /**
+     * Songs Added
+     */
+    songs_added: number;
+    /**
+     * Songs Updated
+     */
+    songs_updated: number;
+    /**
+     * Tracks Matched
+     */
+    tracks_matched: number;
+    /**
+     * Duplicate
+     */
+    duplicate: boolean;
+    /**
+     * Chunks Done
+     */
+    chunks_done: number;
+    /**
+     * Chunk Count
+     */
+    chunk_count: number;
+};
+
+/**
+ * ExportPlaylist
+ */
+export type ExportPlaylist = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Tracks
+     */
+    tracks: Array<ExportRef>;
+};
+
+/**
+ * ExportRef
+ */
+export type ExportRef = {
+    /**
+     * Artist
+     */
+    artist: string;
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
+ * ExportTrack
+ */
+export type ExportTrack = {
+    /**
+     * Artist
+     */
+    artist: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Ms Played
+     */
+    ms_played: number;
+    /**
+     * Plays
+     */
+    plays: number;
+    /**
+     * First Ts
+     */
+    first_ts: number;
+    /**
+     * Last Ts
+     */
+    last_ts: number;
+};
+
+/**
  * FeedbackBody
  */
 export type FeedbackBody = {
@@ -1062,6 +1284,34 @@ export type ImpersonateResponse = {
      * User Display Name
      */
     user_display_name: string | null;
+};
+
+/**
+ * ImportResultResponse
+ *
+ * Outcome of one import, shared by every import source.
+ */
+export type ImportResultResponse = {
+    /**
+     * Source
+     */
+    source: string;
+    /**
+     * Artists Added
+     */
+    artists_added: number;
+    /**
+     * Songs Added
+     */
+    songs_added: number;
+    /**
+     * Songs Updated
+     */
+    songs_updated: number;
+    /**
+     * Tracks Matched
+     */
+    tracks_matched: number;
 };
 
 /**
@@ -1273,6 +1523,30 @@ export type ListenBrainzConnectRequest = {
 };
 
 /**
+ * ListenBrainzOAuthStartResponse
+ */
+export type ListenBrainzOAuthStartResponse = {
+    /**
+     * Auth Url
+     */
+    auth_url: string;
+};
+
+/**
+ * ListenBrainzUploadResponse
+ */
+export type ListenBrainzUploadResponse = {
+    /**
+     * Import Id
+     */
+    import_id: string;
+    /**
+     * Status
+     */
+    status: string;
+};
+
+/**
  * LogMedia
  */
 export type LogMedia = {
@@ -1369,6 +1643,20 @@ export type ManualArtistInput = {
      * Artist genres
      */
     genres?: Array<string>;
+};
+
+/**
+ * PendingListenBrainzImport
+ */
+export type PendingListenBrainzImport = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Status
+     */
+    status: string;
 };
 
 /**
@@ -2044,6 +2332,40 @@ export type RemoveArtistResponse = {
 };
 
 /**
+ * RemoveDataResponse
+ */
+export type RemoveDataResponse = {
+    /**
+     * Removed Songs
+     */
+    removed_songs: number;
+    /**
+     * Removed Artists
+     */
+    removed_artists: number;
+};
+
+/**
+ * ScreenshotConfirmRequest
+ */
+export type ScreenshotConfirmRequest = {
+    /**
+     * Items
+     */
+    items: Array<ConfirmItem>;
+};
+
+/**
+ * ScreenshotExtractResponse
+ */
+export type ScreenshotExtractResponse = {
+    /**
+     * Candidates
+     */
+    candidates: Array<Candidate>;
+};
+
+/**
  * ServiceStats
  *
  * Music service connection statistics.
@@ -2292,6 +2614,58 @@ export type SongsSummary = {
 };
 
 /**
+ * SourceSummary
+ *
+ * One source in the app's "Connected sources" list.
+ */
+export type SourceSummary = {
+    /**
+     * Source
+     */
+    source: string;
+    /**
+     * Connected
+     */
+    connected: boolean;
+    /**
+     * Username
+     */
+    username?: string | null;
+    /**
+     * Artists
+     */
+    artists?: number;
+    /**
+     * Songs
+     */
+    songs?: number;
+    /**
+     * Last Import At
+     */
+    last_import_at?: string | null;
+    /**
+     * Status
+     */
+    status?: 'ok' | 'needs_reconnect' | 'importing' | 'stale' | 'error';
+    /**
+     * Auth
+     */
+    auth?: 'username' | 'oauth' | null;
+    pending_listenbrainz_import?: PendingListenBrainzImport | null;
+};
+
+/**
+ * SourcesSummaryResponse
+ */
+export type SourcesSummaryResponse = {
+    /**
+     * Sources
+     */
+    sources: Array<SourceSummary>;
+    capabilities: Capabilities;
+};
+
+/**
  * SpotifyConnectResponse
  *
  * Response for starting Spotify OAuth.
@@ -2301,6 +2675,70 @@ export type SpotifyConnectResponse = {
      * Auth Url
      */
     auth_url: string;
+};
+
+/**
+ * SpotifyExportRequest
+ */
+export type SpotifyExportRequest = {
+    /**
+     * Generated At
+     */
+    generated_at: string;
+    /**
+     * Chunk Index
+     */
+    chunk_index: number;
+    /**
+     * Chunk Count
+     */
+    chunk_count: number;
+    /**
+     * Tracks
+     */
+    tracks: Array<ExportTrack>;
+    /**
+     * Kind
+     */
+    kind: 'account' | 'extended';
+    /**
+     * Liked
+     */
+    liked: Array<ExportRef>;
+    /**
+     * Playlists
+     */
+    playlists: Array<ExportPlaylist>;
+};
+
+/**
+ * SpotifyPlaylistImportRequest
+ */
+export type SpotifyPlaylistImportRequest = {
+    /**
+     * Url
+     *
+     * Playlist link, URI, id or share text
+     */
+    url: string;
+};
+
+/**
+ * SpotifyPlaylistImportResponse
+ */
+export type SpotifyPlaylistImportResponse = {
+    /**
+     * Playlist Title
+     */
+    playlist_title: string;
+    /**
+     * Tracks Fetched
+     */
+    tracks_fetched: number;
+    /**
+     * Tracks Matched
+     */
+    tracks_matched: number;
 };
 
 /**
@@ -3951,6 +4389,118 @@ export type SearchTracksApiCatalogTracksGetResponses = {
 
 export type SearchTracksApiCatalogTracksGetResponse = SearchTracksApiCatalogTracksGetResponses[keyof SearchTracksApiCatalogTracksGetResponses];
 
+export type GetCapabilitiesApiServicesCapabilitiesGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/services/capabilities';
+};
+
+export type GetCapabilitiesApiServicesCapabilitiesGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: Capabilities;
+};
+
+export type GetCapabilitiesApiServicesCapabilitiesGetResponse = GetCapabilitiesApiServicesCapabilitiesGetResponses[keyof GetCapabilitiesApiServicesCapabilitiesGetResponses];
+
+export type ExtractScreenshotApiServicesScreenshotExtractPostData = {
+    body?: BodyExtractScreenshotApiServicesScreenshotExtractPost;
+    path?: never;
+    query?: never;
+    url: '/api/services/screenshot/extract';
+};
+
+export type ExtractScreenshotApiServicesScreenshotExtractPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ExtractScreenshotApiServicesScreenshotExtractPostError = ExtractScreenshotApiServicesScreenshotExtractPostErrors[keyof ExtractScreenshotApiServicesScreenshotExtractPostErrors];
+
+export type ExtractScreenshotApiServicesScreenshotExtractPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: ScreenshotExtractResponse;
+};
+
+export type ExtractScreenshotApiServicesScreenshotExtractPostResponse = ExtractScreenshotApiServicesScreenshotExtractPostResponses[keyof ExtractScreenshotApiServicesScreenshotExtractPostResponses];
+
+export type ConfirmScreenshotApiServicesScreenshotConfirmPostData = {
+    body: ScreenshotConfirmRequest;
+    path?: never;
+    query?: never;
+    url: '/api/services/screenshot/confirm';
+};
+
+export type ConfirmScreenshotApiServicesScreenshotConfirmPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ConfirmScreenshotApiServicesScreenshotConfirmPostError = ConfirmScreenshotApiServicesScreenshotConfirmPostErrors[keyof ConfirmScreenshotApiServicesScreenshotConfirmPostErrors];
+
+export type ConfirmScreenshotApiServicesScreenshotConfirmPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: ImportResultResponse;
+};
+
+export type ConfirmScreenshotApiServicesScreenshotConfirmPostResponse = ConfirmScreenshotApiServicesScreenshotConfirmPostResponses[keyof ConfirmScreenshotApiServicesScreenshotConfirmPostResponses];
+
+export type GetSourcesSummaryApiServicesSummaryGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/services/summary';
+};
+
+export type GetSourcesSummaryApiServicesSummaryGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: SourcesSummaryResponse;
+};
+
+export type GetSourcesSummaryApiServicesSummaryGetResponse = GetSourcesSummaryApiServicesSummaryGetResponses[keyof GetSourcesSummaryApiServicesSummaryGetResponses];
+
+export type RemoveSourceDataApiServicesSourcesSourceDataDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * Source
+         */
+        source: string;
+    };
+    query?: never;
+    url: '/api/services/sources/{source}/data';
+};
+
+export type RemoveSourceDataApiServicesSourcesSourceDataDeleteErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RemoveSourceDataApiServicesSourcesSourceDataDeleteError = RemoveSourceDataApiServicesSourcesSourceDataDeleteErrors[keyof RemoveSourceDataApiServicesSourcesSourceDataDeleteErrors];
+
+export type RemoveSourceDataApiServicesSourcesSourceDataDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    200: RemoveDataResponse;
+};
+
+export type RemoveSourceDataApiServicesSourcesSourceDataDeleteResponse = RemoveSourceDataApiServicesSourcesSourceDataDeleteResponses[keyof RemoveSourceDataApiServicesSourcesSourceDataDeleteResponses];
+
 export type ListServicesApiServicesGetData = {
     body?: never;
     path?: never;
@@ -4071,6 +4621,97 @@ export type ConnectListenbrainzApiServicesListenbrainzConnectPostResponses = {
 
 export type ConnectListenbrainzApiServicesListenbrainzConnectPostResponse = ConnectListenbrainzApiServicesListenbrainzConnectPostResponses[keyof ConnectListenbrainzApiServicesListenbrainzConnectPostResponses];
 
+export type ListenbrainzOauthStartApiServicesListenbrainzOauthStartGetData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Return To
+         */
+        return_to: 'app' | 'web';
+    };
+    url: '/api/services/listenbrainz/oauth/start';
+};
+
+export type ListenbrainzOauthStartApiServicesListenbrainzOauthStartGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListenbrainzOauthStartApiServicesListenbrainzOauthStartGetError = ListenbrainzOauthStartApiServicesListenbrainzOauthStartGetErrors[keyof ListenbrainzOauthStartApiServicesListenbrainzOauthStartGetErrors];
+
+export type ListenbrainzOauthStartApiServicesListenbrainzOauthStartGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: ListenBrainzOAuthStartResponse;
+};
+
+export type ListenbrainzOauthStartApiServicesListenbrainzOauthStartGetResponse = ListenbrainzOauthStartApiServicesListenbrainzOauthStartGetResponses[keyof ListenbrainzOauthStartApiServicesListenbrainzOauthStartGetResponses];
+
+export type UploadListenbrainzExportApiServicesListenbrainzUploadExportPostData = {
+    body: BodyUploadListenbrainzExportApiServicesListenbrainzUploadExportPost;
+    path?: never;
+    query?: never;
+    url: '/api/services/listenbrainz/upload-export';
+};
+
+export type UploadListenbrainzExportApiServicesListenbrainzUploadExportPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UploadListenbrainzExportApiServicesListenbrainzUploadExportPostError = UploadListenbrainzExportApiServicesListenbrainzUploadExportPostErrors[keyof UploadListenbrainzExportApiServicesListenbrainzUploadExportPostErrors];
+
+export type UploadListenbrainzExportApiServicesListenbrainzUploadExportPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: ListenBrainzUploadResponse;
+};
+
+export type UploadListenbrainzExportApiServicesListenbrainzUploadExportPostResponse = UploadListenbrainzExportApiServicesListenbrainzUploadExportPostResponses[keyof UploadListenbrainzExportApiServicesListenbrainzUploadExportPostResponses];
+
+export type ListenbrainzOauthCallbackApiServicesListenbrainzOauthCallbackGetData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Code
+         */
+        code?: string | null;
+        /**
+         * State
+         */
+        state?: string | null;
+        /**
+         * Error
+         */
+        error?: string | null;
+    };
+    url: '/api/services/listenbrainz/oauth/callback';
+};
+
+export type ListenbrainzOauthCallbackApiServicesListenbrainzOauthCallbackGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListenbrainzOauthCallbackApiServicesListenbrainzOauthCallbackGetError = ListenbrainzOauthCallbackApiServicesListenbrainzOauthCallbackGetErrors[keyof ListenbrainzOauthCallbackApiServicesListenbrainzOauthCallbackGetErrors];
+
+export type ListenbrainzOauthCallbackApiServicesListenbrainzOauthCallbackGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
 export type ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostData = {
     body: YouTubeMusicImportRequest;
     path?: never;
@@ -4095,6 +4736,31 @@ export type ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponses
 };
 
 export type ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponse = ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponses[keyof ImportYoutubeMusicPlaylistApiServicesYoutubeMusicImportPostResponses];
+
+export type ImportSpotifyPlaylistApiServicesSpotifyPlaylistImportPostData = {
+    body: SpotifyPlaylistImportRequest;
+    path?: never;
+    query?: never;
+    url: '/api/services/spotify-playlist/import';
+};
+
+export type ImportSpotifyPlaylistApiServicesSpotifyPlaylistImportPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ImportSpotifyPlaylistApiServicesSpotifyPlaylistImportPostError = ImportSpotifyPlaylistApiServicesSpotifyPlaylistImportPostErrors[keyof ImportSpotifyPlaylistApiServicesSpotifyPlaylistImportPostErrors];
+
+export type ImportSpotifyPlaylistApiServicesSpotifyPlaylistImportPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: SpotifyPlaylistImportResponse;
+};
+
+export type ImportSpotifyPlaylistApiServicesSpotifyPlaylistImportPostResponse = ImportSpotifyPlaylistApiServicesSpotifyPlaylistImportPostResponses[keyof ImportSpotifyPlaylistApiServicesSpotifyPlaylistImportPostResponses];
 
 export type AppleMusicDeveloperTokenApiServicesAppleMusicDeveloperTokenGetData = {
     body?: never;
@@ -4260,6 +4926,56 @@ export type GetSyncStatusApiServicesSyncStatusGetResponses = {
 };
 
 export type GetSyncStatusApiServicesSyncStatusGetResponse = GetSyncStatusApiServicesSyncStatusGetResponses[keyof GetSyncStatusApiServicesSyncStatusGetResponses];
+
+export type SpotifyExportApiServicesSpotifyExportPostData = {
+    body: SpotifyExportRequest;
+    path?: never;
+    query?: never;
+    url: '/api/services/spotify-export';
+};
+
+export type SpotifyExportApiServicesSpotifyExportPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type SpotifyExportApiServicesSpotifyExportPostError = SpotifyExportApiServicesSpotifyExportPostErrors[keyof SpotifyExportApiServicesSpotifyExportPostErrors];
+
+export type SpotifyExportApiServicesSpotifyExportPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: ExportImportResponse;
+};
+
+export type SpotifyExportApiServicesSpotifyExportPostResponse = SpotifyExportApiServicesSpotifyExportPostResponses[keyof SpotifyExportApiServicesSpotifyExportPostResponses];
+
+export type AppleExportApiServicesAppleExportPostData = {
+    body: AppleExportRequest;
+    path?: never;
+    query?: never;
+    url: '/api/services/apple-export';
+};
+
+export type AppleExportApiServicesAppleExportPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AppleExportApiServicesAppleExportPostError = AppleExportApiServicesAppleExportPostErrors[keyof AppleExportApiServicesAppleExportPostErrors];
+
+export type AppleExportApiServicesAppleExportPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: ExportImportResponse;
+};
+
+export type AppleExportApiServicesAppleExportPostResponse = AppleExportApiServicesAppleExportPostResponses[keyof AppleExportApiServicesAppleExportPostResponses];
 
 export type GetQuizSongsApiQuizSongsGetData = {
     body?: never;

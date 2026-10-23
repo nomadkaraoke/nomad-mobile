@@ -1202,5 +1202,221 @@
     "songSearchLabel": "Cari lagu",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Tiada cadangan buat masa ini. Cari artis di atas, atau langkau langkah ini."
+  },
+  "connect": {
+    "appleExport": "Tiada langganan Apple Music? Import sejarah pendengaran anda sebagai ganti",
+    "appleGuide": {
+      "intro": "Tiada langganan Apple Music? Apple masih boleh menghantar sejarah pendengaran anda. Ia mengambil masa beberapa hari.",
+      "open": "Buka privacy.apple.com",
+      "pick": "Pilih fail",
+      "step1": "Pergi ke privacy.apple.com dan log masuk.",
+      "step2": "Pilih Minta salinan data anda, tandakan maklumat Apple Media Services, dan hantar. Apple akan menghantar e-mel kepada anda dalam masa beberapa hari.",
+      "step3": "Muat turun fail tersebut, kemudian pilih fail zip atau CSV Play Activity di sini."
+    },
+    "appleReading": "Membaca pustaka anda…",
+    "cards": {
+      "apple": {
+        "detail": "Pustaka dan lagu yang baru dimainkan · beberapa saat",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Scrobble anda · beberapa minit",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Memastikan pilihan anda sentiasa segar mengikut apa yang anda dengar",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify atau YouTube Music · beberapa saat",
+        "title": "Tampal pautan senarai main"
+      },
+      "screenshot": {
+        "detail": "Artis dalam beberapa saat",
+        "title": "Tangkapan skrin aplikasi muzik anda"
+      },
+      "spotifyExport": {
+        "detail": "Keseluruhan sejarah pendengaran anda · mengambil masa 5–30 hari dari Spotify",
+        "title": "Sejarah Spotify anda"
+      }
+    },
+    "errors": {
+      "badUrl": "Itu bukan pautan senarai main Spotify atau YouTube Music.",
+      "likedPrivate": "Lagu yang Disukai sentiasa bersifat peribadi. Salin ke senarai main awam atau tidak tersenarai, kemudian kongsi pautan tersebut.",
+      "notAnExport": "Ini tidak kelihatan seperti fail eksport data Spotify atau Apple.",
+      "notFound": "Kami tidak dapat mencari nama pengguna tersebut. Semak ejaan dan cuba lagi.",
+      "private": "Kami tidak dapat membuka senarai main tersebut. Pastikan ia bersifat awam, kemudian cuba lagi.",
+      "rateLimited": "Terlalu banyak import buat masa ini. Cuba lagi sebentar lagi.",
+      "tooLarge": "Fail itu terlalu besar untuk dihantar daripada aplikasi.",
+      "unavailable": "Kami tidak dapat menghubungi perkhidmatan tersebut tadi. Cuba lagi dalam beberapa minit.",
+      "unparseable": "Kami tidak dapat membaca senarai main tersebut sekarang. Cuba gunakan pautan YouTube Music atau tangkapan skrin sebagai ganti.",
+      "generic": "Sesuatu yang tidak kena berlaku. Sila cuba lagi."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "sejarah Apple Music anda",
+        "spotifyAccount": "data akaun Spotify anda",
+        "spotifyExtended": "sejarah penstriman Spotify anda"
+      },
+      "lbAlso": "Tambahkan juga ke ListenBrainz supaya lagu baharu terus dimasukkan",
+      "lbBusy": "ListenBrainz sedang mengimport fail untuk anda. Cuba lagi setelah ia selesai.",
+      "lbReconnect": "Sambung semula ListenBrainz, kemudian cuba lagi.",
+      "lbSending": "Menghantar ke ListenBrainz…",
+      "lbSent": "Dihantar ke ListenBrainz. Mereka mungkin mengambil masa sebentar untuk mengimportnya.",
+      "lbTooBig": "Terlalu besar untuk dihantar daripada aplikasi: muat naik di listenbrainz.org",
+      "libraryBoth": "Tambahan {liked, plural, other {# lagu disukai}} dan {playlists, plural, other {# senarai main}}",
+      "libraryLiked": "Tambahan {liked, plural, other {# lagu disukai}}",
+      "libraryPlaylists": "Tambahan {playlists, plural, other {# senarai main}}",
+      "nothing": "Kami tidak menemui sebarang lagu untuk ditambahkan dalam fail ini.",
+      "pickAnother": "Pilih fail lain",
+      "preview": "{tracks, plural, other {# lagu}} daripada {kind}",
+      "reading": "Membaca fail anda…",
+      "sending": "Menambah lagu anda…",
+      "skippedMalformed": "{count, plural, other {# entri tidak boleh dibaca}}",
+      "skippedPodcasts": "{count, plural, other {# mainan podcast, buku audio atau video}}",
+      "skippedShort": "{count, plural, other {# mainan bawah 30 saat}}",
+      "skippedTitle": "Dilangkau",
+      "start": "Tambah ke muzik saya",
+      "title": "Import sejarah anda",
+      "truncated": "Fail ini kelihatan tidak lengkap, jadi sebahagian daripada sejarah anda mungkin tiada. Jika boleh, muat turun semula daripada e-mel Spotify.",
+      "waiting": "Menunggu sambungan"
+    },
+    "improve": {
+      "connect": "Sambungkan muzik anda",
+      "stale": "Sambungkan Spotify ke ListenBrainz supaya lagu baharu yang didengari dapat masuk"
+    },
+    "intro": "Beritahu kami apa yang sebenarnya anda dengar agar cadangan lagu anda menjadi lebih tepat. Setiap sumber ini saling melengkapi.",
+    "lastfm": {
+      "intro": "Masukkan nama pengguna Last.fm anda dan kami akan membaca scrobble anda untuk mencari lagu yang anda tahu.",
+      "submit": "Sambung",
+      "username": "Nama pengguna Last.fm"
+    },
+    "lb": {
+      "account": "Disambungkan sebagai {username}",
+      "accountHint": "Bukan akaun anda? Alih keluar ListenBrainz di bawah Disambungkan, kemudian log masuk semula.",
+      "checklist": {
+        "step1": "1. Cipta akaun MetaBrainz",
+        "step2": "2. Sahkan e-mel anda",
+        "step3": "3. Kembali dan masukkan nama pengguna anda"
+      },
+      "intro": "ListenBrainz menyimpan rekod terbuka dan percuma tentang apa yang anda dengar. Sambungkannya dan lagu baharu yang didengar akan memastikan pilihan lagu anda sentiasa segar.",
+      "oauth": "Log masuk dengan ListenBrainz",
+      "oauthError": {
+        "denied": "Anda tidak membenarkan akses, jadi tiada apa yang disambungkan. Cuba lagi bila-bila masa anda mahu.",
+        "exchange_failed": "Kami tidak dapat melengkapkan sambungan ke ListenBrainz. Sila cuba lagi.",
+        "generic": "Masalah berlaku semasa menyambungkan ListenBrainz. Sila cuba lagi.",
+        "invalid_state": "Sesi log masuk itu telah tamat tempoh atau telah digunakan. Sila cuba lagi.",
+        "missing_params": "ListenBrainz tidak menghantar semula semua data yang diperlukan. Sila cuba lagi.",
+        "validate_failed": "Akaun MetaBrainz anda belum ada di ListenBrainz lagi. Log masuk sekali di listenbrainz.org, kemudian cuba lagi."
+      },
+      "oauthUnavailable": "Log masuk dengan ListenBrainz tidak tersedia sekarang. Masukkan nama pengguna anda sebagai ganti.",
+      "opening": "Membuka ListenBrainz…",
+      "or": "Atau masukkan nama pengguna ListenBrainz anda",
+      "signup": "Tiada akaun? Cipta akaun percuma",
+      "spotifyGuide": "Sambungkan Spotify ke ListenBrainz",
+      "spotifyGuideBody": "Kemudian semua yang anda mainkan di Spotify akan dimasukkan ke pilihan lagu anda secara automatik.",
+      "submit": "Sambung",
+      "username": "Nama pengguna ListenBrainz"
+    },
+    "offline": "Anda berada di luar talian",
+    "playlist": {
+      "again": "Import senarai main lain",
+      "done": "Berjaya mengimport {title}",
+      "howTo": {
+        "step1": "1. Di music.youtube.com, buka Pustaka → Lagu Disukai.",
+        "step2": "2. Pilih lagu (ketik satu lagu, kemudian ketik yang lain).",
+        "step3": "3. Pilih \"Tambah ke senarai main\" → Senarai main baharu, dan tetapkan keterlihatan kepada Tidak Tersenarai atau Awam.",
+        "step4": "4. Buka senarai main baharu tersebut, ketik Kongsi → Salin pautan, dan tampalkannya di sini.",
+        "anyPlaylist": "Mana-mana senarai main awam atau tidak disenaraikan yang mengandungi lagu kegemaran anda juga boleh digunakan, cth. campuran parti atau senaman anda.",
+        "title": "Bagaimanakah cara untuk berkongsi Lagu yang Disukai (Liked Music) saya?"
+      },
+      "importing": "Mengimport senarai main anda…",
+      "intro": "Tampal pautan ke senarai main awam Spotify atau YouTube Music dan kami akan menambahkan lagunya ke senarai lagu yang kami tahu anda nyanyikan.",
+      "matched": "{matched} daripada {fetched} mempunyai versi karaoke",
+      "notPlaylist": "Itu bukan pautan senarai main Spotify atau YouTube Music",
+      "paste": "Tampal",
+      "placeholder": "Pautan senarai main",
+      "submit": "Import senarai main"
+    },
+    "reminders": {
+      "channel": "Peringatan",
+      "title": "Data Spotify anda mungkin sudah sedia",
+      "bodyAndroid": "Buka e-mel daripada Spotify, kemudian kongsikan fail zip tersebut dengan Nomad Karaoke.",
+      "bodyIos": "Buka e-mel daripada Spotify, simpan zip ke Fail, kemudian pilihnya dalam Nomad Karaoke."
+    },
+    "result": "Menambah {artists, plural, other {# artis}} dan {songs, plural, other {# lagu}} yang anda tahu",
+    "screenshot": {
+      "again": "Pilih lebih banyak tangkapan skrin",
+      "confirm": "{count, plural, =0 {Tiada apa untuk ditambahkan} other {Tambah # item}}",
+      "confirmBody": "Nyahsemak apa-apa yang tidak tepat.",
+      "confirmTitle": "Adakah ini betul?",
+      "dailyLimit": "Anda telah menggunakan had 10 tangkapan skrin untuk hari ini. Cuba lagi esok.",
+      "empty": "Kami tidak dapat menemui sebarang artis atau lagu dalam tangkapan skrin tersebut. Cuba imej yang lebih jelas.",
+      "intro": "Pilih tangkapan skrin pustaka, senarai main atau artis teratas anda daripada mana-mana aplikasi muzik. Kami akan membaca nama-nama tersebut dan anda boleh menyemaknya sebelum disimpan.",
+      "item": "{artist} · {title}",
+      "limit": "Sehingga 5 tangkapan skrin pada satu masa.",
+      "pick": "Pilih tangkapan skrin",
+      "pickMore": "Pilih tangkapan skrin lain",
+      "reading": "Membaca tangkapan skrin anda…",
+      "unmatched": "Belum ada dalam katalog karaoke kami",
+      "retry": "Cuba lagi"
+    },
+    "source": {
+      "appleExport": "Sejarah Apple Music",
+      "screenshot": "Tangkapan skrin",
+      "spotifyExport": "Sejarah Spotify",
+      "spotifyPlaylist": "Senarai main Spotify",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Tambah lagi",
+      "counts": "{artists, plural, other {# artis}} · {songs, plural, other {# lagu}}",
+      "empty": "Belum ada yang disambungkan. Tambah perkhidmatan muzik atau import sejarah anda untuk memperkemas pilihan anda.",
+      "lastImport": "Import terakhir {days, plural, =0 {hari ini} other {# hari lalu}}",
+      "loadFailed": "Kami tidak dapat memuatkan sumber yang disambungkan. Sila cuba lagi sebentar.",
+      "reconnect": "Sambung semula",
+      "removeBody": "Ini akan memadamkan artis dan lagu yang ditambahkan oleh {name} pada profil muzik anda. Pilihan anda akan dikemas kini.",
+      "removeFailed": "Kami tidak dapat memadamkannya tadi. Sila cuba lagi.",
+      "removeTitle": "Alih keluar {name}?",
+      "stale": "Sambungkan Spotify ke ListenBrainz supaya lagu baharu yang didengari dapat masuk",
+      "status": {
+        "error": "Masalah",
+        "importing": "Mengimport",
+        "needsReconnect": "Perlu disambung semula",
+        "ok": "Terkini",
+        "stale": "Tiada lagu baharu didengari"
+      },
+      "cancel": "Batal",
+      "remove": "Alih keluar",
+      "title": "Disambungkan"
+    },
+    "spotifyExport": {
+      "denied": "Pemberitahuan dimatikan untuk Nomad Karaoke. Hidupkannya dalam Tetapan untuk mendapatkan peringatan.",
+      "intro": "Spotify boleh menghantar keseluruhan sejarah pendengaran anda. Ia mengambil masa beberapa hari, jadi mulakan sekarang dan kami akan menguruskannya dari situ.",
+      "open": "Buka tetapan privasi Spotify",
+      "pick": "Pilih fail",
+      "remind": "Ingatkan saya",
+      "reminded": "Selesai. Kami akan mengingatkan anda dalam masa kira-kira 5 hari, dan sekali lagi dalam 25 hari.",
+      "step1": "Minta data anda di spotify.com/account/privacy. Tandakan Data akaun (siap dalam masa kira-kira 5 hari) dan Sejarah penstriman lanjutan (sehingga 30 hari): Lanjutan mengandungi keseluruhan sejarah anda.",
+      "step2": "Kami akan mengingatkan anda apabila ia dijangka siap.",
+      "openSettings": "Buka Tetapan",
+      "step3Ios": "Apabila e-mel Spotify tiba, simpan zip ke Fail, kemudian kembali ke sini dan pilihnya.",
+      "step3Android": "Apabila e-mel Spotify tiba, muat turun zip, kemudian tekan Kongsi → Nomad Karaoke, atau kembali ke sini dan pilih fail tersebut."
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Selesai. Pilihan lagu anda kini merangkumi apa yang anda dengar.",
+      "failed": "Kami telah menyambungkan akaun anda tetapi tidak dapat membaca sejarah anda tadi. Kami akan cuba lagi nanti.",
+      "reading": "Membaca sejarah pendengaran anda…",
+      "slow": "Masih membaca sejarah anda. Pilihan lagu anda akan dikemas kini setelah selesai."
+    },
+    "title": "Sambungkan muzik anda",
+    "connected": "Disambungkan",
+    "back": "Kembali",
+    "alreadyImported": "Anda sudah mengimport fail ini, jadi tiada apa-apa yang baharu untuk ditambah."
   }
 }

@@ -1202,5 +1202,221 @@
     "songSearchLabel": "Găsește o piesă",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Nicio sugestie momentan. Caută un artist mai sus sau omite acest pas."
+  },
+  "connect": {
+    "appleExport": "Nu ai abonament Apple Music? Importă în schimb istoricul de ascultare",
+    "appleGuide": {
+      "intro": "Nu ai abonament Apple Music? Apple îți poate trimite totuși istoricul de ascultare. Durează câteva zile.",
+      "open": "Deschide privacy.apple.com",
+      "pick": "Alege fișierul",
+      "step1": "Mergi la privacy.apple.com și conectează-te.",
+      "step2": "Alege Solicită o copie a datelor tale, bifează Informații despre serviciile media Apple și trimite cererea. Apple îți va trimite un e-mail în câteva zile.",
+      "step3": "Descarcă fișierele, apoi alege fișierul zip sau fișierul CSV Play Activity aici."
+    },
+    "appleReading": "Se citește biblioteca ta…",
+    "cards": {
+      "apple": {
+        "detail": "Biblioteca și redările recente · secunde",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Scrobble-urile tale · câteva minute",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Îți menține recomandările actualizate pe măsură ce asculți",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify sau YouTube Music · secunde",
+        "title": "Lipește un link către un playlist"
+      },
+      "screenshot": {
+        "detail": "Artiști în câteva secunde",
+        "title": "Fă o captură de ecran a aplicației tale de muzică"
+      },
+      "spotifyExport": {
+        "detail": "Întregul tău istoric de ascultare · durează 5–30 de zile la Spotify",
+        "title": "Istoricul tău Spotify"
+      }
+    },
+    "errors": {
+      "badUrl": "Acesta nu este un link către un playlist Spotify sau YouTube Music.",
+      "likedPrivate": "Muzica apreciată este întotdeauna privată. Copiaz-o într-un playlist public sau neindexat, apoi trimite acel link.",
+      "notAnExport": "Acesta nu pare a fi un export de date de la Spotify sau Apple.",
+      "notFound": "Nu am putut găsi acel nume de utilizator. Verifică dacă l-ai scris corect și încearcă din nou.",
+      "private": "Nu am putut deschide acel playlist. Asigură-te că este public, apoi încearcă din nou.",
+      "rateLimited": "Ai făcut prea multe importuri deocamdată. Încearcă din nou mai târziu.",
+      "tooLarge": "Acel fișier este prea mare pentru a fi trimis din aplicație.",
+      "unavailable": "Nu am putut contacta serviciul în acest moment. Încearcă din nou în câteva minute.",
+      "unparseable": "Nu am putut citi acel playlist acum. Încearcă în schimb un link YouTube Music sau o captură de ecran.",
+      "generic": "Ceva nu a mers bine. Te rog să încerci din nou."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "istoricul tău Apple Music",
+        "spotifyAccount": "datele contului tău Spotify",
+        "spotifyExtended": "istoricul tău de streaming Spotify"
+      },
+      "lbAlso": "Adaugă-l și în ListenBrainz pentru ca noile ascultări să continue să vină",
+      "lbBusy": "ListenBrainz importă deja un fișier pentru tine. Încearcă din nou după ce se termină.",
+      "lbReconnect": "Reconectează ListenBrainz, apoi încearcă din nou.",
+      "lbSending": "Se trimite către ListenBrainz…",
+      "lbSent": "Trimis către ListenBrainz. Poate dura puțin până îl vor importa.",
+      "lbTooBig": "Prea mare pentru a fi trimis din aplicație: încarcă-l pe listenbrainz.org",
+      "libraryBoth": "Plus {liked, plural, one {# melodie apreciată} few {# melodii apreciate} other {# de melodii apreciate}} și {playlists, plural, one {# playlist} few {# playlisturi} other {# de playlisturi}}",
+      "libraryLiked": "Plus {liked, plural, one {# melodie apreciată} few {# melodii apreciate} other {# de melodii apreciate}}",
+      "libraryPlaylists": "Plus {playlists, plural, one {# playlist} few {# playlisturi} other {# de playlisturi}}",
+      "nothing": "Nu am găsit nicio melodie de adăugat în acest fișier.",
+      "pickAnother": "Alege alt fișier",
+      "preview": "{tracks, plural, one {# melodie} few {# melodii} other {# de melodii}} din {kind}",
+      "reading": "Se citește fișierul…",
+      "sending": "Se adaugă melodiile tale…",
+      "skippedMalformed": "{count, plural, one {# intrare ilizibilă} few {# intrări ilizibile} other {# de intrări ilizibile}}",
+      "skippedPodcasts": "{count, plural, one {# redare de podcast, carte audio sau video} few {# redări de podcast, carte audio sau video} other {# de redări de podcast, carte audio sau video}}",
+      "skippedShort": "{count, plural, one {# redare sub 30 de secunde} few {# redări sub 30 de secunde} other {# de redări sub 30 de secunde}}",
+      "skippedTitle": "Omise",
+      "start": "Adaugă la muzica mea",
+      "title": "Importă istoricul tău",
+      "truncated": "Acest fișier pare incomplet, așa că o parte din istoric ar putea lipsi. Dacă poți, descarcă-l din nou din e-mailul de la Spotify.",
+      "waiting": "Se așteaptă conexiunea"
+    },
+    "improve": {
+      "connect": "Conectează-ți muzica",
+      "stale": "Conectează Spotify la ListenBrainz pentru a primi noile ascultări"
+    },
+    "intro": "Spune-ne ce asculți cu adevărat, iar recomandările tale vor fi mult mai bune. Fiecare sursă le completează pe celelalte.",
+    "lastfm": {
+      "intro": "Introdu numele tău de utilizator Last.fm și îți vom citi scrobble-urile pentru a găsi melodiile pe care le cunoști.",
+      "submit": "Conectează",
+      "username": "Nume de utilizator Last.fm"
+    },
+    "lb": {
+      "account": "Conectat ca {username}",
+      "accountHint": "Nu este contul tău? Elimină ListenBrainz din secțiunea Conectate, apoi conectează-te din nou.",
+      "checklist": {
+        "step1": "1. Creează un cont MetaBrainz",
+        "step2": "2. Verifică-ți adresa de email",
+        "step3": "3. Revino și introdu numele de utilizator"
+      },
+      "intro": "ListenBrainz păstrează o evidență gratuită și deschisă a ceea ce asculți. Conectează-l, iar noile tale ascultări îți vor menține recomandările mereu proaspete.",
+      "oauth": "Conectează-te cu ListenBrainz",
+      "oauthError": {
+        "denied": "Nu ai permis accesul, așa că nu s-a conectat nimic. Încearcă din nou oricând dorești.",
+        "exchange_failed": "Nu am putut finaliza conectarea la ListenBrainz. Te rugăm să încerci din nou.",
+        "generic": "Ceva nu a funcționat la conectarea cu ListenBrainz. Te rugăm să încerci din nou.",
+        "invalid_state": "Acea conectare a expirat sau a fost deja folosită. Te rugăm să încerci din nou.",
+        "missing_params": "ListenBrainz nu a trimis înapoi toate datele necesare. Te rugăm să încerci din nou.",
+        "validate_failed": "Contul tău MetaBrainz nu este încă pe ListenBrainz. Conectează-te o dată pe listenbrainz.org, apoi încearcă din nou."
+      },
+      "oauthUnavailable": "Conectarea cu ListenBrainz nu este disponibilă acum. Introdu numele de utilizator în schimb.",
+      "opening": "Se deschide ListenBrainz…",
+      "or": "Sau introdu numele tău de utilizator ListenBrainz",
+      "signup": "Nu ai cont? Creează unul gratuit",
+      "spotifyGuide": "Conectează Spotify la ListenBrainz",
+      "spotifyGuideBody": "Apoi, tot ce asculți pe Spotify ajunge de la sine în recomandările tale.",
+      "submit": "Conectează",
+      "username": "Nume de utilizator ListenBrainz"
+    },
+    "offline": "Ești offline",
+    "playlist": {
+      "again": "Importă alt playlist",
+      "done": "S-a importat {title}",
+      "howTo": {
+        "step1": "1. Pe music.youtube.com, deschide Bibliotecă → Muzică apreciată.",
+        "step2": "2. Selectează melodiile (apasă pe una, apoi pe celelalte).",
+        "step3": "3. Alege „Adaugă la playlist” → Playlist nou și setează vizibilitatea pe Neindexat sau Public.",
+        "step4": "4. Deschide noul playlist, apasă Distribuie → Copiază linkul și lipește-l aici.",
+        "anyPlaylist": "Funcționează la fel de bine orice playlist public sau neafișat cu melodii care îți plac, cum ar fi mixul tău pentru petreceri sau antrenamente.",
+        "title": "Cum pot partaja playlistul „Muzică apreciată”?"
+      },
+      "importing": "Se importă playlistul tău…",
+      "intro": "Lipește un link către un playlist public Spotify sau YouTube Music și vom adăuga melodiile lui la ceea ce știm că îți place să cânți.",
+      "matched": "{matched} din {fetched} au versiuni karaoke",
+      "notPlaylist": "Acesta nu este un link către un playlist Spotify sau YouTube Music",
+      "paste": "Lipește",
+      "placeholder": "Link playlist",
+      "submit": "Importă playlistul"
+    },
+    "reminders": {
+      "channel": "Mementouri",
+      "title": "Datele tale de la Spotify ar putea fi gata",
+      "bodyAndroid": "Deschide e-mailul de la Spotify, apoi trimite fișierul zip către Nomad Karaoke.",
+      "bodyIos": "Deschide e-mailul de la Spotify, salvează fișierul zip în Fișiere, apoi alege-l în Nomad Karaoke."
+    },
+    "result": "Am adăugat {artists, plural, one {# artist} few {# artiști} other {# de artiști}} și {songs, plural, one {# melodie} few {# melodii} other {# de melodii}} pe care le cunoști",
+    "screenshot": {
+      "again": "Alege mai multe capturi de ecran",
+      "confirm": "{count, plural, =0 {Nimic de adăugat} one {Adaugă # element} few {Adaugă # elemente} other {Adaugă # de elemente}}",
+      "confirmBody": "Debifează tot ce am recunoscut greșit.",
+      "confirmTitle": "Este corect?",
+      "dailyLimit": "Ai folosit cele 10 capturi de ecran pentru azi. Încearcă din nou mâine.",
+      "empty": "Nu am putut găsi artiști sau melodii în acele capturi de ecran. Încearcă una mai clară.",
+      "intro": "Alege capturi de ecran cu biblioteca ta, playlisturile sau artiștii preferați din orice aplicație de muzică. Vom citi numele, iar tu le verifici înainte de a salva ceva.",
+      "item": "{artist} · {title}",
+      "limit": "Până la 5 capturi de ecran o dată.",
+      "pick": "Alege capturile de ecran",
+      "pickMore": "Alege alte capturi de ecran",
+      "reading": "Se citesc capturile tale de ecran…",
+      "unmatched": "Nu este încă în catalogul nostru de karaoke",
+      "retry": "Încearcă din nou"
+    },
+    "source": {
+      "appleExport": "Istoric Apple Music",
+      "screenshot": "Capturi de ecran",
+      "spotifyExport": "Istoric Spotify",
+      "spotifyPlaylist": "Playlisturi Spotify",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Adaugă mai multe",
+      "counts": "{artists, plural, one {# artist} few {# artiști} other {# de artiști}} · {songs, plural, one {# melodie} few {# melodii} other {# de melodii}}",
+      "empty": "Nimic conectat încă. Adaugă un serviciu de muzică sau importă-ți istoricul pentru recomandări mai bune.",
+      "lastImport": "Ultimul import {days, plural, =0 {astăzi} one {acum # zi} few {acum # zile} other {acum # de zile}}",
+      "loadFailed": "Nu am putut încărca sursele tale conectate. Te rugăm să încerci din nou într-un moment.",
+      "reconnect": "Reconectează",
+      "removeBody": "Aceasta va elimina artiștii și melodiile adăugate de {name} la profilul tău muzical. Recomandările tale se vor actualiza.",
+      "removeFailed": "Nu am putut elimina asta chiar acum. Te rugăm să încerci din nou.",
+      "removeTitle": "Elimini {name}?",
+      "stale": "Conectează Spotify la ListenBrainz pentru a primi noile ascultări",
+      "status": {
+        "error": "Problemă",
+        "importing": "Se importă",
+        "needsReconnect": "Necesită reconectare",
+        "ok": "La zi",
+        "stale": "Fără ascultări noi"
+      },
+      "cancel": "Anulează",
+      "remove": "Elimină",
+      "title": "Conectat"
+    },
+    "spotifyExport": {
+      "denied": "Notificările sunt dezactivate pentru Nomad Karaoke. Activează-le în Setări pentru a primi un memento.",
+      "intro": "Spotify îți poate trimite întregul istoric de ascultare. Durează câteva zile, așa că începe acum și ne ocupăm noi de restul.",
+      "open": "Deschide setările de confidențialitate Spotify",
+      "pick": "Alege fișierul",
+      "remind": "Amintește-mi",
+      "reminded": "Gata. Îți vom aminti peste aproximativ 5 zile, și din nou peste 25.",
+      "step1": "Solicită-ți datele pe spotify.com/account/privacy. Bifează Date cont (gata în aprox. 5 zile) și Istoric extins de streaming (până la 30 de zile): cel extins conține tot istoricul tău.",
+      "step2": "Îți vom aminti când ar trebui să fie gata.",
+      "openSettings": "Deschide Setări",
+      "step3Ios": "Când sosește e-mailul de la Spotify, salvează fișierul zip în Fișiere, apoi revino aici și alege-l.",
+      "step3Android": "Când sosește e-mailul de la Spotify, descarcă fișierul zip, apoi Trimite → Nomad Karaoke, sau revino aici și alege fișierul."
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Gata. Recomandările tale includ acum ceea ce asculți.",
+      "failed": "Ți-am conectat contul, dar nu am putut citi istoricul chiar acum. Vom încerca din nou mai târziu.",
+      "reading": "Se citește istoricul tău de ascultare…",
+      "slow": "Încă se citește istoricul tău. Recomandările se vor actualiza când este gata."
+    },
+    "title": "Conectează-ți muzica",
+    "connected": "Conectat",
+    "back": "Înapoi",
+    "alreadyImported": "Ai importat deja acest fișier, așa că nu a fost nimic nou de adăugat."
   }
 }

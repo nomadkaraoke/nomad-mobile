@@ -1,0 +1,23 @@
+# From any Connect screen (pushed over the tabs) back to the tab bar. iOS: the header's back button is labelled
+# with the previous screen's title, so it is found by its id (the hub's own is connect-hub-back, a screen opened
+# cold has connect-back); Android: the system back.
+appId: com.nomadkaraoke.mobile
+---
+- repeat:
+    while:
+      notVisible:
+        id: "tab-discover"
+    times: 5
+    commands:
+      - runFlow:
+          when:
+            platform: iOS
+          commands:
+            - tapOn:
+                id: "BackButton|connect-hub-back|connect-back"
+      - runFlow:
+          when:
+            platform: Android
+          # One back per check (a back with the keyboard up only closes it; hideKeyboard would be a second back).
+          commands:
+            - back

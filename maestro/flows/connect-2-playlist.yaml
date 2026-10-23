@@ -1,0 +1,38 @@
+# Connect 2 (Phase 3b spec §5.3): Connect → Playlist link → the fixture Spotify playlist (decide's fake embed) →
+# the playlist's result → decide has the spotify_playlist source's songs.
+appId: com.nomadkaraoke.mobile
+name: connect-2-playlist
+tags:
+  - connect
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: connect2
+- runFlow:
+    file: ../common/connect-open.yaml
+    env:
+      EMAIL: ${output.email}
+- tapOn:
+    id: "connect-card-playlist"
+- tapOn:
+    id: "connect-playlist-input"
+- inputText: "https://open.spotify.com/playlist/fixtureplaylist0000001"
+- tapOn:
+    id: "connect-playlist-submit"
+- extendedWaitUntil:
+    visible:
+      id: "connect-playlist-matched"
+    timeout: 30000
+- assertVisible:
+    id: "connect-import-result"
+- takeScreenshot: ${SHOTS3B}/connect-2-result
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: source-counts
+      DECIDE_STACK: ${DECIDE_STACK}
+      SOURCE: spotify_playlist
+      MIN_SONGS: "1"

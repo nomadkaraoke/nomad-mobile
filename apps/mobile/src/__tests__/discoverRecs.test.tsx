@@ -13,6 +13,8 @@ import { appRoutes } from '../test-utils/routes';
 
 jest.mock('@nomad/api-decide', () => ({
   ...jest.requireActual('@nomad/api-decide'),
+  // Phase 3b: the Improve card and the profile's Connected section read the services summary.
+  getServicesSummary: jest.fn(async () => ({ sources: [], capabilities: { screenshot_import: false, listenbrainz_oauth: false } })),
   searchSongs: jest.fn(),
   popularSongs: jest.fn(),
   resolveQuery: jest.fn(async () => ({})),

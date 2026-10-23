@@ -1,10 +1,11 @@
 import { GENRE_IDS } from '@nomad/core';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
-import { router } from 'expo-router';
-import { ActivityIndicator, View } from 'react-native';
+import { router, type Href } from 'expo-router';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { useAuth } from '../../auth/store';
+import { ConnectedSources } from '../../discover/connect/ConnectedSources';
 import { ProfileSection } from '../../discover/profile/ProfileSection';
 import { useAppleMusic } from '../../discover/profile/useAppleMusic';
 import { useMusicProfile } from '../../discover/profile/useMusicProfile';
@@ -28,6 +29,7 @@ export default function MusicProfileScreen() {
   const tg = useTranslations('discover.filter.genre');
   const td = useTranslations('discover.filter.decade');
   const tq = useTranslations('quiz.energy');
+  const tc = useTranslations('connect');
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
   const p = useMusicProfile();
   const apple = useAppleMusic();
@@ -206,7 +208,25 @@ export default function MusicProfileScreen() {
         </View>
       </ProfileSection>
 
-      {/* Phase 3b adds the other music services (Spotify export, ListenBrainz, Last.fm) here; Phase 3c adds vocal range. */}
+      {/* Phase 3b: every connected or imported source, with a way to add more. */}
+      <ProfileSection
+        testID="profile-connected"
+        title={tc('sources.title')}
+        isEmpty={false}
+        empty=""
+        action={
+          <Pressable
+            testID="connect-add-more"
+            accessibilityRole="button"
+            onPress={() => router.push('/discover/connect' as Href)}
+            className="min-h-11 justify-center"
+          >
+            <Text className="text-primary">{tc('sources.addMore')}</Text>
+          </Pressable>
+        }
+      >
+        <ConnectedSources onReconnectApple={() => void apple.connect()} />
+      </ProfileSection>
     </Screen>
   );
 }
