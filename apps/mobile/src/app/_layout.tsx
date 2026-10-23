@@ -61,6 +61,8 @@ function RootStack() {
         <Stack.Screen name="discover/quiz" options={{ presentation: 'modal', title: tQuiz('title') }} />
         {/* Me -> Your music profile (Phase 3a spec §8.3). */}
         <Stack.Screen name="me/music-profile" options={{ title: tAccount('musicProfile') }} />
+        {/* Connect your music (Phase 3b): its own stack with its own headers. */}
+        <Stack.Screen name="discover/connect" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

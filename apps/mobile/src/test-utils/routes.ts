@@ -5,6 +5,8 @@ import * as makeTab from '../app/(tabs)/make';
 import * as me from '../app/(tabs)/me';
 import * as tonight from '../app/(tabs)/tonight';
 import * as rootLayout from '../app/_layout';
+import * as connectLayout from '../app/discover/connect/_layout';
+import * as connectHub from '../app/discover/connect/index';
 import * as quiz from '../app/discover/quiz';
 import * as index from '../app/index';
 import * as musicProfile from '../app/me/music-profile';
@@ -26,6 +28,8 @@ export function appRoutes() {
     '(tabs)/make': makeTab,
     '(tabs)/me': me,
     'discover/quiz': quiz,
+    'discover/connect/_layout': connectLayout,
+    'discover/connect/index': connectHub,
     'me/music-profile': musicProfile,
     'song/[id]': song,
     'make/new': makeFlow,

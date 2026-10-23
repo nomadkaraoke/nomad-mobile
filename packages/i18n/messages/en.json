@@ -1215,6 +1215,75 @@
       "tooLarge": "That file is too big to send from the app.",
       "notAnExport": "This doesn't look like a Spotify or Apple data export.",
       "generic": "Something went wrong. Please try again."
-    }
+    },
+    "title": "Connect your music",
+    "intro": "Tell us what you really listen to and your picks get much better. Each of these adds to the others.",
+    "offline": "You're offline",
+    "connected": "Connected",
+    "cards": {
+      "screenshot": {
+        "title": "Screenshot your music app",
+        "detail": "Artists in seconds"
+      },
+      "playlist": {
+        "title": "Paste a playlist link",
+        "detail": "Spotify or YouTube Music · seconds"
+      },
+      "spotifyExport": {
+        "title": "Your Spotify history",
+        "detail": "Your whole listening history · takes Spotify 5–30 days"
+      },
+      "listenbrainz": {
+        "title": "ListenBrainz",
+        "detail": "Keeps your picks fresh as you listen"
+      },
+      "lastfm": {
+        "title": "Last.fm",
+        "detail": "Your scrobbles · a few minutes"
+      },
+      "apple": {
+        "title": "Apple Music",
+        "detail": "Your library and recent plays · seconds"
+      }
+    },
+    "appleExport": "No Apple Music subscription? Import your play history instead",
+    "appleReading": "Reading your library…",
+    "improve": {
+      "connect": "Connect your music",
+      "stale": "Connect Spotify to ListenBrainz so new listens arrive"
+    },
+    "sources": {
+      "title": "Connected",
+      "addMore": "Add more",
+      "empty": "Nothing connected yet. Add a music service or import your history to sharpen your picks.",
+      "counts": "{artists, plural, one {# artist} other {# artists}} · {songs, plural, one {# song} other {# songs}}",
+      "lastImport": "Last import {days, plural, =0 {today} one {# day ago} other {# days ago}}",
+      "remove": "Remove",
+      "removeTitle": "Remove {name}?",
+      "removeBody": "This removes the artists and songs {name} added to your music profile. Your picks will update.",
+      "cancel": "Cancel",
+      "reconnect": "Reconnect",
+      "stale": "Connect Spotify to ListenBrainz so new listens arrive",
+      "removeFailed": "We couldn't remove that just now. Please try again.",
+      "status": {
+        "ok": "Up to date",
+        "needsReconnect": "Needs reconnecting",
+        "importing": "Importing",
+        "stale": "No new listens",
+        "error": "Problem"
+      }
+    },
+    "source": {
+      "spotify": "Spotify",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "appleMusic": "Apple Music",
+      "youtubeMusic": "YouTube Music",
+      "screenshot": "Screenshots",
+      "spotifyPlaylist": "Spotify playlists",
+      "spotifyExport": "Spotify history",
+      "appleExport": "Apple Music history"
+    },
+    "result": "Added {artists, plural, one {# artist} other {# artists}} and {songs, plural, one {# song} other {# songs}} you know"
   }
 }
