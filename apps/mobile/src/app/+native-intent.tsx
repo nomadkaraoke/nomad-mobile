@@ -1,4 +1,5 @@
 // Rewrites links the system hands the app before Expo Router routes them (docs: router/advanced/native-intent).
+import { LB_RETURN, lbReturnFromUrl, lbScreenPath } from '../discover/connect/lbReturn';
 import { isFreshIntent, useMakeIntent } from '../make/intentStore';
 import { parseNightLink } from '../tonight/links';
 
@@ -7,17 +8,7 @@ const CHECKOUT_RETURN = /^nomadkaraoke:\/\/\/?checkout(?:[?#/]|$)/i;
 /** nomadkaraoke://music-connected: decide web's Apple Music connect page handing back (see useAppleMusic). */
 const MUSIC_CONNECTED = /^nomadkaraoke:\/\/\/?music-connected(?:[?#/]|$)/i;
 /** nomadkaraoke://services/listenbrainz?status=…: decide's ListenBrainz OAuth callback (see useListenBrainzOAuth). */
-const SERVICES_RETURN = /^nomadkaraoke:\/\/\/?services\/listenbrainz(?:[?#/]|$)/i;
-const LB_SCREEN = '/discover/connect/listenbrainz';
-
-/** The LB screen with the return's result, keeping only well-formed values (it is an external link). */
-function listenBrainzScreen(path: string): string {
-  const status = path.match(/[?&]status=(connected|error)(?:[&#]|$)/)?.[1];
-  if (!status) return LB_SCREEN;
-  const reason = status === 'error' ? path.match(/[?&]reason=([a-z_]{1,40})(?:[&#]|$)/)?.[1] : undefined;
-  return `${LB_SCREEN}?status=${status}${reason ? `&reason=${reason}` : ''}`;
-}
-
+const SERVICES_RETURN = LB_RETURN;
 /** http(s) links on the hosts the app claims: kjbox.cc, www.kjbox.cc, sing.nomadkaraoke.com (any case). */
 const CLAIMED_HOST = /^https?:\/\/(?:(?:www\.)?kjbox\.cc|sing\.nomadkaraoke\.com)(?:[:/?#]|$)/i;
 
@@ -37,7 +28,7 @@ export function redirectSystemPath({ path, initial }: { path: string; initial: b
   if (MUSIC_CONNECTED.test(path)) return initial ? '/me/music-profile' : null;
   // Same again for ListenBrainz OAuth (the auth session reads the URL). On a cold start (Android killed the app
   // while the user signed in) the LB screen opens and applies the result itself.
-  if (SERVICES_RETURN.test(path)) return initial ? listenBrainzScreen(path) : null;
+  if (SERVICES_RETURN.test(path)) return initial ? lbScreenPath(lbReturnFromUrl(path)) : null;
   // Night links (spec §4.2, ruling E3-R1): kjbox.cc/<code> (any case: the printed QR is HTTP://KJBOX.CC/<code>),
   // sing.nomadkaraoke.com/?t=<code> and nomadkaraoke://tonight?t=<code> open the join route. Only full links: a bare
   // code is never a system path.

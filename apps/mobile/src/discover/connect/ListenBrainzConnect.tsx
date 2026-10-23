@@ -8,6 +8,7 @@ import { Pressable, View } from 'react-native';
 
 import { useOffline } from '../../net/useOffline';
 import { SERVICES_SUMMARY_KEY, useCapabilities, useServicesSummary } from './queries';
+import type { LbReturn } from './lbReturn';
 import { useListenBrainzOAuth } from './useListenBrainzOAuth';
 import { useSyncWait } from './useSyncWait';
 import { SyncStatus, UsernameConnect } from './UsernameConnect';
@@ -20,9 +21,10 @@ const CHECKLIST = ['step1', 'step2', 'step3'] as const;
  * ListenBrainz (spec §5.5): one-tap "Sign in with ListenBrainz" (MetaBrainz OAuth, while decide can), or a
  * username. Either way a sync starts and the screen waits for what it added. The linked account's name is shown
  * prominently, so a connection to someone else's account (a forged callback) is obvious. `oauthReturn` is the
- * result of an OAuth return that cold-started the app (+native-intent passes it in the route).
+ * (already sanitised) result of an OAuth return that cold-started the app (+native-intent passes it in the route);
+ * a `connected` one only counts once the summary confirms it.
  */
-export function ListenBrainzConnect({ oauthReturn }: { oauthReturn?: { status?: string; reason?: string } }) {
+export function ListenBrainzConnect({ oauthReturn }: { oauthReturn?: LbReturn | null }) {
   const t = useTranslations('connect');
   const tAll = useTranslations();
   const offline = useOffline();
@@ -35,9 +37,9 @@ export function ListenBrainzConnect({ oauthReturn }: { oauthReturn?: { status?: 
   const applied = useRef(false);
   const { applyResult } = oauth;
   useEffect(() => {
-    if (applied.current || !oauthReturn?.status) return;
+    if (applied.current || !oauthReturn) return;
     applied.current = true;
-    void applyResult(oauthReturn.status, oauthReturn.reason);
+    void applyResult(oauthReturn);
   }, [oauthReturn, applyResult]);
 
   const onUsernameConnected = useCallback(() => {

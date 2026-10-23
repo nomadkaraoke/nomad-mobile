@@ -13,7 +13,8 @@ export type SyncCounts = { artists: number; songs: number };
 type Outcome = { phase: 'done'; counts: SyncCounts | null } | { phase: 'failed' } | null;
 
 /**
- * After connecting a polled service (ListenBrainz, Last.fm): start a sync and wait for it. decide keeps a finished
+ * After connecting a polled service (ListenBrainz, Last.fm): start a sync and wait for that job (POST /sync hands
+ * back the live job's id, a running or resumed one included). decide keeps a finished
  * job in `GET /api/services/sync/status` for a minute, so a 2 s poll always sees it. `stalled` (a dead heartbeat)
  * resumes on decide's side, so it is just "still going". Whatever happens the summary, picks and profile refresh.
  */
@@ -46,10 +47,11 @@ export function useSyncWait(service: 'listenbrainz' | 'lastfm') {
     [],
   );
 
-  const poll = useCallback(async (): Promise<Outcome> => {
+  const poll = useCallback(async (jobId: string): Promise<Outcome> => {
     const job = (await getSyncStatus()).active_job;
     // No job any more: it finished and aged out of the status (only if the phone slept through the poll).
     if (!job) return { phase: 'done', counts: null };
+    if (job.job_id !== jobId) return null; // another job is newest (not ours): keep waiting for ours
     if (job.status === 'failed') return { phase: 'failed' };
     if (job.status !== 'completed') return null; // pending, in_progress, stalled
     const item = job.results?.find((r) => r.service_type === service);
@@ -62,11 +64,20 @@ export function useSyncWait(service: 'listenbrainz' | 'lastfm') {
     setCounts(null);
     let outcome: Outcome = null;
     try {
-      await triggerSync();
+      const { job_id: jobId } = await triggerSync();
       const deadline = Date.now() + syncPollConfig.timeoutMs;
       while (alive.current && !outcome && Date.now() < deadline) {
         try {
-          outcome = await poll();
+          // A hung request can't hold the wait past its deadline.
+          let timer: ReturnType<typeof setTimeout> | undefined;
+          const timedOut = new Promise<null>((resolve) => {
+            timer = setTimeout(() => resolve(null), Math.max(0, deadline - Date.now()));
+          });
+          try {
+            outcome = await Promise.race([poll(jobId), timedOut]);
+          } finally {
+            clearTimeout(timer);
+          }
         } catch {
           // a blip while polling: keep trying until the wait is over
         }
