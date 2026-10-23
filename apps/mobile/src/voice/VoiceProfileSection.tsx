@@ -96,7 +96,8 @@ export function VoiceProfileSection() {
       />
       <StartText className="text-gold">{tv('comfort', { range: noteRange(profile.comfortLow, profile.comfortHigh) })}</StartText>
       <Text testID="voice-section-method" variant="muted">
-        {profile.method === 'mic' ? t('profileMethodMic') : t('profileMethodSelf')}
+        {/* A decide voice session (3d) was measured from singing too: it reads as measured, not as a pick. */}
+        {profile.method === 'self' ? t('profileMethodSelf') : t('profileMethodMic')}
       </Text>
       {failed ? (
         <Text testID="voice-remove-error" variant="error">

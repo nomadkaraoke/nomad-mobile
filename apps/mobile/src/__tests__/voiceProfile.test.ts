@@ -198,4 +198,10 @@ describe('useVoiceStore', () => {
     appStorage.set(VOICE_STORAGE_KEY, JSON.stringify({ profile: p, pending: false }));
     expect(loadVoice()).toEqual({ profile: p, pending: false });
   });
+
+  it('loadVoice() reads back a profile adopted from a decide voice session (method session)', () => {
+    const p = { ...profileFromSelfReport('tenor', AT), method: 'session' as const, confidence: 'high' as const };
+    appStorage.set(VOICE_STORAGE_KEY, JSON.stringify({ profile: p, pending: false }));
+    expect(loadVoice()).toEqual({ profile: p, pending: false });
+  });
 });

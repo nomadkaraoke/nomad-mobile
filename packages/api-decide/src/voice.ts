@@ -4,7 +4,7 @@ import {
   getSongVocalRangeApiCatalogSongsSongKeyVocalRangeGet,
   getVoiceApiMyVoiceGet,
   putVoiceApiMyVoicePut,
-  type VoiceProfileIn,
+  type VoiceProfilePutIn,
   type VoiceProfileOut,
 } from './client';
 
@@ -12,8 +12,8 @@ import {
 export const getVoiceProfile = async (): Promise<VoiceProfileOut | null> =>
   (await getVoiceApiMyVoiceGet()).data.profile;
 
-/** Replaces the profile. `p` is sent as-is: decide forbids any key outside `VoiceProfileIn`. */
-export const putVoiceProfile = async (p: VoiceProfileIn): Promise<VoiceProfileOut> =>
+/** Replaces the profile. `p` is sent as-is: decide forbids any key outside its `VoiceProfilePutIn` (`VoiceProfileIn` before decide v0.28). */
+export const putVoiceProfile = async (p: VoiceProfilePutIn): Promise<VoiceProfileOut> =>
   (await putVoiceApiMyVoicePut({ body: p })).data;
 
 /** Removes the profile (204). */

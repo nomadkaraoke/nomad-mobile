@@ -16,7 +16,8 @@ import { appStorage } from '../storage';
 export const VOICE_STORAGE_KEY = 'voice.profile.v1';
 
 export type VoiceConfidence = 'low' | 'medium' | 'high';
-export type VoiceMethod = 'mic' | 'self';
+/** `session`: measured by decide's voice sessions (decide v0.28, Phase 3d); the phone only adopts it, never PUTs one. */
+export type VoiceMethod = 'mic' | 'self' | 'session';
 
 /** decide's `VoiceProfileIn`, camelCase. */
 export type LocalVoiceProfile = {
@@ -125,7 +126,7 @@ function parseProfile(raw: unknown): LocalVoiceProfile | null {
     oneOrNull(o.voiceTypeBetween, TYPES) &&
     oneOrNull(o.register, REGISTERS) &&
     (o.confidence === 'low' || o.confidence === 'medium' || o.confidence === 'high') &&
-    (o.method === 'mic' || o.method === 'self') &&
+    (o.method === 'mic' || o.method === 'self' || o.method === 'session') &&
     typeof o.measuredAt === 'string';
   if (!ok) return null;
   // decide's rule: low ≤ comfortLow ≤ comfortHigh ≤ high.

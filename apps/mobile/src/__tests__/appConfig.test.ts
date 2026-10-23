@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import type { ExpoConfig } from 'expo/config';
 import { withPlugins } from 'expo/config-plugins';
-import path from 'path';
 
 const base = { name: 'Nomad Karaoke', slug: 'nomad-karaoke', ios: { bundleIdentifier: 'com.nomadkaraoke.mobile' }, plugins: ['expo-router'] };
 
