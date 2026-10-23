@@ -1413,6 +1413,7 @@
       "slow": "Läser fortfarande din historik. Dina låtförslag uppdateras när det är klart."
     },
     "title": "Anslut din musik",
-    "connected": "Ansluten"
+    "connected": "Ansluten",
+    "back": "Tillbaka"
   }
 }

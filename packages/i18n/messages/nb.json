@@ -1413,6 +1413,7 @@
       "slow": "Leser fortsatt historikken din. Forslagene dine oppdateres så snart den er ferdig."
     },
     "title": "Koble til musikken din",
-    "connected": "Tilkoblet"
+    "connected": "Tilkoblet",
+    "back": "Tilbake"
   }
 }

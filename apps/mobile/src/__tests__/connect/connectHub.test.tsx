@@ -115,6 +115,17 @@ describe('Connect your music hub', () => {
     expect(screen.getByText('No Apple Music subscription? Import your play history instead')).toBeTruthy();
   });
 
+  it('the hub has a back button to where it was opened from (the root stack hides its header for the group)', async () => {
+    const r = renderRouter(appRoutes(), { initialUrl: '/discover' });
+    await screen.findByTestId('discover-search-input');
+    await act(async () => router.push('/discover/connect'));
+    const back = await screen.findByTestId('connect-hub-back');
+    expect(back.props.accessibilityLabel).toBe('Back');
+    await act(async () => fireEvent.press(back));
+    await waitFor(() => expect(r.getPathname()).toBe('/discover'));
+    expect(screen.queryByTestId('connect-hub')).toBeNull();
+  });
+
   // The hub also hides the screenshot card while capabilities load, so "hidden" only means something once the
   // capabilities answer has rendered. The summary answers strictly after it (and a macrotask later); its
   // Connected tag showing proves the capabilities answer is already on screen.

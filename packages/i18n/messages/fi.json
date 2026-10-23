@@ -1413,6 +1413,7 @@
       "slow": "Historiaasi luetaan yhä. Suosituksesi päivittyvät, kun se on valmis."
     },
     "title": "Yhdistä musiikkisi",
-    "connected": "Yhdistetty"
+    "connected": "Yhdistetty",
+    "back": "Takaisin"
   }
 }

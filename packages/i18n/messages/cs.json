@@ -1413,6 +1413,7 @@
       "slow": "Načítání historie stále probíhá. Tvůj výběr se aktualizuje, jakmile bude hotovo."
     },
     "title": "Připoj svou hudbu",
-    "connected": "Připojeno"
+    "connected": "Připojeno",
+    "back": "Zpět"
   }
 }

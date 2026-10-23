@@ -1413,6 +1413,7 @@
       "slow": "Læser stadig din historik. Dine anbefalinger opdateres, når det er færdigt."
     },
     "title": "Forbind din musik",
-    "connected": "Forbundet"
+    "connected": "Forbundet",
+    "back": "Tilbage"
   }
 }

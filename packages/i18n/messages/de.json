@@ -1413,6 +1413,7 @@
       "slow": "Dein Verlauf wird noch gelesen. Deine Auswahl wird aktualisiert, sobald der Vorgang abgeschlossen ist."
     },
     "title": "Verbinde deine Musik",
-    "connected": "Verbunden"
+    "connected": "Verbunden",
+    "back": "Zurück"
   }
 }

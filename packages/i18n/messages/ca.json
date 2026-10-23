@@ -1413,6 +1413,7 @@
       "slow": "Encara s'està llegint el teu historial. Les teves seleccions s'actualitzaran quan s'hagi completat."
     },
     "title": "Connecta la teva música",
-    "connected": "Connectat"
+    "connected": "Connectat",
+    "back": "Enrere"
   }
 }

@@ -1413,6 +1413,7 @@
       "slow": "Még mindig olvassuk az előzményeidet. Az ajánlataid frissülni fognak, amint elkészül."
     },
     "title": "Csatlakoztasd a zenéidet",
-    "connected": "Csatlakoztatva"
+    "connected": "Csatlakoztatva",
+    "back": "Vissza"
   }
 }

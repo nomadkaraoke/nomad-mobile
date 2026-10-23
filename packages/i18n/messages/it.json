@@ -1413,6 +1413,7 @@
       "slow": "Lettura della cronologia ancora in corso. I tuoi consigli verranno aggiornati al termine."
     },
     "title": "Connetti la tua musica",
-    "connected": "Connesso"
+    "connected": "Connesso",
+    "back": "Indietro"
   }
 }

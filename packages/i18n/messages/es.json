@@ -1413,6 +1413,7 @@
       "slow": "Todavía leyendo tu historial. Tus selecciones se actualizarán cuando termine."
     },
     "title": "Conecta tu música",
-    "connected": "Conectado"
+    "connected": "Conectado",
+    "back": "Atrás"
   }
 }

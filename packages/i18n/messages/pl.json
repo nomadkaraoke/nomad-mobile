@@ -1413,6 +1413,7 @@
       "slow": "Nadal odczytujemy Twoją historię. Twoje propozycje zostaną zaktualizowane po zakończeniu."
     },
     "title": "Połącz swoją muzykę",
-    "connected": "Połączono"
+    "connected": "Połączono",
+    "back": "Wstecz"
   }
 }
