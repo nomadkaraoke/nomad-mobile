@@ -1339,9 +1339,10 @@
       "submit": "Importovať playlist"
     },
     "reminders": {
-      "body": "Otvor e-mail od Spotify a potom zdieľaj zip súbor s Nomad Karaoke.",
       "channel": "Pripomienky",
-      "title": "Tvoje údaje zo Spotify už môžu byť pripravené"
+      "title": "Tvoje údaje zo Spotify už môžu byť pripravené",
+      "bodyAndroid": "Otvor e-mail od Spotify a potom zdieľaj zip súbor s Nomad Karaoke.",
+      "bodyIos": "Otvor e-mail od Spotify, ulož zip súbor do Súborov a potom ho vyber v Nomad Karaoke."
     },
     "result": "Pridané: {artists, plural, one {# interpret} few {# interpreti} other {# interpretov}} a {songs, plural, one {# skladba} few {# skladby} other {# skladieb}}, ktoré poznáš",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Hotovo. Pripomenieme sa ti približne o 5 dní a potom znova o 25.",
       "step1": "Požiadaj o svoje údaje na spotify.com/account/privacy. Začiarkni Údaje účtu (pripravené približne o 5 dní) a Rozšírená história streamovania (do 30 dní): Rozšírená história obsahuje celý tvoj prehľad.",
       "step2": "Pripomenieme sa ti, keď by mali byť pripravené.",
-      "step3": "Keď ti príde e-mail od Spotify, stiahni zip súbor a zvoľ Zdieľať → Nomad Karaoke (Android), alebo sa vráť sem a vyber súbor.",
-      "openSettings": "Otvoriť Nastavenia"
+      "openSettings": "Otvoriť Nastavenia",
+      "step3Ios": "Keď ti príde e-mail od Spotify, ulož zip súbor do Súborov, potom sa vráť sem a vyber ho.",
+      "step3Android": "Keď ti príde e-mail od Spotify, stiahni zip súbor a zvoľ Zdieľať → Nomad Karaoke, alebo sa vráť sem a vyber súbor."
     },
     "stepNumber": "{n, number}",
     "sync": {

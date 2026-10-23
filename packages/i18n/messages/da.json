@@ -1339,9 +1339,10 @@
       "submit": "Importer playliste"
     },
     "reminders": {
-      "body": "Åbn e-mailen fra Spotify, og del derefter zip-filen med Nomad Karaoke.",
       "channel": "Påmindelser",
-      "title": "Dine Spotify-data er måske klar"
+      "title": "Dine Spotify-data er måske klar",
+      "bodyAndroid": "Åbn e-mailen fra Spotify, og del derefter zip-filen med Nomad Karaoke.",
+      "bodyIos": "Åbn e-mailen fra Spotify, gem zip-filen i Filer, og vælg den derefter i Nomad Karaoke."
     },
     "result": "Tilføjede {artists, plural, one {# kunstner} other {# kunstnere}} og {songs, plural, one {# sang} other {# sange}}, du kender",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Modtaget. Vi minder dig om det om ca. 5 dage og igen om 25 dage.",
       "step1": "Anmod om dine data på spotify.com/account/privacy. Sæt kryds ved Kontodata (klar om ca. 5 dage) og Udvidet streaminghistorik (op til 30 dage): Udvidet indeholder hele din historik.",
       "step2": "Vi minder dig om det, når det burde være klar.",
-      "step3": "Når e-mailen fra Spotify lander, skal du downloade zip-filen og vælge Del → Nomad Karaoke (Android), eller vende tilbage hertil og vælge filen.",
-      "openSettings": "Åbn Indstillinger"
+      "openSettings": "Åbn Indstillinger",
+      "step3Ios": "Når e-mailen fra Spotify lander, så gem zip-filen i Filer, og vend derefter tilbage hertil og vælg den.",
+      "step3Android": "Når e-mailen fra Spotify lander, skal du downloade zip-filen og vælge Del → Nomad Karaoke, eller vende tilbage hertil og vælge filen."
     },
     "stepNumber": "{n, number}",
     "sync": {

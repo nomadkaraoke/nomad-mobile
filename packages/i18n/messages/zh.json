@@ -1339,9 +1339,10 @@
       "submit": "导入歌单"
     },
     "reminders": {
-      "body": "打开 Spotify 发送的邮件，然后将 zip 压缩包分享至 Nomad Karaoke。",
       "channel": "提醒",
-      "title": "你的 Spotify 数据可能已准备就绪"
+      "title": "你的 Spotify 数据可能已准备就绪",
+      "bodyAndroid": "打开 Spotify 发送的邮件，然后将 zip 压缩包分享至 Nomad Karaoke。",
+      "bodyIos": "打开 Spotify 的邮件，将 zip 压缩包存储到“文件”App，然后在 Nomad Karaoke 中选择它。"
     },
     "result": "已添加你熟悉的 {artists, plural, other {# 位歌手}}和 {songs, plural, other {# 首歌曲}}",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "设置成功！我们将在约 5 天后提醒你，并在第 25 天再次提醒。",
       "step1": "前往 spotify.com/account/privacy 请求获取数据。勾选“账户数据”（约 5 天准备好）和“扩展流媒体历史记录”（最长需 30 天）：扩展记录包含你的全部历史。",
       "step2": "准备就绪时我们会提醒你。",
-      "step3": "收到 Spotify 的邮件后下载 zip 压缩包，然后选择“分享”→“Nomad Karaoke”（Android），或返回此处选择该文件。",
-      "openSettings": "打开设置"
+      "openSettings": "打开设置",
+      "step3Ios": "收到 Spotify 的邮件后，将 zip 压缩包存储到“文件”App，然后返回此处选择它。",
+      "step3Android": "收到 Spotify 的邮件后下载 zip 压缩包，然后选择“分享”→“Nomad Karaoke”，或返回此处选择该文件。"
     },
     "stepNumber": "{n, number}",
     "sync": {

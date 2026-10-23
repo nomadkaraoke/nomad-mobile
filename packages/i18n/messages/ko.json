@@ -1339,9 +1339,10 @@
       "submit": "플레이리스트 가져오기"
     },
     "reminders": {
-      "body": "Spotify에서 보낸 이메일을 열고 zip 파일을 Nomad Karaoke로 공유해 주세요.",
       "channel": "알림",
-      "title": "Spotify 데이터가 준비되었을 수 있습니다"
+      "title": "Spotify 데이터가 준비되었을 수 있습니다",
+      "bodyAndroid": "Spotify에서 보낸 이메일을 열고 zip 파일을 Nomad Karaoke로 공유해 주세요.",
+      "bodyIos": "Spotify 이메일을 열고 zip 파일을 파일 앱에 저장한 뒤, Nomad Karaoke에서 선택하세요."
     },
     "result": "내가 아는 아티스트 {artists, plural, other {#명}}과 노래 {songs, plural, other {#곡}}이 추가되었습니다",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "완료되었습니다. 약 5일 후에, 그리고 25일 후에 다시 알려드릴게요.",
       "step1": "spotify.com/account/privacy에서 데이터를 요청하세요. '계정 데이터'(약 5일 소요)와 '확장 스트리밍 기록'(최대 30일 소요)을 체크하세요. '확장'에 전체 기록이 포함되어 있습니다.",
       "step2": "데이터가 준비될 때쯤 알림을 보내드립니다.",
-      "step3": "Spotify 이메일이 도착하면 zip 파일을 다운로드한 뒤 공유 → Nomad Karaoke(Android)를 선택하거나, 다시 여기로 돌아와 파일을 선택하세요.",
-      "openSettings": "설정 열기"
+      "openSettings": "설정 열기",
+      "step3Ios": "Spotify 이메일이 도착하면 zip 파일을 파일 앱에 저장한 뒤, 다시 여기로 돌아와 선택하세요.",
+      "step3Android": "Spotify 이메일이 도착하면 zip 파일을 다운로드한 뒤 공유 → Nomad Karaoke를 선택하거나, 다시 여기로 돌아와 파일을 선택하세요."
     },
     "stepNumber": "{n, number}",
     "sync": {

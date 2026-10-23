@@ -1339,9 +1339,10 @@
       "submit": "ייבוא פלייליסט"
     },
     "reminders": {
-      "body": "פותחים את האימייל מ-Spotify, ומשתפים את קובץ ה-zip עם Nomad Karaoke.",
       "channel": "תזכורות",
-      "title": "ייתכן שנתוני ה-Spotify שלך כבר מוכנים"
+      "title": "ייתכן שנתוני ה-Spotify שלך כבר מוכנים",
+      "bodyAndroid": "פותחים את האימייל מ-Spotify, ומשתפים את קובץ ה-zip עם Nomad Karaoke.",
+      "bodyIos": "פותחים את האימייל מ-Spotify, שומרים את קובץ ה-zip באפליקציית 'קבצים', ואז בוחרים אותו ב-Nomad Karaoke."
     },
     "result": "נוספו {artists, plural, one {אמן #} other {# אמנים}} ו-{songs, plural, one {שיר #} other {# שירים}} שאתה מכיר",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "בוצע. נזכיר לך בעוד כ-5 ימים, ושוב בעוד 25 ימים.",
       "step1": "מבקשים את הנתונים בכתובת spotify.com/account/privacy. מסמנים את Account data (מוכן תוך כ-5 ימים) ואת Extended streaming history (עד 30 ימים): ההיסטוריה המורחבת מכילה את כל ההיסטוריה המלאה שלך.",
       "step2": "אנחנו נזכיר לך כשהקבצים אמורים להיות מוכנים.",
-      "step3": "כשהאימייל מ-Spotify יגיע, מורידים את קובץ ה-zip, ואז שיתוף ← Nomad Karaoke (באנדרואיד), או חוזרים לכאן ובוחרים את הקובץ.",
-      "openSettings": "פתיחת הגדרות"
+      "openSettings": "פתיחת הגדרות",
+      "step3Ios": "כשהאימייל מ-Spotify יגיע, שומרים את קובץ ה-zip באפליקציית 'קבצים', ואז חוזרים לכאן ובוחרים אותו.",
+      "step3Android": "כשהאימייל מ-Spotify יגיע, מורידים את קובץ ה-zip, ואז שיתוף ← Nomad Karaoke, או חוזרים לכאן ובוחרים את הקובץ."
     },
     "stepNumber": "{n, number}",
     "sync": {

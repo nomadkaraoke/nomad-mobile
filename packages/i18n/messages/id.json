@@ -1339,9 +1339,10 @@
       "submit": "Impor playlist"
     },
     "reminders": {
-      "body": "Buka email dari Spotify, lalu bagikan file zip ke Nomad Karaoke.",
       "channel": "Pengingat",
-      "title": "Data Spotify Anda mungkin sudah siap"
+      "title": "Data Spotify Anda mungkin sudah siap",
+      "bodyAndroid": "Buka email dari Spotify, lalu bagikan file zip ke Nomad Karaoke.",
+      "bodyIos": "Buka email dari Spotify, simpan file zip ke File, lalu pilih di Nomad Karaoke."
     },
     "result": "Menambahkan {artists, plural, one {# artis} other {# artis}} dan {songs, plural, one {# lagu} other {# lagu}} yang Anda tahu",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Selesai. Kami akan mengingatkan Anda dalam waktu sekitar 5 hari, dan sekali lagi dalam 25 hari.",
       "step1": "Minta data Anda di spotify.com/account/privacy. Centang Data akun (siap dalam sekitar 5 hari) dan Riwayat streaming lengkap (hingga 30 hari): Riwayat lengkap memuat seluruh riwayat Anda.",
       "step2": "Kami akan mengingatkan Anda saat datanya diperkirakan sudah siap.",
-      "step3": "Saat email dari Spotify tiba, unduh file zip, lalu pilih Bagikan → Nomad Karaoke (Android), atau kembali ke sini dan pilih filenya.",
-      "openSettings": "Buka Pengaturan"
+      "openSettings": "Buka Pengaturan",
+      "step3Ios": "Saat email dari Spotify tiba, simpan file zip ke File, lalu kembali ke sini dan pilih file tersebut.",
+      "step3Android": "Saat email dari Spotify tiba, unduh file zip, lalu pilih Bagikan → Nomad Karaoke, atau kembali ke sini dan pilih filenya."
     },
     "stepNumber": "{n, number}",
     "sync": {

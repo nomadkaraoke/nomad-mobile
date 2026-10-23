@@ -1339,9 +1339,10 @@
       "submit": "प्लेलिस्ट इम्पोर्ट करो"
     },
     "reminders": {
-      "body": "Spotify से आया ईमेल खोलो, फिर Nomad Karaoke के साथ zip शेयर करो।",
       "channel": "रिमाइंडर",
-      "title": "तुम्हारा Spotify डेटा तैयार हो सकता है"
+      "title": "तुम्हारा Spotify डेटा तैयार हो सकता है",
+      "bodyAndroid": "Spotify से आया ईमेल खोलो, फिर Nomad Karaoke के साथ zip शेयर करो।",
+      "bodyIos": "Spotify का ईमेल खोलो, zip को Files में सेव करो, फिर उसे Nomad Karaoke में चुनो।"
     },
     "result": "{artists, plural, one {# आर्टिस्ट} other {# आर्टिस्ट}} और तुम्हारे जाने-पहचाने {songs, plural, one {# गाना} other {# गाने}} जोड़े गए",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "हो गया। हम तुम्हें लगभग 5 दिनों में और फिर 25 दिनों में याद दिलाएंगे।",
       "step1": "spotify.com/account/privacy पर अपने डेटा की रिक्वेस्ट करो। Account data (लगभग 5 दिनों में तैयार) और Extended streaming history (30 दिनों तक) पर सही का निशान लगाओ: Extended में तुम्हारी पूरी हिस्ट्री होती है।",
       "step2": "जब यह तैयार हो जाएगा, तब हम तुम्हें याद दिलाएंगे।",
-      "step3": "जब Spotify का ईमेल आ जाए, तो zip डाउनलोड करो, फिर Share → Nomad Karaoke (Android), या यहाँ वापस आकर फ़ाइल चुनो।",
-      "openSettings": "सेटिंग्स खोलें"
+      "openSettings": "सेटिंग्स खोलें",
+      "step3Ios": "जब Spotify का ईमेल आ जाए, तो zip को Files में सेव करो, फिर यहाँ वापस आकर उसे चुनो।",
+      "step3Android": "जब Spotify का ईमेल आ जाए, तो zip डाउनलोड करो, फिर Share → Nomad Karaoke, या यहाँ वापस आकर फ़ाइल चुनो।"
     },
     "stepNumber": "{n, number}",
     "sync": {

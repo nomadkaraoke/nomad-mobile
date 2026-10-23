@@ -1339,9 +1339,10 @@
       "submit": "Tuo soittolista"
     },
     "reminders": {
-      "body": "Avaa sähköposti Spotifylta ja jaa sitten zip-tiedosto Nomad Karaoken kanssa.",
       "channel": "Muistutukset",
-      "title": "Spotify-tietosi saattavat olla valmiina"
+      "title": "Spotify-tietosi saattavat olla valmiina",
+      "bodyAndroid": "Avaa sähköposti Spotifylta ja jaa sitten zip-tiedosto Nomad Karaoken kanssa.",
+      "bodyIos": "Avaa Spotifyn sähköposti, tallenna zip-tiedosto Tiedostot-appiin ja valitse se sitten Nomad Karaokessa."
     },
     "result": "Lisätty {artists, plural, one {# tuntemasi artisti} other {# tuntemaasi artistia}} ja {songs, plural, one {# tuntemasi kappale} other {# tuntemaasi kappaletta}}",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Valmis. Muistutamme sinua noin 5 päivän kuluttua ja uudelleen 25 päivän kuluttua.",
       "step1": "Pyydä tietojasi osoitteessa spotify.com/account/privacy. Rasti Tilitiedot (valmiina noin 5 päivässä) ja Laajennettu suoratoistohistoria (enintään 30 päivää): Laajennettu sisältää koko historiasi.",
       "step2": "Muistutamme sinua, kun sen pitäisi olla valmis.",
-      "step3": "Kun Spotifyn sähköposti saapuu, lataa zip-tiedosto ja valitse sitten Jaa → Nomad Karaoke (Android) tai palaa tänne ja valitse tiedosto.",
-      "openSettings": "Avaa asetukset"
+      "openSettings": "Avaa asetukset",
+      "step3Ios": "Kun Spotifyn sähköposti saapuu, tallenna zip-tiedosto Tiedostot-appiin, palaa sitten tänne ja valitse se.",
+      "step3Android": "Kun Spotifyn sähköposti saapuu, lataa zip-tiedosto ja valitse sitten Jaa → Nomad Karaoke tai palaa tänne ja valitse tiedosto."
     },
     "stepNumber": "{n, number}",
     "sync": {

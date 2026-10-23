@@ -1339,9 +1339,10 @@
       "submit": "Importa la llista de reproducció"
     },
     "reminders": {
-      "body": "Obre el correu electrònic de Spotify i comparteix el zip amb Nomad Karaoke.",
       "channel": "Recordatoris",
-      "title": "És possible que les teves dades de Spotify estiguin a punt"
+      "title": "És possible que les teves dades de Spotify estiguin a punt",
+      "bodyAndroid": "Obre el correu electrònic de Spotify i comparteix el zip amb Nomad Karaoke.",
+      "bodyIos": "Obre el correu de Spotify, desa el zip a Fitxers i després tria'l a Nomad Karaoke."
     },
     "result": "S'han afegit {artists, plural, one {# artista} other {# artistes}} i {songs, plural, one {# cançó} other {# cançons}} que coneixes",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Fet. T'ho recordarem d'aquí a uns 5 dies, i un altre cop d'aquí a 25 dies.",
       "step1": "Sol·licita les teves dades a spotify.com/account/privacy. Marca «Dades del compte» (a punt en uns 5 dies) i «Historial complet de reproducció en continu» (fins a 30 dies): aquest últim conté tot el teu historial.",
       "step2": "T'avisarem quan hauria d'estar a punt.",
-      "step3": "Quan arribi el correu electrònic de Spotify, descarrega el zip i després fes Comparteix → Nomad Karaoke (Android), o torna aquí i tria el fitxer.",
-      "openSettings": "Obre la configuració"
+      "openSettings": "Obre la configuració",
+      "step3Ios": "Quan arribi el correu electrònic de Spotify, desa el zip a Fitxers i després torna aquí i tria'l.",
+      "step3Android": "Quan arribi el correu electrònic de Spotify, descarrega el zip i després fes Comparteix → Nomad Karaoke, o torna aquí i tria el fitxer."
     },
     "stepNumber": "{n, number}",
     "sync": {

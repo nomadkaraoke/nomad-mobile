@@ -1339,9 +1339,10 @@
       "submit": "Lejátszási lista importálása"
     },
     "reminders": {
-      "body": "Nyisd meg a Spotify-tól kapott e-mailt, majd oszd meg a zip-fájlt a Nomad Karaoke alkalmazással.",
       "channel": "Emlékeztetők",
-      "title": "A Spotify-adataid készen állhatnak"
+      "title": "A Spotify-adataid készen állhatnak",
+      "bodyAndroid": "Nyisd meg a Spotify-tól kapott e-mailt, majd oszd meg a zip-fájlt a Nomad Karaoke alkalmazással.",
+      "bodyIos": "Nyisd meg a Spotify e-mailjét, mentsd a zip-fájlt a Fájlok appba, majd válaszd ki a Nomad Karaokéban."
     },
     "result": "Hozzáadva: {artists, plural, one {# előadó} other {# előadó}} és {songs, plural, one {# dal} other {# dal}}, amit ismersz",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Kész. Körülbelül 5 nap múlva emlékeztetünk, majd 25 nap múlva újra.",
       "step1": "Kérd ki az adataidat a spotify.com/account/privacy oldalon. Jelöld be a Fiókadatok (kb. 5 nap múlva kész) és a Bővített streamelési előzmények (legfeljebb 30 nap) lehetőséget: a Bővített tartalmazza a teljes előzményedet.",
       "step2": "Emlékeztetni fogunk, amikor elkészülhet.",
-      "step3": "Amikor megérkezik a Spotify e-mailje, töltsd le a zip-fájlt, majd válaszd a Megosztás → Nomad Karaoke (Android) lehetőséget, vagy térj vissza ide, és válaszd ki a fájlt.",
-      "openSettings": "Beállítások megnyitása"
+      "openSettings": "Beállítások megnyitása",
+      "step3Ios": "Amikor megérkezik a Spotify e-mailje, mentsd a zip-fájlt a Fájlok appba, majd térj vissza ide, és válaszd ki.",
+      "step3Android": "Amikor megérkezik a Spotify e-mailje, töltsd le a zip-fájlt, majd válaszd a Megosztás → Nomad Karaoke lehetőséget, vagy térj vissza ide, és válaszd ki a fájlt."
     },
     "stepNumber": "{n, number}",
     "sync": {

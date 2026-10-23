@@ -1333,7 +1333,6 @@
       "reminded": "Done. We'll remind you in about 5 days, and again in 25.",
       "denied": "Notifications are off for Nomad Karaoke. Turn them on in Settings to get a reminder.",
       "openSettings": "Open Settings",
-      "step3": "When Spotify's email arrives, download the zip, then Share → Nomad Karaoke (Android), or come back here and pick the file.",
       "pick": "Pick the file"
     },
     "appleGuide": {
@@ -1346,8 +1345,8 @@
     },
     "reminders": {
       "title": "Your Spotify data may be ready",
-      "body": "Open the email from Spotify, then share the zip with Nomad Karaoke.",
-      "channel": "Reminders"
+      "channel": "Reminders",
+      "bodyAndroid": "Open the email from Spotify, then share the zip with Nomad Karaoke."
     },
     "importFile": {
       "title": "Import your history",

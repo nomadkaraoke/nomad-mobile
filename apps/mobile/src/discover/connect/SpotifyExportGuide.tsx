@@ -2,12 +2,15 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import * as WebBrowser from 'expo-web-browser';
 import { useState, type ReactNode } from 'react';
-import { Linking, View } from 'react-native';
+import { Linking, Platform, View } from 'react-native';
 
 import { PickExportError, usePickExportFile } from './usePickExportFile';
 import { scheduleExportReminders } from './reminders';
 
 const SPOTIFY_PRIVACY = 'https://www.spotify.com/account/privacy/';
+
+/** Only Android has Share -> Nomad Karaoke (modules/share-intake); on iOS the zip goes to Files and is picked here. */
+const shareIntake = () => Platform.OS === 'android';
 
 type Remind = 'idle' | 'busy' | 'scheduled' | 'denied' | 'failed';
 
@@ -42,7 +45,7 @@ export function SpotifyExportGuide() {
       setRemind(
         await scheduleExportReminders({
           title: t('reminders.title'),
-          body: t('reminders.body'),
+          body: t(shareIntake() ? 'reminders.bodyAndroid' : 'reminders.bodyIos'),
           channelName: t('reminders.channel'),
         }),
       );
@@ -96,7 +99,7 @@ export function SpotifyExportGuide() {
           </Text>
         ) : null}
       </Step>
-      <Step n={3} text={t('spotifyExport.step3')}>
+      <Step n={3} text={t(shareIntake() ? 'spotifyExport.step3Android' : 'spotifyExport.step3Ios')}>
         <Button testID="connect-spotify-pick" label={t('spotifyExport.pick')} onPress={pick} />
         <PickExportError visible={pickFailed} />
       </Step>

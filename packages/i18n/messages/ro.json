@@ -1339,9 +1339,10 @@
       "submit": "Importă playlistul"
     },
     "reminders": {
-      "body": "Deschide e-mailul de la Spotify, apoi trimite fișierul zip către Nomad Karaoke.",
       "channel": "Mementouri",
-      "title": "Datele tale de la Spotify ar putea fi gata"
+      "title": "Datele tale de la Spotify ar putea fi gata",
+      "bodyAndroid": "Deschide e-mailul de la Spotify, apoi trimite fișierul zip către Nomad Karaoke.",
+      "bodyIos": "Deschide e-mailul de la Spotify, salvează fișierul zip în Fișiere, apoi alege-l în Nomad Karaoke."
     },
     "result": "Am adăugat {artists, plural, one {# artist} few {# artiști} other {# de artiști}} și {songs, plural, one {# melodie} few {# melodii} other {# de melodii}} pe care le cunoști",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Gata. Îți vom aminti peste aproximativ 5 zile, și din nou peste 25.",
       "step1": "Solicită-ți datele pe spotify.com/account/privacy. Bifează Date cont (gata în aprox. 5 zile) și Istoric extins de streaming (până la 30 de zile): cel extins conține tot istoricul tău.",
       "step2": "Îți vom aminti când ar trebui să fie gata.",
-      "step3": "Când sosește e-mailul de la Spotify, descarcă fișierul zip, apoi Trimite → Nomad Karaoke (Android), sau revino aici și alege fișierul.",
-      "openSettings": "Deschide Setări"
+      "openSettings": "Deschide Setări",
+      "step3Ios": "Când sosește e-mailul de la Spotify, salvează fișierul zip în Fișiere, apoi revino aici și alege-l.",
+      "step3Android": "Când sosește e-mailul de la Spotify, descarcă fișierul zip, apoi Trimite → Nomad Karaoke, sau revino aici și alege fișierul."
     },
     "stepNumber": "{n, number}",
     "sync": {

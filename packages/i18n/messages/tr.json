@@ -1339,9 +1339,10 @@
       "submit": "Çalma listesini içe aktar"
     },
     "reminders": {
-      "body": "Spotify'dan gelen e-postayı aç, ardından zip dosyasını Nomad Karaoke ile paylaş.",
       "channel": "Hatırlatıcılar",
-      "title": "Spotify verilerin hazır olabilir"
+      "title": "Spotify verilerin hazır olabilir",
+      "bodyAndroid": "Spotify'dan gelen e-postayı aç, ardından zip dosyasını Nomad Karaoke ile paylaş.",
+      "bodyIos": "Spotify'ın e-postasını aç, zip dosyasını Dosyalar'a kaydet, ardından Nomad Karaoke'de seç."
     },
     "result": "Bildiğin {artists, plural, one {# sanatçı} other {# sanatçı}} ve {songs, plural, one {# şarkı} other {# şarkı}} eklendi",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Tamamlandı. Yaklaşık 5 gün sonra ve tekrar 25 gün sonra sana hatırlatacağız.",
       "step1": "spotify.com/account/privacy adresinden verilerini talep et. Hesap verileri (yaklaşık 5 günde hazır olur) ve Genişletilmiş dinleme geçmişi (30 güne kadar sürer) kutucuklarını işaretle: Genişletilmiş geçmiş tüm dinleme geçmişini içerir.",
       "step2": "Hazır olması gereken zamanda sana hatırlatacağız.",
-      "step3": "Spotify'ın e-postası geldiğinde zip dosyasını indir, ardından Paylaş → Nomad Karaoke (Android) yolunu izle ya da buraya dönüp dosyayı seç.",
-      "openSettings": "Ayarlar'ı Aç"
+      "openSettings": "Ayarlar'ı Aç",
+      "step3Ios": "Spotify'ın e-postası geldiğinde zip dosyasını Dosyalar'a kaydet, ardından buraya dönüp dosyayı seç.",
+      "step3Android": "Spotify'ın e-postası geldiğinde zip dosyasını indir, ardından Paylaş → Nomad Karaoke yolunu izle ya da buraya dönüp dosyayı seç."
     },
     "stepNumber": "{n, number}",
     "sync": {

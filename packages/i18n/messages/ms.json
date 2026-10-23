@@ -1339,9 +1339,10 @@
       "submit": "Import senarai main"
     },
     "reminders": {
-      "body": "Buka e-mel daripada Spotify, kemudian kongsikan fail zip tersebut dengan Nomad Karaoke.",
       "channel": "Peringatan",
-      "title": "Data Spotify anda mungkin sudah sedia"
+      "title": "Data Spotify anda mungkin sudah sedia",
+      "bodyAndroid": "Buka e-mel daripada Spotify, kemudian kongsikan fail zip tersebut dengan Nomad Karaoke.",
+      "bodyIos": "Buka e-mel daripada Spotify, simpan zip ke Fail, kemudian pilihnya dalam Nomad Karaoke."
     },
     "result": "Menambah {artists, plural, other {# artis}} dan {songs, plural, other {# lagu}} yang anda tahu",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Selesai. Kami akan mengingatkan anda dalam masa kira-kira 5 hari, dan sekali lagi dalam 25 hari.",
       "step1": "Minta data anda di spotify.com/account/privacy. Tandakan Data akaun (siap dalam masa kira-kira 5 hari) dan Sejarah penstriman lanjutan (sehingga 30 hari): Lanjutan mengandungi keseluruhan sejarah anda.",
       "step2": "Kami akan mengingatkan anda apabila ia dijangka siap.",
-      "step3": "Apabila e-mel Spotify tiba, muat turun zip, kemudian tekan Kongsi → Nomad Karaoke (Android), atau kembali ke sini dan pilih fail tersebut.",
-      "openSettings": "Buka Tetapan"
+      "openSettings": "Buka Tetapan",
+      "step3Ios": "Apabila e-mel Spotify tiba, simpan zip ke Fail, kemudian kembali ke sini dan pilihnya.",
+      "step3Android": "Apabila e-mel Spotify tiba, muat turun zip, kemudian tekan Kongsi → Nomad Karaoke, atau kembali ke sini dan pilih fail tersebut."
     },
     "stepNumber": "{n, number}",
     "sync": {

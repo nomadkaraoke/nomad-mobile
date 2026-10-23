@@ -1339,9 +1339,10 @@
       "submit": "Importovat playlist"
     },
     "reminders": {
-      "body": "Otevři e-mail od Spotify a nasdílej soubor zip do Nomad Karaoke.",
       "channel": "Připomínky",
-      "title": "Tvoje data ze Spotify už možná dorazila"
+      "title": "Tvoje data ze Spotify už možná dorazila",
+      "bodyAndroid": "Otevři e-mail od Spotify a nasdílej soubor zip do Nomad Karaoke.",
+      "bodyIos": "Otevři e-mail od Spotify, ulož soubor zip do Souborů a pak ho vyber v Nomad Karaoke."
     },
     "result": "Přidáno: {artists, plural, one {# interpret} few {# interpreti} other {# interpretů}} a {songs, plural, one {# skladba} few {# skladby} other {# skladeb}}, které znáš",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Hotovo. Připomeneme se ti zhruba za 5 dní a pak znovu za 25.",
       "step1": "Požádej o svá data na spotify.com/account/privacy. Zaškrtni Data účtu (bývají připravena zhruba za 5 dní) a Rozšířená historie streamování (až 30 dní): Rozšířená historie obsahuje kompletní data.",
       "step2": "Až by mělo být vše připraveno, pošleme ti připomínku.",
-      "step3": "Až ti dorazí e-mail od Spotify, stáhni si soubor zip a pak zvol Sdílet → Nomad Karaoke (Android), nebo se vrať sem a vyber soubor.",
-      "openSettings": "Otevřít Nastavení"
+      "openSettings": "Otevřít Nastavení",
+      "step3Ios": "Až ti dorazí e-mail od Spotify, ulož soubor zip do Souborů, pak se vrať sem a vyber ho.",
+      "step3Android": "Až ti dorazí e-mail od Spotify, stáhni si soubor zip a pak zvol Sdílet → Nomad Karaoke, nebo se vrať sem a vyber soubor."
     },
     "stepNumber": "{n, number}",
     "sync": {

@@ -1339,9 +1339,10 @@
       "submit": "Nhập danh sách phát"
     },
     "reminders": {
-      "body": "Hãy mở email từ Spotify, sau đó chia sẻ tệp zip với Nomad Karaoke.",
       "channel": "Lời nhắc",
-      "title": "Dữ liệu Spotify của bạn có thể đã sẵn sàng"
+      "title": "Dữ liệu Spotify của bạn có thể đã sẵn sàng",
+      "bodyAndroid": "Hãy mở email từ Spotify, sau đó chia sẻ tệp zip với Nomad Karaoke.",
+      "bodyIos": "Mở email từ Spotify, lưu tệp zip vào Tệp, sau đó chọn tệp đó trong Nomad Karaoke."
     },
     "result": "Đã thêm {artists, plural, other {# nghệ sĩ}} và {songs, plural, other {# bài hát}} bạn biết",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Xong! Chúng tôi sẽ nhắc bạn sau khoảng 5 ngày, và nhắc lại sau 25 ngày.",
       "step1": "Yêu cầu dữ liệu của bạn tại spotify.com/account/privacy. Đánh dấu vào Dữ liệu tài khoản (sẵn sàng sau khoảng 5 ngày) và Lịch sử nghe nhạc mở rộng (tối đa 30 ngày): Gói mở rộng chứa toàn bộ lịch sử của bạn.",
       "step2": "Chúng tôi sẽ nhắc bạn khi dữ liệu sẵn sàng.",
-      "step3": "Khi email từ Spotify tới, hãy tải tệp zip xuống, sau đó chọn Chia sẻ → Nomad Karaoke (Android), hoặc quay lại đây và chọn tệp.",
-      "openSettings": "Mở Cài đặt"
+      "openSettings": "Mở Cài đặt",
+      "step3Ios": "Khi email từ Spotify tới, hãy lưu tệp zip vào Tệp, sau đó quay lại đây và chọn tệp đó.",
+      "step3Android": "Khi email từ Spotify tới, hãy tải tệp zip xuống, sau đó chọn Chia sẻ → Nomad Karaoke, hoặc quay lại đây và chọn tệp."
     },
     "stepNumber": "{n, number}",
     "sync": {

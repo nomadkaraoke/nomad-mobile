@@ -1339,9 +1339,10 @@
       "submit": "Uvezi popis pjesama"
     },
     "reminders": {
-      "body": "Otvori e-poštu od Spotifyja, a zatim podijeli zip datoteku s Nomad Karaoke.",
       "channel": "Podsjetnici",
-      "title": "Tvoji Spotify podaci možda su spremni"
+      "title": "Tvoji Spotify podaci možda su spremni",
+      "bodyAndroid": "Otvori e-poštu od Spotifyja, a zatim podijeli zip datoteku s Nomad Karaoke.",
+      "bodyIos": "Otvori e-poštu od Spotifyja, spremi zip datoteku u Datoteke, a zatim je odaberi u Nomad Karaokeu."
     },
     "result": "Dodano: {artists, plural, one {# izvođač} few {# izvođača} other {# izvođača}} i {songs, plural, one {# pjesma} few {# pjesme} other {# pjesama}} koje znaš",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Dogovoreno. Podsjetit ćemo te za otprilike 5 dana i ponovno za 25.",
       "step1": "Zatraži svoje podatke na spotify.com/account/privacy. Označi Podaci o računu (spremno za otprilike 5 dana) i Proširena povijest streaminga (do 30 dana): Proširena povijest sadrži cijelu tvoju povijest.",
       "step2": "Podsjetit ćemo te kada bi trebala biti spremna.",
-      "step3": "Kada stigne Spotifyjeva e-pošta, preuzmi zip datoteku, a zatim odaberi Dijeli → Nomad Karaoke (Android) ili se vrati ovdje i odaberi datoteku.",
-      "openSettings": "Otvori Postavke"
+      "openSettings": "Otvori Postavke",
+      "step3Ios": "Kada stigne Spotifyjeva e-pošta, spremi zip datoteku u Datoteke, a zatim se vrati ovdje i odaberi je.",
+      "step3Android": "Kada stigne Spotifyjeva e-pošta, preuzmi zip datoteku, a zatim odaberi Dijeli → Nomad Karaoke ili se vrati ovdje i odaberi datoteku."
     },
     "stepNumber": "{n, number}",
     "sync": {

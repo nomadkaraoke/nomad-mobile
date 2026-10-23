@@ -1339,9 +1339,10 @@
       "submit": "Importar playlist"
     },
     "reminders": {
-      "body": "Abra o e-mail do Spotify e compartilhe o arquivo zip com o Nomad Karaoke.",
       "channel": "Lembretes",
-      "title": "Seus dados do Spotify podem estar prontos"
+      "title": "Seus dados do Spotify podem estar prontos",
+      "bodyAndroid": "Abra o e-mail do Spotify e compartilhe o arquivo zip com o Nomad Karaoke.",
+      "bodyIos": "Abra o e-mail do Spotify, salve o zip no app Arquivos e depois escolha-o no Nomad Karaoke."
     },
     "result": "Adicionados {artists, plural, one {# artista} other {# artistas}} e {songs, plural, one {# música que você conhece} other {# músicas que você conhece}}",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "Pronto. Vamos lembrar você em cerca de 5 dias e novamente em 25.",
       "step1": "Solicite seus dados em spotify.com/account/privacy. Marque Dados da conta (pronto em cerca de 5 dias) e Histórico estendido de reprodução (até 30 dias): o Estendido contém todo o seu histórico.",
       "step2": "Vamos lembrar você quando estiver pronto.",
-      "step3": "Quando o e-mail do Spotify chegar, baixe o zip e toque em Compartilhar → Nomad Karaoke (Android) ou volte aqui e escolha o arquivo.",
-      "openSettings": "Abrir Ajustes"
+      "openSettings": "Abrir Ajustes",
+      "step3Ios": "Quando o e-mail do Spotify chegar, salve o zip no app Arquivos e depois volte aqui e escolha-o.",
+      "step3Android": "Quando o e-mail do Spotify chegar, baixe o zip e toque em Compartilhar → Nomad Karaoke ou volte aqui e escolha o arquivo."
     },
     "stepNumber": "{n, number}",
     "sync": {

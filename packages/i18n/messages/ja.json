@@ -1339,9 +1339,10 @@
       "submit": "プレイリストをインポート"
     },
     "reminders": {
-      "body": "Spotifyからのメールを開き、zipファイルをNomad Karaokeに共有してください。",
       "channel": "リマインダー",
-      "title": "Spotifyのデータの準備ができた可能性があります"
+      "title": "Spotifyのデータの準備ができた可能性があります",
+      "bodyAndroid": "Spotifyからのメールを開き、zipファイルをNomad Karaokeに共有してください。",
+      "bodyIos": "Spotifyからのメールを開き、zipファイルを「ファイル」アプリに保存してから、Nomad Karaokeで選択してください。"
     },
     "result": "よく聴くアーティスト{artists, plural, other {#組}}と曲{songs, plural, other {#曲}}を追加しました",
     "screenshot": {
@@ -1402,8 +1403,9 @@
       "reminded": "完了しました。約5日後と、25日後にリマインダーをお送りします。",
       "step1": "spotify.com/account/privacy でデータをリクエストします。「アカウントデータ」（約5日で準備完了）と「拡張ストリーミング履歴」（最大30日）にチェックを入れてください。拡張ストリーミング履歴にはこれまでの全履歴が含まれます。",
       "step2": "準備ができる頃にリマインダーをお送りします。",
-      "step3": "Spotifyからメールが届いたらzipファイルをダウンロードし、「共有」→「Nomad Karaoke」（Android）、またはここに戻ってファイルを選択してください。",
-      "openSettings": "設定を開く"
+      "openSettings": "設定を開く",
+      "step3Ios": "Spotifyからメールが届いたら、zipファイルを「ファイル」アプリに保存し、ここに戻って選択してください。",
+      "step3Android": "Spotifyからメールが届いたらzipファイルをダウンロードし、「共有」→「Nomad Karaoke」、またはここに戻ってファイルを選択してください。"
     },
     "stepNumber": "{n, number}",
     "sync": {

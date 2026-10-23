@@ -5,7 +5,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { router } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 
 import { useAuth } from '../../auth/store';
 import { safeExportName } from '../../discover/connect/pickExportFile';
@@ -54,11 +54,37 @@ describe('Spotify export guide', () => {
     expect(screen.getByText("We'll remind you when it should be ready.")).toBeTruthy();
     expect(
       screen.getByText(
-        "When Spotify's email arrives, download the zip, then Share → Nomad Karaoke (Android), or come back here and pick the file.",
+        "When Spotify's email arrives, save the zip to Files, then come back here and pick it.",
       ),
     ).toBeTruthy();
     await act(async () => fireEvent.press(screen.getByTestId('connect-spotify-open')));
     expect(WebBrowser.openBrowserAsync).toHaveBeenCalledWith('https://www.spotify.com/account/privacy/');
+  });
+
+  // iOS has no Share -> Nomad Karaoke (share intake is Android only), so step 3 and the reminder say Files there.
+  describe('on Android', () => {
+    beforeEach(() => Object.defineProperty(Platform, 'OS', { value: 'android', configurable: true }));
+    afterEach(() => Object.defineProperty(Platform, 'OS', { value: 'ios', configurable: true }));
+
+    it('step 3 and the reminder offer Share -> Nomad Karaoke', async () => {
+      open();
+      expect(
+        await screen.findByText(
+          "When Spotify's email arrives, download the zip, then Share → Nomad Karaoke, or come back here and pick the file.",
+        ),
+      ).toBeTruthy();
+      expect(screen.queryByText(/save the zip to Files/)).toBeNull();
+      await act(async () => fireEvent.press(screen.getByTestId('connect-spotify-remind')));
+      expect(N.scheduleNotificationAsync.mock.calls[0]![0].content).toMatchObject({
+        body: 'Open the email from Spotify, then share the zip with Nomad Karaoke.',
+      });
+    });
+  });
+
+  it('on iOS step 3 never mentions Share -> Nomad Karaoke', async () => {
+    open();
+    await screen.findByText("When Spotify's email arrives, save the zip to Files, then come back here and pick it.");
+    expect(screen.queryByText(/Share → Nomad Karaoke/)).toBeNull();
   });
 
   it('remind asks permission only on tap', async () => {
@@ -72,7 +98,7 @@ describe('Spotify export guide', () => {
     expect(N.scheduleNotificationAsync).toHaveBeenCalledTimes(2);
     expect(N.scheduleNotificationAsync.mock.calls[0]![0].content).toMatchObject({
       title: 'Your Spotify data may be ready',
-      body: 'Open the email from Spotify, then share the zip with Nomad Karaoke.',
+      body: 'Open the email from Spotify, save the zip to Files, then pick it in Nomad Karaoke.',
     });
     expect(await screen.findByTestId('connect-spotify-reminded')).toBeTruthy();
   });
