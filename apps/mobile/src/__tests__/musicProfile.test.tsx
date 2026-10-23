@@ -45,6 +45,7 @@ jest.mock('@nomad/api-decide', () => ({
   getVoiceProfile: jest.fn(async () => null),
   putVoiceProfile: jest.fn(async () => ({})),
   deleteVoiceProfile: jest.fn(async () => undefined),
+  getVoiceFlags: jest.fn(async () => ({ session_enabled: false, is_admin: false, voice_data: false })),
 }));
 jest.mock('@nomad/api-gen', () => ({
   ...jest.requireActual('@nomad/api-gen'),
@@ -351,6 +352,27 @@ describe('Your voice (Phase 3c)', () => {
     await signIn();
     open();
     expect(await screen.findByTestId('voice-section-method')).toHaveTextContent('From your pick, not measured');
+  });
+
+  it('a session profile says it came from a singing session', async () => {
+    act(() => useVoiceStore.getState().adopt({ ...MIC, method: 'session' }));
+    await signIn();
+    open();
+    expect(await screen.findByTestId('voice-section-method')).toHaveTextContent('From a singing session');
+  });
+
+  it('the voice session entry shows only when decide enables it', async () => {
+    await signIn();
+    const app = open();
+    await screen.findByTestId('voice-section');
+    await waitFor(() => expect(decide.getVoiceFlags).toHaveBeenCalled());
+    expect(screen.queryByTestId('vs-entry-me')).toBeNull();
+    app.unmount();
+
+    m(decide.getVoiceFlags).mockResolvedValueOnce({ session_enabled: true, is_admin: false, voice_data: true });
+    const again = renderRouter({ ...routes(), 'discover/voice-session': () => <View testID="session-stub" /> }, { initialUrl: '/me/music-profile' });
+    fireEvent.press(await screen.findByTestId('vs-entry-me'));
+    await waitFor(() => expect(again.getPathname()).toBe('/discover/voice-session'));
   });
 
   it('remove: DELETEs on decide, clears the phone copy and the voice filters', async () => {

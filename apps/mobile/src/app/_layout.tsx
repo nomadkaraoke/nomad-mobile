@@ -46,6 +46,7 @@ function RootStack() {
   useSharedFileIntake();
   const tVoice = useTranslations('voice');
   const tVoiceDebug = useTranslations('voiceSession.debug');
+  const tVoiceSession = useTranslations('voiceSession');
   return (
     <ThemeProvider value={theme}>
       <Stack
@@ -73,6 +74,8 @@ function RootStack() {
         <Stack.Screen name="discover/quiz" options={{ presentation: 'modal', title: tQuiz('title') }} />
         {/* The voice range test (Phase 3c spec §4.2): a modal over Discover, like the quiz. */}
         <Stack.Screen name="discover/voice" options={{ presentation: 'modal', title: tVoice('title') }} />
+        {/* The voice session (Phase 3d spec §4): a modal over Discover or Me. */}
+        <Stack.Screen name="discover/voice-session" options={{ presentation: 'modal', title: tVoiceSession('title') }} />
         {/* Me -> Your music profile (Phase 3a spec §8.3). */}
         <Stack.Screen name="me/music-profile" options={(p) => ({ title: tAccount('musicProfile'), ...profileBack(p) })} />
         {/* Connect your music (Phase 3b): its own stack with its own headers. */}

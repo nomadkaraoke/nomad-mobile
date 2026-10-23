@@ -1521,7 +1521,8 @@
     "profileRemoveBody": "Discover slutar matcha låtar till din röst. Du kan göra om testet när som helst.",
     "profileRemoveTitle": "Ta bort din röst?",
     "singableCtaLabel": "Sångbar, gör rösttestet först",
-    "profileRemoveConfirm": "Ta bort"
+    "profileRemoveConfirm": "Ta bort",
+    "profileMethodSession": "Från en sångsession"
   },
   "voiceSession": {
     "debug": {
@@ -1563,6 +1564,180 @@
       "openFailed": "Kunde inte öppna YouTube. Försök igen.",
       "video": "Karaokevideo",
       "open": "Öppna på YouTube"
-    }
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Ändra hur du sjunger: {posture}, {warmth}",
+      "on": "På",
+      "record": "Spelar in",
+      "title": "Just nu",
+      "off": "Av"
+    },
+    "disabled": {
+      "title": "Kommer snart"
+    },
+    "entry": "Hitta din röst (30 min)",
+    "error": {
+      "network": "Du är offline eller så bröts anslutningen. Kontrollera den och försök igen.",
+      "restart": "Börja om",
+      "server": "Något gick fel hos oss. Försök igen.",
+      "session_lost": "Den här sessionen kan inte fortsätta. Starta en ny.",
+      "warming_up": "Förbereder låtar, försök igen om en minut",
+      "retry": "Försök igen"
+    },
+    "intro": {
+      "body": "Sjung 5–10 låtar du kan, cirka 30 minuter. Bäst hemma med hörlurar.",
+      "title": "Hitta din röst",
+      "close": "Inte nu",
+      "start": "Starta"
+    },
+    "loading": "Väljer din nästa låt…",
+    "pick": {
+      "dontKnow": "Hoppa över, kan den inte",
+      "know": "Jag kan den här",
+      "version": "Karaokeversion: {brand}",
+      "else": "Något annat",
+      "finish": "Slutför"
+    },
+    "play": {
+      "keys": "Klaviatur som visar tonen du sjunger",
+      "recording": "Spelar in",
+      "ribbon": "Visa mina toner",
+      "stopEarly": "Avsluta i förtid"
+    },
+    "progress": "Låt {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Klarade inte vissa partier",
+        "q": "Hur svårt var det?",
+        "stretch": "Lite på gränsen",
+        "easy": "Enkel"
+      },
+      "feel": {
+        "fine": "Helt okej",
+        "loved": "Älskade det",
+        "q": "Hur kändes det?",
+        "not_for_me": "Inte för mig"
+      },
+      "issue": {
+        "bad_sync": "Dålig synk",
+        "low_quality": "Låg kvalitet",
+        "no_intro": "Inget intro",
+        "wrong_lyrics": "Fel låttext"
+      },
+      "knew": {
+        "barely": "Knappt alls",
+        "partly": "Delvis",
+        "q": "Hur väl kunde du den?",
+        "well": "Kunde den väl"
+      },
+      "position": {
+        "both_ends": "Svårt i båda ändarna",
+        "q": "Hur passade den din röst?",
+        "comfortable": "Bekväm",
+        "too_high": "För hög",
+        "too_low": "För låg"
+      },
+      "prefill": "Din högsta hållna ton var {high}, lägsta {low}",
+      "required": "De två första krävs. Hoppa över resten om du vill.",
+      "sing": {
+        "q": "Skulle du sjunga den på karaoke?",
+        "yes_other_key": "Ja, i en annan tonart",
+        "no": "Nej",
+        "yes": "Ja"
+      },
+      "tag": {
+        "crowd_song": "Perfekt allsångslåt",
+        "fast_lyrics": "Snabb text",
+        "long_gaps": "Långa instrumentala partier",
+        "mood_only": "Bara om jag är på humör",
+        "needed_warmup": "Krävde uppvärmning",
+        "q": "Valfria taggar"
+      },
+      "version": {
+        "good": "Bra",
+        "not_great": "Inte så bra",
+        "q": "Den här karaokeversionen"
+      },
+      "voice": {
+        "fresh": "Pigg",
+        "q": "Rösten just nu",
+        "tired": "Börjar bli trött",
+        "warm": "Uppvärmd"
+      },
+      "work": {
+        "fine": "Fungerar bra som den är",
+        "other_key": "I en annan tonart",
+        "other_octave": "En oktav lägre eller högre",
+        "practice": "Efter lite övning",
+        "q": "Skulle det fungera om…?",
+        "warmer": "Du var mer uppvärmd"
+      },
+      "next": "Nästa"
+    },
+    "reason": {
+      "comfortable_start": "En enkel låt att börja med",
+      "explore": "Något nytt att prova",
+      "known": "En låt du kan",
+      "loved": "En låt du älskar",
+      "lower_range": "Testar ditt lägre register",
+      "upper_range": "Testar ditt högre register"
+    },
+    "result": {
+      "confidenceLow": "Låg säkerhet",
+      "confidenceMedium": "Måttlig säkerhet",
+      "hint": {
+        "more_songs": "Några låtar till skulle göra detta säkrare",
+        "sing_higher_warm": "Sjung 2 högre låtar till när du är uppvärmd",
+        "sing_lower": "Prova ett par lägre låtar"
+      },
+      "keys": "Klaviatur som visar ditt röstomfång och dess bekväma mellanregister",
+      "loved": "Låtar du älskade",
+      "more": "Fortsätt",
+      "partial": "Från en kort session, så se det som en första gissning.",
+      "probably": "Förmodligen {type}, men vi behöver fler låtar för att vara säkra",
+      "range": "{range}, bekvämt {comfort}",
+      "saved": "Sparat i din musikprofil.",
+      "suited": "Låtar som passar dig",
+      "confidenceHigh": "Hög säkerhet",
+      "done": "Klar"
+    },
+    "setup": {
+      "bit_warm": "Lite uppvärmd",
+      "cold": "Inte uppvärmd",
+      "coldBody": "En minut med nynnande och sirener gör rösten redo och ger ett mer träffsäkert resultat.",
+      "coldTitle": "Värma upp först?",
+      "go": "Börja sjunga",
+      "headphones": "Hörlurar?",
+      "lying": "Liggande",
+      "micBlockedBody": "Aktivera mikrofonen för Nomad Karaoke i Inställningar. Du kan fortfarande sjunga och svara på frågorna, men inget spelas in.",
+      "micDeniedBody": "Vi behöver mikrofonen för att höra tonerna du sjunger. Utan den spelas inget in, men du kan fortfarande sjunga och svara på frågorna.",
+      "micRetry": "Ge åtkomst till mikrofonen",
+      "noHeadphones": "Bakgrundsmusiken läcker in i mikrofonen, så inspelningarna väger inte lika tungt.",
+      "posture": "Hur sjunger du?",
+      "record": "Spela in när jag sjunger?",
+      "recordBody": "Vi sparar inspelningen privat så att vi kan mäta ditt röstomfång mer exakt och förbättra dina låtförslag framöver. Endast du och vårt team har tillgång till den, och du kan när som helst radera alla dina inspelningar under Mig.",
+      "sitting": "Sittande",
+      "standing": "Stående",
+      "warm": "Helt uppvärmd",
+      "warmth": "Rösten just nu?",
+      "warmthAgain": "Hur känns rösten nu?",
+      "warmupSkip": "Hoppa över uppvärmningen",
+      "warmupStart": "Värm upp (1 min)",
+      "micOffTitle": "Mikrofonen är avstängd",
+      "no": "Nej",
+      "openSettings": "Öppna Inställningar",
+      "quiet": "Var tyst en sekund…",
+      "yes": "Ja"
+    },
+    "title": "Hitta din röst",
+    "warmup": {
+      "hum": "Nynna en bekväm ton",
+      "keys": "Klaviatur som visar tonen du sjunger",
+      "siren": "Glid upp och ner som en siren",
+      "done": "Klar",
+      "left": "{seconds, plural, one {# sekund kvar} other {# sekunder kvar}}"
+    },
+    "close": "Stäng"
   }
 }

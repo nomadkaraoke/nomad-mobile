@@ -40,6 +40,9 @@ jest.mock('@nomad/api-gen', () => ({
 const mockPlayer: { current: unknown } = { current: null };
 jest.mock('expo-audio', () => ({
   useAudioPlayer: () => mockPlayer.current,
+  // The route table loads the voice session's recorder options (aacSink) at import.
+  IOSOutputFormat: { MPEG4AAC: 'aac ' },
+  AudioQuality: { MEDIUM: 64 },
 }));
 jest.mock('expo-file-system', () => {
   class File {

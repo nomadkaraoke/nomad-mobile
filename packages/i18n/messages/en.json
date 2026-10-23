@@ -1521,7 +1521,8 @@
     "profileRemoveTitle": "Remove your voice?",
     "profileRemoveBody": "Discover will stop matching songs to your voice. You can take the test again any time.",
     "profileRemoveConfirm": "Remove",
-    "singableCtaLabel": "Singable, take the voice test first"
+    "singableCtaLabel": "Singable, take the voice test first",
+    "profileMethodSession": "From a singing session"
   },
   "voiceSession": {
     "debug": {
@@ -1563,6 +1564,180 @@
       "title": "Done singing?",
       "body": "Tap to rate it and get your next song",
       "channel": "Voice session"
+    },
+    "title": "Find your voice",
+    "entry": "Find your voice (30 min)",
+    "loading": "Picking your next song…",
+    "progress": "Song {n}",
+    "close": "Close",
+    "intro": {
+      "title": "Find your voice",
+      "body": "Sing 5–10 songs you know, about 30 minutes. Best at home, with headphones.",
+      "start": "Start",
+      "close": "Not now"
+    },
+    "setup": {
+      "posture": "How are you singing?",
+      "standing": "Standing",
+      "sitting": "Sitting",
+      "lying": "Lying down",
+      "warmth": "Voice right now?",
+      "warmthAgain": "How does your voice feel now?",
+      "cold": "Cold",
+      "bit_warm": "A bit warmed up",
+      "warm": "Fully warmed up",
+      "record": "Record me singing?",
+      "recordBody": "We keep the recording privately so we can measure your range more accurately and improve your picks later. Only you and our team can access it, and you can delete all your recordings any time in Me.",
+      "headphones": "Headphones?",
+      "yes": "Yes",
+      "no": "No",
+      "noHeadphones": "The backing track will leak into the mic, so recordings count for less.",
+      "quiet": "Stay quiet for a second…",
+      "go": "Start singing",
+      "micOffTitle": "Microphone is off",
+      "micBlockedBody": "Turn on the microphone for Nomad Karaoke in Settings. You can still sing and answer the questions, but nothing is recorded.",
+      "micDeniedBody": "We need the microphone to hear the notes you sing. Without it nothing is recorded, but you can still sing and answer the questions.",
+      "openSettings": "Open Settings",
+      "micRetry": "Allow the microphone",
+      "coldTitle": "Warm up first?",
+      "coldBody": "A minute of humming and sirens gets your voice ready and makes the result more accurate.",
+      "warmupStart": "Warm up (1 min)",
+      "warmupSkip": "Skip the warm-up"
+    },
+    "warmup": {
+      "hum": "Hum a comfortable note",
+      "siren": "Slide up and down like a siren",
+      "left": "{seconds, plural, one {# second left} other {# seconds left}}",
+      "keys": "Keyboard showing the note you're singing",
+      "done": "Done"
+    },
+    "reason": {
+      "comfortable_start": "An easy one to start",
+      "upper_range": "Checks your upper range",
+      "lower_range": "Checks your lower range",
+      "loved": "A song you love",
+      "known": "A song you know",
+      "explore": "Something new to try"
+    },
+    "pick": {
+      "know": "I know this",
+      "dontKnow": "Skip, don't know it",
+      "else": "Something else",
+      "finish": "Finish",
+      "version": "Karaoke version: {brand}"
+    },
+    "play": {
+      "recording": "Recording",
+      "ribbon": "Show my notes",
+      "keys": "Keyboard showing the note you're singing",
+      "stopEarly": "Stop early"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Change how you're singing: {posture}, {warmth}",
+      "title": "Right now",
+      "record": "Recording",
+      "on": "On",
+      "off": "Off"
+    },
+    "quiz": {
+      "required": "The first two are needed. Skip the rest if you like.",
+      "prefill": "Your highest held note was {high}, lowest {low}",
+      "next": "Next",
+      "feel": {
+        "q": "How did that feel?",
+        "loved": "Loved it",
+        "fine": "Fine",
+        "not_for_me": "Not for me"
+      },
+      "position": {
+        "q": "Where did it sit for your voice?",
+        "too_low": "Too low",
+        "comfortable": "Comfortable",
+        "too_high": "Too high",
+        "both_ends": "Hard at both ends"
+      },
+      "difficulty": {
+        "q": "How hard was it?",
+        "easy": "Easy",
+        "stretch": "A bit of a stretch",
+        "couldnt": "Couldn't hit some parts"
+      },
+      "knew": {
+        "q": "How well did you know it?",
+        "well": "Knew it well",
+        "partly": "Partly",
+        "barely": "Barely"
+      },
+      "sing": {
+        "q": "Would you sing it at karaoke?",
+        "yes": "Yes",
+        "yes_other_key": "Yes, in a different key",
+        "no": "No"
+      },
+      "work": {
+        "q": "Would it work if…?",
+        "warmer": "You were more warmed up",
+        "other_key": "In a different key",
+        "other_octave": "An octave lower or higher",
+        "practice": "After some practice",
+        "fine": "It's fine as is"
+      },
+      "voice": {
+        "q": "Voice now",
+        "fresh": "Fresh",
+        "warm": "Warm",
+        "tired": "Getting tired"
+      },
+      "version": {
+        "q": "This karaoke version",
+        "good": "Good",
+        "not_great": "Not great"
+      },
+      "issue": {
+        "no_intro": "No intro",
+        "wrong_lyrics": "Wrong lyrics",
+        "bad_sync": "Bad sync",
+        "low_quality": "Low quality"
+      },
+      "tag": {
+        "q": "Optional tags",
+        "fast_lyrics": "Fast lyrics",
+        "long_gaps": "Long instrumental gaps",
+        "needed_warmup": "Needed a warm-up",
+        "crowd_song": "Great crowd song",
+        "mood_only": "Only if I'm in the mood"
+      }
+    },
+    "result": {
+      "probably": "Probably {type}, but we need more songs to be sure",
+      "range": "{range}, comfortable {comfort}",
+      "keys": "Keyboard showing your range and its comfortable middle",
+      "confidenceHigh": "High confidence",
+      "confidenceMedium": "Medium confidence",
+      "confidenceLow": "Low confidence",
+      "partial": "From a short session, so take it as a first guess.",
+      "hint": {
+        "sing_higher_warm": "Sing 2 more higher songs when you're warmed up",
+        "sing_lower": "Try a couple of lower songs",
+        "more_songs": "A few more songs would make this surer"
+      },
+      "saved": "Saved to your music profile.",
+      "suited": "Songs that suit you",
+      "loved": "Songs you loved",
+      "done": "Done",
+      "more": "Keep going"
+    },
+    "error": {
+      "network": "You're offline or the connection dropped. Check it and try again.",
+      "warming_up": "Getting songs ready, try again in a minute",
+      "server": "Something went wrong on our side. Try again.",
+      "session_lost": "This session can't carry on. Start a new one.",
+      "retry": "Try again",
+      "restart": "Start again"
+    },
+    "disabled": {
+      "title": "Coming soon"
     }
   }
 }

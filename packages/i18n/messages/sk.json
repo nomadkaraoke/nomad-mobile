@@ -1521,7 +1521,8 @@
     "profileRemoveBody": "Funkcia Objavuj ti prestane priraďovať skladby podľa tvojho hlasu. Test môžeš kedykoľvek absolvovať znova.",
     "profileRemoveTitle": "Odstrániť svoj hlas?",
     "singableCtaLabel": "Zaspievateľné, najprv si urob hlasový test",
-    "profileRemoveConfirm": "Odstrániť"
+    "profileRemoveConfirm": "Odstrániť",
+    "profileMethodSession": "Zo speváckej relácie"
   },
   "voiceSession": {
     "debug": {
@@ -1563,6 +1564,180 @@
       "openFailed": "Nepodarilo sa otvoriť YouTube. Skús to znova.",
       "video": "Karaoke video",
       "open": "Otvoriť v službe YouTube"
-    }
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Zmeň spôsob, akým spievaš: {posture}, {warmth}",
+      "on": "Zapnuté",
+      "record": "Nahráva sa",
+      "title": "Práve teraz",
+      "off": "Vypnuté"
+    },
+    "disabled": {
+      "title": "Už čoskoro"
+    },
+    "entry": "Nájdi svoj hlas (30 min)",
+    "error": {
+      "network": "Si offline alebo vypadlo spojenie. Skontroluj ho a skús to znova.",
+      "restart": "Začať odznova",
+      "server": "Na našej strane sa niečo pokazilo. Skús to znova.",
+      "session_lost": "V tejto relácii sa nedá pokračovať. Spusti novú.",
+      "warming_up": "Pripravujeme piesne, skús to znova o minútu",
+      "retry": "Skúsiť znova"
+    },
+    "intro": {
+      "body": "Zaspievaj 5–10 piesní, ktoré poznáš, približne 30 minút. Najlepšie doma a so slúchadlami.",
+      "title": "Nájdi svoj hlas",
+      "close": "Teraz nie",
+      "start": "Začať"
+    },
+    "loading": "Vyberáme tvoju ďalšiu pieseň…",
+    "pick": {
+      "dontKnow": "Preskočiť, nepoznám ju",
+      "know": "Toto poznám",
+      "version": "Karaoke verzia: {brand}",
+      "else": "Niečo iné",
+      "finish": "Dokončiť"
+    },
+    "play": {
+      "keys": "Klávesnica zobrazujúca tón, ktorý spievaš",
+      "recording": "Nahráva sa",
+      "ribbon": "Ukázať moje tóny",
+      "stopEarly": "Ukončiť skôr"
+    },
+    "progress": "Pieseň {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Niektoré časti sa mi nepodarilo vykryť",
+        "q": "Aké náročné to bolo?",
+        "stretch": "Trochu na hrane",
+        "easy": "Ľahké"
+      },
+      "feel": {
+        "fine": "Fajn",
+        "loved": "Bolo to super",
+        "q": "Aký si mal/a pocit?",
+        "not_for_me": "Toto nie je pre mňa"
+      },
+      "issue": {
+        "bad_sync": "Zlá synchronizácia",
+        "low_quality": "Nízka kvalita",
+        "no_intro": "Bez intra",
+        "wrong_lyrics": "Nesprávny text"
+      },
+      "knew": {
+        "barely": "Sotva",
+        "partly": "Čiastočne",
+        "q": "Ako dobre si ju poznal/a?",
+        "well": "Dobre som ju poznal/a"
+      },
+      "position": {
+        "both_ends": "Náročné na oboch koncoch",
+        "q": "Ako to sadlo tvojmu hlasu?",
+        "comfortable": "Pohodlné",
+        "too_high": "Príliš vysoko",
+        "too_low": "Príliš nízko"
+      },
+      "prefill": "Tvoj najvyšší udržaný tón bol {high}, najnižší {low}",
+      "required": "Prvé dve otázky sú povinné. Ostatné môžeš pokojne preskočiť.",
+      "sing": {
+        "q": "Zaspieval/a by si si ju na karaoke?",
+        "yes_other_key": "Áno, v inej tónine",
+        "no": "Nie",
+        "yes": "Áno"
+      },
+      "tag": {
+        "crowd_song": "Skvelá pieseň na roztlieskanie davu",
+        "fast_lyrics": "Rýchly text",
+        "long_gaps": "Dlhé inštrumentálne pasáže",
+        "mood_only": "Iba ak budem mať náladu",
+        "needed_warmup": "Chcelo to rozospievať sa",
+        "q": "Voliteľné štítky"
+      },
+      "version": {
+        "good": "Dobrá",
+        "not_great": "Nič moc",
+        "q": "Táto karaoke verzia"
+      },
+      "voice": {
+        "fresh": "Svieži",
+        "q": "Hlas práve teraz",
+        "tired": "Začína byť unavený",
+        "warm": "Rozospievaný"
+      },
+      "work": {
+        "fine": "Je to super tak, ako to je",
+        "other_key": "V inej tónine",
+        "other_octave": "O oktávu nižšie alebo vyššie",
+        "practice": "Po troche tréningu",
+        "q": "Šlo by to, ak by…?",
+        "warmer": "Si bol/a lepšie rozospievaný/á"
+      },
+      "next": "Ďalej"
+    },
+    "reason": {
+      "comfortable_start": "Nenáročná na rozbeh",
+      "explore": "Niečo nové na vyskúšanie",
+      "known": "Pieseň, ktorú poznáš",
+      "loved": "Pieseň, ktorú miluješ",
+      "lower_range": "Otestuje tvoj spodný rozsah",
+      "upper_range": "Otestuje tvoj horný rozsah"
+    },
+    "result": {
+      "confidenceLow": "Nízka istota",
+      "confidenceMedium": "Stredná istota",
+      "hint": {
+        "more_songs": "Ešte zopár piesní by výsledok spresnilo",
+        "sing_higher_warm": "Keď sa rozospievaš, skús ešte 2 vyššie piesne",
+        "sing_lower": "Skús zopár nižších piesní"
+      },
+      "keys": "Klávesnica zobrazujúca tvoj rozsah a jeho pohodlný stred",
+      "loved": "Piesne, ktoré si si zamiloval/a",
+      "more": "Pokračovať",
+      "partial": "Z krátkej relácie, takže to ber len ako prvý odhad.",
+      "probably": "Pravdepodobne {type}, ale potrebujeme viac piesní, aby sme si boli istí",
+      "range": "{range}, pohodlný {comfort}",
+      "saved": "Uložené do tvojho hudobného profilu.",
+      "suited": "Piesne, ktoré ti sadnú",
+      "confidenceHigh": "Vysoká istota",
+      "done": "Hotovo"
+    },
+    "setup": {
+      "bit_warm": "Trochu rozospievaný",
+      "cold": "Nerozospievaný",
+      "coldBody": "Minúta brumenia a sirén ti rozohreje hlas a zabezpečí presnejší výsledok.",
+      "coldTitle": "Rozospievať sa najprv?",
+      "go": "Začať spievať",
+      "headphones": "Máš slúchadlá?",
+      "lying": "V ľahu",
+      "micBlockedBody": "Povoľ mikrofón pre Nomad Karaoke v Nastaveniach. Stále môžeš spievať a odpovedať na otázky, ale nič sa nebude nahrávať.",
+      "micDeniedBody": "Potrebujeme mikrofón, aby sme počuli tóny, ktoré spievaš. Bez neho sa nič nenahráva, ale stále môžeš spievať a odpovedať na otázky.",
+      "micRetry": "Povoliť mikrofón",
+      "noHeadphones": "Podklad bude prenikať do mikrofónu, takže nahrávky budú menej presné.",
+      "posture": "V akej polohe spievaš?",
+      "record": "Nahrávať môj spev?",
+      "recordBody": "Nahrávku uchovávame v bezpečí a súkromí, aby sme mohli presnejšie zmerať tvoj rozsah a neskôr vylepšiť odporúčania piesní. Prístup k nej máš iba ty a náš tím a všetky nahrávky môžeš kedykoľvek vymazať v sekcii Ja.",
+      "sitting": "V sede",
+      "standing": "V stoji",
+      "warm": "Plne rozospievaný",
+      "warmth": "Ako je na tom hlas práve teraz?",
+      "warmthAgain": "Ako sa tvoj hlas cíti teraz?",
+      "warmupSkip": "Preskočiť rozospievanie",
+      "warmupStart": "Rozospievať sa (1 min)",
+      "micOffTitle": "Mikrofón je vypnutý",
+      "no": "Nie",
+      "openSettings": "Otvoriť Nastavenia",
+      "quiet": "Buď chvíľku potichu…",
+      "yes": "Áno"
+    },
+    "title": "Nájdi svoj hlas",
+    "warmup": {
+      "hum": "Zabrumi tón, v ktorom sa cítiš pohodlne",
+      "keys": "Klávesnica zobrazujúca tón, ktorý spievaš",
+      "siren": "Prechádzaj hlasom plynulo hore a dole ako siréna",
+      "done": "Hotovo",
+      "left": "{seconds, plural, one {Zostáva # sekunda} few {Zostávajú # sekundy} other {Zostáva # sekúnd}}"
+    },
+    "close": "Zavrieť"
   }
 }

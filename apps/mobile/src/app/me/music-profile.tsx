@@ -36,7 +36,9 @@ export default function MusicProfileScreen() {
   const p = useMusicProfile();
   const apple = useAppleMusic();
   const tvd = useTranslations('voiceSession.debug');
-  const isAdmin = useVoiceFlags().data?.is_admin === true;
+  const tvs = useTranslations('voiceSession');
+  const voiceFlags = useVoiceFlags().data;
+  const isAdmin = voiceFlags?.is_admin === true;
 
   if (!signedIn) {
     return (
@@ -233,6 +235,10 @@ export default function MusicProfileScreen() {
       </ProfileSection>
       {/* Phase 3c: the voice profile. */}
       <VoiceProfileSection />
+
+      {voiceFlags?.session_enabled ? (
+        <Button testID="vs-entry-me" label={tvs('entry')} onPress={() => router.push('/discover/voice-session' as Href)} />
+      ) : null}
 
       {isAdmin ? (
         <Button

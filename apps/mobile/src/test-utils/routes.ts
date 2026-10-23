@@ -16,6 +16,7 @@ import * as connectScreenshot from '../app/discover/connect/screenshot';
 import * as connectSpotifyExport from '../app/discover/connect/spotify-export';
 import * as quiz from '../app/discover/quiz';
 import * as voice from '../app/discover/voice';
+import * as voiceSession from '../app/discover/voice-session';
 import * as index from '../app/index';
 import * as musicProfile from '../app/me/music-profile';
 import * as voiceDebug from '../app/me/voice-debug';
@@ -50,6 +51,7 @@ export function appRoutes() {
     'discover/connect/listenbrainz': connectListenBrainz,
     'discover/connect/lastfm': connectLastfm,
     'discover/voice': voice,
+    'discover/voice-session': voiceSession,
     'me/music-profile': musicProfile,
     'me/voice-debug': voiceDebug,
     'song/[id]': song,

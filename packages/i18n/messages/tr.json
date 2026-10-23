@@ -1521,7 +1521,8 @@
     "profileRemoveBody": "Discover artık şarkıları sesinle eşleştirmeyecek. Testi dilediğin zaman tekrar çözebilirsin.",
     "profileRemoveTitle": "Ses profilin kaldırılsın mı?",
     "singableCtaLabel": "Söylenebilir, önce ses testini yap",
-    "profileRemoveConfirm": "Kaldır"
+    "profileRemoveConfirm": "Kaldır",
+    "profileMethodSession": "Bir şarkı söyleme seansından"
   },
   "voiceSession": {
     "debug": {
@@ -1563,6 +1564,180 @@
       "openFailed": "YouTube açılamadı. Tekrar dene.",
       "video": "Karaoke videosu",
       "open": "YouTube'da Aç"
-    }
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Nasıl söylediğini değiştir: {posture}, {warmth}",
+      "on": "Açık",
+      "record": "Kaydediliyor",
+      "title": "Şu anda",
+      "off": "Kapalı"
+    },
+    "disabled": {
+      "title": "Çok yakında"
+    },
+    "entry": "Sesini keşfet (30 dk)",
+    "error": {
+      "network": "Çevrimdışısın veya bağlantı koptu. Kontrol edip tekrar dene.",
+      "restart": "Yeniden başla",
+      "server": "Bizim tarafımızda bir sorun oluştu. Tekrar dene.",
+      "session_lost": "Bu seans devam edemiyor. Yeni bir tane başlat.",
+      "warming_up": "Şarkılar hazırlanıyor, bir dakika içinde tekrar dene",
+      "retry": "Tekrar dene"
+    },
+    "intro": {
+      "body": "Bildiğin 5–10 şarkı söyle, yaklaşık 30 dakika sürer. En iyisi evde, kulaklıkla söylemektir.",
+      "title": "Sesini keşfet",
+      "close": "Şimdi değil",
+      "start": "Başla"
+    },
+    "loading": "Sıradaki şarkın seçiliyor…",
+    "pick": {
+      "dontKnow": "Geç, bunu bilmiyorum",
+      "know": "Bunu biliyorum",
+      "version": "Karaoke sürümü: {brand}",
+      "else": "Başka bir tür",
+      "finish": "Bitir"
+    },
+    "play": {
+      "keys": "Söylediğin notayı gösteren klavye",
+      "recording": "Kaydediliyor",
+      "ribbon": "Notalarımı göster",
+      "stopEarly": "Erken bitir"
+    },
+    "progress": "Şarkı {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Bazı yerleri çıkaramadım",
+        "q": "Ne kadar zordu?",
+        "stretch": "Biraz zorladı",
+        "easy": "Kolay"
+      },
+      "feel": {
+        "fine": "İyiydi",
+        "loved": "Çok sevdim",
+        "q": "Nasıl hissettirdi?",
+        "not_for_me": "Bana göre değil"
+      },
+      "issue": {
+        "bad_sync": "Kötü senkronizasyon",
+        "low_quality": "Düşük kalite",
+        "no_intro": "Giriş kısmı yok",
+        "wrong_lyrics": "Yanlış sözler"
+      },
+      "knew": {
+        "barely": "Çok az",
+        "partly": "Kısmen",
+        "q": "Ne kadar iyi biliyordun?",
+        "well": "Çok iyi biliyordum"
+      },
+      "position": {
+        "both_ends": "İki uçta da zordu",
+        "q": "Sesine nasıl oturdu?",
+        "comfortable": "Rahat",
+        "too_high": "Çok tiz",
+        "too_low": "Çok pes"
+      },
+      "prefill": "Tuttuğun en yüksek nota {high}, en pes {low}",
+      "required": "İlk ikisi zorunlu. İstersen gerisini atlayabilirsin.",
+      "sing": {
+        "q": "Bunu karaokede söyler miydin?",
+        "yes_other_key": "Evet, farklı bir tonda",
+        "no": "Hayır",
+        "yes": "Evet"
+      },
+      "tag": {
+        "crowd_song": "Ortamı coşturacak şarkı",
+        "fast_lyrics": "Hızlı sözler",
+        "long_gaps": "Uzun enstrümantal aralar",
+        "mood_only": "Sadece havamdaysam",
+        "needed_warmup": "Sesin ısınması gerekiyordu",
+        "q": "İsteğe bağlı etiketler"
+      },
+      "version": {
+        "good": "İyi",
+        "not_great": "Pek iyi değil",
+        "q": "Bu karaoke sürümü"
+      },
+      "voice": {
+        "fresh": "Zinde",
+        "q": "Sesinin şu anki durumu",
+        "tired": "Yorulmaya başladı",
+        "warm": "Isınmış"
+      },
+      "work": {
+        "fine": "Bu haliyle iyi",
+        "other_key": "Farklı bir tonda",
+        "other_octave": "Bir oktav daha pesten veya tizden",
+        "practice": "Biraz pratik yaptıktan sonra",
+        "q": "Şöyle olsa uyar mıydı…?",
+        "warmer": "Sesin daha iyi ısınmış olsaydı"
+      },
+      "next": "İleri"
+    },
+    "reason": {
+      "comfortable_start": "Başlangıç için kolay bir şarkı",
+      "explore": "Denemek için yeni bir şey",
+      "known": "Bildiğin bir şarkı",
+      "loved": "Sevdiğin bir şarkı",
+      "lower_range": "Alt ses aralığını kontrol eder",
+      "upper_range": "Üst ses aralığını kontrol eder"
+    },
+    "result": {
+      "confidenceLow": "Düşük güvenilirlik",
+      "confidenceMedium": "Orta güvenilirlik",
+      "hint": {
+        "more_songs": "Birkaç şarkı daha bunu daha kesin hale getirir",
+        "sing_higher_warm": "Sesin ısındığında 2 tane daha tiz şarkı söyle",
+        "sing_lower": "Daha pes birkaç şarkı dene"
+      },
+      "keys": "Ses aralığını ve rahat hissettiğin orta tonları gösteren klavye",
+      "loved": "Sevdiğin şarkılar",
+      "more": "Devam et",
+      "partial": "Kısa bir seanstan alındı, bu yüzden ilk tahmin olarak değerlendir.",
+      "probably": "Muhtemelen {type}, ancak emin olmak için daha fazla şarkıya ihtiyacımız var",
+      "range": "{range}, rahat {comfort}",
+      "saved": "Müzik profiline kaydedildi.",
+      "suited": "Sana uyan şarkılar",
+      "confidenceHigh": "Yüksek güven",
+      "done": "Bitti"
+    },
+    "setup": {
+      "bit_warm": "Biraz ısınmış",
+      "cold": "Soğuk",
+      "coldBody": "Bir dakikalık mırıldanma ve siren sesleri sesini hazırlar ve sonucun daha doğru olmasını sağlar.",
+      "coldTitle": "Önce sesini ısıtmak ister misin?",
+      "go": "Şarkı söylemeye başla",
+      "headphones": "Kulaklık var mı?",
+      "lying": "Yatarak",
+      "micBlockedBody": "Ayarlar'dan Nomad Karaoke için mikrofona izin ver. Yine de şarkı söyleyip soruları yanıtlayabilirsin ancak hiçbir şey kaydedilmez.",
+      "micDeniedBody": "Söylediğin notaları duyabilmemiz için mikrofona ihtiyacımız var. Mikrofon olmadan hiçbir şey kaydedilmez, ancak yine de şarkı söyleyip soruları yanıtlayabilirsin.",
+      "micRetry": "Mikrofona izin ver",
+      "noHeadphones": "Altyapı müziği mikrofona sızar, bu yüzden kayıtların doğruluk payı azalır.",
+      "posture": "Nasıl şarkı söylüyorsun?",
+      "record": "Şarkı söylerken sesim kaydedilsin mi?",
+      "recordBody": "Ses aralığını daha doğru ölçebilmemiz ve daha sonra sana uygun seçimleri geliştirebilmemiz için kaydı gizli tutarız. Yalnızca sen ve ekibimiz erişebilir; tüm kayıtlarını Profilim bölümünden istediğin zaman silebilirsin.",
+      "sitting": "Oturarak",
+      "standing": "Ayakta",
+      "warm": "Tamamen ısınmış",
+      "warmth": "Sesin şu an nasıl?",
+      "warmthAgain": "Sesin şu an nasıl hissettiriyor?",
+      "warmupSkip": "Isınmayı atla",
+      "warmupStart": "Sesini ısıt (1 dk)",
+      "micOffTitle": "Mikrofon kapalı",
+      "no": "Hayır",
+      "openSettings": "Ayarlar'ı Aç",
+      "quiet": "Bir saniye sessiz kal…",
+      "yes": "Evet"
+    },
+    "title": "Sesini keşfet",
+    "warmup": {
+      "hum": "Rahat bir notada mırıldan",
+      "keys": "Söylediğin notayı gösteren klavye",
+      "siren": "Siren gibi sesini inceltip kalınlaştır",
+      "done": "Bitti",
+      "left": "{seconds, plural, one {# saniye kaldı} other {# saniye kaldı}}"
+    },
+    "close": "Kapat"
   }
 }

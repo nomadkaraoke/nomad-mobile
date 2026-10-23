@@ -1521,7 +1521,8 @@
     "profileRemoveBody": "Ititigil ng Discover ang pagtutugma ng mga kanta sa iyong boses. Maaari mong kunin ulit ang test anumang oras.",
     "profileRemoveTitle": "Alisin ang iyong boses?",
     "singableCtaLabel": "Kayang kantahin, mag-voice test muna",
-    "profileRemoveConfirm": "Alisin"
+    "profileRemoveConfirm": "Alisin",
+    "profileMethodSession": "Mula sa isang singing session"
   },
   "voiceSession": {
     "debug": {
@@ -1563,6 +1564,180 @@
       "openFailed": "Hindi mabuksan ang YouTube. Subukang muli.",
       "video": "Karaoke video",
       "open": "Buksan sa YouTube"
-    }
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Baguhin kung paano ka kumakanta: {posture}, {warmth}",
+      "on": "Bukas",
+      "record": "Nagre-record",
+      "title": "Sa ngayon",
+      "off": "Off"
+    },
+    "disabled": {
+      "title": "Paparating na"
+    },
+    "entry": "Tuklasin ang iyong boses (30 min)",
+    "error": {
+      "network": "Offline ka o naputol ang koneksyon. Pakisuri at subukan muli.",
+      "restart": "Magsimula muli",
+      "server": "May nagkaproblema sa aming panig. Subukan muli.",
+      "session_lost": "Hindi na maipagpatuloy ang session na ito. Magsimula ng bago.",
+      "warming_up": "Inihahanda ang mga kanta, subukan muli sa loob ng isang minuto",
+      "retry": "Subukan muli"
+    },
+    "intro": {
+      "body": "Kumanta ng 5–10 kanta na alam mo, mga 30 minuto. Pinakamainam sa bahay, gamit ang headphones.",
+      "title": "Tuklasin ang iyong boses",
+      "close": "Huwag muna",
+      "start": "Simulan"
+    },
+    "loading": "Pumipili ng susunod mong kanta…",
+    "pick": {
+      "dontKnow": "Laktawan, hindi ko alam",
+      "know": "Alam ko 'to",
+      "version": "Bersyon ng karaoke: {brand}",
+      "else": "Iba pa",
+      "finish": "Tapusin"
+    },
+    "play": {
+      "keys": "Keyboard na nagpapakita ng nota na kinakanta mo",
+      "recording": "Nagre-record",
+      "ribbon": "Ipakita ang mga nota ko",
+      "stopEarly": "Ihinto nang maaga"
+    },
+    "progress": "Kanta {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "May mga parteng 'di ko naabot",
+        "q": "Gaano ito kahirap?",
+        "stretch": "Medyo pilit",
+        "easy": "Madali"
+      },
+      "feel": {
+        "fine": "Ayos lang",
+        "loved": "Sobrang nagustuhan ko",
+        "q": "Kamusta ang pakiramdam mo habang kumakanta?",
+        "not_for_me": "Hindi para sa akin"
+      },
+      "issue": {
+        "bad_sync": "Hindi tugma ang sync",
+        "low_quality": "Mababang kalidad",
+        "no_intro": "Walang intro",
+        "wrong_lyrics": "Maling liriko"
+      },
+      "knew": {
+        "barely": "Bahagya lang",
+        "partly": "Kalahati lang",
+        "q": "Gaano mo ito kakabisado?",
+        "well": "Kabisadong-kabisado ko"
+      },
+      "position": {
+        "both_ends": "Mahirap sa mataas at mababa",
+        "q": "Saan ito pumapatak sa boses mo?",
+        "comfortable": "Komportable",
+        "too_high": "Masyadong mataas",
+        "too_low": "Masyadong mababa"
+      },
+      "prefill": "Ang pinakamataas mong napatagal na nota ay {high}, pinakamababa {low}",
+      "required": "Kailangan ang unang dalawa. Pwede mong laktawan ang iba.",
+      "sing": {
+        "q": "Kakantahin mo ba ito sa karaoke?",
+        "yes_other_key": "Oo, pero sa ibang key",
+        "no": "Hindi",
+        "yes": "Oo"
+      },
+      "tag": {
+        "crowd_song": "Pang-hype sa audience",
+        "fast_lyrics": "Mabilis ang liriko",
+        "long_gaps": "Mahahabang instrumental break",
+        "mood_only": "Kung nasa mood lang ako",
+        "needed_warmup": "Kailangan muna ng warm-up",
+        "q": "Mga opsyonal na tag"
+      },
+      "version": {
+        "good": "Maganda",
+        "not_great": "Hindi masyadong maganda",
+        "q": "Ang karaoke version na ito"
+      },
+      "voice": {
+        "fresh": "Presko pa",
+        "q": "Kondisyon ng boses ngayon",
+        "tired": "Napapagod na",
+        "warm": "Warm na"
+      },
+      "work": {
+        "fine": "Ayos na ito sa lagay na 'yan",
+        "other_key": "Sa ibang key",
+        "other_octave": "Isang octave na mas mababa o mas mataas",
+        "practice": "Pagkatapos mag-practice nang kaunti",
+        "q": "Mas okay kaya kung…?",
+        "warmer": "Mas nakapag-warm up ka pa"
+      },
+      "next": "Susunod"
+    },
+    "reason": {
+      "comfortable_start": "Madaling kanta bilang pampasimula",
+      "explore": "Bagong pwedeng subukan",
+      "known": "Kantang alam mo",
+      "loved": "Kantang gustong-gusto mo",
+      "lower_range": "Sumusubok sa lower range mo",
+      "upper_range": "Sumusubok sa upper range mo"
+    },
+    "result": {
+      "confidenceLow": "Mababang kumpiyansa",
+      "confidenceMedium": "Katamtamang kumpiyansa",
+      "hint": {
+        "more_songs": "Mas magiging tiyak ito sa ilan pang kanta",
+        "sing_higher_warm": "Kumanta ng 2 pang mas matataas na kanta kapag warm na ang boses mo",
+        "sing_lower": "Subukan ang ilan pang mas mabababang kanta"
+      },
+      "keys": "Keyboard na nagpapakita ng range mo at ang komportable nitong gitna",
+      "loved": "Mga kantang nagustuhan mo",
+      "more": "Magpatuloy pa",
+      "partial": "Mula sa maikling session, kaya paunang pagtatantiya pa lang ito.",
+      "probably": "Malamang na {type}, pero kailangan pa namin ng mas maraming kanta para makasiguro",
+      "range": "{range}, komportable sa {comfort}",
+      "saved": "Nai-save sa iyong music profile.",
+      "suited": "Mga kantang babagay sa iyo",
+      "confidenceHigh": "Mataas na kasiguraduhan",
+      "done": "Tapos na"
+    },
+    "setup": {
+      "bit_warm": "Medyo warm na",
+      "cold": "Hindi pa warm",
+      "coldBody": "Ang isang minutong pag-hum at sliding pitch na tunog-sirena ay maghahanda sa boses mo at magpapalabas ng mas tumpak na resulta.",
+      "coldTitle": "Mag-warm up muna?",
+      "go": "Simulan ang pagkanta",
+      "headphones": "May headphones?",
+      "lying": "Nakahiga",
+      "micBlockedBody": "I-on ang mikropono para sa Nomad Karaoke sa Settings. Maaari ka pa ring kumanta at sumagot sa mga tanong, pero walang marere-record.",
+      "micDeniedBody": "Kailangan namin ang mikropono para marinig ang mga notang kinakanta mo. Kung wala ito, walang marere-record, pero maaari ka pa ring kumanta at sumagot sa mga tanong.",
+      "micRetry": "Payagan ang mikropono",
+      "noHeadphones": "Tatalbog o maririnig ang backing track sa mic, kaya hindi magiging ganoon katumpak ang recordings.",
+      "posture": "Ano ang puwesto mo habang kumakanta?",
+      "record": "I-record ang pagkanta ko?",
+      "recordBody": "Itatabi namin ang recording nang pribado upang mas tumpak na masukat ang iyong range at mapaganda ang mga kanta naming mairerekomenda. Ikaw at ang aming team lamang ang may access dito, at maaari mong burahin ang lahat ng iyong recordings anumang oras sa tab na Me.",
+      "sitting": "Nakaupo",
+      "standing": "Nakatayo",
+      "warm": "Warm na warm na",
+      "warmth": "Boses sa ngayon?",
+      "warmthAgain": "Kumusta ang pakiramdam ng boses mo ngayon?",
+      "warmupSkip": "Laktawan ang warm-up",
+      "warmupStart": "Mag-warm up (1 min)",
+      "micOffTitle": "Naka-off ang mikropono",
+      "no": "Hindi",
+      "openSettings": "Buksan ang Mga Setting",
+      "quiet": "Manatiling tahimik sandali…",
+      "yes": "Oo"
+    },
+    "title": "Tuklasin ang iyong boses",
+    "warmup": {
+      "hum": "Mag-hum ng komportableng nota",
+      "keys": "Keyboard na nagpapakita ng nota na kinakanta mo",
+      "siren": "Mag-slide pataas at pababa na parang sirena",
+      "done": "Tapos na",
+      "left": "{seconds, plural, one {# segundo na lang} other {# segundo na lang}}"
+    },
+    "close": "Isara"
   }
 }

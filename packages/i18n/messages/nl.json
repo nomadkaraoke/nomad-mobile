@@ -1521,7 +1521,8 @@
     "profileRemoveBody": "Discover stopt dan met het afstemmen van nummers op je stem. Je kunt de test op elk moment opnieuw doen.",
     "profileRemoveTitle": "Je stemprofiel verwijderen?",
     "singableCtaLabel": "Zingbaar, doe eerst de stemtest",
-    "profileRemoveConfirm": "Verwijderen"
+    "profileRemoveConfirm": "Verwijderen",
+    "profileMethodSession": "Van een zangsessie"
   },
   "voiceSession": {
     "debug": {
@@ -1563,6 +1564,180 @@
       "openFailed": "Kon YouTube niet openen. Probeer het opnieuw.",
       "video": "Karaokevideo",
       "open": "Openen in YouTube"
-    }
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Pas aan hoe je zingt: {posture}, {warmth}",
+      "on": "Aan",
+      "record": "Opnemen",
+      "title": "Op dit moment",
+      "off": "Uit"
+    },
+    "disabled": {
+      "title": "Binnenkort beschikbaar"
+    },
+    "entry": "Vind je stem (30 min)",
+    "error": {
+      "network": "Je bent offline of de verbinding is verbroken. Controleer je verbinding en probeer het opnieuw.",
+      "restart": "Opnieuw beginnen",
+      "server": "Er ging iets mis aan onze kant. Probeer het opnieuw.",
+      "session_lost": "Deze sessie kan niet worden voortgezet. Start een nieuwe.",
+      "warming_up": "Nummers klaarmaken, probeer het over een minuutje opnieuw",
+      "retry": "Probeer opnieuw"
+    },
+    "intro": {
+      "body": "Zing 5–10 nummers die je kent, ongeveer 30 minuten. Het beste thuis, met een koptelefoon.",
+      "title": "Vind je stem",
+      "close": "Niet nu",
+      "start": "Start"
+    },
+    "loading": "Je volgende nummer kiezen…",
+    "pick": {
+      "dontKnow": "Overslaan, ik ken dit niet",
+      "know": "Ik ken dit",
+      "version": "Karaokeversie: {brand}",
+      "else": "Iets anders",
+      "finish": "Afronden"
+    },
+    "play": {
+      "keys": "Toetsenbord dat de noot toont die je zingt",
+      "recording": "Opnemen",
+      "ribbon": "Toon mijn noten",
+      "stopEarly": "Eerder stoppen"
+    },
+    "progress": "Nummer {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Kon sommige delen niet halen",
+        "q": "Hoe moeilijk was het?",
+        "stretch": "Best pittig",
+        "easy": "Makkelijk"
+      },
+      "feel": {
+        "fine": "Prima",
+        "loved": "Geweldig",
+        "q": "Hoe voelde het?",
+        "not_for_me": "Niks voor mij"
+      },
+      "issue": {
+        "bad_sync": "Slechte synchronisatie",
+        "low_quality": "Lage kwaliteit",
+        "no_intro": "Geen intro",
+        "wrong_lyrics": "Verkeerde songtekst"
+      },
+      "knew": {
+        "barely": "Nauwelijks",
+        "partly": "Gedeeltelijk",
+        "q": "Hoe goed kende je het?",
+        "well": "Kende het goed"
+      },
+      "position": {
+        "both_ends": "Moeilijk aan beide kanten",
+        "q": "Hoe lag het nummer voor je stem?",
+        "comfortable": "Comfortabel",
+        "too_high": "Te hoog",
+        "too_low": "Te laag"
+      },
+      "prefill": "Je hoogste vastgehouden noot was {high}, laagste {low}",
+      "required": "De eerste twee zijn verplicht. Sla de rest over als je wilt.",
+      "sing": {
+        "q": "Zou je dit zingen bij karaoke?",
+        "yes_other_key": "Ja, in een andere toonsoort",
+        "no": "Nee",
+        "yes": "Ja"
+      },
+      "tag": {
+        "crowd_song": "Geweldig publieksnummer",
+        "fast_lyrics": "Snelle songtekst",
+        "long_gaps": "Lange instrumentale pauzes",
+        "mood_only": "Alleen als ik in de stemming ben",
+        "needed_warmup": "Had een opwarming nodig",
+        "q": "Optionele tags"
+      },
+      "version": {
+        "good": "Goed",
+        "not_great": "Niet geweldig",
+        "q": "Deze karaokeversie"
+      },
+      "voice": {
+        "fresh": "Fris",
+        "q": "Stem nu",
+        "tired": "Begint moe te worden",
+        "warm": "Opgewarmd"
+      },
+      "work": {
+        "fine": "Het is prima zoals het is",
+        "other_key": "In een andere toonsoort",
+        "other_octave": "Een octaaf lager of hoger",
+        "practice": "Na wat oefenen",
+        "q": "Zou het werken als…?",
+        "warmer": "Je beter opgewarmd was"
+      },
+      "next": "Volgende"
+    },
+    "reason": {
+      "comfortable_start": "Een makkelijk nummer om mee te beginnen",
+      "explore": "Iets nieuws om te proberen",
+      "known": "Een nummer dat je kent",
+      "loved": "Een nummer waar je van houdt",
+      "lower_range": "Test je lagere bereik",
+      "upper_range": "Test je hogere bereik"
+    },
+    "result": {
+      "confidenceLow": "Lage zekerheid",
+      "confidenceMedium": "Gemiddelde zekerheid",
+      "hint": {
+        "more_songs": "Een paar extra nummers zouden meer zekerheid geven",
+        "sing_higher_warm": "Zing nog 2 hogere nummers als je bent opgewarmd",
+        "sing_lower": "Probeer een paar lagere nummers"
+      },
+      "keys": "Toetsenbord dat je bereik en het comfortabele midden toont",
+      "loved": "Nummers die je geweldig vond",
+      "more": "Doorgaan",
+      "partial": "Gebaseerd op een korte sessie, dus zie het als een eerste inschatting.",
+      "probably": "Waarschijnlijk {type}, maar we hebben meer nummers nodig om het zeker te weten",
+      "range": "{range}, comfortabel {comfort}",
+      "saved": "Opgeslagen in je muziekprofiel.",
+      "suited": "Nummers die bij je passen",
+      "confidenceHigh": "Hoge zekerheid",
+      "done": "Gereed"
+    },
+    "setup": {
+      "bit_warm": "Een beetje opgewarmd",
+      "cold": "Niet opgewarmd",
+      "coldBody": "Een minuutje neuriën en glijtonen maakt je stem klaar en zorgt voor een nauwkeuriger resultaat.",
+      "coldTitle": "Eerst opwarmen?",
+      "go": "Begin met zingen",
+      "headphones": "Koptelefoon?",
+      "lying": "Liggend",
+      "micBlockedBody": "Zet de microfoon voor Nomad Karaoke aan in Instellingen. Je kunt nog steeds zingen en de vragen beantwoorden, maar er wordt niets opgenomen.",
+      "micDeniedBody": "We hebben de microfoon nodig om de noten te horen die je zingt. Zonder microfoon wordt er niets opgenomen, maar je kunt nog steeds zingen en de vragen beantwoorden.",
+      "micRetry": "Microfoon toestaan",
+      "noHeadphones": "De begeleidingstrack lekt dan in de microfoon, waardoor de opnames minder meetellen.",
+      "posture": "Hoe zing je?",
+      "record": "Mijn zang opnemen?",
+      "recordBody": "We bewaren de opname privé, zodat we je bereik nauwkeuriger kunnen meten en je aanbevelingen later kunnen verbeteren. Alleen jij en ons team hebben toegang, en je kunt al je opnames op elk gewenst moment verwijderen onder 'Ik'.",
+      "sitting": "Zittend",
+      "standing": "Staand",
+      "warm": "Volledig opgewarmd",
+      "warmth": "Stem op dit moment?",
+      "warmthAgain": "Hoe voelt je stem nu?",
+      "warmupSkip": "Opwarming overslaan",
+      "warmupStart": "Opwarmen (1 min)",
+      "micOffTitle": "Microfoon staat uit",
+      "no": "Nee",
+      "openSettings": "Instellingen openen",
+      "quiet": "Wees even stil…",
+      "yes": "Ja"
+    },
+    "title": "Vind je stem",
+    "warmup": {
+      "hum": "Neurie een comfortabele noot",
+      "keys": "Toetsenbord dat de noot toont die je zingt",
+      "siren": "Glijd omhoog en omlaag als een sirene",
+      "done": "Gereed",
+      "left": "{seconds, plural, one {nog # seconde} other {nog # seconden}}"
+    },
+    "close": "Sluiten"
   }
 }

@@ -1521,7 +1521,8 @@
     "profileRemoveBody": "Discover će prestati usklađivati pjesme s tvojim glasom. Test možeš ponovno riješiti bilo kada.",
     "profileRemoveTitle": "Ukloniti svoj glas?",
     "singableCtaLabel": "Može se pjevati, prvo riješi glasovni test",
-    "profileRemoveConfirm": "Ukloni"
+    "profileRemoveConfirm": "Ukloni",
+    "profileMethodSession": "Iz pjevačke sesije"
   },
   "voiceSession": {
     "debug": {
@@ -1563,6 +1564,180 @@
       "openFailed": "Otvaranje YouTubea nije uspjelo. Pokušaj ponovno.",
       "video": "Karaoke videozapis",
       "open": "Otvori na usluzi YouTube"
-    }
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Promijeni kako pjevaš: {posture}, {warmth}",
+      "on": "Uključeno",
+      "record": "Snimanje",
+      "title": "Upravo sada",
+      "off": "Isključeno"
+    },
+    "disabled": {
+      "title": "Uskoro"
+    },
+    "entry": "Pronađi svoj glas (30 min)",
+    "error": {
+      "network": "Izvan mreže si ili je veza pukla. Provjeri vezu i pokušaj ponovno.",
+      "restart": "Kreni ispočetka",
+      "server": "Nešto je pošlo po zlu s naše strane. Pokušaj ponovno.",
+      "session_lost": "Ova sesija se ne može nastaviti. Pokreni novu.",
+      "warming_up": "Pripremamo pjesme, pokušaj ponovno za minutu",
+      "retry": "Pokušaj ponovno"
+    },
+    "intro": {
+      "body": "Otpjevaj 5–10 pjesama koje znaš, oko 30 minuta. Najbolje kod kuće, sa slušalicama.",
+      "title": "Pronađi svoj glas",
+      "close": "Ne sada",
+      "start": "Započni"
+    },
+    "loading": "Biramo tvoju sljedeću pjesmu…",
+    "pick": {
+      "dontKnow": "Preskoči, ne znam je",
+      "know": "Znam ovu",
+      "version": "Karaoke verzija: {brand}",
+      "else": "Nešto drugo",
+      "finish": "Završi"
+    },
+    "play": {
+      "keys": "Klavijatura koja prikazuje notu koju pjevaš",
+      "recording": "Snimanje",
+      "ribbon": "Prikaži moje note",
+      "stopEarly": "Završi ranije"
+    },
+    "progress": "Pjesma {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Neke dijelove nije išlo pogoditi",
+        "q": "Koliko je bilo teško?",
+        "stretch": "Malo nategnuto",
+        "easy": "Lako"
+      },
+      "feel": {
+        "fine": "U redu",
+        "loved": "Bilo je super",
+        "q": "Kakav je bio osjećaj?",
+        "not_for_me": "Nije za mene"
+      },
+      "issue": {
+        "bad_sync": "Loša sinkronizacija",
+        "low_quality": "Niska kvaliteta",
+        "no_intro": "Nema uvoda",
+        "wrong_lyrics": "Pogrešan tekst"
+      },
+      "knew": {
+        "barely": "Jedva",
+        "partly": "Djelomično",
+        "q": "Koliko dobro znaš pjesmu?",
+        "well": "Vrlo dobro"
+      },
+      "position": {
+        "both_ends": "Teško na oba kraja",
+        "q": "Kako je ležala tvom glasu?",
+        "comfortable": "Ugodno",
+        "too_high": "Previsoko",
+        "too_low": "Prenisko"
+      },
+      "prefill": "Tvoja najviša zadržana nota bila je {high}, a najniža {low}",
+      "required": "Prva dva pitanja su obavezna. Ostalo preskoči ako želiš.",
+      "sing": {
+        "q": "Bi li ovo pjevao/la na karaokama?",
+        "yes_other_key": "Da, u drugom tonalitetu",
+        "no": "Ne",
+        "yes": "Da"
+      },
+      "tag": {
+        "crowd_song": "Odlična stvar za publiku",
+        "fast_lyrics": "Brz tekst",
+        "long_gaps": "Duge instrumentalne pauze",
+        "mood_only": "Samo kad sam pri volji",
+        "needed_warmup": "Trebalo je zagrijavanje",
+        "q": "Neobavezne oznake"
+      },
+      "version": {
+        "good": "Dobra",
+        "not_great": "Nije baš nešto",
+        "q": "Ova karaoke verzija"
+      },
+      "voice": {
+        "fresh": "Svjež",
+        "q": "Glas trenutno",
+        "tired": "Umara se",
+        "warm": "Zagrijan"
+      },
+      "work": {
+        "fine": "Dobro je kako jest",
+        "other_key": "U drugom tonalitetu",
+        "other_octave": "Oktavu niže ili više",
+        "practice": "Nakon malo vježbe",
+        "q": "Bi li funkcioniralo da…?",
+        "warmer": "Ti je glas bolje zagrijan"
+      },
+      "next": "Sljedeće"
+    },
+    "reason": {
+      "comfortable_start": "Jedna lagana za početak",
+      "explore": "Nešto novo za isprobati",
+      "known": "Pjesma koju znaš",
+      "loved": "Pjesma koju voliš",
+      "lower_range": "Za provjeru nižeg raspona",
+      "upper_range": "Za provjeru višeg raspona"
+    },
+    "result": {
+      "confidenceLow": "Niska pouzdanost",
+      "confidenceMedium": "Srednja pouzdanost",
+      "hint": {
+        "more_songs": "Još nekoliko pjesama dalo bi sigurniju procjenu",
+        "sing_higher_warm": "Otpjevaj još 2 više pjesme kad se zagriješ",
+        "sing_lower": "Isprobaj par nižih pjesama"
+      },
+      "keys": "Klavijatura koja prikazuje tvoj raspon i njegov ugodan srednji dio",
+      "loved": "Pjesme koje su ti se svidjele",
+      "more": "Nastavi dalje",
+      "partial": "Na temelju kratke sesije, pa ovo uzmi samo kao prvu procjenu.",
+      "probably": "Vjerojatno {type}, ali treba nam još pjesama za sigurnu procjenu",
+      "range": "{range}, ugodno {comfort}",
+      "saved": "Spremljeno u tvoj glazbeni profil.",
+      "suited": "Pjesme koje ti odgovaraju",
+      "confidenceHigh": "Visoka pouzdanost",
+      "done": "Gotovo"
+    },
+    "setup": {
+      "bit_warm": "Djelomično zagrijan",
+      "cold": "Nezagrijan",
+      "coldBody": "Minuta zujanja i sirenskih vježbi pripremit će tvoj glas i dati točniji rezultat.",
+      "coldTitle": "Želiš li se prvo zagrijati?",
+      "go": "Počni pjevati",
+      "headphones": "Imaš li slušalice?",
+      "lying": "Ležeći",
+      "micBlockedBody": "Uključi mikrofon za Nomad Karaoke u Postavkama. I dalje možeš pjevati i odgovarati na pitanja, ali ništa se ne snima.",
+      "micDeniedBody": "Mikrofon nam je potreban kako bismo čuli note koje pjevaš. Bez njega se ništa ne snima, ali i dalje možeš pjevati i odgovarati na pitanja.",
+      "micRetry": "Dozvoli mikrofon",
+      "noHeadphones": "Glazbena matrica će ulaziti u mikrofon, pa su snimke manje pouzdane.",
+      "posture": "Kako pjevaš?",
+      "record": "Snimiti moje pjevanje?",
+      "recordBody": "Snimku čuvamo privatno kako bismo točnije izmjerili tvoj raspon i kasnije poboljšali tvoj odabir pjesama. Pristup imate samo ti i naš tim, a sve svoje snimke možeš izbrisati bilo kada u dijelu Ja.",
+      "sitting": "Sjedeći",
+      "standing": "Stojeći",
+      "warm": "Potpuno zagrijan",
+      "warmth": "Kakav je glas trenutno?",
+      "warmthAgain": "Kakav ti je glas sada?",
+      "warmupSkip": "Preskoči zagrijavanje",
+      "warmupStart": "Zagrij se (1 min)",
+      "micOffTitle": "Mikrofon je isključen",
+      "no": "Ne",
+      "openSettings": "Otvori Postavke",
+      "quiet": "Budi u tišini sekundu…",
+      "yes": "Da"
+    },
+    "title": "Pronađi svoj glas",
+    "warmup": {
+      "hum": "Zabruji ugodan ton",
+      "keys": "Klavijatura koja prikazuje notu koju pjevaš",
+      "siren": "Klizi glasom gore i dolje poput sirene",
+      "done": "Gotovo",
+      "left": "{seconds, plural, one {Preostala je # sekunda} few {Preostale su # sekunde} other {Preostalo je # sekundi}}"
+    },
+    "close": "Zatvori"
   }
 }

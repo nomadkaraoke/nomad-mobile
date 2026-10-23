@@ -153,3 +153,11 @@ jest.mock('@expo/vector-icons', () => {
   const Icon = ({ testID }) => createElement(View, { testID });
   return new Proxy({ __esModule: true }, { get: (target, key) => (key in target ? target[key] : Icon) });
 });
+
+// The voice session's embedded player (any suite that loads the route table imports it): a plain View.
+// player.test.tsx mocks it itself to drive the page's messages.
+jest.mock('react-native-webview', () => {
+  const { createElement } = jest.requireActual('react');
+  const { View } = jest.requireActual('react-native');
+  return { WebView: ({ testID }) => createElement(View, { testID }) };
+});

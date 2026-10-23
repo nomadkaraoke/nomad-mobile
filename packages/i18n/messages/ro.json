@@ -1521,7 +1521,8 @@
     "profileRemoveBody": "Discover nu va mai potrivi melodiile cu vocea ta. Poți reface testul oricând.",
     "profileRemoveTitle": "Ștergi profilul vocal?",
     "singableCtaLabel": "Potrivite pentru tine, fă mai întâi testul vocal",
-    "profileRemoveConfirm": "Elimină"
+    "profileRemoveConfirm": "Elimină",
+    "profileMethodSession": "Dintr-o sesiune de cântat"
   },
   "voiceSession": {
     "debug": {
@@ -1563,6 +1564,180 @@
       "openFailed": "Nu s-a putut deschide YouTube. Încearcă din nou.",
       "video": "Video karaoke",
       "open": "Deschide în YouTube"
-    }
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Schimbă modul în care cânți: {posture}, {warmth}",
+      "on": "Activat",
+      "record": "Înregistrare",
+      "title": "Chiar acum",
+      "off": "Oprit"
+    },
+    "disabled": {
+      "title": "În curând"
+    },
+    "entry": "Găsește-ți vocea (30 min)",
+    "error": {
+      "network": "Ești offline sau conexiunea s-a întrerupt. Verific-o și încearcă din nou.",
+      "restart": "Reia de la început",
+      "server": "Ceva nu a mers bine la noi. Mai încearcă o dată.",
+      "session_lost": "Această sesiune nu poate continua. Începe una nouă.",
+      "warming_up": "Pregătim melodiile, mai încearcă într-un minut",
+      "retry": "Încearcă din nou"
+    },
+    "intro": {
+      "body": "Cântă 5–10 melodii pe care le știi, cam 30 de minute. Cel mai bine acasă, cu căști.",
+      "title": "Găsește-ți vocea",
+      "close": "Nu acum",
+      "start": "Începe"
+    },
+    "loading": "Alegem următoarea ta melodie…",
+    "pick": {
+      "dontKnow": "Sari peste, nu o știu",
+      "know": "Știu melodia asta",
+      "version": "Versiune karaoke: {brand}",
+      "else": "Altceva",
+      "finish": "Finalizare"
+    },
+    "play": {
+      "keys": "Claviatură care arată nota pe care o cânți",
+      "recording": "Înregistrare",
+      "ribbon": "Arată notele mele",
+      "stopEarly": "Oprește mai devreme"
+    },
+    "progress": "Melodia {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Nu am putut atinge unele părți",
+        "q": "Cât de greu a fost?",
+        "stretch": "Puțin forțat",
+        "easy": "Ușor"
+      },
+      "feel": {
+        "fine": "Bine",
+        "loved": "Mi-a plăcut la nebunie",
+        "q": "Cum s-a simțit?",
+        "not_for_me": "Nu e pentru mine"
+      },
+      "issue": {
+        "bad_sync": "Sincronizare slabă",
+        "low_quality": "Calitate scăzută",
+        "no_intro": "Fără intro",
+        "wrong_lyrics": "Versuri greșite"
+      },
+      "knew": {
+        "barely": "Abia deloc",
+        "partly": "Parțial",
+        "q": "Cât de bine o știai?",
+        "well": "O știam bine"
+      },
+      "position": {
+        "both_ends": "Greu la ambele capete",
+        "q": "Cum s-a potrivit pentru vocea ta?",
+        "comfortable": "Confortabil",
+        "too_high": "Prea sus",
+        "too_low": "Prea jos"
+      },
+      "prefill": "Cea mai înaltă notă susținută a fost {high}, cea mai joasă {low}",
+      "required": "Primele două sunt obligatorii. Treci peste restul dacă vrei.",
+      "sing": {
+        "q": "Ai cânta-o la karaoke?",
+        "yes_other_key": "Da, într-o altă tonalitate",
+        "no": "Nu",
+        "yes": "Da"
+      },
+      "tag": {
+        "crowd_song": "Excelentă pentru public",
+        "fast_lyrics": "Versuri rapide",
+        "long_gaps": "Pauze instrumentale lungi",
+        "mood_only": "Doar dacă am starea potrivită",
+        "needed_warmup": "A necesitat încălzire",
+        "q": "Etichete opționale"
+      },
+      "version": {
+        "good": "Bună",
+        "not_great": "Nu prea grozavă",
+        "q": "Această versiune karaoke"
+      },
+      "voice": {
+        "fresh": "Odihnită",
+        "q": "Vocea acum",
+        "tired": "Începe să obosească",
+        "warm": "Încălzită"
+      },
+      "work": {
+        "fine": "E bine așa cum e",
+        "other_key": "Într-o altă tonalitate",
+        "other_octave": "Cu o octavă mai jos sau mai sus",
+        "practice": "După puțină exersare",
+        "q": "Ar merge dacă…?",
+        "warmer": "Ai fi mai încălzit(ă)"
+      },
+      "next": "Următorul"
+    },
+    "reason": {
+      "comfortable_start": "Una ușoară pentru început",
+      "explore": "Ceva nou de încercat",
+      "known": "O melodie pe care o știi",
+      "loved": "O melodie pe care o iubești",
+      "lower_range": "Îți testează registrul grav",
+      "upper_range": "Îți testează registrul acut"
+    },
+    "result": {
+      "confidenceLow": "Nivel scăzut de încredere",
+      "confidenceMedium": "Nivel mediu de încredere",
+      "hint": {
+        "more_songs": "Încă câteva melodii ar face rezultatul mai sigur",
+        "sing_higher_warm": "Cântă încă 2 melodii mai înalte când ești încălzit(ă)",
+        "sing_lower": "Încearcă două melodii mai joase"
+      },
+      "keys": "Claviatură care îți arată ambitusul și zona de mijloc confortabilă",
+      "loved": "Melodii care ți-au plăcut la nebunie",
+      "more": "Continuă",
+      "partial": "Dintr-o sesiune scurtă, deci consider-o o primă estimare.",
+      "probably": "Probabil {type}, dar avem nevoie de mai multe melodii pentru a fi siguri",
+      "range": "{range}, confortabil {comfort}",
+      "saved": "Salvat în profilul tău muzical.",
+      "suited": "Melodii care ți se potrivesc",
+      "confidenceHigh": "Încredere ridicată",
+      "done": "Gata"
+    },
+    "setup": {
+      "bit_warm": "Puțin încălzit(ă)",
+      "cold": "Neîncălzit(ă)",
+      "coldBody": "Un minut de fredonat și sirene îți pregătește vocea și face rezultatul mai precis.",
+      "coldTitle": "Te încălzești mai întâi?",
+      "go": "Începe să cânți",
+      "headphones": "Căști?",
+      "lying": "Întins(ă)",
+      "micBlockedBody": "Activează microfonul pentru Nomad Karaoke în Setări. Poți cânta și răspunde la întrebări în continuare, dar nimic nu este înregistrat.",
+      "micDeniedBody": "Avem nevoie de microfon pentru a auzi notele pe care le cânți. Fără el nu se înregistrează nimic, dar poți cânta și răspunde la întrebări în continuare.",
+      "micRetry": "Permite accesul la microfon",
+      "noHeadphones": "Negativele audio se vor auzi în microfon, așa că înregistrările vor conta mai puțin.",
+      "posture": "Cum cânți?",
+      "record": "Mă înregistrezi când cânt?",
+      "recordBody": "Păstrăm înregistrarea în mod confidențial pentru a-ți putea măsura ambitusul mai precis și pentru a-ți îmbunătăți recomandările ulterioare. Doar tu și echipa noastră aveți acces la ea și poți șterge oricând toate înregistrările din secțiunea Eu.",
+      "sitting": "Așezat(ă)",
+      "standing": "În picioare",
+      "warm": "Complet încălzit(ă)",
+      "warmth": "Cum e vocea chiar acum?",
+      "warmthAgain": "Cum se simte vocea ta acum?",
+      "warmupSkip": "Sari peste încălzire",
+      "warmupStart": "Încălzește-te (1 min)",
+      "micOffTitle": "Microfonul este oprit",
+      "no": "Nu",
+      "openSettings": "Deschide Setări",
+      "quiet": "Păstrează liniștea o secundă…",
+      "yes": "Da"
+    },
+    "title": "Găsește-ți vocea",
+    "warmup": {
+      "hum": "Fredonează o notă confortabilă",
+      "keys": "Claviatură care arată nota pe care o cânți",
+      "siren": "Glisează în sus și în jos ca o sirenă",
+      "done": "Gata",
+      "left": "{seconds, plural, one {încă # secundă} few {încă # secunde} other {încă # de secunde}}"
+    },
+    "close": "Închide"
   }
 }

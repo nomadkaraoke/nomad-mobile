@@ -1521,7 +1521,8 @@
     "profileRemoveBody": "Discover akan berhenti memadankan lagu dengan suara anda. Anda boleh mengambil ujian ini semula pada bila-bila masa.",
     "profileRemoveTitle": "Padam profil suara anda?",
     "singableCtaLabel": "Boleh dinyanyikan, ambil ujian suara dahulu",
-    "profileRemoveConfirm": "Alih keluar"
+    "profileRemoveConfirm": "Alih keluar",
+    "profileMethodSession": "Daripada sesi nyanyian"
   },
   "voiceSession": {
     "debug": {
@@ -1563,6 +1564,180 @@
       "openFailed": "Tidak dapat membuka YouTube. Cuba lagi.",
       "video": "Video karaoke",
       "open": "Buka di YouTube"
-    }
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Ubah cara anda menyanyi: {posture}, {warmth}",
+      "on": "Hidup",
+      "record": "Merakam",
+      "title": "Sekarang",
+      "off": "Tutup"
+    },
+    "disabled": {
+      "title": "Akan datang"
+    },
+    "entry": "Cari suara anda (30 min)",
+    "error": {
+      "network": "Anda berada di luar talian atau sambungan terputus. Semak sambungan dan cuba lagi.",
+      "restart": "Mula semula",
+      "server": "Ada masalah di pihak kami. Cuba lagi.",
+      "session_lost": "Sesi ini tidak dapat diteruskan. Mulakan sesi baharu.",
+      "warming_up": "Menyediakan lagu, cuba lagi sebentar lagi",
+      "retry": "Cuba lagi"
+    },
+    "intro": {
+      "body": "Nyanyikan 5–10 lagu yang anda tahu, kira-kira 30 minit. Paling sesuai di rumah, menggunakan fon kepala.",
+      "title": "Cari suara anda",
+      "close": "Bukan sekarang",
+      "start": "Mula"
+    },
+    "loading": "Memilih lagu anda yang seterusnya…",
+    "pick": {
+      "dontKnow": "Langkau, tidak tahu lagu ini",
+      "know": "Saya tahu lagu ini",
+      "version": "Versi karaoke: {brand}",
+      "else": "Lain-lain",
+      "finish": "Selesai"
+    },
+    "play": {
+      "keys": "Papan nada menunjukkan nada yang anda nyanyikan",
+      "recording": "Merakam",
+      "ribbon": "Tunjukkan nada saya",
+      "stopEarly": "Berhenti awal"
+    },
+    "progress": "Lagu {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Tidak dapat capai beberapa bahagian",
+        "q": "Berapa sukarkah lagu tadi?",
+        "stretch": "Agak mencabar",
+        "easy": "Mudah"
+      },
+      "feel": {
+        "fine": "Biasa saja",
+        "loved": "Sangat suka",
+        "q": "Bagaimana rasanya tadi?",
+        "not_for_me": "Bukan untuk saya"
+      },
+      "issue": {
+        "bad_sync": "Penyegerakan tidak tepat",
+        "low_quality": "Kualiti rendah",
+        "no_intro": "Tiada intro",
+        "wrong_lyrics": "Lirik salah"
+      },
+      "knew": {
+        "barely": "Hampir tidak tahu",
+        "partly": "Tahu sebahagian",
+        "q": "Sejauh manakah anda tahu lagu ini?",
+        "well": "Tahu dengan baik"
+      },
+      "position": {
+        "both_ends": "Sukar pada kedua-dua nada tinggi dan rendah",
+        "q": "Bagaimanakah kesesuaian lagu ini untuk suara anda?",
+        "comfortable": "Selesa",
+        "too_high": "Terlalu tinggi",
+        "too_low": "Terlalu rendah"
+      },
+      "prefill": "Nada tertahan tertinggi anda ialah {high}, terendah {low}",
+      "required": "Dua yang pertama wajib. Langkau selebihnya jika anda mahu.",
+      "sing": {
+        "q": "Adakah anda akan menyanyikannya semasa karaoke?",
+        "yes_other_key": "Ya, dalam nada yang berbeza",
+        "no": "Tidak",
+        "yes": "Ya"
+      },
+      "tag": {
+        "crowd_song": "Sesuai untuk memeriahkan suasana",
+        "fast_lyrics": "Lirik pantas",
+        "long_gaps": "Jeda instrumental yang panjang",
+        "mood_only": "Hanya jika saya ada mood",
+        "needed_warmup": "Perlu pemanasan suara",
+        "q": "Tag pilihan"
+      },
+      "version": {
+        "good": "Bagus",
+        "not_great": "Kurang memuaskan",
+        "q": "Versi karaoke ini"
+      },
+      "voice": {
+        "fresh": "Segar",
+        "q": "Keadaan suara sekarang",
+        "tired": "Mula penat",
+        "warm": "Sedia dipanaskan"
+      },
+      "work": {
+        "fine": "Sesuai seperti sedia ada",
+        "other_key": "Dalam nada yang berbeza",
+        "other_octave": "Satu oktaf lebih rendah atau lebih tinggi",
+        "practice": "Selepas sedikit latihan",
+        "q": "Adakah ia akan sesuai jika…?",
+        "warmer": "Suara anda lebih bersedia"
+      },
+      "next": "Seterusnya"
+    },
+    "reason": {
+      "comfortable_start": "Lagu yang mudah sebagai permulaan",
+      "explore": "Sesuatu yang baharu untuk dicuba",
+      "known": "Lagu yang anda tahu",
+      "loved": "Lagu yang anda suka",
+      "lower_range": "Menguji julat rendah anda",
+      "upper_range": "Menguji julat tinggi anda"
+    },
+    "result": {
+      "confidenceLow": "Keyakinan rendah",
+      "confidenceMedium": "Keyakinan sederhana",
+      "hint": {
+        "more_songs": "Beberapa lagu lagi akan menjadikan keputusan ini lebih tepat",
+        "sing_higher_warm": "Nyanyikan 2 lagi lagu yang bernada lebih tinggi selepas memanaskan suara",
+        "sing_lower": "Cuba beberapa lagu yang bernada lebih rendah"
+      },
+      "keys": "Papan nada menunjukkan julat anda dan bahagian tengah yang selesa",
+      "loved": "Lagu yang anda suka",
+      "more": "Teruskan",
+      "partial": "Daripada sesi yang singkat, jadi ini hanya anggaran awal.",
+      "probably": "Kemungkinan {type}, tetapi kami memerlukan lebih banyak lagu untuk memastikannya",
+      "range": "{range}, selesa {comfort}",
+      "saved": "Disimpan pada profil muzik anda.",
+      "suited": "Lagu yang sesuai untuk anda",
+      "confidenceHigh": "Keyakinan tinggi",
+      "done": "Selesai"
+    },
+    "setup": {
+      "bit_warm": "Sedikit bersedia",
+      "cold": "Belum bersedia",
+      "coldBody": "Seminit berdengung dan membuat bunyi siren akan menyediakan suara anda serta menjadikan keputusan lebih tepat.",
+      "coldTitle": "Panaskan suara dahulu?",
+      "go": "Mula menyanyi",
+      "headphones": "Fon kepala?",
+      "lying": "Baring",
+      "micBlockedBody": "Hidupkan mikrofon untuk Nomad Karaoke dalam Tetapan. Anda masih boleh menyanyi dan menjawab soalan, tetapi tiada apa yang akan dirakam.",
+      "micDeniedBody": "Kami memerlukan mikrofon untuk mendengar nada yang anda nyanyikan. Tanpanya, tiada apa yang dirakam, tetapi anda masih boleh menyanyi dan menjawab soalan.",
+      "micRetry": "Benarkan mikrofon",
+      "noHeadphones": "Muzik latar akan masuk ke mikrofon, jadi rakaman menjadi kurang tepat.",
+      "posture": "Bagaimanakah posisi anda menyanyi?",
+      "record": "Rakam nyanyian saya?",
+      "recordBody": "Kami menyimpan rakaman secara tertutup supaya kami dapat mengukur julat suara anda dengan lebih tepat dan menambah baik pilihan lagu anda kelak. Hanya anda dan pasukan kami yang boleh mengaksesnya, dan anda boleh memadamkan semua rakaman anda pada bila-bila masa di bahagian Profil.",
+      "sitting": "Duduk",
+      "standing": "Berdiri",
+      "warm": "Sedia sepenuhnya",
+      "warmth": "Keadaan suara sekarang?",
+      "warmthAgain": "Bagaimanakah rasa suara anda sekarang?",
+      "warmupSkip": "Langkau pemanasan suara",
+      "warmupStart": "Panaskan suara (1 min)",
+      "micOffTitle": "Mikrofon dimatikan",
+      "no": "Tidak",
+      "openSettings": "Buka Tetapan",
+      "quiet": "Sila senyap seketika…",
+      "yes": "Ya"
+    },
+    "title": "Cari suara anda",
+    "warmup": {
+      "hum": "Dengungkan nada yang selesa",
+      "keys": "Papan nada menunjukkan nada yang anda nyanyikan",
+      "siren": "Luncurkan nada ke atas dan ke bawah seperti siren",
+      "done": "Selesai",
+      "left": "{seconds, plural, other {Tinggal # saat}}"
+    },
+    "close": "Tutup"
   }
 }

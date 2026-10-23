@@ -32,6 +32,7 @@ import { Directory, File, Paths } from 'expo-file-system';
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 
 import { PLAYER_MODE } from '../config';
+import type { PitchSource } from '../voice/pitchSource';
 import { usePitchSource } from '../voice/usePitchSource';
 import type { PlayerEvent, PlayerHandle } from './player/KaraokePlayer';
 import type { PlayerMode } from './player/playerMode';
@@ -65,6 +66,8 @@ export type VoiceSession = {
   result: ResultOut | null;
   /** The singer's live note (MIDI) while the recorder runs (play, warm-up). */
   livePitch: number | null;
+  /** The session's one pitch source (the setup screen's quiet second reads it before the recorder runs). */
+  pitchSource: PitchSource;
   /** The player for this song: link-out when decide marks the offered version not embeddable. */
   playerMode: PlayerMode;
   /** Pass to `KaraokePlayer`'s `ref`: the session starts the video itself once the recorder runs. */
@@ -709,6 +712,7 @@ export function useVoiceSession(): VoiceSession {
     prefill,
     result,
     livePitch: recorder.livePitch,
+    pitchSource: source,
     playerMode: s.song?.version.embeddable === false ? 'linkout' : PLAYER_MODE,
     playerRef,
     error,

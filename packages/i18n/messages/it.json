@@ -1521,7 +1521,8 @@
     "profileRemoveBody": "Discover smetterà di abbinare i brani alla tua voce. Puoi ripetere il test in qualsiasi momento.",
     "profileRemoveTitle": "Vuoi rimuovere la tua voce?",
     "singableCtaLabel": "Cantabile: fai prima il test vocale",
-    "profileRemoveConfirm": "Rimuovi"
+    "profileRemoveConfirm": "Rimuovi",
+    "profileMethodSession": "Da una sessione di canto"
   },
   "voiceSession": {
     "debug": {
@@ -1563,6 +1564,180 @@
       "openFailed": "Impossibile aprire YouTube. Riprova.",
       "video": "Video karaoke",
       "open": "Apri su YouTube"
-    }
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Modifica la modalità di canto: {posture}, {warmth}",
+      "on": "Attivo",
+      "record": "Registrazione",
+      "title": "In questo momento",
+      "off": "Disattivate"
+    },
+    "disabled": {
+      "title": "In arrivo"
+    },
+    "entry": "Trova la tua voce (30 min)",
+    "error": {
+      "network": "Sei offline o la connessione è caduta. Controlla e riprova.",
+      "restart": "Ricomincia",
+      "server": "Si è verificato un errore da parte nostra. Riprova.",
+      "session_lost": "Impossibile continuare questa sessione. Iniziane una nuova.",
+      "warming_up": "Preparazione dei brani in corso, riprova tra un minuto",
+      "retry": "Riprova"
+    },
+    "intro": {
+      "body": "Canta 5–10 brani che conosci, per circa 30 minuti. Meglio a casa, con le cuffie.",
+      "title": "Trova la tua voce",
+      "close": "Non ora",
+      "start": "Inizia"
+    },
+    "loading": "Scelta del prossimo brano…",
+    "pick": {
+      "dontKnow": "Salta, non la conosco",
+      "know": "Questa la conosco",
+      "version": "Versione karaoke: {brand}",
+      "else": "Altro",
+      "finish": "Fine"
+    },
+    "play": {
+      "keys": "Tastiera che mostra la nota che stai cantando",
+      "recording": "Registrazione in corso",
+      "ribbon": "Mostra le mie note",
+      "stopEarly": "Termina prima"
+    },
+    "progress": "Brano {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Non riuscivo a prendere alcune note",
+        "q": "Quanto è stato difficile?",
+        "stretch": "Un po' al limite",
+        "easy": "Facile"
+      },
+      "feel": {
+        "fine": "Bene",
+        "loved": "Mi è piaciuto un sacco",
+        "q": "Come ti è sembrato?",
+        "not_for_me": "Non fa per me"
+      },
+      "issue": {
+        "bad_sync": "Sincronizzazione errata",
+        "low_quality": "Bassa qualità",
+        "no_intro": "Manca l'intro",
+        "wrong_lyrics": "Testo errato"
+      },
+      "knew": {
+        "barely": "A malapena",
+        "partly": "In parte",
+        "q": "Quanto bene lo conoscevi?",
+        "well": "Lo conoscevo bene"
+      },
+      "position": {
+        "both_ends": "Difficile sia sulle note basse che su quelle alte",
+        "q": "Come si adattava alla tua estensione vocale?",
+        "comfortable": "Confortevole",
+        "too_high": "Troppo alta",
+        "too_low": "Troppo bassa"
+      },
+      "prefill": "La tua nota tenuta più alta è stata {high}, la più bassa {low}",
+      "required": "Le prime due sono obbligatorie. Salta il resto se preferisci.",
+      "sing": {
+        "q": "Lo canteresti al karaoke?",
+        "yes_other_key": "Sì, in un'altra tonalità",
+        "no": "No",
+        "yes": "Sì, tantissimo"
+      },
+      "tag": {
+        "crowd_song": "Ottimo per scaldare il pubblico",
+        "fast_lyrics": "Testo veloce",
+        "long_gaps": "Lunghi stacchi strumentali",
+        "mood_only": "Solo se sono dell'umore giusto",
+        "needed_warmup": "Serviva riscaldare la voce",
+        "q": "Tag facoltativi"
+      },
+      "version": {
+        "good": "Buona",
+        "not_great": "Non un granché",
+        "q": "Questa versione karaoke"
+      },
+      "voice": {
+        "fresh": "Riposata",
+        "q": "Stato della voce",
+        "tired": "Inizia a stancarsi",
+        "warm": "Scaldata"
+      },
+      "work": {
+        "fine": "Va bene così com'è",
+        "other_key": "In un'altra tonalità",
+        "other_octave": "Un'ottava più in basso o più in alto",
+        "practice": "Con un po' di pratica",
+        "q": "Funzionerebbe se…?",
+        "warmer": "Avessi la voce più scaldata"
+      },
+      "next": "Avanti"
+    },
+    "reason": {
+      "comfortable_start": "Un brano facile per cominciare",
+      "explore": "Qualcosa di nuovo da provare",
+      "known": "Un brano che conosci",
+      "loved": "Un brano che adori",
+      "lower_range": "Mette alla prova le note basse",
+      "upper_range": "Mette alla prova le note alte"
+    },
+    "result": {
+      "confidenceLow": "Affidabilità bassa",
+      "confidenceMedium": "Affidabilità media",
+      "hint": {
+        "more_songs": "Qualche altro brano renderebbe il risultato più accurato",
+        "sing_higher_warm": "Canta altri 2 brani più alti dopo esserti scaldato la voce",
+        "sing_lower": "Prova un paio di brani più bassi"
+      },
+      "keys": "Tastiera che mostra la tua estensione e il tuo registro ideale",
+      "loved": "Brani che hai adorato",
+      "more": "Continua",
+      "partial": "Risultato basato su una sessione breve, consideralo una prima stima.",
+      "probably": "Probabilmente {type}, ma servono altri brani per esserne certi",
+      "range": "{range}, ideale {comfort}",
+      "saved": "Salvato nel tuo profilo musicale.",
+      "suited": "Brani adatti a te",
+      "confidenceHigh": "Alta sicurezza",
+      "done": "Fatto"
+    },
+    "setup": {
+      "bit_warm": "Un po' scaldata",
+      "cold": "A freddo",
+      "coldBody": "Un minuto di canticchio a bocca chiusa ed esercizi a sirena prepara la voce e rende il risultato più preciso.",
+      "coldTitle": "Vuoi scaldare la voce prima?",
+      "go": "Inizia a cantare",
+      "headphones": "Hai le cuffie?",
+      "lying": "Disteso/a",
+      "micBlockedBody": "Attiva il microfono per Nomad Karaoke nelle Impostazioni. Puoi comunque cantare e rispondere alle domande, ma non verrà registrato nulla.",
+      "micDeniedBody": "Ci serve il microfono per rilevare le note che canti. Senza di esso non verrà registrato nulla, ma puoi comunque cantare e rispondere alle domande.",
+      "micRetry": "Consenti l'accesso al microfono",
+      "noHeadphones": "La traccia audio rientrerà nel microfono, rendendo le registrazioni meno attendibili.",
+      "posture": "In che posizione canti?",
+      "record": "Vuoi registrare la mia voce?",
+      "recordBody": "Conserviamo la registrazione in modo privato per misurare la tua estensione con maggiore precisione e consigliarti brani migliori in futuro. Solo tu e il nostro team potete accedervi, e puoi eliminare tutte le tue registrazioni quando vuoi nella sezione Profilo.",
+      "sitting": "Seduto/a",
+      "standing": "In piedi",
+      "warm": "Perfettamente scaldata",
+      "warmth": "Com'è la voce in questo momento?",
+      "warmthAgain": "Come senti la voce adesso?",
+      "warmupSkip": "Salta il riscaldamento",
+      "warmupStart": "Riscaldati (1 min)",
+      "micOffTitle": "Il microfono è disattivato",
+      "no": "No",
+      "openSettings": "Apri Impostazioni",
+      "quiet": "Non parlare per un secondo…",
+      "yes": "Sì, tantissimo"
+    },
+    "title": "Trova la tua voce",
+    "warmup": {
+      "hum": "Canticchia una nota comoda a bocca chiusa",
+      "keys": "Tastiera che mostra la nota che stai cantando",
+      "siren": "Fai oscillare la voce verso l'alto e verso il basso come una sirena",
+      "done": "Fatto",
+      "left": "{seconds, plural, one {Ancora # secondo} other {Ancora # secondi}}"
+    },
+    "close": "Chiudi"
   }
 }
