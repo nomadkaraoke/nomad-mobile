@@ -1295,9 +1295,9 @@
       "account": "Conectat ca {username}",
       "accountHint": "Nu este contul tău? Elimină ListenBrainz din secțiunea Conectate, apoi conectează-te din nou.",
       "checklist": {
-        "step1": "Creează un cont MetaBrainz",
-        "step2": "Verifică-ți adresa de e-mail",
-        "step3": "Revino și introdu numele de utilizator"
+        "step1": "1. Creează un cont MetaBrainz",
+        "step2": "2. Verifică-ți adresa de email",
+        "step3": "3. Revino și introdu numele de utilizator"
       },
       "intro": "ListenBrainz păstrează o evidență gratuită și deschisă a ceea ce asculți. Conectează-l, iar noile tale ascultări îți vor menține recomandările mereu proaspete.",
       "oauth": "Conectează-te cu ListenBrainz",

@@ -1295,9 +1295,9 @@
       "account": "Verbunden als {username}",
       "accountHint": "Nicht dein Konto? Entferne ListenBrainz unter „Verbunden“ und melde dich erneut an.",
       "checklist": {
-        "step1": "MetaBrainz-Konto erstellen",
-        "step2": "E-Mail-Adresse bestätigen",
-        "step3": "Hierher zurückkehren und Benutzernamen eingeben"
+        "step1": "1. Erstelle ein MetaBrainz-Konto",
+        "step2": "2. Bestätige deine E-Mail-Adresse",
+        "step3": "3. Komm hierher zurück und gib deinen Benutzernamen ein"
       },
       "intro": "ListenBrainz führt ein kostenloses, offenes Protokoll darüber, was du hörst. Verbinde es, damit neu gehörte Musik deine Auswahl stets aktuell hält.",
       "oauth": "Mit ListenBrainz anmelden",

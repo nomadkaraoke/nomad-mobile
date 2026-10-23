@@ -1295,9 +1295,9 @@
       "account": "Tilkoblet som {username}",
       "accountHint": "Ikke din konto? Fjern ListenBrainz under Tilkoblet, og logg på igjen.",
       "checklist": {
-        "step1": "Opprett en MetaBrainz-konto",
-        "step2": "Bekreft e-postadressen din",
-        "step3": "Kom tilbake hit og skriv inn brukernavnet ditt"
+        "step1": "1. Opprett en MetaBrainz-konto",
+        "step2": "2. Bekreft e-postadressen din",
+        "step3": "3. Kom tilbake og skriv inn brukernavnet ditt"
       },
       "intro": "ListenBrainz holder en gratis og åpen oversikt over hva du lytter til. Koble den til, så holder nye avspillinger forslagene dine oppdaterte.",
       "oauth": "Logg på med ListenBrainz",

@@ -1295,9 +1295,9 @@
       "account": "Povezano kao {username}",
       "accountHint": "Nije tvoj račun? Ukloni ListenBrainz pod Povezano, a zatim se ponovno prijavi.",
       "checklist": {
-        "step1": "Izradi MetaBrainz račun",
-        "step2": "Potvrdi svoju e-poštu",
-        "step3": "Vrati se i unesi svoje korisničko ime"
+        "step1": "1. Izradi MetaBrainz račun",
+        "step2": "2. Potvrdi svoju e-poštu",
+        "step3": "3. Vrati se i unesi svoje korisničko ime"
       },
       "intro": "ListenBrainz vodi besplatnu, otvorenu evidenciju onoga što slušaš. Poveži ga i tvoja će nova slušanja održavati tvoje preporuke svježima.",
       "oauth": "Prijavi se putem ListenBrainza",

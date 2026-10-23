@@ -1295,9 +1295,9 @@
       "account": "Csatlakoztatva mint {username}",
       "accountHint": "Nem a te fiókod? Távolítsd el a ListenBrainz-et a Csatlakoztatva alatt, majd jelentkezz be újra.",
       "checklist": {
-        "step1": "Hozz létre egy MetaBrainz-fiókot",
-        "step2": "Erősítsd meg az e-mail-címedet",
-        "step3": "Gyere vissza, és add meg a felhasználónevedet"
+        "step1": "1. Hozz létre egy MetaBrainz-fiókot",
+        "step2": "2. Erősítsd meg az e-mail-címedet",
+        "step3": "3. Gyere vissza, és add meg a felhasználónevedet"
       },
       "intro": "A ListenBrainz ingyenes, nyílt nyilvántartást vezet arról, amit hallgatsz. Csatlakoztasd, és az új meghallgatásaid frissen tartják az ajánlataidat.",
       "oauth": "Bejelentkezés ListenBrainz-fiókkal",

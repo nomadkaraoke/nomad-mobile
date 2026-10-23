@@ -1295,9 +1295,9 @@
       "account": "Ansluten som {username}",
       "accountHint": "Inte ditt konto? Ta bort ListenBrainz under Anslutna och logga sedan in igen.",
       "checklist": {
-        "step1": "Skapa ett MetaBrainz-konto",
-        "step2": "Verifiera din e-postadress",
-        "step3": "Kom tillbaka och ange ditt användarnamn"
+        "step1": "1. Skapa ett MetaBrainz-konto",
+        "step2": "2. Verifiera din e-postadress",
+        "step3": "3. Kom tillbaka och ange ditt användarnamn"
       },
       "intro": "ListenBrainz sparar en gratis, öppen historik över det du lyssnar på. Anslut tjänsten så håller dina nya lyssningar låtförslagen uppdaterade.",
       "oauth": "Logga in med ListenBrainz",

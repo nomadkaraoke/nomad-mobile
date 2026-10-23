@@ -1295,9 +1295,9 @@
       "account": "{username}(으)로 연결됨",
       "accountHint": "본인 계정이 아닌가요? '연결된 소스'에서 ListenBrainz를 삭제한 후 다시 로그인하세요.",
       "checklist": {
-        "step1": "MetaBrainz 계정 만들기",
-        "step2": "이메일 인증하기",
-        "step3": "돌아와서 사용자 이름 입력하기"
+        "step1": "1. MetaBrainz 계정 생성하기",
+        "step2": "2. 이메일 인증하기",
+        "step3": "3. 돌아와서 사용자 이름 입력하기"
       },
       "intro": "ListenBrainz는 내가 들은 음악을 무료로 기록해 주는 오픈 서비스입니다. 연결해 두면 새로 들은 음악이 추천 목록에 계속 반영됩니다.",
       "oauth": "ListenBrainz로 로그인",

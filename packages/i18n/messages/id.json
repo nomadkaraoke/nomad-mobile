@@ -1295,9 +1295,9 @@
       "account": "Terhubung sebagai {username}",
       "accountHint": "Bukan akun Anda? Hapus ListenBrainz di bagian Terhubung, lalu masuk kembali.",
       "checklist": {
-        "step1": "Buat akun MetaBrainz",
-        "step2": "Verifikasi email Anda",
-        "step3": "Kembali ke sini dan masukkan nama pengguna Anda"
+        "step1": "1. Buat akun MetaBrainz",
+        "step2": "2. Verifikasi email Anda",
+        "step3": "3. Kembali ke sini dan masukkan nama pengguna Anda"
       },
       "intro": "ListenBrainz menyimpan catatan gratis dan terbuka tentang musik yang Anda dengarkan. Hubungkan sekarang agar lagu baru yang Anda dengarkan terus memperbarui pilihan Anda.",
       "oauth": "Masuk dengan ListenBrainz",

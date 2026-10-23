@@ -1295,9 +1295,9 @@
       "account": "Połączono jako {username}",
       "accountHint": "To nie Twoje konto? Usuń ListenBrainz w sekcji Połączone, a następnie zaloguj się ponownie.",
       "checklist": {
-        "step1": "Utwórz konto MetaBrainz",
-        "step2": "Zweryfikuj swój adres e-mail",
-        "step3": "Wróć tutaj i wpisz swoją nazwę użytkownika"
+        "step1": "1. Utwórz konto MetaBrainz",
+        "step2": "2. Zweryfikuj swój adres e-mail",
+        "step3": "3. Wróć tutaj i wpisz swoją nazwę użytkownika"
       },
       "intro": "ListenBrainz prowadzi darmowy, otwarty rejestr tego, czego słuchasz. Połącz go, a Twoje nowe odtworzenia będą stale odświeżać propozycje utworów.",
       "oauth": "Zaloguj się przez ListenBrainz",

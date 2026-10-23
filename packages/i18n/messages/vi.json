@@ -1295,9 +1295,9 @@
       "account": "Đã kết nối với tư cách {username}",
       "accountHint": "Không phải tài khoản của bạn? Hãy gỡ bỏ ListenBrainz trong mục Đã kết nối, sau đó đăng nhập lại.",
       "checklist": {
-        "step1": "Tạo tài khoản MetaBrainz",
-        "step2": "Xác minh email của bạn",
-        "step3": "Quay lại đây và nhập tên người dùng"
+        "step1": "1. Tạo tài khoản MetaBrainz",
+        "step2": "2. Xác minh email của bạn",
+        "step3": "3. Quay lại và nhập tên người dùng của bạn"
       },
       "intro": "ListenBrainz lưu trữ miễn phí và mở lịch sử nghe nhạc của bạn. Hãy kết nối để các bài nghe mới liên tục làm mới gợi ý dành cho bạn.",
       "oauth": "Đăng nhập bằng ListenBrainz",

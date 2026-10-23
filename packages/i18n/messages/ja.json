@@ -1295,9 +1295,9 @@
       "account": "{username} として接続中",
       "accountHint": "別のアカウントですか？「連携済み」からListenBrainzを削除し、再度サインインしてください。",
       "checklist": {
-        "step1": "MetaBrainzアカウントを作成",
-        "step2": "メールアドレスを認証",
-        "step3": "ここに戻ってユーザー名を入力"
+        "step1": "1. MetaBrainzアカウントを作成する",
+        "step2": "2. メールアドレスを認証する",
+        "step3": "3. この画面に戻ってユーザー名を入力する"
       },
       "intro": "ListenBrainzは、再生履歴を記録できる無料のオープンサービスです。連携すると、新しく聴いた曲がおすすめに自動で反映されます。",
       "oauth": "ListenBrainzでサインイン",

@@ -1295,9 +1295,9 @@
       "account": "Pripojené ako {username}",
       "accountHint": "Nie je to tvoj účet? Odstráň ListenBrainz v sekcii Pripojené a prihlás sa znova.",
       "checklist": {
-        "step1": "Vytvor si účet MetaBrainz",
-        "step2": "Over svoj e-mail",
-        "step3": "Vráť sa sem a zadaj svoje používateľské meno"
+        "step1": "1. Vytvor si účet MetaBrainz",
+        "step2": "2. Over svoj e-mail",
+        "step3": "3. Vráť sa sem a zadaj svoje používateľské meno"
       },
       "intro": "ListenBrainz uchováva bezplatný a otvorený záznam o tom, čo počúvaš. Pripoj ho a nové počúvania udržia tvoj výber stále aktuálny.",
       "oauth": "Prihlásiť sa cez ListenBrainz",

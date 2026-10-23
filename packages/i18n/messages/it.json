@@ -1295,9 +1295,9 @@
       "account": "Connesso come {username}",
       "accountHint": "Non è il tuo account? Rimuovi ListenBrainz sotto Connessi, poi accedi di nuovo.",
       "checklist": {
-        "step1": "Crea un account MetaBrainz",
-        "step2": "Verifica la tua email",
-        "step3": "Torna qui e inserisci il tuo nome utente"
+        "step1": "1. Crea un account MetaBrainz",
+        "step2": "2. Verifica la tua email",
+        "step3": "3. Torna qui e inserisci il tuo nome utente"
       },
       "intro": "ListenBrainz tiene un registro gratuito e aperto di ciò che ascolti. Connettilo e i tuoi nuovi ascolti manterranno aggiornati i tuoi consigli.",
       "oauth": "Accedi con ListenBrainz",

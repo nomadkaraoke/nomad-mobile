@@ -1295,9 +1295,9 @@
       "account": "Disambungkan sebagai {username}",
       "accountHint": "Bukan akaun anda? Alih keluar ListenBrainz di bawah Disambungkan, kemudian log masuk semula.",
       "checklist": {
-        "step1": "Cipta akaun MetaBrainz",
-        "step2": "Sahkan e-mel anda",
-        "step3": "Kembali dan masukkan nama pengguna anda"
+        "step1": "1. Cipta akaun MetaBrainz",
+        "step2": "2. Sahkan e-mel anda",
+        "step3": "3. Kembali dan masukkan nama pengguna anda"
       },
       "intro": "ListenBrainz menyimpan rekod terbuka dan percuma tentang apa yang anda dengar. Sambungkannya dan lagu baharu yang didengar akan memastikan pilihan lagu anda sentiasa segar.",
       "oauth": "Log masuk dengan ListenBrainz",

@@ -1295,9 +1295,9 @@
       "account": "Connectat com a {username}",
       "accountHint": "No és el teu compte? Elimina ListenBrainz a Connectats i torna a iniciar sessió.",
       "checklist": {
-        "step1": "Crea un compte de MetaBrainz",
-        "step2": "Verifica el teu correu electrònic",
-        "step3": "Torna aquí i introdueix el teu nom d'usuari"
+        "step1": "1. Crea un compte de MetaBrainz",
+        "step2": "2. Verifica el teu correu electrònic",
+        "step3": "3. Torna aquí i introdueix el teu nom d'usuari"
       },
       "intro": "ListenBrainz manté un registre lliure i obert del que escoltes. Connecta'l i les teves noves escoltes mantindran les seleccions al dia.",
       "oauth": "Inicia sessió amb ListenBrainz",

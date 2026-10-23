@@ -1295,9 +1295,9 @@
       "account": "已作为 {username} 连接",
       "accountHint": "不是你的账户？在“已连接”下方移除 ListenBrainz，然后重新登录。",
       "checklist": {
-        "step1": "创建 MetaBrainz 账户",
-        "step2": "验证邮箱",
-        "step3": "返回此处并输入你的用户名"
+        "step1": "1. 注册 MetaBrainz 账号",
+        "step2": "2. 验证您的邮箱",
+        "step3": "3. 返回此处输入用户名"
       },
       "intro": "ListenBrainz 免费且开放地记录你的听歌历程。连接后，每次收听都会让你的精选推荐保持最新。",
       "oauth": "使用 ListenBrainz 登录",

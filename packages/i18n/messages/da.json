@@ -1295,9 +1295,9 @@
       "account": "Forbundet som {username}",
       "accountHint": "Ikke din konto? Fjern ListenBrainz under Forbundet, og log ind igen.",
       "checklist": {
-        "step1": "Opret en MetaBrainz-konto",
-        "step2": "Bekræft din e-mail",
-        "step3": "Vend tilbage, og indtast dit brugernavn"
+        "step1": "1. Opret en MetaBrainz-konto",
+        "step2": "2. Bekræft din e-mail",
+        "step3": "3. Vend tilbage og indtast dit brugernavn"
       },
       "intro": "ListenBrainz fører en gratis, åben oversigt over, hvad du lytter til. Forbind den, så dine nye afspilninger holder dine anbefalinger opdaterede.",
       "oauth": "Log ind med ListenBrainz",

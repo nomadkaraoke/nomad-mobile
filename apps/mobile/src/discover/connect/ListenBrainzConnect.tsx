@@ -98,9 +98,10 @@ export function ListenBrainzConnect({ oauthReturn }: { oauthReturn?: LbReturn | 
         <Text className="font-semibold text-primary">{t('lb.signup')}</Text>
       </Pressable>
       <View className="gap-1">
-        {CHECKLIST.map((s, i) => (
+        {/* The step numbers are in the strings, so each locale writes its own digits. */}
+        {CHECKLIST.map((s) => (
           <Text key={s} variant="muted">
-            {`${i + 1}. ${t(`lb.checklist.${s}`)}`}
+            {t(`lb.checklist.${s}`)}
           </Text>
         ))}
       </View>

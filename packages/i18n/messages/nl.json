@@ -1295,9 +1295,9 @@
       "account": "Verbonden als {username}",
       "accountHint": "Niet jouw account? Verwijder ListenBrainz onder Verbonden en meld je opnieuw aan.",
       "checklist": {
-        "step1": "Maak een MetaBrainz-account aan",
-        "step2": "Verifieer je e-mailadres",
-        "step3": "Kom terug en voer je gebruikersnaam in"
+        "step1": "1. Maak een MetaBrainz-account aan",
+        "step2": "2. Verifieer je e-mailadres",
+        "step3": "3. Kom terug en vul je gebruikersnaam in"
       },
       "intro": "ListenBrainz houdt een gratis, open overzicht bij van wat je luistert. Verbind het en je nieuwe luisterbeurten houden je suggesties actueel.",
       "oauth": "Aanmelden met ListenBrainz",

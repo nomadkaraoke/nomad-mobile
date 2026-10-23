@@ -1295,9 +1295,9 @@
       "account": "{username} olarak bağlandı",
       "accountHint": "Hesap senin değil mi? Bağlı Kaynaklar altından ListenBrainz'i kaldır, ardından tekrar giriş yap.",
       "checklist": {
-        "step1": "Bir MetaBrainz hesabı oluştur",
-        "step2": "E-postanı doğrula",
-        "step3": "Buraya dön ve kullanıcı adını gir"
+        "step1": "1. Bir MetaBrainz hesabı oluştur",
+        "step2": "2. E-postanı doğrula",
+        "step3": "3. Buraya geri dön ve kullanıcı adını gir"
       },
       "intro": "ListenBrainz dinlediklerinin ücretsiz ve açık bir kaydını tutar. Bağla, yeni dinlemelerin seçimlerini daima güncel tutsun.",
       "oauth": "ListenBrainz ile giriş yap",

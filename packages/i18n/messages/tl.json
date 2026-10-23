@@ -1295,9 +1295,9 @@
       "account": "Konektado bilang {username}",
       "accountHint": "Hindi mo account? Alisin ang ListenBrainz sa ilalim ng Konektado, pagkatapos ay mag-sign in muli.",
       "checklist": {
-        "step1": "Gumawa ng MetaBrainz account",
-        "step2": "I-verify ang iyong email",
-        "step3": "Bumalik dito at ilagay ang iyong username"
+        "step1": "1. Gumawa ng MetaBrainz account",
+        "step2": "2. I-verify ang iyong email",
+        "step3": "3. Bumalik dito at ilagay ang iyong username"
       },
       "intro": "Ang ListenBrainz ay nagpapanatili ng libre at bukas na talaan ng iyong mga pinapakinggan. Ikonekta ito at pananatilihing bago ng iyong mga bagong pinatugtog ang mga mapipili para sa iyo.",
       "oauth": "Mag-sign in gamit ang ListenBrainz",

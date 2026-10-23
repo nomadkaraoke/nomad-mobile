@@ -1295,9 +1295,9 @@
       "account": "Yhdistetty käyttäjänimellä {username}",
       "accountHint": "Eikö ole sinun tilisi? Poista ListenBrainz kohdasta Yhdistetyt ja kirjaudu sitten uudelleen sisään.",
       "checklist": {
-        "step1": "Luo MetaBrainz-tili",
-        "step2": "Vahvista sähköpostiosoitteesi",
-        "step3": "Palaa takaisin ja syötä käyttäjänimesi"
+        "step1": "1. Luo MetaBrainz-tili",
+        "step2": "2. Vahvista sähköpostiosoitteesi",
+        "step3": "3. Palaa takaisin ja anna käyttäjänimesi"
       },
       "intro": "ListenBrainz pitää maksutonta ja avointa kirjaa siitä, mitä kuuntelet. Yhdistä se, niin uudet kuuntelusi pitävät suosituksesi tuoreina.",
       "oauth": "Kirjaudu sisään ListenBrainzilla",

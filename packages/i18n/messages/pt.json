@@ -1295,9 +1295,9 @@
       "account": "Conectado como {username}",
       "accountHint": "Não é sua conta? Remova o ListenBrainz em Conectados e entre novamente.",
       "checklist": {
-        "step1": "Crie uma conta MetaBrainz",
-        "step2": "Verifique seu e-mail",
-        "step3": "Volte e digite seu nome de usuário"
+        "step1": "1. Crie uma conta no MetaBrainz",
+        "step2": "2. Verifique seu e-mail",
+        "step3": "3. Volte e digite seu nome de usuário"
       },
       "intro": "O ListenBrainz mantém um registro gratuito e aberto do que você ouve. Conecte-o e suas novas reproduções manterão suas escolhas atualizadas.",
       "oauth": "Entrar com o ListenBrainz",

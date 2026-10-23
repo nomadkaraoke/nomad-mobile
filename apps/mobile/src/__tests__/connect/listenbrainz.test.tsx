@@ -202,7 +202,10 @@ describe('ListenBrainz connect', () => {
     await open();
     await act(async () => fireEvent.press(screen.getByTestId('connect-lb-signup')));
     expect(WebBrowser.openBrowserAsync).toHaveBeenCalledWith('https://listenbrainz.org/login/');
-    expect(screen.getByText(/Verify your email/)).toBeTruthy();
+    // The numbers come from the strings (each locale's own digits), not from the code.
+    expect(screen.getByText('1. Create a MetaBrainz account')).toBeTruthy();
+    expect(screen.getByText('2. Verify your email')).toBeTruthy();
+    expect(screen.getByText('3. Come back and enter your username')).toBeTruthy();
 
     await act(async () => fireEvent.press(screen.getByTestId('connect-lb-spotify-guide')));
     expect(WebBrowser.openBrowserAsync).toHaveBeenCalledWith('https://listenbrainz.org/settings/music-services/details/');

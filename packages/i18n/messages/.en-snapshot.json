@@ -1395,9 +1395,9 @@
       "accountHint": "Not your account? Remove ListenBrainz under Connected, then sign in again.",
       "signup": "Don't have one? Create a free account",
       "checklist": {
-        "step1": "Create a MetaBrainz account",
-        "step2": "Verify your email",
-        "step3": "Come back and enter your username"
+        "step1": "1. Create a MetaBrainz account",
+        "step2": "2. Verify your email",
+        "step3": "3. Come back and enter your username"
       },
       "spotifyGuide": "Connect Spotify to ListenBrainz",
       "spotifyGuideBody": "Then everything you play on Spotify reaches your picks by itself.",
