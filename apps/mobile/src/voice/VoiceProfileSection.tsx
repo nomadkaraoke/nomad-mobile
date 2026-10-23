@@ -1,0 +1,106 @@
+// Me → Your music profile → "Your voice" (Phase 3c): the range on a keyboard, the hedged voice type, how it was
+// measured, Redo and Remove (DELETE on decide, then the phone's copy and the voice filters go too).
+import { deleteVoiceProfile } from '@nomad/api-decide';
+import { useTranslations } from '@nomad/i18n';
+import { Button, colors, PianoStrip, StartText, Text } from '@nomad/ui';
+import { useQueryClient } from '@tanstack/react-query';
+import { router, type Href } from 'expo-router';
+import { useState } from 'react';
+import { View } from 'react-native';
+
+import { ProfileSection } from '../discover/profile/ProfileSection';
+import { useRecFilters } from '../discover/filtersStore';
+import { RECS_KEY } from '../discover/useRecommendations';
+import { useVoiceProfile, VOICE_KEY } from './useVoiceProfile';
+import { noteRange, useVoiceLabels } from './voiceLabels';
+import { stripBounds } from './VoiceResult';
+import { useVoiceStore } from './voiceStore';
+
+const openVoiceTest = () => router.push('/discover/voice' as Href);
+
+/** Removes the profile from decide, then from the phone. Resolves false (and keeps everything) when decide refuses. */
+export function useRemoveVoiceProfile() {
+  const queryClient = useQueryClient();
+  return async (): Promise<boolean> => {
+    try {
+      await deleteVoiceProfile();
+    } catch {
+      return false;
+    }
+    useVoiceStore.getState().clear();
+    const { filters, set } = useRecFilters.getState();
+    if (filters.singable || filters.sort === 'fit') set({ singable: false, ...(filters.sort === 'fit' ? { sort: 'best' } : {}) });
+    queryClient.setQueriesData({ queryKey: VOICE_KEY }, null);
+    void queryClient.invalidateQueries({ queryKey: RECS_KEY });
+    return true;
+  };
+}
+
+export function VoiceProfileSection() {
+  const t = useTranslations('fit');
+  const tv = useTranslations('voice');
+  const labels = useVoiceLabels();
+  // Reconciled with decide's copy (a profile saved on another phone shows here too).
+  const { profile } = useVoiceProfile();
+  const remove = useRemoveVoiceProfile();
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+
+  const onRemove = async () => {
+    setBusy(true);
+    setFailed(false);
+    const ok = await remove();
+    setBusy(false);
+    setFailed(!ok);
+  };
+
+  if (!profile) {
+    return (
+      <ProfileSection testID="voice-section" title={t('profileTitle')} isEmpty={false} empty="">
+        <Text variant="muted">{t('profileEmpty')}</Text>
+        <Button testID="voice-test" label={t('profileTest')} onPress={openVoiceTest} />
+      </ProfileSection>
+    );
+  }
+
+  const [lo, hi] = stripBounds(profile.lowMidi, profile.highMidi);
+  const marks = [];
+  for (let m = profile.lowMidi; m <= profile.highMidi; m++) {
+    marks.push({ midi: m, color: m >= profile.comfortLow && m <= profile.comfortHigh ? colors.gold : colors.primary });
+  }
+  return (
+    <ProfileSection testID="voice-section" title={t('profileTitle')} isEmpty={false} empty="">
+      <Text testID="voice-section-type" className="text-lg font-bold">
+        {labels.likely(profile)}
+      </Text>
+      <StartText testID="voice-section-range" className="font-semibold text-primary">
+        {t('profileRange', { range: noteRange(profile.lowMidi, profile.highMidi) })}
+      </StartText>
+      <PianoStrip
+        testID="voice-section-keys"
+        lowMidi={lo}
+        highMidi={hi}
+        height={48}
+        marks={marks}
+        accessibilityLabel={t('profileKeysLabel')}
+      />
+      <StartText className="text-gold">{tv('comfort', { range: noteRange(profile.comfortLow, profile.comfortHigh) })}</StartText>
+      <Text testID="voice-section-method" variant="muted">
+        {profile.method === 'mic' ? t('profileMethodMic') : t('profileMethodSelf')}
+      </Text>
+      {failed ? (
+        <Text testID="voice-remove-error" variant="error">
+          {t('profileRemoveFailed')}
+        </Text>
+      ) : null}
+      <View className="flex-row gap-3">
+        <View className="flex-1">
+          <Button testID="voice-redo" label={t('profileRedo')} variant="secondary" onPress={openVoiceTest} />
+        </View>
+        <View className="flex-1">
+          <Button testID="voice-remove" label={t('profileRemove')} variant="secondary" onPress={() => void onRemove()} loading={busy} />
+        </View>
+      </View>
+    </ProfileSection>
+  );
+}

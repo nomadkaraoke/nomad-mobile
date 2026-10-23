@@ -12,6 +12,7 @@ export {
   offlineGroups,
   offlineSongGroup,
   offlineSongLibraries,
+  offlineVocalRange,
   popularOffline,
   searchAvailabilityOffline,
 } from './search/offline';

@@ -10,7 +10,7 @@ export type ShownVoice = Omit<LocalVoiceProfile, 'measuredAt'>;
 
 const BLACK = new Set([1, 3, 6, 8, 10]);
 /** A few keys either side of the range, widened to white keys so the strip starts and ends cleanly. */
-function stripBounds(low: number, high: number): [number, number] {
+export function stripBounds(low: number, high: number): [number, number] {
   let lo = low - 3;
   let hi = high + 3;
   while (BLACK.has(((lo % 12) + 12) % 12)) lo--;

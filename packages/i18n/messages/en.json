@@ -124,7 +124,8 @@
         "newest": "Newest first",
         "oldest": "Oldest first",
         "shortest": "Shortest first",
-        "az": "A to Z"
+        "az": "A to Z",
+        "fit": "Fits my voice"
       },
       "genre": {
         "pop": "Pop",
@@ -1481,5 +1482,40 @@
     "registerLower": "Lower voice",
     "registerMiddle": "Middle voice",
     "registerHigher": "Higher voice"
+  },
+  "fit": {
+    "fits": "Fits your voice",
+    "keysDown": "{n, plural, one {Try it # key down} other {Try it # keys down}}",
+    "keysUp": "{n, plural, one {Try it # key up} other {Try it # keys up}}",
+    "octaveDown": "Fits an octave down",
+    "octaveUp": "Fits an octave up",
+    "octaveDownKeysDown": "{n, plural, one {An octave down, # key down} other {An octave down, # keys down}}",
+    "octaveDownKeysUp": "{n, plural, one {An octave down, # key up} other {An octave down, # keys up}}",
+    "octaveUpKeysDown": "{n, plural, one {An octave up, # key down} other {An octave up, # keys down}}",
+    "octaveUpKeysUp": "{n, plural, one {An octave up, # key up} other {An octave up, # keys up}}",
+    "stretch": "A stretch",
+    "tierMeasured": "Range measured from the recording",
+    "tierNotes": "Range from note data",
+    "tierEstimated": "Range estimated",
+    "tierRough": "Rough guess from the artist",
+    "songCta": "Test your voice to see if this song fits you",
+    "singable": "Singable",
+    "singableCta": "Singable: test your voice",
+    "singableCtaHint": "Opens the voice test. Singable shows songs in your range.",
+    "sortFitCta": "Fits my voice: test your voice first",
+    "singableEmptyTitle": "No range data for these songs yet",
+    "singableEmptyBody": "We're still measuring songs. Turn off Singable to see all your picks.",
+    "singableOff": "Turn off Singable",
+    "improveVoice": "Find songs that fit your voice",
+    "profileTitle": "Your voice",
+    "profileEmpty": "No voice profile yet. Take the voice test to find songs that fit you.",
+    "profileTest": "Take the voice test",
+    "profileRange": "Range {range}",
+    "profileMethodMic": "Measured with the mic test",
+    "profileMethodSelf": "From your pick, not measured",
+    "profileKeysLabel": "Keyboard showing your range",
+    "profileRedo": "Redo the voice test",
+    "profileRemove": "Remove my voice",
+    "profileRemoveFailed": "Couldn't remove it. Check your connection and try again."
   }
 }

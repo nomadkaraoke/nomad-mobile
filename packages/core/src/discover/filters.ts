@@ -2,7 +2,8 @@
 // The library filter is NOT part of RecFilters: it lives in useLibraryFilter and is merged at query time.
 import type { LibraryFilter } from '../library';
 
-export type RecSort = 'best' | 'popular' | 'newest' | 'oldest' | 'shortest' | 'az';
+/** `fit` (Phase 3c) orders by how well each song fits the user's voice; it needs a voice profile. */
+export type RecSort = 'best' | 'popular' | 'newest' | 'oldest' | 'shortest' | 'az' | 'fit';
 export type Mood = 'happy' | 'chill' | 'sad' | 'intense';
 
 export interface RecFilters {
@@ -17,6 +18,8 @@ export interface RecFilters {
   classic: boolean;
   explicit: 'include' | 'exclude';
   hasKaraoke: 'any' | 'yes' | 'make';
+  /** Only songs in the user's range (Phase 3c); needs a voice profile. */
+  singable: boolean;
   sort: RecSort;
 }
 
@@ -31,6 +34,7 @@ export const DEFAULT_REC_FILTERS: RecFilters = {
   classic: false,
   explicit: 'include',
   hasKaraoke: 'any',
+  singable: false,
   sort: 'best',
 };
 
@@ -75,9 +79,16 @@ export function toRecQuery(f: RecFilters, library: LibraryFilter): Record<string
   if (f.classic) q.classic = 'true';
   if (f.explicit !== DEFAULT_REC_FILTERS.explicit) q.explicit = f.explicit;
   if (f.hasKaraoke !== DEFAULT_REC_FILTERS.hasKaraoke) q.has_karaoke = f.hasKaraoke;
+  if (f.singable) q.singable = 'true';
   if (library !== 'any') q.library = library;
   if (f.sort !== DEFAULT_REC_FILTERS.sort) q.sort = f.sort;
   return q;
+}
+
+/** The filters without the voice ones (Singable, the fit sort): what applies while the phone has no voice profile. */
+export function withoutVoiceFilters(f: RecFilters): RecFilters {
+  if (!f.singable && f.sort !== 'fit') return f;
+  return { ...f, singable: false, sort: f.sort === 'fit' ? DEFAULT_REC_FILTERS.sort : f.sort };
 }
 
 /** Number of active (non-default) filters. Sort does not count; the library filter has its own chip row. */

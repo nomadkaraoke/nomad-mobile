@@ -5,7 +5,7 @@ import {
   type ResolveResponse,
   type SongGroup,
 } from "@nomad/api-decide";
-import { activeFilterCount } from "@nomad/core";
+import { activeFilterCount, withoutVoiceFilters } from "@nomad/core";
 import { useTranslations } from "@nomad/i18n";
 import { Button, List, Screen, Text, TextField } from "@nomad/ui";
 import { router, useIsFocused, type Href } from "expo-router";
@@ -60,6 +60,7 @@ import {
   type SongIdentity,
 } from "../../make/intentStore";
 import { useOfflineIndex } from "../../offline/offlineIndex";
+import { useVoiceStore } from "../../voice/voiceStore";
 import { useFlushVoiceOnDiscoverMount } from "../../voice/useVoiceProfile";
 
 /** A popular-list row (empty search box). */
@@ -167,7 +168,10 @@ export default function DiscoverScreen() {
   const popular = search.query.length < MIN_QUERY_CHARS;
 
   // Picks (spec §8.1): the persisted filters, edited from the FilterBar.
-  const filters = useRecFilters((s) => s.filters);
+  const storedFilters = useRecFilters((s) => s.filters);
+  // Singable and the fit sort need a voice profile on the phone (Phase 3c); without one they don't apply.
+  const hasVoice = useVoiceStore((s) => s.profile !== null);
+  const filters = hasVoice ? storedFilters : withoutVoiceFilters(storedFilters);
   const library = useLibraryFilter((s) => s.filter);
   const recs = useRecommendations(filters);
   const feedback = useSongFeedback();
@@ -626,7 +630,9 @@ export default function DiscoverScreen() {
                 )
               }
               ListEmptyComponent={
-                filtersActive ? (
+                filters.singable && recs.data?.voiceProfile ? (
+                  <PicksState kind="singableEmpty" onClear={() => useRecFilters.getState().set({ singable: false })} />
+                ) : filtersActive ? (
                   <PicksState kind="empty" onClear={clearFilters} />
                 ) : (
                   <PicksState kind="none" />

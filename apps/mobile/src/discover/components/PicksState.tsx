@@ -2,7 +2,7 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, NomadLoader, Text } from '@nomad/ui';
 import { View } from 'react-native';
 
-export type PicksStateKind = 'loading' | 'warming' | 'error' | 'empty' | 'none' | 'offline';
+export type PicksStateKind = 'loading' | 'warming' | 'error' | 'empty' | 'none' | 'offline' | 'singableEmpty';
 
 /**
  * Everything the picks area shows instead of sections: loading, warming up, an error, no match for the filters,
@@ -18,6 +18,7 @@ export function PicksState({
   onClear?: () => void;
 }) {
   const t = useTranslations('discover');
+  const tf = useTranslations('fit');
   switch (kind) {
     case 'loading':
       return (
@@ -51,6 +52,17 @@ export function PicksState({
         <Text variant="muted" testID="discover-picks-none" className="py-4">
           {t('picksNone')}
         </Text>
+      );
+    case 'singableEmpty':
+      // Singable on, decide has the voice profile, but none of these songs has range data yet (spec: not "nothing fits").
+      return (
+        <View testID="discover-picks-singable-empty" className="items-start gap-2 py-4">
+          <Text className="font-semibold">{tf('singableEmptyTitle')}</Text>
+          <Text variant="muted">{tf('singableEmptyBody')}</Text>
+          {onClear ? (
+            <Button testID="fit-singable-off" label={tf('singableOff')} variant="secondary" onPress={onClear} />
+          ) : null}
+        </View>
       );
     case 'empty':
       return (

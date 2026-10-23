@@ -30,7 +30,12 @@ export const RECS_KEY = ['recs'] as const;
 export type RecsPages = InfiniteData<RecommendationsV2Response, string | undefined>;
 
 /** The merged pages: a later page's section with the same id continues it (a non-`best` sort pages `all`). */
-export type Recs = { sections: RecSection[]; hasProfile: boolean };
+export type Recs = {
+  sections: RecSection[];
+  hasProfile: boolean;
+  /** decide has the user's voice profile (`voice.has_profile`; absent from responses before decide's 3c deploy). */
+  voiceProfile: boolean;
+};
 
 export function mergePages(pages: readonly RecommendationsV2Response[]): Recs {
   const sections: RecSection[] = [];
@@ -46,7 +51,11 @@ export function mergePages(pages: readonly RecommendationsV2Response[]): Recs {
       }
     }
   }
-  return { sections: sections.filter((s) => s.songs.length > 0), hasProfile: pages[0]?.has_profile ?? false };
+  return {
+    sections: sections.filter((s) => s.songs.length > 0),
+    hasProfile: pages[0]?.has_profile ?? false,
+    voiceProfile: pages[0]?.voice?.has_profile ?? false,
+  };
 }
 
 /** Saved rows carry decide's karaoke flags; map them to the shape the shared library filter reads. */

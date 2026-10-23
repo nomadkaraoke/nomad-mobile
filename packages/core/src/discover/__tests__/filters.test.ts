@@ -5,6 +5,7 @@ import {
   filtersKey,
   GENRE_IDS,
   toRecQuery,
+  withoutVoiceFilters,
   type RecFilters,
 } from '../index';
 
@@ -37,6 +38,9 @@ describe('toRecQuery', () => {
     [{ explicit: 'exclude' }, { explicit: 'exclude' }],
     [{ hasKaraoke: 'make' }, { has_karaoke: 'make' }],
     [{ sort: 'az' }, { sort: 'az' }],
+    [{ singable: true }, { singable: 'true' }],
+    [{ sort: 'fit' }, { sort: 'fit' }],
+    [{ singable: true, sort: 'fit' }, { singable: 'true', sort: 'fit' }],
   ])('%j -> %j', (over, expected) => {
     expect(toRecQuery(f(over), 'any')).toEqual(expected);
   });
@@ -51,6 +55,14 @@ describe('toRecQuery', () => {
     const q = toRecQuery(filters, 'any');
     (q.genre as string[]).push('x');
     expect(filters.genre).toEqual(['rock']);
+  });
+});
+
+describe('withoutVoiceFilters', () => {
+  it('drops Singable and the fit sort (no voice profile on the phone), keeps the rest', () => {
+    expect(withoutVoiceFilters(f({ singable: true, sort: 'fit', genre: ['rock'] }))).toEqual(f({ genre: ['rock'] }));
+    const other = f({ sort: 'az' });
+    expect(withoutVoiceFilters(other)).toBe(other);
   });
 });
 

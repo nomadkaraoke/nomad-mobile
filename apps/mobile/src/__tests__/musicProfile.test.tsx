@@ -7,10 +7,12 @@ import { renderRouter } from 'expo-router/testing-library';
 import { View } from 'react-native';
 
 import { useAuth } from '../auth/store';
+import { useRecFilters } from '../discover/filtersStore';
 import { QUIZ_STORAGE_KEY, useQuizDraft } from '../discover/quizStore';
 import { appStorage } from '../storage';
 import { gen, session } from '../test-utils/genAuthMock';
 import { appRoutes } from '../test-utils/routes';
+import { profileFromSelfReport, useVoiceStore, type LocalVoiceProfile } from '../voice/voiceStore';
 
 // Router-rendered screens with optimistic edits run slowly on CI runners (5 s default timed out there).
 jest.setTimeout(20_000);
@@ -39,6 +41,9 @@ jest.mock('@nomad/api-decide', () => ({
   submitQuiz: jest.fn(async () => ({ message: 'ok', songs_added: 1, recommendations_ready: true })),
   loveSong: jest.fn(async () => undefined),
   listMusicServices: jest.fn(async () => []),
+  getVoiceProfile: jest.fn(async () => null),
+  putVoiceProfile: jest.fn(async () => ({})),
+  deleteVoiceProfile: jest.fn(async () => undefined),
 }));
 jest.mock('@nomad/api-gen', () => ({
   ...jest.requireActual('@nomad/api-gen'),
@@ -58,6 +63,7 @@ const routes = () => ({
   'review/[id]': () => <View testID="review-stub" />,
   'make/new': () => <View testID="make-stub" />,
   'song/[id]': () => <View testID="song-stub" />,
+  'discover/voice': () => <View testID="voice-stub" />,
 });
 const open = (url = '/me/music-profile') => renderRouter(routes(), { initialUrl: url });
 const signIn = () => act(() => useAuth.getState().signInWithSession(session()));
@@ -286,5 +292,62 @@ describe('musicProfile', () => {
       expect(body.artist_affinities).toEqual([{ artist_name: 'Alpha Band', affinity: 'love' }]);
       expect(JSON.stringify(body.manual_artists)).not.toContain('Gone Band');
     });
+  });
+});
+
+describe('Your voice (Phase 3c)', () => {
+  const MIC: LocalVoiceProfile = {
+    lowMidi: 43, highMidi: 67, comfortLow: 48, comfortHigh: 62, voiceType: 'baritone', voiceTypeBetween: null,
+    register: null, confidence: 'high', method: 'mic', measuredAt: '2026-10-22T10:00:00Z',
+  };
+  beforeEach(() => act(() => useVoiceStore.getState().clear()));
+
+  it('no profile: says so and offers the voice test', async () => {
+    await signIn();
+    const app = open();
+    expect(await screen.findByTestId('voice-section')).toHaveTextContent(/No voice profile yet/);
+    fireEvent.press(screen.getByTestId('voice-test'));
+    await waitFor(() => expect(app.getPathname()).toBe('/discover/voice'));
+  });
+
+  it('a mic profile: type, range on the keyboard, how it was measured, and Redo', async () => {
+    act(() => useVoiceStore.getState().adopt(MIC));
+    await signIn();
+    const app = open();
+    expect(await screen.findByTestId('voice-section-type')).toHaveTextContent('Likely Baritone');
+    expect(screen.getByTestId('voice-section-range')).toHaveTextContent(/G2.*G4/);
+    expect(screen.getByTestId('voice-section-keys')).toBeTruthy();
+    expect(screen.getByTestId('voice-section-method')).toHaveTextContent('Measured with the mic test');
+    fireEvent.press(screen.getByTestId('voice-redo'));
+    await waitFor(() => expect(app.getPathname()).toBe('/discover/voice'));
+  });
+
+  it('a self-reported profile says it was not measured', async () => {
+    act(() => useVoiceStore.getState().adopt(profileFromSelfReport('tenor', '2026-10-22T10:00:00Z')));
+    await signIn();
+    open();
+    expect(await screen.findByTestId('voice-section-method')).toHaveTextContent('From your pick, not measured');
+  });
+
+  it('remove: DELETEs on decide, clears the phone copy and the voice filters', async () => {
+    act(() => useVoiceStore.getState().adopt(MIC));
+    act(() => useRecFilters.getState().set({ singable: true, sort: 'fit' }));
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    await waitFor(() => expect(decide.deleteVoiceProfile).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(useVoiceStore.getState().profile).toBeNull());
+    expect(useRecFilters.getState().filters).toMatchObject({ singable: false, sort: 'best' });
+    expect(await screen.findByTestId('voice-test')).toBeTruthy();
+  });
+
+  it('remove fails: says so and keeps the profile', async () => {
+    m(decide.deleteVoiceProfile).mockRejectedValueOnce(new Error('offline'));
+    act(() => useVoiceStore.getState().adopt(MIC));
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    expect(await screen.findByTestId('voice-remove-error')).toBeTruthy();
+    expect(useVoiceStore.getState().profile).not.toBeNull();
   });
 });
