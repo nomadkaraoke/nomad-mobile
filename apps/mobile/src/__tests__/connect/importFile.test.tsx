@@ -136,6 +136,20 @@ describe('Import file', () => {
     expect(m(decide.uploadExportChunk).mock.calls[0]![0].body).toMatchObject({ kind: 'account', chunk_index: 0 });
   });
 
+  it('a double tap on Add enqueues the import once', async () => {
+    mockConnected = false;
+    reads(summary('spotify-account'));
+    open();
+    const startBtn = await screen.findByTestId('connect-import-start');
+    await act(async () => {
+      fireEvent.press(startBtn);
+      fireEvent.press(startBtn);
+    });
+    expect(await screen.findByText('Waiting for connection')).toBeTruthy();
+    expect(useImportQueue.getState().pending).toHaveLength(1);
+    expect(Object.keys(useImportQueue.getState().batches)).toHaveLength(1);
+  });
+
   it('shows the result when the queue drains, and an account import cancels only the 5-day reminder', async () => {
     appStorage.set('connect.spotifyReminders', JSON.stringify({ account: 'rem-a', extended: 'rem-e' }));
     reads(summary('spotify-account'));

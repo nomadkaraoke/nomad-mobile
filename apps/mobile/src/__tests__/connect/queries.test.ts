@@ -7,6 +7,7 @@ import { createElement, type ReactNode } from 'react';
 import { useAuth } from '../../auth/store';
 import { importErrorKey } from '../../discover/connect/importErrors';
 import {
+  CAPABILITIES_KEY,
   SERVICES_SUMMARY_KEY,
   useCapabilities,
   useInvalidateAfterImport,
@@ -47,7 +48,25 @@ describe('useCapabilities', () => {
   it('useCapabilities falls back to false on error', async () => {
     api.getServiceCapabilities.mockRejectedValue(new ApiError(503, 'down'));
     const { result } = renderHook(() => useCapabilities(), { wrapper: wrapper(newClient()) });
-    await waitFor(() => expect(result.current.data).toEqual({ screenshot_import: false, listenbrainz_oauth: false }));
+    await waitFor(() =>
+      expect(result.current.data).toEqual({ screenshot_import: false, listenbrainz_oauth: false, fallback: true }),
+    );
+  });
+
+  // Structural sharing keeps the previous data object when the new one is deep-equal, so an error after a real
+  // all-off answer must still be known as the fallback (and asked again on the next mount, not an hour later).
+  it('a fallback after a real all-off answer is not cached for the hour', async () => {
+    api.getServiceCapabilities.mockResolvedValueOnce({ screenshot_import: false, listenbrainz_oauth: false });
+    const client = newClient();
+    const first = renderHook(() => useCapabilities(), { wrapper: wrapper(client) });
+    await waitFor(() => expect(first.result.current.isSuccess).toBe(true));
+    api.getServiceCapabilities.mockRejectedValueOnce(new ApiError(503, 'down'));
+    await act(() => client.refetchQueries({ queryKey: CAPABILITIES_KEY }));
+    expect(client.getQueryData(CAPABILITIES_KEY)).toMatchObject({ fallback: true });
+    api.getServiceCapabilities.mockResolvedValueOnce({ screenshot_import: true, listenbrainz_oauth: false });
+    const second = renderHook(() => useCapabilities(), { wrapper: wrapper(client) });
+    await waitFor(() => expect(second.result.current.data?.screenshot_import).toBe(true));
+    expect(api.getServiceCapabilities).toHaveBeenCalledTimes(3);
   });
 
   it('caches for an hour', async () => {

@@ -188,11 +188,15 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
     [],
   );
 
+  // Set synchronously on the first tap: `submitted` only flips on the next render, so a double tap could enqueue the
+  // file twice (the second batch all duplicates, read as "already imported").
+  const enqueued = useRef(false);
   const start = () => {
-    if (!summary || submitted || chunks.length === 0) return;
+    if (!summary || submitted || enqueued.current || chunks.length === 0) return;
     const id = enqueue(chunks, summary.kind === 'apple' ? 'apple' : 'spotify');
     setSignedOut(id === null);
     if (id === null) return;
+    enqueued.current = true;
     setBatchId(id);
     // Queued is enough: the queue keeps it until sent, so the reminders have done their job.
     cancelRemindersFor(summary.kind);

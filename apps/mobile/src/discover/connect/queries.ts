@@ -11,8 +11,16 @@ export const SERVICES_SUMMARY_KEY = ['decide', 'services-summary'] as const;
 export const CAPABILITIES_KEY = ['decide', 'capabilities'] as const;
 
 const HOUR_MS = 60 * 60 * 1000;
-/** When decide can't say, every optional card stays hidden. */
-const CAPABILITIES_OFF: Capabilities = Object.freeze({ screenshot_import: false, listenbrainz_oauth: false });
+/**
+ * When decide can't say, every optional card stays hidden. `fallback` marks it so it is never cached for the hour:
+ * not detected by identity, since structural sharing keeps the previous (deep-equal) data object instead.
+ */
+const CAPABILITIES_OFF: Capabilities & { fallback: true } = Object.freeze({
+  screenshot_import: false,
+  listenbrainz_oauth: false,
+  fallback: true,
+});
+const isFallback = (data: unknown) => (data as { fallback?: boolean } | undefined)?.fallback === true;
 
 export function useServicesSummary(): UseQueryResult<SourcesSummaryResponse> {
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
@@ -33,7 +41,7 @@ export function useCapabilities(): UseQueryResult<Capabilities> {
         return CAPABILITIES_OFF;
       }
     },
-    staleTime: (q) => (q.state.data === CAPABILITIES_OFF ? 0 : HOUR_MS),
+    staleTime: (q) => (isFallback(q.state.data) ? 0 : HOUR_MS),
   });
 }
 

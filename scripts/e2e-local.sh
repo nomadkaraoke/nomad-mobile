@@ -214,7 +214,11 @@ start_metro() {
 point_dev_client() {
   [[ "$PLATFORM" == ios && "$METRO_PORT" != 8081 ]] || return 0
   xcrun simctl terminate "$DEVICE" com.nomadkaraoke.mobile 2>/dev/null || true
-  xcrun simctl openurl "$DEVICE" "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F127.0.0.1%3A$METRO_PORT" || true
+  # A failure here would leave the dev client on whatever Metro it used last (another session's), so stop.
+  if ! xcrun simctl openurl "$DEVICE" "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F127.0.0.1%3A$METRO_PORT"; then
+    echo "Could not point the dev client on $DEVICE at Metro :$METRO_PORT (simctl openurl failed); stopping." >&2
+    exit 1
+  fi
   sleep 8
 }
 

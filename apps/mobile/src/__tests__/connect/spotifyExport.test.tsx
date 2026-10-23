@@ -103,6 +103,21 @@ describe('Spotify export guide', () => {
     expect(await screen.findByTestId('connect-spotify-reminded')).toBeTruthy();
   });
 
+  it('a double tap on Remind me schedules the reminders once', async () => {
+    let grant!: (v: unknown) => void;
+    N.requestPermissionsAsync.mockReturnValueOnce(new Promise((r) => (grant = r)) as never);
+    open();
+    const remind = await screen.findByTestId('connect-spotify-remind');
+    await act(async () => {
+      fireEvent.press(remind);
+      fireEvent.press(remind);
+    });
+    await act(async () => grant({ granted: true, status: 'granted', canAskAgain: true }));
+    expect(await screen.findByTestId('connect-spotify-reminded')).toBeTruthy();
+    expect(N.requestPermissionsAsync).toHaveBeenCalledTimes(1);
+    expect(N.scheduleNotificationAsync).toHaveBeenCalledTimes(2);
+  });
+
   it('denied permission shows settings hint', async () => {
     N.requestPermissionsAsync.mockResolvedValue({ granted: false, status: 'denied', canAskAgain: false } as never);
     const openSettings = jest.spyOn(Linking, 'openSettings').mockResolvedValue();

@@ -1,7 +1,7 @@
 import { useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import * as WebBrowser from 'expo-web-browser';
-import { useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { Linking, Platform, View } from 'react-native';
 
 import { PickExportError, usePickExportFile } from './usePickExportFile';
@@ -38,8 +38,12 @@ export function SpotifyExportGuide() {
   const { pick, failed: pickFailed } = usePickExportFile();
   const [remind, setRemind] = useState<Remind>('idle');
 
+  // A ref, not the `busy` state (which only lands on the next render): a double tap would schedule a second pair of
+  // reminders, and only the last pair's ids are kept for cancelling.
+  const scheduling = useRef(false);
   const remindMe = async () => {
-    if (remind === 'busy') return;
+    if (scheduling.current) return;
+    scheduling.current = true;
     setRemind('busy');
     try {
       setRemind(
@@ -52,6 +56,8 @@ export function SpotifyExportGuide() {
     } catch (e) {
       console.warn('[connect] scheduling the Spotify reminders failed', e);
       setRemind('failed');
+    } finally {
+      scheduling.current = false;
     }
   };
 
