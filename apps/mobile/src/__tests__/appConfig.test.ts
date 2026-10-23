@@ -209,7 +209,7 @@ describe('android permissions', () => {
   type ManifestMod = (c: object) => Promise<{ modResults: { manifest: { 'uses-permission'?: UsesPermission[] } } }>;
 
   const permissionsAfterPrebuild = async () => {
-    const appJson = require('../../app.json') as { expo: ExpoConfig };
+    const appJson = require('../../app.json') as { expo: { plugins?: Parameters<typeof withPlugins>[1] } };
     const projectRoot = path.resolve(__dirname, '../..');
     const c = withPlugins(
       { name: 'Nomad Karaoke', slug: 'nomad-karaoke', _internal: { projectRoot } } as ExpoConfig,
