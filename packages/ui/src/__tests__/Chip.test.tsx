@@ -41,3 +41,10 @@ it('a chip row takes the tap while the keyboard is up (the first tap picks the c
   );
   expect(screen.getByTestId('row').props.keyboardShouldPersistTaps).toBe('handled');
 });
+
+it('a leading glyph shows before the label, hidden from accessibility; accessibilityLabel overrides the label', () => {
+  render(<Chip testID="g" label="Singable" leading="+" accessibilityLabel="Singable, test first" selected={false} onPress={jest.fn()} />);
+  expect(screen.getByTestId('g').props.accessibilityLabel).toBe('Singable, test first');
+  expect(screen.getByTestId('chip-leading-g', { includeHiddenElements: true })).toHaveTextContent('+');
+  expect(screen.getByText('Singable')).toBeTruthy();
+});

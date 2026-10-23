@@ -13,6 +13,9 @@ import { MoodSheet } from './sheets/MoodSheet';
 import { MoreSheet } from './sheets/MoreSheet';
 import { SortSheet } from './sheets/SortSheet';
 
+/** The Singable chip's cue that it opens the voice test first (a non-word glyph: the label and hint carry the meaning). */
+const CTA_GLYPH = '+';
+
 type SheetName = 'sort' | 'genre' | 'decade' | 'mood' | 'energy' | 'more';
 
 const MORE_KEYS = ['popularity', 'leadGender', 'duration', 'classic', 'explicit', 'hasKaraoke'] as const;
@@ -58,6 +61,8 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
           <Chip
             testID="filter-chip-singable-cta"
             label={tf('singable')}
+            leading={CTA_GLYPH}
+            accessibilityLabel={tf('singableCtaLabel')}
             accessibilityHint={tf('singableCtaHint')}
             selected={false}
             onPress={testVoice}

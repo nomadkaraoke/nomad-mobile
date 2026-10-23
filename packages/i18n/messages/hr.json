@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Izmjereno mikrofonskim testom",
     "profileMethodSelf": "Prema tvom odabiru, nije izmjereno",
     "profileRange": "Raspon {range}",
-    "profileRedo": "Ponovi glasovni test",
+    "profileRedo": "Ponovi test",
     "profileRemove": "Ukloni moj glas",
     "profileRemoveFailed": "Uklanjanje nije uspjelo. Provjeri internetsku vezu i pokušaj ponovno.",
     "profileTest": "Riješi glasovni test",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Raspon prema notnim podacima",
     "tierRough": "Gruba procjena prema izvođaču",
     "profileKeysLabel": "Klavijatura koja prikazuje tvoj raspon",
-    "profileTitle": "Tvoj glas"
+    "profileTitle": "Tvoj glas",
+    "profileRemoveBody": "Discover će prestati usklađivati pjesme s tvojim glasom. Test možeš ponovno riješiti bilo kada.",
+    "profileRemoveTitle": "Ukloniti svoj glas?",
+    "singableCtaLabel": "Može se pjevati, prvo riješi glasovni test",
+    "profileRemoveConfirm": "Ukloni"
   }
 }

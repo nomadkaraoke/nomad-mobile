@@ -1498,7 +1498,7 @@
     "profileMethodMic": "تم القياس عبر اختبار الميكروفون",
     "profileMethodSelf": "من اختيارك، لم يتم قياسه",
     "profileRange": "النطاق الصوتي {range}",
-    "profileRedo": "إعادة اختبار الصوت",
+    "profileRedo": "إعادة الاختبار",
     "profileRemove": "حذف ملفي الصوتي",
     "profileRemoveFailed": "تعذرت الإزالة. تحقق من اتصالك بالإنترنت وحاول مجدداً.",
     "profileTest": "إجراء اختبار الصوت",
@@ -1515,6 +1515,10 @@
     "tierNotes": "النطاق الصوتي مأخوذ من بيانات النوتات الموسيقية",
     "tierRough": "تخمين تقريبي استناداً إلى الفنان",
     "profileKeysLabel": "لوحة مفاتيح توضح نطاق صوتك",
-    "profileTitle": "صوتك"
+    "profileTitle": "صوتك",
+    "profileRemoveBody": "سيتوقف قسم \"استكشف\" عن مطابقة الأغاني مع صوتك. يمكنك إجراء الاختبار مجددًا في أي وقت.",
+    "profileRemoveTitle": "هل تريد إزالة ملف صوتك؟",
+    "singableCtaLabel": "قابلة للغناء، خض اختبار الصوت أولاً",
+    "profileRemoveConfirm": "إزالة"
   }
 }

@@ -1498,7 +1498,7 @@
     "profileMethodMic": "נמדד באמצעות מבדק המיקרופון",
     "profileMethodSelf": "לפי הבחירה שלכם, לא נמדד",
     "profileRange": "מנעד {range}",
-    "profileRedo": "לבצע מחדש את מבדק הקול",
+    "profileRedo": "לבצע את המבחן מחדש",
     "profileRemove": "הסרת הקול שלי",
     "profileRemoveFailed": "לא הצלחנו להסיר. כדאי לבדוק את החיבור לרשת ולנסות שוב.",
     "profileTest": "לבצע את מבדק הקול",
@@ -1515,6 +1515,10 @@
     "tierNotes": "מנעד מתוך נתוני תווים",
     "tierRough": "הערכה גסה לפי האמן",
     "profileKeysLabel": "מקלדת המציגה את המנעד שלך",
-    "profileTitle": "הקול שלך"
+    "profileTitle": "הקול שלך",
+    "profileRemoveBody": "Discover יפסיק להתאים שירים לקול שלך. אפשר לעשות את המבחן שוב בכל שלב.",
+    "profileRemoveTitle": "להסיר את הקול שלך?",
+    "singableCtaLabel": "מתאים לשירה, קודם יש לעשות את מבחן הקול",
+    "profileRemoveConfirm": "הסרה"
   }
 }

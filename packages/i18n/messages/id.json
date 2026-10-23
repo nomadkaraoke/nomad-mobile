@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Diukur lewat tes mikrofon",
     "profileMethodSelf": "Berdasarkan pilihan Anda, tidak diukur",
     "profileRange": "Rentang nada {range}",
-    "profileRedo": "Ulangi tes vokal",
+    "profileRedo": "Ulangi tes",
     "profileRemove": "Hapus profil suara saya",
     "profileRemoveFailed": "Tidak dapat menghapus. Periksa koneksi Anda dan coba lagi.",
     "profileTest": "Ikuti tes vokal",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Rentang nada dari data not lagu",
     "tierRough": "Perkiraan kasar berdasarkan artis",
     "profileKeysLabel": "Papan tuts yang menampilkan rentang Anda",
-    "profileTitle": "Suara Anda"
+    "profileTitle": "Suara Anda",
+    "profileRemoveBody": "Discover akan berhenti mencocokkan lagu dengan suaramu. Kamu bisa mengikuti tes lagi kapan saja.",
+    "profileRemoveTitle": "Hapus profil suaramu?",
+    "singableCtaLabel": "Dapat dinyanyikan, ikuti tes suara terlebih dahulu",
+    "profileRemoveConfirm": "Hapus"
   }
 }

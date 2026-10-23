@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Diukur melalui ujian mikrofon",
     "profileMethodSelf": "Daripada pilihan anda, bukan diukur",
     "profileRange": "Julat {range}",
-    "profileRedo": "Ulang ujian suara",
+    "profileRedo": "Ulangi ujian",
     "profileRemove": "Padam profil suara saya",
     "profileRemoveFailed": "Gagal memadamkannya. Sila periksa sambungan internet anda dan cuba lagi.",
     "profileTest": "Ambil ujian suara",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Julat daripada data not muzik",
     "tierRough": "Anggaran kasar berdasarkan artis",
     "profileKeysLabel": "Papan kekunci yang menunjukkan julat anda",
-    "profileTitle": "Suara anda"
+    "profileTitle": "Suara anda",
+    "profileRemoveBody": "Discover akan berhenti memadankan lagu dengan suara anda. Anda boleh mengambil ujian ini semula pada bila-bila masa.",
+    "profileRemoveTitle": "Padam profil suara anda?",
+    "singableCtaLabel": "Boleh dinyanyikan, ambil ujian suara dahulu",
+    "profileRemoveConfirm": "Alih keluar"
   }
 }

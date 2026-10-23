@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Zmerané pomocou mikrofónového testu",
     "profileMethodSelf": "Podľa tvojho výberu, nezmerané",
     "profileRange": "Rozsah {range}",
-    "profileRedo": "Zopakovať hlasový test",
+    "profileRedo": "Zopakovať test",
     "profileRemove": "Odstrániť môj hlasový profil",
     "profileRemoveFailed": "Nepodarilo sa ho odstrániť. Skontroluj pripojenie a skús to znova.",
     "profileTest": "Urobiť hlasový test",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Rozsah z nôt",
     "tierRough": "Hrubý odhad podľa interpreta",
     "profileKeysLabel": "Klávesnica zobrazujúca tvoj rozsah",
-    "profileTitle": "Tvoj hlas"
+    "profileTitle": "Tvoj hlas",
+    "profileRemoveBody": "Funkcia Objavuj ti prestane priraďovať skladby podľa tvojho hlasu. Test môžeš kedykoľvek absolvovať znova.",
+    "profileRemoveTitle": "Odstrániť svoj hlas?",
+    "singableCtaLabel": "Zaspievateľné, najprv si urob hlasový test",
+    "profileRemoveConfirm": "Odstrániť"
   }
 }

@@ -4,7 +4,7 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { QueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 
 import { useAuth } from '../auth/store';
 import { useRecFilters } from '../discover/filtersStore';
@@ -12,6 +12,7 @@ import { QUIZ_STORAGE_KEY, useQuizDraft } from '../discover/quizStore';
 import { appStorage } from '../storage';
 import { gen, session } from '../test-utils/genAuthMock';
 import { appRoutes } from '../test-utils/routes';
+import { sendPendingVoice } from '../voice/useVoiceProfile';
 import { profileFromSelfReport, useVoiceStore, type LocalVoiceProfile } from '../voice/voiceStore';
 
 // Router-rendered screens with optimistic edits run slowly on CI runners (5 s default timed out there).
@@ -300,7 +301,22 @@ describe('Your voice (Phase 3c)', () => {
     lowMidi: 43, highMidi: 67, comfortLow: 48, comfortHigh: 62, voiceType: 'baritone', voiceTypeBetween: null,
     register: null, confidence: 'high', method: 'mic', measuredAt: '2026-10-22T10:00:00Z',
   };
-  beforeEach(() => act(() => useVoiceStore.getState().clear()));
+  beforeEach(() => {
+    act(() => useVoiceStore.getState().clear());
+    jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+  });
+  afterEach(() => (Alert.alert as jest.Mock).mockRestore());
+  /** Lets pending promises run (renderRouter's fake timers would hang a real setTimeout). */
+  const flush = async () => {
+    for (let i = 0; i < 5; i++) await act(async () => {});
+  };
+  /** Taps the confirmation's destructive button. */
+  const confirmRemove = async () => {
+    const alert = Alert.alert as jest.Mock;
+    await waitFor(() => expect(alert).toHaveBeenCalled());
+    const buttons = alert.mock.calls[alert.mock.calls.length - 1][2] as { style?: string; onPress?: () => void }[];
+    await act(async () => buttons.find((b) => b.style === 'destructive')!.onPress?.());
+  };
 
   it('no profile: says so and offers the voice test', async () => {
     await signIn();
@@ -335,10 +351,47 @@ describe('Your voice (Phase 3c)', () => {
     await signIn();
     open();
     fireEvent.press(await screen.findByTestId('voice-remove'));
+    await confirmRemove();
     await waitFor(() => expect(decide.deleteVoiceProfile).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(useVoiceStore.getState().profile).toBeNull());
     expect(useRecFilters.getState().filters).toMatchObject({ singable: false, sort: 'best' });
     expect(await screen.findByTestId('voice-test')).toBeTruthy();
+  });
+
+  it('remove waits for a voice PUT still in flight, then DELETEs (the PUT can never land after it)', async () => {
+    let finishPut: (v: unknown) => void = () => {};
+    m(decide.putVoiceProfile).mockImplementationOnce(() => new Promise((r) => (finishPut = r)));
+    await signIn();
+    act(() => useVoiceStore.getState().save(MIC)); // pending
+    const sending = sendPendingVoice();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    await confirmRemove();
+    await flush();
+    expect(decide.putVoiceProfile).toHaveBeenCalledTimes(1);
+    expect(decide.deleteVoiceProfile).not.toHaveBeenCalled();
+    await act(async () => {
+      finishPut({});
+      await sending;
+    });
+    await waitFor(() => expect(decide.deleteVoiceProfile).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(useVoiceStore.getState().profile).toBeNull());
+  });
+
+  it('remove asks first: Cancel keeps everything', async () => {
+    act(() => useVoiceStore.getState().adopt(MIC));
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    const alert = Alert.alert as jest.Mock;
+    expect(alert).toHaveBeenCalledTimes(1);
+    expect(alert.mock.calls[0][0]).toBe('Remove your voice?');
+    const buttons = alert.mock.calls[0][2] as { text: string; style?: string; onPress?: () => void }[];
+    expect(buttons.map((b) => b.text)).toEqual(['Cancel', 'Remove']);
+    buttons[0]!.onPress?.();
+    await flush();
+    expect(decide.deleteVoiceProfile).not.toHaveBeenCalled();
+    expect(useVoiceStore.getState().profile).not.toBeNull();
   });
 
   it('remove fails: says so and keeps the profile', async () => {
@@ -347,6 +400,7 @@ describe('Your voice (Phase 3c)', () => {
     await signIn();
     open();
     fireEvent.press(await screen.findByTestId('voice-remove'));
+    await confirmRemove();
     expect(await screen.findByTestId('voice-remove-error')).toBeTruthy();
     expect(useVoiceStore.getState().profile).not.toBeNull();
   });

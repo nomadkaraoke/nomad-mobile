@@ -1,5 +1,5 @@
 // Local voice profile (Phase 3c Task 18a): mappers from a mic result / self-report, the decide body, MMKV store.
-import { classifyVoice, summarizeRange, type RangeSummary } from '@nomad/core';
+import { classifyVoice, fitSong, summarizeRange, type RangeSummary } from '@nomad/core';
 import { act } from '@testing-library/react-native';
 
 import { appStorage } from '../storage';
@@ -36,14 +36,15 @@ beforeEach(() => {
 });
 
 describe('profileFromResult', () => {
-  it('copies the range and classification, method mic', () => {
+  it('copies the range and classification, method mic; comfort widened to 2 keys inside the range', () => {
     const c = classifyVoice(range);
     const p = profileFromResult(range, c, AT);
     expect(p).toEqual({
       lowMidi: 45,
       highMidi: 64,
-      comfortLow: 50,
-      comfortHigh: 59,
+      // free-sing comfort 50..59 (9 keys) -> min(50, 45+2) .. max(59, 64-2)
+      comfortLow: 47,
+      comfortHigh: 62,
       voiceType: c.type,
       voiceTypeBetween: c.between,
       register: null,
@@ -51,6 +52,37 @@ describe('profileFromResult', () => {
       method: 'mic',
       measuredAt: AT,
     });
+  });
+
+  it.each<[string, Partial<RangeSummary>, [number, number]]>([
+    ['a narrow free sing (the fake mic: G3..C4) widens', { low: 45, high: 64, comfortLow: 55, comfortHigh: 60 }, [47, 62]],
+    ['a free sing wider than range-2 keeps its own edges', { low: 45, high: 64, comfortLow: 46, comfortHigh: 63 }, [46, 63]],
+    ['a tiny range stays inside it (clamped)', { low: 50, high: 52, comfortLow: 51, comfortHigh: 51 }, [51, 51]],
+    ['a 1-key range', { low: 50, high: 51, comfortLow: 50, comfortHigh: 51 }, [50, 51]],
+  ])('comfort: %s', (_n, patch, [lo, hi]) => {
+    const r = { ...range, ...patch };
+    const p = profileFromResult(r, classifyVoice(r), AT);
+    expect([p.comfortLow, p.comfortHigh]).toEqual([lo, hi]);
+    expect(p.lowMidi <= p.comfortLow && p.comfortLow <= p.comfortHigh && p.comfortHigh <= p.highMidi).toBe(true);
+  });
+
+  it('the fake-mic tester (A2-E4, free sing G3-C4) now gets fits on the fixture songs', () => {
+    const r = { ...range, low: 45, high: 64, comfortLow: 55, comfortHigh: 60 };
+    const user = toUserRange(profileFromResult(r, classifyVoice(r), AT));
+    const museRough = { low: 47.6, high: 68, p10: 51.5, p50: 58.1, p90: 64.5, tier: 'rough' as const, octaveConfidence: null };
+    const starlight = { low: 47.2, high: 66.1, p10: 51, p50: 57.3, p90: 63, tier: 'measured' as const, octaveConfidence: null };
+    expect(fitSong(user, museRough)).toMatchObject({ bucket: 'fitsIn', transpose: -2 });
+    // Starlight's 18.9-key span vs a 19-key measured range: 0.1 key over at -2 -> a stretch, not a miss.
+    expect(fitSong(user, starlight)).toMatchObject({ bucket: 'stretch', transpose: -2, cost: 0.05 });
+    // Before the widening, both were outside (no badge).
+    const narrow = { low: 45, high: 64, comfortLow: 55, comfortHigh: 60 };
+    expect(fitSong(narrow, museRough).bucket).toBe('outside');
+  });
+
+  it('the voice type still comes from the free-sing centre (classifier input unchanged)', () => {
+    const narrow = { ...range, comfortLow: 55, comfortHigh: 60 };
+    const c = classifyVoice(narrow);
+    expect(profileFromResult(narrow, c, AT).voiceType).toBe(c.type);
   });
 
   it('keeps the adjacent type when the classifier is between two', () => {

@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Mitattu mikrofonitestillä",
     "profileMethodSelf": "Oma valintasi, ei mitattu",
     "profileRange": "Ääniala {range}",
-    "profileRedo": "Tee äänitesti uudelleen",
+    "profileRedo": "Tee testi uudelleen",
     "profileRemove": "Poista ääniprofiilini",
     "profileRemoveFailed": "Poistaminen epäonnistui. Tarkista verkkoyhteytesi ja yritä uudelleen.",
     "profileTest": "Tee äänitesti",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Ääniala nuottitiedoista",
     "tierRough": "Karkea arvio artistin perusteella",
     "profileKeysLabel": "Koskettimisto, joka näyttää äänialasi",
-    "profileTitle": "Äänesi"
+    "profileTitle": "Äänesi",
+    "profileRemoveBody": "Discover ei enää etsi äänellesi sopivia kappaleita. Voit tehdä testin uudelleen milloin tahansa.",
+    "profileRemoveTitle": "Poistetaanko äänesi?",
+    "singableCtaLabel": "Singable, tee äänitesti ensin",
+    "profileRemoveConfirm": "Poista"
   }
 }

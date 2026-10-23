@@ -1510,8 +1510,12 @@
     "profileMethodMic": "Measured with the mic test",
     "profileMethodSelf": "From your pick, not measured",
     "profileKeysLabel": "Keyboard showing your range",
-    "profileRedo": "Redo the voice test",
+    "profileRedo": "Redo the test",
     "profileRemove": "Remove my voice",
-    "profileRemoveFailed": "Couldn't remove it. Check your connection and try again."
+    "profileRemoveFailed": "Couldn't remove it. Check your connection and try again.",
+    "profileRemoveTitle": "Remove your voice?",
+    "profileRemoveBody": "Discover will stop matching songs to your voice. You can take the test again any time.",
+    "profileRemoveConfirm": "Remove",
+    "singableCtaLabel": "Singable, take the voice test first"
   }
 }

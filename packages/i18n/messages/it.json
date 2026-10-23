@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Misurata con il test al microfono",
     "profileMethodSelf": "In base alla tua selezione, non misurata",
     "profileRange": "Estensione {range}",
-    "profileRedo": "Rifai il test vocale",
+    "profileRedo": "Ripeti il test",
     "profileRemove": "Rimuovi la mia voce",
     "profileRemoveFailed": "Impossibile rimuoverla. Controlla la connessione e riprova.",
     "profileTest": "Fai il test vocale",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Estensione ricavata dalle note",
     "tierRough": "Stima approssimativa in base all'artista",
     "profileKeysLabel": "Tastiera che mostra la tua estensione",
-    "profileTitle": "La tua voce"
+    "profileTitle": "La tua voce",
+    "profileRemoveBody": "Discover smetterà di abbinare i brani alla tua voce. Puoi ripetere il test in qualsiasi momento.",
+    "profileRemoveTitle": "Vuoi rimuovere la tua voce?",
+    "singableCtaLabel": "Cantabile: fai prima il test vocale",
+    "profileRemoveConfirm": "Rimuovi"
   }
 }

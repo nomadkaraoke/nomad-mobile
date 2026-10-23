@@ -1498,7 +1498,7 @@
     "profileMethodMic": "วัดจากการทดสอบผ่านไมโครโฟน",
     "profileMethodSelf": "เลือกด้วยตัวเอง ไม่ได้ผ่านการวัด",
     "profileRange": "ช่วงเสียง {range}",
-    "profileRedo": "ทำแบบทดสอบเสียงใหม่",
+    "profileRedo": "ทำแบบทดสอบใหม่",
     "profileRemove": "ลบข้อมูลเสียงของฉัน",
     "profileRemoveFailed": "ลบไม่สำเร็จ โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองอีกครั้ง",
     "profileTest": "ทำแบบทดสอบเสียง",
@@ -1515,6 +1515,10 @@
     "tierNotes": "ช่วงเสียงจากข้อมูลโน้ตเพลง",
     "tierRough": "คาดเดาคร่าวๆ จากศิลปิน",
     "profileKeysLabel": "คีย์บอร์ดแสดงช่วงเสียงของคุณ",
-    "profileTitle": "เสียงของคุณ"
+    "profileTitle": "เสียงของคุณ",
+    "profileRemoveBody": "Discover จะหยุดจับคู่เพลงให้เข้ากับเสียงของคุณ คุณสามารถกลับมาทำแบบทดสอบใหม่ได้ทุกเมื่อ",
+    "profileRemoveTitle": "ต้องการลบข้อมูลเสียงของคุณหรือไม่?",
+    "singableCtaLabel": "ร้องได้ (ทำแบบทดสอบเสียงก่อน)",
+    "profileRemoveConfirm": "นำออก"
   }
 }

@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Změřeno testem s mikrofonem",
     "profileMethodSelf": "Podle tvého výběru, nezměřeno",
     "profileRange": "Rozsah {range}",
-    "profileRedo": "Zopakovat hlasový test",
+    "profileRedo": "Zopakovat test",
     "profileRemove": "Smazat můj hlas",
     "profileRemoveFailed": "Nepodařilo se ho odstranit. Zkontroluj připojení a zkus to znovu.",
     "profileTest": "Udělat si hlasový test",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Rozsah podle notových dat",
     "tierRough": "Hrubý odhad podle interpreta",
     "profileKeysLabel": "Klávesnice zobrazující tvůj rozsah",
-    "profileTitle": "Tvůj hlas"
+    "profileTitle": "Tvůj hlas",
+    "profileRemoveBody": "Discover ti přestane doporučovat písničky podle tvého hlasu. Test si můžeš kdykoli udělat znovu.",
+    "profileRemoveTitle": "Odebrat tvůj hlas?",
+    "singableCtaLabel": "Zpívatelné, nejdřív si udělej hlasový test",
+    "profileRemoveConfirm": "Odstranit"
   }
 }

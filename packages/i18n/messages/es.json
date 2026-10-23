@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Medido con la prueba de micrófono",
     "profileMethodSelf": "A partir de tu selección, no medido",
     "profileRange": "Rango {range}",
-    "profileRedo": "Repetir la prueba de voz",
+    "profileRedo": "Repetir la prueba",
     "profileRemove": "Eliminar mi voz",
     "profileRemoveFailed": "No se pudo eliminar. Revisa tu conexión e inténtalo de nuevo.",
     "profileTest": "Hacer la prueba de voz",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Rango a partir de notas",
     "tierRough": "Aproximación según el artista",
     "profileKeysLabel": "Teclado que muestra tu rango",
-    "profileTitle": "Tu voz"
+    "profileTitle": "Tu voz",
+    "profileRemoveBody": "Discover dejará de buscar canciones que se adapten a tu voz. Puedes volver a hacer la prueba en cualquier momento.",
+    "profileRemoveTitle": "¿Eliminar tu voz?",
+    "singableCtaLabel": "Cantable, haz la prueba de voz primero",
+    "profileRemoveConfirm": "Quitar"
   }
 }

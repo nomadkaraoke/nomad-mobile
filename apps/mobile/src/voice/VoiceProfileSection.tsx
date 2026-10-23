@@ -6,12 +6,12 @@ import { Button, colors, PianoStrip, StartText, Text } from '@nomad/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { router, type Href } from 'expo-router';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 
 import { ProfileSection } from '../discover/profile/ProfileSection';
 import { useRecFilters } from '../discover/filtersStore';
 import { RECS_KEY } from '../discover/useRecommendations';
-import { useVoiceProfile, VOICE_KEY } from './useVoiceProfile';
+import { useVoiceProfile, VOICE_KEY, waitForVoiceSend } from './useVoiceProfile';
 import { noteRange, useVoiceLabels } from './voiceLabels';
 import { stripBounds } from './VoiceResult';
 import { useVoiceStore } from './voiceStore';
@@ -23,6 +23,8 @@ export function useRemoveVoiceProfile() {
   const queryClient = useQueryClient();
   return async (): Promise<boolean> => {
     try {
+      // A PUT still in flight would otherwise land after the DELETE and bring the profile back.
+      await waitForVoiceSend();
       await deleteVoiceProfile();
     } catch {
       return false;
@@ -39,12 +41,20 @@ export function useRemoveVoiceProfile() {
 export function VoiceProfileSection() {
   const t = useTranslations('fit');
   const tv = useTranslations('voice');
+  const tc = useTranslations('common');
   const labels = useVoiceLabels();
   // Reconciled with decide's copy (a profile saved on another phone shows here too).
   const { profile } = useVoiceProfile();
   const remove = useRemoveVoiceProfile();
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
+
+  // No modal is open on this screen, so the Alert can be raised straight away (see the iOS Modal gotcha).
+  const confirmRemove = () =>
+    Alert.alert(t('profileRemoveTitle'), t('profileRemoveBody'), [
+      { text: tc('cancel'), style: 'cancel' },
+      { text: t('profileRemoveConfirm'), style: 'destructive', onPress: () => void onRemove() },
+    ]);
 
   const onRemove = async () => {
     setBusy(true);
@@ -93,13 +103,9 @@ export function VoiceProfileSection() {
           {t('profileRemoveFailed')}
         </Text>
       ) : null}
-      <View className="flex-row gap-3">
-        <View className="flex-1">
-          <Button testID="voice-redo" label={t('profileRedo')} variant="secondary" onPress={openVoiceTest} />
-        </View>
-        <View className="flex-1">
-          <Button testID="voice-remove" label={t('profileRemove')} variant="secondary" onPress={() => void onRemove()} loading={busy} />
-        </View>
+      <View className="gap-2">
+        <Button testID="voice-redo" label={t('profileRedo')} variant="secondary" onPress={openVoiceTest} />
+        <Button testID="voice-remove" label={t('profileRemove')} variant="secondary" onPress={confirmRemove} loading={busy} />
       </View>
     </ProfileSection>
   );

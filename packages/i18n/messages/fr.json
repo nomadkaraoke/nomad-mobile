@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Mesuré avec le test au micro",
     "profileMethodSelf": "D'après ton choix, non mesuré",
     "profileRange": "Tessiture {range}",
-    "profileRedo": "Refaire le test vocal",
+    "profileRedo": "Refaire le test",
     "profileRemove": "Supprimer ma voix",
     "profileRemoveFailed": "Impossible de la supprimer. Vérifie ta connexion et réessaie.",
     "profileTest": "Faire le test vocal",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Tessiture basée sur les notes",
     "tierRough": "Estimation approximative d'après l'artiste",
     "profileKeysLabel": "Clavier affichant ta tessiture",
-    "profileTitle": "Ta voix"
+    "profileTitle": "Ta voix",
+    "profileRemoveBody": "Discover n'associera plus les morceaux à ta voix. Tu peux refaire le test à tout moment.",
+    "profileRemoveTitle": "Supprimer ta voix ?",
+    "singableCtaLabel": "Chantable, fais d'abord le test vocal",
+    "profileRemoveConfirm": "Retirer"
   }
 }

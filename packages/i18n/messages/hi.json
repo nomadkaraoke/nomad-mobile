@@ -1498,7 +1498,7 @@
     "profileMethodMic": "माइक टेस्ट से मापा गया",
     "profileMethodSelf": "तुम्हारी पसंद से, मापा नहीं गया",
     "profileRange": "रेंज {range}",
-    "profileRedo": "वॉइस टेस्ट फिर से दो",
+    "profileRedo": "टेस्ट दोबारा दो",
     "profileRemove": "मेरी आवाज़ हटाएं",
     "profileRemoveFailed": "हटाया नहीं जा सका। अपना कनेक्शन जांचो और फिर कोशिश करो।",
     "profileTest": "वॉइस टेस्ट दो",
@@ -1515,6 +1515,10 @@
     "tierNotes": "नोट डेटा से रेंज",
     "tierRough": "कलाकार के आधार पर मोटा अनुमान",
     "profileKeysLabel": "तुम्हारी रेंज दिखाने वाला कीबोर्ड",
-    "profileTitle": "तुम्हारी आवाज़"
+    "profileTitle": "तुम्हारी आवाज़",
+    "profileRemoveBody": "Discover तुम्हारी आवाज़ से गानों का मिलान करना बंद कर देगा। तुम कभी भी फिर से टेस्ट दे सकते हो।",
+    "profileRemoveTitle": "अपनी आवाज़ हटाएं?",
+    "singableCtaLabel": "गाने योग्य, पहले वॉइस टेस्ट दो",
+    "profileRemoveConfirm": "हटाओ"
   }
 }

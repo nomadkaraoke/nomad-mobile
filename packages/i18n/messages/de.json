@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Mit dem Mikrofontest gemessen",
     "profileMethodSelf": "Nach deiner Auswahl, nicht gemessen",
     "profileRange": "Tonumfang {range}",
-    "profileRedo": "Stimmentest wiederholen",
+    "profileRedo": "Test wiederholen",
     "profileRemove": "Mein Stimmenprofil löschen",
     "profileRemoveFailed": "Konnte nicht gelöscht werden. Überprüfe deine Verbindung und versuche es erneut.",
     "profileTest": "Stimmentest machen",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Tonumfang aus Notendaten",
     "tierRough": "Grobe Schätzung anhand des Interpreten",
     "profileKeysLabel": "Klaviatur, die deinen Tonumfang anzeigt",
-    "profileTitle": "Deine Stimme"
+    "profileTitle": "Deine Stimme",
+    "profileRemoveBody": "Discover wird keine Songs mehr mit deiner Stimme abgleichen. Du kannst den Test jederzeit wiederholen.",
+    "profileRemoveTitle": "Deine Stimme entfernen?",
+    "singableCtaLabel": "Singbar, mach zuerst den Stimmtest",
+    "profileRemoveConfirm": "Entfernen"
   }
 }

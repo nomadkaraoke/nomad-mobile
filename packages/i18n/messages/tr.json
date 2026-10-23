@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Mikrofon testiyle ölçüldü",
     "profileMethodSelf": "Kendi seçiminden, ölçülmedi",
     "profileRange": "Ses aralığı {range}",
-    "profileRedo": "Ses testini tekrar yap",
+    "profileRedo": "Testi tekrar yap",
     "profileRemove": "Ses profilimi kaldır",
     "profileRemoveFailed": "Kaldırılamadı. Bağlantını kontrol et ve tekrar dene.",
     "profileTest": "Ses testini yap",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Ses aralığı nota verilerinden alındı",
     "tierRough": "Sanatçıya göre kaba tahmin",
     "profileKeysLabel": "Ses aralığını gösteren klavye",
-    "profileTitle": "Sesin"
+    "profileTitle": "Sesin",
+    "profileRemoveBody": "Discover artık şarkıları sesinle eşleştirmeyecek. Testi dilediğin zaman tekrar çözebilirsin.",
+    "profileRemoveTitle": "Ses profilin kaldırılsın mı?",
+    "singableCtaLabel": "Söylenebilir, önce ses testini yap",
+    "profileRemoveConfirm": "Kaldır"
   }
 }

@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Măsurat prin testul la microfon",
     "profileMethodSelf": "Din selecția ta, nemăsurat",
     "profileRange": "Întindere vocală {range}",
-    "profileRedo": "Refă testul vocal",
+    "profileRedo": "Refă testul",
     "profileRemove": "Șterge-mi vocea",
     "profileRemoveFailed": "Nu s-a putut șterge. Verifică conexiunea la internet și încearcă din nou.",
     "profileTest": "Fă testul vocal",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Întindere extrasă din partitură",
     "tierRough": "Estimare aproximativă după artist",
     "profileKeysLabel": "Claviatură care îți arată întinderea vocală",
-    "profileTitle": "Vocea ta"
+    "profileTitle": "Vocea ta",
+    "profileRemoveBody": "Discover nu va mai potrivi melodiile cu vocea ta. Poți reface testul oricând.",
+    "profileRemoveTitle": "Ștergi profilul vocal?",
+    "singableCtaLabel": "Potrivite pentru tine, fă mai întâi testul vocal",
+    "profileRemoveConfirm": "Elimină"
   }
 }

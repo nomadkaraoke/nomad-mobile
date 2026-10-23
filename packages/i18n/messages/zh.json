@@ -1498,7 +1498,7 @@
     "profileMethodMic": "通过麦克风测试测定",
     "profileMethodSelf": "来自手动选择，未经过测试",
     "profileRange": "音域 {range}",
-    "profileRedo": "重新测试声线",
+    "profileRedo": "重新测试",
     "profileRemove": "移除我的声线档案",
     "profileRemoveFailed": "移除失败。请检查网络连接后重试。",
     "profileTest": "测试声线",
@@ -1515,6 +1515,10 @@
     "tierNotes": "基于音符数据的音域",
     "tierRough": "根据歌手粗略估算",
     "profileKeysLabel": "显示你音域的键盘",
-    "profileTitle": "你的声音"
+    "profileTitle": "你的声音",
+    "profileRemoveBody": "“发现”将不再根据您的声音匹配歌曲。您可以随时重新进行测试。",
+    "profileRemoveTitle": "移除您的声音档案？",
+    "singableCtaLabel": "适合演唱，请先进行声音测试",
+    "profileRemoveConfirm": "移除"
   }
 }

@@ -136,6 +136,10 @@ describe('the Singable chip', () => {
   it('without a profile: the chip is the voice-test CTA and opens /discover/voice', async () => {
     const app = await open();
     expect(screen.queryByTestId('filter-chip-singable')).toBeNull();
+    const cta = screen.getByTestId('filter-chip-singable-cta');
+    expect(cta.props.accessibilityLabel).toBe('Singable, take the voice test first');
+    expect(cta.props.accessibilityHint).toBe('Opens the voice test. Singable shows songs in your range.');
+    expect(screen.getByTestId('chip-leading-filter-chip-singable-cta', { includeHiddenElements: true })).toHaveTextContent('+');
     fireEvent.press(screen.getByTestId('filter-chip-singable-cta'));
     await waitFor(() => expect(app.getPathname()).toBe('/discover/voice'));
   });

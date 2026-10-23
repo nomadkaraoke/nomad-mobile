@@ -1498,7 +1498,7 @@
     "profileMethodMic": "マイクテストで測定済み",
     "profileMethodSelf": "自己選択（未測定）",
     "profileRange": "音域：{range}",
-    "profileRedo": "ボイステストをもう一度受ける",
+    "profileRedo": "テストをやり直す",
     "profileRemove": "声のデータを削除",
     "profileRemoveFailed": "削除できませんでした。通信環境を確認して、もう一度お試しください。",
     "profileTest": "ボイステストを受ける",
@@ -1515,6 +1515,10 @@
     "tierNotes": "音符データに基づく音域",
     "tierRough": "アーティスト情報からの大まかな推定",
     "profileKeysLabel": "あなたの音域を示す鍵盤",
-    "profileTitle": "あなたの声"
+    "profileTitle": "あなたの声",
+    "profileRemoveBody": "「見つける」であなたの声に合わせた曲のマッチングが行われなくなります。テストはいつでもやり直せます。",
+    "profileRemoveTitle": "声のプロファイルを削除しますか？",
+    "singableCtaLabel": "歌える曲：まずは声のテストを受けてください",
+    "profileRemoveConfirm": "削除"
   }
 }

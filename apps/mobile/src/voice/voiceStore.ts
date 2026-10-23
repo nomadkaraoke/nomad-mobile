@@ -47,12 +47,21 @@ export type VoiceProfileInBody = {
   measured_at: string;
 };
 
+/** Saved comfort reaches at least this close to the measured range's edges (keys). */
+export const COMFORT_EDGE_KEYS = 2;
+
+/**
+ * A mic result as the profile to save. The ~15 s free sing gives a comfortable middle of only 5–7 keys, so almost no
+ * song fit it (a self-report gets 14): the saved comfort reaches to at least 2 keys inside the measured range, never
+ * past it. The voice type still comes from the free-sing centre (`c`, classified upstream).
+ */
 export function profileFromResult(range: RangeSummary, c: Classification, measuredAt: string): LocalVoiceProfile {
+  const clamp = (m: number) => Math.min(range.high, Math.max(range.low, m));
   return {
     lowMidi: range.low,
     highMidi: range.high,
-    comfortLow: range.comfortLow,
-    comfortHigh: range.comfortHigh,
+    comfortLow: clamp(Math.min(range.comfortLow, range.low + COMFORT_EDGE_KEYS)),
+    comfortHigh: clamp(Math.max(range.comfortHigh, range.high - COMFORT_EDGE_KEYS)),
     voiceType: c.type,
     voiceTypeBetween: c.between,
     register: null,

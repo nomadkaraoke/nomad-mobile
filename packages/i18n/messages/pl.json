@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Zmierzone testem mikrofonu",
     "profileMethodSelf": "Na podstawie Twojego wyboru, niemierzone",
     "profileRange": "Skala: {range}",
-    "profileRedo": "Powtórz test głosu",
+    "profileRedo": "Powtórz test",
     "profileRemove": "Usuń mój głos",
     "profileRemoveFailed": "Nie udało się usunąć. Sprawdź połączenie i spróbuj ponownie.",
     "profileTest": "Zrób test głosu",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Skala na podstawie zapisu nutowego",
     "tierRough": "Przybliżona na podstawie wykonawcy",
     "profileKeysLabel": "Klawiatura pokazująca Twoją skalę głosu",
-    "profileTitle": "Twój głos"
+    "profileTitle": "Twój głos",
+    "profileRemoveBody": "Discover przestanie dopasowywać utwory do Twojego głosu. W każdej chwili możesz zrobić test ponownie.",
+    "profileRemoveTitle": "Usunąć profil głosu?",
+    "singableCtaLabel": "Do zaśpiewania – najpierw zrób test głosu",
+    "profileRemoveConfirm": "Usuń"
   }
 }

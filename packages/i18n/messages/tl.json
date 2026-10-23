@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Sinukat gamit ang mic test",
     "profileMethodSelf": "Mula sa pinili mo, hindi sinukat",
     "profileRange": "Range {range}",
-    "profileRedo": "Ulitin ang voice test",
+    "profileRedo": "Ulitin ang test",
     "profileRemove": "Alisin ang boses ko",
     "profileRemoveFailed": "Hindi maalis. Suriin ang iyong koneksyon at subukan muli.",
     "profileTest": "Mag-voice test",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Range mula sa note data",
     "tierRough": "Tantya batay sa artist",
     "profileKeysLabel": "Keyboard na nagpapakita ng iyong range",
-    "profileTitle": "Ang iyong boses"
+    "profileTitle": "Ang iyong boses",
+    "profileRemoveBody": "Ititigil ng Discover ang pagtutugma ng mga kanta sa iyong boses. Maaari mong kunin ulit ang test anumang oras.",
+    "profileRemoveTitle": "Alisin ang iyong boses?",
+    "singableCtaLabel": "Singable, mag-voice test muna",
+    "profileRemoveConfirm": "Alisin"
   }
 }

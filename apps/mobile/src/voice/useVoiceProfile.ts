@@ -96,6 +96,14 @@ export function useVoiceProfile() {
   return { profile, pending, isLoading: query.isLoading };
 }
 
+/** Settles once no voice PUT is in flight (a remove waits for it, so a PUT can never land after its DELETE). */
+export function waitForVoiceSend(): Promise<void> {
+  return inFlight ? inFlight.then(
+      () => undefined,
+      () => undefined,
+    ) : Promise.resolve();
+}
+
 /**
  * Returns `save(profile)`: stores it pending, then PUTs it when signed in. Resolves true once decide has it,
  * false when it is still pending (offline, 5xx/503, 401, signed out).

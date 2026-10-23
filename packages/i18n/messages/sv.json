@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Mätt med mikrofontestet",
     "profileMethodSelf": "Baserat på ditt val, inte uppmätt",
     "profileRange": "Omfång {range}",
-    "profileRedo": "Gör om rösttestet",
+    "profileRedo": "Gör om testet",
     "profileRemove": "Ta bort min röstprofil",
     "profileRemoveFailed": "Kunde inte ta bort den. Kontrollera din anslutning och försök igen.",
     "profileTest": "Gör rösttestet",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Omfång baserat på notdata",
     "tierRough": "Ungefärlig uppskattning utifrån artisten",
     "profileKeysLabel": "Klaviatur som visar ditt omfång",
-    "profileTitle": "Din röst"
+    "profileTitle": "Din röst",
+    "profileRemoveBody": "Discover slutar matcha låtar till din röst. Du kan göra om testet när som helst.",
+    "profileRemoveTitle": "Ta bort din röst?",
+    "singableCtaLabel": "Sjungbar, gör rösttestet först",
+    "profileRemoveConfirm": "Ta bort"
   }
 }

@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Mikrofonos teszttel mérve",
     "profileMethodSelf": "A megadott hangod alapján, nem mért",
     "profileRange": "Hangterjedelem: {range}",
-    "profileRedo": "Hangteszt újbóli elvégzése",
+    "profileRedo": "Teszt újrakezdése",
     "profileRemove": "Hangprofilom törlése",
     "profileRemoveFailed": "Nem sikerült törölni. Ellenőrizd az internetkapcsolatodat, és próbáld újra.",
     "profileTest": "Csináld meg a hangtesztet",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Hangjegyadatokból számított hangterjedelem",
     "tierRough": "Hozzávetőleges becslés az előadó alapján",
     "profileKeysLabel": "A hangterjedelmedet mutató billentyűzet",
-    "profileTitle": "A hangod"
+    "profileTitle": "A hangod",
+    "profileRemoveBody": "A Felfedezés többé nem igazítja a dalokat a hangodhoz. Bármikor újra kitöltheted a tesztet.",
+    "profileRemoveTitle": "Eltávolítod a hangodat?",
+    "singableCtaLabel": "Énekelhető, először töltsd ki a hangtesztet",
+    "profileRemoveConfirm": "Eltávolítás"
   }
 }

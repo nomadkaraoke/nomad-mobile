@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Gemeten met de microfoontest",
     "profileMethodSelf": "Op basis van je keuze, niet gemeten",
     "profileRange": "Bereik {range}",
-    "profileRedo": "Doe de stemtest opnieuw",
+    "profileRedo": "Doe de test opnieuw",
     "profileRemove": "Mijn stemprofiel verwijderen",
     "profileRemoveFailed": "Verwijderen mislukt. Controleer je verbinding en probeer het opnieuw.",
     "profileTest": "Doe de stemtest",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Bereik op basis van nootgegevens",
     "tierRough": "Ruwe schatting op basis van de artiest",
     "profileKeysLabel": "Toetsenbord dat je bereik toont",
-    "profileTitle": "Je stem"
+    "profileTitle": "Je stem",
+    "profileRemoveBody": "Discover stopt dan met het afstemmen van nummers op je stem. Je kunt de test op elk moment opnieuw doen.",
+    "profileRemoveTitle": "Je stemprofiel verwijderen?",
+    "singableCtaLabel": "Zingbaar, doe eerst de stemtest",
+    "profileRemoveConfirm": "Verwijderen"
   }
 }

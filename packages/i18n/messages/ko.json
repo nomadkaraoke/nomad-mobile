@@ -1498,7 +1498,7 @@
     "profileMethodMic": "마이크 테스트로 측정됨",
     "profileMethodSelf": "직접 선택함 (측정되지 않음)",
     "profileRange": "음역대 {range}",
-    "profileRedo": "음역대 다시 테스트하기",
+    "profileRedo": "테스트 다시 하기",
     "profileRemove": "내 보이스 프로필 삭제",
     "profileRemoveFailed": "삭제하지 못했습니다. 인터넷 연결을 확인하고 다시 시도해 주세요.",
     "profileTest": "음역대 테스트하기",
@@ -1515,6 +1515,10 @@
     "tierNotes": "음표 데이터 기반 음역대",
     "tierRough": "아티스트 기반 대략적 추정",
     "profileKeysLabel": "내 음역대를 보여주는 건반",
-    "profileTitle": "내 목소리"
+    "profileTitle": "내 목소리",
+    "profileRemoveBody": "Discover에서 회원님의 음역대에 맞는 곡 추천이 중단됩니다. 테스트는 언제든지 다시 진행하실 수 있습니다.",
+    "profileRemoveTitle": "음성 프로필을 삭제하시겠습니까?",
+    "singableCtaLabel": "부르기 가능한 곡 확인, 먼저 음성 테스트를 받아보세요",
+    "profileRemoveConfirm": "제거"
   }
 }

@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Målt med mikrofontesten",
     "profileMethodSelf": "Valgt selv, ikke målt",
     "profileRange": "Toneomfang {range}",
-    "profileRedo": "Ta stemmetesten på nytt",
+    "profileRedo": "Ta testen på nytt",
     "profileRemove": "Fjern stemmen min",
     "profileRemoveFailed": "Kunne ikke fjerne den. Sjekk internettforbindelsen din og prøv igjen.",
     "profileTest": "Ta stemmetesten",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Toneomfang fra notedata",
     "tierRough": "Grovt anslag basert på artisten",
     "profileKeysLabel": "Klaviatur som viser registeret ditt",
-    "profileTitle": "Stemmen din"
+    "profileTitle": "Stemmen din",
+    "profileRemoveBody": "Discover vil slutte å matche sanger til stemmen din. Du kan ta testen igjen når som helst.",
+    "profileRemoveTitle": "Fjerne stemmen din?",
+    "singableCtaLabel": "Sangbar, ta stemmetesten først",
+    "profileRemoveConfirm": "Fjern"
   }
 }

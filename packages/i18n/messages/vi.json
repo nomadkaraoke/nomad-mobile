@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Được đo bằng bài kiểm tra qua micro",
     "profileMethodSelf": "Do bạn tự chọn, chưa qua đo lường",
     "profileRange": "Âm vực {range}",
-    "profileRedo": "Kiểm tra lại giọng",
+    "profileRedo": "Làm lại bài kiểm tra",
     "profileRemove": "Xóa hồ sơ giọng hát",
     "profileRemoveFailed": "Không thể xóa. Kiểm tra lại kết nối mạng và thử lại nhé.",
     "profileTest": "Làm bài kiểm tra giọng",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Âm vực từ dữ liệu nốt nhạc",
     "tierRough": "Ước tính sơ bộ theo ca sĩ",
     "profileKeysLabel": "Bàn phím hiển thị quãng giọng của bạn",
-    "profileTitle": "Giọng của bạn"
+    "profileTitle": "Giọng của bạn",
+    "profileRemoveBody": "Mục Khám phá sẽ ngừng gợi ý bài hát theo chất giọng của bạn. Bạn có thể làm lại bài kiểm tra bất cứ lúc nào.",
+    "profileRemoveTitle": "Xóa hồ sơ giọng hát của bạn?",
+    "singableCtaLabel": "Hát được ngay, hãy kiểm tra giọng hát trước",
+    "profileRemoveConfirm": "Xóa"
   }
 }

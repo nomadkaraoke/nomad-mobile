@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Μετρήθηκε με το τεστ μικροφώνου",
     "profileMethodSelf": "Από δική σου επιλογή, χωρίς μέτρηση",
     "profileRange": "Έκταση: {range}",
-    "profileRedo": "Κάνε ξανά το τεστ φωνής",
+    "profileRedo": "Κάνε ξανά το τεστ",
     "profileRemove": "Αφαίρεση της φωνής μου",
     "profileRemoveFailed": "Δεν ήταν δυνατή η αφαίρεση. Έλεγξε τη σύνδεσή σου και δοκίμασε ξανά.",
     "profileTest": "Κάνε το τεστ φωνής",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Έκταση βάσει νοτών",
     "tierRough": "Κατά προσέγγιση βάσει του καλλιτέχνη",
     "profileKeysLabel": "Πληκτρολόγιο που δείχνει το εύρος σου",
-    "profileTitle": "Η φωνή σου"
+    "profileTitle": "Η φωνή σου",
+    "profileRemoveBody": "Το Discover θα σταματήσει να αντιστοιχίζει τραγούδια στη φωνή σου. Μπορείς να κάνεις ξανά το τεστ οποιαδήποτε στιγμή.",
+    "profileRemoveTitle": "Αφαίρεση της φωνής σου;",
+    "singableCtaLabel": "Singable, κάνε πρώτα το τεστ φωνής",
+    "profileRemoveConfirm": "Αφαίρεση"
   }
 }

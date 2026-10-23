@@ -1,0 +1,21 @@
+# Scrolls Discover's filter chip row one swipe towards its end (towards the start edge under RTL). Env: LOCALE.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    when:
+      true: ${LOCALE != 'ar' && LOCALE != 'he'}
+    commands:
+      - swipe:
+          from:
+            id: "filter-bar"
+          direction: LEFT
+- runFlow:
+    when:
+      true: ${LOCALE == 'ar' || LOCALE == 'he'}
+    commands:
+      - swipe:
+          from:
+            id: "filter-bar"
+          direction: RIGHT
+- waitForAnimationToEnd:
+    timeout: 3000

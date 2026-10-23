@@ -1498,7 +1498,7 @@
     "profileMethodMic": "Mesurat amb la prova del micròfon",
     "profileMethodSelf": "Segons la teva selecció, no mesurat",
     "profileRange": "Tessitura: {range}",
-    "profileRedo": "Torna a fer la prova de veu",
+    "profileRedo": "Torna a fer el test",
     "profileRemove": "Elimina la meva veu",
     "profileRemoveFailed": "No s'ha pogut eliminar. Comprova la connexió i torna-ho a provar.",
     "profileTest": "Fes la prova de veu",
@@ -1515,6 +1515,10 @@
     "tierNotes": "Tessitura a partir de les dades de les notes",
     "tierRough": "Estimació aproximada a partir de l'artista",
     "profileKeysLabel": "Teclat que mostra el teu rang",
-    "profileTitle": "La teva veu"
+    "profileTitle": "La teva veu",
+    "profileRemoveBody": "Discover deixarà de recomanar-te cançons adaptades a la teva veu. Pots tornar a fer el test quan vulguis.",
+    "profileRemoveTitle": "Vols eliminar la teva veu?",
+    "singableCtaLabel": "Per saber si la pots cantar, fes primer el test de veu",
+    "profileRemoveConfirm": "Elimina"
   }
 }
