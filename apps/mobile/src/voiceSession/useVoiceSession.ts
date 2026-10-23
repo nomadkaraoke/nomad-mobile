@@ -194,28 +194,77 @@ export function useVoiceSession(): VoiceSession {
 
   /** Bumped by reset() and by a new begin(): async work from before then must not touch the session. */
   const generation = useRef(0);
-  /** A user action (begin, pick, submit, finish, context change, retry) is running: further taps are ignored. */
-  const inFlight = useRef(false);
+  /**
+   * The user action (begin, pick, submit, finish, retry, or sending a context change) now running, else null: further
+   * taps are ignored. Each run owns a token, so a stale call settling after reset() can't release a newer one.
+   */
+  const inFlight = useRef<object | null>(null);
   const [busy, setBusy] = useState(false);
+  /** A context change decide hasn't got yet (sent once the running action settles, or retried after the next). */
+  const pendingPatch = useRef<{ sessionId: string; patch: SessionPatch } | null>(null);
 
   const actions = useMemo(() => {
     /** True while the session (and the hook's generation) is still the one `id` / `gen` were captured from. */
     const current = (id: string | null, gen: number) => generation.current === gen && get().sessionId === id;
 
-    /** One user action at a time (double taps are dropped); `busy` mirrors it for the screens. */
+    /**
+     * One user action at a time (double taps are dropped); `busy` mirrors it for the screens. When a main action
+     * settles, a context change that waited for it (or failed earlier) is sent.
+     */
     const guarded =
       <A extends unknown[]>(fn: (...a: A) => Promise<void>) =>
       async (...a: A): Promise<void> => {
         if (inFlight.current) return;
-        inFlight.current = true;
+        const token = {};
+        inFlight.current = token;
         setBusy(true);
         try {
           await fn(...a);
         } finally {
-          inFlight.current = false;
-          setBusy(false);
+          if (inFlight.current === token) {
+            inFlight.current = null;
+            setBusy(false);
+            if (pendingPatch.current) void sendPendingPatch();
+          }
         }
       };
+
+    /**
+     * Sends the waiting context change, as a user action of its own (busy while it runs; skipped while another runs,
+     * which sends it when it settles). It never takes over `error` / `retry()` (those belong to the session's own
+     * flow): a lost connection keeps it waiting for the next action; a refusal is logged.
+     */
+    async function sendPendingPatch(): Promise<void> {
+      const p = pendingPatch.current;
+      if (!p || inFlight.current) return;
+      pendingPatch.current = null;
+      if (get().sessionId !== p.sessionId) return;
+      const token = {};
+      inFlight.current = token;
+      setBusy(true);
+      const gen = generation.current;
+      try {
+        await patchVoiceSession(p.sessionId, p.patch);
+      } catch (e) {
+        if (generation.current !== gen || get().sessionId !== p.sessionId) return;
+        const f = classify(e);
+        if (f.kind === 'disabled') {
+          await dropRunningTake();
+          update({ step: 'disabled' });
+        } else if (f.kind === 'retry') {
+          // Keep it (merged under any newer change) for the next action or retry.
+          const newer = pendingPatch.current as { patch: SessionPatch } | null;
+          pendingPatch.current = { sessionId: p.sessionId, patch: { ...p.patch, ...newer?.patch } };
+        } else if (f.kind === 'fatal') {
+          warn('context change refused', e);
+        }
+      } finally {
+        if (inFlight.current === token) {
+          inFlight.current = null;
+          setBusy(false);
+        }
+      }
+    }
 
     /** Stops the running take; returns it (null when another stop got there first). */
     const stopTake = async () => {
@@ -476,6 +525,10 @@ export function useVoiceSession(): VoiceSession {
       discardTake();
       get().clear();
       retryRef.current = null;
+      // A call still hanging for the old session must not keep the buttons locked.
+      inFlight.current = null;
+      pendingPatch.current = null;
+      setBusy(false);
       setResult(null);
       setError(null);
     };
@@ -544,9 +597,10 @@ export function useVoiceSession(): VoiceSession {
         discardTake();
         await goResult();
       }),
-      patchContext: guarded(async (patch: SessionPatch) => {
+      async patchContext(patch: SessionPatch) {
         const { sessionId, setup } = get();
         if (!sessionId || !setup) return;
+        // Applied here at once, whatever else is running (consent withdrawal must never wait or be dropped).
         const changes = Object.fromEntries(Object.entries(patch).filter(([, v]) => v !== null && v !== undefined));
         update({ setup: { ...setup, ...changes } });
         if (patch.record === false) {
@@ -555,8 +609,11 @@ export function useVoiceSession(): VoiceSession {
           useRecordingQueue.getState().dropSession(sessionId);
           discardTake();
         }
-        await attempt({ fn: () => patchVoiceSession(sessionId, patch) });
-      }),
+        const prev = pendingPatch.current?.sessionId === sessionId ? pendingPatch.current.patch : {};
+        pendingPatch.current = { sessionId, patch: { ...prev, ...patch } };
+        // While another action runs, it is sent when that one settles.
+        await sendPendingPatch();
+      },
       retry: guarded(async () => {
         await retryRef.current?.();
       }),

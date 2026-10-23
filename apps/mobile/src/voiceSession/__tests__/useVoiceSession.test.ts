@@ -920,4 +920,75 @@ describe('useVoiceSession', () => {
       expect(fsState.files.has(`${DIR}/a.wav`)).toBe(false);
     });
   });
+
+  describe('fix round 2', () => {
+    it('record:false tapped during an in-flight submitQuiz still drops the queue and the take, then sends the PATCH', async () => {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 2)).mockResolvedValueOnce(song('b', 3));
+      const posted = deferred<unknown>();
+      mockApi.postVoiceAttempt.mockReturnValueOnce(posted.promise);
+      const { result: r } = await mount();
+      await act(() => r.current.begin(SETUP));
+      // An earlier song's take still waiting to upload.
+      const earlier = `${DIR}/earlier.wav`;
+      fsState.files.set(earlier, new Uint8Array(8));
+      useRecordingQueue
+        .getState()
+        .enqueue({ sessionId: 's1', attemptN: 1, uri: earlier, contentType: 'audio/wav', durationS: 9, device: null });
+      mockRec.nextTake = takeWithFile('a');
+      await singIt(r);
+      act(() => r.current.setAnswer({ feel: 'fine', position: 'comfortable' }));
+
+      let submitting!: Promise<void>;
+      await act(async () => {
+        submitting = r.current.submitQuiz();
+      });
+      expect(r.current.busy).toBe(true);
+      await act(() => r.current.patchContext({ record: false }));
+      // Local effects at once, while the attempt is still in flight.
+      expect(r.current.setup?.record).toBe(false);
+      expect(useRecordingQueue.getState().items).toEqual([]);
+      expect(fsState.files.has(earlier)).toBe(false);
+      expect(fsState.files.has(`${DIR}/a.wav`)).toBe(false);
+      expect(mockApi.patchVoiceSession).not.toHaveBeenCalled();
+
+      await act(async () => {
+        posted.resolve({ attempt_id: 'x2', n: 2, done: false, done_reason: null, top_p: 0.4 });
+        await submitting;
+      });
+      await flush();
+      expect(mockApi.patchVoiceSession).toHaveBeenCalledWith('s1', { record: false });
+      expect(useRecordingQueue.getState().items).toEqual([]);
+      expect(r.current.step).toBe('pick');
+      expect(r.current.busy).toBe(false);
+    });
+
+    it('a PATCH that fails offline is sent again after the next action', async () => {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1)).mockResolvedValueOnce(song('b', 1));
+      mockApi.patchVoiceSession.mockRejectedValueOnce(network());
+      const { result: r } = await mount();
+      await act(() => r.current.begin(SETUP));
+      await act(() => r.current.patchContext({ record: false }));
+      expect(r.current.error).toBeNull();
+      expect(useRecordingQueue.getState().items).toEqual([]);
+      await act(() => r.current.pickSkip('dont_know'));
+      await flush();
+      expect(mockApi.patchVoiceSession).toHaveBeenCalledTimes(2);
+      expect(mockApi.patchVoiceSession).toHaveBeenLastCalledWith('s1', { record: false });
+    });
+
+    it('after reset() with a hung request pending, busy is false and a new session can start', async () => {
+      mockApi.createVoiceSession.mockReturnValueOnce(new Promise(() => {}));
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1));
+      const { result: r } = await mount();
+      await act(async () => {
+        void r.current.begin(SETUP);
+      });
+      expect(r.current.busy).toBe(true);
+      act(() => r.current.reset());
+      expect(r.current.busy).toBe(false);
+      await act(() => r.current.begin(SETUP));
+      expect(mockApi.createVoiceSession).toHaveBeenCalledTimes(2);
+      expect(r.current.step).toBe('pick');
+    });
+  });
 });
