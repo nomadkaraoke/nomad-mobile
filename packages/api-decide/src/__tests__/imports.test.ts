@@ -24,9 +24,8 @@ const json = (body: unknown, status = 200) =>
 const last = (): Request => fetchMock.mock.calls.at(-1)[0];
 const onUnauthorized = jest.fn();
 
-// jest's FormData is Node's: a Blob stands in for React Native's { uri, name, type } file part.
-const blobFile = (name: string) => Object.assign(new Blob(['x'], { type: 'image/png' }), { name });
-const rnFile = (name: string, type = 'image/png') => blobFile(name) as unknown as { uri: string; name: string; type: string };
+// A web File stands in for the phone's expo-file-system File (both are Blobs with a name and a type).
+const file = (name: string, type = 'image/png') => new File(['x'], name, { type });
 
 beforeEach(() => {
   fetchMock.mockReset();
@@ -53,13 +52,18 @@ describe('imports and services summary', () => {
 
   it('extractScreenshots sends FormData with N images', async () => {
     fetchMock.mockResolvedValueOnce(json({ candidates: [] }));
-    await extractScreenshots([rnFile('a.png'), rnFile('b.png'), rnFile('c.png')]);
+    await extractScreenshots([file('a.png'), file('b.png'), file('c.png')]);
     const req = last();
     expect(req.method).toBe('POST');
     expect(req.url).toBe('https://decide.test/api/services/screenshot/extract');
     expect(req.headers.get('Content-Type')).toMatch(/^multipart\/form-data; boundary=/);
     const form = await req.formData();
-    expect(form.getAll('images')).toHaveLength(3);
+    const images = form.getAll('images') as File[];
+    expect(images.map((f) => [f.name, f.type])).toEqual([
+      ['a.png', 'image/png'],
+      ['b.png', 'image/png'],
+      ['c.png', 'image/png'],
+    ]);
   });
 
   it('confirms screenshot items as JSON', async () => {
@@ -110,10 +114,17 @@ describe('imports and services summary', () => {
 
   it('uploads an export zip to ListenBrainz as multipart file', async () => {
     fetchMock.mockResolvedValueOnce(json({ import_id: 'i1', status: 'waiting' }));
-    await uploadExportToListenBrainz(rnFile('export.zip', 'application/zip'));
+    await uploadExportToListenBrainz(file('export.zip', 'application/zip'));
     expect(last().url).toBe('https://decide.test/api/services/listenbrainz/upload-export');
     expect(last().headers.get('Content-Type')).toMatch(/^multipart\/form-data; boundary=/);
-    expect((await last().formData()).getAll('file')).toHaveLength(1);
+    const parts = (await last().formData()).getAll('file') as File[];
+    expect(parts.map((f) => [f.name, f.type])).toEqual([['export.zip', 'application/zip']]);
+  });
+
+  it('sends the ListenBrainz export under the picked file name when given', async () => {
+    fetchMock.mockResolvedValueOnce(json({ import_id: 'i1', status: 'waiting' }));
+    await uploadExportToListenBrainz(file('3f2a.zip', 'application/zip'), 'my_spotify_data.zip');
+    expect(((await last().formData()).get('file') as File).name).toBe('my_spotify_data.zip');
   });
 
   it('removes source data, disconnects and triggers sync', async () => {

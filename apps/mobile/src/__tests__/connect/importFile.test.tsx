@@ -11,6 +11,7 @@ import { importQueueIdle, setImportQueueOnline, useImportQueue } from '../../dis
 import { NotAnExportError, readExportFile } from '../../discover/connect/readExport';
 import { appStorage } from '../../storage';
 import { gen, session } from '../../test-utils/genAuthMock';
+import * as memoryFs from '../../test-utils/memoryFs';
 import { fsState } from '../../test-utils/memoryFs';
 import { appRoutes } from '../../test-utils/routes';
 
@@ -176,12 +177,12 @@ describe('Import file', () => {
     await act(async () => fireEvent.press(box));
     await act(async () => fireEvent.press(screen.getByTestId('connect-import-start')));
     await waitFor(() =>
-      expect(decide.uploadExportToListenBrainz).toHaveBeenCalledWith({
-        uri: FILE,
-        name: 'my_spotify_data.zip',
-        type: 'application/zip',
-      }),
+      expect(decide.uploadExportToListenBrainz).toHaveBeenCalledWith(expect.any(memoryFs.File), 'my_spotify_data.zip'),
     );
+    // An expo-file-system File (expo/fetch reads its bytes), not a React Native { uri } part: those never send.
+    const [part] = m(decide.uploadExportToListenBrainz).mock.calls[0];
+    expect(part.uri).toBe(FILE);
+    expect(typeof part.bytes).toBe('function');
     expect(await screen.findByTestId('connect-lb-sent')).toBeTruthy();
   });
 

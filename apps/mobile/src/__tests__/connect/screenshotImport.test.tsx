@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { useAuth } from '../../auth/store';
+import * as memoryFs from '../../test-utils/memoryFs';
 import { gen, session } from '../../test-utils/genAuthMock';
 import { appRoutes } from '../../test-utils/routes';
 
@@ -19,6 +20,7 @@ jest.mock('../../../modules/apple-music-auth', () => ({
   nativeAppleMusicAvailable: () => false,
   requestAppleMusicUserToken: jest.fn(),
 }));
+jest.mock('expo-file-system', () => require('../../test-utils/memoryFs'));
 jest.mock('expo-image-picker', () => ({ launchImageLibraryAsync: jest.fn() }));
 jest.mock('expo-image-manipulator', () => ({
   SaveFormat: { JPEG: 'jpeg' },
@@ -98,9 +100,11 @@ describe('Screenshot import', () => {
     expect(resize).toHaveBeenCalledTimes(1); // only the 1800 px one is wider than 1290
     expect(resize).toHaveBeenCalledWith({ width: 1290 });
     expect(saveAsync).toHaveBeenCalledWith({ format: 'jpeg', compress: 0.8 });
-    expect(decide.extractScreenshots).toHaveBeenCalledWith([
-      { uri: 'file:///out/shot.jpg', name: 'screenshot-0.jpg', type: 'image/jpeg' },
-      { uri: 'file:///out/shot.jpg', name: 'screenshot-1.jpg', type: 'image/jpeg' },
+    // expo-file-system Files (expo/fetch reads their bytes), not React Native { uri } parts: those never send.
+    const [parts] = m(decide.extractScreenshots).mock.calls[0] as [memoryFs.File[]];
+    expect(parts.map((p) => [p instanceof memoryFs.File, p.uri, p.type, typeof p.bytes])).toEqual([
+      [true, 'file:///out/shot.jpg', 'image/jpeg', 'function'],
+      [true, 'file:///out/shot.jpg', 'image/jpeg', 'function'],
     ]);
   });
 

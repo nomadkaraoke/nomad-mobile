@@ -3,9 +3,9 @@ import {
   buildZip,
   csv,
   extendedHistory,
-  readZip,
   SONGS,
 } from '../../../../../packages/core/src/imports/__fixtures__/buildExport';
+import { readZip } from '../../../../../packages/core/src/imports/__fixtures__/readZip';
 import { NotAnExportError, readExportFile } from '../../discover/connect/readExport';
 import { fsState } from '../../test-utils/memoryFs';
 

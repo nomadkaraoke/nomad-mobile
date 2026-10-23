@@ -3,10 +3,11 @@ import {
   extractScreenshots,
   type Candidate,
   type ImportResultResponse,
-  type RNFile,
+  type UploadFile,
 } from '@nomad/api-decide';
 import { useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
+import { File } from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import { useRef, useState } from 'react';
@@ -30,13 +31,16 @@ const CHECK = '\u2713';
 
 const statusOf = (e: unknown) => (e as { status?: unknown } | null)?.status;
 
-/** Shrink to <= MAX_WIDTH wide and re-encode as JPEG so every upload stays well under decide's size cap. */
-async function prepare(asset: ImagePicker.ImagePickerAsset, i: number): Promise<RNFile> {
+/**
+ * Shrink to <= MAX_WIDTH wide and re-encode as JPEG so every upload stays well under decide's size cap. The upload
+ * part is an expo-file-system File: the app's fetch (expo/fetch) can't send React Native's `{ uri }` parts.
+ */
+async function prepare(asset: ImagePicker.ImagePickerAsset): Promise<UploadFile> {
   const ctx = ImageManipulator.ImageManipulator.manipulate(asset.uri);
   if (asset.width > MAX_WIDTH) ctx.resize({ width: MAX_WIDTH });
   const image = await ctx.renderAsync();
   const out = await image.saveAsync({ format: ImageManipulator.SaveFormat.JPEG, compress: JPEG_QUALITY });
-  return { uri: out.uri, name: `screenshot-${i}.jpg`, type: 'image/jpeg' };
+  return new File(out.uri);
 }
 
 /**

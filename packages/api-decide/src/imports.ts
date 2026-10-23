@@ -20,8 +20,12 @@ import {
   type ConfirmItem,
 } from './client';
 
-/** A React Native file part: `FormData.append(name, file)` reads `uri`, `name` and `type`. */
-export type RNFile = { uri: string; name: string; type: string };
+/**
+ * A file to upload: on the phone an expo-file-system `File` (a Blob with a name and a type). Expo SDK 57's global
+ * fetch (expo/fetch) reads each part's bytes; React Native's `{ uri, name, type }` parts fail there with
+ * "Unsupported FormDataPart implementation" before anything is sent.
+ */
+export type UploadFile = Blob & { readonly name: string };
 
 /**
  * Multipart options: the FormData goes through untouched (the generated serializer would re-wrap it), and the
@@ -36,9 +40,9 @@ export const getServicesSummary = async () => (await getSourcesSummaryApiService
 export const getServiceCapabilities = async () => (await getCapabilitiesApiServicesCapabilitiesGet()).data;
 
 /** Read artists and songs from up to 5 screenshots (Gemini on the server); candidates come back for review. */
-export const extractScreenshots = async (files: RNFile[]) => {
+export const extractScreenshots = async (files: UploadFile[]) => {
   const form = new FormData();
-  for (const f of files) form.append('images', f as never);
+  for (const f of files) form.append('images', f, f.name);
   return (await extractScreenshotApiServicesScreenshotExtractPost(multipart(form))).data;
 };
 
@@ -68,10 +72,10 @@ export const connectListenBrainz = async (username: string) =>
 export const startListenBrainzOAuth = async () =>
   (await listenbrainzOauthStartApiServicesListenbrainzOauthStartGet({ query: { return_to: 'app' } })).data;
 
-/** Hand a Spotify export zip to ListenBrainz on the user's behalf (decide proxies it, 30 MiB max). */
-export const uploadExportToListenBrainz = async (file: RNFile) => {
+/** Hand a Spotify export zip to ListenBrainz on the user's behalf (decide proxies it, 30 MiB max); `filename` defaults to the file's own. */
+export const uploadExportToListenBrainz = async (file: UploadFile, filename: string = file.name) => {
   const form = new FormData();
-  form.append('file', file as never);
+  form.append('file', file, filename);
   return (await uploadListenbrainzExportApiServicesListenbrainzUploadExportPost(multipart(form))).data;
 };
 

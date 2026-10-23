@@ -101,6 +101,17 @@ export class File {
   get size() {
     return fsState.files.get(this.uri)?.length ?? 0;
   }
+  /** Like expo-file-system's File (a Blob): the MIME type from the extension. */
+  get type() {
+    const ext = this.uri.slice(this.uri.lastIndexOf('.') + 1).toLowerCase();
+    return ({ jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', zip: 'application/zip', csv: 'text/csv' } as Record<string, string>)[ext] ?? '';
+  }
+  /** What expo/fetch reads from a FormData part. */
+  async bytes() {
+    const data = fsState.files.get(this.uri);
+    if (!data) throw new Error(`no such file: ${this.uri}`);
+    return data;
+  }
   create({ overwrite = false } = {}) {
     if (this.exists && !overwrite) throw new Error(`exists: ${this.uri}`);
     fsState.files.set(this.uri, new Uint8Array());

@@ -1,4 +1,4 @@
-import { ApiError, uploadExportToListenBrainz, type RNFile } from '@nomad/api-decide';
+import { ApiError, uploadExportToListenBrainz, type UploadFile } from '@nomad/api-decide';
 import { toUploadChunks, type ExportKind, type ExportSummary } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
@@ -66,10 +66,10 @@ const isRetryable = (e: unknown) => !(e instanceof ApiError) || e.status === 0 |
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 /** Hands the zip to ListenBrainz through decide, retrying 5xx / 429 / network errors (5, 15, 30, 60 s or Retry-After). */
-async function sendToListenBrainz(file: RNFile, alive: () => boolean): Promise<void> {
+async function sendToListenBrainz(file: UploadFile, filename: string, alive: () => boolean): Promise<void> {
   for (let attempt = 1; ; attempt++) {
     try {
-      await uploadExportToListenBrainz(file);
+      await uploadExportToListenBrainz(file, filename);
       return;
     } catch (e) {
       if (!isRetryable(e) || attempt > RETRY_DELAYS_MS.length || !alive()) throw e;
@@ -146,7 +146,8 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
   useEffect(() => {
     if (!submitted || !lbAlso || lbStarted.current || offline) return;
     lbStarted.current = true;
-    sendToListenBrainz({ uri, name: name || 'my_spotify_data.zip', type: 'application/zip' }, () => alive.current).then(
+    // An expo-file-system File: the app's fetch (expo/fetch) can't send React Native's `{ uri }` parts.
+    sendToListenBrainz(new File(uri), name || 'my_spotify_data.zip', () => alive.current).then(
       () => alive.current && setLb({ step: 'sent' }),
       (error: unknown) => alive.current && setLb({ step: 'failed', message: lbMessage(error), error }),
     );
