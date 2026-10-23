@@ -37,6 +37,18 @@ jest.mock('@nomad/api-gen', () => ({
   getMe: jest.fn(),
 }));
 
+// The real List, with scrollToTop captured (a filter change starts the picks from the top).
+const mockScrollToTop = jest.fn();
+jest.mock('@nomad/ui', () => {
+  const actual = jest.requireActual('@nomad/ui');
+  const React = jest.requireActual('react');
+  const List = React.forwardRef(function MockList(props: object, ref: unknown) {
+    React.useImperativeHandle(ref, () => ({ scrollToIndex: jest.fn(), scrollToTop: mockScrollToTop }));
+    return React.createElement(actual.List, props);
+  });
+  return { ...actual, List };
+});
+
 const getRecs = decide.getRecommendationsV2 as jest.Mock;
 
 const song = (title: string, fit: decide.RecSong['fit'] = null): decide.RecSong => ({
@@ -95,6 +107,22 @@ beforeEach(async () => {
   (decide.popularSongs as jest.Mock).mockResolvedValue([]);
   getRecs.mockResolvedValue(FITTED);
   await act(() => useAuth.getState().signInWithSession(session()));
+});
+
+describe('picks scroll position', () => {
+  it('a filter change scrolls the picks to the top; mounting and re-rendering do not', async () => {
+    withVoice();
+    await open();
+    await screen.findByTestId('filter-chip-singable');
+    expect(mockScrollToTop).not.toHaveBeenCalled();
+    fireEvent.press(screen.getByTestId('filter-chip-singable'));
+    await waitFor(() => expect(mockScrollToTop).toHaveBeenCalledTimes(1));
+    expect(mockScrollToTop).toHaveBeenCalledWith({ animated: false });
+    // The new picks arriving (a re-render with the same filters) don't scroll again.
+    await waitFor(() => expect(getRecs).toHaveBeenCalledTimes(2));
+    await screen.findByTestId('rec-section-crowd_pleasers');
+    expect(mockScrollToTop).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('fit badges on the picks', () => {

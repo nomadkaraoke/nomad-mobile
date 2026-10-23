@@ -3,6 +3,8 @@ import { forwardRef, useImperativeHandle, useRef, type ReactElement, type Ref } 
 
 export type ListHandle = {
   scrollToIndex(index: number, opts?: { animated?: boolean; viewPosition?: number }): void;
+  /** Back to offset 0, above any list header (index 0 would leave a header out of view). */
+  scrollToTop(opts?: { animated?: boolean }): void;
 };
 
 export type ListProps<T> = {
@@ -45,6 +47,9 @@ function ListInner<T>(
         listRef.current
           ?.scrollToIndex({ index, animated: opts?.animated, viewPosition: opts?.viewPosition })
           .catch(() => {});
+      },
+      scrollToTop: (opts) => {
+        listRef.current?.scrollToOffset({ offset: 0, animated: opts?.animated });
       },
     }),
     [],

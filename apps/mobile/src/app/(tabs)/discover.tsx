@@ -187,7 +187,7 @@ export default function DiscoverScreen() {
   useEffect(() => {
     if (lastFiltersKey.current === filtersKey) return;
     lastFiltersKey.current = filtersKey;
-    picksList.current?.scrollToIndex(0, { animated: false });
+    picksList.current?.scrollToTop({ animated: false });
   }, [filtersKey]);
   const picks: PicksMode = !signedIn
     ? "signin"

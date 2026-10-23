@@ -59,14 +59,27 @@ onFlowComplete:
     timeout: 30000
 - assertVisible: ".*Fits your voice.*"
 - takeScreenshot: ${VOICE_SHOTS}/voice-3-singable-on
-# Uprising fits 2 keys down; Hello, next to it in the crowd pleasers, is gone.
+# Hello is gone from the whole list, not just the first screen: check every viewport down to the list's footer
+# (each scroll moves less than a screen, so the viewports overlap).
+- repeat:
+    times: 30
+    while:
+      notVisible:
+        id: "discover-make-any"
+    commands:
+      - assertNotVisible:
+          text: "More options for .*Hello.*"
+      - scroll
+- assertVisible:
+    id: "discover-make-any"
+- assertNotVisible:
+    text: "More options for .*Hello.*"
+# Uprising (crowd pleasers) fits 2 keys down.
 - scrollUntilVisible:
     element:
       text: ".*Uprising.*Try it 2 keys down.*"
-    direction: DOWN
+    direction: UP
     timeout: 30000
-- assertNotVisible:
-    text: "More options for .*Hello.*"
 - takeScreenshot: ${VOICE_SHOTS}/voice-3-uprising
 - tapOn: ".*Uprising.*Try it 2 keys down.*"
 - extendedWaitUntil:

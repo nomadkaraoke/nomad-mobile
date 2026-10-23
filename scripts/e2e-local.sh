@@ -112,12 +112,28 @@ curl -sf -m 5 -o /dev/null "$WEB" || echo "warning: gen web isn't answering on $
 # 2. decide's local stack: the main API (:8030, fixture catalog, /api/test/*) on gen's Firestore emulator, so gen
 #    sessions validate there, and the search service (:8020, fixture song index; its offline-list URL is on
 #    127.0.0.1 too). `up` is idempotent.
+echo "decide checkout: $DECIDE_DIR (DECIDE_DIR; used when its local stack has to be started)"
 if ! curl -sf -m 3 "$SEARCH/api/search/ready" >/dev/null || ! curl -sf -m 3 "$DECIDE/api/ready" >/dev/null; then
   echo "Starting decide's local stack from $DECIDE_DIR"
   (cd "$DECIDE_DIR" && GEN_API_URL="$STACK" DECIDE_LOCAL_PORT="$DECIDE_PORT" SEARCH_LOCAL_PORT="$SEARCH_PORT" scripts/local-stack.sh up)
 fi
 curl -sf -m 5 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@example.com"}' \
   "$DECIDE/api/test/profile/reset" || { echo "decide at $DECIDE has no /api/test (DECIDE_TEST_API off?)" >&2; exit 1; }
+# The vocal range flows and tours (voice-*, fit-*) need decide >= v0.25: the vr_* fixture catalog and
+# /api/test/voice/seed. An empty body is a 422 when the route exists; an older decide answers 404.
+needs_voice() {
+  if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; return; fi
+  [[ -z "$FILTER" || "$FILTER" == *voice* || "$FILTER" == *fit* ]]
+}
+if needs_voice; then
+  code="$(curl -s -m 5 -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' \
+    "$DECIDE/api/test/voice/seed")"
+  [[ "$code" == 422 ]] || {
+    echo "decide at $DECIDE has no /api/test/voice/seed (HTTP $code; older than v0.25?). The voice flows need decide with the vocal" \
+      "range fixtures: restart its local stack from an up-to-date checkout (DECIDE_DIR=$DECIDE_DIR)." >&2
+    exit 1
+  }
+fi
 
 # 2b. kjbox's local stack (:8040): the real singer API (v1) on the fixture night, event code 2121, with
 #     /sing/api/test/*. It verifies app tokens against gen (:8010) and sends sung songs to decide (:8030), so it
@@ -307,7 +323,7 @@ run_flows() {
   "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" \
     -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
     -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" \
-    -e VOICE_SHOTS="$VOICE_SHOTS" "$@"
+    -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" "$@"
 }
 status=0
 
@@ -325,9 +341,10 @@ if [[ -n "$SCREEN" ]]; then
   point_dev_client
   set_app_locale "$lang"
   # SHOT: the name prefix long-title.yaml gives its shots (in ${SHOTS}).
-  # The voice and fit tours write to ${VOICE_SHOTS} / ${FIT_SHOTS}: the locale's folder here.
-  run_flows -e LOCALE="$lang" -e TOUR_SHOTS="$TOUR_SHOTS" -e SHOT="ux-$lang" -e VOICE_SHOTS="$TOUR_SHOTS" \
-    -e FIT_SHOTS="$TOUR_SHOTS" "maestro/screens/$SCREEN.yaml" || status=$?
+  # The voice and fit tours write to ${VOICE_SHOTS} / ${FIT_SHOTS} (run_flows passes both from VOICE_SHOTS): the
+  # locale's folder for a tour, the platform's folder for the flows.
+  if [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; then VOICE_SHOTS="$TOUR_SHOTS"; fi
+  run_flows -e LOCALE="$lang" -e TOUR_SHOTS="$TOUR_SHOTS" -e SHOT="ux-$lang" "maestro/screens/$SCREEN.yaml" || status=$?
   set_app_locale ""
   exit "$status"
 fi
