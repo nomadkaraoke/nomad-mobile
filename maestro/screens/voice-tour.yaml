@@ -12,12 +12,13 @@ appId: com.nomadkaraoke.mobile
       ACTION: setup
       STACK: ${STACK}
       NAME: voicetour
-- runFlow: ../common/launch.yaml
+- runFlow: ../common/tour-launch-signed-out.yaml
 - openLink: "nomadkaraoke://discover/voice"
 - extendedWaitUntil:
     visible:
       id: "voice-start"
     timeout: 15000
+- waitForAnimationToEnd
 - takeScreenshot: ${VOICE_SHOTS}/voice-intro
 - tapOn:
     id: "voice-skip"
@@ -43,6 +44,12 @@ appId: com.nomadkaraoke.mobile
       id: "voice-low-done"
       enabled: true
     timeout: 15000
+# Held like a singer would, so the shots and the result show the whole fake range (A2–E4): see voice-1-test.yaml for
+# how these waits follow the WAV's slices.
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: 3500
 - takeScreenshot: ${VOICE_SHOTS}/voice-low
 - tapOn:
     id: "voice-low-done"
@@ -51,6 +58,10 @@ appId: com.nomadkaraoke.mobile
       id: "voice-high-done"
       enabled: true
     timeout: 15000
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: 2500
 - takeScreenshot: ${VOICE_SHOTS}/voice-high
 - tapOn:
     id: "voice-high-done"

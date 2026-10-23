@@ -80,6 +80,8 @@ onFlowComplete:
       text: ".*Uprising.*Try it 2 keys down.*"
     direction: UP
     timeout: 30000
+    # Centred: scrolled up, the row stopped half under the filter bar, and the tap on its centre opened the search field.
+    centerElement: true
 - takeScreenshot: ${VOICE_SHOTS}/voice-3-uprising
 - tapOn: ".*Uprising.*Try it 2 keys down.*"
 - extendedWaitUntil:

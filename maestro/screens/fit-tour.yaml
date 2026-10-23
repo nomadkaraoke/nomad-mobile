@@ -14,10 +14,19 @@ onFlowComplete:
       STACK: ${STACK}
       NAME: fittour
 - runFlow:
-    file: ../common/discover-seeded.yaml
+    file: ../common/seed-decide-profile.yaml
     env:
       EMAIL: ${output.email}
       PROFILE: '{"genres":["rock"],"decades":["2000s"],"energy":"high","artists":[{"name":"Muse","affinity":"love"}]}'
+# Any language: tour-launch waits on testIDs only (launch.yaml's English text wait fails in ar).
+- runFlow:
+    file: ../common/tour-launch.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "rec-row-.*-0"
+    timeout: 30000
 - tapOn:
     id: "library-filter-any"
 # A voice profile left on the phone by an earlier run goes first (Me → Your music profile → Remove my voice).
@@ -52,7 +61,7 @@ onFlowComplete:
     direction: DOWN
     timeout: 10000
 - takeScreenshot: ${FIT_SHOTS}/fit-me-no-voice
-- tapOn: "Back|Navigate up"
+- runFlow: ../common/header-back.yaml
 - tapOn:
     id: "tab-discover"
 - extendedWaitUntil:
@@ -119,7 +128,7 @@ onFlowComplete:
 - assertVisible:
     id: "fit-tier"
 - takeScreenshot: ${FIT_SHOTS}/fit-song
-- tapOn: "Back|Navigate up"
+- runFlow: ../common/header-back.yaml
 # Me → Your music profile → Your voice.
 - tapOn:
     id: "tab-me"

@@ -23,13 +23,11 @@ export function SelfReportStep({ onSave, onTakeTest }: SelfReportStepProps) {
     <StepLayout
       testID="voice-self"
       footer={
-        <View className="flex-row gap-3">
-          <View className="flex-1">
-            <Button testID="voice-self-take-test" variant="secondary" label={t('takeTest')} onPress={onTakeTest} />
-          </View>
-          <View className="flex-1">
-            <Button testID="voice-self-save" label={t('save')} disabled={!choice} onPress={() => choice && onSave(choice)} />
-          </View>
+        // Stacked, full width: side by side, "Take the mic test instead" wrapped to two lines (three in ar) and
+        // stood taller than Save.
+        <View className="gap-2">
+          <Button testID="voice-self-save" label={t('save')} disabled={!choice} onPress={() => choice && onSave(choice)} />
+          <Button testID="voice-self-take-test" variant="secondary" label={t('takeTest')} onPress={onTakeTest} />
         </View>
       }
     >

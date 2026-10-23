@@ -58,13 +58,10 @@ export function VoiceResult({ profile: p, saved, signedIn, onSave, onTryAgain, o
                 {t('saveSignIn')}
               </Text>
             )}
-            <View className="flex-row gap-3">
-              <View className="flex-1">
-                <Button testID="voice-try-again" variant="secondary" label={t('retry')} onPress={onTryAgain} />
-              </View>
-              <View className="flex-[2]">
-                <Button testID="voice-save" label={t('save')} onPress={onSave} />
-              </View>
+            {/* Stacked, full width: at a third of the row "Try again" wrapped in ar. */}
+            <View className="gap-2">
+              <Button testID="voice-save" label={t('save')} onPress={onSave} />
+              <Button testID="voice-try-again" variant="secondary" label={t('retry')} onPress={onTryAgain} />
             </View>
           </>
         )
