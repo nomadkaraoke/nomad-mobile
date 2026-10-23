@@ -309,6 +309,49 @@ describe('Import file', () => {
     await waitFor(() => expect(fsState.files.has(FILE)).toBe(false));
   });
 
+  it('leaving during the ListenBrainz upload keeps the copy until the upload settles, then deletes it', async () => {
+    m(decide.getServicesSummary).mockResolvedValue({ sources: [lbRow('oauth')], capabilities: {} });
+    let finish!: (v: unknown) => void;
+    m(decide.uploadExportToListenBrainz).mockReturnValue(new Promise((r) => (finish = r)));
+    reads(summary('spotify-extended'));
+    const { unmount } = open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-lb-also')));
+    await act(async () => fireEvent.press(screen.getByTestId('connect-import-start')));
+    await waitFor(() => expect(decide.uploadExportToListenBrainz).toHaveBeenCalled());
+    unmount();
+    expect(fsState.files.has(FILE)).toBe(true); // the upload is still reading it
+    await act(async () => finish({ import_id: 'imp-1', status: 'queued' }));
+    await waitFor(() => expect(fsState.files.has(FILE)).toBe(false));
+  });
+
+  it('leaving after a failed ListenBrainz upload settles deletes the copy too', async () => {
+    m(decide.getServicesSummary).mockResolvedValue({ sources: [lbRow('oauth')], capabilities: {} });
+    let fail!: (e: unknown) => void;
+    m(decide.uploadExportToListenBrainz).mockReturnValue(new Promise((_r, j) => (fail = j)));
+    reads(summary('spotify-extended'));
+    const { unmount } = open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-lb-also')));
+    await act(async () => fireEvent.press(screen.getByTestId('connect-import-start')));
+    await waitFor(() => expect(decide.uploadExportToListenBrainz).toHaveBeenCalled());
+    unmount();
+    await act(async () => fail(new decide.ApiError(409, 'import_in_progress')));
+    await waitFor(() => expect(fsState.files.has(FILE)).toBe(false));
+  });
+
+  it('leaving before an offline ListenBrainz upload could start deletes the copy', async () => {
+    m(decide.getServicesSummary).mockResolvedValue({ sources: [lbRow('oauth')], capabilities: {} });
+    reads(summary('spotify-extended'));
+    mockConnected = false;
+    const { unmount } = open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-lb-also')));
+    await act(async () => fireEvent.press(screen.getByTestId('connect-import-start')));
+    expect(await screen.findByText('Waiting for connection')).toBeTruthy();
+    expect(decide.uploadExportToListenBrainz).not.toHaveBeenCalled();
+    expect(fsState.files.has(FILE)).toBe(true);
+    unmount();
+    expect(fsState.files.has(FILE)).toBe(false);
+  });
+
   it('deletes the cache copy when the file has nothing to add', async () => {
     putFile(10);
     reads(summary('spotify-account', 0));

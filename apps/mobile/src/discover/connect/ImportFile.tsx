@@ -148,9 +148,11 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
     if (!submitted || !lbAlso || lbStarted.current || offline) return;
     lbStarted.current = true;
     // An expo-file-system File: the app's fetch (expo/fetch) can't send React Native's `{ uri }` parts.
+    // Once the screen is gone the cleanup effects can't run, so a settling upload deletes the copy itself.
     sendToListenBrainz(new File(uri), name || 'my_spotify_data.zip', () => alive.current).then(
-      () => alive.current && setLb({ step: 'sent' }),
-      (error: unknown) => alive.current && setLb({ step: 'failed', message: lbMessage(error), error }),
+      () => (alive.current ? setLb({ step: 'sent' }) : deleteIfCached(uri)),
+      (error: unknown) =>
+        alive.current ? setLb({ step: 'failed', message: lbMessage(error), error }) : deleteIfCached(uri),
     );
   }, [submitted, lbAlso, offline, uri, name]);
 
@@ -171,11 +173,12 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
     deleteIfCached(uri);
   }, [nothingToAdd, uri]);
 
-  // Leaving the screen (back, or a failed read) with no upload still using the copy: delete it.
+  // Leaving the screen (back, or a failed read) with no upload still using the copy: delete it. Only an upload in
+  // flight keeps it (and deletes it when it settles); one that never started (offline) never will once we're gone.
   const copyInUse = useRef(false);
   const latestUri = useRef(uri);
   useEffect(() => {
-    copyInUse.current = submitted && lbAlso && lb.step === 'idle';
+    copyInUse.current = submitted && lbAlso && lb.step === 'idle' && lbStarted.current;
     latestUri.current = uri;
   });
   useEffect(
