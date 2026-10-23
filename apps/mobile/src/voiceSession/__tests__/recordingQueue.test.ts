@@ -168,6 +168,28 @@ describe('recordingQueue', () => {
     expect(fsState.files.has(a.uri)).toBe(false);
   });
 
+  it.each([
+    ['succeeds', (r: { ok: (v: unknown) => void }) => r.ok({ recording_id: 'old' })],
+    ['is refused for good', (r: { fail: (e: unknown) => void }) => r.fail(new ApiError(404, 'attempt_not_found'))],
+  ])('an old take whose upload %s after a newer take was queued for the same attempt leaves the newer one', async (_n, settle) => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const a = take('s1', 1);
+    const ctl = {} as { ok: (v: unknown) => void; fail: (e: unknown) => void };
+    mockUpload.mockImplementationOnce(() => new Promise((ok, fail) => Object.assign(ctl, { ok, fail })));
+    q().enqueue(a);
+    const running = q().flush();
+    await Promise.resolve();
+    const b = take('s1', 1, { uri: `${DIR}/s1-1-newer.m4a` });
+    fsState.files.set(b.uri, new Uint8Array(7));
+    q().enqueue(b);
+    (settle as (r: typeof ctl) => void)(ctl);
+    await running;
+    expect(q().items).toEqual([expect.objectContaining({ id: 's1:1', uri: b.uri, tries: 0 })]);
+    expect(fsState.files.has(b.uri)).toBe(true);
+    expect(fsState.files.has(a.uri)).toBe(false);
+    warn.mockRestore();
+  });
+
   it('concurrent flushes share one run (no double upload)', async () => {
     q().enqueue(take('s1', 1));
     await Promise.all([q().flush(), q().flush()]);

@@ -1,5 +1,6 @@
 import { AudioQuality, IOSOutputFormat, type AudioRecorder, type RecordingOptions } from 'expo-audio';
 import { File } from 'expo-file-system';
+import { deleteFileQuietly } from './files';
 import type { FinishedRecording } from './wavSink';
 
 /**
@@ -27,20 +28,14 @@ export type AacSink = {
   discard(): Promise<void>;
 };
 
-const deleteQuietly = (uri: string | null) => {
-  if (!uri) return;
-  try {
-    const f = new File(uri);
-    if (f.exists) f.delete();
-  } catch {
-    // Already gone.
-  }
-};
-
 /** One take on expo-audio's recorder (from `useAudioRecorder(AAC_RECORDING_OPTIONS)`). */
 export function createAacSink(recorder: AudioRecorder): AacSink {
   let started = false;
   let stopped = false;
+  // The take's path, read once the recorder is prepared. expo-audio's hook releases the native recorder on unmount
+  // (before our cleanup can run, in passive-effect order), after which `uri`, `getStatus()` and `stop()` throw: the
+  // captured path is what lets discard() still delete a take nobody consented to.
+  let uri: string | null = null;
 
   const stop = async (): Promise<number> => {
     if (!started || stopped) return 0;
@@ -53,21 +48,22 @@ export function createAacSink(recorder: AudioRecorder): AacSink {
   return {
     async start() {
       await recorder.prepareToRecordAsync();
+      uri = recorder.uri;
       recorder.record();
       started = true;
     },
     async finish() {
       const durationS = await stop();
-      const uri = recorder.uri;
       if (!uri) return null;
       return { uri, durationS, bytes: new File(uri).size };
     },
     async discard() {
       try {
         await stop();
-      } finally {
-        deleteQuietly(recorder.uri);
+      } catch {
+        // A released recorder throws; the file is still deleted below.
       }
+      deleteFileQuietly(uri);
     },
   };
 }

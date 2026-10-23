@@ -8,12 +8,13 @@ import {
 } from '@nomad/core';
 import type { VoiceRecordingContentType } from '@nomad/api-decide';
 import { setAudioModeAsync, useAudioRecorder, type AudioMode } from 'expo-audio';
-import { Directory, File, Paths } from 'expo-file-system';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Directory, Paths } from 'expo-file-system';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { createFramer } from '../../voice/framer';
 import type { PitchSource } from '../../voice/pitchSource';
 import { AAC_RECORDING_OPTIONS, createAacSink, type AacSink } from './aacSink';
+import { deleteFileQuietly } from './files';
 import { createWavSink, type WavSink } from './wavSink';
 
 /**
@@ -56,15 +57,6 @@ type Run = {
   aacKeepAliveOnly: boolean;
 };
 
-const deleteQuietly = (uri: string) => {
-  try {
-    const f = new File(uri);
-    if (f.exists) f.delete();
-  } catch {
-    // Already gone.
-  }
-};
-
 const warn = (what: string, e: unknown) => console.warn(`[song recorder] ${what}: ${String(e)}`);
 
 /**
@@ -98,7 +90,7 @@ export function useSongRecorder(
       if (run.current) {
         // A start() over a running take abandons it: its file is never queued, so delete it.
         const old = await stop();
-        if (old.file) deleteQuietly(old.file.uri);
+        if (old.file) deleteFileQuietly(old.file.uri);
       }
       const { record, floor, sink: wanted } = optsRef.current;
       const sink: SongSink = source.kind === 'fake' ? 'wav' : (wanted ?? 'aac');
@@ -200,7 +192,9 @@ export function useSongRecorder(
     return { start, stop };
   }, [source, recorder]);
 
-  useEffect(
+  // A layout effect, so this cleanup runs before useAudioRecorder's passive one releases the native recorder: the
+  // recorder can still be stopped, and discard() deletes the take either way (aacSink captures its path).
+  useLayoutEffect(
     () => () => {
       const r = run.current;
       if (!r) return;

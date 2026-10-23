@@ -15,6 +15,7 @@ import { AppState } from 'react-native';
 import { create } from 'zustand';
 
 import { appStorage } from '../../storage';
+import { deleteFileQuietly } from './files';
 
 export const RECORDING_QUEUE_KEY = 'voiceSession.uploads.v1';
 
@@ -44,15 +45,6 @@ const BACKOFF_MAX_MS = 6 * 3600_000;
 
 /** Wait after a failed upload that had failed `tries` times before: 30 s × 2^tries, at most 6 h. */
 export const uploadBackoffMs = (tries: number): number => Math.min(BACKOFF_MAX_MS, BACKOFF_BASE_MS * 2 ** tries);
-
-const deleteFile = (uri: string) => {
-  try {
-    const f = new File(uri);
-    if (f.exists) f.delete();
-  } catch {
-    // Already gone.
-  }
-};
 
 const fileExists = (uri: string) => {
   try {
@@ -137,9 +129,10 @@ export const useRecordingQueue = create<RecordingQueue>((set, get) => {
     const next = fn(items[at]!);
     save(next ? items.map((i, k) => (k === at ? next : i)) : items.filter((_, k) => k !== at));
   };
+  /** Drops the item only if it is still this take (a newer take for the same attempt stays), and deletes the file. */
   const remove = (id: string, uri: string) => {
-    update(id, () => null);
-    deleteFile(uri);
+    update(id, (i) => (i.uri === uri ? null : i));
+    deleteFileQuietly(uri);
   };
 
   async function run(): Promise<void> {
@@ -182,7 +175,7 @@ export const useRecordingQueue = create<RecordingQueue>((set, get) => {
     enqueue(input) {
       const id = `${input.sessionId}:${input.attemptN}`;
       const prev = get().items.find((i) => i.id === id);
-      if (prev && prev.uri !== input.uri) deleteFile(prev.uri);
+      if (prev && prev.uri !== input.uri) deleteFileQuietly(prev.uri);
       const item = toItem({ ...input, device: input.device ?? null, id, tries: 0, nextAt: 0 });
       save([...get().items.filter((i) => i.id !== id), item]);
     },
@@ -195,12 +188,12 @@ export const useRecordingQueue = create<RecordingQueue>((set, get) => {
     dropSession(sessionId) {
       const [gone, kept] = partition(get().items, (i) => i.sessionId === sessionId);
       save(kept);
-      for (const i of gone) deleteFile(i.uri);
+      for (const i of gone) deleteFileQuietly(i.uri);
     },
     clearAll() {
       const gone = get().items;
       save([]);
-      for (const i of gone) deleteFile(i.uri);
+      for (const i of gone) deleteFileQuietly(i.uri);
     },
   };
 });

@@ -9,16 +9,35 @@ import { SESSION_AUDIO_MODE, useSongRecorder } from '../recording/useSongRecorde
 // eslint-disable-next-line @typescript-eslint/no-require-imports -- jest.mock factories can't use imports
 jest.mock('expo-file-system', () => require('../../test-utils/memoryFs'));
 jest.mock('expo-audio', () => {
+  const { useEffect } = jest.requireActual('react');
+  // Like expo-audio's shared object: once released (the hook's own passive cleanup on unmount), every member throws.
+  let released = false;
+  let uri: string | null = null;
+  const live = <T,>(v: T): T => {
+    if (released) throw new Error('FunctionCallException: native recorder released');
+    return v;
+  };
   const recorder = {
-    uri: null as string | null,
+    get uri() {
+      return live(uri);
+    },
+    set uri(v: string | null) {
+      uri = v;
+    },
     prepareToRecordAsync: jest.fn(async () => {}),
     record: jest.fn(),
     stop: jest.fn(async () => {}),
     getStatus: jest.fn(() => ({ durationMillis: 0 })),
+    __release: () => void (released = true),
+    __reset: () => void (released = false),
+    __live: live,
   };
   return {
     setAudioModeAsync: jest.fn(async () => {}),
-    useAudioRecorder: jest.fn(() => recorder),
+    useAudioRecorder: jest.fn(() => {
+      useEffect(() => () => recorder.__release(), []);
+      return recorder;
+    }),
     IOSOutputFormat: { MPEG4AAC: 'aac ' },
     AudioQuality: { MEDIUM: 64 },
     __recorder: recorder,
@@ -34,6 +53,9 @@ const mocked = audio as unknown as {
     record: jest.Mock;
     stop: jest.Mock;
     getStatus: jest.Mock;
+    __release(): void;
+    __reset(): void;
+    __live<T>(v: T): T;
   };
 };
 
@@ -79,14 +101,24 @@ beforeEach(() => {
   jest.clearAllMocks();
   fsState.reset();
   const r = mocked.__recorder;
+  r.__reset();
   r.uri = null;
+  // Like the native recorder: prepare picks the path and creates the file; stop finalises it.
   r.prepareToRecordAsync.mockImplementation(async () => {
     r.uri = AAC_URI;
+    fsState.files.set(AAC_URI, new Uint8Array(0));
   });
   r.stop.mockImplementation(async () => {
+    r.__live(null);
     fsState.files.set(AAC_URI, new Uint8Array(1234));
   });
-  r.getStatus.mockReturnValue({ durationMillis: 12_500 });
+  r.getStatus.mockImplementation(() => r.__live({ durationMillis: 12_500 }));
+});
+
+let platform: { restore(): void } | null = null;
+afterEach(() => {
+  platform?.restore();
+  platform = null;
 });
 
 describe('useSongRecorder', () => {
@@ -164,7 +196,7 @@ describe('useSongRecorder', () => {
   });
 
   it('on Android without consent the recorder never runs', async () => {
-    jest.replaceProperty(Platform, 'OS', 'android');
+    platform = jest.replaceProperty(Platform, 'OS', 'android');
     const { source, emit } = fakeSource('mic');
     const { result } = renderHook(() => useSongRecorder(source, { record: false, floor: 0.003 }));
     await act(() => result.current.start());
@@ -176,7 +208,6 @@ describe('useSongRecorder', () => {
     expect(mocked.__recorder.record).not.toHaveBeenCalled();
     expect(out.file).toBeNull();
     expect(out.pitch).not.toBeNull();
-    jest.restoreAllMocks();
   });
 
   it('the fake source records a WAV (16 kHz PCM16) and never touches the AAC recorder or the audio mode', async () => {
@@ -324,6 +355,57 @@ describe('useSongRecorder', () => {
       out = await result.current.stop();
     });
     expect(out.file!.durationS).toBe(0);
+  });
+
+  it('unmount deletes a non-consented iOS keep-alive take (our cleanup runs before the hook releases the recorder)', async () => {
+    const order: string[] = [];
+    const r = mocked.__recorder;
+    r.stop.mockImplementation(async () => {
+      r.__live(null);
+      order.push('recorder.stop');
+    });
+    const release = r.__release;
+    r.__release = () => {
+      order.push('release');
+      release();
+    };
+    const { source, emit } = fakeSource('mic');
+    const { result, unmount } = renderHook(() => useSongRecorder(source, { record: false, floor: 0.003 }));
+    await act(() => result.current.start());
+    act(() => emit(220, 1));
+    expect(fsState.files.has(AAC_URI)).toBe(true);
+    unmount();
+    await act(async () => {});
+    r.__release = release;
+    expect(order).toEqual(['recorder.stop', 'release']);
+    expect(fsState.files.has(AAC_URI)).toBe(false);
+  });
+
+  it('a keep-alive take is still deleted when the recorder was already released (uri, getStatus, stop all throw)', async () => {
+    const { source, emit } = fakeSource('mic');
+    const { result, unmount } = renderHook(() => useSongRecorder(source, { record: false, floor: 0.003 }));
+    await act(() => result.current.start());
+    act(() => emit(220, 1));
+    mocked.__recorder.__release();
+    expect(() => mocked.__recorder.uri).toThrow('released');
+    unmount();
+    await act(async () => {});
+    expect(fsState.files.has(AAC_URI)).toBe(false);
+  });
+
+  it('stop() on a released recorder still deletes a keep-alive take', async () => {
+    const { source, emit } = fakeSource('mic');
+    const { result } = renderHook(() => useSongRecorder(source, { record: false, floor: 0.003 }));
+    await act(() => result.current.start());
+    act(() => sing(emit));
+    mocked.__recorder.__release();
+    let out!: Awaited<ReturnType<typeof result.current.stop>>;
+    await act(async () => {
+      out = await result.current.stop();
+    });
+    expect(out.file).toBeNull();
+    expect(out.pitch).not.toBeNull();
+    expect(fsState.files.size).toBe(0);
   });
 
   it('unmount stops the stream and discards the take', async () => {
