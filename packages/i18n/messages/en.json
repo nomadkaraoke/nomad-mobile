@@ -1202,5 +1202,19 @@
     "next": "Next",
     "finish": "Finish",
     "submitError": "Couldn't save your answers. Try again."
+  },
+  "connect": {
+    "errors": {
+      "badUrl": "That isn't a Spotify or YouTube Music playlist link.",
+      "notFound": "We couldn't find that username. Check the spelling and try again.",
+      "private": "We couldn't open that playlist. Make sure it's public, then try again.",
+      "likedPrivate": "Liked Music is always private. Copy it into a public or unlisted playlist, then share that link.",
+      "unparseable": "We couldn't read that playlist right now. Try a YouTube Music link or a screenshot instead.",
+      "rateLimited": "That's a lot of imports for now. Try again later.",
+      "unavailable": "We couldn't reach the service just now. Try again in a few minutes.",
+      "tooLarge": "That file is too big to send from the app.",
+      "notAnExport": "This doesn't look like a Spotify or Apple data export.",
+      "generic": "Something went wrong. Please try again."
+    }
   }
 }

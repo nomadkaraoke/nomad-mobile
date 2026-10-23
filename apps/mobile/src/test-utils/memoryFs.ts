@@ -43,7 +43,7 @@ export class Directory {
   get exists() {
     return fsState.dirs.has(this.uri);
   }
-  create() {
+  create(_opts?: { intermediates?: boolean; idempotent?: boolean }) {
     fsState.dirs.add(this.uri);
   }
   delete() {
@@ -122,6 +122,11 @@ export class File {
   open() {
     if (!this.exists) throw new Error(`no such file: ${this.uri}`);
     return new FileHandle(this.uri);
+  }
+  async text() {
+    const data = fsState.files.get(this.uri);
+    if (!data) throw new Error(`no such file: ${this.uri}`);
+    return new TextDecoder().decode(data);
   }
   write(content: string | Uint8Array) {
     fsState.files.set(this.uri, typeof content === 'string' ? new TextEncoder().encode(content) : content);
