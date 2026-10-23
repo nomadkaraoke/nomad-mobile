@@ -54,6 +54,22 @@ Where this plan names a 3a symbol that the 3a plan (`docs/superpowers/plans/2026
 - **decide rules.** Bump `pyproject.toml` from 0.15.x to the next minor. Each new endpoint gets a row in `docs/API.md`. Run `make test` (unit ≥ 70%, backend ≥ 60%).
 - **Retry policy** for mobile uploads on 5xx, 429 or network errors: 5, 15, 30, 60 s, honouring `Retry-After`. Any other 4xx is final.
 
+## Execution amendments (2026-10-22, execution session nomadkaraoke-94)
+
+Changes since the plan was written. Each is a ruling in the SDD ledger; task-level amendments sit in the tasks as "Amendment" blockquotes.
+
+- **A1 Apple Music connect has shipped** (decide #172–176 v0.20.0–0.20.4, mobile #12/#15). The hub's `apple` card calls `useAppleMusic().connect` (`apps/mobile/src/discover/profile/useAppleMusic.ts`: native MusicKit on iOS, full-browser MusicKit JS on Android). The privacy-export route (Task 5 `apple-export`, Task 15 Apple CSV parser, Task 22 screen) stays, demoted to a "No Apple Music subscription? Import your play history instead" link on that card: ex-subscribers keep years of play activity, and it reuses the Spotify export pipeline, so it costs one small screen. Spec §2 non-goal "Apple MusicKit library access" and §8 item 3 are superseded.
+- **A2 ListenBrainz OAuth ships live, not dark.** Andrew registered the MetaBrainz app (redirect `https://decide.nomadkaraoke.com/api/services/listenbrainz/oauth/callback`); `metabrainz-client-id` / `metabrainz-client-secret` exist in Secret Manager, and the compute SA has project-level secretAccessor. The capability is still computed (`listenbrainz_oauth_active`), so the button hides itself if anything is missing, but ci.yml mounts the MetaBrainz secrets and sets `LISTENBRAINZ_OAUTH_ENABLED=true` unconditionally (drop the `DECIDE_METABRAINZ` gate). `gemini-api-key` (exists) is mounted unconditionally too. Only `decide-token-key` (does not exist yet; created under `/gcp-admin`) stays gated on `vars.DECIDE_3B_SECRETS == '1'`; without it `listenbrainz_oauth_active` is false, so Andrew's `/gcp-admin` step is: create the secret version, `pulumi up` (grants, scheduler/job, Worker), `gh variable set DECIDE_3B_SECRETS --body 1`. The upload of the Spotify zip to ListenBrainz on the user's behalf (Task 8) is in scope and must work end to end on prod.
+- **A11 `decide-token-key` was created by hand (2026-10-22, admin, Fernet key v1)** during this session's `/gcp-admin` grant. Pulumi must NOT declare a `gcp.secretmanager.Secret` for it (that would collide); it only goes in `REQUIRED_SECRETS` for the accessor grant, like the Apple secrets. ci.yml mounts `DECIDE_TOKEN_KEY` unconditionally — the `DECIDE_3B_SECRETS` gate is dropped entirely.
+- **A3 Shared `user_songs` rows with Tonight (decide #168).** The agreed contract: an imported song lands on the existing row `{user_id}:{kn_id}` (catalog.db maps the song_key to a KaraokeNerds id and that row exists), else `loved_doc_id(user_id, song_key)` (`backend/services/song_feedback_service.py`), exactly the rule `backend/services/karaoke_log_service.py` uses. Writes are additive merges: never overwrite `times_sung`, `last_sung_at`, `loved`, `hidden` or another source's `source`; new timestamp fields are ISO strings. Reuse (or extract into a shared helper) karaoke_log_service's row resolution rather than re-deriving it.
+- **A4 New sources touch every source enumeration** (Apple Music learning): `karaoke_decide/core/models.py` (`MusicService.service_type` and the `UserSong.source` Literal ~line 119), recs v2 `backend/services/recs_v2/context.py` `_TOP_SOURCES` and `weights.py` `song_weight`, the decide web `SourceBadge`, and the disconnect allowlist in `backend/api/routes/services.py`. New sources: `screenshot`, `spotify_playlist`, `spotify_export`, `apple_export` (`youtube_music` already exists? check). 3c (nomadkaraoke-a2) is also editing recs v2 (`filters.py`, `weights.py`, `scoring.py`, `service.py`) — keep edits there minimal and additive.
+- **A5 decide version:** decide is at 0.20.4, not 0.15.x. Each decide PR bumps the next minor off main at merge time (3c does the same; whoever merges second rebases and re-bumps).
+- **A6 Decide PRs, one per part:** Part A (Tasks 1–6), Part B (Tasks 7–10), Part C (Tasks 11, 12, 27), Part D (Tasks 13–14). Infra/CI for a part may ride with that part's PR when needed for it to work on prod; Task 14 collects the rest.
+- **A7 Local stack ports:** the parallel 3c session holds decide :8030/:8020. 3b runs its decide stack on **:8031 (API) / :8021 (search)** (`DECIDE_PORT`/`SEARCH_PORT` or equivalent in `scripts/local-stack.sh`; add the knobs if missing) and the mobile e2e uses `EXPO_PUBLIC_DECIDE_API_URL=http://127.0.0.1:8031` etc. Gen :8010 is shared.
+- **A8 The ListenBrainz poller runs as a Cloud Run Job, not a request on the API service** (see Task 10 amendment): decide already runs `mb-refresh` / `lb-refresh` as scheduled Jobs from the same image, and the watch item (A9) shows the API instances can't absorb long CPU work.
+- **A9 Capacity watch item → new Task 27** (Part C): Cloud Run returned 0 s 500s on decide while an Apple sync was matching. Investigate and fix.
+- **A10 3a names:** test API router = `backend/api/routes/test_support.py`; Maestro helper = `maestro/scripts/stack.js` (decide actions there); recommendations query key = `RECS_KEY` in `apps/mobile/src/discover/useRecommendations.ts`; Improve card = `apps/mobile/src/discover/components/ImproveCard.tsx` (3c adds a voice entry `discover-improve-voice` there); music profile = `apps/mobile/src/discover/profile/ProfileSection.tsx` route `/me/music-profile` (3c adds a VoiceProfileSection).
+
 ## Review Focus
 
 1. **A real export zip with unexpected entries or naming.** Examples: old `StreamingHistory0.json` names, `Streaming_History_Video_*`, a nested `Apple_Media_Services.zip`, an Apple CSV with renamed headers, a UTF-8 BOM. The parser must still find the music plays, or say "This doesn't look like a Spotify or Apple export". It must never crash or report zero silently. Tests in Task 15: `oldAccountNaming`, `skipsVideo`, `nestedAppleZip`, `appleHeaderAliases`, `bomCsv`.
@@ -67,6 +83,8 @@ Where this plan names a 3a symbol that the 3a plan (`docs/superpowers/plans/2026
 ## Part A: decide imports API (repo `karaoke-decide`)
 
 ### Task 1: Settings, token cipher, capabilities endpoint, deps
+
+> **Amendment (A5, A7):** bump decide from 0.20.4 to 0.21.0 (not 0.15.x). Also make `scripts/local-stack.sh` ports configurable if they are not already (API default 8030, search default 8020), so this session can run on 8031/8021 — or defer that to Task 13 if the script change is bigger than a couple of lines. Check which Gemini Flash model id decide/gen use today (`karaoke_decide/services/llm_judge.py`, gen's settings) and default `screenshot_llm_model` to that model, not a guessed name.
 
 **Files:**
 - Modify: `backend/config.py` (BackendSettings)
@@ -113,6 +131,8 @@ Where this plan names a 3a symbol that the 3a plan (`docs/superpowers/plans/2026
 - [ ] **Step 5:** Commit: `feat(services): 3b settings, token cipher, capabilities endpoint`.
 
 ### Task 2: Firestore batch helpers and `ImportIngestService`
+
+> **Amendment (A3, A4):** `user_songs` row ids follow the contract shared with Tonight (decide #168): existing `{user_id}:{kn_id}` row when catalog.db maps the song_key to a KN id and that row exists, else `loved_doc_id(user_id, song_key)`. Reuse karaoke_log_service's resolution (extract a shared helper if needed). Unmatched imports (no song_key) keep the existing synthetic-id behaviour of `SyncService._upsert_user_songs`. Merges are additive: never touch `times_sung`, `last_sung_at`, `loved`, `hidden`; timestamps are ISO strings. Add the new `ImportSource` values to every source enumeration (A4): `UserSong.source` Literal in `karaoke_decide/core/models.py`, recs v2 `_TOP_SOURCES` (artist sources: `spotify_export`, `apple_export`, `screenshot`, `spotify_playlist` as fits) and `song_weight` (export plays weigh like Last.fm plays), decide web `SourceBadge`. Add a test that a song already logged by Tonight (times_sung=2 on the `{uid}:{kn_id}` row) keeps times_sung after an import and gains the import source.
 
 **Files:**
 - Modify: `backend/services/firestore_service.py`
@@ -315,6 +335,8 @@ Where this plan names a 3a symbol that the 3a plan (`docs/superpowers/plans/2026
 
 ### Task 7: MetaBrainz OAuth (dark), encrypted tokens, Worker redirect fix
 
+> **Amendment (A2):** ships live. Before coding, verify against current ListenBrainz docs/source which `Authorization` scheme LB's API accepts for a MetaBrainz OAuth access token (`Token` vs `Bearer`) on `/1/validate-token`, `/1/user/{u}/listens` and `/1/import-listens/`, and which scopes import-listens needs; record the finding in the report and adjust the scopes. Find out how `infrastructure/cloudflare-worker/api-proxy.js` is deployed (CI, wrangler or Pulumi) so the `redirect: "manual"` change actually reaches prod with this PR; the MetaBrainz app's registered redirect is `https://decide.nomadkaraoke.com/api/services/listenbrainz/oauth/callback`.
+
 **Files:**
 - Create: `karaoke_decide/services/metabrainz_oauth.py`
 - Modify:
@@ -407,6 +429,8 @@ Where this plan names a 3a symbol that the 3a plan (`docs/superpowers/plans/2026
 
 ### Task 10: Daily ListenBrainz poller and stale status
 
+> **Amendment (A8):** the poller is a Cloud Run **Job** `lb-poll` (same image, entry point `python -m backend.jobs.lb_poll` or the repo's existing job-entry convention — copy how `lb-refresh` is wired), scheduled daily by Cloud Scheduler like `lb-refresh`. Replace `POST /internal/listenbrainz/poll` with: the job entry point calling `ListenBrainzPoller.run(budget)` and logging one INFO summary line; and a test-API route `POST /api/test/listenbrainz/poll` (only under `DECIDE_TEST_API=1`) for the local stack and Maestro. Route test `test_poll_requires_internal_caller` becomes `test_poll_route_only_with_test_api`. Pulumi job + scheduler + SA go in Task 14 (budget: job task timeout 1800 s).
+
 **Files:**
 - Create: `backend/services/listenbrainz_poller.py`
 - Modify: `backend/api/routes/internal.py`
@@ -489,6 +513,17 @@ Where this plan names a 3a symbol that the 3a plan (`docs/superpowers/plans/2026
 - [ ] **Step 4:** Run them. Expected: PASS.
 - [ ] **Step 5:** Commit: `fix(spotify): invalid_grant → needs_reconnect, encoded authorize URL, coded errors`.
 
+### Task 27: decide capacity under sync load (watch item)
+
+**Why:** during Apple Music sync matching on prod (2026-10-22), Cloud Run returned a few 0 s-latency 500s with no app log (`/api/services`, `/api/my/songs/hidden`, `/api/health`); the app's next poll succeeded. 3b adds more import, sync and poll load.
+
+**Files:** investigation first; likely `backend/services/track_matcher.py`, `backend/services/sync_service.py`, `backend/api/routes/internal.py`, ci.yml/Pulumi Cloud Run settings (`--concurrency 80`, `--cpu 1`, `--cpu-throttling`, 2Gi), maybe a separate Cloud Run service or Job for sync.
+
+- [ ] **Step 1: Diagnose.** Pull Cloud Run request logs for `karaoke-decide` around the Apple syncs on 2026-10-22 (python `google-cloud-logging` with the read-only ADC; gcloud CLI user auth may be lapsed): the 500s' `latency`, `textPayload`/`httpRequest`, instance id, and any `The request failed because …` platform message; container memory/CPU around them (Cloud Monitoring `run.googleapis.com/container/*`). Find what blocked: sync work on the event loop (e.g. `catalog_service.batch_match_tracks` BigQuery fallback is synchronous inside `async def batch_match_tracks`; Firestore sync calls; CPU-heavy normalisation of thousands of tracks), memory pressure, or instance startup. Write the diagnosis in the report with the evidence.
+- [ ] **Step 2: Fix the root cause** with tests: every blocking BigQuery/Firestore/CPU-bound call reachable from async handlers and the sync/import paths (including the new ingest service and screenshot matching) runs off the event loop (`asyncio.to_thread` / `run_in_threadpool`) or in bounded chunks that yield; add a regression test that the event loop stays responsive (e.g. a concurrent `/api/health` completes within 200 ms while a 5,000-track match runs). If the evidence shows CPU starvation that threads can't fix, move `/internal/sync/process` onto its own Cloud Run service (same image) or lower the main service's concurrency — say which and why in the report; any Pulumi/ci.yml change stays in parity (`tests/unit/test_infra_ci_parity.py`).
+- [ ] **Step 3:** If something is out of scope for 3b, file it in the workspace BACKLOG.md via the report (the controller runs `/backlog-add`).
+- [ ] **Step 4:** Commit: `fix(perf): keep decide's event loop free during sync/import matching`.
+
 ## Part D: local-stack fakes
 
 ### Task 13: `DECIDE_FAKE_EXTERNALS` and inline tasks
@@ -545,6 +580,8 @@ Where this plan names a 3a symbol that the 3a plan (`docs/superpowers/plans/2026
 - [ ] **Step 5:** Commit: `test(local-stack): DECIDE_FAKE_EXTERNALS fakes for LB, MetaBrainz, Spotify embed, Last.fm, Gemini`.
 
 ### Task 14: Pulumi, CI, docs, ship the decide PR
+
+> **Amendment (A2, A8):** ci.yml mounts `GEMINI_API_KEY=gemini-api-key:latest`, `METABRAINZ_CLIENT_ID`, `METABRAINZ_CLIENT_SECRET` and sets `LISTENBRAINZ_OAUTH_ENABLED=true` unconditionally (the secrets exist; the compute SA has project-level accessor); `DECIDE_TOKEN_KEY=decide-token-key:latest` too (A11: the secret exists; no repo-variable gates, and no Pulumi `Secret` resource for it). `REQUIRED_SECRETS` += `gemini-api-key`, `metabrainz-client-id`, `metabrainz-client-secret`, `decide-token-key` (drop the `metabrainzOAuth` config gate). Replace the HTTP scheduler with the `lb-poll` Cloud Run Job + its Scheduler + SA, mirroring `lb-refresh` (incl. the ci.yml "Update … job image" step). Admin step (this session, under `/gcp-admin`): `pulumi preview` then `pulumi up` for the grants, the lb-poll job + scheduler and anything else Pulumi-managed.
 
 **Files:**
 - Modify: `infrastructure/__main__.py`, `.github/workflows/ci.yml`, `docs/API.md`, `docs/ARCHITECTURE.md`, `docs/README.md`
@@ -709,6 +746,8 @@ export function importErrorKey(e: unknown, route: 'screenshot' | 'playlist' | 'e
 - [ ] **Step 5:** Commit: `feat(connect): on-phone export reader, offline upload queue, summary hooks`.
 
 ### Task 18: Connect hub, entry points, profile Connected section
+
+> **Amendment (A1):** the `apple` card's primary action is `useAppleMusic().connect` (already shipped, used by the profile screen); show its connected state from the existing services list. A secondary link on the card, `connect-apple-export`, "No Apple Music subscription? Import your play history instead", opens Task 22's screen. Card copy: "Apple Music" · "Your library and recent plays · seconds".
 
 **Files:**
 - Create:
@@ -924,6 +963,8 @@ export function importErrorKey(e: unknown, route: 'screenshot' | 'playlist' | 'e
 - [ ] **Step 5:** Commit: `feat(connect): Android Share → Nomad Karaoke for export zips`.
 
 ### Task 25: i18n, Maestro connect-1…5, fixtures
+
+> **Amendment (A7, A10):** run against decide on :8031/:8021 (`EXPO_PUBLIC_DECIDE_API_URL=http://127.0.0.1:8031`, `EXPO_PUBLIC_DECIDE_SEARCH_URL=http://127.0.0.1:8021`, Android `adb reverse tcp:8031 tcp:8021`); make `scripts/e2e-local.sh` / `stack.js` ports configurable (`DECIDE_STACK`) rather than hard-coding. The decide helper is `maestro/scripts/stack.js`. `lb-poll` calls `POST {DECIDE}/api/test/listenbrainz/poll` (Task 10 amendment).
 
 **Files:**
 - Create:
