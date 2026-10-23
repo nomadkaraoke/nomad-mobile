@@ -4,7 +4,7 @@ import * as WebBrowser from 'expo-web-browser';
 import type { ReactNode } from 'react';
 import { View } from 'react-native';
 
-import { pickExportFile } from './pickExportFile';
+import { PickExportError, usePickExportFile } from './usePickExportFile';
 
 const APPLE_PRIVACY = 'https://privacy.apple.com/';
 
@@ -29,6 +29,7 @@ function Step({ n, text, children }: { n: number; text: string; children?: React
  */
 export function AppleExportGuide() {
   const t = useTranslations('connect');
+  const { pick, failed: pickFailed } = usePickExportFile();
   return (
     <Screen testID="connect-apple-export-guide" scroll underHeader>
       <Text variant="muted">{t('appleGuide.intro')}</Text>
@@ -42,7 +43,8 @@ export function AppleExportGuide() {
       </Step>
       <Step n={2} text={t('appleGuide.step2')} />
       <Step n={3} text={t('appleGuide.step3')}>
-        <Button testID="connect-apple-pick" label={t('appleGuide.pick')} onPress={() => void pickExportFile()} />
+        <Button testID="connect-apple-pick" label={t('appleGuide.pick')} onPress={pick} />
+        <PickExportError visible={pickFailed} />
       </Step>
     </Screen>
   );

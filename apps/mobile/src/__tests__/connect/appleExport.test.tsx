@@ -65,6 +65,35 @@ describe('Apple Music export guide', () => {
     expect(await screen.findByTestId('connect-import-progress')).toBeTruthy();
   });
 
+  // Final review minor 2: a picker failure is shown, never an unhandled rejection.
+  it('a picker failure shows an error and stays on the guide', async () => {
+    (DocumentPicker.getDocumentAsync as jest.Mock).mockRejectedValueOnce(new Error('Different document picking in progress'));
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const app = open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-apple-pick')));
+    expect(await screen.findByTestId('connect-pick-error')).toBeTruthy();
+    expect(screen.getByText('Something went wrong. Please try again.')).toBeTruthy();
+    expect(app.getPathname()).toBe('/discover/connect/apple');
+    warn.mockRestore();
+  });
+
+  it('a double tap opens one picker', async () => {
+    let resolvePick!: (r: unknown) => void;
+    (DocumentPicker.getDocumentAsync as jest.Mock).mockImplementationOnce(() => new Promise((r) => (resolvePick = r)));
+    open();
+    const button = await screen.findByTestId('connect-apple-pick');
+    await act(async () => {
+      fireEvent.press(button);
+      fireEvent.press(button);
+    });
+    expect(DocumentPicker.getDocumentAsync).toHaveBeenCalledTimes(1);
+    await act(async () => resolvePick({ canceled: true, assets: null }));
+    expect(screen.queryByTestId('connect-pick-error')).toBeNull();
+    // Once the picker is closed, the button opens it again.
+    await act(async () => fireEvent.press(screen.getByTestId('connect-apple-pick')));
+    expect(DocumentPicker.getDocumentAsync).toHaveBeenCalledTimes(2);
+  });
+
   it('a cancelled pick stays on the guide', async () => {
     const app = open();
     await act(async () => fireEvent.press(await screen.findByTestId('connect-apple-pick')));

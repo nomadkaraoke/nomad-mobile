@@ -13,7 +13,7 @@ import { isAlreadyImported, RETRY_DELAYS_MS, retryDelayMs, useImportQueue } from
 import { isImportableFileUri } from './importFileUri';
 import { ImportResult } from './ImportResult';
 import { useCapabilities, useServicesSummary } from './queries';
-import { pickExportFile } from './pickExportFile';
+import { PickExportError, usePickExportFile } from './usePickExportFile';
 import { readExportFile } from './readExport';
 import { cancelExportReminder } from './reminders';
 
@@ -97,6 +97,7 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
   const sources = useServicesSummary();
   const capabilities = useCapabilities();
   const enqueue = useImportQueue((s) => s.enqueue);
+  const { pick: pickAnother, failed: pickFailed } = usePickExportFile(true);
   const [read, setRead] = useState<Read>({ step: 'reading', pct: 0 });
   /** The queued import (set once enqueued; enqueue answers null when signed out, which leaves this null). */
   const [batchId, setBatchId] = useState<string | null>(null);
@@ -222,7 +223,8 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
           <Text testID="connect-import-error" variant="error" accessibilityLiveRegion="polite">
             {tAll(importErrorKey(read.error, 'export'))}
           </Text>
-          <Button testID="connect-import-pick" label={t('importFile.pickAnother')} onPress={() => void pickExportFile(true)} />
+          <Button testID="connect-import-pick" label={t('importFile.pickAnother')} onPress={pickAnother} />
+          <PickExportError visible={pickFailed} />
         </>
       ) : null}
 
@@ -317,9 +319,10 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
               testID="connect-import-pick"
               variant="secondary"
               label={t('importFile.pickAnother')}
-              onPress={() => void pickExportFile(true)}
+              onPress={pickAnother}
             />
           ) : null}
+          {done || chunks.length === 0 ? <PickExportError visible={pickFailed} /> : null}
         </>
       ) : null}
     </Screen>

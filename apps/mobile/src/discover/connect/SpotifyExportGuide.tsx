@@ -4,7 +4,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { useState, type ReactNode } from 'react';
 import { Linking, View } from 'react-native';
 
-import { pickExportFile } from './pickExportFile';
+import { PickExportError, usePickExportFile } from './usePickExportFile';
 import { scheduleExportReminders } from './reminders';
 
 const SPOTIFY_PRIVACY = 'https://www.spotify.com/account/privacy/';
@@ -32,6 +32,7 @@ function Step({ n, text, children }: { n: number; text: string; children: ReactN
  */
 export function SpotifyExportGuide() {
   const t = useTranslations('connect');
+  const { pick, failed: pickFailed } = usePickExportFile();
   const [remind, setRemind] = useState<Remind>('idle');
 
   const remindMe = async () => {
@@ -96,7 +97,8 @@ export function SpotifyExportGuide() {
         ) : null}
       </Step>
       <Step n={3} text={t('spotifyExport.step3')}>
-        <Button testID="connect-spotify-pick" label={t('spotifyExport.pick')} onPress={() => void pickExportFile()} />
+        <Button testID="connect-spotify-pick" label={t('spotifyExport.pick')} onPress={pick} />
+        <PickExportError visible={pickFailed} />
       </Step>
     </Screen>
   );
