@@ -13,6 +13,7 @@ import { StepLayout } from './StepLayout';
 import { usePitchSource } from './usePitchSource';
 import { useVoiceTest, type VoiceResult as MicResult } from './useVoiceTest';
 import { VoiceResult } from './VoiceResult';
+import { useSaveVoiceProfile } from './useVoiceProfile';
 import { profileFromResult, profileFromSelfReport, useVoiceStore, type LocalVoiceProfile } from './voiceStore';
 
 /** The live strip spans every voice type's range (E2–C6) from C2. */
@@ -26,13 +27,14 @@ const LISTENING_STEPS: ReadonlySet<string> = new Set(['low', 'high', 'sing']);
 /**
  * `/discover/voice` (spec §4.2): the ~60 s mic test (intro → lowest → highest → sing → result), the
  * self-report picker and the result. Signed out, Save keeps the result on this phone and opens sign-in; it
- * counts as saved once sign-in returns here. 18b sends the pending profile to decide.
+ * counts as saved once sign-in returns here. useSaveVoiceProfile sends it to decide (pending until it lands).
  */
 export function VoiceTestScreen() {
   const source = usePitchSource();
   const test = useVoiceTest(source);
   const { cancel, begin } = test;
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
+  const saveToDecide = useSaveVoiceProfile();
 
   const [mode, setMode] = useState<'test' | 'self'>('test');
   /** The last mic result: kept when cancel() (blur, background) resets the test. */
@@ -71,10 +73,12 @@ export function VoiceTestScreen() {
 
   const save = (p: LocalVoiceProfile) => {
     setChosen(p);
-    useVoiceStore.getState().save(p);
     if (signedIn) {
+      // Stored pending first; the PUT (and any retry) happens in the hook, so a failure never loses the result.
+      void saveToDecide(p);
       setSaved(true);
     } else {
+      useVoiceStore.getState().save(p); // signed out: kept on the phone, sent once signed in
       setAwaitingSignIn(true);
       openSignIn('/discover/voice');
     }

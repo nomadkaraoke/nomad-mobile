@@ -162,6 +162,8 @@ type VoiceStore = Persisted & {
   save(profile: LocalVoiceProfile): void;
   /** decide has the profile measured at `measuredAt`; a newer local one stays pending. */
   markSynced(measuredAt: string): void;
+  /** decide's copy is newer than ours: it replaces the profile and nothing is pending. */
+  adopt(profile: LocalVoiceProfile): void;
   clear(): void;
 };
 
@@ -178,6 +180,11 @@ export const useVoiceStore = create<VoiceStore>((set, get) => ({
     const { profile } = get();
     if (!profile || profile.measuredAt !== measuredAt) return;
     const next = { profile, pending: false };
+    persist(next);
+    set(next);
+  },
+  adopt(profile) {
+    const next = { profile: toLocal(profile), pending: false };
     persist(next);
     set(next);
   },

@@ -14,6 +14,7 @@ import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
 import { useKaraokeLogFreshness } from '../tonight/log/IdeasPanel';
 import { useLogSync } from '../tonight/log/useLogSync';
+import { useFlushPendingVoice } from '../voice/useVoiceProfile';
 import { installDevWarningTrace } from './devWarnings';
 
 // Before anything formats: Hermes has no Intl.PluralRules (ICU plurals would throw).
@@ -40,6 +41,12 @@ function SearchWarmup() {
 function LogSync() {
   useLogSync();
   useKaraokeLogFreshness();
+  return null;
+}
+
+/** Phase 3c: sends a voice profile decide hasn't got yet (offline / 5xx / signed-out saves) on sign-in and foreground. */
+function VoiceFlush() {
+  useFlushPendingVoice();
   return null;
 }
 
@@ -80,6 +87,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
           <SearchWarmup />
           <LogSync />
           <ClearDiscoverOnSignOut />
+          <VoiceFlush />
           {children}
         </QueryClientProvider>
       </IntlProvider>
