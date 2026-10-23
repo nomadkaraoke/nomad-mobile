@@ -8,6 +8,10 @@ import { useImportQueueRunner } from '../discover/connect/importQueue';
 import { useReminderTapRouting } from '../discover/connect/reminders';
 import { useSharedFileIntake } from '../discover/connect/useSharedFileIntake';
 import { AppProviders } from '../providers/AppProviders';
+import { headerBackWhenFirst } from '../ui/HeaderBack';
+
+/** Your music profile opened cold (e.g. the Apple Music hand-back) goes back to Me. */
+const profileBack = headerBackWhenFirst('/me', 'profile-back');
 
 // Sign-in is a bottom sheet over whatever asked for it (spec §4.3). Its screens replace one another.
 // The duration-confirm sheet reuses the same look.
@@ -66,7 +70,7 @@ function RootStack() {
         {/* The Discover quiz (Phase 3a spec §8.2): a modal over Discover; finishing dismisses back to it. */}
         <Stack.Screen name="discover/quiz" options={{ presentation: 'modal', title: tQuiz('title') }} />
         {/* Me -> Your music profile (Phase 3a spec §8.3). */}
-        <Stack.Screen name="me/music-profile" options={{ title: tAccount('musicProfile') }} />
+        <Stack.Screen name="me/music-profile" options={(p) => ({ title: tAccount('musicProfile'), ...profileBack(p) })} />
         {/* Connect your music (Phase 3b): its own stack with its own headers. */}
         <Stack.Screen name="discover/connect" options={{ headerShown: false }} />
       </Stack>

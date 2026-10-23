@@ -228,6 +228,71 @@ describe('Connect your music hub', () => {
   });
 });
 
+// A screen opened cold (deep link, reminder tap, ListenBrainz OAuth return, Android share) is the first in its
+// stack, so the native header shows no chevron: it gets its own back button to the hub (or to Me for the profile).
+describe('back from a screen opened cold', () => {
+  const cold = (initialUrl: string) =>
+    renderRouter(
+      {
+        ...appRoutes(),
+        'discover/connect/spotify-export': stub('stub-spotify-export'),
+        'discover/connect/listenbrainz': stub('stub-listenbrainz'),
+        'discover/connect/import-file': stub('stub-import-file'),
+        'me/music-profile': stub('stub-profile'),
+      },
+      { initialUrl },
+    );
+
+  it.each([
+    ['/discover/connect/spotify-export', 'stub-spotify-export'],
+    ['/discover/connect/listenbrainz', 'stub-listenbrainz'],
+    ['/discover/connect/import-file', 'stub-import-file'],
+  ])('%s goes back to the Connect hub', async (url, target) => {
+    const r = cold(url);
+    await screen.findByTestId(target);
+    const back = await screen.findByTestId('connect-back');
+    expect(back.props.accessibilityLabel).toBe('Back');
+    await act(async () => fireEvent.press(back));
+    await waitFor(() => expect(r.getPathname()).toBe('/discover/connect'));
+    expect(await screen.findByTestId('connect-card-playlist')).toBeTruthy();
+    expect(screen.queryByTestId(target)).toBeNull();
+  });
+
+  it('a screen pushed from the hub keeps the native back (no extra button)', async () => {
+    const r = cold('/discover/connect');
+    await screen.findByTestId('connect-card-spotify-export');
+    await act(async () => router.push('/discover/connect/spotify-export'));
+    await screen.findByTestId('stub-spotify-export');
+    expect(screen.queryByTestId('connect-back')).toBeNull();
+    await act(async () => router.back());
+    await waitFor(() => expect(r.getPathname()).toBe('/discover/connect'));
+  });
+
+  it('a Connect screen pushed straight from the tabs goes back to them', async () => {
+    const r = cold('/me');
+    await act(async () => router.push('/discover/connect/listenbrainz'));
+    await screen.findByTestId('stub-listenbrainz');
+    await act(async () => fireEvent.press(screen.getByTestId('connect-back')));
+    await waitFor(() => expect(r.getPathname()).toBe('/me'));
+  });
+
+  it('the music profile opened cold goes back to Me', async () => {
+    const r = cold('/me/music-profile');
+    await screen.findByTestId('stub-profile');
+    const back = await screen.findByTestId('profile-back');
+    expect(back.props.accessibilityLabel).toBe('Back');
+    await act(async () => fireEvent.press(back));
+    await waitFor(() => expect(r.getPathname()).toBe('/me'));
+  });
+
+  it('the music profile pushed from Me keeps the native back', async () => {
+    cold('/me');
+    await act(async () => router.push('/me/music-profile'));
+    await screen.findByTestId('stub-profile');
+    expect(screen.queryByTestId('profile-back')).toBeNull();
+  });
+});
+
 describe('Improve your picks card', () => {
   const renderCard = () => {
     const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
