@@ -84,6 +84,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       // Android needs no plugin config: Credential Manager matches the package + signing SHA-1.
       ['react-native-google-auth', { iosClientId: GOOGLE_IOS_CLIENT_ID }],
       ...(apple ? ['expo-apple-authentication'] : []),
+      // Android Share -> Nomad Karaoke for privacy-export zips/CSVs (Phase 3b Task 24).
+      './plugins/withShareIntake',
     ],
   };
   const labelled = withoutPushEntitlement(withLauncherLabel(resolved));

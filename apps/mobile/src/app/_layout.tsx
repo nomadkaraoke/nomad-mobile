@@ -6,6 +6,7 @@ import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
 
 import { useImportQueueRunner } from '../discover/connect/importQueue';
 import { useReminderTapRouting } from '../discover/connect/reminders';
+import { useSharedFileIntake } from '../discover/connect/useSharedFileIntake';
 import { AppProviders } from '../providers/AppProviders';
 
 // Sign-in is a bottom sheet over whatever asked for it (spec §4.3). Its screens replace one another.
@@ -37,6 +38,8 @@ function RootStack() {
   useImportQueueRunner();
   // A tapped Spotify-export reminder opens its screen (Phase 3b).
   useReminderTapRouting();
+  // Android Share -> Nomad Karaoke: a shared export zip/CSV opens the import screen (Phase 3b).
+  useSharedFileIntake();
   return (
     <ThemeProvider value={theme}>
       <Stack

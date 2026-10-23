@@ -1,0 +1,18 @@
+<lint-module
+    format="1"
+    dir="/Users/andrew/Projects/nomadkaraoke/nomad-mobile-phase3b-music-data/apps/mobile/modules/share-intake/android"
+    name=":share-intake"
+    type="LIBRARY"
+    maven="com.nomadkaraoke:share-intake:1.0.0"
+    agpVersion="8.12.0"
+    buildFolder="build"
+    bootClassPath="/Users/andrew/Library/Android/sdk/platforms/android-36/android.jar:/Users/andrew/Library/Android/sdk/build-tools/35.0.0/core-lambda-stubs.jar"
+    javaSourceLevel="17"
+    compileTarget="android-36"
+    neverShrinking="true">
+  <lintOptions
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

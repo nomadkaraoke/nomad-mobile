@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/andrew/Projects/nomadkaraoke/nomad-mobile-phase3b-music-data/apps/mobile/modules/share-intake/android/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest9263520493649142140.xml:2:13-83
+INJECTED from /Users/andrew/Projects/nomadkaraoke/nomad-mobile-phase3b-music-data/apps/mobile/modules/share-intake/android/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest9263520493649142140.xml:2:13-83
+	package
+		INJECTED from /Users/andrew/Projects/nomadkaraoke/nomad-mobile-phase3b-music-data/apps/mobile/modules/share-intake/android/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest9263520493649142140.xml
+	xmlns:android
+		ADDED from /Users/andrew/Projects/nomadkaraoke/nomad-mobile-phase3b-music-data/apps/mobile/modules/share-intake/android/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest9263520493649142140.xml:2:23-81
+uses-sdk
+INJECTED from /Users/andrew/Projects/nomadkaraoke/nomad-mobile-phase3b-music-data/apps/mobile/modules/share-intake/android/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest9263520493649142140.xml reason: use-sdk injection requested
+INJECTED from /Users/andrew/Projects/nomadkaraoke/nomad-mobile-phase3b-music-data/apps/mobile/modules/share-intake/android/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest9263520493649142140.xml
+INJECTED from /Users/andrew/Projects/nomadkaraoke/nomad-mobile-phase3b-music-data/apps/mobile/modules/share-intake/android/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest9263520493649142140.xml
+	android:targetSdkVersion
+		INJECTED from /Users/andrew/Projects/nomadkaraoke/nomad-mobile-phase3b-music-data/apps/mobile/modules/share-intake/android/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest9263520493649142140.xml
+	android:minSdkVersion
+		INJECTED from /Users/andrew/Projects/nomadkaraoke/nomad-mobile-phase3b-music-data/apps/mobile/modules/share-intake/android/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest9263520493649142140.xml

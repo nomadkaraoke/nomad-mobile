@@ -32,6 +32,7 @@ it('adds the Google plugin with the iOS client id, and no Apple entitlement with
   expect(c.plugins).toEqual([
     'expo-router',
     ['react-native-google-auth', { iosClientId: '718638054799-hre535n83p8i85tsqf6ai759nlubhd2o.apps.googleusercontent.com' }],
+    './plugins/withShareIntake',
   ]);
   expect(c.ios?.usesAppleSignIn).toBeUndefined();
   // prebuild auto-applies expo-apple-authentication's entitlement; a mod strips it again
@@ -103,5 +104,70 @@ describe('night links', () => {
     const c = resolve();
     expect(c.ios?.associatedDomains).toEqual(['applinks:kjbox.cc', 'applinks:www.kjbox.cc', 'applinks:sing.nomadkaraoke.com']);
     expect(c.ios?.bundleIdentifier).toBe('com.nomadkaraoke.mobile');
+  });
+});
+
+// Phase 3b Task 24: Android Share -> Nomad Karaoke for privacy-export zips and CSVs.
+describe('share intake', () => {
+  type ManifestMod = (c: object) => Promise<{ modResults: AndroidManifestFixture }>;
+  type IntentFilter = { action?: { $: Record<string, string> }[]; category?: { $: Record<string, string> }[]; data?: { $: Record<string, string> }[] };
+  type AndroidManifestFixture = {
+    manifest: { $: Record<string, string>; application: { $: Record<string, string>; activity: { $: Record<string, string>; 'intent-filter'?: IntentFilter[] }[] }[] };
+  };
+  const fixture = (): AndroidManifestFixture => ({
+    manifest: {
+      $: { 'xmlns:android': 'http://schemas.android.com/apk/res/android' },
+      application: [
+        {
+          $: { 'android:name': '.MainApplication' },
+          activity: [
+            {
+              $: { 'android:name': '.MainActivity' },
+              'intent-filter': [
+                { action: [{ $: { 'android:name': 'android.intent.action.MAIN' } }], category: [{ $: { 'android:name': 'android.intent.category.LAUNCHER' } }] },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  });
+  const manifestAfterPrebuild = async (c: ExpoConfig) => {
+    const mod = (c as { mods?: { android?: { manifest?: ManifestMod } } }).mods?.android?.manifest;
+    expect(mod).toBeDefined();
+    return (await mod!({ ...c, modResults: fixture(), modRequest: {} })).modResults;
+  };
+  const sendFilters = (m: AndroidManifestFixture) =>
+    (m.manifest.application[0]!.activity[0]!['intent-filter'] ?? []).filter((f) =>
+      f.action?.some((a) => a.$['android:name'] === 'android.intent.action.SEND'),
+    );
+
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const plugin = () => (require('../../plugins/withShareIntake') as typeof import('../../plugins/withShareIntake')).withShareIntake;
+
+  it('appConfig adds SEND intent filter with four mime types', async () => {
+    // Prebuild resolves the plugin entry against the project root (a TS import from app.config.ts doesn't load there).
+    const c = resolve();
+    expect(c.plugins).toContain('./plugins/withShareIntake');
+    const m = await manifestAfterPrebuild(plugin()(c));
+    expect(sendFilters(m)).toEqual([
+      {
+        action: [{ $: { 'android:name': 'android.intent.action.SEND' } }],
+        category: [{ $: { 'android:name': 'android.intent.category.DEFAULT' } }],
+        data: [
+          { $: { 'android:mimeType': 'application/zip' } },
+          { $: { 'android:mimeType': 'application/x-zip-compressed' } },
+          { $: { 'android:mimeType': 'text/csv' } },
+          { $: { 'android:mimeType': 'text/comma-separated-values' } },
+        ],
+      },
+    ]);
+    // The launcher filter is kept.
+    expect(m.manifest.application[0]!.activity[0]!['intent-filter']).toHaveLength(2);
+  });
+
+  it('adds the SEND filter once, however often prebuild runs', async () => {
+    const twice = plugin()(plugin()({ name: 'x', slug: 'x' }));
+    expect(sendFilters(await manifestAfterPrebuild(twice))).toHaveLength(1);
   });
 });
