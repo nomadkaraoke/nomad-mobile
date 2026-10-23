@@ -1334,6 +1334,14 @@
       "step3": "When Spotify's email arrives, download the zip, then Share → Nomad Karaoke (Android), or come back here and pick the file.",
       "pick": "Pick the file"
     },
+    "appleGuide": {
+      "intro": "No Apple Music subscription? Apple can still send you your play history. It takes them a few days.",
+      "step1": "Go to privacy.apple.com and sign in.",
+      "open": "Open privacy.apple.com",
+      "step2": "Choose Request a copy of your data, tick Apple Media Services information, and submit. Apple emails you in a few days.",
+      "step3": "Download the files, then pick the zip or the Play Activity CSV here.",
+      "pick": "Pick the file"
+    },
     "reminders": {
       "title": "Your Spotify data may be ready",
       "body": "Open the email from Spotify, then share the zip with Nomad Karaoke.",

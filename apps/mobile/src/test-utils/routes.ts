@@ -6,6 +6,7 @@ import * as me from '../app/(tabs)/me';
 import * as tonight from '../app/(tabs)/tonight';
 import * as rootLayout from '../app/_layout';
 import * as connectLayout from '../app/discover/connect/_layout';
+import * as connectApple from '../app/discover/connect/apple';
 import * as connectHub from '../app/discover/connect/index';
 import * as connectImportFile from '../app/discover/connect/import-file';
 import * as connectPlaylist from '../app/discover/connect/playlist';
@@ -34,6 +35,7 @@ export function appRoutes() {
     'discover/quiz': quiz,
     'discover/connect/_layout': connectLayout,
     'discover/connect/index': connectHub,
+    'discover/connect/apple': connectApple,
     'discover/connect/playlist': connectPlaylist,
     'discover/connect/screenshot': connectScreenshot,
     'discover/connect/spotify-export': connectSpotifyExport,
