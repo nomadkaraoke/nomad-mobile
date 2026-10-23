@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Cambia cómo estás cantando: {posture}, {warmth}",
-      "on": "Activo",
-      "record": "Grabando",
       "title": "Ahora mismo",
-      "off": "Desactivado"
+      "recordOff": "Grabación desactivada",
+      "recordTurnOff": "Desactivar grabación"
     },
     "disabled": {
       "title": "Próximamente"
@@ -1700,7 +1699,8 @@
       "saved": "Guardado en tu perfil musical.",
       "suited": "Canciones que te van bien",
       "confidenceHigh": "Alta confianza",
-      "done": "Listo"
+      "done": "Listo",
+      "typeUnknown": "Tu tipo de voz"
     },
     "setup": {
       "bit_warm": "Algo calentada",

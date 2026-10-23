@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Ändra hur du sjunger: {posture}, {warmth}",
-      "on": "På",
-      "record": "Spelar in",
       "title": "Just nu",
-      "off": "Av"
+      "recordOff": "Inspelning av",
+      "recordTurnOff": "Stäng av inspelning"
     },
     "disabled": {
       "title": "Kommer snart"
@@ -1700,7 +1699,8 @@
       "saved": "Sparat i din musikprofil.",
       "suited": "Låtar som passar dig",
       "confidenceHigh": "Hög säkerhet",
-      "done": "Klar"
+      "done": "Klar",
+      "typeUnknown": "Din rösttyp"
     },
     "setup": {
       "bit_warm": "Lite uppvärmd",

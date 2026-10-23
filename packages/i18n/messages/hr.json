@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Promijeni kako pjevaš: {posture}, {warmth}",
-      "on": "Uključeno",
-      "record": "Snimanje",
       "title": "Upravo sada",
-      "off": "Isključeno"
+      "recordOff": "Snimanje isključeno",
+      "recordTurnOff": "Isključi snimanje"
     },
     "disabled": {
       "title": "Uskoro"
@@ -1700,7 +1699,8 @@
       "saved": "Spremljeno u tvoj glazbeni profil.",
       "suited": "Pjesme koje ti odgovaraju",
       "confidenceHigh": "Visoka pouzdanost",
-      "done": "Gotovo"
+      "done": "Gotovo",
+      "typeUnknown": "Tvoj tip glasa"
     },
     "setup": {
       "bit_warm": "Djelomično zagrijan",

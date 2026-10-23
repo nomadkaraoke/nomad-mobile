@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Nasıl söylediğini değiştir: {posture}, {warmth}",
-      "on": "Açık",
-      "record": "Kaydediliyor",
       "title": "Şu anda",
-      "off": "Kapalı"
+      "recordOff": "Kayıt kapalı",
+      "recordTurnOff": "Kaydı kapat"
     },
     "disabled": {
       "title": "Çok yakında"
@@ -1700,7 +1699,8 @@
       "saved": "Müzik profiline kaydedildi.",
       "suited": "Sana uyan şarkılar",
       "confidenceHigh": "Yüksek güven",
-      "done": "Bitti"
+      "done": "Bitti",
+      "typeUnknown": "Ses türün"
     },
     "setup": {
       "bit_warm": "Biraz ısınmış",

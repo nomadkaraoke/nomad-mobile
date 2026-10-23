@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Zmeň spôsob, akým spievaš: {posture}, {warmth}",
-      "on": "Zapnuté",
-      "record": "Nahráva sa",
       "title": "Práve teraz",
-      "off": "Vypnuté"
+      "recordOff": "Nahrávanie je vypnuté",
+      "recordTurnOff": "Vypnúť nahrávanie"
     },
     "disabled": {
       "title": "Už čoskoro"
@@ -1700,7 +1699,8 @@
       "saved": "Uložené do tvojho hudobného profilu.",
       "suited": "Piesne, ktoré ti sadnú",
       "confidenceHigh": "Vysoká istota",
-      "done": "Hotovo"
+      "done": "Hotovo",
+      "typeUnknown": "Tvoj typ hlasu"
     },
     "setup": {
       "bit_warm": "Trochu rozospievaný",

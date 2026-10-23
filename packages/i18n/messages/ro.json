@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Schimbă modul în care cânți: {posture}, {warmth}",
-      "on": "Activat",
-      "record": "Înregistrare",
       "title": "Chiar acum",
-      "off": "Oprit"
+      "recordOff": "Înregistrare oprită",
+      "recordTurnOff": "Oprește înregistrarea"
     },
     "disabled": {
       "title": "În curând"
@@ -1700,7 +1699,8 @@
       "saved": "Salvat în profilul tău muzical.",
       "suited": "Melodii care ți se potrivesc",
       "confidenceHigh": "Încredere ridicată",
-      "done": "Gata"
+      "done": "Gata",
+      "typeUnknown": "Tipul tău de voce"
     },
     "setup": {
       "bit_warm": "Puțin încălzit(ă)",

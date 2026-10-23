@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "تغيير طريقة غنائك: {posture}، {warmth}",
-      "on": "مفعل",
-      "record": "جارٍ التسجيل",
       "title": "الآن",
-      "off": "إيقاف"
+      "recordOff": "التسجيل متوقف",
+      "recordTurnOff": "إيقاف التسجيل"
     },
     "disabled": {
       "title": "قريباً"
@@ -1700,7 +1699,8 @@
       "saved": "تم الحفظ في ملفك الموسيقي.",
       "suited": "أغانٍ تناسبك",
       "confidenceHigh": "ثقة عالية",
-      "done": "تم"
+      "done": "تم",
+      "typeUnknown": "نوع صوتك"
     },
     "setup": {
       "bit_warm": "مُحمى قليلاً",

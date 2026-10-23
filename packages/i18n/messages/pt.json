@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Mude como você está cantando: {posture}, {warmth}",
-      "on": "Ativado",
-      "record": "Gravando",
       "title": "Agora mesmo",
-      "off": "Desativado"
+      "recordOff": "Gravação desativada",
+      "recordTurnOff": "Desativar gravação"
     },
     "disabled": {
       "title": "Em breve"
@@ -1700,7 +1699,8 @@
       "saved": "Salvo no seu perfil musical.",
       "suited": "Músicas que combinam com você",
       "confidenceHigh": "Alta confiança",
-      "done": "Concluído"
+      "done": "Concluído",
+      "typeUnknown": "Seu tipo de voz"
     },
     "setup": {
       "bit_warm": "Um pouco aquecida",

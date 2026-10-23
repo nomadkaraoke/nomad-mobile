@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Muuta laulutapaasi: {posture}, {warmth}",
-      "on": "Päällä",
-      "record": "Tallentaa",
       "title": "Juuri nyt",
-      "off": "Pois päältä"
+      "recordOff": "Tallennus pois päältä",
+      "recordTurnOff": "Ota tallennus pois päältä"
     },
     "disabled": {
       "title": "Tulossa pian"
@@ -1700,7 +1699,8 @@
       "saved": "Tallennettu musiikkiprofiiliisi.",
       "suited": "Sinulle sopivat kappaleet",
       "confidenceHigh": "Korkea varmuus",
-      "done": "Valmis"
+      "done": "Valmis",
+      "typeUnknown": "Äänityyppisi"
     },
     "setup": {
       "bit_warm": "Hieman lämmitelty",

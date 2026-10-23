@@ -9,6 +9,7 @@ import { ActivityIndicator, View } from 'react-native';
 
 import { openSignIn } from '../auth/signInUi';
 import { useAuth } from '../auth/store';
+import type { MicPermission } from '../voice/pitchSource';
 import { StepLayout } from '../voice/StepLayout';
 import { VOICE_KEY } from '../voice/useVoiceProfile';
 import { ContextChip } from './ContextChip';
@@ -70,6 +71,23 @@ export function VoiceSessionFlow() {
   const [draft, setDraft] = useState<SetupDraft>(() => draftFrom(vs.setup));
   const [floor, setFloor] = useState<number | null>(null);
   const [afterWarmup, setAfterWarmup] = useState(false);
+  /** Mic permission as last asked on the setup screen (null: not asked in this visit, e.g. a resumed session). */
+  const [mic, setMic] = useState<MicPermission | null>(null);
+
+  // A resumed session reaches a song without the setup screen: check the mic (the singer allowed it when they
+  // consented to recording, so this normally answers without a prompt), so the recording dot tells the truth.
+  const recordOn = vs.setup?.record === true;
+  useEffect(() => {
+    if (mic !== null || vs.step !== 'play' || !recordOn) return;
+    let live = true;
+    vs.pitchSource
+      .requestPermission()
+      .then((p) => live && setMic(p))
+      .catch(() => live && setMic('denied'));
+    return () => {
+      live = false;
+    };
+  }, [mic, vs.step, recordOn, vs.pitchSource]);
 
   // A result that saved the session profile: Me's voice profile reads it again.
   const savedFor = useRef<object | null>(null);
@@ -114,6 +132,8 @@ export function VoiceSessionFlow() {
           source={vs.pitchSource}
           floor={floor}
           onFloor={setFloor}
+          mic={mic}
+          onMic={setMic}
           afterWarmup={afterWarmup}
           busy={vs.busy}
           onBegin={(setup, f) => {
@@ -158,6 +178,7 @@ export function VoiceSessionFlow() {
           playerRef={vs.playerRef}
           onPlayer={(e) => void vs.onPlayer(e)}
           livePitch={vs.livePitch}
+          micGranted={mic === 'granted'}
           onStopEarly={() => void vs.stopEarly()}
           onPatch={(p) => void vs.patchContext(p)}
         />

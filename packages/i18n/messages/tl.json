@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Baguhin kung paano ka kumakanta: {posture}, {warmth}",
-      "on": "Bukas",
-      "record": "Nagre-record",
       "title": "Sa ngayon",
-      "off": "Off"
+      "recordOff": "Naka-off ang recording",
+      "recordTurnOff": "I-off ang recording"
     },
     "disabled": {
       "title": "Paparating na"
@@ -1700,7 +1699,8 @@
       "saved": "Nai-save sa iyong music profile.",
       "suited": "Mga kantang babagay sa iyo",
       "confidenceHigh": "Mataas na kasiguraduhan",
-      "done": "Tapos na"
+      "done": "Tapos na",
+      "typeUnknown": "Uri ng boses mo"
     },
     "setup": {
       "bit_warm": "Medyo warm na",

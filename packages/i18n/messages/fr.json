@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Modifie ta façon de chanter : {posture}, {warmth}",
-      "on": "Activé",
-      "record": "Enregistrement",
       "title": "En ce moment",
-      "off": "Désactivé"
+      "recordOff": "Enregistrement désactivé",
+      "recordTurnOff": "Désactiver l'enregistrement"
     },
     "disabled": {
       "title": "Bientôt disponible"
@@ -1700,7 +1699,8 @@
       "saved": "Enregistré dans ton profil musical.",
       "suited": "Chansons qui te correspondent",
       "confidenceHigh": "Certitude élevée",
-      "done": "Terminé"
+      "done": "Terminé",
+      "typeUnknown": "Ton type de voix"
     },
     "setup": {
       "bit_warm": "Un peu échauffé",

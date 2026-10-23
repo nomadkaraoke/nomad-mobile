@@ -1636,9 +1636,8 @@
       "chip": "{posture} · {warmth}",
       "chipLabel": "Change how you're singing: {posture}, {warmth}",
       "title": "Right now",
-      "record": "Recording",
-      "on": "On",
-      "off": "Off"
+      "recordTurnOff": "Turn recording off",
+      "recordOff": "Recording off"
     },
     "quiz": {
       "required": "The first two are needed. Skip the rest if you like.",
@@ -1726,7 +1725,8 @@
       "suited": "Songs that suit you",
       "loved": "Songs you loved",
       "done": "Done",
-      "more": "Keep going"
+      "more": "Keep going",
+      "typeUnknown": "Your voice type"
     },
     "error": {
       "network": "You're offline or the connection dropped. Check it and try again.",

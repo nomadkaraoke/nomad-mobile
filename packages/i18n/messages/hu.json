@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Változtasd meg, hogyan énekelsz: {posture}, {warmth}",
-      "on": "Be",
-      "record": "Felvétel",
       "title": "Jelenleg",
-      "off": "Kikapcsolva"
+      "recordOff": "Felvétel kikapcsolva",
+      "recordTurnOff": "Felvétel kikapcsolása"
     },
     "disabled": {
       "title": "Hamarosan"
@@ -1700,7 +1699,8 @@
       "saved": "Elmentve a zenei profilodba.",
       "suited": "Dalok, amelyek illenek hozzád",
       "confidenceHigh": "Nagy bizonyosság",
-      "done": "Kész"
+      "done": "Kész",
+      "typeUnknown": "A hangtípusod"
     },
     "setup": {
       "bit_warm": "Kissé bemelegedett",

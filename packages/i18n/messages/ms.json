@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Ubah cara anda menyanyi: {posture}, {warmth}",
-      "on": "Hidup",
-      "record": "Merakam",
       "title": "Sekarang",
-      "off": "Tutup"
+      "recordOff": "Rakaman dimatikan",
+      "recordTurnOff": "Matikan rakaman"
     },
     "disabled": {
       "title": "Akan datang"
@@ -1700,7 +1699,8 @@
       "saved": "Disimpan pada profil muzik anda.",
       "suited": "Lagu yang sesuai untuk anda",
       "confidenceHigh": "Keyakinan tinggi",
-      "done": "Selesai"
+      "done": "Selesai",
+      "typeUnknown": "Jenis suara anda"
     },
     "setup": {
       "bit_warm": "Sedikit bersedia",

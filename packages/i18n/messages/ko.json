@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "노래 부르는 상태 변경: {posture}, {warmth}",
-      "on": "켜짐",
-      "record": "녹음 중",
       "title": "현재 상태",
-      "off": "끄기"
+      "recordOff": "녹음 꺼짐",
+      "recordTurnOff": "녹음 끄기"
     },
     "disabled": {
       "title": "출시 예정"
@@ -1700,7 +1699,8 @@
       "saved": "음악 프로필에 저장되었습니다.",
       "suited": "나에게 잘 어울리는 노래",
       "confidenceHigh": "높은 확신도",
-      "done": "완료"
+      "done": "완료",
+      "typeUnknown": "나의 음성 유형"
     },
     "setup": {
       "bit_warm": "조금 풀림",

@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "更改演唱状态：{posture}，{warmth}",
-      "on": "开",
-      "record": "正在录音",
       "title": "当前状态",
-      "off": "关闭"
+      "recordOff": "录音已关闭",
+      "recordTurnOff": "关闭录音"
     },
     "disabled": {
       "title": "即将推出"
@@ -1700,7 +1699,8 @@
       "saved": "已保存至你的音乐档案。",
       "suited": "适合你的歌曲",
       "confidenceHigh": "高置信度",
-      "done": "完成"
+      "done": "完成",
+      "typeUnknown": "你的声部"
     },
     "setup": {
       "bit_warm": "稍稍开嗓",

@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "שנו את אופן השירה שלכם: {posture}, {warmth}",
-      "on": "פעיל",
-      "record": "מקליט",
       "title": "עכשיו",
-      "off": "כבוי"
+      "recordOff": "ההקלטה כבויה",
+      "recordTurnOff": "כיבוי ההקלטה"
     },
     "disabled": {
       "title": "בקרוב"
@@ -1700,7 +1699,8 @@
       "saved": "נשמר בפרופיל המוזיקלי שלכם.",
       "suited": "שירים שמתאימים לכם",
       "confidenceHigh": "ביטחון גבוה",
-      "done": "סיום"
+      "done": "סיום",
+      "typeUnknown": "סוג הקול שלך"
     },
     "setup": {
       "bit_warm": "מחומם מעט",

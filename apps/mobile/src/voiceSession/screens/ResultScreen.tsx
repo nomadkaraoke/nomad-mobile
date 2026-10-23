@@ -40,14 +40,13 @@ export type ResultScreenProps = {
 export function ResultScreen({ result: r, busy, onDone, onMore }: ResultScreenProps) {
   const t = useTranslations('voiceSession.result');
   const labels = useVoiceLabels();
-  const name = (v: string) => (isType(v) ? labels.typeName(v) : isolate(v));
-
   let typeLine: string;
-  if (r.confidence_label === 'low') typeLine = t('probably', { type: name(r.voice_type) });
-  else if (isType(r.voice_type) && isType(r.between) && r.between !== r.voice_type) {
+  // A type this app version doesn't know (decide added one): a generic line, never decide's raw value.
+  if (!isType(r.voice_type)) typeLine = t('typeUnknown');
+  else if (r.confidence_label === 'low') typeLine = t('probably', { type: labels.typeName(r.voice_type) });
+  else if (isType(r.between) && r.between !== r.voice_type) {
     typeLine = labels.likely({ voiceType: r.voice_type, voiceTypeBetween: r.between, register: null });
-  } else if (isType(r.voice_type)) typeLine = labels.likely({ voiceType: r.voice_type, voiceTypeBetween: null, register: null });
-  else typeLine = t('probably', { type: name(r.voice_type) });
+  } else typeLine = labels.likely({ voiceType: r.voice_type, voiceTypeBetween: null, register: null });
 
   const [lo, hi] = stripBounds(r.low, r.high);
   const marks = [];

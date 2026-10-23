@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Pas aan hoe je zingt: {posture}, {warmth}",
-      "on": "Aan",
-      "record": "Opnemen",
       "title": "Op dit moment",
-      "off": "Uit"
+      "recordOff": "Opname uit",
+      "recordTurnOff": "Opname uitschakelen"
     },
     "disabled": {
       "title": "Binnenkort beschikbaar"
@@ -1700,7 +1699,8 @@
       "saved": "Opgeslagen in je muziekprofiel.",
       "suited": "Nummers die bij je passen",
       "confidenceHigh": "Hoge zekerheid",
-      "done": "Gereed"
+      "done": "Gereed",
+      "typeUnknown": "Je stemtype"
     },
     "setup": {
       "bit_warm": "Een beetje opgewarmd",

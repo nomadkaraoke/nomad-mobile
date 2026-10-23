@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Ubah cara bernyanyi Anda: {posture}, {warmth}",
-      "on": "Aktif",
-      "record": "Merekam",
       "title": "Saat ini",
-      "off": "Mati"
+      "recordOff": "Perekaman nonaktif",
+      "recordTurnOff": "Nonaktifkan perekaman"
     },
     "disabled": {
       "title": "Segera hadir"
@@ -1700,7 +1699,8 @@
       "saved": "Tersimpan di profil musik Anda.",
       "suited": "Lagu yang cocok untuk Anda",
       "confidenceHigh": "Keyakinan tinggi",
-      "done": "Selesai"
+      "done": "Selesai",
+      "typeUnknown": "Tipe suara Anda"
     },
     "setup": {
       "bit_warm": "Sedikit pemanasan",

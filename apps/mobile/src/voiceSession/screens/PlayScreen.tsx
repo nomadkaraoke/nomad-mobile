@@ -19,6 +19,8 @@ export type PlayScreenProps = {
   playerRef: RefObject<PlayerHandle | null>;
   onPlayer: (e: PlayerEvent) => void;
   livePitch: number | null;
+  /** The mic is on (granted): only then does a consented take actually record. */
+  micGranted: boolean;
   onStopEarly: () => void;
   onPatch: (patch: SessionPatch) => void;
 };
@@ -28,7 +30,7 @@ export type PlayScreenProps = {
  * a recording dot while consent is on, an optional live pitch ribbon, Stop early and the context chip. The session
  * starts the video itself once the recorder runs (KaraokePlayer's start order).
  */
-export function PlayScreen({ song, setup, playerMode, playerRef, onPlayer, livePitch, onStopEarly, onPatch }: PlayScreenProps) {
+export function PlayScreen({ song, setup, playerMode, playerRef, onPlayer, livePitch, micGranted, onStopEarly, onPatch }: PlayScreenProps) {
   const t = useTranslations('voiceSession');
   const [ribbon, setRibbon] = useState(false);
   return (
@@ -56,7 +58,7 @@ export function PlayScreen({ song, setup, playerMode, playerRef, onPlayer, liveP
         testID="vs-player"
       />
       <View className="flex-row flex-wrap items-center gap-3">
-        {setup.record ? (
+        {setup.record && micGranted ? (
           <View testID="vs-recording" className="flex-row items-center gap-2" accessible accessibilityLabel={t('play.recording')}>
             <View className="h-3 w-3 rounded-full" style={{ backgroundColor: colors.danger }} />
             <Text variant="muted">{t('play.recording')}</Text>

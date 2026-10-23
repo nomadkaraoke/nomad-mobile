@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 import { createRef, type ReactNode } from 'react';
+import { AppState, type AppStateStatus } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { useAuth } from '../auth/store';
@@ -61,6 +62,8 @@ jest.mock('@nomad/api-decide', () => ({
 
 // The fake player (FAKE_YT): ready on mount, `ended` 20 ms after play().
 jest.mock('../config', () => ({ ...jest.requireActual('../config'), FAKE_YT: true, FAKE_YT_SECONDS: 0.02 }));
+// KaraokePlayer reads `config.FAKE_YT` at render: the link-out test switches it off.
+const config = jest.requireMock('../config') as { FAKE_YT: boolean };
 
 const mockRec = {
   start: jest.fn(async () => {}),
@@ -71,14 +74,18 @@ jest.mock('../voiceSession/recording/useSongRecorder', () => ({
 }));
 
 /** A quiet microphone: the setup screen's quiet second reads it. */
-type Quiet = PitchSource & { permission: MicPermission; sections: string[] };
+type Quiet = PitchSource & { permission: MicPermission; sections: string[]; asks: number };
 const RATE = 16000;
 function quietSource(): Quiet {
   const src: Quiet = {
     kind: 'fake',
     permission: 'granted',
     sections: [],
-    requestPermission: async () => src.permission,
+    asks: 0,
+    requestPermission: async () => {
+      src.asks++;
+      return src.permission;
+    },
     start: async (onBuffer: (b: PcmBuffer) => void, section) => {
       src.sections.push(section);
       const s = new Float32Array(RATE * 1.2);
@@ -193,6 +200,12 @@ const text = (id: string) => {
   const kids = screen.getByTestId(id).props.children;
   return Array.isArray(kids) ? kids.join('') : String(kids);
 };
+const METRICS_EN = { frame: { x: 0, y: 0, width: 390, height: 844 }, insets: { top: 0, left: 0, right: 0, bottom: 0 } };
+const Shell = ({ children }: { children: ReactNode }) => (
+  <SafeAreaProvider initialMetrics={METRICS_EN}>
+    <IntlProvider locale="en">{children}</IntlProvider>
+  </SafeAreaProvider>
+);
 const flags = (session_enabled: boolean) => ({ session_enabled, is_admin: false, voice_data: true, active_session_id: null });
 
 beforeEach(async () => {
@@ -328,7 +341,8 @@ describe('voiceSessionScreens: steps', () => {
     open();
     await screen.findByTestId('vs-play');
     expect(screen.getByTestId('vs-player')).toBeTruthy();
-    expect(screen.getByTestId('vs-recording')).toBeTruthy();
+    // Recording is consented and the mic is on (checked on arrival: this visit skipped the setup).
+    expect(await screen.findByTestId('vs-recording')).toBeTruthy();
     await press('vs-ribbon-toggle');
     expect(screen.getByTestId('vs-play-keys')).toBeTruthy();
     expect(screen.getByText('Standing · A bit warmed up')).toBeTruthy();
@@ -336,10 +350,82 @@ describe('voiceSessionScreens: steps', () => {
     await screen.findByTestId('vs-context-sheet');
     await press('vs-ctx-warmth-warm');
     expect(vs.patchContext).toHaveBeenCalledWith({ warmth: 'warm' });
-    await press('vs-ctx-record-no');
+    await press('vs-ctx-record-off');
     expect(vs.patchContext).toHaveBeenCalledWith({ record: false });
     await press('vs-stop-early');
     expect(vs.stopEarly).toHaveBeenCalled();
+  });
+
+  it('play: with recording off, no dot and the sheet only says so (no way to turn it back on)', async () => {
+    mockVs.current = fakeVs({ step: 'play', song: SONG, attemptN: 1, setup: { ...SETUP, record: false } });
+    open();
+    await screen.findByTestId('vs-play');
+    expect(screen.queryByTestId('vs-recording')).toBeNull();
+    await press('vs-context-chip');
+    await screen.findByTestId('vs-context-sheet');
+    expect(screen.getByText('Recording off')).toBeTruthy();
+    expect(screen.queryByTestId('vs-ctx-record-off')).toBeNull();
+    expect(screen.queryByTestId('vs-ctx-record-on')).toBeNull();
+    expect(screen.queryByTestId('vs-ctx-record-yes')).toBeNull();
+  });
+
+  it('play: consented but the mic is off: no recording dot', async () => {
+    mockSource.current!.permission = 'blocked';
+    mockVs.current = fakeVs({ step: 'play', song: SONG, attemptN: 1 });
+    open();
+    await screen.findByTestId('vs-play');
+    await waitFor(() => expect(mockSource.current!.asks).toBe(1));
+    expect(screen.queryByTestId('vs-recording')).toBeNull();
+  });
+
+  it('setup: a double tap on Go runs one permission ask and one quiet second', async () => {
+    const vs = fakeVs({ step: 'setup', setup: null });
+    mockVs.current = vs;
+    open();
+    await screen.findByTestId('vs-setup');
+    await press('vs-posture-standing');
+    await press('vs-warmth-warm');
+    await press('vs-record-yes');
+    await press('vs-headphones-yes');
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('vs-setup-go'));
+      fireEvent.press(screen.getByTestId('vs-setup-go'));
+    });
+    await waitFor(() => expect(vs.begin).toHaveBeenCalledTimes(1));
+    expect(mockSource.current!.asks).toBe(1);
+    expect(mockSource.current!.sections).toEqual(['low']);
+  });
+
+  it('setup: back from Settings with the mic now on, the record question returns', async () => {
+    const handlers: ((s: AppStateStatus) => void)[] = [];
+    // RN's jest AppState.addEventListener is already a mock: spyOn returns it, and mockRestore would drop its
+    // implementation for later tests. Keep the original and put it back instead.
+    const original = (AppState.addEventListener as unknown as jest.Mock).getMockImplementation();
+    const spy = jest.spyOn(AppState, 'addEventListener').mockImplementation((_t, h) => {
+      handlers.push(h as (s: AppStateStatus) => void);
+      return { remove: () => {} } as never;
+    });
+    try {
+      mockSource.current!.permission = 'blocked';
+      mockVs.current = fakeVs({ step: 'setup', setup: null });
+      open();
+      await screen.findByTestId('vs-setup');
+      await press('vs-posture-standing');
+      await press('vs-warmth-warm');
+      await press('vs-record-yes');
+      await press('vs-headphones-yes');
+      await press('vs-setup-go');
+      await screen.findByTestId('vs-mic-off');
+      expect(screen.queryByTestId('vs-record-yes')).toBeNull();
+
+      mockSource.current!.permission = 'granted';
+      await act(async () => handlers.forEach((h) => h('active')));
+      expect(await screen.findByTestId('vs-record-yes')).toBeTruthy();
+      expect(screen.getByText(/We keep the recording privately/)).toBeTruthy();
+      expect(screen.queryByTestId('vs-mic-off')).toBeNull();
+    } finally {
+      if (original) spy.mockImplementation(original);
+    }
   });
 
   it('quiz: Next stays off until Q1 and Q2; the prefill line shows note names', async () => {
@@ -363,6 +449,25 @@ describe('voiceSessionScreens: steps', () => {
     expect(screen.getByTestId('vs-quiz-next')).toBeEnabled();
     await press('vs-quiz-next');
     expect(mockVs.current.submitQuiz).toHaveBeenCalled();
+  });
+
+  it('quiz: a "comfortable" prefill pre-selects Q2 once, unless already answered', async () => {
+    const setAnswer = jest.fn();
+    const props = { song: SONG, prefill: { highest: 67, lowest: 48, suggested: 'comfortable' as const }, busy: false, setAnswer, onNext: jest.fn() };
+    const first = render(
+      <Shell>
+        <QuizScreen {...props} quiz={EMPTY_SESSION_QUIZ} />
+      </Shell>,
+    );
+    expect(setAnswer).toHaveBeenCalledWith({ position: 'comfortable' });
+    first.unmount();
+    setAnswer.mockClear();
+    render(
+      <Shell>
+        <QuizScreen {...props} quiz={{ ...EMPTY_SESSION_QUIZ, position: 'too_high' }} />
+      </Shell>,
+    );
+    expect(setAnswer).not.toHaveBeenCalled();
   });
 
   it('quiz: "Not great" shows the version issue chips', async () => {
@@ -397,6 +502,13 @@ describe('voiceSessionScreens: steps', () => {
     expect(text('vs-result-type')).toBe('Between Baritone and Tenor');
     await press('vs-result-more');
     expect(vs.openSetup).toHaveBeenCalled();
+  });
+
+  it('result: a voice type this app does not know reads "Your voice type", never the raw value', async () => {
+    mockVs.current = fakeVs({ step: 'result', result: { ...RESULT, voice_type: 'countertenor' } });
+    open();
+    await screen.findByTestId('vs-result');
+    expect(text('vs-result-type')).toBe('Your voice type');
   });
 
   it('result: tapping a suited song opens its song page', async () => {
@@ -470,6 +582,30 @@ describe('voiceSessionScreens: through the real hook', () => {
       's1',
       expect.objectContaining({ quiz: expect.objectContaining({ feel: 'fine', position: 'too_high' }) }),
     );
+  });
+});
+
+describe('voiceSessionScreens: link-out', () => {
+  it('a version decide marks not embeddable plays through the link-out card', async () => {
+    config.FAKE_YT = false;
+    try {
+      await signIn();
+      useVoiceSessionStore.getState().update({
+        sessionId: 's1',
+        setup: SETUP,
+        step: 'pick',
+        song: { ...SONG, version: { ...SONG.version, embeddable: false } },
+        attemptN: 1,
+      });
+      mockApi.getVoiceSession.mockResolvedValue({ state: 'active', attempts: 0 });
+      open();
+      await screen.findByTestId('vs-pick');
+      await press('vs-pick-know');
+      expect(await screen.findByTestId('vs-linkout')).toBeTruthy();
+      expect(screen.getByTestId('vs-linkout-open')).toBeTruthy();
+    } finally {
+      config.FAKE_YT = true;
+    }
   });
 });
 

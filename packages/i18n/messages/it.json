@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Modifica la modalità di canto: {posture}, {warmth}",
-      "on": "Attivo",
-      "record": "Registrazione",
       "title": "In questo momento",
-      "off": "Disattivate"
+      "recordOff": "Registrazione disattivata",
+      "recordTurnOff": "Disattiva la registrazione"
     },
     "disabled": {
       "title": "In arrivo"
@@ -1700,7 +1699,8 @@
       "saved": "Salvato nel tuo profilo musicale.",
       "suited": "Brani adatti a te",
       "confidenceHigh": "Alta sicurezza",
-      "done": "Fatto"
+      "done": "Fatto",
+      "typeUnknown": "Il tuo tipo di voce"
     },
     "setup": {
       "bit_warm": "Un po' scaldata",

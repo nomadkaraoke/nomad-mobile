@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Zmień sposób śpiewania: {posture}, {warmth}",
-      "on": "Wł.",
-      "record": "Nagrywanie",
       "title": "Teraz",
-      "off": "Wyłączone"
+      "recordOff": "Nagrywanie wyłączone",
+      "recordTurnOff": "Wyłącz nagrywanie"
     },
     "disabled": {
       "title": "Już wkrótce"
@@ -1700,7 +1699,8 @@
       "saved": "Zapisano w Twoim profilu muzycznym.",
       "suited": "Piosenki, które do Ciebie pasują",
       "confidenceHigh": "Wysoka pewność",
-      "done": "Gotowe"
+      "done": "Gotowe",
+      "typeUnknown": "Twój typ głosu"
     },
     "setup": {
       "bit_warm": "Trochę rozgrzany",

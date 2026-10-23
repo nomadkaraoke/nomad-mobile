@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Endre hvordan du synger: {posture}, {warmth}",
-      "on": "På",
-      "record": "Tar opp",
       "title": "Akkurat nå",
-      "off": "Av"
+      "recordOff": "Opptak av",
+      "recordTurnOff": "Slå av opptak"
     },
     "disabled": {
       "title": "Kommer snart"
@@ -1700,7 +1699,8 @@
       "saved": "Lagret i musikkprofilen din.",
       "suited": "Sanger som passer til deg",
       "confidenceHigh": "Høy sikkerhet",
-      "done": "Ferdig"
+      "done": "Ferdig",
+      "typeUnknown": "Stemmetypen din"
     },
     "setup": {
       "bit_warm": "Litt oppvarmet",

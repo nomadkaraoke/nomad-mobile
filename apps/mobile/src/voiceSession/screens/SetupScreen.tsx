@@ -4,17 +4,14 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, colors, Text } from '@nomad/ui';
 import * as Device from 'expo-device';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Linking, View } from 'react-native';
+import { ActivityIndicator, AppState, Linking, View } from 'react-native';
 
 import type { MicPermission, PitchSource } from '../../voice/pitchSource';
 import { StepLayout } from '../../voice/StepLayout';
 import { measureQuietSecond } from '../quietSecond';
+import { POSTURES, WARMTHS, type Posture, type Warmth } from '../setupOptions';
 import { ChoiceGroup } from './ChoiceGroup';
 
-export type Posture = SessionSetup['posture'];
-export type Warmth = SessionSetup['warmth'];
-export const POSTURES: readonly Posture[] = ['standing', 'sitting', 'lying'];
-export const WARMTHS: readonly Warmth[] = ['cold', 'bit_warm', 'warm'];
 const YES_NO = ['yes', 'no'] as const;
 type YesNo = (typeof YES_NO)[number];
 
@@ -31,6 +28,9 @@ export type SetupScreenProps = {
   /** The quiet second's floor once measured (after a warm-up it isn't measured again). */
   floor: number | null;
   onFloor: (floor: number) => void;
+  /** Mic permission as last asked (null = not yet); kept by the route, which also needs it on the play screen. */
+  mic: MicPermission | null;
+  onMic: (mic: MicPermission) => void;
   /** Back from the warm-up: the warmth question is asked again and no warm-up is offered. */
   afterWarmup: boolean;
   busy: boolean;
@@ -43,10 +43,11 @@ export type SetupScreenProps = {
  * second for the noise floor, and for a cold voice the warm-up offer. Without the mic, recording is forced off and the
  * session goes on (the songs and the quiz still count).
  */
-export function SetupScreen({ draft, onDraft, source, floor, onFloor, afterWarmup, busy, onBegin, onWarmup }: SetupScreenProps) {
+export function SetupScreen({ draft, onDraft, source, floor, onFloor, mic, onMic, afterWarmup, busy, onBegin, onWarmup }: SetupScreenProps) {
   const t = useTranslations('voiceSession.setup');
-  const [mic, setMic] = useState<MicPermission | null>(floor === null ? null : 'granted');
   const [phase, setPhase] = useState<'form' | 'quiet' | 'cold'>('form');
+  /** Go is running (permission, quiet second): a second tap must not start another run on the shared source. */
+  const starting = useRef(false);
   const live = useRef(true);
   /** The quiet second is running (leaving the screen then releases the mic). */
   const measuring = useRef(false);
@@ -57,6 +58,28 @@ export function SetupScreen({ draft, onDraft, source, floor, onFloor, afterWarmu
       if (measuring.current) source.stop();
     };
   }, [source]);
+
+  const askMic = async (): Promise<MicPermission> => {
+    try {
+      return await source.requestPermission();
+    } catch {
+      return 'denied';
+    }
+  };
+
+  // Blocked: back from Settings (the app active again), ask once more; the system doesn't prompt for a blocked mic,
+  // it only reports whether it's on now.
+  useEffect(() => {
+    if (mic !== 'blocked') return;
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state !== 'active') return;
+      void askMic().then((p) => {
+        if (live.current && p === 'granted') onMic('granted');
+      });
+    });
+    return () => sub.remove();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mic, source]);
 
   const micOff = mic === 'denied' || mic === 'blocked';
   const record = micOff ? false : draft.record;
@@ -71,36 +94,37 @@ export function SetupScreen({ draft, onDraft, source, floor, onFloor, afterWarmu
   });
 
   const go = async () => {
-    if (!ready || phase !== 'form') return;
-    let f = floor;
-    if (f === null && !micOff) {
-      let perm: MicPermission;
-      try {
-        perm = await source.requestPermission();
-      } catch {
-        perm = 'denied';
+    if (!ready || phase !== 'form' || starting.current) return;
+    starting.current = true;
+    try {
+      let f = floor;
+      if (f === null && !micOff) {
+        const perm = await askMic();
+        if (!live.current) return;
+        onMic(perm);
+        // The notice shows; recording is now off and the next Go carries on without the mic.
+        if (perm !== 'granted') return;
+        setPhase('quiet');
+        measuring.current = true;
+        f = await measureQuietSecond(source);
+        measuring.current = false;
+        if (!live.current) return;
+        onFloor(f);
       }
-      if (!live.current) return;
-      setMic(perm);
-      // The notice shows; recording is now off and the next Go carries on without the mic.
-      if (perm !== 'granted') return;
-      setPhase('quiet');
-      measuring.current = true;
-      f = await measureQuietSecond(source);
-      measuring.current = false;
-      if (!live.current) return;
-      onFloor(f);
+      if (draft.warmth === 'cold' && !afterWarmup && !micOff) {
+        setPhase('cold');
+        return;
+      }
+      setPhase('form');
+      onBegin(setup(), f ?? undefined);
+    } finally {
+      starting.current = false;
     }
-    if (draft.warmth === 'cold' && !afterWarmup && !micOff) {
-      setPhase('cold');
-      return;
-    }
-    setPhase('form');
-    onBegin(setup(), f ?? undefined);
   };
 
-  const retryMic = () => {
-    setMic(null);
+  const retryMic = async () => {
+    const p = await askMic();
+    if (live.current) onMic(p);
   };
 
   if (phase === 'quiet') {
@@ -170,7 +194,7 @@ export function SetupScreen({ draft, onDraft, source, floor, onFloor, afterWarmu
           {mic === 'blocked' ? (
             <Button testID="vs-open-settings" variant="secondary" label={t('openSettings')} onPress={() => void Linking.openSettings()} />
           ) : (
-            <Button testID="vs-mic-retry" variant="secondary" label={t('micRetry')} onPress={retryMic} />
+            <Button testID="vs-mic-retry" variant="secondary" label={t('micRetry')} onPress={() => void retryMic()} />
           )}
         </View>
       ) : (

@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Thay đổi trạng thái hát: {posture}, {warmth}",
-      "on": "Bật",
-      "record": "Đang ghi âm",
       "title": "Hiện tại",
-      "off": "Tắt"
+      "recordOff": "Đã tắt ghi âm",
+      "recordTurnOff": "Tắt ghi âm"
     },
     "disabled": {
       "title": "Sắp ra mắt"
@@ -1700,7 +1699,8 @@
       "saved": "Đã lưu vào hồ sơ âm nhạc của bạn.",
       "suited": "Những bài hát phù hợp với bạn",
       "confidenceHigh": "Độ chắc chắn cao",
-      "done": "Xong"
+      "done": "Xong",
+      "typeUnknown": "Loại giọng của bạn"
     },
     "setup": {
       "bit_warm": "Hơi ấm giọng rồi",

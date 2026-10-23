@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Canvia com cantes: {posture}, {warmth}",
-      "on": "Activat",
-      "record": "Enregistrant",
       "title": "Ara mateix",
-      "off": "Desactivat"
+      "recordOff": "Enregistrament desactivat",
+      "recordTurnOff": "Desactiva l'enregistrament"
     },
     "disabled": {
       "title": "Properament"
@@ -1700,7 +1699,8 @@
       "saved": "S'ha desat al teu perfil musical.",
       "suited": "Cançons que et van bé",
       "confidenceHigh": "Certesa alta",
-      "done": "Fet"
+      "done": "Fet",
+      "typeUnknown": "El teu tipus de veu"
     },
     "setup": {
       "bit_warm": "Una mica escalfada",

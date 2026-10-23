@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Змінити умови співу: {posture}, {warmth}",
-      "on": "Увімкнено",
-      "record": "Запис",
       "title": "Зараз",
-      "off": "Вимкнено"
+      "recordOff": "Запис вимкнено",
+      "recordTurnOff": "Вимкнути запис"
     },
     "disabled": {
       "title": "Незабаром"
@@ -1700,7 +1699,8 @@
       "saved": "Збережено у твоєму музичному профілі.",
       "suited": "Пісні, які тобі підходять",
       "confidenceHigh": "Висока впевненість",
-      "done": "Готово"
+      "done": "Готово",
+      "typeUnknown": "Твій тип голосу"
     },
     "setup": {
       "bit_warm": "Трохи розігрітий",

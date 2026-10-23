@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Ändere, wie du singst: {posture}, {warmth}",
-      "on": "An",
-      "record": "Aufnahme läuft",
       "title": "Gerade jetzt",
-      "off": "Aus"
+      "recordOff": "Aufnahme aus",
+      "recordTurnOff": "Aufnahme ausschalten"
     },
     "disabled": {
       "title": "Demnächst verfügbar"
@@ -1700,7 +1699,8 @@
       "saved": "In deinem Musikprofil gespeichert.",
       "suited": "Songs, die zu dir passen",
       "confidenceHigh": "Hohe Sicherheit",
-      "done": "Fertig"
+      "done": "Fertig",
+      "typeUnknown": "Deine Stimmlage"
     },
     "setup": {
       "bit_warm": "Ein bisschen aufgewärmt",

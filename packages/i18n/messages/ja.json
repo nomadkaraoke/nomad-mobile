@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "歌い方の状態を変更: {posture}、{warmth}",
-      "on": "オン",
-      "record": "録音中",
       "title": "現在の状態",
-      "off": "オフ"
+      "recordOff": "録音オフ",
+      "recordTurnOff": "録音をオフにする"
     },
     "disabled": {
       "title": "近日公開"
@@ -1700,7 +1699,8 @@
       "saved": "音楽プロフィールに保存されました。",
       "suited": "あなたに合う曲",
       "confidenceHigh": "高い確信度",
-      "done": "完了"
+      "done": "完了",
+      "typeUnknown": "あなたの声のタイプ"
     },
     "setup": {
       "bit_warm": "少し温まっている",

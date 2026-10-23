@@ -1568,10 +1568,9 @@
     "context": {
       "chip": "{posture} · {warmth}",
       "chipLabel": "Změnit způsob zpěvu: {posture}, {warmth}",
-      "on": "Zapnuto",
-      "record": "Nahrávání",
       "title": "Právě teď",
-      "off": "Vypnuto"
+      "recordOff": "Nahrávání vypnuto",
+      "recordTurnOff": "Vypnout nahrávání"
     },
     "disabled": {
       "title": "Již brzy"
@@ -1700,7 +1699,8 @@
       "saved": "Uloženo do tvého hudebního profilu.",
       "suited": "Písničky, které ti sedí",
       "confidenceHigh": "Vysoká jistota",
-      "done": "Hotovo"
+      "done": "Hotovo",
+      "typeUnknown": "Tvůj typ hlasu"
     },
     "setup": {
       "bit_warm": "Trochu rozezpívaný",
