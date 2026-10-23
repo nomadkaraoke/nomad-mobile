@@ -14,3 +14,15 @@ appId: com.nomadkaraoke.mobile
           text: "Photo, [A-Z][a-z]+ [0-9]{2}, [0-9]{2}:[0-9]{2}"
           index: 0
       - tapOn: "Done"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      # The system photo picker: items are "Photo taken on <date>"; the newest (ours) is first.
+      - extendedWaitUntil:
+          visible: "Photo taken on .*"
+          timeout: 20000
+      - tapOn:
+          text: "Photo taken on .*"
+          index: 0
+      - tapOn: "Add.*"

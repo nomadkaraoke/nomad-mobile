@@ -25,3 +25,21 @@ appId: com.nomadkaraoke.mobile
       # The file cell (its id is "spotify-extended.zip, zip"); a tap on its name label doesn't pick it.
       - tapOn:
           id: "spotify-extended\\.zip.*"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      # DocumentsUI opens on Recent (the pushed zip is there); otherwise go to Downloads.
+      - extendedWaitUntil:
+          visible: "Show roots"
+          timeout: 20000
+      - runFlow:
+          when:
+            notVisible: "spotify-extended\\.zip"
+          commands:
+            - tapOn: "Show roots"
+            - tapOn: "Downloads"
+      - extendedWaitUntil:
+          visible: "spotify-extended\\.zip"
+          timeout: 15000
+      - tapOn: "spotify-extended\\.zip"

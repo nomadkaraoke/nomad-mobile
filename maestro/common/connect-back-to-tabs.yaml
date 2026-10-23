@@ -18,6 +18,6 @@ appId: com.nomadkaraoke.mobile
       - runFlow:
           when:
             platform: Android
+          # One back per check (a back with the keyboard up only closes it; hideKeyboard would be a second back).
           commands:
-            - hideKeyboard
             - back
