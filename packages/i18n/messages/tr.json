@@ -1414,6 +1414,7 @@
     },
     "title": "Müziğini bağla",
     "connected": "Bağlandı",
-    "back": "Geri"
+    "back": "Geri",
+    "alreadyImported": "Bu dosyayı zaten içe aktardın, bu yüzden eklenecek yeni bir şey yoktu."
   }
 }

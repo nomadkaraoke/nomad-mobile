@@ -1414,6 +1414,7 @@
     },
     "title": "Koble til musikken din",
     "connected": "Tilkoblet",
-    "back": "Tilbake"
+    "back": "Tilbake",
+    "alreadyImported": "Du har allerede importert denne filen, så det var ingenting nytt å legge til."
   }
 }

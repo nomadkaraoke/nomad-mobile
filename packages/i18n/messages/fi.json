@@ -1414,6 +1414,7 @@
     },
     "title": "Yhdistä musiikkisi",
     "connected": "Yhdistetty",
-    "back": "Takaisin"
+    "back": "Takaisin",
+    "alreadyImported": "Olet jo tuonut tämän tiedoston, joten mitään uutta lisättävää ei ollut."
   }
 }

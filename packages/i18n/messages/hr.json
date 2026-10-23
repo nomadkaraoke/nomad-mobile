@@ -1414,6 +1414,7 @@
     },
     "title": "Poveži svoju glazbu",
     "connected": "Povezano",
-    "back": "Natrag"
+    "back": "Natrag",
+    "alreadyImported": "Već si uvezao ovu datoteku, pa nije bilo ničeg novog za dodavanje."
   }
 }

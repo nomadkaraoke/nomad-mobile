@@ -1414,6 +1414,7 @@
     },
     "title": "Csatlakoztasd a zenéidet",
     "connected": "Csatlakoztatva",
-    "back": "Vissza"
+    "back": "Vissza",
+    "alreadyImported": "Ezt a fájlt már importáltad, így nem volt új hozzáadnivaló."
   }
 }

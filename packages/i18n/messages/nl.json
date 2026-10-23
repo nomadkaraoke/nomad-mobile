@@ -1414,6 +1414,7 @@
     },
     "title": "Verbind je muziek",
     "connected": "Verbonden",
-    "back": "Terug"
+    "back": "Terug",
+    "alreadyImported": "Je hebt dit bestand al geïmporteerd, dus er viel niets nieuws toe te voegen."
   }
 }

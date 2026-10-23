@@ -1414,6 +1414,7 @@
     },
     "title": "Connecta la teva música",
     "connected": "Connectat",
-    "back": "Enrere"
+    "back": "Enrere",
+    "alreadyImported": "Ja has importat aquest fitxer, així que no hi havia res de nou per afegir."
   }
 }

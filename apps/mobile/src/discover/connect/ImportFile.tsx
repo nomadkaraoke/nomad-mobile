@@ -9,7 +9,7 @@ import { Pressable, View } from 'react-native';
 
 import { useOffline } from '../../net/useOffline';
 import { importErrorKey } from './importErrors';
-import { RETRY_DELAYS_MS, retryDelayMs, useImportQueue } from './importQueue';
+import { isAlreadyImported, RETRY_DELAYS_MS, retryDelayMs, useImportQueue } from './importQueue';
 import { ImportResult } from './ImportResult';
 import { useCapabilities, useServicesSummary } from './queries';
 import { pickExportFile } from './pickExportFile';
@@ -293,7 +293,7 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
             </Text>
           ) : null}
 
-          {done && batch ? <ImportResult artists={batch.artistsAdded} songs={batch.songsAdded} /> : null}
+          {done && batch ? <ImportResult artists={batch.artistsAdded} songs={batch.songsAdded} alreadyImported={isAlreadyImported(batch)} /> : null}
           {done && failed > 0 ? (
             <Text testID="connect-import-error" variant="error" accessibilityLiveRegion="polite">
               {tAll(importErrorKey(lastError?.batch === batchId ? lastError : null, 'export'))}

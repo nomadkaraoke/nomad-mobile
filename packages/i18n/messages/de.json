@@ -1414,6 +1414,7 @@
     },
     "title": "Verbinde deine Musik",
     "connected": "Verbunden",
-    "back": "Zurück"
+    "back": "Zurück",
+    "alreadyImported": "Du hast diese Datei bereits importiert, daher gab es nichts Neues hinzuzufügen."
   }
 }

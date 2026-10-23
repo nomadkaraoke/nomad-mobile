@@ -49,8 +49,11 @@ export interface ImportBatch {
   chunks: number;
   sent: number;
   failed: number;
+  /** decide's totals are cumulative over an export's chunks, so these keep the largest seen (never a sum). */
   artistsAdded: number;
   songsAdded: number;
+  /** Chunks decide had already ingested (`duplicate: true`); all of them = this export was imported before. */
+  duplicates?: number;
   /** When the last chunk finished (ms epoch); finished batches are pruned after a day. */
   finishedAt?: number;
 }
@@ -101,6 +104,8 @@ function deletePayload(id: string): void {
 }
 
 const isDone = (b: ImportBatch | undefined) => !!b && b.sent + b.failed >= b.chunks;
+/** Every chunk of the batch came back `duplicate: true`: the same export was imported before, nothing new. */
+export const isAlreadyImported = (b: ImportBatch | undefined) => !!b && b.chunks > 0 && (b.duplicates ?? 0) >= b.chunks;
 
 /** Drops finished batches older than a day (their result screen is long gone). */
 function pruneBatches(batches: Record<string, ImportBatch>, now = Date.now()): Record<string, ImportBatch> {
@@ -260,8 +265,9 @@ function finish(item: PendingUpload, outcome: { ok: ExportImportResponse } | { e
       pending,
       batches: patchBatch(item.batch, (b) => ({
         sent: b.sent + 1,
-        artistsAdded: b.artistsAdded + r.artists_added,
-        songsAdded: b.songsAdded + r.songs_added,
+        artistsAdded: Math.max(b.artistsAdded, r.artists_added),
+        songsAdded: Math.max(b.songsAdded, r.songs_added),
+        duplicates: (b.duplicates ?? 0) + (r.duplicate ? 1 : 0),
         ...(b.sent + 1 + b.failed >= b.chunks ? { finishedAt: Date.now() } : {}),
       })),
     });

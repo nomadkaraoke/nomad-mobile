@@ -1414,6 +1414,7 @@
     },
     "title": "Sambungkan muzik anda",
     "connected": "Disambungkan",
-    "back": "Kembali"
+    "back": "Kembali",
+    "alreadyImported": "Anda sudah mengimport fail ini, jadi tiada apa-apa yang baharu untuk ditambah."
   }
 }

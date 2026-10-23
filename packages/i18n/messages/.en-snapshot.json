@@ -1287,6 +1287,7 @@
       "appleExport": "Apple Music history"
     },
     "result": "Added {artists, plural, one {# artist} other {# artists}} and {songs, plural, one {# song} other {# songs}} you know",
+    "alreadyImported": "You've already imported this file, so there was nothing new to add.",
     "screenshot": {
       "intro": "Pick screenshots of your library, playlists or top artists from any music app. We'll read the names and you check them before anything is saved.",
       "pick": "Choose screenshots",

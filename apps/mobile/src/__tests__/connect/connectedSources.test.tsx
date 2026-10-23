@@ -250,4 +250,14 @@ describe('ImportResult', () => {
     expect(screen.getByTestId('connect-import-result')).toBeTruthy();
     expect(screen.getByText(text)).toBeTruthy();
   });
+
+  it('says an export imported before added nothing new', () => {
+    render(
+      <IntlProvider locale="en">
+        <ImportResult artists={5} songs={15} alreadyImported />
+      </IntlProvider>,
+    );
+    expect(screen.getByText("You've already imported this file, so there was nothing new to add.")).toBeTruthy();
+    expect(screen.queryByText(/^Added/)).toBeNull();
+  });
 });

@@ -8,6 +8,7 @@ import { createElement, type ReactNode } from 'react';
 import { useAuth } from '../../auth/store';
 import {
   importQueueIdle,
+  isAlreadyImported,
   retryDelayMs,
   setImportQueueOnline,
   useImportQueue,
@@ -91,7 +92,21 @@ it('offline keeps pending', async () => {
   expect(appStorage.getString('connect.importQueue')).not.toContain('generated_at');
 });
 
+/** decide's export responses: totals are cumulative over the export's chunks (imports_export.py `response`). */
+const cumulative = (perChunk: { artists: number; songs: number }[], duplicate = false) => {
+  let artists = 0;
+  let songs = 0;
+  return perChunk.map((c, i) => {
+    artists += c.artists;
+    songs += c.songs;
+    return { ...OK, artists_added: artists, songs_added: songs, tracks_matched: songs, duplicate, chunks_done: i + 1, chunk_count: perChunk.length };
+  });
+};
+
 it('online flushes in order', async () => {
+  for (const r of cumulative([{ artists: 2, songs: 3 }, { artists: 2, songs: 3 }, { artists: 2, songs: 3 }])) {
+    api.uploadExportChunk.mockResolvedValueOnce(r);
+  }
   const batch = useImportQueue.getState().enqueue([chunk(0, 3), chunk(1, 3), chunk(2, 3)], 'spotify')!;
   setImportQueueOnline(true);
   await importQueueIdle();
@@ -102,6 +117,32 @@ it('online flushes in order', async () => {
   expect(s.pending).toEqual([]);
   expect(s.batches[batch]).toMatchObject({ chunks: 3, sent: 3, failed: 0, artistsAdded: 6, songsAdded: 9 });
   expect(payloadFiles()).toEqual([]);
+  expect(isAlreadyImported(s.batches[batch])).toBe(false);
+});
+
+it('re-importing the same export (every chunk duplicate) keeps the totals and reports it as already imported', async () => {
+  for (const r of cumulative([{ artists: 4, songs: 10 }, { artists: 1, songs: 5 }], true)) {
+    api.uploadExportChunk.mockResolvedValueOnce({ ...r, artists_added: 5, songs_added: 15, chunks_done: 2 });
+  }
+  const batch = useImportQueue.getState().enqueue([chunk(0), chunk(1)], 'spotify')!;
+  setImportQueueOnline(true);
+  await importQueueIdle();
+
+  const b = useImportQueue.getState().batches[batch];
+  expect(b).toMatchObject({ sent: 2, artistsAdded: 5, songsAdded: 15, duplicates: 2 });
+  expect(isAlreadyImported(b)).toBe(true);
+});
+
+it('a partly duplicate import (a retry after a lost response) is not "already imported"', async () => {
+  const [first, second] = cumulative([{ artists: 4, songs: 10 }, { artists: 1, songs: 5 }]);
+  api.uploadExportChunk.mockResolvedValueOnce({ ...first!, duplicate: true }).mockResolvedValueOnce(second!);
+  const batch = useImportQueue.getState().enqueue([chunk(0), chunk(1)], 'spotify')!;
+  setImportQueueOnline(true);
+  await importQueueIdle();
+
+  const b = useImportQueue.getState().batches[batch];
+  expect(b).toMatchObject({ artistsAdded: 5, songsAdded: 15, duplicates: 1 });
+  expect(isAlreadyImported(b)).toBe(false);
 });
 
 it('signed out keeps pending; signing back in sends', async () => {

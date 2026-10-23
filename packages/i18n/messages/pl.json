@@ -1414,6 +1414,7 @@
     },
     "title": "Połącz swoją muzykę",
     "connected": "Połączono",
-    "back": "Wstecz"
+    "back": "Wstecz",
+    "alreadyImported": "Ten plik został już przez Ciebie zaimportowany, więc nie ma nic nowego do dodania."
   }
 }

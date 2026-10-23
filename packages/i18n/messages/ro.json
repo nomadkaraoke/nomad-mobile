@@ -1414,6 +1414,7 @@
     },
     "title": "Conectează-ți muzica",
     "connected": "Conectat",
-    "back": "Înapoi"
+    "back": "Înapoi",
+    "alreadyImported": "Ai importat deja acest fișier, așa că nu a fost nimic nou de adăugat."
   }
 }

@@ -1414,6 +1414,7 @@
     },
     "title": "Hubungkan musik Anda",
     "connected": "Terhubung",
-    "back": "Kembali"
+    "back": "Kembali",
+    "alreadyImported": "Anda sudah mengimpor file ini sebelumnya, jadi tidak ada yang baru untuk ditambahkan."
   }
 }

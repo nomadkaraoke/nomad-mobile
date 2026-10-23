@@ -1414,6 +1414,7 @@
     },
     "title": "Connecter ta musique",
     "connected": "Connecté",
-    "back": "Retour"
+    "back": "Retour",
+    "alreadyImported": "Tu as déjà importé ce fichier, il n'y avait donc rien de nouveau à ajouter."
   }
 }

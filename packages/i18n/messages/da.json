@@ -1414,6 +1414,7 @@
     },
     "title": "Forbind din musik",
     "connected": "Forbundet",
-    "back": "Tilbage"
+    "back": "Tilbage",
+    "alreadyImported": "Du har allerede importeret denne fil, så der var ikke noget nyt at tilføje."
   }
 }

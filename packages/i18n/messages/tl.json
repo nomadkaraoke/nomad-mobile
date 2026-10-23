@@ -1414,6 +1414,7 @@
     },
     "title": "Ikonekta ang iyong musika",
     "connected": "Konektado",
-    "back": "Bumalik"
+    "back": "Bumalik",
+    "alreadyImported": "Na-import mo na ang file na ito, kaya walang bagong naidagdag."
   }
 }

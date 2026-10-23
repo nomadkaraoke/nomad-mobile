@@ -1414,6 +1414,7 @@
     },
     "title": "Připoj svou hudbu",
     "connected": "Připojeno",
-    "back": "Zpět"
+    "back": "Zpět",
+    "alreadyImported": "Tento soubor už máš naimportovaný, takže nebylo co nového přidat."
   }
 }
