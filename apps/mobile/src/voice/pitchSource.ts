@@ -10,6 +10,8 @@ export type VoiceSection = 'low' | 'high' | 'sing' | 'song';
 export interface PitchSource {
   kind: 'mic' | 'fake';
   requestPermission(): Promise<MicPermission>;
+  /** The current permission without ever prompting (undetermined reads as 'denied'). */
+  checkPermission(): Promise<MicPermission>;
   start(onBuffer: (b: PcmBuffer) => void, section: VoiceSection): Promise<void>;
   stop(): void;
 }

@@ -42,6 +42,7 @@ function makeSource(permission: MicPermission = 'granted', rate = RATE): FakeSou
     stops: 0,
     timings: [],
     requestPermission: async () => permission,
+    checkPermission: async () => permission,
     start: async (onBuffer, section) => {
       sink = onBuffer;
       clock = 0;

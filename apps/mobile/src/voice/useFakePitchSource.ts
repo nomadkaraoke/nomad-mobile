@@ -53,6 +53,9 @@ export function createFakePitchSource(name: string): PitchSource {
     async requestPermission(): Promise<MicPermission> {
       return 'granted';
     },
+    async checkPermission(): Promise<MicPermission> {
+      return 'granted';
+    },
     async start(onBuffer, section) {
       stop();
       const mine = gen;

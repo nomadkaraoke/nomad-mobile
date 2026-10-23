@@ -55,6 +55,7 @@ function scripted(): Scripted {
     stops: 0,
     sections: [],
     requestPermission: async () => src.permission,
+    checkPermission: async () => src.permission,
     // Plays the whole section at once, as the real source would over a few seconds.
     start: async (onBuffer: (b: PcmBuffer) => void, section: VoiceSection) => {
       src.sections.push(section);

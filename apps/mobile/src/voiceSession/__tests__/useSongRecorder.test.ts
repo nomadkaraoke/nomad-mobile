@@ -68,6 +68,7 @@ function fakeSource(kind: 'mic' | 'fake', order: string[] = []) {
   const src = {
     kind,
     requestPermission: jest.fn(async () => 'granted' as const),
+    checkPermission: jest.fn(async () => 'granted' as const),
     start: jest.fn(async (cb: (b: PcmBuffer) => void, section: string) => {
       order.push(`stream.start:${section}`);
       onBuffer = cb;

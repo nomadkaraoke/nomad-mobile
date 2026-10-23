@@ -74,14 +74,14 @@ export function VoiceSessionFlow() {
   /** Mic permission as last asked on the setup screen (null: not asked in this visit, e.g. a resumed session). */
   const [mic, setMic] = useState<MicPermission | null>(null);
 
-  // A resumed session reaches a song without the setup screen: check the mic (the singer allowed it when they
-  // consented to recording, so this normally answers without a prompt), so the recording dot tells the truth.
+  // A resumed session reaches a song without the setup screen: read the mic permission (checkPermission never
+  // prompts) so the recording dot tells the truth. Anything but granted keeps the dot off.
   const recordOn = vs.setup?.record === true;
   useEffect(() => {
     if (mic !== null || vs.step !== 'play' || !recordOn) return;
     let live = true;
     vs.pitchSource
-      .requestPermission()
+      .checkPermission()
       .then((p) => live && setMic(p))
       .catch(() => live && setMic('denied'));
     return () => {

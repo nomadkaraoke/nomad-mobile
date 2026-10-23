@@ -74,17 +74,24 @@ jest.mock('../voiceSession/recording/useSongRecorder', () => ({
 }));
 
 /** A quiet microphone: the setup screen's quiet second reads it. */
-type Quiet = PitchSource & { permission: MicPermission; sections: string[]; asks: number };
+/** `permission`: what asking returns; `current`: what a no-prompt check reads. `asks` / `checks` count the calls. */
+type Quiet = PitchSource & { permission: MicPermission; current: MicPermission; sections: string[]; asks: number; checks: number };
 const RATE = 16000;
 function quietSource(): Quiet {
   const src: Quiet = {
     kind: 'fake',
     permission: 'granted',
     sections: [],
+    current: 'granted',
     asks: 0,
+    checks: 0,
     requestPermission: async () => {
       src.asks++;
       return src.permission;
+    },
+    checkPermission: async () => {
+      src.checks++;
+      return src.current;
     },
     start: async (onBuffer: (b: PcmBuffer) => void, section) => {
       src.sections.push(section);
@@ -341,8 +348,10 @@ describe('voiceSessionScreens: steps', () => {
     open();
     await screen.findByTestId('vs-play');
     expect(screen.getByTestId('vs-player')).toBeTruthy();
-    // Recording is consented and the mic is on (checked on arrival: this visit skipped the setup).
+    // Recording is consented and the mic is on (read on arrival without a prompt: this visit skipped the setup).
     expect(await screen.findByTestId('vs-recording')).toBeTruthy();
+    expect(mockSource.current!.checks).toBe(1);
+    expect(mockSource.current!.asks).toBe(0);
     await press('vs-ribbon-toggle');
     expect(screen.getByTestId('vs-play-keys')).toBeTruthy();
     expect(screen.getByText('Standing · A bit warmed up')).toBeTruthy();
@@ -369,12 +378,13 @@ describe('voiceSessionScreens: steps', () => {
     expect(screen.queryByTestId('vs-ctx-record-yes')).toBeNull();
   });
 
-  it('play: consented but the mic is off: no recording dot', async () => {
-    mockSource.current!.permission = 'blocked';
+  it('play (resumed): the mic is only read, never asked for; not granted keeps the dot off', async () => {
+    mockSource.current!.current = 'denied';
     mockVs.current = fakeVs({ step: 'play', song: SONG, attemptN: 1 });
     open();
     await screen.findByTestId('vs-play');
-    await waitFor(() => expect(mockSource.current!.asks).toBe(1));
+    await waitFor(() => expect(mockSource.current!.checks).toBe(1));
+    expect(mockSource.current!.asks).toBe(0);
     expect(screen.queryByTestId('vs-recording')).toBeNull();
   });
 
