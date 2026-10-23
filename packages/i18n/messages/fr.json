@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Supprimer ta voix ?",
     "singableCtaLabel": "Chantable, fais d'abord le test vocal",
     "profileRemoveConfirm": "Retirer"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Tentative {n} : ressenti {feel}, position {position}, difficulté {difficulty}",
+      "attemptPitch": "Chanté P10-P90 {core}",
+      "empty": "Aucune chanson étiquetée ou essayée pour le moment.",
+      "error": "Impossible de charger les chansons. Reviens en arrière et réessaie.",
+      "label": "Feuille : {good} {tags}",
+      "labelNone": "Aucune étiquette de feuille",
+      "loading": "Chargement des chansons...",
+      "markers": "Tessiture {range}, P10-P90 {core}, aigus soutenus {sustained}, densité {density}/s, intro {intro}s",
+      "markersNone": "Aucun marqueur calculé",
+      "octaveBoth": "hommes et femmes",
+      "octaveFemale": "femmes",
+      "octaveMale": "hommes",
+      "octaveSplit": "Séparation d'octave : {who}",
+      "open": "Débogage vocal (admin)",
+      "play": "Écouter l'enregistrement",
+      "playFailed": "Impossible de lire cet enregistrement.",
+      "prediction": "Modèle : {verdict} (p {p})",
+      "predictionNone": "Aucune prédiction",
+      "stop": "Arrêter",
+      "title": "Débogage vocal",
+      "unknown": "-",
+      "verdictGood": "bon",
+      "verdictNotGood": "pas bon"
+    }
   }
 }

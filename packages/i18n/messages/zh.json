@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "移除您的声音档案？",
     "singableCtaLabel": "适合演唱，请先进行声音测试",
     "profileRemoveConfirm": "移除"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "尝试 {n}：感受 {feel}，位置 {position}，难度 {difficulty}",
+      "attemptPitch": "演唱音高 P10-P90 {core}",
+      "empty": "暂无已标记或已尝试的歌曲。",
+      "error": "无法加载歌曲。请返回并重试。",
+      "label": "乐谱：{good} {tags}",
+      "labelNone": "无乐谱标签",
+      "loading": "正在加载歌曲...",
+      "markers": "音域 {range}，P10-P90 {core}，持续高音 {sustained}，密度 {density}/秒，前奏 {intro} 秒",
+      "markersNone": "未计算标记",
+      "octaveBoth": "男声和女声",
+      "octaveFemale": "女声",
+      "octaveMale": "男声",
+      "octaveSplit": "八度分离：{who}",
+      "open": "声音调试（管理员）",
+      "play": "播放录音",
+      "playFailed": "无法播放该录音。",
+      "prediction": "模型：{verdict} (p {p})",
+      "predictionNone": "无预测",
+      "stop": "停止",
+      "title": "声音调试",
+      "unknown": "-",
+      "verdictGood": "良好",
+      "verdictNotGood": "不佳"
+    }
   }
 }

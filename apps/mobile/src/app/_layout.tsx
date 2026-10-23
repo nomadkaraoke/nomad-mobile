@@ -45,6 +45,7 @@ function RootStack() {
   // Android Share -> Nomad Karaoke: a shared export zip/CSV opens the import screen (Phase 3b).
   useSharedFileIntake();
   const tVoice = useTranslations('voice');
+  const tVoiceDebug = useTranslations('voiceSession.debug');
   return (
     <ThemeProvider value={theme}>
       <Stack
@@ -76,6 +77,7 @@ function RootStack() {
         <Stack.Screen name="me/music-profile" options={(p) => ({ title: tAccount('musicProfile'), ...profileBack(p) })} />
         {/* Connect your music (Phase 3b): its own stack with its own headers. */}
         <Stack.Screen name="discover/connect" options={{ headerShown: false }} />
+        <Stack.Screen name="me/voice-debug" options={{ title: tVoiceDebug('title') }} />
       </Stack>
     </ThemeProvider>
   );

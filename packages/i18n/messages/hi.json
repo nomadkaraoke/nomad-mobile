@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "अपनी आवाज़ हटाएं?",
     "singableCtaLabel": "गाने योग्य, पहले वॉइस टेस्ट दो",
     "profileRemoveConfirm": "हटाओ"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "प्रयास {n}: अहसास {feel}, पोज़ीशन {position}, कठिनाई {difficulty}",
+      "attemptPitch": "गाया गया P10-P90 {core}",
+      "empty": "अभी तक कोई लेबल किए गए या गाए गए गाने नहीं हैं।",
+      "error": "गाने लोड नहीं हो सके। पीछे जाओ और फिर से कोशिश करो।",
+      "label": "शीट: {good} {tags}",
+      "labelNone": "कोई शीट लेबल नहीं",
+      "loading": "गाने लोड हो रहे हैं...",
+      "markers": "रेंज {range}, P10-P90 {core}, सस्टेन्ड हाई {sustained}, डेंसिटी {density}/s, इंट्रो {intro}s",
+      "markersNone": "कोई मार्कर्स कैलकुलेट नहीं किए गए",
+      "octaveBoth": "पुरुष और महिलाएँ",
+      "octaveFemale": "महिलाएँ",
+      "octaveMale": "पुरुष",
+      "octaveSplit": "ऑक्टेव विभाजन: {who}",
+      "open": "वॉइस डीबग (admin)",
+      "play": "रिकॉर्डिंग चलाओ",
+      "playFailed": "वह रिकॉर्डिंग नहीं चलाई जा सकी।",
+      "prediction": "मॉडल: {verdict} (p {p})",
+      "predictionNone": "कोई प्रेडिक्शन नहीं",
+      "stop": "रोको",
+      "title": "वॉइस डीबग",
+      "unknown": "-",
+      "verdictGood": "अच्छा",
+      "verdictNotGood": "अच्छा नहीं"
+    }
   }
 }

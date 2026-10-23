@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Ses profilin kaldırılsın mı?",
     "singableCtaLabel": "Söylenebilir, önce ses testini yap",
     "profileRemoveConfirm": "Kaldır"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Deneme {n}: his {feel}, pozisyon {position}, zorluk {difficulty}",
+      "attemptPitch": "Söylenen P10-P90 {core}",
+      "empty": "Henüz etiketlenmiş veya denenmiş şarkı yok.",
+      "error": "Şarkılar yüklenemedi. Geri dönüp tekrar dene.",
+      "label": "Tablo: {good} {tags}",
+      "labelNone": "Tablo etiketi yok",
+      "loading": "Şarkılar yükleniyor...",
+      "markers": "Aralık {range}, P10-P90 {core}, sürekli tizler {sustained}, yoğunluk {density}/sn, intro {intro}sn",
+      "markersNone": "İşaretleyici hesaplanmadı",
+      "octaveBoth": "erkekler ve kadınlar",
+      "octaveFemale": "kadınlar",
+      "octaveMale": "erkekler",
+      "octaveSplit": "Oktav ayrımı: {who}",
+      "open": "Ses hata ayıklama (yönetici)",
+      "play": "Kaydı oynat",
+      "playFailed": "Bu kayıt oynatılamadı.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Tahmin yok",
+      "stop": "Durdur",
+      "title": "Ses hata ayıklama",
+      "unknown": "-",
+      "verdictGood": "iyi",
+      "verdictNotGood": "iyi değil"
+    }
   }
 }

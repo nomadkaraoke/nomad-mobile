@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Odebrat tvůj hlas?",
     "singableCtaLabel": "Zpívatelné, nejdřív si udělej hlasový test",
     "profileRemoveConfirm": "Odstranit"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Pokus {n}: pocit {feel}, pozice {position}, obtížnost {difficulty}",
+      "attemptPitch": "Zpíváno P10–P90 {core}",
+      "empty": "Zatím žádné označené písně ani pokusy.",
+      "error": "Písničky se nepodařilo načíst. Vrať se zpět a zkus to znovu.",
+      "label": "Tabulka: {good} {tags}",
+      "labelNone": "Žádné označení v tabulce",
+      "loading": "Načítání písniček...",
+      "markers": "Rozsah {range}, P10–P90 {core}, držené výšky {sustained}, hustota {density}/s, intro {intro}s",
+      "markersNone": "Nebyly vypočteny žádné markery",
+      "octaveBoth": "muži a ženy",
+      "octaveFemale": "ženy",
+      "octaveMale": "muži",
+      "octaveSplit": "Rozdělení oktáv: {who}",
+      "open": "Ladění hlasu (admin)",
+      "play": "Přehrát nahrávku",
+      "playFailed": "Tuhle nahrávku se nepodařilo přehrát.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Žádná predikce",
+      "stop": "Zastavit",
+      "title": "Ladění hlasu",
+      "unknown": "-",
+      "verdictGood": "dobré",
+      "verdictNotGood": "nevyhovující"
+    }
   }
 }

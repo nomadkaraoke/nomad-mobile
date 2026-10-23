@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Видалити дані про свій голос?",
     "singableCtaLabel": "Підходить для співу: спочатку пройди голосовий тест",
     "profileRemoveConfirm": "Видалити"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Спроба {n}: відчуття {feel}, позиція {position}, складність {difficulty}",
+      "attemptPitch": "Проспівано P10-P90 {core}",
+      "empty": "Поки немає розмічених пісень або спроб.",
+      "error": "Не вдалося завантажити пісні. Повернися назад і спробуй ще раз.",
+      "label": "Таблиця: {good} {tags}",
+      "labelNone": "Немає мітки в таблиці",
+      "loading": "Завантаження пісень...",
+      "markers": "Діапазон {range}, P10-P90 {core}, утримані високі {sustained}, щільність {density}/с, вступ {intro}с",
+      "markersNone": "Маркери не обчислено",
+      "octaveBoth": "чоловіки та жінки",
+      "octaveFemale": "жінки",
+      "octaveMale": "чоловіки",
+      "octaveSplit": "Розподіл октав: {who}",
+      "open": "Налагодження голосу (адмін)",
+      "play": "Відтворити запис",
+      "playFailed": "Не вдалося відтворити цей запис.",
+      "prediction": "Модель: {verdict} (p {p})",
+      "predictionNone": "Немає прогнозу",
+      "stop": "Зупинити",
+      "title": "Налагодження голосу",
+      "unknown": "-",
+      "verdictGood": "добре",
+      "verdictNotGood": "недобре"
+    }
   }
 }

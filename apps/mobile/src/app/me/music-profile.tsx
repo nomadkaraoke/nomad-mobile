@@ -10,6 +10,7 @@ import { ProfileSection } from '../../discover/profile/ProfileSection';
 import { useAppleMusic } from '../../discover/profile/useAppleMusic';
 import { useMusicProfile } from '../../discover/profile/useMusicProfile';
 import { VoiceProfileSection } from '../../voice/VoiceProfileSection';
+import { useVoiceFlags } from '../../voiceSession/debug/useVoiceDebug';
 
 /** decide's genre ids to their message keys (`classic-rock` is `classicRock`). */
 const genreKey = (id: string) => id.replace(/-(\w)/g, (_, c: string) => c.toUpperCase());
@@ -34,6 +35,8 @@ export default function MusicProfileScreen() {
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
   const p = useMusicProfile();
   const apple = useAppleMusic();
+  const tvd = useTranslations('voiceSession.debug');
+  const isAdmin = useVoiceFlags().data?.is_admin === true;
 
   if (!signedIn) {
     return (
@@ -230,6 +233,15 @@ export default function MusicProfileScreen() {
       </ProfileSection>
       {/* Phase 3c: the voice profile. */}
       <VoiceProfileSection />
+
+      {isAdmin ? (
+        <Button
+          testID="vs-debug-open"
+          label={tvd('open')}
+          variant="secondary"
+          onPress={() => router.push('/me/voice-debug' as Href)}
+        />
+      ) : null}
     </Screen>
   );
 }

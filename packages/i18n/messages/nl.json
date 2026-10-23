@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Je stemprofiel verwijderen?",
     "singableCtaLabel": "Zingbaar, doe eerst de stemtest",
     "profileRemoveConfirm": "Verwijderen"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Poging {n}: gevoel {feel}, positie {position}, moeilijkheidsgraad {difficulty}",
+      "attemptPitch": "Gezongen P10-P90 {core}",
+      "empty": "Nog geen gelabelde of geprobeerde nummers.",
+      "error": "Kon de nummers niet laden. Ga terug en probeer het opnieuw.",
+      "label": "Sheet: {good} {tags}",
+      "labelNone": "Geen sheet-label",
+      "loading": "Nummers laden...",
+      "markers": "Bereik {range}, P10-P90 {core}, aangehouden hoge noten {sustained}, dichtheid {density}/s, intro {intro}s",
+      "markersNone": "Geen markers berekend",
+      "octaveBoth": "mannen en vrouwen",
+      "octaveFemale": "vrouwen",
+      "octaveMale": "mannen",
+      "octaveSplit": "Octaafsplitsing: {who}",
+      "open": "Stem-debug (admin)",
+      "play": "Opname afspelen",
+      "playFailed": "Kon die opname niet afspelen.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Geen voorspelling",
+      "stop": "Stoppen",
+      "title": "Stem-debug",
+      "unknown": "-",
+      "verdictGood": "goed",
+      "verdictNotGood": "niet goed"
+    }
   }
 }

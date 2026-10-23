@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "ต้องการลบข้อมูลเสียงของคุณหรือไม่?",
     "singableCtaLabel": "ร้องได้พอดี (ทำแบบทดสอบเสียงก่อน)",
     "profileRemoveConfirm": "นำออก"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "ครั้งที่ {n}: ความรู้สึก {feel}, ตำแหน่ง {position}, ความยาก {difficulty}",
+      "attemptPitch": "ระดับเสียงที่ร้อง P10-P90 {core}",
+      "empty": "ยังไม่มีเพลงที่ติดป้ายกำกับหรือได้ลองร้อง",
+      "error": "ไม่สามารถโหลดเพลงได้ โปรดย้อนกลับแล้วลองอีกครั้ง",
+      "label": "ชีต: {good} {tags}",
+      "labelNone": "ไม่มีป้ายกำกับในชีต",
+      "loading": "กำลังโหลดเพลง...",
+      "markers": "ช่วงเสียง {range}, P10-P90 {core}, เสียงสูงต่อเนื่อง {sustained}, ความหนาแน่น {density}/วินาที, อินโทร {intro} วินาที",
+      "markersNone": "ไม่มีการคำนวณตัวบ่งชี้",
+      "octaveBoth": "ชายและหญิง",
+      "octaveFemale": "หญิง",
+      "octaveMale": "ชาย",
+      "octaveSplit": "แยกอ็อกเทฟ: {who}",
+      "open": "ดีบั๊กเสียงร้อง (แอดมิน)",
+      "play": "เล่นไฟล์บันทึกเสียง",
+      "playFailed": "ไม่สามารถเล่นไฟล์บันทึกเสียงนั้นได้",
+      "prediction": "โมเดล: {verdict} (p {p})",
+      "predictionNone": "ไม่มีการคาดการณ์",
+      "stop": "หยุด",
+      "title": "ดีบั๊กเสียงร้อง",
+      "unknown": "-",
+      "verdictGood": "ดี",
+      "verdictNotGood": "ไม่ดี"
+    }
   }
 }

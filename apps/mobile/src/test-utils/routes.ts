@@ -18,6 +18,7 @@ import * as quiz from '../app/discover/quiz';
 import * as voice from '../app/discover/voice';
 import * as index from '../app/index';
 import * as musicProfile from '../app/me/music-profile';
+import * as voiceDebug from '../app/me/voice-debug';
 import * as readyScreen from '../app/job/[id]';
 import * as durationSheet from '../app/job/duration/[id]';
 import * as makeFlow from '../app/make/new';
@@ -50,6 +51,7 @@ export function appRoutes() {
     'discover/connect/lastfm': connectLastfm,
     'discover/voice': voice,
     'me/music-profile': musicProfile,
+    'me/voice-debug': voiceDebug,
     'song/[id]': song,
     'make/new': makeFlow,
     'job/[id]': readyScreen,

@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Удалить данные о твоём голосе?",
     "singableCtaLabel": "Подходит для пения: сначала пройди тест голоса",
     "profileRemoveConfirm": "Удалить"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Попытка {n}: ощущение {feel}, позиция {position}, сложность {difficulty}",
+      "attemptPitch": "Спето P10-P90 {core}",
+      "empty": "Пока нет размеченных или спетых песен.",
+      "error": "Не удалось загрузить песни. Вернись назад и попробуй снова.",
+      "label": "Таблица: {good} {tags}",
+      "labelNone": "Нет метки в таблице",
+      "loading": "Загрузка песен...",
+      "markers": "Диапазон {range}, P10-P90 {core}, удержание верхов {sustained}, плотность {density}/с, интро {intro} с",
+      "markersNone": "Маркеры не рассчитаны",
+      "octaveBoth": "мужчины и женщины",
+      "octaveFemale": "женщины",
+      "octaveMale": "мужчины",
+      "octaveSplit": "Разделение по октавам: {who}",
+      "open": "Отладка голоса (admin)",
+      "play": "Воспроизвести запись",
+      "playFailed": "Не удалось воспроизвести эту запись.",
+      "prediction": "Модель: {verdict} (p {p})",
+      "predictionNone": "Нет прогноза",
+      "stop": "Остановить",
+      "title": "Отладка голоса",
+      "unknown": "-",
+      "verdictGood": "хорошо",
+      "verdictNotGood": "не очень"
+    }
   }
 }

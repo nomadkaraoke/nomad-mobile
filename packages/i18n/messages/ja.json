@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "声のプロファイルを削除しますか？",
     "singableCtaLabel": "歌える曲：まずは声のテストを受けてください",
     "profileRemoveConfirm": "削除"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "試行 {n}: フィール {feel}、ポジション {position}、難易度 {difficulty}",
+      "attemptPitch": "歌唱音域 P10-P90 {core}",
+      "empty": "ラベル付けまたは試行された曲はまだありません。",
+      "error": "曲を読み込めませんでした。前の画面に戻ってもう一度お試しください。",
+      "label": "シート: {good} {tags}",
+      "labelNone": "シートラベルなし",
+      "loading": "曲を読み込み中...",
+      "markers": "音域 {range}、P10-P90 {core}、ロングトーン高音 {sustained}、密度 {density}/秒、イントロ {intro}秒",
+      "markersNone": "計算されたマーカーはありません",
+      "octaveBoth": "男女両方",
+      "octaveFemale": "女性",
+      "octaveMale": "男性",
+      "octaveSplit": "オクターブ分割: {who}",
+      "open": "音声デバッグ (管理者)",
+      "play": "録音を再生",
+      "playFailed": "録音を再生できませんでした。",
+      "prediction": "モデル: {verdict} (p {p})",
+      "predictionNone": "予測なし",
+      "stop": "停止",
+      "title": "音声デバッグ",
+      "unknown": "-",
+      "verdictGood": "良好",
+      "verdictNotGood": "不良"
+    }
   }
 }

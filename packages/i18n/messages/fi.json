@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Poistetaanko äänesi?",
     "singableCtaLabel": "Laulettava, tee äänitesti ensin",
     "profileRemoveConfirm": "Poista"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Yritys {n}: fiilis {feel}, sijainti {position}, vaikeusaste {difficulty}",
+      "attemptPitch": "Laulettu P10-P90 {core}",
+      "empty": "Ei vielä merkittyjä tai kokeiltuja kappaleita.",
+      "error": "Kappaleita ei voitu ladata. Palaa takaisin ja yritä uudelleen.",
+      "label": "Taulukko: {good} {tags}",
+      "labelNone": "Ei taulukkomerkintää",
+      "loading": "Ladataan kappaleita...",
+      "markers": "Ääniala {range}, P10-P90 {core}, pitkät korkeat {sustained}, tiheys {density}/s, intro {intro} s",
+      "markersNone": "Merkitsimiä ei ole laskettu",
+      "octaveBoth": "miehet ja naiset",
+      "octaveFemale": "naiset",
+      "octaveMale": "miehet",
+      "octaveSplit": "Oktaavijako: {who}",
+      "open": "Äänen virheenkorjaus (admin)",
+      "play": "Toista tallenne",
+      "playFailed": "Tallenteen toistaminen epäonnistui.",
+      "prediction": "Malli: {verdict} (p {p})",
+      "predictionNone": "Ei ennustetta",
+      "stop": "Pysäytä",
+      "title": "Äänen virheenkorjaus",
+      "unknown": "-",
+      "verdictGood": "hyvä",
+      "verdictNotGood": "ei hyvä"
+    }
   }
 }

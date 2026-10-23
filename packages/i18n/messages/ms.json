@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Padam profil suara anda?",
     "singableCtaLabel": "Boleh dinyanyikan, ambil ujian suara dahulu",
     "profileRemoveConfirm": "Alih keluar"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Percubaan {n}: rasa {feel}, posisi {position}, kesukaran {difficulty}",
+      "attemptPitch": "Dinyanyikan P10-P90 {core}",
+      "empty": "Belum ada lagu yang dilabelkan atau dicuba.",
+      "error": "Tidak dapat memuatkan lagu. Sila kembali dan cuba lagi.",
+      "label": "Helaian: {good} {tags}",
+      "labelNone": "Tiada label helaian",
+      "loading": "Memuatkan lagu...",
+      "markers": "Julat {range}, P10-P90 {core}, nada tinggi berterusan {sustained}, ketumpatan {density}/s, intro {intro}s",
+      "markersNone": "Tiada penanda dikira",
+      "octaveBoth": "lelaki dan wanita",
+      "octaveFemale": "wanita",
+      "octaveMale": "lelaki",
+      "octaveSplit": "Pemisahan oktaf: {who}",
+      "open": "Nyahpepijat suara (admin)",
+      "play": "Mainkan rakaman",
+      "playFailed": "Tidak dapat memainkan rakaman tersebut.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Tiada ramalan",
+      "stop": "Berhenti",
+      "title": "Nyahpepijat suara",
+      "unknown": "-",
+      "verdictGood": "baik",
+      "verdictNotGood": "tidak baik"
+    }
   }
 }

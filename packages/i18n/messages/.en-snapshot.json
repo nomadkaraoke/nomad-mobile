@@ -1522,5 +1522,32 @@
     "profileRemoveBody": "Discover will stop matching songs to your voice. You can take the test again any time.",
     "profileRemoveConfirm": "Remove",
     "singableCtaLabel": "Singable, take the voice test first"
+  },
+  "voiceSession": {
+    "debug": {
+      "open": "Voice debug (admin)",
+      "title": "Voice debug",
+      "loading": "Loading songs...",
+      "error": "Could not load the songs. Pull back and try again.",
+      "empty": "No labelled or attempted songs yet.",
+      "labelNone": "No sheet label",
+      "label": "Sheet: {good} {tags}",
+      "markersNone": "No markers computed",
+      "markers": "Range {range}, P10-P90 {core}, sustained highs {sustained}, density {density}/s, intro {intro}s",
+      "octaveSplit": "Octave split: {who}",
+      "octaveMale": "men",
+      "octaveFemale": "women",
+      "octaveBoth": "men and women",
+      "attempt": "Attempt {n}: feel {feel}, position {position}, difficulty {difficulty}",
+      "attemptPitch": "Sung P10-P90 {core}",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "No prediction",
+      "verdictGood": "good",
+      "verdictNotGood": "not good",
+      "play": "Play recording",
+      "stop": "Stop",
+      "playFailed": "Could not play that recording.",
+      "unknown": "-"
+    }
   }
 }

@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Alisin ang iyong boses?",
     "singableCtaLabel": "Kayang kantahin, mag-voice test muna",
     "profileRemoveConfirm": "Alisin"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Subok {n}: pakiramdam {feel}, posisyon {position}, hirap {difficulty}",
+      "attemptPitch": "Kinanta P10-P90 {core}",
+      "empty": "Wala pang may label o nasubukang mga kanta.",
+      "error": "Hindi ma-load ang mga kanta. Bumalik at subukan muli.",
+      "label": "Sheet: {good} {tags}",
+      "labelNone": "Walang sheet label",
+      "loading": "Naglo-load ng mga kanta...",
+      "markers": "Range {range}, P10-P90 {core}, sustained highs {sustained}, density {density}/s, intro {intro}s",
+      "markersNone": "Walang nakalkulang mga marker",
+      "octaveBoth": "mga lalaki at babae",
+      "octaveFemale": "mga babae",
+      "octaveMale": "mga lalaki",
+      "octaveSplit": "Hati ng octave: {who}",
+      "open": "Voice debug (admin)",
+      "play": "I-play ang recording",
+      "playFailed": "Hindi ma-play ang recording na iyon.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Walang prediction",
+      "stop": "Itigil",
+      "title": "Voice debug",
+      "unknown": "-",
+      "verdictGood": "maganda",
+      "verdictNotGood": "hindi maganda"
+    }
   }
 }

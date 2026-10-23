@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Hapus profil suaramu?",
     "singableCtaLabel": "Dapat dinyanyikan, ikuti tes suara terlebih dahulu",
     "profileRemoveConfirm": "Hapus"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Percobaan {n}: sensasi {feel}, posisi {position}, tingkat kesulitan {difficulty}",
+      "attemptPitch": "Dinyanyikan P10-P90 {core}",
+      "empty": "Belum ada lagu yang dilabeli atau dicoba.",
+      "error": "Gagal memuat lagu. Kembali dan coba lagi.",
+      "label": "Sheet: {good} {tags}",
+      "labelNone": "Tidak ada label sheet",
+      "loading": "Memuat lagu...",
+      "markers": "Rentang {range}, P10-P90 {core}, nada tinggi tertahan {sustained}, kepadatan {density}/dtk, intro {intro} dtk",
+      "markersNone": "Tidak ada penanda yang dihitung",
+      "octaveBoth": "pria dan wanita",
+      "octaveFemale": "wanita",
+      "octaveMale": "pria",
+      "octaveSplit": "Pemisahan oktaf: {who}",
+      "open": "Debug suara (admin)",
+      "play": "Putar rekaman",
+      "playFailed": "Gagal memutar rekaman tersebut.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Tidak ada prediksi",
+      "stop": "Berhenti",
+      "title": "Debug suara",
+      "unknown": "-",
+      "verdictGood": "bagus",
+      "verdictNotGood": "kurang bagus"
+    }
   }
 }

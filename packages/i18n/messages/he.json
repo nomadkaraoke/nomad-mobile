@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "להסיר את הקול שלך?",
     "singableCtaLabel": "מתאים לשירה, קודם יש לעשות את מבחן הקול",
     "profileRemoveConfirm": "הסרה"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "ניסיון {n}: תחושה {feel}, מיקום {position}, רמת קושי {difficulty}",
+      "attemptPitch": "הושר P10-P90 {core}",
+      "empty": "אין עדיין שירים מתויגים או שירים שנוסו.",
+      "error": "לא הצלחנו לטעון את השירים. אפשר לחזור ולנסות שוב.",
+      "label": "גיליון: {good} {tags}",
+      "labelNone": "אין תווית גיליון",
+      "loading": "טוען שירים...",
+      "markers": "טווח {range}, P10-P90 {core}, צלילים גבוהים ממושכים {sustained}, צפיפות {density}/שנ׳, פתיח {intro} שנ׳",
+      "markersNone": "לא חושבו סמנים",
+      "octaveBoth": "גברים ונשים",
+      "octaveFemale": "נשים",
+      "octaveMale": "גברים",
+      "octaveSplit": "פיצול אוקטבה: {who}",
+      "open": "דיבאג קולי (מנהל)",
+      "play": "השמעת הקלטה",
+      "playFailed": "לא הצלחנו להשמיע את ההקלטה הזו.",
+      "prediction": "מודל: {verdict} (p {p})",
+      "predictionNone": "אין חיזוי",
+      "stop": "עצירה",
+      "title": "דיבאג קולי",
+      "unknown": "-",
+      "verdictGood": "טוב",
+      "verdictNotGood": "לא טוב"
+    }
   }
 }

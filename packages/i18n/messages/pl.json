@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Usunąć profil głosu?",
     "singableCtaLabel": "Do zaśpiewania – najpierw zrób test głosu",
     "profileRemoveConfirm": "Usuń"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Podejście {n}: wrażenie {feel}, pozycja {position}, trudność {difficulty}",
+      "attemptPitch": "Zaśpiewane P10–P90 {core}",
+      "empty": "Brak oznaczonych lub wypróbowanych utworów.",
+      "error": "Nie udało się załadować utworów. Wróć i spróbuj ponownie.",
+      "label": "Arkusz: {good} {tags}",
+      "labelNone": "Brak etykiety w arkuszu",
+      "loading": "Ładowanie utworów...",
+      "markers": "Skala {range}, P10–P90 {core}, długie wysokie dźwięki {sustained}, gęstość {density}/s, intro {intro}s",
+      "markersNone": "Nie obliczono znaczników",
+      "octaveBoth": "mężczyźni i kobiety",
+      "octaveFemale": "kobiety",
+      "octaveMale": "mężczyźni",
+      "octaveSplit": "Podział oktaw: {who}",
+      "open": "Debugowanie głosu (admin)",
+      "play": "Odtwórz nagranie",
+      "playFailed": "Nie udało się odtworzyć tego nagrania.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Brak predykcji",
+      "stop": "Zatrzymaj",
+      "title": "Debugowanie głosu",
+      "unknown": "-",
+      "verdictGood": "dobre",
+      "verdictNotGood": "niedobre"
+    }
   }
 }

@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Vols eliminar la teva veu?",
     "singableCtaLabel": "Per saber si la pots cantar, fes primer el test de veu",
     "profileRemoveConfirm": "Elimina"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Intent {n}: sensació {feel}, posició {position}, dificultat {difficulty}",
+      "attemptPitch": "Cantat P10-P90 {core}",
+      "empty": "Encara no hi ha cançons etiquetades o intentades.",
+      "error": "No s'han pogut carregar les cançons. Torna enrere i torna-ho a provar.",
+      "label": "Full: {good} {tags}",
+      "labelNone": "Sense etiqueta de full",
+      "loading": "S'estan carregant les cançons...",
+      "markers": "Rang {range}, P10-P90 {core}, aguts sostinguts {sustained}, densitat {density}/s, intro {intro}s",
+      "markersNone": "Sense marcadors calculats",
+      "octaveBoth": "homes i dones",
+      "octaveFemale": "dones",
+      "octaveMale": "homes",
+      "octaveSplit": "Divisió d'octava: {who}",
+      "open": "Depuració de veu (admin)",
+      "play": "Reprodueix la gravació",
+      "playFailed": "No s'ha pogut reproduir aquesta gravació.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Sense predicció",
+      "stop": "Atura",
+      "title": "Depuració de veu",
+      "unknown": "-",
+      "verdictGood": "bo",
+      "verdictNotGood": "no bo"
+    }
   }
 }

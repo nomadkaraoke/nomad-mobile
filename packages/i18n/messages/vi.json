@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Xóa hồ sơ giọng hát của bạn?",
     "singableCtaLabel": "Hát được ngay, hãy kiểm tra giọng hát trước",
     "profileRemoveConfirm": "Xóa"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Lần thử {n}: cảm giác {feel}, vị trí {position}, độ khó {difficulty}",
+      "attemptPitch": "Cao độ đã hát P10-P90 {core}",
+      "empty": "Chưa có bài hát nào được gắn nhãn hoặc đã hát thử.",
+      "error": "Không thể tải danh sách bài hát. Vui lòng quay lại và thử lại.",
+      "label": "Bảng dữ liệu: {good} {tags}",
+      "labelNone": "Không có nhãn từ bảng dữ liệu",
+      "loading": "Đang tải bài hát...",
+      "markers": "Âm vực {range}, P10-P90 {core}, nốt cao ngân dài {sustained}, mật độ {density}/s, dạo đầu {intro}s",
+      "markersNone": "Chưa tính toán chỉ số đánh dấu",
+      "octaveBoth": "nam và nữ",
+      "octaveFemale": "nữ",
+      "octaveMale": "nam",
+      "octaveSplit": "Phân chia quãng tám: {who}",
+      "open": "Gỡ lỗi giọng hát (quản trị viên)",
+      "play": "Phát bản ghi âm",
+      "playFailed": "Không thể phát bản ghi âm này.",
+      "prediction": "Mô hình: {verdict} (p {p})",
+      "predictionNone": "Không có dự đoán",
+      "stop": "Dừng",
+      "title": "Gỡ lỗi giọng hát",
+      "unknown": "-",
+      "verdictGood": "tốt",
+      "verdictNotGood": "không tốt"
+    }
   }
 }

@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Fjern din stemme?",
     "singableCtaLabel": "Syngbar, tag stemmetesten først",
     "profileRemoveConfirm": "Fjern"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Forsøg {n}: fornemmelse {feel}, position {position}, sværhedsgrad {difficulty}",
+      "attemptPitch": "Sunget P10-P90 {core}",
+      "empty": "Ingen mærkede eller forsøgte sange endnu.",
+      "error": "Kunne ikke indlæse sangene. Træk tilbage, og prøv igen.",
+      "label": "Ark: {good} {tags}",
+      "labelNone": "Ingen arkmærkning",
+      "loading": "Indlæser sange...",
+      "markers": "Område {range}, P10-P90 {core}, holdte høje toner {sustained}, tæthed {density}/s, intro {intro}s",
+      "markersNone": "Ingen markører beregnet",
+      "octaveBoth": "mænd og kvinder",
+      "octaveFemale": "kvinder",
+      "octaveMale": "mænd",
+      "octaveSplit": "Oktavopdeling: {who}",
+      "open": "Stemmedebug (admin)",
+      "play": "Afspil optagelse",
+      "playFailed": "Kunne ikke afspille optagelsen.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Ingen forudsigelse",
+      "stop": "Stop",
+      "title": "Stemmedebug",
+      "unknown": "-",
+      "verdictGood": "god",
+      "verdictNotGood": "ikke god"
+    }
   }
 }

@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Ta bort din röst?",
     "singableCtaLabel": "Sångbar, gör rösttestet först",
     "profileRemoveConfirm": "Ta bort"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Försök {n}: känsla {feel}, position {position}, svårighetsgrad {difficulty}",
+      "attemptPitch": "Sjungen P10-P90 {core}",
+      "empty": "Inga märkta eller testade låtar än.",
+      "error": "Kunde inte ladda låtarna. Gå tillbaka och försök igen.",
+      "label": "Ark: {good} {tags}",
+      "labelNone": "Ingen arkmärkning",
+      "loading": "Laddar låtar...",
+      "markers": "Omfång {range}, P10-P90 {core}, utdragna höga toner {sustained}, densitet {density}/s, intro {intro}s",
+      "markersNone": "Inga markörer beräknade",
+      "octaveBoth": "män och kvinnor",
+      "octaveFemale": "kvinnor",
+      "octaveMale": "män",
+      "octaveSplit": "Oktavdelning: {who}",
+      "open": "Röstfelsökning (admin)",
+      "play": "Spela upp inspelning",
+      "playFailed": "Kunde inte spela upp inspelningen.",
+      "prediction": "Modell: {verdict} (p {p})",
+      "predictionNone": "Ingen prediktion",
+      "stop": "Stopp",
+      "title": "Röstfelsökning",
+      "unknown": "-",
+      "verdictGood": "bra",
+      "verdictNotGood": "inte bra"
+    }
   }
 }

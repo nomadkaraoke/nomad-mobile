@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Vuoi rimuovere la tua voce?",
     "singableCtaLabel": "Cantabile: fai prima il test vocale",
     "profileRemoveConfirm": "Rimuovi"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Tentativo {n}: sensazione {feel}, posizione {position}, difficoltà {difficulty}",
+      "attemptPitch": "Cantato P10-P90 {core}",
+      "empty": "Ancora nessun brano etichettato o provato.",
+      "error": "Impossibile caricare i brani. Torna indietro e riprova.",
+      "label": "Foglio: {good} {tags}",
+      "labelNone": "Nessuna etichetta nel foglio",
+      "loading": "Caricamento brani...",
+      "markers": "Estensione {range}, P10-P90 {core}, acuti prolungati {sustained}, densità {density}/s, intro {intro}s",
+      "markersNone": "Nessun marcatore calcolato",
+      "octaveBoth": "uomini e donne",
+      "octaveFemale": "donne",
+      "octaveMale": "uomini",
+      "octaveSplit": "Divisione d'ottava: {who}",
+      "open": "Debug voce (admin)",
+      "play": "Riproduci registrazione",
+      "playFailed": "Impossibile riprodurre la registrazione.",
+      "prediction": "Modello: {verdict} (p {p})",
+      "predictionNone": "Nessuna previsione",
+      "stop": "Interrompi",
+      "title": "Debug voce",
+      "unknown": "-",
+      "verdictGood": "adatto",
+      "verdictNotGood": "non adatto"
+    }
   }
 }

@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Αφαίρεση της φωνής σου;",
     "singableCtaLabel": "Στα μέτρα σου, κάνε πρώτα το τεστ φωνής",
     "profileRemoveConfirm": "Αφαίρεση"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Προσπάθεια {n}: αίσθηση {feel}, θέση {position}, δυσκολία {difficulty}",
+      "attemptPitch": "Τραγουδισμένο P10-P90 {core}",
+      "empty": "Δεν υπάρχουν ακόμη τραγούδια με ετικέτα ή προσπάθεια.",
+      "error": "Δεν ήταν δυνατή η φόρτωση των τραγουδιών. Πήγαινε πίσω και δοκίμασε ξανά.",
+      "label": "Φύλλο: {good} {tags}",
+      "labelNone": "Χωρίς ετικέτα φύλλου",
+      "loading": "Φόρτωση τραγουδιών...",
+      "markers": "Εύρος {range}, P10-P90 {core}, παρατεταμένες ψηλές {sustained}, πυκνότητα {density}/δευτ., εισαγωγή {intro} δευτ.",
+      "markersNone": "Δεν υπολογίστηκαν δείκτες",
+      "octaveBoth": "άνδρες και γυναίκες",
+      "octaveFemale": "γυναίκες",
+      "octaveMale": "άνδρες",
+      "octaveSplit": "Διαχωρισμός οκτάβας: {who}",
+      "open": "Αποσφαλμάτωση φωνής (διαχειριστής)",
+      "play": "Αναπαραγωγή ηχογράφησης",
+      "playFailed": "Δεν ήταν δυνατή η αναπαραγωγή αυτής της ηχογράφησης.",
+      "prediction": "Μοντέλο: {verdict} (p {p})",
+      "predictionNone": "Χωρίς πρόβλεψη",
+      "stop": "Διακοπή",
+      "title": "Αποσφαλμάτωση φωνής",
+      "unknown": "-",
+      "verdictGood": "καλό",
+      "verdictNotGood": "όχι καλό"
+    }
   }
 }

@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Ștergi profilul vocal?",
     "singableCtaLabel": "Potrivite pentru tine, fă mai întâi testul vocal",
     "profileRemoveConfirm": "Elimină"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Încercarea {n}: senzație {feel}, poziție {position}, dificultate {difficulty}",
+      "attemptPitch": "Cântat P10-P90 {core}",
+      "empty": "Nicio melodie etichetată sau încercată încă.",
+      "error": "Nu s-au putut încărca melodiile. Mergi înapoi și încearcă din nou.",
+      "label": "Tabel: {good} {tags}",
+      "labelNone": "Nicio etichetă de tabel",
+      "loading": "Se încarcă melodiile...",
+      "markers": "Ambitus {range}, P10-P90 {core}, acute susținute {sustained}, densitate {density}/s, intro {intro}s",
+      "markersNone": "Niciun marker calculat",
+      "octaveBoth": "bărbați și femei",
+      "octaveFemale": "femei",
+      "octaveMale": "bărbați",
+      "octaveSplit": "Divizare octavă: {who}",
+      "open": "Depanare voce (admin)",
+      "play": "Redă înregistrarea",
+      "playFailed": "Nu s-a putut reda înregistrarea.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Nicio predicție",
+      "stop": "Oprește",
+      "title": "Depanare voce",
+      "unknown": "-",
+      "verdictGood": "bun",
+      "verdictNotGood": "nu e bun"
+    }
   }
 }

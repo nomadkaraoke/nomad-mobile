@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Ukloniti svoj glas?",
     "singableCtaLabel": "Može se pjevati, prvo riješi glasovni test",
     "profileRemoveConfirm": "Ukloni"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Pokušaj {n}: dojam {feel}, pozicija {position}, težina {difficulty}",
+      "attemptPitch": "Otpjevano P10–P90 {core}",
+      "empty": "Još nema označenih pjesama ni pokušaja.",
+      "error": "Pjesme se nisu mogle učitati. Vrati se i pokušaj ponovno.",
+      "label": "Tablica: {good} {tags}",
+      "labelNone": "Nema oznake u tablici",
+      "loading": "Učitavanje pjesama...",
+      "markers": "Raspon {range}, P10–P90 {core}, zadržani visoki tonovi {sustained}, gustoća {density}/s, uvod {intro}s",
+      "markersNone": "Nema izračunatih markera",
+      "octaveBoth": "muškarci i žene",
+      "octaveFemale": "žene",
+      "octaveMale": "muškarci",
+      "octaveSplit": "Podjela po oktavama: {who}",
+      "open": "Otklanjanje pogrešaka glasa (admin)",
+      "play": "Reproduciraj snimku",
+      "playFailed": "Reprodukcija snimke nije uspjela.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Nema predviđanja",
+      "stop": "Zaustavi",
+      "title": "Otklanjanje pogrešaka glasa",
+      "unknown": "-",
+      "verdictGood": "dobro",
+      "verdictNotGood": "nije dobro"
+    }
   }
 }

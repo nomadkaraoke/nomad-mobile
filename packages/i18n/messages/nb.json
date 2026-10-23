@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Fjerne stemmen din?",
     "singableCtaLabel": "Sangbar, ta stemmetesten først",
     "profileRemoveConfirm": "Fjern"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Forsøk {n}: følelse {feel}, posisjon {position}, vanskelighetsgrad {difficulty}",
+      "attemptPitch": "Sunget P10–P90 {core}",
+      "empty": "Ingen merkede eller prøvde sanger ennå.",
+      "error": "Kunne ikke laste inn sangene. Gå tilbake og prøv på nytt.",
+      "label": "Ark: {good} {tags}",
+      "labelNone": "Ingen arketikett",
+      "loading": "Laster inn sanger...",
+      "markers": "Omfang {range}, P10–P90 {core}, holdte høye toner {sustained}, tetthet {density}/s, intro {intro}s",
+      "markersNone": "Ingen markører beregnet",
+      "octaveBoth": "menn og kvinner",
+      "octaveFemale": "kvinner",
+      "octaveMale": "menn",
+      "octaveSplit": "Oktavdeling: {who}",
+      "open": "Stemmefeilsøking (admin)",
+      "play": "Spill av opptak",
+      "playFailed": "Kunne ikke spille av opptaket.",
+      "prediction": "Modell: {verdict} (p {p})",
+      "predictionNone": "Ingen prediksjon",
+      "stop": "Stopp",
+      "title": "Stemmefeilsøking",
+      "unknown": "-",
+      "verdictGood": "bra",
+      "verdictNotGood": "ikke bra"
+    }
   }
 }

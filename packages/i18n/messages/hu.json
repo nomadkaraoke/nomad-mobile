@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Eltávolítod a hangodat?",
     "singableCtaLabel": "Énekelhető, először töltsd ki a hangtesztet",
     "profileRemoveConfirm": "Eltávolítás"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "{n}. próbálkozás: érzet {feel}, pozíció {position}, nehézség {difficulty}",
+      "attemptPitch": "Énekelt P10-P90 {core}",
+      "empty": "Még nincsenek felcímkézett vagy megpróbált dalok.",
+      "error": "Nem sikerült betölteni a dalokat. Lépj vissza, és próbáld újra.",
+      "label": "Táblázat: {good} {tags}",
+      "labelNone": "Nincs táblázatcímke",
+      "loading": "Dalok betöltése...",
+      "markers": "Hangterjedelem {range}, P10-P90 {core}, kitartott magas hangok {sustained}, sűrűség {density}/mp, intro {intro} mp",
+      "markersNone": "Nincsenek kiszámított jelölők",
+      "octaveBoth": "férfiak és nők",
+      "octaveFemale": "nők",
+      "octaveMale": "férfiak",
+      "octaveSplit": "Oktávbontás: {who}",
+      "open": "Hanghibakeresés (admin)",
+      "play": "Felvétel lejátszása",
+      "playFailed": "Nem sikerült lejátszani a felvételt.",
+      "prediction": "Modell: {verdict} (p {p})",
+      "predictionNone": "Nincs előrejelzés",
+      "stop": "Leállítás",
+      "title": "Hanghibakeresés",
+      "unknown": "-",
+      "verdictGood": "jó",
+      "verdictNotGood": "nem jó"
+    }
   }
 }

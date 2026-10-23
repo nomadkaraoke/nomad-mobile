@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "Deine Stimme entfernen?",
     "singableCtaLabel": "Singbar, mach zuerst den Stimmtest",
     "profileRemoveConfirm": "Entfernen"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Versuch {n}: Gefühl {feel}, Position {position}, Schwierigkeit {difficulty}",
+      "attemptPitch": "Gesungen P10-P90 {core}",
+      "empty": "Noch keine gelabelten oder versuchten Songs vorhanden.",
+      "error": "Songs konnten nicht geladen werden. Geh zurück und versuche es erneut.",
+      "label": "Tabelle: {good} {tags}",
+      "labelNone": "Kein Tabellen-Label",
+      "loading": "Songs werden geladen...",
+      "markers": "Tonumfang {range}, P10-P90 {core}, gehaltene hohe Töne {sustained}, Dichte {density}/s, Intro {intro}s",
+      "markersNone": "Keine Marker berechnet",
+      "octaveBoth": "Männer und Frauen",
+      "octaveFemale": "Frauen",
+      "octaveMale": "Männer",
+      "octaveSplit": "Oktaventeilung: {who}",
+      "open": "Stimm-Debug (Admin)",
+      "play": "Aufnahme abspielen",
+      "playFailed": "Diese Aufnahme konnte nicht abgespielt werden.",
+      "prediction": "Modell: {verdict} (p {p})",
+      "predictionNone": "Keine Vorhersage",
+      "stop": "Stopp",
+      "title": "Stimm-Debug",
+      "unknown": "-",
+      "verdictGood": "gut",
+      "verdictNotGood": "nicht gut"
+    }
   }
 }

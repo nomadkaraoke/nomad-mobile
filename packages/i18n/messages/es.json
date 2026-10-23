@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "¿Eliminar tu voz?",
     "singableCtaLabel": "Cantable, haz la prueba de voz primero",
     "profileRemoveConfirm": "Quitar"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Intento {n}: sensación {feel}, posición {position}, dificultad {difficulty}",
+      "attemptPitch": "Cantado P10-P90 {core}",
+      "empty": "Aún no hay canciones etiquetadas o intentadas.",
+      "error": "No se pudieron cargar las canciones. Retrocede e inténtalo de nuevo.",
+      "label": "Hoja: {good} {tags}",
+      "labelNone": "Sin etiqueta de hoja",
+      "loading": "Cargando canciones...",
+      "markers": "Rango {range}, P10-P90 {core}, agudos sostenidos {sustained}, densidad {density}/s, intro {intro}s",
+      "markersNone": "No se calcularon marcadores",
+      "octaveBoth": "hombres y mujeres",
+      "octaveFemale": "mujeres",
+      "octaveMale": "hombres",
+      "octaveSplit": "División de octava: {who}",
+      "open": "Depuración de voz (admin)",
+      "play": "Reproducir grabación",
+      "playFailed": "No se pudo reproducir esa grabación.",
+      "prediction": "Modelo: {verdict} (p {p})",
+      "predictionNone": "Sin predicción",
+      "stop": "Detener",
+      "title": "Depuración de voz",
+      "unknown": "-",
+      "verdictGood": "bueno",
+      "verdictNotGood": "no bueno"
+    }
   }
 }

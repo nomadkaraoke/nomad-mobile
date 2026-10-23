@@ -1522,5 +1522,32 @@
     "profileRemoveTitle": "هل تريد إزالة ملف صوتك؟",
     "singableCtaLabel": "قابلة للغناء، خض اختبار الصوت أولاً",
     "profileRemoveConfirm": "إزالة"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "المحاولة {n}: الشعور {feel}، الموضع {position}، الصعوبة {difficulty}",
+      "attemptPitch": "طبقة الغناء P10-P90 {core}",
+      "empty": "لا توجد أغانٍ مصنفة أو تمت تجربتها حتى الآن.",
+      "error": "تعذر تحميل الأغاني. اسحب للخلف وحاول مرة أخرى.",
+      "label": "الجدول: {good} {tags}",
+      "labelNone": "لا يوجد تصنيف في الجدول",
+      "loading": "جارٍ تحميل الأغاني...",
+      "markers": "النطاق {range}، P10-P90 {core}، النغمات العالية الممتدة {sustained}، الكثافة {density}/ثانية، المقدمة {intro} ثانية",
+      "markersNone": "لم يتم احتساب أي مؤشرات",
+      "octaveBoth": "رجال ونساء",
+      "octaveFemale": "نساء",
+      "octaveMale": "رجال",
+      "octaveSplit": "تقسيم الأوكتاف: {who}",
+      "open": "تصحيح أخطاء الصوت (المشرف)",
+      "play": "تشغيل التسجيل",
+      "playFailed": "تعذر تشغيل هذا التسجيل.",
+      "prediction": "النموذج: {verdict} (الاحتمالية {p})",
+      "predictionNone": "لا يوجد توقع",
+      "stop": "إيقاف",
+      "title": "تصحيح أخطاء الصوت",
+      "unknown": "-",
+      "verdictGood": "جيد",
+      "verdictNotGood": "غير جيد"
+    }
   }
 }
