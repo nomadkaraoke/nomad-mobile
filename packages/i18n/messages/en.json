@@ -1302,6 +1302,25 @@
       "dailyLimit": "You've used today's 10 screenshots. Try again tomorrow.",
       "again": "Pick more screenshots",
       "retry": "Try again"
+    },
+    "playlist": {
+      "intro": "Paste a link to a public Spotify or YouTube Music playlist and we'll add its songs to what we know you sing.",
+      "placeholder": "Playlist link",
+      "paste": "Paste",
+      "submit": "Import playlist",
+      "importing": "Importing your playlist…",
+      "notPlaylist": "That isn't a Spotify or YouTube Music playlist link",
+      "done": "Imported {title}",
+      "matched": "{matched} of {fetched} have karaoke versions",
+      "again": "Import another playlist",
+      "howTo": {
+        "title": "How do I share my Liked Music?",
+        "step1": "On music.youtube.com, open Library → Liked Music.",
+        "step2": "Select the songs (tap one, then tap the others).",
+        "step3": "Choose \"Add to playlist\" → New playlist, and set visibility to Unlisted or Public.",
+        "step4": "Open the new playlist, tap Share → Copy link, and paste it here.",
+        "anyPlaylist": "Any public or unlisted playlist of songs you love works too, e.g. your party or workout mix."
+      }
     }
   }
 }
