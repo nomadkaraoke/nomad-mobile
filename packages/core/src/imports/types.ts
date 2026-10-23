@@ -26,6 +26,8 @@ export interface ExportSummary {
   liked: ExportRef[];
   playlists: { name: string; tracks: ExportRef[] }[];
   skipped: { podcasts: number; short: number; malformed: number };
+  /** The zip looked incomplete or damaged (e.g. a cut-off download): what was read is partial. */
+  truncated: boolean;
 }
 
 /** Plays shorter than this are not counted (Spotify's own "stream" threshold). */

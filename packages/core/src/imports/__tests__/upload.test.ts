@@ -10,6 +10,7 @@ const summary = (over: Partial<ExportSummary>): ExportSummary => ({
   liked: [],
   playlists: [],
   skipped: { podcasts: 0, short: 0, malformed: 0 },
+  truncated: false,
   ...over,
 });
 

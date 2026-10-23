@@ -126,6 +126,26 @@ describe('Apple Music play activity', () => {
     expect(s.skipped.malformed).toBe(1);
   });
 
+  it('skips non-audio rows (music videos) and rejects impossible dates', () => {
+    const s = fromCsvText(
+      csv(
+        ['Artist Name', 'Song Name', 'Event Start Timestamp', 'Play Duration Milliseconds', 'Media Type'],
+        [
+          [SONGS.hello.artist, SONGS.hello.title, '2023-01-01T00:00:00Z', 100_000, 'AUDIO'],
+          [SONGS.hello.artist, SONGS.hello.title, '2023-01-02T00:00:00Z', 100_000, 'VIDEO'],
+          [SONGS.hello.artist, SONGS.hello.title, '2023-02-29T00:00:00Z', 100_000, ''],
+          [SONGS.hello.artist, SONGS.hello.title, '2023-13-01T00:00:00Z', 100_000, 'audio'],
+        ],
+      ),
+    )!;
+    expect(s.tracks.map((t) => t.plays)).toEqual([1]);
+    expect(s.skipped.malformed).toBe(2);
+    const daily = fromCsvText(csv(['Date Played', 'Play Duration Milliseconds', 'Track Description'], [['20230231', 100_000, 'Adele - Hello']]))!;
+    expect(daily.tracks).toEqual([]);
+    expect(daily.skipped.malformed).toBe(1);
+    expect(daily.truncated).toBe(false);
+  });
+
   it('a final row without a line break still counts', () => {
     const text = 'Artist Name,Song Name,Event Start Timestamp,Play Duration Milliseconds\nAdele,Hello,2023-01-01T00:00:00Z,100000';
     expect(fromCsvText(text, 5)!.tracks).toHaveLength(1);

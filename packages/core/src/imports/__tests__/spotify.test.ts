@@ -66,12 +66,24 @@ describe('Spotify extended history', () => {
     expect(byTitle(s, 'Hello')!.plays).toBe(1);
   });
 
+  it('extended history with no music plays does not hide the account history', () => {
+    const zip = buildZip({
+      'MyData/StreamingHistory_music_0.json': accountHistory([{ song: SONGS.hello, endTime: '2024-01-02 00:03', ms: 300_000 }]),
+      'Spotify Extended Streaming History/Streaming_History_Audio_2024.json': extendedHistory([{ song: null, ts: '2024-01-02T00:03:00Z', ms: 300_000 }]),
+    });
+    const s = readZip(zip)!;
+    expect(s.kind).toBe('spotify-account');
+    expect(s.tracks.map((t) => t.title)).toEqual(['Hello']);
+  });
+
   it('counts malformed rows and unparseable files, never throws', () => {
     const zip = buildZip({
       'Streaming_History_Audio_2024_0.json': JSON.stringify([
         { ts: 'not a date', ms_played: 100_000, master_metadata_track_name: 'Hello', master_metadata_album_artist_name: 'Adele' },
         { ts: '2024-01-01T00:00:00Z', ms_played: 'x', master_metadata_track_name: 'Hello', master_metadata_album_artist_name: 'Adele' },
         { ts: '2024-01-01T00:00:00Z', ms_played: 100_000, master_metadata_track_name: 'Hello', master_metadata_album_artist_name: '  ' },
+        { ts: '2024-02-30T00:00:00Z', ms_played: 100_000, master_metadata_track_name: 'Hello', master_metadata_album_artist_name: 'Adele' }, // no rollover to Mar 1
+        { ts: '2024-01-01T24:00:00Z', ms_played: 100_000, master_metadata_track_name: 'Hello', master_metadata_album_artist_name: 'Adele' },
         'junk',
         { ts: '2024-01-01T00:00:00Z', ms_played: 100_000, master_metadata_track_name: 'Hello', master_metadata_album_artist_name: 'Adele' },
       ]),
@@ -81,7 +93,8 @@ describe('Spotify extended history', () => {
     const s = readZip(zip)!;
     expect(s.kind).toBe('spotify-extended');
     expect(s.tracks).toHaveLength(1);
-    expect(s.skipped.malformed).toBe(6);
+    expect(s.skipped.malformed).toBe(8);
+    expect(s.truncated).toBe(false);
   });
 });
 
@@ -136,10 +149,15 @@ describe('Spotify account data', () => {
   });
 
   it('a library-only export is still a Spotify export (generatedAt falls back to today)', () => {
-    const s = readZip(buildZip({ 'MyData/YourLibrary.json': yourLibrary([SONGS.hello]) }))!;
-    expect(s.kind).toBe('spotify-account');
-    expect(s.tracks).toEqual([]);
-    expect(s.generatedAt).toBe(new Date().toISOString().slice(0, 10));
+    jest.useFakeTimers({ now: Date.parse('2026-10-22T23:59:30Z') });
+    try {
+      const s = readZip(buildZip({ 'MyData/YourLibrary.json': yourLibrary([SONGS.hello]) }))!;
+      expect(s.kind).toBe('spotify-account');
+      expect(s.tracks).toEqual([]);
+      expect(s.generatedAt).toBe('2026-10-22');
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   it('generatedAtIsMaxPlayDate', () => {

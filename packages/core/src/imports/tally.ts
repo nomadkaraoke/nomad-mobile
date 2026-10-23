@@ -26,6 +26,14 @@ export function num(v: unknown): number | null {
 const DATE_ONLY_RE = /^(\d{4})(\d{2})(\d{2})$/;
 const ISO_RE = /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?)?\s*(Z|[+-]\d{2}:?\d{2})?$/i;
 
+/** Unix seconds of a UTC civil time, or null when a field is out of range (no Date.UTC rollover: Feb 30 is not Mar 2). */
+function utcSeconds(y: number, mo: number, d: number, h: number, mi: number, s: number): number | null {
+  if (mo < 1 || mo > 12 || d < 1 || h > 23 || mi > 59 || s > 59) return null;
+  const ms = Date.UTC(y, mo - 1, d, h, mi, s);
+  if (new Date(ms).getUTCDate() !== d) return null;
+  return ms / 1000;
+}
+
 /**
  * Unix seconds from an export timestamp: Spotify `endTime` ("2024-05-01 21:15", UTC),
  * Spotify `ts` / Apple ISO 8601 (zone optional, UTC assumed), Apple `YYYYMMDD` dates, or
@@ -37,19 +45,18 @@ export function toUnixSeconds(v: unknown): number | null {
   const s = typeof v === 'string' ? v.trim() : '';
   const day = DATE_ONLY_RE.exec(s);
   if (day) {
-    sec = Date.UTC(Number(day[1]), Number(day[2]) - 1, Number(day[3])) / 1000;
+    sec = utcSeconds(Number(day[1]), Number(day[2]), Number(day[3]), 0, 0, 0);
   } else if (n !== null) {
     sec = n > 1e11 ? n / 1000 : n;
   } else {
     const m = ISO_RE.exec(s);
     if (m) {
       const [, y, mo, d, h = '0', mi = '0', se = '0', zone] = m;
-      let ms = Date.UTC(Number(y), Number(mo) - 1, Number(d), Number(h), Number(mi), Number(se));
-      if (zone && zone.toUpperCase() !== 'Z') {
+      sec = utcSeconds(Number(y), Number(mo), Number(d), Number(h), Number(mi), Number(se));
+      if (sec !== null && zone && zone.toUpperCase() !== 'Z') {
         const z = /([+-])(\d{2}):?(\d{2})/.exec(zone)!;
-        ms -= (z[1] === '-' ? -1 : 1) * (Number(z[2]) * 60 + Number(z[3])) * 60_000;
+        sec -= (z[1] === '-' ? -1 : 1) * (Number(z[2]) * 60 + Number(z[3])) * 60;
       }
-      sec = ms / 1000;
     }
   }
   if (sec === null || !Number.isFinite(sec)) return null;

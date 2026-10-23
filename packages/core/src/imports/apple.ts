@@ -102,6 +102,7 @@ const TIME = ['event start timestamp', 'event end timestamp'];
 const DATE_PLAYED = ['date played'];
 const PLAY_COUNT = ['play count'];
 const DESCRIPTION = ['track description'];
+const MEDIA_TYPE = ['media type'];
 
 export type AppleFamily = 'activity' | 'daily';
 
@@ -109,11 +110,12 @@ export type AppleFamily = 'activity' | 'daily';
  * One Apple play-history CSV → its tally. The header row decides the family: event
  * timestamps = "Play Activity" (one row per play), `Date Played` = "Play History Daily Tracks"
  * (per-day totals with a play count). Any other header: not a play-history file, ignored.
+ * Rows whose `Media Type` is set and not AUDIO are skipped.
  * Artist/title come from the aliased columns, else from `Track Description` ("Artist - Title").
  */
 export class AppleCsv {
   private readonly rows = new CsvRows((f) => this.onRow(f));
-  private cols: { artist: number[]; title: number[]; duration: number; time: number[]; count: number; description: number } | null = null;
+  private cols: { artist: number[]; title: number[]; duration: number; time: number[]; count: number; description: number; media: number } | null = null;
   private tally: ListenTally | null = null;
   private headerDone = false;
 
@@ -132,6 +134,9 @@ export class AppleCsv {
     const c = this.cols;
     const tally = this.tally;
     if (!c || !tally) return;
+    // Music videos and other non-audio rows are skipped, like Spotify's video history.
+    const media = c.media >= 0 ? text(fields[c.media]) : null;
+    if (media && media.toUpperCase() !== 'AUDIO') return;
     const pick = (idx: number[]) => {
       for (const i of idx) {
         const v = text(fields[i]);
@@ -164,7 +169,7 @@ export class AppleCsv {
     const date = find(DATE_PLAYED);
     const family: AppleFamily | null = time.length ? 'activity' : date.length ? 'daily' : null;
     if (!family || duration < 0 || ((!artist.length || !title.length) && description < 0)) return;
-    this.cols = { artist, title, duration, time: family === 'activity' ? time : date, count: find(PLAY_COUNT)[0] ?? -1, description };
+    this.cols = { artist, title, duration, time: family === 'activity' ? time : date, count: find(PLAY_COUNT)[0] ?? -1, description, media: find(MEDIA_TYPE)[0] ?? -1 };
     this.tally = this.tallies[family];
     this.tally.seen = true;
   }

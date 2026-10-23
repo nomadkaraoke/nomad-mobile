@@ -4,7 +4,7 @@ import { AppleCsv, appleCsvEntry, type AppleFamily } from './apple';
 import { addAccountHistory, addExtendedHistory, addLibrary, readPlaylists, spotifyEntryKind } from './spotify';
 import { ListenTally, RefSet } from './tally';
 import type { ExportRef, ExportSummary } from './types';
-import { entryBaseName } from './zip';
+import { entryBaseName, ExportZipReader, wantExportEntry, type EntrySink } from './zip';
 
 const BOM = String.fromCharCode(0xfeff);
 /** CSV entries are decoded and parsed in slices of this many bytes. */
@@ -24,17 +24,41 @@ export class ExportAggregator {
   private spotifySeen = false;
   private csv: AppleCsv | null = null;
 
+  private readonly readers: ExportZipReader[] = [];
+
+  /** A zip reader wired to this aggregator (CSV entries streamed, JSON entries whole). */
+  createReader(): ExportZipReader {
+    const reader = new ExportZipReader(
+      (name, data) => this.addEntry(name, data),
+      wantExportEntry,
+      (name) => this.entryStream(name),
+    );
+    this.readers.push(reader);
+    return reader;
+  }
+
+  /**
+   * A streaming sink for entries parsed as they inflate (the Apple play-history CSVs: decoded
+   * by DecodeUTF8 straight into the CSV parser, never held whole), or null for entries that
+   * must arrive whole through `addEntry` (Spotify JSON).
+   */
+  entryStream(name: string): EntrySink | null {
+    if (!appleCsvEntry(entryBaseName(name))) return null;
+    const csv = new AppleCsv(this.apple);
+    const dec = new DecodeUTF8((str, final) => csv.push(str, final));
+    return (data, final) => dec.push(data, final);
+  }
+
   /** One zip entry, whole. Unknown names are ignored; unreadable history files count as malformed. */
   addEntry(name: string, data: Uint8Array): void {
     const base = entryBaseName(name);
     if (/\.csv$/i.test(base)) {
-      if (!appleCsvEntry(base)) return;
-      const csv = new AppleCsv(this.apple);
-      const dec = new DecodeUTF8((str, final) => csv.push(str, final));
-      if (data.length === 0) dec.push(data, true);
+      const sink = this.entryStream(name);
+      if (!sink) return;
+      if (data.length === 0) sink(data, true);
       for (let off = 0; off < data.length; off += DECODE_SLICE) {
         const end = Math.min(data.length, off + DECODE_SLICE);
-        dec.push(data.subarray(off, end), end === data.length);
+        sink(data.subarray(off, end), end === data.length);
       }
       return;
     }
@@ -71,10 +95,15 @@ export class ExportAggregator {
     if (final) this.csv = null;
   }
 
+  private truncated(): boolean {
+    return this.readers.some((r) => r.truncated);
+  }
+
   /** The export's summary, or null when nothing looked like a Spotify or Apple export. */
   summary(): ExportSummary | null {
     if (this.spotifySeen) {
-      const extended = this.extended.seen;
+      // Extended wins unless it produced nothing while Account history is there.
+      const extended = this.extended.seen && (this.extended.size > 0 || !this.account.seen);
       const tally = extended ? this.extended : this.account;
       return {
         kind: extended ? 'spotify-extended' : 'spotify-account',
@@ -83,11 +112,12 @@ export class ExportAggregator {
         liked: this.liked.refs.map((r) => ({ ...r })),
         playlists: this.playlists.map((p) => ({ name: p.name, tracks: p.tracks.map((r) => ({ ...r })) })),
         skipped: { ...tally.skipped },
+        truncated: this.truncated(),
       };
     }
     const { activity, daily } = this.apple;
     if (!activity.seen && !daily.seen) return null;
     const tally = activity.size > 0 || !daily.seen ? activity : daily;
-    return { kind: 'apple', generatedAt: tally.generatedAt(), tracks: tally.tracks(), liked: [], playlists: [], skipped: { ...tally.skipped } };
+    return { kind: 'apple', generatedAt: tally.generatedAt(), tracks: tally.tracks(), liked: [], playlists: [], skipped: { ...tally.skipped }, truncated: this.truncated() };
   }
 }

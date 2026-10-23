@@ -1,9 +1,8 @@
 // Synthetic Spotify / Apple export builders for tests. Songs come from the decide fixture
 // catalog; no real exports, no lyrics.
-import { strToU8, zipSync, type Zippable } from 'fflate';
+import { strToU8, Zip, ZipDeflate, ZipPassThrough, zipSync, type Zippable } from 'fflate';
 import { ExportAggregator } from '../aggregator';
 import type { ExportSummary } from '../types';
-import { ExportZipReader, wantExportEntry } from '../zip';
 
 export const SONGS = {
   hello: { artist: 'Adele', title: 'Hello' },
@@ -19,6 +18,31 @@ export function buildZip(files: Record<string, string | Uint8Array>, level: 0 | 
   const z: Zippable = {};
   for (const [name, body] of Object.entries(files)) z[name] = typeof body === 'string' ? strToU8(body) : body;
   return zipSync(z, { level });
+}
+
+/**
+ * A zip written by fflate's streaming `Zip`, so every entry has a data descriptor (sizes
+ * after the data), like zips made on the fly. `stored: true` → ZipPassThrough (no compression).
+ */
+export function buildStreamedZip(files: Record<string, { body: string | Uint8Array; stored?: boolean }>): Uint8Array {
+  const parts: Uint8Array[] = [];
+  const zip = new Zip((err, data) => {
+    if (err) throw err;
+    parts.push(data);
+  });
+  for (const [name, { body, stored }] of Object.entries(files)) {
+    const entry = stored ? new ZipPassThrough(name) : new ZipDeflate(name, { level: 6 });
+    zip.add(entry);
+    entry.push(typeof body === 'string' ? strToU8(body) : body, true);
+  }
+  zip.end();
+  const out = new Uint8Array(parts.reduce((n, p) => n + p.length, 0));
+  let off = 0;
+  for (const p of parts) {
+    out.set(p, off);
+    off += p.length;
+  }
+  return out;
 }
 
 /** Account-data history rows (`StreamingHistory_music_*.json`). `endTime` is "YYYY-MM-DD HH:MM" UTC. */
@@ -73,7 +97,7 @@ export function csv(headers: string[], rows: (string | number)[][], opts: { bom?
 /** Reads a whole zip through the streaming reader, `chunk` bytes at a time. */
 export function readZip(zip: Uint8Array, chunk = zip.length): ExportSummary | null {
   const agg = new ExportAggregator();
-  const reader = new ExportZipReader((name, data) => agg.addEntry(name, data), wantExportEntry);
+  const reader = agg.createReader();
   for (let off = 0; off < zip.length; off += chunk) {
     const end = Math.min(zip.length, off + chunk);
     reader.push(zip.subarray(off, end), end === zip.length);
