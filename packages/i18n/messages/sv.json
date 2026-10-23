@@ -1229,7 +1229,7 @@
       },
       "playlist": {
         "detail": "Spotify eller YouTube Music · sekunder",
-        "title": "Klistra in en spellänklänk"
+        "title": "Klistra in en spellistlänk"
       },
       "screenshot": {
         "detail": "Artister på några sekunder",
@@ -1241,7 +1241,7 @@
       }
     },
     "errors": {
-      "badUrl": "Det där är inte en spellänklänk från Spotify eller YouTube Music.",
+      "badUrl": "Det där är inte en spellistlänk från Spotify eller YouTube Music.",
       "likedPrivate": "Gillad musik är alltid privat. Kopiera den till en offentlig eller olistad spellista och dela sedan den länken.",
       "notAnExport": "Det här ser inte ut som en dataexport från Spotify eller Apple.",
       "notFound": "Vi kunde inte hitta det användarnamnet. Kontrollera stavningen och försök igen.",
@@ -1333,9 +1333,9 @@
       "importing": "Importerar din spellista…",
       "intro": "Klistra in en länk till en offentlig Spotify- eller YouTube Music-spellista så lägger vi till dess låtar i vad vi vet att du sjunger.",
       "matched": "{matched} av {fetched} har karaokeversioner",
-      "notPlaylist": "Det där är inte en spellänklänk från Spotify eller YouTube Music",
+      "notPlaylist": "Det där är inte en spellistlänk från Spotify eller YouTube Music",
       "paste": "Klistra in",
-      "placeholder": "Spellänklänk",
+      "placeholder": "Spellistlänk",
       "submit": "Importera spellista"
     },
     "reminders": {
