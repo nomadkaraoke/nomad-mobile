@@ -1,6 +1,6 @@
 import { importSpotifyPlaylist, importYouTubeMusicPlaylist } from '@nomad/api-decide';
 import { classifyPlaylistUrl } from '@nomad/core';
-import { useTranslations } from '@nomad/i18n';
+import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text, TextField } from '@nomad/ui';
 import * as Clipboard from 'expo-clipboard';
 import { useState } from 'react';
@@ -89,7 +89,7 @@ export function PlaylistImport() {
       {done ? (
         <>
           <Text testID="connect-import-result" accessibilityLiveRegion="polite" className="font-semibold">
-            {t('playlist.done', { title: done.title })}
+            {t('playlist.done', { title: isolate(done.title) })}
           </Text>
           <Text testID="connect-playlist-matched">
             {t('playlist.matched', { matched: done.matched, fetched: done.fetched })}

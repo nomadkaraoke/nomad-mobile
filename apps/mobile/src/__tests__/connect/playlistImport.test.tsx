@@ -1,5 +1,6 @@
 // Connect -> Playlist link import: Spotify embed + YouTube Music (Phase 3b Task 20).
 import * as decide from '@nomad/api-decide';
+import { isolate } from '@nomad/i18n';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import * as Clipboard from 'expo-clipboard';
 import { renderRouter } from 'expo-router/testing-library';
@@ -57,7 +58,7 @@ describe('Playlist link import', () => {
   it('routes spotify vs youtube', async () => {
     await submit(SPOTIFY);
     expect(await screen.findByText('9 of 12 have karaoke versions')).toBeTruthy();
-    expect(screen.getByText('Imported Fixture Mix')).toBeTruthy();
+    expect(screen.getByText(`Imported ${isolate('Fixture Mix')}`)).toBeTruthy();
     expect(decide.importSpotifyPlaylist).toHaveBeenCalledWith(SPOTIFY);
     expect(decide.importYouTubeMusicPlaylist).not.toHaveBeenCalled();
 

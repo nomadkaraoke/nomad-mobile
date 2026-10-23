@@ -1,5 +1,6 @@
 // Connect -> Screenshot import: pick -> resize -> extract -> confirm list -> save (Phase 3b Task 19).
 import * as decide from '@nomad/api-decide';
+import { isolate } from '@nomad/i18n';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
@@ -117,7 +118,8 @@ describe('Screenshot import', () => {
     for (let i = 0; i < 3; i++) {
       expect(screen.getByTestId(`connect-shot-item-${i}`).props.accessibilityState.checked).toBe(true);
     }
-    expect(screen.getByText('Fixture Band · Fixture Song')).toBeTruthy();
+    // isolate()d names (RTL-safe), as the screen renders them
+    expect(screen.getByText(`${isolate('Fixture Band')} · ${isolate('Fixture Song')}`)).toBeTruthy();
     expect(screen.getAllByText('Not in our karaoke catalog yet')).toHaveLength(1);
   });
 

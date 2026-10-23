@@ -5,7 +5,7 @@ import {
   type ImportResultResponse,
   type UploadFile,
 } from '@nomad/api-decide';
-import { useTranslations } from '@nomad/i18n';
+import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import { File } from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -179,7 +179,7 @@ export function ScreenshotImport() {
                 </View>
                 <View className="flex-1 gap-1">
                   <Text className="font-semibold">
-                    {c.kind === 'song' && c.title ? t('screenshot.item', { artist: c.artist, title: c.title }) : c.artist}
+                    {c.kind === 'song' && c.title ? t('screenshot.item', { artist: isolate(c.artist), title: isolate(c.title) }) : c.artist}
                   </Text>
                   {!c.matched ? <Text variant="muted">{t('screenshot.unmatched')}</Text> : null}
                 </View>
