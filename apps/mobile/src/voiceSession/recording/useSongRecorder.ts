@@ -14,7 +14,7 @@ import { Platform } from 'react-native';
 import { createFramer } from '../../voice/framer';
 import type { PitchSource } from '../../voice/pitchSource';
 import { AAC_RECORDING_OPTIONS, createAacSink, type AacSink } from './aacSink';
-import { deleteFileQuietly } from './files';
+import { deleteFileQuietly, WAV_DIR_NAME } from './files';
 import { createWavSink, type WavSink } from './wavSink';
 
 /**
@@ -46,7 +46,7 @@ const LIVE_PITCH_INTERVAL_S = 1 / 15;
 const EMPTY: SongTake = { pitch: null, file: null };
 
 /** Where WAV takes are written (documents, so a queued upload's file is not purged with the cache). */
-const wavDir = () => new Directory(Paths.document, 'voice-recordings').uri;
+const wavDir = () => new Directory(Paths.document, WAV_DIR_NAME).uri;
 
 type Run = {
   stopped: boolean;

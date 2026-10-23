@@ -221,6 +221,6 @@ export function useFlushRecordingQueue(): void {
     const sub = AppState.addEventListener('change', (s) => {
       if (s === 'active') void useRecordingQueue.getState().flush();
     });
-    return () => sub.remove();
+    return () => sub?.remove(); // jest-expo's AppState mock returns no subscription
   }, []);
 }

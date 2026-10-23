@@ -15,6 +15,7 @@ import { initObservability } from '../observability';
 import { useKaraokeLogFreshness } from '../tonight/log/IdeasPanel';
 import { useLogSync } from '../tonight/log/useLogSync';
 import { useVoiceSync } from '../voice/useVoiceProfile';
+import { useFlushRecordingQueue } from '../voiceSession/recording/recordingQueue';
 import { installDevWarningTrace } from './devWarnings';
 
 // Before anything formats: Hermes has no Intl.PluralRules (ICU plurals would throw).
@@ -50,6 +51,7 @@ function LogSync() {
  */
 function VoiceSync() {
   useVoiceSync();
+  useFlushRecordingQueue(); // Phase 3d: queued voice-session recordings, on launch and foreground
   return null;
 }
 
