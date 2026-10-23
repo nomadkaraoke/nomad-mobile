@@ -72,6 +72,14 @@
           "recordAudioAndroid": false,
           "barcodeScannerEnabled": true
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to read the screenshots you pick of your music app.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
       ]
     ],
     "experiments": {

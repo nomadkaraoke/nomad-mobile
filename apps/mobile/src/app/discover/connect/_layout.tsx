@@ -21,6 +21,7 @@ export default function ConnectLayout() {
       }}
     >
       <Stack.Screen name="index" options={{ title: t('title') }} />
+      <Stack.Screen name="screenshot" options={{ title: t('cards.screenshot.title') }} />
     </Stack>
   );
 }

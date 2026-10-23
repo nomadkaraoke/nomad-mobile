@@ -7,6 +7,7 @@ import * as tonight from '../app/(tabs)/tonight';
 import * as rootLayout from '../app/_layout';
 import * as connectLayout from '../app/discover/connect/_layout';
 import * as connectHub from '../app/discover/connect/index';
+import * as connectScreenshot from '../app/discover/connect/screenshot';
 import * as quiz from '../app/discover/quiz';
 import * as index from '../app/index';
 import * as musicProfile from '../app/me/music-profile';
@@ -30,6 +31,7 @@ export function appRoutes() {
     'discover/quiz': quiz,
     'discover/connect/_layout': connectLayout,
     'discover/connect/index': connectHub,
+    'discover/connect/screenshot': connectScreenshot,
     'me/music-profile': musicProfile,
     'song/[id]': song,
     'make/new': makeFlow,

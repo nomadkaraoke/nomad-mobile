@@ -1285,6 +1285,23 @@
       "spotifyExport": "Spotify history",
       "appleExport": "Apple Music history"
     },
-    "result": "Added {artists, plural, one {# artist} other {# artists}} and {songs, plural, one {# song} other {# songs}} you know"
+    "result": "Added {artists, plural, one {# artist} other {# artists}} and {songs, plural, one {# song} other {# songs}} you know",
+    "screenshot": {
+      "intro": "Pick screenshots of your library, playlists or top artists from any music app. We'll read the names and you check them before anything is saved.",
+      "pick": "Choose screenshots",
+      "pickMore": "Choose different screenshots",
+      "limit": "Up to 5 screenshots at a time.",
+      "reading": "Reading your screenshots…",
+      "saving": "Saving…",
+      "confirmTitle": "Is this right?",
+      "confirmBody": "Untick anything we got wrong.",
+      "confirm": "{count, plural, =0 {Nothing to add} one {Add # item} other {Add # items}}",
+      "unmatched": "Not in our karaoke catalog yet",
+      "empty": "We couldn't find any artists or songs in those screenshots. Try a clearer one.",
+      "item": "{artist} · {title}",
+      "dailyLimit": "You've used today's 10 screenshots. Try again tomorrow.",
+      "again": "Pick more screenshots",
+      "retry": "Try again"
+    }
   }
 }
