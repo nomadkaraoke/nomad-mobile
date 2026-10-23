@@ -892,6 +892,196 @@
         }
       }
     },
+    "/api/services/capabilities": {
+      "get": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Get Capabilities",
+        "description": "Feature flags for the Connect hub (no auth; the app hides cards that are off).",
+        "operationId": "get_capabilities_api_services_capabilities_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Capabilities"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/services/screenshot/extract": {
+      "post": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Extract Screenshot",
+        "description": "Read artists/songs off 1-5 screenshots (each at most 4 MiB, image/*).\n\nErrors: 400 no_images / too_many_images / not_an_image, 413 image_too_large,\n429 daily_limit (10 images per UTC day), 503 screenshot_unavailable.",
+        "operationId": "extract_screenshot_api_services_screenshot_extract_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_extract_screenshot_api_services_screenshot_extract_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScreenshotExtractResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/services/screenshot/confirm": {
+      "post": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Confirm Screenshot",
+        "description": "Save the candidates the user kept (source ``screenshot``).",
+        "operationId": "confirm_screenshot_api_services_screenshot_confirm_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScreenshotConfirmRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportResultResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/services/summary": {
+      "get": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Get Sources Summary",
+        "description": "Every connected or imported source with its counts and status, plus the capability flags.",
+        "operationId": "get_sources_summary_api_services_summary_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourcesSummaryResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/services/sources/{source}/data": {
+      "delete": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Remove Source Data",
+        "description": "Remove what one source contributed (rows sung or loved, or held by another source, are kept)\nand its connection, if it has one.",
+        "operationId": "remove_source_data_api_services_sources__source__data_delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "source",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Source"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoveDataResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/services": {
       "get": {
         "tags": [
@@ -1124,6 +1314,185 @@
         ]
       }
     },
+    "/api/services/listenbrainz/oauth/start": {
+      "get": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Listenbrainz Oauth Start",
+        "description": "Start connecting ListenBrainz through MetaBrainz OAuth (404 ``oauth_disabled`` when off).",
+        "operationId": "listenbrainz_oauth_start_api_services_listenbrainz_oauth_start_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "return_to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "enum": [
+                "app",
+                "web"
+              ],
+              "type": "string",
+              "title": "Return To"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListenBrainzOAuthStartResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/services/listenbrainz/upload-export": {
+      "post": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Upload Listenbrainz Export",
+        "description": "Hand the user's Spotify export zip (at most 30 MiB) to ListenBrainz's importer for them.\n\nNeeds a ListenBrainz connection made with OAuth. The listens are not ingested here (the app\nalready sent its aggregates); this only feeds ListenBrainz. Errors: 409 not_oauth_connected /\nneeds_reconnect / import_in_progress, 413 too_large, 400 not_a_zip, 429 rate_limited\n(Retry-After), 503 listenbrainz_unavailable.",
+        "operationId": "upload_listenbrainz_export_api_services_listenbrainz_upload_export_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_listenbrainz_export_api_services_listenbrainz_upload_export_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListenBrainzUploadResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/services/listenbrainz/oauth/callback": {
+      "get": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Listenbrainz Oauth Callback",
+        "description": "MetaBrainz redirects here (no auth; the state identifies the user and the return target).\n\nErrors redirect with a fixed reason code, never exception text. An unknown state can't\nsay where the user came from, so it returns to the web page.",
+        "operationId": "listenbrainz_oauth_callback_api_services_listenbrainz_oauth_callback_get",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Code"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "State"
+            }
+          },
+          {
+            "name": "error",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Error"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/services/youtube-music/import": {
       "post": {
         "tags": [
@@ -1149,6 +1518,53 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/YouTubeMusicImportResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/services/spotify-playlist/import": {
+      "post": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Import Spotify Playlist",
+        "description": "Import up to 100 tracks from a public Spotify playlist link (no Spotify login).\n\n- 400: not a Spotify playlist link\n- 404: playlist doesn't exist or is private\n- 422: Spotify changed its embed page and we can't read it (best-effort feature)\n- 429: too many imports (30 s cooldown / 20 per day)\n- 503: Spotify couldn't be reached (503, not 502: Cloudflare replaces origin 502 bodies)",
+        "operationId": "import_spotify_playlist_api_services_spotify_playlist_import_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpotifyPlaylistImportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotifyPlaylistImportResponse"
                 }
               }
             }
@@ -1428,6 +1844,100 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SyncStatusResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/services/spotify-export": {
+      "post": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Spotify Export",
+        "description": "One chunk of a Spotify Account data / Extended streaming history export (aggregates).\n\nErrors: 400 ``bad_chunk`` (index >= count, or count differs from the first chunk), 422 validation.",
+        "operationId": "spotify_export_api_services_spotify_export_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpotifyExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportImportResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/services/apple-export": {
+      "post": {
+        "tags": [
+          "services"
+        ],
+        "summary": "Apple Export",
+        "description": "One chunk of an Apple privacy-export play history (aggregates). Errors as ``spotify-export``.",
+        "operationId": "apple_export_api_services_apple_export_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppleExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportImportResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -4988,6 +5498,42 @@
         "title": "AllArtistsResponse",
         "description": "Response containing paginated list of user's artists."
       },
+      "AppleExportRequest": {
+        "properties": {
+          "generated_at": {
+            "type": "string",
+            "format": "date",
+            "title": "Generated At"
+          },
+          "chunk_index": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "Chunk Index"
+          },
+          "chunk_count": {
+            "type": "integer",
+            "maximum": 50,
+            "minimum": 1,
+            "title": "Chunk Count"
+          },
+          "tracks": {
+            "items": {
+              "$ref": "#/components/schemas/ExportTrack"
+            },
+            "type": "array",
+            "maxItems": 20000,
+            "title": "Tracks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "generated_at",
+          "chunk_index",
+          "chunk_count",
+          "tracks"
+        ],
+        "title": "AppleExportRequest"
+      },
       "AppleMusicConnectRequest": {
         "properties": {
           "music_user_token": {
@@ -5350,6 +5896,41 @@
         "title": "AuthResponse",
         "description": "Response with auth token."
       },
+      "Body_extract_screenshot_api_services_screenshot_extract_post": {
+        "properties": {
+          "images": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "format": "binary"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Images"
+          }
+        },
+        "type": "object",
+        "title": "Body_extract_screenshot_api_services_screenshot_extract_post"
+      },
+      "Body_upload_listenbrainz_export_api_services_listenbrainz_upload_export_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_listenbrainz_export_api_services_listenbrainz_upload_export_post"
+      },
       "BulkAddKnownSongsRequest": {
         "properties": {
           "song_ids": {
@@ -5398,6 +5979,84 @@
         ],
         "title": "BulkAddKnownSongsResponse",
         "description": "Response after bulk adding known songs."
+      },
+      "Candidate": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "artist",
+              "song"
+            ],
+            "title": "Kind"
+          },
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "matched": {
+            "type": "boolean",
+            "title": "Matched"
+          },
+          "song_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Song Key"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "artist",
+          "confidence",
+          "matched"
+        ],
+        "title": "Candidate"
+      },
+      "Capabilities": {
+        "properties": {
+          "screenshot_import": {
+            "type": "boolean",
+            "title": "Screenshot Import"
+          },
+          "listenbrainz_oauth": {
+            "type": "boolean",
+            "title": "Listenbrainz Oauth"
+          },
+          "listenbrainz_upload_max_bytes": {
+            "type": "integer",
+            "title": "Listenbrainz Upload Max Bytes",
+            "default": 31457280
+          }
+        },
+        "type": "object",
+        "required": [
+          "screenshot_import",
+          "listenbrainz_oauth"
+        ],
+        "title": "Capabilities",
+        "description": "Which optional import features this deployment has enabled."
       },
       "CatalogSearchResponse": {
         "properties": {
@@ -5606,6 +6265,42 @@
         "title": "CollectEmailResponse",
         "description": "Response after collecting email."
       },
+      "ConfirmItem": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "artist",
+              "song"
+            ],
+            "title": "Kind"
+          },
+          "artist": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Artist"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "artist"
+        ],
+        "title": "ConfirmItem"
+      },
       "ConnectedServiceResponse": {
         "properties": {
           "service_type": {
@@ -5649,6 +6344,32 @@
           "songs_synced": {
             "type": "integer",
             "title": "Songs Synced"
+          },
+          "artists": {
+            "type": "integer",
+            "title": "Artists",
+            "default": 0
+          },
+          "songs": {
+            "type": "integer",
+            "title": "Songs",
+            "default": 0
+          },
+          "last_import_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Import At"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "ok"
           }
         },
         "type": "object",
@@ -6019,6 +6740,147 @@
         "title": "ExcludeArtistResponse",
         "description": "Response after excluding/including an artist."
       },
+      "ExportImportResponse": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "artists_added": {
+            "type": "integer",
+            "title": "Artists Added"
+          },
+          "songs_added": {
+            "type": "integer",
+            "title": "Songs Added"
+          },
+          "songs_updated": {
+            "type": "integer",
+            "title": "Songs Updated"
+          },
+          "tracks_matched": {
+            "type": "integer",
+            "title": "Tracks Matched"
+          },
+          "duplicate": {
+            "type": "boolean",
+            "title": "Duplicate"
+          },
+          "chunks_done": {
+            "type": "integer",
+            "title": "Chunks Done"
+          },
+          "chunk_count": {
+            "type": "integer",
+            "title": "Chunk Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "artists_added",
+          "songs_added",
+          "songs_updated",
+          "tracks_matched",
+          "duplicate",
+          "chunks_done",
+          "chunk_count"
+        ],
+        "title": "ExportImportResponse"
+      },
+      "ExportPlaylist": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "title": "Name"
+          },
+          "tracks": {
+            "items": {
+              "$ref": "#/components/schemas/ExportRef"
+            },
+            "type": "array",
+            "maxItems": 10000,
+            "title": "Tracks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "tracks"
+        ],
+        "title": "ExportPlaylist"
+      },
+      "ExportRef": {
+        "properties": {
+          "artist": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "artist",
+          "title"
+        ],
+        "title": "ExportRef"
+      },
+      "ExportTrack": {
+        "properties": {
+          "artist": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "ms_played": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "Ms Played"
+          },
+          "plays": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Plays"
+          },
+          "first_ts": {
+            "type": "integer",
+            "maximum": 4102444800,
+            "minimum": 0,
+            "title": "First Ts"
+          },
+          "last_ts": {
+            "type": "integer",
+            "maximum": 4102444800,
+            "minimum": 0,
+            "title": "Last Ts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "artist",
+          "title",
+          "ms_played",
+          "plays",
+          "first_ts",
+          "last_ts"
+        ],
+        "title": "ExportTrack"
+      },
       "FeedbackBody": {
         "properties": {
           "artist": {
@@ -6206,6 +7068,40 @@
         ],
         "title": "ImpersonateResponse",
         "description": "Response containing impersonation token."
+      },
+      "ImportResultResponse": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "artists_added": {
+            "type": "integer",
+            "title": "Artists Added"
+          },
+          "songs_added": {
+            "type": "integer",
+            "title": "Songs Added"
+          },
+          "songs_updated": {
+            "type": "integer",
+            "title": "Songs Updated"
+          },
+          "tracks_matched": {
+            "type": "integer",
+            "title": "Tracks Matched"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "artists_added",
+          "songs_added",
+          "songs_updated",
+          "tracks_matched"
+        ],
+        "title": "ImportResultResponse",
+        "description": "Outcome of one import, shared by every import source."
       },
       "KaraokeLinkResponse": {
         "properties": {
@@ -6571,6 +7467,37 @@
         "title": "ListenBrainzConnectRequest",
         "description": "Request to connect ListenBrainz account."
       },
+      "ListenBrainzOAuthStartResponse": {
+        "properties": {
+          "auth_url": {
+            "type": "string",
+            "title": "Auth Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "auth_url"
+        ],
+        "title": "ListenBrainzOAuthStartResponse"
+      },
+      "ListenBrainzUploadResponse": {
+        "properties": {
+          "import_id": {
+            "type": "string",
+            "title": "Import Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "import_id",
+          "status"
+        ],
+        "title": "ListenBrainzUploadResponse"
+      },
       "LogMedia": {
         "properties": {
           "brand_code": {
@@ -6741,6 +7668,24 @@
         ],
         "title": "ManualArtistInput",
         "description": "Artist manually entered by user via autocomplete search.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional for backward compatibility and image lookup."
+      },
+      "PendingListenBrainzImport": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status"
+        ],
+        "title": "PendingListenBrainzImport"
       },
       "PlaylistResponse": {
         "properties": {
@@ -7078,8 +8023,8 @@
         "properties": {
           "step": {
             "type": "integer",
-            "maximum": 5.0,
-            "minimum": 1.0,
+            "maximum": 5,
+            "minimum": 1,
             "title": "Step",
             "description": "Current quiz step (1-5)"
           },
@@ -7830,6 +8775,57 @@
         "title": "RemoveArtistResponse",
         "description": "Response after removing an artist."
       },
+      "RemoveDataResponse": {
+        "properties": {
+          "removed_songs": {
+            "type": "integer",
+            "title": "Removed Songs"
+          },
+          "removed_artists": {
+            "type": "integer",
+            "title": "Removed Artists"
+          }
+        },
+        "type": "object",
+        "required": [
+          "removed_songs",
+          "removed_artists"
+        ],
+        "title": "RemoveDataResponse"
+      },
+      "ScreenshotConfirmRequest": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ConfirmItem"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "ScreenshotConfirmRequest"
+      },
+      "ScreenshotExtractResponse": {
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/Candidate"
+            },
+            "type": "array",
+            "title": "Candidates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "candidates"
+        ],
+        "title": "ScreenshotExtractResponse"
+      },
       "ServiceStats": {
         "properties": {
           "spotify_connected": {
@@ -8097,8 +9093,8 @@
           },
           "count": {
             "type": "integer",
-            "maximum": 50.0,
-            "minimum": 10.0,
+            "maximum": 50,
+            "minimum": 10,
             "title": "Count",
             "description": "Number of artists to return",
             "default": 25
@@ -8206,6 +9202,114 @@
         "title": "SongsSummary",
         "description": "Summary of user's songs."
       },
+      "SourceSummary": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "connected": {
+            "type": "boolean",
+            "title": "Connected"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          },
+          "artists": {
+            "type": "integer",
+            "title": "Artists",
+            "default": 0
+          },
+          "songs": {
+            "type": "integer",
+            "title": "Songs",
+            "default": 0
+          },
+          "last_import_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Import At"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "needs_reconnect",
+              "importing",
+              "stale",
+              "error"
+            ],
+            "title": "Status",
+            "default": "ok"
+          },
+          "auth": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "username",
+                  "oauth"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Auth"
+          },
+          "pending_listenbrainz_import": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PendingListenBrainzImport"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "connected"
+        ],
+        "title": "SourceSummary",
+        "description": "One source in the app's \"Connected sources\" list."
+      },
+      "SourcesSummaryResponse": {
+        "properties": {
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceSummary"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "capabilities": {
+            "$ref": "#/components/schemas/Capabilities"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sources",
+          "capabilities"
+        ],
+        "title": "SourcesSummaryResponse"
+      },
       "SpotifyConnectResponse": {
         "properties": {
           "auth_url": {
@@ -8219,6 +9323,108 @@
         ],
         "title": "SpotifyConnectResponse",
         "description": "Response for starting Spotify OAuth."
+      },
+      "SpotifyExportRequest": {
+        "properties": {
+          "generated_at": {
+            "type": "string",
+            "format": "date",
+            "title": "Generated At"
+          },
+          "chunk_index": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "Chunk Index"
+          },
+          "chunk_count": {
+            "type": "integer",
+            "maximum": 50,
+            "minimum": 1,
+            "title": "Chunk Count"
+          },
+          "tracks": {
+            "items": {
+              "$ref": "#/components/schemas/ExportTrack"
+            },
+            "type": "array",
+            "maxItems": 20000,
+            "title": "Tracks"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "account",
+              "extended"
+            ],
+            "title": "Kind"
+          },
+          "liked": {
+            "items": {
+              "$ref": "#/components/schemas/ExportRef"
+            },
+            "type": "array",
+            "maxItems": 20000,
+            "title": "Liked"
+          },
+          "playlists": {
+            "items": {
+              "$ref": "#/components/schemas/ExportPlaylist"
+            },
+            "type": "array",
+            "maxItems": 500,
+            "title": "Playlists"
+          }
+        },
+        "type": "object",
+        "required": [
+          "generated_at",
+          "chunk_index",
+          "chunk_count",
+          "tracks",
+          "kind",
+          "liked",
+          "playlists"
+        ],
+        "title": "SpotifyExportRequest"
+      },
+      "SpotifyPlaylistImportRequest": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Url",
+            "description": "Playlist link, URI, id or share text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "title": "SpotifyPlaylistImportRequest"
+      },
+      "SpotifyPlaylistImportResponse": {
+        "properties": {
+          "playlist_title": {
+            "type": "string",
+            "title": "Playlist Title"
+          },
+          "tracks_fetched": {
+            "type": "integer",
+            "title": "Tracks Fetched"
+          },
+          "tracks_matched": {
+            "type": "integer",
+            "title": "Tracks Matched"
+          }
+        },
+        "type": "object",
+        "required": [
+          "playlist_title",
+          "tracks_fetched",
+          "tracks_matched"
+        ],
+        "title": "SpotifyPlaylistImportResponse"
       },
       "SuggestionReasonResponse": {
         "properties": {

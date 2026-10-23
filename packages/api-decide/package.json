@@ -6,5 +6,6 @@
   "types": "src/index.ts",
   "scripts": { "generate": "openapi-ts", "typecheck": "tsc --noEmit" },
   "devDependencies": { "@hey-api/openapi-ts": "0.99.0" },
+  "dependencies": { "@nomad/core": "workspace:*" },
   "peerDependencies": { "@tanstack/react-query": "^5" }
 }
