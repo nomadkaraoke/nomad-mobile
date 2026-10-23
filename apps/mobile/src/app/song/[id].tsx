@@ -5,7 +5,7 @@ import { ArtTile, Button, Screen, Text, TextField } from '@nomad/ui';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, type ReactNode } from 'react';
-import { ActivityIndicator, Linking, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 
 import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
@@ -16,6 +16,7 @@ import { toGroup } from '../../find/useSearch';
 import { identifiedIntent, typedIntent, useMakeIntent, type MakeIntent } from '../../make/intentStore';
 import { useOffline } from '../../net/useOffline';
 import { openOfflineReader } from '../../offline/offlineIndex';
+import { openYouTubeUrl } from '../../media/youtube';
 import { useOfflineIndexStore } from '../../offline/offlineIndexStore';
 import { SongTonightAction } from '../../tonight/other/SongTonightAction';
 import { SongFitCard } from '../../voice/SongFitCard';
@@ -160,7 +161,7 @@ function KnownSong({ songKey, also = [] }: { songKey: string; also?: string[] })
 
   const openUrl = (url: string) => {
     logEvent('open_youtube', { where: 'song_page', song_key: songKey });
-    Linking.openURL(url).catch(() => {});
+    openYouTubeUrl(url).catch(() => {});
   };
 
   let body: ReactNode;

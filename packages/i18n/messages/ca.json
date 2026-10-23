@@ -1549,6 +1549,20 @@
       "verdictGood": "bo",
       "verdictNotGood": "no bo",
       "notAvailable": "La pantalla de depuració de veu només és per a administradors."
+    },
+    "notify": {
+      "body": "Toca per valorar-la i rebre la teva propera cançó",
+      "channel": "Sessió de veu",
+      "title": "Ja has acabat de cantar?"
+    },
+    "player": {
+      "back": "Ja he tornat",
+      "fake": "Vídeo de prova",
+      "linkoutBody": "Obre'l a YouTube i canta. Quan acabi la cançó, torna aquí per dir com ha anat.",
+      "linkoutTitle": "Aquest es reprodueix a YouTube",
+      "openFailed": "No s'ha pogut obrir YouTube. Torna-ho a provar.",
+      "video": "Vídeo de karaoke",
+      "open": "Obre a YouTube"
     }
   }
 }

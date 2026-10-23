@@ -1549,6 +1549,20 @@
       "verdictGood": "jó",
       "verdictNotGood": "nem jó",
       "notAvailable": "A hang hibakeresési képernyője csak rendszergazdák számára érhető el."
+    },
+    "notify": {
+      "body": "Koppints az értékeléshez és a következő dalod kéréséhez",
+      "channel": "Hangalapú munkamenet",
+      "title": "Befejezted az éneklést?"
+    },
+    "player": {
+      "back": "Visszatértem",
+      "fake": "Tesztvideó",
+      "linkoutBody": "Nyisd meg a YouTube-on, és énekelj vele! Ha véget ért a dal, gyere vissza ide, és meséld el, milyen volt.",
+      "linkoutTitle": "Ez a YouTube-on játszható le",
+      "openFailed": "Nem sikerült megnyitni a YouTube-ot. Próbáld újra.",
+      "video": "Karaokevideó",
+      "open": "Megnyitás a YouTube-on"
     }
   }
 }

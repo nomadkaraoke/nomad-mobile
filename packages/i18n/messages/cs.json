@@ -1549,6 +1549,20 @@
       "verdictGood": "dobré",
       "verdictNotGood": "nevyhovující",
       "notAvailable": "Obrazovka ladění hlasu je určena pouze pro správce."
+    },
+    "notify": {
+      "body": "Klepnutím ohodnoť a získej další písničku",
+      "channel": "Hlasová relace",
+      "title": "Dozpíváno?"
+    },
+    "player": {
+      "back": "Jsem zpátky",
+      "fake": "Testovací video",
+      "linkoutBody": "Otevři si ji na YouTube a zazpívej si. Až písnička skončí, vrať se sem a řekni, jak to šlo.",
+      "linkoutTitle": "Tato písnička se přehrává na YouTube",
+      "openFailed": "Nepodařilo se otevřít YouTube. Zkus to znovu.",
+      "video": "Karaoke video",
+      "open": "Otevřít na YouTube"
     }
   }
 }

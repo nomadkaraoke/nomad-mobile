@@ -1,6 +1,8 @@
 // Every EXPO_PUBLIC_* read for the API layer and sign-in lives here. Expo inlines these at build
 // time only for static `process.env.EXPO_PUBLIC_X` reads, so never index process.env dynamically.
 
+import { DEFAULT_PLAYER_MODE, parsePlayerMode, type PlayerMode } from './voiceSession/player/playerMode';
+
 /** scheme://host[:port], then a path, query, fragment or the end. No userinfo (`user@host`) is accepted. */
 const URL_HOST = /^https?:\/\/([a-z0-9.-]+)(?::\d+)?(?:[/?#]|$)/i;
 /**
@@ -54,3 +56,21 @@ export function searchForceOffline(): boolean {
  */
 export const FAKE_MIC: string | null =
   (process.env.EXPO_PUBLIC_FAKE_MIC || '') !== '' && isLocalUrl(GEN_API_URL) ? (process.env.EXPO_PUBLIC_FAKE_MIC as string) : null;
+
+/**
+ * E2E only: the voice session plays a fake video (`FakePlayer`: ready, then playing on play(), then ended after
+ * `FAKE_YT_SECONDS`) instead of YouTube. Off unless gen is a local host, so a release build never fakes it.
+ */
+export const FAKE_YT: boolean = process.env.EXPO_PUBLIC_FAKE_YT === '1' && isLocalUrl(GEN_API_URL);
+
+const fakeYtSeconds = Number(process.env.EXPO_PUBLIC_FAKE_YT_SECONDS);
+/** How long the fake video "plays" (default 5 s). */
+export const FAKE_YT_SECONDS: number = Number.isFinite(fakeYtSeconds) && fakeYtSeconds > 0 ? fakeYtSeconds : 5;
+
+/**
+ * The voice session's player (`embed-hosted` by default, spike D1). `EXPO_PUBLIC_VS_PLAYER_MODE` overrides it only in
+ * a local build (gen on a local host), for trying `linkout`.
+ */
+export const PLAYER_MODE: PlayerMode = isLocalUrl(GEN_API_URL)
+  ? parsePlayerMode(process.env.EXPO_PUBLIC_VS_PLAYER_MODE)
+  : DEFAULT_PLAYER_MODE;

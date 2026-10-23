@@ -1,34 +1,12 @@
-import { getSongDetail, type Version } from '@nomad/api-decide';
+// Tonight's hooks over the shared `youTubeLinkFor` (media/youtube.ts): the live jobs and decide versions it picks from.
+import { getSongDetail } from '@nomad/api-decide';
 import type { JobSummary } from '@nomad/api-gen';
-import { sameSong } from '@nomad/core';
 import { useQuery } from '@tanstack/react-query';
 
 import { useAuth } from '../../auth/store';
 import { useMyJobs } from '../../jobs/useMyJobs';
+import { youTubeLinkFor } from '../../media/youtube';
 import type { LogSong } from '../log/logStore';
-
-export type YouTubeSources = {
-  /** The signed-in user's gen jobs (Phase 1's jobs list). */
-  jobs?: readonly JobSummary[];
-  /** decide's karaoke versions of the song (its `song_key`). */
-  versions?: readonly Version[];
-};
-
-/**
- * The YouTube link to hand the host for a logged song (spec §6.2, ruling E9-R4): the user's own gen-made video of the
- * same artist + title, else a community version's `youtube_url` from decide search, else null (commercial versions
- * are never offered: those videos aren't ours to point a host at).
- */
-export function youTubeLinkFor(song: Pick<LogSong, 'artist' | 'title'>, { jobs, versions }: YouTubeSources): string | null {
-  for (const job of jobs ?? []) {
-    const url = job.state_data?.youtube_url;
-    if (url && sameSong({ artist: job.artist ?? '', title: job.title ?? '' }, song)) return url;
-  }
-  for (const v of versions ?? []) {
-    if (v.kind === 'community' && v.youtube_url) return v.youtube_url;
-  }
-  return null;
-}
 
 /** The signed-in user's gen jobs, read once per screen (not per row: each `useMyJobs` adds a foreground listener). */
 export function useMyJobsForLinks(): readonly JobSummary[] | undefined {

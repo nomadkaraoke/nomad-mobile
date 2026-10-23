@@ -1549,6 +1549,20 @@
       "verdictGood": "dobro",
       "verdictNotGood": "nije dobro",
       "notAvailable": "Zaslon za otklanjanje pogrešaka glasovnih sesija dostupan je samo administratorima."
+    },
+    "notify": {
+      "body": "Dodirni za ocjenjivanje i preuzmi sljedeću pjesmu",
+      "channel": "Glasovna sesija",
+      "title": "Gotovo pjevanje?"
+    },
+    "player": {
+      "back": "Tu sam opet",
+      "fake": "Probni videozapis",
+      "linkoutBody": "Otvori na YouTubeu i pjevaj. Kad pjesma završi, vrati se ovdje i javi kako je prošlo.",
+      "linkoutTitle": "Ova se pjesma reproducira na YouTubeu",
+      "openFailed": "Otvaranje YouTubea nije uspjelo. Pokušaj ponovno.",
+      "video": "Karaoke videozapis",
+      "open": "Otvori na usluzi YouTube"
     }
   }
 }

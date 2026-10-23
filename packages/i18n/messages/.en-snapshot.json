@@ -1549,6 +1549,20 @@
       "playFailed": "Could not play that recording.",
       "unknown": "-",
       "notAvailable": "The voice debug screen is only for admins."
+    },
+    "player": {
+      "video": "Karaoke video",
+      "linkoutTitle": "This one plays in YouTube",
+      "linkoutBody": "Open it in YouTube and sing along. When the song ends, come back here to say how it went.",
+      "open": "Open in YouTube",
+      "openFailed": "Couldn't open YouTube. Try again.",
+      "back": "I'm back",
+      "fake": "Test video"
+    },
+    "notify": {
+      "title": "Done singing?",
+      "body": "Tap to rate it and get your next song",
+      "channel": "Voice session"
     }
   }
 }

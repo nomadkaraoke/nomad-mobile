@@ -1549,6 +1549,20 @@
       "verdictGood": "goed",
       "verdictNotGood": "niet goed",
       "notAvailable": "Het spraak-debugscherm is alleen voor beheerders."
+    },
+    "notify": {
+      "body": "Tik om te beoordelen en je volgende nummer te kiezen",
+      "channel": "Spraaksessie",
+      "title": "Klaar met zingen?"
+    },
+    "player": {
+      "back": "Ik ben er weer",
+      "fake": "Testvideo",
+      "linkoutBody": "Open hem in YouTube en zing mee. Kom hier terug wanneer het nummer is afgelopen om te laten weten hoe het ging.",
+      "linkoutTitle": "Deze speelt af op YouTube",
+      "openFailed": "Kon YouTube niet openen. Probeer het opnieuw.",
+      "video": "Karaokevideo",
+      "open": "Openen in YouTube"
     }
   }
 }

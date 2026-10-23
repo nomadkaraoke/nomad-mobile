@@ -1549,6 +1549,20 @@
       "verdictGood": "dobre",
       "verdictNotGood": "niedobre",
       "notAvailable": "Ekran debugowania głosu jest dostępny tylko dla administratorów."
+    },
+    "notify": {
+      "body": "Dotknij, aby ocenić i odebrać następną piosenkę",
+      "channel": "Sesja głosowa",
+      "title": "Koniec śpiewania?"
+    },
+    "player": {
+      "back": "Już jestem",
+      "fake": "Wideo testowe",
+      "linkoutBody": "Otwórz w YouTube i śpiewaj z nami. Gdy piosenka się skończy, wróć tutaj i daj znać, jak poszło.",
+      "linkoutTitle": "Ten utwór odtwarza się w YouTube",
+      "openFailed": "Nie udało się otworzyć YouTube. Spróbuj ponownie.",
+      "video": "Wideo karaoke",
+      "open": "Otwórz w YouTube"
     }
   }
 }

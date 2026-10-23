@@ -1549,6 +1549,20 @@
       "verdictGood": "적합",
       "verdictNotGood": "부적합",
       "notAvailable": "음성 디버그 화면은 관리자 전용입니다."
+    },
+    "notify": {
+      "body": "탭하여 평가하고 다음 곡을 받아보세요",
+      "channel": "음성 세션",
+      "title": "노래를 다 부르셨나요?"
+    },
+    "player": {
+      "back": "돌아왔어요",
+      "fake": "테스트 영상",
+      "linkoutBody": "YouTube에서 열고 함께 불러보세요. 노래가 끝나면 여기로 돌아와 어땠는지 알려주세요.",
+      "linkoutTitle": "이 곡은 YouTube에서 재생됩니다",
+      "openFailed": "YouTube를 열 수 없습니다. 다시 시도해 주세요.",
+      "video": "노래방 영상",
+      "open": "YouTube에서 열기"
     }
   }
 }

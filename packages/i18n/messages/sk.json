@@ -1549,6 +1549,20 @@
       "verdictGood": "dobré",
       "verdictNotGood": "nevyhovujúce",
       "notAvailable": "Obrazovka ladenia hlasu je určená len pre administrátorov."
+    },
+    "notify": {
+      "body": "Ťukni sem, ohodnoť ju a získaj ďalšiu skladbu",
+      "channel": "Hlasová relácia",
+      "title": "Dospievané?"
+    },
+    "player": {
+      "back": "Som späť",
+      "fake": "Testovacie video",
+      "linkoutBody": "Otvor si ju na YouTube a zaspievaj si. Keď pesnička skončí, vráť sa sem a daj vedieť, ako to išlo.",
+      "linkoutTitle": "Toto video sa prehráva na YouTube",
+      "openFailed": "Nepodarilo sa otvoriť YouTube. Skús to znova.",
+      "video": "Karaoke video",
+      "open": "Otvoriť v službe YouTube"
     }
   }
 }

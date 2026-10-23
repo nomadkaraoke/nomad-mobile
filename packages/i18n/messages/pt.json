@@ -1549,6 +1549,20 @@
       "verdictGood": "bom",
       "verdictNotGood": "não bom",
       "notAvailable": "A tela de depuração de voz é apenas para administradores."
+    },
+    "notify": {
+      "body": "Toque para avaliar e receber sua próxima música",
+      "channel": "Sessão de voz",
+      "title": "Terminou de cantar?"
+    },
+    "player": {
+      "back": "Voltei",
+      "fake": "Vídeo de teste",
+      "linkoutBody": "Abra no YouTube e cante junto. Quando a música terminar, volte aqui para contar como foi.",
+      "linkoutTitle": "Esta música toca no YouTube",
+      "openFailed": "Não foi possível abrir o YouTube. Tente novamente.",
+      "video": "Vídeo de karaokê",
+      "open": "Abrir no YouTube"
     }
   }
 }

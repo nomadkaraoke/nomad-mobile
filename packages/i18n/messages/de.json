@@ -1549,6 +1549,20 @@
       "verdictGood": "gut",
       "verdictNotGood": "nicht gut",
       "notAvailable": "Der Sprach-Debug-Bildschirm ist nur für Admins verfügbar."
+    },
+    "notify": {
+      "body": "Tippe hier, um zu bewerten und deinen nächsten Song zu bekommen",
+      "channel": "Sprach-Session",
+      "title": "Fertig gesungen?"
+    },
+    "player": {
+      "back": "Ich bin zurück",
+      "fake": "Testvideo",
+      "linkoutBody": "Öffne es auf YouTube und sing mit. Wenn der Song zu Ende ist, komm hierher zurück und erzähle, wie es war.",
+      "linkoutTitle": "Dieser Song wird auf YouTube abgespielt",
+      "openFailed": "YouTube konnte nicht geöffnet werden. Versuche es noch einmal.",
+      "video": "Karaoke-Video",
+      "open": "In YouTube öffnen"
     }
   }
 }

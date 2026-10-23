@@ -1549,6 +1549,20 @@
       "verdictGood": "bagus",
       "verdictNotGood": "kurang bagus",
       "notAvailable": "Layar debug suara hanya untuk admin."
+    },
+    "notify": {
+      "body": "Ketuk untuk memberi rating dan dapatkan lagu berikutnya",
+      "channel": "Sesi suara",
+      "title": "Selesai bernyanyi?"
+    },
+    "player": {
+      "back": "Saya kembali",
+      "fake": "Video uji coba",
+      "linkoutBody": "Buka di YouTube dan bernyanyilah. Setelah lagunya selesai, kembali ke sini untuk memberi tahu kesanmu.",
+      "linkoutTitle": "Lagu ini diputar di YouTube",
+      "openFailed": "Tidak dapat membuka YouTube. Coba lagi.",
+      "video": "Video karaoke",
+      "open": "Buka di YouTube"
     }
   }
 }

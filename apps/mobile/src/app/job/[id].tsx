@@ -12,7 +12,7 @@ import { ActivityIndicator, Image, Linking, Platform, Pressable, Share, View } f
 import { cachedJobSummary } from '../../jobs/cachedJob';
 import { discardMp4, downloadMp4, fetchMp4, Mp4ArchivedError, signedMp4Url } from '../../jobs/downloadMp4';
 import { copiedToast } from '../../jobs/readyUi';
-import { openYouTube, youtubeId, youtubeShortUrl, youtubeThumbnail, youtubeTitle } from '../../jobs/youtube';
+import { openYouTube, youtubeId, youtubeShortUrl, youtubeThumbnail, youtubeTitle } from '../../media/youtube';
 
 type Transfer =
   | { kind: 'idle' | 'saved' | 'denied' | 'archived' | 'failed' }

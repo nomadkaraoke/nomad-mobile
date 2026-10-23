@@ -1549,6 +1549,20 @@
       "verdictGood": "bra",
       "verdictNotGood": "inte bra",
       "notAvailable": "Felsökningssidan för röst är endast till för administratörer."
+    },
+    "notify": {
+      "body": "Tryck för att betygsätta den och få din nästa låt",
+      "channel": "Röstsession",
+      "title": "Sjungit klart?"
+    },
+    "player": {
+      "back": "Jag är tillbaka",
+      "fake": "Testvideo",
+      "linkoutBody": "Öppna den på YouTube och sjung med. När låten är slut kommer du tillbaka hit och berättar hur det gick.",
+      "linkoutTitle": "Den här spelas på YouTube",
+      "openFailed": "Kunde inte öppna YouTube. Försök igen.",
+      "video": "Karaokevideo",
+      "open": "Öppna på YouTube"
     }
   }
 }

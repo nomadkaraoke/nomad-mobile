@@ -1549,6 +1549,20 @@
       "verdictGood": "god",
       "verdictNotGood": "ikke god",
       "notAvailable": "Fejlfindingssiden for stemme er kun for administratorer."
+    },
+    "notify": {
+      "body": "Tryk for at bedømme den og få din næste sang",
+      "channel": "Stemmesession",
+      "title": "Færdig med at synge?"
+    },
+    "player": {
+      "back": "Jeg er tilbage",
+      "fake": "Testvideo",
+      "linkoutBody": "Åbn den på YouTube og syng med. Når sangen er slut, vender du tilbage hertil for at fortælle, hvordan det gik.",
+      "linkoutTitle": "Denne afspilles på YouTube",
+      "openFailed": "Kunne ikke åbne YouTube. Prøv igen.",
+      "video": "Karaokevideo",
+      "open": "Åbn på YouTube"
     }
   }
 }

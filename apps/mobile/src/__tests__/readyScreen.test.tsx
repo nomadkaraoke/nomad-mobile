@@ -78,13 +78,12 @@ it('with a YouTube URL shows the block (thumbnail, title, youtu.be link) and no 
   expect(gen.getJob).toHaveBeenCalledWith('r1');
 });
 
-it('tapping the thumbnail or title opens YouTube', async () => {
-  jest.spyOn(Linking, 'canOpenURL').mockResolvedValue(true);
+it('tapping the thumbnail or title opens YouTube (the watch URL: the app claims it when installed)', async () => {
   const openUrl = jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
   open();
   await screen.findByTestId('ready-youtube');
   await act(async () => fireEvent.press(screen.getByTestId('ready-youtube-open')));
-  expect(openUrl).toHaveBeenCalledWith('youtube://dQw4w9WgXcQ');
+  expect(openUrl).toHaveBeenCalledWith('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
 });
 
 it('a long title wraps to 2 lines and the link shrinks rather than overflowing (Review Focus 5)', async () => {

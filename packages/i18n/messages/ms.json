@@ -1549,6 +1549,20 @@
       "verdictGood": "baik",
       "verdictNotGood": "tidak baik",
       "notAvailable": "Skrin nyahpepijat suara hanya untuk pentadbir."
+    },
+    "notify": {
+      "body": "Ketik untuk beri penilaian dan dapatkan lagu seterusnya",
+      "channel": "Sesi suara",
+      "title": "Selesai menyanyi?"
+    },
+    "player": {
+      "back": "Saya kembali",
+      "fake": "Video ujian",
+      "linkoutBody": "Buka di YouTube dan menyanyi bersama. Apabila lagu tamat, kembali ke sini untuk kongsikan pengalaman anda.",
+      "linkoutTitle": "Lagu ini dimainkan di YouTube",
+      "openFailed": "Tidak dapat membuka YouTube. Cuba lagi.",
+      "video": "Video karaoke",
+      "open": "Buka di YouTube"
     }
   }
 }

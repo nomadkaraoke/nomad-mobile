@@ -1549,6 +1549,20 @@
       "verdictGood": "tốt",
       "verdictNotGood": "không tốt",
       "notAvailable": "Màn hình gỡ lỗi giọng nói chỉ dành cho quản trị viên."
+    },
+    "notify": {
+      "body": "Nhấn để đánh giá và nhận bài hát tiếp theo",
+      "channel": "Phiên bằng giọng nói",
+      "title": "Bạn hát xong chưa?"
+    },
+    "player": {
+      "back": "Tôi đã quay lại",
+      "fake": "Video thử nghiệm",
+      "linkoutBody": "Mở video trong YouTube và hát theo nhé. Khi hát xong, hãy quay lại đây để cho biết cảm nhận của bạn.",
+      "linkoutTitle": "Bài này phát trên YouTube",
+      "openFailed": "Không thể mở YouTube. Vui lòng thử lại.",
+      "video": "Video karaoke",
+      "open": "Mở trên YouTube"
     }
   }
 }

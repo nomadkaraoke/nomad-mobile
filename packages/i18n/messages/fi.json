@@ -1549,6 +1549,20 @@
       "verdictGood": "hyvä",
       "verdictNotGood": "ei hyvä",
       "notAvailable": "Äänen virheenkorjausnäkymä on vain ylläpitäjille."
+    },
+    "notify": {
+      "body": "Napauta arvioidaksesi sen ja valitaksesi seuraavan kappaleen",
+      "channel": "Äänisessio",
+      "title": "Saitko laulettua?"
+    },
+    "player": {
+      "back": "Olen takaisin",
+      "fake": "Testivideo",
+      "linkoutBody": "Avaa se YouTubessa ja laula mukana. Kun kappale päättyy, palaa tänne kertomaan, miten meni.",
+      "linkoutTitle": "Tämä toistetaan YouTubessa",
+      "openFailed": "YouTubea ei voitu avata. Yritä uudelleen.",
+      "video": "Karaokevideo",
+      "open": "Avaa YouTubessa"
     }
   }
 }

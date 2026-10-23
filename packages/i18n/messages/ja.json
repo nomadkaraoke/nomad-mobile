@@ -1549,6 +1549,20 @@
       "verdictGood": "良好",
       "verdictNotGood": "不良",
       "notAvailable": "音声デバッグ画面は管理者専用です。"
+    },
+    "notify": {
+      "body": "タップして評価し、次の曲を見つけましょう",
+      "channel": "ボイスセッション",
+      "title": "歌い終わりましたか？"
+    },
+    "player": {
+      "back": "戻りました",
+      "fake": "テスト動画",
+      "linkoutBody": "YouTubeで開いて一緒に歌いましょう。歌い終わったらここに戻って感想を教えてくださいね。",
+      "linkoutTitle": "この曲はYouTubeで再生されます",
+      "openFailed": "YouTubeを開けませんでした。もう一度お試しください。",
+      "video": "カラオケ動画",
+      "open": "YouTubeで開く"
     }
   }
 }

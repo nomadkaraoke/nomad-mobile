@@ -9,7 +9,6 @@ import { Share } from 'react-native';
 import { useLogStore } from '../../../tonight/log/logStore';
 import { outboxIdle } from '../../../tonight/log/outbox';
 import { OtherNightScreen } from '../../../tonight/other/OtherNightScreen';
-import { youTubeLinkFor } from '../../../tonight/other/YouTubeLink';
 import { renderTonight } from '../../../test-utils/tonightFixtures';
 import { otherNight, signedInClean } from './setup';
 
@@ -30,30 +29,6 @@ const job = (over: Partial<JobSummary> & { youtube_url?: string }): JobSummary =
   return { job_id: 'j1', status: 'complete', progress: 100, artist: 'Muse', title: 'Starlight', state_data: youtube_url ? { youtube_url } : {}, ...rest } as JobSummary;
 };
 const v = (kind: Version['kind'], youtube_url: string | null): Version => ({ brand_code: 'B', brand_name: 'B', kind, youtube_url, rank: 0 });
-const SONG = { artist: 'Muse', title: 'Starlight' };
-
-describe('youTubeLinkFor (E9-R4)', () => {
-  it('prefers the user\'s own gen video for the same artist + title', () => {
-    expect(
-      youTubeLinkFor(SONG, {
-        jobs: [job({ title: 'Uprising', youtube_url: 'https://youtu.be/other000000' }), job({ title: 'starlight', youtube_url: 'https://youtu.be/mine0000000' })],
-        versions: [v('community', 'https://youtu.be/comm0000000')],
-      }),
-    ).toBe('https://youtu.be/mine0000000');
-  });
-
-  it('falls back to a community version\'s youtube_url, never a commercial one', () => {
-    expect(youTubeLinkFor(SONG, { jobs: [job({})], versions: [v('commercial', 'https://youtu.be/com00000000'), v('community', 'https://youtu.be/comm0000000')] })).toBe(
-      'https://youtu.be/comm0000000',
-    );
-    expect(youTubeLinkFor(SONG, { jobs: [], versions: [v('commercial', 'https://youtu.be/com00000000')] })).toBeNull();
-  });
-
-  it('is null with no sources', () => {
-    expect(youTubeLinkFor(SONG, {})).toBeNull();
-    expect(youTubeLinkFor(SONG, { jobs: [job({ youtube_url: '' })], versions: [v('community', null)] })).toBeNull();
-  });
-});
 
 describe('youtube link only when one exists (rows)', () => {
   beforeEach(() => {

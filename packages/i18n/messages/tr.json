@@ -1549,6 +1549,20 @@
       "verdictGood": "iyi",
       "verdictNotGood": "iyi değil",
       "notAvailable": "Ses hata ayıklama ekranı yalnızca yöneticiler içindir."
+    },
+    "notify": {
+      "body": "Puan vermek ve sıradaki şarkını almak için dokun",
+      "channel": "Ses oturumu",
+      "title": "Şarkın bitti mi?"
+    },
+    "player": {
+      "back": "Geri döndüm",
+      "fake": "Test videosu",
+      "linkoutBody": "YouTube'da aç ve şarkıya eşlik et. Şarkı bittiğinde nasıl geçtiğini anlatmak için buraya geri dön.",
+      "linkoutTitle": "Bu şarkı YouTube'da açılır",
+      "openFailed": "YouTube açılamadı. Tekrar dene.",
+      "video": "Karaoke videosu",
+      "open": "YouTube'da Aç"
     }
   }
 }

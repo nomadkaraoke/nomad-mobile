@@ -1549,6 +1549,20 @@
       "verdictGood": "adatto",
       "verdictNotGood": "non adatto",
       "notAvailable": "La schermata di debug vocale è riservata agli amministratori."
+    },
+    "notify": {
+      "body": "Tocca per votare e ricevere la tua prossima canzone",
+      "channel": "Sessione vocale",
+      "title": "Finito di cantare?"
+    },
+    "player": {
+      "back": "Sono di ritorno",
+      "fake": "Video di prova",
+      "linkoutBody": "Aprila su YouTube e canta a squarciagola. Quando la canzone finisce, torna qui a dirci com'è andata.",
+      "linkoutTitle": "Questo brano viene riprodotto su YouTube",
+      "openFailed": "Impossibile aprire YouTube. Riprova.",
+      "video": "Video karaoke",
+      "open": "Apri su YouTube"
     }
   }
 }

@@ -1549,6 +1549,20 @@
       "verdictGood": "良好",
       "verdictNotGood": "不佳",
       "notAvailable": "语音调试界面仅供管理员使用。"
+    },
+    "notify": {
+      "body": "轻点评分并获取下一首歌",
+      "channel": "语音会话",
+      "title": "唱完了吗？"
+    },
+    "player": {
+      "back": "我回来了",
+      "fake": "测试视频",
+      "linkoutBody": "在 YouTube 中打开并跟着唱。唱完后，返回这里说说感觉如何吧。",
+      "linkoutTitle": "这首歌将在 YouTube 中播放",
+      "openFailed": "无法打开 YouTube，请重试。",
+      "video": "卡拉OK视频",
+      "open": "在 YouTube 中打开"
     }
   }
 }

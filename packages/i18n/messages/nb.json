@@ -1549,6 +1549,20 @@
       "verdictGood": "bra",
       "verdictNotGood": "ikke bra",
       "notAvailable": "Feilsøkingsskjermen for stemme er kun for administratorer."
+    },
+    "notify": {
+      "body": "Trykk for å vurdere og få neste sang",
+      "channel": "Stemmeøkt",
+      "title": "Ferdig med å synge?"
+    },
+    "player": {
+      "back": "Jeg er tilbake",
+      "fake": "Testvideo",
+      "linkoutBody": "Åpne den i YouTube og syng med. Når sangen er ferdig, kommer du tilbake hit for å si hvordan det gikk.",
+      "linkoutTitle": "Denne spilles i YouTube",
+      "openFailed": "Kunne ikke åpne YouTube. Prøv igjen.",
+      "video": "Karaokevideo",
+      "open": "Åpne i YouTube"
     }
   }
 }

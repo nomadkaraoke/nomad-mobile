@@ -1549,6 +1549,20 @@
       "verdictGood": "bon",
       "verdictNotGood": "pas bon",
       "notAvailable": "L'écran de débogage vocal est réservé aux administrateurs."
+    },
+    "notify": {
+      "body": "Appuie pour donner une note et obtenir ta prochaine chanson",
+      "channel": "Session vocale",
+      "title": "Tu as fini de chanter ?"
+    },
+    "player": {
+      "back": "Je suis de retour",
+      "fake": "Vidéo test",
+      "linkoutBody": "Ouvre-la dans YouTube et chante en même temps. Quand la chanson se termine, reviens ici pour dire comment ça s'est passé.",
+      "linkoutTitle": "Celle-ci se lit dans YouTube",
+      "openFailed": "Impossible d'ouvrir YouTube. Réessaie.",
+      "video": "Vidéo karaoké",
+      "open": "Ouvrir dans YouTube"
     }
   }
 }

@@ -1549,6 +1549,20 @@
       "verdictGood": "bun",
       "verdictNotGood": "nu e bun",
       "notAvailable": "Ecranul de depanare vocală este destinat doar administratorilor."
+    },
+    "notify": {
+      "body": "Apasă pentru a evalua piesa și a o primi pe următoarea",
+      "channel": "Sesiune vocală",
+      "title": "Ai terminat de cântat?"
+    },
+    "player": {
+      "back": "M-am întors",
+      "fake": "Video de test",
+      "linkoutBody": "Deschide-l pe YouTube și cântă. Când se termină melodia, revino aici și spune-ne cum a fost.",
+      "linkoutTitle": "Aceasta se redă pe YouTube",
+      "openFailed": "Nu s-a putut deschide YouTube. Încearcă din nou.",
+      "video": "Video karaoke",
+      "open": "Deschide în YouTube"
     }
   }
 }
