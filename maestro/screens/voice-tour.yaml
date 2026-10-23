@@ -1,11 +1,17 @@
 # Voice test screen tour (Phase 3c Task 18a): every step of /discover/voice with the fake mic
 # (Metro with EXPO_PUBLIC_FAKE_MIC=baritone-scale against the gen local stack). Signed out: intro, self-report,
-# low / high / sing, the result ("Likely Baritone"), then Save → sign-in (fake Google, EMAIL) → saved.
-# Shots in ${VOICE_SHOTS} (docs/screenshots/phase3c/<platform>/). Run from the repo root:
-#   maestro test -e VOICE_SHOTS=docs/screenshots/phase3c/ios -e EMAIL=e2e-voice-<n>@example.com maestro/screens/voice-tour.yaml
+# low / high / sing, the result ("Likely Baritone"), then Save → sign-in (fake Google, a fresh gen user) → saved.
+# Any app language: it waits on testIDs only. Shots in ${VOICE_SHOTS}:
+#   scripts/e2e-local.sh --platform ios --locale ar --screen voice-tour   # docs/screenshots/phase3c/ios/ar/
 # The mic-off and no-notes screens need the real mic (a denied permission, a silent room), not the fake one.
 appId: com.nomadkaraoke.mobile
 ---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: voicetour
 - runFlow: ../common/launch.yaml
 - openLink: "nomadkaraoke://discover/voice"
 - extendedWaitUntil:
@@ -26,8 +32,10 @@ appId: com.nomadkaraoke.mobile
     id: "voice-self-take-test"
 - tapOn:
     id: "voice-start"
+# The quiet second the noise floor is measured on.
 - extendedWaitUntil:
-    visible: "Stay quiet for a second…"
+    visible:
+      id: "voice-low"
     timeout: 10000
 - takeScreenshot: ${VOICE_SHOTS}/voice-low-quiet
 - extendedWaitUntil:
@@ -47,15 +55,19 @@ appId: com.nomadkaraoke.mobile
 - tapOn:
     id: "voice-high-done"
 - extendedWaitUntil:
-    visible: "Keep singing.*"
+    visible:
+      id: "voice-sing-progress"
     timeout: 10000
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: 2000
 - takeScreenshot: ${VOICE_SHOTS}/voice-sing
 # The sing step ends by itself after 15 s.
 - extendedWaitUntil:
     visible:
       id: "voice-result-type"
     timeout: 25000
-- assertVisible: "Likely Baritone"
 - takeScreenshot: ${VOICE_SHOTS}/voice-result
 - tapOn:
     id: "voice-save"
@@ -67,10 +79,9 @@ appId: com.nomadkaraoke.mobile
 - runFlow:
     file: ../common/google-signin.yaml
     env:
-      EMAIL: ${EMAIL}
+      EMAIL: ${output.email}
 - extendedWaitUntil:
     visible:
       id: "voice-saved"
     timeout: 20000
-- assertVisible: "Likely Baritone"
 - takeScreenshot: ${VOICE_SHOTS}/voice-saved

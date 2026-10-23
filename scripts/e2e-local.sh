@@ -11,14 +11,17 @@
 #                                     # a screenshot-only flow (maestro/screens/<name>.yaml) with the app in that
 #                                     # language (default en); shots go to docs/screenshots/phase2/review/<platform>/<locale>
 #                                     # (discover-* screens: docs/screenshots/phase3a/<platform>/<locale>;
-#                                     # tonight-* screens: docs/screenshots/phase5/<platform>/<locale>)
+#                                     # tonight-* screens: docs/screenshots/phase5/<platform>/<locale>;
+#                                     # voice-* / fit-* screens: docs/screenshots/phase3c/<platform>/<locale>)
+#   scripts/e2e-local.sh --platform ios voice-           # the vocal range flows (voice-1…3, Phase 3c)
 #   scripts/e2e-local.sh --platform ios tonight          # the Tonight flows (tonight-1…11)
 #
 # Env: GEN_DIR (gen checkout with scripts/local-stack.sh, at least v0.278.2 plus the fake match judge; default
 #      ../karaoke-gen, the main clone: pull it first, or point GEN_DIR at a gen worktree with the code you want),
 #      DECIDE_DIR (decide checkout with scripts/local-stack.sh, the main API + search stack; default
 #      ../karaoke-decide-phase3-discover while that branch is unmerged and the worktree exists, else
-#      ../karaoke-decide), DECIDE_GEN_PARTNER_SECRET (shared by both stacks so decide's
+#      ../karaoke-decide; the voice flows need decide with the vocal range fixtures and /api/test/voice/*, v0.25+),
+#      DECIDE_GEN_PARTNER_SECRET (shared by both stacks so decide's
 #      /resolve reaches gen; default local-stack-secret), KJBOX_DIR (kjbox checkout with
 #      kj-controller/scripts/local-stack.sh; default ../kjbox; only used when the run has Tonight flows; reset fresh every such run unless KJBOX_KEEP=1), IOS_DEVICE (simulator name or UDID; default
 #      "iPhone 17 Pro"), ANDROID_SERIAL (default emulator-5554), METRO_PORT (default 8081), DECIDE_PORT / SEARCH_PORT
@@ -34,6 +37,9 @@
 # Metro is the exception on Android: the dev launcher loads it from 10.0.2.2:$METRO_PORT (maestro/common/launch.yaml).
 # If adb reports "device offline" mid-run (it wipes the reverse rules), give the AVD more RAM and -gpu host
 # (see CLAUDE.md § E2E).
+#
+# Metro bundles with EXPO_PUBLIC_FAKE_MIC=baritone-scale: the voice test hears a bundled synthetic singer instead of
+# the mic (honoured only against a local gen host), so voice-1 and the voice tour measure a baritone.
 #
 # Flows tagged `force-offline` (search-4) need a bundle built with EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1, so they
 # run after the others, on a Metro restarted with it (only when this script started Metro itself). Flows tagged
@@ -195,7 +201,7 @@ start_metro() {
   # (e.g. +native-intent) need a fresh route context.
   (cd "$ROOT/apps/mobile" && exec env EXPO_PUBLIC_GEN_API_URL="$STACK" EXPO_PUBLIC_GEN_WEB_URL="$WEB" \
     EXPO_PUBLIC_DECIDE_API_URL="$DECIDE" EXPO_PUBLIC_DECIDE_SEARCH_URL="$SEARCH" EXPO_PUBLIC_KJBOX_API_URL="$KJBOX_APP" \
-    EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 CI=1 "$@" \
+    EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 EXPO_PUBLIC_FAKE_MIC=baritone-scale CI=1 "$@" \
     npx expo start --dev-client --port "$METRO_PORT" --clear) >"$METRO_LOG" 2>&1 &
   METRO_PID=$!
   local deadline=$((SECONDS + 120))
@@ -230,7 +236,9 @@ REVIEW_SHOTS="docs/screenshots/phase2/$PLATFORM"
 DISCOVER_SHOTS="docs/screenshots/phase3a/$PLATFORM"
 TONIGHT_SHOTS="docs/screenshots/phase5/$PLATFORM"
 SHOTS3B="docs/screenshots/phase3b/$PLATFORM"
-mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B"
+# Vocal range (voice-*, Phase 3c).
+VOICE_SHOTS="docs/screenshots/phase3c/$PLATFORM"
+mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B" "$VOICE_SHOTS"
 ALL=()
 while IFS= read -r f; do ALL+=("$f"); done < <(ls maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } || true)
 [[ ${#ALL[@]} -gt 0 ]] || { echo "no flow matches $FILTER" >&2; exit 2; }
@@ -298,7 +306,8 @@ run_hebrew() {
 run_flows() {
   "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" \
     -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
-    -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" "$@"
+    -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" \
+    -e VOICE_SHOTS="$VOICE_SHOTS" "$@"
 }
 status=0
 
@@ -309,13 +318,16 @@ if [[ -n "$SCREEN" ]]; then
   lang="${LOCALE:-en}"
   if [[ "$SCREEN" == discover* ]]; then TOUR_SHOTS="$DISCOVER_SHOTS/$lang"
   elif [[ "$SCREEN" == tonight* ]]; then TOUR_SHOTS="$TONIGHT_SHOTS/$lang"
+  elif [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; then TOUR_SHOTS="$VOICE_SHOTS/$lang"
   else TOUR_SHOTS="docs/screenshots/phase2/review/$PLATFORM/$lang"; fi
   mkdir -p "$TOUR_SHOTS"
   metro_up || start_metro
   point_dev_client
   set_app_locale "$lang"
   # SHOT: the name prefix long-title.yaml gives its shots (in ${SHOTS}).
-  run_flows -e LOCALE="$lang" -e TOUR_SHOTS="$TOUR_SHOTS" -e SHOT="ux-$lang" "maestro/screens/$SCREEN.yaml" || status=$?
+  # The voice and fit tours write to ${VOICE_SHOTS} / ${FIT_SHOTS}: the locale's folder here.
+  run_flows -e LOCALE="$lang" -e TOUR_SHOTS="$TOUR_SHOTS" -e SHOT="ux-$lang" -e VOICE_SHOTS="$TOUR_SHOTS" \
+    -e FIT_SHOTS="$TOUR_SHOTS" "maestro/screens/$SCREEN.yaml" || status=$?
   set_app_locale ""
   exit "$status"
 fi
@@ -323,7 +335,7 @@ fi
 # out on iOS, which drops the picks the phone kept).
 if metro_up; then
   echo "Using the Metro already on :$METRO_PORT (it must have EXPO_PUBLIC_GEN_API_URL=$STACK, EXPO_PUBLIC_DECIDE_API_URL=$DECIDE," \
-    "EXPO_PUBLIC_DECIDE_SEARCH_URL=$SEARCH, EXPO_PUBLIC_KJBOX_API_URL=$KJBOX_APP and EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1; the force-offline flows also need" \
+    "EXPO_PUBLIC_DECIDE_SEARCH_URL=$SEARCH, EXPO_PUBLIC_KJBOX_API_URL=$KJBOX_APP, EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 and EXPO_PUBLIC_FAKE_MIC=baritone-scale; the force-offline flows also need" \
     "EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1)"
   point_dev_client
   if [[ ${#ONLINE[@]} -gt 0 ]]; then run_flows "${ONLINE[@]}" || status=$?; fi

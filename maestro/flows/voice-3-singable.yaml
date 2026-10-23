@@ -1,0 +1,84 @@
+# Vocal range 3 (Phase 3c): fit badges and Singable. decide has a self-reported baritone profile (45–69, comfortable
+# 50–64) and a Muse + Adele persona. On the fixture catalog's vr_* data: Muse "Starlight" fits, "Uprising" fits 2 keys
+# down, Adele "Hello" is outside the range (no badge, and Singable hides it). Opening Uprising shows the song page's
+# badge and tier line.
+appId: com.nomadkaraoke.mobile
+name: voice-3-singable
+tags:
+  - voice
+onFlowComplete:
+  - runFlow: ../common/discover-reset-filters.yaml
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: voice3
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      PROFILE: '{"low_midi":45,"high_midi":69,"comfort_low":50,"comfort_high":64,"voice_type":"baritone","confidence":"low","method":"self"}'
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["rock","pop"],"decades":["2000s","2010s"],"energy":"high","artists":[{"name":"Muse","affinity":"love"},{"name":"Adele","affinity":"love"}]}'
+- tapOn:
+    id: "library-filter-any"
+# The phone adopts decide's profile: the Singable chip (not its voice-test CTA) and the badges.
+- extendedWaitUntil:
+    visible:
+      id: "filter-chip-singable"
+    timeout: 20000
+- extendedWaitUntil:
+    visible: ".*Starlight.*Fits your voice.*"
+    timeout: 30000
+- takeScreenshot: ${VOICE_SHOTS}/voice-3-badges
+# Before Singable: Adele "Hello" is among the picks (no badge: outside the range).
+- scrollUntilVisible:
+    element:
+      text: "More options for .*Hello.*"
+    direction: DOWN
+    timeout: 30000
+- takeScreenshot: ${VOICE_SHOTS}/voice-3-hello-no-badge
+# Singable on while the picks are scrolled down (the filter bar sits above the list): the new picks start from the
+# top (a data swap under FlashList's offset used to leave the list blank until the next scroll).
+- tapOn:
+    id: "filter-chip-singable"
+- extendedWaitUntil:
+    visible:
+      id: "filter-chip-singable"
+      selected: true
+    timeout: 5000
+- extendedWaitUntil:
+    visible:
+      id: "rec-row-.*-0"
+    timeout: 30000
+- assertVisible: ".*Fits your voice.*"
+- takeScreenshot: ${VOICE_SHOTS}/voice-3-singable-on
+# Uprising fits 2 keys down; Hello, next to it in the crowd pleasers, is gone.
+- scrollUntilVisible:
+    element:
+      text: ".*Uprising.*Try it 2 keys down.*"
+    direction: DOWN
+    timeout: 30000
+- assertNotVisible:
+    text: "More options for .*Hello.*"
+- takeScreenshot: ${VOICE_SHOTS}/voice-3-uprising
+- tapOn: ".*Uprising.*Try it 2 keys down.*"
+- extendedWaitUntil:
+    visible:
+      id: "fit-badge-song"
+    timeout: 20000
+- assertVisible:
+    id: "fit-badge-song"
+    text: "Try it 2 keys down"
+- assertVisible:
+    id: "fit-tier"
+- takeScreenshot: ${VOICE_SHOTS}/voice-3-song
+- tapOn: "Back|Navigate up"
+- tapOn:
+    id: "filter-chip-singable"

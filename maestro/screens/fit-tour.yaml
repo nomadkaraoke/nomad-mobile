@@ -37,6 +37,11 @@ onFlowComplete:
     commands:
       - tapOn:
           id: "voice-remove"
+      # The confirm alert's destructive button (Android may show it upper-case), en or ar. Anchored below the alert's title:
+      # the profile's artist rows have "Remove" buttons too (scrolled out of view under the header).
+      - tapOn:
+          text: "Remove|REMOVE|إزالة"
+          below: "Remove your voice\\?|هل تريد إزالة ملف صوتك؟"
       - extendedWaitUntil:
           visible:
             id: "voice-test"
@@ -125,5 +130,6 @@ onFlowComplete:
       id: "voice-remove"
     direction: DOWN
     timeout: 15000
-- assertVisible: "Likely Baritone"
+- assertVisible:
+    id: "voice-section-type"
 - takeScreenshot: ${FIT_SHOTS}/fit-me-voice

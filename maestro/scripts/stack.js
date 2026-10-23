@@ -1,7 +1,7 @@
 // Maestro runScript helper for the gen local stack's test API (/api/test/*, fake workers only).
 // Env (pass with runScript `env:`; STACK comes from `maestro test -e STACK=http://127.0.0.1:8010`):
-//   ACTION   setup | code | config | judge | job | scenario | review | decide-seed | decide-reset | kjbox | decide | log |
-//            fake-externals | fake-lb-user | fake-lastfm-user | lb-poll | source-counts
+//   ACTION   setup | code | config | judge | job | scenario | review | decide-seed | decide-reset | voice-seed |
+//            voice-assert | kjbox | decide | log | fake-externals | fake-lb-user | fake-lastfm-user | lb-poll | source-counts
 //   setup:   NAME (flow name, used in the unique email), CREDITS (default 2),
 //            USER_CONFIG (JSON, per-user fake-config knobs: fail_at, auto_approve, audio_duration_seconds,
 //            youtube_url_enabled, step_delay_seconds, judge_*), GLOBAL_CONFIG (JSON, merged over the defaults
@@ -38,6 +38,12 @@
 //            docs/TESTING.md § Local stack). DECIDE_STACK defaults to http://127.0.0.1:8030 (decide's main API).
 //            -> output.decideUserId
 //   decide-reset: EMAIL (default output.email) -> deletes that user's decide profile, loved and hidden songs.
+//   voice-seed:   EMAIL (default output.email), PROFILE (JSON, decide's VoiceProfileIn: low_midi, high_midi,
+//            comfort_low, comfort_high, voice_type or register, confidence, method; measured_at defaults to now,
+//            voice_type_between / register to null) -> sets that user's voice profile (POST ${DECIDE_STACK}/api/test/voice/seed).
+//   voice-assert: EMAIL (default output.email), EXPECT_TYPE (voice_type, or "none"), EXPECT_METHOD (mic | self),
+//            polled for WAIT_MS (default 10000) -> fails unless decide's voice_profile (GET /api/test/profile) matches
+//            -> output.voiceProfile (JSON)
 //   kjbox:   OP, one of kjbox's local-stack test API calls (KJBOX_STACK, default http://127.0.0.1:8040; kjbox
 //            docs/TESTING.md § Local stack). BODY (JSON, optional) is sent as is; the shortcuts below build it.
 //            reset       FIXTURE (default|empty) -> a new night (new night_id), event code 2121, fixture flags
@@ -330,6 +336,46 @@
       );
       output.decideUserId = res.user_id;
     }
+  } else if (action === 'voice-seed') {
+    const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+    if (!email) throw new Error('ACTION voice-seed needs EMAIL (or ACTION setup first)');
+    const profile = merge(
+      { voice_type: null, voice_type_between: null, register: null, measured_at: new Date().toISOString() },
+      envJson(typeof PROFILE !== 'undefined' ? PROFILE : undefined),
+    );
+    const res = http.post(decideBase + '/api/test/voice/seed', {
+      headers: JSON_HEADERS,
+      body: JSON.stringify({ email: email, profile: profile }),
+    });
+    if (res.status < 200 || res.status >= 300) throw new Error('decide voice seed failed: HTTP ' + res.status + ' ' + res.body);
+  } else if (action === 'voice-assert') {
+    const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+    if (!email) throw new Error('ACTION voice-assert needs EMAIL (or ACTION setup first)');
+    const wantType = envValue(typeof EXPECT_TYPE !== 'undefined' ? EXPECT_TYPE : undefined);
+    const wantMethod = envValue(typeof EXPECT_METHOD !== 'undefined' ? EXPECT_METHOD : undefined);
+    const waitMs = Number(envValue(typeof WAIT_MS !== 'undefined' ? WAIT_MS : undefined) || 10000);
+    const problem = (vp) => {
+      if (wantType === 'none') return vp ? 'a voice profile exists' : null;
+      if (!vp) return 'no voice profile';
+      if (wantType !== null && vp.voice_type !== wantType) return 'voice_type ' + vp.voice_type + ', expected ' + wantType;
+      if (wantMethod !== null && vp.method !== wantMethod) return 'method ' + vp.method + ', expected ' + wantMethod;
+      return null;
+    };
+    // The app's PUT can land a moment after the saved screen shows.
+    const deadline = new Date().getTime() + waitMs;
+    let vp = null;
+    let why = null;
+    do {
+      vp = check(http.get(decideBase + '/api/test/profile?email=' + encodeURIComponent(email)), 'decide profile').voice_profile;
+      why = problem(vp);
+      if (why === null) break;
+      const pause = new Date().getTime() + 1000;
+      while (new Date().getTime() < pause) {
+        // busy-wait: the script engine has no timers
+      }
+    } while (new Date().getTime() < deadline);
+    output.voiceProfile = JSON.stringify(vp);
+    if (why !== null) throw new Error('voice profile of ' + email + ': ' + why + ' ' + JSON.stringify(vp));
   } else if (action === 'kjbox') {
     const op = envValue(typeof OP !== 'undefined' ? OP : undefined);
     if (!op) throw new Error('ACTION kjbox needs OP');
