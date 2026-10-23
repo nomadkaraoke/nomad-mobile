@@ -6,10 +6,13 @@ import { useEffect } from 'react';
 import { openSignIn } from '../../../auth/signInUi';
 import { useAuth } from '../../../auth/store';
 import { ImportFile } from '../../../discover/connect/ImportFile';
+import { isImportableFileUri } from '../../../discover/connect/importFileUri';
 
 /**
  * Import a picked (or shared) privacy export: `?file=<uri>&name=<file name>` (Phase 3b spec §5.4). The import
- * belongs to an account, so signed out it opens sign-in first and comes back here with the same file.
+ * belongs to an account, so signed out it opens sign-in first and comes back here with the same file. Only the
+ * picker's and share intake's cache copies are accepted (`isImportableFileUri`); system links to this route go to
+ * the Connect hub instead (`+native-intent`).
  */
 export default function ImportFileRoute() {
   const { file, name } = useLocalSearchParams<{ file?: string; name?: string }>();
@@ -19,7 +22,7 @@ export default function ImportFileRoute() {
     if (!signedIn) openSignIn(returnTo);
   }, [signedIn, returnTo]);
   if (!signedIn) return <SignedOut returnTo={returnTo} />;
-  if (!file) return <NoFile />;
+  if (!isImportableFileUri(file)) return <NoFile />;
   return <ImportFile key={file} uri={file} name={name ?? ''} />;
 }
 

@@ -45,7 +45,8 @@ jest.mock('@nomad/api-gen', () => ({ ...jest.requireActual('@nomad/api-gen'), ge
 const m = (f: unknown) => f as jest.Mock;
 const N = Notifications as jest.Mocked<typeof Notifications>;
 const MiB = 1024 * 1024;
-const FILE = 'file:///cache/my_spotify_data.zip';
+/** expo-document-picker's cache copy (memoryFs: Paths.cache = file:///cache). */
+const FILE = 'file:///cache/DocumentPicker/4F1C2B7A-9D0E-4A51-8E2B-1C3D5E7F9A0B.zip';
 
 const summary = (kind: ExportSummary['kind'], tracks = 3, extra: Partial<ExportSummary> = {}): ExportSummary => ({
   kind,
@@ -326,13 +327,32 @@ describe('Import file', () => {
     expect(fsState.files.has(FILE)).toBe(false);
   });
 
-  it('never deletes a file outside the cache', async () => {
-    const shared = 'file:///document/shared/export.zip';
+  it('deletes the share intake copy too', async () => {
+    const shared = 'file:///cache/shared/1729999999999-1/my_spotify_data.zip';
     fsState.files.set(shared, new Uint8Array(10));
     reads(summary('spotify-account'));
-    renderRouter(appRoutes(), { initialUrl: `/discover/connect/import-file?file=${encodeURIComponent(shared)}&name=export.zip` });
+    renderRouter(appRoutes(), { initialUrl: `/discover/connect/import-file?file=${encodeURIComponent(shared)}&name=x.zip` });
     await act(async () => fireEvent.press(await screen.findByTestId('connect-import-start')));
     expect(await screen.findByTestId('connect-import-result')).toBeTruthy();
-    expect(fsState.files.has(shared)).toBe(true);
+    expect(fsState.files.has(shared)).toBe(false);
+  });
+
+  // Final review I2: a crafted file= must neither be read nor deleted (the offline song list, app-private files).
+  it.each([
+    'file:///cache/offline/offline.db',
+    'file:///document/shared/export.zip',
+    'file:///cache/DocumentPicker/../offline/offline.db',
+    'file:///cache/DocumentPicker/%2e%2e/offline/offline.db',
+  ])('refuses %s: not read, and kept on leaving', async (uri) => {
+    fsState.files.set(uri, new Uint8Array(10));
+    reads(summary('spotify-account'));
+    const { unmount } = renderRouter(appRoutes(), {
+      initialUrl: `/discover/connect/import-file?file=${encodeURIComponent(uri)}&name=x.zip`,
+    });
+    expect(await screen.findByTestId('connect-import-error')).toBeTruthy();
+    expect(screen.queryByTestId('connect-import-start')).toBeNull();
+    expect(readExportFile).not.toHaveBeenCalled();
+    unmount();
+    expect(fsState.files.has(uri)).toBe(true);
   });
 });

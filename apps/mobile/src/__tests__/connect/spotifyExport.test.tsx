@@ -92,7 +92,7 @@ describe('Spotify export guide', () => {
   it('pick copies to cache and opens the import screen', async () => {
     (DocumentPicker.getDocumentAsync as jest.Mock).mockResolvedValueOnce({
       canceled: false,
-      assets: [{ uri: 'file:///cache/my_spotify_data.zip', name: 'my_spotify_data.zip', size: 10, lastModified: 0 }],
+      assets: [{ uri: 'file:///cache/DocumentPicker/A1B2C3D4.zip', name: 'my_spotify_data.zip', size: 10, lastModified: 0 }],
     });
     const app = open();
     await act(async () => fireEvent.press(await screen.findByTestId('connect-spotify-pick')));
@@ -107,7 +107,7 @@ describe('Spotify export guide', () => {
       copyToCacheDirectory: true,
     });
     await waitFor(() => expect(app.getPathname()).toBe('/discover/connect/import-file'));
-    expect(app.getSearchParams()).toMatchObject({ file: 'file:///cache/my_spotify_data.zip', name: 'my_spotify_data.zip' });
+    expect(app.getSearchParams()).toMatchObject({ file: 'file:///cache/DocumentPicker/A1B2C3D4.zip', name: 'my_spotify_data.zip' });
     expect(await screen.findByTestId('connect-import-progress')).toBeTruthy();
   });
 

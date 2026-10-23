@@ -2,7 +2,7 @@ import { ApiError, uploadExportToListenBrainz, type UploadFile } from '@nomad/ap
 import { toUploadChunks, type ExportKind, type ExportSummary } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
-import { File, Paths } from 'expo-file-system';
+import { File } from 'expo-file-system';
 import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
@@ -10,6 +10,7 @@ import { Pressable, View } from 'react-native';
 import { useOffline } from '../../net/useOffline';
 import { importErrorKey } from './importErrors';
 import { isAlreadyImported, RETRY_DELAYS_MS, retryDelayMs, useImportQueue } from './importQueue';
+import { isImportableFileUri } from './importFileUri';
 import { ImportResult } from './ImportResult';
 import { useCapabilities, useServicesSummary } from './queries';
 import { pickExportFile } from './pickExportFile';
@@ -26,11 +27,10 @@ const KIND_KEY: Record<ExportKind, 'spotifyAccount' | 'spotifyExtended' | 'apple
   apple: 'apple',
 };
 
-/** The picker's copy lives in the app's cache: delete it once done. Anything else (a shared file) is left alone. */
+/** The picker's or share intake's copy lives in the app's cache: delete it once done. Any other file is left alone. */
 function deleteIfCached(uri: string): void {
   try {
-    const cache = (Paths.cache as unknown as { uri?: string }).uri ?? String(Paths.cache);
-    if (!uri.startsWith(cache.replace(/\/*$/, '/'))) return;
+    if (!isImportableFileUri(uri)) return;
     const f = new File(uri);
     if (f.exists) f.delete();
   } catch {
