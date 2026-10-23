@@ -3,11 +3,25 @@
 import { songIdentity } from './tally';
 import type { ExportRef, ExportSummary, ListenAggregate } from './types';
 
-export interface ExportUploadChunk {
-  endpoint: 'spotify-export' | 'apple-export';
-  /** snake_case, as decide's API takes it. */
-  body: Record<string, unknown>;
+/** decide's `AppleExportRequest` (snake_case, as its API takes it). */
+export interface AppleExportBody {
+  generated_at: string;
+  chunk_index: number;
+  chunk_count: number;
+  tracks: ListenAggregate[];
 }
+
+/** decide's `SpotifyExportRequest`. */
+export interface SpotifyExportBody extends AppleExportBody {
+  kind: 'account' | 'extended';
+  liked: ExportRef[];
+  playlists: { name: string; tracks: ExportRef[] }[];
+}
+
+/** One upload request: the endpoint decides the body shape. */
+export type ExportUploadChunk =
+  | { endpoint: 'spotify-export'; body: SpotifyExportBody }
+  | { endpoint: 'apple-export'; body: AppleExportBody };
 
 const MAX_TRACKS = 20_000;
 const MAX_CHUNKS = 50;
@@ -95,7 +109,7 @@ export function toUploadChunks(s: ExportSummary, maxTracks = MAX_TRACKS): Export
   const count = Math.max(1, Math.ceil(tracks.length / per));
   const chunks: ExportUploadChunk[] = [];
   for (let i = 0; i < count; i++) {
-    const body: Record<string, unknown> = {
+    const body: AppleExportBody = {
       generated_at: s.generatedAt,
       chunk_index: i,
       chunk_count: count,

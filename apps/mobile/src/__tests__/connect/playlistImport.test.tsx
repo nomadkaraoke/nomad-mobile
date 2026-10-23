@@ -78,10 +78,22 @@ describe('Playlist link import', () => {
 
   it('paste fills field', async () => {
     m(Clipboard.getStringAsync).mockResolvedValue(`  ${SPOTIFY}\n`);
-    const input = await open();
+    await open();
     await act(async () => fireEvent.press(screen.getByTestId('connect-playlist-paste')));
     await waitFor(() => expect(screen.getByTestId('connect-playlist-input').props.value).toBe(SPOTIFY));
-    expect(input).toBeTruthy();
+  });
+
+  it('a clipboard failure is ignored quietly', async () => {
+    m(Clipboard.getStringAsync).mockRejectedValue(new Error('clipboard unavailable'));
+    await open();
+    await act(async () => fireEvent.press(screen.getByTestId('connect-playlist-paste')));
+    expect(screen.getByTestId('connect-playlist-input').props.value).toBe('');
+  });
+
+  it('a Spotify 422 is always "unparseable", even if the detail mentions liked', async () => {
+    m(decide.importSpotifyPlaylist).mockRejectedValue(new decide.ApiError(422, 'liked songs embed unreadable'));
+    await submit(SPOTIFY);
+    expect(await screen.findByText(/We couldn't read that playlist right now/)).toBeTruthy();
   });
 
   it('spotify 422 copy', async () => {
@@ -102,6 +114,7 @@ describe('Playlist link import', () => {
     await open();
     expect(screen.queryByTestId('connect-playlist-howto-body')).toBeNull();
     await act(async () => fireEvent.press(screen.getByTestId('connect-playlist-howto')));
-    expect(screen.getByText(/Library → Liked Music/)).toBeTruthy();
+    expect(screen.getByText(/^1\. On music\.youtube\.com.*Library → Liked Music/)).toBeTruthy();
+    expect(screen.getByText(/^4\. Open the new playlist/)).toBeTruthy();
   });
 });

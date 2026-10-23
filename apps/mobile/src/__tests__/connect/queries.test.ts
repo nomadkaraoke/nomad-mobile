@@ -93,7 +93,7 @@ describe('importErrorKey', () => {
     // [error, route, key]
     [new NotAnExportError(), 'export', 'notAnExport'],
     [e(400, 'not_a_zip'), 'listenbrainz', 'notAnExport'],
-    [e(400, 'bad_chunk'), 'export', 'notAnExport'],
+    [e(400, 'bad_chunk'), 'export', 'generic'],
     [e(400, 'Not a Spotify playlist link'), 'playlist', 'badUrl'],
     [e(404, 'Playlist not found or private'), 'playlist', 'private'],
     [e(422, 'Liked Music is always private - copy it into a public or unlisted playlist'), 'playlist', 'likedPrivate'],
@@ -114,7 +114,7 @@ describe('importErrorKey', () => {
     [new Error('boom'), 'export', 'generic'],
     [undefined, 'playlist', 'generic'],
     // A queue's stored lastError ({status, detail}) maps the same way.
-    [{ status: 400, detail: 'bad_chunk' }, 'export', 'notAnExport'],
+    [{ status: 400, detail: 'bad_chunk' }, 'export', 'generic'],
   ] as const)('%p on %s → %s', (err, route, key) => {
     expect(importErrorKey(err, route)).toBe(`connect.errors.${key}`);
   });

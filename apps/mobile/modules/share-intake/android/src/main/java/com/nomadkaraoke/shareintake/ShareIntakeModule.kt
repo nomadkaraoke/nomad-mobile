@@ -68,6 +68,12 @@ class ShareIntakeModule : Module() {
     val source = streamOf(intent) ?: return null
     intent.removeExtra(Intent.EXTRA_STREAM)
     val ctx = context
+    if (source.authority?.contains('@') == true) {
+      // content://<userId>@<authority>/...: a cross-user uri. resolveContentProvider can't resolve the prefixed
+      // authority, so it is refused (never guessed at) below; say why.
+      Log.w(TAG, "ignored a share with a user-prefixed authority (N@): ${source.scheme}://${source.authority}")
+      return null
+    }
     val owner = source.authority?.let { ctx.packageManager.resolveContentProvider(it, 0)?.packageName }
     if (!ShareIntakeRules.isAcceptableSource(source.scheme, owner, ctx.packageName)) {
       Log.w(TAG, "ignored a share from ${source.scheme}://${source.authority}")
@@ -80,8 +86,11 @@ class ShareIntakeModule : Module() {
     // Each share gets its own folder: a second share never deletes a file the import screen is still reading.
     val dir = File(root, "${System.currentTimeMillis()}-${shareCount.incrementAndGet()}").apply { mkdirs() }
     val target = File(dir, name)
+    var mimeType = ""
     val copied = try {
-      resolver.openInputStream(source)?.use { ShareIntakeRules.copyBounded(it, target) } ?: false
+      val ok = resolver.openInputStream(source)?.use { ShareIntakeRules.copyBounded(it, target) } ?: false
+      if (ok) mimeType = intent.type ?: resolver.getType(source) ?: ""
+      ok
     } catch (e: Exception) {
       false // e.g. SecurityException: the sender didn't grant read access
     }
@@ -90,7 +99,6 @@ class ShareIntakeModule : Module() {
       Log.w(TAG, "shared file too large or unreadable")
       return null
     }
-    val mimeType = intent.type ?: resolver.getType(source) ?: ""
     // The cache path and safeName() are URL-safe, so the plain path is the uri (no percent-encoding to undo).
     return mapOf("uri" to "file://${target.absolutePath}", "name" to name, "mimeType" to mimeType)
   }

@@ -2,12 +2,13 @@ import { ApiError, uploadExportChunk, type ExportImportResponse } from '@nomad/a
 import type { ExportUploadChunk } from '@nomad/core';
 import { Directory, File, Paths } from 'expo-file-system';
 import { useEffect } from 'react';
+import { AppState } from 'react-native';
 import { create } from 'zustand';
 
 import { useAuth } from '../../auth/store';
 import { useOffline } from '../../net/useOffline';
 import { appStorage } from '../../storage';
-import { userKeyFor } from '../../tonight/nightStore';
+import { userKeyFor } from '../../auth/userKey';
 import { useInvalidateAfterImport } from './queries';
 
 /**
@@ -19,7 +20,11 @@ import { useInvalidateAfterImport } from './queries';
  * lost response is harmless.
  *
  * Retries (5xx, 429, network, and 401 while the session refreshes): 5, 15, 30, then every 60 s, or the server's
- * `Retry-After`. Any other 4xx is final: the chunk is dropped and `lastError` set.
+ * `Retry-After` (never under 1 s). Any other 4xx is final: the chunk is dropped and `lastError` set. After
+ * `MAX_CONSECUTIVE_401` 401s in a row sending pauses (payloads kept) until the next sign-in or app foreground.
+ *
+ * Privacy: signing in as a DIFFERENT account purges every other account's queued items, payload files, batches and
+ * error, so one person's listening history never sits on a phone someone else signed in to.
  */
 export type ImportLabel = 'spotify' | 'apple';
 
@@ -46,10 +51,14 @@ export interface ImportBatch {
   failed: number;
   artistsAdded: number;
   songsAdded: number;
+  /** When the last chunk finished (ms epoch); finished batches are pruned after a day. */
+  finishedAt?: number;
 }
 
 /** The last chunk the queue gave up on (`status: null` = its payload file was missing). Feed it to importErrorKey. */
 export interface ImportQueueError {
+  /** Account the failed import belonged to: the error is only shown to that account. */
+  owner: string;
   batch: string;
   label: ImportLabel;
   status: number | null;
@@ -61,10 +70,13 @@ const KEY = 'connect.importQueue';
 const DIR = 'imports';
 
 export const RETRY_DELAYS_MS = [5_000, 15_000, 30_000, 60_000] as const;
+const MIN_RETRY_AFTER_MS = 1_000;
+const MAX_CONSECUTIVE_401 = 3;
+const BATCH_TTL_MS = 24 * 60 * 60 * 1000;
 
 /** Delay before retry number `attempts` (1-based): the server's Retry-After (seconds) when it sent one. */
 export function retryDelayMs(attempts: number, retryAfter: number | null): number {
-  if (retryAfter !== null) return retryAfter * 1000;
+  if (retryAfter !== null) return Math.max(MIN_RETRY_AFTER_MS, retryAfter * 1000);
   return RETRY_DELAYS_MS[Math.min(Math.max(attempts, 1), RETRY_DELAYS_MS.length) - 1] ?? 60_000;
 }
 
@@ -88,6 +100,15 @@ function deletePayload(id: string): void {
   }
 }
 
+const isDone = (b: ImportBatch | undefined) => !!b && b.sent + b.failed >= b.chunks;
+
+/** Drops finished batches older than a day (their result screen is long gone). */
+function pruneBatches(batches: Record<string, ImportBatch>, now = Date.now()): Record<string, ImportBatch> {
+  return Object.fromEntries(
+    Object.entries(batches).filter(([, b]) => !(isDone(b) && b.finishedAt !== undefined && now - b.finishedAt > BATCH_TTL_MS)),
+  );
+}
+
 type Persisted = { pending: PendingUpload[]; batches: Record<string, ImportBatch>; lastError: ImportQueueError | null };
 
 function load(): Persisted {
@@ -100,7 +121,7 @@ function load(): Persisted {
             !!p && typeof p.id === 'string' && typeof p.owner === 'string' && typeof p.batch === 'string',
         )
       : [];
-    const batches = v.batches && typeof v.batches === 'object' ? v.batches : {};
+    const batches = pruneBatches(v.batches && typeof v.batches === 'object' ? v.batches : {});
     return { pending, batches, lastError: v.lastError ?? null };
   } catch {
     return { pending: [], batches: {}, lastError: null };
@@ -151,7 +172,7 @@ export const useImportQueue = create<ImportQueueStore>((set, get) => {
       save({
         pending: [...get().pending, ...items],
         batches: {
-          ...get().batches,
+          ...pruneBatches(get().batches),
           [batch]: { label, owner, chunks: chunks.length, sent: 0, failed: 0, artistsAdded: 0, songsAdded: 0 },
         },
       });
@@ -175,6 +196,7 @@ export const useImportQueue = create<ImportQueueStore>((set, get) => {
 
     rehydrate() {
       clearTimer();
+      unauthorized = 0;
       set(load());
     },
   };
@@ -187,6 +209,8 @@ let running: Promise<void> | null = null;
 let kickAgain = false;
 let timer: ReturnType<typeof setTimeout> | null = null;
 let swept = false;
+/** Consecutive 401s; at MAX_CONSECUTIVE_401 sending pauses until a sign-in or app foreground. */
+let unauthorized = 0;
 
 function clearTimer(): void {
   if (timer) clearTimeout(timer);
@@ -238,13 +262,17 @@ function finish(item: PendingUpload, outcome: { ok: ExportImportResponse } | { e
         sent: b.sent + 1,
         artistsAdded: b.artistsAdded + r.artists_added,
         songsAdded: b.songsAdded + r.songs_added,
+        ...(b.sent + 1 + b.failed >= b.chunks ? { finishedAt: Date.now() } : {}),
       })),
     });
   } else {
     console.warn(`[import-queue] dropped ${item.label} chunk ${item.id}: ${outcome.error.status} ${String(outcome.error.detail)}`);
     save({
       pending,
-      batches: patchBatch(item.batch, (b) => ({ failed: b.failed + 1 })),
+      batches: patchBatch(item.batch, (b) => ({
+        failed: b.failed + 1,
+        ...(b.sent + b.failed + 1 >= b.chunks ? { finishedAt: Date.now() } : {}),
+      })),
       lastError: outcome.error,
     });
   }
@@ -261,7 +289,7 @@ async function run(): Promise<void> {
   sweepOrphans();
   for (;;) {
     const owner = currentOwner();
-    if (!online || !owner) return;
+    if (!online || !owner || unauthorized >= MAX_CONSECUTIVE_401) return;
     const head = useImportQueue.getState().pending.find((p) => p.owner === owner);
     if (!head) return;
     if (head.nextAt > Date.now()) {
@@ -272,19 +300,24 @@ async function run(): Promise<void> {
     try {
       chunk = JSON.parse(await payloadFile(head.id).text()) as ExportUploadChunk;
     } catch (e) {
-      finish(head, { error: { batch: head.batch, label: head.label, status: null, detail: String(e), at: Date.now() } });
+      finish(head, { error: { owner: head.owner, batch: head.batch, label: head.label, status: null, detail: String(e), at: Date.now() } });
       continue;
     }
+    // The file read can take a while: the account may have changed meanwhile, and the request carries the CURRENT token.
+    if (currentOwner() !== head.owner) continue;
     try {
       const res = await uploadExportChunk(chunk);
+      unauthorized = 0;
       finish(head, { ok: res });
     } catch (e) {
+      if (e instanceof ApiError && e.status === 401) unauthorized += 1;
       if (isRetryable(e)) {
-        wakeAt(retryLater(head, e));
+        const at = retryLater(head, e);
+        if (unauthorized < MAX_CONSECUTIVE_401) wakeAt(at);
         return;
       }
       const err = e as ApiError;
-      finish(head, { error: { batch: head.batch, label: head.label, status: err.status, detail: err.detail, at: Date.now() } });
+      finish(head, { error: { owner: head.owner, batch: head.batch, label: head.label, status: err.status, detail: err.detail, at: Date.now() } });
     }
   }
 }
@@ -314,11 +347,40 @@ export async function importQueueIdle(): Promise<void> {
   while (running) await running;
 }
 
-const isDone = (b: ImportBatch | undefined) => !!b && b.sent + b.failed >= b.chunks;
+/** Removes every item, payload file, batch and error that is not the given account's (null = nobody's). */
+function purgeOthers(owner: string | null): void {
+  const { pending, batches, lastError } = useImportQueue.getState();
+  const foreign = pending.filter((p) => p.owner !== owner);
+  if (foreign.length === 0 && Object.values(batches).every((b) => b.owner === owner) && (!lastError || lastError.owner === owner)) {
+    return;
+  }
+  for (const p of foreign) deletePayload(p.id);
+  save({
+    pending: pending.filter((p) => p.owner === owner),
+    batches: Object.fromEntries(Object.entries(batches).filter(([, b]) => b.owner === owner)),
+    lastError: lastError && lastError.owner === owner ? lastError : null,
+  });
+}
 
-// Signing in (or switching account) may unblock that account's uploads.
+// Signing in (or switching account) may unblock that account's uploads. A DIFFERENT account than the queue's owner
+// purges the owner's leftovers; sign-out keeps the queue (the same person signing back in still gets it sent) but
+// hides the error.
 useAuth.subscribe((s, prev) => {
-  if (s.state !== prev.state && s.state.status === 'signedIn') kick();
+  if (s.state === prev.state) return;
+  if (s.state.status === 'signedIn') {
+    unauthorized = 0;
+    purgeOthers(currentOwner());
+    kick();
+  } else if (useImportQueue.getState().lastError) {
+    save({ lastError: null });
+  }
+});
+
+AppState.addEventListener('change', (next) => {
+  if (next === 'active' && unauthorized >= MAX_CONSECUTIVE_401) {
+    unauthorized = 0;
+    kick();
+  }
 });
 
 /**

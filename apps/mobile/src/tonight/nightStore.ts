@@ -1,9 +1,8 @@
-import { sha256 } from "@noble/hashes/sha2.js";
-import { bytesToHex, utf8ToBytes } from "@noble/hashes/utils.js";
 import { randomUUID } from "expo-crypto";
 import { create } from "zustand";
 
 import { useAuth } from "../auth/store";
+import { userKeyFor } from "../auth/userKey";
 import { appStorage } from "../storage";
 
 export type NomadNight = {
@@ -28,9 +27,8 @@ export const OTHER_NIGHT_IDLE_MS = 12 * 60 * 60 * 1000;
 
 const keyFor = (userKey: string) => `tonight.night.v1.${userKey}`;
 
-/** Hex sha256 of the lowercased, trimmed email: names the per-user storage key. */
-export const userKeyFor = (email: string): string =>
-  bytesToHex(sha256(utf8ToBytes(email.trim().toLowerCase())));
+// Moved to auth/ (the upload queue uses it too); re-exported so Tonight code keeps working.
+export { userKeyFor };
 
 let clock: () => number = () => Date.now();
 /** Test hook: replaces the clock (pass nothing to restore Date.now). */

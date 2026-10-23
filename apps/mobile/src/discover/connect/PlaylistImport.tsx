@@ -31,7 +31,12 @@ export function PlaylistImport() {
   const [howToOpen, setHowToOpen] = useState(false);
 
   const paste = async () => {
-    const clip = await Clipboard.getStringAsync();
+    let clip = '';
+    try {
+      clip = await Clipboard.getStringAsync();
+    } catch {
+      return; // the clipboard is unavailable: leave the field as it is
+    }
     if (clip) {
       setText(clip.trim());
       setError('');
@@ -59,7 +64,9 @@ export function PlaylistImport() {
       const key: ImportErrorKey =
         statusOf(e) === 422 && found.service === 'youtube_music'
           ? 'connect.errors.likedPrivate'
-          : importErrorKey(e, 'playlist');
+          : statusOf(e) === 422
+            ? 'connect.errors.unparseable' // Spotify: an embed we couldn't read, whatever the detail says
+            : importErrorKey(e, 'playlist');
       setError(tAll(key));
     } finally {
       setBusy(false);
@@ -127,9 +134,9 @@ export function PlaylistImport() {
           </Pressable>
           {howToOpen ? (
             <View testID="connect-playlist-howto-body" className="gap-2">
-              {HOW_TO_STEPS.map((s, i) => (
+              {HOW_TO_STEPS.map((s) => (
                 <Text key={s} variant="muted">
-                  {`${i + 1}. ${t(`playlist.howTo.${s}`)}`}
+                  {t(`playlist.howTo.${s}`)}
                 </Text>
               ))}
               <Text variant="muted">{t('playlist.howTo.anyPlaylist')}</Text>

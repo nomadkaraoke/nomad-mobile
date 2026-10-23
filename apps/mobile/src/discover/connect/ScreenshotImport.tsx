@@ -9,7 +9,7 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { useOffline } from '../../net/useOffline';
@@ -24,6 +24,9 @@ const MAX_WIDTH = 1290;
 const JPEG_QUALITY = 0.8;
 
 type Phase = 'picking' | 'reading' | 'confirm' | 'saving' | 'done' | 'error';
+
+/** Drawn in a checked box. */
+const CHECK = '\u2713';
 
 const statusOf = (e: unknown) => (e as { status?: unknown } | null)?.status;
 
@@ -50,6 +53,8 @@ export function ScreenshotImport() {
   const [checked, setChecked] = useState<boolean[]>([]);
   const [result, setResult] = useState<ImportResultResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
+  /** Set the moment a picker opens: a double tap must not open two (state updates are too late for that). */
+  const picking = useRef(false);
 
   const fail = (e: unknown) => {
     setErrorMessage(statusOf(e) === 429 ? t('screenshot.dailyLimit') : tAll(importErrorKey(e, 'screenshot')));
@@ -57,7 +62,16 @@ export function ScreenshotImport() {
   };
 
   const pickAndRead = async () => {
-    if (phase === 'reading' || phase === 'saving') return;
+    if (picking.current || phase === 'reading' || phase === 'saving') return;
+    picking.current = true;
+    try {
+      await pickAndReadOnce();
+    } finally {
+      picking.current = false;
+    }
+  };
+
+  const pickAndReadOnce = async () => {
     let picked: ImagePicker.ImagePickerResult;
     try {
       picked = await ImagePicker.launchImageLibraryAsync({
@@ -90,7 +104,8 @@ export function ScreenshotImport() {
     if (phase !== 'confirm') return;
     const items = candidates
       .filter((_, i) => checked[i])
-      .map((c) => ({ kind: c.kind, artist: c.artist, title: c.kind === 'song' ? c.title ?? null : null }));
+      // A song with no title is just an artist.
+      .map((c) => (c.kind === 'song' && c.title ? { kind: c.kind, artist: c.artist, title: c.title } : { kind: 'artist' as const, artist: c.artist, title: null }));
     setErrorMessage('');
     setPhase('saving');
     try {
@@ -153,7 +168,11 @@ export function ScreenshotImport() {
                 onPress={() => toggle(i)}
                 className="min-h-11 flex-row items-center gap-3 rounded-xl border border-border bg-card p-3"
               >
-                <View className={`size-6 rounded border border-primary ${checked[i] ? 'bg-primary' : 'bg-transparent'}`} />
+                <View
+                  className={`size-6 items-center justify-center rounded border border-primary ${checked[i] ? 'bg-primary' : 'bg-transparent'}`}
+                >
+                  {checked[i] ? <Text className="text-sm font-bold text-primary-foreground">{CHECK}</Text> : null}
+                </View>
                 <View className="flex-1 gap-1">
                   <Text className="font-semibold">
                     {c.kind === 'song' && c.title ? t('screenshot.item', { artist: c.artist, title: c.title }) : c.artist}

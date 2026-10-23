@@ -82,11 +82,13 @@ describe('imports and services summary', () => {
 
   it.each(['spotify-export', 'apple-export'] as const)('uploadExportChunk posts to chunk.endpoint (%s)', async (endpoint) => {
     fetchMock.mockResolvedValueOnce(json({ ok: true }));
-    const body = { generated_at: '2026-01-01T00:00:00Z', chunk_index: 0, chunk_count: 1, tracks: [] };
-    await uploadExportChunk({ endpoint, body });
+    const apple = { generated_at: '2026-01-01T00:00:00Z', chunk_index: 0, chunk_count: 1, tracks: [] };
+    const body = { ...apple, kind: 'extended' as const, liked: [], playlists: [] };
+    await uploadExportChunk(endpoint === 'apple-export' ? { endpoint, body: apple } : { endpoint, body });
+    const sent = endpoint === 'apple-export' ? apple : body;
     expect(last().method).toBe('POST');
     expect(last().url).toBe(`https://decide.test/api/services/${endpoint}`);
-    expect(await last().json()).toEqual(body);
+    expect(await last().json()).toEqual(sent);
   });
 
   it('connects Last.fm and ListenBrainz by username', async () => {
@@ -133,7 +135,7 @@ describe('imports and services summary', () => {
     expect(last().url).toBe('https://decide.test/api/services/sync/status');
   });
 
-  it('errors surface status codes as ApiError, and a 401 never signs out beyond the injected hook', async () => {
+  it('errors surface their status and detail as ApiError', async () => {
     fetchMock.mockResolvedValueOnce(json({ detail: 'rate_limited' }, 429));
     await expect(importSpotifyPlaylist('x')).rejects.toMatchObject({ status: 429, detail: 'rate_limited' });
     fetchMock.mockResolvedValueOnce(json({ detail: 'nope' }, 422));

@@ -56,7 +56,9 @@ export async function readExportFile(
         } else {
           // A bare CSV: the aggregator's streaming Apple CSV sink (UTF-8 decode → CSV parser), under a name it
           // routes to that parser; the headers decide whether it is a play history at all.
-          push = agg.entryStream(BARE_CSV_NAME)!;
+          const stream = agg.entryStream(BARE_CSV_NAME);
+          if (!stream) throw new NotAnExportError();
+          push = stream;
         }
       }
       push(slice, read >= total);

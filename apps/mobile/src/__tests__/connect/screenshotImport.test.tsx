@@ -131,6 +131,38 @@ describe('Screenshot import', () => {
     expect(screen.getByText('Added 1 artist and 1 song you know')).toBeTruthy();
   });
 
+  it('a song with no title is saved as an artist', async () => {
+    m(decide.extractScreenshots).mockResolvedValue({
+      candidates: [{ kind: 'song', artist: 'Fixture Band', title: null, confidence: 0.8, matched: true, song_key: null }],
+    });
+    await pickShots();
+    expect(await screen.findByText('Fixture Band')).toBeTruthy();
+    await act(async () => fireEvent.press(screen.getByTestId('connect-shot-confirm')));
+    await screen.findByTestId('connect-import-result');
+    expect(decide.confirmScreenshotItems).toHaveBeenCalledWith([{ kind: 'artist', artist: 'Fixture Band', title: null }]);
+  });
+
+  it('a double tap on the picker opens it once', async () => {
+    let release!: (v: unknown) => void;
+    m(ImagePicker.launchImageLibraryAsync).mockReturnValue(new Promise((r) => (release = r)));
+    open();
+    const pick = await screen.findByTestId('connect-shot-pick');
+    await act(async () => {
+      fireEvent.press(pick);
+      fireEvent.press(pick);
+    });
+    expect(ImagePicker.launchImageLibraryAsync).toHaveBeenCalledTimes(1);
+    await act(async () => release({ canceled: true, assets: null }));
+  });
+
+  it('checked boxes show a check mark', async () => {
+    await pickShots();
+    await screen.findByTestId('connect-shot-item-0');
+    expect(screen.getAllByText('\u2713')).toHaveLength(3);
+    await act(async () => fireEvent.press(screen.getByTestId('connect-shot-item-0')));
+    expect(screen.getAllByText('\u2713')).toHaveLength(2);
+  });
+
   it('429 shows the daily-limit copy', async () => {
     m(decide.extractScreenshots).mockRejectedValue(new decide.ApiError(429, 'daily_limit'));
     await pickShots();

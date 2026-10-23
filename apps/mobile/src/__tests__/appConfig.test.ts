@@ -125,7 +125,7 @@ describe('share intake', () => {
     category: [{ $: { 'android:name': 'android.intent.category.DEFAULT' } }],
     data: [{ $: { 'android:mimeType': 'image/*' } }],
   };
-  const fixture = (): AndroidManifestFixture => ({
+  const fixture = (extra: IntentFilter[] = []): AndroidManifestFixture => ({
     manifest: {
       $: { 'xmlns:android': 'http://schemas.android.com/apk/res/android' },
       application: [
@@ -138,6 +138,7 @@ describe('share intake', () => {
                 { action: [{ $: { 'android:name': 'android.intent.action.MAIN' } }], category: [{ $: { 'android:name': 'android.intent.category.LAUNCHER' } }] },
                 VIEW_FILTER,
                 OTHER_SEND,
+                ...extra,
               ],
             },
           ],
@@ -145,10 +146,10 @@ describe('share intake', () => {
       ],
     },
   });
-  const manifestAfterPrebuild = async (c: ExpoConfig) => {
+  const manifestAfterPrebuild = async (c: ExpoConfig, extra: IntentFilter[] = []) => {
     const mod = (c as { mods?: { android?: { manifest?: ManifestMod } } }).mods?.android?.manifest;
     expect(mod).toBeDefined();
-    return (await mod!({ ...c, modResults: fixture(), modRequest: {} })).modResults;
+    return (await mod!({ ...c, modResults: fixture(extra), modRequest: {} })).modResults;
   };
   const sendFilters = (m: AndroidManifestFixture) =>
     (m.manifest.application[0]!.activity[0]!['intent-filter'] ?? []).filter((f) =>
@@ -180,6 +181,16 @@ describe('share intake', () => {
     const filters = m.manifest.application[0]!.activity[0]!['intent-filter']!;
     expect(filters).toHaveLength(4);
     expect(filters).toContainEqual(VIEW_FILTER);
+  });
+
+  it('does not treat a SEND filter with no <data> as ours', async () => {
+    const dataless: IntentFilter = {
+      action: [{ $: { 'android:name': 'android.intent.action.SEND' } }],
+      category: [{ $: { 'android:name': 'android.intent.category.DEFAULT' } }],
+    };
+    const filters = sendFilters(await manifestAfterPrebuild(plugin()({ name: 'x', slug: 'x' }), [dataless]));
+    expect(filters).toHaveLength(3); // OTHER_SEND + the data-less one (kept) + ours
+    expect(filters).toContainEqual(dataless);
   });
 
   it('adds the SEND filter once, however often prebuild runs', async () => {

@@ -1,7 +1,13 @@
-import { toUploadChunks, type ExportSummary, type ListenAggregate } from '../index';
+import { toUploadChunks, type ExportSummary, type ExportUploadChunk, type ListenAggregate } from '../index';
 import { SONGS } from '../__fixtures__/buildExport';
 
 const track = (i: number, plays = 1): ListenAggregate => ({ artist: `Artist ${i}`, title: `Song ${i}`, ms_played: plays * 200_000, plays, first_ts: 1_700_000_000, last_ts: 1_700_000_000 + i });
+
+/** The body of a chunk that must be a Spotify one. */
+const sp = (c: ExportUploadChunk) => {
+  if (c.endpoint !== 'spotify-export') throw new Error(`expected a Spotify chunk, got ${c.endpoint}`);
+  return c.body;
+};
 
 const summary = (over: Partial<ExportSummary>): ExportSummary => ({
   kind: 'spotify-account',
@@ -25,11 +31,11 @@ describe('toUploadChunks', () => {
       expect(c.endpoint).toBe('spotify-export');
       expect(c.body).toMatchObject({ kind: 'extended', generated_at: '2024-05-03', chunk_index: i, chunk_count: 3 });
     });
-    expect(chunks[0]!.body.liked).toEqual([SONGS.hello]);
-    expect(chunks[0]!.body.playlists).toEqual([{ name: 'Mix', tracks: [SONGS.rocket] }]);
+    expect(sp(chunks[0]!).liked).toEqual([SONGS.hello]);
+    expect(sp(chunks[0]!).playlists).toEqual([{ name: 'Mix', tracks: [SONGS.rocket] }]);
     for (const c of chunks.slice(1)) {
-      expect(c.body.liked).toEqual([]);
-      expect(c.body.playlists).toEqual([]);
+      expect(sp(c).liked).toEqual([]);
+      expect(sp(c).playlists).toEqual([]);
     }
     // Every song lands in exactly one chunk, sorted by plays descending.
     const all = chunks.flatMap((c) => c.body.tracks as ListenAggregate[]);
@@ -42,7 +48,7 @@ describe('toUploadChunks', () => {
     const tracks = Array.from({ length: 60 }, (_, i) => track(i));
     const chunks = toUploadChunks(summary({ tracks }), 1);
     expect(chunks).toHaveLength(50);
-    expect(chunks[0]!.body.kind).toBe('account');
+    expect(sp(chunks[0]!).kind).toBe('account');
     expect(chunks.every((c) => c.body.chunk_count === 50)).toBe(true);
     expect(toUploadChunks(summary({ tracks }), 0)).toHaveLength(50); // clamped to ≥ 1
     expect(toUploadChunks(summary({ tracks }), 99_999)).toHaveLength(1); // clamped to ≤ 20,000
@@ -72,7 +78,7 @@ describe('toUploadChunks', () => {
         playlists: [{ name: 'n'.repeat(250), tracks: [{ artist: 'Adele', title: ' ' }, SONGS.machu] }],
       }),
     );
-    const body = chunks[0]!.body;
+    const body = sp(chunks[0]!);
     const t = (body.tracks as ListenAggregate[])[0]!;
     expect(t.artist).toBe('x'.repeat(299));
     expect(t.title).toBe('Hello');
@@ -90,7 +96,7 @@ describe('toUploadChunks', () => {
       { name: 'Crosses', tracks: refs('C', 5_000) }, // truncated to the 2,000 left
       { name: 'Late', tracks: refs('D', 10) }, // budget gone → dropped
     ];
-    const body = toUploadChunks(summary({ liked: [SONGS.hello], playlists }))[0]!.body;
+    const body = sp(toUploadChunks(summary({ liked: [SONGS.hello], playlists }))[0]!);
     const pl = body.playlists as { name: string; tracks: unknown[] }[];
     expect(pl.map((p) => [p.name, p.tracks.length])).toEqual([
       ['Big', 10_000],
@@ -98,11 +104,11 @@ describe('toUploadChunks', () => {
       ['Crosses', 2_000],
     ]);
     const many = Array.from({ length: 600 }, (_, i) => ({ name: `P${i}`, tracks: [{ artist: 'X', title: `t${i}` }] }));
-    expect((toUploadChunks(summary({ playlists: many }))[0]!.body.playlists as unknown[]).length).toBe(500);
+    expect((sp(toUploadChunks(summary({ playlists: many }))[0]!).playlists as unknown[]).length).toBe(500);
   });
 
   it('caps liked at 20,000', () => {
     const liked = Array.from({ length: 20_005 }, (_, i) => ({ artist: 'A', title: `L${i}` }));
-    expect((toUploadChunks(summary({ liked }))[0]!.body.liked as unknown[]).length).toBe(20_000);
+    expect((sp(toUploadChunks(summary({ liked }))[0]!).liked as unknown[]).length).toBe(20_000);
   });
 });

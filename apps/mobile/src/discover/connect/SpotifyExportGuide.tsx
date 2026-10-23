@@ -12,10 +12,11 @@ const SPOTIFY_PRIVACY = 'https://www.spotify.com/account/privacy/';
 type Remind = 'idle' | 'busy' | 'scheduled' | 'denied' | 'failed';
 
 function Step({ n, text, children }: { n: number; text: string; children: ReactNode }) {
+  const t = useTranslations('connect');
   return (
     <View className="flex-row gap-3 rounded-xl border border-border bg-card p-4">
       <View className="size-7 items-center justify-center rounded-full bg-primary">
-        <Text className="font-semibold">{n}</Text>
+        <Text className="font-semibold">{t('stepNumber', { n })}</Text>
       </View>
       <View className="flex-1 gap-3">
         <Text>{text}</Text>

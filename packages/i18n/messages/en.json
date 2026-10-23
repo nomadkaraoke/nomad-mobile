@@ -1292,7 +1292,6 @@
       "pickMore": "Choose different screenshots",
       "limit": "Up to 5 screenshots at a time.",
       "reading": "Reading your screenshots…",
-      "saving": "Saving…",
       "confirmTitle": "Is this right?",
       "confirmBody": "Untick anything we got wrong.",
       "confirm": "{count, plural, =0 {Nothing to add} one {Add # item} other {Add # items}}",
@@ -1315,13 +1314,14 @@
       "again": "Import another playlist",
       "howTo": {
         "title": "How do I share my Liked Music?",
-        "step1": "On music.youtube.com, open Library → Liked Music.",
-        "step2": "Select the songs (tap one, then tap the others).",
-        "step3": "Choose \"Add to playlist\" → New playlist, and set visibility to Unlisted or Public.",
-        "step4": "Open the new playlist, tap Share → Copy link, and paste it here.",
+        "step1": "1. On music.youtube.com, open Library → Liked Music.",
+        "step2": "2. Select the songs (tap one, then tap the others).",
+        "step3": "3. Choose \"Add to playlist\" → New playlist, and set visibility to Unlisted or Public.",
+        "step4": "4. Open the new playlist, tap Share → Copy link, and paste it here.",
         "anyPlaylist": "Any public or unlisted playlist of songs you love works too, e.g. your party or workout mix."
       }
     },
+    "stepNumber": "{n, number}",
     "spotifyExport": {
       "intro": "Spotify can send you your whole listening history. It takes them a few days, so start now and we will take it from there.",
       "step1": "Request your data at spotify.com/account/privacy. Tick Account data (ready in about 5 days) and Extended streaming history (up to 30 days): Extended has your whole history.",

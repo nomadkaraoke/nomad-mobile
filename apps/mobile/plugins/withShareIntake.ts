@@ -11,9 +11,10 @@ const SEND = 'android.intent.action.SEND';
 
 type IntentFilter = NonNullable<AndroidConfig.Manifest.ManifestActivity['intent-filter']>[number];
 
-/** A SEND filter this plugin wrote (only our mime types), so a re-run replaces it; anyone else's filters stay. */
+/** A SEND filter this plugin wrote (at least one <data>, all of them our mime types), so a re-run replaces it; anyone else's filters stay (a data-less one is not ours). */
 const isOurSendFilter = (f: IntentFilter) =>
   (f.action?.some((a) => a.$['android:name'] === SEND) ?? false) &&
+  (f.data?.length ?? 0) > 0 &&
   (f.data ?? []).every((d) => SHARE_MIME_TYPES.includes(d.$['android:mimeType'] ?? ''));
 
 export const withShareIntake: ConfigPlugin = (config) =>

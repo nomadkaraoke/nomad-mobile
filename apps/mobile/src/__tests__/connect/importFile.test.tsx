@@ -162,7 +162,7 @@ describe('Import file', () => {
     reads(summary('spotify-account'));
     open();
     await act(async () => fireEvent.press(await screen.findByTestId('connect-import-start')));
-    expect(await screen.findByText("This doesn't look like a Spotify or Apple data export.")).toBeTruthy();
+    expect(await screen.findByText('Something went wrong. Please try again.')).toBeTruthy();
     expect(screen.getByTestId('connect-import-result')).toBeTruthy(); // what did land (nothing here)
   });
 
@@ -305,6 +305,24 @@ describe('Import file', () => {
     expect(fsState.files.has(FILE)).toBe(true);
     await act(async () => finish({ import_id: 'imp-1', status: 'queued' }));
     await waitFor(() => expect(fsState.files.has(FILE)).toBe(false));
+  });
+
+  it('deletes the cache copy when the file has nothing to add', async () => {
+    putFile(10);
+    reads(summary('spotify-account', 0));
+    open();
+    expect(await screen.findByText("We didn't find any songs to add in this file.")).toBeTruthy();
+    await waitFor(() => expect(fsState.files.has(FILE)).toBe(false));
+  });
+
+  it('deletes the cache copy when the screen closes without an upload', async () => {
+    putFile(10);
+    reads(summary('spotify-account'));
+    const { unmount } = open();
+    await screen.findByTestId('connect-import-start');
+    expect(fsState.files.has(FILE)).toBe(true);
+    unmount();
+    expect(fsState.files.has(FILE)).toBe(false);
   });
 
   it('never deletes a file outside the cache', async () => {

@@ -43,7 +43,7 @@ function name(e: unknown, route: ImportRoute): ImportErrorName {
       if (route === 'listenbrainz' && status === 400 && detail === 'not_a_zip') return 'notAnExport';
       return 'generic';
     case 'export':
-      return status === 400 ? 'notAnExport' : 'generic'; // 400 bad_chunk: decide rejected what we parsed
+      return 'generic'; // 400 bad_chunk is our bug, not the user's file: only a parse failure on the phone is "not an export"
     case 'screenshot':
       return 'generic';
   }

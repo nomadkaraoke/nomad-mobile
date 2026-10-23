@@ -2,7 +2,7 @@
 // share target for exports yet: the module is absent there, so these return null and no-op.
 import { requireOptionalNativeModule } from 'expo';
 
-/** A shared export, copied into the app's cache (`file://…/cache/shared/<name>`). */
+/** A shared export, copied into the app's cache (`file://…/cache/shared/<per-share dir>/<name>`). */
 export type SharedFile = { uri: string; name: string; mimeType: string };
 
 type Subscription = { remove(): void };

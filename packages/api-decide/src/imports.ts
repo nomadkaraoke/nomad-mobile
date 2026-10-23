@@ -17,9 +17,7 @@ import {
   spotifyExportApiServicesSpotifyExportPost,
   triggerSyncApiServicesSyncPost,
   uploadListenbrainzExportApiServicesListenbrainzUploadExportPost,
-  type AppleExportRequest,
   type ConfirmItem,
-  type SpotifyExportRequest,
 } from './client';
 
 /** A React Native file part: `FormData.append(name, file)` reads `uri`, `name` and `type`. */
@@ -57,8 +55,8 @@ export const importYouTubeMusicPlaylist = async (url: string) =>
 /** One chunk of an on-device-parsed Spotify / Apple privacy export (idempotent per chunk on the server). */
 export const uploadExportChunk = async (chunk: ExportUploadChunk) =>
   chunk.endpoint === 'spotify-export'
-    ? (await spotifyExportApiServicesSpotifyExportPost({ body: chunk.body as SpotifyExportRequest })).data
-    : (await appleExportApiServicesAppleExportPost({ body: chunk.body as AppleExportRequest })).data;
+    ? (await spotifyExportApiServicesSpotifyExportPost({ body: chunk.body })).data
+    : (await appleExportApiServicesAppleExportPost({ body: chunk.body })).data;
 
 export const connectLastfm = async (username: string) =>
   (await connectLastfmApiServicesLastfmConnectPost({ body: { username } })).data;

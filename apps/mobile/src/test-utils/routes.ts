@@ -25,6 +25,9 @@ import * as signInEmail from '../app/sign-in/email';
 import * as signInSheet from '../app/sign-in/index';
 import * as song from '../app/song/[id]';
 
+/** Stand-in for the review screen: the root layout declares the route, and its real module needs native audio. */
+const reviewStub = { default: () => null };
+
 export function appRoutes() {
   return {
     _layout: rootLayout,
@@ -49,6 +52,7 @@ export function appRoutes() {
     'make/new': makeFlow,
     'job/[id]': readyScreen,
     'job/duration/[id]': durationSheet,
+    'review/[id]': reviewStub,
     'sign-in/index': signInSheet,
     'sign-in/email': signInEmail,
     'sign-in/code': signInCode,

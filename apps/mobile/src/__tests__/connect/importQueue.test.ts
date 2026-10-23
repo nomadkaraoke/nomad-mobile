@@ -16,7 +16,8 @@ import {
 import { SERVICES_SUMMARY_KEY } from '../../discover/connect/queries';
 import { RECS_KEY } from '../../discover/useRecommendations';
 import { appStorage } from '../../storage';
-import { fsState } from '../../test-utils/memoryFs';
+import { File, fsState } from '../../test-utils/memoryFs';
+import { userKeyFor } from '../../auth/userKey';
 
 jest.mock('expo-file-system', () => require('../../test-utils/memoryFs'));
 jest.mock('@nomad/api-decide', () => ({
@@ -71,6 +72,10 @@ it('retry schedule is 5/15/30/60 s, then stays at 60 s, and a Retry-After wins',
   expect(retryDelayMs(1, 42)).toBe(42_000);
 });
 
+it('Retry-After of 0 is floored at 1 s', () => {
+  expect(retryDelayMs(1, 0)).toBe(1_000);
+});
+
 it('offline keeps pending', async () => {
   const batch = useImportQueue.getState().enqueue([chunk(0), chunk(1)], 'spotify');
   await importQueueIdle();
@@ -111,13 +116,81 @@ it('signed out keeps pending; signing back in sends', async () => {
   expect(sentIndexes()).toEqual([0]);
 });
 
-it("never sends one account's import as another account", async () => {
-  useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify');
+it("signing in as another account purges the first account's import (items, files, batch, error)", async () => {
+  const batch = useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify')!;
+  useImportQueue.setState({
+    lastError: { owner: userKeyFor('a@example.com'), batch, label: 'spotify', status: 400, detail: 'x', at: 1 },
+  });
   signIn('b@example.com');
   setImportQueueOnline(true);
   await importQueueIdle();
   expect(api.uploadExportChunk).not.toHaveBeenCalled();
+  const s = useImportQueue.getState();
+  expect(s.pending).toEqual([]);
+  expect(s.batches).toEqual({});
+  expect(s.lastError).toBeNull();
+  expect(payloadFiles()).toEqual([]);
+});
+
+it('signing out keeps the queue for the same account but hides its error', async () => {
+  const batch = useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify')!;
+  useImportQueue.setState({
+    lastError: { owner: userKeyFor('a@example.com'), batch, label: 'spotify', status: 400, detail: 'x', at: 1 },
+  });
+  signOut();
   expect(useImportQueue.getState().pending).toHaveLength(1);
+  expect(useImportQueue.getState().lastError).toBeNull();
+});
+
+it('does not send when the account changes while the payload file is being read', async () => {
+  useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify');
+  const real = File.prototype.text;
+  const spy = jest.spyOn(File.prototype, 'text').mockImplementation(async function (this: InstanceType<typeof File>) {
+    const text = await real.call(this);
+    signIn('b@example.com');
+    return text;
+  });
+  setImportQueueOnline(true);
+  await importQueueIdle();
+  spy.mockRestore();
+  expect(api.uploadExportChunk).not.toHaveBeenCalled();
+});
+
+it('three 401s in a row pause sending until the next sign-in or foreground; the payload is kept', async () => {
+  jest.useFakeTimers({ now: 3_000_000 });
+  api.uploadExportChunk.mockRejectedValue(new ApiError(401, 'expired'));
+  useImportQueue.getState().enqueue([chunk(0, 1)], 'spotify');
+  setImportQueueOnline(true);
+  await importQueueIdle();
+  for (const ms of [5_000, 15_000]) {
+    await act(async () => {
+      jest.advanceTimersByTime(ms);
+    });
+    await importQueueIdle();
+  }
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(3);
+  await act(async () => {
+    jest.advanceTimersByTime(10 * 60_000);
+  });
+  await importQueueIdle();
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(3);
+  expect(useImportQueue.getState().pending).toHaveLength(1);
+  expect(payloadFiles()).toHaveLength(1);
+
+  // The next sign-in resumes it.
+  api.uploadExportChunk.mockResolvedValue(OK);
+  signIn('a@example.com');
+  await importQueueIdle();
+  expect(api.uploadExportChunk).toHaveBeenCalledTimes(4);
+  expect(useImportQueue.getState().pending).toEqual([]);
+});
+
+it('finished batches older than 24 h are pruned', () => {
+  const owner = userKeyFor('a@example.com');
+  const old = { label: 'spotify', owner, chunks: 1, sent: 1, failed: 0, artistsAdded: 1, songsAdded: 1, finishedAt: Date.now() - 25 * 3600_000 };
+  appStorage.set('connect.importQueue', JSON.stringify({ pending: [], batches: { old, fresh: { ...old, finishedAt: Date.now() } }, lastError: null }));
+  useImportQueue.getState().rehydrate();
+  expect(Object.keys(useImportQueue.getState().batches)).toEqual(['fresh']);
 });
 
 it('enqueue while signed out does nothing', () => {

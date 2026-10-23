@@ -161,6 +161,28 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
     deleteIfCached(uri);
   }, [submitted, lbAlso, lb.step, uri]);
 
+  // Nothing to add: the picked copy has no further use.
+  const nothingToAdd = summary !== null && chunks.length === 0;
+  useEffect(() => {
+    if (!nothingToAdd || cleaned.current) return;
+    cleaned.current = true;
+    deleteIfCached(uri);
+  }, [nothingToAdd, uri]);
+
+  // Leaving the screen (back, or a failed read) with no upload still using the copy: delete it.
+  const copyInUse = useRef(false);
+  const latestUri = useRef(uri);
+  useEffect(() => {
+    copyInUse.current = submitted && lbAlso && lb.step === 'idle';
+    latestUri.current = uri;
+  });
+  useEffect(
+    () => () => {
+      if (!copyInUse.current && !cleaned.current) deleteIfCached(latestUri.current);
+    },
+    [],
+  );
+
   const start = () => {
     if (!summary || submitted || chunks.length === 0) return;
     const id = enqueue(chunks, summary.kind === 'apple' ? 'apple' : 'spotify');
