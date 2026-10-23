@@ -63,9 +63,13 @@ tags:
     visible:
       id: "song-offline-note"
     timeout: 20000
-- assertVisible:
-    id: "song-make-offline"
 - takeScreenshot: ${SHOTS}/search-offline-song-page
+# Below the versions (and, with a voice profile on the phone, the fit badge and tier line): scroll to it.
+- scrollUntilVisible:
+    element:
+      id: "song-make-offline"
+    direction: DOWN
+    timeout: 15000
 - tapOn: "Back|Navigate up"
 # Leave no list behind (and exercise Remove's confirm).
 - tapOn:

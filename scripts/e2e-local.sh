@@ -14,6 +14,7 @@
 #                                     # tonight-* screens: docs/screenshots/phase5/<platform>/<locale>;
 #                                     # voice-* / fit-* screens: docs/screenshots/phase3c/<platform>/<locale>)
 #   scripts/e2e-local.sh --platform ios voice-           # the vocal range flows (voice-1…3, Phase 3c)
+#   scripts/e2e-local.sh --platform ios --skip tonight   # every flow except those whose name contains "tonight"
 #   scripts/e2e-local.sh --platform ios tonight          # the Tonight flows (tonight-1…11)
 #
 # Env: GEN_DIR (gen checkout with scripts/local-stack.sh, at least v0.278.2 plus the fake match judge; default
@@ -72,6 +73,7 @@ KJBOX_APP="$KJBOX/sing"
 MAESTRO="${MAESTRO:-$(command -v maestro || echo "$HOME/.maestro/bin/maestro")}"
 PLATFORM=""
 FILTER=""
+SKIP=""
 LOCALE=""
 SCREEN=""
 
@@ -80,11 +82,19 @@ while [[ $# -gt 0 ]]; do
     --platform) PLATFORM="$2"; shift 2 ;;
     --locale) LOCALE="$2"; shift 2 ;;
     --screen) SCREEN="$2"; shift 2 ;;
+    --skip) SKIP="$2"; shift 2 ;;
     -h|--help) sed -n '2,44p' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
 [[ "$PLATFORM" == ios || "$PLATFORM" == android ]] || { echo "usage: $0 --platform ios|android [flow-filter]" >&2; exit 2; }
+
+# The suite's flow files: those whose name contains FILTER (all when empty), minus those whose name contains SKIP
+# (--skip tonight: a full run without ../kjbox).
+list_flows() {
+  ls "$ROOT"/maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } |
+    { if [[ -n "$SKIP" ]]; then grep -vF "$SKIP"; else cat; fi; } || true
+}
 
 # kjbox (and the stack-control helper) only when this run has Tonight flows: a flow tagged `tonight` among the
 # filtered ones, or a tonight* screen tour. Make / Search / Review / Discover runs don't need ../kjbox.
@@ -93,7 +103,7 @@ needs_kjbox() {
   local f
   while IFS= read -r f; do
     grep -qE '^\s*-\s*tonight\s*$' "$f" && return 0
-  done < <(ls "$ROOT"/maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } || true)
+  done < <(list_flows)
   return 1
 }
 NEED_KJBOX=0
@@ -256,7 +266,7 @@ SHOTS3B="docs/screenshots/phase3b/$PLATFORM"
 VOICE_SHOTS="docs/screenshots/phase3c/$PLATFORM"
 mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B" "$VOICE_SHOTS"
 ALL=()
-while IFS= read -r f; do ALL+=("$f"); done < <(ls maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } || true)
+while IFS= read -r f; do ALL+=("maestro/flows/${f##*/}"); done < <(list_flows)
 [[ ${#ALL[@]} -gt 0 ]] || { echo "no flow matches $FILTER" >&2; exit 2; }
 # The connect flows pick a screenshot and a Spotify export zip from the device: write the zip, push both.
 if printf '%s\n' "${ALL[@]}" | grep -q '/connect-'; then
