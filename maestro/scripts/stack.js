@@ -64,13 +64,16 @@
 //   fake-externals:   KNOBS (JSON, optional: metabrainz deny, spotify_embed changed, screenshot fail, …) -> resets every
 //            fake (seeded users, codes, imports) and sets those knobs (PUT ${DECIDE_STACK}/api/test/fake-externals)
 //   fake-lb-user:     USERNAME (default e2e-lb-<ms>), LISTENS (JSON [{artist, title, listened_at}], default: fixture
-//            catalog songs listened to in the last few hours) -> a fake ListenBrainz user; output.lbUsername
+//            catalog songs listened to in the last few hours) -> a fake ListenBrainz user; output.lbUsername,
+//            output.lbListens (JSON). ADD (JSON [{artist, title}]): instead, the same user (output.lbUsername unless
+//            USERNAME) keeps output.lbListens and gets these listened to just now (the fake only replaces a user).
 //   fake-lastfm-user: USERNAME (default e2e-lastfm-<ms>), TOP_TRACKS / TOP_ARTISTS (JSON, default fixture catalog
 //            songs / artists) -> a fake Last.fm user; output.lastfmUsername
 //   lb-poll:  runs decide's daily ListenBrainz poller once (POST ${DECIDE_STACK}/api/test/listenbrainz/poll)
-//            -> output.lbListensAdded
+//            -> output.lbListensAdded; EXPECT_ADDED: fails unless it added at least that many listens
 //   source-counts: SOURCE (decide source id: screenshot, spotify_playlist, spotify_export, listenbrainz, lastfm, …),
-//            MIN_SONGS / MIN_ARTISTS (default 1 / 0), TOKEN (default output.token from setup; decide takes the gen
+//            MIN_SONGS / MIN_ARTISTS (default 1 / 0) or MIN_SONGS_ADDED (at least that many more songs than the previous
+//            source-counts call's output.sourceSongs), TOKEN (default output.token from setup; decide takes the gen
 //            session) -> polls GET ${DECIDE_STACK}/api/services/summary until that source's row has at least those
 //            counts or WAIT_MS (default 20000) passes; output.sourceSongs / output.sourceArtists
 // Wrapped in a function: a flow can run this file more than once, and top-level `let`s must not collide.
@@ -455,12 +458,21 @@
       'decide fake-externals',
     );
   } else if (action === 'fake-lb-user') {
-    const username = envValue(typeof USERNAME !== 'undefined' ? USERNAME : undefined) || 'e2e-lb-' + new Date().getTime();
     const nowS = Math.floor(new Date().getTime() / 1000);
+    const addEnv = envValue(typeof ADD !== 'undefined' ? ADD : undefined);
+    const username =
+      envValue(typeof USERNAME !== 'undefined' ? USERNAME : undefined) ||
+      (addEnv ? output.lbUsername : null) ||
+      'e2e-lb-' + new Date().getTime();
+    if (addEnv && !username) throw new Error('ACTION fake-lb-user ADD needs USERNAME (or a fake-lb-user first)');
     const listensEnv = envValue(typeof LISTENS !== 'undefined' ? LISTENS : undefined);
-    const listens = listensEnv
-      ? JSON.parse(listensEnv)
-      : [
+    const listens = addEnv
+      ? JSON.parse(output.lbListens || '[]').concat(
+          JSON.parse(addEnv).map((x) => ({ artist: x.artist, title: x.title, listened_at: nowS })),
+        )
+      : listensEnv
+        ? JSON.parse(listensEnv)
+        : [
           { artist: 'Muse', title: 'Starlight', listened_at: nowS - 3600 },
           { artist: 'Muse', title: 'Starlight', listened_at: nowS - 7200 },
           { artist: 'Elton John', title: 'Rocket Man', listened_at: nowS - 10800 },
@@ -473,6 +485,7 @@
       'decide fake ListenBrainz user',
     );
     output.lbUsername = username;
+    output.lbListens = JSON.stringify(listens);
   } else if (action === 'fake-lastfm-user') {
     const username = envValue(typeof USERNAME !== 'undefined' ? USERNAME : undefined) || 'e2e-lastfm-' + new Date().getTime();
     const tracksEnv = envValue(typeof TOP_TRACKS !== 'undefined' ? TOP_TRACKS : undefined);
@@ -503,12 +516,22 @@
       'decide ListenBrainz poll',
     );
     output.lbListensAdded = String(r.listens_added);
+    const wantAdded = envValue(typeof EXPECT_ADDED !== 'undefined' ? EXPECT_ADDED : undefined);
+    if (wantAdded !== null && r.listens_added < Number(wantAdded)) {
+      throw new Error('lb-poll added ' + r.listens_added + ' listens, expected at least ' + wantAdded + ': ' + JSON.stringify(r));
+    }
   } else if (action === 'source-counts') {
     const source = envValue(typeof SOURCE !== 'undefined' ? SOURCE : undefined);
     if (!source) throw new Error('ACTION source-counts needs SOURCE');
     const token = envValue(typeof TOKEN !== 'undefined' ? TOKEN : undefined) || output.token;
     if (!token) throw new Error('ACTION source-counts needs TOKEN (or ACTION setup first)');
-    const minSongs = Number(envValue(typeof MIN_SONGS !== 'undefined' ? MIN_SONGS : undefined) || 1);
+    const added = envValue(typeof MIN_SONGS_ADDED !== 'undefined' ? MIN_SONGS_ADDED : undefined);
+    if (added !== null && !output.sourceSongs) throw new Error('MIN_SONGS_ADDED needs an earlier source-counts (output.sourceSongs)');
+    const minSongs =
+      added !== null
+        ? Number(output.sourceSongs) + Number(added)
+        : Number(envValue(typeof MIN_SONGS !== 'undefined' ? MIN_SONGS : undefined) || 1);
+    if (!Number.isFinite(minSongs)) throw new Error('source-counts: bad MIN_SONGS / MIN_SONGS_ADDED');
     const minArtists = Number(envValue(typeof MIN_ARTISTS !== 'undefined' ? MIN_ARTISTS : undefined) || 0);
     const waitMs = Number(envValue(typeof WAIT_MS !== 'undefined' ? WAIT_MS : undefined) || 20000);
     const deadline = new Date().getTime() + waitMs;

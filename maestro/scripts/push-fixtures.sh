@@ -12,7 +12,7 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 IMAGE="$ROOT/apps/mobile/assets/images/icon.png"
 ZIP="$ROOT/maestro/fixtures/generated/spotify-extended.zip"
 [[ -f "$ZIP" ]] || { echo "no $ZIP: run node scripts/make-import-fixtures.ts first" >&2; exit 1; }
-# One image name per run, so the picker's newest photo is always ours.
+# The photo's file name (Android overwrites it in place on every push).
 SHOT_NAME="connect-screenshot.png"
 
 case "${1:-}" in
@@ -24,10 +24,16 @@ case "${1:-}" in
         | grep -oE '[0-9A-F-]{36}' | head -1 || true)"
     fi
     [[ -n "$UDID" ]] || { echo "no booted simulator (set IOS_DEVICE)" >&2; exit 1; }
-    tmp="$(mktemp -d)"
-    cp "$IMAGE" "$tmp/$SHOT_NAME"
-    xcrun simctl addmedia "$UDID" "$tmp/$SHOT_NAME"
-    rm -rf "$tmp"
+    # addmedia adds a new photo every time; once per simulator is enough (a marker in its data dir, which an
+    # erase wipes along with the photos).
+    MARKER="$HOME/Library/Developer/CoreSimulator/Devices/$UDID/data/.nomad-connect-screenshot-added"
+    if [[ ! -f "$MARKER" ]]; then
+      tmp="$(mktemp -d)"
+      cp "$IMAGE" "$tmp/$SHOT_NAME"
+      xcrun simctl addmedia "$UDID" "$tmp/$SHOT_NAME"
+      rm -rf "$tmp"
+      touch "$MARKER"
+    fi
     # "On My iPhone" is the FileProvider.LocalStorage app group's "File Provider Storage" folder. It exists once
     # the Files app has run; launch it once if it doesn't yet.
     find_storage() {

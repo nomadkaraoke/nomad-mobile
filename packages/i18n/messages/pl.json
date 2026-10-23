@@ -1373,7 +1373,7 @@
     },
     "sources": {
       "addMore": "Dodaj więcej",
-      "counts": "{artists, plural, one {# wykonawca} few {# wykonawców} many {# wykonawców} other {# wykonawców}} · {songs, plural, one {# utwór} few {# utwory} many {# utworów} other {# utworów}}",
+      "counts": "{artists, plural, one {# wykonawca} few {# wykonawcy} many {# wykonawców} other {# wykonawców}} · {songs, plural, one {# utwór} few {# utwory} many {# utworów} other {# utworów}}",
       "empty": "Nic jeszcze nie połączono. Dodaj usługę muzyczną lub zaimportuj swoją historię, aby lepiej dopasować propozycje.",
       "lastImport": "Ostatni import {days, plural, =0 {dzisiaj} one {# dzień temu} few {# dni temu} many {# dni temu} other {# dni temu}}",
       "loadFailed": "Nie udało się załadować połączonych źródeł. Spróbuj ponownie za chwilę.",

@@ -104,6 +104,9 @@ describe('Connected sources on the music profile', () => {
     expect(exp.getByText('Importing')).toBeTruthy();
     expect(exp.getByText('30 artists · 250 songs')).toBeTruthy();
     expect(exp.getByText('Last import today')).toBeTruthy();
+    // Each counts line has its own id (E2E asserts one source's counts).
+    expect(screen.getByTestId('connected-counts-lastfm')).toHaveTextContent('1 artist · 1 song');
+    expect(screen.getByTestId('connected-counts-spotify_export')).toHaveTextContent('30 artists · 250 songs');
   });
 
   it('says nothing is connected yet, and Add more opens the hub', async () => {

@@ -175,7 +175,9 @@ function SourceRow({
           <Text className={`text-xs ${statusKey === 'ok' ? 'text-muted' : 'text-primary'}`}>{t(`status.${statusKey}`)}</Text>
         </View>
       </View>
-      <Text variant="muted">{t('counts', { artists: s.artists ?? 0, songs: s.songs ?? 0 })}</Text>
+      <Text testID={`connected-counts-${s.source}`} variant="muted">
+        {t('counts', { artists: s.artists ?? 0, songs: s.songs ?? 0 })}
+      </Text>
       {s.last_import_at ? <Text variant="muted">{t('lastImport', { days: daysSince(s.last_import_at) })}</Text> : null}
       {status === 'stale' ? (
         <Pressable
