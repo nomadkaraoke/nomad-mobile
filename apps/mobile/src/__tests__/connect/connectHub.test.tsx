@@ -115,14 +115,42 @@ describe('Connect your music hub', () => {
     expect(screen.getByText('No Apple Music subscription? Import your play history instead')).toBeTruthy();
   });
 
+  // The hub also hides the screenshot card while capabilities load, so "hidden" only means something once the
+  // capabilities answer has rendered. The summary answers strictly after it (and a macrotask later); its
+  // Connected tag showing proves the capabilities answer is already on screen.
+  const settleCapabilitiesThenSummary = (screenshot_import: boolean) => {
+    let capabilitiesAnswered!: Promise<unknown>;
+    const asked = new Promise<void>((resolve) => {
+      m(decide.getServiceCapabilities).mockImplementation(() => {
+        capabilitiesAnswered = Promise.resolve({ screenshot_import, listenbrainz_oauth: false });
+        resolve();
+        return capabilitiesAnswered;
+      });
+    });
+    m(decide.getServicesSummary).mockImplementation(async () => {
+      await asked;
+      await capabilitiesAnswered;
+      await new Promise((r) => setTimeout(r, 0));
+      return { sources: [source({ source: 'lastfm' })], capabilities: { screenshot_import, listenbrainz_oauth: false } };
+    });
+  };
+
   it('hides screenshot card when capability off', async () => {
-    m(decide.getServiceCapabilities).mockResolvedValue({ screenshot_import: false, listenbrainz_oauth: false });
+    settleCapabilitiesThenSummary(false);
     open();
-    await screen.findByTestId('connect-card-playlist');
-    await waitFor(() => expect(decide.getServiceCapabilities).toHaveBeenCalled());
+    expect(await screen.findByTestId('connect-card-lastfm-connected')).toBeTruthy();
 
     expect(screen.queryByTestId('connect-card-screenshot')).toBeNull();
     expect(screen.getAllByTestId(CARD_ID)).toHaveLength(5);
+  });
+
+  it('shows the screenshot card when the capability is on (same timing as the hidden case)', async () => {
+    settleCapabilitiesThenSummary(true);
+    open();
+    expect(await screen.findByTestId('connect-card-lastfm-connected')).toBeTruthy();
+
+    expect(screen.getByTestId('connect-card-screenshot')).toBeTruthy();
+    expect(screen.getAllByTestId(CARD_ID)).toHaveLength(6);
   });
 
   it.each([
@@ -162,6 +190,20 @@ describe('Connect your music hub', () => {
     expect(screen.queryByTestId('connect-card-listenbrainz-connected')).toBeNull();
   });
 
+  it('Apple Music flagged for reconnecting by decide re-enables its card', async () => {
+    sources = [source({ source: 'apple_music', status: 'needs_reconnect', auth: 'oauth' })];
+    m(decide.listMusicServices).mockResolvedValue([
+      { service_type: 'apple_music', service_username: 'Apple Music', last_sync_at: '2026-10-22T16:00:00Z', sync_status: 'idle', sync_error: null, tracks_synced: 1, songs_synced: 9 },
+    ]);
+    open();
+    await waitFor(() => expect(decide.getServicesSummary).toHaveBeenCalled());
+    await waitFor(() => expect(screen.getByTestId('connect-card-apple').props.accessibilityState.disabled).toBe(false));
+    expect(screen.queryByTestId('connect-card-apple-connected')).toBeNull();
+
+    fireEvent.press(screen.getByTestId('connect-card-apple'));
+    await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith(LINK.connect_url));
+  });
+
   it('offline: the cards stay, and Apple Music connect says you are offline', async () => {
     mockConnected = false;
     open();
@@ -169,6 +211,7 @@ describe('Connect your music hub', () => {
     expect(await screen.findByTestId('connect-offline')).toBeTruthy();
     expect(screen.getByText("You're offline")).toBeTruthy();
     expect(screen.getAllByTestId(CARD_ID).length).toBeGreaterThanOrEqual(5);
+    expect(screen.getByTestId('connect-card-apple').props.accessibilityState.disabled).toBe(true);
     fireEvent.press(screen.getByTestId('connect-card-apple'));
     expect(decide.startAppleMusicLink).not.toHaveBeenCalled();
   });

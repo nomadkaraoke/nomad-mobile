@@ -40,7 +40,11 @@ export function ConnectHub() {
   const connectedSources = new Set((summary.data?.sources ?? []).filter(hasData).map((s) => s.source));
   // Hidden until decide says it can (also while asking), so the card never appears and then vanishes.
   const screenshotOn = capabilities.data?.screenshot_import === true;
-  const appleConnected = apple.status === 'connected' || apple.status === 'reading';
+  // decide can flag Apple Music for reconnecting (an expired token) before the services list says error.
+  const appleNeedsReconnect = (summary.data?.sources ?? []).some(
+    (s) => s.source === 'apple_music' && s.status === 'needs_reconnect',
+  );
+  const appleConnected = !appleNeedsReconnect && (apple.status === 'connected' || apple.status === 'reading');
 
   return (
     <Screen testID="connect-hub" scroll underHeader>

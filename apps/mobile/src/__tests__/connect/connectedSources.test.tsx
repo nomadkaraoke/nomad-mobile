@@ -4,7 +4,7 @@ import { IntlProvider } from '@nomad/i18n';
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 import * as WebBrowser from 'expo-web-browser';
-import { Alert, View, type AlertButton } from 'react-native';
+import { Alert, Linking, View, type AlertButton } from 'react-native';
 
 import { useAuth } from '../../auth/store';
 import { ImportResult } from '../../discover/connect/ImportResult';
@@ -12,6 +12,16 @@ import { gen, session } from '../../test-utils/genAuthMock';
 import { appRoutes } from '../../test-utils/routes';
 
 jest.setTimeout(20_000);
+
+let mockConnected = true;
+jest.mock('@react-native-community/netinfo', () => {
+  const actual = jest.requireActual('@react-native-community/netinfo/jest/netinfo-mock.js');
+  return { ...actual, useNetInfo: () => ({ isConnected: mockConnected, isInternetReachable: mockConnected }) };
+});
+jest.mock('../../../modules/apple-music-auth', () => ({
+  nativeAppleMusicAvailable: () => false,
+  requestAppleMusicUserToken: jest.fn(),
+}));
 
 jest.mock('@nomad/api-decide', () => ({
   ...jest.requireActual('@nomad/api-decide'),
@@ -29,6 +39,8 @@ jest.mock('@nomad/api-decide', () => ({
   getServicesSummary: jest.fn(),
   getServiceCapabilities: jest.fn(async () => ({ screenshot_import: true, listenbrainz_oauth: false })),
   removeSourceData: jest.fn(async () => ({ removed_songs: 40, removed_artists: 12 })),
+  startAppleMusicLink: jest.fn(async () => ({ connect_url: 'https://decide.test/en/connect/apple-music?state=s', expires_in: 600 })),
+  getAppleMusicAppDeveloperToken: jest.fn(async () => 'dev-token'),
 }));
 jest.mock('@nomad/api-gen', () => ({
   ...jest.requireActual('@nomad/api-gen'),
@@ -65,6 +77,8 @@ const open = () =>
 beforeEach(async () => {
   jest.clearAllMocks();
   jest.useRealTimers();
+  mockConnected = true;
+  jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
   await useAuth.getState().signOut();
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 } as never);
   sources = [];
@@ -154,6 +168,59 @@ describe('Connected sources on the music profile', () => {
 
     fireEvent.press(screen.getByTestId('connected-reconnect-listenbrainz'));
     expect(await screen.findByTestId('stub-listenbrainz')).toBeTruthy();
+  });
+
+  it('Apple Music reconnects in place through MusicKit, not via the hub', async () => {
+    sources = [source({ source: 'apple_music', status: 'needs_reconnect', auth: 'oauth' })];
+    open();
+
+    fireEvent.press(await screen.findByTestId('connected-reconnect-apple_music'));
+
+    await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith('https://decide.test/en/connect/apple-music?state=s'));
+    expect(screen.queryByTestId('connect-hub')).toBeNull();
+  });
+
+  it('an unknown status reads as up to date', async () => {
+    sources = [source({ source: 'lastfm', status: 'paused' as never })];
+    open();
+
+    const row = within(await screen.findByTestId('connected-row-lastfm'));
+    expect(row.getByText('Up to date')).toBeTruthy();
+  });
+
+  it('offline with nothing loaded says so instead of spinning', async () => {
+    mockConnected = false;
+    m(decide.getServicesSummary).mockImplementation(() => new Promise(() => {}));
+    open();
+
+    expect(await screen.findByTestId('connected-offline')).toBeTruthy();
+    expect(screen.queryByTestId('connected-loading')).toBeNull();
+  });
+
+  it('offline, Remove and Reconnect wait for a connection', async () => {
+    mockConnected = false;
+    sources = [source({ source: 'listenbrainz', status: 'needs_reconnect' })];
+    const alert = jest.spyOn(Alert, 'alert');
+    open();
+
+    const remove = await screen.findByTestId('connected-remove-listenbrainz');
+    expect(screen.getByTestId('connected-offline')).toBeTruthy();
+    expect(remove.props.accessibilityState.disabled).toBe(true);
+    expect(screen.getByTestId('connected-reconnect-listenbrainz').props.accessibilityState.disabled).toBe(true);
+    fireEvent.press(remove);
+    fireEvent.press(screen.getByTestId('connected-reconnect-listenbrainz'));
+
+    expect(alert).not.toHaveBeenCalled();
+    expect(decide.removeSourceData).not.toHaveBeenCalled();
+    expect(screen.queryByTestId('stub-listenbrainz')).toBeNull();
+  });
+
+  it('a summary that fails to load says so (not "nothing connected")', async () => {
+    m(decide.getServicesSummary).mockRejectedValue(new decide.ApiError(503, 'down'));
+    open();
+
+    expect(await screen.findByTestId('connected-load-error', {}, { timeout: 5000 })).toBeTruthy();
+    expect(screen.queryByTestId('connected-empty')).toBeNull();
   });
 
   it('stale source shows nudge', async () => {

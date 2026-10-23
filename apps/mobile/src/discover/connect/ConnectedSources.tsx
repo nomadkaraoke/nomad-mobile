@@ -24,13 +24,13 @@ const SOURCE_NAME = {
   apple_export: 'appleExport',
 } as const;
 
-const STATUS = {
+const STATUS: Record<string, 'ok' | 'needsReconnect' | 'importing' | 'stale' | 'error'> = {
   ok: 'ok',
   needs_reconnect: 'needsReconnect',
   importing: 'importing',
   stale: 'stale',
   error: 'error',
-} as const;
+};
 
 /** Where ListenBrainz connects to Spotify, so new listens keep arriving (the stale nudge). */
 export const LB_MUSIC_SERVICES_URL = 'https://listenbrainz.org/settings/music-services/details/';
@@ -54,8 +54,9 @@ const daysSince = (iso: string) => Math.max(0, Math.floor((Date.now() - Date.par
 /**
  * Every connected or imported source (decide's services summary) with its status, counts and last import, and
  * Remove (confirm first) / Reconnect / the ListenBrainz stale nudge. On Me -> Your music profile, under "Connected".
+ * Apple Music reconnects in place through `onReconnectApple` (the screen's `useAppleMusic().connect`).
  */
-export function ConnectedSources() {
+export function ConnectedSources({ onReconnectApple }: { onReconnectApple?: () => void }) {
   const t = useTranslations('connect');
   const summary = useServicesSummary();
   const offline = useOffline();
@@ -88,7 +89,28 @@ export function ConnectedSources() {
     ]);
   };
 
-  if (summary.isPending) return <ActivityIndicator testID="connected-loading" />;
+  const reconnect = (source: string) => {
+    if (source === 'apple_music' && onReconnectApple) onReconnectApple();
+    else router.push(reconnectHref(source));
+  };
+
+  if (summary.isPending) {
+    // Offline with nothing cached, the request waits for a connection: say so instead of spinning.
+    return offline ? (
+      <Text testID="connected-offline" variant="muted">
+        {t('offline')}
+      </Text>
+    ) : (
+      <ActivityIndicator testID="connected-loading" />
+    );
+  }
+  if (summary.isError && !summary.data) {
+    return (
+      <Text testID="connected-load-error" variant="error">
+        {t('sources.loadFailed')}
+      </Text>
+    );
+  }
   const sources = summary.data?.sources ?? [];
 
   return (
@@ -116,6 +138,7 @@ export function ConnectedSources() {
           offline={offline}
           removing={removing === s.source}
           onRemove={() => confirmRemove(s.source)}
+          onReconnect={() => reconnect(s.source)}
         />
       ))}
     </View>
@@ -128,24 +151,28 @@ function SourceRow({
   offline,
   removing,
   onRemove,
+  onReconnect,
 }: {
   source: SourceSummary;
   name: string;
   offline: boolean;
   removing: boolean;
   onRemove: () => void;
+  onReconnect: () => void;
 }) {
   const t = useTranslations('connect.sources');
   const status = s.status ?? 'ok';
+  // A status this build doesn't know yet reads as the neutral one.
+  const statusKey = STATUS[status] ?? 'ok';
   return (
     <View testID={`connected-row-${s.source}`} className="gap-1 border-b border-border pb-3">
       <View className="flex-row items-center gap-2">
         <Text className="flex-1 font-semibold">{name}</Text>
         <View
           testID={`connected-status-${s.source}`}
-          className={`rounded-full border px-2 py-0.5 ${status === 'ok' ? 'border-border' : 'border-primary'}`}
+          className={`rounded-full border px-2 py-0.5 ${statusKey === 'ok' ? 'border-border' : 'border-primary'}`}
         >
-          <Text className={`text-xs ${status === 'ok' ? 'text-muted' : 'text-primary'}`}>{t(`status.${STATUS[status]}`)}</Text>
+          <Text className={`text-xs ${statusKey === 'ok' ? 'text-muted' : 'text-primary'}`}>{t(`status.${statusKey}`)}</Text>
         </View>
       </View>
       <Text variant="muted">{t('counts', { artists: s.artists ?? 0, songs: s.songs ?? 0 })}</Text>
@@ -167,7 +194,7 @@ function SourceRow({
               testID={`connected-reconnect-${s.source}`}
               label={t('reconnect')}
               disabled={offline}
-              onPress={() => router.push(reconnectHref(s.source))}
+              onPress={onReconnect}
             />
           </View>
         ) : null}

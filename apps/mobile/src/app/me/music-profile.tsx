@@ -225,7 +225,7 @@ export default function MusicProfileScreen() {
           </Pressable>
         }
       >
-        <ConnectedSources />
+        <ConnectedSources onReconnectApple={() => void apple.connect()} />
       </ProfileSection>
 
       {/* Phase 3b adds the other music services (Spotify export, ListenBrainz, Last.fm) here; Phase 3c adds vocal range. */}

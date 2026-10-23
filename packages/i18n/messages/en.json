@@ -1271,7 +1271,8 @@
         "importing": "Importing",
         "stale": "No new listens",
         "error": "Problem"
-      }
+      },
+      "loadFailed": "We couldn't load your connected sources. Please try again in a moment."
     },
     "source": {
       "spotify": "Spotify",
