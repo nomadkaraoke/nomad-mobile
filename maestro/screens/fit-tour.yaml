@@ -1,0 +1,129 @@
+# Vocal fit screen tour (Phase 3c Task 19): Discover's Singable chip without a voice profile (the voice-test CTA),
+# the fake-mic voice test saved to decide, then the picks with fit badges, Singable on, the song page's badge and
+# tier line, and Me's "Your voice" section. Needs Metro with EXPO_PUBLIC_FAKE_MIC=baritone-scale, the gen local
+# stack and decide's local stack from the 3c branch (fixture vr_* data, voice endpoints). Run from the repo root:
+#   maestro test -e STACK=http://127.0.0.1:8010 -e FIT_SHOTS=docs/screenshots/phase3c/ios maestro/screens/fit-tour.yaml
+appId: com.nomadkaraoke.mobile
+onFlowComplete:
+  - runFlow: ../common/discover-reset-filters.yaml
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: fittour
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["rock"],"decades":["2000s"],"energy":"high","artists":[{"name":"Muse","affinity":"love"}]}'
+- tapOn:
+    id: "library-filter-any"
+# A voice profile left on the phone by an earlier run goes first (Me → Your music profile → Remove my voice).
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- scrollUntilVisible:
+    element:
+      id: "voice-section"
+    direction: DOWN
+    timeout: 15000
+- runFlow:
+    when:
+      visible:
+        id: "voice-remove"
+    commands:
+      - tapOn:
+          id: "voice-remove"
+      - extendedWaitUntil:
+          visible:
+            id: "voice-test"
+          timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "voice-test"
+    direction: DOWN
+    timeout: 10000
+- takeScreenshot: ${FIT_SHOTS}/fit-me-no-voice
+- tapOn: "Back|Navigate up"
+- tapOn:
+    id: "tab-discover"
+- extendedWaitUntil:
+    visible:
+      id: "filter-chip-singable-cta"
+    timeout: 15000
+- takeScreenshot: ${FIT_SHOTS}/fit-discover-no-voice
+# The CTA chip opens the voice test. The tour picks Baritone (self-report): the fake mic's short sing slice gives a
+# comfortable middle of only G3-C4, which no fixture song fits, so its picks would carry no badges.
+- tapOn:
+    id: "filter-chip-singable-cta"
+- extendedWaitUntil:
+    visible:
+      id: "voice-skip"
+    timeout: 15000
+- tapOn:
+    id: "voice-skip"
+- tapOn:
+    id: "voice-self-baritone"
+- tapOn:
+    id: "voice-self-save"
+- extendedWaitUntil:
+    visible:
+      id: "voice-saved"
+    timeout: 20000
+- tapOn:
+    id: "voice-close"
+# Decide has the profile: the picks reload with their fit.
+- extendedWaitUntil:
+    visible:
+      id: "filter-chip-singable"
+    timeout: 15000
+- extendedWaitUntil:
+    visible:
+      id: "fit-badge-.*"
+    timeout: 30000
+- takeScreenshot: ${FIT_SHOTS}/fit-discover-badges
+- tapOn:
+    id: "filter-chip-singable"
+- extendedWaitUntil:
+    visible:
+      id: "filter-chip-singable"
+      selected: true
+    timeout: 5000
+- extendedWaitUntil:
+    visible:
+      id: "rec-row-.*-0|discover-picks-singable-empty|discover-picks-empty"
+    timeout: 30000
+- takeScreenshot: ${FIT_SHOTS}/fit-discover-singable-on
+- tapOn:
+    id: "filter-chip-singable"
+# A song with a fit badge: the song page's badge and tier line.
+- extendedWaitUntil:
+    visible:
+      id: "fit-badge-.*"
+    timeout: 30000
+- tapOn:
+    id: "fit-badge-.*"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: "fit-badge-song"
+    timeout: 20000
+- assertVisible:
+    id: "fit-tier"
+- takeScreenshot: ${FIT_SHOTS}/fit-song
+- tapOn: "Back|Navigate up"
+# Me → Your music profile → Your voice.
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- scrollUntilVisible:
+    element:
+      id: "voice-remove"
+    direction: DOWN
+    timeout: 15000
+- assertVisible: "Likely Baritone"
+- takeScreenshot: ${FIT_SHOTS}/fit-me-voice
