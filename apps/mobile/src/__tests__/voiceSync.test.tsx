@@ -10,7 +10,14 @@ import { useAuth } from '../auth/store';
 import { useDiscoverStale } from '../discover/staleStore';
 import { appStorage } from '../storage';
 import { session } from '../test-utils/genAuthMock';
-import { sendPendingVoice, useFlushPendingVoice, useFlushVoiceOnDiscoverMount, useSaveVoiceProfile, useVoiceProfile } from '../voice/useVoiceProfile';
+import {
+  sendPendingVoice,
+  useFlushPendingVoice,
+  useFlushVoiceOnDiscoverMount,
+  useSaveVoiceProfile,
+  useVoiceProfile,
+  useVoiceSync,
+} from '../voice/useVoiceProfile';
 import { profileFromSelfReport, toVoiceProfileIn, useVoiceStore, VOICE_STORAGE_KEY } from '../voice/voiceStore';
 
 jest.mock('@react-native-community/netinfo', () => ({ useNetInfo: jest.fn() }));
@@ -183,6 +190,22 @@ describe('useVoiceProfile', () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     await act(async () => {});
     expect(useVoiceStore.getState()).toMatchObject({ profile: local(T1), pending: true });
+  });
+});
+
+describe('useVoiceSync (AppProviders)', () => {
+  it('adopts a newer profile decide has without Me mounted', async () => {
+    act(() => useVoiceStore.getState().adopt(local(T1)));
+    fetchMock.mockResolvedValue(json({ profile: serverOut(T2) }));
+    renderHook(() => useVoiceSync(), { wrapper: wrapperFor() });
+    await waitFor(() => expect(useVoiceStore.getState().profile).toMatchObject({ voiceType: 'alto', measuredAt: T2 }));
+    expect(useVoiceStore.getState().pending).toBe(false);
+  });
+
+  it('adopts the decide profile on a phone with none', async () => {
+    fetchMock.mockResolvedValue(json({ profile: serverOut(T2) }));
+    renderHook(() => useVoiceSync(), { wrapper: wrapperFor() });
+    await waitFor(() => expect(useVoiceStore.getState().profile?.voiceType).toBe('alto'));
   });
 });
 

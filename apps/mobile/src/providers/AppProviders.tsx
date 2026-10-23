@@ -14,7 +14,7 @@ import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
 import { useKaraokeLogFreshness } from '../tonight/log/IdeasPanel';
 import { useLogSync } from '../tonight/log/useLogSync';
-import { useFlushPendingVoice } from '../voice/useVoiceProfile';
+import { useVoiceSync } from '../voice/useVoiceProfile';
 import { installDevWarningTrace } from './devWarnings';
 
 // Before anything formats: Hermes has no Intl.PluralRules (ICU plurals would throw).
@@ -44,9 +44,12 @@ function LogSync() {
   return null;
 }
 
-/** Phase 3c: sends a voice profile decide hasn't got yet (offline / 5xx / signed-out saves) on sign-in and foreground. */
+/**
+ * Phase 3c: sends a voice profile decide hasn't got yet (offline / 5xx / signed-out saves) on sign-in and foreground,
+ * and adopts a newer one decide has (saved on another phone).
+ */
 function VoiceFlush() {
-  useFlushPendingVoice();
+  useVoiceSync();
   return null;
 }
 

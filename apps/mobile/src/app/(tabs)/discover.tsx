@@ -7,7 +7,7 @@ import {
 } from "@nomad/api-decide";
 import { activeFilterCount, withoutVoiceFilters } from "@nomad/core";
 import { useTranslations } from "@nomad/i18n";
-import { Button, List, Screen, Text, TextField } from "@nomad/ui";
+import { Button, List, Screen, Text, TextField, type ListHandle } from "@nomad/ui";
 import { router, useIsFocused, type Href } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -178,6 +178,17 @@ export default function DiscoverScreen() {
   const [menuSong, setMenuSong] = useState<RecSong | null>(null);
   const [pulling, setPulling] = useState(false);
   const filtersActive = activeFilterCount(filters) > 0 || library !== "any";
+  // A filter change while the picks are scrolled down swaps the data under FlashList's scroll offset, and the
+  // rows stayed unrendered (a blank list) until the next scroll (Singable on, seen on iOS): start the new
+  // picks from the top.
+  const picksList = useRef<ListHandle>(null);
+  const filtersKey = JSON.stringify([filters, library]);
+  const lastFiltersKey = useRef(filtersKey);
+  useEffect(() => {
+    if (lastFiltersKey.current === filtersKey) return;
+    lastFiltersKey.current = filtersKey;
+    picksList.current?.scrollToIndex(0, { animated: false });
+  }, [filtersKey]);
   const picks: PicksMode = !signedIn
     ? "signin"
     : recs.data
@@ -609,6 +620,7 @@ export default function DiscoverScreen() {
               </Text>
             ) : null}
             <List
+              ref={picksList}
               testID="discover-picks"
               data={picksItems}
               keyExtractor={(it) =>

@@ -140,6 +140,17 @@ export function useFlushPendingVoice() {
   }, [offline, email]);
 }
 
+/**
+ * Mounted once in AppProviders: flushes a pending profile (useFlushPendingVoice) and keeps the phone's copy reconciled
+ * with decide's on every screen, not only on Me. Without it, a profile decide got from another phone (or a seeded one)
+ * never reached this phone's badges: the song page fitted against no or an older profile while the picks' badges
+ * (decide's) used the newer one, and Singable offered the voice test.
+ */
+export function useVoiceSync() {
+  useFlushPendingVoice();
+  useVoiceProfile();
+}
+
 /** Discover's own trigger: tries a pending profile whenever the tab mounts while signed in. */
 export function useFlushVoiceOnDiscoverMount() {
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
