@@ -4,7 +4,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { useState, type ReactNode } from 'react';
 import { Linking, View } from 'react-native';
 
-import { pickExportFile } from './ImportFile';
+import { pickExportFile } from './pickExportFile';
 import { scheduleExportReminders } from './reminders';
 
 const SPOTIFY_PRIVACY = 'https://www.spotify.com/account/privacy/';

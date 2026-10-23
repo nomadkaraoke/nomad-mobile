@@ -53,6 +53,13 @@ it('schedules +5d and +25d and replaces earlier ids', async () => {
   expect(stored()).toEqual({ account: 'id-1', extended: 'id-2' });
 });
 
+it('creates the Android channel before asking permission (Android 13+ prompts only once a channel exists)', async () => {
+  await scheduleExportReminders(COPY, NOW);
+  const channel = N.setNotificationChannelAsync.mock.invocationCallOrder[0]!;
+  const ask = N.requestPermissionsAsync.mock.invocationCallOrder[0]!;
+  expect(channel).toBeLessThan(ask);
+});
+
 it('denied permission schedules nothing', async () => {
   appStorage.set('connect.spotifyReminders', JSON.stringify({ account: 'old-a' }));
   N.requestPermissionsAsync.mockResolvedValue({ granted: false, status: 'denied', canAskAgain: false } as never);

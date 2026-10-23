@@ -3,6 +3,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as Notifications from 'expo-notifications';
 import * as WebBrowser from 'expo-web-browser';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { router } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
 import { Linking } from 'react-native';
 
@@ -96,7 +97,13 @@ describe('Spotify export guide', () => {
     const app = open();
     await act(async () => fireEvent.press(await screen.findByTestId('connect-spotify-pick')));
     expect(DocumentPicker.getDocumentAsync).toHaveBeenCalledWith({
-      type: ['application/zip', 'text/csv', 'text/comma-separated-values'],
+      type: [
+        'application/zip',
+        'application/x-zip-compressed',
+        'application/octet-stream',
+        'text/csv',
+        'text/comma-separated-values',
+      ],
       copyToCacheDirectory: true,
     });
     await waitFor(() => expect(app.getPathname()).toBe('/discover/connect/import-file'));
@@ -108,5 +115,21 @@ describe('Spotify export guide', () => {
     const app = open();
     await act(async () => fireEvent.press(await screen.findByTestId('connect-spotify-pick')));
     expect(app.getPathname()).toBe('/discover/connect/spotify-export');
+  });
+
+  it('a reminder tap that cold-starts the app lands on the guide, not the / redirect', async () => {
+    N.getLastNotificationResponse.mockReturnValueOnce({
+      notification: { request: { content: { data: { url: '/discover/connect/spotify-export' } } } },
+    } as never);
+    const app = renderRouter(appRoutes(), { initialUrl: '/' });
+    await waitFor(() => expect(app.getPathname()).toBe('/discover/connect/spotify-export'));
+    expect(await screen.findByTestId('connect-spotify-remind')).toBeTruthy();
+    // and it stays there (the index redirect must not win afterwards)
+    await act(async () => {});
+    expect(app.getPathname()).toBe('/discover/connect/spotify-export');
+    expect(N.clearLastNotificationResponse).toHaveBeenCalled();
+    // Back from there goes to Discover (the redirect target), not an empty stack.
+    await act(async () => router.back());
+    await waitFor(() => expect(app.getPathname()).toBe('/discover'));
   });
 });

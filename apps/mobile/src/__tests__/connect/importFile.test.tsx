@@ -156,15 +156,14 @@ describe('Import file', () => {
     expect(appStorage.getString('connect.spotifyReminders')).toBe('{}');
   });
 
-  it('a failed chunk keeps the reminders and shows the error', async () => {
-    appStorage.set('connect.spotifyReminders', JSON.stringify({ account: 'rem-a' }));
+  it('a chunk decide rejects shows the error', async () => {
     m(decide.uploadExportChunk).mockRejectedValue(new decide.ApiError(400, 'bad_chunk'));
     jest.spyOn(console, 'warn').mockImplementation(() => {});
     reads(summary('spotify-account'));
     open();
     await act(async () => fireEvent.press(await screen.findByTestId('connect-import-start')));
     expect(await screen.findByText("This doesn't look like a Spotify or Apple data export.")).toBeTruthy();
-    expect(N.cancelScheduledNotificationAsync).not.toHaveBeenCalled();
+    expect(screen.getByTestId('connect-import-result')).toBeTruthy(); // what did land (nothing here)
   });
 
   it('extended + oauth shows LB checkbox', async () => {
@@ -230,11 +229,91 @@ describe('Import file', () => {
     reads(summary('spotify-account', 0, { skipped: { podcasts: 4, short: 7, malformed: 1 }, truncated: true }));
     open();
     expect(await screen.findByTestId('connect-import-skipped')).toBeTruthy();
-    expect(
-      screen.getByText('Skipped: 4 podcast, audiobook or video plays, 7 plays under 30 seconds, 1 unreadable entries.'),
-    ).toBeTruthy();
+    expect(screen.getByText("We didn't find any songs to add in this file.")).toBeTruthy();
+    expect(screen.getByText('4 podcast, audiobook or video plays')).toBeTruthy();
+    expect(screen.getByText('7 plays under 30 seconds')).toBeTruthy();
+    expect(screen.getByText('1 unreadable entry')).toBeTruthy();
     expect(screen.getByTestId('connect-import-truncated')).toBeTruthy();
     expect(screen.queryByTestId('connect-import-start')).toBeNull();
     expect(screen.queryByTestId('connect-import-result')).toBeNull();
+  });
+
+  it('lists only the non-zero skipped kinds', async () => {
+    reads(summary('spotify-account', 0, { skipped: { podcasts: 0, short: 1, malformed: 0 } }));
+    open();
+    expect(await screen.findByText('1 play under 30 seconds')).toBeTruthy();
+    expect(screen.queryByText(/podcast/)).toBeNull();
+    expect(screen.queryByText(/unreadable/)).toBeNull();
+  });
+
+  it('a library-only export (no plays) can still be added, with its liked songs and playlists in the preview', async () => {
+    const ref = { artist: 'Fixture Artist', title: 'Fixture Song' };
+    reads(summary('spotify-account', 0, { liked: [ref, { ...ref, title: 'Fixture Song 2' }], playlists: [{ name: 'Mix', tracks: [ref] }] }));
+    open();
+    expect(await screen.findByText('Plus 2 liked songs and 1 playlist')).toBeTruthy();
+    expect(screen.queryByText("We didn't find any songs to add in this file.")).toBeNull();
+    await act(async () => fireEvent.press(screen.getByTestId('connect-import-start')));
+    expect(await screen.findByTestId('connect-import-result')).toBeTruthy();
+    expect(m(decide.uploadExportChunk).mock.calls[0]![0].body.liked).toHaveLength(2);
+  });
+
+  it('signed out at enqueue: no result, no reminder cancelled, the button stays', async () => {
+    appStorage.set('connect.spotifyReminders', JSON.stringify({ account: 'rem-a' }));
+    const real = useImportQueue.getState().enqueue;
+    useImportQueue.setState({ enqueue: () => null });
+    try {
+      reads(summary('spotify-account'));
+      open();
+      await act(async () => fireEvent.press(await screen.findByTestId('connect-import-start')));
+      expect(await screen.findByTestId('connect-import-error')).toBeTruthy();
+      expect(screen.queryByTestId('connect-import-result')).toBeNull();
+      expect(screen.getByTestId('connect-import-start')).toBeTruthy();
+      expect(N.cancelScheduledNotificationAsync).not.toHaveBeenCalled();
+    } finally {
+      useImportQueue.setState({ enqueue: real });
+    }
+  });
+
+  it('cancels the reminders as soon as the import is queued (even offline)', async () => {
+    mockConnected = false;
+    appStorage.set('connect.spotifyReminders', JSON.stringify({ account: 'rem-a', extended: 'rem-e' }));
+    reads(summary('spotify-extended'));
+    open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-import-start')));
+    expect(await screen.findByText('Waiting for connection')).toBeTruthy();
+    await waitFor(() => expect(N.cancelScheduledNotificationAsync).toHaveBeenCalledWith('rem-e'));
+    expect(N.cancelScheduledNotificationAsync).toHaveBeenCalledWith('rem-a');
+  });
+
+  it('deletes the picked cache copy once queued (no ListenBrainz)', async () => {
+    mockConnected = false;
+    reads(summary('spotify-account'));
+    open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-import-start')));
+    await waitFor(() => expect(fsState.files.has(FILE)).toBe(false));
+  });
+
+  it('keeps the cache copy until the ListenBrainz upload is done', async () => {
+    m(decide.getServicesSummary).mockResolvedValue({ sources: [lbRow('oauth')], capabilities: {} });
+    let finish!: (v: unknown) => void;
+    m(decide.uploadExportToListenBrainz).mockReturnValue(new Promise((r) => (finish = r)));
+    reads(summary('spotify-extended'));
+    open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-lb-also')));
+    await act(async () => fireEvent.press(screen.getByTestId('connect-import-start')));
+    await waitFor(() => expect(decide.uploadExportToListenBrainz).toHaveBeenCalled());
+    expect(fsState.files.has(FILE)).toBe(true);
+    await act(async () => finish({ import_id: 'imp-1', status: 'queued' }));
+    await waitFor(() => expect(fsState.files.has(FILE)).toBe(false));
+  });
+
+  it('never deletes a file outside the cache', async () => {
+    const shared = 'file:///document/shared/export.zip';
+    fsState.files.set(shared, new Uint8Array(10));
+    reads(summary('spotify-account'));
+    renderRouter(appRoutes(), { initialUrl: `/discover/connect/import-file?file=${encodeURIComponent(shared)}&name=export.zip` });
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-import-start')));
+    expect(await screen.findByTestId('connect-import-result')).toBeTruthy();
+    expect(fsState.files.has(shared)).toBe(true);
   });
 });

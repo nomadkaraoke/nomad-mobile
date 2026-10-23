@@ -54,17 +54,18 @@ async function cancelId(id: string | undefined): Promise<void> {
 }
 
 /**
- * Asks for notification permission, then schedules the +5 d (Account data) and +25 d (Extended history) reminders,
+ * Creates the Android channel, asks for notification permission, then schedules the +5 d (Account data) and +25 d (Extended history) reminders,
  * replacing any scheduled earlier. Returns 'denied' (nothing scheduled) when permission is refused.
  */
 export async function scheduleExportReminders(copy: ReminderCopy, now = Date.now()): Promise<'scheduled' | 'denied'> {
-  const permission = await Notifications.requestPermissionsAsync();
-  if (!permission.granted) return 'denied';
-  // Android 8+ needs a channel; elsewhere this resolves null.
+  // The channel first: Android 13+ only shows the permission prompt once the app has a channel (SDK docs).
+  // Elsewhere this resolves null.
   await Notifications.setNotificationChannelAsync(REMINDER_CHANNEL, {
     name: copy.channelName,
     importance: Notifications.AndroidImportance.DEFAULT,
   });
+  const permission = await Notifications.requestPermissionsAsync();
+  if (!permission.granted) return 'denied';
   const earlier = load();
   await Promise.all(KINDS.map((k) => cancelId(earlier[k])));
   store({});

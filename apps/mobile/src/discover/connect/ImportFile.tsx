@@ -2,9 +2,7 @@ import { ApiError, uploadExportToListenBrainz, type RNFile } from '@nomad/api-de
 import { toUploadChunks, type ExportKind, type ExportSummary } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
-import * as DocumentPicker from 'expo-document-picker';
-import { File } from 'expo-file-system';
-import { router, type Href } from 'expo-router';
+import { File, Paths } from 'expo-file-system';
 import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
@@ -14,10 +12,10 @@ import { importErrorKey } from './importErrors';
 import { RETRY_DELAYS_MS, retryDelayMs, useImportQueue } from './importQueue';
 import { ImportResult } from './ImportResult';
 import { useCapabilities, useServicesSummary } from './queries';
+import { pickExportFile } from './pickExportFile';
 import { readExportFile } from './readExport';
 import { cancelExportReminder } from './reminders';
 
-const PICK_TYPES = ['application/zip', 'text/csv', 'text/comma-separated-values'];
 const LB_IMPORT_PAGE = 'https://listenbrainz.org/settings/import/';
 /** decide's proxied ListenBrainz upload cap when the capability doesn't say (Cloud Run's request cap is 32 MiB). */
 const LB_DEFAULT_MAX_BYTES = 30 * 1024 * 1024;
@@ -28,17 +26,25 @@ const KIND_KEY: Record<ExportKind, 'spotifyAccount' | 'spotifyExtended' | 'apple
   apple: 'apple',
 };
 
-/**
- * Opens the system file picker for a privacy export and, when a file is picked, the import screen for it. The
- * picker copies the file into the app's cache, so the reader gets a `file://` uri with a known size.
- */
-export async function pickExportFile(replace = false): Promise<void> {
-  const res = await DocumentPicker.getDocumentAsync({ type: PICK_TYPES, copyToCacheDirectory: true });
-  const asset = res.canceled ? undefined : res.assets?.[0];
-  if (!asset) return;
-  const to = { pathname: '/discover/connect/import-file', params: { file: asset.uri, name: asset.name } } as unknown as Href;
-  if (replace) router.replace(to);
-  else router.push(to);
+/** The picker's copy lives in the app's cache: delete it once done. Anything else (a shared file) is left alone. */
+function deleteIfCached(uri: string): void {
+  try {
+    const cache = (Paths.cache as unknown as { uri?: string }).uri ?? String(Paths.cache);
+    if (!uri.startsWith(cache.replace(/\/*$/, '/'))) return;
+    const f = new File(uri);
+    if (f.exists) f.delete();
+  } catch {
+    // Best effort: the OS clears the cache anyway.
+  }
+}
+
+/** A finished import makes its Spotify reminders pointless: Account data cancels the 5-day one, Extended both. */
+function cancelRemindersFor(kind: ExportKind): void {
+  if (kind === 'spotify-account') void cancelExportReminder('account');
+  if (kind === 'spotify-extended') {
+    void cancelExportReminder('account');
+    void cancelExportReminder('extended');
+  }
 }
 
 function fileSize(uri: string): number | null {
@@ -92,8 +98,9 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
   const capabilities = useCapabilities();
   const enqueue = useImportQueue((s) => s.enqueue);
   const [read, setRead] = useState<Read>({ step: 'reading', pct: 0 });
-  const [submitted, setSubmitted] = useState(false);
+  /** The queued import (set once enqueued; enqueue answers null when signed out, which leaves this null). */
   const [batchId, setBatchId] = useState<string | null>(null);
+  const [signedOut, setSignedOut] = useState(false);
   const [lbAlso, setLbAlso] = useState(false);
   const [lb, setLb] = useState<Lb>({ step: 'idle' });
   const lbStarted = useRef(false);
@@ -129,23 +136,11 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
   const maxBytes = capabilities.data?.listenbrainz_upload_max_bytes ?? LB_DEFAULT_MAX_BYTES;
   const lbTooBig = size !== null && size > maxBytes;
 
+  const submitted = batchId !== null;
   const batch = useImportQueue((s) => (batchId ? s.batches[batchId] : undefined));
   const lastError = useImportQueue((s) => s.lastError);
-  // An empty import makes no batch record: it is done as soon as it is submitted.
-  const done = submitted && (batchId === null || (!!batch && batch.sent + batch.failed >= batch.chunks));
+  const done = !!batch && batch.sent + batch.failed >= batch.chunks;
   const failed = batch?.failed ?? 0;
-
-  // A finished import makes its Spotify reminders pointless: Account data cancels the 5-day one, Extended both.
-  const cancelled = useRef(false);
-  useEffect(() => {
-    if (!done || failed > 0 || cancelled.current || !summary) return;
-    cancelled.current = true;
-    if (summary.kind === 'spotify-account') void cancelExportReminder('account');
-    if (summary.kind === 'spotify-extended') {
-      void cancelExportReminder('account');
-      void cancelExportReminder('extended');
-    }
-  }, [done, failed, summary]);
 
   // The ListenBrainz hand-off starts once submitted and online.
   useEffect(() => {
@@ -157,14 +152,31 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
     );
   }, [submitted, lbAlso, offline, uri, name]);
 
+  // The picked copy is no longer needed once the chunks are queued (their bodies are in the queue's own files) and
+  // the optional ListenBrainz upload has finished with it.
+  const cleaned = useRef(false);
+  useEffect(() => {
+    if (!submitted || (lbAlso && lb.step === 'idle') || cleaned.current) return;
+    cleaned.current = true;
+    deleteIfCached(uri);
+  }, [submitted, lbAlso, lb.step, uri]);
+
   const start = () => {
-    if (!summary || submitted) return;
-    setBatchId(chunks.length ? enqueue(chunks, summary.kind === 'apple' ? 'apple' : 'spotify') : null);
-    setSubmitted(true);
+    if (!summary || submitted || chunks.length === 0) return;
+    const id = enqueue(chunks, summary.kind === 'apple' ? 'apple' : 'spotify');
+    setSignedOut(id === null);
+    if (id === null) return;
+    setBatchId(id);
+    // Queued is enough: the queue keeps it until sent, so the reminders have done their job.
+    cancelRemindersFor(summary.kind);
   };
 
   const pct = read.step === 'reading' ? read.pct : 100;
   const hasTracks = (summary?.tracks.length ?? 0) > 0;
+  const liked = summary?.liked.length ?? 0;
+  const playlists = summary?.playlists.length ?? 0;
+  const skipped = summary?.skipped ?? { podcasts: 0, short: 0, malformed: 0 };
+  const anySkipped = skipped.podcasts + skipped.short + skipped.malformed > 0;
 
   return (
     <Screen testID="connect-import-file" scroll underHeader>
@@ -197,14 +209,29 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
             <Text testID="connect-import-preview" className="text-lg font-semibold">
               {t('importFile.preview', { tracks: summary.tracks.length, kind: t(`importFile.kind.${KIND_KEY[summary.kind]}`) })}
             </Text>
-          ) : (
-            <>
-              <Text className="text-lg font-semibold">{t('importFile.nothing')}</Text>
-              <Text testID="connect-import-skipped" variant="muted">
-                {t('importFile.skipped', summary.skipped)}
-              </Text>
-            </>
-          )}
+          ) : null}
+          {liked > 0 || playlists > 0 ? (
+            <Text testID="connect-import-library">
+              {liked > 0 && playlists > 0
+                ? t('importFile.libraryBoth', { liked, playlists })
+                : liked > 0
+                  ? t('importFile.libraryLiked', { liked })
+                  : t('importFile.libraryPlaylists', { playlists })}
+            </Text>
+          ) : null}
+          {chunks.length === 0 ? <Text className="text-lg font-semibold">{t('importFile.nothing')}</Text> : null}
+          {!hasTracks && anySkipped ? (
+            <View testID="connect-import-skipped" className="gap-1">
+              <Text variant="muted">{t('importFile.skippedTitle')}</Text>
+              {skipped.podcasts > 0 ? (
+                <Text variant="muted">{t('importFile.skippedPodcasts', { count: skipped.podcasts })}</Text>
+              ) : null}
+              {skipped.short > 0 ? <Text variant="muted">{t('importFile.skippedShort', { count: skipped.short })}</Text> : null}
+              {skipped.malformed > 0 ? (
+                <Text variant="muted">{t('importFile.skippedMalformed', { count: skipped.malformed })}</Text>
+              ) : null}
+            </View>
+          ) : null}
           {summary.truncated ? (
             <Text testID="connect-import-truncated" variant="error">
               {t('importFile.truncated')}
@@ -230,6 +257,11 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
 
           {chunks.length > 0 && !submitted ? (
             <Button testID="connect-import-start" label={t('importFile.start')} onPress={start} />
+          ) : null}
+          {signedOut ? (
+            <Text testID="connect-import-error" variant="error" accessibilityLiveRegion="polite">
+              {t('errors.generic')}
+            </Text>
           ) : null}
 
           {submitted && !done ? (
@@ -257,7 +289,7 @@ export function ImportFile({ uri, name }: { uri: string; name: string }) {
             )
           ) : null}
 
-          {done || (!hasTracks && chunks.length === 0) ? (
+          {done || chunks.length === 0 ? (
             <Button
               testID="connect-import-pick"
               variant="secondary"
