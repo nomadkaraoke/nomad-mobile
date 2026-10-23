@@ -221,6 +221,7 @@ beforeEach(async () => {
   mockVs.current = null;
   mockSource.current = quietSource();
   appStorage.remove(VOICE_SESSION_KEY);
+  appStorage.remove('voiceSession.recordDefault');
   appStorage.remove(VOICE_STORAGE_KEY);
   act(() => useVoiceSessionStore.getState().clear());
   act(() => useVoiceStore.getState().clear());
@@ -270,6 +271,22 @@ describe('voiceSessionScreens: steps', () => {
     expect(setup).toMatchObject({ posture: 'sitting', warmth: 'bit_warm', record: false, headphones: false });
     expect(floor).toBeCloseTo(0.003);
     expect(mockSource.current!.sections).toEqual(['low']);
+  });
+
+  it('setup: the Record-me default from Me pre-fills the question', async () => {
+    appStorage.set('voiceSession.recordDefault', true);
+    const vs = fakeVs({ step: 'setup', setup: null });
+    mockVs.current = vs;
+    open();
+    await screen.findByTestId('vs-setup');
+    await press('vs-posture-sitting');
+    await press('vs-warmth-bit_warm');
+    await press('vs-headphones-yes');
+    // Not asked by hand: the stored default answers it.
+    expect(screen.getByTestId('vs-setup-go')).toBeEnabled();
+    await press('vs-setup-go');
+    await waitFor(() => expect(vs.begin).toHaveBeenCalled());
+    expect((vs.begin as jest.Mock).mock.calls[0][0]).toMatchObject({ record: true });
   });
 
   it('setup: cold offers the warm-up', async () => {

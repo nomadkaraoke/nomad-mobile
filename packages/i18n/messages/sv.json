@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Ta bort din röst?",
     "singableCtaLabel": "Sångbar, gör rösttestet först",
     "profileRemoveConfirm": "Ta bort",
-    "profileMethodSession": "Från en sångsession"
+    "profileMethodSession": "Från din röstsession ({n, plural, one {# låt} other {# låtar}})",
+    "profileMethodSessionPlain": "Från din röstsession"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Klar",
       "left": "{seconds, plural, one {# sekund kvar} other {# sekunder kvar}}"
     },
-    "close": "Stäng"
+    "close": "Stäng",
+    "recordings": {
+      "confirmBody": "Detta raderar alla inspelningar vi har sparat från dina röstsessioner och gör att vi slutar spela in tills du godkänner det igen. Det kan inte ångras.",
+      "confirmTitle": "Ta bort alla dina inspelningar?",
+      "count": "{count, plural, one {# inspelning} other {# inspelningar}} sparas privat",
+      "delete": "Ta bort alla mina inspelningar",
+      "failed": "Det gick inte att ta bort dina inspelningar. Kontrollera anslutningen och försök igen.",
+      "loading": "Räknar dina inspelningar...",
+      "recordDefault": "Spela in mig som standard",
+      "recordDefaultBody": "Förväljer \"Spela in när jag sjunger?\" när du startar en röstsession. Du kan fortfarande ändra det varje gång.",
+      "title": "Dina inspelningar",
+      "confirmButton": "Ta bort"
+    }
   }
 }

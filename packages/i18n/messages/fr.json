@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Supprimer ta voix ?",
     "singableCtaLabel": "Chantable, fais d'abord le test vocal",
     "profileRemoveConfirm": "Retirer",
-    "profileMethodSession": "D'après une session de chant"
+    "profileMethodSession": "D'après ta session vocale ({n, plural, one {# chanson} other {# chansons}})",
+    "profileMethodSessionPlain": "D'après ta session vocale"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Terminé",
       "left": "{seconds, plural, one {# seconde restante} other {# secondes restantes}}"
     },
-    "close": "Fermer"
+    "close": "Fermer",
+    "recordings": {
+      "confirmBody": "Cela supprimera tous les enregistrements conservés de tes sessions vocales et nous arrêterons d'enregistrer jusqu'à ce que tu donnes à nouveau ton accord. Cette action est irréversible.",
+      "confirmTitle": "Supprimer tous tes enregistrements ?",
+      "count": "{count, plural, one {# enregistrement conservé} other {# enregistrements conservés}} en toute confidentialité",
+      "delete": "Supprimer tous mes enregistrements",
+      "failed": "Impossible de supprimer tes enregistrements. Vérifie ta connexion et réessaie.",
+      "loading": "Chargement de tes enregistrements...",
+      "recordDefault": "M'enregistrer par défaut",
+      "recordDefaultBody": "Coche automatiquement « M'enregistrer quand je chante ? » lorsque tu lances une session vocale. Tu pourras toujours modifier ce choix à chaque fois.",
+      "title": "Tes enregistrements",
+      "confirmButton": "Supprimer"
+    }
   }
 }

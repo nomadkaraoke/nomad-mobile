@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Odstrániť svoj hlas?",
     "singableCtaLabel": "Zaspievateľné, najprv si urob hlasový test",
     "profileRemoveConfirm": "Odstrániť",
-    "profileMethodSession": "Zo speváckej relácie"
+    "profileMethodSession": "Z tvojej hlasovej relácie ({n, plural, one {# pieseň} few {# piesne} other {# piesní}})",
+    "profileMethodSessionPlain": "Z tvojej hlasovej relácie"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Hotovo",
       "left": "{seconds, plural, one {Zostáva # sekunda} few {Zostávajú # sekundy} other {Zostáva # sekúnd}}"
     },
-    "close": "Zavrieť"
+    "close": "Zavrieť",
+    "recordings": {
+      "confirmBody": "Týmto vymažeš každú nahrávku, ktorú sme z tvojich hlasových relácií uchovali, a zastavíš nahrávanie, kým ho znova nepovolíš. Túto akciu nemožno vrátiť späť.",
+      "confirmTitle": "Vymazať všetky tvoje nahrávky?",
+      "count": "{count, plural, one {# nahrávka uchovávaná} few {# nahrávky uchovávané} other {# nahrávok uchovávaných}} v súkromí",
+      "delete": "Vymazať všetky moje nahrávky",
+      "failed": "Tvoje nahrávky sa nepodarilo vymazať. Skontroluj pripojenie a skús to znova.",
+      "loading": "Počítajú sa tvoje nahrávky...",
+      "recordDefault": "Nahrávať ma automaticky",
+      "recordDefaultBody": "Automaticky predvolí možnosť „Nahrávať ma pri spievaní?“, keď spustíš hlasovú reláciu. Vždy to však môžeš zmeniť.",
+      "title": "Tvoje nahrávky",
+      "confirmButton": "Vymazať"
+    }
   }
 }

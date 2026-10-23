@@ -106,7 +106,9 @@ export function VoiceProfileSection() {
         {profile.method === 'mic'
           ? t('profileMethodMic')
           : profile.method === 'session'
-            ? t('profileMethodSession')
+            ? profile.evidenceCount != null
+              ? t('profileMethodSession', { n: profile.evidenceCount })
+              : t('profileMethodSessionPlain')
             : t('profileMethodSelf')}
       </Text>
       {failed ? (

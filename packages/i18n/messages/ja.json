@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "声のプロファイルを削除しますか？",
     "singableCtaLabel": "歌える曲：まずは声のテストを受けてください",
     "profileRemoveConfirm": "削除",
-    "profileMethodSession": "歌唱セッションから"
+    "profileMethodSession": "ボイスセッションから ({n, plural, one {#曲} other {#曲}})",
+    "profileMethodSessionPlain": "ボイスセッションから"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "完了",
       "left": "{seconds, plural, other {残り#秒}}"
     },
-    "close": "閉じる"
+    "close": "閉じる",
+    "recordings": {
+      "confirmBody": "ボイスセッションから保存されたすべての録音が消去され、再度許可するまで録音は停止されます。この操作は取り消せません。",
+      "confirmTitle": "すべての録音を削除しますか？",
+      "count": "{count, plural, one {#件の録音} other {#件の録音}}を非公開で保存中",
+      "delete": "すべての録音を削除",
+      "failed": "録音を削除できませんでした。接続環境を確認して、もう一度お試しください。",
+      "loading": "録音を確認中...",
+      "recordDefault": "デフォルトで録音する",
+      "recordDefaultBody": "ボイスセッション開始時に「歌声を録音しますか？」があらかじめ選択された状態になります。この設定は毎回変更できます。",
+      "title": "保存済みの録音",
+      "confirmButton": "削除"
+    }
   }
 }

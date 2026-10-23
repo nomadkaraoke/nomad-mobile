@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "移除您的声音档案？",
     "singableCtaLabel": "适合演唱，请先进行声音测试",
     "profileRemoveConfirm": "移除",
-    "profileMethodSession": "来自演唱测试"
+    "profileMethodSession": "来自您的练唱环节（{n, plural, one {# 首歌曲} other {# 首歌曲}}）",
+    "profileMethodSessionPlain": "来自您的练唱环节"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "完成",
       "left": "{seconds, plural, one {还剩 # 秒} other {还剩 # 秒}}"
     },
-    "close": "关闭"
+    "close": "关闭",
+    "recordings": {
+      "confirmBody": "这将删除我们保存的所有练唱录音，且在您再次同意前不再进行录音。此操作无法撤销。",
+      "confirmTitle": "删除您的所有录音？",
+      "count": "已私密保存 {count, plural, one {# 条录音} other {# 条录音}}",
+      "delete": "删除我的所有录音",
+      "failed": "无法删除您的录音。请检查网络连接后重试。",
+      "loading": "正在统计您的录音...",
+      "recordDefault": "默认录制我的声音",
+      "recordDefaultBody": "在您开始练唱环节时，自动勾选“录制我的演唱？”。您每次仍可手动更改该选项。",
+      "title": "您的录音",
+      "confirmButton": "删除"
+    }
   }
 }

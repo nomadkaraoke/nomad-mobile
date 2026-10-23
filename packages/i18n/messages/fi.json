@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Poistetaanko äänesi?",
     "singableCtaLabel": "Laulettava, tee äänitesti ensin",
     "profileRemoveConfirm": "Poista",
-    "profileMethodSession": "Laulusessiosta"
+    "profileMethodSession": "Äänisessiostasi ({n, plural, one {# kappale} other {# kappaletta}})",
+    "profileMethodSessionPlain": "Äänisessiostasi"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Valmis",
       "left": "{seconds, plural, one {# sekunti jäljellä} other {# sekuntia jäljellä}}"
     },
-    "close": "Sulje"
+    "close": "Sulje",
+    "recordings": {
+      "confirmBody": "Tämä poistaa kaikki äänisessioistasi säilytetyt äänitteet ja lopettaa tallentamisen, kunnes annat luvan uudelleen. Toimintoa ei voi kumota.",
+      "confirmTitle": "Poistetaanko kaikki äänitteesi?",
+      "count": "{count, plural, one {# äänite} other {# äänitettä}} säilytetty yksityisenä",
+      "delete": "Poista kaikki äänitteeni",
+      "failed": "Äänitteidesi poistaminen epäonnistui. Tarkista verkkoyhteytesi ja yritä uudelleen.",
+      "loading": "Lasketaan äänitteitäsi...",
+      "recordDefault": "Tallenna lauluni oletusarvoisesti",
+      "recordDefaultBody": "Valitsee valmiiksi kohdan ”Tallenna lauluni?”, kun aloitat äänisession. Voit silti muuttaa valintaa joka kerta.",
+      "title": "Omat äänitteet",
+      "confirmButton": "Poista"
+    }
   }
 }

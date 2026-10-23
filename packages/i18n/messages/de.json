@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Deine Stimme entfernen?",
     "singableCtaLabel": "Singbar, mach zuerst den Stimmtest",
     "profileRemoveConfirm": "Entfernen",
-    "profileMethodSession": "Aus einer Gesangssession"
+    "profileMethodSession": "Aus deiner Gesangssitzung ({n, plural, one {# Song} other {# Songs}})",
+    "profileMethodSessionPlain": "Aus deiner Gesangssitzung"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Fertig",
       "left": "{seconds, plural, one {Noch # Sekunde} other {Noch # Sekunden}}"
     },
-    "close": "Schließen"
+    "close": "Schließen",
+    "recordings": {
+      "confirmBody": "Dadurch werden alle Aufnahmen gelöscht, die wir aus deinen Gesangssitzungen gespeichert haben, und wir nehmen nichts mehr auf, bis du wieder zustimmst. Dies kann nicht rückgängig gemacht werden.",
+      "confirmTitle": "Alle deine Aufnahmen löschen?",
+      "count": "{count, plural, one {# Aufnahme} other {# Aufnahmen}} privat gespeichert",
+      "delete": "Alle meine Aufnahmen löschen",
+      "failed": "Deine Aufnahmen konnten nicht gelöscht werden. Überprüfe deine Verbindung und versuche es erneut.",
+      "loading": "Deine Aufnahmen werden gezählt...",
+      "recordDefault": "Mich standardmäßig aufnehmen",
+      "recordDefaultBody": "Wählt standardmäßig „Mich beim Singen aufnehmen?“ aus, wenn du eine Gesangssitzung startest. Du kannst dies jedes Mal ändern.",
+      "title": "Deine Aufnahmen",
+      "confirmButton": "Löschen"
+    }
   }
 }

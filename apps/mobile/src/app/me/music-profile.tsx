@@ -10,6 +10,7 @@ import { ProfileSection } from '../../discover/profile/ProfileSection';
 import { useAppleMusic } from '../../discover/profile/useAppleMusic';
 import { useMusicProfile } from '../../discover/profile/useMusicProfile';
 import { VoiceProfileSection } from '../../voice/VoiceProfileSection';
+import { RecordingsSection } from '../../voiceSession/RecordingsSection';
 import { useVoiceFlags } from '../../voiceSession/debug/useVoiceDebug';
 
 /** decide's genre ids to their message keys (`classic-rock` is `classicRock`). */
@@ -239,6 +240,8 @@ export default function MusicProfileScreen() {
       {voiceFlags?.session_enabled ? (
         <Button testID="vs-entry-me" label={tvs('entry')} onPress={() => router.push('/discover/voice-session' as Href)} />
       ) : null}
+
+      {voiceFlags?.session_enabled ? <RecordingsSection /> : null}
 
       {isAdmin ? (
         <Button

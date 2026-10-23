@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "음성 프로필을 삭제하시겠습니까?",
     "singableCtaLabel": "부르기 가능한 곡 확인, 먼저 음성 테스트를 받아보세요",
     "profileRemoveConfirm": "제거",
-    "profileMethodSession": "노래 세션에서 가져옴"
+    "profileMethodSession": "보이스 세션 기록 기반 ({n, plural, other {#곡}})",
+    "profileMethodSessionPlain": "보이스 세션 기록 기반"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "완료",
       "left": "{seconds, plural, other {#초 남음}}"
     },
-    "close": "닫기"
+    "close": "닫기",
+    "recordings": {
+      "confirmBody": "보이스 세션에서 보관된 모든 녹음본이 삭제되며, 다시 동의하실 때까지 녹음되지 않습니다. 이 작업은 되돌릴 수 없습니다.",
+      "confirmTitle": "모든 녹음본을 삭제하시겠습니까?",
+      "count": "안전하게 비공개 보관 중인 녹음본 {count, plural, other {#개}}",
+      "delete": "내 녹음본 모두 삭제",
+      "failed": "녹음본을 삭제하지 못했습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.",
+      "loading": "녹음본 확인 중...",
+      "recordDefault": "기본으로 녹음하기",
+      "recordDefaultBody": "보이스 세션을 시작할 때 '노래 녹음하기'가 기본으로 선택됩니다. 매번 직접 변경하실 수도 있습니다.",
+      "title": "내 녹음본",
+      "confirmButton": "삭제"
+    }
   }
 }

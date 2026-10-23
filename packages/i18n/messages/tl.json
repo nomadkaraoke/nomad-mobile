@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Alisin ang iyong boses?",
     "singableCtaLabel": "Kayang kantahin, mag-voice test muna",
     "profileRemoveConfirm": "Alisin",
-    "profileMethodSession": "Mula sa isang singing session"
+    "profileMethodSession": "Mula sa iyong voice session ({n, plural, one {# kanta} other {# kanta}})",
+    "profileMethodSessionPlain": "Mula sa iyong voice session"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Tapos na",
       "left": "{seconds, plural, one {# segundo na lang} other {# segundo na lang}}"
     },
-    "close": "Isara"
+    "close": "Isara",
+    "recordings": {
+      "confirmBody": "Buburahin nito ang bawat recording na itinago namin mula sa iyong mga voice session at ititigil ang aming pag-record hanggang sa pumayag ka ulit. Hindi na ito mababawi.",
+      "confirmTitle": "Burahin ang lahat ng iyong recording?",
+      "count": "{count, plural, one {# recording} other {# recording}} na pribadong nakatago",
+      "delete": "Burahin ang lahat ng aking recording",
+      "failed": "Hindi mabura ang iyong mga recording. Pakisuri ang iyong koneksyon at subukan muli.",
+      "loading": "Binibilang ang iyong mga recording...",
+      "recordDefault": "I-record ako bilang default",
+      "recordDefaultBody": "Awtomatikong pipiliin ang \"I-record ang aking pagkanta?\" kapag nagsimula ka ng voice session. Maaari mo pa rin itong baguhin bawat pagkakataon.",
+      "title": "Iyong mga recording",
+      "confirmButton": "Burahin"
+    }
   }
 }

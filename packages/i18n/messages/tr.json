@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Ses profilin kaldırılsın mı?",
     "singableCtaLabel": "Söylenebilir, önce ses testini yap",
     "profileRemoveConfirm": "Kaldır",
-    "profileMethodSession": "Bir şarkı söyleme seansından"
+    "profileMethodSession": "Ses seansından ({n, plural, one {# şarkı} other {# şarkı}})",
+    "profileMethodSessionPlain": "Ses seansından"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Bitti",
       "left": "{seconds, plural, one {# saniye kaldı} other {# saniye kaldı}}"
     },
-    "close": "Kapat"
+    "close": "Kapat",
+    "recordings": {
+      "confirmBody": "Bu işlem, ses seanslarından sakladığımız her kaydı siler ve sen tekrar izin verene kadar kayıt almamızı durdurur. Bu işlem geri alınamaz.",
+      "confirmTitle": "Tüm kayıtların silinsin mi?",
+      "count": "Gizli olarak saklanan {count, plural, one {# kayıt} other {# kayıt}}",
+      "delete": "Tüm kayıtlarımı sil",
+      "failed": "Kayıtların silinemedi. Bağlantını kontrol edip tekrar dene.",
+      "loading": "Kayıtların sayılıyor...",
+      "recordDefault": "Beni varsayılan olarak kaydet",
+      "recordDefaultBody": "Bir ses seansı başlattığında \"Şarkı söylerken beni kaydet?\" seçeneğini önceden seçili getirir. Bunu her zaman değiştirebilirsin.",
+      "title": "Kayıtların",
+      "confirmButton": "Sil"
+    }
   }
 }

@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "להסיר את הקול שלך?",
     "singableCtaLabel": "מתאים לשירה, קודם יש לעשות את מבחן הקול",
     "profileRemoveConfirm": "הסרה",
-    "profileMethodSession": "מתוך סשן שירה"
+    "profileMethodSession": "מסשן הקול שלך ({n, plural, one {שיר #} other {# שירים}})",
+    "profileMethodSessionPlain": "מסשן הקול שלך"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "סיום",
       "left": "{seconds, plural, one {נותרה שנייה אחת} two {נותרו שתי שניות} other {נותרו # שניות}}"
     },
-    "close": "סגירה"
+    "close": "סגירה",
+    "recordings": {
+      "confirmBody": "פעולה זו תמחק כל הקלטה שנשמרה מסשני הקול שלך ותפסיק להקליט אותך עד לאישורך מחדש. לא ניתן לבטל פעולה זו.",
+      "confirmTitle": "למחוק את כל ההקלטות שלך?",
+      "count": "{count, plural, one {הקלטה # שמורה} other {# הקלטות שמורות}} באופן פרטי",
+      "delete": "מחיקת כל ההקלטות שלי",
+      "failed": "לא ניתן היה למחוק את ההקלטות שלך. כדאי לבדוק את החיבור לרשת ולנסות שוב.",
+      "loading": "סופר את ההקלטות שלך...",
+      "recordDefault": "הקלט אותי כברירת מחדל",
+      "recordDefaultBody": "מסמן מראש את \"להקליט אותי שר/ה?\" כשמתחילים סשן קול. עדיין ניתן לשנות זאת בכל פעם.",
+      "title": "ההקלטות שלך",
+      "confirmButton": "מחיקה"
+    }
   }
 }

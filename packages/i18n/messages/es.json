@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "¿Eliminar tu voz?",
     "singableCtaLabel": "Cantable, haz la prueba de voz primero",
     "profileRemoveConfirm": "Quitar",
-    "profileMethodSession": "A partir de una sesión de canto"
+    "profileMethodSession": "De tu sesión de voz ({n, plural, one {# canción} other {# canciones}})",
+    "profileMethodSessionPlain": "De tu sesión de voz"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Listo",
       "left": "{seconds, plural, one {Queda # segundo} other {Quedan # segundos}}"
     },
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "recordings": {
+      "confirmBody": "Esto borrará todas las grabaciones que guardamos de tus sesiones de voz y dejaremos de grabarte hasta que vuelvas a aceptar. No se puede deshacer.",
+      "confirmTitle": "¿Eliminar todas tus grabaciones?",
+      "count": "{count, plural, one {# grabación guardada} other {# grabaciones guardadas}} de forma privada",
+      "delete": "Eliminar todas mis grabaciones",
+      "failed": "No se pudieron eliminar tus grabaciones. Comprueba tu conexión e inténtalo de nuevo.",
+      "loading": "Contando tus grabaciones...",
+      "recordDefault": "Grabarme de forma predeterminada",
+      "recordDefaultBody": "Marca automáticamente \"¿Grabarme cantando?\" cuando inicias una sesión de voz. Podrás cambiarlo cada vez.",
+      "title": "Tus grabaciones",
+      "confirmButton": "Eliminar"
+    }
   }
 }

@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Vols eliminar la teva veu?",
     "singableCtaLabel": "Per saber si la pots cantar, fes primer el test de veu",
     "profileRemoveConfirm": "Elimina",
-    "profileMethodSession": "D'una sessió de cant"
+    "profileMethodSession": "De la teva sessió de veu ({n, plural, one {# cançó} other {# cançons}})",
+    "profileMethodSessionPlain": "De la teva sessió de veu"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Fet",
       "left": "{seconds, plural, one {Queda # segon} other {Queden # segons}}"
     },
-    "close": "Tanca"
+    "close": "Tanca",
+    "recordings": {
+      "confirmBody": "Això esborrarà totes les gravacions que hem guardat de les teves sessions de veu i deixarem de gravar fins que tornis a acceptar-ho. Aquesta acció no es pot desfer.",
+      "confirmTitle": "Vols eliminar totes les teves gravacions?",
+      "count": "{count, plural, one {# gravació guardada} other {# gravacions guardades}} de manera privada",
+      "delete": "Elimina totes les meves gravacions",
+      "failed": "No s'han pogut eliminar les teves gravacions. Comprova la connexió i torna-ho a provar.",
+      "loading": "S'estan comptant les teves gravacions...",
+      "recordDefault": "Grava'm per defecte",
+      "recordDefaultBody": "Marca prèviament l'opció «Grava'm cantant?» quan iniciïs una sessió de veu. Ho podràs canviar cada vegada.",
+      "title": "Les teves gravacions",
+      "confirmButton": "Suprimeix"
+    }
   }
 }

@@ -1522,7 +1522,8 @@
     "profileRemoveBody": "Discover will stop matching songs to your voice. You can take the test again any time.",
     "profileRemoveConfirm": "Remove",
     "singableCtaLabel": "Singable, take the voice test first",
-    "profileMethodSession": "From a singing session"
+    "profileMethodSession": "From your voice session ({n, plural, one {# song} other {# songs}})",
+    "profileMethodSessionPlain": "From your voice session"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
     },
     "disabled": {
       "title": "Coming soon"
+    },
+    "recordings": {
+      "title": "Your recordings",
+      "count": "{count, plural, one {# recording} other {# recordings}} kept privately",
+      "loading": "Counting your recordings...",
+      "delete": "Delete all my recordings",
+      "confirmTitle": "Delete all your recordings?",
+      "confirmBody": "This erases every recording we kept from your voice sessions and stops us recording until you say yes again. It cannot be undone.",
+      "confirmButton": "Delete",
+      "failed": "Could not delete your recordings. Check your connection and try again.",
+      "recordDefault": "Record me by default",
+      "recordDefaultBody": "Pre-fills \"Record me singing?\" when you start a voice session. You can still change it each time."
     }
   }
 }

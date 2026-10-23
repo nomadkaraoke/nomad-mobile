@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Vuoi rimuovere la tua voce?",
     "singableCtaLabel": "Cantabile: fai prima il test vocale",
     "profileRemoveConfirm": "Rimuovi",
-    "profileMethodSession": "Da una sessione di canto"
+    "profileMethodSession": "Dalla tua sessione vocale ({n, plural, one {# brano} other {# brani}})",
+    "profileMethodSessionPlain": "Dalla tua sessione vocale"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Fatto",
       "left": "{seconds, plural, one {Ancora # secondo} other {Ancora # secondi}}"
     },
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "recordings": {
+      "confirmBody": "Questo cancellerà ogni registrazione conservata delle tue sessioni vocali e interromperà le registrazioni finché non darai nuovamente il consenso. L'operazione non può essere annullata.",
+      "confirmTitle": "Vuoi eliminare tutte le tue registrazioni?",
+      "count": "{count, plural, one {# registrazione conservata} other {# registrazioni conservate}} privatamente",
+      "delete": "Elimina tutte le mie registrazioni",
+      "failed": "Impossibile eliminare le tue registrazioni. Controlla la connessione e riprova.",
+      "loading": "Conteggio delle registrazioni in corso...",
+      "recordDefault": "Registrami per impostazione predefinita",
+      "recordDefaultBody": "Seleziona automaticamente \"Vuoi registrare la tua voce?\" quando avvii una sessione vocale. Potrai comunque modificarla ogni volta.",
+      "title": "Le tue registrazioni",
+      "confirmButton": "Elimina"
+    }
   }
 }

@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Ukloniti svoj glas?",
     "singableCtaLabel": "Može se pjevati, prvo riješi glasovni test",
     "profileRemoveConfirm": "Ukloni",
-    "profileMethodSession": "Iz pjevačke sesije"
+    "profileMethodSession": "Iz tvoje glasovne sesije ({n, plural, one {# pjesma} few {# pjesme} other {# pjesama}})",
+    "profileMethodSessionPlain": "Iz tvoje glasovne sesije"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Gotovo",
       "left": "{seconds, plural, one {Preostala je # sekunda} few {Preostale su # sekunde} other {Preostalo je # sekundi}}"
     },
-    "close": "Zatvori"
+    "close": "Zatvori",
+    "recordings": {
+      "confirmBody": "Ovo briše svaku snimku koju smo spremili iz tvojih glasovnih sesija i zaustavlja snimanje dok ponovno ne odobriš. To se ne može poništiti.",
+      "confirmTitle": "Želiš li obrisati sve svoje snimke?",
+      "count": "{count, plural, one {# snimka pohranjena} few {# snimke pohranjene} other {# snimaka pohranjeno}} privatno",
+      "delete": "Obriši sve moje snimke",
+      "failed": "Brisanje tvojih snimki nije uspjelo. Provjeri vezu i pokušaj ponovno.",
+      "loading": "Brojanje tvojih snimki...",
+      "recordDefault": "Automatski me snimaj",
+      "recordDefaultBody": "Unaprijed označava opciju „Snimati me dok pjevam?” kad pokreneš glasovnu sesiju. To i dalje možeš promijeniti svaki put.",
+      "title": "Tvoje snimke",
+      "confirmButton": "Izbriši"
+    }
   }
 }

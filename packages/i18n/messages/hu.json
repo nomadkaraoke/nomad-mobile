@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Eltávolítod a hangodat?",
     "singableCtaLabel": "Énekelhető, először töltsd ki a hangtesztet",
     "profileRemoveConfirm": "Eltávolítás",
-    "profileMethodSession": "Egy éneklési munkamenetből"
+    "profileMethodSession": "A hangmunkamenetedből ({n, plural, one {# dal} other {# dal}})",
+    "profileMethodSessionPlain": "A hangmunkamenetedből"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Kész",
       "left": "{seconds, plural, one {# másodperc van hátra} other {# másodperc van hátra}}"
     },
-    "close": "Bezárás"
+    "close": "Bezárás",
+    "recordings": {
+      "confirmBody": "Ez törli a hangmunkameneteidből megőrzött összes felvételt, és leállítja a felvételkészítést, amíg újra hozzá nem járulsz. A művelet nem vonható vissza.",
+      "confirmTitle": "Törlöd az összes felvételedet?",
+      "count": "{count, plural, one {# felvétel} other {# felvétel}} bizalmasan tárolva",
+      "delete": "Minden felvételem törlése",
+      "failed": "Nem sikerült törölni a felvételeidet. Ellenőrizd a kapcsolatodat, és próbáld újra.",
+      "loading": "Felvételeid számlálása...",
+      "recordDefault": "Alapértelmezés szerint vegyen fel",
+      "recordDefaultBody": "Automatikusan bejelöli a „Felvegyük, ahogy énekelsz?” opciót, amikor hangmunkamenetet indítasz. Később ezt alkalmanként bármikor módosíthatod.",
+      "title": "Felvételeid",
+      "confirmButton": "Törlés"
+    }
   }
 }

@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Padam profil suara anda?",
     "singableCtaLabel": "Boleh dinyanyikan, ambil ujian suara dahulu",
     "profileRemoveConfirm": "Alih keluar",
-    "profileMethodSession": "Daripada sesi nyanyian"
+    "profileMethodSession": "Daripada sesi suara anda ({n, plural, other {# lagu}})",
+    "profileMethodSessionPlain": "Daripada sesi suara anda"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Selesai",
       "left": "{seconds, plural, other {Tinggal # saat}}"
     },
-    "close": "Tutup"
+    "close": "Tutup",
+    "recordings": {
+      "confirmBody": "Tindakan ini akan memadamkan setiap rakaman yang kami simpan daripada sesi suara anda dan kami tidak akan merakam lagi sehinggalah anda membenarkannya semula. Tindakan ini tidak boleh dibuat asal.",
+      "confirmTitle": "Padamkan semua rakaman anda?",
+      "count": "{count, plural, other {# rakaman}} disimpan secara peribadi",
+      "delete": "Padamkan semua rakaman saya",
+      "failed": "Tidak dapat memadamkan rakaman anda. Semak sambungan anda dan cuba lagi.",
+      "loading": "Mengira rakaman anda...",
+      "recordDefault": "Rakam saya secara lalai",
+      "recordDefaultBody": "Memilih awal-siap \"Rakam saya menyanyi?\" apabila anda memulakan sesi suara. Anda masih boleh mengubahnya pada bila-bila masa.",
+      "title": "Rakaman anda",
+      "confirmButton": "Padam"
+    }
   }
 }

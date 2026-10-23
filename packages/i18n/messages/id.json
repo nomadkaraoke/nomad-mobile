@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Hapus profil suaramu?",
     "singableCtaLabel": "Dapat dinyanyikan, ikuti tes suara terlebih dahulu",
     "profileRemoveConfirm": "Hapus",
-    "profileMethodSession": "Dari sesi bernyanyi"
+    "profileMethodSession": "Dari sesi suara Anda ({n, plural, other {# lagu}})",
+    "profileMethodSessionPlain": "Dari sesi suara Anda"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Selesai",
       "left": "{seconds, plural, other {Tersisa # detik}}"
     },
-    "close": "Tutup"
+    "close": "Tutup",
+    "recordings": {
+      "confirmBody": "Tindakan ini akan menghapus semua rekaman yang kami simpan dari sesi suara Anda dan menghentikan kami merekam hingga Anda menyetujuinya lagi. Tindakan ini tidak dapat dibatalkan.",
+      "confirmTitle": "Hapus semua rekaman Anda?",
+      "count": "{count, plural, other {# rekaman}} disimpan secara privat",
+      "delete": "Hapus semua rekaman saya",
+      "failed": "Gagal menghapus rekaman Anda. Periksa koneksi internet Anda dan coba lagi.",
+      "loading": "Menghitung rekaman Anda...",
+      "recordDefault": "Rekam saya secara default",
+      "recordDefaultBody": "Otomatis memilih \"Rekam saat saya bernyanyi?\" saat Anda memulai sesi suara. Anda tetap bisa mengubahnya setiap saat.",
+      "title": "Rekaman Anda",
+      "confirmButton": "Hapus"
+    }
   }
 }

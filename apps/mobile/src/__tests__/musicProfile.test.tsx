@@ -354,11 +354,18 @@ describe('Your voice (Phase 3c)', () => {
     expect(await screen.findByTestId('voice-section-method')).toHaveTextContent('From your pick, not measured');
   });
 
-  it('a session profile says it came from a singing session', async () => {
+  it('a session profile says how many songs it came from', async () => {
+    act(() => useVoiceStore.getState().adopt({ ...MIC, method: 'session', evidenceCount: 6 }));
+    await signIn();
+    open();
+    expect(await screen.findByTestId('voice-section-method')).toHaveTextContent('From your voice session (6 songs)');
+  });
+
+  it('a session profile without an evidence count drops the number', async () => {
     act(() => useVoiceStore.getState().adopt({ ...MIC, method: 'session' }));
     await signIn();
     open();
-    expect(await screen.findByTestId('voice-section-method')).toHaveTextContent('From a singing session');
+    expect(await screen.findByTestId('voice-section-method')).toHaveTextContent(/^From your voice session$/);
   });
 
   it('the voice session entry shows only when decide enables it', async () => {

@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Ștergi profilul vocal?",
     "singableCtaLabel": "Potrivite pentru tine, fă mai întâi testul vocal",
     "profileRemoveConfirm": "Elimină",
-    "profileMethodSession": "Dintr-o sesiune de cântat"
+    "profileMethodSession": "Din sesiunea ta vocală ({n, plural, one {# melodie} few {# melodii} other {# de melodii}})",
+    "profileMethodSessionPlain": "Din sesiunea ta vocală"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Gata",
       "left": "{seconds, plural, one {încă # secundă} few {încă # secunde} other {încă # de secunde}}"
     },
-    "close": "Închide"
+    "close": "Închide",
+    "recordings": {
+      "confirmBody": "Această acțiune șterge toate înregistrările păstrate din sesiunile tale vocale și oprește înregistrarea până când accepți din nou. Acțiunea este ireversibilă.",
+      "confirmTitle": "Ștergi toate înregistrările tale?",
+      "count": "{count, plural, one {# înregistrare păstrată} few {# înregistrări păstrate} other {# de înregistrări păstrate}} în mod privat",
+      "delete": "Șterge toate înregistrările mele",
+      "failed": "Nu am putut șterge înregistrările tale. Verifică conexiunea și încearcă din nou.",
+      "loading": "Se numără înregistrările tale...",
+      "recordDefault": "Înregistrează-mă în mod prestabilit",
+      "recordDefaultBody": "Bifează automat „Mă înregistrezi când cânt?” când începi o sesiune vocală. O poți modifica oricând.",
+      "title": "Înregistrările tale",
+      "confirmButton": "Șterge"
+    }
   }
 }

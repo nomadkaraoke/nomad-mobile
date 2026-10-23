@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Je stemprofiel verwijderen?",
     "singableCtaLabel": "Zingbaar, doe eerst de stemtest",
     "profileRemoveConfirm": "Verwijderen",
-    "profileMethodSession": "Van een zangsessie"
+    "profileMethodSession": "Van je stemsessie ({n, plural, one {# nummer} other {# nummers}})",
+    "profileMethodSessionPlain": "Van je stemsessie"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Gereed",
       "left": "{seconds, plural, one {nog # seconde} other {nog # seconden}}"
     },
-    "close": "Sluiten"
+    "close": "Sluiten",
+    "recordings": {
+      "confirmBody": "Dit verwijdert elke opname die we van je stemsessies hebben bewaard en zorgt ervoor dat we niet meer opnemen totdat je weer toestemming geeft. Dit kan niet ongedaan worden gemaakt.",
+      "confirmTitle": "Al je opnames verwijderen?",
+      "count": "{count, plural, one {# opname} other {# opnames}} privé bewaard",
+      "delete": "Al mijn opnames verwijderen",
+      "failed": "We konden je opnames niet verwijderen. Controleer je verbinding en probeer het opnieuw.",
+      "loading": "Je opnames tellen...",
+      "recordDefault": "Mij standaard opnemen",
+      "recordDefaultBody": "Vinkt automatisch \"Mij opnemen terwijl ik zing?\" aan wanneer je een stemsessie start. Je kunt dit elke keer nog aanpassen.",
+      "title": "Je opnames",
+      "confirmButton": "Verwijderen"
+    }
   }
 }

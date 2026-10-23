@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Fjerne stemmen din?",
     "singableCtaLabel": "Sangbar, ta stemmetesten først",
     "profileRemoveConfirm": "Fjern",
-    "profileMethodSession": "Fra en sangøkt"
+    "profileMethodSession": "Fra stemmeøkten din ({n, plural, one {# sang} other {# sanger}})",
+    "profileMethodSessionPlain": "Fra stemmeøkten din"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Ferdig",
       "left": "{seconds, plural, one {# sekund igjen} other {# sekunder igjen}}"
     },
-    "close": "Lukk"
+    "close": "Lukk",
+    "recordings": {
+      "confirmBody": "Dette sletter alle opptak vi har lagret fra stemmeøktene dine, og stopper nye opptak frem til du sier ja igjen. Dette kan ikke angres.",
+      "confirmTitle": "Slette alle opptakene dine?",
+      "count": "{count, plural, one {# opptak} other {# opptak}} lagret privat",
+      "delete": "Slett alle opptakene mine",
+      "failed": "Kunne ikke slette opptakene dine. Sjekk internettforbindelsen og prøv igjen.",
+      "loading": "Teller opptakene dine...",
+      "recordDefault": "Gjør opptak som standard",
+      "recordDefaultBody": "Forhåndsvelger «Gjør opptak når jeg synger?» når du starter en stemmeøkt. Du kan fortsatt endre dette hver gang.",
+      "title": "Opptakene dine",
+      "confirmButton": "Slett"
+    }
   }
 }

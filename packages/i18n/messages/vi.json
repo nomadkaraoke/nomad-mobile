@@ -1522,7 +1522,8 @@
     "profileRemoveTitle": "Xóa hồ sơ giọng hát của bạn?",
     "singableCtaLabel": "Hát được ngay, hãy kiểm tra giọng hát trước",
     "profileRemoveConfirm": "Xóa",
-    "profileMethodSession": "Từ một buổi hát"
+    "profileMethodSession": "Từ phiên thu giọng của bạn ({n, plural, one {# bài hát} other {# bài hát}})",
+    "profileMethodSessionPlain": "Từ phiên thu giọng của bạn"
   },
   "voiceSession": {
     "debug": {
@@ -1738,6 +1739,18 @@
       "done": "Xong",
       "left": "{seconds, plural, other {Còn # giây}}"
     },
-    "close": "Đóng"
+    "close": "Đóng",
+    "recordings": {
+      "confirmBody": "Thao tác này sẽ xóa mọi bản ghi âm được lưu từ các phiên thu giọng của bạn và ngừng ghi âm cho đến khi bạn bật lại. Thao tác này không thể hoàn tác.",
+      "confirmTitle": "Xóa tất cả bản ghi âm của bạn?",
+      "count": "{count, plural, one {# bản ghi âm} other {# bản ghi âm}} được lưu riêng tư",
+      "delete": "Xóa tất cả bản ghi âm của tôi",
+      "failed": "Không thể xóa các bản ghi âm của bạn. Vui lòng kiểm tra kết nối mạng và thử lại.",
+      "loading": "Đang kiểm tra số bản ghi âm của bạn...",
+      "recordDefault": "Luôn tự động ghi âm giọng tôi",
+      "recordDefaultBody": "Tự động chọn \"Ghi âm giọng hát của tôi?\" khi bạn bắt đầu một phiên thu giọng. Bạn vẫn có thể thay đổi tùy chọn này mỗi lần hát.",
+      "title": "Bản ghi âm của bạn",
+      "confirmButton": "Xóa"
+    }
   }
 }
