@@ -61,7 +61,7 @@ describe('Apple Music export guide', () => {
     const { type } = (DocumentPicker.getDocumentAsync as jest.Mock).mock.calls[0]![0];
     expect(type).toEqual(expect.arrayContaining(['application/zip', 'text/csv', 'text/comma-separated-values']));
     await waitFor(() => expect(app.getPathname()).toBe('/discover/connect/import-file'));
-    expect(app.getSearchParams()).toMatchObject({ file: 'file:///cache/DocumentPicker/E5F6A7B8.csv', name: 'Play Activity.csv' });
+    expect(app.getSearchParams()).toMatchObject({ file: 'file:///cache/DocumentPicker/E5F6A7B8.csv', name: 'Play_Activity.csv' });
     expect(await screen.findByTestId('connect-import-progress')).toBeTruthy();
   });
 

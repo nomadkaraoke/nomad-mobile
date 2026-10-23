@@ -8,6 +8,7 @@ import { renderRouter } from 'expo-router/testing-library';
 import { Linking } from 'react-native';
 
 import { useAuth } from '../../auth/store';
+import { safeExportName } from '../../discover/connect/pickExportFile';
 import { gen, session } from '../../test-utils/genAuthMock';
 import { appRoutes } from '../../test-utils/routes';
 
@@ -111,6 +112,17 @@ describe('Spotify export guide', () => {
     expect(await screen.findByTestId('connect-import-progress')).toBeTruthy();
   });
 
+  it('a picked name with & or % reaches the import screen sanitised (it rides in the sign-in returnTo)', async () => {
+    (DocumentPicker.getDocumentAsync as jest.Mock).mockResolvedValueOnce({
+      canceled: false,
+      assets: [{ uri: 'file:///cache/DocumentPicker/A1B2C3D4.zip', name: 'R&B 100%.zip', size: 10, lastModified: 0 }],
+    });
+    const app = open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-spotify-pick')));
+    await waitFor(() => expect(app.getPathname()).toBe('/discover/connect/import-file'));
+    expect(app.getSearchParams()).toMatchObject({ file: 'file:///cache/DocumentPicker/A1B2C3D4.zip', name: 'R_B_100_.zip' });
+  });
+
   it('a cancelled pick stays on the guide', async () => {
     const app = open();
     await act(async () => fireEvent.press(await screen.findByTestId('connect-spotify-pick')));
@@ -131,5 +143,27 @@ describe('Spotify export guide', () => {
     // Back from there goes to Discover (the redirect target), not an empty stack.
     await act(async () => router.back());
     await waitFor(() => expect(app.getPathname()).toBe('/discover'));
+  });
+});
+
+describe('safeExportName', () => {
+  it.each([
+    ['my_spotify_data.zip', 'my_spotify_data.zip'],
+    ['my spotify data.zip', 'my_spotify_data.zip'],
+    ['R&B 100%.zip', 'R_B_100_.zip'],
+    ['..hidden.csv', 'hidden.csv'],
+    ['dir/sub\\Play Activity.csv', 'Play_Activity.csv'],
+    ['%%%', ''],
+    ['', ''],
+    [null, ''],
+    [undefined, ''],
+  ])('%p -> %p', (raw, want) => {
+    expect(safeExportName(raw)).toBe(want);
+  });
+
+  it('truncates a long name to 120 characters, keeping the extension', () => {
+    const out = safeExportName(`${'a'.repeat(200)}.zip`);
+    expect(out).toHaveLength(120);
+    expect(out.endsWith('.zip')).toBe(true);
   });
 });

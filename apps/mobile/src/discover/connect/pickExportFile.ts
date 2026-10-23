@@ -13,6 +13,25 @@ export const PICK_TYPES = [
   'text/comma-separated-values',
 ];
 
+const MAX_NAME = 120;
+
+/**
+ * The picked file's name the way share intake makes it (`ShareIntakeRules.safeName`): [A-Za-z0-9._-] only, no
+ * leading dots, at most 120 characters keeping the extension. The name travels as a route param and, when the import
+ * screen asks for sign-in, inside the sign-in sheet's nested `returnTo`, which is decoded twice: an `&` or `%` in a
+ * name like "R&B 100%.zip" would split or break it. Empty when nothing usable is left (the import screen then uses
+ * its default upload name).
+ */
+export function safeExportName(raw: string | null | undefined): string {
+  const base = ((raw ?? '').split(/[/\\]/).pop() ?? '').trim();
+  const cleaned = base.replace(/[^A-Za-z0-9._-]/g, '_').replace(/^\.+/, '');
+  if (!cleaned || /^[_.]+$/.test(cleaned)) return '';
+  if (cleaned.length <= MAX_NAME) return cleaned;
+  const dot = cleaned.lastIndexOf('.');
+  const ext = dot > 0 && cleaned.length - dot <= 10 ? cleaned.slice(dot) : '';
+  return cleaned.slice(0, MAX_NAME - ext.length) + ext;
+}
+
 /** How a pick ended: the import screen opened, the user cancelled, a picker was already up, or the picker failed. */
 export type PickOutcome = 'opened' | 'cancelled' | 'busy' | 'failed';
 
@@ -37,7 +56,7 @@ export async function pickExportFile(replace = false): Promise<PickOutcome> {
     }
     const asset = res.canceled ? undefined : res.assets?.[0];
     if (!asset) return 'cancelled';
-    const to = { pathname: '/discover/connect/import-file', params: { file: asset.uri, name: asset.name } } as unknown as Href;
+    const to = { pathname: '/discover/connect/import-file', params: { file: asset.uri, name: safeExportName(asset.name) } } as unknown as Href;
     if (replace) router.replace(to);
     else router.push(to);
     return 'opened';
