@@ -9,6 +9,8 @@ import * as connectLayout from '../app/discover/connect/_layout';
 import * as connectApple from '../app/discover/connect/apple';
 import * as connectHub from '../app/discover/connect/index';
 import * as connectImportFile from '../app/discover/connect/import-file';
+import * as connectLastfm from '../app/discover/connect/lastfm';
+import * as connectListenBrainz from '../app/discover/connect/listenbrainz';
 import * as connectPlaylist from '../app/discover/connect/playlist';
 import * as connectScreenshot from '../app/discover/connect/screenshot';
 import * as connectSpotifyExport from '../app/discover/connect/spotify-export';
@@ -40,6 +42,8 @@ export function appRoutes() {
     'discover/connect/screenshot': connectScreenshot,
     'discover/connect/spotify-export': connectSpotifyExport,
     'discover/connect/import-file': connectImportFile,
+    'discover/connect/listenbrainz': connectListenBrainz,
+    'discover/connect/lastfm': connectLastfm,
     'me/music-profile': musicProfile,
     'song/[id]': song,
     'make/new': makeFlow,

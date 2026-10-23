@@ -9,6 +9,7 @@ import {
   extractScreenshotApiServicesScreenshotExtractPost,
   getCapabilitiesApiServicesCapabilitiesGet,
   getSourcesSummaryApiServicesSummaryGet,
+  getSyncStatusApiServicesSyncStatusGet,
   importSpotifyPlaylistApiServicesSpotifyPlaylistImportPost,
   importYoutubeMusicPlaylistApiServicesYoutubeMusicImportPost,
   listenbrainzOauthStartApiServicesListenbrainzOauthStartGet,
@@ -87,3 +88,6 @@ export const disconnectService = async (type: 'lastfm' | 'listenbrainz'): Promis
 
 /** Start a background sync of every connected service. */
 export const triggerSync = async () => (await triggerSyncApiServicesSyncPost()).data;
+
+/** Every connected service's sync state plus the newest sync job (kept for a minute after it finishes). */
+export const getSyncStatus = async () => (await getSyncStatusApiServicesSyncStatusGet()).data;

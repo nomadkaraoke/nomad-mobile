@@ -12,6 +12,7 @@ import {
   importYouTubeMusicPlaylist,
   removeSourceData,
   startListenBrainzOAuth,
+  getSyncStatus,
   triggerSync,
   uploadExportChunk,
   uploadExportToListenBrainz,
@@ -126,6 +127,10 @@ describe('imports and services summary', () => {
     await triggerSync();
     expect(last().method).toBe('POST');
     expect(last().url).toBe('https://decide.test/api/services/sync');
+    fetchMock.mockResolvedValueOnce(json({ services: [], active_job: null }));
+    expect(await getSyncStatus()).toEqual({ services: [], active_job: null });
+    expect(last().method).toBe('GET');
+    expect(last().url).toBe('https://decide.test/api/services/sync/status');
   });
 
   it('errors surface status codes as ApiError, and a 401 never signs out beyond the injected hook', async () => {

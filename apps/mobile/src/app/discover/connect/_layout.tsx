@@ -26,6 +26,8 @@ export default function ConnectLayout() {
       <Stack.Screen name="spotify-export" options={{ title: t('cards.spotifyExport.title') }} />
       <Stack.Screen name="apple" options={{ title: t('source.appleExport') }} />
       <Stack.Screen name="import-file" options={{ title: t('importFile.title') }} />
+      <Stack.Screen name="listenbrainz" options={{ title: t('cards.listenbrainz.title') }} />
+      <Stack.Screen name="lastfm" options={{ title: t('cards.lastfm.title') }} />
     </Stack>
   );
 }

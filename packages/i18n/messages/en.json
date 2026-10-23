@@ -1375,6 +1375,44 @@
       "lbBusy": "ListenBrainz is already importing a file for you. Try again once it's done.",
       "lbReconnect": "Reconnect ListenBrainz, then try again.",
       "pickAnother": "Pick another file"
+    },
+    "sync": {
+      "reading": "Reading your listening history…",
+      "done": "Done. Your picks now include what you listen to.",
+      "slow": "Still reading your history. Your picks will update when it's done.",
+      "failed": "We connected your account but couldn't read your history just now. We'll try again later."
+    },
+    "lb": {
+      "intro": "ListenBrainz keeps a free, open record of what you listen to. Connect it and your new listens keep your picks fresh.",
+      "oauth": "Sign in with ListenBrainz",
+      "or": "Or enter your ListenBrainz username",
+      "username": "ListenBrainz username",
+      "submit": "Connect",
+      "opening": "Opening ListenBrainz…",
+      "account": "Connected as {username}",
+      "accountHint": "Not your account? Remove ListenBrainz under Connected, then sign in again.",
+      "signup": "Don't have one? Create a free account",
+      "checklist": {
+        "step1": "Create a MetaBrainz account",
+        "step2": "Verify your email",
+        "step3": "Come back and enter your username"
+      },
+      "spotifyGuide": "Connect Spotify to ListenBrainz",
+      "spotifyGuideBody": "Then everything you play on Spotify reaches your picks by itself.",
+      "oauthUnavailable": "Signing in with ListenBrainz isn't available right now. Enter your username instead.",
+      "oauthError": {
+        "denied": "You didn't allow access, so nothing was connected. Try again whenever you like.",
+        "missing_params": "ListenBrainz didn't send back everything we need. Please try again.",
+        "invalid_state": "That sign-in expired or was already used. Please try again.",
+        "exchange_failed": "We couldn't finish connecting to ListenBrainz. Please try again.",
+        "validate_failed": "Your MetaBrainz account isn't on ListenBrainz yet. Sign in at listenbrainz.org once, then try again.",
+        "generic": "Something went wrong connecting ListenBrainz. Please try again."
+      }
+    },
+    "lastfm": {
+      "intro": "Enter your Last.fm username and we'll read your scrobbles to find songs you know.",
+      "username": "Last.fm username",
+      "submit": "Connect"
     }
   }
 }

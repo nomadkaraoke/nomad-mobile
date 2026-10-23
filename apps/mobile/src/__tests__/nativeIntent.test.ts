@@ -46,3 +46,42 @@ describe('redirectSystemPath: Apple Music hand-back', () => {
     expect(redirectSystemPath({ path: 'nomadkaraoke://music-connected', initial: true })).toBe('/me/music-profile');
   });
 });
+
+// decide's ListenBrainz OAuth callback returns to nomadkaraoke://services/listenbrainz?status=…; Android also
+// delivers it to Expo Router, which has no such route.
+describe('redirectSystemPath: ListenBrainz OAuth return', () => {
+  it.each([
+    'nomadkaraoke://services/listenbrainz?status=connected',
+    'nomadkaraoke://services/listenbrainz?status=error&reason=denied',
+    'nomadkaraoke:///services/listenbrainz',
+  ])('nativeIntent services return keeps screen when warm (%s)', (path) => {
+    expect(redirectSystemPath({ path, initial: false })).toBeNull();
+  });
+
+  it('nativeIntent services return opens LB screen when cold, carrying the result', () => {
+    expect(redirectSystemPath({ path: 'nomadkaraoke://services/listenbrainz?status=connected', initial: true })).toBe(
+      '/discover/connect/listenbrainz?status=connected',
+    );
+    expect(
+      redirectSystemPath({ path: 'nomadkaraoke://services/listenbrainz?status=error&reason=validate_failed', initial: true }),
+    ).toBe('/discover/connect/listenbrainz?status=error&reason=validate_failed');
+  });
+
+  it('a cold return with no or odd parameters still opens the LB screen, dropping anything unknown', () => {
+    expect(redirectSystemPath({ path: 'nomadkaraoke://services/listenbrainz', initial: true })).toBe(
+      '/discover/connect/listenbrainz',
+    );
+    expect(
+      redirectSystemPath({ path: 'nomadkaraoke://services/listenbrainz?status=evil&reason=<script>', initial: true }),
+    ).toBe('/discover/connect/listenbrainz');
+    expect(
+      redirectSystemPath({ path: 'nomadkaraoke://services/listenbrainz?status=error&reason=../../x', initial: true }),
+    ).toBe('/discover/connect/listenbrainz?status=error');
+  });
+
+  it('other services paths are not taken for it', () => {
+    expect(redirectSystemPath({ path: 'nomadkaraoke://services/listenbrainzz', initial: false })).toBe(
+      'nomadkaraoke://services/listenbrainzz',
+    );
+  });
+});

@@ -247,6 +247,6 @@ describe('Improve your picks card', () => {
     fireEvent.press(await screen.findByTestId('discover-improve-stale'));
 
     expect(screen.getByText('Connect Spotify to ListenBrainz so new listens arrive')).toBeTruthy();
-    expect(push).toHaveBeenCalledWith('/discover/connect');
+    expect(push).toHaveBeenCalledWith('/discover/connect/listenbrainz');
   });
 });

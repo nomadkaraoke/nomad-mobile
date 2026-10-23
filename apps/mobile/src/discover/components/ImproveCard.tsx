@@ -34,7 +34,7 @@ export function ImproveCard({ onAddArtists }: { onAddArtists: () => void }) {
         <Pressable
           testID="discover-improve-stale"
           accessibilityRole="button"
-          onPress={() => router.push('/discover/connect' as Href)}
+          onPress={() => router.push('/discover/connect/listenbrainz' as Href)}
           className="min-h-11 justify-center"
         >
           <Text variant="muted">{tc('stale')}</Text>
