@@ -1202,5 +1202,217 @@
     "songSearchLabel": "Etsi kappale",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Ei ehdotuksia juuri nyt. Etsi artistia yltä tai ohita tämä vaihe."
+  },
+  "connect": {
+    "appleExport": "Eikö sinulla ole Apple Music -tilausta? Tuo sen sijaan kuunteluhistoriasi",
+    "appleGuide": {
+      "intro": "Eikö sinulla ole Apple Music -tilausta? Apple voi silti lähettää sinulle kuunteluhistoriasi. Siinä kestää muutama päivä.",
+      "open": "Avaa privacy.apple.com",
+      "pick": "Valitse tiedosto",
+      "step1": "Mene osoitteeseen privacy.apple.com ja kirjaudu sisään.",
+      "step2": "Valitse Pyydä kopiota tiedoistasi, rasti Apple Media Services -tiedot ja lähetä pyyntö. Apple lähettää sinulle sähköpostia muutaman päivän kuluessa.",
+      "step3": "Lataa tiedostot ja valitse sitten zip-tiedosto tai Play Activity -CSV-tiedosto täältä."
+    },
+    "appleReading": "Luetaan kirjastoasi…",
+    "cards": {
+      "apple": {
+        "detail": "Kirjastosi ja viimeisimmät toistot · sekunneissa",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Scrobblauksesi · muutama minuutti",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Pitää suosituksesi tuoreina kuuntelusi mukaan",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify tai YouTube Music · sekunneissa",
+        "title": "Liitä soittolistan linkki"
+      },
+      "screenshot": {
+        "detail": "Artistit sekunneissa",
+        "title": "Ota kuvakaappaus musiikkisovelluksestasi"
+      },
+      "spotifyExport": {
+        "detail": "Koko kuunteluhistoriasi · kestää Spotifylla 5–30 päivää",
+        "title": "Spotify-historiasi"
+      }
+    },
+    "errors": {
+      "badUrl": "Tämä ei ole Spotify- tai YouTube Music -soittolistan linkki.",
+      "likedPrivate": "Tykätyt kappaleet ovat aina yksityisiä. Kopioi ne julkiseen tai piilotettuun soittolistaan ja jaa sitten kyseinen linkki.",
+      "notAnExport": "Tämä ei näytä Spotifyn tai Applen vientitiedostolta.",
+      "notFound": "Tätä käyttäjänimeä ei löytynyt. Tarkista kirjoitusasu ja yritä uudelleen.",
+      "private": "Emme voineet avata kyseistä soittolistaa. Varmista, että se on julkinen, ja yritä uudelleen.",
+      "rateLimited": "Liian monta tuontia lyhyen ajan sisällä. Yritä myöhemmin uudelleen.",
+      "tooLarge": "Tämä tiedosto on liian suuri lähetettäväksi sovelluksesta.",
+      "unavailable": "Palveluun ei saatu yhteyttä juuri nyt. Yritä uudelleen muutaman minuutin kuluttua.",
+      "unparseable": "Emme voineet lukea kyseistä soittolistaa juuri nyt. Kokeile sen sijaan YouTube Music -linkkiä tai kuvakaappausta.",
+      "generic": "Jotain meni pieleen. Yritä uudelleen."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "Apple Music -historiasi",
+        "spotifyAccount": "Spotify-tilitietosi",
+        "spotifyExtended": "Spotifyn suoratoistohistoriasi"
+      },
+      "lbAlso": "Lisää se myös ListenBrainziin, jotta uudet kuuntelut päivittyvät jatkossakin",
+      "lbBusy": "ListenBrainz tuo jo parhaillaan tiedostoa sinulle. Yritä uudelleen, kun se on valmis.",
+      "lbReconnect": "Yhdistä ListenBrainz uudelleen ja yritä sitten uudelleen.",
+      "lbSending": "Lähetetään ListenBrainziin…",
+      "lbSent": "Lähetetty ListenBrainziin. Tuonnissa voi kestää hetki.",
+      "lbTooBig": "Liian suuri lähetettäväksi sovelluksesta: lataa se osoitteessa listenbrainz.org",
+      "libraryBoth": "Lisäksi {liked, plural, one {# tykätty kappale} other {# tykättyä kappaletta}} ja {playlists, plural, one {# soittolista} other {# soittolistaa}}",
+      "libraryLiked": "Lisäksi {liked, plural, one {# tykätty kappale} other {# tykättyä kappaletta}}",
+      "libraryPlaylists": "Lisäksi {playlists, plural, one {# soittolista} other {# soittolistaa}}",
+      "nothing": "Emme löytäneet tästä tiedostosta lisättäviä kappaleita.",
+      "pickAnother": "Valitse toinen tiedosto",
+      "preview": "{tracks, plural, one {# kappale} other {# kappaletta}} kohteesta {kind}",
+      "reading": "Luetaan tiedostoasi…",
+      "sending": "Lisätään kappaleitasi…",
+      "skippedMalformed": "{count, plural, one {# lukukelvoton merkintä} other {# lukukelvotonta merkintää}}",
+      "skippedPodcasts": "{count, plural, one {# podcastin, äänikirjan tai videon toisto} other {# podcastin, äänikirjan tai videon toistoa}}",
+      "skippedShort": "{count, plural, one {# alle 30 sekunnin toisto} other {# alle 30 sekunnin toistoa}}",
+      "skippedTitle": "Ohitettu",
+      "start": "Lisää omaan musiikkiini",
+      "title": "Tuo historiasi",
+      "truncated": "Tämä tiedosto näyttää puutteelliselta, joten osa historiastasi saattaa puuttua. Jos mahdollista, lataa se uudelleen Spotifyn sähköpostiviestistä.",
+      "waiting": "Odotetaan yhteyttä"
+    },
+    "improve": {
+      "connect": "Yhdistä musiikkisi",
+      "stale": "Yhdistä Spotify ListenBrainziin, jotta uudet kuuntelut päivittyvät"
+    },
+    "intro": "Kerro meille, mitä oikeasti kuuntelet, niin suosituksesi paranevat huomattavasti. Jokainen näistä täydentää muita.",
+    "lastfm": {
+      "intro": "Syötä Last.fm-käyttäjänimesi, niin luemme scrobblauksesi löytääksemme kappaleet, jotka tunnet.",
+      "submit": "Yhdistä",
+      "username": "Last.fm-käyttäjänimi"
+    },
+    "lb": {
+      "account": "Yhdistetty käyttäjänimellä {username}",
+      "accountHint": "Eikö ole sinun tilisi? Poista ListenBrainz kohdasta Yhdistetyt ja kirjaudu sitten uudelleen sisään.",
+      "checklist": {
+        "step1": "Luo MetaBrainz-tili",
+        "step2": "Vahvista sähköpostiosoitteesi",
+        "step3": "Palaa takaisin ja syötä käyttäjänimesi"
+      },
+      "intro": "ListenBrainz pitää maksutonta ja avointa kirjaa siitä, mitä kuuntelet. Yhdistä se, niin uudet kuuntelusi pitävät suosituksesi tuoreina.",
+      "oauth": "Kirjaudu sisään ListenBrainzilla",
+      "oauthError": {
+        "denied": "Et sallinut pääsyä, joten mitään ei yhdistetty. Yritä uudelleen milloin vain.",
+        "exchange_failed": "Yhteyden muodostamista ListenBrainziin ei voitu viimeistellä. Yritä uudelleen.",
+        "generic": "Jokin meni pieleen ListenBrainziin yhdistettäessä. Yritä uudelleen.",
+        "invalid_state": "Kyseinen sisäänkirjautuminen vanheni tai se oli jo käytetty. Yritä uudelleen.",
+        "missing_params": "ListenBrainz ei palauttanut kaikkea tarvittavaa. Yritä uudelleen.",
+        "validate_failed": "MetaBrainz-tiliäsi ei ole vielä ListenBrainzissa. Kirjaudu kerran sisään osoitteessa listenbrainz.org ja yritä sitten uudelleen."
+      },
+      "oauthUnavailable": "ListenBrainzilla sisäänkirjautuminen ei ole juuri nyt käytettävissä. Syötä sen sijaan käyttäjänimesi.",
+      "opening": "Avataan ListenBrainz…",
+      "or": "Tai syötä ListenBrainz-käyttäjänimesi",
+      "signup": "Eikö sinulla ole tiliä? Luo maksuton tili",
+      "spotifyGuide": "Yhdistä Spotify ListenBrainziin",
+      "spotifyGuideBody": "Silloin kaikki, mitä kuuntelet Spotifyssa, päätyy suosituksiisi automaattisesti.",
+      "submit": "Yhdistä",
+      "username": "ListenBrainz-käyttäjänimi"
+    },
+    "offline": "Olet offline-tilassa",
+    "playlist": {
+      "again": "Tuo toinen soittolista",
+      "done": "Tuotu {title}",
+      "howTo": {
+        "step1": "1. Avaa osoitteessa music.youtube.com Kirjasto → Tykätyt kappaleet.",
+        "step2": "2. Valitse kappaleet (napauta yhtä, napauta sitten muita).",
+        "step3": "3. Valitse \"Lisää soittolistaan\" → Uusi soittolista ja aseta näkyvyydeksi Piilotettu tai Julkinen.",
+        "step4": "4. Avaa uusi soittolista, napauta Jaa → Kopioi linkki ja liitä se tähän.",
+        "anyPlaylist": "Mikä tahansa julkinen tai piilotettu lempikappaleidesi soittolista käy myös, kuten bile- tai treenimixisi.",
+        "title": "Miten jaan tykätyt kappaleeni?"
+      },
+      "importing": "Tuodaan soittolistaasi…",
+      "intro": "Liitä linkki julkiseen Spotify- tai YouTube Music -soittolistaan, niin lisäämme sen kappaleet siihen, mitä tiedämme sinun laulavan.",
+      "matched": "{matched} / {fetched} löytyy karaokeversiona",
+      "notPlaylist": "Tämä ei ole Spotify- tai YouTube Music -soittolistan linkki",
+      "paste": "Liitä",
+      "placeholder": "Soittolistan linkki",
+      "submit": "Tuo soittolista"
+    },
+    "reminders": {
+      "body": "Avaa sähköposti Spotifylta ja jaa sitten zip-tiedosto Nomad Karaoken kanssa.",
+      "channel": "Muistutukset",
+      "title": "Spotify-tietosi saattavat olla valmiina"
+    },
+    "result": "Lisätty {artists, plural, one {# tuntemasi artisti} other {# tuntemaasi artistia}} ja {songs, plural, one {# tuntemasi kappale} other {# tuntemaasi kappaletta}}",
+    "screenshot": {
+      "again": "Valitse lisää kuvakaappauksia",
+      "confirm": "{count, plural, =0 {Ei lisättävää} one {Lisää # kohde} other {Lisää # kohdetta}}",
+      "confirmBody": "Poista valinta kohdista, jotka menivät väärin.",
+      "confirmTitle": "Onko tämä oikein?",
+      "dailyLimit": "Olet käyttänyt tämän päivän 10 kuvakaappausta. Yritä huomenna uudelleen.",
+      "empty": "Emme löytäneet artisteja tai kappaleita näistä kuvakaappauksista. Kokeile selkeämpää kuvaa.",
+      "intro": "Valitse kuvakaappauksia kirjastostasi, soittolistoistasi tai suosituimmista artisteistasi mistä tahansa musiikkisovelluksesta. Luemme nimet, ja voit tarkistaa ne ennen kuin mitään tallennetaan.",
+      "item": "{artist} · {title}",
+      "limit": "Enintään 5 kuvakaappausta kerrallaan.",
+      "pick": "Valitse kuvakaappaukset",
+      "pickMore": "Valitse toiset kuvakaappaukset",
+      "reading": "Luetaan kuvakaappauksiasi…",
+      "unmatched": "Ei vielä karaokeluettelossamme",
+      "retry": "Yritä uudelleen"
+    },
+    "source": {
+      "appleExport": "Apple Music -historia",
+      "screenshot": "Kuvakaappaukset",
+      "spotifyExport": "Spotify-historia",
+      "spotifyPlaylist": "Spotify-soittolistat",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Lisää muuta",
+      "counts": "{artists, plural, one {# artisti} other {# artistia}} · {songs, plural, one {# kappale} other {# kappaletta}}",
+      "empty": "Mitään ei ole vielä yhdistetty. Lisää musiikkipalvelu tai tuo historiasi tarkentaaksesi suosituksiasi.",
+      "lastImport": "Viimeisin tuonti {days, plural, =0 {tänään} one {# päivä sitten} other {# päivää sitten}}",
+      "loadFailed": "Yhdistettyjä lähteitäsi ei voitu ladata. Yritä hetken kuluttua uudelleen.",
+      "reconnect": "Yhdistä uudelleen",
+      "removeBody": "Tämä poistaa artistit ja kappaleet, jotka {name} lisäsi musiikkiprofiiliisi. Suosituksesi päivittyvät.",
+      "removeFailed": "Tätä ei voitu poistaa juuri nyt. Yritä uudelleen.",
+      "removeTitle": "Poistetaanko {name}?",
+      "stale": "Yhdistä Spotify ListenBrainziin, jotta uudet kuuntelut päivittyvät",
+      "status": {
+        "error": "Ongelma",
+        "importing": "Tuodaan",
+        "needsReconnect": "Vaatii uudelleenyhdistämisen",
+        "ok": "Ajan tasalla",
+        "stale": "Ei uusia kuunteluita"
+      },
+      "cancel": "Peruuta",
+      "remove": "Poista",
+      "title": "Yhdistetty"
+    },
+    "spotifyExport": {
+      "denied": "Ilmoitukset ovat pois päältä Nomad Karaokelle. Ota ne käyttöön asetuksista saadaksesi muistutuksen.",
+      "intro": "Spotify voi lähettää sinulle koko kuunteluhistoriasi. Siinä kestää muutama päivä, joten aloita nyt ja me hoidamme loput.",
+      "open": "Avaa Spotifyn tietosuoja-asetukset",
+      "pick": "Valitse tiedosto",
+      "remind": "Muistuta minua",
+      "reminded": "Valmis. Muistutamme sinua noin 5 päivän kuluttua ja uudelleen 25 päivän kuluttua.",
+      "step1": "Pyydä tietojasi osoitteessa spotify.com/account/privacy. Rasti Tilitiedot (valmiina noin 5 päivässä) ja Laajennettu suoratoistohistoria (enintään 30 päivää): Laajennettu sisältää koko historiasi.",
+      "step2": "Muistutamme sinua, kun sen pitäisi olla valmis.",
+      "step3": "Kun Spotifyn sähköposti saapuu, lataa zip-tiedosto ja valitse sitten Jaa → Nomad Karaoke (Android) tai palaa tänne ja valitse tiedosto.",
+      "openSettings": "Avaa asetukset"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Valmis. Suosituksesi sisältävät nyt sen, mitä kuuntelet.",
+      "failed": "Yhdistimme tilisi, mutta emme voineet lukea historiaasi juuri nyt. Yritämme myöhemmin uudelleen.",
+      "reading": "Luetaan kuunteluhistoriaasi…",
+      "slow": "Historiaasi luetaan yhä. Suosituksesi päivittyvät, kun se on valmis."
+    },
+    "title": "Yhdistä musiikkisi",
+    "connected": "Yhdistetty"
   }
 }

@@ -1202,5 +1202,217 @@
     "songSearchLabel": "查找歌曲",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "目前没有推荐。请在上方搜索歌手，或跳过此步骤。"
+  },
+  "connect": {
+    "appleExport": "没有订阅 Apple Music？改为导入播放记录",
+    "appleGuide": {
+      "intro": "没有订阅 Apple Music？Apple 仍然可以向你发送播放记录，处理通常需要几天时间。",
+      "open": "打开 privacy.apple.com",
+      "pick": "选择文件",
+      "step1": "前往 privacy.apple.com 并登录。",
+      "step2": "选择“请求获取你的数据副本”，勾选“Apple 媒体服务信息”并提交。Apple 会在几天内给你发送电子邮件。",
+      "step3": "下载文件，然后在此处选择 zip 压缩包或播放活动 CSV 文件。"
+    },
+    "appleReading": "正在读取你的资料库…",
+    "cards": {
+      "apple": {
+        "detail": "你的资料库和最近播放 · 仅需数秒",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "你的听歌记录 (scrobbles) · 需几分钟",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "随听随更，精选推荐保持最新",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify 或 YouTube Music · 仅需数秒",
+        "title": "粘贴歌单链接"
+      },
+      "screenshot": {
+        "detail": "数秒内识别歌手",
+        "title": "截图你的音乐应用"
+      },
+      "spotifyExport": {
+        "detail": "完整收听历史记录 · Spotify 处理需 5–30 天",
+        "title": "你的 Spotify 历史记录"
+      }
+    },
+    "errors": {
+      "badUrl": "这不是有效的 Spotify 或 YouTube Music 歌单链接。",
+      "likedPrivate": "“喜欢的音乐”始终是私密的。请将其复制到公开或不公开列出的歌单中，然后分享该链接。",
+      "notAnExport": "这看起来不像是 Spotify 或 Apple 的数据导出文件。",
+      "notFound": "未找到该用户名。请检查拼写后重试。",
+      "private": "无法打开该歌单。请确保其已设为公开，然后重试。",
+      "rateLimited": "当前导入操作太频繁，请稍后重试。",
+      "tooLarge": "该文件过大，无法直接从应用发送。",
+      "unavailable": "暂时无法连接该服务，请几分钟后重试。",
+      "unparseable": "暂时无法读取该歌单。请尝试使用 YouTube Music 链接或上传截图。",
+      "generic": "出了点问题，请重试。"
+    },
+    "importFile": {
+      "kind": {
+        "apple": "你的 Apple Music 历史记录",
+        "spotifyAccount": "你的 Spotify 账户数据",
+        "spotifyExtended": "你的 Spotify 流媒体历史记录"
+      },
+      "lbAlso": "同时添加到 ListenBrainz，以便持续同步新的收听动态",
+      "lbBusy": "ListenBrainz 正在为你导入文件。请等待完成后重试。",
+      "lbReconnect": "重新连接 ListenBrainz，然后重试。",
+      "lbSending": "正在发送至 ListenBrainz…",
+      "lbSent": "已发送至 ListenBrainz。他们导入数据可能需要一些时间。",
+      "lbTooBig": "文件过大无法从应用发送：请直接在 listenbrainz.org 上传",
+      "libraryBoth": "另有 {liked, plural, other {# 首喜欢的歌曲}}和 {playlists, plural, other {# 个歌单}}",
+      "libraryLiked": "另有 {liked, plural, other {# 首喜欢的歌曲}}",
+      "libraryPlaylists": "另有 {playlists, plural, other {# 个歌单}}",
+      "nothing": "在此文件中未找到可添加的歌曲。",
+      "pickAnother": "选择另一个文件",
+      "preview": "来自{kind}的 {tracks, plural, other {# 首歌曲}}",
+      "reading": "正在读取文件…",
+      "sending": "正在添加歌曲…",
+      "skippedMalformed": "{count, plural, other {# 条无法读取的记录}}",
+      "skippedPodcasts": "{count, plural, other {# 次播客、有声书或视频播放}}",
+      "skippedShort": "{count, plural, other {# 次少于 30 秒的播放}}",
+      "skippedTitle": "已跳过",
+      "start": "添加到我的音乐",
+      "title": "导入历史记录",
+      "truncated": "该文件似乎不完整，部分历史记录可能缺失。如果可以，请从 Spotify 的邮件中重新下载。",
+      "waiting": "正在等待连接"
+    },
+    "improve": {
+      "connect": "连接你的音乐服务",
+      "stale": "将 Spotify 连接至 ListenBrainz 以同步最新收听动态"
+    },
+    "intro": "告诉我们你常听什么，精选推荐会更懂你。连接得越多，推荐越精准。",
+    "lastfm": {
+      "intro": "输入你的 Last.fm 用户名，我们将读取你的听歌记录以找到你会唱的歌。",
+      "submit": "连接",
+      "username": "Last.fm 用户名"
+    },
+    "lb": {
+      "account": "已作为 {username} 连接",
+      "accountHint": "不是你的账户？在“已连接”下方移除 ListenBrainz，然后重新登录。",
+      "checklist": {
+        "step1": "创建 MetaBrainz 账户",
+        "step2": "验证邮箱",
+        "step3": "返回此处并输入你的用户名"
+      },
+      "intro": "ListenBrainz 免费且开放地记录你的听歌历程。连接后，每次收听都会让你的精选推荐保持最新。",
+      "oauth": "使用 ListenBrainz 登录",
+      "oauthError": {
+        "denied": "你拒绝了授权，因此未连接任何内容。随时可以重试。",
+        "exchange_failed": "无法完成与 ListenBrainz 的连接。请重试。",
+        "generic": "连接 ListenBrainz 时出错。请重试。",
+        "invalid_state": "登录已过期或已被使用。请重试。",
+        "missing_params": "ListenBrainz 未返回所需完整信息。请重试。",
+        "validate_failed": "你的 MetaBrainz 账户尚未开通 ListenBrainz。请先在 listenbrainz.org 登录一次，然后重试。"
+      },
+      "oauthUnavailable": "暂不支持通过 ListenBrainz 登录。请直接输入用户名。",
+      "opening": "正在打开 ListenBrainz…",
+      "or": "或输入你的 ListenBrainz 用户名",
+      "signup": "还没有账号？免费注册一个",
+      "spotifyGuide": "将 Spotify 连接至 ListenBrainz",
+      "spotifyGuideBody": "连接后，你在 Spotify 播放的所有内容都会自动同步到精选推荐中。",
+      "submit": "连接",
+      "username": "ListenBrainz 用户名"
+    },
+    "offline": "当前处于离线状态",
+    "playlist": {
+      "again": "导入另一个歌单",
+      "done": "已导入 {title}",
+      "howTo": {
+        "step1": "1. 在 music.youtube.com 上，打开“媒体库”→“赞过的音乐”。",
+        "step2": "2. 选择歌曲（点击一首，然后继续多选）。",
+        "step3": "3. 选择“添加到播放列表”→“新建播放列表”，并将可见性设为“不公开列出”或“公开”。",
+        "step4": "4. 打开新播放列表，点击“分享”→“复制链接”，并粘贴到此处。",
+        "anyPlaylist": "只要是包含你喜欢的歌曲的公开或不公开列出歌单都可以，例如你的派对或健身歌单。",
+        "title": "如何分享我的“顶过的音乐”？"
+      },
+      "importing": "正在导入歌单…",
+      "intro": "粘贴公开的 Spotify 或 YouTube Music 歌单链接，我们会将这些歌曲添加到你擅长的曲库中。",
+      "matched": "{fetched} 首歌曲中有 {matched} 首提供卡拉OK版本",
+      "notPlaylist": "这不是有效的 Spotify 或 YouTube Music 歌单链接",
+      "paste": "粘贴",
+      "placeholder": "歌单链接",
+      "submit": "导入歌单"
+    },
+    "reminders": {
+      "body": "打开 Spotify 发送的邮件，然后将 zip 压缩包分享至 Nomad Karaoke。",
+      "channel": "提醒",
+      "title": "你的 Spotify 数据可能已准备就绪"
+    },
+    "result": "已添加你熟悉的 {artists, plural, other {# 位歌手}}和 {songs, plural, other {# 首歌曲}}",
+    "screenshot": {
+      "again": "选择更多截图",
+      "confirm": "{count, plural, =0 {无内容可添加} other {添加 # 项}}",
+      "confirmBody": "如有识别错误，请取消勾选。",
+      "confirmTitle": "确认内容无误？",
+      "dailyLimit": "今日 10 张截图额度已用完，请明天再试。",
+      "empty": "未能在这些截图中识别到歌手或歌曲。请尝试更清晰的截图。",
+      "intro": "从任何音乐应用中截取你的音乐库、歌单或常听歌手。我们会识别名称，在保存前由你核对确认。",
+      "item": "{artist} · {title}",
+      "limit": "一次最多上传 5 张截图。",
+      "pick": "选择截图",
+      "pickMore": "重新选择截图",
+      "reading": "正在读取截图…",
+      "unmatched": "卡拉OK曲库中暂未收录",
+      "retry": "重试"
+    },
+    "source": {
+      "appleExport": "Apple Music 历史记录",
+      "screenshot": "截图",
+      "spotifyExport": "Spotify 历史记录",
+      "spotifyPlaylist": "Spotify 歌单",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "添加更多",
+      "counts": "{artists, plural, other {# 位歌手}} · {songs, plural, other {# 首歌曲}}",
+      "empty": "尚未连接任何内容。添加音乐服务或导入历史记录，让你的精选推荐更精准。",
+      "lastImport": "上次导入：{days, plural, =0 {今天} other {# 天前}}",
+      "loadFailed": "无法加载已连接的来源，请稍后重试。",
+      "reconnect": "重新连接",
+      "removeBody": "这会从你的音乐档案中移除由 {name} 添加的歌手和歌曲，精选推荐也将随之更新。",
+      "removeFailed": "暂时无法移除，请重试。",
+      "removeTitle": "移除 {name}？",
+      "stale": "将 Spotify 连接至 ListenBrainz 以同步最新收听动态",
+      "status": {
+        "error": "出现问题",
+        "importing": "正在导入",
+        "needsReconnect": "需要重新连接",
+        "ok": "已是最新",
+        "stale": "无新增收听记录"
+      },
+      "cancel": "取消",
+      "remove": "移除",
+      "title": "已连接"
+    },
+    "spotifyExport": {
+      "denied": "Nomad Karaoke 的通知已关闭。请在设置中开启通知以接收提醒。",
+      "intro": "Spotify 可以向你发送完整的收听历史记录。这需要几天时间处理，现在就申请，后续交给我们搞定。",
+      "open": "打开 Spotify 隐私设置",
+      "pick": "选择文件",
+      "remind": "提醒我",
+      "reminded": "设置成功！我们将在约 5 天后提醒你，并在第 25 天再次提醒。",
+      "step1": "前往 spotify.com/account/privacy 请求获取数据。勾选“账户数据”（约 5 天准备好）和“扩展流媒体历史记录”（最长需 30 天）：扩展记录包含你的全部历史。",
+      "step2": "准备就绪时我们会提醒你。",
+      "step3": "收到 Spotify 的邮件后下载 zip 压缩包，然后选择“分享”→“Nomad Karaoke”（Android），或返回此处选择该文件。",
+      "openSettings": "打开设置"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "完成！你的精选推荐现已包含你常听的音乐。",
+      "failed": "已连接你的账户，但暂时无法读取收听历史记录。我们稍后会重试。",
+      "reading": "正在读取你的收听历史记录…",
+      "slow": "仍在读取历史记录，完成后精选推荐将自动更新。"
+    },
+    "title": "连接你的音乐服务",
+    "connected": "已连接"
   }
 }

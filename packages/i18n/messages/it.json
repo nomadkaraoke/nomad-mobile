@@ -1202,5 +1202,217 @@
     "songSearchLabel": "Cerca un brano",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Nessun suggerimento al momento. Cerca un artista qui sopra oppure salta questo passaggio."
+  },
+  "connect": {
+    "appleExport": "Non hai un abbonamento ad Apple Music? Importa invece la tua cronologia di ascolto",
+    "appleGuide": {
+      "intro": "Non hai un abbonamento ad Apple Music? Apple può comunque inviarti la tua cronologia di ascolto. Ci vorrà qualche giorno.",
+      "open": "Apri privacy.apple.com",
+      "pick": "Scegli il file",
+      "step1": "Vai su privacy.apple.com e accedi.",
+      "step2": "Scegli Richiedi una copia dei tuoi dati, seleziona Informazioni sui servizi multimediali Apple e invia la richiesta. Apple ti invierà un'email tra qualche giorno.",
+      "step3": "Scarica i file, poi seleziona il file zip o il file CSV Play Activity qui."
+    },
+    "appleReading": "Lettura della tua libreria in corso…",
+    "cards": {
+      "apple": {
+        "detail": "La tua libreria e gli ascolti recenti · pochi secondi",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "I tuoi scrobble · pochi minuti",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Mantiene aggiornati i tuoi consigli man mano che ascolti",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify o YouTube Music · pochi secondi",
+        "title": "Incolla il link di una playlist"
+      },
+      "screenshot": {
+        "detail": "Artisti in pochi secondi",
+        "title": "Fai uno screenshot della tua app musicale"
+      },
+      "spotifyExport": {
+        "detail": "Tutta la tua cronologia di ascolto · Spotify impiega 5–30 giorni",
+        "title": "La tua cronologia Spotify"
+      }
+    },
+    "errors": {
+      "badUrl": "Questo non è un link a una playlist di Spotify o YouTube Music.",
+      "likedPrivate": "I brani che ti piacciono sono sempre privati. Copiali in una playlist pubblica o non in elenco, poi condividi quel link.",
+      "notAnExport": "Questo file non sembra un'esportazione di dati da Spotify o Apple.",
+      "notFound": "Non siamo riusciti a trovare questo nome utente. Controlla come è scritto e riprova.",
+      "private": "Non siamo riusciti ad aprire questa playlist. Assicurati che sia pubblica, poi riprova.",
+      "rateLimited": "Troppe importazioni per ora. Riprova più tardi.",
+      "tooLarge": "Questo file è troppo grande per essere inviato dall'app.",
+      "unavailable": "Non siamo riusciti a raggiungere il servizio in questo momento. Riprova tra qualche minuto.",
+      "unparseable": "Non siamo riusciti a leggere questa playlist in questo momento. Prova con un link di YouTube Music o uno screenshot.",
+      "generic": "Qualcosa è andato storto. Riprova."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "la tua cronologia di Apple Music",
+        "spotifyAccount": "i dati del tuo account Spotify",
+        "spotifyExtended": "la tua cronologia di streaming di Spotify"
+      },
+      "lbAlso": "Aggiungila anche a ListenBrainz così i nuovi ascolti continueranno ad arrivare",
+      "lbBusy": "ListenBrainz sta già importando un file per te. Riprova una volta terminato.",
+      "lbReconnect": "Riconnetti ListenBrainz, poi riprova.",
+      "lbSending": "Invio a ListenBrainz in corso…",
+      "lbSent": "Inviato a ListenBrainz. L'importazione potrebbe richiedere un po' di tempo.",
+      "lbTooBig": "Troppo grande per essere inviato dall'app: caricalo su listenbrainz.org",
+      "libraryBoth": "In più {liked, plural, one {# brano piaciuto} other {# brani piaciuti}} e {playlists, plural, one {# playlist} other {# playlist}}",
+      "libraryLiked": "In più {liked, plural, one {# brano piaciuto} other {# brani piaciuti}}",
+      "libraryPlaylists": "In più {playlists, plural, one {# playlist} other {# playlist}}",
+      "nothing": "Non abbiamo trovato brani da aggiungere in questo file.",
+      "pickAnother": "Scegli un altro file",
+      "preview": "{tracks, plural, one {# brano} other {# brani}} da {kind}",
+      "reading": "Lettura del file in corso…",
+      "sending": "Aggiunta dei tuoi brani in corso…",
+      "skippedMalformed": "{count, plural, one {# voce non leggibile} other {# voci non leggibili}}",
+      "skippedPodcasts": "{count, plural, one {# riproduzione di podcast, audiolibro o video} other {# riproduzioni di podcast, audiolibri o video}}",
+      "skippedShort": "{count, plural, one {# riproduzione sotto i 30 secondi} other {# riproduzioni sotto i 30 secondi}}",
+      "skippedTitle": "Elementi ignorati",
+      "start": "Aggiungi alla mia musica",
+      "title": "Importa la tua cronologia",
+      "truncated": "Questo file sembra incompleto, quindi parte della tua cronologia potrebbe mancare. Se puoi, scaricalo di nuovo dall'email di Spotify.",
+      "waiting": "In attesa di connessione"
+    },
+    "improve": {
+      "connect": "Connetti la tua musica",
+      "stale": "Connetti Spotify a ListenBrainz per ricevere i nuovi ascolti"
+    },
+    "intro": "Dicci cosa ascolti davvero e i tuoi brani consigliati miglioreranno notevolmente. Ogni opzione si aggiunge alle altre.",
+    "lastfm": {
+      "intro": "Inserisci il tuo nome utente Last.fm e leggeremo i tuoi scrobble per trovare i brani che conosci.",
+      "submit": "Connetti",
+      "username": "Nome utente Last.fm"
+    },
+    "lb": {
+      "account": "Connesso come {username}",
+      "accountHint": "Non è il tuo account? Rimuovi ListenBrainz sotto Connessi, poi accedi di nuovo.",
+      "checklist": {
+        "step1": "Crea un account MetaBrainz",
+        "step2": "Verifica la tua email",
+        "step3": "Torna qui e inserisci il tuo nome utente"
+      },
+      "intro": "ListenBrainz tiene un registro gratuito e aperto di ciò che ascolti. Connettilo e i tuoi nuovi ascolti manterranno aggiornati i tuoi consigli.",
+      "oauth": "Accedi con ListenBrainz",
+      "oauthError": {
+        "denied": "Non hai autorizzato l'accesso, quindi non è stato connesso nulla. Riprova quando vuoi.",
+        "exchange_failed": "Non siamo riusciti a completare la connessione a ListenBrainz. Riprova.",
+        "generic": "Si è verificato un errore durante la connessione a ListenBrainz. Riprova.",
+        "invalid_state": "La sessione di accesso è scaduta o è già stata utilizzata. Riprova.",
+        "missing_params": "ListenBrainz non ha restituito tutto ciò di cui abbiamo bisogno. Riprova.",
+        "validate_failed": "Il tuo account MetaBrainz non è ancora su ListenBrainz. Accedi una volta su listenbrainz.org, poi riprova."
+      },
+      "oauthUnavailable": "L'accesso con ListenBrainz non è disponibile al momento. Inserisci invece il tuo nome utente.",
+      "opening": "Apertura di ListenBrainz in corso…",
+      "or": "Oppure inserisci il tuo nome utente ListenBrainz",
+      "signup": "Non ne hai uno? Crea un account gratuito",
+      "spotifyGuide": "Connetti Spotify a ListenBrainz",
+      "spotifyGuideBody": "Così tutto ciò che ascolti su Spotify aggiornerà automaticamente i tuoi brani consigliati.",
+      "submit": "Connetti",
+      "username": "Nome utente ListenBrainz"
+    },
+    "offline": "Sei offline",
+    "playlist": {
+      "again": "Importa un'altra playlist",
+      "done": "Importata {title}",
+      "howTo": {
+        "step1": "1. Su music.youtube.com, apri Raccolta → Brani piaciuti.",
+        "step2": "2. Seleziona i brani (tocca un brano, poi tocca gli altri).",
+        "step3": "3. Scegli \"Aggiungi a playlist\" → Nuova playlist, e imposta la visibilità su Non in elenco o Pubblica.",
+        "step4": "4. Apri la nuova playlist, tocca Condividi → Copia link, e incollalo qui.",
+        "anyPlaylist": "Va bene anche qualsiasi playlist pubblica o non in elenco con i brani che ami, ad esempio il tuo mix per le feste o per l'allenamento.",
+        "title": "Come faccio a condividere i miei \"Brani che ti piacciono\"?"
+      },
+      "importing": "Importazione della tua playlist in corso…",
+      "intro": "Incolla il link di una playlist pubblica di Spotify o YouTube Music e aggiungeremo i suoi brani a quelli che sappiamo che canti.",
+      "matched": "{matched} su {fetched} hanno una versione karaoke",
+      "notPlaylist": "Questo non è un link a una playlist di Spotify o YouTube Music",
+      "paste": "Incolla",
+      "placeholder": "Link della playlist",
+      "submit": "Importa playlist"
+    },
+    "reminders": {
+      "body": "Apri l'email di Spotify, poi condividi il file zip con Nomad Karaoke.",
+      "channel": "Promemoria",
+      "title": "I tuoi dati Spotify potrebbero essere pronti"
+    },
+    "result": "Aggiunti {artists, plural, one {# artista} other {# artisti}} e {songs, plural, one {# brano} other {# brani}} che conosci",
+    "screenshot": {
+      "again": "Scegli altri screenshot",
+      "confirm": "{count, plural, =0 {Nulla da aggiungere} one {Aggiungi # elemento} other {Aggiungi # elementi}}",
+      "confirmBody": "Deseleziona tutto ciò che non è corretto.",
+      "confirmTitle": "È corretto?",
+      "dailyLimit": "Hai usato tutti i 10 screenshot di oggi. Riprova domani.",
+      "empty": "Non siamo riusciti a trovare artisti o brani in questi screenshot. Provane uno più nitido.",
+      "intro": "Scegli screenshot della tua libreria, delle playlist o dei tuoi artisti preferiti da qualsiasi app musicale. Leggeremo i nomi e potrai verificarli prima che venga salvato qualsiasi dato.",
+      "item": "{artist} · {title}",
+      "limit": "Fino a 5 screenshot alla volta.",
+      "pick": "Scegli screenshot",
+      "pickMore": "Scegli screenshot diversi",
+      "reading": "Lettura dei tuoi screenshot in corso…",
+      "unmatched": "Non ancora presente nel nostro catalogo karaoke",
+      "retry": "Riprova"
+    },
+    "source": {
+      "appleExport": "Cronologia di Apple Music",
+      "screenshot": "Screenshot",
+      "spotifyExport": "Cronologia di Spotify",
+      "spotifyPlaylist": "Playlist di Spotify",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Aggiungi altri",
+      "counts": "{artists, plural, one {# artista} other {# artisti}} · {songs, plural, one {# brano} other {# brani}}",
+      "empty": "Nessun servizio connesso. Collega un servizio musicale o importa la tua cronologia per perfezionare i tuoi consigli.",
+      "lastImport": "Ultima importazione {days, plural, =0 {oggi} one {# giorno fa} other {# giorni fa}}",
+      "loadFailed": "Non siamo riusciti a caricare le tue fonti connesse. Riprova tra un momento.",
+      "reconnect": "Riconnetti",
+      "removeBody": "Questo rimuoverà gli artisti e i brani che {name} ha aggiunto al tuo profilo musicale. I tuoi consigli verranno aggiornati.",
+      "removeFailed": "Non siamo riusciti a rimuoverlo in questo momento. Riprova.",
+      "removeTitle": "Rimuovere {name}?",
+      "stale": "Connetti Spotify a ListenBrainz per ricevere i nuovi ascolti",
+      "status": {
+        "error": "Problema",
+        "importing": "Importazione in corso",
+        "needsReconnect": "Da riconnettere",
+        "ok": "Aggiornato",
+        "stale": "Nessun nuovo ascolto"
+      },
+      "cancel": "Annulla",
+      "remove": "Rimuovi",
+      "title": "Connesso"
+    },
+    "spotifyExport": {
+      "denied": "Le notifiche sono disattivate per Nomad Karaoke. Attivale nelle Impostazioni per ricevere un promemoria.",
+      "intro": "Spotify può inviarti l'intera cronologia di ascolto. Ci vorrà qualche giorno: inizia subito e noi penseremo al resto.",
+      "open": "Apri impostazioni privacy di Spotify",
+      "pick": "Scegli il file",
+      "remind": "Ricordamelo",
+      "reminded": "Fatto. Te lo ricorderemo tra circa 5 giorni e di nuovo tra 25.",
+      "step1": "Richiedi i tuoi dati su spotify.com/account/privacy. Seleziona Dati dell'account (pronti in circa 5 giorni) e Cronologia di streaming estesa (fino a 30 giorni): la cronologia estesa include tutti i tuoi ascolti.",
+      "step2": "Ti invieremo un promemoria quando dovrebbero essere pronti.",
+      "step3": "Quando arriva l'email di Spotify, scarica il file zip, poi fai Condividi → Nomad Karaoke (Android), oppure torna qui e seleziona il file.",
+      "openSettings": "Apri Impostazioni"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Fatto. I tuoi brani consigliati ora includono ciò che ascolti.",
+      "failed": "Abbiamo collegato il tuo account ma non siamo riusciti a leggere la cronologia in questo momento. Riproveremo più tardi.",
+      "reading": "Lettura della tua cronologia di ascolto in corso…",
+      "slow": "Lettura della cronologia ancora in corso. I tuoi consigli verranno aggiornati al termine."
+    },
+    "title": "Connetti la tua musica",
+    "connected": "Connesso"
   }
 }

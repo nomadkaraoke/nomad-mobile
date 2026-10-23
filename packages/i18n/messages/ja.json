@@ -1202,5 +1202,217 @@
     "songSearchLabel": "曲を探す",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "現在おすすめはありません。上の検索バーからアーティストを検索するか、このステップをスキップしてください。"
+  },
+  "connect": {
+    "appleExport": "Apple Musicのサブスクリプションをお持ちでないですか？代わりに再生履歴をインポートできます",
+    "appleGuide": {
+      "intro": "Apple Musicのサブスクリプションがなくても、Appleから再生履歴を取り寄せることができます。届くまでに数日かかります。",
+      "open": "privacy.apple.com を開く",
+      "pick": "ファイルを選択",
+      "step1": "privacy.apple.com にアクセスしてサインインします。",
+      "step2": "「データのコピーをリクエスト」を選択し、「Apple Mediaサービスの情報」にチェックを入れて送信します。数日後にAppleからメールが届きます。",
+      "step3": "ファイルをダウンロードし、zipファイルまたはPlay ActivityのCSVファイルをここで選択します。"
+    },
+    "appleReading": "ライブラリを読み込み中…",
+    "cards": {
+      "apple": {
+        "detail": "ライブラリと最近の再生履歴 · 数秒",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Scrobble履歴 · 数分",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "聴いた曲に合わせておすすめを常に最新に",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "SpotifyまたはYouTube Music · 数秒",
+        "title": "プレイリストのリンクを貼り付け"
+      },
+      "screenshot": {
+        "detail": "アーティストを数秒で検出",
+        "title": "音楽アプリのスクリーンショット"
+      },
+      "spotifyExport": {
+        "detail": "すべての再生履歴 · Spotify側で5〜30日かかります",
+        "title": "Spotifyの履歴"
+      }
+    },
+    "errors": {
+      "badUrl": "SpotifyまたはYouTube Musicのプレイリストのリンクではありません。",
+      "likedPrivate": "「高く評価した曲」は常に非公開です。公開または限定公開のプレイリストにコピーしてから、そのリンクを共有してください。",
+      "notAnExport": "SpotifyまたはAppleのエクスポートデータではないようです。",
+      "notFound": "そのユーザー名が見つかりませんでした。スペルを確認してもう一度お試しください。",
+      "private": "そのプレイリストを開けませんでした。公開設定になっていることを確認して、もう一度お試しください。",
+      "rateLimited": "現在インポートが集中しています。しばらく経ってからもう一度お試しください。",
+      "tooLarge": "ファイルサイズが大きすぎるため、アプリから送信できません。",
+      "unavailable": "サービスに接続できませんでした。数分後にもう一度お試しください。",
+      "unparseable": "プレイリストを読み込めませんでした。代わりにYouTube Musicのリンクまたはスクリーンショットをお試しください。",
+      "generic": "問題が発生しました。もう一度お試しください。"
+    },
+    "importFile": {
+      "kind": {
+        "apple": "Apple Musicの履歴",
+        "spotifyAccount": "Spotifyのアカウントデータ",
+        "spotifyExtended": "Spotifyの再生履歴"
+      },
+      "lbAlso": "ListenBrainzにも追加して、新しい再生履歴を自動で反映",
+      "lbBusy": "ListenBrainzで別のファイルをインポート中です。完了してからもう一度お試しください。",
+      "lbReconnect": "ListenBrainzに再接続してから、もう一度お試しください。",
+      "lbSending": "ListenBrainzに送信中…",
+      "lbSent": "ListenBrainzに送信しました。インポートの完了まで少し時間がかかる場合があります。",
+      "lbTooBig": "アプリから送信するにはサイズが大きすぎます。listenbrainz.org で直接アップロードしてください",
+      "libraryBoth": "さらに、{liked, plural, other {#曲のお気に入り}}と{playlists, plural, other {#個のプレイリスト}}",
+      "libraryLiked": "さらに、{liked, plural, other {#曲のお気に入り}}",
+      "libraryPlaylists": "さらに、{playlists, plural, other {#個のプレイリスト}}",
+      "nothing": "このファイルには追加できる曲が見つかりませんでした。",
+      "pickAnother": "別のファイルを選択",
+      "preview": "{kind}から{tracks, plural, other {#曲}}",
+      "reading": "ファイルを読み込み中…",
+      "sending": "曲を追加中…",
+      "skippedMalformed": "{count, plural, other {#件の読み取れないデータ}}",
+      "skippedPodcasts": "{count, plural, other {#件のポッドキャスト、オーディオブック、動画の再生}}",
+      "skippedShort": "{count, plural, other {#件の30秒未満の再生}}",
+      "skippedTitle": "スキップ済み",
+      "start": "マイミュージックに追加",
+      "title": "履歴をインポート",
+      "truncated": "このファイルは不完全な可能性があるため、履歴の一部が不足している場合があります。可能であれば、Spotifyからのメールから再度ダウンロードしてください。",
+      "waiting": "接続を待機中"
+    },
+    "improve": {
+      "connect": "音楽サービスを連携",
+      "stale": "SpotifyをListenBrainzに連携して、新しい再生履歴を反映させましょう"
+    },
+    "intro": "普段聴いている音楽を連携すると、おすすめの選曲精度が大幅にアップします。連携するサービスを増やすほど、さらに精度が上がります。",
+    "lastfm": {
+      "intro": "Last.fmのユーザー名を入力すると、Scrobble履歴を読み込んであなたが知っている曲を見つけます。",
+      "submit": "連携する",
+      "username": "Last.fmのユーザー名"
+    },
+    "lb": {
+      "account": "{username} として接続中",
+      "accountHint": "別のアカウントですか？「連携済み」からListenBrainzを削除し、再度サインインしてください。",
+      "checklist": {
+        "step1": "MetaBrainzアカウントを作成",
+        "step2": "メールアドレスを認証",
+        "step3": "ここに戻ってユーザー名を入力"
+      },
+      "intro": "ListenBrainzは、再生履歴を記録できる無料のオープンサービスです。連携すると、新しく聴いた曲がおすすめに自動で反映されます。",
+      "oauth": "ListenBrainzでサインイン",
+      "oauthError": {
+        "denied": "アクセスが許可されなかったため、連携されませんでした。いつでも再試行できます。",
+        "exchange_failed": "ListenBrainzへの接続を完了できませんでした。もう一度お試しください。",
+        "generic": "ListenBrainzの連携中に問題が発生しました。もう一度お試しください。",
+        "invalid_state": "サインインの有効期限が切れたか、すでに使用されています。もう一度お試しください。",
+        "missing_params": "ListenBrainzから必要な情報が返されませんでした。もう一度お試しください。",
+        "validate_failed": "MetaBrainzアカウントがまだListenBrainzに登録されていません。一度 listenbrainz.org にサインインしてから、もう一度お試しください。"
+      },
+      "oauthUnavailable": "現在、ListenBrainzでのサインインを利用できません。代わりにユーザー名を入力してください。",
+      "opening": "ListenBrainzを開いています…",
+      "or": "またはListenBrainzのユーザー名を入力",
+      "signup": "アカウントをお持ちでないですか？ 無料で作成できます",
+      "spotifyGuide": "SpotifyをListenBrainzに連携",
+      "spotifyGuideBody": "連携すると、Spotifyで再生した曲がすべて自動的におすすめに反映されます。",
+      "submit": "連携する",
+      "username": "ListenBrainzのユーザー名"
+    },
+    "offline": "オフラインです",
+    "playlist": {
+      "again": "別のプレイリストをインポート",
+      "done": "「{title}」をインポートしました",
+      "howTo": {
+        "step1": "1. music.youtube.com で、「ライブラリ」→「高く評価した曲」を開きます。",
+        "step2": "2. 曲を選択します（1曲タップしてから、他の曲をタップ）。",
+        "step3": "3.「プレイリストに追加」→「新しいプレイリスト」を選択し、公開設定を「限定公開」または「公開」に設定します。",
+        "step4": "4. 新しいプレイリストを開き、「共有」→「リンクをコピー」をタップして、ここに貼り付けます。",
+        "anyPlaylist": "お気に入りの曲を集めた公開または限定公開のプレイリスト（パーティー用やワークアウト用など）でもインポートできます。",
+        "title": "「高く評価した音楽」を共有するには？"
+      },
+      "importing": "プレイリストをインポート中…",
+      "intro": "SpotifyまたはYouTube Musicの公開プレイリストのリンクを貼り付けると、その曲がレパートリーに追加されます。",
+      "matched": "{fetched}曲中{matched}曲にカラオケバージョンがあります",
+      "notPlaylist": "SpotifyまたはYouTube Musicのプレイリストのリンクではありません",
+      "paste": "貼り付け",
+      "placeholder": "プレイリストのリンク",
+      "submit": "プレイリストをインポート"
+    },
+    "reminders": {
+      "body": "Spotifyからのメールを開き、zipファイルをNomad Karaokeに共有してください。",
+      "channel": "リマインダー",
+      "title": "Spotifyのデータの準備ができた可能性があります"
+    },
+    "result": "よく聴くアーティスト{artists, plural, other {#組}}と曲{songs, plural, other {#曲}}を追加しました",
+    "screenshot": {
+      "again": "他のスクリーンショットを選択",
+      "confirm": "{count, plural, =0 {追加する項目がありません} other {#件を追加}}",
+      "confirmBody": "間違っている項目のチェックを外してください。",
+      "confirmTitle": "これでよろしいですか？",
+      "dailyLimit": "本日のスクリーンショット上限（10枚）に達しました。明日もう一度お試しください。",
+      "empty": "スクリーンショットからアーティストや曲が見つかりませんでした。より鮮明な画像をお試しください。",
+      "intro": "音楽アプリのライブラリ、プレイリスト、トップアーティストなどのスクリーンショットを選択してください。名前を読み取ります。保存する前に内容を確認できます。",
+      "item": "{artist} · {title}",
+      "limit": "一度に最大5枚のスクリーンショットを選択できます。",
+      "pick": "スクリーンショットを選択",
+      "pickMore": "別のスクリーンショットを選択",
+      "reading": "スクリーンショットを読み取り中…",
+      "unmatched": "カラオケカタログにまだありません",
+      "retry": "もう一度試す"
+    },
+    "source": {
+      "appleExport": "Apple Musicの履歴",
+      "screenshot": "スクリーンショット",
+      "spotifyExport": "Spotifyの履歴",
+      "spotifyPlaylist": "Spotifyのプレイリスト",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "さらに追加",
+      "counts": "{artists, plural, other {#組のアーティスト}} · {songs, plural, other {#曲}}",
+      "empty": "まだ何も連携されていません。音楽サービスを追加するか履歴をインポートして、おすすめの精度を上げましょう。",
+      "lastImport": "最終インポート：{days, plural, =0 {今日} other {#日前}}",
+      "loadFailed": "連携済みのソースを読み込めませんでした。しばらくしてからもう一度お試しください。",
+      "reconnect": "再接続",
+      "removeBody": "{name}によって音楽プロフィールに追加されたアーティストや曲が削除されます。おすすめの選曲も更新されます。",
+      "removeFailed": "削除できませんでした。もう一度お試しください。",
+      "removeTitle": "{name}を削除しますか？",
+      "stale": "SpotifyをListenBrainzに連携して、新しい再生履歴を反映させましょう",
+      "status": {
+        "error": "エラー",
+        "importing": "インポート中",
+        "needsReconnect": "再接続が必要",
+        "ok": "最新",
+        "stale": "新しい再生履歴がありません"
+      },
+      "cancel": "キャンセル",
+      "remove": "削除",
+      "title": "接続済み"
+    },
+    "spotifyExport": {
+      "denied": "Nomad Karaokeの通知がオフになっています。リマインダーを受け取るには、設定で通知をオンにしてください。",
+      "intro": "Spotifyからすべての再生履歴を取り寄せることができます。届くまでに数日かかるため、今すぐリクエストしておきましょう。届き次第、こちらで処理します。",
+      "open": "Spotifyのプライバシー設定を開く",
+      "pick": "ファイルを選択",
+      "remind": "通知を受け取る",
+      "reminded": "完了しました。約5日後と、25日後にリマインダーをお送りします。",
+      "step1": "spotify.com/account/privacy でデータをリクエストします。「アカウントデータ」（約5日で準備完了）と「拡張ストリーミング履歴」（最大30日）にチェックを入れてください。拡張ストリーミング履歴にはこれまでの全履歴が含まれます。",
+      "step2": "準備ができる頃にリマインダーをお送りします。",
+      "step3": "Spotifyからメールが届いたらzipファイルをダウンロードし、「共有」→「Nomad Karaoke」（Android）、またはここに戻ってファイルを選択してください。",
+      "openSettings": "設定を開く"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "完了しました。聴いている曲がおすすめに反映されました。",
+      "failed": "アカウントは連携されましたが、履歴を読み込めませんでした。後ほど再試行します。",
+      "reading": "再生履歴を読み込み中…",
+      "slow": "引き続き履歴を読み込んでいます。完了次第、おすすめが更新されます。"
+    },
+    "title": "音楽を連携する",
+    "connected": "接続済み"
   }
 }

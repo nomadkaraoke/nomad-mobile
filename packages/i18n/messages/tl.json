@@ -1202,5 +1202,217 @@
     "songSearchLabel": "Maghanap ng kanta",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Walang mga mungkahi sa ngayon. Maghanap ng artist sa itaas, o laktawan ang hakbang na ito."
+  },
+  "connect": {
+    "appleExport": "Walang subscription sa Apple Music? I-import na lang ang iyong play history",
+    "appleGuide": {
+      "intro": "Walang subscription sa Apple Music? Puwede pa ring ipadala sa iyo ng Apple ang iyong play history. Tumatagal ito nang ilang araw.",
+      "open": "Buksan ang privacy.apple.com",
+      "pick": "Piliin ang file",
+      "step1": "Pumunta sa privacy.apple.com at mag-sign in.",
+      "step2": "Piliin ang Request a copy of your data, lagyan ng tsek ang Apple Media Services information, at i-submit. Mag-e-email ang Apple sa loob ng ilang araw.",
+      "step3": "I-download ang mga file, pagkatapos ay piliin dito ang zip o ang Play Activity CSV."
+    },
+    "appleReading": "Binabasa ang iyong library…",
+    "cards": {
+      "apple": {
+        "detail": "Iyong library at mga kamakailang pinatugtog · ilang segundo",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Iyong mga scrobble · ilang minuto",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Pinapanatiling bago ang iyong mga napili habang nakikinig ka",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify o YouTube Music · ilang segundo",
+        "title": "Mag-paste ng link ng playlist"
+      },
+      "screenshot": {
+        "detail": "Mga artist sa loob ng ilang segundo",
+        "title": "I-screenshot ang iyong music app"
+      },
+      "spotifyExport": {
+        "detail": "Iyong buong listening history · tumatagal ng 5–30 araw sa Spotify",
+        "title": "Iyong Spotify history"
+      }
+    },
+    "errors": {
+      "badUrl": "Hindi iyan link ng playlist sa Spotify o YouTube Music.",
+      "likedPrivate": "Palaging private ang Liked Music. Kopyahin ito sa isang pampubliko o unlisted na playlist, pagkatapos ay ibahagi ang link na iyon.",
+      "notAnExport": "Mukhang hindi ito data export mula sa Spotify o Apple.",
+      "notFound": "Hindi namin mahanap ang username na iyon. Pakisuri ang baybay at subukan muli.",
+      "private": "Hindi namin mabuksan ang playlist na iyon. Tiyaking pampubliko ito, pagkatapos ay subukan muli.",
+      "rateLimited": "Masyadong maraming import sa ngayon. Subukan muli mamaya.",
+      "tooLarge": "Masyadong malaki ang file na iyan para ipadala mula sa app.",
+      "unavailable": "Hindi namin maabot ang serbisyo ngayon. Subukan muli sa loob ng ilang minuto.",
+      "unparseable": "Hindi namin mabasa ang playlist na iyon ngayon. Subukan na lang ang link ng YouTube Music o isang screenshot.",
+      "generic": "May nangyaring mali. Pakisubukan muli."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "iyong Apple Music history",
+        "spotifyAccount": "iyong Spotify account data",
+        "spotifyExtended": "iyong Spotify streaming history"
+      },
+      "lbAlso": "Idagdag din ito sa ListenBrainz para tuloy-tuloy ang pagpasok ng mga bagong pinapakinggan",
+      "lbBusy": "Kasalukuyan nang nag-i-import ng file ang ListenBrainz para sa iyo. Subukan muli kapag tapos na ito.",
+      "lbReconnect": "Muling ikonekta ang ListenBrainz, pagkatapos ay subukan muli.",
+      "lbSending": "Ipinapadala sa ListenBrainz…",
+      "lbSent": "Naipadala na sa ListenBrainz. Maaaring magtagal bago nila ito ma-import.",
+      "lbTooBig": "Masyadong malaki para ipadala mula sa app: i-upload ito sa listenbrainz.org",
+      "libraryBoth": "Kasama ang {liked, plural, one {# nagustuhang kanta} other {# nagustuhang kanta}} at {playlists, plural, one {# playlist} other {# playlist}}",
+      "libraryLiked": "Kasama ang {liked, plural, one {# nagustuhang kanta} other {# nagustuhang kanta}}",
+      "libraryPlaylists": "Kasama ang {playlists, plural, one {# playlist} other {# playlist}}",
+      "nothing": "Wala kaming nahanap na mga kantang maidaragdag sa file na ito.",
+      "pickAnother": "Pumili ng ibang file",
+      "preview": "{tracks, plural, one {# kanta} other {# kanta}} mula sa {kind}",
+      "reading": "Binabasa ang iyong file…",
+      "sending": "Idinaragdag ang iyong mga kanta…",
+      "skippedMalformed": "{count, plural, one {# hindi mababasang entry} other {# hindi mababasang entry}}",
+      "skippedPodcasts": "{count, plural, one {# pag-play ng podcast, audiobook, o video} other {# pag-play ng podcast, audiobook, o video}}",
+      "skippedShort": "{count, plural, one {# play na wala pang 30 segundo} other {# play na wala pang 30 segundo}}",
+      "skippedTitle": "Nilaktawan",
+      "start": "Idagdag sa aking musika",
+      "title": "I-import ang iyong history",
+      "truncated": "Mukhang hindi kumpleto ang file na ito, kaya maaaring may kulang sa iyong history. Kung maaari, i-download itong muli mula sa email ng Spotify.",
+      "waiting": "Naghihintay ng koneksyon"
+    },
+    "improve": {
+      "connect": "Ikonekta ang iyong musika",
+      "stale": "Ikonekta ang Spotify sa ListenBrainz para pumasok ang mga bagong pinapakinggan"
+    },
+    "intro": "Sabihin sa amin kung ano talaga ang pinapakinggan mo at mas gaganda pa ang iyong mga mapipiling kanta. Bawat isa rito ay nakadaragdag sa iba.",
+    "lastfm": {
+      "intro": "Ilagay ang iyong Last.fm username at babasahin namin ang iyong mga scrobble para maghanap ng mga kantang alam mo.",
+      "submit": "Ikonekta",
+      "username": "Last.fm username"
+    },
+    "lb": {
+      "account": "Konektado bilang {username}",
+      "accountHint": "Hindi mo account? Alisin ang ListenBrainz sa ilalim ng Konektado, pagkatapos ay mag-sign in muli.",
+      "checklist": {
+        "step1": "Gumawa ng MetaBrainz account",
+        "step2": "I-verify ang iyong email",
+        "step3": "Bumalik dito at ilagay ang iyong username"
+      },
+      "intro": "Ang ListenBrainz ay nagpapanatili ng libre at bukas na talaan ng iyong mga pinapakinggan. Ikonekta ito at pananatilihing bago ng iyong mga bagong pinatugtog ang mga mapipili para sa iyo.",
+      "oauth": "Mag-sign in gamit ang ListenBrainz",
+      "oauthError": {
+        "denied": "Hindi mo pinayagan ang access, kaya walang naikonekta. Subukan muli kahit kailan mo gusto.",
+        "exchange_failed": "Hindi namin matapos ang pagkonekta sa ListenBrainz. Pakisubukan muli.",
+        "generic": "Nagkaproblema sa pagkonekta sa ListenBrainz. Pakisubukan muli.",
+        "invalid_state": "Nag-expire na o nagamit na ang sign-in na iyon. Pakisubukan muli.",
+        "missing_params": "Hindi naibalik ng ListenBrainz ang lahat ng kailangan namin. Pakisubukan muli.",
+        "validate_failed": "Wala pa sa ListenBrainz ang iyong MetaBrainz account. Mag-sign in muna nang isang beses sa listenbrainz.org, pagkatapos ay subukan muli."
+      },
+      "oauthUnavailable": "Hindi available ang pag-sign in gamit ang ListenBrainz ngayon. Ilagay na lang ang iyong username.",
+      "opening": "Binubuksan ang ListenBrainz…",
+      "or": "O ilagay ang iyong ListenBrainz username",
+      "signup": "Wala ka pa nito? Gumawa ng libreng account",
+      "spotifyGuide": "Ikonekta ang Spotify sa ListenBrainz",
+      "spotifyGuideBody": "Pagkatapos, lahat ng pinapatugtog mo sa Spotify ay kusa nang makakarating sa iyong mga mapipiling kanta.",
+      "submit": "Ikonekta",
+      "username": "ListenBrainz username"
+    },
+    "offline": "Offline ka",
+    "playlist": {
+      "again": "Mag-import ng isa pang playlist",
+      "done": "Na-import ang {title}",
+      "howTo": {
+        "step1": "1. Sa music.youtube.com, buksan ang Library → Liked Music.",
+        "step2": "2. Piliin ang mga kanta (i-tap ang isa, pagkatapos ay i-tap ang iba pa).",
+        "step3": "3. Piliin ang \"Add to playlist\" → New playlist, at itakda ang visibility sa Unlisted o Public.",
+        "step4": "4. Buksan ang bagong playlist, i-tap ang Share → Copy link, at i-paste ito rito.",
+        "anyPlaylist": "Puwede rin ang kahit anong pampubliko o unlisted na playlist ng mga paborito mong kanta, tulad ng mix mo para sa party o workout.",
+        "title": "Paano ko maibabahagi ang aking Liked Music?"
+      },
+      "importing": "Inii-import ang iyong playlist…",
+      "intro": "Mag-paste ng link sa isang pampublikong playlist sa Spotify o YouTube Music at idaragdag namin ang mga kanta nito sa mga alam naming kinakanta mo.",
+      "matched": "{matched} sa {fetched} ay may karaoke version",
+      "notPlaylist": "Hindi iyan link ng playlist sa Spotify o YouTube Music",
+      "paste": "I-paste",
+      "placeholder": "Link ng playlist",
+      "submit": "I-import ang playlist"
+    },
+    "reminders": {
+      "body": "Buksan ang email mula sa Spotify, pagkatapos ay ibahagi ang zip sa Nomad Karaoke.",
+      "channel": "Mga Paalala",
+      "title": "Maaaring handa na ang iyong Spotify data"
+    },
+    "result": "Naidagdag ang {artists, plural, one {# artist} other {# artist}} at {songs, plural, one {# kanta} other {# kanta}} na alam mo",
+    "screenshot": {
+      "again": "Pumili pa ng mga screenshot",
+      "confirm": "{count, plural, =0 {Walang idaragdag} one {Magdagdag ng # item} other {Magdagdag ng # item}}",
+      "confirmBody": "Alisin ang tsek sa anumang nagkamali kami.",
+      "confirmTitle": "Tama ba ito?",
+      "dailyLimit": "Nagamit mo na ang iyong 10 screenshot para sa araw na ito. Subukan muli bukas.",
+      "empty": "Wala kaming mahanap na mga artist o kanta sa mga screenshot na iyon. Subukan ang mas malinaw na larawan.",
+      "intro": "Pumili ng mga screenshot ng iyong library, mga playlist, o nangungunang mga artist mula sa anumang music app. Babasahin namin ang mga pangalan at susuriin mo muna ang mga ito bago i-save ang anuman.",
+      "item": "{artist} · {title}",
+      "limit": "Hanggang 5 screenshot sa bawat pagkakataon.",
+      "pick": "Pumili ng mga screenshot",
+      "pickMore": "Pumili ng iba pang mga screenshot",
+      "reading": "Binabasa ang iyong mga screenshot…",
+      "unmatched": "Wala pa sa aming karaoke catalog",
+      "retry": "Subukan muli"
+    },
+    "source": {
+      "appleExport": "Apple Music history",
+      "screenshot": "Mga screenshot",
+      "spotifyExport": "Spotify history",
+      "spotifyPlaylist": "Mga playlist sa Spotify",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Magdagdag pa",
+      "counts": "{artists, plural, one {# artist} other {# artist}} · {songs, plural, one {# kanta} other {# kanta}}",
+      "empty": "Wala pang nakakonekta. Magdagdag ng serbisyo ng musika o i-import ang iyong history para mas mapahusay ang iyong mga mapipili.",
+      "lastImport": "Huling pag-import {days, plural, =0 {ngayong araw} one {# araw ang nakalipas} other {# araw ang nakalipas}}",
+      "loadFailed": "Hindi namin ma-load ang iyong mga nakakonektang source. Pakisubukan muli sa ilang sandali.",
+      "reconnect": "Muling ikonekta",
+      "removeBody": "Aalisin nito ang mga artist at kantang idinagdag ng {name} sa iyong music profile. Mag-a-update ang iyong mga mapipili.",
+      "removeFailed": "Hindi namin maalis iyon ngayon. Pakisubukan muli.",
+      "removeTitle": "Alisin ang {name}?",
+      "stale": "Ikonekta ang Spotify sa ListenBrainz para pumasok ang mga bagong pinapakinggan",
+      "status": {
+        "error": "May problema",
+        "importing": "Nag-i-import",
+        "needsReconnect": "Kailangang muling ikonekta",
+        "ok": "Up to date",
+        "stale": "Walang mga bagong pinatugtog"
+      },
+      "cancel": "Kanselahin",
+      "remove": "Alisin",
+      "title": "Konektado"
+    },
+    "spotifyExport": {
+      "denied": "Naka-off ang mga notification para sa Nomad Karaoke. I-on ang mga ito sa Settings para makatanggap ng paalala.",
+      "intro": "Maaaring ipadala sa iyo ng Spotify ang iyong buong listening history. Tumatagal ito nang ilang araw, kaya simulan na ngayon at kami na ang bahala pagkatapos.",
+      "open": "Buksan ang privacy settings ng Spotify",
+      "pick": "Piliin ang file",
+      "remind": "Ipaalala sa akin",
+      "reminded": "Tapos na. Paaalalahanan ka namin sa loob ng mga 5 araw, at muli sa ika-25 araw.",
+      "step1": "Hilingin ang iyong data sa spotify.com/account/privacy. Lagyan ng tsek ang Account data (handa sa loob ng mga 5 araw) at Extended streaming history (hanggang 30 araw): nasa Extended ang iyong buong history.",
+      "step2": "Paaalalahanan ka namin kung kailan ito dapat handa na.",
+      "step3": "Kapag dumating na ang email ng Spotify, i-download ang zip, pagkatapos ay Share → Nomad Karaoke (Android), o bumalik dito at piliin ang file.",
+      "openSettings": "Buksan ang Mga Setting"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Tapos na. Kasama na ngayon sa iyong mga mapipili ang mga pinapakinggan mo.",
+      "failed": "Naikonekta namin ang iyong account ngunit hindi mabasa ang iyong history ngayon. Susubukan naming muli mamaya.",
+      "reading": "Binabasa ang iyong listening history…",
+      "slow": "Binabasa pa rin ang iyong history. Mag-a-update ang iyong mga mapipili kapag tapos na ito."
+    },
+    "title": "Ikonekta ang iyong musika",
+    "connected": "Konektado"
   }
 }

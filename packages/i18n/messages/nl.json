@@ -1202,5 +1202,217 @@
     "songSearchLabel": "Zoek een nummer",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Op dit moment geen suggesties. Zoek hierboven naar een artiest of sla deze stap over."
+  },
+  "connect": {
+    "appleExport": "Geen Apple Music-abonnement? Importeer in plaats daarvan je afspeelgeschiedenis",
+    "appleGuide": {
+      "intro": "Geen Apple Music-abonnement? Apple kan je alsnog je afspeelgeschiedenis sturen. Dit duurt een paar dagen.",
+      "open": "Open privacy.apple.com",
+      "pick": "Kies het bestand",
+      "step1": "Ga naar privacy.apple.com en meld je aan.",
+      "step2": "Kies 'Vraag een kopie van je gegevens aan', vink 'Gegevens van voorzieningen voor Apple Media' aan en verstuur het verzoek. Apple mailt je binnen enkele dagen.",
+      "step3": "Download de bestanden en kies hier het zip-bestand of het CSV-bestand van Play Activity."
+    },
+    "appleReading": "Je bibliotheek lezen…",
+    "cards": {
+      "apple": {
+        "detail": "Je bibliotheek en recent afgespeelde nummers · seconden",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Je scrobbles · een paar minuten",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Houdt je suggesties actueel terwijl je luistert",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify of YouTube Music · seconden",
+        "title": "Plak een afspeellijstlink"
+      },
+      "screenshot": {
+        "detail": "Artiesten binnen enkele seconden",
+        "title": "Maak een screenshot van je muziek-app"
+      },
+      "spotifyExport": {
+        "detail": "Je hele luistergeschiedenis · duurt 5–30 dagen bij Spotify",
+        "title": "Je Spotify-geschiedenis"
+      }
+    },
+    "errors": {
+      "badUrl": "Dat is geen afspeellijstlink van Spotify of YouTube Music.",
+      "likedPrivate": "Gelikete nummers zijn altijd privé. Kopieer ze naar een openbare of verborgen afspeellijst en deel die link.",
+      "notAnExport": "Dit lijkt niet op een gegevensexport van Spotify of Apple.",
+      "notFound": "We konden die gebruikersnaam niet vinden. Controleer de spelling en probeer het opnieuw.",
+      "private": "We konden die afspeellijst niet openen. Zorg dat deze openbaar is en probeer het opnieuw.",
+      "rateLimited": "Dat zijn te veel imports voor nu. Probeer het later opnieuw.",
+      "tooLarge": "Dat bestand is te groot om vanuit de app te verzenden.",
+      "unavailable": "We konden de service zojuist niet bereiken. Probeer het over een paar minuten opnieuw.",
+      "unparseable": "We konden die afspeellijst nu niet lezen. Probeer in plaats daarvan een YouTube Music-link of een screenshot.",
+      "generic": "Er is iets misgegaan. Probeer het opnieuw."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "je Apple Music-geschiedenis",
+        "spotifyAccount": "je Spotify-accountgegevens",
+        "spotifyExtended": "je uitgebreide Spotify-streaminggeschiedenis"
+      },
+      "lbAlso": "Voeg het ook toe aan ListenBrainz zodat nieuwe luisterbeurten blijven binnenkomen",
+      "lbBusy": "ListenBrainz is al een bestand voor je aan het importeren. Probeer het opnieuw zodra dit klaar is.",
+      "lbReconnect": "Verbind ListenBrainz opnieuw en probeer het nog eens.",
+      "lbSending": "Verzenden naar ListenBrainz…",
+      "lbSent": "Verzonden naar ListenBrainz. Het kan even duren voordat het is geïmporteerd.",
+      "lbTooBig": "Te groot om vanuit de app te verzenden: upload het op listenbrainz.org",
+      "libraryBoth": "Plus {liked, plural, one {# geliket nummer} other {# gelikete nummers}} en {playlists, plural, one {# afspeellijst} other {# afspeellijsten}}",
+      "libraryLiked": "Plus {liked, plural, one {# geliket nummer} other {# gelikete nummers}}",
+      "libraryPlaylists": "Plus {playlists, plural, one {# afspeellijst} other {# afspeellijsten}}",
+      "nothing": "We hebben geen nummers gevonden in dit bestand om toe te voegen.",
+      "pickAnother": "Kies een ander bestand",
+      "preview": "{tracks, plural, one {# nummer} other {# nummers}} uit {kind}",
+      "reading": "Je bestand lezen…",
+      "sending": "Je nummers toevoegen…",
+      "skippedMalformed": "{count, plural, one {# onleesbaar item} other {# onleesbare items}}",
+      "skippedPodcasts": "{count, plural, one {# afgespeelde podcast, luisterboek of video} other {# afgespeelde podcasts, luisterboeken of video's}}",
+      "skippedShort": "{count, plural, one {# keer korter dan 30 seconden afgespeeld} other {# keren korter dan 30 seconden afgespeeld}}",
+      "skippedTitle": "Overgeslagen",
+      "start": "Toevoegen aan mijn muziek",
+      "title": "Importeer je geschiedenis",
+      "truncated": "Dit bestand lijkt onvolledig, waardoor een deel van je geschiedenis mogelijk ontbreekt. Download het zo mogelijk opnieuw uit de e-mail van Spotify.",
+      "waiting": "Wachten op verbinding"
+    },
+    "improve": {
+      "connect": "Verbind je muziek",
+      "stale": "Verbind Spotify met ListenBrainz zodat nieuwe luisterbeurten binnenkomen"
+    },
+    "intro": "Vertel ons waar je echt naar luistert, dan worden je suggesties veel beter. Elk hiervan bouwt voort op de rest.",
+    "lastfm": {
+      "intro": "Voer je Last.fm-gebruikersnaam in en we lezen je scrobbles om nummers te vinden die je kent.",
+      "submit": "Verbinden",
+      "username": "Last.fm-gebruikersnaam"
+    },
+    "lb": {
+      "account": "Verbonden als {username}",
+      "accountHint": "Niet jouw account? Verwijder ListenBrainz onder Verbonden en meld je opnieuw aan.",
+      "checklist": {
+        "step1": "Maak een MetaBrainz-account aan",
+        "step2": "Verifieer je e-mailadres",
+        "step3": "Kom terug en voer je gebruikersnaam in"
+      },
+      "intro": "ListenBrainz houdt een gratis, open overzicht bij van wat je luistert. Verbind het en je nieuwe luisterbeurten houden je suggesties actueel.",
+      "oauth": "Aanmelden met ListenBrainz",
+      "oauthError": {
+        "denied": "Je hebt geen toegang verleend, dus er is niets verbonden. Probeer het opnieuw wanneer je wilt.",
+        "exchange_failed": "We konden de verbinding met ListenBrainz niet voltooien. Probeer het opnieuw.",
+        "generic": "Er is iets misgegaan bij het verbinden met ListenBrainz. Probeer het opnieuw.",
+        "invalid_state": "Die aanmelding is verlopen of al gebruikt. Probeer het opnieuw.",
+        "missing_params": "ListenBrainz heeft niet alle benodigde gegevens teruggestuurd. Probeer het opnieuw.",
+        "validate_failed": "Je MetaBrainz-account staat nog niet op ListenBrainz. Meld je eenmalig aan op listenbrainz.org en probeer het opnieuw."
+      },
+      "oauthUnavailable": "Aanmelden met ListenBrainz is momenteel niet beschikbaar. Voer in plaats daarvan je gebruikersnaam in.",
+      "opening": "ListenBrainz openen…",
+      "or": "Of voer je ListenBrainz-gebruikersnaam in",
+      "signup": "Heb je er nog geen? Maak een gratis account aan",
+      "spotifyGuide": "Verbind Spotify met ListenBrainz",
+      "spotifyGuideBody": "Dan komt alles wat je op Spotify afspeelt vanzelf bij je suggesties terecht.",
+      "submit": "Verbinden",
+      "username": "ListenBrainz-gebruikersnaam"
+    },
+    "offline": "Je bent offline",
+    "playlist": {
+      "again": "Importeer nog een afspeellijst",
+      "done": "{title} geïmporteerd",
+      "howTo": {
+        "step1": "1. Ga naar music.youtube.com en open Bibliotheek → Gelikete nummers.",
+        "step2": "2. Selecteer de nummers (tik op één nummer en selecteer daarna de rest).",
+        "step3": "3. Kies \"Toevoegen aan afspeellijst\" → Nieuwe afspeellijst en zet de zichtbaarheid op Verborgen of Openbaar.",
+        "step4": "4. Open de nieuwe afspeellijst, tik op Delen → Link kopiëren en plak deze hier.",
+        "anyPlaylist": "Elke openbare of verborgen afspeellijst met nummers die je geweldig vindt werkt ook, zoals je feest- of workoutmix.",
+        "title": "Hoe deel ik mijn 'Gelikete muziek'?"
+      },
+      "importing": "Je afspeellijst importeren…",
+      "intro": "Plak een link naar een openbare Spotify- of YouTube Music-afspeellijst en we voegen de nummers toe aan wat we weten dat je zingt.",
+      "matched": "{matched} van de {fetched} hebben karaokeversies",
+      "notPlaylist": "Dat is geen afspeellijstlink van Spotify of YouTube Music",
+      "paste": "Plakken",
+      "placeholder": "Afspeellijstlink",
+      "submit": "Afspeellijst importeren"
+    },
+    "reminders": {
+      "body": "Open de e-mail van Spotify en deel het zip-bestand met Nomad Karaoke.",
+      "channel": "Herinneringen",
+      "title": "Je Spotify-gegevens staan mogelijk klaar"
+    },
+    "result": "{artists, plural, one {# artiest} other {# artiesten}} en {songs, plural, one {# nummer} other {# nummers}} toegevoegd die je kent",
+    "screenshot": {
+      "again": "Kies meer screenshots",
+      "confirm": "{count, plural, =0 {Niets om toe te voegen} one {# item toevoegen} other {# items toevoegen}}",
+      "confirmBody": "Vink alles uit wat niet klopt.",
+      "confirmTitle": "Klopt dit?",
+      "dailyLimit": "Je hebt je dagelijkse limiet van 10 screenshots gebruikt. Probeer het morgen opnieuw.",
+      "empty": "We konden geen artiesten of nummers vinden in die screenshots. Probeer een duidelijkere afbeelding.",
+      "intro": "Kies screenshots van je bibliotheek, afspeellijsten of topartiesten uit elke gewenste muziek-app. We lezen de namen en jij controleert ze voordat er iets wordt opgeslagen.",
+      "item": "{artist} · {title}",
+      "limit": "Max. 5 screenshots tegelijk.",
+      "pick": "Kies screenshots",
+      "pickMore": "Kies andere screenshots",
+      "reading": "Je screenshots lezen…",
+      "unmatched": "Nog niet in onze karaokecatalogus",
+      "retry": "Probeer opnieuw"
+    },
+    "source": {
+      "appleExport": "Apple Music-geschiedenis",
+      "screenshot": "Screenshots",
+      "spotifyExport": "Spotify-geschiedenis",
+      "spotifyPlaylist": "Spotify-afspeellijsten",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Voeg meer toe",
+      "counts": "{artists, plural, one {# artiest} other {# artiesten}} · {songs, plural, one {# nummer} other {# nummers}}",
+      "empty": "Nog niets verbonden. Koppel een muziekdienst of importeer je geschiedenis om je suggesties te verfijnen.",
+      "lastImport": "Laatste import {days, plural, =0 {vandaag} one {# dag geleden} other {# dagen geleden}}",
+      "loadFailed": "We konden je verbonden bronnen niet laden. Probeer het over een ogenblik opnieuw.",
+      "reconnect": "Opnieuw verbinden",
+      "removeBody": "Hiermee verwijder je de artiesten en nummers die {name} aan je muziekprofiel heeft toegevoegd. Je suggesties worden bijgewerkt.",
+      "removeFailed": "We konden dat zojuist niet verwijderen. Probeer het opnieuw.",
+      "removeTitle": "{name} verwijderen?",
+      "stale": "Verbind Spotify met ListenBrainz zodat nieuwe luisterbeurten binnenkomen",
+      "status": {
+        "error": "Probleem",
+        "importing": "Importeren",
+        "needsReconnect": "Opnieuw verbinden vereist",
+        "ok": "Up-to-date",
+        "stale": "Geen nieuwe luisterbeurten"
+      },
+      "cancel": "Annuleren",
+      "remove": "Verwijderen",
+      "title": "Verbonden"
+    },
+    "spotifyExport": {
+      "denied": "Meldingen staan uit voor Nomad Karaoke. Schakel ze in via Instellingen om een herinnering te ontvangen.",
+      "intro": "Spotify kan je je hele luistergeschiedenis sturen. Dit duurt een paar dagen, dus vraag het nu alvast aan en wij nemen het vanaf daar over.",
+      "open": "Open Spotify-privacyinstellingen",
+      "pick": "Kies het bestand",
+      "remind": "Herinner mij",
+      "reminded": "Klaar. We sturen je over ongeveer 5 dagen een herinnering, en na 25 dagen opnieuw.",
+      "step1": "Vraag je gegevens aan op spotify.com/account/privacy. Vink Accountgegevens aan (klaar in ongeveer 5 dagen) en Uitgebreide streaminggeschiedenis (tot 30 dagen): Uitgebreid bevat je hele geschiedenis.",
+      "step2": "We herinneren je eraan wanneer het klaar zou moeten zijn.",
+      "step3": "Zodra de e-mail van Spotify binnenkomt, download je het zip-bestand en kies je Delen → Nomad Karaoke (Android), of kom je hier terug en kies je het bestand.",
+      "openSettings": "Instellingen openen"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Klaar. Je suggesties bevatten nu waar je naar luistert.",
+      "failed": "We hebben je account verbonden, maar konden je geschiedenis zojuist niet lezen. We proberen het later opnieuw.",
+      "reading": "Je luistergeschiedenis lezen…",
+      "slow": "Nog bezig met het lezen van je geschiedenis. Je suggesties worden bijgewerkt zodra dit klaar is."
+    },
+    "title": "Verbind je muziek",
+    "connected": "Verbonden"
   }
 }

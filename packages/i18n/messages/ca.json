@@ -1202,5 +1202,217 @@
     "songSearchLabel": "Cerca una cançó",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Ara mateix no hi ha cap suggeriment. Cerca un artista a dalt o omet aquest pas."
+  },
+  "connect": {
+    "appleExport": "No tens cap subscripció a Apple Music? Importa el teu historial de reproducció",
+    "appleGuide": {
+      "intro": "No tens cap subscripció a Apple Music? Apple encara et pot enviar el teu historial de reproducció. Triguen uns quants dies.",
+      "open": "Obre privacy.apple.com",
+      "pick": "Tria el fitxer",
+      "step1": "Ves a privacy.apple.com i inicia sessió.",
+      "step2": "Tria «Sol·licita una còpia de les teves dades», marca «Informació dels Serveis multimèdia d'Apple» i envia la sol·licitud. Apple t'enviarà un correu electrònic d'aquí a uns quants dies.",
+      "step3": "Descarrega els fitxers i després tria el zip o el CSV de Play Activity aquí."
+    },
+    "appleReading": "S'està llegint la teva biblioteca…",
+    "cards": {
+      "apple": {
+        "detail": "La teva biblioteca i reproduccions recents · segons",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Els teus scrobbles · uns quants minuts",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Manté les teves seleccions al dia mentre escoltes música",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify o YouTube Music · segons",
+        "title": "Enganxa un enllaç a una llista de reproducció"
+      },
+      "screenshot": {
+        "detail": "Artistes en qüestió de segons",
+        "title": "Fes una captura de pantalla de la teva app de música"
+      },
+      "spotifyExport": {
+        "detail": "Tot el teu historial d'escolta · Spotify triga entre 5 i 30 dies",
+        "title": "El teu historial de Spotify"
+      }
+    },
+    "errors": {
+      "badUrl": "Això no és un enllaç a una llista de reproducció de Spotify o YouTube Music.",
+      "likedPrivate": "La música que t'agrada sempre és privada. Copia-la a una llista de reproducció pública o oculta i després comparteix aquest enllaç.",
+      "notAnExport": "Això no sembla una exportació de dades de Spotify o Apple.",
+      "notFound": "No hem pogut trobar aquest nom d'usuari. Comprova com s'escriu i torna-ho a provar.",
+      "private": "No hem pogut obrir aquesta llista de reproducció. Assegura't que sigui pública i torna-ho a provar.",
+      "rateLimited": "Són massa importacions per ara. Torna-ho a provar més tard.",
+      "tooLarge": "Aquest fitxer és massa gran per enviar-lo des de l'aplicació.",
+      "unavailable": "No hem pogut connectar amb el servei ara mateix. Torna-ho a provar d'aquí a uns quants minuts.",
+      "unparseable": "No hem pogut llegir aquesta llista de reproducció ara mateix. Prova amb un enllaç de YouTube Music o una captura de pantalla.",
+      "generic": "Alguna cosa ha anat malament. Torna-ho a provar."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "el teu historial d'Apple Music",
+        "spotifyAccount": "les dades del teu compte de Spotify",
+        "spotifyExtended": "el teu historial de reproducció en continu de Spotify"
+      },
+      "lbAlso": "Afegeix-ho també a ListenBrainz perquè s'hi continuïn afegint les noves escoltes",
+      "lbBusy": "ListenBrainz ja està important un fitxer per a tu. Torna-ho a provar quan hagi acabat.",
+      "lbReconnect": "Torna a connectar ListenBrainz i després torna-ho a provar.",
+      "lbSending": "S'està enviant a ListenBrainz…",
+      "lbSent": "S'ha enviat a ListenBrainz. Pot ser que triguin una estona a importar-ho.",
+      "lbTooBig": "És massa gran per enviar-lo des de l'aplicació: puja'l a listenbrainz.org",
+      "libraryBoth": "A més de {liked, plural, one {# cançó que t'agrada} other {# cançons que t'agraden}} i {playlists, plural, one {# llista de reproducció} other {# llistes de reproducció}}",
+      "libraryLiked": "A més de {liked, plural, one {# cançó que t'agrada} other {# cançons que t'agraden}}",
+      "libraryPlaylists": "A més de {playlists, plural, one {# llista de reproducció} other {# llistes de reproducció}}",
+      "nothing": "No hem trobat cap cançó per afegir en aquest fitxer.",
+      "pickAnother": "Tria un altre fitxer",
+      "preview": "{tracks, plural, one {# cançó} other {# cançons}} de {kind}",
+      "reading": "S'està llegint el teu fitxer…",
+      "sending": "S'estan afegint les teves cançons…",
+      "skippedMalformed": "{count, plural, one {# entrada il·legible} other {# entrades il·legibles}}",
+      "skippedPodcasts": "{count, plural, one {# reproducció de pòdcast, audiollibre o vídeo} other {# reproduccions de pòdcast, audiollibre o vídeo}}",
+      "skippedShort": "{count, plural, one {# reproducció de menys de 30 segons} other {# reproduccions de menys de 30 segons}}",
+      "skippedTitle": "Omesos",
+      "start": "Afegeix a la meva música",
+      "title": "Importa el teu historial",
+      "truncated": "Aquest fitxer sembla incomplet, de manera que pot ser que falti part del teu historial. Si pots, torna'l a descarregar des del correu electrònic de Spotify.",
+      "waiting": "Esperant la connexió"
+    },
+    "improve": {
+      "connect": "Connecta la teva música",
+      "stale": "Connecta Spotify a ListenBrainz perquè arribin les noves escoltes"
+    },
+    "intro": "Explica'ns què escoltes realment i les teves seleccions milloraran molt. Cadascuna d'aquestes opcions se suma a les altres.",
+    "lastfm": {
+      "intro": "Introdueix el teu nom d'usuari de Last.fm i llegirem els teus scrobbles per trobar cançons que coneguis.",
+      "submit": "Connecta",
+      "username": "Nom d'usuari de Last.fm"
+    },
+    "lb": {
+      "account": "Connectat com a {username}",
+      "accountHint": "No és el teu compte? Elimina ListenBrainz a Connectats i torna a iniciar sessió.",
+      "checklist": {
+        "step1": "Crea un compte de MetaBrainz",
+        "step2": "Verifica el teu correu electrònic",
+        "step3": "Torna aquí i introdueix el teu nom d'usuari"
+      },
+      "intro": "ListenBrainz manté un registre lliure i obert del que escoltes. Connecta'l i les teves noves escoltes mantindran les seleccions al dia.",
+      "oauth": "Inicia sessió amb ListenBrainz",
+      "oauthError": {
+        "denied": "No has concedit l'accés, de manera que no s'ha connectat res. Torna-ho a provar quan vulguis.",
+        "exchange_failed": "No hem pogut completar la connexió amb ListenBrainz. Torna-ho a provar.",
+        "generic": "S'ha produït un error en connectar amb ListenBrainz. Torna-ho a provar.",
+        "invalid_state": "Aquest inici de sessió ha caducat o ja s'ha utilitzat. Torna-ho a provar.",
+        "missing_params": "ListenBrainz no ha retornat tota la informació necessària. Torna-ho a provar.",
+        "validate_failed": "El teu compte de MetaBrainz encara no és a ListenBrainz. Inicia sessió un cop a listenbrainz.org i torna-ho a provar."
+      },
+      "oauthUnavailable": "L'inici de sessió amb ListenBrainz no està disponible ara mateix. Introdueix el teu nom d'usuari.",
+      "opening": "S'està obrint ListenBrainz…",
+      "or": "O introdueix el teu nom d'usuari de ListenBrainz",
+      "signup": "No en tens cap? Crea un compte gratuït",
+      "spotifyGuide": "Connecta Spotify a ListenBrainz",
+      "spotifyGuideBody": "Així, tot el que reprodueixis a Spotify s'afegirà automàticament a les teves seleccions.",
+      "submit": "Connecta",
+      "username": "Nom d'usuari de ListenBrainz"
+    },
+    "offline": "No tens connexió",
+    "playlist": {
+      "again": "Importa una altra llista de reproducció",
+      "done": "S'ha importat {title}",
+      "howTo": {
+        "step1": "1. A music.youtube.com, obre Biblioteca → Cançons que t'agraden.",
+        "step2": "2. Selecciona les cançons (toca'n una i després toca les altres).",
+        "step3": "3. Tria «Afegeix a la llista de reproducció» → Llista de reproducció nova, i defineix la visibilitat com a Oculta o Pública.",
+        "step4": "4. Obre la llista de reproducció nova, toca Comparteix → Copia l'enllaç i enganxa'l aquí.",
+        "anyPlaylist": "Qualsevol llista de reproducció pública o no llistada amb cançons que t'encantin també serveix; per exemple, la teva llista de festa o d'entrenament.",
+        "title": "Com puc compartir la meva llista de cançons que m'agraden?"
+      },
+      "importing": "S'està important la teva llista de reproducció…",
+      "intro": "Enganxa un enllaç a una llista de reproducció pública de Spotify o YouTube Music i afegirem les seves cançons a les que sabem que cantes.",
+      "matched": "{matched} de {fetched} tenen versió de karaoke",
+      "notPlaylist": "Això no és un enllaç a una llista de reproducció de Spotify o YouTube Music",
+      "paste": "Enganxa",
+      "placeholder": "Enllaç a la llista de reproducció",
+      "submit": "Importa la llista de reproducció"
+    },
+    "reminders": {
+      "body": "Obre el correu electrònic de Spotify i comparteix el zip amb Nomad Karaoke.",
+      "channel": "Recordatoris",
+      "title": "És possible que les teves dades de Spotify estiguin a punt"
+    },
+    "result": "S'han afegit {artists, plural, one {# artista} other {# artistes}} i {songs, plural, one {# cançó} other {# cançons}} que coneixes",
+    "screenshot": {
+      "again": "Tria més captures de pantalla",
+      "confirm": "{count, plural, =0 {Res a afegir} one {Afegeix # element} other {Afegeix # elements}}",
+      "confirmBody": "Desmarca tot el que no sigui correcte.",
+      "confirmTitle": "És correcte?",
+      "dailyLimit": "Has utilitzat el límit de 10 captures de pantalla d'avui. Torna-ho a provar demà.",
+      "empty": "No hem trobat cap artista ni cançó en aquestes captures de pantalla. Prova-ho amb una de més clara.",
+      "intro": "Tria captures de pantalla de la teva biblioteca, llistes de reproducció o artistes principals des de qualsevol app de música. En llegirem els noms i podràs revisar-los abans de desar res.",
+      "item": "{artist} · {title}",
+      "limit": "Fins a 5 captures de pantalla alhora.",
+      "pick": "Tria captures de pantalla",
+      "pickMore": "Tria captures de pantalla diferents",
+      "reading": "S'estan llegint les teves captures de pantalla…",
+      "unmatched": "Encara no és al nostre catàleg de karaoke",
+      "retry": "Torna-ho a provar"
+    },
+    "source": {
+      "appleExport": "Historial d'Apple Music",
+      "screenshot": "Captures de pantalla",
+      "spotifyExport": "Historial de Spotify",
+      "spotifyPlaylist": "Llistes de reproducció de Spotify",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Afegeix-ne més",
+      "counts": "{artists, plural, one {# artista} other {# artistes}} · {songs, plural, one {# cançó} other {# cançons}}",
+      "empty": "Encara no hi ha res connectat. Afegeix un servei de música o importa el teu historial per afinar les teves seleccions.",
+      "lastImport": "Darrera importació {days, plural, =0 {avui} one {fa # dia} other {fa # dies}}",
+      "loadFailed": "No hem pogut carregar les teves fonts connectades. Torna-ho a provar d'aquí a un moment.",
+      "reconnect": "Torna a connectar",
+      "removeBody": "Això eliminarà els artistes i les cançons que {name} ha afegit al teu perfil de música. Les teves seleccions s'actualitzaran.",
+      "removeFailed": "No ho hem pogut eliminar ara mateix. Torna-ho a provar.",
+      "removeTitle": "Vols eliminar {name}?",
+      "stale": "Connecta Spotify a ListenBrainz perquè arribin les noves escoltes",
+      "status": {
+        "error": "Problema",
+        "importing": "S'està important",
+        "needsReconnect": "Cal tornar a connectar",
+        "ok": "Al dia",
+        "stale": "Sense noves escoltes"
+      },
+      "cancel": "Cancel·la",
+      "remove": "Elimina",
+      "title": "Connectat"
+    },
+    "spotifyExport": {
+      "denied": "Les notificacions estan desactivades per a Nomad Karaoke. Activa-les a Configuració per rebre un recordatori.",
+      "intro": "Spotify et pot enviar tot el teu historial d'escolta. Triguen uns quants dies, així que comença ara i nosaltres ens n'encarregarem a partir d'aquí.",
+      "open": "Obre la configuració de privadesa de Spotify",
+      "pick": "Tria el fitxer",
+      "remind": "Recorda-m'ho",
+      "reminded": "Fet. T'ho recordarem d'aquí a uns 5 dies, i un altre cop d'aquí a 25 dies.",
+      "step1": "Sol·licita les teves dades a spotify.com/account/privacy. Marca «Dades del compte» (a punt en uns 5 dies) i «Historial complet de reproducció en continu» (fins a 30 dies): aquest últim conté tot el teu historial.",
+      "step2": "T'avisarem quan hauria d'estar a punt.",
+      "step3": "Quan arribi el correu electrònic de Spotify, descarrega el zip i després fes Comparteix → Nomad Karaoke (Android), o torna aquí i tria el fitxer.",
+      "openSettings": "Obre la configuració"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Fet. Les teves seleccions ara inclouen el que escoltes.",
+      "failed": "Hem connectat el teu compte, però no hem pogut llegir el teu historial ara mateix. Ho tornarem a provar més tard.",
+      "reading": "S'està llegint el teu historial d'escolta…",
+      "slow": "Encara s'està llegint el teu historial. Les teves seleccions s'actualitzaran quan s'hagi completat."
+    },
+    "title": "Connecta la teva música",
+    "connected": "Connectat"
   }
 }

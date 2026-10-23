@@ -1202,5 +1202,217 @@
     "songSearchLabel": "노래 찾기",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "지금은 추천 항목이 없습니다. 위에서 아티스트를 검색하거나 이 단계를 건너뛰세요."
+  },
+  "connect": {
+    "appleExport": "Apple Music을 구독하지 않으셨나요? 대신 재생 기록을 가져와 보세요",
+    "appleGuide": {
+      "intro": "Apple Music을 구독하지 않으셨나요? Apple에서 재생 기록을 받아보실 수 있습니다. 며칠 정도 소요됩니다.",
+      "open": "privacy.apple.com 열기",
+      "pick": "파일 선택",
+      "step1": "privacy.apple.com으로 이동하여 로그인합니다.",
+      "step2": "'데이터 복사본 요청'을 선택하고 'Apple Media Services 정보'를 체크한 후 제출하세요. 며칠 내로 Apple에서 이메일을 보내드립니다.",
+      "step3": "파일을 다운로드한 후, 여기에서 zip 파일이나 Play Activity CSV 파일을 선택하세요."
+    },
+    "appleReading": "보관함을 읽는 중…",
+    "cards": {
+      "apple": {
+        "detail": "보관함 및 최근 재생 기록 · 몇 초 소요",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "내 스크로블 기록 · 몇 분 소요",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "음악을 들을 때마다 추천 목록을 최신 상태로 유지",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify 또는 YouTube Music · 몇 초 소요",
+        "title": "플레이리스트 링크 붙여넣기"
+      },
+      "screenshot": {
+        "detail": "몇 초 만에 아티스트 확인",
+        "title": "음악 앱 스크린샷"
+      },
+      "spotifyExport": {
+        "detail": "전체 청취 기록 · Spotify에서 5~30일 소요",
+        "title": "내 Spotify 기록"
+      }
+    },
+    "errors": {
+      "badUrl": "Spotify 또는 YouTube Music 플레이리스트 링크가 아닙니다.",
+      "likedPrivate": "'좋아요 표시한 음악'은 항상 비공개 상태입니다. 공개 또는 일부 공개 플레이리스트로 복사한 후 해당 링크를 공유해 주세요.",
+      "notAnExport": "Spotify 또는 Apple의 데이터 내보내기 파일이 아닌 것 같습니다.",
+      "notFound": "해당 사용자 이름을 찾을 수 없습니다. 철자를 확인하고 다시 시도해 주세요.",
+      "private": "플레이리스트를 열 수 없습니다. 공개 상태인지 확인한 후 다시 시도해 주세요.",
+      "rateLimited": "지금은 가져오기 요청이 너무 많습니다. 나중에 다시 시도해 주세요.",
+      "tooLarge": "파일 크기가 너무 커서 앱에서 전송할 수 없습니다.",
+      "unavailable": "지금은 서비스에 연결할 수 없습니다. 몇 분 후 다시 시도해 주세요.",
+      "unparseable": "지금은 플레이리스트를 읽을 수 없습니다. 대신 YouTube Music 링크나 스크린샷을 사용해 보세요.",
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "Apple Music 기록",
+        "spotifyAccount": "Spotify 계정 데이터",
+        "spotifyExtended": "Spotify 스트리밍 기록"
+      },
+      "lbAlso": "새로운 청취 기록이 계속 반영되도록 ListenBrainz에도 추가하기",
+      "lbBusy": "ListenBrainz에서 이미 파일을 가져오는 중입니다. 완료된 후 다시 시도해 주세요.",
+      "lbReconnect": "ListenBrainz를 다시 연결한 후 시도해 주세요.",
+      "lbSending": "ListenBrainz로 전송 중…",
+      "lbSent": "ListenBrainz로 전송되었습니다. 가져오기까지 시간이 다소 걸릴 수 있습니다.",
+      "lbTooBig": "앱에서 전송하기에는 파일이 너무 큽니다. listenbrainz.org에서 직접 업로드해 주세요.",
+      "libraryBoth": "{liked, plural, other {좋아요 표시한 곡 #곡}} 및 {playlists, plural, other {플레이리스트 #개}} 추가",
+      "libraryLiked": "{liked, plural, other {좋아요 표시한 곡 #곡}} 추가",
+      "libraryPlaylists": "{playlists, plural, other {플레이리스트 #개}} 추가",
+      "nothing": "이 파일에서 추가할 곡을 찾지 못했습니다.",
+      "pickAnother": "다른 파일 선택",
+      "preview": "{kind}의 곡 {tracks, plural, other {#곡}}",
+      "reading": "파일을 읽는 중…",
+      "sending": "곡을 추가하는 중…",
+      "skippedMalformed": "{count, plural, other {읽을 수 없는 항목 #개}}",
+      "skippedPodcasts": "{count, plural, other {팟캐스트, 오디오북 또는 동영상 재생 기록 #건}}",
+      "skippedShort": "{count, plural, other {30초 미만 재생 기록 #건}}",
+      "skippedTitle": "건너뜀",
+      "start": "내 음악에 추가하기",
+      "title": "내 기록 가져오기",
+      "truncated": "파일이 불완전하여 일부 기록이 누락되었을 수 있습니다. 가능하면 Spotify 이메일에서 다시 다운로드해 주세요.",
+      "waiting": "연결 대기 중"
+    },
+    "improve": {
+      "connect": "내 음악 연결하기",
+      "stale": "새로운 청취 기록이 반영되도록 Spotify를 ListenBrainz에 연결하세요"
+    },
+    "intro": "평소에 실제로 듣는 음악을 알려주시면 추천이 훨씬 더 정확해집니다. 여러 서비스를 함께 연결할 수도 있어요.",
+    "lastfm": {
+      "intro": "Last.fm 사용자 이름을 입력하시면 스크로블 기록을 읽어 아는 곡을 찾아드립니다.",
+      "submit": "연결하기",
+      "username": "Last.fm 사용자 이름"
+    },
+    "lb": {
+      "account": "{username}(으)로 연결됨",
+      "accountHint": "본인 계정이 아닌가요? '연결된 소스'에서 ListenBrainz를 삭제한 후 다시 로그인하세요.",
+      "checklist": {
+        "step1": "MetaBrainz 계정 만들기",
+        "step2": "이메일 인증하기",
+        "step3": "돌아와서 사용자 이름 입력하기"
+      },
+      "intro": "ListenBrainz는 내가 들은 음악을 무료로 기록해 주는 오픈 서비스입니다. 연결해 두면 새로 들은 음악이 추천 목록에 계속 반영됩니다.",
+      "oauth": "ListenBrainz로 로그인",
+      "oauthError": {
+        "denied": "접근 권한을 허용하지 않아 연결되지 않았습니다. 원하실 때 언제든 다시 시도해 주세요.",
+        "exchange_failed": "ListenBrainz 연결을 완료하지 못했습니다. 다시 시도해 주세요.",
+        "generic": "ListenBrainz 연결 중 문제가 발생했습니다. 다시 시도해 주세요.",
+        "invalid_state": "로그인 세션이 만료되었거나 이미 사용되었습니다. 다시 시도해 주세요.",
+        "missing_params": "ListenBrainz에서 필요한 정보를 모두 전달받지 못했습니다. 다시 시도해 주세요.",
+        "validate_failed": "MetaBrainz 계정이 아직 ListenBrainz에 등록되지 않았습니다. listenbrainz.org에서 한 번 로그인한 후 다시 시도해 주세요."
+      },
+      "oauthUnavailable": "현재 ListenBrainz 로그인을 이용할 수 없습니다. 대신 사용자 이름을 직접 입력해 주세요.",
+      "opening": "ListenBrainz 여는 중…",
+      "or": "또는 ListenBrainz 사용자 이름 입력하기",
+      "signup": "계정이 없으신가요? 무료 계정을 만들어 보세요",
+      "spotifyGuide": "Spotify를 ListenBrainz에 연결하기",
+      "spotifyGuideBody": "연결하면 Spotify에서 재생한 모든 음악이 추천 목록에 자동으로 반영됩니다.",
+      "submit": "연결하기",
+      "username": "ListenBrainz 사용자 이름"
+    },
+    "offline": "오프라인 상태입니다",
+    "playlist": {
+      "again": "다른 플레이리스트 가져오기",
+      "done": "{title} 가져오기 완료",
+      "howTo": {
+        "step1": "1. music.youtube.com에서 보관함 → 좋아요 표시한 음악으로 이동합니다.",
+        "step2": "2. 곡들을 선택합니다(하나를 탭한 후 나머지를 선택).",
+        "step3": "3. \"플레이리스트에 추가\" → 새 플레이리스트를 선택하고 공개 상태를 일부 공개 또는 공개로 설정합니다.",
+        "step4": "4. 새 플레이리스트를 열고 공유 → 링크 복사를 탭한 뒤 여기에 붙여넣으세요.",
+        "anyPlaylist": "파티나 운동용 믹스처럼 좋아하는 곡이 담긴 공개 또는 일부 공개 재생목록이라면 모두 사용 가능합니다.",
+        "title": "'좋아요 표시한 음악'은 어떻게 공유하나요?"
+      },
+      "importing": "플레이리스트를 가져오는 중…",
+      "intro": "공개된 Spotify 또는 YouTube Music 플레이리스트 링크를 붙여넣으시면, 해당 곡들을 알고 계신 노래 목록에 추가해 드립니다.",
+      "matched": "{fetched}곡 중 {matched}곡에 노래방 버전이 있습니다",
+      "notPlaylist": "Spotify 또는 YouTube Music 플레이리스트 링크가 아닙니다",
+      "paste": "붙여넣기",
+      "placeholder": "플레이리스트 링크",
+      "submit": "플레이리스트 가져오기"
+    },
+    "reminders": {
+      "body": "Spotify에서 보낸 이메일을 열고 zip 파일을 Nomad Karaoke로 공유해 주세요.",
+      "channel": "알림",
+      "title": "Spotify 데이터가 준비되었을 수 있습니다"
+    },
+    "result": "내가 아는 아티스트 {artists, plural, other {#명}}과 노래 {songs, plural, other {#곡}}이 추가되었습니다",
+    "screenshot": {
+      "again": "스크린샷 더 선택하기",
+      "confirm": "{count, plural, =0 {추가할 항목 없음} other {항목 #개 추가}}",
+      "confirmBody": "잘못 인식된 항목은 체크를 해제하세요.",
+      "confirmTitle": "이 내용이 맞나요?",
+      "dailyLimit": "오늘 이용 가능한 스크린샷 10장을 모두 사용하셨습니다. 내일 다시 시도해 주세요.",
+      "empty": "스크린샷에서 아티스트나 곡을 찾을 수 없습니다. 더 선명한 이미지로 다시 시도해 보세요.",
+      "intro": "음악 앱에서 보관함, 플레이리스트 또는 인기 아티스트 화면의 스크린샷을 선택하세요. 이름을 확인한 뒤 저장하기 전에 검토하실 수 있습니다.",
+      "item": "{artist} · {title}",
+      "limit": "한 번에 최대 5장까지 선택할 수 있습니다.",
+      "pick": "스크린샷 선택",
+      "pickMore": "다른 스크린샷 선택",
+      "reading": "스크린샷을 읽는 중…",
+      "unmatched": "아직 노래방 카탈로그에 없는 곡",
+      "retry": "다시 시도"
+    },
+    "source": {
+      "appleExport": "Apple Music 기록",
+      "screenshot": "스크린샷",
+      "spotifyExport": "Spotify 기록",
+      "spotifyPlaylist": "Spotify 플레이리스트",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "더 추가하기",
+      "counts": "아티스트 {artists, plural, other {#명}} · 노래 {songs, plural, other {#곡}}",
+      "empty": "아직 연결된 서비스가 없습니다. 음악 서비스를 연결하거나 기록을 가져와 추천 목록을 다듬어 보세요.",
+      "lastImport": "마지막 가져오기: {days, plural, =0 {오늘} other {#일 전}}",
+      "loadFailed": "연결된 소스를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
+      "reconnect": "다시 연결하기",
+      "removeBody": "{name}에서 음악 프로필에 추가된 아티스트와 곡이 삭제됩니다. 추천 목록도 업데이트됩니다.",
+      "removeFailed": "지금은 삭제할 수 없습니다. 다시 시도해 주세요.",
+      "removeTitle": "{name}을(를) 삭제하시겠습니까?",
+      "stale": "새로운 청취 기록이 반영되도록 Spotify를 ListenBrainz에 연결하세요",
+      "status": {
+        "error": "오류",
+        "importing": "가져오는 중",
+        "needsReconnect": "다시 연결 필요",
+        "ok": "최신 상태",
+        "stale": "새로운 청취 기록 없음"
+      },
+      "cancel": "취소",
+      "remove": "제거",
+      "title": "연결됨"
+    },
+    "spotifyExport": {
+      "denied": "Nomad Karaoke 알림이 꺼져 있습니다. 알림을 받으시려면 설정에서 켜주세요.",
+      "intro": "Spotify에서 전체 청취 기록을 받아보실 수 있습니다. 며칠 정도 걸리므로 지금 신청해 두시면 나머지는 저희가 처리해 드릴게요.",
+      "open": "Spotify 개인정보 설정 열기",
+      "pick": "파일 선택",
+      "remind": "알림 받기",
+      "reminded": "완료되었습니다. 약 5일 후에, 그리고 25일 후에 다시 알려드릴게요.",
+      "step1": "spotify.com/account/privacy에서 데이터를 요청하세요. '계정 데이터'(약 5일 소요)와 '확장 스트리밍 기록'(최대 30일 소요)을 체크하세요. '확장'에 전체 기록이 포함되어 있습니다.",
+      "step2": "데이터가 준비될 때쯤 알림을 보내드립니다.",
+      "step3": "Spotify 이메일이 도착하면 zip 파일을 다운로드한 뒤 공유 → Nomad Karaoke(Android)를 선택하거나, 다시 여기로 돌아와 파일을 선택하세요.",
+      "openSettings": "설정 열기"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "완료되었습니다. 이제 추천 목록에 자주 듣는 음악이 포함됩니다.",
+      "failed": "계정이 연결되었으나 지금은 기록을 읽어올 수 없습니다. 나중에 다시 시도하겠습니다.",
+      "reading": "청취 기록을 읽는 중…",
+      "slow": "기록을 계속 읽어오는 중입니다. 완료되면 추천 목록이 업데이트됩니다."
+    },
+    "title": "내 음악 연결하기",
+    "connected": "연결됨"
   }
 }

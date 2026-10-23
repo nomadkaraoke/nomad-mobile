@@ -1202,5 +1202,217 @@
     "songSearchLabel": "חיפוש שיר",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "אין הצעות כרגע. אפשר לחפש אמן למעלה, או לדלג על השלב הזה."
+  },
+  "connect": {
+    "appleExport": "אין לך מינוי ל-Apple Music? אפשר לייבא את היסטוריית ההאזנה במקום זאת",
+    "appleGuide": {
+      "intro": "אין לך מינוי ל-Apple Music? Apple עדיין יכולה לשלוח לך את היסטוריית ההאזנה שלך. זה לוקח להם כמה ימים.",
+      "open": "פתיחת privacy.apple.com",
+      "pick": "בחירת הקובץ",
+      "step1": "עוברים אל privacy.apple.com ומתחברים לחשבון.",
+      "step2": "בוחרים באפשרות Request a copy of your data, מסמנים את Apple Media Services information ושולחים. Apple תשלח לך אימייל תוך כמה ימים.",
+      "step3": "מורידים את הקבצים, ואז בוחרים כאן את קובץ ה-zip או את קובץ ה-CSV של Play Activity."
+    },
+    "appleReading": "קורא את הספרייה שלך…",
+    "cards": {
+      "apple": {
+        "detail": "הספרייה וההשמעות האחרונות שלך · כמה שניות",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "ה-scrobbles שלך · כמה דקות",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "שומר על ההמלצות שלך מעודכנות לפי מה ששמעת",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify או YouTube Music · כמה שניות",
+        "title": "הדבקת קישור לפלייליסט"
+      },
+      "screenshot": {
+        "detail": "אמנים תוך שניות",
+        "title": "צילום מסך של אפליקציית המוזיקה שלך"
+      },
+      "spotifyExport": {
+        "detail": "כל היסטוריית ההאזנה שלך · לוקח ל-Spotify בין 5 ל-30 ימים",
+        "title": "היסטוריית ה-Spotify שלך"
+      }
+    },
+    "errors": {
+      "badUrl": "זה אינו קישור לפלייליסט של Spotify או YouTube Music.",
+      "likedPrivate": "רשימת השירים שאהבת (Liked Music) היא תמיד פרטית. אפשר להעתיק אותה לפלייליסט ציבורי או לא רשום (Unlisted), ואז לשתף את הקישור.",
+      "notAnExport": "זה לא נראה כמו קובץ ייצוא נתונים של Spotify או Apple.",
+      "notFound": "לא הצלחנו למצוא את שם המשתמש הזה. כדאי לבדוק את האיות ולנסות שוב.",
+      "private": "לא הצלחנו לפתוח את הפלייליסט הזה. יש לוודא שהוא ציבורי ולנסות שוב.",
+      "rateLimited": "יותר מדי פעולות ייבוא כרגע. אפשר לנסות שוב מאוחר יותר.",
+      "tooLarge": "הקובץ הזה גדול מדי לשליחה מהאפליקציה.",
+      "unavailable": "לא הצלחנו להתחבר לשירות כרגע. כדאי לנסות שוב בעוד כמה דקות.",
+      "unparseable": "לא הצלחנו לקרוא את הפלייליסט הזה כרגע. אפשר לנסות קישור מ-YouTube Music או צילום מסך במקום זאת.",
+      "generic": "משהו השתבש. אנא נסה שוב."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "היסטוריית ה-Apple Music שלך",
+        "spotifyAccount": "נתוני חשבון ה-Spotify שלך",
+        "spotifyExtended": "היסטוריית ההאזנה המורחבת שלך ב-Spotify"
+      },
+      "lbAlso": "להוסיף את זה גם ל-ListenBrainz כדי שהאזנות חדשות ימשיכו להגיע",
+      "lbBusy": "ListenBrainz כבר מייבא קובץ עבורך. אפשר לנסות שוב בסיום הפעולה.",
+      "lbReconnect": "יש לחבר מחדש את ListenBrainz, ואז לנסות שוב.",
+      "lbSending": "שולח אל ListenBrainz…",
+      "lbSent": "נשלח אל ListenBrainz. ייתכן שיקח להם קצת זמן לייבא את זה.",
+      "lbTooBig": "הקובץ גדול מדי לשליחה מהאפליקציה: אפשר להעלות אותו ישירות ב-listenbrainz.org",
+      "libraryBoth": "ועוד {liked, plural, one {שיר # שאהבת} other {# שירים שאהבת}} ו-{playlists, plural, one {פלייליסט #} other {# פלייליסטים}}",
+      "libraryLiked": "ועוד {liked, plural, one {שיר # שאהבת} other {# שירים שאהבת}}",
+      "libraryPlaylists": "ועוד {playlists, plural, one {פלייליסט #} other {# פלייליסטים}}",
+      "nothing": "לא מצאנו שירים להוספה בקובץ הזה.",
+      "pickAnother": "בחירת קובץ אחר",
+      "preview": "{tracks, plural, one {שיר #} other {# שירים}} מתוך {kind}",
+      "reading": "קורא את הקובץ שלך…",
+      "sending": "מוסיף את השירים שלך…",
+      "skippedMalformed": "{count, plural, one {רשומה לא קריאה אחת} other {# רשומות לא קריאות}}",
+      "skippedPodcasts": "{count, plural, one {השמעה אחת של פודקאסט, ספר מוקלט או וידאו} other {# השמעות של פודקאסטים, ספרים מוקלטים או וידאו}}",
+      "skippedShort": "{count, plural, one {השמעה קצרה מ-30 שניות אחת} other {# השמעות קצרות מ-30 שניות}}",
+      "skippedTitle": "דולגו",
+      "start": "הוספה למוזיקה שלי",
+      "title": "ייבוא ההיסטוריה שלך",
+      "truncated": "הקובץ הזה נראה חלקי, ולכן ייתכן שחלק מההיסטוריה חסר. אם אפשר, מומלץ להוריד אותו שוב מהאימייל של Spotify.",
+      "waiting": "ממתין לחיבור"
+    },
+    "improve": {
+      "connect": "חיבור המוזיקה שלך",
+      "stale": "כדאי לחבר את Spotify ל-ListenBrainz כדי שהאזנות חדשות ימשיכו להגיע"
+    },
+    "intro": "כשנדע למה באמת מתחשק לך להאזין, ההמלצות שלך ישתפרו משמעותית. כל מקור שתוסיף ישלים את האחרים.",
+    "lastfm": {
+      "intro": "הזן את שם המשתמש שלך ב-Last.fm ונקרא את ה-scrobbles שלך כדי למצוא שירים שאתה מכיר.",
+      "submit": "התחברות",
+      "username": "שם משתמש ב-Last.fm"
+    },
+    "lb": {
+      "account": "מחובר בתור {username}",
+      "accountHint": "זה לא החשבון שלך? אפשר להסיר את ListenBrainz תחת 'מקורות מחוברים', ואז להתחבר שוב.",
+      "checklist": {
+        "step1": "יוצרים חשבון MetaBrainz",
+        "step2": "מאמתים את כתובת האימייל",
+        "step3": "חוזרים לכאן ומזינים את שם המשתמש"
+      },
+      "intro": "ListenBrainz שומר תיעוד חינמי ופתוח של מה שאתה שומע. אם תחבר אותו, ההאזנות החדשות שלך ישמרו תמיד על המלצות מעודכנות.",
+      "oauth": "התחברות באמצעות ListenBrainz",
+      "oauthError": {
+        "denied": "לא אישרת גישה, לכן שום דבר לא חובר. אפשר לנסות שוב מתי שתרצה.",
+        "exchange_failed": "לא הצלחנו להשלים את החיבור ל-ListenBrainz. כדאי לנסות שוב.",
+        "generic": "משהו השתבש בחיבור ל-ListenBrainz. כדאי לנסות שוב.",
+        "invalid_state": "פג תוקף ההתחברות או שהקישור כבר נוצל. כדאי לנסות שוב.",
+        "missing_params": "ListenBrainz לא החזיר את כל המידע הדרוש. כדאי לנסות שוב.",
+        "validate_failed": "חשבון ה-MetaBrainz שלך עדיין אינו מוגדר ב-ListenBrainz. יש להתחבר פעם אחת ב-listenbrainz.org, ואז לנסות שוב."
+      },
+      "oauthUnavailable": "ההתחברות באמצעות ListenBrainz אינה זמינה כרגע. אפשר להזין את שם המשתמש במקום זאת.",
+      "opening": "פותח את ListenBrainz…",
+      "or": "או להזין את שם המשתמש שלך ב-ListenBrainz",
+      "signup": "אין לך חשבון עדיין? אפשר להירשם בחינם",
+      "spotifyGuide": "חיבור Spotify ל-ListenBrainz",
+      "spotifyGuideBody": "ואז כל מה שתשמע ב-Spotify יעדכן את ההמלצות שלך באופן אוטומטי.",
+      "submit": "התחברות",
+      "username": "שם משתמש ב-ListenBrainz"
+    },
+    "offline": "אינך מחובר לאינטרנט",
+    "playlist": {
+      "again": "ייבוא פלייליסט נוסף",
+      "done": "הפלייליסט {title} יובא בהצלחה",
+      "howTo": {
+        "step1": "1. ב-music.youtube.com, פותחים את Library ← Liked Music.",
+        "step2": "2. בוחרים את השירים (מקישים על שיר אחד, ואז על השאר).",
+        "step3": "3. בוחרים באפשרות \"Add to playlist\" ← New playlist, ומגדירים את הניראות כ-Unlisted או Public.",
+        "step4": "4. פותחים את הפלייליסט החדש, מקישים על Share ← Copy link, ומדביקים את הקישור כאן.",
+        "anyPlaylist": "כל פלייליסט ציבורי או לא רשום (Unlisted) של שירים שאתם אוהבים יעבוד מעולה, למשל המיקס שלכם למסיבה או לאימון.",
+        "title": "איך לשתף את השירים שאהבתי?"
+      },
+      "importing": "מייבא את הפלייליסט שלך…",
+      "intro": "מדביקים קישור לפלייליסט ציבורי מ-Spotify או מ-YouTube Music, ואנחנו נוסיף את השירים לרשימת השירים שאתה מכיר.",
+      "matched": "ל-{matched} מתוך {fetched} יש גרסאות קריוקי",
+      "notPlaylist": "זה אינו קישור לפלייליסט של Spotify או YouTube Music",
+      "paste": "הדבקה",
+      "placeholder": "קישור לפלייליסט",
+      "submit": "ייבוא פלייליסט"
+    },
+    "reminders": {
+      "body": "פותחים את האימייל מ-Spotify, ומשתפים את קובץ ה-zip עם Nomad Karaoke.",
+      "channel": "תזכורות",
+      "title": "ייתכן שנתוני ה-Spotify שלך כבר מוכנים"
+    },
+    "result": "נוספו {artists, plural, one {אמן #} other {# אמנים}} ו-{songs, plural, one {שיר #} other {# שירים}} שאתה מכיר",
+    "screenshot": {
+      "again": "בחירת צילומי מסך נוספים",
+      "confirm": "{count, plural, =0 {אין מה להוסיף} one {הוספת פריט #} other {הוספת # פריטים}}",
+      "confirmBody": "בטל את הסימון של כל מה שלא זיהינו נכון.",
+      "confirmTitle": "האם הפרטים נכונים?",
+      "dailyLimit": "הגעת למכסה של 10 צילומי מסך להיום. אפשר לנסות שוב מחר.",
+      "empty": "לא הצלחנו למצוא אמנים או שירים בצילומי המסך האלה. כדאי לנסות צילום מסך ברור יותר.",
+      "intro": "בוחרים צילומי מסך של הספרייה, הפלייליסטים או האמנים המובילים מכל אפליקציית מוזיקה. אנחנו נקרא את השמות ותוכל לבדוק אותם לפני ששומרים משהו.",
+      "item": "{artist} · {title}",
+      "limit": "עד 5 צילומי מסך בכל פעם.",
+      "pick": "בחירת צילומי מסך",
+      "pickMore": "בחירת צילומי מסך אחרים",
+      "reading": "קורא את צילומי המסך שלך…",
+      "unmatched": "עדיין לא בקטלוג הקריוקי שלנו",
+      "retry": "נסה שוב"
+    },
+    "source": {
+      "appleExport": "היסטוריית Apple Music",
+      "screenshot": "צילומי מסך",
+      "spotifyExport": "היסטוריית Spotify",
+      "spotifyPlaylist": "פלייליסטים מ-Spotify",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "הוספת מקורות נוספים",
+      "counts": "{artists, plural, one {אמן #} other {# אמנים}} · {songs, plural, one {שיר #} other {# שירים}}",
+      "empty": "אין עדיין מקורות מחוברים. אפשר לחבר שירות מוזיקה או לייבא היסטוריה כדי לשפר את ההמלצות שלך.",
+      "lastImport": "ייבוא אחרון: {days, plural, =0 {היום} one {אתמול} other {לפני # ימים}}",
+      "loadFailed": "לא הצלחנו לטעון את המקורות המחוברים שלך. כדאי לנסות שוב בעוד רגע.",
+      "reconnect": "חיבור מחדש",
+      "removeBody": "פעולה זו תסיר את האמנים והשירים ש-{name} הוסיף לפרופיל המוזיקה שלך. ההמלצות שלך יתעדכנו בהתאם.",
+      "removeFailed": "לא הצלחנו להסיר את זה כרגע. כדאי לנסות שוב.",
+      "removeTitle": "להסיר את {name}?",
+      "stale": "כדאי לחבר את Spotify ל-ListenBrainz כדי שהאזנות חדשות ימשיכו להגיע",
+      "status": {
+        "error": "בעיה",
+        "importing": "מייבא",
+        "needsReconnect": "נדרש חיבור מחדש",
+        "ok": "מעודכן",
+        "stale": "אין האזנות חדשות"
+      },
+      "cancel": "ביטול",
+      "remove": "הסרה",
+      "title": "מחובר"
+    },
+    "spotifyExport": {
+      "denied": "ההתראות כבויות עבור Nomad Karaoke. אפשר להפעיל אותן בהגדרות כדי לקבל תזכורת.",
+      "intro": "Spotify יכולה לשלוח לך את כל היסטוריית ההאזנה שלך. זה לוקח להם כמה ימים, אז שווה להתחיל עכשיו ואנחנו כבר נמשיך משם.",
+      "open": "פתיחת הגדרות הפרטיות של Spotify",
+      "pick": "בחירת הקובץ",
+      "remind": "תזכירו לי",
+      "reminded": "בוצע. נזכיר לך בעוד כ-5 ימים, ושוב בעוד 25 ימים.",
+      "step1": "מבקשים את הנתונים בכתובת spotify.com/account/privacy. מסמנים את Account data (מוכן תוך כ-5 ימים) ואת Extended streaming history (עד 30 ימים): ההיסטוריה המורחבת מכילה את כל ההיסטוריה המלאה שלך.",
+      "step2": "אנחנו נזכיר לך כשהקבצים אמורים להיות מוכנים.",
+      "step3": "כשהאימייל מ-Spotify יגיע, מורידים את קובץ ה-zip, ואז שיתוף ← Nomad Karaoke (באנדרואיד), או חוזרים לכאן ובוחרים את הקובץ.",
+      "openSettings": "פתיחת הגדרות"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "בוצע. ההמלצות שלך כוללות עכשיו את מה שאתה שומע.",
+      "failed": "חיברנו את החשבון שלך, אך לא הצלחנו לקרוא את ההיסטוריה כרגע. ננסה שוב מאוחר יותר.",
+      "reading": "קורא את היסטוריית ההאזנה שלך…",
+      "slow": "עדיין קורא את ההיסטוריה שלך. ההמלצות יתעדכנו ברגע שזה יסתיים."
+    },
+    "title": "חיבור המוזיקה שלך",
+    "connected": "מחובר"
   }
 }

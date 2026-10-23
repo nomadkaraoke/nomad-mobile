@@ -1202,5 +1202,217 @@
     "songSearchLabel": "Najít skladbu",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Právě teď nemáme žádné návrhy. Vyhledej interpreta výše, nebo tento krok přeskoč."
+  },
+  "connect": {
+    "appleExport": "Nemáš předplatné Apple Music? Importuj si místo toho historii přehrávání",
+    "appleGuide": {
+      "intro": "Nemáš předplatné Apple Music? Apple ti i tak může poslat tvou historii přehrávání. Trvá jim to pár dní.",
+      "open": "Otevřít privacy.apple.com",
+      "pick": "Vybrat soubor",
+      "step1": "Přejdi na privacy.apple.com a přihlas se.",
+      "step2": "Zvol Požádat o kopii dat, zaškrtni Informace o službách Apple Media a odešli žádost. Apple ti za pár dní pošle e-mail.",
+      "step3": "Stáhni si soubory a pak sem nahraj soubor zip nebo CSV s historií přehrávání (Play Activity)."
+    },
+    "appleReading": "Načítání tvé knihovny…",
+    "cards": {
+      "apple": {
+        "detail": "Tvoje knihovna a nedávno přehrané · pár sekund",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Tvoje scrobble · několik minut",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Udržuje tvůj výběr aktuální podle toho, co posloucháš",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify nebo YouTube Music · pár sekund",
+        "title": "Vložit odkaz na playlist"
+      },
+      "screenshot": {
+        "detail": "Interpreti během několika sekund",
+        "title": "Snímek obrazovky z hudební aplikace"
+      },
+      "spotifyExport": {
+        "detail": "Celá tvoje historie poslechu · Spotify to trvá 5–30 dní",
+        "title": "Tvoje historie ze Spotify"
+      }
+    },
+    "errors": {
+      "badUrl": "Tohle není odkaz na playlist ze Spotify ani z YouTube Music.",
+      "likedPrivate": "Oblíbené skladby jsou vždy soukromé. Zkopíruj je do veřejného nebo neveřejného playlistu a nasdílej odkaz na něj.",
+      "notAnExport": "Tohle nevypadá jako export dat ze Spotify nebo z Applu.",
+      "notFound": "Tohle uživatelské jméno se nám nepodařilo najít. Zkontroluj překlepy a zkus to znovu.",
+      "private": "Tento playlist se nám nepodařilo otevřít. Ujisti se, že je veřejný, a zkus to znovu.",
+      "rateLimited": "Pro teď už je to příliš mnoho importů. Zkus to znovu později.",
+      "tooLarge": "Tento soubor je příliš velký na odeslání z aplikace.",
+      "unavailable": "Ke službě se právě teď nepodařilo připojit. Zkus to znovu za několik minut.",
+      "unparseable": "Tento playlist se nám právě nepodařilo načíst. Zkus místo toho odkaz na YouTube Music nebo snímek obrazovky.",
+      "generic": "Něco se pokazilo. Zkus to prosím znovu."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "historie z Apple Music",
+        "spotifyAccount": "dat účtu Spotify",
+        "spotifyExtended": "historie streamování ze Spotify"
+      },
+      "lbAlso": "Přidej to také do ListenBrainz, aby se nové poslechy automaticky synchronizovaly",
+      "lbBusy": "ListenBrainz už pro tebe soubor importuje. Zkus to znovu, jakmile proces skončí.",
+      "lbReconnect": "Znovu připoj ListenBrainz a pak to zkus znovu.",
+      "lbSending": "Odesílání do ListenBrainz…",
+      "lbSent": "Odesláno do ListenBrainz. Import jim může chvíli trvat.",
+      "lbTooBig": "Příliš velké na odeslání z aplikace: nahraj to na listenbrainz.org",
+      "libraryBoth": "Plus {liked, plural, one {# oblíbená skladba} few {# oblíbené skladby} other {# oblíbených skladeb}} a {playlists, plural, one {# playlist} few {# playlisty} other {# playlistů}}",
+      "libraryLiked": "Plus {liked, plural, one {# oblíbená skladba} few {# oblíbené skladby} other {# oblíbených skladeb}}",
+      "libraryPlaylists": "Plus {playlists, plural, one {# playlist} few {# playlisty} other {# playlistů}}",
+      "nothing": "V tomto souboru jsme nenašli žádné skladby k přidání.",
+      "pickAnother": "Vybrat jiný soubor",
+      "preview": "{tracks, plural, one {# skladba} few {# skladby} other {# skladeb}} z: {kind}",
+      "reading": "Načítání tvého souboru…",
+      "sending": "Přidávání tvých skladeb…",
+      "skippedMalformed": "{count, plural, one {# nečitelný záznam} few {# nečitelné záznamy} other {# nečitelných záznamů}}",
+      "skippedPodcasts": "{count, plural, one {# přehrání podcastu, audioknihy nebo videa} few {# přehrání podcastů, audioknih nebo videí} other {# přehrání podcastů, audioknih nebo videí}}",
+      "skippedShort": "{count, plural, one {# přehrání kratší než 30 sekund} few {# přehrání kratší než 30 sekund} other {# přehrání kratších než 30 sekund}}",
+      "skippedTitle": "Přeskočeno",
+      "start": "Přidat do mé hudby",
+      "title": "Importovat historii",
+      "truncated": "Tento soubor vypadá neúplně, takže část tvé historie může chybět. Pokud můžeš, stáhni si ho z e-mailu od Spotify znovu.",
+      "waiting": "Čekání na připojení"
+    },
+    "improve": {
+      "connect": "Připojit hudbu",
+      "stale": "Propoj Spotify s ListenBrainz, aby se načítaly nové poslechy"
+    },
+    "intro": "Dej nám vědět, co opravdu posloucháš, a tvůj výběr skladeb bude mnohem přesnější. Zdroje se navzájem doplňují.",
+    "lastfm": {
+      "intro": "Zadej své uživatelské jméno na Last.fm a my načteme tvé scrobble, abychom našli skladby, které znáš.",
+      "submit": "Připojit",
+      "username": "Uživatelské jméno na Last.fm"
+    },
+    "lb": {
+      "account": "Připojeno jako {username}",
+      "accountHint": "Není to tvůj účet? Odeber ListenBrainz v sekci Připojeno a přihlas se znovu.",
+      "checklist": {
+        "step1": "Vytvoř si účet MetaBrainz",
+        "step2": "Ověř svůj e-mail",
+        "step3": "Vrať se sem a zadej své uživatelské jméno"
+      },
+      "intro": "ListenBrainz uchovává bezplatný a otevřený přehled toho, co posloucháš. Připoj ho a nové poslechy budou tvůj výběr neustále aktualizovat.",
+      "oauth": "Přihlásit se přes ListenBrainz",
+      "oauthError": {
+        "denied": "Nepovolil jsi přístup, takže se nic nepřipojilo. Můžeš to zkusit kdykoli znovu.",
+        "exchange_failed": "Nepodařilo se dokončit připojení k ListenBrainz. Zkus to prosím znovu.",
+        "generic": "Při připojování k ListenBrainz došlo k chybě. Zkus to prosím znovu.",
+        "invalid_state": "Platnost tohoto přihlášení vypršela nebo už bylo použito. Zkus to prosím znovu.",
+        "missing_params": "ListenBrainz neposlal zpět všechny potřebné údaje. Zkus to prosím znovu.",
+        "validate_failed": "Tvůj účet MetaBrainz ještě není na ListenBrainz aktivní. Přihlas se jednou na listenbrainz.org a pak to zkus znovu."
+      },
+      "oauthUnavailable": "Přihlášení přes ListenBrainz není právě dostupné. Zadej místo toho své uživatelské jméno.",
+      "opening": "Otevírání ListenBrainz…",
+      "or": "Nebo zadej své uživatelské jméno na ListenBrainz",
+      "signup": "Nemáš účet? Vytvoř si ho zdarma",
+      "spotifyGuide": "Propojit Spotify s ListenBrainz",
+      "spotifyGuideBody": "Pak se vše, co si pustíš na Spotify, promítne do tvého výběru úplně samo.",
+      "submit": "Připojit",
+      "username": "Uživatelské jméno na ListenBrainz"
+    },
+    "offline": "Jsi offline",
+    "playlist": {
+      "again": "Importovat další playlist",
+      "done": "Importováno: {title}",
+      "howTo": {
+        "step1": "1. Na music.youtube.com otevři Knihovna → Oblíbené skladby.",
+        "step2": "2. Vyber skladby (klepni na jednu a pak označ další).",
+        "step3": "3. Zvol „Přidat do playlistu“ → Nový playlist a nastav viditelnost na Neveřejné nebo Veřejné.",
+        "step4": "4. Otevři nový playlist, klepni na Sdílet → Kopírovat odkaz a vlož ho sem.",
+        "anyPlaylist": "Funguje i jakýkoli jiný veřejný nebo neveřejný playlist s tvou oblíbenou hudbou, např. mix na párty nebo na cvičení.",
+        "title": "Jak nasdílet Oblíbenou hudbu?"
+      },
+      "importing": "Importování playlistu…",
+      "intro": "Vlož odkaz na veřejný playlist ze Spotify nebo YouTube Music a my přidáme jeho skladby k tomu, o čem víme, že zpíváš.",
+      "matched": "{matched} z {fetched} má karaoke verzi",
+      "notPlaylist": "Tohle není odkaz na playlist ze Spotify ani z YouTube Music",
+      "paste": "Vložit",
+      "placeholder": "Odkaz na playlist",
+      "submit": "Importovat playlist"
+    },
+    "reminders": {
+      "body": "Otevři e-mail od Spotify a nasdílej soubor zip do Nomad Karaoke.",
+      "channel": "Připomínky",
+      "title": "Tvoje data ze Spotify už možná dorazila"
+    },
+    "result": "Přidáno: {artists, plural, one {# interpret} few {# interpreti} other {# interpretů}} a {songs, plural, one {# skladba} few {# skladby} other {# skladeb}}, které znáš",
+    "screenshot": {
+      "again": "Vybrat další snímky obrazovky",
+      "confirm": "{count, plural, =0 {Nic k přidání} one {Přidat # položku} few {Přidat # položky} other {Přidat # položek}}",
+      "confirmBody": "Odznač cokoli, co jsme rozpoznali špatně.",
+      "confirmTitle": "Je to správně?",
+      "dailyLimit": "Vyčerpal jsi dnešní limit 10 snímků obrazovky. Zkus to znovu zítra.",
+      "empty": "Na těchto snímcích obrazovky se nám nepodařilo najít žádné interprety ani skladby. Zkus čitelnější snímek.",
+      "intro": "Vyber snímky obrazovky své knihovny, playlistů nebo oblíbených interpretů z libovolné hudební aplikace. My přečteme názvy a ty je před uložením zkontroluješ.",
+      "item": "{artist} · {title}",
+      "limit": "Až 5 snímků obrazovky najednou.",
+      "pick": "Vybrat snímky obrazovky",
+      "pickMore": "Vybrat jiné snímky obrazovky",
+      "reading": "Načítání snímků obrazovky…",
+      "unmatched": "Zatím není v našem karaoke katalogu",
+      "retry": "Zkusit znovu"
+    },
+    "source": {
+      "appleExport": "Historie Apple Music",
+      "screenshot": "Snímky obrazovky",
+      "spotifyExport": "Historie Spotify",
+      "spotifyPlaylist": "Playlisty ze Spotify",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Přidat další",
+      "counts": "{artists, plural, one {# interpret} few {# interpreti} other {# interpretů}} · {songs, plural, one {# skladba} few {# skladby} other {# skladeb}}",
+      "empty": "Zatím není nic připojeno. Přidej hudební službu nebo importuj svou historii, aby byl tvůj výběr přesnější.",
+      "lastImport": "Poslední import {days, plural, =0 {dnes} one {před # dnem} few {před # dny} other {před # dny}}",
+      "loadFailed": "Připojené zdroje se nepodařilo načíst. Zkus to prosím za chvilku znovu.",
+      "reconnect": "Znovu připojit",
+      "removeBody": "Tímto odstraníš interprety a skladby, které služba {name} přidala do tvého hudebního profilu. Tvůj výběr skladeb se aktualizuje.",
+      "removeFailed": "Položku se právě teď nepodařilo odebrat. Zkus to prosím znovu.",
+      "removeTitle": "Odebrat {name}?",
+      "stale": "Propoj Spotify s ListenBrainz, aby se načítaly nové poslechy",
+      "status": {
+        "error": "Problém",
+        "importing": "Importování",
+        "needsReconnect": "Vyžaduje opětovné připojení",
+        "ok": "Aktuální",
+        "stale": "Žádné nové poslechy"
+      },
+      "cancel": "Zrušit",
+      "remove": "Odstranit",
+      "title": "Připojeno"
+    },
+    "spotifyExport": {
+      "denied": "Oznámení pro Nomad Karaoke jsou vypnutá. Zapni je v Nastavení, abychom ti mohli poslat připomínku.",
+      "intro": "Spotify ti může poslat celou tvou historii poslechu. Trvá jim to několik dní, takže začni hned a my se pak postaráme o zbytek.",
+      "open": "Otevřít nastavení soukromí Spotify",
+      "pick": "Vybrat soubor",
+      "remind": "Připomenout mi",
+      "reminded": "Hotovo. Připomeneme se ti zhruba za 5 dní a pak znovu za 25.",
+      "step1": "Požádej o svá data na spotify.com/account/privacy. Zaškrtni Data účtu (bývají připravena zhruba za 5 dní) a Rozšířená historie streamování (až 30 dní): Rozšířená historie obsahuje kompletní data.",
+      "step2": "Až by mělo být vše připraveno, pošleme ti připomínku.",
+      "step3": "Až ti dorazí e-mail od Spotify, stáhni si soubor zip a pak zvol Sdílet → Nomad Karaoke (Android), nebo se vrať sem a vyber soubor.",
+      "openSettings": "Otevřít Nastavení"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Hotovo. Tvůj výběr skladeb teď vychází z toho, co opravdu posloucháš.",
+      "failed": "Tvůj účet jsme připojili, ale historii poslechu se právě nepodařilo načíst. Zkusíme to znovu později.",
+      "reading": "Načítání tvé historie poslechu…",
+      "slow": "Načítání historie stále probíhá. Tvůj výběr se aktualizuje, jakmile bude hotovo."
+    },
+    "title": "Připoj svou hudbu",
+    "connected": "Připojeno"
   }
 }

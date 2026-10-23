@@ -1202,5 +1202,217 @@
     "songSearchLabel": "Pronađi pjesmu",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Trenutačno nema prijedloga. Pretraži izvođača iznad ili preskoči ovaj korak."
+  },
+  "connect": {
+    "appleExport": "Nemaš pretplatu na Apple Music? Umjesto toga uvezi svoju povijest slušanja",
+    "appleGuide": {
+      "intro": "Nemaš pretplatu na Apple Music? Apple ti svejedno može poslati tvoju povijest slušanja. Za to im treba nekoliko dana.",
+      "open": "Otvori privacy.apple.com",
+      "pick": "Odaberi datoteku",
+      "step1": "Otiđi na privacy.apple.com i prijavi se.",
+      "step2": "Odaberi Zatražite kopiju svojih podataka, označi podatke za Apple Media Services i pošalji zahtjev. Apple će ti se javiti e-poštom za nekoliko dana.",
+      "step3": "Preuzmi datoteke, a zatim ovdje odaberi zip ili Play Activity CSV datoteku."
+    },
+    "appleReading": "Učitavanje tvoje zbirke…",
+    "cards": {
+      "apple": {
+        "detail": "Tvoja zbirka i nedavna slušanja · nekoliko sekundi",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Tvoji scrobbleovi · nekoliko minuta",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Održava tvoje preporuke svježima dok slušaš",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify ili YouTube Music · nekoliko sekundi",
+        "title": "Zalijepi poveznicu na popis pjesama"
+      },
+      "screenshot": {
+        "detail": "Izvođači za nekoliko sekundi",
+        "title": "Snimi zaslon glazbene aplikacije"
+      },
+      "spotifyExport": {
+        "detail": "Cijela tvoja povijest slušanja · Spotifyju treba 5–30 dana",
+        "title": "Tvoja Spotify povijest"
+      }
+    },
+    "errors": {
+      "badUrl": "To nije poveznica na Spotify ili YouTube Music popis pjesama.",
+      "likedPrivate": "Popis označenih pjesama uvijek je privatan. Kopiraj ga u javni ili nenavedeni popis pjesama, a zatim podijeli tu poveznicu.",
+      "notAnExport": "Ovo ne izgleda kao izvoz podataka sa Spotifyja ili Applea.",
+      "notFound": "Nismo uspjeli pronaći to korisničko ime. Provjeri je li točno napisano pa pokušaj ponovno.",
+      "private": "Nismo mogli otvoriti taj popis pjesama. Provjeri je li javan pa pokušaj ponovno.",
+      "rateLimited": "To je trenutačno previše uvoza. Pokušaj ponovno kasnije.",
+      "tooLarge": "Ta je datoteka prevelika za slanje iz aplikacije.",
+      "unavailable": "Trenutačno nismo mogli pristupiti usluzi. Pokušaj ponovno za nekoliko minuta.",
+      "unparseable": "Trenutačno nismo mogli pročitati taj popis pjesama. Pokušaj s YouTube Music poveznicom ili snimkom zaslona.",
+      "generic": "Nešto je pošlo po zlu. Pokušaj ponovno."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "tvoja Apple Music povijest",
+        "spotifyAccount": "podaci tvog Spotify računa",
+        "spotifyExtended": "tvoja Spotify povijest streaminga"
+      },
+      "lbAlso": "Dodaj i na ListenBrainz kako bi nova slušanja nastavila pristizati",
+      "lbBusy": "ListenBrainz već uvozi datoteku za tebe. Pokušaj ponovno kada završi.",
+      "lbReconnect": "Ponovno poveži ListenBrainz pa pokušaj opet.",
+      "lbSending": "Slanje na ListenBrainz…",
+      "lbSent": "Poslano na ListenBrainz. Možda će im trebati neko vrijeme za uvoz.",
+      "lbTooBig": "Preveliko za slanje iz aplikacije: učitaj na listenbrainz.org",
+      "libraryBoth": "Plus {liked, plural, one {# označena pjesma} few {# označene pjesme} other {# označenih pjesama}} i {playlists, plural, one {# popis pjesama} few {# popisa pjesama} other {# popisa pjesama}}",
+      "libraryLiked": "Plus {liked, plural, one {# označena pjesma} few {# označene pjesme} other {# označenih pjesama}}",
+      "libraryPlaylists": "Plus {playlists, plural, one {# popis pjesama} few {# popisa pjesama} other {# popisa pjesama}}",
+      "nothing": "U ovoj datoteci nismo pronašli nijednu pjesmu za dodavanje.",
+      "pickAnother": "Odaberi drugu datoteku",
+      "preview": "{tracks, plural, one {# pjesma} few {# pjesme} other {# pjesama}} iz izvora {kind}",
+      "reading": "Čitanje tvoje datoteke…",
+      "sending": "Dodavanje tvojih pjesama…",
+      "skippedMalformed": "{count, plural, one {# nečitljiv unos} few {# nečitljiva unosa} other {# nečitljivih unosa}}",
+      "skippedPodcasts": "{count, plural, one {# preslušani podcast, audioknjiga ili video} few {# preslušana podcasta, audioknjige ili videa} other {# preslušanih podcasta, audioknjiga ili videa}}",
+      "skippedShort": "{count, plural, one {# slušanje kraće od 30 sekundi} few {# slušanja kraća od 30 sekundi} other {# slušanja kraćih od 30 sekundi}}",
+      "skippedTitle": "Preskočeno",
+      "start": "Dodaj u moju glazbu",
+      "title": "Uvezi svoju povijest",
+      "truncated": "Čini se da ova datoteka nije potpuna, pa možda nedostaje dio tvoje povijesti. Ako možeš, preuzmi je ponovno iz Spotifyjeve e-pošte.",
+      "waiting": "Čekanje veze"
+    },
+    "improve": {
+      "connect": "Poveži svoju glazbu",
+      "stale": "Poveži Spotify s ListenBrainzom kako bi stizala nova slušanja"
+    },
+    "intro": "Reci nam što stvarno slušaš i tvoji će odabiri postati puno bolji. Svaki od ovih izvora nadopunjuje ostale.",
+    "lastfm": {
+      "intro": "Unesi svoje Last.fm korisničko ime i pročitat ćemo tvoje scrobbleove kako bismo pronašli pjesme koje znaš.",
+      "submit": "Poveži",
+      "username": "Last.fm korisničko ime"
+    },
+    "lb": {
+      "account": "Povezano kao {username}",
+      "accountHint": "Nije tvoj račun? Ukloni ListenBrainz pod Povezano, a zatim se ponovno prijavi.",
+      "checklist": {
+        "step1": "Izradi MetaBrainz račun",
+        "step2": "Potvrdi svoju e-poštu",
+        "step3": "Vrati se i unesi svoje korisničko ime"
+      },
+      "intro": "ListenBrainz vodi besplatnu, otvorenu evidenciju onoga što slušaš. Poveži ga i tvoja će nova slušanja održavati tvoje preporuke svježima.",
+      "oauth": "Prijavi se putem ListenBrainza",
+      "oauthError": {
+        "denied": "Nisi dopustio pristup, pa ništa nije povezano. Pokušaj ponovno kad god želiš.",
+        "exchange_failed": "Nismo uspjeli dovršiti povezivanje s ListenBrainzom. Pokušaj ponovno.",
+        "generic": "Nešto je pošlo po zlu pri povezivanju s ListenBrainzom. Pokušaj ponovno.",
+        "invalid_state": "Ta je prijava istekla ili je već iskorištena. Pokušaj ponovno.",
+        "missing_params": "ListenBrainz nije vratio sve potrebne podatke. Pokušaj ponovno.",
+        "validate_failed": "Tvoj MetaBrainz račun još nije na ListenBrainzu. Prijavi se jednom na listenbrainz.org, a zatim pokušaj ponovno."
+      },
+      "oauthUnavailable": "Prijava putem ListenBrainza trenutačno nije dostupna. Umjesto toga unesi svoje korisničko ime.",
+      "opening": "Otvaranje ListenBrainza…",
+      "or": "Ili unesi svoje ListenBrainz korisničko ime",
+      "signup": "Nemaš račun? Otvori besplatan račun",
+      "spotifyGuide": "Poveži Spotify s ListenBrainzom",
+      "spotifyGuideBody": "Tada sve što slušaš na Spotifyju automatski stiže u tvoje preporuke.",
+      "submit": "Poveži",
+      "username": "ListenBrainz korisničko ime"
+    },
+    "offline": "Nema internetske veze",
+    "playlist": {
+      "again": "Uvezi drugi popis pjesama",
+      "done": "Uvezeno: {title}",
+      "howTo": {
+        "step1": "1. Na music.youtube.com otvori Zbirka → Sviđanja.",
+        "step2": "2. Odaberi pjesme (dodirni jednu, a zatim ostale).",
+        "step3": "3. Odaberi \"Dodaj na popis pjesama\" → Novi popis pjesama i postavi vidljivost na Nenavedeno ili Javno.",
+        "step4": "4. Otvori novi popis pjesama, dodirni Podijeli → Kopiraj vezu i zalijepi je ovdje.",
+        "anyPlaylist": "Bilo koja javna ili nenavedena playlista s tvojim omiljenim pjesmama također funkcionira, npr. miks za tulum ili trening.",
+        "title": "Kako podijeliti svoja Sviđanja?"
+      },
+      "importing": "Uvoz tvog popisa pjesama…",
+      "intro": "Zalijepi poveznicu na javni Spotify ili YouTube Music popis pjesama i dodat ćemo njegove pjesme onome što već znamo da pjevaš.",
+      "matched": "{matched} od {fetched} ima karaoke verziju",
+      "notPlaylist": "To nije poveznica na Spotify ili YouTube Music popis pjesama",
+      "paste": "Zalijepi",
+      "placeholder": "Poveznica na popis pjesama",
+      "submit": "Uvezi popis pjesama"
+    },
+    "reminders": {
+      "body": "Otvori e-poštu od Spotifyja, a zatim podijeli zip datoteku s Nomad Karaoke.",
+      "channel": "Podsjetnici",
+      "title": "Tvoji Spotify podaci možda su spremni"
+    },
+    "result": "Dodano: {artists, plural, one {# izvođač} few {# izvođača} other {# izvođača}} i {songs, plural, one {# pjesma} few {# pjesme} other {# pjesama}} koje znaš",
+    "screenshot": {
+      "again": "Odaberi još snimki zaslona",
+      "confirm": "{count, plural, =0 {Nema ničega za dodati} one {Dodaj # stavku} few {Dodaj # stavke} other {Dodaj # stavki}}",
+      "confirmBody": "Odoznači sve što smo pogrešno prepoznali.",
+      "confirmTitle": "Je li ovo točno?",
+      "dailyLimit": "Iskoristio si današnjih 10 snimki zaslona. Pokušaj ponovno sutra.",
+      "empty": "Na tim snimkama zaslona nismo uspjeli pronaći izvođače ili pjesme. Pokušaj s jasnijom snimkom.",
+      "intro": "Odaberi snimke zaslona svoje zbirke, popisa pjesama ili omiljenih izvođača iz bilo koje glazbene aplikacije. Pročitat ćemo nazive, a ti ih provjeri prije nego što se bilo što spremi.",
+      "item": "{artist} · {title}",
+      "limit": "Do 5 snimki zaslona odjednom.",
+      "pick": "Odaberi snimke zaslona",
+      "pickMore": "Odaberi druge snimke zaslona",
+      "reading": "Čitanje tvojih snimki zaslona…",
+      "unmatched": "Još nije u našem karaoke katalogu",
+      "retry": "Pokušaj ponovno"
+    },
+    "source": {
+      "appleExport": "Apple Music povijest",
+      "screenshot": "Snimke zaslona",
+      "spotifyExport": "Spotify povijest",
+      "spotifyPlaylist": "Spotify popisi pjesama",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Dodaj još",
+      "counts": "{artists, plural, one {# izvođač} few {# izvođača} other {# izvođača}} · {songs, plural, one {# pjesma} few {# pjesme} other {# pjesama}}",
+      "empty": "Još ništa nije povezano. Poveži glazbenu uslugu ili uvezi svoju povijest kako bi poboljšao preporuke.",
+      "lastImport": "Zadnji uvoz: {days, plural, =0 {danas} one {prije # dan} few {prije # dana} other {prije # dana}}",
+      "loadFailed": "Nismo uspjeli učitati tvoje povezane izvore. Pokušaj ponovno za trenutak.",
+      "reconnect": "Ponovno poveži",
+      "removeBody": "Ovim će se ukloniti izvođači i pjesme koje je {name} dodao tvom glazbenom profilu. Tvoje će se preporuke ažurirati.",
+      "removeFailed": "Trenutačno to nismo uspjeli ukloniti. Pokušaj ponovno.",
+      "removeTitle": "Ukloniti izvor {name}?",
+      "stale": "Poveži Spotify s ListenBrainzom kako bi stizala nova slušanja",
+      "status": {
+        "error": "Problem",
+        "importing": "Uvoz u tijeku",
+        "needsReconnect": "Potrebno ponovno povezati",
+        "ok": "Ažurno",
+        "stale": "Nema novih slušanja"
+      },
+      "cancel": "Odustani",
+      "remove": "Ukloni",
+      "title": "Povezano"
+    },
+    "spotifyExport": {
+      "denied": "Obavijesti su isključene za Nomad Karaoke. Uključi ih u Postavkama kako bi primao podsjetnike.",
+      "intro": "Spotify ti može poslati cijelu tvoju povijest slušanja. Za to im treba nekoliko dana, pa kreni odmah, a mi ćemo nastaviti odatle.",
+      "open": "Otvori postavke privatnosti na Spotifyju",
+      "pick": "Odaberi datoteku",
+      "remind": "Podsjeti me",
+      "reminded": "Dogovoreno. Podsjetit ćemo te za otprilike 5 dana i ponovno za 25.",
+      "step1": "Zatraži svoje podatke na spotify.com/account/privacy. Označi Podaci o računu (spremno za otprilike 5 dana) i Proširena povijest streaminga (do 30 dana): Proširena povijest sadrži cijelu tvoju povijest.",
+      "step2": "Podsjetit ćemo te kada bi trebala biti spremna.",
+      "step3": "Kada stigne Spotifyjeva e-pošta, preuzmi zip datoteku, a zatim odaberi Dijeli → Nomad Karaoke (Android) ili se vrati ovdje i odaberi datoteku.",
+      "openSettings": "Otvori Postavke"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Gotovo. Tvoji odabiri sada uključuju ono što slušaš.",
+      "failed": "Povezali smo tvoj račun, ali trenutačno nismo mogli pročitati tvoju povijest. Pokušat ćemo ponovno kasnije.",
+      "reading": "Čitanje tvoje povijesti slušanja…",
+      "slow": "Još uvijek čitamo tvoju povijest. Tvoji će se odabiri ažurirati kada završi."
+    },
+    "title": "Poveži svoju glazbu",
+    "connected": "Povezano"
   }
 }

@@ -1202,5 +1202,217 @@
     "songSearchLabel": "Znajdź piosenkę",
     "songValue": "{title} · {artist}",
     "suggestionsNone": "Brak propozycji w tej chwili. Wyszukaj wykonawcę powyżej lub pomiń ten krok."
+  },
+  "connect": {
+    "appleExport": "Nie masz subskrypcji Apple Music? Zamiast tego zaimportuj swoją historię odtwarzania",
+    "appleGuide": {
+      "intro": "Nie masz subskrypcji Apple Music? Apple nadal może przesłać Ci Twoją historię odtwarzania. Zajmuje im to kilka dni.",
+      "open": "Otwórz privacy.apple.com",
+      "pick": "Wybierz plik",
+      "step1": "Przejdź na stronę privacy.apple.com i się zaloguj.",
+      "step2": "Wybierz „Poproś o kopię swoich danych”, zaznacz „Informacje o usługach multimedialnych Apple” i wyślij wniosek. Apple wyśle Ci wiadomość e-mail w ciągu kilku dni.",
+      "step3": "Pobierz pliki, a następnie wybierz tutaj plik zip lub plik CSV z aktywnością odtwarzania (Play Activity)."
+    },
+    "appleReading": "Odczytywanie Twojej biblioteki…",
+    "cards": {
+      "apple": {
+        "detail": "Twoja biblioteka i ostatnio odtwarzane · kilka sekund",
+        "title": "Apple Music"
+      },
+      "lastfm": {
+        "detail": "Twoje scrobble · kilka minut",
+        "title": "Last.fm"
+      },
+      "listenbrainz": {
+        "detail": "Aktualizuje propozycje na bieżąco podczas słuchania",
+        "title": "ListenBrainz"
+      },
+      "playlist": {
+        "detail": "Spotify lub YouTube Music · kilka sekund",
+        "title": "Wklej link do playlisty"
+      },
+      "screenshot": {
+        "detail": "Wykonawcy w kilka sekund",
+        "title": "Zrób zrzut ekranu aplikacji muzycznej"
+      },
+      "spotifyExport": {
+        "detail": "Cała Twoja historia słuchania · zajmuje Spotify od 5 do 30 dni",
+        "title": "Twoja historia Spotify"
+      }
+    },
+    "errors": {
+      "badUrl": "To nie jest link do playlisty Spotify ani YouTube Music.",
+      "likedPrivate": "Polubione utwory są zawsze prywatne. Skopiuj je do playlisty publicznej lub niepublicznej, a następnie udostępnij ten link.",
+      "notAnExport": "To nie wygląda na plik eksportu danych ze Spotify ani Apple.",
+      "notFound": "Nie znaleźliśmy takiej nazwy użytkownika. Sprawdź pisownię i spróbuj ponownie.",
+      "private": "Nie udało się otworzyć tej playlisty. Upewnij się, że jest publiczna, i spróbuj ponownie.",
+      "rateLimited": "Zbyt wiele importów na ten moment. Spróbuj ponownie później.",
+      "tooLarge": "Ten plik jest zbyt duży, aby wysłać go z aplikacji.",
+      "unavailable": "Nie udało się teraz połączyć z usługą. Spróbuj ponownie za kilka minut.",
+      "unparseable": "Nie udało się teraz odczytać tej playlisty. Wypróbuj zamiast tego link z YouTube Music lub zrzut ekranu.",
+      "generic": "Coś poszło nie tak. Spróbuj ponownie."
+    },
+    "importFile": {
+      "kind": {
+        "apple": "Twojej historii Apple Music",
+        "spotifyAccount": "Twoich danych konta Spotify",
+        "spotifyExtended": "Twojej historii odtwarzania Spotify"
+      },
+      "lbAlso": "Dodaj także do ListenBrainz, aby nowe odtworzenia stale spływały",
+      "lbBusy": "ListenBrainz już importuje dla Ciebie plik. Spróbuj ponownie, gdy zakończy.",
+      "lbReconnect": "Połącz ponownie z ListenBrainz, a następnie spróbuj jeszcze raz.",
+      "lbSending": "Wysyłanie do ListenBrainz…",
+      "lbSent": "Wysłano do ListenBrainz. Zaimportowanie może im chwilę zająć.",
+      "lbTooBig": "Plik zbyt duży, by wysłać go z aplikacji: prześlij go na listenbrainz.org",
+      "libraryBoth": "Oraz {liked, plural, one {# polubiony utwór} few {# polubione utwory} many {# polubionych utworów} other {# polubionych utworów}} i {playlists, plural, one {# playlista} few {# playlisty} many {# playlist} other {# playlist}}",
+      "libraryLiked": "Oraz {liked, plural, one {# polubiony utwór} few {# polubione utwory} many {# polubionych utworów} other {# polubionych utworów}}",
+      "libraryPlaylists": "Oraz {playlists, plural, one {# playlista} few {# playlisty} many {# playlist} other {# playlist}}",
+      "nothing": "W tym pliku nie znaleziono żadnych utworów do dodania.",
+      "pickAnother": "Wybierz inny plik",
+      "preview": "{tracks, plural, one {# utwór} few {# utwory} many {# utworów} other {# utworów}} z {kind}",
+      "reading": "Odczytywanie pliku…",
+      "sending": "Dodawanie utworów…",
+      "skippedMalformed": "{count, plural, one {# nieczytelny wpis} few {# nieczytelne wpisy} many {# nieczytelnych wpisów} other {# nieczytelnych wpisów}}",
+      "skippedPodcasts": "{count, plural, one {# odtworzenie podcastu, audiobooka lub wideo} few {# odtworzenia podcastów, audiobooków lub wideo} many {# odtworzeń podcastów, audiobooków lub wideo} other {# odtworzeń podcastów, audiobooków lub wideo}}",
+      "skippedShort": "{count, plural, one {# odtworzenie poniżej 30 sekund} few {# odtworzenia poniżej 30 sekund} many {# odtworzeń poniżej 30 sekund} other {# odtworzeń poniżej 30 sekund}}",
+      "skippedTitle": "Pominięto",
+      "start": "Dodaj do mojej muzyki",
+      "title": "Zaimportuj swoją historię",
+      "truncated": "Ten plik wygląda na niekompletny, więc może brakować części Twojej historii. Jeśli możesz, pobierz go ponownie z wiadomości e-mail od Spotify.",
+      "waiting": "Oczekiwanie na połączenie"
+    },
+    "improve": {
+      "connect": "Połącz swoją muzykę",
+      "stale": "Połącz Spotify z ListenBrainz, aby nowe odtworzenia trafiały na bieżąco"
+    },
+    "intro": "Powiedz nam, czego naprawdę słuchasz, a Twoje propozycje staną się znacznie lepsze. Każde z tych źródeł uzupełnia pozostałe.",
+    "lastfm": {
+      "intro": "Wpisz swoją nazwę użytkownika Last.fm, a my odczytamy Twoje scrobble, aby znaleźć utwory, które znasz.",
+      "submit": "Połącz",
+      "username": "Nazwa użytkownika Last.fm"
+    },
+    "lb": {
+      "account": "Połączono jako {username}",
+      "accountHint": "To nie Twoje konto? Usuń ListenBrainz w sekcji Połączone, a następnie zaloguj się ponownie.",
+      "checklist": {
+        "step1": "Utwórz konto MetaBrainz",
+        "step2": "Zweryfikuj swój adres e-mail",
+        "step3": "Wróć tutaj i wpisz swoją nazwę użytkownika"
+      },
+      "intro": "ListenBrainz prowadzi darmowy, otwarty rejestr tego, czego słuchasz. Połącz go, a Twoje nowe odtworzenia będą stale odświeżać propozycje utworów.",
+      "oauth": "Zaloguj się przez ListenBrainz",
+      "oauthError": {
+        "denied": "Nie wyrażono zgody na dostęp, więc nic nie połączono. Spróbuj ponownie, kiedy tylko zechcesz.",
+        "exchange_failed": "Nie udało się dokończyć łączenia z ListenBrainz. Spróbuj ponownie.",
+        "generic": "Coś poszło nie tak podczas łączenia z ListenBrainz. Spróbuj ponownie.",
+        "invalid_state": "Sesja logowania wygasła lub została już wykorzystana. Spróbuj ponownie.",
+        "missing_params": "ListenBrainz nie zwrócił wszystkich wymaganych informacji. Spróbuj ponownie.",
+        "validate_failed": "Twojego konta MetaBrainz nie ma jeszcze na ListenBrainz. Zaloguj się raz na listenbrainz.org, a następnie spróbuj ponownie."
+      },
+      "oauthUnavailable": "Logowanie przez ListenBrainz jest w tej chwili niedostępne. Wpisz zamiast tego swoją nazwę użytkownika.",
+      "opening": "Otwieranie ListenBrainz…",
+      "or": "Lub wpisz swoją nazwę użytkownika ListenBrainz",
+      "signup": "Nie masz konta? Załóż bezpłatne konto",
+      "spotifyGuide": "Połącz Spotify z ListenBrainz",
+      "spotifyGuideBody": "Wtedy wszystko, co odtwarzasz na Spotify, automatycznie trafi do Twoich propozycji.",
+      "submit": "Połącz",
+      "username": "Nazwa użytkownika ListenBrainz"
+    },
+    "offline": "Jesteś offline",
+    "playlist": {
+      "again": "Zaimportuj kolejną playlistę",
+      "done": "Zaimportowano {title}",
+      "howTo": {
+        "step1": "1. Na music.youtube.com otwórz Biblioteka → Polubione utwory.",
+        "step2": "2. Zaznacz utwory (dotknij jednego, a potem pozostałych).",
+        "step3": "3. Wybierz „Dodaj do playlisty” → Nowa playlista i ustaw widoczność na Niepubliczna lub Publiczna.",
+        "step4": "4. Otwórz nową playlistę, dotknij Udostępnij → Skopiuj link i wklej go tutaj.",
+        "anyPlaylist": "Każda publiczna lub niepubliczna playlista z Twoimi ulubionymi utworami również zadziała — np. Twoja składanka na imprezę lub trening.",
+        "title": "Jak udostępnić Polubione utwory?"
+      },
+      "importing": "Importowanie Twojej playlisty…",
+      "intro": "Wklej link do publicznej playlisty Spotify lub YouTube Music, a dodamy jej utwory do listy piosenek, które znamy jako Twoje.",
+      "matched": "{matched} z {fetched} ma wersje karaoke",
+      "notPlaylist": "To nie jest link do playlisty Spotify ani YouTube Music",
+      "paste": "Wklej",
+      "placeholder": "Link do playlisty",
+      "submit": "Importuj playlistę"
+    },
+    "reminders": {
+      "body": "Otwórz wiadomość e-mail od Spotify, a następnie udostępnij plik zip aplikacji Nomad Karaoke.",
+      "channel": "Przypomnienia",
+      "title": "Twoje dane Spotify mogą być już gotowe"
+    },
+    "result": "Dodano {artists, plural, one {# wykonawcę} few {# wykonawców} many {# wykonawców} other {# wykonawców}} i {songs, plural, one {# znany Ci utwór} few {# znane Ci utwory} many {# znanych Ci utworów} other {# znanych Ci utworów}}",
+    "screenshot": {
+      "again": "Wybierz więcej zrzutów ekranu",
+      "confirm": "{count, plural, =0 {Nic do dodania} one {Dodaj # pozycję} few {Dodaj # pozycje} many {Dodaj # pozycji} other {Dodaj # pozycji}}",
+      "confirmBody": "Odznacz wszystko, co zostało błędnie rozpoznane.",
+      "confirmTitle": "Czy wszystko się zgadza?",
+      "dailyLimit": "Wykorzystano dzisiejszy limit 10 zrzutów ekranu. Spróbuj ponownie jutro.",
+      "empty": "Na tych zrzutach ekranu nie znaleźliśmy żadnych wykonawców ani utworów. Wypróbuj czytelniejszy zrzut.",
+      "intro": "Wybierz zrzuty ekranu swojej biblioteki, playlist lub ulubionych wykonawców z dowolnej aplikacji muzycznej. Odczytamy nazwy, a Ty sprawdzisz je przed zapisaniem.",
+      "item": "{artist} · {title}",
+      "limit": "Do 5 zrzutów ekranu jednocześnie.",
+      "pick": "Wybierz zrzuty ekranu",
+      "pickMore": "Wybierz inne zrzuty ekranu",
+      "reading": "Odczytywanie zrzutów ekranu…",
+      "unmatched": "Brak jeszcze w naszym katalogu karaoke",
+      "retry": "Spróbuj ponownie"
+    },
+    "source": {
+      "appleExport": "Historia Apple Music",
+      "screenshot": "Zrzuty ekranu",
+      "spotifyExport": "Historia Spotify",
+      "spotifyPlaylist": "Playlisty Spotify",
+      "youtubeMusic": "YouTube Music",
+      "appleMusic": "Apple Music",
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "spotify": "Spotify"
+    },
+    "sources": {
+      "addMore": "Dodaj więcej",
+      "counts": "{artists, plural, one {# wykonawca} few {# wykonawców} many {# wykonawców} other {# wykonawców}} · {songs, plural, one {# utwór} few {# utwory} many {# utworów} other {# utworów}}",
+      "empty": "Nic jeszcze nie połączono. Dodaj usługę muzyczną lub zaimportuj swoją historię, aby lepiej dopasować propozycje.",
+      "lastImport": "Ostatni import {days, plural, =0 {dzisiaj} one {# dzień temu} few {# dni temu} many {# dni temu} other {# dni temu}}",
+      "loadFailed": "Nie udało się załadować połączonych źródeł. Spróbuj ponownie za chwilę.",
+      "reconnect": "Połącz ponownie",
+      "removeBody": "Spowoduje to usunięcie wykonawców i utworów dodanych do Twojego profilu muzycznego przez {name}. Twoje propozycje zostaną zaktualizowane.",
+      "removeFailed": "Nie udało się teraz tego usunąć. Spróbuj ponownie.",
+      "removeTitle": "Usunąć {name}?",
+      "stale": "Połącz Spotify z ListenBrainz, aby nowe odtworzenia trafiały na bieżąco",
+      "status": {
+        "error": "Problem",
+        "importing": "Importowanie",
+        "needsReconnect": "Wymaga ponownego połączenia",
+        "ok": "Aktualne",
+        "stale": "Brak nowych odtworzeń"
+      },
+      "cancel": "Anuluj",
+      "remove": "Usuń",
+      "title": "Połączono"
+    },
+    "spotifyExport": {
+      "denied": "Powiadomienia dla Nomad Karaoke są wyłączone. Włącz je w Ustawieniach, aby otrzymać przypomnienie.",
+      "intro": "Spotify może przesłać Ci całą Twoją historię słuchania. Zajmuje im to kilka dni, więc zacznij teraz, a my zajmiemy się resztą.",
+      "open": "Otwórz ustawienia prywatności Spotify",
+      "pick": "Wybierz plik",
+      "remind": "Przypomnij mi",
+      "reminded": "Gotowe. Przypomnimy Ci za około 5 dni, a potem ponownie za 25 dni.",
+      "step1": "Złóż wniosek o dane na spotify.com/account/privacy. Zaznacz „Dane konta” (gotowe w około 5 dni) oraz „Rozszerzona historia odtwarzania” (do 30 dni): wersja rozszerzona zawiera całą Twoją historię.",
+      "step2": "Przypomnimy Ci, kiedy dane powinny być gotowe.",
+      "step3": "Gdy nadejdzie e-mail od Spotify, pobierz plik zip, a następnie wybierz Udostępnij → Nomad Karaoke (Android) lub wróć tutaj i wybierz plik.",
+      "openSettings": "Otwórz Ustawienia"
+    },
+    "stepNumber": "{n, number}",
+    "sync": {
+      "done": "Gotowe. Twoje propozycje uwzględniają teraz to, czego słuchasz.",
+      "failed": "Połączyliśmy Twoje konto, ale nie udało się teraz odczytać historii. Spróbujemy ponownie później.",
+      "reading": "Odczytywanie Twojej historii słuchania…",
+      "slow": "Nadal odczytujemy Twoją historię. Twoje propozycje zostaną zaktualizowane po zakończeniu."
+    },
+    "title": "Połącz swoją muzykę",
+    "connected": "Połączono"
   }
 }
