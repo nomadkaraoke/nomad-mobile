@@ -1,0 +1,31 @@
+# The setup screen: standing, fully warmed up, record RECORD (yes | no), headphones yes → Start singing → the first
+# pick (after the fake mic's quiet second). Env: RECORD, SHOT (optional: a screenshot path for the filled-in form).
+appId: com.nomadkaraoke.mobile
+---
+- tapOn:
+    id: "vs-posture-standing"
+- tapOn:
+    id: "vs-warmth-warm"
+- scrollUntilVisible:
+    element:
+      id: "vs-headphones-yes"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "vs-record-${RECORD}"
+- tapOn:
+    id: "vs-headphones-yes"
+- assertVisible:
+    id: "vs-record-${RECORD}"
+    selected: true
+- runFlow:
+    when:
+      true: ${SHOT != null && SHOT != ''}
+    commands:
+      - takeScreenshot: ${SHOT}
+- tapOn:
+    id: "vs-setup-go"
+- extendedWaitUntil:
+    visible:
+      id: "vs-pick-know"
+    timeout: 30000

@@ -1,7 +1,8 @@
 // Maestro runScript helper for the gen local stack's test API (/api/test/*, fake workers only).
 // Env (pass with runScript `env:`; STACK comes from `maestro test -e STACK=http://127.0.0.1:8010`):
 //   ACTION   setup | code | config | judge | job | scenario | review | decide-seed | decide-reset | voice-seed |
-//            voice-assert | kjbox | decide | log | fake-externals | fake-lb-user | fake-lastfm-user | lb-poll | source-counts
+//            voice-assert | kjbox | decide | log | fake-externals | fake-lb-user | fake-lastfm-user | lb-poll | source-counts |
+//            voice-session-assert | voice-recordings-count | voice-reset
 //   setup:   NAME (flow name, used in the unique email), CREDITS (default 2),
 //            USER_CONFIG (JSON, per-user fake-config knobs: fail_at, auto_approve, audio_duration_seconds,
 //            youtube_url_enabled, step_delay_seconds, judge_*), GLOBAL_CONFIG (JSON, merged over the defaults
@@ -82,6 +83,15 @@
 //            source-counts call's output.sourceSongs), TOKEN (default output.token from setup; decide takes the gen
 //            session) -> polls GET ${DECIDE_STACK}/api/services/summary until that source's row has at least those
 //            counts or WAIT_MS (default 20000) passes; output.sourceSongs / output.sourceArtists
+//   voice-session-assert: EMAIL (default output.email) -> that user's voice sessions (GET
+//            ${DECIDE_STACK}/api/test/voice/sessions, decide docs/TESTING.md § Voice session), polled until the
+//            expectations hold or WAIT_MS (default 15000) passes: EXPECT_ATTEMPTS (attempts across all sessions),
+//            EXPECT_DONE ("true": some session is done, "false": none is), EXPECT_SESSIONS (how many sessions)
+//            -> output.voiceSessions (JSON)
+//   voice-recordings-count: EMAIL (default output.email), EXPECT_COUNT -> decide's stored take recordings for that
+//            user, polled until it is EXPECT_COUNT or WAIT_MS (default 30000) passes (the app uploads in the
+//            background) -> output.voiceRecordings
+//   voice-reset: EMAIL (default output.email) -> deletes the user's voice sessions, attempts and recordings
 // Wrapped in a function: a flow can run this file more than once, and top-level `let`s must not collide.
 (function () {
   const base = (typeof STACK !== 'undefined' && STACK && STACK !== 'undefined' && STACK) || 'http://127.0.0.1:8010';
@@ -603,6 +613,64 @@
     }
     output.sourceSongs = String(row.songs);
     output.sourceArtists = String(row.artists);
+  } else if (action === 'voice-session-assert' || action === 'voice-recordings-count' || action === 'voice-reset') {
+    const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+    if (!email) throw new Error('ACTION ' + action + ' needs EMAIL (or ACTION setup first)');
+    const q = '?email=' + encodeURIComponent(email);
+    const sleep = (ms) => {
+      const until = new Date().getTime() + ms;
+      while (new Date().getTime() < until) {
+        // busy-wait: the script engine has no timers
+      }
+    };
+    // Polls read() until problem(value) is null or waitMs passes; throws with the last problem.
+    const poll = (read, problem, waitMs, what) => {
+      const deadline = new Date().getTime() + waitMs;
+      let value = null;
+      let why = null;
+      do {
+        value = read();
+        why = problem(value);
+        if (why === null) return value;
+        sleep(1000);
+      } while (new Date().getTime() < deadline);
+      throw new Error(what + ' of ' + email + ': ' + why + '\n' + JSON.stringify(value));
+    };
+    const waitEnv = envValue(typeof WAIT_MS !== 'undefined' ? WAIT_MS : undefined);
+    if (action === 'voice-reset') {
+      const res = http.post(decideBase + '/api/test/voice/reset', { headers: JSON_HEADERS, body: JSON.stringify({ email: email }) });
+      if (res.status < 200 || res.status >= 300) throw new Error('voice reset failed: HTTP ' + res.status + ' ' + res.body);
+    } else if (action === 'voice-session-assert') {
+      const want = {
+        attempts: envValue(typeof EXPECT_ATTEMPTS !== 'undefined' ? EXPECT_ATTEMPTS : undefined),
+        done: envValue(typeof EXPECT_DONE !== 'undefined' ? EXPECT_DONE : undefined),
+        sessions: envValue(typeof EXPECT_SESSIONS !== 'undefined' ? EXPECT_SESSIONS : undefined),
+      };
+      const sessions = poll(
+        () => check(http.get(decideBase + '/api/test/voice/sessions' + q), 'voice sessions'),
+        (list) => {
+          const attempts = list.reduce((n, s) => n + (s.attempts || 0), 0);
+          const done = list.some((s) => s.state === 'done');
+          if (want.sessions !== null && list.length !== Number(want.sessions)) return list.length + ' sessions, expected ' + want.sessions;
+          if (want.attempts !== null && attempts !== Number(want.attempts)) return attempts + ' attempts, expected ' + want.attempts;
+          if (want.done !== null && String(done) !== want.done) return 'done is ' + done + ', expected ' + want.done;
+          return null;
+        },
+        Number(waitEnv || 15000),
+        'voice sessions',
+      );
+      output.voiceSessions = JSON.stringify(sessions);
+    } else {
+      const expect = envValue(typeof EXPECT_COUNT !== 'undefined' ? EXPECT_COUNT : undefined);
+      if (expect === null) throw new Error('ACTION voice-recordings-count needs EXPECT_COUNT');
+      const r = poll(
+        () => check(http.get(decideBase + '/api/test/voice/recordings' + q), 'voice recordings'),
+        (v) => (v.count === Number(expect) ? null : v.count + ' recordings, expected ' + expect),
+        Number(waitEnv || 30000),
+        'voice recordings',
+      );
+      output.voiceRecordings = String(r.count);
+    }
   } else {
     throw new Error('unknown ACTION ' + action);
   }

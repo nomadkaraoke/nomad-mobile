@@ -1,0 +1,66 @@
+# Voice session 3 (Phase 3d spec §6, plan Task D8): a one-song recorded session (its take uploads) → Me → Your music
+# profile → Your recordings shows 1 → Delete all my recordings → confirm → the count says 0 → decide has none.
+appId: com.nomadkaraoke.mobile
+name: voice-session-3-delete-recordings
+tags:
+  - voice-session
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: vs3
+- runFlow:
+    file: ../common/voice-session-open.yaml
+    env:
+      EMAIL: ${output.email}
+- runFlow:
+    file: ../common/voice-session-setup.yaml
+    env:
+      RECORD: "yes"
+- runFlow:
+    file: ../common/voice-session-song.yaml
+    env:
+      EXPECT_PREFILL: "true"
+- runFlow: ../common/voice-session-finish.yaml
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-recordings-count
+      EXPECT_COUNT: "1"
+- tapOn:
+    id: "vs-result-done"
+- extendedWaitUntil:
+    notVisible:
+      id: "vs-result"
+    timeout: 10000
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- scrollUntilVisible:
+    element:
+      id: "vs-recordings-delete"
+    direction: DOWN
+    timeout: 20000
+- extendedWaitUntil:
+    visible: "1 recording kept privately"
+    timeout: 15000
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-3-recordings
+- tapOn:
+    id: "vs-recordings-delete"
+- extendedWaitUntil:
+    visible: "Delete all your recordings?"
+    timeout: 10000
+- tapOn: "Delete|DELETE"
+- extendedWaitUntil:
+    visible: "0 recordings kept privately"
+    timeout: 20000
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-3-recordings-deleted
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-recordings-count
+      EXPECT_COUNT: "0"
+      WAIT_MS: "5000"

@@ -1,0 +1,15 @@
+# From a pick (after at least one song) → Finish → the result. decide may also end the session by itself (done_reason),
+# in which case the result is already showing.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    when:
+      visible:
+        id: "vs-finish"
+    commands:
+      - tapOn:
+          id: "vs-finish"
+- extendedWaitUntil:
+    visible:
+      id: "vs-result-type"
+    timeout: 30000
