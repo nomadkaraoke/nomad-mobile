@@ -91,7 +91,8 @@ export type PianoStripProps = {
   live?: number | null;
   height: number;
   testID: string;
-  accessibilityLabel?: string;
+  /** Required: the strip is one accessible element and the canvas has no text of its own. */
+  accessibilityLabel: string;
 };
 
 /**
@@ -107,6 +108,7 @@ export function PianoStrip({ lowMidi, highMidi, marks, band, live, height, testI
 
   const bandFrom = band ? keyOf(Math.max(Math.round(band.from), Math.round(lowMidi))) : null;
   const bandTo = band ? keyOf(Math.min(Math.round(band.to), Math.round(highMidi))) : null;
+  const inBand = (midi: number) => band !== undefined && midi >= Math.round(band.from) && midi <= Math.round(band.to);
   const liveX = live !== null && live !== undefined && width > 0 ? pianoX(layout, live) : null;
 
   return (
@@ -149,7 +151,8 @@ export function PianoStrip({ lowMidi, highMidi, marks, band, live, height, testI
               y={0}
               width={k.w}
               height={height * BLACK_H}
-              color={mark ? pianoShade(mark) : PIANO_BLACK_KEY}
+              // Black keys are opaque over the band, so an unmarked black key inside it takes the band's colour.
+              color={mark ? pianoShade(mark) : inBand(k.midi) && band ? pianoShade(band.color) : PIANO_BLACK_KEY}
             />,
           ];
         })}

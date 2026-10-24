@@ -54,6 +54,7 @@ it('colours marked keys, draws the band and the live pitch line', () => {
       marks={[{ midi: 62, color: '#f0f' }, { midi: 61, color: '#0ff' }]}
       band={{ from: 60, to: 62, color: '#ff0' }}
       live={62}
+      accessibilityLabel="Keyboard"
     />,
   );
   layout();
@@ -69,7 +70,7 @@ it('colours marked keys, draws the band and the live pitch line', () => {
 });
 
 it('draws no live line when there is no pitch', () => {
-  render(<PianoStrip testID="piano" lowMidi={60} highMidi={64} height={60} live={null} />);
+  render(<PianoStrip testID="piano" lowMidi={60} highMidi={64} height={60} live={null} accessibilityLabel="Keyboard" />);
   layout();
   expect(screen.getAllByTestId('skia-rect').some((r) => r.props.color === PIANO_LIVE_COLOR)).toBe(false);
 });
@@ -85,7 +86,7 @@ it('pianoShade darkens a colour towards black', () => {
 });
 
 it('every black key has a dark outline; unlit ones are dark grey, not the page background', () => {
-  render(<PianoStrip testID="piano" lowMidi={60} highMidi={64} height={60} marks={[{ midi: 61, color: '#f0f' }]} />);
+  render(<PianoStrip testID="piano" lowMidi={60} highMidi={64} height={60} marks={[{ midi: 61, color: '#f0f' }]} accessibilityLabel="Keyboard" />);
   layout();
   const rects = screen.getAllByTestId('skia-rect').map((r) => r.props);
   const outlines = rects.filter((r) => r.color === PIANO_KEY_OUTLINE);
@@ -97,4 +98,14 @@ it('every black key has a dark outline; unlit ones are dark grey, not the page b
   const dSharp = unlit[0]!;
   const frame = outlines.find((o) => o.x < dSharp.x && o.x + o.width > dSharp.x + dSharp.width);
   expect(frame).toBeTruthy();
+});
+
+it('an unmarked black key inside the band takes the band colour (black keys draw over the band)', () => {
+  render(
+    <PianoStrip testID="piano" lowMidi={60} highMidi={64} height={60} band={{ from: 61, to: 61, color: '#ff0' }} accessibilityLabel="Keyboard" />,
+  );
+  layout();
+  const rects = screen.getAllByTestId('skia-rect').map((r) => r.props);
+  expect(rects.filter((r) => r.color === pianoShade('#ff0'))).toHaveLength(1); // C#4
+  expect(rects.filter((r) => r.color === PIANO_BLACK_KEY)).toHaveLength(1); // D#4, outside the band
 });
