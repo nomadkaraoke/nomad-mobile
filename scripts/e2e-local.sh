@@ -92,8 +92,15 @@ done
 # The suite's flow files: those whose name contains FILTER (all when empty), minus those whose name contains SKIP
 # (--skip tonight: a full run without ../kjbox).
 list_flows() {
-  ls "$ROOT"/maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } |
-    { if [[ -n "$SKIP" ]]; then grep -vF "$SKIP"; else cat; fi; } || true
+  # Match FILTER and SKIP against the file name only: a checkout path containing the term mustn't select or drop
+  # every flow.
+  local f name
+  for f in "$ROOT"/maestro/flows/*.yaml; do
+    name="${f##*/}"
+    [[ -n "$FILTER" && "$name" != *"$FILTER"* ]] && continue
+    [[ -n "$SKIP" && "$name" == *"$SKIP"* ]] && continue
+    echo "$f"
+  done
 }
 
 # kjbox (and the stack-control helper) only when this run has Tonight flows: a flow tagged `tonight` among the

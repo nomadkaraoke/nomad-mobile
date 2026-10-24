@@ -378,6 +378,39 @@ describe('Your voice (Phase 3c)', () => {
     await waitFor(() => expect(useVoiceStore.getState().profile).toBeNull());
   });
 
+  it('remove: a flush while the DELETE runs never re-sends a profile whose upload had failed', async () => {
+    let finishDelete: (v: unknown) => void = () => {};
+    m(decide.deleteVoiceProfile).mockImplementationOnce(() => new Promise((r) => (finishDelete = r)));
+    m(decide.putVoiceProfile).mockRejectedValue(new Error('offline')); // every upload fails until the remove
+    act(() => useVoiceStore.getState().save(MIC)); // pending
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    await confirmRemove();
+    await waitFor(() => expect(decide.deleteVoiceProfile).toHaveBeenCalledTimes(1));
+    m(decide.putVoiceProfile).mockClear();
+    await act(async () => {
+      await sendPendingVoice(); // foreground / reconnect / Discover mount
+    });
+    expect(decide.putVoiceProfile).not.toHaveBeenCalled();
+    await act(async () => finishDelete(undefined));
+    await waitFor(() => expect(useVoiceStore.getState().profile).toBeNull());
+    m(decide.putVoiceProfile).mockResolvedValue({});
+  });
+
+  it('remove fails: an unsent profile goes back to waiting for its upload', async () => {
+    m(decide.deleteVoiceProfile).mockRejectedValueOnce(new Error('offline'));
+    m(decide.putVoiceProfile).mockRejectedValue(new Error('offline'));
+    act(() => useVoiceStore.getState().save(MIC)); // pending: its upload keeps failing
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    await confirmRemove();
+    expect(await screen.findByTestId('voice-remove-error')).toBeTruthy();
+    expect(useVoiceStore.getState()).toMatchObject({ pending: true, profile: expect.objectContaining({ measuredAt: MIC.measuredAt }) });
+    m(decide.putVoiceProfile).mockResolvedValue({});
+  });
+
   it('remove asks first: Cancel keeps everything', async () => {
     act(() => useVoiceStore.getState().adopt(MIC));
     await signIn();

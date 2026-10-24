@@ -1486,14 +1486,14 @@
   "fit": {
     "fits": "Passar din röst",
     "improveVoice": "Hitta låtar som passar din röst",
-    "keysDown": "{n, plural, one {Prova # tonsteg ner} other {Prova # tonsteg ner}}",
-    "keysUp": "{n, plural, one {Prova # tonsteg upp} other {Prova # tonsteg upp}}",
+    "keysDown": "{n, plural, one {Prova # halvton ner} other {Prova # halvtoner ner}}",
+    "keysUp": "{n, plural, one {Prova # halvton upp} other {Prova # halvtoner upp}}",
     "octaveDown": "Passar en oktav ner",
-    "octaveDownKeysDown": "{n, plural, one {En oktav ner, # tonsteg ner} other {En oktav ner, # tonsteg ner}}",
-    "octaveDownKeysUp": "{n, plural, one {En oktav ner, # tonsteg upp} other {En oktav ner, # tonsteg upp}}",
+    "octaveDownKeysDown": "{n, plural, one {En oktav ner, # halvton ner} other {En oktav ner, # halvtoner ner}}",
+    "octaveDownKeysUp": "{n, plural, one {En oktav ner, # halvton upp} other {En oktav ner, # halvtoner upp}}",
     "octaveUp": "Passar en oktav upp",
-    "octaveUpKeysDown": "{n, plural, one {En oktav upp, # tonsteg ner} other {En oktav upp, # tonsteg ner}}",
-    "octaveUpKeysUp": "{n, plural, one {En oktav upp, # tonsteg upp} other {En oktav upp, # tonsteg upp}}",
+    "octaveUpKeysDown": "{n, plural, one {En oktav upp, # halvton ner} other {En oktav upp, # halvtoner ner}}",
+    "octaveUpKeysUp": "{n, plural, one {En oktav upp, # halvton upp} other {En oktav upp, # halvtoner upp}}",
     "profileEmpty": "Ingen röstprofil ännu. Gör rösttestet för att hitta låtar som passar dig.",
     "profileMethodMic": "Mätt med mikrofontestet",
     "profileMethodSelf": "Baserat på ditt val, inte uppmätt",
@@ -1518,7 +1518,7 @@
     "profileTitle": "Din röst",
     "profileRemoveBody": "Discover slutar matcha låtar till din röst. Du kan göra om testet när som helst.",
     "profileRemoveTitle": "Ta bort din röst?",
-    "singableCtaLabel": "Sjungbar, gör rösttestet först",
+    "singableCtaLabel": "Sångbar, gör rösttestet först",
     "profileRemoveConfirm": "Ta bort"
   }
 }

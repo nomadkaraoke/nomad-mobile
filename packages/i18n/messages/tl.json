@@ -1503,10 +1503,10 @@
     "profileRemoveFailed": "Hindi maalis. Suriin ang iyong koneksyon at subukan muli.",
     "profileTest": "Mag-voice test",
     "singable": "Kayang kantahin",
-    "singableCtaHint": "Bubuksan nito ang voice test. Ipinapakita ng Singable ang mga kanta sa range mo.",
-    "singableEmptyBody": "Kasalukuyan pa naming sinusukat ang mga kanta. I-off ang Singable para makita ang lahat ng iyong mga napili.",
+    "singableCtaHint": "Bubuksan nito ang voice test. Ipinapakita ng Kayang kantahin ang mga kanta sa range mo.",
+    "singableEmptyBody": "Kasalukuyan pa naming sinusukat ang mga kanta. I-off ang Kayang kantahin para makita ang lahat ng iyong mga napili.",
     "singableEmptyTitle": "Wala pang range data para sa mga kantang ito",
-    "singableOff": "I-off ang Singable",
+    "singableOff": "I-off ang Kayang kantahin",
     "songCta": "I-test ang iyong boses para makita kung bagay sa iyo ang kantang ito",
     "sortFitCta": "Bagay sa boses ko: i-test muna ang iyong boses",
     "stretch": "Medyo mahirap abutin",
@@ -1518,7 +1518,7 @@
     "profileTitle": "Ang iyong boses",
     "profileRemoveBody": "Ititigil ng Discover ang pagtutugma ng mga kanta sa iyong boses. Maaari mong kunin ulit ang test anumang oras.",
     "profileRemoveTitle": "Alisin ang iyong boses?",
-    "singableCtaLabel": "Singable, mag-voice test muna",
+    "singableCtaLabel": "Kayang kantahin, mag-voice test muna",
     "profileRemoveConfirm": "Alisin"
   }
 }

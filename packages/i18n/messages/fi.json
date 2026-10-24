@@ -1502,11 +1502,11 @@
     "profileRemove": "Poista ääniprofiilini",
     "profileRemoveFailed": "Poistaminen epäonnistui. Tarkista verkkoyhteytesi ja yritä uudelleen.",
     "profileTest": "Tee äänitesti",
-    "singable": "Singable",
-    "singableCtaHint": "Avaa äänitestin. Singable näyttää äänialaasi sopivat kappaleet.",
-    "singableEmptyBody": "Mittaamme kappaleita parhaillaan. Kytke Singable pois päältä nähdäksesi kaikki valintasi.",
+    "singable": "Laulettava",
+    "singableCtaHint": "Avaa äänitestin. Laulettava näyttää äänialaasi sopivat kappaleet.",
+    "singableEmptyBody": "Mittaamme kappaleita parhaillaan. Kytke Laulettava pois päältä nähdäksesi kaikki valintasi.",
     "singableEmptyTitle": "Näille kappaleille ei ole vielä äänialatietoja",
-    "singableOff": "Kytke Singable pois päältä",
+    "singableOff": "Kytke Laulettava pois päältä",
     "songCta": "Testaa äänesi nähdäksesi, sopiiko tämä kappale sinulle",
     "sortFitCta": "Sopii äänelleni: testaa äänesi ensin",
     "stretch": "Haastava",
@@ -1518,7 +1518,7 @@
     "profileTitle": "Äänesi",
     "profileRemoveBody": "Discover ei enää etsi äänellesi sopivia kappaleita. Voit tehdä testin uudelleen milloin tahansa.",
     "profileRemoveTitle": "Poistetaanko äänesi?",
-    "singableCtaLabel": "Singable, tee äänitesti ensin",
+    "singableCtaLabel": "Laulettava, tee äänitesti ensin",
     "profileRemoveConfirm": "Poista"
   }
 }

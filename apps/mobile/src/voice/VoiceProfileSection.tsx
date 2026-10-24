@@ -22,11 +22,18 @@ const openVoiceTest = () => router.push('/discover/voice' as Href);
 export function useRemoveVoiceProfile() {
   const queryClient = useQueryClient();
   return async (): Promise<boolean> => {
+    // A profile still waiting to upload (an earlier PUT failed) stops being pending first: a flush started while
+    // the DELETE runs (foreground, reconnect, Discover mount) must not PUT it after the DELETE and bring it back.
+    const { profile, pending } = useVoiceStore.getState();
+    const unsent = pending && profile ? profile : null;
+    if (unsent) useVoiceStore.getState().markSynced(unsent.measuredAt);
     try {
       // A PUT still in flight would otherwise land after the DELETE and bring the profile back.
       await waitForVoiceSend();
       await deleteVoiceProfile();
     } catch {
+      // Kept on the phone: the unsent profile goes back to waiting for its upload.
+      if (unsent && useVoiceStore.getState().profile?.measuredAt === unsent.measuredAt) useVoiceStore.getState().save(unsent);
       return false;
     }
     useVoiceStore.getState().clear();
