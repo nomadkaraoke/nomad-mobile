@@ -149,7 +149,11 @@ const toLocal = (p: LocalVoiceProfile): LocalVoiceProfile => ({
   measuredAt: p.measuredAt,
 });
 
-type Persisted = { profile: LocalVoiceProfile | null; pending: boolean };
+/**
+ * `rejected`: decide refused this profile for good (400/422), so decide having none is expected and is not "removed
+ * on another phone". Present only when true, so older stored copies read back unchanged.
+ */
+type Persisted = { profile: LocalVoiceProfile | null; pending: boolean; rejected?: true };
 const EMPTY: Persisted = { profile: null, pending: false };
 
 /** This phone's copy, or empty when there is none (or it is unreadable, which is then removed). */
@@ -157,9 +161,12 @@ export function loadVoice(): Persisted {
   try {
     const raw = appStorage.getString(VOICE_STORAGE_KEY);
     if (raw === undefined) return EMPTY;
-    const v = JSON.parse(raw) as { profile?: unknown; pending?: unknown };
+    const v = JSON.parse(raw) as { profile?: unknown; pending?: unknown; rejected?: unknown };
     const profile = parseProfile(v?.profile);
-    if (profile) return { profile, pending: v.pending === true };
+    if (profile) {
+      const pending = v.pending === true;
+      return !pending && v.rejected === true ? { profile, pending, rejected: true } : { profile, pending };
+    }
   } catch {
     // fall through: unreadable
   }
@@ -186,25 +193,29 @@ export const useVoiceStore = create<VoiceStore>((set, get) => ({
   save(profile) {
     const next = { profile: toLocal(profile), pending: true };
     persist(next);
-    set(next);
+    set({ ...next, rejected: undefined });
   },
   markSynced(measuredAt) {
     const { profile } = get();
     if (!profile || profile.measuredAt !== measuredAt) return;
     const next = { profile, pending: false };
     persist(next);
-    set(next);
+    set({ ...next, rejected: undefined });
   },
   markRejected(measuredAt) {
-    get().markSynced(measuredAt);
+    const { profile } = get();
+    if (!profile || profile.measuredAt !== measuredAt) return;
+    const next = { profile, pending: false, rejected: true as const };
+    persist(next);
+    set(next);
   },
   adopt(profile) {
     const next = { profile: toLocal(profile), pending: false };
     persist(next);
-    set(next);
+    set({ ...next, rejected: undefined });
   },
   clear() {
     appStorage.remove(VOICE_STORAGE_KEY);
-    set(EMPTY);
+    set({ ...EMPTY, rejected: undefined });
   },
 }));

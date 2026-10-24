@@ -25,7 +25,12 @@ jest.mock('@nomad/api-decide', () => ({
   getSong: jest.fn(),
   configureClient: jest.fn(),
   getRecommendationsV2: jest.fn(),
-  getVoiceProfile: jest.fn(async () => null),
+  // decide holds what this phone synced (a synced profile with none on decide is cleared as removed elsewhere).
+  getVoiceProfile: jest.fn(async () => {
+    const voice = jest.requireActual<typeof import('../voice/voiceStore')>('../voice/voiceStore');
+    const { profile, pending } = voice.useVoiceStore.getState();
+    return profile && !pending ? voice.toVoiceProfileIn(profile) : null;
+  }),
   putVoiceProfile: jest.fn(async () => ({})),
   hideSong: jest.fn(async () => {}),
   unhideSong: jest.fn(async () => {}),
@@ -189,6 +194,15 @@ describe('the Singable chip', () => {
     fireEvent.press(screen.getByTestId('fit-singable-off'));
     await waitFor(() => expect(lastQuery()).toEqual({}));
     expect(useRecFilters.getState().filters.singable).toBe(false);
+  });
+
+  it('Singable on with another filter, nothing back: the usual empty state, not "no range data yet"', async () => {
+    withVoice();
+    act(() => useRecFilters.getState().set({ singable: true, decade: ['1980s'] }));
+    getRecs.mockResolvedValue(response([], { has_profile: true, method: 'mic' }));
+    renderRouter(routes(), { initialUrl: '/discover' });
+    expect(await screen.findByTestId('discover-picks-empty')).toBeTruthy();
+    expect(screen.queryByTestId('discover-picks-singable-empty')).toBeNull();
   });
 
   it('Singable on, nothing back, decide has no profile yet (or an old response without voice): the usual empty state', async () => {

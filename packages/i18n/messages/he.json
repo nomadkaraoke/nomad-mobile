@@ -1343,7 +1343,7 @@
       "channel": "תזכורות",
       "title": "ייתכן שנתוני ה-Spotify שלך כבר מוכנים",
       "bodyAndroid": "פותחים את האימייל מ-Spotify, ומשתפים את קובץ ה-zip עם Nomad Karaoke.",
-      "bodyIos": "פותחים את האימייל מ-Spotify, שומרים את קובץ ה-zip באפליקציית 'קבצים', ואז בוחרים אותו ב-Nomad Karaoke."
+      "bodyIos": "פתחו את האימייל מ-Spotify, שמרו את קובץ ה-zip ב'קבצים' (Files), ואז בחרו אותו ב-Nomad Karaoke."
     },
     "result": "נוספו {artists, plural, one {אמן #} other {# אמנים}} ו-{songs, plural, one {שיר #} other {# שירים}} שאתה מכיר",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "מבקשים את הנתונים בכתובת spotify.com/account/privacy. מסמנים את Account data (מוכן תוך כ-5 ימים) ואת Extended streaming history (עד 30 ימים): ההיסטוריה המורחבת מכילה את כל ההיסטוריה המלאה שלך.",
       "step2": "אנחנו נזכיר לך כשהקבצים אמורים להיות מוכנים.",
       "openSettings": "פתיחת הגדרות",
-      "step3Ios": "כשהאימייל מ-Spotify יגיע, שומרים את קובץ ה-zip באפליקציית 'קבצים', ואז חוזרים לכאן ובוחרים אותו.",
-      "step3Android": "כשהאימייל מ-Spotify יגיע, מורידים את קובץ ה-zip, ואז שיתוף ← Nomad Karaoke, או חוזרים לכאן ובוחרים את הקובץ."
+      "step3Ios": "כשהאימייל מ-Spotify יגיע, שמרו את קובץ ה-zip ב'קבצים' (Files), ואז חזרו לכאן ובחרו אותו.",
+      "step3Android": "כשהאימייל מ-Spotify יגיע, הורידו את קובץ ה-zip, ואז לחצו על שיתוף ← Nomad Karaoke, או חזרו לכאן ובחרו את הקובץ."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "שלב {step} מתוך {total}",
     "heldCaption": "הנמוך והגבוה שלך עד כה",
     "singLeft": "{seconds, plural, one {נותרה שנייה אחת} two {נותרו שתי שניות} other {נותרו # שניות}}",
-    "singProgressLabel": "הזמן שנותר לשיר"
+    "singProgressLabel": "הזמן שנותר לשיר",
+    "micBusyBody": "אפליקציה אחרת או שיחה משתמשת במיקרופון כרגע. סגרו אותה ונסו שוב, או פשוט בחרו את סוג הקול שלכם.",
+    "micBusyTitle": "המיקרופון תפוס"
   },
   "fit": {
     "fits": "מתאים לקול שלך",

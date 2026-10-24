@@ -1405,8 +1405,8 @@
       "step1": "Begär dina data på spotify.com/account/privacy. Kryssa för Kontodata (klart om cirka 5 dagar) och Utökad strömningshistorik (upp till 30 dagar): Utökad innehåller hela din historik.",
       "step2": "Vi påminner dig när det borde vara klart.",
       "openSettings": "Öppna Inställningar",
-      "step3Ios": "När Spotifys mejl kommer sparar du zip-filen i Filer och återvänder sedan hit och väljer den.",
-      "step3Android": "När Spotifys mejl kommer laddar du ner zip-filen och väljer Dela → Nomad Karaoke, eller återvänder hit och väljer filen."
+      "step3Ios": "När mejlet från Spotify kommer sparar du zip-filen i Filer och går sedan tillbaka hit och väljer den.",
+      "step3Android": "När mejlet från Spotify kommer laddar du ner zip-filen och väljer Dela → Nomad Karaoke, eller går tillbaka hit och väljer filen."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Steg {step} av {total}",
     "heldCaption": "Dina lägsta och högsta toner hittills",
     "singLeft": "{seconds, plural, one {# sekund kvar} other {# sekunder kvar}}",
-    "singProgressLabel": "Tid kvar att sjunga"
+    "singProgressLabel": "Tid kvar att sjunga",
+    "micBusyBody": "En annan app eller ett samtal använder mikrofonen. Avsluta det och försök igen, eller välj din rösttyp istället.",
+    "micBusyTitle": "Mikrofonen är upptagen"
   },
   "fit": {
     "fits": "Passar din röst",

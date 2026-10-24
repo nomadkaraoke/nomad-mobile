@@ -1343,7 +1343,7 @@
       "channel": "Påmindelser",
       "title": "Dine Spotify-data er måske klar",
       "bodyAndroid": "Åbn e-mailen fra Spotify, og del derefter zip-filen med Nomad Karaoke.",
-      "bodyIos": "Åbn e-mailen fra Spotify, gem zip-filen i Filer, og vælg den derefter i Nomad Karaoke."
+      "bodyIos": "Åbn e-mailen fra Spotify, gem zip-filen i Arkiver, og vælg den derefter i Nomad Karaoke."
     },
     "result": "Tilføjede {artists, plural, one {# kunstner} other {# kunstnere}} og {songs, plural, one {# sang} other {# sange}}, du kender",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Anmod om dine data på spotify.com/account/privacy. Sæt kryds ved Kontodata (klar om ca. 5 dage) og Udvidet streaminghistorik (op til 30 dage): Udvidet indeholder hele din historik.",
       "step2": "Vi minder dig om det, når det burde være klar.",
       "openSettings": "Åbn Indstillinger",
-      "step3Ios": "Når e-mailen fra Spotify lander, så gem zip-filen i Filer, og vend derefter tilbage hertil og vælg den.",
-      "step3Android": "Når e-mailen fra Spotify lander, skal du downloade zip-filen og vælge Del → Nomad Karaoke, eller vende tilbage hertil og vælge filen."
+      "step3Ios": "Når e-mailen fra Spotify ankommer, skal du gemme zip-filen i Arkiver og derefter vende tilbage hertil og vælge den.",
+      "step3Android": "Når e-mailen fra Spotify ankommer, skal du downloade zip-filen og derefter vælge Del → Nomad Karaoke, eller vende tilbage hertil og vælge filen."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Trin {step} af {total}",
     "heldCaption": "Dine dybeste og højeste toner indtil videre",
     "singLeft": "{seconds, plural, one {# sekund tilbage} other {# sekunder tilbage}}",
-    "singProgressLabel": "Resterende tid til at synge"
+    "singProgressLabel": "Resterende tid til at synge",
+    "micBusyBody": "En anden app eller et opkald bruger mikrofonen. Luk appen, og prøv igen, eller vælg din stemmetype i stedet.",
+    "micBusyTitle": "Mikrofonen er optaget"
   },
   "fit": {
     "fits": "Passer til din stemme",

@@ -1343,7 +1343,7 @@
       "channel": "Lời nhắc",
       "title": "Dữ liệu Spotify của bạn có thể đã sẵn sàng",
       "bodyAndroid": "Hãy mở email từ Spotify, sau đó chia sẻ tệp zip với Nomad Karaoke.",
-      "bodyIos": "Mở email từ Spotify, lưu tệp zip vào Tệp, sau đó chọn tệp đó trong Nomad Karaoke."
+      "bodyIos": "Mở email từ Spotify, lưu tệp zip vào Tệp (Files), rồi chọn tệp đó trong Nomad Karaoke."
     },
     "result": "Đã thêm {artists, plural, other {# nghệ sĩ}} và {songs, plural, other {# bài hát}} bạn biết",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Yêu cầu dữ liệu của bạn tại spotify.com/account/privacy. Đánh dấu vào Dữ liệu tài khoản (sẵn sàng sau khoảng 5 ngày) và Lịch sử nghe nhạc mở rộng (tối đa 30 ngày): Gói mở rộng chứa toàn bộ lịch sử của bạn.",
       "step2": "Chúng tôi sẽ nhắc bạn khi dữ liệu sẵn sàng.",
       "openSettings": "Mở Cài đặt",
-      "step3Ios": "Khi email từ Spotify tới, hãy lưu tệp zip vào Tệp, sau đó quay lại đây và chọn tệp đó.",
-      "step3Android": "Khi email từ Spotify tới, hãy tải tệp zip xuống, sau đó chọn Chia sẻ → Nomad Karaoke, hoặc quay lại đây và chọn tệp."
+      "step3Ios": "Khi nhận được email từ Spotify, hãy lưu tệp zip vào Tệp (Files), rồi quay lại đây và chọn tệp đó.",
+      "step3Android": "Khi nhận được email từ Spotify, hãy tải tệp zip xuống, sau đó Chia sẻ → Nomad Karaoke, hoặc quay lại đây và chọn tệp."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Bước {step}/{total}",
     "heldCaption": "Nốt thấp nhất và cao nhất của bạn cho đến hiện tại",
     "singLeft": "{seconds, plural, other {Còn # giây}}",
-    "singProgressLabel": "Thời gian hát còn lại"
+    "singProgressLabel": "Thời gian hát còn lại",
+    "micBusyBody": "Một ứng dụng khác hoặc một cuộc gọi đang sử dụng micro. Hãy tắt đi rồi thử lại, hoặc tự chọn loại giọng của bạn.",
+    "micBusyTitle": "Micro đang bận"
   },
   "fit": {
     "fits": "Hợp với giọng của bạn",

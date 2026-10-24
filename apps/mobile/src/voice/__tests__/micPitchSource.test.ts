@@ -23,10 +23,13 @@ beforeEach(() => jest.clearAllMocks());
 
 const perm = (granted: boolean, canAskAgain: boolean) => ({ granted, canAskAgain, status: granted ? 'granted' : 'denied' });
 
-it('asks for a mono float32 48 kHz stream', () => {
+// The full playback mode, not a partial one: a partial setAudioModeAsync resets playsInSilentMode on iOS.
+const AFTER = { playsInSilentMode: true, interruptionMode: 'mixWithOthers', allowsRecording: false };
+
+it('asks for a mono float32 16 kHz stream', () => {
   renderHook(() => useMicPitchSource());
   expect(mocked.useAudioStream).toHaveBeenCalledWith(
-    expect.objectContaining({ sampleRate: 48000, channels: 1, encoding: 'float32' }),
+    expect.objectContaining({ sampleRate: 16000, channels: 1, encoding: 'float32' }),
   );
 });
 
@@ -51,7 +54,7 @@ it('start enables recording mode before starting the stream; stop stops it and t
   expect(mocked.setAudioModeAsync).toHaveBeenCalledWith({ allowsRecording: true, playsInSilentMode: true });
   result.current.stop();
   expect(order).toEqual(['mode:true', 'start', 'stop', 'mode:false']);
-  expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith({ allowsRecording: false });
+  expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith(AFTER);
 });
 
 it('forwards float32 buffers as PcmBuffer and takes channel 0 of interleaved stereo', async () => {
@@ -74,7 +77,7 @@ it('unmount does not throw when expo-audio already released the stream', () => {
   });
   const { unmount } = renderHook(() => useMicPitchSource());
   expect(() => unmount()).not.toThrow();
-  expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith({ allowsRecording: false });
+  expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith(AFTER);
 });
 
 it('drops buffers after stop', async () => {
@@ -97,7 +100,7 @@ describe('stop() during an in-flight start()', () => {
     release();
     await started;
     expect(mocked.__stream.start).not.toHaveBeenCalled();
-    expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith({ allowsRecording: false });
+    expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith(AFTER);
   });
 
   it('stops the stream when stop lands while stream.start is pending', async () => {
@@ -112,7 +115,7 @@ describe('stop() during an in-flight start()', () => {
     release();
     await started;
     expect(mocked.__stream.stop).toHaveBeenCalledTimes(1);
-    expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith({ allowsRecording: false });
+    expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith(AFTER);
   });
 });
 

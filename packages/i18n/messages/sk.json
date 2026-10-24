@@ -1343,7 +1343,7 @@
       "channel": "Pripomienky",
       "title": "Tvoje údaje zo Spotify už môžu byť pripravené",
       "bodyAndroid": "Otvor e-mail od Spotify a potom zdieľaj zip súbor s Nomad Karaoke.",
-      "bodyIos": "Otvor e-mail od Spotify, ulož zip súbor do Súborov a potom ho vyber v Nomad Karaoke."
+      "bodyIos": "Otvor e-mail od Spotify, ulož zip do Súborov a potom ho vyber v Nomad Karaoke."
     },
     "result": "Pridané: {artists, plural, one {# interpret} few {# interpreti} other {# interpretov}} a {songs, plural, one {# skladba} few {# skladby} other {# skladieb}}, ktoré poznáš",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Požiadaj o svoje údaje na spotify.com/account/privacy. Začiarkni Údaje účtu (pripravené približne o 5 dní) a Rozšírená história streamovania (do 30 dní): Rozšírená história obsahuje celý tvoj prehľad.",
       "step2": "Pripomenieme sa ti, keď by mali byť pripravené.",
       "openSettings": "Otvoriť Nastavenia",
-      "step3Ios": "Keď ti príde e-mail od Spotify, ulož zip súbor do Súborov, potom sa vráť sem a vyber ho.",
-      "step3Android": "Keď ti príde e-mail od Spotify, stiahni zip súbor a zvoľ Zdieľať → Nomad Karaoke, alebo sa vráť sem a vyber súbor."
+      "step3Ios": "Keď ti príde e-mail od Spotify, ulož zip do Súborov, potom sa vráť sem a vyber ho.",
+      "step3Android": "Keď ti príde e-mail od Spotify, stiahni si zip a potom zvoľ Zdieľať → Nomad Karaoke, alebo sa vráť sem a vyber daný súbor."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Krok {step} z {total}",
     "heldCaption": "Tvoje doterajšie najnižšie a najvyššie tóny",
     "singLeft": "{seconds, plural, one {Zostáva # sekunda} few {Zostávajú # sekundy} other {Zostáva # sekúnd}}",
-    "singProgressLabel": "Zostávajúci čas na spievanie"
+    "singProgressLabel": "Zostávajúci čas na spievanie",
+    "micBusyBody": "Mikrofón práve používa iná aplikácia alebo hovor. Ukonči ju a skús to znova, alebo si namiesto toho vyber svoj typ hlasu.",
+    "micBusyTitle": "Mikrofón sa práve používa"
   },
   "fit": {
     "fits": "Sedí k tvojmu hlasu",

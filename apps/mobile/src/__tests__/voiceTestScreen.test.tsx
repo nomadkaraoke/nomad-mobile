@@ -188,6 +188,46 @@ describe('voice test', () => {
     expect(settings).toHaveBeenCalled();
   });
 
+  it('blocked permission: coming back from Settings with the mic allowed starts the test', async () => {
+    const handlers: ((s: AppStateStatus) => void)[] = [];
+    jest.spyOn(AppState, 'addEventListener').mockImplementation((_t, h) => {
+      handlers.push(h as (s: AppStateStatus) => void);
+      return { remove: () => {} } as never;
+    });
+    mockSource.current!.permission = 'blocked';
+    open();
+    await screen.findByTestId('voice-start');
+    await press('voice-start');
+    expect(screen.getByTestId('voice-permission-blocked')).toBeTruthy();
+    // Still off in Settings: back to the app, still blocked (and no loop).
+    await act(async () => handlers.forEach((h) => h('active')));
+    expect(screen.getByTestId('voice-permission-blocked')).toBeTruthy();
+    mockSource.current!.permission = 'granted';
+    await act(async () => handlers.forEach((h) => h('active')));
+    expect(await screen.findByTestId('voice-low-done')).toBeTruthy();
+    expect(mockSource.current!.sections).toEqual(['low']);
+  });
+
+  it('a busy mic (start() throws) shows its own copy with Try again and the self-report way out', async () => {
+    const src = mockSource.current!;
+    const realStart = src.start;
+    let busy = true;
+    src.start = async (onBuffer, section) => {
+      if (busy) throw new Error('mic in use');
+      return realStart(onBuffer, section);
+    };
+    open();
+    await screen.findByTestId('voice-start');
+    await press('voice-start');
+    expect(screen.getByTestId('voice-mic-busy')).toBeTruthy();
+    expect(screen.getByText('The microphone is busy')).toBeTruthy();
+    expect(screen.queryByText('Microphone is off')).toBeNull();
+    expect(screen.getByTestId('voice-skip')).toBeTruthy();
+    busy = false;
+    await press('voice-retry');
+    expect(screen.getByTestId('voice-low-done')).toBeTruthy();
+  });
+
   it('denied permission: Try again asks again', async () => {
     mockSource.current!.permission = 'denied';
     open();

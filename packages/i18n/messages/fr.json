@@ -1343,7 +1343,7 @@
       "channel": "Rappels",
       "title": "Tes données Spotify sont peut-être prêtes",
       "bodyAndroid": "Ouvre l'e-mail de Spotify, puis partage le zip avec Nomad Karaoke.",
-      "bodyIos": "Ouvre l'e-mail de Spotify, enregistre le zip dans Fichiers, puis sélectionne-le dans Nomad Karaoke."
+      "bodyIos": "Ouvre l'e-mail de Spotify, enregistre le fichier zip dans Fichiers, puis sélectionne-le dans Nomad Karaoke."
     },
     "result": "Ajout de {artists, plural, one {# artiste} other {# artistes}} et {songs, plural, one {# morceau} other {# morceaux}} que tu connais",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Demande tes données sur spotify.com/account/privacy. Coche Données du compte (prêtes en 5 jours environ) et Historique de streaming étendu (jusqu'à 30 jours) : l'historique étendu contient l'intégralité de tes écoutes.",
       "step2": "Nous te rappellerons quand tout devrait être prêt.",
       "openSettings": "Ouvrir les Réglages",
-      "step3Ios": "Lorsque l'e-mail de Spotify arrive, enregistre le zip dans Fichiers, puis reviens ici et sélectionne-le.",
-      "step3Android": "Lorsque l'e-mail de Spotify arrive, télécharge le zip, puis choisis Partager → Nomad Karaoke, ou reviens ici et sélectionne le fichier."
+      "step3Ios": "Quand l'e-mail de Spotify arrive, enregistre le zip dans Fichiers, puis reviens ici et sélectionne-le.",
+      "step3Android": "Quand l'e-mail de Spotify arrive, télécharge le zip, puis fais Partager → Nomad Karaoke, ou reviens ici et sélectionne le fichier."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Étape {step} sur {total}",
     "heldCaption": "Tes notes les plus graves et les plus aiguës jusqu'ici",
     "singLeft": "{seconds, plural, one {# seconde restante} other {# secondes restantes}}",
-    "singProgressLabel": "Temps de chant restant"
+    "singProgressLabel": "Temps de chant restant",
+    "micBusyBody": "Une autre application ou un appel utilise le micro. Ferme-la et réessaie, ou choisis plutôt ton type de voix.",
+    "micBusyTitle": "Le micro est déjà utilisé"
   },
   "fit": {
     "fits": "Adapté à ta voix",

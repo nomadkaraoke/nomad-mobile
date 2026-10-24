@@ -1343,7 +1343,7 @@
       "channel": "Pengingat",
       "title": "Data Spotify Anda mungkin sudah siap",
       "bodyAndroid": "Buka email dari Spotify, lalu bagikan file zip ke Nomad Karaoke.",
-      "bodyIos": "Buka email dari Spotify, simpan file zip ke File, lalu pilih di Nomad Karaoke."
+      "bodyIos": "Buka email dari Spotify, simpan zip ke File, lalu pilih file tersebut di Nomad Karaoke."
     },
     "result": "Menambahkan {artists, plural, one {# artis} other {# artis}} dan {songs, plural, one {# lagu} other {# lagu}} yang Anda tahu",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Minta data Anda di spotify.com/account/privacy. Centang Data akun (siap dalam sekitar 5 hari) dan Riwayat streaming lengkap (hingga 30 hari): Riwayat lengkap memuat seluruh riwayat Anda.",
       "step2": "Kami akan mengingatkan Anda saat datanya diperkirakan sudah siap.",
       "openSettings": "Buka Pengaturan",
-      "step3Ios": "Saat email dari Spotify tiba, simpan file zip ke File, lalu kembali ke sini dan pilih file tersebut.",
-      "step3Android": "Saat email dari Spotify tiba, unduh file zip, lalu pilih Bagikan → Nomad Karaoke, atau kembali ke sini dan pilih filenya."
+      "step3Ios": "Saat email dari Spotify masuk, simpan file zip ke File, lalu kembali ke sini dan pilih filenya.",
+      "step3Android": "Saat email dari Spotify masuk, unduh file zip, lalu Bagikan → Nomad Karaoke, atau kembali ke sini dan pilih filenya."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Langkah {step} dari {total}",
     "heldCaption": "Nada terendah dan tertinggi Anda sejauh ini",
     "singLeft": "{seconds, plural, other {Tersisa # detik}}",
-    "singProgressLabel": "Sisa waktu bernyanyi"
+    "singProgressLabel": "Sisa waktu bernyanyi",
+    "micBusyBody": "Aplikasi lain atau panggilan telepon sedang menggunakan mikrofon. Tutup aplikasi tersebut dan coba lagi, atau pilih jenis suara Anda secara manual.",
+    "micBusyTitle": "Mikrofon sedang digunakan"
   },
   "fit": {
     "fits": "Sesuai suara Anda",

@@ -1343,7 +1343,7 @@
       "channel": "提醒",
       "title": "你的 Spotify 数据可能已准备就绪",
       "bodyAndroid": "打开 Spotify 发送的邮件，然后将 zip 压缩包分享至 Nomad Karaoke。",
-      "bodyIos": "打开 Spotify 的邮件，将 zip 压缩包存储到“文件”App，然后在 Nomad Karaoke 中选择它。"
+      "bodyIos": "打开 Spotify 发来的邮件，将 zip 文件保存到“文件”，然后在 Nomad Karaoke 中选择该文件。"
     },
     "result": "已添加你熟悉的 {artists, plural, other {# 位歌手}}和 {songs, plural, other {# 首歌曲}}",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "前往 spotify.com/account/privacy 请求获取数据。勾选“账户数据”（约 5 天准备好）和“扩展流媒体历史记录”（最长需 30 天）：扩展记录包含你的全部历史。",
       "step2": "准备就绪时我们会提醒你。",
       "openSettings": "打开设置",
-      "step3Ios": "收到 Spotify 的邮件后，将 zip 压缩包存储到“文件”App，然后返回此处选择它。",
-      "step3Android": "收到 Spotify 的邮件后下载 zip 压缩包，然后选择“分享”→“Nomad Karaoke”，或返回此处选择该文件。"
+      "step3Ios": "收到 Spotify 发来的邮件后，将 zip 文件保存到“文件”，然后返回此处选择该文件。",
+      "step3Android": "收到 Spotify 发来的邮件后，下载 zip 文件，然后选择“分享”→ Nomad Karaoke，或者返回此处选择该文件。"
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "第 {step} 步，共 {total} 步",
     "heldCaption": "您目前测得的最低音和最高音",
     "singLeft": "{seconds, plural, one {还剩 # 秒} other {还剩 # 秒}}",
-    "singProgressLabel": "剩余演唱时间"
+    "singProgressLabel": "剩余演唱时间",
+    "micBusyBody": "其他应用或通话正在占用麦克风。请将其关闭后重试，或者直接选择您的声部类型。",
+    "micBusyTitle": "麦克风被占用"
   },
   "fit": {
     "fits": "适合你的声线",

@@ -14,7 +14,12 @@ import { useEffect, useState } from 'react';
 import { createFramer, FRAME_SIZE } from './framer';
 import type { PitchSource } from './pitchSource';
 
-export type VoiceStep = 'intro' | 'permission-denied' | 'permission-blocked' | 'low' | 'high' | 'sing' | 'result' | 'no-notes';
+export type VoiceStep =
+  | 'intro'
+  | 'permission-denied'
+  | 'permission-blocked'
+  | 'mic-busy'
+  | 'low' | 'high' | 'sing' | 'result' | 'no-notes';
 export type VoiceResult = { range: RangeSummary; voice: Classification };
 type ActiveStep = 'low' | 'high' | 'sing';
 
@@ -23,6 +28,13 @@ const QUIET_FALLBACK_MS = 2000;
 const NOTE_TIMEOUT_MS = 20_000;
 const SING_MS = 15_000;
 const PITCH_INTERVAL_MS = 1000 / 15;
+/**
+ * Safety net: a step keeps at most this many seconds of listening audio (after the quiet second) for held-note
+ * detection; later frames still drive the live pitch but are not collected. A low/high step with a held note has
+ * no timeout, so without a cap a singer who never taps Done would grow the frame list (and the per-buffer
+ * findHeldNotes rerun) without bound. 20 s matches the no-note timeout and is far longer than any held note needs.
+ */
+export const MAX_STEP_LISTEN_S = 20;
 
 type Setters = {
   initialSource: PitchSource;
@@ -83,7 +95,7 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     }
     r.floor ??= noiseFloor(r.quiet);
     const [v] = gateFrames([f], r.floor);
-    if (v) r.gated.push(v);
+    if (v && f.t < 1.0 + MAX_STEP_LISTEN_S) r.gated.push(v);
     const now = Date.now();
     if (now - r.lastPitchAt >= PITCH_INTERVAL_MS) {
       r.lastPitchAt = now;
@@ -149,9 +161,13 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     try {
       await r.source.start(onBuffer, s);
     } catch {
+      // Permission was just granted, so a failing start() means the mic is busy (a call, another app recording),
+      // not a permission problem: say so, and let retry() re-enter this same step.
       if (gen === r.gen && !r.unmounted) {
         stopRun();
-        setStepBoth('permission-denied');
+        r.retryTo = s;
+        setLivePitch(null);
+        setStepBoth('mic-busy');
       }
       return;
     }
@@ -205,6 +221,7 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     },
     async retry(): Promise<void> {
       if (r.step === 'permission-denied' || r.step === 'permission-blocked') return begin();
+      if (r.step === 'mic-busy') return enterStep(r.retryTo);
       if (r.step === 'no-notes') {
         if (r.retryTo === 'low') r.committed = [];
         setResult(null);
@@ -245,6 +262,7 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
  *   intro --begin()--> (permission) --denied--> permission-denied --retry()--> (permission again)
  *                                   --blocked-> permission-blocked --retry()--> (permission again)
  *                                   --granted-> low --done() [>=1 held]--> high --done() [>=1 held]--> sing
+ *   low/high/sing --source.start() throws--> mic-busy --retry()--> the same step
  *   low/high --20 s with no held note--> no-notes --retry()--> the same step
  *   sing --15 s | skipSing()--> result (range from >=2 held notes spanning >=3 semitones) | no-notes --retry()--> low
  *

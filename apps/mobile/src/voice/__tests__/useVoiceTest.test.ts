@@ -1,17 +1,16 @@
 import { StrictMode, createElement, type ReactNode } from 'react';
 import { act, renderHook } from '@testing-library/react-native';
 import type { MicPermission, PcmBuffer, PitchSource, VoiceSection } from '../pitchSource';
-import { useVoiceTest } from '../useVoiceTest';
+import { MAX_STEP_LISTEN_S, useVoiceTest } from '../useVoiceTest';
 
 const RATE = 16000;
-const CHUNK = 1600;
 const hz = (midi: number) => 440 * 2 ** ((midi - 69) / 12);
 
 /** Mono sine (or silence when midi is null) as 100 ms buffers. */
-function tone(midi: number | null, secs: number, amp = 0.3): Float32Array {
-  const n = Math.round(secs * RATE);
+function tone(midi: number | null, secs: number, amp = 0.3, rate = RATE): Float32Array {
+  const n = Math.round(secs * rate);
   const out = new Float32Array(n);
-  if (midi !== null) for (let i = 0; i < n; i++) out[i] = amp * Math.sin((2 * Math.PI * hz(midi) * i) / RATE);
+  if (midi !== null) for (let i = 0; i < n; i++) out[i] = amp * Math.sin((2 * Math.PI * hz(midi) * i) / rate);
   return out;
 }
 function concat(...parts: Float32Array[]): Float32Array {
@@ -27,16 +26,21 @@ function concat(...parts: Float32Array[]): Float32Array {
 type FakeSource = PitchSource & {
   sections: VoiceSection[];
   stops: number;
+  /** Wall-clock ms the hook spent in each delivered buffer during the last feed(). */
+  timings: number[];
   feed(samples: Float32Array): void;
 };
 
-function makeSource(permission: MicPermission = 'granted'): FakeSource {
+/** `rate` is the delivered sample rate; buffers are always 100 ms long, like expo-audio's native stream. */
+function makeSource(permission: MicPermission = 'granted', rate = RATE): FakeSource {
+  const chunk = Math.round(rate / 10);
   let sink: ((b: PcmBuffer) => void) | null = null;
   let clock = 0;
   const src: FakeSource = {
     kind: 'fake',
     sections: [],
     stops: 0,
+    timings: [],
     requestPermission: async () => permission,
     start: async (onBuffer, section) => {
       sink = onBuffer;
@@ -48,9 +52,12 @@ function makeSource(permission: MicPermission = 'granted'): FakeSource {
     },
     // Deliberately keeps delivering to the last sink after stop(): the hook must ignore it.
     feed(samples) {
-      for (let off = 0; off < samples.length; off += CHUNK) {
-        sink?.({ samples: samples.subarray(off, off + CHUNK), sampleRate: RATE, timestamp: clock });
-        clock += CHUNK / RATE;
+      src.timings = [];
+      for (let off = 0; off < samples.length; off += chunk) {
+        const t0 = performance.now();
+        sink?.({ samples: samples.subarray(off, off + chunk), sampleRate: rate, timestamp: clock });
+        src.timings.push(performance.now() - t0);
+        clock += chunk / rate;
       }
     },
   };
@@ -141,6 +148,36 @@ it('a permission request that throws lands on permission-denied, not a spinner',
   };
   const { result } = await begin(src);
   expect(result.current.step).toBe('permission-denied');
+});
+
+it('start() throwing (mic busy) lands on mic-busy, not permission-denied; retry re-enters that step', async () => {
+  const src = makeSource();
+  const realStart = src.start;
+  let busy = true;
+  src.start = async (onBuffer, section) => {
+    if (busy) throw new Error('AVAudioSession: mic in use');
+    return realStart(onBuffer, section);
+  };
+  const { result } = await begin(src);
+  expect(result.current.step).toBe('mic-busy');
+  busy = false;
+  await act(async () => {
+    await result.current.retry();
+  });
+  expect(result.current.step).toBe('low');
+  expect(src.sections).toEqual(['low']);
+
+  // Busy again on high: retry goes back to high, keeping the low note.
+  await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
+  busy = true;
+  await act(async () => result.current.done());
+  expect(result.current.step).toBe('mic-busy');
+  busy = false;
+  await act(async () => {
+    await result.current.retry();
+  });
+  expect(result.current.step).toBe('high');
+  expect(result.current.held).toHaveLength(1);
 });
 
 it('retry from permission-denied asks again', async () => {
@@ -386,4 +423,53 @@ it('range is min/max over all held notes when high is sung lower than low', asyn
   expect(result.current.result?.range.low).toBe(48);
   expect(result.current.result?.range.high).toBe(60);
   expect(result.current.result?.range.heldCount).toBe(2);
+});
+
+describe('at 48 kHz (what a phone delivers if it ignores the 16 kHz request)', () => {
+  const R = 48000;
+  const t48 = (midi: number | null, secs: number) => tone(midi, secs, 0.3, R);
+  // Real performance.now for the per-buffer timings; timers stay fake.
+  beforeEach(() => jest.useFakeTimers({ doNotFake: ['performance'] }));
+
+  it('walks intro→low→high→sing→result with the same answer as at 16 kHz', async () => {
+    const src = makeSource('granted', R);
+    const { result } = await begin(src);
+    await feed(src, concat(t48(null, 1), t48(45, 1.2)));
+    expect(result.current.phase).toBe('listening');
+    expect(result.current.held).toHaveLength(1);
+    await act(async () => result.current.done());
+    await feed(src, concat(t48(null, 1), t48(69, 1.2)));
+    await act(async () => result.current.done());
+    expect(result.current.step).toBe('sing');
+    await feed(src, concat(t48(null, 1), ...[52, 55, 59, 62, 57, 54].map((m) => t48(m, 0.8))));
+    act(() => result.current.skipSing());
+    expect(result.current.step).toBe('result');
+    expect(result.current.result?.range.low).toBe(45);
+    expect(result.current.result?.range.high).toBe(69);
+    expect(result.current.result?.voice.type).toBe('baritone');
+  });
+
+  it('perf: a 20 s continuous hold costs < 20 ms of JS per 100 ms buffer', async () => {
+    const src = makeSource('granted', R);
+    const { result } = await begin(src);
+    await feed(src, concat(t48(null, 1), t48(45, 20)));
+    expect(result.current.held).toHaveLength(1);
+    // The last 5 s are the worst case: the longest frame list. The median, so GC pauses and a busy CI machine (jest
+    // runs suites in parallel) can't flake it; the old re-sorting held-note pass cost ~130 ms here, now ~3 ms.
+    const tail = src.timings.slice(-50).sort((a, b) => a - b);
+    const median = tail[tail.length >> 1]!;
+    expect(median).toBeLessThan(20);
+  });
+
+  it('stops collecting frames after MAX_STEP_LISTEN_S of listening (safety net)', async () => {
+    const src = makeSource('granted', R);
+    const { result } = await begin(src);
+    await feed(src, concat(t48(null, 1), t48(45, MAX_STEP_LISTEN_S + 4)));
+    // done() commits the step's final notes; high then shows them.
+    await act(async () => result.current.done());
+    expect(result.current.step).toBe('high');
+    expect(result.current.held).toHaveLength(1);
+    expect(result.current.held[0]!.end).toBeLessThan(1 + MAX_STEP_LISTEN_S);
+    expect(result.current.held[0]!.end).toBeGreaterThan(MAX_STEP_LISTEN_S - 0.5);
+  });
 });

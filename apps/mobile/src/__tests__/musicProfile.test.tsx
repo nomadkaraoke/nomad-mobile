@@ -13,7 +13,7 @@ import { appStorage } from '../storage';
 import { gen, session } from '../test-utils/genAuthMock';
 import { appRoutes } from '../test-utils/routes';
 import { sendPendingVoice } from '../voice/useVoiceProfile';
-import { profileFromSelfReport, useVoiceStore, type LocalVoiceProfile } from '../voice/voiceStore';
+import { profileFromSelfReport, toVoiceProfileIn, useVoiceStore, type LocalVoiceProfile } from '../voice/voiceStore';
 
 // Router-rendered screens with optimistic edits run slowly on CI runners (5 s default timed out there).
 jest.setTimeout(20_000);
@@ -304,8 +304,16 @@ describe('Your voice (Phase 3c)', () => {
   beforeEach(() => {
     act(() => useVoiceStore.getState().clear());
     jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+    // decide holds what this phone synced (a synced profile with none on decide would be cleared as removed elsewhere).
+    m(decide.getVoiceProfile).mockImplementation(async () => {
+      const { profile, pending } = useVoiceStore.getState();
+      return profile && !pending ? (toVoiceProfileIn(profile) as never) : null;
+    });
   });
-  afterEach(() => (Alert.alert as jest.Mock).mockRestore());
+  afterEach(() => {
+    (Alert.alert as jest.Mock).mockRestore();
+    m(decide.getVoiceProfile).mockImplementation(async () => null);
+  });
   /** Lets pending promises run (renderRouter's fake timers would hang a real setTimeout). */
   const flush = async () => {
     for (let i = 0; i < 5; i++) await act(async () => {});

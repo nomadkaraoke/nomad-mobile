@@ -1343,7 +1343,7 @@
       "channel": "Hatırlatıcılar",
       "title": "Spotify verilerin hazır olabilir",
       "bodyAndroid": "Spotify'dan gelen e-postayı aç, ardından zip dosyasını Nomad Karaoke ile paylaş.",
-      "bodyIos": "Spotify'ın e-postasını aç, zip dosyasını Dosyalar'a kaydet, ardından Nomad Karaoke'de seç."
+      "bodyIos": "Spotify'dan gelen e-postayı aç, zip dosyasını Dosyalar'a kaydet, ardından Nomad Karaoke'den seç."
     },
     "result": "Bildiğin {artists, plural, one {# sanatçı} other {# sanatçı}} ve {songs, plural, one {# şarkı} other {# şarkı}} eklendi",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "spotify.com/account/privacy adresinden verilerini talep et. Hesap verileri (yaklaşık 5 günde hazır olur) ve Genişletilmiş dinleme geçmişi (30 güne kadar sürer) kutucuklarını işaretle: Genişletilmiş geçmiş tüm dinleme geçmişini içerir.",
       "step2": "Hazır olması gereken zamanda sana hatırlatacağız.",
       "openSettings": "Ayarlar'ı Aç",
-      "step3Ios": "Spotify'ın e-postası geldiğinde zip dosyasını Dosyalar'a kaydet, ardından buraya dönüp dosyayı seç.",
-      "step3Android": "Spotify'ın e-postası geldiğinde zip dosyasını indir, ardından Paylaş → Nomad Karaoke yolunu izle ya da buraya dönüp dosyayı seç."
+      "step3Ios": "Spotify'dan e-posta geldiğinde zip dosyasını Dosyalar'a kaydet, ardından buraya geri dönüp dosyayı seç.",
+      "step3Android": "Spotify'dan e-posta geldiğinde zip dosyasını indir, ardından Paylaş → Nomad Karaoke adımlarını takip et veya buraya geri dönüp dosyayı seç."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "{total} adımdan {step}. adım",
     "heldCaption": "Şu ana kadarki en pes ve en tiz tonun",
     "singLeft": "{seconds, plural, one {# saniye kaldı} other {# saniye kaldı}}",
-    "singProgressLabel": "Şarkı söylemek için kalan süre"
+    "singProgressLabel": "Şarkı söylemek için kalan süre",
+    "micBusyBody": "Mikrofonu başka bir uygulama veya arama kullanıyor. Uygulamayı kapatıp tekrar dene ya da bunun yerine ses türünü seç.",
+    "micBusyTitle": "Mikrofon meşgul"
   },
   "fit": {
     "fits": "Sesine uygun",

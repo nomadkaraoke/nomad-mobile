@@ -1343,7 +1343,7 @@
       "channel": "Promemoria",
       "title": "I tuoi dati Spotify potrebbero essere pronti",
       "bodyAndroid": "Apri l'email di Spotify, poi condividi il file zip con Nomad Karaoke.",
-      "bodyIos": "Apri l'email di Spotify, salva il file zip in File, poi selezionalo in Nomad Karaoke."
+      "bodyIos": "Apri l'email di Spotify, salva lo zip su File, poi selezionalo in Nomad Karaoke."
     },
     "result": "Aggiunti {artists, plural, one {# artista} other {# artisti}} e {songs, plural, one {# brano} other {# brani}} che conosci",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Richiedi i tuoi dati su spotify.com/account/privacy. Seleziona Dati dell'account (pronti in circa 5 giorni) e Cronologia di streaming estesa (fino a 30 giorni): la cronologia estesa include tutti i tuoi ascolti.",
       "step2": "Ti invieremo un promemoria quando dovrebbero essere pronti.",
       "openSettings": "Apri Impostazioni",
-      "step3Ios": "Quando arriva l'email di Spotify, salva il file zip in File, poi torna qui e selezionalo.",
-      "step3Android": "Quando arriva l'email di Spotify, scarica il file zip, poi fai Condividi → Nomad Karaoke, oppure torna qui e seleziona il file."
+      "step3Ios": "Quando arriva l'email di Spotify, salva lo zip su File, poi torna qui e selezionalo.",
+      "step3Android": "Quando arriva l'email di Spotify, scarica lo zip, poi fai Condividi → Nomad Karaoke, oppure torna qui e seleziona il file."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Passaggio {step} di {total}",
     "heldCaption": "Le tue note più bassa e più alta finora",
     "singLeft": "{seconds, plural, one {Ancora # secondo} other {Ancora # secondi}}",
-    "singProgressLabel": "Tempo rimasto per cantare"
+    "singProgressLabel": "Tempo rimasto per cantare",
+    "micBusyBody": "Un'altra app o una chiamata sta usando il microfono. Chiudila e riprova, oppure scegli direttamente il tuo tipo di voce.",
+    "micBusyTitle": "Il microfono è occupato"
   },
   "fit": {
     "fits": "Adatta alla tua voce",

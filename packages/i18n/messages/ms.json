@@ -1343,7 +1343,7 @@
       "channel": "Peringatan",
       "title": "Data Spotify anda mungkin sudah sedia",
       "bodyAndroid": "Buka e-mel daripada Spotify, kemudian kongsikan fail zip tersebut dengan Nomad Karaoke.",
-      "bodyIos": "Buka e-mel daripada Spotify, simpan zip ke Fail, kemudian pilihnya dalam Nomad Karaoke."
+      "bodyIos": "Buka e-mel daripada Spotify, simpan fail zip ke Files, kemudian pilih fail tersebut dalam Nomad Karaoke."
     },
     "result": "Menambah {artists, plural, other {# artis}} dan {songs, plural, other {# lagu}} yang anda tahu",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Minta data anda di spotify.com/account/privacy. Tandakan Data akaun (siap dalam masa kira-kira 5 hari) dan Sejarah penstriman lanjutan (sehingga 30 hari): Lanjutan mengandungi keseluruhan sejarah anda.",
       "step2": "Kami akan mengingatkan anda apabila ia dijangka siap.",
       "openSettings": "Buka Tetapan",
-      "step3Ios": "Apabila e-mel Spotify tiba, simpan zip ke Fail, kemudian kembali ke sini dan pilihnya.",
-      "step3Android": "Apabila e-mel Spotify tiba, muat turun zip, kemudian tekan Kongsi → Nomad Karaoke, atau kembali ke sini dan pilih fail tersebut."
+      "step3Ios": "Apabila e-mel daripada Spotify diterima, simpan fail zip ke Files, kemudian kembali ke sini dan pilih fail tersebut.",
+      "step3Android": "Apabila e-mel daripada Spotify diterima, muat turun fail zip, kemudian Kongsi → Nomad Karaoke, atau kembali ke sini dan pilih fail tersebut."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Langkah {step} daripada {total}",
     "heldCaption": "Nada rendah dan tinggi anda setakat ini",
     "singLeft": "{seconds, plural, other {Tinggal # saat}}",
-    "singProgressLabel": "Masa menyanyi yang tinggal"
+    "singProgressLabel": "Masa menyanyi yang tinggal",
+    "micBusyBody": "Aplikasi lain atau panggilan sedang menggunakan mikrofon. Tutup aplikasi tersebut dan cuba lagi, atau pilih jenis suara anda.",
+    "micBusyTitle": "Mikrofon sedang digunakan"
   },
   "fit": {
     "fits": "Sesuai dengan suara anda",

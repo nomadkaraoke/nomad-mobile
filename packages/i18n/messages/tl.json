@@ -1343,7 +1343,7 @@
       "channel": "Mga Paalala",
       "title": "Maaaring handa na ang iyong Spotify data",
       "bodyAndroid": "Buksan ang email mula sa Spotify, pagkatapos ay ibahagi ang zip sa Nomad Karaoke.",
-      "bodyIos": "Buksan ang email ng Spotify, i-save ang zip sa Files, pagkatapos ay piliin ito sa Nomad Karaoke."
+      "bodyIos": "Buksan ang email mula sa Spotify, i-save ang zip sa Files, pagkatapos ay piliin ito sa Nomad Karaoke."
     },
     "result": "Naidagdag ang {artists, plural, one {# artist} other {# artist}} at {songs, plural, one {# kanta} other {# kanta}} na alam mo",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Hilingin ang iyong data sa spotify.com/account/privacy. Lagyan ng tsek ang Account data (handa sa loob ng mga 5 araw) at Extended streaming history (hanggang 30 araw): nasa Extended ang iyong buong history.",
       "step2": "Paaalalahanan ka namin kung kailan ito dapat handa na.",
       "openSettings": "Buksan ang Mga Setting",
-      "step3Ios": "Kapag dumating na ang email ng Spotify, i-save ang zip sa Files, pagkatapos ay bumalik dito at piliin ito.",
-      "step3Android": "Kapag dumating na ang email ng Spotify, i-download ang zip, pagkatapos ay Share → Nomad Karaoke, o bumalik dito at piliin ang file."
+      "step3Ios": "Pagdating ng email mula sa Spotify, i-save ang zip sa Files, pagkatapos ay bumalik dito at piliin ito.",
+      "step3Android": "Pagdating ng email mula sa Spotify, i-download ang zip, pagkatapos ay Share → Nomad Karaoke, o bumalik dito at piliin ang file."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Hakbang {step} ng {total}",
     "heldCaption": "Ang iyong pinakamababa at pinakamataas na tono sa ngayon",
     "singLeft": "{seconds, plural, one {# segundo na lang} other {# segundo na lang}}",
-    "singProgressLabel": "Natitirang oras para kumanta"
+    "singProgressLabel": "Natitirang oras para kumanta",
+    "micBusyBody": "May ibang app o tawag na gumagamit sa mikropono. Isara ito at subukang muli, o piliin na lang ang uri ng iyong boses.",
+    "micBusyTitle": "Ginagamit pa ang mikropono"
   },
   "fit": {
     "fits": "Bagay sa boses mo",

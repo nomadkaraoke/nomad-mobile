@@ -178,6 +178,10 @@ export default function DiscoverScreen() {
   const [menuSong, setMenuSong] = useState<RecSong | null>(null);
   const [pulling, setPulling] = useState(false);
   const filtersActive = activeFilterCount(filters) > 0 || library !== "any";
+  // "No range data yet" only when Singable is the one filter narrowing the picks: with genre/decade/library on
+  // too, the empty list may be those filters' doing, so the usual "nothing matches" (with Clear) is shown.
+  const onlySingable =
+    filters.singable && activeFilterCount({ ...filters, singable: false }) === 0 && library === "any";
   // A filter change while the picks are scrolled down swaps the data under FlashList's scroll offset, and the
   // rows stayed unrendered (a blank list) until the next scroll (Singable on, seen on iOS): start the new
   // picks from the top.
@@ -642,7 +646,7 @@ export default function DiscoverScreen() {
                 )
               }
               ListEmptyComponent={
-                filters.singable && recs.data?.voiceProfile ? (
+                onlySingable && recs.data?.voiceProfile ? (
                   <PicksState kind="singableEmpty" onClear={() => useRecFilters.getState().set({ singable: false })} />
                 ) : filtersActive ? (
                   <PicksState kind="empty" onClear={clearFilters} />

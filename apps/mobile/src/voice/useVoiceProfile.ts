@@ -2,6 +2,7 @@
 // decide's copy follows it. A save never loses the measurement: it is stored `pending` first and stays pending
 // through offline, 5xx/503 and signed-out states until a PUT succeeds. A decide 401 only marks Discover stale.
 import { ApiError, getVoiceProfile, putVoiceProfile, type VoiceProfileOut } from '@nomad/api-decide';
+import { VOICE_TYPES, type VoiceType } from '@nomad/core';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
@@ -15,6 +16,10 @@ export const VOICE_KEY = ['voice'] as const;
 const isSignedIn = () => useAuth.getState().state.status === 'signedIn';
 const time = (iso: string) => Date.parse(iso);
 
+const KNOWN_TYPES: ReadonlySet<string> = new Set(VOICE_TYPES.map((v) => v.type));
+/** A voice type this app knows, else null: a newer decide may add types, and the labels must never look up an unknown key. */
+const knownType = (v: string | null | undefined): VoiceType | null => (v != null && KNOWN_TYPES.has(v) ? (v as VoiceType) : null);
+
 /** decide's `VoiceProfileOut` as the phone's camelCase profile. */
 export function fromServer(o: VoiceProfileOut): LocalVoiceProfile {
   return {
@@ -22,8 +27,8 @@ export function fromServer(o: VoiceProfileOut): LocalVoiceProfile {
     highMidi: o.high_midi,
     comfortLow: o.comfort_low,
     comfortHigh: o.comfort_high,
-    voiceType: o.voice_type,
-    voiceTypeBetween: o.voice_type_between ?? null,
+    voiceType: knownType(o.voice_type),
+    voiceTypeBetween: knownType(o.voice_type_between),
     register: o.register,
     confidence: o.confidence,
     method: o.method,
@@ -32,6 +37,13 @@ export function fromServer(o: VoiceProfileOut): LocalVoiceProfile {
 }
 
 let inFlight: Promise<void> | null = null;
+/** Date.now() when the last voice PUT started, and when the last voice GET started (the clear-on-null race guard). */
+let lastPutStartedAt = 0;
+let lastGetStartedAt = 0;
+const fetchVoice = () => {
+  lastGetStartedAt = Date.now();
+  return getVoiceProfile();
+};
 
 /**
  * PUTs the pending profile, once at a time (a save and a flush never double-send). Resolves true when nothing is
@@ -44,6 +56,7 @@ export function sendPendingVoice(): Promise<boolean> {
       const { profile, pending } = useVoiceStore.getState();
       if (!pending || !profile || !isSignedIn()) return;
       try {
+        lastPutStartedAt = Date.now();
         await putVoiceProfile(toVoiceProfileIn(profile));
       } catch (e) {
         // 400/422: decide will never take this measurement; keep it for badges and stop retrying (not an error).
@@ -69,7 +82,10 @@ export function sendPendingVoice(): Promise<boolean> {
 
 /**
  * The profile for badges (this phone's copy), reconciled with decide's: a server profile measured later than the
- * local one replaces it, an older one is ignored, the same one marks the local copy synced.
+ * local one replaces it, an older one is ignored, the same one marks the local copy synced. decide having none while
+ * the local copy is synced means it was removed on another phone: the local copy is cleared too. Not when it is
+ * pending (not uploaded yet), was rejected by decide (400/422, never there), or a PUT started after this GET did
+ * (the GET read decide before the upload landed: the launch-time flush and fetch run together).
  */
 export function useVoiceProfile() {
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
@@ -81,14 +97,18 @@ export function useVoiceProfile() {
   const query = useQuery({
     queryKey: [...VOICE_KEY, email],
     enabled: signedIn && !offline,
-    queryFn: getVoiceProfile,
+    queryFn: fetchVoice,
     retry: false,
   });
 
   const server = query.data;
   useEffect(() => {
-    if (!server) return;
-    const { profile: mine, adopt, markSynced } = useVoiceStore.getState();
+    if (server === undefined) return;
+    const { profile: mine, pending: minePending, rejected, adopt, markSynced, clear } = useVoiceStore.getState();
+    if (server === null) {
+      if (mine && !minePending && !rejected && lastPutStartedAt < lastGetStartedAt) clear();
+      return;
+    }
     if (!mine || time(server.measured_at) > time(mine.measuredAt)) adopt(fromServer(server));
     else if (time(server.measured_at) === time(mine.measuredAt)) markSynced(mine.measuredAt);
   }, [server]);

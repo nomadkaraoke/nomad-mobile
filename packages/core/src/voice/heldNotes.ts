@@ -8,9 +8,32 @@ function median(xs: number[]): number {
   return s.length % 2 ? s[mid]! : (s[mid - 1]! + s[mid]!) / 2;
 }
 
+/** Median of an already-sorted array (same arithmetic as `median`, so results are bit-identical). */
+function sortedMedian(s: number[]): number {
+  const mid = s.length >> 1;
+  return s.length % 2 ? s[mid]! : (s[mid - 1]! + s[mid]!) / 2;
+}
+
+/** Inserts x into ascending `s`, keeping it sorted (binary search for the slot, then one splice). */
+function sortedInsert(s: number[], x: number): void {
+  let lo = 0;
+  let hi = s.length;
+  while (lo < hi) {
+    const m = (lo + hi) >> 1;
+    if (s[m]! <= x) lo = m + 1;
+    else hi = m;
+  }
+  s.splice(lo, 0, x);
+}
+
 /**
  * Held notes: runs where the rolling-median pitch stays within ±tolCents for ≥ minHoldS,
  * with voiced gaps no longer than maxGapS. The rolling median smooths vibrato and spikes.
+ *
+ * Cost: the run's median is kept in a sorted array that grows by one binary-search insert (a splice) per frame, so
+ * extending a run costs O(log L) compares plus one memmove, instead of re-sorting the whole run every frame. That
+ * re-sort made a call O(L² log L) and froze the JS thread on long held notes, because the voice test reruns this on
+ * every mic buffer. Results are identical to the re-sorting version (same multiset, same median arithmetic).
  */
 export function findHeldNotes(
   frames: VoicedFrame[],
@@ -37,6 +60,8 @@ export function findHeldNotes(
     }
     let first = 0;
     let runMed = r[0]!;
+    // Sorted copy of r[first..i]: its median is runMed.
+    let run: number[] = [runMed];
     const close = (last: number) => {
       if (seg[last]!.t - seg[first]!.t >= minHoldS - eps) {
         notes.push({ start: seg[first]!.t, end: seg[last]!.t, midi: runMed, note: Math.round(runMed) });
@@ -44,11 +69,13 @@ export function findHeldNotes(
     };
     for (let i = 1; i < seg.length; i++) {
       if (Math.abs(r[i]! - runMed) <= tolCents / 100) {
-        runMed = median(r.slice(first, i + 1));
+        sortedInsert(run, r[i]!);
+        runMed = sortedMedian(run);
       } else {
         close(i - 1);
         first = i;
         runMed = r[i]!;
+        run = [runMed];
       }
     }
     close(seg.length - 1);

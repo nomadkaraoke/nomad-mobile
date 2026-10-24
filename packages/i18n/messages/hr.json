@@ -1343,7 +1343,7 @@
       "channel": "Podsjetnici",
       "title": "Tvoji Spotify podaci možda su spremni",
       "bodyAndroid": "Otvori e-poštu od Spotifyja, a zatim podijeli zip datoteku s Nomad Karaoke.",
-      "bodyIos": "Otvori e-poštu od Spotifyja, spremi zip datoteku u Datoteke, a zatim je odaberi u Nomad Karaokeu."
+      "bodyIos": "Otvori e-mail od Spotifyja, spremi zip u Datoteke, a zatim ga odaberi u Nomad Karaoke."
     },
     "result": "Dodano: {artists, plural, one {# izvođač} few {# izvođača} other {# izvođača}} i {songs, plural, one {# pjesma} few {# pjesme} other {# pjesama}} koje znaš",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Zatraži svoje podatke na spotify.com/account/privacy. Označi Podaci o računu (spremno za otprilike 5 dana) i Proširena povijest streaminga (do 30 dana): Proširena povijest sadrži cijelu tvoju povijest.",
       "step2": "Podsjetit ćemo te kada bi trebala biti spremna.",
       "openSettings": "Otvori Postavke",
-      "step3Ios": "Kada stigne Spotifyjeva e-pošta, spremi zip datoteku u Datoteke, a zatim se vrati ovdje i odaberi je.",
-      "step3Android": "Kada stigne Spotifyjeva e-pošta, preuzmi zip datoteku, a zatim odaberi Dijeli → Nomad Karaoke ili se vrati ovdje i odaberi datoteku."
+      "step3Ios": "Kada stigne Spotifyjev e-mail, spremi zip u Datoteke, zatim se vrati ovdje i odaberi datoteku.",
+      "step3Android": "Kada stigne Spotifyjev e-mail, preuzmi zip, zatim Podijeli → Nomad Karaoke ili se vrati ovdje i odaberi datoteku."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Korak {step} od {total}",
     "heldCaption": "Tvoj najniži i najviši ton do sada",
     "singLeft": "{seconds, plural, one {Preostala je # sekunda} few {Preostale su # sekunde} other {Preostalo je # sekundi}}",
-    "singProgressLabel": "Preostalo vrijeme za pjevanje"
+    "singProgressLabel": "Preostalo vrijeme za pjevanje",
+    "micBusyBody": "Druga aplikacija ili poziv koristi mikrofon. Zatvori je i pokušaj ponovno ili umjesto toga odaberi svoju vrstu glasa.",
+    "micBusyTitle": "Mikrofon je zauzet"
   },
   "fit": {
     "fits": "Odgovara tvom glasu",

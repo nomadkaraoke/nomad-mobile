@@ -1334,6 +1334,8 @@
       "reminded": "Done. We'll remind you in about 5 days, and again in 25.",
       "denied": "Notifications are off for Nomad Karaoke. Turn them on in Settings to get a reminder.",
       "openSettings": "Open Settings",
+      "step3Ios": "When Spotify's email arrives, save the zip to Files, then come back here and pick it.",
+      "step3Android": "When Spotify's email arrives, download the zip, then Share → Nomad Karaoke, or come back here and pick the file.",
       "pick": "Pick the file"
     },
     "appleGuide": {
@@ -1346,8 +1348,9 @@
     },
     "reminders": {
       "title": "Your Spotify data may be ready",
-      "channel": "Reminders",
-      "bodyAndroid": "Open the email from Spotify, then share the zip with Nomad Karaoke."
+      "bodyIos": "Open the email from Spotify, save the zip to Files, then pick it in Nomad Karaoke.",
+      "bodyAndroid": "Open the email from Spotify, then share the zip with Nomad Karaoke.",
+      "channel": "Reminders"
     },
     "importFile": {
       "title": "Import your history",
@@ -1451,6 +1454,8 @@
     "micDeniedBody": "We need the microphone to hear the notes you sing. Audio stays on your phone.",
     "micBlockedBody": "Turn on the microphone for Nomad Karaoke in Settings, or pick your voice type instead.",
     "openSettings": "Open Settings",
+    "micBusyTitle": "The microphone is busy",
+    "micBusyBody": "Another app or a call is using the microphone. Close it and try again, or pick your voice type instead.",
     "resultTitle": "Your range",
     "likely": "Likely {type}",
     "between": "Between {low} and {high}",

@@ -1,6 +1,24 @@
 import { requestRecordingPermissionsAsync, setAudioModeAsync, useAudioStream } from 'expo-audio';
 import { useEffect, useMemo, useRef } from 'react';
+import { PLAYBACK_AUDIO_MODE } from '../audio/playbackMode';
 import type { MicPermission, PcmBuffer, PitchSource } from './pitchSource';
+
+/**
+ * Requested capture rate. 16 kHz is plenty for singing pitch (MAX_HZ 2000 is far below Nyquist) and is a third of the
+ * frames per second of 48 kHz, so pitch detection and held-note tracking cost a third of the JS time. expo-audio 57
+ * honours it on both platforms: iOS converts the hardware rate with an AVAudioConverter (or, if it cannot build one,
+ * delivers the hardware rate), Android opens AudioRecord at 16 kHz (or falls back to a supported rate). Either way the
+ * buffer reports its actual `sampleRate` and the framer adapts, so an ignored request only costs CPU.
+ */
+export const MIC_SAMPLE_RATE = 16000;
+
+/**
+ * The mode set when the test stops: playback, exactly as `ensurePlaybackAudioMode` sets it, with recording off. A
+ * partial `{ allowsRecording: false }` is NOT enough on iOS: every field left out falls back to the native default,
+ * so `playsInSilentMode` becomes false and the ringer switch then mutes review and preview playback. And
+ * `ensurePlaybackAudioMode` runs once per launch, so it would never put it back.
+ */
+export const AFTER_RECORDING_AUDIO_MODE = { ...PLAYBACK_AUDIO_MODE, allowsRecording: false } as const;
 
 /** Live microphone PCM via expo-audio's native stream (SDK 57 `useAudioStream`). Ignores `section`. */
 export function useMicPitchSource(): PitchSource {
@@ -8,7 +26,7 @@ export function useMicPitchSource(): PitchSource {
   const gen = useRef(0);
   const running = useRef(false);
   const { stream } = useAudioStream({
-    sampleRate: 48000,
+    sampleRate: MIC_SAMPLE_RATE,
     channels: 1,
     encoding: 'float32',
     onBuffer: (buf) => {
@@ -39,7 +57,7 @@ export function useMicPitchSource(): PitchSource {
       };
       const leaveRecordingMode = () => {
         // Fire and forget: leaving recording mode must not block the UI, and a failure here is harmless.
-        void setAudioModeAsync({ allowsRecording: false }).catch(() => {});
+        void setAudioModeAsync(AFTER_RECORDING_AUDIO_MODE).catch(() => {});
       };
       const stop = () => {
         gen.current++;

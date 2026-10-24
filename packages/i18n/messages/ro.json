@@ -1343,7 +1343,7 @@
       "channel": "Mementouri",
       "title": "Datele tale de la Spotify ar putea fi gata",
       "bodyAndroid": "Deschide e-mailul de la Spotify, apoi trimite fișierul zip către Nomad Karaoke.",
-      "bodyIos": "Deschide e-mailul de la Spotify, salvează fișierul zip în Fișiere, apoi alege-l în Nomad Karaoke."
+      "bodyIos": "Deschide e-mailul de la Spotify, salvează fișierul zip în Fișiere, apoi selectează-l în Nomad Karaoke."
     },
     "result": "Am adăugat {artists, plural, one {# artist} few {# artiști} other {# de artiști}} și {songs, plural, one {# melodie} few {# melodii} other {# de melodii}} pe care le cunoști",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Solicită-ți datele pe spotify.com/account/privacy. Bifează Date cont (gata în aprox. 5 zile) și Istoric extins de streaming (până la 30 de zile): cel extins conține tot istoricul tău.",
       "step2": "Îți vom aminti când ar trebui să fie gata.",
       "openSettings": "Deschide Setări",
-      "step3Ios": "Când sosește e-mailul de la Spotify, salvează fișierul zip în Fișiere, apoi revino aici și alege-l.",
-      "step3Android": "Când sosește e-mailul de la Spotify, descarcă fișierul zip, apoi Trimite → Nomad Karaoke, sau revino aici și alege fișierul."
+      "step3Ios": "Când sosește e-mailul de la Spotify, salvează fișierul zip în Fișiere, apoi întoarce-te aici și selectează-l.",
+      "step3Android": "Când sosește e-mailul de la Spotify, descarcă fișierul zip, apoi Partajare → Nomad Karaoke sau întoarce-te aici și selectează fișierul."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Pasul {step} din {total}",
     "heldCaption": "Cea mai joasă și cea mai înaltă notă a ta de până acum",
     "singLeft": "{seconds, plural, one {încă # secundă} few {încă # secunde} other {încă # de secunde}}",
-    "singProgressLabel": "Timp rămas de cântat"
+    "singProgressLabel": "Timp rămas de cântat",
+    "micBusyBody": "O altă aplicație sau un apel folosește microfonul. Închide-o și încearcă din nou sau alege-ți direct tipul de voce.",
+    "micBusyTitle": "Microfonul este ocupat"
   },
   "fit": {
     "fits": "Se potrivește cu vocea ta",

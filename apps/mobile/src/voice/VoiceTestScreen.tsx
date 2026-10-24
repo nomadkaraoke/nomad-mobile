@@ -64,12 +64,16 @@ export function VoiceTestScreen() {
     stepRef.current = test.step;
   }, [test.step]);
   useFocusEffect(useCallback(() => () => cancel(), [cancel]));
+  // Back from Settings ("don't ask again" on Android, or denied on iOS): ask again. With the mic now allowed the
+  // request resolves granted without a dialog and the test starts; still off, it resolves blocked, no dialog.
+  const { retry } = test;
   useEffect(() => {
     const sub = AppState.addEventListener('change', (s) => {
       if (s === 'background' && LISTENING_STEPS.has(stepRef.current)) cancel();
+      else if (s === 'active' && stepRef.current === 'permission-blocked') void retry();
     });
     return () => sub.remove();
-  }, [cancel]);
+  }, [cancel, retry]);
 
   const save = (p: LocalVoiceProfile) => {
     setChosen(p);
@@ -211,6 +215,24 @@ function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onS
         <Ionicons name="mic-off" size={40} color={colors.muted} />
         <Text className="text-2xl font-bold">{t('micOffTitle')}</Text>
         <Text>{blocked ? t('micBlockedBody') : t('micDeniedBody')}</Text>
+      </StepLayout>
+    );
+  }
+
+  if (step === 'mic-busy') {
+    return (
+      <StepLayout
+        testID="voice-mic-busy"
+        footer={
+          <>
+            <Button testID="voice-retry" label={t('retry')} onPress={() => void test.retry()} />
+            <Button testID="voice-skip" variant="secondary" label={t('skip')} onPress={onSkip} />
+          </>
+        }
+      >
+        <Ionicons name="mic-off" size={40} color={colors.muted} />
+        <Text className="text-2xl font-bold">{t('micBusyTitle')}</Text>
+        <Text>{t('micBusyBody')}</Text>
       </StepLayout>
     );
   }

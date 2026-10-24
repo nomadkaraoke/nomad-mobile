@@ -1343,7 +1343,7 @@
       "channel": "Připomínky",
       "title": "Tvoje data ze Spotify už možná dorazila",
       "bodyAndroid": "Otevři e-mail od Spotify a nasdílej soubor zip do Nomad Karaoke.",
-      "bodyIos": "Otevři e-mail od Spotify, ulož soubor zip do Souborů a pak ho vyber v Nomad Karaoke."
+      "bodyIos": "Otevři e-mail od Spotify, ulož zip do Souborů a pak ho vyber v Nomad Karaoke."
     },
     "result": "Přidáno: {artists, plural, one {# interpret} few {# interpreti} other {# interpretů}} a {songs, plural, one {# skladba} few {# skladby} other {# skladeb}}, které znáš",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Požádej o svá data na spotify.com/account/privacy. Zaškrtni Data účtu (bývají připravena zhruba za 5 dní) a Rozšířená historie streamování (až 30 dní): Rozšířená historie obsahuje kompletní data.",
       "step2": "Až by mělo být vše připraveno, pošleme ti připomínku.",
       "openSettings": "Otevřít Nastavení",
-      "step3Ios": "Až ti dorazí e-mail od Spotify, ulož soubor zip do Souborů, pak se vrať sem a vyber ho.",
-      "step3Android": "Až ti dorazí e-mail od Spotify, stáhni si soubor zip a pak zvol Sdílet → Nomad Karaoke, nebo se vrať sem a vyber soubor."
+      "step3Ios": "Až dorazí e-mail od Spotify, ulož zip do Souborů, pak se vrať sem a vyber ho.",
+      "step3Android": "Až dorazí e-mail od Spotify, stáhni zip a pak zvol Sdílet → Nomad Karaoke, nebo se vrať sem a vyber soubor."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Krok {step} z {total}",
     "heldCaption": "Tvé dosavadní nejnižší a nejvyšší tóny",
     "singLeft": "{seconds, plural, one {Zbývá # sekunda} few {Zbývají # sekundy} other {Zbývá # sekund}}",
-    "singProgressLabel": "Zbývající čas na zpěv"
+    "singProgressLabel": "Zbývající čas na zpěv",
+    "micBusyBody": "Mikrofon právě používá jiná aplikace nebo hovor. Ukonči ji a zkus to znovu, nebo si místo toho vyber svůj typ hlasu.",
+    "micBusyTitle": "Mikrofon se právě používá"
   },
   "fit": {
     "fits": "Sedí tvému hlasu",

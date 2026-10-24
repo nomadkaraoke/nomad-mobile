@@ -1405,8 +1405,8 @@
       "step1": "spotify.com/account/privacy でデータをリクエストします。「アカウントデータ」（約5日で準備完了）と「拡張ストリーミング履歴」（最大30日）にチェックを入れてください。拡張ストリーミング履歴にはこれまでの全履歴が含まれます。",
       "step2": "準備ができる頃にリマインダーをお送りします。",
       "openSettings": "設定を開く",
-      "step3Ios": "Spotifyからメールが届いたら、zipファイルを「ファイル」アプリに保存し、ここに戻って選択してください。",
-      "step3Android": "Spotifyからメールが届いたらzipファイルをダウンロードし、「共有」→「Nomad Karaoke」、またはここに戻ってファイルを選択してください。"
+      "step3Ios": "Spotifyからメールが届いたらzipファイルを「ファイル」アプリに保存し、ここに戻ってファイルを選択してください。",
+      "step3Android": "Spotifyからメールが届いたらzipファイルをダウンロードし、「共有」→「Nomad Karaoke」を選択するか、ここに戻ってファイルを選択してください。"
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "ステップ {step} / {total}",
     "heldCaption": "ここまでの最低音と最高音",
     "singLeft": "{seconds, plural, other {残り#秒}}",
-    "singProgressLabel": "歌唱の残り時間"
+    "singProgressLabel": "歌唱の残り時間",
+    "micBusyBody": "他のアプリまたは通話でマイクが使用されています。そのアプリや通話を終了してもう一度お試しいただくか、代わりに声のタイプを選択してください。",
+    "micBusyTitle": "マイクが使用中です"
   },
   "fit": {
     "fits": "あなたの声にぴったり",

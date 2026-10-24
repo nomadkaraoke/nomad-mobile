@@ -1343,7 +1343,7 @@
       "channel": "Recordatorios",
       "title": "Tus datos de Spotify podrían estar listos",
       "bodyAndroid": "Abre el correo de Spotify y comparte el archivo zip con Nomad Karaoke.",
-      "bodyIos": "Abre el correo de Spotify, guarda el zip en Archivos y luego elígelo en Nomad Karaoke."
+      "bodyIos": "Abre el correo de Spotify, guarda el zip en Archivos y luego selecciónalo en Nomad Karaoke."
     },
     "result": "Se añadieron {artists, plural, one {# artista} other {# artistas}} y {songs, plural, one {# canción} other {# canciones}} que conoces",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Solicita tus datos en spotify.com/account/privacy. Marca Datos de la cuenta (listos en unos 5 días) e Historial de reproducción extendido (hasta 30 días): el extendido incluye todo tu historial.",
       "step2": "Te recordaremos cuando debería estar listo.",
       "openSettings": "Abrir Ajustes",
-      "step3Ios": "Cuando llegue el correo de Spotify, guarda el zip en Archivos y luego regresa aquí y elígelo.",
-      "step3Android": "Cuando llegue el correo de Spotify, descarga el zip, luego Compartir → Nomad Karaoke, o regresa aquí y elige el archivo."
+      "step3Ios": "Cuando llegue el correo de Spotify, guarda el zip en Archivos y luego vuelve aquí y selecciónalo.",
+      "step3Android": "Cuando llegue el correo de Spotify, descarga el zip y luego Compartir → Nomad Karaoke, o vuelve aquí y selecciona el archivo."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Paso {step} de {total}",
     "heldCaption": "Tus notas más bajas y más altas hasta ahora",
     "singLeft": "{seconds, plural, one {Queda # segundo} other {Quedan # segundos}}",
-    "singProgressLabel": "Tiempo restante para cantar"
+    "singProgressLabel": "Tiempo restante para cantar",
+    "micBusyBody": "Otra aplicación o una llamada está usando el micrófono. Ciérrala e inténtalo de nuevo, o elige tu tipo de voz.",
+    "micBusyTitle": "El micrófono está ocupado"
   },
   "fit": {
     "fits": "Se adapta a tu voz",

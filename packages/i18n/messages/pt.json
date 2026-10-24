@@ -1343,7 +1343,7 @@
       "channel": "Lembretes",
       "title": "Seus dados do Spotify podem estar prontos",
       "bodyAndroid": "Abra o e-mail do Spotify e compartilhe o arquivo zip com o Nomad Karaoke.",
-      "bodyIos": "Abra o e-mail do Spotify, salve o zip no app Arquivos e depois escolha-o no Nomad Karaoke."
+      "bodyIos": "Abra o e-mail do Spotify, salve o zip no app Arquivos e selecione-o no Nomad Karaoke."
     },
     "result": "Adicionados {artists, plural, one {# artista} other {# artistas}} e {songs, plural, one {# música que você conhece} other {# músicas que você conhece}}",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Solicite seus dados em spotify.com/account/privacy. Marque Dados da conta (pronto em cerca de 5 dias) e Histórico estendido de reprodução (até 30 dias): o Estendido contém todo o seu histórico.",
       "step2": "Vamos lembrar você quando estiver pronto.",
       "openSettings": "Abrir Ajustes",
-      "step3Ios": "Quando o e-mail do Spotify chegar, salve o zip no app Arquivos e depois volte aqui e escolha-o.",
-      "step3Android": "Quando o e-mail do Spotify chegar, baixe o zip e toque em Compartilhar → Nomad Karaoke ou volte aqui e escolha o arquivo."
+      "step3Ios": "Quando o e-mail do Spotify chegar, salve o zip no app Arquivos, volte aqui e selecione-o.",
+      "step3Android": "Quando o e-mail do Spotify chegar, baixe o zip e toque em Compartilhar → Nomad Karaoke, ou volte aqui e selecione o arquivo."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Etapa {step} de {total}",
     "heldCaption": "Suas notas mais grave e mais aguda até agora",
     "singLeft": "{seconds, plural, one {# segundo restante} other {# segundos restantes}}",
-    "singProgressLabel": "Tempo restante para cantar"
+    "singProgressLabel": "Tempo restante para cantar",
+    "micBusyBody": "Outro app ou uma chamada está usando o microfone. Encerre o uso e tente novamente, ou selecione seu tipo de voz.",
+    "micBusyTitle": "O microfone está ocupado"
   },
   "fit": {
     "fits": "Combina com a sua voz",

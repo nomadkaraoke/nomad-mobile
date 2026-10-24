@@ -1405,8 +1405,8 @@
       "step1": "Sol·licita les teves dades a spotify.com/account/privacy. Marca «Dades del compte» (a punt en uns 5 dies) i «Historial complet de reproducció en continu» (fins a 30 dies): aquest últim conté tot el teu historial.",
       "step2": "T'avisarem quan hauria d'estar a punt.",
       "openSettings": "Obre la configuració",
-      "step3Ios": "Quan arribi el correu electrònic de Spotify, desa el zip a Fitxers i després torna aquí i tria'l.",
-      "step3Android": "Quan arribi el correu electrònic de Spotify, descarrega el zip i després fes Comparteix → Nomad Karaoke, o torna aquí i tria el fitxer."
+      "step3Ios": "Quan arribi el correu de Spotify, desa el zip a Fitxers i després torna aquí i tria'l.",
+      "step3Android": "Quan arribi el correu de Spotify, baixa el zip i després ves a Comparteix → Nomad Karaoke, o torna aquí i tria el fitxer."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Pas {step} de {total}",
     "heldCaption": "El teu to més greu i més agut fins ara",
     "singLeft": "{seconds, plural, one {Queda # segon} other {Queden # segons}}",
-    "singProgressLabel": "Temps que et queda per cantar"
+    "singProgressLabel": "Temps que et queda per cantar",
+    "micBusyBody": "Una altra aplicació o una trucada està utilitzant el micròfon. Tanca-la i torna-ho a provar, o tria el teu tipus de veu directament.",
+    "micBusyTitle": "El micròfon està ocupat"
   },
   "fit": {
     "fits": "S'adapta a la teva veu",

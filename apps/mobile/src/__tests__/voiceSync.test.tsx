@@ -11,6 +11,7 @@ import { useDiscoverStale } from '../discover/staleStore';
 import { appStorage } from '../storage';
 import { session } from '../test-utils/genAuthMock';
 import {
+  fromServer,
   sendPendingVoice,
   useFlushPendingVoice,
   useFlushVoiceOnDiscoverMount,
@@ -190,6 +191,71 @@ describe('useVoiceProfile', () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     await act(async () => {});
     expect(useVoiceStore.getState()).toMatchObject({ profile: local(T1), pending: true });
+  });
+});
+
+describe('useVoiceProfile: removed on another phone', () => {
+  it('decide has none and the local copy is synced: the local copy is cleared', async () => {
+    act(() => useVoiceStore.getState().adopt(local(T1)));
+    fetchMock.mockResolvedValue(json({ profile: null }));
+    renderHook(() => useVoiceProfile(), { wrapper: wrapperFor() });
+    await waitFor(() => expect(useVoiceStore.getState().profile).toBeNull());
+    expect(appStorage.getString(VOICE_STORAGE_KEY)).toBeUndefined();
+  });
+
+  it('a profile decide rejected (400/422) is kept: decide never had it', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    fetchMock.mockImplementation(async (req: Request) =>
+      req.method === 'PUT' ? json({ detail: 'invalid' }, 422) : json({ profile: null }),
+    );
+    const save = renderHook(() => useSaveVoiceProfile(), { wrapper: wrapperFor() });
+    await act(async () => void (await save.result.current(local(T1))));
+    expect(useVoiceStore.getState()).toMatchObject({ pending: false, rejected: true });
+    renderHook(() => useVoiceProfile(), { wrapper: wrapperFor() });
+    await waitFor(() => expect(voiceCalls('GET')).toHaveLength(1));
+    await act(async () => {});
+    expect(useVoiceStore.getState().profile).toEqual(local(T1));
+    warn.mockRestore();
+  });
+
+  it('a GET that started before this phone\'s PUT landed does not clear the just-uploaded profile', async () => {
+    let now = 1_000;
+    const clock = jest.spyOn(Date, 'now').mockImplementation(() => now);
+    let answerGet: (r: Response) => void = () => {};
+    fetchMock.mockImplementation((req: Request) =>
+      req.method === 'PUT'
+        ? Promise.resolve(json({ ...toVoiceProfileIn(local(T1)), updated_at: T1 }))
+        : new Promise<Response>((r) => (answerGet = r)),
+    );
+    act(() => useVoiceStore.getState().save(local(T1)));
+    renderHook(() => useVoiceProfile(), { wrapper: wrapperFor() });
+    await waitFor(() => expect(voiceCalls('GET')).toHaveLength(1)); // reads decide before the upload
+    now = 2_000;
+    await act(async () => void (await sendPendingVoice()));
+    expect(useVoiceStore.getState().pending).toBe(false);
+    await act(async () => answerGet(json({ profile: null })));
+    await act(async () => {});
+    expect(useVoiceStore.getState().profile).toEqual(local(T1));
+    clock.mockRestore();
+  });
+});
+
+describe('fromServer', () => {
+  it('an unknown voice type from a newer decide reads as none, never an undefined label key', () => {
+    const out = { ...serverOut(T1), voice_type: 'countertenor', voice_type_between: 'contralto' } as never;
+    expect(fromServer(out)).toMatchObject({ voiceType: null, voiceTypeBetween: null });
+  });
+
+  it('known types pass through', () => {
+    const out = { ...serverOut(T1), voice_type: 'alto', voice_type_between: 'mezzo' } as never;
+    expect(fromServer(out)).toMatchObject({ voiceType: 'alto', voiceTypeBetween: 'mezzo' });
+  });
+
+  it('an unknown type is adopted as none', async () => {
+    fetchMock.mockResolvedValue(json({ profile: { ...serverOut(T2), voice_type: 'countertenor' } }));
+    renderHook(() => useVoiceSync(), { wrapper: wrapperFor() });
+    await waitFor(() => expect(useVoiceStore.getState().profile?.measuredAt).toBe(T2));
+    expect(useVoiceStore.getState().profile?.voiceType).toBeNull();
   });
 });
 

@@ -1343,7 +1343,7 @@
       "channel": "Erinnerungen",
       "title": "Deine Spotify-Daten sind eventuell bereit",
       "bodyAndroid": "Öffne die E-Mail von Spotify und teile die ZIP-Datei dann mit Nomad Karaoke.",
-      "bodyIos": "Öffne die E-Mail von Spotify, sichere die ZIP-Datei in „Dateien“ und wähle sie dann in Nomad Karaoke aus."
+      "bodyIos": "Öffne die E-Mail von Spotify, speichere die ZIP-Datei in „Dateien“ und wähle sie dann in Nomad Karaoke aus."
     },
     "result": "{artists, plural, one {# Künstler} other {# Künstler}} und {songs, plural, one {# Song} other {# Songs}}, die du kennst, hinzugefügt",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Fordere deine Daten unter spotify.com/account/privacy an. Setze ein Häkchen bei „Kontodaten“ (bereit in etwa 5 Tagen) und „Erweiterter Streaming-Verlauf“ (bis zu 30 Tage): Der erweiterte Verlauf enthält deine gesamte Historie.",
       "step2": "Wir erinnern dich, sobald die Daten voraussichtlich bereit sind.",
       "openSettings": "Einstellungen öffnen",
-      "step3Ios": "Sobald die E-Mail von Spotify eintrifft, sichere die ZIP-Datei in „Dateien“, kehre dann hierher zurück und wähle sie aus.",
-      "step3Android": "Sobald die E-Mail von Spotify eintrifft, lade die ZIP-Datei herunter und wähle Teilen → Nomad Karaoke oder kehre hierher zurück und wähle die Datei aus."
+      "step3Ios": "Wenn die E-Mail von Spotify ankommt, speichere die ZIP-Datei in „Dateien“, komm dann hierher zurück und wähle sie aus.",
+      "step3Android": "Wenn die E-Mail von Spotify ankommt, lade die ZIP-Datei herunter und tippe auf Teilen → Nomad Karaoke, oder komm hierher zurück und wähle die Datei aus."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Schritt {step} von {total}",
     "heldCaption": "Dein bisheriger tiefster und höchster Ton",
     "singLeft": "{seconds, plural, one {Noch # Sekunde} other {Noch # Sekunden}}",
-    "singProgressLabel": "Verbleibende Singzeit"
+    "singProgressLabel": "Verbleibende Singzeit",
+    "micBusyBody": "Eine andere App oder ein Anruf verwendet gerade das Mikrofon. Schließe die App bzw. beende den Anruf und versuche es erneut, oder wähle stattdessen deinen Stimmtyp aus.",
+    "micBusyTitle": "Das Mikrofon wird bereits verwendet"
   },
   "fit": {
     "fits": "Passt zu deiner Stimme",

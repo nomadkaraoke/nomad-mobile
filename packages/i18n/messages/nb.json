@@ -1343,7 +1343,7 @@
       "channel": "Påminnelser",
       "title": "Spotify-dataene dine kan være klare",
       "bodyAndroid": "Åpne e-posten fra Spotify, og del zip-filen med Nomad Karaoke.",
-      "bodyIos": "Åpne e-posten fra Spotify, lagre zip-filen i Filer, og velg den så i Nomad Karaoke."
+      "bodyIos": "Åpne e-posten fra Spotify, lagre zip-filen i Filer, og velg den deretter i Nomad Karaoke."
     },
     "result": "La til {artists, plural, one {# artist} other {# artister}} og {songs, plural, one {# sang} other {# sanger}} du kjenner til",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Be om dataene dine på spotify.com/account/privacy. Kryss av for Kontodata (klart om ca. 5 dager) og Utvidet strømmehistorikk (opptil 30 dager): Utvidet inneholder hele historikken din.",
       "step2": "Vi minner deg på det når det bør være klart.",
       "openSettings": "Åpne Innstillinger",
-      "step3Ios": "Når e-posten fra Spotify kommer, lagrer du zip-filen i Filer, og så kommer du tilbake hit og velger den.",
-      "step3Android": "Når e-posten fra Spotify kommer, laster du ned zip-filen og velger Del → Nomad Karaoke, eller kommer tilbake hit og velger filen."
+      "step3Ios": "Når e-posten fra Spotify kommer, lagrer du zip-filen i Filer, og går deretter tilbake hit og velger den.",
+      "step3Android": "Når e-posten fra Spotify kommer, laster du ned zip-filen og velger Del → Nomad Karaoke, eller går tilbake hit og velger filen."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Trinn {step} av {total}",
     "heldCaption": "Din laveste og høyeste tone så langt",
     "singLeft": "{seconds, plural, one {# sekund igjen} other {# sekunder igjen}}",
-    "singProgressLabel": "Tid igjen å synge"
+    "singProgressLabel": "Tid igjen å synge",
+    "micBusyBody": "En annen app eller en samtale bruker mikrofonen. Lukk den og prøv igjen, eller velg stemmetype i stedet.",
+    "micBusyTitle": "Mikrofonen er opptatt"
   },
   "fit": {
     "fits": "Passer til stemmen din",

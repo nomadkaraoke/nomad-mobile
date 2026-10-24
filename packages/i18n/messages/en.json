@@ -1454,6 +1454,8 @@
     "micDeniedBody": "We need the microphone to hear the notes you sing. Audio stays on your phone.",
     "micBlockedBody": "Turn on the microphone for Nomad Karaoke in Settings, or pick your voice type instead.",
     "openSettings": "Open Settings",
+    "micBusyTitle": "The microphone is busy",
+    "micBusyBody": "Another app or a call is using the microphone. Close it and try again, or pick your voice type instead.",
     "resultTitle": "Your range",
     "likely": "Likely {type}",
     "between": "Between {low} and {high}",

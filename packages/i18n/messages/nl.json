@@ -1343,7 +1343,7 @@
       "channel": "Herinneringen",
       "title": "Je Spotify-gegevens staan mogelijk klaar",
       "bodyAndroid": "Open de e-mail van Spotify en deel het zip-bestand met Nomad Karaoke.",
-      "bodyIos": "Open de e-mail van Spotify, bewaar het zip-bestand in Bestanden en kies het daarna in Nomad Karaoke."
+      "bodyIos": "Open de e-mail van Spotify, sla het zip-bestand op in Bestanden en kies het vervolgens in Nomad Karaoke."
     },
     "result": "{artists, plural, one {# artiest} other {# artiesten}} en {songs, plural, one {# nummer} other {# nummers}} toegevoegd die je kent",
     "screenshot": {
@@ -1405,8 +1405,8 @@
       "step1": "Vraag je gegevens aan op spotify.com/account/privacy. Vink Accountgegevens aan (klaar in ongeveer 5 dagen) en Uitgebreide streaminggeschiedenis (tot 30 dagen): Uitgebreid bevat je hele geschiedenis.",
       "step2": "We herinneren je eraan wanneer het klaar zou moeten zijn.",
       "openSettings": "Instellingen openen",
-      "step3Ios": "Zodra de e-mail van Spotify binnenkomt, bewaar je het zip-bestand in Bestanden, en kom je hier terug om het te kiezen.",
-      "step3Android": "Zodra de e-mail van Spotify binnenkomt, download je het zip-bestand en kies je Delen → Nomad Karaoke, of kom je hier terug en kies je het bestand."
+      "step3Ios": "Zodra de e-mail van Spotify binnen is, sla je het zip-bestand op in Bestanden en kom je hier terug om het te kiezen.",
+      "step3Android": "Zodra de e-mail van Spotify binnen is, download je het zip-bestand en kies je Delen → Nomad Karaoke, of kom hier terug en kies het bestand."
     },
     "stepNumber": "{n, number}",
     "sync": {
@@ -1481,7 +1481,9 @@
     "stepOf": "Stap {step} van {total}",
     "heldCaption": "Je laagste en hoogste noot tot nu toe",
     "singLeft": "{seconds, plural, one {nog # seconde} other {nog # seconden}}",
-    "singProgressLabel": "Resterende zangtijd"
+    "singProgressLabel": "Resterende zangtijd",
+    "micBusyBody": "Een andere app of een oproep gebruikt de microfoon. Sluit deze en probeer het opnieuw, of kies in plaats daarvan je stemtype.",
+    "micBusyTitle": "De microfoon is bezet"
   },
   "fit": {
     "fits": "Past bij je stem",
