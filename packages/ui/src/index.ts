@@ -12,3 +12,11 @@ export { WaveformCanvas, buildBars, buildBarsPath, type Bar, type WaveformMarker
 export { NomadLoader, nomadLoaderIconCount, NOMAD_PATTERN_UNITS, type NomadLoaderProps } from './NomadLoader';
 export { NOMAD_COLORWAYS, NOMAD_N, nomadDashesPath, nomadNStripSvg, type NomadColorway, type NomadDash } from './nomadN';
 export { Chip, ChipRow, type ChipProps, type ChipRowProps } from './Chip';
+export {
+  PIANO_BLACK_KEY,
+  PIANO_KEY_OUTLINE,
+  PIANO_LIVE_COLOR,
+  PianoStrip,
+  pianoKeyLayout,
+  pianoShade,
+  pianoX, type PianoKey, type PianoKeyLayout, type PianoStripProps } from './PianoStrip';

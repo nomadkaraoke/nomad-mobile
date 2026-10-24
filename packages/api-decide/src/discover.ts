@@ -33,6 +33,8 @@ type RecQuery = NonNullable<GetRecommendationsV2ApiMyRecommendationsV2GetData['q
 /**
  * GET /api/my/recommendations/v2. `query` is core's `toRecQuery(filters, library)` plus an optional `sort`;
  * repeated params (genre, mood, decade) are sent as repeated keys. `cursor` pages a non-`best` sort.
+ * Voice fit (Phase 3c): `singable=true` keeps songs in the user's range, `sort=fit` orders by fit; each `RecSong.fit`
+ * and the response's `voice` ({has_profile, method}) describe the match. Both need a saved voice profile.
  */
 export const getRecommendationsV2 = async (
   query: Record<string, string | string[]>,

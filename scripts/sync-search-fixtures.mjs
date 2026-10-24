@@ -28,3 +28,14 @@ for (const f of FILES) {
   copyFileSync(join(src, f), join(dst, f));
   console.log(`${f} (${statSync(join(dst, f)).size} bytes) <- ${src}`);
 }
+
+// Song-fit parity table (Phase 3c): decide tests/fixtures/voice/fit_cases.json.
+const fitSrc = join(decideDir, 'tests', 'fixtures', 'voice', 'fit_cases.json');
+const fitDst = join(repo, 'packages', 'core', 'src', 'voice', '__fixtures__');
+if (!existsSync(fitSrc)) {
+  console.error(`missing ${fitSrc}`);
+  process.exit(1);
+}
+mkdirSync(fitDst, { recursive: true });
+copyFileSync(fitSrc, join(fitDst, 'fit_cases.json'));
+console.log(`fit_cases.json (${statSync(join(fitDst, 'fit_cases.json')).size} bytes) <- ${fitSrc}`);

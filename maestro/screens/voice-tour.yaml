@@ -1,0 +1,98 @@
+# Voice test screen tour (Phase 3c Task 18a): every step of /discover/voice with the fake mic
+# (Metro with EXPO_PUBLIC_FAKE_MIC=baritone-scale against the gen local stack). Signed out: intro, self-report,
+# low / high / sing, the result ("Likely Baritone"), then Save → sign-in (fake Google, a fresh gen user) → saved.
+# Any app language: it waits on testIDs only. Shots in ${VOICE_SHOTS}:
+#   scripts/e2e-local.sh --platform ios --locale ar --screen voice-tour   # docs/screenshots/phase3c/ios/ar/
+# The mic-off and no-notes screens need the real mic (a denied permission, a silent room), not the fake one.
+appId: com.nomadkaraoke.mobile
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: voicetour
+- runFlow: ../common/tour-launch-signed-out.yaml
+- openLink: "nomadkaraoke://discover/voice"
+- extendedWaitUntil:
+    visible:
+      id: "voice-start"
+    timeout: 15000
+- waitForAnimationToEnd
+- takeScreenshot: ${VOICE_SHOTS}/voice-intro
+- tapOn:
+    id: "voice-skip"
+- extendedWaitUntil:
+    visible:
+      id: "voice-self-save"
+    timeout: 5000
+- tapOn:
+    id: "voice-self-baritone"
+- takeScreenshot: ${VOICE_SHOTS}/voice-self-report
+- tapOn:
+    id: "voice-self-take-test"
+- tapOn:
+    id: "voice-start"
+# The quiet second the noise floor is measured on.
+- extendedWaitUntil:
+    visible:
+      id: "voice-low"
+    timeout: 10000
+- takeScreenshot: ${VOICE_SHOTS}/voice-low-quiet
+- extendedWaitUntil:
+    visible:
+      id: "voice-low-done"
+      enabled: true
+    timeout: 15000
+# Held like a singer would, so the shots and the result show the whole fake range (A2–E4): see voice-1-test.yaml for
+# how these waits follow the WAV's slices.
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: 3500
+- takeScreenshot: ${VOICE_SHOTS}/voice-low
+- tapOn:
+    id: "voice-low-done"
+- extendedWaitUntil:
+    visible:
+      id: "voice-high-done"
+      enabled: true
+    timeout: 15000
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: 2500
+- takeScreenshot: ${VOICE_SHOTS}/voice-high
+- tapOn:
+    id: "voice-high-done"
+- extendedWaitUntil:
+    visible:
+      id: "voice-sing-progress"
+    timeout: 10000
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: 2000
+- takeScreenshot: ${VOICE_SHOTS}/voice-sing
+# The sing step ends by itself after 15 s.
+- extendedWaitUntil:
+    visible:
+      id: "voice-result-type"
+    timeout: 25000
+- takeScreenshot: ${VOICE_SHOTS}/voice-result
+- tapOn:
+    id: "voice-save"
+- extendedWaitUntil:
+    visible:
+      id: "signin-sheet"
+    timeout: 10000
+- takeScreenshot: ${VOICE_SHOTS}/voice-save-signin
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "voice-saved"
+    timeout: 20000
+- takeScreenshot: ${VOICE_SHOTS}/voice-saved

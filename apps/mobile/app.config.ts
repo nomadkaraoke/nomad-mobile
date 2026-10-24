@@ -1,5 +1,19 @@
 import type { ConfigContext, ExpoConfig } from 'expo/config';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { AndroidConfig, withEntitlementsPlist, withStringsXml, type ConfigPlugin } from 'expo/config-plugins';
+
+/**
+ * Native (iOS InfoPlist.strings) strings per app locale, generated from @nomad/i18n messages by
+ * scripts/gen-native-locales.mjs (CI runs it with --check), one file per @nomad/i18n locale. Read from disk because
+ * expo's config loader can't import the TS workspace package; nativeLocales.test.ts pins the set to LOCALES.
+ */
+const NATIVE_LOCALES = Object.fromEntries(
+  readdirSync(join(__dirname, 'locales'))
+    .filter((f) => f.endsWith('.json'))
+    .sort()
+    .map((f) => [f.slice(0, -'.json'.length), `./locales/${f}`]),
+);
 
 /** Home-screen label (like "Photos" for Google Photos); the app's name stays "Nomad Karaoke". iOS: app.json CFBundleDisplayName. */
 const LAUNCHER_LABEL = 'Karaoke';
@@ -72,6 +86,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     ...config,
     name: config.name ?? 'Nomad Karaoke',
     slug: config.slug ?? 'nomad-karaoke',
+    locales: { ...config.locales, ...NATIVE_LOCALES },
     ios: {
       ...config.ios,
       ...(apple ? { usesAppleSignIn: true } : {}),

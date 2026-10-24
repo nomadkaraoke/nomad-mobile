@@ -1,7 +1,10 @@
 import { DEFAULT_REC_FILTERS, type RecFilters } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { Chip, ChipRow } from '@nomad/ui';
+import { router, type Href } from 'expo-router';
 import { useState } from 'react';
+
+import { useVoiceStore } from '../../voice/voiceStore';
 
 import { DecadeSheet } from './sheets/DecadeSheet';
 import { EnergySheet } from './sheets/EnergySheet';
@@ -9,6 +12,9 @@ import { GenreSheet } from './sheets/GenreSheet';
 import { MoodSheet } from './sheets/MoodSheet';
 import { MoreSheet } from './sheets/MoreSheet';
 import { SortSheet } from './sheets/SortSheet';
+
+/** The Singable chip's cue that it opens the voice test first (a non-word glyph: the label and hint carry the meaning). */
+const CTA_GLYPH = '+';
 
 type SheetName = 'sort' | 'genre' | 'decade' | 'mood' | 'energy' | 'more';
 
@@ -19,6 +25,12 @@ export type FilterBarProps = { filters: RecFilters; onChange: (patch: Partial<Re
 /** Sort / Genre / Decade / Mood / Energy / More chips, each opening its sheet; a chip shows how many are on. */
 export function FilterBar({ filters, onChange }: FilterBarProps) {
   const t = useTranslations('discover.filter');
+  const tf = useTranslations('fit');
+  const hasVoice = useVoiceStore((s) => s.profile !== null);
+  const testVoice = () => {
+    close();
+    router.push('/discover/voice' as Href);
+  };
   const [open, setOpen] = useState<SheetName | null>(null);
   const close = () => setOpen(null);
   const apply = (patch: Partial<RecFilters>) => {
@@ -37,6 +49,25 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
   return (
     <>
       <ChipRow testID="filter-bar">
+        {/* Singable (Phase 3c), first so it is on screen: a toggle; without a voice profile on the phone it opens the voice test instead. */}
+        {hasVoice ? (
+          <Chip
+            testID="filter-chip-singable"
+            label={tf('singable')}
+            selected={filters.singable}
+            onPress={() => onChange({ singable: !filters.singable })}
+          />
+        ) : (
+          <Chip
+            testID="filter-chip-singable-cta"
+            label={tf('singable')}
+            leading={CTA_GLYPH}
+            accessibilityLabel={tf('singableCtaLabel')}
+            accessibilityHint={tf('singableCtaHint')}
+            selected={false}
+            onPress={testVoice}
+          />
+        )}
         {chips.map((c) => (
           <Chip
             key={c.name}
@@ -47,7 +78,13 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
           />
         ))}
       </ChipRow>
-      <SortSheet visible={open === 'sort'} value={filters.sort} onClose={close} onApply={(sort) => apply({ sort })} />
+      <SortSheet
+        visible={open === 'sort'}
+        value={filters.sort}
+        onClose={close}
+        onApply={(sort) => apply({ sort })}
+        onTestVoice={hasVoice ? undefined : testVoice}
+      />
       <GenreSheet visible={open === 'genre'} value={filters.genre} onClose={close} onApply={(genre) => apply({ genre })} />
       <DecadeSheet visible={open === 'decade'} value={filters.decade} onClose={close} onApply={(decade) => apply({ decade })} />
       <MoodSheet visible={open === 'mood'} value={filters.mood} onClose={close} onApply={(mood) => apply({ mood })} />

@@ -5,7 +5,7 @@ import { appStorage } from '../storage';
 
 const KEY = 'discover.filters.v1';
 
-export const SORTS = ['best', 'popular', 'newest', 'oldest', 'shortest', 'az'] as const;
+export const SORTS = ['best', 'popular', 'newest', 'oldest', 'shortest', 'az', 'fit'] as const;
 export const MOODS = ['happy', 'chill', 'sad', 'intense'] as const;
 
 const strings = (v: unknown, allowed: readonly string[]) =>
@@ -31,6 +31,7 @@ function sanitize(raw: unknown): RecFilters {
     classic: o.classic === true,
     explicit: oneOf(o.explicit, ['include', 'exclude'] as const, d.explicit),
     hasKaraoke: oneOf(o.hasKaraoke, ['any', 'yes', 'make'] as const, d.hasKaraoke),
+    singable: o.singable === true,
     sort: oneOf(o.sort, SORTS, d.sort),
   };
 }

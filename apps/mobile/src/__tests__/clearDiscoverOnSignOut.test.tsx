@@ -12,6 +12,7 @@ import { useDiscoverStale } from '../discover/staleStore';
 import { useClearDiscoverOnSignOut } from '../discover/useClearDiscoverOnSignOut';
 import { RECS_KEY } from '../discover/useRecommendations';
 import { appStorage } from '../storage';
+import { profileFromSelfReport, useVoiceStore, VOICE_STORAGE_KEY } from '../voice/voiceStore';
 
 const data = { sections: [], has_profile: true } as never;
 const signedIn = { status: 'signedIn', session: { token: 't', email: 'me@example.com', createdAt: 0 } } as const;
@@ -48,6 +49,7 @@ it('removes cached picks and music profile, the quiz draft and the stale flag wh
   useQuizDraft.setState({ owner: 'me@example.com', listed: [{ name: 'Alpha Band' }] });
   appStorage.set(QUIZ_STORAGE_KEY, JSON.stringify({ owner: 'me@example.com', progress: {} }));
   useDiscoverStale.getState().markStale();
+  useVoiceStore.getState().save(profileFromSelfReport('tenor', '2026-10-22T00:00:00.000Z'));
 
   useAuth.setState({ state: { status: 'signedOut' } });
 
@@ -57,6 +59,9 @@ it('removes cached picks and music profile, the quiz draft and the stale flag wh
   expect(useQuizDraft.getState().listed).toEqual([]);
   expect(appStorage.getString(QUIZ_STORAGE_KEY)).toBeUndefined();
   expect(useDiscoverStale.getState().stale).toBe(false);
+  // The voice profile is personal too.
+  expect(useVoiceStore.getState().profile).toBeNull();
+  expect(appStorage.getString(VOICE_STORAGE_KEY)).toBeUndefined();
 });
 
 it('keeps everything while signed in', () => {

@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "Dopusti aplikaciji Nomad Karaoke da te čuje dok pjevaš kako bi mogla izmjeriti tvoj vokalni raspon. Zvuk ostaje na tvom telefonu."
+  }
+}

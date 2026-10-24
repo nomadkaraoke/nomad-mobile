@@ -1,6 +1,7 @@
 // Port of decide's karaoke_decide/song_search/offline.py offline_groups: the karaoke
 // groups the phone shows for an identify result over offline.db.
 import { ftsMatchQuery, identityNormalize, songKey, songNorm } from './normalize';
+import { tierFromCode, type SongVocalRange } from '../voice/fit';
 import type { IdentifyResult, OfflineGroup, OfflineVersion, SqlReader } from './types';
 
 /**
@@ -47,6 +48,62 @@ export function offlineSongLibraries(db: SqlReader, songKeys: readonly string[])
     throw e;
   }
   return out;
+}
+
+type VocalRangeRow = {
+  artist: string;
+  vr_low: number | null;
+  vr_high: number | null;
+  vr_p10: number | null;
+  vr_p50: number | null;
+  vr_p90: number | null;
+  vr_tier: number | null;
+  vr_octave_conf: number | null;
+};
+type ArtistRangeRow = { low: number; high: number; p10: number; p50: number; p90: number };
+
+/**
+ * A song's vocal range from offline.db (Phase 3c, additive: the schema stays 1). The song's own `vr_*` columns
+ * (tiers 4/3/2) when `vr_p10` is set; else its artist's row in `artist_vocal_range` (keyed by
+ * `identityNormalize(artist)`) as tier `rough` with no octave confidence; else null. Null on any SQLite error,
+ * which includes an older list without these columns or that table.
+ */
+export function offlineVocalRange(db: SqlReader, key: string): SongVocalRange | null {
+  try {
+    const row = db.all<VocalRangeRow>(
+      'SELECT artist, vr_low, vr_high, vr_p10, vr_p50, vr_p90, vr_tier, vr_octave_conf FROM songs WHERE song_key = ? LIMIT 1',
+      [key],
+    )[0];
+    if (!row) return null;
+    const tier = row.vr_tier === null ? null : tierFromCode(row.vr_tier);
+    if (
+      row.vr_p10 !== null &&
+      row.vr_low !== null &&
+      row.vr_high !== null &&
+      row.vr_p50 !== null &&
+      row.vr_p90 !== null &&
+      tier !== null &&
+      tier !== 'rough'
+    ) {
+      return {
+        low: row.vr_low,
+        high: row.vr_high,
+        p10: row.vr_p10,
+        p50: row.vr_p50,
+        p90: row.vr_p90,
+        tier,
+        octaveConfidence: row.vr_octave_conf,
+      };
+    }
+    const artist = db.all<ArtistRangeRow>(
+      'SELECT low, high, p10, p50, p90 FROM artist_vocal_range WHERE artist_key = ? LIMIT 1',
+      [identityNormalize(row.artist)],
+    )[0];
+    if (!artist || [artist.low, artist.high, artist.p10, artist.p50, artist.p90].some((v) => v === null)) return null;
+    return { ...artist, tier: 'rough', octaveConfidence: null };
+  } catch {
+    return null;
+  }
 }
 
 /**

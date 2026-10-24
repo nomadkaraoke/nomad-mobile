@@ -5,6 +5,7 @@ import { Text } from '@nomad/ui';
 import { Pressable, View } from 'react-native';
 
 import { LibraryBadge } from '../../find/library';
+import { FitBadge } from '../../voice/FitBadge';
 
 /** A non-word glyph: the meaning comes from the accessibility label. */
 const MENU_GLYPH = '⋯';
@@ -45,6 +46,7 @@ export function RecSongRow({ song, idPart, loved, onOpen, onMenu }: RecSongRowPr
             <Text className="text-xs text-muted">{reason}</Text>
           </View>
           <LibraryBadge song={recLibraries(song)} />
+          <FitBadge fit={song.fit} testID={`fit-badge-${idPart}`} />
           {loved ? (
             <Text testID={`rec-loved-${idPart}`} accessibilityLabel={t('loved')} className="text-xs text-primary">
               {HEART_GLYPH}

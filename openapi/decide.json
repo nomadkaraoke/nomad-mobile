@@ -624,6 +624,49 @@
         }
       }
     },
+    "/api/catalog/songs/{song_key}/vocal-range": {
+      "get": {
+        "tags": [
+          "catalog"
+        ],
+        "summary": "Get Song Vocal Range",
+        "description": "A song's vocal range from catalog.db (public). ``range`` is null for an unknown song or no data;\n503 ``warming_up`` while catalog.db loads.",
+        "operationId": "get_song_vocal_range_api_catalog_songs__song_key__vocal_range_get",
+        "parameters": [
+          {
+            "name": "song_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Song Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SongVocalRangeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/catalog/songs/{song_id}": {
       "get": {
         "tags": [
@@ -3037,7 +3080,7 @@
           "my"
         ],
         "summary": "Get Recommendations V2",
-        "description": "Catalog-backed recommendations: explained sections for ``sort=best``, else one paged flat list.",
+        "description": "Catalog-backed recommendations: explained sections for ``sort=best``, else one paged flat list.\n\nWith a voice profile every song carries ``fit``; ``singable`` keeps fits / fitsIn songs and\n``sort=fit`` orders by fit. Without a profile ``singable`` is ignored (not echoed).",
         "operationId": "get_recommendations_v2_api_my_recommendations_v2_get",
         "security": [
           {
@@ -3267,6 +3310,16 @@
             }
           },
           {
+            "name": "singable",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Singable"
+            }
+          },
+          {
             "name": "sort",
             "in": "query",
             "required": false,
@@ -3277,7 +3330,8 @@
                 "newest",
                 "oldest",
                 "shortest",
-                "az"
+                "az",
+                "fit"
               ],
               "type": "string",
               "default": "best",
@@ -4778,6 +4832,565 @@
         }
       }
     },
+    "/api/my/voice": {
+      "get": {
+        "tags": [
+          "voice"
+        ],
+        "summary": "Get Voice",
+        "operationId": "get_voice_api_my_voice_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceProfileResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "voice"
+        ],
+        "summary": "Put Voice",
+        "operationId": "put_voice_api_my_voice_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoiceProfilePutIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceProfileOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "voice"
+        ],
+        "summary": "Delete Voice",
+        "operationId": "delete_voice_api_my_voice_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/voice/flags": {
+      "get": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Flags",
+        "operationId": "flags_api_voice_flags_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceFlagsOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/voice/sessions": {
+      "post": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Create Session",
+        "operationId": "create_session_api_voice_sessions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionSetup"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionCreated"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/voice/sessions/{session_id}": {
+      "get": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Get Session",
+        "operationId": "get_session_api_voice_sessions__session_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Patch Session",
+        "operationId": "patch_session_api_voice_sessions__session_id__patch",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/voice/sessions/{session_id}/next": {
+      "get": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Next Song",
+        "operationId": "next_song_api_voice_sessions__session_id__next_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/NextSongOut"
+                    },
+                    {
+                      "$ref": "#/components/schemas/NextDoneOut"
+                    }
+                  ],
+                  "title": "Response Next Song Api Voice Sessions  Session Id  Next Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/voice/sessions/{session_id}/skips": {
+      "post": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Skip Song",
+        "operationId": "skip_song_api_voice_sessions__session_id__skips_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SkipIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/voice/sessions/{session_id}/attempts": {
+      "post": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Add Attempt",
+        "operationId": "add_attempt_api_voice_sessions__session_id__attempts_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttemptIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/voice/sessions/{session_id}/result": {
+      "get": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Session Result",
+        "operationId": "session_result_api_voice_sessions__session_id__result_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/voice/recordings": {
+      "post": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Upload Recording",
+        "operationId": "upload_recording_api_voice_recordings_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_recording_api_voice_recordings_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordingCreated"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Delete Recordings",
+        "operationId": "delete_recordings_api_voice_recordings_delete",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordingsDeleted"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/voice/recordings/count": {
+      "get": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Count Recordings",
+        "operationId": "count_recordings_api_voice_recordings_count_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordingsCount"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/api/admin/stats": {
       "get": {
         "tags": [
@@ -5168,6 +5781,320 @@
         ]
       }
     },
+    "/api/admin/voice/labels/import": {
+      "post": {
+        "tags": [
+          "admin-voice"
+        ],
+        "summary": "Import Labels",
+        "description": "Store sheet rows as ``voice_labels`` (idempotent per user + song) and queue matched songs.",
+        "operationId": "import_labels_api_admin_voice_labels_import_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "x-admin-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportLabelsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportLabelsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/voice/coverage": {
+      "get": {
+        "tags": [
+          "admin-voice"
+        ],
+        "summary": "Coverage",
+        "description": "The published voice.db's pool by stratum dimension, the fetch queue by status, the Spotify budget.",
+        "operationId": "coverage_api_admin_voice_coverage_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "x-admin-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoverageOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/voice/users/{email}/songs": {
+      "get": {
+        "tags": [
+          "admin-voice"
+        ],
+        "summary": "User Songs",
+        "description": "Every song the user labelled or attempted, with voice.db markers and, when the user has a\nvoice profile, the good/no prediction (lookup only: no profile is created).",
+        "operationId": "user_songs_api_admin_voice_users__email__songs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Email"
+            }
+          },
+          {
+            "name": "x-admin-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserSongOut"
+                  },
+                  "title": "Response User Songs Api Admin Voice Users  Email  Songs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/voice/agreement": {
+      "get": {
+        "tags": [
+          "admin-voice"
+        ],
+        "summary": "Agreement Report",
+        "description": "The good/no prediction vs the user's yes/no labels on held-out songs (labelled, analysed,\nnever attempted in a session). ``rows`` carry each song's features for offline weight trials\n(``scripts/voice/agreement.py --export``).",
+        "operationId": "agreement_report_api_admin_voice_agreement_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Email"
+            }
+          },
+          {
+            "name": "x-admin-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgreementOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/voice/recordings/{recording_id}/audio": {
+      "get": {
+        "tags": [
+          "admin-voice"
+        ],
+        "summary": "Recording Audio",
+        "description": "Stream a private recording (admin listening while tuning) with its stored content type.",
+        "operationId": "recording_audio_api_admin_voice_recordings__recording_id__audio_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "recording_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Recording Id"
+            }
+          },
+          {
+            "name": "x-admin-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/internal/sync/process": {
       "post": {
         "tags": [
@@ -5461,11 +6388,151 @@
         "title": "AdminStats",
         "description": "Combined admin statistics for dashboard."
       },
+      "AgreementOut": {
+        "properties": {
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "agree": {
+            "type": "integer",
+            "title": "Agree"
+          },
+          "rate": {
+            "type": "number",
+            "title": "Rate"
+          },
+          "confusion": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Confusion"
+          },
+          "ready_for_signoff": {
+            "type": "boolean",
+            "title": "Ready For Signoff"
+          },
+          "per_marker": {
+            "additionalProperties": {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "type": "object"
+            },
+            "type": "object",
+            "title": "Per Marker"
+          },
+          "weights": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Weights"
+          },
+          "skipped_no_profile": {
+            "type": "integer",
+            "title": "Skipped No Profile"
+          },
+          "skipped_no_range": {
+            "type": "integer",
+            "title": "Skipped No Range"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/AgreementRowOut"
+            },
+            "type": "array",
+            "title": "Rows"
+          }
+        },
+        "type": "object",
+        "required": [
+          "n",
+          "agree",
+          "rate",
+          "confusion",
+          "ready_for_signoff",
+          "per_marker",
+          "weights",
+          "skipped_no_profile",
+          "skipped_no_range",
+          "rows"
+        ],
+        "title": "AgreementOut"
+      },
+      "AgreementRowOut": {
+        "properties": {
+          "song_key": {
+            "type": "string",
+            "title": "Song Key"
+          },
+          "artist": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artist"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "features": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Features"
+          },
+          "p": {
+            "type": "number",
+            "title": "P"
+          },
+          "pred": {
+            "type": "boolean",
+            "title": "Pred"
+          }
+        },
+        "type": "object",
+        "required": [
+          "song_key",
+          "artist",
+          "title",
+          "label",
+          "features",
+          "p",
+          "pred"
+        ],
+        "title": "AgreementRowOut"
+      },
       "AllArtistsResponse": {
         "properties": {
           "artists": {
             "items": {
-              "$ref": "#/components/schemas/UserArtistResponse"
+              "$ref": "#/components/schemas/backend__api__routes__my_data__UserArtistResponse"
             },
             "type": "array",
             "title": "Artists"
@@ -5872,6 +6939,191 @@
         "title": "ArtistsSummary",
         "description": "Summary of user's artists."
       },
+      "AttemptDebugOut": {
+        "properties": {
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          },
+          "at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "At"
+          },
+          "quiz": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quiz"
+          },
+          "context": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Context"
+          },
+          "pitch": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pitch"
+          },
+          "recording_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recording Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "at",
+          "quiz",
+          "context",
+          "pitch",
+          "recording_id"
+        ],
+        "title": "AttemptDebugOut"
+      },
+      "AttemptIn": {
+        "properties": {
+          "song_key": {
+            "type": "string",
+            "maxLength": 500,
+            "title": "Song Key"
+          },
+          "video_id": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Video Id"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "ended_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Ended At"
+          },
+          "stopped_early": {
+            "type": "boolean",
+            "title": "Stopped Early"
+          },
+          "quiz": {
+            "$ref": "#/components/schemas/QuizIn"
+          },
+          "pitch": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PitchSummaryIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "song_key",
+          "video_id",
+          "started_at",
+          "ended_at",
+          "stopped_early",
+          "quiz"
+        ],
+        "title": "AttemptIn"
+      },
+      "AttemptOut": {
+        "properties": {
+          "attempt_id": {
+            "type": "string",
+            "title": "Attempt Id"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "done": {
+            "type": "boolean",
+            "title": "Done"
+          },
+          "done_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "confident",
+                  "tired",
+                  "max_attempts",
+                  "no_candidates"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done Reason"
+          },
+          "top_p": {
+            "type": "number",
+            "title": "Top P"
+          }
+        },
+        "type": "object",
+        "required": [
+          "attempt_id",
+          "n",
+          "done",
+          "done_reason",
+          "top_p"
+        ],
+        "title": "AttemptOut"
+      },
       "AuthResponse": {
         "properties": {
           "access_token": {
@@ -5930,6 +7182,53 @@
           "file"
         ],
         "title": "Body_upload_listenbrainz_export_api_services_listenbrainz_upload_export_post"
+      },
+      "Body_upload_recording_api_voice_recordings_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          },
+          "session_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Session Id"
+          },
+          "attempt_n": {
+            "type": "integer",
+            "maximum": 12,
+            "minimum": 1,
+            "title": "Attempt N"
+          },
+          "duration_s": {
+            "type": "number",
+            "maximum": 3600,
+            "minimum": 0,
+            "title": "Duration S"
+          },
+          "device": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file",
+          "session_id",
+          "attempt_n",
+          "duration_s"
+        ],
+        "title": "Body_upload_recording_api_voice_recordings_post"
       },
       "BulkAddKnownSongsRequest": {
         "properties": {
@@ -6385,6 +7684,71 @@
         "title": "ConnectedServiceResponse",
         "description": "Connected music service information."
       },
+      "CoverageOut": {
+        "properties": {
+          "run": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run"
+          },
+          "songs": {
+            "type": "integer",
+            "title": "Songs"
+          },
+          "analysed": {
+            "type": "integer",
+            "title": "Analysed"
+          },
+          "per_stratum_dimension": {
+            "additionalProperties": {
+              "additionalProperties": {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "type": "object"
+              },
+              "type": "object"
+            },
+            "type": "object",
+            "title": "Per Stratum Dimension"
+          },
+          "queue": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Queue"
+          },
+          "budget": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Budget"
+          }
+        },
+        "type": "object",
+        "required": [
+          "run",
+          "songs",
+          "analysed",
+          "per_stratum_dimension",
+          "queue",
+          "budget"
+        ],
+        "title": "CoverageOut"
+      },
       "CreatePlaylistRequest": {
         "properties": {
           "name": {
@@ -6443,7 +7807,7 @@
         "properties": {
           "services": {
             "additionalProperties": {
-              "$ref": "#/components/schemas/ServiceSummary"
+              "$ref": "#/components/schemas/backend__api__routes__my_data__ServiceSummary"
             },
             "type": "object",
             "title": "Services"
@@ -7069,6 +8433,64 @@
         "title": "ImpersonateResponse",
         "description": "Response containing impersonation token."
       },
+      "ImportLabelsRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/SheetRowIn"
+            },
+            "type": "array",
+            "maxItems": 500,
+            "title": "Rows"
+          },
+          "enqueue": {
+            "type": "boolean",
+            "title": "Enqueue",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "rows"
+        ],
+        "title": "ImportLabelsRequest"
+      },
+      "ImportLabelsResponse": {
+        "properties": {
+          "imported": {
+            "type": "integer",
+            "title": "Imported"
+          },
+          "matched": {
+            "type": "integer",
+            "title": "Matched"
+          },
+          "unmatched": {
+            "items": {
+              "$ref": "#/components/schemas/UnmatchedRow"
+            },
+            "type": "array",
+            "title": "Unmatched"
+          },
+          "enqueued": {
+            "type": "integer",
+            "title": "Enqueued"
+          }
+        },
+        "type": "object",
+        "required": [
+          "imported",
+          "matched",
+          "unmatched",
+          "enqueued"
+        ],
+        "title": "ImportLabelsResponse"
+      },
       "ImportResultResponse": {
         "properties": {
           "source": {
@@ -7439,6 +8861,39 @@
         "title": "KnownSongsListResponse",
         "description": "Response for listing known songs."
       },
+      "LabelOut": {
+        "properties": {
+          "good": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Good"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags"
+          },
+          "notes": {
+            "type": "string",
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "good",
+          "tags",
+          "notes"
+        ],
+        "title": "LabelOut"
+      },
       "LastFmConnectRequest": {
         "properties": {
           "username": {
@@ -7593,6 +9048,29 @@
         "type": "object",
         "title": "LogNight"
       },
+      "LovedSongOut": {
+        "properties": {
+          "song_key": {
+            "type": "string",
+            "title": "Song Key"
+          },
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "song_key",
+          "artist",
+          "title"
+        ],
+        "title": "LovedSongOut"
+      },
       "MagicLinkRequest": {
         "properties": {
           "email": {
@@ -7669,6 +9147,119 @@
         "title": "ManualArtistInput",
         "description": "Artist manually entered by user via autocomplete search.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional for backward compatibility and image lookup."
       },
+      "NextDoneOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "done",
+            "title": "Kind",
+            "default": "done"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "confident",
+              "tired",
+              "max_attempts",
+              "no_candidates"
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reason"
+        ],
+        "title": "NextDoneOut"
+      },
+      "NextSongOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "song",
+            "title": "Kind",
+            "default": "song"
+          },
+          "song_key": {
+            "type": "string",
+            "title": "Song Key"
+          },
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "duration_s": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration S"
+          },
+          "reason_type": {
+            "type": "string",
+            "enum": [
+              "comfortable_start",
+              "upper_range",
+              "lower_range",
+              "loved",
+              "known",
+              "explore"
+            ],
+            "title": "Reason Type"
+          },
+          "version": {
+            "$ref": "#/components/schemas/VersionOut"
+          },
+          "alternatives": {
+            "items": {
+              "$ref": "#/components/schemas/VersionOut"
+            },
+            "type": "array",
+            "maxItems": 2,
+            "title": "Alternatives"
+          },
+          "song_range": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SongRangeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "attempt_n": {
+            "type": "integer",
+            "title": "Attempt N"
+          },
+          "max_attempts": {
+            "type": "integer",
+            "title": "Max Attempts",
+            "default": 12
+          }
+        },
+        "type": "object",
+        "required": [
+          "song_key",
+          "artist",
+          "title",
+          "duration_s",
+          "reason_type",
+          "version",
+          "alternatives",
+          "song_range",
+          "attempt_n"
+        ],
+        "title": "NextSongOut"
+      },
       "PendingListenBrainzImport": {
         "properties": {
           "id": {
@@ -7686,6 +9277,65 @@
           "status"
         ],
         "title": "PendingListenBrainzImport"
+      },
+      "PitchSummaryIn": {
+        "properties": {
+          "voiced_s": {
+            "type": "number",
+            "maximum": 3600,
+            "minimum": 0,
+            "title": "Voiced S"
+          },
+          "held_count": {
+            "type": "integer",
+            "maximum": 10000,
+            "minimum": 0,
+            "title": "Held Count"
+          },
+          "held_low": {
+            "type": "number",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Held Low"
+          },
+          "held_high": {
+            "type": "number",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Held High"
+          },
+          "p10": {
+            "type": "number",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "P10"
+          },
+          "p50": {
+            "type": "number",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "P50"
+          },
+          "p90": {
+            "type": "number",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "P90"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "voiced_s",
+          "held_count",
+          "held_low",
+          "held_high",
+          "p10",
+          "p50",
+          "p90"
+        ],
+        "title": "PitchSummaryIn",
+        "description": "On-device pitch summary (MIDI note numbers); no frames, no audio."
       },
       "PlaylistResponse": {
         "properties": {
@@ -7762,6 +9412,24 @@
         ],
         "title": "PlaylistsListResponse",
         "description": "Response containing list of playlists."
+      },
+      "PredictionOut": {
+        "properties": {
+          "good": {
+            "type": "boolean",
+            "title": "Good"
+          },
+          "p": {
+            "type": "number",
+            "title": "P"
+          }
+        },
+        "type": "object",
+        "required": [
+          "good",
+          "p"
+        ],
+        "title": "PredictionOut"
       },
       "PreferencesResponse": {
         "properties": {
@@ -8018,6 +9686,160 @@
         ],
         "title": "QuizEnjoySingingResponse",
         "description": "Response after submitting enjoy singing songs."
+      },
+      "QuizIn": {
+        "properties": {
+          "feel": {
+            "type": "string",
+            "enum": [
+              "loved",
+              "fine",
+              "not_for_me"
+            ],
+            "title": "Feel"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "too_low",
+              "comfortable",
+              "too_high",
+              "both_ends"
+            ],
+            "title": "Position"
+          },
+          "difficulty": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "easy",
+                  "stretch",
+                  "couldnt"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Difficulty"
+          },
+          "knew": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "well",
+                  "partly",
+                  "barely"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Knew"
+          },
+          "would_sing": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "yes",
+                  "yes_other_key",
+                  "no"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Would Sing"
+          },
+          "would_work_if": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "warmer",
+                "other_key",
+                "other_octave",
+                "practice",
+                "fine"
+              ]
+            },
+            "type": "array",
+            "maxItems": 5,
+            "title": "Would Work If"
+          },
+          "voice_now": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "fresh",
+                  "warm",
+                  "tired"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Now"
+          },
+          "version_quality": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "good",
+                  "not_great"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Quality"
+          },
+          "version_issues": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "no_intro",
+                "wrong_lyrics",
+                "bad_sync",
+                "low_quality"
+              ]
+            },
+            "type": "array",
+            "maxItems": 4,
+            "title": "Version Issues"
+          },
+          "tags": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "fast_lyrics",
+                "long_gaps",
+                "needed_warmup",
+                "crowd_song",
+                "mood_only"
+              ]
+            },
+            "type": "array",
+            "maxItems": 5,
+            "title": "Tags"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "feel",
+          "position"
+        ],
+        "title": "QuizIn",
+        "description": "Mirrors ``voice_session.model.Quiz``; Q1 ``feel`` and Q2 ``position`` are required."
       },
       "QuizProgressRequest": {
         "properties": {
@@ -8482,6 +10304,47 @@
         ],
         "title": "RecFacets"
       },
+      "RecFit": {
+        "properties": {
+          "bucket": {
+            "type": "string",
+            "enum": [
+              "fits",
+              "fitsIn",
+              "stretch",
+              "outside"
+            ],
+            "title": "Bucket"
+          },
+          "transpose": {
+            "type": "integer",
+            "title": "Transpose"
+          },
+          "octave": {
+            "type": "integer",
+            "title": "Octave"
+          },
+          "tier": {
+            "type": "string",
+            "enum": [
+              "measured",
+              "notes",
+              "estimated",
+              "rough"
+            ],
+            "title": "Tier"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bucket",
+          "transpose",
+          "octave",
+          "tier"
+        ],
+        "title": "RecFit",
+        "description": "How the user's voice meets the song: bucket, the key shift (semitones) and octave shift to use."
+      },
       "RecKaraoke": {
         "properties": {
           "community": {
@@ -8595,6 +10458,16 @@
           },
           "facets": {
             "$ref": "#/components/schemas/RecFacets"
+          },
+          "fit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RecFit"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -8611,6 +10484,36 @@
           "facets"
         ],
         "title": "RecSong"
+      },
+      "RecVoice": {
+        "properties": {
+          "has_profile": {
+            "type": "boolean",
+            "title": "Has Profile"
+          },
+          "method": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "mic",
+                  "self",
+                  "session"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method"
+          }
+        },
+        "type": "object",
+        "required": [
+          "has_profile",
+          "method"
+        ],
+        "title": "RecVoice"
       },
       "RecommendationResponse": {
         "properties": {
@@ -8736,6 +10639,9 @@
           "catalog_run": {
             "type": "string",
             "title": "Catalog Run"
+          },
+          "voice": {
+            "$ref": "#/components/schemas/RecVoice"
           }
         },
         "type": "object",
@@ -8744,9 +10650,49 @@
           "filters_applied",
           "next_cursor",
           "has_profile",
-          "catalog_run"
+          "catalog_run",
+          "voice"
         ],
         "title": "RecommendationsV2Response"
+      },
+      "RecordingCreated": {
+        "properties": {
+          "recording_id": {
+            "type": "string",
+            "title": "Recording Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "recording_id"
+        ],
+        "title": "RecordingCreated"
+      },
+      "RecordingsCount": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "count"
+        ],
+        "title": "RecordingsCount"
+      },
+      "RecordingsDeleted": {
+        "properties": {
+          "deleted": {
+            "type": "integer",
+            "title": "Deleted"
+          }
+        },
+        "type": "object",
+        "required": [
+          "deleted"
+        ],
+        "title": "RecordingsDeleted"
       },
       "RemoveArtistResponse": {
         "properties": {
@@ -8792,6 +10738,133 @@
           "removed_artists"
         ],
         "title": "RemoveDataResponse"
+      },
+      "ResultOut": {
+        "properties": {
+          "voice_type": {
+            "type": "string",
+            "title": "Voice Type"
+          },
+          "between": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Between"
+          },
+          "confidence_label": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Confidence Label"
+          },
+          "top_p": {
+            "type": "number",
+            "title": "Top P"
+          },
+          "low": {
+            "type": "integer",
+            "title": "Low"
+          },
+          "high": {
+            "type": "integer",
+            "title": "High"
+          },
+          "comfort_low": {
+            "type": "integer",
+            "title": "Comfort Low"
+          },
+          "comfort_high": {
+            "type": "integer",
+            "title": "Comfort High"
+          },
+          "attempts": {
+            "type": "integer",
+            "title": "Attempts"
+          },
+          "partial": {
+            "type": "boolean",
+            "title": "Partial"
+          },
+          "improve_hint": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "sing_higher_warm",
+                  "sing_lower",
+                  "more_songs"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Improve Hint"
+          },
+          "done_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "confident",
+                  "tired",
+                  "max_attempts",
+                  "no_candidates"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done Reason"
+          },
+          "profile_saved": {
+            "type": "boolean",
+            "title": "Profile Saved"
+          },
+          "suited": {
+            "items": {
+              "$ref": "#/components/schemas/RecSong"
+            },
+            "type": "array",
+            "maxItems": 15,
+            "title": "Suited"
+          },
+          "loved": {
+            "items": {
+              "$ref": "#/components/schemas/LovedSongOut"
+            },
+            "type": "array",
+            "title": "Loved"
+          }
+        },
+        "type": "object",
+        "required": [
+          "voice_type",
+          "between",
+          "confidence_label",
+          "top_p",
+          "low",
+          "high",
+          "comfort_low",
+          "comfort_high",
+          "attempts",
+          "partial",
+          "improve_hint",
+          "done_reason",
+          "profile_saved",
+          "suited",
+          "loved"
+        ],
+        "title": "ResultOut"
       },
       "ScreenshotConfirmRequest": {
         "properties": {
@@ -8847,72 +10920,277 @@
       },
       "ServiceSummary": {
         "properties": {
-          "connected": {
-            "type": "boolean",
-            "title": "Connected"
+          "service_type": {
+            "type": "string",
+            "title": "Service Type"
           },
-          "username": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Username"
+          "service_username": {
+            "type": "string",
+            "title": "Service Username"
           },
-          "tracks_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Tracks Synced"
-          },
-          "songs_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Songs Synced"
-          },
-          "artists_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Artists Synced"
+          "sync_status": {
+            "type": "string",
+            "title": "Sync Status"
           },
           "last_sync_at": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "format": "date-time"
               },
               {
                 "type": "null"
               }
             ],
             "title": "Last Sync At"
+          },
+          "tracks_synced": {
+            "type": "integer",
+            "title": "Tracks Synced"
+          },
+          "sync_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sync Error"
           }
         },
         "type": "object",
         "required": [
-          "connected"
+          "service_type",
+          "service_username",
+          "sync_status",
+          "last_sync_at",
+          "tracks_synced",
+          "sync_error"
         ],
         "title": "ServiceSummary",
         "description": "Summary of a connected music service."
+      },
+      "SessionCreated": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "title": "Session Id"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "active",
+              "abandoned",
+              "done"
+            ],
+            "title": "State"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "state"
+        ],
+        "title": "SessionCreated"
+      },
+      "SessionOut": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "title": "Session Id"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "active",
+              "abandoned",
+              "done"
+            ],
+            "title": "State"
+          },
+          "setup": {
+            "$ref": "#/components/schemas/SessionSetup"
+          },
+          "attempts": {
+            "type": "integer",
+            "title": "Attempts"
+          },
+          "top_p": {
+            "type": "number",
+            "title": "Top P"
+          },
+          "done_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "confident",
+                  "tired",
+                  "max_attempts",
+                  "no_candidates"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done Reason"
+          },
+          "last_offer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NextSongOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "profile_saved": {
+            "type": "boolean",
+            "title": "Profile Saved"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "state",
+          "setup",
+          "attempts",
+          "top_p",
+          "done_reason",
+          "last_offer",
+          "profile_saved"
+        ],
+        "title": "SessionOut",
+        "description": "A session as it stands (``GET /api/voice/sessions/{id}``), for the app to resume it."
+      },
+      "SessionPatch": {
+        "properties": {
+          "posture": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "standing",
+                  "sitting",
+                  "lying"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Posture"
+          },
+          "warmth": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "cold",
+                  "bit_warm",
+                  "warm"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warmth"
+          },
+          "record": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Record"
+          },
+          "headphones": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Headphones"
+          },
+          "device": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SessionPatch",
+        "description": "The mid-session context chip: any subset of the setup."
+      },
+      "SessionSetup": {
+        "properties": {
+          "posture": {
+            "type": "string",
+            "enum": [
+              "standing",
+              "sitting",
+              "lying"
+            ],
+            "title": "Posture"
+          },
+          "warmth": {
+            "type": "string",
+            "enum": [
+              "cold",
+              "bit_warm",
+              "warm"
+            ],
+            "title": "Warmth"
+          },
+          "record": {
+            "type": "boolean",
+            "title": "Record"
+          },
+          "headphones": {
+            "type": "boolean",
+            "title": "Headphones"
+          },
+          "device": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "posture",
+          "warmth",
+          "record",
+          "headphones"
+        ],
+        "title": "SessionSetup"
       },
       "SetEnjoySingingRequest": {
         "properties": {
@@ -9049,6 +11327,99 @@
         "title": "SetEnjoySingingResponse",
         "description": "Response after marking a song as enjoy singing."
       },
+      "SheetRowIn": {
+        "properties": {
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "duet": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duet"
+          },
+          "good": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Good"
+          },
+          "sung": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sung"
+          },
+          "notes": {
+            "type": "string",
+            "title": "Notes",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "artist",
+          "title"
+        ],
+        "title": "SheetRowIn"
+      },
+      "SkipIn": {
+        "properties": {
+          "song_key": {
+            "type": "string",
+            "maxLength": 500,
+            "title": "Song Key"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "dont_know",
+              "something_else",
+              "not_embeddable"
+            ],
+            "title": "Reason"
+          },
+          "video_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "song_key",
+          "reason"
+        ],
+        "title": "SkipIn"
+      },
       "SmartArtistRequest": {
         "properties": {
           "genres": {
@@ -9136,6 +11507,39 @@
         "title": "SongLinksResponse",
         "description": "Response containing karaoke links for a song."
       },
+      "SongRangeOut": {
+        "properties": {
+          "low": {
+            "type": "number",
+            "title": "Low"
+          },
+          "high": {
+            "type": "number",
+            "title": "High"
+          },
+          "p10": {
+            "type": "number",
+            "title": "P10"
+          },
+          "p50": {
+            "type": "number",
+            "title": "P50"
+          },
+          "p90": {
+            "type": "number",
+            "title": "P90"
+          }
+        },
+        "type": "object",
+        "required": [
+          "low",
+          "high",
+          "p10",
+          "p50",
+          "p90"
+        ],
+        "title": "SongRangeOut"
+      },
       "SongResponse": {
         "properties": {
           "id": {
@@ -9177,6 +11581,99 @@
         ],
         "title": "SongResponse",
         "description": "Karaoke song in API response."
+      },
+      "SongVocalRangeOut": {
+        "properties": {
+          "low": {
+            "type": "number",
+            "title": "Low"
+          },
+          "high": {
+            "type": "number",
+            "title": "High"
+          },
+          "p10": {
+            "type": "number",
+            "title": "P10"
+          },
+          "p50": {
+            "type": "number",
+            "title": "P50"
+          },
+          "p90": {
+            "type": "number",
+            "title": "P90"
+          },
+          "tier": {
+            "type": "string",
+            "enum": [
+              "measured",
+              "notes",
+              "estimated",
+              "rough"
+            ],
+            "title": "Tier"
+          },
+          "octave_confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Octave Confidence"
+          },
+          "is_duet": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Duet"
+          }
+        },
+        "type": "object",
+        "required": [
+          "low",
+          "high",
+          "p10",
+          "p50",
+          "p90",
+          "tier",
+          "octave_confidence",
+          "is_duet"
+        ],
+        "title": "SongVocalRangeOut",
+        "description": "MIDI note numbers (fractional); ``tier`` rough = the artist's range standing in for the song's."
+      },
+      "SongVocalRangeResponse": {
+        "properties": {
+          "song_key": {
+            "type": "string",
+            "title": "Song Key"
+          },
+          "range": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SongVocalRangeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "song_key",
+          "range"
+        ],
+        "title": "SongVocalRangeResponse"
       },
       "SongsSummary": {
         "properties": {
@@ -10260,6 +12757,24 @@
         "title": "TrackSearchResult",
         "description": "Track search result for autocomplete."
       },
+      "UnmatchedRow": {
+        "properties": {
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "artist",
+          "title"
+        ],
+        "title": "UnmatchedRow"
+      },
       "UpdatePlaylistRequest": {
         "properties": {
           "name": {
@@ -10405,60 +12920,25 @@
       },
       "UserArtistResponse": {
         "properties": {
-          "mbid": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Mbid"
+          "id": {
+            "type": "string",
+            "title": "Id"
           },
           "artist_name": {
             "type": "string",
             "title": "Artist Name"
           },
-          "sources": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Sources"
+          "source": {
+            "type": "string",
+            "title": "Source"
           },
-          "spotify_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Id"
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
           },
-          "spotify_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Rank"
-          },
-          "spotify_time_range": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Time Range"
+          "time_range": {
+            "type": "string",
+            "title": "Time Range"
           },
           "popularity": {
             "anyOf": [
@@ -10478,77 +12958,24 @@
             "type": "array",
             "title": "Genres",
             "default": []
-          },
-          "lastfm_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Rank"
-          },
-          "lastfm_playcount": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Playcount"
-          },
-          "tags": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Tags",
-            "default": []
-          },
-          "is_excluded": {
-            "type": "boolean",
-            "title": "Is Excluded",
-            "default": false
-          },
-          "is_manual": {
-            "type": "boolean",
-            "title": "Is Manual",
-            "default": false
-          },
-          "affinity": {
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "love",
-                  "like",
-                  "occasionally"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Affinity"
           }
         },
         "type": "object",
         "required": [
+          "id",
           "artist_name",
-          "sources"
+          "source",
+          "rank",
+          "time_range"
         ],
         "title": "UserArtistResponse",
-        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
+        "description": "Artist from user's listening history."
       },
       "UserArtistsResponse": {
         "properties": {
           "artists": {
             "items": {
-              "$ref": "#/components/schemas/backend__api__routes__recommendations__UserArtistResponse"
+              "$ref": "#/components/schemas/UserArtistResponse"
             },
             "type": "array",
             "title": "Artists"
@@ -10645,7 +13072,7 @@
           },
           "services": {
             "items": {
-              "$ref": "#/components/schemas/backend__models__admin__ServiceSummary"
+              "$ref": "#/components/schemas/ServiceSummary"
             },
             "type": "array",
             "title": "Services"
@@ -10842,6 +13269,85 @@
         "title": "UserResponse",
         "description": "Current user information."
       },
+      "UserSongOut": {
+        "properties": {
+          "song_key": {
+            "type": "string",
+            "title": "Song Key"
+          },
+          "artist": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artist"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "markers": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Markers"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LabelOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "attempts": {
+            "items": {
+              "$ref": "#/components/schemas/AttemptDebugOut"
+            },
+            "type": "array",
+            "title": "Attempts"
+          },
+          "prediction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PredictionOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "song_key",
+          "artist",
+          "title",
+          "markers",
+          "label",
+          "attempts"
+        ],
+        "title": "UserSongOut"
+      },
       "UserSongResponse": {
         "properties": {
           "id": {
@@ -11037,6 +13543,379 @@
         "title": "VerifyTokenRequest",
         "description": "Request to verify a magic link token."
       },
+      "VersionOut": {
+        "properties": {
+          "video_id": {
+            "type": "string",
+            "title": "Video Id"
+          },
+          "brand_code": {
+            "type": "string",
+            "title": "Brand Code"
+          },
+          "brand_name": {
+            "type": "string",
+            "title": "Brand Name"
+          },
+          "embeddable": {
+            "type": "boolean",
+            "title": "Embeddable",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "video_id",
+          "brand_code",
+          "brand_name"
+        ],
+        "title": "VersionOut"
+      },
+      "VoiceFlagsOut": {
+        "properties": {
+          "session_enabled": {
+            "type": "boolean",
+            "title": "Session Enabled"
+          },
+          "is_admin": {
+            "type": "boolean",
+            "title": "Is Admin"
+          },
+          "voice_data": {
+            "type": "boolean",
+            "title": "Voice Data"
+          },
+          "active_session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Session Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_enabled",
+          "is_admin",
+          "voice_data"
+        ],
+        "title": "VoiceFlagsOut"
+      },
+      "VoiceProfileOut": {
+        "properties": {
+          "low_midi": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Low Midi"
+          },
+          "high_midi": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "High Midi"
+          },
+          "comfort_low": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Comfort Low"
+          },
+          "comfort_high": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Comfort High"
+          },
+          "voice_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bass",
+                  "baritone",
+                  "tenor",
+                  "alto",
+                  "mezzo",
+                  "soprano"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Type"
+          },
+          "voice_type_between": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bass",
+                  "baritone",
+                  "tenor",
+                  "alto",
+                  "mezzo",
+                  "soprano"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Type Between"
+          },
+          "register": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "lower",
+                  "middle",
+                  "higher"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Register"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Confidence"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "mic",
+              "self",
+              "session"
+            ],
+            "title": "Method"
+          },
+          "measured_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Measured At"
+          },
+          "evidence_count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Count"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "low_midi",
+          "high_midi",
+          "comfort_low",
+          "comfort_high",
+          "voice_type",
+          "register",
+          "confidence",
+          "method",
+          "measured_at",
+          "updated_at"
+        ],
+        "title": "VoiceProfileOut"
+      },
+      "VoiceProfilePutIn": {
+        "properties": {
+          "low_midi": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Low Midi"
+          },
+          "high_midi": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "High Midi"
+          },
+          "comfort_low": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Comfort Low"
+          },
+          "comfort_high": {
+            "type": "integer",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Comfort High"
+          },
+          "voice_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bass",
+                  "baritone",
+                  "tenor",
+                  "alto",
+                  "mezzo",
+                  "soprano"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Type"
+          },
+          "voice_type_between": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "bass",
+                  "baritone",
+                  "tenor",
+                  "alto",
+                  "mezzo",
+                  "soprano"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Type Between"
+          },
+          "register": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "lower",
+                  "middle",
+                  "higher"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Register"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Confidence"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "mic",
+              "self",
+              "session"
+            ],
+            "title": "Method"
+          },
+          "measured_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Measured At"
+          },
+          "evidence_count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Count"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "low_midi",
+          "high_midi",
+          "comfort_low",
+          "comfort_high",
+          "voice_type",
+          "register",
+          "confidence",
+          "method",
+          "measured_at"
+        ],
+        "title": "VoiceProfilePutIn",
+        "description": "``PUT /api/my/voice``: the app's mic / self-report profiles. ``method: 'session'`` profiles are\nsaved only by a voice session's result (``VoiceSessionService``), never through this route."
+      },
+      "VoiceProfileResponse": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VoiceProfileOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "profile"
+        ],
+        "title": "VoiceProfileResponse"
+      },
       "YouTubeMusicImportRequest": {
         "properties": {
           "playlist_url": {
@@ -11078,27 +13957,131 @@
         "title": "YouTubeMusicImportResponse",
         "description": "Result of a YouTube Music playlist import."
       },
-      "backend__api__routes__recommendations__UserArtistResponse": {
+      "backend__api__routes__my_data__ServiceSummary": {
         "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
+          "connected": {
+            "type": "boolean",
+            "title": "Connected"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          },
+          "tracks_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tracks Synced"
+          },
+          "songs_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Songs Synced"
+          },
+          "artists_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artists Synced"
+          },
+          "last_sync_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sync At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "connected"
+        ],
+        "title": "ServiceSummary",
+        "description": "Summary of a connected music service."
+      },
+      "backend__api__routes__my_data__UserArtistResponse": {
+        "properties": {
+          "mbid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mbid"
           },
           "artist_name": {
             "type": "string",
             "title": "Artist Name"
           },
-          "source": {
-            "type": "string",
-            "title": "Source"
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sources"
           },
-          "rank": {
-            "type": "integer",
-            "title": "Rank"
+          "spotify_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Id"
           },
-          "time_range": {
-            "type": "string",
-            "title": "Time Range"
+          "spotify_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Rank"
+          },
+          "spotify_time_range": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Time Range"
           },
           "popularity": {
             "anyOf": [
@@ -11118,72 +14101,71 @@
             "type": "array",
             "title": "Genres",
             "default": []
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "artist_name",
-          "source",
-          "rank",
-          "time_range"
-        ],
-        "title": "UserArtistResponse",
-        "description": "Artist from user's listening history."
-      },
-      "backend__models__admin__ServiceSummary": {
-        "properties": {
-          "service_type": {
-            "type": "string",
-            "title": "Service Type"
           },
-          "service_username": {
-            "type": "string",
-            "title": "Service Username"
+          "lastfm_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Rank"
           },
-          "sync_status": {
-            "type": "string",
-            "title": "Sync Status"
+          "lastfm_playcount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Playcount"
           },
-          "last_sync_at": {
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "default": []
+          },
+          "is_excluded": {
+            "type": "boolean",
+            "title": "Is Excluded",
+            "default": false
+          },
+          "is_manual": {
+            "type": "boolean",
+            "title": "Is Manual",
+            "default": false
+          },
+          "affinity": {
             "anyOf": [
               {
                 "type": "string",
-                "format": "date-time"
+                "enum": [
+                  "love",
+                  "like",
+                  "occasionally"
+                ]
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Last Sync At"
-          },
-          "tracks_synced": {
-            "type": "integer",
-            "title": "Tracks Synced"
-          },
-          "sync_error": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Sync Error"
+            "title": "Affinity"
           }
         },
         "type": "object",
         "required": [
-          "service_type",
-          "service_username",
-          "sync_status",
-          "last_sync_at",
-          "tracks_synced",
-          "sync_error"
+          "artist_name",
+          "sources"
         ],
-        "title": "ServiceSummary",
-        "description": "Summary of a connected music service."
+        "title": "UserArtistResponse",
+        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
       }
     },
     "securitySchemes": {

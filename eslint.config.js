@@ -111,6 +111,8 @@ module.exports = defineConfig([
         EXPECT_FEEL: 'readonly',
         EXPECT_KEY: 'readonly',
         EXPECT_SOURCE: 'readonly',
+        EXPECT_TYPE: 'readonly',
+        EXPECT_METHOD: 'readonly',
         WAIT_MS: 'readonly',
       },
     },

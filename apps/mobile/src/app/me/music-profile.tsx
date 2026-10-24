@@ -9,6 +9,7 @@ import { ConnectedSources } from '../../discover/connect/ConnectedSources';
 import { ProfileSection } from '../../discover/profile/ProfileSection';
 import { useAppleMusic } from '../../discover/profile/useAppleMusic';
 import { useMusicProfile } from '../../discover/profile/useMusicProfile';
+import { VoiceProfileSection } from '../../voice/VoiceProfileSection';
 
 /** decide's genre ids to their message keys (`classic-rock` is `classicRock`). */
 const genreKey = (id: string) => id.replace(/-(\w)/g, (_, c: string) => c.toUpperCase());
@@ -227,6 +228,8 @@ export default function MusicProfileScreen() {
       >
         <ConnectedSources onReconnectApple={() => void apple.connect()} />
       </ProfileSection>
+      {/* Phase 3c: the voice profile. */}
+      <VoiceProfileSection />
     </Screen>
   );
 }

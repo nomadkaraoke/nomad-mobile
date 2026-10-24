@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "Permita que o Nomad Karaoke ouça você cantar para poder medir seu alcance vocal. O áudio não sai do seu celular."
+  }
+}

@@ -2,42 +2,7 @@
 # hierarchy 500s on an app it just relaunched). Then signs in from Discover (fake Google, EMAIL). testIDs only.
 appId: com.nomadkaraoke.mobile
 ---
-- stopApp
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - launchApp:
-          clearKeychain: true
-- runFlow:
-    when:
-      platform: Android
-    commands:
-      - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A${typeof METRO_PORT !== 'undefined' && METRO_PORT ? METRO_PORT : '8081'}"
-- extendedWaitUntil:
-    visible: "Runtime version.*"
-    timeout: 20000
-    optional: true
-- runFlow:
-    when:
-      visible: "Runtime version.*"
-    commands:
-      - tapOn: "Close|Continue"
-# The dev menu can also come up late (a cold Metro bundle): close it if it is in front now.
-- extendedWaitUntil:
-    visible:
-      id: "discover-signin"
-    timeout: 60000
-    optional: true
-- runFlow:
-    when:
-      visible: "Runtime version.*"
-    commands:
-      - tapOn: "Close|Continue"
-- extendedWaitUntil:
-    visible:
-      id: "discover-signin"
-    timeout: 60000
+- runFlow: tour-launch-signed-out.yaml
 - tapOn:
     id: "discover-signin"
 - runFlow:

@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "Cho phép Nomad Karaoke nghe bạn hát để ứng dụng có thể đo âm vực của bạn. Âm thanh chỉ được lưu lại trên điện thoại của bạn."
+  }
+}

@@ -19,6 +19,7 @@ import {
   recsSnapshotKey,
   saveRecsSnapshot,
 } from './recsSnapshot';
+import { useVoiceStore } from '../voice/voiceStore';
 import { useDiscoverStale } from './staleStore';
 
 /** While decide's catalog is still loading (503 warming_up), Discover polls this often. */
@@ -30,7 +31,12 @@ export const RECS_KEY = ['recs'] as const;
 export type RecsPages = InfiniteData<RecommendationsV2Response, string | undefined>;
 
 /** The merged pages: a later page's section with the same id continues it (a non-`best` sort pages `all`). */
-export type Recs = { sections: RecSection[]; hasProfile: boolean };
+export type Recs = {
+  sections: RecSection[];
+  hasProfile: boolean;
+  /** decide has the user's voice profile (`voice.has_profile`; absent from responses before decide's 3c deploy). */
+  voiceProfile: boolean;
+};
 
 export function mergePages(pages: readonly RecommendationsV2Response[]): Recs {
   const sections: RecSection[] = [];
@@ -46,7 +52,11 @@ export function mergePages(pages: readonly RecommendationsV2Response[]): Recs {
       }
     }
   }
-  return { sections: sections.filter((s) => s.songs.length > 0), hasProfile: pages[0]?.has_profile ?? false };
+  return {
+    sections: sections.filter((s) => s.songs.length > 0),
+    hasProfile: pages[0]?.has_profile ?? false,
+    voiceProfile: pages[0]?.voice?.has_profile ?? false,
+  };
 }
 
 /** Saved rows carry decide's karaoke flags; map them to the shape the shared library filter reads. */
@@ -116,6 +126,14 @@ export function useRecommendations(filters: RecFilters) {
   useEffect(() => {
     if (ok && stale) useDiscoverStale.getState().clear();
   }, [ok, stale]);
+
+  // A voice profile decide now has (saved, then synced): reload so the rows carry their fit (Phase 3c).
+  const voiceSynced = useVoiceStore((s) => (s.profile && !s.pending ? s.profile.measuredAt : null));
+  const lastVoice = useRef(voiceSynced);
+  useEffect(() => {
+    if (voiceSynced !== null && voiceSynced !== lastVoice.current) void queryClient.invalidateQueries({ queryKey: RECS_KEY });
+    lastVoice.current = voiceSynced;
+  }, [voiceSynced, queryClient]);
 
   // Stale flipped back (cleared elsewhere, e.g. a new sign-in) while this query is still failing: reload.
   const wasStale = useRef(stale);

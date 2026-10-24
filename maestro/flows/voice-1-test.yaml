@@ -1,0 +1,113 @@
+# Vocal range 1 (Phase 3c): the mic voice test with the fake mic (Metro with EXPO_PUBLIC_FAKE_MIC=baritone-scale,
+# honoured only against a local gen host). Signed in on Discover → "Find songs that fit your voice" → Start → low,
+# high, sing → "Likely Baritone" → Save → decide has a mic baritone profile.
+appId: com.nomadkaraoke.mobile
+name: voice-1-test
+tags:
+  - voice
+onFlowComplete:
+  - runFlow: ../common/discover-reset-filters.yaml
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: voice1
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["rock"],"decades":["2000s"],"energy":"high","artists":[{"name":"Muse","affinity":"love"}]}'
+- runFlow: ../common/voice-clear-local.yaml
+# The improve card is last on the picks list.
+- scrollUntilVisible:
+    element:
+      id: "discover-improve-voice"
+    direction: DOWN
+    timeout: 30000
+# The link can count as visible while it still sits under the tab bar: one more scroll reaches the list's end.
+- scroll
+- waitForAnimationToEnd
+- tapOn:
+    id: "discover-improve-voice"
+- extendedWaitUntil:
+    visible:
+      id: "voice-start"
+    timeout: 15000
+- takeScreenshot: ${VOICE_SHOTS}/voice-1-intro
+- tapOn:
+    id: "voice-start"
+# The holds below follow the fake singer's slices (scripts/make-fake-mic-wav.mjs SECTIONS; useFakePitchSource.ts
+# FAKE_MIC_SECTIONS), each opening with 1.2 s of silence:
+#   low  4.4 s: A3 E3 C3 A2, 0.8 s each. Done enables on the first held note (~1.7 s in); A2 sounds from 3.6 s to
+#        4.4 s, so 3.5 s more covers it.
+#   high 2.8 s: C4 E4, 0.8 s each. E4 sounds from 2.0 s to 2.8 s: 2.5 s after Done enables.
+#   sing 7.2 s of 0.6 s notes: Finish after 5 s, before the slice ends.
+# Change these waits together with the WAV.
+- extendedWaitUntil:
+    visible:
+      id: "voice-low-done"
+      enabled: true
+    timeout: 15000
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: 3500
+- takeScreenshot: ${VOICE_SHOTS}/voice-1-low
+- tapOn:
+    id: "voice-low-done"
+- extendedWaitUntil:
+    visible:
+      id: "voice-high-done"
+      enabled: true
+    timeout: 15000
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: 2500
+- takeScreenshot: ${VOICE_SHOTS}/voice-1-high
+- tapOn:
+    id: "voice-high-done"
+- extendedWaitUntil:
+    visible:
+      id: "voice-sing-skip"
+    timeout: 10000
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: 5000
+- tapOn:
+    id: "voice-sing-skip"
+- extendedWaitUntil:
+    visible:
+      id: "voice-result-type"
+    timeout: 15000
+- assertVisible:
+    id: "voice-result-type"
+    text: ".*Baritone.*"
+- takeScreenshot: ${VOICE_SHOTS}/voice-1-result
+- tapOn:
+    id: "voice-save"
+- extendedWaitUntil:
+    visible:
+      id: "voice-saved"
+    timeout: 20000
+- takeScreenshot: ${VOICE_SHOTS}/voice-1-saved
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_TYPE: baritone
+      EXPECT_METHOD: mic
+- tapOn:
+    id: "voice-close"
+# Back on Discover (still scrolled to the improve card, under the make-it rows that have no range), the picks reload
+# with fit badges for the measured range.
+- scrollUntilVisible:
+    element:
+      id: "fit-badge-.*"
+    direction: UP
+    timeout: 30000
+- takeScreenshot: ${VOICE_SHOTS}/voice-1-picks-badges

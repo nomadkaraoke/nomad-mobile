@@ -4,13 +4,16 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { QueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 
 import { useAuth } from '../auth/store';
+import { useRecFilters } from '../discover/filtersStore';
 import { QUIZ_STORAGE_KEY, useQuizDraft } from '../discover/quizStore';
 import { appStorage } from '../storage';
 import { gen, session } from '../test-utils/genAuthMock';
 import { appRoutes } from '../test-utils/routes';
+import { sendPendingVoice } from '../voice/useVoiceProfile';
+import { profileFromSelfReport, toVoiceProfileIn, useVoiceStore, type LocalVoiceProfile } from '../voice/voiceStore';
 
 // Router-rendered screens with optimistic edits run slowly on CI runners (5 s default timed out there).
 jest.setTimeout(20_000);
@@ -39,6 +42,9 @@ jest.mock('@nomad/api-decide', () => ({
   submitQuiz: jest.fn(async () => ({ message: 'ok', songs_added: 1, recommendations_ready: true })),
   loveSong: jest.fn(async () => undefined),
   listMusicServices: jest.fn(async () => []),
+  getVoiceProfile: jest.fn(async () => null),
+  putVoiceProfile: jest.fn(async () => ({})),
+  deleteVoiceProfile: jest.fn(async () => undefined),
 }));
 jest.mock('@nomad/api-gen', () => ({
   ...jest.requireActual('@nomad/api-gen'),
@@ -58,6 +64,7 @@ const routes = () => ({
   'review/[id]': () => <View testID="review-stub" />,
   'make/new': () => <View testID="make-stub" />,
   'song/[id]': () => <View testID="song-stub" />,
+  'discover/voice': () => <View testID="voice-stub" />,
 });
 const open = (url = '/me/music-profile') => renderRouter(routes(), { initialUrl: url });
 const signIn = () => act(() => useAuth.getState().signInWithSession(session()));
@@ -286,5 +293,156 @@ describe('musicProfile', () => {
       expect(body.artist_affinities).toEqual([{ artist_name: 'Alpha Band', affinity: 'love' }]);
       expect(JSON.stringify(body.manual_artists)).not.toContain('Gone Band');
     });
+  });
+});
+
+describe('Your voice (Phase 3c)', () => {
+  const MIC: LocalVoiceProfile = {
+    lowMidi: 43, highMidi: 67, comfortLow: 48, comfortHigh: 62, voiceType: 'baritone', voiceTypeBetween: null,
+    register: null, confidence: 'high', method: 'mic', measuredAt: '2026-10-22T10:00:00Z',
+  };
+  beforeEach(() => {
+    act(() => useVoiceStore.getState().clear());
+    jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+    // decide holds what this phone synced (a synced profile with none on decide would be cleared as removed elsewhere).
+    m(decide.getVoiceProfile).mockImplementation(async () => {
+      const { profile, pending } = useVoiceStore.getState();
+      return profile && !pending ? (toVoiceProfileIn(profile) as never) : null;
+    });
+  });
+  afterEach(() => {
+    (Alert.alert as jest.Mock).mockRestore();
+    m(decide.getVoiceProfile).mockImplementation(async () => null);
+  });
+  /** Lets pending promises run (renderRouter's fake timers would hang a real setTimeout). */
+  const flush = async () => {
+    for (let i = 0; i < 5; i++) await act(async () => {});
+  };
+  /** Taps the confirmation's destructive button. */
+  const confirmRemove = async () => {
+    const alert = Alert.alert as jest.Mock;
+    await waitFor(() => expect(alert).toHaveBeenCalled());
+    const buttons = alert.mock.calls[alert.mock.calls.length - 1][2] as { style?: string; onPress?: () => void }[];
+    await act(async () => buttons.find((b) => b.style === 'destructive')!.onPress?.());
+  };
+
+  it('no profile: says so and offers the voice test', async () => {
+    await signIn();
+    const app = open();
+    expect(await screen.findByTestId('voice-section')).toHaveTextContent(/No voice profile yet/);
+    fireEvent.press(screen.getByTestId('voice-test'));
+    await waitFor(() => expect(app.getPathname()).toBe('/discover/voice'));
+  });
+
+  it('a mic profile: type, range on the keyboard, how it was measured, and Redo', async () => {
+    act(() => useVoiceStore.getState().adopt(MIC));
+    await signIn();
+    const app = open();
+    expect(await screen.findByTestId('voice-section-type')).toHaveTextContent('Likely Baritone');
+    expect(screen.getByTestId('voice-section-range')).toHaveTextContent(/G2.*G4/);
+    expect(screen.getByTestId('voice-section-keys')).toBeTruthy();
+    expect(screen.getByTestId('voice-section-method')).toHaveTextContent('Measured with the mic test');
+    fireEvent.press(screen.getByTestId('voice-redo'));
+    await waitFor(() => expect(app.getPathname()).toBe('/discover/voice'));
+  });
+
+  it('a self-reported profile says it was not measured', async () => {
+    act(() => useVoiceStore.getState().adopt(profileFromSelfReport('tenor', '2026-10-22T10:00:00Z')));
+    await signIn();
+    open();
+    expect(await screen.findByTestId('voice-section-method')).toHaveTextContent('From your pick, not measured');
+  });
+
+  it('remove: DELETEs on decide, clears the phone copy and the voice filters', async () => {
+    act(() => useVoiceStore.getState().adopt(MIC));
+    act(() => useRecFilters.getState().set({ singable: true, sort: 'fit' }));
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    await confirmRemove();
+    await waitFor(() => expect(decide.deleteVoiceProfile).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(useVoiceStore.getState().profile).toBeNull());
+    expect(useRecFilters.getState().filters).toMatchObject({ singable: false, sort: 'best' });
+    expect(await screen.findByTestId('voice-test')).toBeTruthy();
+  });
+
+  it('remove waits for a voice PUT still in flight, then DELETEs (the PUT can never land after it)', async () => {
+    let finishPut: (v: unknown) => void = () => {};
+    m(decide.putVoiceProfile).mockImplementationOnce(() => new Promise((r) => (finishPut = r)));
+    await signIn();
+    act(() => useVoiceStore.getState().save(MIC)); // pending
+    const sending = sendPendingVoice();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    await confirmRemove();
+    await flush();
+    expect(decide.putVoiceProfile).toHaveBeenCalledTimes(1);
+    expect(decide.deleteVoiceProfile).not.toHaveBeenCalled();
+    await act(async () => {
+      finishPut({});
+      await sending;
+    });
+    await waitFor(() => expect(decide.deleteVoiceProfile).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(useVoiceStore.getState().profile).toBeNull());
+  });
+
+  it('remove: a flush while the DELETE runs never re-sends a profile whose upload had failed', async () => {
+    let finishDelete: (v: unknown) => void = () => {};
+    m(decide.deleteVoiceProfile).mockImplementationOnce(() => new Promise((r) => (finishDelete = r)));
+    m(decide.putVoiceProfile).mockRejectedValue(new Error('offline')); // every upload fails until the remove
+    act(() => useVoiceStore.getState().save(MIC)); // pending
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    await confirmRemove();
+    await waitFor(() => expect(decide.deleteVoiceProfile).toHaveBeenCalledTimes(1));
+    m(decide.putVoiceProfile).mockClear();
+    await act(async () => {
+      await sendPendingVoice(); // foreground / reconnect / Discover mount
+    });
+    expect(decide.putVoiceProfile).not.toHaveBeenCalled();
+    await act(async () => finishDelete(undefined));
+    await waitFor(() => expect(useVoiceStore.getState().profile).toBeNull());
+    m(decide.putVoiceProfile).mockResolvedValue({});
+  });
+
+  it('remove fails: an unsent profile goes back to waiting for its upload', async () => {
+    m(decide.deleteVoiceProfile).mockRejectedValueOnce(new Error('offline'));
+    m(decide.putVoiceProfile).mockRejectedValue(new Error('offline'));
+    act(() => useVoiceStore.getState().save(MIC)); // pending: its upload keeps failing
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    await confirmRemove();
+    expect(await screen.findByTestId('voice-remove-error')).toBeTruthy();
+    expect(useVoiceStore.getState()).toMatchObject({ pending: true, profile: expect.objectContaining({ measuredAt: MIC.measuredAt }) });
+    m(decide.putVoiceProfile).mockResolvedValue({});
+  });
+
+  it('remove asks first: Cancel keeps everything', async () => {
+    act(() => useVoiceStore.getState().adopt(MIC));
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    const alert = Alert.alert as jest.Mock;
+    expect(alert).toHaveBeenCalledTimes(1);
+    expect(alert.mock.calls[0][0]).toBe('Remove your voice?');
+    const buttons = alert.mock.calls[0][2] as { text: string; style?: string; onPress?: () => void }[];
+    expect(buttons.map((b) => b.text)).toEqual(['Cancel', 'Remove']);
+    buttons[0]!.onPress?.();
+    await flush();
+    expect(decide.deleteVoiceProfile).not.toHaveBeenCalled();
+    expect(useVoiceStore.getState().profile).not.toBeNull();
+  });
+
+  it('remove fails: says so and keeps the profile', async () => {
+    m(decide.deleteVoiceProfile).mockRejectedValueOnce(new Error('offline'));
+    act(() => useVoiceStore.getState().adopt(MIC));
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('voice-remove'));
+    await confirmRemove();
+    expect(await screen.findByTestId('voice-remove-error')).toBeTruthy();
+    expect(useVoiceStore.getState().profile).not.toBeNull();
   });
 });

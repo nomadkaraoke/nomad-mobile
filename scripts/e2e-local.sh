@@ -11,14 +11,18 @@
 #                                     # a screenshot-only flow (maestro/screens/<name>.yaml) with the app in that
 #                                     # language (default en); shots go to docs/screenshots/phase2/review/<platform>/<locale>
 #                                     # (discover-* screens: docs/screenshots/phase3a/<platform>/<locale>;
-#                                     # tonight-* screens: docs/screenshots/phase5/<platform>/<locale>)
+#                                     # tonight-* screens: docs/screenshots/phase5/<platform>/<locale>;
+#                                     # voice-* / fit-* screens: docs/screenshots/phase3c/<platform>/<locale>)
+#   scripts/e2e-local.sh --platform ios voice-           # the vocal range flows (voice-1…3, Phase 3c)
+#   scripts/e2e-local.sh --platform ios --skip tonight   # every flow except those whose name contains "tonight"
 #   scripts/e2e-local.sh --platform ios tonight          # the Tonight flows (tonight-1…11)
 #
 # Env: GEN_DIR (gen checkout with scripts/local-stack.sh, at least v0.278.2 plus the fake match judge; default
 #      ../karaoke-gen, the main clone: pull it first, or point GEN_DIR at a gen worktree with the code you want),
 #      DECIDE_DIR (decide checkout with scripts/local-stack.sh, the main API + search stack; default
 #      ../karaoke-decide-phase3-discover while that branch is unmerged and the worktree exists, else
-#      ../karaoke-decide), DECIDE_GEN_PARTNER_SECRET (shared by both stacks so decide's
+#      ../karaoke-decide; the voice flows need decide with the vocal range fixtures and /api/test/voice/*, v0.25+),
+#      DECIDE_GEN_PARTNER_SECRET (shared by both stacks so decide's
 #      /resolve reaches gen; default local-stack-secret), KJBOX_DIR (kjbox checkout with
 #      kj-controller/scripts/local-stack.sh; default ../kjbox; only used when the run has Tonight flows; reset fresh every such run unless KJBOX_KEEP=1), IOS_DEVICE (simulator name or UDID; default
 #      "iPhone 17 Pro"), ANDROID_SERIAL (default emulator-5554), METRO_PORT (default 8081), DECIDE_PORT / SEARCH_PORT
@@ -34,6 +38,9 @@
 # Metro is the exception on Android: the dev launcher loads it from 10.0.2.2:$METRO_PORT (maestro/common/launch.yaml).
 # If adb reports "device offline" mid-run (it wipes the reverse rules), give the AVD more RAM and -gpu host
 # (see CLAUDE.md § E2E).
+#
+# Metro bundles with EXPO_PUBLIC_FAKE_MIC=baritone-scale: the voice test hears a bundled synthetic singer instead of
+# the mic (honoured only against a local gen host), so voice-1 and the voice tour measure a baritone.
 #
 # Flows tagged `force-offline` (search-4) need a bundle built with EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1, so they
 # run after the others, on a Metro restarted with it (only when this script started Metro itself). Flows tagged
@@ -66,6 +73,7 @@ KJBOX_APP="$KJBOX/sing"
 MAESTRO="${MAESTRO:-$(command -v maestro || echo "$HOME/.maestro/bin/maestro")}"
 PLATFORM=""
 FILTER=""
+SKIP=""
 LOCALE=""
 SCREEN=""
 
@@ -74,11 +82,26 @@ while [[ $# -gt 0 ]]; do
     --platform) PLATFORM="$2"; shift 2 ;;
     --locale) LOCALE="$2"; shift 2 ;;
     --screen) SCREEN="$2"; shift 2 ;;
+    --skip) SKIP="$2"; shift 2 ;;
     -h|--help) sed -n '2,44p' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
 [[ "$PLATFORM" == ios || "$PLATFORM" == android ]] || { echo "usage: $0 --platform ios|android [flow-filter]" >&2; exit 2; }
+
+# The suite's flow files: those whose name contains FILTER (all when empty), minus those whose name contains SKIP
+# (--skip tonight: a full run without ../kjbox).
+list_flows() {
+  # Match FILTER and SKIP against the file name only: a checkout path containing the term mustn't select or drop
+  # every flow.
+  local f name
+  for f in "$ROOT"/maestro/flows/*.yaml; do
+    name="${f##*/}"
+    [[ -n "$FILTER" && "$name" != *"$FILTER"* ]] && continue
+    [[ -n "$SKIP" && "$name" == *"$SKIP"* ]] && continue
+    echo "$f"
+  done
+}
 
 # kjbox (and the stack-control helper) only when this run has Tonight flows: a flow tagged `tonight` among the
 # filtered ones, or a tonight* screen tour. Make / Search / Review / Discover runs don't need ../kjbox.
@@ -87,7 +110,7 @@ needs_kjbox() {
   local f
   while IFS= read -r f; do
     grep -qE '^\s*-\s*tonight\s*$' "$f" && return 0
-  done < <(ls "$ROOT"/maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } || true)
+  done < <(list_flows)
   return 1
 }
 NEED_KJBOX=0
@@ -106,12 +129,29 @@ curl -sf -m 5 -o /dev/null "$WEB" || echo "warning: gen web isn't answering on $
 # 2. decide's local stack: the main API (:8030, fixture catalog, /api/test/*) on gen's Firestore emulator, so gen
 #    sessions validate there, and the search service (:8020, fixture song index; its offline-list URL is on
 #    127.0.0.1 too). `up` is idempotent.
+echo "decide checkout: $DECIDE_DIR (DECIDE_DIR; used when its local stack has to be started)"
 if ! curl -sf -m 3 "$SEARCH/api/search/ready" >/dev/null || ! curl -sf -m 3 "$DECIDE/api/ready" >/dev/null; then
   echo "Starting decide's local stack from $DECIDE_DIR"
   (cd "$DECIDE_DIR" && GEN_API_URL="$STACK" DECIDE_LOCAL_PORT="$DECIDE_PORT" SEARCH_LOCAL_PORT="$SEARCH_PORT" scripts/local-stack.sh up)
 fi
 curl -sf -m 5 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@example.com"}' \
   "$DECIDE/api/test/profile/reset" || { echo "decide at $DECIDE has no /api/test (DECIDE_TEST_API off?)" >&2; exit 1; }
+# The vocal range flows and tours (voice-*, fit-*) need decide >= v0.25: the vr_* fixture catalog and
+# /api/test/voice/seed. An empty body is a 422 when the route exists; an older decide answers 404.
+needs_voice() {
+  if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; return; fi
+  # The selected flow files (FILTER minus --skip), like needs_kjbox: `--skip voice` needs no voice routes.
+  list_flows | grep -qE '/(voice|fit)[^/]*\.yaml$'
+}
+if needs_voice; then
+  code="$(curl -s -m 5 -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' \
+    "$DECIDE/api/test/voice/seed")"
+  [[ "$code" == 422 ]] || {
+    echo "decide at $DECIDE has no /api/test/voice/seed (HTTP $code; older than v0.25?). The voice flows need decide with the vocal" \
+      "range fixtures: restart its local stack from an up-to-date checkout (DECIDE_DIR=$DECIDE_DIR)." >&2
+    exit 1
+  }
+fi
 
 # 2b. kjbox's local stack (:8040): the real singer API (v1) on the fixture night, event code 2121, with
 #     /sing/api/test/*. It verifies app tokens against gen (:8010) and sends sung songs to decide (:8030), so it
@@ -195,7 +235,7 @@ start_metro() {
   # (e.g. +native-intent) need a fresh route context.
   (cd "$ROOT/apps/mobile" && exec env EXPO_PUBLIC_GEN_API_URL="$STACK" EXPO_PUBLIC_GEN_WEB_URL="$WEB" \
     EXPO_PUBLIC_DECIDE_API_URL="$DECIDE" EXPO_PUBLIC_DECIDE_SEARCH_URL="$SEARCH" EXPO_PUBLIC_KJBOX_API_URL="$KJBOX_APP" \
-    EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 CI=1 "$@" \
+    EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 EXPO_PUBLIC_FAKE_MIC=baritone-scale CI=1 "$@" \
     npx expo start --dev-client --port "$METRO_PORT" --clear) >"$METRO_LOG" 2>&1 &
   METRO_PID=$!
   local deadline=$((SECONDS + 120))
@@ -230,9 +270,11 @@ REVIEW_SHOTS="docs/screenshots/phase2/$PLATFORM"
 DISCOVER_SHOTS="docs/screenshots/phase3a/$PLATFORM"
 TONIGHT_SHOTS="docs/screenshots/phase5/$PLATFORM"
 SHOTS3B="docs/screenshots/phase3b/$PLATFORM"
-mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B"
+# Vocal range (voice-*, Phase 3c).
+VOICE_SHOTS="docs/screenshots/phase3c/$PLATFORM"
+mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B" "$VOICE_SHOTS"
 ALL=()
-while IFS= read -r f; do ALL+=("$f"); done < <(ls maestro/flows/*.yaml | { if [[ -n "$FILTER" ]]; then grep -F "$FILTER"; else cat; fi; } || true)
+while IFS= read -r f; do ALL+=("maestro/flows/${f##*/}"); done < <(list_flows)
 [[ ${#ALL[@]} -gt 0 ]] || { echo "no flow matches $FILTER" >&2; exit 2; }
 # The connect flows pick a screenshot and a Spotify export zip from the device: write the zip, push both.
 if printf '%s\n' "${ALL[@]}" | grep -q '/connect-'; then
@@ -298,7 +340,8 @@ run_hebrew() {
 run_flows() {
   "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" \
     -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
-    -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" "$@"
+    -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" \
+    -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" "$@"
 }
 status=0
 
@@ -309,12 +352,16 @@ if [[ -n "$SCREEN" ]]; then
   lang="${LOCALE:-en}"
   if [[ "$SCREEN" == discover* ]]; then TOUR_SHOTS="$DISCOVER_SHOTS/$lang"
   elif [[ "$SCREEN" == tonight* ]]; then TOUR_SHOTS="$TONIGHT_SHOTS/$lang"
+  elif [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; then TOUR_SHOTS="$VOICE_SHOTS/$lang"
   else TOUR_SHOTS="docs/screenshots/phase2/review/$PLATFORM/$lang"; fi
   mkdir -p "$TOUR_SHOTS"
   metro_up || start_metro
   point_dev_client
   set_app_locale "$lang"
   # SHOT: the name prefix long-title.yaml gives its shots (in ${SHOTS}).
+  # The voice and fit tours write to ${VOICE_SHOTS} / ${FIT_SHOTS} (run_flows passes both from VOICE_SHOTS): the
+  # locale's folder for a tour, the platform's folder for the flows.
+  if [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; then VOICE_SHOTS="$TOUR_SHOTS"; fi
   run_flows -e LOCALE="$lang" -e TOUR_SHOTS="$TOUR_SHOTS" -e SHOT="ux-$lang" "maestro/screens/$SCREEN.yaml" || status=$?
   set_app_locale ""
   exit "$status"
@@ -323,7 +370,7 @@ fi
 # out on iOS, which drops the picks the phone kept).
 if metro_up; then
   echo "Using the Metro already on :$METRO_PORT (it must have EXPO_PUBLIC_GEN_API_URL=$STACK, EXPO_PUBLIC_DECIDE_API_URL=$DECIDE," \
-    "EXPO_PUBLIC_DECIDE_SEARCH_URL=$SEARCH, EXPO_PUBLIC_KJBOX_API_URL=$KJBOX_APP and EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1; the force-offline flows also need" \
+    "EXPO_PUBLIC_DECIDE_SEARCH_URL=$SEARCH, EXPO_PUBLIC_KJBOX_API_URL=$KJBOX_APP, EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 and EXPO_PUBLIC_FAKE_MIC=baritone-scale; the force-offline flows also need" \
     "EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1)"
   point_dev_client
   if [[ ${#ONLINE[@]} -gt 0 ]]; then run_flows "${ONLINE[@]}" || status=$?; fi

@@ -12,6 +12,7 @@ import { Linking, View } from 'react-native';
 import { useAuth } from '../auth/store';
 import { logEvent } from '../find/searchSession';
 import { EMPTY_DRAFT, useMakeIntent } from '../make/intentStore';
+import { profileFromSelfReport, useVoiceStore } from '../voice/voiceStore';
 import { session } from '../test-utils/genAuthMock';
 import { signInRoutes } from '../test-utils/signInRoutes';
 
@@ -20,6 +21,7 @@ jest.mock('@nomad/api-decide', () => ({
   popularSongs: jest.fn(async () => []),
   pingSearch: jest.fn(async () => true),
   getSongDetail: jest.fn(),
+  getSongVocalRange: jest.fn(),
   logSearchEvent: jest.fn(async () => {}),
   configureClient: jest.fn(),
 }));
@@ -40,6 +42,7 @@ jest.mock('@react-native-community/netinfo', () => {
 });
 
 const getSongDetail = decide.getSongDetail as jest.Mock;
+const getSongVocalRange = decide.getSongVocalRange as jest.Mock;
 const log = logEvent as jest.Mock;
 
 const raw = new Database(path.join(__dirname, '../../../../packages/core/src/search/__fixtures__/offline_fixture.db'), {
@@ -71,6 +74,8 @@ beforeEach(async () => {
   mockReader = null;
   mockConnected = true;
   getSongDetail.mockResolvedValue(detail([version(0), version(1, 'commercial', false)]));
+  getSongVocalRange.mockResolvedValue({ song_key: 'muse|starlight', range: null });
+  useVoiceStore.getState().clear();
 });
 
 describe('a song (online: decide getSongDetail)', () => {
@@ -299,5 +304,83 @@ describe('make any song (/song/new)', () => {
     renderRouter(routes(), { initialUrl: KEY_URL });
     await screen.findByText('Starlight');
     expect(useMakeIntent.getState().draft).toEqual(EMPTY_DRAFT);
+  });
+});
+
+describe('vocal fit (Phase 3c)', () => {
+  const baritone = () => useVoiceStore.getState().save(profileFromSelfReport('baritone', '2026-10-22T10:00:00Z'));
+  const range = (over: Partial<decide.SongVocalRangeOut> = {}): decide.SongVocalRangeOut => ({
+    low: 47, high: 66, p10: 51, p50: 57, p90: 63, tier: 'measured', octave_confidence: null, is_duet: false, ...over,
+  });
+
+  it('online: decide\'s range, the fit badge and the tier line', async () => {
+    baritone();
+    getSongVocalRange.mockResolvedValue({ song_key: 'muse|starlight', range: range() });
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByTestId('fit-badge-song')).toHaveTextContent('Fits your voice');
+    expect(screen.getByTestId('fit-tier')).toHaveTextContent('Range measured from the recording');
+    expect(getSongVocalRange).toHaveBeenCalledWith('muse|starlight');
+  });
+
+  it('online with a rough range (decide stores the artist fallback per song): says it is a guess', async () => {
+    baritone();
+    getSongVocalRange.mockResolvedValue({ song_key: 'muse|starlight', range: range({ tier: 'rough', low: 30, high: 50, p10: 33, p50: 40, p90: 47 }) });
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByTestId('fit-tier')).toHaveTextContent('Rough guess from the artist');
+    expect(screen.getByTestId('fit-badge-song')).toHaveTextContent(/Fits an octave up|key/);
+  });
+
+  it('force-offline: the offline list\'s range (offlineVocalRange) gives the badge and the tier line', async () => {
+    baritone();
+    mockConnected = false;
+    mockReader = fixtureReader;
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByTestId('fit-tier')).toHaveTextContent('Range measured from the recording');
+    expect(screen.getByTestId('fit-badge-song')).toBeTruthy();
+    expect(getSongVocalRange).not.toHaveBeenCalled();
+  });
+
+  it('offline, a song with no range but an artist row: the rough guess', async () => {
+    baritone();
+    mockConnected = false;
+    mockReader = fixtureReader;
+    renderRouter(routes(), { initialUrl: `/song/${encodeURIComponent('muse|hysteria')}` });
+    expect(await screen.findByTestId('fit-tier')).toHaveTextContent('Rough guess from the artist');
+  });
+
+  it('offline, no range data at all: no badge and no tier line', async () => {
+    baritone();
+    mockConnected = false;
+    mockReader = fixtureReader;
+    renderRouter(routes(), { initialUrl: `/song/${encodeURIComponent('toto|africa')}` });
+    expect(await screen.findByText('Africa')).toBeTruthy();
+    expect(screen.queryByTestId('fit-badge-song')).toBeNull();
+    expect(screen.queryByTestId('fit-tier')).toBeNull();
+  });
+
+  it('decide unreachable: falls back to the offline list\'s range', async () => {
+    baritone();
+    mockReader = fixtureReader;
+    getSongVocalRange.mockRejectedValue({ status: 0 });
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByTestId('fit-tier')).toHaveTextContent('Range measured from the recording');
+  });
+
+  it('a song outside the range: no badge, no tier line', async () => {
+    baritone();
+    getSongVocalRange.mockResolvedValue({ song_key: 'muse|starlight', range: range({ low: 70, high: 96, p10: 75, p50: 85, p90: 93 }) });
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByText('Starlight')).toBeTruthy();
+    await waitFor(() => expect(getSongVocalRange).toHaveBeenCalled());
+    expect(screen.queryByTestId('fit-badge-song')).toBeNull();
+    expect(screen.queryByTestId('fit-tier')).toBeNull();
+  });
+
+  it('no voice profile on the phone but a range: offers the voice test instead of a badge', async () => {
+    getSongVocalRange.mockResolvedValue({ song_key: 'muse|starlight', range: range() });
+    renderRouter({ ...routes(), 'discover/voice': () => <View testID="voice-stub" /> }, { initialUrl: KEY_URL });
+    fireEvent.press(await screen.findByTestId('fit-song-cta'));
+    expect(await screen.findByTestId('voice-stub')).toBeTruthy();
+    expect(screen.queryByTestId('fit-badge-song')).toBeNull();
   });
 });

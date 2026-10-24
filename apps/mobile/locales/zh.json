@@ -1,0 +1,5 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "允许 Nomad Karaoke 听您唱歌，以便测定您的音域。音频只会保留在您的手机上。"
+  }
+}

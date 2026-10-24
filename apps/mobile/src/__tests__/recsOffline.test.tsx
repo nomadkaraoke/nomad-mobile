@@ -62,6 +62,7 @@ const song = (artist: string, title: string, karafun = false): Song => ({
   },
 });
 const recs = (songs: Song[]): decide.RecommendationsV2Response => ({
+  voice: { has_profile: false, method: null },
   sections: [
     {
       id: 'crowd_pleasers',

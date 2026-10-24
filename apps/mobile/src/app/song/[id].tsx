@@ -18,6 +18,7 @@ import { useOffline } from '../../net/useOffline';
 import { openOfflineReader } from '../../offline/offlineIndex';
 import { useOfflineIndexStore } from '../../offline/offlineIndexStore';
 import { SongTonightAction } from '../../tonight/other/SongTonightAction';
+import { SongFitCard } from '../../voice/SongFitCard';
 
 /** The song from the offline list on this phone, or null (no list, not in it, or a broken file). */
 function offlineDetail(key: string): SongDetail | null {
@@ -191,6 +192,7 @@ function KnownSong({ songKey, also = [] }: { songKey: string; also?: string[] })
             {hasVersions ? t('song.hasKaraoke') : t('song.noKaraoke')}
           </Text>
           <Text variant="muted">{hasVersions ? t('song.hasKaraokeHint') : t('song.noKaraokeHint')}</Text>
+          <SongFitCard songKey={songKey} />
         </View>
         {hasVersions ? <VersionList key={song.song_key} versions={versions} total={versions.length} openUrl={openUrl} /> : null}
       </>

@@ -16,7 +16,8 @@
           "vnd.youtube"
         ],
         "CFBundleDisplayName": "Karaoke",
-        "NSAppleMusicUsageDescription": "Nomad Karaoke reads your Apple Music library and recent plays to pick karaoke songs you'll love singing."
+        "NSAppleMusicUsageDescription": "Nomad Karaoke reads your Apple Music library and recent plays to pick karaoke songs you'll love singing.",
+        "CFBundleAllowMixedLocalizations": true
       }
     },
     "android": {
@@ -58,6 +59,15 @@
         }
       ],
       "expo-video",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to hear you sing so it can measure your vocal range. Audio stays on your phone.",
+          "recordAudioAndroid": true,
+          "enableBackgroundPlayback": false,
+          "enableBackgroundRecording": false
+        }
+      ],
       [
         "expo-sqlite",
         {

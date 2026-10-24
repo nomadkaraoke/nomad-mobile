@@ -1,0 +1,76 @@
+# Vocal range 2 (Phase 3c): the self-report path. Signed in on Discover → "Find songs that fit your voice" → "Pick
+# my voice type instead" → Tenor → Save → decide has a self-reported tenor profile, and Me's "Your voice" says Tenor.
+appId: com.nomadkaraoke.mobile
+name: voice-2-self-report
+tags:
+  - voice
+onFlowComplete:
+  - runFlow: ../common/discover-reset-filters.yaml
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: voice2
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["rock"],"decades":["2000s"],"energy":"high","artists":[{"name":"Muse","affinity":"love"}]}'
+- runFlow: ../common/voice-clear-local.yaml
+- scrollUntilVisible:
+    element:
+      id: "discover-improve-voice"
+    direction: DOWN
+    timeout: 30000
+# The link can count as visible while it still sits under the tab bar: one more scroll reaches the list's end.
+- scroll
+- waitForAnimationToEnd
+- tapOn:
+    id: "discover-improve-voice"
+- extendedWaitUntil:
+    visible:
+      id: "voice-skip"
+    timeout: 15000
+- tapOn:
+    id: "voice-skip"
+- extendedWaitUntil:
+    visible:
+      id: "voice-self-tenor"
+    timeout: 5000
+- tapOn:
+    id: "voice-self-tenor"
+- takeScreenshot: ${VOICE_SHOTS}/voice-2-self-tenor
+- tapOn:
+    id: "voice-self-save"
+- extendedWaitUntil:
+    visible:
+      id: "voice-saved"
+    timeout: 20000
+- takeScreenshot: ${VOICE_SHOTS}/voice-2-saved
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_TYPE: tenor
+      EXPECT_METHOD: self
+- tapOn:
+    id: "voice-close"
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- scrollUntilVisible:
+    element:
+      id: "voice-section-method"
+    direction: DOWN
+    timeout: 15000
+- assertVisible:
+    id: "voice-section-type"
+    text: ".*Tenor.*"
+- takeScreenshot: ${VOICE_SHOTS}/voice-2-me
+- tapOn: "Back|Navigate up"
+- tapOn:
+    id: "tab-discover"

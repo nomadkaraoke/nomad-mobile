@@ -102,6 +102,12 @@ onFlowComplete:
 - takeScreenshot: ${TOUR_SHOTS}/tour-06-sheet-decade
 - tapOn:
     id: "filter-sheet-decade-close"
+# Mood, Energy and More sit past the edge (Singable leads the row since Phase 3c): one swipe of the chip row
+# before Mood, another before More.
+- runFlow:
+    file: ../common/filter-bar-scroll.yaml
+    env:
+      LOCALE: ${LOCALE}
 - tapOn:
     id: "filter-chip-mood"
 - extendedWaitUntil:
@@ -111,25 +117,6 @@ onFlowComplete:
 - takeScreenshot: ${TOUR_SHOTS}/tour-07-sheet-mood
 - tapOn:
     id: "filter-sheet-mood-close"
-# Energy and More sit past the edge: scroll the chip row (towards the start edge under RTL).
-- runFlow:
-    when:
-      true: ${LOCALE != 'ar' && LOCALE != 'he'}
-    commands:
-      - swipe:
-          from:
-            id: "filter-bar"
-          direction: LEFT
-- runFlow:
-    when:
-      true: ${LOCALE == 'ar' || LOCALE == 'he'}
-    commands:
-      - swipe:
-          from:
-            id: "filter-bar"
-          direction: RIGHT
-- waitForAnimationToEnd:
-    timeout: 3000
 - tapOn:
     id: "filter-chip-energy"
 - extendedWaitUntil:
@@ -139,6 +126,10 @@ onFlowComplete:
 - takeScreenshot: ${TOUR_SHOTS}/tour-08-sheet-energy
 - tapOn:
     id: "filter-sheet-energy-close"
+- runFlow:
+    file: ../common/filter-bar-scroll.yaml
+    env:
+      LOCALE: ${LOCALE}
 - tapOn:
     id: "filter-chip-more"
 - extendedWaitUntil:
