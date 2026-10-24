@@ -48,3 +48,11 @@ it('a leading glyph shows before the label, hidden from accessibility; accessibi
   expect(screen.getByTestId('chip-leading-g', { includeHiddenElements: true })).toHaveTextContent('+');
   expect(screen.getByText('Singable')).toBeTruthy();
 });
+
+it('the leading glyph switches to the on-primary colour when selected, so it stays visible on the filled chip', () => {
+  const { rerender } = render(<Chip testID="g" label="Singable" leading="+" selected={false} onPress={jest.fn()} />);
+  const glyph = () => screen.getByTestId('chip-leading-g', { includeHiddenElements: true }).props.className as string;
+  expect(glyph()).toMatch(/\btext-primary\b(?!-)/);
+  rerender(<Chip testID="g" label="Singable" leading="+" selected onPress={jest.fn()} />);
+  expect(glyph()).toContain('text-primary-fg');
+});

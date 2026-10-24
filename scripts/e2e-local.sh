@@ -133,7 +133,8 @@ curl -sf -m 5 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"ema
 # /api/test/voice/seed. An empty body is a 422 when the route exists; an older decide answers 404.
 needs_voice() {
   if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; return; fi
-  [[ -z "$FILTER" || "$FILTER" == *voice* || "$FILTER" == *fit* ]]
+  # The selected flow files (FILTER minus --skip), like needs_kjbox: `--skip voice` needs no voice routes.
+  list_flows | grep -qE '/(voice|fit)[^/]*\.yaml$'
 }
 if needs_voice; then
   code="$(curl -s -m 5 -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' \

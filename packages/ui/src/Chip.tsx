@@ -34,7 +34,7 @@ export function Chip({ label, selected, onPress, testID, accessibilityHint, acce
           testID={`chip-leading-${testID}`}
           importantForAccessibility="no"
           accessibilityElementsHidden
-          className="text-base font-bold text-primary"
+          className={`text-base font-bold ${selected ? 'text-primary-fg' : 'text-primary'}`}
         >
           {leading}
         </Text>
