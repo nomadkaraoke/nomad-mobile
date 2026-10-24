@@ -13,7 +13,6 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import { createFramer } from '../../voice/framer';
 import type { PitchSource } from '../../voice/pitchSource';
-import { stopSourceQuietly } from '../stopSource';
 import { AAC_RECORDING_OPTIONS, createAacSink, type AacSink } from './aacSink';
 import { deleteFileQuietly, WAV_DIR_NAME } from './files';
 import { createWavSink, type WavSink } from './wavSink';
@@ -109,7 +108,7 @@ export function useSongRecorder(
       // Stopped while start() awaited: stop the stream unless a newer run owns the source.
       const abandoned = () => {
         if (!r.stopped) return false;
-        if (run.current === null) stopSourceQuietly(source);
+        if (run.current === null) source.stop();
         return true;
       };
 
@@ -130,7 +129,7 @@ export function useSongRecorder(
       } catch (e) {
         r.stopped = true;
         if (run.current === r) run.current = null;
-        stopSourceQuietly(source);
+        source.stop();
         r.wav?.abort();
         throw e;
       }
@@ -177,7 +176,7 @@ export function useSongRecorder(
           }
         }
       }
-      stopSourceQuietly(source);
+      source.stop();
       if (r.wav) {
         try {
           const f = await r.wav.finish();
@@ -201,7 +200,7 @@ export function useSongRecorder(
       if (!r) return;
       run.current = null;
       r.stopped = true;
-      stopSourceQuietly(source);
+      source.stop();
       r.wav?.abort();
       void r.aac?.discard().catch(() => {});
     },

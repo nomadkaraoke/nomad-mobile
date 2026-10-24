@@ -38,7 +38,6 @@ jest.mock('../player/notifications', () => ({
   ensureLocalPermission: jest.fn(async () => true),
   scheduleBackNotification: jest.fn(async () => 'back-id'),
   cancelBackNotification: jest.fn(async () => {}),
-  useNotificationOpens: jest.fn(),
 }));
 const N = notifications as jest.Mocked<typeof notifications>;
 

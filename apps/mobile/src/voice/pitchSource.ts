@@ -13,5 +13,9 @@ export interface PitchSource {
   /** The current permission without ever prompting (undetermined reads as 'denied'). */
   checkPermission(): Promise<MicPermission>;
   start(onBuffer: (b: PcmBuffer) => void, section: VoiceSection): Promise<void>;
+  /**
+   * Never throws: it can run from unmount cleanups and timers after expo-audio has released the native stream (the mic
+   * source drops ERR_USING_RELEASED_SHARED_OBJECT itself, 3c 8d913d6), and a throw there closes the release app.
+   */
   stop(): void;
 }

@@ -93,6 +93,21 @@ it('unmount does not throw when expo-audio already released the stream', () => {
   expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith(AFTER);
 });
 
+it('stop() after the release (a voice-session timer or child cleanup, Phase 3d) never throws, so callers need no guard', () => {
+  const released = () => {
+    throw Object.assign(new Error('Cannot use shared object that was already released'), {
+      code: 'ERR_USING_RELEASED_SHARED_OBJECT',
+    });
+  };
+  const { result, unmount } = renderHook(() => useMicPitchSource());
+  const source = result.current;
+  mocked.__stream.stop.mockImplementation(released);
+  unmount();
+  expect(() => source.stop()).not.toThrow();
+  expect(() => source.stop()).not.toThrow();
+  mocked.__stream.stop.mockReset();
+});
+
 it('drops buffers after stop', async () => {
   const { result } = renderHook(() => useMicPitchSource());
   const got: unknown[] = [];

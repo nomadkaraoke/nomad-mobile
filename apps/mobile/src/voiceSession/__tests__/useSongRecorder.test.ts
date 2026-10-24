@@ -418,31 +418,4 @@ describe('useSongRecorder', () => {
     expect(source.stop).toHaveBeenCalled();
     expect(fsState.files.size).toBe(0);
   });
-
-  it('unmount after the mic stream was released (stop throws) does not throw and still discards the take', async () => {
-    const { source, emit } = fakeSource('fake');
-    const { result, unmount } = renderHook(() => useSongRecorder(source, { record: true, floor: 0.003 }));
-    await act(() => result.current.start());
-    act(() => emit(220, 1));
-    source.stop.mockImplementation(() => {
-      throw Object.assign(new Error('released'), { code: 'ERR_USING_RELEASED_SHARED_OBJECT' });
-    });
-    expect(() => unmount()).not.toThrow();
-    expect(fsState.files.size).toBe(0);
-  });
-
-  it('stop() resolves the take when the mic stream was already released', async () => {
-    const { source, emit } = fakeSource('fake');
-    const { result } = renderHook(() => useSongRecorder(source, { record: true, floor: 0.003 }));
-    await act(() => result.current.start());
-    act(() => emit(220, 6));
-    source.stop.mockImplementation(() => {
-      throw Object.assign(new Error('released'), { code: 'ERR_USING_RELEASED_SHARED_OBJECT' });
-    });
-    let out: Awaited<ReturnType<typeof result.current.stop>> | null = null;
-    await act(async () => {
-      out = await result.current.stop();
-    });
-    expect(out!.file?.contentType).toBe('audio/wav');
-  });
 });

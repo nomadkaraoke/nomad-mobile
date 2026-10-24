@@ -1,5 +1,5 @@
-// Voice session "Done singing?" local notification (Phase 3d D3). expo-notifications isn't a dependency on this
-// branch yet (3b adds it), so the module is mocked as virtual here and notifications.ts loads it optionally.
+// Voice session "Done singing?" local notification (Phase 3d D3), on 3b's expo-notifications. A tap is routed by 3b's
+// useReminderTapRouting (data.url), not by a listener of our own.
 import { renderHook } from '@testing-library/react-native';
 
 type Listener = (r: unknown) => void;
@@ -16,7 +16,7 @@ const mockN = {
   SchedulableTriggerInputTypes: { TIME_INTERVAL: 'timeInterval' },
 };
 
-jest.mock('expo-notifications', () => mockN, { virtual: true });
+jest.mock('expo-notifications', () => mockN);
 const mockPush = jest.fn();
 jest.mock('expo-router', () => ({ router: { push: mockPush } }));
 
@@ -85,32 +85,14 @@ describe('cancelBackNotification', () => {
   });
 });
 
-describe('useNotificationOpens', () => {
-  it('notification tap opens the quiz (route push) while the app runs', () => {
-    let listener: Listener = () => {};
-    const remove = jest.fn();
-    mockN.addNotificationResponseReceivedListener.mockImplementationOnce((l) => ((listener = l), { remove }));
-    const { unmount } = renderHook(() => load().useNotificationOpens());
-    listener(response('/discover/voice-session'));
-    expect(mockPush).toHaveBeenCalledWith('/discover/voice-session');
-    unmount();
-    expect(remove).toHaveBeenCalled();
-  });
-
-  it('routes the tap that launched the app, once', () => {
-    mockN.getLastNotificationResponse.mockReturnValueOnce(response('/discover/voice-session'));
-    renderHook(() => load().useNotificationOpens());
-    expect(mockN.clearLastNotificationResponse).toHaveBeenCalled();
-    expect(mockPush).toHaveBeenCalledTimes(1);
-    expect(mockPush).toHaveBeenCalledWith('/discover/voice-session');
-  });
-
-  it('ignores a notification without an in-app path', () => {
+describe("3b's useReminderTapRouting", () => {
+  it('opens the voice session from a tapped "Done singing?" notification (the single tap router)', () => {
     let listener: Listener = () => {};
     mockN.addNotificationResponseReceivedListener.mockImplementationOnce((l) => ((listener = l), { remove: jest.fn() }));
-    renderHook(() => load().useNotificationOpens());
-    listener(response('https://evil.example'));
-    listener(response(undefined));
-    expect(mockPush).not.toHaveBeenCalled();
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- loaded after the mocks are set up
+    const { useReminderTapRouting } = require('../../discover/connect/reminders') as typeof import('../../discover/connect/reminders');
+    renderHook(() => useReminderTapRouting());
+    listener(response(load().VOICE_SESSION_URL));
+    expect(mockPush).toHaveBeenCalledWith('/discover/voice-session');
   });
 });
