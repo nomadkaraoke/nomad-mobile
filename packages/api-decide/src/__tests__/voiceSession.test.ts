@@ -150,29 +150,37 @@ describe('session facades', () => {
 });
 
 describe('recordings', () => {
-  const ARGS = { sessionId: 's1', attemptN: 3, durationS: 12.5, device: 'Pixel 9', fileUri: 'file:///rec/3.m4a', contentType: 'audio/mp4' } as const;
+  const BYTES = new Uint8Array([82, 73, 70, 70]);
+  const file = { bytes: jest.fn(async () => BYTES) };
+  const ARGS = { sessionId: 's1', attemptN: 3, durationS: 12.5, device: 'Pixel 9', file, contentType: 'audio/mp4' } as const;
 
-  it('voiceRecordingForm: the RN file part plus the four fields', () => {
+  it('voiceRecordingForm: a bytes() file part (what expo/fetch sends) plus the four fields', async () => {
     const append = jest.spyOn(FormData.prototype, 'append');
     try {
       voiceRecordingForm(ARGS);
-      expect(append.mock.calls).toEqual([
-        ['file', { uri: 'file:///rec/3.m4a', name: '3.m4a', type: 'audio/mp4' }],
+      expect(append.mock.calls.map((c) => c[0])).toEqual(['file', 'session_id', 'attempt_n', 'duration_s', 'device']);
+      expect(append.mock.calls.slice(1)).toEqual([
         ['session_id', 's1'],
         ['attempt_n', '3'],
         ['duration_s', '12.5'],
         ['device', 'Pixel 9'],
       ]);
+      const part = append.mock.calls[0]![1] as unknown as { name: string; type: string; bytes(): Promise<Uint8Array> };
+      // Never React Native's { uri } part: expo/fetch refuses it ("Unsupported FormDataPart implementation").
+      expect(part).not.toHaveProperty('uri');
+      expect(part.name).toBe('3.m4a');
+      expect(part.type).toBe('audio/mp4');
+      await expect(part.bytes()).resolves.toBe(BYTES);
     } finally {
       append.mockRestore();
     }
   });
 
-  it('voiceRecordingForm: a wav file, no device', () => {
+  it('voiceRecordingForm: a wav file keeps decide\'s exact type, no device', () => {
     const append = jest.spyOn(FormData.prototype, 'append');
     try {
-      voiceRecordingForm({ ...ARGS, device: null, contentType: 'audio/wav', fileUri: 'file:///rec/3.wav' });
-      expect(append.mock.calls[0]).toEqual(['file', { uri: 'file:///rec/3.wav', name: '3.wav', type: 'audio/wav' }]);
+      voiceRecordingForm({ ...ARGS, device: null, contentType: 'audio/wav' });
+      expect(append.mock.calls[0]![1]).toMatchObject({ name: '3.wav', type: 'audio/wav' });
       expect(append.mock.calls.map((c) => c[0])).toEqual(['file', 'session_id', 'attempt_n', 'duration_s']);
     } finally {
       append.mockRestore();

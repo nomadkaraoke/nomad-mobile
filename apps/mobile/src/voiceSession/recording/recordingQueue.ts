@@ -163,7 +163,8 @@ export const useRecordingQueue = create<RecordingQueue>((set, get) => {
           attemptN: item.attemptN,
           durationS: item.durationS,
           device: item.device,
-          fileUri: item.uri,
+          // expo/fetch reads the part's bytes() (React Native's { uri } parts fail there before anything is sent).
+          file: new File(item.uri),
           contentType: item.contentType,
         });
         uploaded = true;

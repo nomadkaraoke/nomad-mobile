@@ -78,20 +78,32 @@ export type VoiceRecordingUpload = {
   attemptN: number;
   durationS: number;
   device?: string | null;
-  /** A local `file://` URI (expo-audio's recording). */
-  fileUri: string;
+  /** The take's bytes (on the phone: the expo-file-system `File` of the local recording). */
+  file: RecordingBytes;
   contentType: VoiceRecordingContentType;
 };
 
-const EXT: Record<VoiceRecordingContentType, string> = { 'audio/mp4': 'm4a', 'audio/wav': 'wav' };
+/** Anything that reads a file's bytes, e.g. an expo-file-system `File`. */
+export type RecordingBytes = { bytes(): Promise<Uint8Array> };
 
 /**
- * The multipart body. The file part is React Native's `{uri, name, type}` form-data file (RN's networking streams
- * the file from disk), which the generated serializer would JSON-encode, hence this builder.
+ * The multipart file part: a name, the exact content type decide accepts and a `bytes()` reader. Expo SDK 57's global
+ * fetch (expo/fetch) sends any part with `bytes()` and takes its `name` / `type` for the part's headers; React Native's
+ * `{ uri, name, type }` parts fail there with "Unsupported FormDataPart implementation" before anything is sent. The
+ * type is set here rather than taken from a `File` (whose type comes from the extension, e.g. `audio/x-wav`).
  */
+export type RecordingFilePart = { readonly name: string; readonly type: VoiceRecordingContentType; bytes(): Promise<Uint8Array> };
+
+const EXT: Record<VoiceRecordingContentType, string> = { 'audio/mp4': 'm4a', 'audio/wav': 'wav' };
+
+/** The multipart body (the generated serializer would JSON-encode the file part, hence this builder). */
 export function voiceRecordingForm(u: VoiceRecordingUpload): FormData {
   const form = new FormData();
-  const file = { uri: u.fileUri, name: `${u.attemptN}.${EXT[u.contentType]}`, type: u.contentType };
+  const file: RecordingFilePart = {
+    name: `${u.attemptN}.${EXT[u.contentType]}`,
+    type: u.contentType,
+    bytes: () => u.file.bytes(),
+  };
   form.append('file', file as unknown as Blob);
   form.append('session_id', u.sessionId);
   form.append('attempt_n', String(u.attemptN));

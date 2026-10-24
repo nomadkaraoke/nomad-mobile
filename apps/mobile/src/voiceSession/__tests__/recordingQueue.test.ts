@@ -68,14 +68,21 @@ describe('recordingQueue', () => {
 
   it('uploads a queued take, then deletes the file and the item', async () => {
     const t = take('s1', 1);
+    // The file part is the take on disk: its bytes are what is sent (read during the upload; the file goes after).
+    let sent: Uint8Array | null = null;
+    mockUpload.mockImplementationOnce(async (u: { file: { bytes(): Promise<Uint8Array> } }) => {
+      sent = await u.file.bytes();
+      return { recording_id: 'r1' };
+    });
     q().enqueue(t);
     await q().flush();
+    expect(sent).toHaveLength(100);
     expect(mockUpload).toHaveBeenCalledWith({
       sessionId: 's1',
       attemptN: 1,
       durationS: 180,
       device: 'iPad15,7',
-      fileUri: t.uri,
+      file: expect.objectContaining({ uri: t.uri }),
       contentType: 'audio/mp4',
     });
     expect(q().items).toEqual([]);
