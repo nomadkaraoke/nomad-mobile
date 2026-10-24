@@ -2,6 +2,8 @@ import { LogBox } from 'react-native';
 
 /** React's dev warning for a state update on a component that hasn't mounted yet (Ruling T). */
 export const NOT_MOUNTED_WARNING = "hasn't mounted yet";
+/** The prefix of the caller-stack line this module logs after that warning. */
+const TRACE_PREFIX = '[Ruling T]';
 
 let installed = false;
 
@@ -20,10 +22,11 @@ export function installDevWarningTrace({ dev, e2e }: { dev: boolean; e2e: boolea
     original(...args);
     const message = args.map((a) => (typeof a === 'string' ? a : '')).join(' ');
     if (message.includes(NOT_MOUNTED_WARNING)) {
-      original(`[Ruling T] state update before mount; caller stack:\n${new Error().stack ?? '(no stack)'}`);
+      original(`${TRACE_PREFIX} state update before mount; caller stack:\n${new Error().stack ?? '(no stack)'}`);
     }
   };
-  if (e2e) LogBox.ignoreLogs([NOT_MOUNTED_WARNING]);
+  // The trace line as well: it doesn't contain the warning's text, so its own toast showed (Android discover-4).
+  if (e2e) LogBox.ignoreLogs([NOT_MOUNTED_WARNING, TRACE_PREFIX]);
 }
 
 /** Tests only: allow installing again. */
