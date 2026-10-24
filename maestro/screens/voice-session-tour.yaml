@@ -32,7 +32,8 @@ name: screens-voice-session-tour
       id: "rec-row-.*-0"
     timeout: 30000
 # scrollUntilVisible missed this row now and then on iOS (the row on screen, its 100% visibility check failing),
-# so scroll to the list's end and wait for it.
+# so scroll until it shows, then once more: a row that only just showed at the bottom edge has its centre under
+# the tab bar, and the tap opened Make instead (full iOS suite).
 - repeat:
     times: 8
     while:
@@ -40,6 +41,7 @@ name: screens-voice-session-tour
         id: "vs-entry-discover"
     commands:
       - scroll
+- scroll
 - extendedWaitUntil:
     visible:
       id: "vs-entry-discover"
