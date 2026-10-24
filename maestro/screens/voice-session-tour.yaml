@@ -101,6 +101,15 @@ name: screens-voice-session-tour
 - takeScreenshot: ${TOUR_SHOTS}/vs-06-quiz
 - tapOn:
     id: "vs-q-feel-loved"
+# Q2 while it is on screen (Next stays off without it).
+- runFlow:
+    when:
+      notVisible:
+        id: "vs-q-position-.*"
+        selected: true
+    commands:
+      - tapOn:
+          id: "vs-q-position-comfortable"
 - scrollUntilVisible:
     element:
       id: "vs-q-version-not_great"
@@ -114,19 +123,6 @@ name: screens-voice-session-tour
     direction: DOWN
     timeout: 10000
 - takeScreenshot: ${TOUR_SHOTS}/vs-07-quiz-end
-- runFlow:
-    when:
-      notVisible:
-        id: "vs-q-position-.*"
-        selected: true
-    commands:
-      - scrollUntilVisible:
-          element:
-            id: "vs-q-position-comfortable"
-          direction: UP
-          timeout: 10000
-      - tapOn:
-          id: "vs-q-position-comfortable"
 - tapOn:
     id: "vs-quiz-next"
 - extendedWaitUntil:
