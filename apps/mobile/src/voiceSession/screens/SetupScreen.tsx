@@ -9,6 +9,7 @@ import { ActivityIndicator, AppState, Linking, View } from 'react-native';
 import type { MicPermission, PitchSource } from '../../voice/pitchSource';
 import { StepLayout } from '../../voice/StepLayout';
 import { measureQuietSecond } from '../quietSecond';
+import { stopSourceQuietly } from '../stopSource';
 import { POSTURES, WARMTHS, type Posture, type Warmth } from '../setupOptions';
 import { ChoiceGroup } from './ChoiceGroup';
 
@@ -55,7 +56,7 @@ export function SetupScreen({ draft, onDraft, source, floor, onFloor, mic, onMic
     live.current = true;
     return () => {
       live.current = false;
-      if (measuring.current) source.stop();
+      if (measuring.current) stopSourceQuietly(source);
     };
   }, [source]);
 

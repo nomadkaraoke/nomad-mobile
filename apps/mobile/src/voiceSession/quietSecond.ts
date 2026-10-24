@@ -2,6 +2,7 @@ import { noiseFloor, type PitchFrame } from '@nomad/core';
 
 import { createFramer, FRAME_SIZE } from '../voice/framer';
 import type { PitchSource } from '../voice/pitchSource';
+import { stopSourceQuietly } from './stopSource';
 
 /** Wall-clock cap: a source that never delivers a full second of audio still ends (with 3c's minimum floor). */
 const QUIET_TIMEOUT_MS = 3000;
@@ -20,7 +21,7 @@ export function measureQuietSecond(source: PitchSource, timeoutMs = QUIET_TIMEOU
       if (done) return;
       done = true;
       clearTimeout(timer);
-      source.stop();
+      stopSourceQuietly(source);
       resolve(noiseFloor(frames));
     };
     const framer = createFramer((f) => {
