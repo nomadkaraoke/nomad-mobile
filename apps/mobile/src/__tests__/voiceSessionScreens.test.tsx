@@ -5,6 +5,7 @@ import { EMPTY_SESSION_QUIZ } from '@nomad/core';
 import { IntlProvider, isolate } from '@nomad/i18n';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { router } from 'expo-router';
 import { renderRouter } from 'expo-router/testing-library';
 import { createRef, type ReactNode } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
@@ -536,6 +537,28 @@ describe('voiceSessionScreens: steps', () => {
     open();
     await screen.findByTestId('vs-result');
     expect(text('vs-result-type')).toBe('Your voice type');
+  });
+
+  it('result: a song closes the session modal first, then opens its page on the root stack (back: Discover)', async () => {
+    mockVs.current = fakeVs({ step: 'result', result: RESULT });
+    const r = renderRouter(appRoutes(), { initialUrl: '/discover' });
+    jest.useRealTimers();
+    await signIn();
+    act(() => router.push('/discover/voice-session'));
+    await screen.findByTestId('vs-result');
+    const dismiss = jest.spyOn(router, 'dismiss');
+    const push = jest.spyOn(router, 'push');
+    await press('vs-result-loved-0');
+    expect(dismiss).toHaveBeenCalledTimes(1);
+    expect(push).toHaveBeenCalledWith({ pathname: '/song/[id]', params: { id: RESULT.loved[0]!.song_key } });
+    expect(dismiss.mock.invocationCallOrder[0]).toBeLessThan(push.mock.invocationCallOrder[0]!);
+    await waitFor(() => expect(r.getPathname()).toBe(`/song/${RESULT.loved[0]!.song_key}`));
+    // The session modal is gone: back from the song page lands on Discover, not on the result.
+    act(() => router.back());
+    await waitFor(() => expect(r.getPathname()).toBe('/discover'));
+    expect(screen.queryByTestId('vs-result')).toBeNull();
+    dismiss.mockRestore();
+    push.mockRestore();
   });
 
   it('result: tapping a suited song opens its song page', async () => {

@@ -54,6 +54,20 @@ const fileExists = (uri: string) => {
   }
 };
 
+/**
+ * Largest take the queue sends (20 MiB). A 4-minute AAC take is about 2–3 MB; a larger file is dropped as terminal
+ * before its bytes are read, since the upload reads the whole file into memory.
+ */
+export const MAX_UPLOAD_BYTES = 20 * 1024 * 1024;
+
+const fileSize = (uri: string): number => {
+  try {
+    return new File(uri).size;
+  } catch {
+    return 0;
+  }
+};
+
 /** Only the queue's own fields, so nothing else (a token, say) is ever persisted. */
 const toItem = (i: QueuedRecording): QueuedRecording => ({
   id: i.id,
@@ -155,6 +169,13 @@ export const useRecordingQueue = create<RecordingQueue>((set, get) => {
       tried.add(item.id);
       if (!fileExists(item.uri)) {
         update(item.id, () => null);
+        continue;
+      }
+      // Never read an oversized take into memory (expo/fetch sends the part's bytes): decide refuses it anyway.
+      const size = fileSize(item.uri);
+      if (size > MAX_UPLOAD_BYTES) {
+        console.warn(`[voice upload] dropped ${item.id}: ${size} bytes is over the ${MAX_UPLOAD_BYTES} limit`);
+        remove(item.id, item.uri);
         continue;
       }
       try {

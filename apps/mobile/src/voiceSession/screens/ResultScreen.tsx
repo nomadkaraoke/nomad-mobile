@@ -14,7 +14,18 @@ const isType = (v: string | null): v is VoiceType => v !== null && TYPES.include
 
 const CONFIDENCE_KEY = { high: 'confidenceHigh', medium: 'confidenceMedium', low: 'confidenceLow' } as const;
 
-const openSong = (id: string) => router.push({ pathname: '/song/[id]', params: { id } });
+/**
+ * A suited or loved song's page. The session is a modal route: pushed from inside it, the song page came up on iOS 26 as
+ * a second sheet with no header or back button (only a swipe down left it). So the modal closes first and the page is
+ * pushed on the root stack, with its normal header and back. The session keeps its result (Done is what resets it), so
+ * Find your voice reopens on it.
+ */
+export function openSongFromResult(id: string): void {
+  if (router.canDismiss()) router.dismiss();
+  router.push({ pathname: '/song/[id]', params: { id } });
+}
+
+const openSong = openSongFromResult;
 
 function SongRow({ testID, title, artist, onPress }: { testID: string; title: string; artist: string; onPress: () => void }) {
   return (

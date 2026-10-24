@@ -30,10 +30,23 @@ const releasedSource = (): PitchSource & { stop: jest.Mock } => ({
 afterEach(() => jest.useRealTimers());
 
 describe('stopping a released mic stream', () => {
-  it('stopSourceQuietly swallows the released-stream error', () => {
+  it('stopSourceQuietly drops the released-stream error silently (matched on its code)', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
     const source = releasedSource();
     expect(() => stopSourceQuietly(source)).not.toThrow();
     expect(source.stop).toHaveBeenCalledTimes(1);
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it('any other stop error is warned, not rethrown', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    // The release message text alone (no code) is not enough to be treated as the release.
+    const other = { stop: jest.fn(() => { throw new Error('Cannot use shared object that was already released'); }) };
+    expect(() => stopSourceQuietly(other)).not.toThrow();
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0]![0]).toMatch(/stopping the mic failed: Error: Cannot use shared object/);
+    warn.mockRestore();
   });
 
   it('the quiet second still resolves when its timeout stops a released stream', async () => {

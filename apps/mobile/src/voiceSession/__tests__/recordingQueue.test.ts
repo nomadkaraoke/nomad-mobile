@@ -5,6 +5,7 @@ import { appStorage } from '../../storage';
 import { fsState } from '../../test-utils/memoryFs';
 import {
   deleteMyRecordings,
+  MAX_UPLOAD_BYTES,
   RECORDING_QUEUE_KEY,
   uploadBackoffMs,
   useFlushRecordingQueue,
@@ -88,6 +89,30 @@ describe('recordingQueue', () => {
     expect(q().items).toEqual([]);
     expect(fsState.files.has(t.uri)).toBe(false);
     expect(appStorage.getString(RECORDING_QUEUE_KEY)).toBeUndefined();
+  });
+
+  it('a take over 20 MiB is dropped as terminal without being read or sent', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const big = take('s1', 3);
+    fsState.files.set(big.uri, new Uint8Array(MAX_UPLOAD_BYTES + 1));
+    const ok = take('s1', 4);
+    q().enqueue(big);
+    q().enqueue(ok);
+    await q().flush();
+    expect(mockUpload).toHaveBeenCalledTimes(1);
+    expect(mockUpload.mock.calls[0][0]).toMatchObject({ attemptN: 4 });
+    expect(q().items).toEqual([]);
+    expect(fsState.files.has(big.uri)).toBe(false);
+    expect(warn).toHaveBeenCalledWith(expect.stringMatching(/dropped s1:3: \d+ bytes is over/));
+    warn.mockRestore();
+  });
+
+  it('a take of exactly 20 MiB is still sent', async () => {
+    const t = take('s1', 5);
+    fsState.files.set(t.uri, new Uint8Array(MAX_UPLOAD_BYTES));
+    q().enqueue(t);
+    await q().flush();
+    expect(mockUpload).toHaveBeenCalledTimes(1);
   });
 
   it('queue survives restart and retries', async () => {

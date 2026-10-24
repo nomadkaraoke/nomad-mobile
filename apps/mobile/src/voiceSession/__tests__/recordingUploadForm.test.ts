@@ -2,6 +2,8 @@
 // React Native's `{ uri, name, type }` file part made it throw "Unsupported FormDataPart implementation" before any
 // request was sent, so no take ever reached decide (found on the simulator in D8).
 import { voiceRecordingForm } from '@nomad/api-decide';
+// On purpose: Expo's private winter modules (convertFormData, FormData), the exact code the app's global fetch runs,
+// are not public API and may move or change. Re-check these imports and this test on every Expo SDK bump.
 import { convertFormDataAsync } from 'expo/src/winter/fetch/convertFormData';
 import { installFormDataPatch } from 'expo/src/winter/FormData';
 
