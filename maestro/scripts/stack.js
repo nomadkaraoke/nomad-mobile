@@ -86,8 +86,10 @@
 //   voice-session-assert: EMAIL (default output.email) -> that user's voice sessions (GET
 //            ${DECIDE_STACK}/api/test/voice/sessions, decide docs/TESTING.md § Voice session), polled until the
 //            expectations hold or WAIT_MS (default 15000) passes: EXPECT_ATTEMPTS (attempts across all sessions),
-//            EXPECT_DONE ("true": some session is done, "false": none is), EXPECT_SESSIONS (how many sessions)
-//            -> output.voiceSessions (JSON)
+//            EXPECT_DONE ("true": some session is done, "false": none is), EXPECT_SESSIONS (how many sessions),
+//            EXPECT_TYPE (the newest session's PRIMARY voice type from decide's GET /api/voice/sessions/{id}/result,
+//            read with TOKEN = setup's output.token; the result screen's "Between X and Y" sorts the two types, so
+//            the UI text can't tell which one is primary) -> output.voiceSessions (JSON), output.voiceType
 //   voice-recordings-count: EMAIL (default output.email), EXPECT_COUNT -> decide's stored take recordings for that
 //            user, polled until it is EXPECT_COUNT or WAIT_MS (default 30000) passes (the app uploads in the
 //            background) -> output.voiceRecordings
@@ -645,6 +647,7 @@
         attempts: envValue(typeof EXPECT_ATTEMPTS !== 'undefined' ? EXPECT_ATTEMPTS : undefined),
         done: envValue(typeof EXPECT_DONE !== 'undefined' ? EXPECT_DONE : undefined),
         sessions: envValue(typeof EXPECT_SESSIONS !== 'undefined' ? EXPECT_SESSIONS : undefined),
+        type: envValue(typeof EXPECT_TYPE !== 'undefined' ? EXPECT_TYPE : undefined),
       };
       const sessions = poll(
         () => check(http.get(decideBase + '/api/test/voice/sessions' + q), 'voice sessions'),
@@ -660,6 +663,21 @@
         'voice sessions',
       );
       output.voiceSessions = JSON.stringify(sessions);
+      if (want.type !== null) {
+        const token = envValue(typeof TOKEN !== 'undefined' ? TOKEN : undefined) || output.token;
+        if (!token) throw new Error('EXPECT_TYPE needs TOKEN (setup output.token)');
+        if (!sessions.length) throw new Error('EXPECT_TYPE: ' + email + ' has no voice session');
+        // The test API lists sessions in creation order (decide ids are random); the flows run one session per user.
+        const sid = sessions[sessions.length - 1].session_id;
+        const r = check(
+          http.get(decideBase + '/api/voice/sessions/' + sid + '/result', { headers: { Authorization: 'Bearer ' + token } }),
+          'voice result',
+        );
+        output.voiceType = String(r.voice_type);
+        if (r.voice_type !== want.type) {
+          throw new Error('voice session ' + sid + ': primary type ' + r.voice_type + ' (between ' + r.between + ', ' + r.confidence_label + '), expected ' + want.type);
+        }
+      }
     } else {
       const expect = envValue(typeof EXPECT_COUNT !== 'undefined' ? EXPECT_COUNT : undefined);
       if (expect === null) throw new Error('ACTION voice-recordings-count needs EXPECT_COUNT');

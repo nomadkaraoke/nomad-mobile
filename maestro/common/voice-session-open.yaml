@@ -8,21 +8,7 @@ appId: com.nomadkaraoke.mobile
       EMAIL: ${EMAIL}
       PROFILE: '{"genres":["pop"]}'
 # The Improve card is last on the picks list; its session row needs decide's voice flags (session_enabled).
-# scrollUntilVisible missed this row now and then on iOS (the row on screen, its 100% visibility check failing),
-# so scroll until it shows, then once more: a row that only just showed at the bottom edge has its centre under
-# the tab bar, and the tap opened Make instead (full iOS suite).
-- repeat:
-    times: 8
-    while:
-      notVisible:
-        id: "vs-entry-discover"
-    commands:
-      - scroll
-- scroll
-- extendedWaitUntil:
-    visible:
-      id: "vs-entry-discover"
-    timeout: 20000
+- runFlow: voice-session-scroll-to-entry.yaml
 - tapOn:
     id: "vs-entry-discover"
 - extendedWaitUntil:

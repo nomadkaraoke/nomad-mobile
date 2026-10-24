@@ -1,6 +1,6 @@
 # Voice session 1 (Phase 3d spec §4, plan Task D8): Discover → Find your voice → setup (record yes, headphones) →
 # three songs on the fake player with the fake mic singing (the quiz's pre-fill shows each time) → Finish → the
-# result says Baritone (decide's fixture voice.db + the fake mic's baritone scale) → decide has 3 attempts and 3
+# result's primary type is Baritone (decide's fixture voice.db + the fake mic's baritone scale) → decide has 3 attempts and 3
 # uploaded take recordings.
 appId: com.nomadkaraoke.mobile
 name: voice-session-1-full
@@ -38,15 +38,18 @@ tags:
     env:
       EXPECT_PREFILL: "true"
 - runFlow: ../common/voice-session-finish.yaml
+# The screen says Baritone ("Likely Baritone" or "Between Baritone and Tenor"); "Between" sorts the two types low to
+# high, so whether Baritone is the PRIMARY type is asserted on decide's result below (EXPECT_TYPE).
 - assertVisible:
     id: "vs-result-type"
-    text: ".*Baritone.*"
+    text: "^(Likely Baritone|Between (Bass and Baritone|Baritone and Tenor))$"
 - takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-1-result
 - runScript:
     file: ../scripts/stack.js
     env:
       ACTION: voice-session-assert
       EXPECT_ATTEMPTS: "3"
+      EXPECT_TYPE: baritone
 - runScript:
     file: ../scripts/stack.js
     env:

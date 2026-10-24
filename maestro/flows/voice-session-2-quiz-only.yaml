@@ -22,6 +22,11 @@ tags:
 - runFlow: ../common/voice-session-song.yaml
 - copyTextFrom:
     id: "vs-pick-title"
+# Regex-escaped (titles hold ( ) . ? and the like; Maestro text matchers are regexes).
+- runScript:
+    file: ../scripts/remember-text.js
+    env:
+      NAME: skipped
 - tapOn:
     id: "vs-pick-dont-know"
 # A different song is offered.
@@ -31,7 +36,7 @@ tags:
     timeout: 30000
 - assertNotVisible:
     id: "vs-pick-title"
-    text: ${maestro.copiedText}
+    text: ${output.skipped}
 - runFlow: ../common/voice-session-song.yaml
 - runFlow: ../common/voice-session-finish.yaml
 - assertVisible:
