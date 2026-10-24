@@ -66,6 +66,17 @@ it('forwards float32 buffers as PcmBuffer and takes channel 0 of interleaved ste
   expect(Array.from(got[0]!.samples).map((v) => Math.round(v * 10) / 10)).toEqual([0.1, 0.2, 0.3]);
 });
 
+it('unmount does not throw when expo-audio already released the stream', () => {
+  mocked.__stream.stop.mockImplementationOnce(() => {
+    throw Object.assign(new Error('Cannot use shared object that was already released'), {
+      code: 'ERR_USING_RELEASED_SHARED_OBJECT',
+    });
+  });
+  const { unmount } = renderHook(() => useMicPitchSource());
+  expect(() => unmount()).not.toThrow();
+  expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith({ allowsRecording: false });
+});
+
 it('drops buffers after stop', async () => {
   const { result } = renderHook(() => useMicPitchSource());
   const got: unknown[] = [];

@@ -27,6 +27,16 @@ export function useMicPitchSource(): PitchSource {
 
   const source = useMemo<PitchSource>(
     () => {
+      // expo-audio releases the native stream in its own unmount cleanup, which runs before ours: stop() on a
+      // released stream throws ERR_USING_RELEASED_SHARED_OBJECT, and a throw in an unmount cleanup closes the
+      // release app (found on a release APK). The release already stopped capture, so the error is safe to drop.
+      const stopStream = () => {
+        try {
+          stream.stop();
+        } catch {
+          // Already released.
+        }
+      };
       const leaveRecordingMode = () => {
         // Fire and forget: leaving recording mode must not block the UI, and a failure here is harmless.
         void setAudioModeAsync({ allowsRecording: false }).catch(() => {});
@@ -35,7 +45,7 @@ export function useMicPitchSource(): PitchSource {
         gen.current++;
         running.current = false;
         sink.current = null;
-        stream.stop();
+        stopStream();
         leaveRecordingMode();
       };
       return {
@@ -53,7 +63,7 @@ export function useMicPitchSource(): PitchSource {
           const stale = () => {
             if (gen.current === mine) return false;
             if (!running.current) {
-              stream.stop();
+              stopStream();
               leaveRecordingMode();
             }
             return true;
