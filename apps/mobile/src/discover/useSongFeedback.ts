@@ -149,9 +149,11 @@ export function useSongFeedback() {
     const key = song.song_key;
     setLoved((s) => new Set(s).add(key));
     // Me's library and saves see this love at once (and Me's un-save un-hearts it here).
-    useLovedOverrides.getState().set(song, true);
+    useLovedOverrides.getState().set(song, true, true);
     const at = useLovedOverrides.getState().byKey[key]?.at;
-    loveSong(key, { artist: song.artist, title: song.title }).catch(() => {
+    loveSong(key, { artist: song.artist, title: song.title })
+      .then(() => useLovedOverrides.getState().release(key, at))
+      .catch(() => {
       useLovedOverrides.getState().unset(key, at);
       setLoved((s) => {
         const next = new Set(s);
@@ -163,6 +165,9 @@ export function useSongFeedback() {
 
   // Me's saves and un-saves win over this view's own record.
   const overrides = useLovedOverrides((s) => s.byKey);
+  // A Me un-save drops the heart for good (the override itself is settled away once decide has it).
+  const gone = Object.entries(overrides).filter(([k, o]) => !o.loved && loved.has(k));
+  if (gone.length) setLoved((s) => new Set([...s].filter((k) => !gone.some(([g]) => g === k))));
   const merged = useMemo(() => {
     const out = new Set(loved);
     for (const [k, o] of Object.entries(overrides)) {

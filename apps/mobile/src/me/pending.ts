@@ -5,7 +5,13 @@ import type { LogEntry } from '../tonight/log/logStore';
 import type { OutboxItem } from '../tonight/log/outbox';
 import type { MeOutboxItem } from './meOutbox';
 
-/** Tonight-outbox items (unsynced karaoke-log writes) as pending records for the overlay. */
+/**
+ * Tonight-outbox items (unsynced karaoke-log writes) as pending records for the overlay.
+ * `state`, `times`, `sung_at` and `origin` come ONLY from the queued patch: a survey-only put on a record the server
+ * already counted must not count it again (its state is 'survey', which never counts as sung, so the survey applies
+ * to existing library items only). Accepted limitation: a queued delete of an already-synced record does not subtract
+ * from the cached counts (the overlay only adds).
+ */
 export function pendingLog(items: OutboxItem[], entries: Record<string, LogEntry>): PendingLog[] {
   const out: PendingLog[] = [];
   for (const it of items) {
@@ -24,11 +30,11 @@ export function pendingLog(items: OutboxItem[], entries: Record<string, LogEntry
       artist,
       title,
       song_key: (p.song_key as string | undefined) ?? e?.song_key,
-      state: (p.state as string | undefined) ?? e?.state ?? 'planned',
-      times: p.times as number | undefined,
-      origin: p.origin as string | undefined,
+      state: it.patch.state ?? 'survey',
+      times: it.patch.times,
+      origin: it.patch.origin,
       survey: Object.keys(survey).length ? (survey as PendingLog['survey']) : undefined,
-      sung_at: (p.sung_at as string | undefined) ?? e?.sung_at,
+      sung_at: it.patch.sung_at,
       night: (p.night ?? e?.night) as PendingLog['night'] | undefined,
     });
   }

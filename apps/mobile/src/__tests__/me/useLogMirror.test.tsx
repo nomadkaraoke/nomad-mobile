@@ -37,3 +37,14 @@ it('pages with the cursor', async () => {
   await waitFor(() => expect(result.current.entries).toHaveLength(2));
   expect(api.listKaraokeLog).toHaveBeenLastCalledWith(expect.objectContaining({ cursor: 'c1' }));
 });
+
+it('compares updated_at as instants, not strings', async () => {
+  const client = resetMe();
+  api.listKaraokeLog.mockResolvedValueOnce({
+    entries: [e('a', { updated_at: '2026-10-01T10:00:00+02:00' }), e('b', { updated_at: '2026-10-01T09:00:00Z' })],
+  });
+  const { result } = renderHook(() => useLogMirror(), { wrapper: wrapperFor(client) });
+  await waitFor(() => expect(result.current.entries).toHaveLength(2));
+  // 10:00+02:00 = 08:00Z, so b (09:00Z) is the later one though its string sorts earlier
+  expect(JSON.parse(appStorage.getString(KEY)!).since).toBe('2026-10-01T09:00:00Z');
+});

@@ -5,6 +5,7 @@ import { useClearMeOnAccountChange } from '../../me/useClearMeOnAccountChange';
 import { useMeOutbox } from '../../me/meOutbox';
 import { useLibrary } from '../../me/useLibrary';
 import { useSetlists } from '../../me/useSetlists';
+import { useLovedOverrides } from '../../me/lovedOverrides';
 import { useAuth } from '../../auth/store';
 import { userKeyFor } from '../../auth/userKey';
 import { appStorage } from '../../storage';
@@ -51,6 +52,42 @@ it('keeps A out of B, and A comes back to their own pending writes after a lone 
   expect(useMeOutbox.getState().items).toEqual([]);
   expect(appStorage.getAllKeys().filter((k) => k.startsWith('me.') && k.endsWith(`.${A}`))).toEqual([]);
   const libB = renderHook(() => useLibrary(), { wrapper });
+  const firstB = libB.result.current.items;
   await waitFor(() => expect(api.getLibrary).toHaveBeenLastCalledWith(undefined));
   expect(libB.result.current.items).toEqual([]);
+  expect(firstB).toEqual([]);
+});
+
+it('a direct A to B switch (no sign-out) leaks nothing: loves, library, outbox', async () => {
+  const client = resetMe('a@example.com');
+  api.getLibrary.mockResolvedValue({ status: 'ok', etag: '"a"', items: [li('A', 'Secret') as never] });
+  const wrapper = wrapperFor(client);
+  renderHook(() => useClearMeOnAccountChange(), { wrapper });
+  const lib = renderHook(() => useLibrary(), { wrapper });
+  await waitFor(() => expect(lib.result.current.items).toHaveLength(1));
+  act(() => useLovedOverrides.getState().set({ song_key: 'k_Secret', artist: 'A', title: 'Secret' }, true));
+  act(() => useMeOutbox.getState().enqueue({ key: 'love:k_Secret', op: 'love', song_key: 'k_Secret', artist: 'A', title: 'Secret', loved: true }));
+  api.getLibrary.mockImplementation(() => new Promise(() => {}));
+  act(() => signIn('b@example.com'));
+  expect(useLovedOverrides.getState().byKey).toEqual({});
+  expect(useMeOutbox.getState().items).toEqual([]);
+  expect(appStorage.getString(`me.library.v1.${A}`)).toBeUndefined();
+  const libB = renderHook(() => useLibrary(), { wrapper });
+  expect(libB.result.current.items).toEqual([]);
+});
+
+it('a fetch that finishes after sign-out writes no cache for the old account', async () => {
+  const client = resetMe('a@example.com');
+  let release!: (v: never) => void;
+  api.getLibrary.mockImplementation(() => new Promise((r) => (release = r as never)));
+  const wrapper = wrapperFor(client);
+  renderHook(() => useClearMeOnAccountChange(), { wrapper });
+  renderHook(() => useLibrary(), { wrapper });
+  await waitFor(() => expect(api.getLibrary).toHaveBeenCalled());
+  act(() => useAuth.setState({ state: { status: 'signedOut' } }));
+  await act(async () => {
+    release({ status: 'ok', etag: '"a"', items: [li('A', 'Late') as never] } as never);
+    await Promise.resolve();
+  });
+  expect(appStorage.getString(`me.library.v1.${A}`)).toBeUndefined();
 });

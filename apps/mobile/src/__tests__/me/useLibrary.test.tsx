@@ -1,9 +1,11 @@
 import * as decide from '@nomad/api-decide';
-import { renderHook, waitFor } from '@testing-library/react-native';
+import { act, renderHook, waitFor } from '@testing-library/react-native';
 
 import { useMeOutbox } from '../../me/meOutbox';
 import { useLibrary } from '../../me/useLibrary';
-import { useLogStore } from '../../tonight/log/logStore';
+import { useLovedOverrides } from '../../me/lovedOverrides';
+import { useSaveSong } from '../../me/useSaveSong';
+import { useSongFeedback } from '../../discover/useSongFeedback';
 import { useOutbox } from '../../tonight/log/outbox';
 import { appStorage } from '../../storage';
 import { userKeyFor } from '../../auth/userKey';
@@ -13,6 +15,7 @@ jest.mock('@nomad/api-decide', () => ({
   ...jest.requireActual('@nomad/api-decide'),
   getLibrary: jest.fn(),
   loveSong: jest.fn(),
+  unloveSong: jest.fn(),
   putKaraokeLog: jest.fn(() => new Promise(() => {})),
 }));
 const api = decide as jest.Mocked<typeof decide>;
@@ -60,7 +63,6 @@ it('a pending backfill shows immediately', async () => {
   const { result } = renderHook(() => useLibrary(), { wrapper: wrapperFor(client) });
   expect(result.current.items).toHaveLength(1);
   expect(result.current.items[0]).toMatchObject({ artist: 'Muse', times_sung: 3, backfill_times: 3 });
-  void useLogStore;
 });
 
 it('a queued love shows immediately', async () => {
@@ -74,9 +76,6 @@ it('a queued love shows immediately', async () => {
 });
 
 it('useSaveSong toggles through the outbox and agrees with Discover hearts', async () => {
-  const { useSaveSong } = require('../../me/useSaveSong') as typeof import('../../me/useSaveSong');
-  const { useLovedOverrides } = require('../../me/lovedOverrides') as typeof import('../../me/lovedOverrides');
-  const { act } = require('@testing-library/react-native') as typeof import('@testing-library/react-native');
   const client = resetMe();
   api.getLibrary.mockResolvedValue({ status: 'ok', etag: '"e"', items: [li('A', 'One') as never] });
   api.loveSong.mockImplementation(() => new Promise(() => {}));
@@ -88,4 +87,58 @@ it('useSaveSong toggles through the outbox and agrees with Discover hearts', asy
   expect(useLovedOverrides.getState().byKey.k_One!.loved).toBe(true);
   act(() => result.current.toggle({ song_key: 'k_One', artist: 'A', title: 'One' }));
   expect(result.current.saved('k_One')).toBe(false);
+});
+
+it('a queued survey-only put on an already-counted record changes feel but not the count', async () => {
+  const client = resetMe();
+  api.getLibrary.mockResolvedValue({ status: 'ok', etag: '"e"', items: [li('A', 'One', { times_sung: 2 }) as never] });
+  const { result } = renderHook(() => useLibrary(), { wrapper: wrapperFor(client) });
+  await waitFor(() => expect(result.current.items).toHaveLength(1));
+  act(() =>
+    useOutbox.setState({
+      items: [{ key: 'app_1', id: 'app_1', op: 'put', rev: 1, patch: { artist: 'A', title: 'One', song_key: 'k_One', survey: { feel: 'great' } } as never }],
+    }),
+  );
+  expect(result.current.items[0]).toMatchObject({ times_sung: 2, latest_feel: 'great' });
+});
+
+describe('Discover and Me hearts agree', () => {
+  const rec = { song_key: 'k_One', artist: 'A', title: 'One' } as never;
+  it('a Discover love shows as saved in Me, and survives a library refetch while in flight', async () => {
+    const client = resetMe();
+    api.getLibrary.mockResolvedValue({ status: 'ok', etag: '"e"', items: [] });
+    api.loveSong.mockImplementation(() => new Promise(() => {}));
+    const w = wrapperFor(client);
+    const me = renderHook(() => useSaveSong(), { wrapper: w });
+    const disc = renderHook(() => useSongFeedback(), { wrapper: w });
+    act(() => disc.result.current.love(rec));
+    expect(me.result.current.saved('k_One')).toBe(true);
+    await act(async () => {
+      await client.invalidateQueries({ queryKey: ['decide'] });
+    });
+    await waitFor(() => expect(api.getLibrary).toHaveBeenCalled());
+    expect(useLovedOverrides.getState().byKey.k_One).toBeTruthy(); // held: the request has not finished
+    expect(me.result.current.saved('k_One')).toBe(true);
+  });
+
+  it('a Me un-save of a Discover-loved song un-hearts Discover, even after the override settles', async () => {
+    const client = resetMe();
+    api.getLibrary.mockResolvedValue({ status: 'ok', etag: '"e"', items: [] });
+    api.loveSong.mockResolvedValue(undefined as never);
+    api.unloveSong.mockImplementation(() => new Promise(() => {}));
+    const w = wrapperFor(client);
+    const me = renderHook(() => useSaveSong(), { wrapper: w });
+    const disc = renderHook(() => useSongFeedback(), { wrapper: w });
+    await act(async () => disc.result.current.love(rec));
+    expect(disc.result.current.loved.has('k_One')).toBe(true);
+    act(() => me.result.current.toggle(rec));
+    expect(me.result.current.saved('k_One')).toBe(false);
+    expect(disc.result.current.loved.has('k_One')).toBe(false);
+    // a library fetch while the unlove is still queued keeps the override
+    await act(async () => {
+      await client.invalidateQueries({ queryKey: ['decide'] });
+    });
+    expect(me.result.current.saved('k_One')).toBe(false);
+    expect(disc.result.current.loved.has('k_One')).toBe(false);
+  });
 });

@@ -63,6 +63,9 @@ export type KaraokeLogPatch = {
   media?: LogMedia;
   survey?: Survey;
   deleted?: boolean;
+  /** Backfill: how many times (1-50, default 1) and where it was logged. */
+  times?: number;
+  origin?: 'live' | 'backfill';
 };
 
 /** One page of the user's records, newest `updated_at` first. With `since`, deleted records are included (sync pull). */

@@ -55,3 +55,24 @@ it('adds, removes and deletes optimistically', async () => {
   act(() => result.current.deleteSetlist(id));
   expect(result.current.setlists).toHaveLength(0);
 });
+
+it('refuses (does not truncate) past 500 songs', async () => {
+  const client = resetMe();
+  api.listSetlists.mockResolvedValue([]);
+  api.createSetlist.mockRejectedValue(new ApiError(0, 'offline'));
+  const { result } = renderHook(() => useSetlists(), { wrapper: wrapperFor(client) });
+  let id = '';
+  act(() => {
+    id = result.current.createSetlist('Big');
+  });
+  const many = Array.from({ length: 500 }, (_, n) => ({ song_key: `k${n}`, artist: 'A', title: `T${n}` }));
+  act(() => {
+    expect(result.current.setItems(id, many)).toBe(true);
+  });
+  let res: { added: string[]; full: string[] } = { added: [], full: [] };
+  act(() => {
+    res = result.current.addSongs([id], { artist: 'A', title: 'One more', song_key: 'kx' });
+  });
+  expect(res).toEqual({ added: [], full: [id] });
+  expect(result.current.setlists[0]!.items).toHaveLength(500);
+});

@@ -2,8 +2,8 @@ import { listKaraokeLog, type KaraokeLogEntry } from '@nomad/api-decide';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { logMirrorStorageKey, useUserKey } from './account';
-import { isObj, readCache, writeCache } from './cache';
+import { logMirrorStorageKey, useUserKey, writeCacheFor } from './account';
+import { isObj, readCache } from './cache';
 
 type Mirror = { entries: KaraokeLogEntry[]; since?: string };
 const isMirror = (v: unknown): v is Mirror => isObj(v) && Array.isArray(v.entries) && (v.since === undefined || typeof v.since === 'string');
@@ -22,7 +22,7 @@ export async function syncMirror(prev: Mirror): Promise<Mirror> {
     for (const e of page.entries) {
       if (e.deleted) byId.delete(e.id);
       else byId.set(e.id, e);
-      if (e.updated_at && (!since || e.updated_at > since)) since = e.updated_at;
+      if (e.updated_at && (!since || Date.parse(e.updated_at) > Date.parse(since))) since = e.updated_at;
     }
     cursor = page.next_cursor ?? undefined;
   } while (cursor);
@@ -43,7 +43,7 @@ export function useLogMirror(): { entries: KaraokeLogEntry[] } {
       const key = userKey!;
       const prev = readCache(logMirrorStorageKey(key), isMirror) ?? { entries: [] };
       const next = await syncMirror(prev);
-      writeCache(logMirrorStorageKey(key), next);
+      writeCacheFor(key, logMirrorStorageKey(key), next);
       return next;
     },
   });

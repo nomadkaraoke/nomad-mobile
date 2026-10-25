@@ -37,14 +37,16 @@ export function useClearMeOnAccountChange(): void {
     return useAuth.subscribe((state, prev) => {
       const was = keyOf(prev);
       const is = keyOf(state);
+      if (is !== was) useLovedOverrides.getState().clear(); // any account change: loves are per person
       if (was && !is) {
         for (const kind of ['library', 'setlists', 'karaoke-log']) {
-          queryClient.removeQueries({ predicate: (q) => q.queryKey[0] === 'decide' && q.queryKey[2] === kind });
+          const predicate = (q: { queryKey: readonly unknown[] }) => q.queryKey[0] === 'decide' && q.queryKey[2] === kind;
+          void queryClient.cancelQueries({ predicate });
+          queryClient.removeQueries({ predicate });
         }
         appStorage.remove(libraryStorageKey(was));
         appStorage.remove(setlistsStorageKey(was));
         appStorage.remove(logMirrorStorageKey(was));
-        useLovedOverrides.getState().clear();
       }
       if (is && is !== was) adoptOwner(is);
     });

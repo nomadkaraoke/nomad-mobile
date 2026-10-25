@@ -3,8 +3,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
 import { newUuid } from '../tonight/nightStore';
-import { setlistsStorageKey, useUserKey } from './account';
-import { isObj, readCache, writeCache } from './cache';
+import { setlistsStorageKey, useUserKey, writeCacheFor } from './account';
+import { isObj, readCache } from './cache';
 import { useInvalidateOnSynced } from './useLibrary';
 import { useMeOutbox } from './meOutbox';
 import { overlaySetlists } from './pending';
@@ -13,7 +13,8 @@ type SetlistsCache = { setlists: Setlist[]; savedAt: number };
 const isCache = (v: unknown): v is SetlistsCache => isObj(v) && Array.isArray(v.setlists) && typeof v.savedAt === 'number';
 export const setlistsKeyFor = (userKey: string | null) => ['decide', userKey, 'setlists'] as const;
 
-const MAX_ITEMS = 500;
+/** At most this many songs in a setlist. */
+export const MAX_SETLIST_ITEMS = 500;
 type SongRef = { artist: string; title: string; song_key?: string | null };
 const sameSong = (a: SetlistItemIn, b: SongRef) =>
   a.song_key && b.song_key ? a.song_key === b.song_key : (a.artist ?? '') === b.artist && (a.title ?? '') === b.title;
@@ -22,7 +23,7 @@ const sameSong = (a: SetlistItemIn, b: SongRef) =>
 export function useSetlists() {
   const queryClient = useQueryClient();
   const userKey = useUserKey();
-  const queryKey = setlistsKeyFor(userKey);
+  const queryKey = useMemo(() => setlistsKeyFor(userKey), [userKey]);
   const cached = useMemo(() => readCache(userKey && setlistsStorageKey(userKey), isCache), [userKey]);
   const q = useQuery<SetlistsCache>({
     queryKey,
@@ -33,7 +34,7 @@ export function useSetlists() {
     retry: false,
     queryFn: async () => {
       const next = { setlists: await listSetlists(), savedAt: Date.now() };
-      if (userKey) writeCache(setlistsStorageKey(userKey), next);
+      if (userKey) writeCacheFor(userKey, setlistsStorageKey(userKey), next);
       return next;
     },
   });
@@ -48,9 +49,10 @@ export function useSetlists() {
     [queryClient, queryKey],
   );
   const save = useCallback(
-    (id: string, patch: { name?: string; items?: SetlistItemIn[]; create?: boolean }) => {
+    (id: string, patch: { name?: string; items?: SetlistItemIn[]; create?: boolean }): boolean => {
       const cur = find(id);
-      const items = (patch.items ?? cur?.items ?? []).slice(0, MAX_ITEMS).map((x) => ({
+      if ((patch.items ?? cur?.items ?? []).length > MAX_SETLIST_ITEMS) return false; // never silently truncate
+      const items = (patch.items ?? cur?.items ?? []).map((x) => ({
         item_id: x.item_id?.startsWith('local-') ? undefined : x.item_id, song_key: x.song_key, artist: x.artist, title: x.title,
       }));
       const queued = useMeOutbox.getState().items.find((i) => i.key === `setlist:${id}`);
@@ -65,6 +67,7 @@ export function useSetlists() {
         baseRev: cur?.rev ?? null,
         ...(patch.name !== undefined && cur && patch.name !== cur.name ? { rename: true } : {}),
       });
+      return true;
     },
     [find],
   );
@@ -79,15 +82,20 @@ export function useSetlists() {
       return id;
     },
     renameSetlist: (id: string, name: string) => save(id, { name }),
-    setItems: (id: string, items: SetlistItemIn[]) => save(id, { items }),
-    addSongs(ids: string[], song: SongRef) {
+    /** false when the list would pass 500 songs (nothing is changed). */
+    setItems: (id: string, items: SetlistItemIn[]): boolean => save(id, { items }),
+    /** Which setlists got the song, and which were full (500 songs) so the UI can say so. */
+    addSongs(ids: string[], song: SongRef): { added: string[]; full: string[] } {
+      const out = { added: [] as string[], full: [] as string[] };
       for (const id of ids) {
         const cur = find(id);
         if (!cur) continue;
         const items = cur.items ?? [];
         if (items.some((x) => sameSong(x, song))) continue;
-        save(id, { items: [...items, { artist: song.artist, title: song.title, song_key: song.song_key ?? null }] });
+        const ok = save(id, { items: [...items, { artist: song.artist, title: song.title, song_key: song.song_key ?? null }] });
+        (ok ? out.added : out.full).push(id);
       }
+      return out;
     },
     removeItem(id: string, itemId: string) {
       const cur = find(id);

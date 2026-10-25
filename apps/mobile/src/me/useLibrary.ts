@@ -5,8 +5,8 @@ import { useEffect, useMemo, useRef } from 'react';
 
 import { useLogStore } from '../tonight/log/logStore';
 import { useOutbox } from '../tonight/log/outbox';
-import { libraryStorageKey, useUserKey } from './account';
-import { isObj, readCache, writeCache } from './cache';
+import { libraryStorageKey, useUserKey, writeCacheFor } from './account';
+import { isObj, readCache } from './cache';
 import { useLovedOverrides } from './lovedOverrides';
 import { useMeOutbox } from './meOutbox';
 import { pendingLoves, pendingLog, pendingSetlists, toMeSong } from './pending';
@@ -38,7 +38,7 @@ export function useInvalidateOnSynced(keys: (readonly unknown[])[]): void {
 export function useLibrary(): { items: MeSong[]; loading: boolean; offline: boolean; error: boolean; refetch(): void } {
   const queryClient = useQueryClient();
   const userKey = useUserKey();
-  const queryKey = libraryKeyFor(userKey);
+  const queryKey = useMemo(() => libraryKeyFor(userKey), [userKey]);
   const cached = useMemo(() => readCache(userKey && libraryStorageKey(userKey), isCache), [userKey]);
 
   const q = useQuery<LibraryCache>({
@@ -61,7 +61,7 @@ export function useLibrary(): { items: MeSong[]; loading: boolean; offline: bool
         if (full.status !== 'ok') throw new Error('library unavailable');
         next = { etag: full.etag, items: full.items.map(toMeSong), savedAt: Date.now() };
       }
-      if (userKey) writeCache(libraryStorageKey(userKey), next);
+      if (userKey) writeCacheFor(userKey, libraryStorageKey(userKey), next);
       useLovedOverrides.getState().settle(startedAt);
       return next;
     },
