@@ -167,12 +167,17 @@ const toPitchIn = (p: PitchSummary | null): AttemptIn['pitch'] =>
 /**
  * The attempt's pitch fields. `pitch` is chest-only: with a falsetto or unsure answer it is recomputed from the
  * contour without those notes (`chestSummary`); `pitch_all` is the song as sung. `note_labels` only when answered.
- * A song from before batch 1 (no contour) sends its stored summary as both.
+ * A song from before batch 1 (no contour) sends its stored summary as both; a song with no summary sends null for
+ * both.
  */
 function attemptPitch(st: SessionState): Pick<AttemptIn, 'pitch' | 'pitch_all' | 'note_labels'> {
   const all = toPitchIn(st.pitch);
   const relabels = st.noteLabels.some((l) => l.label !== 'full');
-  const chest = relabels && st.contour ? toPitchIn(chestSummary(st.contour, st.held, st.noteLabels)) : all;
+  // No whole-song summary (too little singing): no chest one either, whatever the labels.
+  const chest =
+    st.pitch && relabels && st.contour
+      ? toPitchIn(chestSummary(st.contour, st.held, st.noteLabels, st.pitch.voicedS))
+      : all;
   const labels = toNoteLabelsIn(st.noteLabels);
   return { pitch: chest, pitch_all: all, ...(labels.length > 0 && { note_labels: labels }) };
 }

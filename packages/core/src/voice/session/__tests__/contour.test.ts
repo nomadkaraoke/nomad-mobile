@@ -24,10 +24,12 @@ describe('contourFrom', () => {
     expect(c.t0).toBe(0);
     expect(c.dt).toBeCloseTo(0.1);
     expect(c.midi).toEqual([50, 50, 50, null, null, 55, 55]);
+    expect(c.n).toEqual([10, 10, 10, 0, 0, 10, 10]);
+    expect(c.hop).toBeCloseTo(0.01);
   });
 
   it('empty without frames', () => {
-    expect(contourFrom([])).toEqual({ t0: 0, dt: 0.1, midi: [] });
+    expect(contourFrom([])).toEqual({ t0: 0, dt: 0.1, midi: [], n: [], hop: 0 });
   });
 
   it('the builder gives the same contour frame by frame', () => {
@@ -97,6 +99,44 @@ describe('chestSummary', () => {
     const held = findHeldNotes(frames);
     expect(chestSummary(contourFrom(frames), held, [])).not.toBeNull();
     expect(chestSummary(contourFrom(frames), held, [label(12, 17.99, 69, 'falsetto')])).toBeNull();
+  });
+
+  it('sparse singing (one voiced frame per 0.1 s): chest voiced_s ≤ the whole song and ≈ frames × hop', () => {
+    // 12 s of dense singing (10 ms frames), then 20 s with one voiced frame per 0.1 s slot.
+    const dense = framesFor([{ midi: 50, dur: 6 }, { midi: 52, dur: 6 }]);
+    const sparse = Array.from({ length: 200 }, (_, i) => ({ t: 12 + i * 0.1, midi: 55 + (i % 3) }));
+    const frames = [...dense, ...sparse];
+    const held = findHeldNotes(frames);
+    const whole = summarizeSongPitch(frames, held)!;
+    const chest = chestSummary(contourFrom(frames), held, [])!;
+    // Frame counting: 1400 frames × 10 ms = 14 s (slot counting would have claimed 120 + 200 slots = 32 s).
+    expect(whole.voicedS).toBeCloseTo(14, 6);
+    expect(chest.voicedS).toBeLessThanOrEqual(whole.voicedS + 1e-9);
+    expect(chest.voicedS).toBeCloseTo(frames.length * 0.01, 6);
+  });
+
+  it('one voiced frame per slot only: voiced time = frames × hop, matching summarizeSongPitch', () => {
+    const frames = Array.from({ length: 150 }, (_, i) => ({ t: i * 0.1, midi: i < 75 ? 50 : 55 }));
+    const held = [
+      { start: 0, end: 7.4, midi: 50, note: 50 },
+      { start: 7.5, end: 14.9, midi: 55, note: 55 },
+    ];
+    const whole = summarizeSongPitch(frames, held)!;
+    const chest = chestSummary(contourFrom(frames), held, [])!;
+    expect(chest.voicedS).toBeCloseTo(whole.voicedS, 6);
+    expect(chest.voicedS).toBeCloseTo(15, 6);
+  });
+
+  it('a contour stored without counts scales the whole song by the kept share of voiced slots', () => {
+    const frames = framesFor([...Array.from({ length: 8 }, (_, i) => ({ midi: 50 + i, dur: 3 })), { midi: 69, dur: 6 }]);
+    const held = findHeldNotes(frames);
+    const { n: _n, hop: _hop, ...old } = contourFrom(frames);
+    const s = chestSummary(old, held, [label(24, 29.99, 69, 'falsetto')], 30)!;
+    const voiced = old.midi.filter((m) => m !== null).length;
+    const kept = voiced - old.midi.filter((m, i) => m !== null && 0 + i * 0.1 + 0.1 > 23.8 && i * 0.1 < 30.19).length;
+    expect(s.voicedS).toBeCloseTo((30 * kept) / voiced, 6);
+    // No whole-song figure either: slots × dt.
+    expect(chestSummary(old, held, [])!.voicedS).toBeCloseTo(voiced * 0.1, 6);
   });
 
   it('null when every remaining held note is unsure', () => {

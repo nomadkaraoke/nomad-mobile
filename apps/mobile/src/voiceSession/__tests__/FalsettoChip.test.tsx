@@ -2,6 +2,7 @@
 import type { NextSongOut, SessionSetup } from '@nomad/api-decide';
 import { IntlProvider } from '@nomad/i18n';
 import { fireEvent, render, screen } from '@testing-library/react-native';
+import { AccessibilityInfo, Platform } from 'react-native';
 import { createRef } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -29,6 +30,38 @@ describe('FalsettoChip', () => {
     fireEvent.press(screen.getByTestId('vs-falsetto-yes'));
     fireEvent.press(screen.getByTestId('vs-falsetto-no'));
     expect(onAnswer.mock.calls).toEqual([['falsetto'], ['full']]);
+  });
+});
+
+describe('FalsettoChip announcements', () => {
+  const renderChip = () =>
+    render(
+      <IntlProvider locale="en">
+        <FalsettoChip candidate={C} onAnswer={jest.fn()} />
+      </IntlProvider>,
+    );
+  let os: { restore(): void } | null = null;
+  afterEach(() => {
+    os?.restore();
+    os = null;
+    jest.restoreAllMocks();
+  });
+
+  it('iOS: VoiceOver gets a queued announcement on mount (no live regions there)', () => {
+    os = jest.replaceProperty(Platform, 'OS', 'ios');
+    const announce = jest.spyOn(AccessibilityInfo, 'announceForAccessibilityWithOptions').mockImplementation(() => {});
+    announce.mockClear(); // jest-expo's AccessibilityInfo methods are already mocks: spyOn returns that same mock
+    renderChip();
+    expect(announce).toHaveBeenCalledTimes(1);
+    expect(announce).toHaveBeenCalledWith(expect.stringMatching(/A4.*Was it\?$/), { queue: true });
+  });
+
+  it('Android: the polite live region speaks it, no extra announcement', () => {
+    os = jest.replaceProperty(Platform, 'OS', 'android');
+    const announce = jest.spyOn(AccessibilityInfo, 'announceForAccessibilityWithOptions').mockImplementation(() => {});
+    announce.mockClear(); // jest-expo's AccessibilityInfo methods are already mocks: spyOn returns that same mock
+    renderChip();
+    expect(announce).not.toHaveBeenCalled();
   });
 });
 

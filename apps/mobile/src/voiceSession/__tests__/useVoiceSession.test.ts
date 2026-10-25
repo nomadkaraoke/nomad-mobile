@@ -1239,6 +1239,40 @@ describe('useVoiceSession', () => {
       expect(r.current.step).toBe('pick');
     });
 
+    it('no whole-song summary: pitch and pitch_all are both null even with a falsetto answer', async () => {
+      const { result: r } = await atQuiz();
+      const a4 = A4(store().held);
+      act(() => store().update({ pitch: null }));
+      act(() => r.current.answerFalsetto(a4, 'falsetto', 'quiz'));
+      await act(() => r.current.submitQuiz());
+      expect(body().pitch).toBeNull();
+      expect(body().pitch_all).toBeNull();
+      expect(body().note_labels).toHaveLength(1);
+    });
+
+    it('chest voiced_s never exceeds the whole song (frame counts × hop)', async () => {
+      const { result: r } = await atQuiz();
+      act(() => r.current.answerFalsetto(A4(store().held), 'falsetto', 'quiz'));
+      await act(() => r.current.submitQuiz());
+      expect(body().pitch.voiced_s).toBeLessThanOrEqual(body().pitch_all.voiced_s);
+      // 24 s of chest singing less the 0.2 s pad before the labelled A4.
+      expect(body().pitch.voiced_s).toBeCloseTo(23.8, 0);
+    });
+
+    it('a stored contour without frame counts (saved before them) scales the whole song', () => {
+      const old = { t0: 0, dt: 0.1, midi: [50, 50, null, 51] };
+      appStorage.set(
+        VOICE_SESSION_KEY,
+        JSON.stringify({
+          sessionId: 's1', setup: SETUP, floor: 0.003, song: song('a', 1), step: 'quiz', attemptN: 1, quiz: {},
+          pitch: PITCH, playStartedAt: T0 - 1000, playEndedAt: T0, stoppedEarly: false, take: null, savedAt: T0,
+          contour: old, held: [], noteLabels: [], candidates: [], takeOffsetS: 0,
+        }),
+      );
+      restoreVoiceSession();
+      expect(store().contour).toEqual(old);
+    });
+
     it('restore after kill keeps labels', async () => {
       const first = await atQuiz();
       const a4 = A4(store().held);

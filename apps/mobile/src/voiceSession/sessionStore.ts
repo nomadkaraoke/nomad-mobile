@@ -109,7 +109,15 @@ function falsettoFields(v: Record<string, unknown>): Pick<
   const c = v.contour;
   const contour =
     obj(c) && num(c.t0) && num(c.dt) && Array.isArray(c.midi) && c.midi.every(numOrNull)
-      ? (c as PitchContour)
+      ? ({
+          t0: c.t0,
+          dt: c.dt,
+          midi: c.midi,
+          // Frame counts and hop: only when well-formed (older copies have none; chestSummary then scales).
+          ...(Array.isArray(c.n) && c.n.length === c.midi.length && c.n.every(num) && num(c.hop)
+            ? { n: c.n, hop: c.hop }
+            : {}),
+        } as PitchContour)
       : null;
   const list = <T,>(x: unknown, ok: (e: Record<string, unknown>) => boolean): T[] =>
     Array.isArray(x) && x.every((e) => obj(e) && ok(e)) ? (x as T[]) : [];
