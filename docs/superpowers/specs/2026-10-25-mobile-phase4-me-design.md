@@ -1,6 +1,6 @@
 # Mobile Phase 4 "Me": design
 
-**Status:** draft for Andrew's approval, 2026-10-25. **Delivers:** [VISION.md](../../VISION.md) phase 4, use case 4 ("karaoke nerds"); BACKLOG 4.4. **Repos:** nomad-mobile, karaoke-decide, kjbox (slice 4c only). gen gets no changes; the app calls gen's existing requests-board endpoints.
+**Status:** approved by Andrew 2026-10-25. **Delivers:** [VISION.md](../../VISION.md) phase 4, use case 4 ("karaoke nerds"); BACKLOG 4.4. **Repos:** nomad-mobile, karaoke-decide, kjbox (slice 4c only). gen gets no changes; the app calls gen's existing requests-board endpoints.
 
 **Companion:** [2026-10-25-mobile-phase4-me-survey.md](2026-10-25-mobile-phase4-me-survey.md) is the raw survey of earlier learnings; §3 condenses it.
 
