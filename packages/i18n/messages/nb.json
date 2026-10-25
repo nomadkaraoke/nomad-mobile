@@ -1714,10 +1714,15 @@
       "probably": "Sannsynligvis {type}, men vi trenger flere sanger for å være sikre",
       "range": "{range}, behagelig {comfort}",
       "saved": "Lagret i musikkprofilen din.",
-      "suited": "Sanger som passer til deg",
+      "suited": "Sanger du liker som passer for deg",
       "confidenceHigh": "Høy sikkerhet",
       "done": "Ferdig",
-      "typeUnknown": "Stemmetypen din"
+      "typeUnknown": "Stemmetypen din",
+      "comfortEstimated": "Beregnet",
+      "comfortMeasured": "Målt ut fra sangene du syntes var behagelige",
+      "falsetto": "Falsett opp til {note}",
+      "adopt": "Bruk denne som stemmen min",
+      "adoptFailed": "Kunne ikke lagre den som stemmen din. Sjekk tilkoblingen og prøv igjen."
     },
     "setup": {
       "bit_warm": "Litt oppvarmet",

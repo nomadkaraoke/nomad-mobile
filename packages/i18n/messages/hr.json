@@ -1714,10 +1714,15 @@
       "probably": "Vjerojatno {type}, ali treba nam još pjesama za sigurnu procjenu",
       "range": "{range}, ugodno {comfort}",
       "saved": "Spremljeno u tvoj glazbeni profil.",
-      "suited": "Pjesme koje ti odgovaraju",
+      "suited": "Pjesme koje voliš i koje ti odgovaraju",
       "confidenceHigh": "Visoka pouzdanost",
       "done": "Gotovo",
-      "typeUnknown": "Tvoj tip glasa"
+      "typeUnknown": "Tvoj tip glasa",
+      "comfortEstimated": "Procijenjeno",
+      "comfortMeasured": "Izmjereno na temelju pjesama koje su ti bile ugodne",
+      "falsetto": "Falset do {note}",
+      "adopt": "Postavi ovo kao moj glas",
+      "adoptFailed": "Spremanje glasa nije uspjelo. Provjeri vezu i pokušaj ponovno."
     },
     "setup": {
       "bit_warm": "Djelomično zagrijan",

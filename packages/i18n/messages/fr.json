@@ -1714,10 +1714,15 @@
       "probably": "Probablement {type}, mais il nous faut d'autres chansons pour en être sûrs",
       "range": "{range}, zone de confort {comfort}",
       "saved": "Enregistré dans ton profil musical.",
-      "suited": "Chansons qui te correspondent",
+      "suited": "Morceaux que tu aimes et qui te conviennent",
       "confidenceHigh": "Certitude élevée",
       "done": "Terminé",
-      "typeUnknown": "Ton type de voix"
+      "typeUnknown": "Ton type de voix",
+      "comfortEstimated": "Estimé",
+      "comfortMeasured": "Mesuré à partir des morceaux où tu étais à l'aise",
+      "falsetto": "Voix de tête jusqu'à {note}",
+      "adopt": "Utiliser comme ma voix",
+      "adoptFailed": "Impossible de l'enregistrer comme ta voix. Vérifie ta connexion et réessaie."
     },
     "setup": {
       "bit_warm": "Un peu échauffé",

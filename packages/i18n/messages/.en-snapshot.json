@@ -1750,11 +1750,16 @@
         "more_songs": "A few more songs would make this surer"
       },
       "saved": "Saved to your music profile.",
-      "suited": "Songs that suit you",
+      "suited": "Songs you like that suit you",
       "loved": "Songs you loved",
       "done": "Done",
       "more": "Keep going",
-      "typeUnknown": "Your voice type"
+      "typeUnknown": "Your voice type",
+      "falsetto": "Falsetto up to {note}",
+      "comfortMeasured": "Measured from the songs you found comfortable",
+      "comfortEstimated": "Estimated",
+      "adopt": "Use this as my voice",
+      "adoptFailed": "Couldn't save it as your voice. Check your connection and try again."
     },
     "error": {
       "network": "You're offline or the connection dropped. Check it and try again.",

@@ -1714,10 +1714,15 @@
       "probably": "Muhtemelen {type}, ancak emin olmak için daha fazla şarkıya ihtiyacımız var",
       "range": "{range}, rahat {comfort}",
       "saved": "Müzik profiline kaydedildi.",
-      "suited": "Sana uyan şarkılar",
+      "suited": "Sevdiğin ve sana uyan şarkılar",
       "confidenceHigh": "Yüksek güven",
       "done": "Bitti",
-      "typeUnknown": "Ses türün"
+      "typeUnknown": "Ses türün",
+      "comfortEstimated": "Tahmini",
+      "comfortMeasured": "Söylerken rahat ettiğin şarkılardan ölçüldü",
+      "falsetto": "{note} notasına kadar falseto",
+      "adopt": "Bunu sesim olarak kullan",
+      "adoptFailed": "Sesin olarak kaydedilemedi. Bağlantını kontrol et ve tekrar dene."
     },
     "setup": {
       "bit_warm": "Biraz ısınmış",

@@ -1714,10 +1714,15 @@
       "probably": "Wahrscheinlich {type}, aber wir brauchen noch mehr Songs, um sicher zu sein",
       "range": "{range}, angenehm {comfort}",
       "saved": "In deinem Musikprofil gespeichert.",
-      "suited": "Songs, die zu dir passen",
+      "suited": "Songs, die dir gefallen und zu dir passen",
       "confidenceHigh": "Hohe Sicherheit",
       "done": "Fertig",
-      "typeUnknown": "Deine Stimmlage"
+      "typeUnknown": "Deine Stimmlage",
+      "comfortEstimated": "Geschätzt",
+      "comfortMeasured": "Gemessen anhand der Songs, die für dich angenehm waren",
+      "falsetto": "Falsett bis {note}",
+      "adopt": "Als meine Stimme verwenden",
+      "adoptFailed": "Konnte nicht als deine Stimme gespeichert werden. Überprüfe deine Verbindung und versuche es erneut."
     },
     "setup": {
       "bit_warm": "Ein bisschen aufgewärmt",

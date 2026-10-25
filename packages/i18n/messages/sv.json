@@ -1714,10 +1714,15 @@
       "probably": "Förmodligen {type}, men vi behöver fler låtar för att vara säkra",
       "range": "{range}, bekvämt {comfort}",
       "saved": "Sparat i din musikprofil.",
-      "suited": "Låtar som passar dig",
+      "suited": "Låtar du gillar som passar dig",
       "confidenceHigh": "Hög säkerhet",
       "done": "Klar",
-      "typeUnknown": "Din rösttyp"
+      "typeUnknown": "Din rösttyp",
+      "comfortEstimated": "Uppskattat",
+      "comfortMeasured": "Mätt utifrån de låtar du tyckte kändes bekväma",
+      "falsetto": "Falsett upp till {note}",
+      "adopt": "Använd som min röst",
+      "adoptFailed": "Det gick inte att spara som din röst. Kontrollera anslutningen och försök igen."
     },
     "setup": {
       "bit_warm": "Lite uppvärmd",

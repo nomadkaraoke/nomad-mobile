@@ -1714,10 +1714,15 @@
       "probably": "Waarschijnlijk {type}, maar we hebben meer nummers nodig om het zeker te weten",
       "range": "{range}, comfortabel {comfort}",
       "saved": "Opgeslagen in je muziekprofiel.",
-      "suited": "Nummers die bij je passen",
+      "suited": "Nummers die je leuk vindt en goed bij je passen",
       "confidenceHigh": "Hoge zekerheid",
       "done": "Gereed",
-      "typeUnknown": "Je stemtype"
+      "typeUnknown": "Je stemtype",
+      "comfortEstimated": "Geschat",
+      "comfortMeasured": "Gemeten aan de hand van de nummers die je prettig vond om te zingen",
+      "falsetto": "Falset tot {note}",
+      "adopt": "Gebruik dit als mijn stem",
+      "adoptFailed": "Kon dit niet opslaan als je stem. Controleer je verbinding en probeer het opnieuw."
     },
     "setup": {
       "bit_warm": "Een beetje opgewarmd",

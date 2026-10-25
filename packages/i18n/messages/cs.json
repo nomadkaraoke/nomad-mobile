@@ -1714,10 +1714,15 @@
       "probably": "Pravděpodobně {type}, ale pro jistotu potřebujeme víc písniček",
       "range": "{range}, pohodlný {comfort}",
       "saved": "Uloženo do tvého hudebního profilu.",
-      "suited": "Písničky, které ti sedí",
+      "suited": "Písničky, které se ti líbí a sedí ti",
       "confidenceHigh": "Vysoká jistota",
       "done": "Hotovo",
-      "typeUnknown": "Tvůj typ hlasu"
+      "typeUnknown": "Tvůj typ hlasu",
+      "comfortEstimated": "Odhadnuto",
+      "comfortMeasured": "Změřeno z písniček, které ti byly příjemné",
+      "falsetto": "Falzet až do {note}",
+      "adopt": "Použít jako můj hlas",
+      "adoptFailed": "Nepodařilo se uložit jako tvůj hlas. Zkontroluj připojení a zkus to znovu."
     },
     "setup": {
       "bit_warm": "Trochu rozezpívaný",

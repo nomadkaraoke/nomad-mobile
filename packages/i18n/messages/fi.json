@@ -1714,10 +1714,15 @@
       "probably": "Todennäköisesti {type}, mutta tarvitsemme lisää kappaleita varmistukseen",
       "range": "{range}, mukava alue {comfort}",
       "saved": "Tallennettu musiikkiprofiiliisi.",
-      "suited": "Sinulle sopivat kappaleet",
+      "suited": "Kappaleet, joista pidät ja jotka sopivat äänellesi",
       "confidenceHigh": "Korkea varmuus",
       "done": "Valmis",
-      "typeUnknown": "Äänityyppisi"
+      "typeUnknown": "Äänityyppisi",
+      "comfortEstimated": "Arvioitu",
+      "comfortMeasured": "Mitattu kappaleista, jotka tuntuivat sinulle mukavilta laulaa",
+      "falsetto": "Falsetti säveleen {note} asti",
+      "adopt": "Käytä tätä äänenäni",
+      "adoptFailed": "Tallentaminen ääneksesi epäonnistui. Tarkista verkkoyhteytesi ja yritä uudelleen."
     },
     "setup": {
       "bit_warm": "Hieman lämmitelty",

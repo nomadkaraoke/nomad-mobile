@@ -1714,10 +1714,15 @@
       "probably": "Valószínűleg {type}, de több dalra van szükség, hogy biztosak lehessünk benne",
       "range": "{range}, kényelmes: {comfort}",
       "saved": "Elmentve a zenei profilodba.",
-      "suited": "Dalok, amelyek illenek hozzád",
+      "suited": "Dalok, amiket szeretsz, és illenek hozzád",
       "confidenceHigh": "Nagy bizonyosság",
       "done": "Kész",
-      "typeUnknown": "A hangtípusod"
+      "typeUnknown": "A hangtípusod",
+      "comfortEstimated": "Becsült",
+      "comfortMeasured": "A számodra kényelmesnek jelölt dalok alapján mérve",
+      "falsetto": "Falzett egészen eddig: {note}",
+      "adopt": "Használd ezt hangprofilként",
+      "adoptFailed": "Nem sikerült elmenteni a hangprofilodként. Ellenőrizd a kapcsolatot, és próbáld újra."
     },
     "setup": {
       "bit_warm": "Kissé bemelegedett",

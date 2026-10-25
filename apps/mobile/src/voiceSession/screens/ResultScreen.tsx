@@ -1,8 +1,9 @@
 import type { ResultOut } from '@nomad/api-decide';
-import type { VoiceType } from '@nomad/core';
+import { midiToName, type VoiceType } from '@nomad/core';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, colors, PianoStrip, StartText, Text } from '@nomad/ui';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { StepLayout } from '../../voice/StepLayout';
@@ -42,15 +43,23 @@ export type ResultScreenProps = {
   onDone: () => void;
   /** Another session with the same setup (offered when the singer finished early). */
   onMore: () => void;
+  /** "Use this as my voice" for a result decide didn't save (true once saved). */
+  onAdopt?: () => Promise<boolean>;
 };
 
 /**
  * The session's result (spec §4.4): the hedged voice type, the range and its comfortable middle on a keyboard,
  * confidence and what would raise it, then songs that suit the singer and the ones they loved.
  */
-export function ResultScreen({ result: r, busy, onDone, onMore }: ResultScreenProps) {
+export function ResultScreen({ result: r, busy, onDone, onMore, onAdopt }: ResultScreenProps) {
   const t = useTranslations('voiceSession.result');
   const labels = useVoiceLabels();
+  const [adopt, setAdopt] = useState<'idle' | 'running' | 'failed'>('idle');
+  const runAdopt = async () => {
+    if (!onAdopt || adopt === 'running') return;
+    setAdopt('running');
+    setAdopt((await onAdopt()) ? 'idle' : 'failed');
+  };
   let typeLine: string;
   // A type this app version doesn't know (decide added one): a generic line, never decide's raw value.
   if (!isType(r.voice_type)) typeLine = t('typeUnknown');
@@ -91,6 +100,14 @@ export function ResultScreen({ result: r, busy, onDone, onMore }: ResultScreenPr
         accessibilityLabel={t('keys')}
       />
       <View className="gap-1">
+        <Text testID="vs-result-comfort-source" variant="muted">
+          {r.comfort_source === 'measured' ? t('comfortMeasured') : t('comfortEstimated')}
+        </Text>
+        {r.falsetto_high != null ? (
+          <StartText testID="vs-result-falsetto">{t('falsetto', { note: isolate(midiToName(r.falsetto_high)) })}</StartText>
+        ) : null}
+      </View>
+      <View className="gap-1">
         <Text testID="vs-result-confidence">{t(CONFIDENCE_KEY[r.confidence_label])}</Text>
         {r.partial ? <Text variant="muted">{t('partial')}</Text> : null}
         {r.improve_hint ? (
@@ -104,6 +121,23 @@ export function ResultScreen({ result: r, busy, onDone, onMore }: ResultScreenPr
           </Text>
         ) : null}
       </View>
+      {!r.profile_saved && onAdopt && isType(r.voice_type) ? (
+        <View className="gap-1">
+          <Button
+            testID="vs-result-adopt"
+            variant="secondary"
+            label={t('adopt')}
+            loading={adopt === 'running'}
+            disabled={adopt === 'running'}
+            onPress={() => void runAdopt()}
+          />
+          {adopt === 'failed' ? (
+            <Text testID="vs-result-adopt-failed" className="text-gold">
+              {t('adoptFailed')}
+            </Text>
+          ) : null}
+        </View>
+      ) : null}
       {r.suited.length > 0 ? (
         <View className="gap-2">
           <Text className="text-lg font-bold">{t('suited')}</Text>

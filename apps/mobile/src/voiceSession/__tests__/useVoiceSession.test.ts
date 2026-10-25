@@ -25,6 +25,7 @@ const mockApi = {
   postVoiceAttempt: jest.fn(),
   getVoiceResult: jest.fn(),
   uploadVoiceRecording: jest.fn(),
+  adoptVoiceSession: jest.fn(),
 };
 jest.mock('@nomad/api-decide', () => ({
   ...jest.requireActual('@nomad/api-decide'),
@@ -37,6 +38,7 @@ jest.mock('@nomad/api-decide', () => ({
   postVoiceAttempt: (...a: unknown[]) => mockApi.postVoiceAttempt(...a),
   getVoiceResult: (...a: unknown[]) => mockApi.getVoiceResult(...a),
   uploadVoiceRecording: (...a: unknown[]) => mockApi.uploadVoiceRecording(...a),
+  adoptVoiceSession: (...a: unknown[]) => mockApi.adoptVoiceSession(...a),
 }));
 
 /** The fake recorder: records call order and hands back `nextTake` on stop(). */
@@ -1249,6 +1251,47 @@ describe('useVoiceSession', () => {
       await act(() => r.current.submitQuiz());
       expect(body().note_labels).toHaveLength(1);
       expect(body().pitch.held_high).toBe(57);
+    });
+  
+    it('adoptResult saves the session result as the voice and marks the result saved', async () => {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1));
+      mockApi.getVoiceResult.mockResolvedValue({ ...(RESULT as object), profile_saved: false, suited: [], loved: [] });
+      const PROFILE = {
+        low_midi: 45, high_midi: 64, comfort_low: 49, comfort_high: 59, voice_type: 'baritone', voice_type_between: null,
+        register: null, confidence: 'low', method: 'session', measured_at: '2026-10-25T20:00:00Z', updated_at: '2026-10-25T20:00:00Z',
+        evidence_count: 2, session_id: 's1',
+      };
+      mockApi.adoptVoiceSession.mockResolvedValue(PROFILE);
+      const { result: r } = await mount();
+      await act(() => r.current.begin(SETUP));
+      await act(() => r.current.finish());
+      expect(r.current.step).toBe('result');
+      let ok = false;
+      await act(async () => {
+        ok = await r.current.adoptResult();
+      });
+      expect(ok).toBe(true);
+      expect(mockApi.adoptVoiceSession).toHaveBeenCalledWith('s1');
+      expect(r.current.result?.profile_saved).toBe(true);
+      expect(useVoiceStore.getState().profile).toMatchObject({ method: 'session', voiceType: 'baritone', sessionId: 's1' });
+    });
+
+    it('adoptResult failing (409 no_evidence, offline) returns false and changes nothing', async () => {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1));
+      mockApi.getVoiceResult.mockResolvedValue({ ...(RESULT as object), profile_saved: false, suited: [], loved: [] });
+      mockApi.adoptVoiceSession.mockRejectedValue(new ApiError(409, 'no_evidence'));
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const { result: r } = await mount();
+      await act(() => r.current.begin(SETUP));
+      await act(() => r.current.finish());
+      let ok = true;
+      await act(async () => {
+        ok = await r.current.adoptResult();
+      });
+      expect(ok).toBe(false);
+      expect(r.current.result?.profile_saved).toBe(false);
+      expect(useVoiceStore.getState().profile).toBeNull();
+      warn.mockRestore();
     });
   });
 });

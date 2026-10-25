@@ -1714,10 +1714,15 @@
       "probably": "Nhiều khả năng là {type}, nhưng chúng tôi cần thêm vài bài hát để chắc chắn",
       "range": "{range}, thoải mái nhất ở {comfort}",
       "saved": "Đã lưu vào hồ sơ âm nhạc của bạn.",
-      "suited": "Những bài hát phù hợp với bạn",
+      "suited": "Bài hát bạn thích và phù hợp với giọng của bạn",
       "confidenceHigh": "Độ chắc chắn cao",
       "done": "Xong",
-      "typeUnknown": "Loại giọng của bạn"
+      "typeUnknown": "Loại giọng của bạn",
+      "comfortEstimated": "Ước tính",
+      "comfortMeasured": "Đo từ các bài hát bạn thấy thoải mái khi hát",
+      "falsetto": "Giọng giả thanh lên đến {note}",
+      "adopt": "Dùng hồ sơ này làm giọng của tôi",
+      "adoptFailed": "Không thể lưu làm giọng của bạn. Vui lòng kiểm tra kết nối mạng và thử lại."
     },
     "setup": {
       "bit_warm": "Hơi ấm giọng rồi",

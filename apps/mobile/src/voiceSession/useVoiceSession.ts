@@ -3,6 +3,7 @@
 // a killed app resumes; on mount the stored session is checked against decide. No UI and no copy here: errors are
 // kinds that the screens (D6) turn into words.
 import {
+  adoptVoiceSession,
   ApiError,
   createVoiceSession,
   getVoiceFlags,
@@ -44,6 +45,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } fro
 import { PLAYER_MODE } from '../config';
 import type { PitchSource } from '../voice/pitchSource';
 import { usePitchSource } from '../voice/usePitchSource';
+import { followServerVoice } from '../voice/useVoiceProfile';
 import { useVoiceStore } from '../voice/voiceStore';
 import { chestTopFor } from './falsettoReference';
 import type { PlayerEvent, PlayerHandle } from './player/KaraokePlayer';
@@ -121,6 +123,11 @@ export type VoiceSession = {
   submitQuiz(): Promise<void>;
   finish(): Promise<void>;
   patchContext(patch: SessionPatch): Promise<void>;
+  /**
+   * Makes the shown result the singer's voice profile (decide's adopt, for a result too unsure to save itself): the
+   * phone follows decide's profile and the result reads as saved. False when decide refused or was unreachable.
+   */
+  adoptResult(): Promise<boolean>;
   /** Repeats the call that failed (`error` set). */
   retry(): Promise<void>;
   /** Forgets the session: back to the intro. */
@@ -704,6 +711,20 @@ export function useVoiceSession(): VoiceSession {
         // While another action runs, it is sent when that one settles.
         await sendPendingPatch();
       },
+      async adoptResult(): Promise<boolean> {
+        const id = get().sessionId;
+        if (!id) return false;
+        try {
+          const profile = await adoptVoiceSession(id);
+          if (get().sessionId !== id) return false;
+          followServerVoice(profile);
+          setResult((r) => (r ? { ...r, profile_saved: true } : r));
+          return true;
+        } catch (e) {
+          warn('adopt failed', e);
+          return false;
+        }
+      },
       retry: guarded(async () => {
         await retryRef.current?.();
       }),
@@ -841,5 +862,6 @@ export function useVoiceSession(): VoiceSession {
     patchContext: actions.patchContext,
     retry: actions.retry,
     reset: actions.reset,
+    adoptResult: actions.adoptResult,
   };
 }

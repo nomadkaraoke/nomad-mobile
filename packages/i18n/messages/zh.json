@@ -1714,10 +1714,15 @@
       "probably": "大概率属于 {type}，但需要唱更多歌才能确认",
       "range": "{range}，舒适音区 {comfort}",
       "saved": "已保存至你的音乐档案。",
-      "suited": "适合你的歌曲",
+      "suited": "适合您且您喜欢的歌曲",
       "confidenceHigh": "高置信度",
       "done": "完成",
-      "typeUnknown": "你的声部"
+      "typeUnknown": "你的声部",
+      "comfortEstimated": "预估",
+      "comfortMeasured": "根据您唱着最舒适的歌曲测得",
+      "falsetto": "假音最高可达 {note}",
+      "adopt": "将此设为我的音域",
+      "adoptFailed": "无法保存为您的音域。请检查网络连接后重试。"
     },
     "setup": {
       "bit_warm": "稍稍开嗓",

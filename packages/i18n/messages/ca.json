@@ -1714,10 +1714,15 @@
       "probably": "Probablement {type}, però necessitem més cançons per confirmar-ho",
       "range": "{range}, zona còmoda {comfort}",
       "saved": "S'ha desat al teu perfil musical.",
-      "suited": "Cançons que et van bé",
+      "suited": "Cançons que t'agraden i que et van bé",
       "confidenceHigh": "Certesa alta",
       "done": "Fet",
-      "typeUnknown": "El teu tipus de veu"
+      "typeUnknown": "El teu tipus de veu",
+      "comfortEstimated": "Estimat",
+      "comfortMeasured": "Mesurat a partir de les cançons que t'han resultat còmodes",
+      "falsetto": "Falset fins a {note}",
+      "adopt": "Utilitza aquesta com a la meva veu",
+      "adoptFailed": "No s'ha pogut desar com a la teva veu. Comprova la connexió i torna-ho a provar."
     },
     "setup": {
       "bit_warm": "Una mica escalfada",

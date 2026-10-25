@@ -1714,10 +1714,15 @@
       "probably": "{type} 타입일 가능성이 높지만, 확실하게 확인하려면 노래를 더 불러봐야 해요",
       "range": "{range}, 편안한 음역 {comfort}",
       "saved": "음악 프로필에 저장되었습니다.",
-      "suited": "나에게 잘 어울리는 노래",
+      "suited": "내가 좋아하고 잘 어울리는 곡",
       "confidenceHigh": "높은 확신도",
       "done": "완료",
-      "typeUnknown": "나의 음성 유형"
+      "typeUnknown": "나의 음성 유형",
+      "comfortEstimated": "예상치",
+      "comfortMeasured": "편안하게 불렀던 곡들을 바탕으로 측정한 결과",
+      "falsetto": "가성 최대 {note}",
+      "adopt": "내 음성 프로필로 사용하기",
+      "adoptFailed": "내 음성으로 저장하지 못했어요. 네트워크 연결을 확인하고 다시 시도해 주세요."
     },
     "setup": {
       "bit_warm": "조금 풀림",

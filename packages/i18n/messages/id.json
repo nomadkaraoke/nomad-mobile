@@ -1714,10 +1714,15 @@
       "probably": "Kemungkinan {type}, tetapi butuh lebih banyak lagu untuk memastikannya",
       "range": "{range}, nyaman di {comfort}",
       "saved": "Tersimpan di profil musik Anda.",
-      "suited": "Lagu yang cocok untuk Anda",
+      "suited": "Lagu favorit yang cocok untukmu",
       "confidenceHigh": "Keyakinan tinggi",
       "done": "Selesai",
-      "typeUnknown": "Tipe suara Anda"
+      "typeUnknown": "Tipe suara Anda",
+      "comfortEstimated": "Perkiraan",
+      "comfortMeasured": "Diukur dari lagu-lagu yang kamu rasa nyaman dinyanyikan",
+      "falsetto": "Falseto hingga {note}",
+      "adopt": "Gunakan ini sebagai suara saya",
+      "adoptFailed": "Tidak dapat menyimpannya sebagai suara Anda. Periksa koneksi Anda dan coba lagi."
     },
     "setup": {
       "bit_warm": "Sedikit pemanasan",

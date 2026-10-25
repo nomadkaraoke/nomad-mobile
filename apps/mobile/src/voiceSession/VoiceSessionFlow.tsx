@@ -11,6 +11,7 @@ import { openSignIn } from '../auth/signInUi';
 import { useAuth } from '../auth/store';
 import type { MicPermission } from '../voice/pitchSource';
 import { StepLayout } from '../voice/StepLayout';
+import { RECS_KEY } from '../discover/useRecommendations';
 import { VOICE_KEY } from '../voice/useVoiceProfile';
 import { ContextChip } from './ContextChip';
 import { readBackground } from './backgroundDefault';
@@ -103,12 +104,14 @@ export function VoiceSessionFlow() {
     };
   }, [mic, vs.step, recordOn, vs.pitchSource]);
 
-  // A result that saved the session profile: Me's voice profile reads it again.
+  // A result that saved the session profile (by itself, or adopted here): Me's voice profile and the picks' fit badges
+  // read it again.
   const savedFor = useRef<object | null>(null);
   useEffect(() => {
     if (vs.result?.profile_saved && savedFor.current !== vs.result) {
       savedFor.current = vs.result;
       void queryClient.invalidateQueries({ queryKey: VOICE_KEY });
+      void queryClient.invalidateQueries({ queryKey: RECS_KEY });
     }
   }, [vs.result, queryClient]);
 
@@ -233,6 +236,7 @@ export function VoiceSessionFlow() {
         <ResultScreen
           result={vs.result}
           busy={vs.busy}
+          onAdopt={vs.adoptResult}
           onDone={() => {
             vs.reset();
             close();

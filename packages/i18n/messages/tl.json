@@ -1714,10 +1714,15 @@
       "probably": "Malamang na {type}, pero kailangan pa namin ng mas maraming kanta para makasiguro",
       "range": "{range}, komportable sa {comfort}",
       "saved": "Nai-save sa iyong music profile.",
-      "suited": "Mga kantang babagay sa iyo",
+      "suited": "Mga kantang gusto mo na bagay sa iyo",
       "confidenceHigh": "Mataas na kasiguraduhan",
       "done": "Tapos na",
-      "typeUnknown": "Uri ng boses mo"
+      "typeUnknown": "Uri ng boses mo",
+      "comfortEstimated": "Tantiya",
+      "comfortMeasured": "Sinukat mula sa mga kantang naging komportable ka",
+      "falsetto": "Falsetto hanggang {note}",
+      "adopt": "Gamitin ito bilang boses ko",
+      "adoptFailed": "Hindi mai-save bilang boses mo. Pakisuri ang iyong koneksyon at subukang muli."
     },
     "setup": {
       "bit_warm": "Medyo warm na",

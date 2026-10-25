@@ -178,6 +178,7 @@ function fakeVs(over: Partial<VoiceSession> = {}): VoiceSession {
     noteLabels: [],
     take: null,
     takeOffsetS: 0,
+    adoptResult: jest.fn(async () => true),
     livePitch: null,
     pitchSource: mockSource.current!,
     playerMode: 'embed-hosted',
@@ -615,6 +616,39 @@ describe('voiceSessionScreens: steps', () => {
     expect(screen.queryByTestId('vs-result-more')).toBeNull();
     await press('vs-result-done');
     expect(vs.reset).toHaveBeenCalled();
+  });
+
+  it('result: falsetto line, measured comfort copy; saved, so no adopt', async () => {
+    mockVs.current = fakeVs({ step: 'result', result: { ...RESULT, falsetto_high: 69, comfort_source: 'measured' } });
+    open();
+    await screen.findByTestId('vs-result');
+    expect(text('vs-result-falsetto')).toBe(`Falsetto up to ${isolate('A4')}`);
+    expect(text('vs-result-comfort-source')).toBe('Measured from the songs you found comfortable');
+    expect(screen.getByText('Songs you like that suit you')).toBeTruthy();
+    expect(screen.queryByTestId('vs-result-adopt')).toBeNull();
+  });
+
+  it('result: no falsetto, estimated comfort (also from an older decide without comfort_source)', async () => {
+    mockVs.current = fakeVs({ step: 'result', result: { ...RESULT, falsetto_high: null, comfort_source: undefined } });
+    open();
+    await screen.findByTestId('vs-result');
+    expect(screen.queryByTestId('vs-result-falsetto')).toBeNull();
+    expect(text('vs-result-comfort-source')).toBe('Estimated');
+  });
+
+  it('result: adopt when not saved; a failure says so and keeps the button', async () => {
+    const vs = fakeVs({ step: 'result', result: { ...RESULT, confidence_label: 'low', profile_saved: false } });
+    (vs.adoptResult as jest.Mock).mockResolvedValueOnce(false);
+    mockVs.current = vs;
+    open();
+    await screen.findByTestId('vs-result');
+    expect(screen.queryByTestId('vs-result-saved')).toBeNull();
+    await press('vs-result-adopt');
+    expect(vs.adoptResult).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId('vs-result-adopt-failed')).toBeTruthy();
+    await press('vs-result-adopt');
+    expect(vs.adoptResult).toHaveBeenCalledTimes(2);
+    expect(screen.queryByTestId('vs-result-adopt-failed')).toBeNull();
   });
 
   it('result: between two types; Keep going when the singer finished early', async () => {

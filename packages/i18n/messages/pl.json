@@ -1714,10 +1714,15 @@
       "probably": "Prawdopodobnie {type}, ale potrzebujemy więcej piosenek, aby mieć pewność",
       "range": "{range}, komfortowo {comfort}",
       "saved": "Zapisano w Twoim profilu muzycznym.",
-      "suited": "Piosenki, które do Ciebie pasują",
+      "suited": "Piosenki, które lubisz i które do Ciebie pasują",
       "confidenceHigh": "Wysoka pewność",
       "done": "Gotowe",
-      "typeUnknown": "Twój typ głosu"
+      "typeUnknown": "Twój typ głosu",
+      "comfortEstimated": "Szacowany",
+      "comfortMeasured": "Zmierzony na podstawie utworów, które były dla Ciebie komfortowe",
+      "falsetto": "Falset do {note}",
+      "adopt": "Ustaw jako mój głos",
+      "adoptFailed": "Nie udało się zapisać tego jako Twój głos. Sprawdź połączenie i spróbuj ponownie."
     },
     "setup": {
       "bit_warm": "Trochę rozgrzany",

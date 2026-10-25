@@ -1714,10 +1714,15 @@
       "probably": "Probabil {type}, dar avem nevoie de mai multe melodii pentru a fi siguri",
       "range": "{range}, confortabil {comfort}",
       "saved": "Salvat în profilul tău muzical.",
-      "suited": "Melodii care ți se potrivesc",
+      "suited": "Melodii care îți plac și ți se potrivesc",
       "confidenceHigh": "Încredere ridicată",
       "done": "Gata",
-      "typeUnknown": "Tipul tău de voce"
+      "typeUnknown": "Tipul tău de voce",
+      "comfortEstimated": "Estimat",
+      "comfortMeasured": "Măsurat pe baza melodiilor care ți s-au părut confortabile",
+      "falsetto": "Falset până la {note}",
+      "adopt": "Folosește ca vocea mea",
+      "adoptFailed": "Nu s-a putut salva ca vocea ta. Verifică-ți conexiunea și încearcă din nou."
     },
     "setup": {
       "bit_warm": "Puțin încălzit(ă)",
