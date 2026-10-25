@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Berhenti"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Beberapa waktu lalu",
+      "day": "Hari (opsional)",
+      "less": "Lebih sedikit",
+      "onDate": "Pada tanggal tertentu",
+      "times": "Berapa kali dinyanyikan",
+      "title": "Tandai sudah dinyanyikan",
+      "close": "Tutup",
+      "more": "Lainnya",
+      "save": "Simpan",
+      "song": "{title} oleh {artist}",
+      "tonight": "Malam Ini"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Selesai} other {Tambahkan # lagu}}",
+      "hint": "Centang lagu yang pernah Anda nyanyikan sebelumnya. Kami akan menambahkannya ke riwayat Anda.",
+      "title": "Lagu yang pernah saya nyanyikan",
+      "searchLabel": "Cari lagu",
+      "searchPlaceholder": "Cari lagu",
+      "songValue": "{title} oleh {artist}"
+    }
   }
 }

@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Stop"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "For et stykke tid siden",
+      "day": "Dag (valgfrit)",
+      "less": "Færre",
+      "onDate": "På en bestemt dato",
+      "times": "Antal gange sunget",
+      "title": "Markér som sunget",
+      "close": "Luk",
+      "more": "Mere",
+      "save": "Gem",
+      "song": "{title} af {artist}",
+      "tonight": "I aften"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Færdig} one {Tilføj # sang} other {Tilføj # sange}}",
+      "hint": "Sæt kryds ved de sange, du har sunget før. Vi føjer dem til din historik.",
+      "title": "Sange, jeg har sunget",
+      "searchLabel": "Find en sang",
+      "searchPlaceholder": "Søg efter sange",
+      "songValue": "{title} af {artist}"
+    }
   }
 }

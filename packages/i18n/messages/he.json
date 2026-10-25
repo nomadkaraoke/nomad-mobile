@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "עצירה"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "לפני זמן מה",
+      "day": "יום (אופציונלי)",
+      "less": "פחות",
+      "onDate": "בתאריך מסוים",
+      "times": "כמה פעמים שרת",
+      "title": "סימון כשיר ששרתי",
+      "close": "סגירה",
+      "more": "עוד",
+      "save": "שמור",
+      "song": "{title} מאת {artist}",
+      "tonight": "הערב"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {סיום} one {הוספת שיר אחד} two {הוספת שני שירים} other {הוספת # שירים}}",
+      "hint": "סמנו את השירים שכבר שרתם בעבר. נוסיף אותם להיסטוריה שלכם.",
+      "title": "שירים ששרתי",
+      "searchLabel": "חיפוש שיר",
+      "searchPlaceholder": "חיפוש שירים",
+      "songValue": "{title} מאת {artist}"
+    }
   }
 }

@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Leállítás"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Régebben",
+      "day": "Nap (nem kötelező)",
+      "less": "Kevesebb",
+      "onDate": "Adott napon",
+      "times": "Hányszor énekelted",
+      "title": "Megjelölés elénekeltként",
+      "close": "Bezárás",
+      "more": "Továbbiak",
+      "save": "Mentés",
+      "song": "{artist} – {title}",
+      "tonight": "Ma este"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Kész} one {# dal hozzáadása} other {# dal hozzáadása}}",
+      "hint": "Pipáld be azokat a dalokat, amiket már énekeltél korábban! Hozzáadjuk őket az előzményeidhez.",
+      "title": "Dalok, amiket énekeltem",
+      "searchLabel": "Keress egy dalt",
+      "searchPlaceholder": "Dalok keresése",
+      "songValue": "{artist} – {title}"
+    }
   }
 }

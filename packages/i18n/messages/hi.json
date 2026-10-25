@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "रोको"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "कुछ समय पहले",
+      "day": "दिन (वैकल्पिक)",
+      "less": "कम",
+      "onDate": "किसी तारीख पर",
+      "times": "कितनी बार गाया",
+      "title": "गाया हुआ मार्क करो",
+      "close": "बंद करो",
+      "more": "और विकल्प",
+      "save": "सेव करो",
+      "song": "{artist} का {title}",
+      "tonight": "आज रात"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {हो गया} one {# गाना जोड़ो} other {# गाने जोड़ो}}",
+      "hint": "उन गानों पर टिक करो जो तुमने पहले गाए हैं। हम उन्हें तुम्हारी हिस्ट्री में जोड़ देंगे।",
+      "title": "मेरे गाए हुए गाने",
+      "searchLabel": "गाना ढूंढो",
+      "searchPlaceholder": "गाने खोजो",
+      "songValue": "{artist} का {title}"
+    }
   }
 }

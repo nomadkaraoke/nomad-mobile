@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "إيقاف"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "منذ فترة",
+      "day": "اليوم (اختياري)",
+      "less": "أقل",
+      "onDate": "في تاريخ محدد",
+      "times": "مرات الغناء",
+      "title": "تحديد كمُغنّاة",
+      "close": "إغلاق",
+      "more": "المزيد",
+      "save": "حفظ",
+      "song": "{title} لـ {artist}",
+      "tonight": "الليلة"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {تم} one {إضافة أغنية واحدة} two {إضافة أغنيتين} few {إضافة # أغانٍ} many {إضافة # أغنية} other {إضافة # أغنية}}",
+      "hint": "ضع علامة على الأغاني التي غنيتها من قبل، وسنضيفها إلى سجلك.",
+      "title": "أغانٍ غنيتها",
+      "searchLabel": "ابحث عن أغنية",
+      "searchPlaceholder": "ابحث عن أغانٍ",
+      "songValue": "{title} لـ {artist}"
+    }
   }
 }

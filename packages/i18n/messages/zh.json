@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "停止"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "之前唱过",
+      "day": "具体日期（可选）",
+      "less": "更少",
+      "onDate": "指定日期",
+      "times": "演唱次数",
+      "title": "标记为已唱",
+      "close": "关闭",
+      "more": "更多",
+      "save": "保存",
+      "song": "{artist}《{title}》",
+      "tonight": "今晚"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {完成} other {添加 # 首歌曲}}",
+      "hint": "勾选你以前唱过的歌，我们会将它们添加到你的历史记录中。",
+      "title": "我唱过的歌",
+      "searchLabel": "查找歌曲",
+      "searchPlaceholder": "搜索歌曲",
+      "songValue": "{artist}《{title}》"
+    }
   }
 }

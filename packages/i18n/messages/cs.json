@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Zastavit"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Před nějakou dobou",
+      "day": "Den (volitelné)",
+      "less": "Méně",
+      "onDate": "V konkrétní den",
+      "times": "Kolikrát zazpíváno",
+      "title": "Označit jako zazpívané",
+      "close": "Zavřít",
+      "more": "Více",
+      "save": "Uložit",
+      "song": "{title} od {artist}",
+      "tonight": "Dnes večer"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Hotovo} one {Přidat # písničku} few {Přidat # písničky} other {Přidat # písniček}}",
+      "hint": "Zaškrtni písničky, které už jsi někdy zpíval/a. Přidáme je do tvé historie.",
+      "title": "Písničky, které jsem zpíval/a",
+      "searchLabel": "Najít skladbu",
+      "searchPlaceholder": "Hledat skladby",
+      "songValue": "{title} od {artist}"
+    }
   }
 }

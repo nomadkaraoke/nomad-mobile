@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Itigil"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Kani-kanina lang",
+      "day": "Araw (opsyonal)",
+      "less": "Bawasan",
+      "onDate": "Sa petsang ito",
+      "times": "Ilang beses kinanta",
+      "title": "Markahan bilang nakanta na",
+      "close": "Isara",
+      "more": "Higit pa",
+      "save": "I-save",
+      "song": "{title} ni {artist}",
+      "tonight": "Ngayong Gabi"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Tapos na} one {Magdagdag ng # kanta} other {Magdagdag ng # na kanta}}",
+      "hint": "Lagyan ng tsek ang mga kantang nakanta mo na noon. Idaragdag namin ang mga ito sa iyong history.",
+      "title": "Mga kantang nakanta ko na",
+      "searchLabel": "Maghanap ng kanta",
+      "searchPlaceholder": "Maghanap ng mga kanta",
+      "songValue": "{title} ni {artist}"
+    }
   }
 }

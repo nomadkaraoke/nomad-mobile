@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Zatrzymaj"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Jakiś czas temu",
+      "day": "Dzień (opcjonalnie)",
+      "less": "Mniej",
+      "onDate": "W konkretnym dniu",
+      "times": "Liczba wykonań",
+      "title": "Oznacz jako zaśpiewane",
+      "close": "Zamknij",
+      "more": "Więcej",
+      "save": "Zapisz",
+      "song": "{title} – {artist}",
+      "tonight": "Dziś wieczorem"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Gotowe} one {Dodaj # piosenkę} few {Dodaj # piosenki} many {Dodaj # piosenek} other {Dodaj # piosenek}}",
+      "hint": "Zaznacz piosenki, które zdarzyło Ci się już śpiewać. Dodamy je do Twojej historii.",
+      "title": "Zaśpiewane piosenki",
+      "searchLabel": "Znajdź piosenkę",
+      "searchPlaceholder": "Szukaj utworów",
+      "songValue": "{title} – {artist}"
+    }
   }
 }

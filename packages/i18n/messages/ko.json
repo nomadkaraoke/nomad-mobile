@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "중지"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "오래전",
+      "day": "날짜 (선택 사항)",
+      "less": "더 적게",
+      "onDate": "특정 날짜",
+      "times": "부른 횟수",
+      "title": "부른 곡으로 표시",
+      "close": "닫기",
+      "more": "더보기",
+      "save": "저장",
+      "song": "{artist}의 {title}",
+      "tonight": "투나잇"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {완료} other {#곡 추가}}",
+      "hint": "이전에 불러본 곡을 선택해 보세요. 부른 곡 기록에 추가해 드릴게요.",
+      "title": "내가 부른 곡",
+      "searchLabel": "노래 찾기",
+      "searchPlaceholder": "노래 검색",
+      "songValue": "{artist}의 {title}"
+    }
   }
 }

@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Oprește"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Acum ceva timp",
+      "day": "Ziua (opțional)",
+      "less": "Mai puține",
+      "onDate": "La o dată anume",
+      "times": "Cântată de",
+      "title": "Marchează ca fiind cântată",
+      "close": "Închide",
+      "more": "Mai multe",
+      "save": "Salvează",
+      "song": "{title} de {artist}",
+      "tonight": "În această seară"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Gata} one {Adaugă # melodie} few {Adaugă # melodii} other {Adaugă # de melodii}}",
+      "hint": "Bifează melodiile pe care le-ai mai cântat. Le vom adăuga în istoricul tău.",
+      "title": "Melodii pe care le-am cântat",
+      "searchLabel": "Găsește o piesă",
+      "searchPlaceholder": "Caută piese",
+      "songValue": "{title} de {artist}"
+    }
   }
 }

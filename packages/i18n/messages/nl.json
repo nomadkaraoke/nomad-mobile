@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Stoppen"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Een tijdje geleden",
+      "day": "Dag (optioneel)",
+      "less": "Minder",
+      "onDate": "Op een datum",
+      "times": "Aantal keren gezongen",
+      "title": "Markeren als gezongen",
+      "close": "Sluiten",
+      "more": "Meer",
+      "save": "Opslaan",
+      "song": "{title} van {artist}",
+      "tonight": "Vanavond"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Klaar} one {# nummer toevoegen} other {# nummers toevoegen}}",
+      "hint": "Vink de nummers aan die je al eens hebt gezongen. We voegen ze toe aan je geschiedenis.",
+      "title": "Nummers die ik heb gezongen",
+      "searchLabel": "Zoek een nummer",
+      "searchPlaceholder": "Nummers zoeken",
+      "songValue": "{title} van {artist}"
+    }
   }
 }

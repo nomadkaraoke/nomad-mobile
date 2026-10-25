@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Stopp"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "För ett tag sedan",
+      "day": "Dag (valfritt)",
+      "less": "Färre",
+      "onDate": "Ett visst datum",
+      "times": "Antal gånger sjungen",
+      "title": "Markera som sjungen",
+      "close": "Stäng",
+      "more": "Mer",
+      "save": "Spara",
+      "song": "{title} med {artist}",
+      "tonight": "I kväll"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Klar} one {Lägg till # låt} other {Lägg till # låtar}}",
+      "hint": "Bocka för låtarna du har sjungit tidigare, så lägger vi till dem i din historik.",
+      "title": "Låtar jag har sjungit",
+      "searchLabel": "Hitta en låt",
+      "searchPlaceholder": "Sök efter låtar",
+      "songValue": "{title} med {artist}"
+    }
   }
 }

@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Atura"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Fa un temps",
+      "day": "Dia (opcional)",
+      "less": "Menys",
+      "onDate": "En una data concreta",
+      "times": "Vegades cantada",
+      "title": "Marca com a cantada",
+      "close": "Tanca",
+      "more": "Més",
+      "save": "Desa",
+      "song": "{title} de {artist}",
+      "tonight": "Aquesta nit"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Fet} one {Afegeix # cançó} other {Afegeix # cançons}}",
+      "hint": "Marca les cançons que ja hagis cantat abans. Les afegirem al teu historial.",
+      "title": "Cançons que he cantat",
+      "searchLabel": "Cerca una cançó",
+      "searchPlaceholder": "Cerca cançons",
+      "songValue": "{title} de {artist}"
+    }
   }
 }

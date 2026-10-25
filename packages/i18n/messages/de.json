@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Stopp"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Vor einer Weile",
+      "day": "Tag (optional)",
+      "less": "Weniger",
+      "onDate": "An einem bestimmten Datum",
+      "times": "Wie oft gesungen",
+      "title": "Als gesungen markieren",
+      "close": "Schließen",
+      "more": "Mehr",
+      "save": "Speichern",
+      "song": "{title} von {artist}",
+      "tonight": "Heute Abend"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Fertig} one {# Song hinzufügen} other {# Songs hinzufügen}}",
+      "hint": "Hake die Songs ab, die du schon einmal gesungen hast. Wir fügen sie deinem Verlauf hinzu.",
+      "title": "Songs, die ich gesungen habe",
+      "searchLabel": "Song suchen",
+      "searchPlaceholder": "Songs suchen",
+      "songValue": "{title} von {artist}"
+    }
   }
 }

@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Pysäytä"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Jokin aika sitten",
+      "day": "Päivä (valinnainen)",
+      "less": "Vähemmän",
+      "onDate": "Tiettynä päivänä",
+      "times": "Laulukertoja",
+      "title": "Merkitse lauletuksi",
+      "close": "Sulje",
+      "more": "Lisää",
+      "save": "Tallenna",
+      "song": "{title} – {artist}",
+      "tonight": "Tänä iltana"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Valmis} one {Lisää # kappale} other {Lisää # kappaletta}}",
+      "hint": "Merkitse kappaleet, joita olet laulanut aiemmin. Lisäämme ne historiaasi.",
+      "title": "Laulamani kappaleet",
+      "searchLabel": "Etsi kappale",
+      "searchPlaceholder": "Etsi kappaleita",
+      "songValue": "{title} – {artist}"
+    }
   }
 }

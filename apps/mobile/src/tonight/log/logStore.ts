@@ -24,8 +24,18 @@ export type LogEntry = {
   night?: LogNight;
   sung_at?: string;
   survey?: Survey;
+  /** Backfill: how many times (1-50) it was sung before. */
+  times?: number;
+  origin?: 'live' | 'backfill';
   /** Local ms epoch of the last change. */
   updatedAt: number;
+};
+export type BackfillOptions = {
+  /** 1-50. */
+  times: number;
+  /** `YYYY`, `YYYY-MM` or `YYYY-MM-DD`, matching `precision` (omitted for `unknown`). */
+  date?: string;
+  precision: NonNullable<LogNight['date_precision']>;
 };
 export type LogSong = { song_key?: string; artist: string; title: string };
 
@@ -100,6 +110,8 @@ type LogStore = {
   surveyed: Record<string, number>;
   /** Logs a song at another bar (`app_<uuid>`) under the active Other night; returns the id (null when signed out). */
   addOther(song: LogSong, state: LogState): string | null;
+  /** Logs a song sung before the app, with a rough date (`origin: 'backfill'`); returns the id (null when signed out). */
+  addBackfill(song: LogSong, opts: BackfillOptions): string | null;
   /** Mirrors a Nomad song kjbox reported sung (local only: kjbox delivers the facts to decide). */
   noteNomad(id: string, song: { artist: string; title: string; nightId?: string }): void;
   /** Moves an app entry along planned → requested → sung (or skipped). kjbox owns Nomad entries' state: ignored. */
@@ -161,6 +173,33 @@ export const useLogStore = create<LogStore>((set, get) => {
       };
       saveEntries({ ...get().entries, [id]: entry });
       if (active?.kind === 'other') useNightStore.getState().touch();
+      const { updatedAt: _u, id: _i, source: _s, ...facts } = entry;
+      put(id, facts);
+      return id;
+    },
+
+    addBackfill(song, opts) {
+      if (!get().userKey) return null;
+      const id = `app_${newUuid()}`;
+      const times = Math.min(50, Math.max(1, Math.round(opts.times)));
+      const night: LogNight = {
+        kind: 'other',
+        ...(opts.precision !== 'unknown' && opts.date ? { date: opts.date } : {}),
+        date_precision: opts.precision,
+      };
+      const entry: LogEntry = {
+        id,
+        source: 'app',
+        state: 'sung',
+        artist: song.artist,
+        title: song.title,
+        ...(song.song_key ? { song_key: song.song_key } : {}),
+        night,
+        times,
+        origin: 'backfill',
+        updatedAt: clock(),
+      };
+      saveEntries({ ...get().entries, [id]: entry });
       const { updatedAt: _u, id: _i, source: _s, ...facts } = entry;
       put(id, facts);
       return id;

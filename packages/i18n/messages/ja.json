@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "停止"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "少し前",
+      "day": "日付（任意）",
+      "less": "少なく表示",
+      "onDate": "日付を指定",
+      "times": "歌った回数",
+      "title": "歌った曲として記録",
+      "close": "閉じる",
+      "more": "その他",
+      "save": "保存",
+      "song": "{artist} - {title}",
+      "tonight": "Tonight"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {完了} other {#曲を追加}}",
+      "hint": "これまでに歌ったことがある曲にチェックを入れてください。履歴に追加されます。",
+      "title": "歌ったことがある曲",
+      "searchLabel": "曲を探す",
+      "searchPlaceholder": "曲を検索",
+      "songValue": "{artist} - {title}"
+    }
   }
 }

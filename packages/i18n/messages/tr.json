@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Durdur"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Bir süre önce",
+      "day": "Gün (isteğe bağlı)",
+      "less": "Daha az",
+      "onDate": "Belirli bir tarihte",
+      "times": "Söylenme sayısı",
+      "title": "Söylendi olarak işaretle",
+      "close": "Kapat",
+      "more": "Daha fazla",
+      "save": "Kaydet",
+      "song": "{artist} - {title}",
+      "tonight": "Bu Gece"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Tamam} one {# şarkı ekle} other {# şarkı ekle}}",
+      "hint": "Daha önce söylediğin şarkıları işaretle. Onları geçmişine ekleyeceğiz.",
+      "title": "Söylediğim şarkılar",
+      "searchLabel": "Bir şarkı bul",
+      "searchPlaceholder": "Şarkı ara",
+      "songValue": "{artist} - {title}"
+    }
   }
 }

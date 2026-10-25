@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Interrompi"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Un po' di tempo fa",
+      "day": "Giorno (facoltativo)",
+      "less": "Meno",
+      "onDate": "In una data specifica",
+      "times": "Volte cantata",
+      "title": "Segna come cantata",
+      "close": "Chiudi",
+      "more": "Altro",
+      "save": "Salva",
+      "song": "{title} di {artist}",
+      "tonight": "Stasera"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Fatto} one {Aggiungi # canzone} other {Aggiungi # canzoni}}",
+      "hint": "Spunta le canzoni che hai già cantato. Le aggiungeremo alla tua cronologia.",
+      "title": "Canzoni che ho cantato",
+      "searchLabel": "Cerca un brano",
+      "searchPlaceholder": "Cerca brani",
+      "songValue": "{title} di {artist}"
+    }
   }
 }

@@ -19,6 +19,7 @@ import * as voice from '../app/discover/voice';
 import * as voiceSession from '../app/discover/voice-session';
 import * as index from '../app/index';
 import * as artistsAll from '../app/me/artists';
+import * as sungBefore from '../app/me/sung-before';
 import * as musicProfile from '../app/me/music-profile';
 import * as voiceDebug from '../app/me/voice-debug';
 import * as readyScreen from '../app/job/[id]';
@@ -55,6 +56,7 @@ export function appRoutes() {
     'discover/voice-session': voiceSession,
     'me/music-profile': musicProfile,
     'me/artists': artistsAll,
+    'me/sung-before': sungBefore,
     'me/voice-debug': voiceDebug,
     'song/[id]': song,
     'make/new': makeFlow,

@@ -1816,5 +1816,28 @@
       "rowFailed": "Couldn't change that. Check your connection and try again.",
       "playFailed": "Couldn't play that recording. Check your connection and try again."
     }
+  },
+  "me": {
+    "mark": {
+      "title": "Mark as sung",
+      "close": "Close",
+      "song": "{title} by {artist}",
+      "tonight": "Tonight",
+      "onDate": "On a date",
+      "aWhileAgo": "A while ago",
+      "day": "Day (optional)",
+      "times": "Times sung",
+      "less": "Fewer",
+      "more": "More",
+      "save": "Save"
+    },
+    "sungBefore": {
+      "title": "Songs I've sung",
+      "hint": "Tick the songs you have sung before. We'll add them to your history.",
+      "searchLabel": "Find a song",
+      "searchPlaceholder": "Search songs",
+      "songValue": "{title} by {artist}",
+      "done": "{count, plural, =0 {Done} one {Add # song} other {Add # songs}}"
+    }
   }
 }

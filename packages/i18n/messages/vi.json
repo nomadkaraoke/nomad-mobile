@@ -1816,5 +1816,28 @@
       "song": "{title} · {artist}",
       "stop": "Dừng"
     }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Trước đây một thời gian",
+      "day": "Ngày (không bắt buộc)",
+      "less": "Ít hơn",
+      "onDate": "Vào một ngày cụ thể",
+      "times": "Số lần hát",
+      "title": "Đánh dấu đã hát",
+      "close": "Đóng",
+      "more": "Thêm",
+      "save": "Lưu",
+      "song": "{title} - {artist}",
+      "tonight": "Tối nay"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Xong} other {Thêm # bài hát}}",
+      "hint": "Đánh dấu những bài hát bạn từng hát trước đây. Chúng tôi sẽ thêm vào lịch sử của bạn.",
+      "title": "Bài hát tôi đã hát",
+      "searchLabel": "Tìm bài hát",
+      "searchPlaceholder": "Tìm kiếm bài hát",
+      "songValue": "{title} - {artist}"
+    }
   }
 }
