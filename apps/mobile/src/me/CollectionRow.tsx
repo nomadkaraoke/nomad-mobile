@@ -58,9 +58,12 @@ export function CollectionRow({ song: s, index: i }: { song: MeSong; index: numb
         {feel ? (
           <Ionicons testID={`me-song-feel-${i}`} name={FEEL_ICON[feel]} size={20} color={FEEL_COLOR[feel]} accessibilityLabel={tFeel(feel)} />
         ) : null}
-        <Text testID={`me-song-times-${i}`} accessibilityLabel={t('timesSungLabel', { count: s.times_sung })} className="overflow-hidden rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">
-          {t('timesSung', { count: s.times_sung })}
-        </Text>
+        {/* A saved song not sung yet: no "0×" pill (the How often filter has "Not yet sung" for that). */}
+        {s.times_sung > 0 ? (
+          <Text testID={`me-song-times-${i}`} accessibilityLabel={t('timesSungLabel', { count: s.times_sung })} className="overflow-hidden rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">
+            {t('timesSung', { count: s.times_sung })}
+          </Text>
+        ) : null}
       </View>
       {s.facets?.community || s.facets?.karafun || showFit ? (
         <View className="flex-row flex-wrap items-center gap-1.5">

@@ -49,6 +49,14 @@ it('lists every song, most-sung first, and offers only the vibes in use', async 
   expect(screen.queryByTestId('me-songs-vibe-duet')).toBeNull();
 });
 
+it('a saved song nobody has sung yet shows no "0×" pill; sung songs keep theirs', async () => {
+  renderRouter(appRoutes(), { initialUrl: '/me/songs' });
+  await screen.findByTestId('me-song-2');
+  expect(screen.getByTestId('me-song-times-0')).toHaveTextContent('5×');
+  expect(screen.getByTestId('me-song-2')).toHaveTextContent(/Yak/);
+  expect(screen.queryByTestId('me-song-times-2')).toBeNull();
+});
+
 it('filters (feel, often, mood, vibe, saved), searches and sorts', async () => {
   renderRouter(appRoutes(), { initialUrl: '/me/songs' });
   await screen.findByTestId('me-song-2');
