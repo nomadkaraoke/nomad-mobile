@@ -10,6 +10,8 @@ import { useAuth } from '../auth/store';
 import { onRecordingsUploaded } from './recording/recordingQueue';
 
 export const VOICE_HISTORY_KEY = ['voiceSession', 'history'] as const;
+/** The recordings count's query key (a session or an upload changes it). */
+export const RECORDING_COUNT_KEY = ['voiceSession', 'recordingCount'] as const;
 
 export function useVoiceHistory() {
   const queryClient = useQueryClient();

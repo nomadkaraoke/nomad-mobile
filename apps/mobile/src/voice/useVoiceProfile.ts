@@ -40,6 +40,17 @@ export function fromServer(o: VoiceProfileOut): LocalVoiceProfile {
 }
 
 let inFlight: Promise<void> | null = null;
+/**
+ * Set when decide reverted or removed the saved profile itself (a "Don't count" recompute) and the app couldn't read
+ * the result: the next server read made after this time is followed as-is (`followServerVoice`), even though decide's
+ * restored mic result is older than the phone's copy, which the reconcile below would otherwise keep forever.
+ */
+let followReadAfter: number | null = null;
+
+/** Follow the next server read of the voice profile, whatever its age (see `followReadAfter`). */
+export function followNextServerRead(): void {
+  followReadAfter = Date.now();
+}
 /** Date.now() when the last voice PUT started, and when the last voice GET started (the clear-on-null race guard). */
 let lastPutStartedAt = 0;
 let lastGetStartedAt = 0;
@@ -111,8 +122,16 @@ export function useVoiceProfile() {
   });
 
   const server = query.data === undefined ? undefined : query.data.profile;
+  const readAt = query.dataUpdatedAt;
   useEffect(() => {
     if (server === undefined) return;
+    if (followReadAfter !== null && readAt >= followReadAfter) {
+      followReadAfter = null;
+      if (!useVoiceStore.getState().pending) {
+        followServerVoice(server);
+        return;
+      }
+    }
     const { profile: mine, pending: minePending, rejected, adopt, markSynced, clear } = useVoiceStore.getState();
     if (server === null) {
       if (mine && !minePending && !rejected && lastPutStartedAt < lastGetStartedAt) clear();
@@ -120,7 +139,7 @@ export function useVoiceProfile() {
     }
     if (!mine || time(server.measured_at) > time(mine.measuredAt)) adopt(fromServer(server));
     else if (time(server.measured_at) === time(mine.measuredAt)) markSynced(mine.measuredAt);
-  }, [server]);
+  }, [server, readAt]);
 
   return {
     profile,

@@ -2,7 +2,9 @@
 import { classifyVoice, fitSong, summarizeRange, type RangeSummary } from '@nomad/core';
 import { act } from '@testing-library/react-native';
 
+import { useRecFilters } from '../discover/filtersStore';
 import { appStorage } from '../storage';
+import { followServerVoice } from '../voice/useVoiceProfile';
 import {
   loadVoice,
   profileFromResult,
@@ -264,5 +266,42 @@ describe('useVoiceStore', () => {
     const p = { ...profileFromSelfReport('tenor', AT), method: 'session' as const, confidence: 'high' as const };
     appStorage.set(VOICE_STORAGE_KEY, JSON.stringify({ profile: p, pending: false }));
     expect(loadVoice()).toEqual({ profile: p, pending: false });
+  });
+});
+
+describe('followServerVoice (decide changed the saved profile itself)', () => {
+  const LOCAL: LocalVoiceProfile = {
+    lowMidi: 46, highMidi: 70, comfortLow: 50, comfortHigh: 60, voiceType: 'baritone', voiceTypeBetween: null,
+    register: null, confidence: 'low', method: 'session', measuredAt: '2026-10-25T18:00:00.000Z', sessionId: 's1',
+  };
+  const MIC_OUT = {
+    low_midi: 43, high_midi: 67, comfort_low: 48, comfort_high: 58, voice_type: 'bass', voice_type_between: null,
+    register: null, confidence: 'medium', method: 'mic', measured_at: '2026-10-20T10:00:00.000Z',
+    updated_at: '2026-10-20T10:00:01Z',
+  } as const;
+
+  it('an older server profile is still adopted (a revert to the mic result)', () => {
+    act(() => useVoiceStore.getState().adopt(LOCAL));
+    act(() => followServerVoice(MIC_OUT));
+    expect(useVoiceStore.getState()).toMatchObject({
+      pending: false,
+      profile: expect.objectContaining({ method: 'mic', voiceType: 'bass', measuredAt: MIC_OUT.measured_at }),
+    });
+  });
+
+  it('a pending local measurement is kept', () => {
+    act(() => useVoiceStore.getState().save(LOCAL));
+    act(() => followServerVoice(MIC_OUT));
+    expect(useVoiceStore.getState()).toMatchObject({ pending: true, profile: expect.objectContaining({ method: 'session' }) });
+    act(() => followServerVoice(null));
+    expect(useVoiceStore.getState().profile?.method).toBe('session');
+  });
+
+  it('null clears the profile and turns off Singable and sort by fit', () => {
+    act(() => useVoiceStore.getState().adopt(LOCAL));
+    act(() => useRecFilters.getState().set({ singable: true, sort: 'fit' }));
+    act(() => followServerVoice(null));
+    expect(useVoiceStore.getState().profile).toBeNull();
+    expect(useRecFilters.getState().filters).toMatchObject({ singable: false, sort: 'best' });
   });
 });

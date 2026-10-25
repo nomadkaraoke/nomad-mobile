@@ -15,7 +15,8 @@ import { appStorage } from '../storage';
 import { gen, session } from '../test-utils/genAuthMock';
 import { appRoutes } from '../test-utils/routes';
 import { RECS_KEY } from '../discover/useRecommendations';
-import { VOICE_KEY } from '../voice/useVoiceProfile';
+import { useVoiceProfile, VOICE_KEY } from '../voice/useVoiceProfile';
+import { useVoiceStore, type LocalVoiceProfile } from '../voice/voiceStore';
 import { RECORD_DEFAULT_KEY } from '../voiceSession/recordDefault';
 import { useRecordingQueue } from '../voiceSession/recording/recordingQueue';
 import { RECORDING_COUNT_KEY, RecordingsSection } from '../voiceSession/RecordingsSection';
@@ -60,13 +61,20 @@ const m = (f: unknown) => f as jest.Mock;
 const METRICS = { frame: { x: 0, y: 0, width: 390, height: 844 }, insets: { top: 0, left: 0, right: 0, bottom: 0 } };
 const flags = (session_enabled: boolean) => ({ session_enabled, is_admin: false, voice_data: true, active_session_id: null });
 
+/** The app-wide voice reconcile (useVoiceSync's useVoiceProfile), mounted beside the section. */
+function VoiceSync() {
+  useVoiceProfile();
+  return null;
+}
+
 let client: QueryClient;
-const renderSection = () => {
+const renderSection = ({ withSync = false }: { withSync?: boolean } = {}) => {
   client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
     <SafeAreaProvider initialMetrics={METRICS}>
       <IntlProvider locale="en">
         <QueryClientProvider client={client}>
+          {withSync ? <VoiceSync /> : null}
           <RecordingsSection />
         </QueryClientProvider>
       </IntlProvider>
@@ -96,6 +104,19 @@ const SUMMARY = {
   evidence_attempts: 1,
   profile_saved: false,
   computed_at: '2026-10-25T18:00:00Z',
+} as const;
+const MIC_OUT = {
+  low_midi: 43, high_midi: 67, comfort_low: 48, comfort_high: 58, voice_type: 'bass', voice_type_between: null,
+  register: null, confidence: 'medium', method: 'mic', measured_at: '2026-10-20T10:00:00.000Z', updated_at: '2026-10-20T10:00:01Z',
+} as const;
+const SESSION_LOCAL: LocalVoiceProfile = {
+  lowMidi: 46, highMidi: 70, comfortLow: 50, comfortHigh: 60, voiceType: 'baritone', voiceTypeBetween: null,
+  register: null, confidence: 'low', method: 'session', measuredAt: '2026-10-25T18:00:00.000Z', sessionId: 'sB', evidenceCount: 2,
+};
+const SESSION_OUT = {
+  low_midi: 46, high_midi: 70, comfort_low: 50, comfort_high: 60, voice_type: 'baritone', voice_type_between: null,
+  register: null, confidence: 'low', method: 'session', measured_at: '2026-10-25T18:00:00.000Z', updated_at: '2026-10-25T18:00:01Z',
+  session_id: 'sB', evidence_count: 2,
 } as const;
 const attempt = (session: string, n: number, over: Record<string, unknown> = {}) => ({
   attempt_id: `${session}:${n}`,
@@ -129,6 +150,8 @@ beforeEach(async () => {
   jest.clearAllMocks();
   appStorage.remove(RECORD_DEFAULT_KEY);
   useRecordingQueue.getState().clearAll();
+  act(() => useVoiceStore.getState().clear());
+  m(decide.getVoiceProfiles).mockResolvedValue({ profile: null, mic: null, latestSession: null });
   m(decide.getVoiceHistory).mockResolvedValue(HISTORY);
   m(decide.voiceRecordingCount).mockResolvedValue(3);
   m(decide.deleteVoiceRecordings).mockResolvedValue({ deleted: 3 });
@@ -282,7 +305,9 @@ describe('Your sessions (history)', () => {
   });
 
   it('exclude confirms, patches, refetches voice and recs', async () => {
+    act(() => useVoiceStore.getState().adopt(SESSION_LOCAL));
     m(decide.patchVoiceAttempt).mockResolvedValue({ attempt_id: 'sB:1', excluded: true, result: SUMMARY, profile: 'reverted_to_mic' });
+    m(decide.getVoiceProfiles).mockResolvedValue({ profile: MIC_OUT, mic: MIC_OUT, latestSession: null });
     renderSection();
     fireEvent.press(await screen.findByTestId('vs-rec-0-1-exclude'));
     expect(Alert.alert).toHaveBeenCalledWith("Don't count this song?", expect.stringMatching(/again without it/), expect.anything());
@@ -291,9 +316,38 @@ describe('Your sessions (history)', () => {
     await confirmDelete();
     expect(decide.patchVoiceAttempt).toHaveBeenCalledWith('sB:1', { excluded: true });
     expect(await screen.findByTestId('vs-rec-outcome')).toHaveTextContent('Your voice is back to your mic test result.');
+    // The phone follows decide's (older) mic result at once.
+    await waitFor(() =>
+      expect(useVoiceStore.getState()).toMatchObject({ pending: false, profile: expect.objectContaining({ method: 'mic', voiceType: 'bass' }) }),
+    );
     const keys = invalidate.mock.calls.map((c) => c[0]?.queryKey);
     expect(keys).toEqual(expect.arrayContaining([VOICE_KEY, RECS_KEY]));
     await waitFor(() => expect(decide.getVoiceHistory).toHaveBeenCalledTimes(2));
+  });
+
+  it('a failed read after a revert: the next server read is followed even though it is older', async () => {
+    act(() => useVoiceStore.getState().adopt(SESSION_LOCAL));
+    // On mount decide still has the session profile (the phone's copy is synced).
+    m(decide.getVoiceProfiles).mockResolvedValue({ profile: SESSION_OUT, mic: MIC_OUT, latestSession: null });
+    m(decide.patchVoiceAttempt).mockResolvedValue({ attempt_id: 'sB:1', excluded: true, result: SUMMARY, profile: 'reverted_to_mic' });
+    renderSection({ withSync: true });
+    await waitFor(() => expect(decide.getVoiceProfiles).toHaveBeenCalled());
+    fireEvent.press(await screen.findByTestId('vs-rec-0-1-exclude'));
+    // The follow-up read fails; the refetch after it sees the restored mic result (older than the phone's copy).
+    m(decide.getVoiceProfiles).mockRejectedValueOnce(new Error('offline')).mockResolvedValue({ profile: MIC_OUT, mic: MIC_OUT, latestSession: null });
+    await confirmDelete();
+    await waitFor(() =>
+      expect(useVoiceStore.getState()).toMatchObject({ pending: false, profile: expect.objectContaining({ method: 'mic' }) }),
+    );
+  });
+
+  it('without a pending follow, an older server profile still loses to the phone\'s newer copy', async () => {
+    act(() => useVoiceStore.getState().adopt(SESSION_LOCAL));
+    m(decide.getVoiceProfiles).mockResolvedValue({ profile: MIC_OUT, mic: MIC_OUT, latestSession: null });
+    renderSection({ withSync: true });
+    await waitFor(() => expect(decide.getVoiceProfiles).toHaveBeenCalled());
+    await act(async () => {});
+    expect(useVoiceStore.getState().profile?.method).toBe('session');
   });
 
   it('count it again needs no destructive confirm and sends excluded: false', async () => {

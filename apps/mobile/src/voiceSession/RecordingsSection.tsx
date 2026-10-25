@@ -23,16 +23,15 @@ import { Alert, Switch, View } from 'react-native';
 import { useAuth } from '../auth/store';
 import { ProfileSection } from '../discover/profile/ProfileSection';
 import { RECS_KEY } from '../discover/useRecommendations';
-import { followServerVoice, VOICE_KEY } from '../voice/useVoiceProfile';
+import { followNextServerRead, followServerVoice, VOICE_KEY } from '../voice/useVoiceProfile';
 import { useVoiceLabels } from '../voice/voiceLabels';
 import { readRecordDefault, writeRecordDefault } from './recordDefault';
 import { RecordingRow } from './RecordingRow';
 import { deleteMyRecordings, onRecordingsUploaded, useRecordingQueue, waitForRecordingFlush } from './recording/recordingQueue';
 import { useRecordingPlayback } from './recording/useRecordingPlayback';
-import { useVoiceHistory, VOICE_HISTORY_KEY } from './useVoiceHistory';
+import { RECORDING_COUNT_KEY, useVoiceHistory, VOICE_HISTORY_KEY } from './useVoiceHistory';
 
-/** The recordings count's query key (a session or an upload changes it). */
-export const RECORDING_COUNT_KEY = ['voiceSession', 'recordingCount'] as const;
+export { RECORDING_COUNT_KEY } from './useVoiceHistory';
 
 const CONFIDENCE_KEY = { high: 'confidenceHigh', medium: 'confidenceMedium', low: 'confidenceLow' } as const;
 
@@ -113,7 +112,9 @@ export function RecordingsSection() {
           followServerVoice(voice.profile);
           queryClient.setQueryData([...VOICE_KEY, email], voice);
         } catch {
-          // The app-wide reconcile catches up later.
+          // The app-wide reconcile catches up later; a revert or removal must be followed even though decide's
+          // profile is then older than (or missing beside) the phone's copy.
+          if (out.profile === 'reverted_to_mic' || out.profile === 'removed') followNextServerRead();
         }
       }
       void queryClient.invalidateQueries({ queryKey: VOICE_KEY });
