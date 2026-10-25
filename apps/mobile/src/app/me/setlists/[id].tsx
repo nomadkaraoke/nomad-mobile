@@ -117,7 +117,10 @@ export default function SetlistScreen() {
 
   return (
     <View testID="setlist" className="flex-1 bg-bg">
+      {/* The header changes height (Edit order swaps the button row for Save / Cancel): with FlashList holding the
+          visible rows still, that scrolled the setlist's name and buttons out of view. Let the rows move instead. */}
       <List
+        showNewRowsAtTop
         testID="setlist-items"
         data={shown}
         extraData={editing}

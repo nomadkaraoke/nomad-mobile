@@ -14,6 +14,18 @@ import { resetMe } from './helpers';
 
 jest.setTimeout(20_000);
 
+// The real List, with its props captured per testID.
+const mockListProps: Record<string, Record<string, unknown>> = {};
+jest.mock('@nomad/ui', () => {
+  const actual = jest.requireActual('@nomad/ui');
+  const React = jest.requireActual('react');
+  const List = React.forwardRef(function MockList(props: { testID: string }, ref: unknown) {
+    mockListProps[props.testID] = props;
+    return React.createElement(actual.List, { ...props, ref });
+  });
+  return { ...actual, List };
+});
+
 jest.mock('@nomad/api-decide', () => ({
   ...jest.requireActual('@nomad/api-decide'),
   listSetlists: jest.fn(),
@@ -86,6 +98,14 @@ describe('setlist detail', () => {
     fireEvent.press(screen.getByTestId('setlist-order-save'));
     await waitFor(() => expect(queuedFor(SEED)?.items.map((x) => x.title)).toEqual(['Song 2', 'Song 1', 'Song 3']));
     expect(screen.queryByTestId('setlist-order-save')).toBeNull();
+  });
+
+  it('the setlist list lets rows move when the header changes height (Edit order keeps the name and buttons in view)', async () => {
+    renderRouter(appRoutes(), { initialUrl: `/me/setlists/${SEED}` });
+    await screen.findByTestId('setlist-item-0');
+    expect(mockListProps['setlist-items']?.showNewRowsAtTop).toBe(true);
+    fireEvent.press(screen.getByTestId('setlist-edit-order'));
+    expect(mockListProps['setlist-items']?.showNewRowsAtTop).toBe(true);
   });
 
   it('delete confirms, then the setlist is gone', async () => {
