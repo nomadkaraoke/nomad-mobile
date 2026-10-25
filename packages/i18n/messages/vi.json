@@ -1901,6 +1901,75 @@
       "songValue": "{title} - {artist}",
       "sung": "Đánh dấu đã hát",
       "up": "Chuyển {song} lên"
+    },
+    "allSongs": "Tất cả bài hát của bạn",
+    "home": {
+      "allSongsRow": "Tất cả bài hát của bạn ({count})",
+      "allTime": "Tất cả thời gian",
+      "connectHint": "Nhận gợi ý từ những bài bạn hay nghe",
+      "gotosEmpty": "Những bài hát tủ của bạn sẽ xuất hiện ở đây. Hãy bắt đầu bằng cách thêm các bài hát bạn từng hát trước đây.",
+      "gotosEmptyCta": "Thêm bài hát tôi từng hát",
+      "gotosTitle": "Bài tủ của bạn",
+      "greatShare": "{percent}% lần hát tuyệt vời",
+      "keysLabel": "Quãng giọng của bạn trên phím đàn",
+      "known": "{count, plural, other {# bài hát đã biết}}",
+      "manage": "Quản lý",
+      "manageHint": "Cài đặt quãng giọng, kết nối dịch vụ âm nhạc và chỉnh sửa thông tin của bạn",
+      "mostSung": "Hát nhiều nhất: {song} ({count}×)",
+      "nights": "{count, plural, other {# buổi}}",
+      "performances": "{count, plural, other {# lượt hát}}",
+      "saved": "{count, plural, other {# bài đã lưu}}",
+      "seeAll": "Xem tất cả",
+      "setlistsEmpty": "Lên kế hoạch cho buổi đi hát: tạo danh sách các bài hát bạn muốn biểu diễn.",
+      "songs": "{count, plural, other {# bài hát}}",
+      "sourcesLabel": "Nhạc đã kết nối",
+      "statsEmpty": "Chưa có bài nào được hát. Hãy đánh dấu bài hát là đã hát để bắt đầu theo dõi thống kê.",
+      "statsTitle": "Hành trình karaoke của bạn",
+      "sung": "{count, plural, other {# bài đã hát}}",
+      "thisYear": "Năm nay",
+      "topArtist": "Nghệ sĩ hát nhiều nhất: {artist}",
+      "venues": "{count, plural, other {# địa điểm}}",
+      "voiceCta": "Tìm quãng giọng của bạn",
+      "connectCta": "Kết nối âm nhạc của bạn",
+      "profileTitle": "Hồ sơ âm nhạc của bạn",
+      "voiceHint": "Tìm các bài hát hợp với giọng của bạn",
+      "voiceRange": "Âm vực {range}"
+    },
+    "songs": {
+      "addPast": "Thêm bài hát tôi từng hát",
+      "count": "{count, plural, other {# bài hát}}",
+      "empty": "Chưa có bài hát nào. Hãy đánh dấu một bài là đã hát hoặc lưu lại, bài hát sẽ xuất hiện ở đây.",
+      "emptyFiltered": "Không có bài hát nào khớp với bộ lọc này.",
+      "feel": {
+        "unrated": "Chưa đánh giá",
+        "bad": "Không hợp với mình",
+        "great": "Tuyệt vời",
+        "ok": "OK"
+      },
+      "offline": "Bạn đang ngoại tuyến. Đang hiển thị các bài hát đã lưu trên thiết bị này.",
+      "often": {
+        "once": "1 lần",
+        "twice": "Từ 2 lần trở lên",
+        "unsung": "Chưa hát lần nào"
+      },
+      "oftenLabel": "Tần suất hát",
+      "searchLabel": "Tìm kiếm bài hát của bạn",
+      "sort": {
+        "most": "Hát nhiều nhất",
+        "rated": "Được đánh giá cao nhất",
+        "recent": "Gần đây",
+        "az": "A đến Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Giai điệu & cảm xúc",
+      "crowdPleaser": "Được khán giả yêu thích",
+      "feelLabel": "Phân loại",
+      "loadError": "Không thể tải các bài hát của bạn.",
+      "moodLabel": "Tâm trạng",
+      "saved": "Đã lưu",
+      "searchPlaceholder": "Bài hát hoặc nghệ sĩ",
+      "sortLabel": "Sắp xếp",
+      "timesSungLabel": "{count, plural, one {Đã hát # lần} other {Đã hát # lần}}"
     }
   }
 }

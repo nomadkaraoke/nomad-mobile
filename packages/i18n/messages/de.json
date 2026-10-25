@@ -1901,6 +1901,75 @@
       "songValue": "{title} von {artist}",
       "sung": "Als gesungen markieren",
       "up": "{song} nach oben verschieben"
+    },
+    "allSongs": "Alle deine Songs",
+    "home": {
+      "allSongsRow": "Alle deine Songs ({count})",
+      "allTime": "Gesamter Zeitraum",
+      "connectHint": "Erhalte Vorschläge basierend auf dem, was du bereits hörst",
+      "gotosEmpty": "Die Songs, die du am liebsten singst, werden hier angezeigt. Füge zuerst Songs hinzu, die du schon einmal gesungen hast.",
+      "gotosEmptyCta": "Bereits gesungene Songs hinzufügen",
+      "gotosTitle": "Deine Favoriten",
+      "greatShare": "{percent} % liefen großartig",
+      "keysLabel": "Dein Stimmumfang auf einer Klaviatur",
+      "known": "{count, plural, one {# Song bekannt} other {# Songs bekannt}}",
+      "manage": "Verwalten",
+      "manageHint": "Richte deinen Stimmumfang ein, verbinde Musik und bearbeite, was wir über dich wissen",
+      "mostSung": "Am meisten gesungen: {song} ({count}×)",
+      "nights": "{count, plural, one {# Abend} other {# Abende}}",
+      "performances": "{count, plural, one {# Auftritt} other {# Auftritte}}",
+      "saved": "{count, plural, one {# gespeichert} other {# gespeichert}}",
+      "seeAll": "Alle anzeigen",
+      "setlistsEmpty": "Plane einen Abend: Erstelle eine Setlist mit Songs, die du singen möchtest.",
+      "songs": "{count, plural, one {# Song} other {# Songs}}",
+      "sourcesLabel": "Verbundene Musik",
+      "statsEmpty": "Bisher noch nichts gesungen. Markiere einen Song als gesungen, um deine Statistiken zu starten.",
+      "statsTitle": "Dein Karaoke",
+      "sung": "{count, plural, one {# Song gesungen} other {# Songs gesungen}}",
+      "thisYear": "Dieses Jahr",
+      "topArtist": "Top-Künstler: {artist}",
+      "venues": "{count, plural, one {# Location} other {# Locations}}",
+      "voiceCta": "Finde deinen Stimmumfang",
+      "connectCta": "Verbinde deine Musik",
+      "profileTitle": "Dein Musikprofil",
+      "voiceHint": "Finde Songs, die zu deiner Stimme passen",
+      "voiceRange": "Tonumfang {range}"
+    },
+    "songs": {
+      "addPast": "Bereits gesungene Songs hinzufügen",
+      "count": "{count, plural, one {# Song} other {# Songs}}",
+      "empty": "Noch keine Songs. Markiere einen Song als gesungen oder speichere einen, damit er hier angezeigt wird.",
+      "emptyFiltered": "Keine Songs entsprechen diesen Filtern.",
+      "feel": {
+        "unrated": "Nicht bewertet",
+        "bad": "Nicht mein Fall",
+        "great": "Großartig",
+        "ok": "OK"
+      },
+      "offline": "Du bist offline. Es werden die auf diesem Telefon gespeicherten Songs angezeigt.",
+      "often": {
+        "once": "Einmal",
+        "twice": "2-mal oder öfter",
+        "unsung": "Noch nicht gesungen"
+      },
+      "oftenLabel": "Häufigkeit",
+      "searchLabel": "Deine Songs durchsuchen",
+      "sort": {
+        "most": "Am meisten gesungen",
+        "rated": "Am besten bewertet",
+        "recent": "Zuletzt gesungen",
+        "az": "A bis Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Publikumsliebling",
+      "feelLabel": "Freigabe",
+      "loadError": "Deine Songs konnten nicht geladen werden.",
+      "moodLabel": "Stimmung",
+      "saved": "Gespeichert",
+      "searchPlaceholder": "Song oder Interpret",
+      "sortLabel": "Sortieren",
+      "timesSungLabel": "{count, plural, one {# Mal gesungen} other {# Mal gesungen}}"
     }
   }
 }

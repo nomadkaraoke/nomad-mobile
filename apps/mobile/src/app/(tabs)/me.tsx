@@ -10,6 +10,7 @@ import { ActivityIndicator, Alert, View } from 'react-native';
 import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
 import { currentLocale } from '../../locale';
+import { MeHome } from '../../me/MeHome';
 import { useOfflineIndex } from '../../offline/offlineIndex';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -102,6 +103,7 @@ export default function MeScreen() {
       <Text variant="title">{t('title')}</Text>
       {signedIn ? (
         <>
+          <MeHome />
           {me.data ? (
             <Text testID="me-credits" className="text-lg font-semibold">
               {t('credits', { credits: me.data.credits })}
@@ -128,6 +130,7 @@ export default function MeScreen() {
       <OfflineSongList />
       <Text variant="muted">{t('language')}</Text>
       <Text testID="me-language">{LOCALE_NAMES[locale]}</Text>
+      {/* Bottom block: Phase 6 adds an "Account and notifications" row here, above Sign out. */}
       {signedIn ? (
         <Button testID="me-signout" label={t('signOut')} variant="secondary" onPress={() => void signOut()} />
       ) : null}

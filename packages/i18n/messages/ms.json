@@ -1901,6 +1901,75 @@
       "songValue": "{title} oleh {artist}",
       "sung": "Tandakan sebagai pernah dinyanyikan",
       "up": "Alih {song} ke atas"
+    },
+    "allSongs": "Semua lagu anda",
+    "home": {
+      "allSongsRow": "Semua lagu anda ({count})",
+      "allTime": "Sepanjang masa",
+      "connectHint": "Dapatkan cadangan lagu daripada apa yang biasa anda dengar",
+      "gotosEmpty": "Lagu kegemaran anda akan dipaparkan di sini. Mulakan dengan menambah lagu yang pernah anda nyanyikan.",
+      "gotosEmptyCta": "Tambah lagu yang pernah saya nyanyikan",
+      "gotosTitle": "Lagu kegemaran anda",
+      "greatShare": "{percent}% berjalan lancar",
+      "keysLabel": "Julat vokal anda pada papan kekunci",
+      "known": "{count, plural, other {# lagu diketahui}}",
+      "manage": "Urus",
+      "manageHint": "Tetapkan julat vokal anda, sambungkan muzik dan edit maklumat tentang diri anda",
+      "mostSung": "Paling kerap dinyanyikan: {song} ({count}×)",
+      "nights": "{count, plural, other {# malam}}",
+      "performances": "{count, plural, other {# persembahan}}",
+      "saved": "{count, plural, other {# disimpan}}",
+      "seeAll": "Lihat semua",
+      "setlistsEmpty": "Rancang sesi karaoke anda: buat senarai lagu yang ingin anda nyanyikan.",
+      "songs": "{count, plural, other {# lagu}}",
+      "sourcesLabel": "Muzik disambungkan",
+      "statsEmpty": "Belum ada lagu dinyanyikan. Tandakan lagu sebagai telah dinyanyikan untuk mula menjejak statistik anda.",
+      "statsTitle": "Karaoke anda",
+      "sung": "{count, plural, other {# lagu dinyanyikan}}",
+      "thisYear": "Tahun ini",
+      "topArtist": "Artis popular: {artist}",
+      "venues": "{count, plural, other {# lokasi}}",
+      "voiceCta": "Ketahui julat vokal anda",
+      "connectCta": "Sambungkan muzik anda",
+      "profileTitle": "Profil muzik anda",
+      "voiceHint": "Cari lagu yang sesuai dengan suara anda",
+      "voiceRange": "Julat {range}"
+    },
+    "songs": {
+      "addPast": "Tambah lagu yang pernah saya nyanyikan",
+      "count": "{count, plural, other {# lagu}}",
+      "empty": "Belum ada lagu. Tandakan lagu sebagai telah dinyanyikan atau simpan lagu untuk memaparkannya di sini.",
+      "emptyFiltered": "Tiada lagu yang sepadan dengan penapis ini.",
+      "feel": {
+        "unrated": "Belum dinilai",
+        "bad": "Bukan untuk saya",
+        "great": "Hebat",
+        "ok": "OK"
+      },
+      "offline": "Anda berada di luar talian. Memaparkan lagu yang disimpan pada telefon ini.",
+      "often": {
+        "once": "Sekali",
+        "twice": "2 kali atau lebih",
+        "unsung": "Belum pernah dinyanyikan"
+      },
+      "oftenLabel": "Kekerapan",
+      "searchLabel": "Cari lagu anda",
+      "sort": {
+        "most": "Paling kerap dinyanyikan",
+        "rated": "Penilaian terbaik",
+        "recent": "Terkini",
+        "az": "A ke Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Pilihan ramai",
+      "feelLabel": "Penarafan",
+      "loadError": "Tidak dapat memuatkan lagu anda.",
+      "moodLabel": "Suasana",
+      "saved": "Disimpan",
+      "searchPlaceholder": "Lagu atau artis",
+      "sortLabel": "Susun",
+      "timesSungLabel": "{count, plural, one {Dinyanyikan # kali} other {Dinyanyikan # kali}}"
     }
   }
 }

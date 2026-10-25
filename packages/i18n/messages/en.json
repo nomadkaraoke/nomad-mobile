@@ -1901,6 +1901,75 @@
       "sung": "Mark as sung",
       "make": "Make it",
       "remove": "Remove"
+    },
+    "home": {
+      "profileTitle": "Your music profile",
+      "manage": "Manage",
+      "manageHint": "Set up your voice range, connect music and edit what we know about you",
+      "voiceCta": "Find your voice range",
+      "voiceHint": "Find songs that fit your voice",
+      "connectCta": "Connect your music",
+      "connectHint": "Get picks from what you already listen to",
+      "keysLabel": "Your vocal range on a keyboard",
+      "voiceRange": "Range {range}",
+      "sourcesLabel": "Connected music",
+      "known": "{count, plural, one {# song known} other {# songs known}}",
+      "sung": "{count, plural, one {# song sung} other {# songs sung}}",
+      "saved": "{count, plural, one {# saved} other {# saved}}",
+      "seeAll": "See all",
+      "gotosTitle": "Your go-tos",
+      "gotosEmpty": "The songs you love to sing will show up here. Start by adding songs you've sung before.",
+      "gotosEmptyCta": "Add songs I've sung",
+      "setlistsEmpty": "Plan a night: make a setlist of songs you want to sing.",
+      "allSongsRow": "All your songs ({count})",
+      "statsTitle": "Your karaoke",
+      "thisYear": "This year",
+      "allTime": "All time",
+      "songs": "{count, plural, one {# song} other {# songs}}",
+      "performances": "{count, plural, one {# performance} other {# performances}}",
+      "nights": "{count, plural, one {# night} other {# nights}}",
+      "venues": "{count, plural, one {# venue} other {# venues}}",
+      "topArtist": "Top artist: {artist}",
+      "mostSung": "Most sung: {song} ({count}×)",
+      "greatShare": "{percent}% went great",
+      "statsEmpty": "Nothing sung yet. Mark a song as sung to start your stats."
+    },
+    "allSongs": "All your songs",
+    "songs": {
+      "searchLabel": "Search your songs",
+      "searchPlaceholder": "Song or artist",
+      "addPast": "Add songs I've sung",
+      "sortLabel": "Sort",
+      "sort": {
+        "most": "Most sung",
+        "recent": "Recent",
+        "rated": "Best rated",
+        "az": "A to Z"
+      },
+      "feelLabel": "Rating",
+      "feel": {
+        "great": "Great",
+        "ok": "OK",
+        "bad": "Not for me",
+        "unrated": "Unrated"
+      },
+      "oftenLabel": "How often",
+      "often": {
+        "twice": "2 or more",
+        "once": "Once",
+        "unsung": "Not yet sung"
+      },
+      "moodLabel": "Mood",
+      "vibeLabel": "Vibe",
+      "saved": "Saved",
+      "timesSung": "{count}×",
+      "timesSungLabel": "{count, plural, one {Sung # time} other {Sung # times}}",
+      "crowdPleaser": "Crowd-pleaser",
+      "empty": "No songs yet. Mark a song as sung or save one and it will show up here.",
+      "emptyFiltered": "No songs match these filters.",
+      "offline": "You're offline. Showing the songs saved on this phone.",
+      "loadError": "Couldn't load your songs.",
+      "count": "{count, plural, one {# song} other {# songs}}"
     }
   }
 }

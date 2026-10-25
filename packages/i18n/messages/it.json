@@ -1901,6 +1901,75 @@
       "songValue": "{title} di {artist}",
       "sung": "Segna come cantata",
       "up": "Sposta {song} più in alto"
+    },
+    "allSongs": "Tutti i tuoi brani",
+    "home": {
+      "allSongsRow": "Tutti i tuoi brani ({count})",
+      "allTime": "Di sempre",
+      "connectHint": "Ricevi consigli basati su ciò che ascolti di solito",
+      "gotosEmpty": "I brani che ami cantare appariranno qui. Inizia aggiungendo quelli che hai già cantato.",
+      "gotosEmptyCta": "Aggiungi brani che ho cantato",
+      "gotosTitle": "I tuoi cavalli di battaglia",
+      "greatShare": "{percent}% andati alla grande",
+      "keysLabel": "La tua estensione vocale su una tastiera",
+      "known": "{count, plural, one {# brano conosciuto} other {# brani conosciuti}}",
+      "manage": "Gestisci",
+      "manageHint": "Imposta la tua estensione vocale, collega la tua musica e modifica il tuo profilo",
+      "mostSung": "Più cantato: {song} ({count}×)",
+      "nights": "{count, plural, one {# serata} other {# serate}}",
+      "performances": "{count, plural, one {# esibizione} other {# esibizioni}}",
+      "saved": "{count, plural, one {# salvato} other {# salvati}}",
+      "seeAll": "Vedi tutti",
+      "setlistsEmpty": "Organizza una serata: crea una scaletta con i brani che vuoi cantare.",
+      "songs": "{count, plural, one {# brano} other {# brani}}",
+      "sourcesLabel": "Musica collegata",
+      "statsEmpty": "Non hai ancora cantato nulla. Segna un brano come cantato per iniziare a registrare le tue statistiche.",
+      "statsTitle": "Il tuo karaoke",
+      "sung": "{count, plural, one {# brano cantato} other {# brani cantati}}",
+      "thisYear": "Quest'anno",
+      "topArtist": "Artista top: {artist}",
+      "venues": "{count, plural, one {# locale} other {# locali}}",
+      "voiceCta": "Scopri la tua estensione vocale",
+      "connectCta": "Connetti la tua musica",
+      "profileTitle": "Il tuo profilo musicale",
+      "voiceHint": "Trova brani adatti alla tua voce",
+      "voiceRange": "Estensione {range}"
+    },
+    "songs": {
+      "addPast": "Aggiungi brani che ho cantato",
+      "count": "{count, plural, one {# brano} other {# brani}}",
+      "empty": "Ancora nessun brano. Segna un brano come cantato o salvalo per vederlo qui.",
+      "emptyFiltered": "Nessun brano corrisponde a questi filtri.",
+      "feel": {
+        "unrated": "Non valutato",
+        "bad": "Non fa per me",
+        "great": "Alla grande",
+        "ok": "OK"
+      },
+      "offline": "Sei offline. Mostro i brani salvati su questo telefono.",
+      "often": {
+        "once": "Una volta",
+        "twice": "2 o più volte",
+        "unsung": "Non ancora cantati"
+      },
+      "oftenLabel": "Frequenza",
+      "searchLabel": "Cerca tra i tuoi brani",
+      "sort": {
+        "most": "Più cantati",
+        "rated": "I più votati",
+        "recent": "Recenti",
+        "az": "Dalla A alla Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Pezzo forte",
+      "feelLabel": "Rating",
+      "loadError": "Impossibile caricare i tuoi brani.",
+      "moodLabel": "Umore",
+      "saved": "Salvato",
+      "searchPlaceholder": "Canzone o artista",
+      "sortLabel": "Ordina",
+      "timesSungLabel": "{count, plural, one {Cantata # volta} other {Cantata # volte}}"
     }
   }
 }

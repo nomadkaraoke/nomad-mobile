@@ -1901,6 +1901,75 @@
       "songValue": "{artist}의 {title}",
       "sung": "부른 곡으로 표시",
       "up": "{song} 위로 이동"
+    },
+    "allSongs": "내 모든 곡",
+    "home": {
+      "allSongsRow": "내 모든 곡 ({count})",
+      "allTime": "전체 기간",
+      "connectHint": "평소 즐겨 듣는 음악을 바탕으로 추천곡을 받아보세요",
+      "gotosEmpty": "즐겨 부르는 노래가 여기에 표시됩니다. 이전에 불러본 노래를 추가해 보세요.",
+      "gotosEmptyCta": "불러본 노래 추가하기",
+      "gotosTitle": "나의 애창곡",
+      "greatShare": "{percent}% 대만족",
+      "keysLabel": "건반으로 보는 내 음역대",
+      "known": "{count, plural, other {아는 곡 #곡}}",
+      "manage": "관리",
+      "manageHint": "음역대를 설정하고, 음악 서비스를 연동하고, 내 정보를 수정해 보세요",
+      "mostSung": "가장 많이 부른 곡: {song} ({count}회)",
+      "nights": "{count, plural, other {#일}}",
+      "performances": "{count, plural, other {노래 부른 횟수 #회}}",
+      "saved": "{count, plural, other {저장된 곡 #곡}}",
+      "seeAll": "전체 보기",
+      "setlistsEmpty": "노래방 갈 준비: 부르고 싶은 곡들로 세트리스트를 만들어 보세요.",
+      "songs": "{count, plural, other {#곡}}",
+      "sourcesLabel": "연동된 음악",
+      "statsEmpty": "아직 부른 노래가 없습니다. 노래를 불렀다고 표시하고 통계를 시작해 보세요.",
+      "statsTitle": "나의 노래방 기록",
+      "sung": "{count, plural, other {부른 곡 #곡}}",
+      "thisYear": "올해",
+      "topArtist": "최애 아티스트: {artist}",
+      "venues": "{count, plural, other {방문 장소 #곳}}",
+      "voiceCta": "내 음역대 찾기",
+      "connectCta": "내 음악 연결하기",
+      "profileTitle": "내 음악 프로필",
+      "voiceHint": "내 음역대에 맞는 노래 찾기",
+      "voiceRange": "음역대 {range}"
+    },
+    "songs": {
+      "addPast": "불러본 노래 추가하기",
+      "count": "{count, plural, other {#곡}}",
+      "empty": "아직 노래가 없습니다. 노래를 불렀다고 표시하거나 저장하면 여기에 표시됩니다.",
+      "emptyFiltered": "해당 필터와 일치하는 노래가 없습니다.",
+      "feel": {
+        "unrated": "평가 안 됨",
+        "bad": "관심 없음",
+        "great": "아주 좋았음",
+        "ok": "정상"
+      },
+      "offline": "오프라인 상태입니다. 이 기기에 저장된 노래를 표시합니다.",
+      "often": {
+        "once": "1회",
+        "twice": "2회 이상",
+        "unsung": "아직 안 불러봄"
+      },
+      "oftenLabel": "부른 횟수",
+      "searchLabel": "내 노래 검색",
+      "sort": {
+        "most": "많이 부른 순",
+        "rated": "높은 평점 순",
+        "recent": "최신 순",
+        "az": "가나다/ABC순"
+      },
+      "timesSung": "{count}회",
+      "vibeLabel": "분위기",
+      "crowdPleaser": "분위기 메이커",
+      "feelLabel": "등급",
+      "loadError": "노래를 불러오지 못했습니다.",
+      "moodLabel": "분위기",
+      "saved": "저장됨",
+      "searchPlaceholder": "곡명 또는 아티스트",
+      "sortLabel": "정렬",
+      "timesSungLabel": "{count, plural, one {#회 부름} other {#회 부름}}"
     }
   }
 }

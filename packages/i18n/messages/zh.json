@@ -1901,6 +1901,75 @@
       "songValue": "{artist}《{title}》",
       "sung": "标记为已唱",
       "up": "上移《{song}》"
+    },
+    "allSongs": "你的所有歌曲",
+    "home": {
+      "allSongsRow": "你的所有歌曲 ({count})",
+      "allTime": "所有时间",
+      "connectHint": "根据你常听的音乐获取推荐",
+      "gotosEmpty": "你常唱拿手的歌曲会显示在这里。先添加你以前唱过的歌吧。",
+      "gotosEmptyCta": "添加我唱过的歌",
+      "gotosTitle": "拿手曲目",
+      "greatShare": "{percent}% 唱得很棒",
+      "keysLabel": "在键盘上查看你的音域",
+      "known": "{count, plural, one {# 首会唱} other {# 首会唱}}",
+      "manage": "管理",
+      "manageHint": "设置你的音域、关联音乐账号，并编辑你的个人信息",
+      "mostSung": "唱得最多：{song}（{count}次）",
+      "nights": "{count, plural, one {# 晚} other {# 晚}}",
+      "performances": "{count, plural, one {# 次演唱} other {# 次演唱}}",
+      "saved": "{count, plural, one {# 首已收藏} other {# 首已收藏}}",
+      "seeAll": "查看全部",
+      "setlistsEmpty": "规划一个欢唱之夜：创建你想唱的歌单吧。",
+      "songs": "{count, plural, one {# 首歌曲} other {# 首歌曲}}",
+      "sourcesLabel": "已关联音乐",
+      "statsEmpty": "还没有唱过歌。将歌曲标记为已唱即可开始统计。",
+      "statsTitle": "你的卡拉OK数据",
+      "sung": "{count, plural, one {# 首已唱} other {# 首已唱}}",
+      "thisYear": "今年",
+      "topArtist": "唱得最多的歌手：{artist}",
+      "venues": "{count, plural, one {# 个地点} other {# 个地点}}",
+      "voiceCta": "测测你的音域",
+      "connectCta": "连接你的音乐服务",
+      "profileTitle": "你的音乐偏好",
+      "voiceHint": "查找适合你声线的歌曲",
+      "voiceRange": "音域 {range}"
+    },
+    "songs": {
+      "addPast": "添加我唱过的歌",
+      "count": "{count, plural, one {# 首歌曲} other {# 首歌曲}}",
+      "empty": "暂无歌曲。标记已唱或收藏歌曲，就会显示在这里。",
+      "emptyFiltered": "没有符合筛选条件的歌曲。",
+      "feel": {
+        "unrated": "未评分",
+        "bad": "不合口味",
+        "great": "感觉棒极了",
+        "ok": "正常"
+      },
+      "offline": "你当前处于离线状态。仅显示保存在本机上的歌曲。",
+      "often": {
+        "once": "1 次",
+        "twice": "2 次及以上",
+        "unsung": "尚未唱过"
+      },
+      "oftenLabel": "演唱频次",
+      "searchLabel": "搜索你的歌曲",
+      "sort": {
+        "most": "唱得最多",
+        "rated": "评分最高",
+        "recent": "最近",
+        "az": "A 到 Z"
+      },
+      "timesSung": "{count}次",
+      "vibeLabel": "曲风氛围",
+      "crowdPleaser": "全场嗨唱",
+      "feelLabel": "分级",
+      "loadError": "无法加载您的歌曲。",
+      "moodLabel": "心情",
+      "saved": "已保存",
+      "searchPlaceholder": "歌名或歌手",
+      "sortLabel": "排序",
+      "timesSungLabel": "{count, plural, one {唱过 # 次} other {唱过 # 次}}"
     }
   }
 }

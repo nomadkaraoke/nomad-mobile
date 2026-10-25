@@ -1901,6 +1901,75 @@
       "songValue": "{title} oleh {artist}",
       "sung": "Tandai sudah dinyanyikan",
       "up": "Pindahkan {song} ke atas"
+    },
+    "allSongs": "Semua lagumu",
+    "home": {
+      "allSongsRow": "Semua lagumu ({count})",
+      "allTime": "Sepanjang masa",
+      "connectHint": "Dapatkan rekomendasi dari musik yang biasa kamu dengarkan",
+      "gotosEmpty": "Lagu yang suka kamu nyanyikan akan muncul di sini. Mulailah dengan menambahkan lagu yang pernah kamu nyanyikan sebelumnya.",
+      "gotosEmptyCta": "Tambah lagu yang pernah kunyanyikan",
+      "gotosTitle": "Lagu andalanmu",
+      "greatShare": "{percent}% berjalan sukses",
+      "keysLabel": "Rentang vokalmu di keyboard",
+      "known": "{count, plural, other {# lagu dikenali}}",
+      "manage": "Kelola",
+      "manageHint": "Atur rentang vokal, hubungkan musik, dan ubah profilmu",
+      "mostSung": "Paling sering dinyanyikan: {song} ({count}×)",
+      "nights": "{count, plural, other {# malam}}",
+      "performances": "{count, plural, other {# penampilan}}",
+      "saved": "{count, plural, other {# tersimpan}}",
+      "seeAll": "Lihat semua",
+      "setlistsEmpty": "Rencanakan malammu: buat setlist lagu yang ingin kamu nyanyikan.",
+      "songs": "{count, plural, other {# lagu}}",
+      "sourcesLabel": "Musik terhubung",
+      "statsEmpty": "Belum ada yang dinyanyikan. Tandai lagu sebagai sudah dinyanyikan untuk mulai melihat statistikmu.",
+      "statsTitle": "Karaokemu",
+      "sung": "{count, plural, other {# lagu dinyanyikan}}",
+      "thisYear": "Tahun ini",
+      "topArtist": "Artis teratas: {artist}",
+      "venues": "{count, plural, other {# tempat}}",
+      "voiceCta": "Temukan rentang vokalmu",
+      "connectCta": "Hubungkan musik Anda",
+      "profileTitle": "Profil musik Anda",
+      "voiceHint": "Temukan lagu yang sesuai dengan suara Anda",
+      "voiceRange": "Rentang nada {range}"
+    },
+    "songs": {
+      "addPast": "Tambah lagu yang pernah kunyanyikan",
+      "count": "{count, plural, other {# lagu}}",
+      "empty": "Belum ada lagu. Tandai lagu sebagai sudah dinyanyikan atau simpan lagu, dan lagu tersebut akan muncul di sini.",
+      "emptyFiltered": "Tidak ada lagu yang cocok dengan filter ini.",
+      "feel": {
+        "unrated": "Belum dinilai",
+        "bad": "Bukan untuk saya",
+        "great": "Luar biasa",
+        "ok": "OK"
+      },
+      "offline": "Kamu sedang offline. Menampilkan lagu yang tersimpan di ponsel ini.",
+      "often": {
+        "once": "1 kali",
+        "twice": "2 kali atau lebih",
+        "unsung": "Belum pernah dinyanyikan"
+      },
+      "oftenLabel": "Frekuensi",
+      "searchLabel": "Cari lagumu",
+      "sort": {
+        "most": "Paling sering dinyanyikan",
+        "rated": "Rating tertinggi",
+        "recent": "Terbaru",
+        "az": "A sampai Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Favorit penonton",
+      "feelLabel": "Rating",
+      "loadError": "Tidak bisa memuat lagu-lagumu.",
+      "moodLabel": "Suasana hati",
+      "saved": "Tersimpan",
+      "searchPlaceholder": "Lagu atau artis",
+      "sortLabel": "Urutkan",
+      "timesSungLabel": "{count, plural, other {Dinyanyikan # kali}}"
     }
   }
 }

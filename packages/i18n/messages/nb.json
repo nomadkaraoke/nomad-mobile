@@ -1901,6 +1901,75 @@
       "songValue": "{title} av {artist}",
       "sung": "Marker som sunget",
       "up": "Flytt {song} opp"
+    },
+    "allSongs": "Alle sangene dine",
+    "home": {
+      "allSongsRow": "Alle sangene dine ({count})",
+      "allTime": "Gjennom tidene",
+      "connectHint": "Få anbefalinger basert på det du allerede hører på",
+      "gotosEmpty": "Sangene du elsker å synge, dukker opp her. Start med å legge til sanger du har sunget før.",
+      "gotosEmptyCta": "Legg til sanger jeg har sunget",
+      "gotosTitle": "Dine faste favoritter",
+      "greatShare": "{percent} % gikk kjempebra",
+      "keysLabel": "Stemmerekkevidden din på tangenter",
+      "known": "{count, plural, one {# sang du kan} other {# sanger du kan}}",
+      "manage": "Administrer",
+      "manageHint": "Angi stemmerekkevidde, koble til musikk og rediger det vi vet om deg",
+      "mostSung": "Mest sunget: {song} ({count}×)",
+      "nights": "{count, plural, one {# kveld} other {# kvelder}}",
+      "performances": "{count, plural, one {# opptreden} other {# opptredener}}",
+      "saved": "{count, plural, one {# lagret} other {# lagrede}}",
+      "seeAll": "Se alle",
+      "setlistsEmpty": "Planlegg en kveld: lag en spilleliste over sanger du vil synge.",
+      "songs": "{count, plural, one {# sang} other {# sanger}}",
+      "sourcesLabel": "Tilkoblet musikk",
+      "statsEmpty": "Ingenting sunget ennå. Marker en sang som sunget for å starte statistikken din.",
+      "statsTitle": "Karaoken din",
+      "sung": "{count, plural, one {# sang sunget} other {# sanger sunget}}",
+      "thisYear": "I år",
+      "topArtist": "Toppartist: {artist}",
+      "venues": "{count, plural, one {# sted} other {# steder}}",
+      "voiceCta": "Finn stemmerekkevidden din",
+      "connectCta": "Koble til musikken din",
+      "profileTitle": "Musikkprofilen din",
+      "voiceHint": "Finn sanger som passer til stemmen din",
+      "voiceRange": "Toneomfang {range}"
+    },
+    "songs": {
+      "addPast": "Legg til sanger jeg har sunget",
+      "count": "{count, plural, one {# sang} other {# sanger}}",
+      "empty": "Ingen sanger ennå. Marker en sang som sunget eller lagre en, så dukker den opp her.",
+      "emptyFiltered": "Ingen sanger passer til disse filtrene.",
+      "feel": {
+        "unrated": "Ikke vurdert",
+        "bad": "Ikke noe for meg",
+        "great": "Topp",
+        "ok": "OK"
+      },
+      "offline": "Du er frakoblet. Viser sanger som er lagret på denne telefonen.",
+      "often": {
+        "once": "Én gang",
+        "twice": "2 eller flere",
+        "unsung": "Ikke sunget ennå"
+      },
+      "oftenLabel": "Hvor ofte",
+      "searchLabel": "Søk i sangene dine",
+      "sort": {
+        "most": "Mest sunget",
+        "rated": "Beste vurdering",
+        "recent": "Siste",
+        "az": "A til Å"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Publikumsfavoritt",
+      "feelLabel": "Aldersgrense",
+      "loadError": "Kunne ikke laste inn sangene dine.",
+      "moodLabel": "Stemning",
+      "saved": "Lagret",
+      "searchPlaceholder": "Sang eller artist",
+      "sortLabel": "Sorter",
+      "timesSungLabel": "{count, plural, one {Sunget # gang} other {Sunget # ganger}}"
     }
   }
 }

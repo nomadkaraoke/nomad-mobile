@@ -1901,6 +1901,75 @@
       "songValue": "{artist} - {title}",
       "sung": "Söylendi olarak işaretle",
       "up": "{song} şarkısını yukarı taşı"
+    },
+    "allSongs": "Tüm şarkıların",
+    "home": {
+      "allSongsRow": "Tüm şarkıların ({count})",
+      "allTime": "Tüm zamanlar",
+      "connectHint": "Zaten dinlediğin parçalardan öneriler al",
+      "gotosEmpty": "Söylemeyi sevdiğin şarkılar burada görünecek. Daha önce söylediğin şarkıları ekleyerek başla.",
+      "gotosEmptyCta": "Söylediğim şarkıları ekle",
+      "gotosTitle": "Gözdelerin",
+      "greatShare": "%{percent} harika geçti",
+      "keysLabel": "Klavyede ses aralığın",
+      "known": "{count, plural, one {# bilinen şarkı} other {# bilinen şarkı}}",
+      "manage": "Yönet",
+      "manageHint": "Ses aralığını ayarla, müzik servislerini bağla ve senin hakkında bildiklerimizi düzenle",
+      "mostSung": "En çok söylenen: {song} ({count}×)",
+      "nights": "{count, plural, one {# gece} other {# gece}}",
+      "performances": "{count, plural, one {# performans} other {# performans}}",
+      "saved": "{count, plural, one {# kaydedilen} other {# kaydedilen}}",
+      "seeAll": "Tümünü gör",
+      "setlistsEmpty": "Bir gece planla: söylemek istediğin şarkılardan bir çalma listesi oluştur.",
+      "songs": "{count, plural, one {# şarkı} other {# şarkı}}",
+      "sourcesLabel": "Bağlı müzik hesapları",
+      "statsEmpty": "Henüz şarkı söylenmedi. İstatistiklerini başlatmak için bir şarkıyı söylendi olarak işaretle.",
+      "statsTitle": "Karaoke özetin",
+      "sung": "{count, plural, one {# şarkı söylendi} other {# şarkı söylendi}}",
+      "thisYear": "Bu yıl",
+      "topArtist": "En çok söylenen sanatçı: {artist}",
+      "venues": "{count, plural, one {# mekan} other {# mekan}}",
+      "voiceCta": "Ses aralığını bul",
+      "connectCta": "Müziğini bağla",
+      "profileTitle": "Müzik profilin",
+      "voiceHint": "Sesine uygun şarkıları bul",
+      "voiceRange": "Ses aralığı {range}"
+    },
+    "songs": {
+      "addPast": "Söylediğim şarkıları ekle",
+      "count": "{count, plural, one {# şarkı} other {# şarkı}}",
+      "empty": "Henüz şarkı yok. Bir şarkıyı söylendi olarak işaretle veya kaydet, burada görünecektir.",
+      "emptyFiltered": "Bu filtrelere uyan şarkı yok.",
+      "feel": {
+        "unrated": "Puanlanmamış",
+        "bad": "Bana göre değil",
+        "great": "Harika",
+        "ok": "Tamam"
+      },
+      "offline": "Çevrimdışısın. Bu telefona kaydedilen şarkılar gösteriliyor.",
+      "often": {
+        "once": "1 kez",
+        "twice": "2 veya daha fazla",
+        "unsung": "Henüz söylenmedi"
+      },
+      "oftenLabel": "Sıklık",
+      "searchLabel": "Şarkılarında ara",
+      "sort": {
+        "most": "En çok söylenen",
+        "rated": "En yüksek puanlı",
+        "recent": "En son",
+        "az": "A'dan Z'ye"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Mod",
+      "crowdPleaser": "Herkesin sevdiği",
+      "feelLabel": "Derecelendirme",
+      "loadError": "Şarkıların yüklenemedi.",
+      "moodLabel": "Ruh Hali",
+      "saved": "Kaydedildi",
+      "searchPlaceholder": "Şarkı veya sanatçı",
+      "sortLabel": "Sırala",
+      "timesSungLabel": "{count, plural, one {# kez söylendi} other {# kez söylendi}}"
     }
   }
 }

@@ -1901,6 +1901,75 @@
       "songValue": "{title} ni {artist}",
       "sung": "Markahan bilang nakanta na",
       "up": "Ilipat pataas ang {song}"
+    },
+    "allSongs": "Lahat ng iyong kanta",
+    "home": {
+      "allSongsRow": "Lahat ng iyong kanta ({count})",
+      "allTime": "Kailanman",
+      "connectHint": "Kumuha ng mga rekomendasyon batay sa mga pinakikinggan mo na",
+      "gotosEmpty": "Lalabas dito ang mga kantang paborito mong kantahin. Magsimula sa pagdaragdag ng mga kantang nakanta mo na dati.",
+      "gotosEmptyCta": "Magdagdag ng mga kantang nakanta ko na",
+      "gotosTitle": "Iyong mga paborito",
+      "greatShare": "{percent}% ang naging maganda",
+      "keysLabel": "Ang vocal range mo sa keyboard",
+      "known": "{count, plural, one {# kanta ang alam} other {# kanta ang alam}}",
+      "manage": "Pamahalaan",
+      "manageHint": "I-set up ang range ng iyong boses, ikonekta ang musika, at i-edit ang nalalaman namin tungkol sa iyo",
+      "mostSung": "Pinakamadalas kantahin: {song} ({count}×)",
+      "nights": "{count, plural, one {# gabi} other {# gabi}}",
+      "performances": "{count, plural, one {# performance} other {# performance}}",
+      "saved": "{count, plural, one {# ang naka-save} other {# ang naka-save}}",
+      "seeAll": "Tingnan lahat",
+      "setlistsEmpty": "Magplano para sa isang gabi: gumawa ng setlist ng mga kantang gusto mong kantahin.",
+      "songs": "{count, plural, one {# kanta} other {# kanta}}",
+      "sourcesLabel": "Nakakonektang musika",
+      "statsEmpty": "Wala pang nakakanta. Magmarka ng kanta bilang nakanta na para masimulan ang iyong stats.",
+      "statsTitle": "Iyong karaoke",
+      "sung": "{count, plural, one {# kanta ang nakanta} other {# kanta ang nakanta}}",
+      "thisYear": "Ngayong taon",
+      "topArtist": "Nangungunang artist: {artist}",
+      "venues": "{count, plural, one {# venue} other {# venue}}",
+      "voiceCta": "Alamin ang range ng iyong boses",
+      "connectCta": "Ikonekta ang iyong musika",
+      "profileTitle": "Iyong profile sa musika",
+      "voiceHint": "Maghanap ng mga kantang bagay sa boses mo",
+      "voiceRange": "Range {range}"
+    },
+    "songs": {
+      "addPast": "Magdagdag ng mga kantang nakanta ko na",
+      "count": "{count, plural, one {# kanta} other {# kanta}}",
+      "empty": "Wala pang kanta. Magmarka ng kanta bilang nakanta na o mag-save para lumabas ito rito.",
+      "emptyFiltered": "Walang kantang tumutugma sa mga filter na ito.",
+      "feel": {
+        "unrated": "Walang rating",
+        "bad": "Hindi para sa akin",
+        "great": "Sobrang ayos",
+        "ok": "OK"
+      },
+      "offline": "Offline ka. Ipinapakita ang mga kantang naka-save sa teleponong ito.",
+      "often": {
+        "once": "Isang beses",
+        "twice": "2 o higit pa",
+        "unsung": "Hindi pa nakakanta"
+      },
+      "oftenLabel": "Gaano kadalas",
+      "searchLabel": "Hanapin ang iyong mga kanta",
+      "sort": {
+        "most": "Pinakamadalas kantahin",
+        "rated": "Pinakamataas ang rating",
+        "recent": "Pinakabago",
+        "az": "A hanggang Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Paborito ng marami",
+      "feelLabel": "Rating",
+      "loadError": "Hindi ma-load ang iyong mga kanta.",
+      "moodLabel": "Mood",
+      "saved": "Nai-save na",
+      "searchPlaceholder": "Kanta o artist",
+      "sortLabel": "I-sort",
+      "timesSungLabel": "{count, plural, one {# beses kinanta} other {# beses kinanta}}"
     }
   }
 }

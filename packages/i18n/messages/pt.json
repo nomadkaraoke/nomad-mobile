@@ -1901,6 +1901,75 @@
       "songValue": "{title} de {artist}",
       "sung": "Marcar como cantada",
       "up": "Mover {song} para cima"
+    },
+    "allSongs": "Todas as suas músicas",
+    "home": {
+      "allSongsRow": "Todas as suas músicas ({count})",
+      "allTime": "Todo o período",
+      "connectHint": "Receba recomendações com base no que você já ouve",
+      "gotosEmpty": "As músicas que você adora cantar vão aparecer aqui. Comece adicionando as músicas que você já cantou.",
+      "gotosEmptyCta": "Adicionar músicas que já cantei",
+      "gotosTitle": "Suas favoritas",
+      "greatShare": "{percent}% foram ótimas",
+      "keysLabel": "Seu alcance vocal em um teclado",
+      "known": "{count, plural, one {# música conhecida} other {# músicas conhecidas}}",
+      "manage": "Gerenciar",
+      "manageHint": "Configure seu alcance vocal, conecte seus serviços de música e edite o que sabemos sobre você",
+      "mostSung": "Mais cantada: {song} ({count}×)",
+      "nights": "{count, plural, one {# noite} other {# noites}}",
+      "performances": "{count, plural, one {# apresentação} other {# apresentações}}",
+      "saved": "{count, plural, one {# salva} other {# salvas}}",
+      "seeAll": "Ver tudo",
+      "setlistsEmpty": "Planeje uma noite: crie uma setlist com as músicas que quer cantar.",
+      "songs": "{count, plural, one {# música} other {# músicas}}",
+      "sourcesLabel": "Música conectada",
+      "statsEmpty": "Nada cantado ainda. Marque uma música como cantada para ver suas estatísticas.",
+      "statsTitle": "Seu karaokê",
+      "sung": "{count, plural, one {# música cantada} other {# músicas cantadas}}",
+      "thisYear": "Este ano",
+      "topArtist": "Artista favorito: {artist}",
+      "venues": "{count, plural, one {# local} other {# locais}}",
+      "voiceCta": "Descubra seu alcance vocal",
+      "connectCta": "Conectar suas músicas",
+      "profileTitle": "Seu perfil musical",
+      "voiceHint": "Encontre músicas que combinam com a sua voz",
+      "voiceRange": "Extensão {range}"
+    },
+    "songs": {
+      "addPast": "Adicionar músicas que já cantei",
+      "count": "{count, plural, one {# música} other {# músicas}}",
+      "empty": "Nenhuma música ainda. Marque uma música como cantada ou salve uma para ela aparecer aqui.",
+      "emptyFiltered": "Nenhuma música corresponde a estes filtros.",
+      "feel": {
+        "unrated": "Sem avaliação",
+        "bad": "Não é para mim",
+        "great": "Ótimo",
+        "ok": "OK"
+      },
+      "offline": "Você está offline. Mostrando as músicas salvas neste celular.",
+      "often": {
+        "once": "Uma vez",
+        "twice": "2 ou mais",
+        "unsung": "Ainda não cantadas"
+      },
+      "oftenLabel": "Frequência",
+      "searchLabel": "Buscar nas suas músicas",
+      "sort": {
+        "most": "Mais cantadas",
+        "rated": "Mais bem avaliadas",
+        "recent": "Recentes",
+        "az": "A a Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Favorita do público",
+      "feelLabel": "Classificação",
+      "loadError": "Não foi possível carregar suas músicas.",
+      "moodLabel": "Vibe",
+      "saved": "Salvo",
+      "searchPlaceholder": "Música ou artista",
+      "sortLabel": "Ordenar",
+      "timesSungLabel": "{count, plural, one {Cantada # vez} other {Cantada # vezes}}"
     }
   }
 }

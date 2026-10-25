@@ -1901,6 +1901,75 @@
       "songValue": "{title} de {artist}",
       "sung": "Marca com a cantada",
       "up": "Mou {song} cap amunt"
+    },
+    "allSongs": "Totes les teves cançons",
+    "home": {
+      "allSongsRow": "Totes les teves cançons ({count})",
+      "allTime": "Des de sempre",
+      "connectHint": "Aconsegueix recomanacions basades en el que ja escoltes",
+      "gotosEmpty": "Les cançons que t'encanta cantar apareixeran aquí. Comença afegint cançons que hagis cantat abans.",
+      "gotosEmptyCta": "Afegeix cançons que he cantat",
+      "gotosTitle": "Els teus clàssics",
+      "greatShare": "El {percent}% han anat genial",
+      "keysLabel": "El teu rang vocal en un teclat",
+      "known": "{count, plural, one {# cançó coneguda} other {# cançons conegudes}}",
+      "manage": "Gestiona",
+      "manageHint": "Configura el teu rang vocal, connecta la teva música i edita el que sabem sobre tu",
+      "mostSung": "Més cantada: {song} ({count}×)",
+      "nights": "{count, plural, one {# nit} other {# nits}}",
+      "performances": "{count, plural, one {# actuació} other {# actuacions}}",
+      "saved": "{count, plural, one {# desada} other {# desades}}",
+      "seeAll": "Mostra-ho tot",
+      "setlistsEmpty": "Planifica una nit: crea una llista de cançons que vulguis cantar.",
+      "songs": "{count, plural, one {# cançó} other {# cançons}}",
+      "sourcesLabel": "Música connectada",
+      "statsEmpty": "Encara no has cantat res. Marca una cançó com a cantada per començar les teves estadístiques.",
+      "statsTitle": "El teu karaoke",
+      "sung": "{count, plural, one {# cançó cantada} other {# cançons cantades}}",
+      "thisYear": "Aquest any",
+      "topArtist": "Artista principal: {artist}",
+      "venues": "{count, plural, one {# local} other {# locals}}",
+      "voiceCta": "Descobreix el teu rang vocal",
+      "connectCta": "Connecta la teva música",
+      "profileTitle": "El teu perfil musical",
+      "voiceHint": "Troba cançons que s'adaptin a la teva veu",
+      "voiceRange": "Tessitura: {range}"
+    },
+    "songs": {
+      "addPast": "Afegeix cançons que he cantat",
+      "count": "{count, plural, one {# cançó} other {# cançons}}",
+      "empty": "Encara no hi ha cap cançó. Marca una cançó com a cantada o desa'n una i apareixerà aquí.",
+      "emptyFiltered": "Cap cançó coincideix amb aquests filtres.",
+      "feel": {
+        "unrated": "Sense valorar",
+        "bad": "No és per a mi",
+        "great": "Molt bé",
+        "ok": "OK"
+      },
+      "offline": "No tens connexió. Es mostren les cançons desades en aquest telèfon.",
+      "often": {
+        "once": "Una vegada",
+        "twice": "2 o més",
+        "unsung": "Encara no cantades"
+      },
+      "oftenLabel": "Freqüència",
+      "searchLabel": "Cerca entre les teves cançons",
+      "sort": {
+        "most": "Més cantades",
+        "rated": "Millor valorades",
+        "recent": "Recents",
+        "az": "De la A a la Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Ambient",
+      "crowdPleaser": "Èxit assegurat",
+      "feelLabel": "Qualificació",
+      "loadError": "No s'han pogut carregar les teves cançons.",
+      "moodLabel": "Estat d'ànim",
+      "saved": "Desat",
+      "searchPlaceholder": "Cançó o artista",
+      "sortLabel": "Ordena",
+      "timesSungLabel": "{count, plural, one {Cantada # vegada} other {Cantada # vegades}}"
     }
   }
 }

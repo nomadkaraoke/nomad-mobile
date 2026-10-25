@@ -1901,6 +1901,75 @@
       "songValue": "{title} de {artist}",
       "sung": "Marcar como cantada",
       "up": "Mover {song} hacia arriba"
+    },
+    "allSongs": "Todas tus canciones",
+    "home": {
+      "allSongsRow": "Todas tus canciones ({count})",
+      "allTime": "Histórico",
+      "connectHint": "Obtén recomendaciones basadas en lo que ya escuchas",
+      "gotosEmpty": "Las canciones que te encanta cantar aparecerán aquí. Empieza añadiendo canciones que hayas cantado antes.",
+      "gotosEmptyCta": "Añadir canciones que he cantado",
+      "gotosTitle": "Tus infalibles",
+      "greatShare": "{percent}% salió genial",
+      "keysLabel": "Tu rango vocal en un teclado",
+      "known": "{count, plural, one {# canción conocida} other {# canciones conocidas}}",
+      "manage": "Gestionar",
+      "manageHint": "Configura tu rango vocal, conecta tu música y edita lo que sabemos sobre ti",
+      "mostSung": "Más cantada: {song} ({count}×)",
+      "nights": "{count, plural, one {# noche} other {# noches}}",
+      "performances": "{count, plural, one {# interpretación} other {# interpretaciones}}",
+      "saved": "{count, plural, one {# guardada} other {# guardadas}}",
+      "seeAll": "Ver todo",
+      "setlistsEmpty": "Planifica una noche: crea un repertorio con las canciones que quieras cantar.",
+      "songs": "{count, plural, one {# canción} other {# canciones}}",
+      "sourcesLabel": "Música conectada",
+      "statsEmpty": "Aún no has cantado nada. Marca una canción como cantada para empezar con tus estadísticas.",
+      "statsTitle": "Tu karaoke",
+      "sung": "{count, plural, one {# canción cantada} other {# canciones cantadas}}",
+      "thisYear": "Este año",
+      "topArtist": "Artista más cantado: {artist}",
+      "venues": "{count, plural, one {# local} other {# locales}}",
+      "voiceCta": "Descubre tu rango vocal",
+      "connectCta": "Conecta tu música",
+      "profileTitle": "Tu perfil musical",
+      "voiceHint": "Encuentra canciones que se adapten a tu voz",
+      "voiceRange": "Rango {range}"
+    },
+    "songs": {
+      "addPast": "Añadir canciones que he cantado",
+      "count": "{count, plural, one {# canción} other {# canciones}}",
+      "empty": "Aún no hay canciones. Marca una canción como cantada o guarda una para que aparezca aquí.",
+      "emptyFiltered": "Ninguna canción coincide con estos filtros.",
+      "feel": {
+        "unrated": "Sin calificar",
+        "bad": "No es para mí",
+        "great": "Genial",
+        "ok": "OK"
+      },
+      "offline": "Estás sin conexión. Mostrando las canciones guardadas en este teléfono.",
+      "often": {
+        "once": "1 vez",
+        "twice": "2 o más veces",
+        "unsung": "Aún sin cantar"
+      },
+      "oftenLabel": "Frecuencia",
+      "searchLabel": "Buscar en tus canciones",
+      "sort": {
+        "most": "Más cantadas",
+        "rated": "Mejor calificadas",
+        "recent": "Recientes",
+        "az": "A a la Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibra",
+      "crowdPleaser": "Éxito asegurado",
+      "feelLabel": "Clasificación",
+      "loadError": "No se pudieron cargar tus canciones.",
+      "moodLabel": "Estado de ánimo",
+      "saved": "Guardado",
+      "searchPlaceholder": "Canción o artista",
+      "sortLabel": "Ordenar",
+      "timesSungLabel": "{count, plural, one {Cantada # vez} other {Cantada # veces}}"
     }
   }
 }

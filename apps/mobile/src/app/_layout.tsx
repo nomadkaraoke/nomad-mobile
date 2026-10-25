@@ -81,6 +81,7 @@ function RootStack() {
         <Stack.Screen name="discover/voice-session" {...voiceSessionScreenProps(tVoiceSession('title'))} />
         {/* Me -> Your music profile (Phase 3a spec §8.3). */}
         <Stack.Screen name="me/music-profile" options={(p) => ({ title: tAccount('musicProfile'), ...profileBack(p) })} />
+        <Stack.Screen name="me/songs" options={{ title: tMe('allSongs') }} />
         <Stack.Screen name="me/sung-before" options={{ title: tMe('sungBefore.title') }} />
         <Stack.Screen name="me/setlists/index" options={{ title: tMe('setlists.title') }} />
         <Stack.Screen name="me/setlists/[id]" options={{ title: tMe('setlists.detailTitle') }} />

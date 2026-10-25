@@ -1901,6 +1901,75 @@
       "songValue": "{title} – {artist}",
       "sung": "Oznacz jako zaśpiewane",
       "up": "Przesuń {song} w górę"
+    },
+    "allSongs": "Wszystkie Twoje piosenki",
+    "home": {
+      "allSongsRow": "Wszystkie Twoje piosenki ({count})",
+      "allTime": "Od początku",
+      "connectHint": "Otrzymuj propozycje na podstawie tego, czego już słuchasz",
+      "gotosEmpty": "Piosenki, które uwielbiasz śpiewać, pojawią się tutaj. Zacznij od dodania utworów zaśpiewanych w przeszłości.",
+      "gotosEmptyCta": "Dodaj zaśpiewane piosenki",
+      "gotosTitle": "Twoje pewniaki",
+      "greatShare": "{percent}% poszło świetnie",
+      "keysLabel": "Twój zakres głosu na klawiaturze",
+      "known": "{count, plural, one {# znana piosenka} few {# znane piosenki} many {# znanych piosenek} other {# znanych piosenek}}",
+      "manage": "Zarządzaj",
+      "manageHint": "Ustaw skalę głosu, połącz serwisy muzyczne i edytuj informacje o sobie",
+      "mostSung": "Najczęściej śpiewane: {song} ({count}×)",
+      "nights": "{count, plural, one {# wieczór} few {# wieczory} many {# wieczorów} other {# wieczorów}}",
+      "performances": "{count, plural, one {# występ} few {# występy} many {# występów} other {# występów}}",
+      "saved": "{count, plural, one {# zapisana} few {# zapisane} many {# zapisanych} other {# zapisanych}}",
+      "seeAll": "Zobacz wszystkie",
+      "setlistsEmpty": "Zaplanuj wieczór: stwórz setlistę piosenek, które chcesz zaśpiewać.",
+      "songs": "{count, plural, one {# piosenka} few {# piosenki} many {# piosenek} other {# piosenek}}",
+      "sourcesLabel": "Połączona muzyka",
+      "statsEmpty": "Jeszcze nic nie zaśpiewano. Oznacz piosenkę jako zaśpiewaną, aby rozpocząć zbieranie statystyk.",
+      "statsTitle": "Twoje karaoke",
+      "sung": "{count, plural, one {# zaśpiewana piosenka} few {# zaśpiewane piosenki} many {# zaśpiewanych piosenek} other {# zaśpiewanych piosenek}}",
+      "thisYear": "W tym roku",
+      "topArtist": "Najpopularniejszy wykonawca: {artist}",
+      "venues": "{count, plural, one {# lokal} few {# lokale} many {# lokali} other {# lokali}}",
+      "voiceCta": "Poznaj swoją skalę głosu",
+      "connectCta": "Połącz swoją muzykę",
+      "profileTitle": "Twój profil muzyczny",
+      "voiceHint": "Znajdź piosenki pasujące do Twojego głosu",
+      "voiceRange": "Skala: {range}"
+    },
+    "songs": {
+      "addPast": "Dodaj zaśpiewane piosenki",
+      "count": "{count, plural, one {# piosenka} few {# piosenki} many {# piosenek} other {# piosenek}}",
+      "empty": "Brak piosenek. Oznacz piosenkę jako zaśpiewaną lub zapisz ją, a pojawi się tutaj.",
+      "emptyFiltered": "Żadne piosenki nie pasują do wybranych filtrów.",
+      "feel": {
+        "unrated": "Bez oceny",
+        "bad": "Nie dla mnie",
+        "great": "Świetnie",
+        "ok": "OK"
+      },
+      "offline": "Jesteś offline. Wyświetlamy piosenki zapisane na tym telefonie.",
+      "often": {
+        "once": "Raz",
+        "twice": "2 lub więcej",
+        "unsung": "Jeszcze niezaśpiewane"
+      },
+      "oftenLabel": "Jak często",
+      "searchLabel": "Szukaj w swoich piosenkach",
+      "sort": {
+        "most": "Najczęściej śpiewane",
+        "rated": "Najwyżej oceniane",
+        "recent": "Ostatnio dodane",
+        "az": "Od A do Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Klimat",
+      "crowdPleaser": "Hit publiczności",
+      "feelLabel": "Kategoria wiekowa",
+      "loadError": "Nie udało się wczytać Twoich utworów.",
+      "moodLabel": "Nastrój",
+      "saved": "Zapisano",
+      "searchPlaceholder": "Tytuł lub wykonawca",
+      "sortLabel": "Sortuj",
+      "timesSungLabel": "{count, plural, one {Zaśpiewano # raz} few {Zaśpiewano # razy} many {Zaśpiewano # razy} other {Zaśpiewano # razy}}"
     }
   }
 }

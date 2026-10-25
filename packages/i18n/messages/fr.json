@@ -1901,6 +1901,75 @@
       "songValue": "{title} par {artist}",
       "sung": "Marquer comme chantée",
       "up": "Monter {song}"
+    },
+    "allSongs": "Toutes tes chansons",
+    "home": {
+      "allSongsRow": "Toutes tes chansons ({count})",
+      "allTime": "Tout le temps",
+      "connectHint": "Obtiens des suggestions basées sur ce que tu écoutes déjà",
+      "gotosEmpty": "Les chansons que tu adores chanter apparaîtront ici. Commence par ajouter des morceaux que tu as déjà chantés.",
+      "gotosEmptyCta": "Ajouter des chansons que j'ai chantées",
+      "gotosTitle": "Tes incontournables",
+      "greatShare": "{percent} % se sont super bien passées",
+      "keysLabel": "Ta tessiture vocale sur un clavier",
+      "known": "{count, plural, one {# chanson connue} other {# chansons connues}}",
+      "manage": "Gérer",
+      "manageHint": "Définis ta tessiture, connecte ta musique et modifie ce qu'on sait sur toi",
+      "mostSung": "Plus chantée : {song} ({count}×)",
+      "nights": "{count, plural, one {# soirée} other {# soirées}}",
+      "performances": "{count, plural, one {# performance} other {# performances}}",
+      "saved": "{count, plural, one {# enregistrée} other {# enregistrées}}",
+      "seeAll": "Tout voir",
+      "setlistsEmpty": "Organise ta soirée : crée une setlist des chansons que tu veux chanter.",
+      "songs": "{count, plural, one {# chanson} other {# chansons}}",
+      "sourcesLabel": "Musique connectée",
+      "statsEmpty": "Rien de chanté pour le moment. Marque une chanson comme chantée pour lancer tes stats.",
+      "statsTitle": "Ton karaoké",
+      "sung": "{count, plural, one {# chanson chantée} other {# chansons chantées}}",
+      "thisYear": "Cette année",
+      "topArtist": "Top artiste : {artist}",
+      "venues": "{count, plural, one {# lieu} other {# lieux}}",
+      "voiceCta": "Découvre ta tessiture vocale",
+      "connectCta": "Connecter ta musique",
+      "profileTitle": "Ton profil musical",
+      "voiceHint": "Trouve des chansons adaptées à ta voix",
+      "voiceRange": "Tessiture {range}"
+    },
+    "songs": {
+      "addPast": "Ajouter des chansons que j'ai chantées",
+      "count": "{count, plural, one {# chanson} other {# chansons}}",
+      "empty": "Aucune chanson pour le moment. Marque une chanson comme chantée ou enregistre-en une pour la voir apparaître ici.",
+      "emptyFiltered": "Aucune chanson ne correspond à ces filtres.",
+      "feel": {
+        "unrated": "Non notée",
+        "bad": "Pas pour moi",
+        "great": "Super",
+        "ok": "OK"
+      },
+      "offline": "Tu es hors ligne. Affichage des chansons enregistrées sur ce téléphone.",
+      "often": {
+        "once": "Une fois",
+        "twice": "2 ou plus",
+        "unsung": "Pas encore chantée"
+      },
+      "oftenLabel": "Fréquence",
+      "searchLabel": "Rechercher dans tes chansons",
+      "sort": {
+        "most": "Plus chantées",
+        "rated": "Mieux notées",
+        "recent": "Récentes",
+        "az": "De A à Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Ambiance",
+      "crowdPleaser": "Succès garanti",
+      "feelLabel": "Classification",
+      "loadError": "Impossible de charger tes morceaux.",
+      "moodLabel": "Ambiance",
+      "saved": "Enregistré",
+      "searchPlaceholder": "Chanson ou artiste",
+      "sortLabel": "Trier",
+      "timesSungLabel": "{count, plural, one {Chantée # fois} other {Chantée # fois}}"
     }
   }
 }

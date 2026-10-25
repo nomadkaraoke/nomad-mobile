@@ -1901,6 +1901,75 @@
       "songValue": "{title} od {artist}",
       "sung": "Označiť ako odspievané",
       "up": "Posunúť {song} vyššie"
+    },
+    "allSongs": "Všetky tvoje piesne",
+    "home": {
+      "allSongsRow": "Všetky tvoje piesne ({count})",
+      "allTime": "Za celý čas",
+      "connectHint": "Získaj tipy podľa toho, čo už počúvaš",
+      "gotosEmpty": "Piesne, ktoré rád spievaš, sa zobrazia tu. Začni pridaním piesní, ktoré si už spieval.",
+      "gotosEmptyCta": "Pridať odspievané piesne",
+      "gotosTitle": "Tvoje istoty",
+      "greatShare": "{percent} % dopadlo skvele",
+      "keysLabel": "Tvoj hlasový rozsah na klávesnici",
+      "known": "{count, plural, one {# známa pieseň} few {# známe piesne} many {# známych piesní} other {# známych piesní}}",
+      "manage": "Spravovať",
+      "manageHint": "Nastav si hlasový rozsah, prepoj hudbu a uprav, čo o tebe vieme",
+      "mostSung": "Najčastejšie spievaná: {song} ({count}×)",
+      "nights": "{count, plural, one {# večer} few {# večery} many {# večerov} other {# večerov}}",
+      "performances": "{count, plural, one {# vystúpenie} few {# vystúpenia} many {# vystúpení} other {# vystúpení}}",
+      "saved": "{count, plural, one {# uložená} few {# uložené} many {# uložených} other {# uložených}}",
+      "seeAll": "Zobraziť všetko",
+      "setlistsEmpty": "Naplánuj si večer: vytvor si setlist piesní, ktoré chceš spievať.",
+      "songs": "{count, plural, one {# pieseň} few {# piesne} many {# piesní} other {# piesní}}",
+      "sourcesLabel": "Prepojená hudba",
+      "statsEmpty": "Zatiaľ si nič nezaspieval. Označ pieseň ako odspievanú a začni sledovať svoje štatistiky.",
+      "statsTitle": "Tvoje karaoke",
+      "sung": "{count, plural, one {# odspievaná pieseň} few {# odspievané piesne} many {# odspievaných piesní} other {# odspievaných piesní}}",
+      "thisYear": "Tento rok",
+      "topArtist": "Najhranejší interpret: {artist}",
+      "venues": "{count, plural, one {# podnik} few {# podniky} many {# podnikov} other {# podnikov}}",
+      "voiceCta": "Zisti svoj hlasový rozsah",
+      "connectCta": "Pripoj svoju hudbu",
+      "profileTitle": "Tvoj hudobný profil",
+      "voiceHint": "Nájdi skladby, ktoré sedia k tvojmu hlasu",
+      "voiceRange": "Rozsah {range}"
+    },
+    "songs": {
+      "addPast": "Pridať odspievané piesne",
+      "count": "{count, plural, one {# pieseň} few {# piesne} many {# piesní} other {# piesní}}",
+      "empty": "Zatiaľ žiadne piesne. Označ pieseň ako odspievanú alebo si nejakú ulož a zobrazí sa tu.",
+      "emptyFiltered": "Týmto filtrom nezodpovedajú žiadne piesne.",
+      "feel": {
+        "unrated": "Nehodnotené",
+        "bad": "Toto nie je pre mňa",
+        "great": "Super",
+        "ok": "OK"
+      },
+      "offline": "Si offline. Zobrazujú sa piesne uložené v tomto telefóne.",
+      "often": {
+        "once": "Raz",
+        "twice": "2- a viackrát",
+        "unsung": "Zatiaľ nespievané"
+      },
+      "oftenLabel": "Frekvencia",
+      "searchLabel": "Hľadaj vo svojich piesňach",
+      "sort": {
+        "most": "Najčastejšie spievané",
+        "rated": "Najlepšie hodnotené",
+        "recent": "Nedávne",
+        "az": "Od A po Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Nálada",
+      "crowdPleaser": "Trhák u publika",
+      "feelLabel": "Hodnotenie",
+      "loadError": "Nepodarilo sa načítať tvoje skladby.",
+      "moodLabel": "Nálada",
+      "saved": "Uložené",
+      "searchPlaceholder": "Pesnička alebo interpret",
+      "sortLabel": "Zoradiť",
+      "timesSungLabel": "{count, plural, one {Spievané # raz} few {Spievané # razy} other {Spievané #-krát}}"
     }
   }
 }

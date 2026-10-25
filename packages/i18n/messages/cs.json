@@ -1901,6 +1901,75 @@
       "songValue": "{title} od {artist}",
       "sung": "Označit jako zazpívané",
       "up": "Posunout {song} nahoru"
+    },
+    "allSongs": "Všechny tvoje písničky",
+    "home": {
+      "allSongsRow": "Všechny tvoje písničky ({count})",
+      "allTime": "Za celou dobu",
+      "connectHint": "Získej tipy podle toho, co už posloucháš",
+      "gotosEmpty": "Tady se objeví písničky, které rád zpíváš. Začni tím, že přidáš skladby, které už máš odzpívané.",
+      "gotosEmptyCta": "Přidat odzpívané písničky",
+      "gotosTitle": "Tvoje jistoty",
+      "greatShare": "{percent} % dopadlo skvěle",
+      "keysLabel": "Tvůj hlasový rozsah na klaviatuře",
+      "known": "{count, plural, one {# známá písnička} few {# známé písničky} other {# známých písniček}}",
+      "manage": "Spravovat",
+      "manageHint": "Nastav si hlasový rozsah, propoj hudební služby a uprav informace o sobě",
+      "mostSung": "Nejzpívanější: {song} ({count}×)",
+      "nights": "{count, plural, one {# večer} few {# večery} other {# večerů}}",
+      "performances": "{count, plural, one {# vystoupení} few {# vystoupení} other {# vystoupení}}",
+      "saved": "{count, plural, one {# uložená} few {# uložené} other {# uložených}}",
+      "seeAll": "Zobrazit vše",
+      "setlistsEmpty": "Naplánuj si večer: vytvoř si setlist písniček, které chceš zpívat.",
+      "songs": "{count, plural, one {# písnička} few {# písničky} other {# písniček}}",
+      "sourcesLabel": "Propojená hudba",
+      "statsEmpty": "Zatím nic neodzpíváno. Označ písničku jako odzpívanou a začni sbírat statistiky.",
+      "statsTitle": "Tvoje karaoke",
+      "sung": "{count, plural, one {# odzpívaná písnička} few {# odzpívané písničky} other {# odzpívaných písniček}}",
+      "thisYear": "Tento rok",
+      "topArtist": "Nejčastější interpret: {artist}",
+      "venues": "{count, plural, one {# podnik} few {# podniky} other {# podniků}}",
+      "voiceCta": "Zjisti svůj hlasový rozsah",
+      "connectCta": "Připoj svou hudbu",
+      "profileTitle": "Tvůj hudební profil",
+      "voiceHint": "Najdi písničky, které sedí tvému hlasu",
+      "voiceRange": "Rozsah {range}"
+    },
+    "songs": {
+      "addPast": "Přidat odzpívané písničky",
+      "count": "{count, plural, one {# písnička} few {# písničky} other {# písniček}}",
+      "empty": "Zatím žádné písničky. Označ písničku jako odzpívanou nebo si nějakou ulož a objeví se tady.",
+      "emptyFiltered": "Těmto filtrům neodpovídá žádná písnička.",
+      "feel": {
+        "unrated": "Nehodnoceno",
+        "bad": "Není pro mě",
+        "great": "Skvěle",
+        "ok": "OK"
+      },
+      "offline": "Jsi offline. Zobrazují se písničky uložené v tomto telefonu.",
+      "often": {
+        "once": "Jednou",
+        "twice": "2× a více",
+        "unsung": "Zatím nezpíváno"
+      },
+      "oftenLabel": "Jak často",
+      "searchLabel": "Hledat ve svých písničkách",
+      "sort": {
+        "most": "Nejzpívanější",
+        "rated": "Nejlépe hodnocené",
+        "recent": "Nedávné",
+        "az": "Od A do Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Trhák pro publikum",
+      "feelLabel": "Hodnocení",
+      "loadError": "Nepodařilo se načíst tvoje skladby.",
+      "moodLabel": "Nálada",
+      "saved": "Uloženo",
+      "searchPlaceholder": "Písnička nebo interpret",
+      "sortLabel": "Seřadit",
+      "timesSungLabel": "{count, plural, one {Zpíváno #krát} few {Zpíváno #krát} other {Zpíváno #krát}}"
     }
   }
 }

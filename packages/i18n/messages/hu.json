@@ -1901,6 +1901,75 @@
       "songValue": "{artist} – {title}",
       "sung": "Megjelölés elénekeltként",
       "up": "{song} mozgatása felfelé"
+    },
+    "allSongs": "Minden dalod",
+    "home": {
+      "allSongsRow": "Minden dalod ({count})",
+      "allTime": "Kezdetektől",
+      "connectHint": "Kérj ajánlásokat abból, amit egyébként is hallgatsz",
+      "gotosEmpty": "Itt jelennek meg azok a dalok, amiket a legszívesebben énekelsz. Kezdésként add hozzá azokat, amiket korábban már énekeltél.",
+      "gotosEmptyCta": "Már énekelt dalaim hozzáadása",
+      "gotosTitle": "A tuti befutóid",
+      "greatShare": "{percent}% szuperül sikerült",
+      "keysLabel": "A hangterjedelmed zongorabillentyűkön",
+      "known": "{count, plural, one {# ismert dal} other {# ismert dal}}",
+      "manage": "Kezelés",
+      "manageHint": "Állítsd be a hangterjedelmed, csatlakoztass zenéket, és szerkeszd, amit rólad tudunk",
+      "mostSung": "Legtöbbet énekelt: {song} ({count}×)",
+      "nights": "{count, plural, one {# este} other {# este}}",
+      "performances": "{count, plural, one {# előadás} other {# előadás}}",
+      "saved": "{count, plural, one {# mentve} other {# mentve}}",
+      "seeAll": "Összes megtekintése",
+      "setlistsEmpty": "Tervezz meg egy estét: készíts dallistát azokból a számokból, amiket énekelni szeretnél.",
+      "songs": "{count, plural, one {# dal} other {# dal}}",
+      "sourcesLabel": "Csatlakoztatott zenék",
+      "statsEmpty": "Még nem énekeltél semmit. Jelölj meg egy dalt énekeltként, hogy elinduljon a statisztikád.",
+      "statsTitle": "Karaoke-statisztikáid",
+      "sung": "{count, plural, one {# elénekelt dal} other {# elénekelt dal}}",
+      "thisYear": "Idén",
+      "topArtist": "Kedvenc előadó: {artist}",
+      "venues": "{count, plural, one {# helyszín} other {# helyszín}}",
+      "voiceCta": "Mérd fel a hangterjedelmed",
+      "connectCta": "Csatlakoztasd a zenéidet",
+      "profileTitle": "Zenei profilod",
+      "voiceHint": "Keress a hangodhoz illő dalokat",
+      "voiceRange": "Hangterjedelem: {range}"
+    },
+    "songs": {
+      "addPast": "Már énekelt dalaim hozzáadása",
+      "count": "{count, plural, one {# dal} other {# dal}}",
+      "empty": "Még nincsenek dalok. Jelölj meg egy dalt énekeltként, vagy ments el egyet, és itt meg fog jelenni.",
+      "emptyFiltered": "Egyetlen dal sem felel meg ezeknek a szűrőknek.",
+      "feel": {
+        "unrated": "Nincs értékelve",
+        "bad": "Nem nekem való",
+        "great": "Nagyszerű",
+        "ok": "OK"
+      },
+      "offline": "Offline vagy. A telefonra mentett dalok megjelenítése.",
+      "often": {
+        "once": "Egyszer",
+        "twice": "2 vagy több",
+        "unsung": "Még nem énekeltem"
+      },
+      "oftenLabel": "Milyen gyakran",
+      "searchLabel": "Keresés a dalaid között",
+      "sort": {
+        "most": "Legtöbbet énekelt",
+        "rated": "Legjobbra értékelt",
+        "recent": "Legutóbbi",
+        "az": "A–Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Hangulat",
+      "crowdPleaser": "Közönségkedvenc",
+      "feelLabel": "Korhatár",
+      "loadError": "Nem sikerült betölteni a dalaidat.",
+      "moodLabel": "Hangulat",
+      "saved": "Mentve",
+      "searchPlaceholder": "Dal vagy előadó",
+      "sortLabel": "Rendezés",
+      "timesSungLabel": "{count, plural, one {# alkalommal elénekelve} other {# alkalommal elénekelve}}"
     }
   }
 }

@@ -1901,6 +1901,75 @@
       "songValue": "{title} מאת {artist}",
       "sung": "סימון כשיר ששרתי",
       "up": "העלאת {song}"
+    },
+    "allSongs": "כל השירים שלך",
+    "home": {
+      "allSongsRow": "כל השירים שלך ({count})",
+      "allTime": "בכל הזמנים",
+      "connectHint": "קבלו המלצות לפי מה שאתם כבר מאזינים לו",
+      "gotosEmpty": "השירים שאתם הכי אוהבים לשיר יופיעו כאן. התחילו בהוספת שירים שכבר שרתם בעבר.",
+      "gotosEmptyCta": "הוספת שירים ששרתי",
+      "gotosTitle": "הקבועים שלך",
+      "greatShare": "{percent}% הלכו מעולה",
+      "keysLabel": "המנעד הקולי שלך על מקלדת",
+      "known": "{count, plural, one {שיר אחד מוכר} two {שני שירים מוכרים} other {# שירים מוכרים}}",
+      "manage": "ניהול",
+      "manageHint": "הגדירו את המנעד הקולי שלכם, חברו מוזיקה וערכו את מה שאנחנו יודעים עליכם",
+      "mostSung": "הכי מושר: {song} ({count}×)",
+      "nights": "{count, plural, one {ערב אחד} two {שני ערבים} other {# ערבים}}",
+      "performances": "{count, plural, one {ביצוע אחד} two {שני ביצועים} other {# ביצועים}}",
+      "saved": "{count, plural, one {שיר אחד שמור} two {שני שירים שמורים} other {# שירים שמורים}}",
+      "seeAll": "הצגת הכל",
+      "setlistsEmpty": "מתכננים ערב? הכינו רשימת שירים (סטליסט) שתרצו לשיר.",
+      "songs": "{count, plural, one {שיר אחד} two {שני שירים} other {# שירים}}",
+      "sourcesLabel": "מוזיקה מחוברת",
+      "statsEmpty": "עדיין לא שרתם כלום. סמנו שיר ככזה ששרתם כדי להתחיל לצבור נתונים.",
+      "statsTitle": "הקריוקי שלך",
+      "sung": "{count, plural, one {שיר אחד מושר} two {שני שירים מושרים} other {# שירים מושרים}}",
+      "thisYear": "השנה",
+      "topArtist": "האמן המוביל: {artist}",
+      "venues": "{count, plural, one {מקום אחד} two {שני מקומות} other {# מקומות}}",
+      "voiceCta": "גלו את המנעד הקולי שלכם",
+      "connectCta": "חיבור המוזיקה שלך",
+      "profileTitle": "פרופיל המוזיקה שלך",
+      "voiceHint": "למצוא שירים שמתאימים לקול שלך",
+      "voiceRange": "מנעד {range}"
+    },
+    "songs": {
+      "addPast": "הוספת שירים ששרתי",
+      "count": "{count, plural, one {שיר אחד} two {שני שירים} other {# שירים}}",
+      "empty": "עדיין אין שירים. סמנו שיר ככזה ששרתם או שמרו שיר, והוא יופיע כאן.",
+      "emptyFiltered": "אין שירים שתואמים למסננים אלה.",
+      "feel": {
+        "unrated": "ללא דירוג",
+        "bad": "לא בשבילי",
+        "great": "מעולה",
+        "ok": "תקין"
+      },
+      "offline": "אין חיבור לאינטרנט. מוצגים שירים שנשמרו בטלפון זה.",
+      "often": {
+        "once": "פעם אחת",
+        "twice": "פעמיים ומעלה",
+        "unsung": "טרם הושר"
+      },
+      "oftenLabel": "באיזו תדירות",
+      "searchLabel": "חיפוש בשירים שלך",
+      "sort": {
+        "most": "הכי מושרים",
+        "rated": "הכי אהובים",
+        "recent": "אחרונים",
+        "az": "א' עד ת'"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "וייב",
+      "crowdPleaser": "להיט שכולם אוהבים",
+      "feelLabel": "דירוג",
+      "loadError": "לא הצלחנו לטעון את השירים שלך.",
+      "moodLabel": "מצב רוח",
+      "saved": "נשמר",
+      "searchPlaceholder": "שיר או אמן",
+      "sortLabel": "מיון",
+      "timesSungLabel": "{count, plural, one {הושר פעם אחת} other {הושר # פעמים}}"
     }
   }
 }

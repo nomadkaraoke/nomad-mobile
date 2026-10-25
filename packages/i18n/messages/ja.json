@@ -1901,6 +1901,75 @@
       "songValue": "{artist} - {title}",
       "sung": "歌った曲として記録",
       "up": "{song}を上に移動"
+    },
+    "allSongs": "すべての曲",
+    "home": {
+      "allSongsRow": "すべての曲（{count}）",
+      "allTime": "全期間",
+      "connectHint": "普段聴いている曲からおすすめを表示",
+      "gotosEmpty": "よく歌うお気に入りの曲がここに表示されます。まずは過去に歌った曲を追加してみましょう。",
+      "gotosEmptyCta": "歌った曲を追加",
+      "gotosTitle": "定番曲",
+      "greatShare": "{percent}%が大好評",
+      "keysLabel": "鍵盤で見るあなたの音域",
+      "known": "{count, plural, one {#曲を把握} other {#曲を把握}}",
+      "manage": "管理",
+      "manageHint": "音域の設定、音楽サービスの連携、登録情報の編集ができます",
+      "mostSung": "一番歌った曲: {song}（{count}回）",
+      "nights": "{count, plural, one {#夜} other {#夜}}",
+      "performances": "{count, plural, one {#回の歌唱} other {#回の歌唱}}",
+      "saved": "{count, plural, one {#件保存済み} other {#件保存済み}}",
+      "seeAll": "すべて表示",
+      "setlistsEmpty": "カラオケの計画を立てましょう。歌いたい曲のセットリストを作成できます。",
+      "songs": "{count, plural, one {#曲} other {#曲}}",
+      "sourcesLabel": "連携中の音楽サービス",
+      "statsEmpty": "まだ記録がありません。曲を「歌った」にチェックして統計をスタートしましょう。",
+      "statsTitle": "カラオケ記録",
+      "sung": "{count, plural, one {#曲歌唱} other {#曲歌唱}}",
+      "thisYear": "今年",
+      "topArtist": "一番歌ったアーティスト: {artist}",
+      "venues": "{count, plural, one {#店舗} other {#店舗}}",
+      "voiceCta": "音域を測定する",
+      "connectCta": "音楽を連携する",
+      "profileTitle": "あなたの音楽プロフィール",
+      "voiceHint": "あなたの声に合う曲を見つける",
+      "voiceRange": "音域：{range}"
+    },
+    "songs": {
+      "addPast": "歌った曲を追加",
+      "count": "{count, plural, one {#曲} other {#曲}}",
+      "empty": "まだ曲がありません。曲を「歌った」にするか保存すると、ここに表示されます。",
+      "emptyFiltered": "条件に一致する曲は見つかりませんでした。",
+      "feel": {
+        "unrated": "未評価",
+        "bad": "好みに合わない",
+        "great": "とても良かった",
+        "ok": "OK"
+      },
+      "offline": "オフラインです。この端末に保存されている曲を表示しています。",
+      "often": {
+        "once": "1回",
+        "twice": "2回以上",
+        "unsung": "まだ歌っていない"
+      },
+      "oftenLabel": "歌った回数",
+      "searchLabel": "曲を検索",
+      "sort": {
+        "most": "歌った回数順",
+        "rated": "評価順",
+        "recent": "最近の曲順",
+        "az": "アルファベット順"
+      },
+      "timesSung": "{count}回",
+      "vibeLabel": "雰囲気",
+      "crowdPleaser": "盛り上がり曲",
+      "feelLabel": "レイティング",
+      "loadError": "曲を読み込めませんでした。",
+      "moodLabel": "ムード",
+      "saved": "保存済み",
+      "searchPlaceholder": "曲名またはアーティスト名",
+      "sortLabel": "並べ替え",
+      "timesSungLabel": "{count, plural, one {#回歌唱} other {#回歌唱}}"
     }
   }
 }

@@ -1901,6 +1901,75 @@
       "songValue": "{title} – {artist}",
       "sung": "Merkitse lauletuksi",
       "up": "Siirrä kappaletta {song} ylemmäs"
+    },
+    "allSongs": "Kaikki kappaleesi",
+    "home": {
+      "allSongsRow": "Kaikki kappaleesi ({count})",
+      "allTime": "Koko ajalta",
+      "connectHint": "Saa suosituksia siitä, mitä jo kuuntelet",
+      "gotosEmpty": "Lempikappaleesi näkyvät täällä. Aloita lisäämällä kappaleita, joita olet laulanut aiemmin.",
+      "gotosEmptyCta": "Lisää aiemmin laulamiani kappaleita",
+      "gotosTitle": "Luottobiisisi",
+      "greatShare": "{percent} % meni loistavasti",
+      "keysLabel": "Äänialasi koskettimistolla",
+      "known": "{count, plural, one {# tuttu kappale} other {# tuttua kappaletta}}",
+      "manage": "Hallinnoi",
+      "manageHint": "Määritä äänialasi, yhdistä musiikkipalvelusi ja muokkaa sinusta tallennettuja tietoja",
+      "mostSung": "Eniten laulettu: {song} ({count}×)",
+      "nights": "{count, plural, one {# ilta} other {# iltaa}}",
+      "performances": "{count, plural, one {# esitys} other {# esitystä}}",
+      "saved": "{count, plural, one {# tallennettu} other {# tallennettua}}",
+      "seeAll": "Näytä kaikki",
+      "setlistsEmpty": "Suunnittele ilta: tee settilista kappaleista, joita haluat laulaa.",
+      "songs": "{count, plural, one {# kappale} other {# kappaletta}}",
+      "sourcesLabel": "Yhdistetyt musiikkipalvelut",
+      "statsEmpty": "Ei vielä lauluja. Merkitse kappale lauletuksi aloittaaksesi tilastosi.",
+      "statsTitle": "Oma karaokesi",
+      "sung": "{count, plural, one {# laulettu kappale} other {# laulettua kappaletta}}",
+      "thisYear": "Tänä vuonna",
+      "topArtist": "Suosituin artisti: {artist}",
+      "venues": "{count, plural, one {# paikka} other {# paikkaa}}",
+      "voiceCta": "Selvitä äänialasi",
+      "connectCta": "Yhdistä musiikkisi",
+      "profileTitle": "Musiikkiprofiilisi",
+      "voiceHint": "Löydä äänellesi sopivia kappaleita",
+      "voiceRange": "Ääniala {range}"
+    },
+    "songs": {
+      "addPast": "Lisää aiemmin laulamiani kappaleita",
+      "count": "{count, plural, one {# kappale} other {# kappaletta}}",
+      "empty": "Ei vielä kappaleita. Merkitse kappale lauletuksi tai tallenna sellainen, niin se näkyy täällä.",
+      "emptyFiltered": "Yksikään kappale ei vastaa näitä suodattimia.",
+      "feel": {
+        "unrated": "Ei arviota",
+        "bad": "Ei minua varten",
+        "great": "Mahtavalta",
+        "ok": "OK"
+      },
+      "offline": "Olet offline-tilassa. Näytetään tähän puhelimeen tallennetut kappaleet.",
+      "often": {
+        "once": "Kerran",
+        "twice": "Vähintään kahdesti",
+        "unsung": "Ei vielä laulettu"
+      },
+      "oftenLabel": "Kuinka usein",
+      "searchLabel": "Hae kappaleistasi",
+      "sort": {
+        "most": "Eniten lauletut",
+        "rated": "Parhaat arviot",
+        "recent": "Viimeisimmät",
+        "az": "A–Ö"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Fiilis",
+      "crowdPleaser": "Yleisön suosikki",
+      "feelLabel": "Ikäraja",
+      "loadError": "Kappaleitasi ei voitu ladata.",
+      "moodLabel": "Tunnelma",
+      "saved": "Tallennettu",
+      "searchPlaceholder": "Kappale tai esittäjä",
+      "sortLabel": "Lajittele",
+      "timesSungLabel": "{count, plural, one {Laulettu # kerran} other {Laulettu # kertaa}}"
     }
   }
 }

@@ -1901,6 +1901,75 @@
       "songValue": "{title} de {artist}",
       "sung": "Marchează ca fiind cântată",
       "up": "Mută {song} mai sus"
+    },
+    "allSongs": "Toate melodiile tale",
+    "home": {
+      "allSongsRow": "Toate melodiile tale ({count})",
+      "allTime": "Dintotdeauna",
+      "connectHint": "Primește recomandări pe baza a ceea ce asculți deja",
+      "gotosEmpty": "Melodiile pe care îți place să le cânți vor apărea aici. Începe prin a adăuga melodiile pe care le-ai mai cântat.",
+      "gotosEmptyCta": "Adaugă melodii cântate anterior",
+      "gotosTitle": "Preferatele tale",
+      "greatShare": "{percent}% au ieșit grozav",
+      "keysLabel": "Întinderea ta vocală pe o claviatură",
+      "known": "{count, plural, one {# melodie știută} few {# melodii știute} other {# de melodii știute}}",
+      "manage": "Gestionează",
+      "manageHint": "Setează-ți întinderea vocală, conectează serviciile muzicale și modifică ce știm despre tine",
+      "mostSung": "Cea mai cântată: {song} ({count}×)",
+      "nights": "{count, plural, one {# seară} few {# seri} other {# de seri}}",
+      "performances": "{count, plural, one {# interpretare} few {# interpretări} other {# de interpretări}}",
+      "saved": "{count, plural, one {# salvată} few {# salvate} other {# de salvate}}",
+      "seeAll": "Vezi tot",
+      "setlistsEmpty": "Planifică o seară: creează un setlist cu melodiile pe care vrei să le cânți.",
+      "songs": "{count, plural, one {# melodie} few {# melodii} other {# de melodii}}",
+      "sourcesLabel": "Muzică conectată",
+      "statsEmpty": "Nu ai cântat nimic încă. Marchează o melodie ca fiind cântată pentru a începe statisticile.",
+      "statsTitle": "Activitatea ta karaoke",
+      "sung": "{count, plural, one {# melodie cântată} few {# melodii cântate} other {# de melodii cântate}}",
+      "thisYear": "Anul acesta",
+      "topArtist": "Artist preferat: {artist}",
+      "venues": "{count, plural, one {# local} few {# localuri} other {# de localuri}}",
+      "voiceCta": "Află-ți întinderea vocală",
+      "connectCta": "Conectează-ți muzica",
+      "profileTitle": "Profilul tău muzical",
+      "voiceHint": "Găsește melodii care se potrivesc cu vocea ta",
+      "voiceRange": "Întindere vocală {range}"
+    },
+    "songs": {
+      "addPast": "Adaugă melodii cântate anterior",
+      "count": "{count, plural, one {# melodie} few {# melodii} other {# de melodii}}",
+      "empty": "Nicio melodie încă. Marchează o melodie ca fiind cântată sau salvează una și va apărea aici.",
+      "emptyFiltered": "Nicio melodie nu corespunde acestor filtre.",
+      "feel": {
+        "unrated": "Neevaluată",
+        "bad": "Nu e pentru mine",
+        "great": "Excelent",
+        "ok": "OK"
+      },
+      "offline": "Ești offline. Se afișează melodiile salvate pe acest telefon.",
+      "often": {
+        "once": "O dată",
+        "twice": "De cel puțin 2 ori",
+        "unsung": "Necântată încă"
+      },
+      "oftenLabel": "Frecvență",
+      "searchLabel": "Caută în melodiile tale",
+      "sort": {
+        "most": "Cele mai cântate",
+        "rated": "Cele mai bine cotate",
+        "recent": "Recente",
+        "az": "De la A la Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Pe placul publicului",
+      "feelLabel": "Rating",
+      "loadError": "Nu s-au putut încărca piesele tale.",
+      "moodLabel": "Stare",
+      "saved": "Salvat",
+      "searchPlaceholder": "Melodie sau artist",
+      "sortLabel": "Sortează",
+      "timesSungLabel": "{count, plural, one {Cântată o dată} few {Cântată de # ori} other {Cântată de # de ori}}"
     }
   }
 }

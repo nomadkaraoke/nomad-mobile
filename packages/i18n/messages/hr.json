@@ -1901,6 +1901,75 @@
       "songValue": "{title} – {artist}",
       "sung": "Označi kao otpjevano",
       "up": "Pomakni pjesmu {song} gore"
+    },
+    "allSongs": "Sve tvoje pjesme",
+    "home": {
+      "allSongsRow": "Sve tvoje pjesme ({count})",
+      "allTime": "Sveukupno",
+      "connectHint": "Primi preporuke na temelju onoga što već slušaš",
+      "gotosEmpty": "Pjesme koje voliš pjevati pojavit će se ovdje. Započni dodavanjem pjesama koje već znaš pjevati.",
+      "gotosEmptyCta": "Dodaj pjesme koje sam pjevao/la",
+      "gotosTitle": "Tvoji favoriti",
+      "greatShare": "{percent}% je prošlo odlično",
+      "keysLabel": "Tvoj vokalni raspon na klavijaturi",
+      "known": "{count, plural, one {# poznata pjesma} few {# poznate pjesme} other {# poznatih pjesama}}",
+      "manage": "Upravljaj",
+      "manageHint": "Postavi svoj vokalni raspon, poveži glazbu i uredi podatke o sebi",
+      "mostSung": "Najviše pjevano: {song} ({count}×)",
+      "nights": "{count, plural, one {# večer} few {# večeri} other {# večeri}}",
+      "performances": "{count, plural, one {# izvedba} few {# izvedbe} other {# izvedbi}}",
+      "saved": "{count, plural, one {# spremljena} few {# spremljene} other {# spremljenih}}",
+      "seeAll": "Vidi sve",
+      "setlistsEmpty": "Isplaniraj večer: složi set-listu pjesama koje želiš pjevati.",
+      "songs": "{count, plural, one {# pjesma} few {# pjesme} other {# pjesama}}",
+      "sourcesLabel": "Povezana glazba",
+      "statsEmpty": "Još nema otpjevanih pjesama. Označi pjesmu kao otpjevanu kako bi se pokrenula statistika.",
+      "statsTitle": "Tvoj karaoke",
+      "sung": "{count, plural, one {# otpjevana pjesma} few {# otpjevane pjesme} other {# otpjevanih pjesama}}",
+      "thisYear": "Ove godine",
+      "topArtist": "Najčešći izvođač: {artist}",
+      "venues": "{count, plural, one {# lokacija} few {# lokacije} other {# lokacija}}",
+      "voiceCta": "Saznaj svoj vokalni raspon",
+      "connectCta": "Poveži svoju glazbu",
+      "profileTitle": "Tvoj glazbeni profil",
+      "voiceHint": "Pronađi pjesme koje odgovaraju tvom glasu",
+      "voiceRange": "Raspon {range}"
+    },
+    "songs": {
+      "addPast": "Dodaj pjesme koje sam pjevao/la",
+      "count": "{count, plural, one {# pjesma} few {# pjesme} other {# pjesama}}",
+      "empty": "Još nema pjesama. Označi pjesmu kao otpjevanu ili je spremi i pojavit će se ovdje.",
+      "emptyFiltered": "Nijedna pjesma ne odgovara ovim filtrima.",
+      "feel": {
+        "unrated": "Neocijenjeno",
+        "bad": "Nije za mene",
+        "great": "Odlično",
+        "ok": "OK"
+      },
+      "offline": "Izvan mreže si. Prikazuju se pjesme spremljene na ovom telefonu.",
+      "often": {
+        "once": "Jednom",
+        "twice": "2 ili više puta",
+        "unsung": "Još neotpjevano"
+      },
+      "oftenLabel": "Koliko često",
+      "searchLabel": "Pretraži svoje pjesme",
+      "sort": {
+        "most": "Najviše pjevano",
+        "rated": "Najbolje ocijenjeno",
+        "recent": "Nedavno",
+        "az": "Od A do Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Ugođaj",
+      "crowdPleaser": "Favorit publike",
+      "feelLabel": "Dobna oznaka",
+      "loadError": "Učitavanje tvojih pjesama nije uspjelo.",
+      "moodLabel": "Raspoloženje",
+      "saved": "Spremljeno",
+      "searchPlaceholder": "Pjesma ili izvođač",
+      "sortLabel": "Sortiraj",
+      "timesSungLabel": "{count, plural, one {Otpjevano # put} few {Otpjevano # puta} other {Otpjevano # puta}}"
     }
   }
 }

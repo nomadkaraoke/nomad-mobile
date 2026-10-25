@@ -1901,6 +1901,75 @@
       "songValue": "{title} van {artist}",
       "sung": "Markeren als gezongen",
       "up": "Verplaats {song} omhoog"
+    },
+    "allSongs": "Al je nummers",
+    "home": {
+      "allSongsRow": "Al je nummers ({count})",
+      "allTime": "Alles bij elkaar",
+      "connectHint": "Krijg suggesties op basis van waar je al naar luistert",
+      "gotosEmpty": "De nummers die je graag zingt, verschijnen hier. Begin met het toevoegen van nummers die je al eerder hebt gezongen.",
+      "gotosEmptyCta": "Nummers toevoegen die ik heb gezongen",
+      "gotosTitle": "Je favorieten",
+      "greatShare": "{percent}% ging geweldig",
+      "keysLabel": "Je stembereik op een toetsenbord",
+      "known": "{count, plural, one {# nummer bekend} other {# nummers bekend}}",
+      "manage": "Beheren",
+      "manageHint": "Stel je stembereik in, koppel muziek en pas aan wat we over je weten",
+      "mostSung": "Meest gezongen: {song} ({count}×)",
+      "nights": "{count, plural, one {# avond} other {# avonden}}",
+      "performances": "{count, plural, one {# optreden} other {# optredens}}",
+      "saved": "{count, plural, one {# opgeslagen} other {# opgeslagen}}",
+      "seeAll": "Bekijk alles",
+      "setlistsEmpty": "Plan een avond: maak een setlist van nummers die je wilt zingen.",
+      "songs": "{count, plural, one {# nummer} other {# nummers}}",
+      "sourcesLabel": "Gekoppelde muziek",
+      "statsEmpty": "Nog niets gezongen. Markeer een nummer als gezongen om je statistieken te starten.",
+      "statsTitle": "Jouw karaoke",
+      "sung": "{count, plural, one {# nummer gezongen} other {# nummers gezongen}}",
+      "thisYear": "Dit jaar",
+      "topArtist": "Topartiest: {artist}",
+      "venues": "{count, plural, one {# locatie} other {# locaties}}",
+      "voiceCta": "Ontdek je stembereik",
+      "connectCta": "Verbind je muziek",
+      "profileTitle": "Je muziekprofiel",
+      "voiceHint": "Vind nummers die bij je stem passen",
+      "voiceRange": "Bereik {range}"
+    },
+    "songs": {
+      "addPast": "Nummers toevoegen die ik heb gezongen",
+      "count": "{count, plural, one {# nummer} other {# nummers}}",
+      "empty": "Nog geen nummers. Markeer een nummer als gezongen of sla er een op, dan verschijnt het hier.",
+      "emptyFiltered": "Geen nummers gevonden die aan deze filters voldoen.",
+      "feel": {
+        "unrated": "Niet beoordeeld",
+        "bad": "Niks voor mij",
+        "great": "Geweldig",
+        "ok": "OK"
+      },
+      "offline": "Je bent offline. We tonen de nummers die op deze telefoon zijn opgeslagen.",
+      "often": {
+        "once": "1 keer",
+        "twice": "2 of vaker",
+        "unsung": "Nog niet gezongen"
+      },
+      "oftenLabel": "Hoe vaak",
+      "searchLabel": "Zoek in je nummers",
+      "sort": {
+        "most": "Meest gezongen",
+        "rated": "Best beoordeeld",
+        "recent": "Recent",
+        "az": "A tot Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Publieksfavoriet",
+      "feelLabel": "Keuring",
+      "loadError": "Kon je nummers niet laden.",
+      "moodLabel": "Stemming",
+      "saved": "Opgeslagen",
+      "searchPlaceholder": "Nummer of artiest",
+      "sortLabel": "Sorteer",
+      "timesSungLabel": "{count, plural, one {# keer gezongen} other {# keer gezongen}}"
     }
   }
 }

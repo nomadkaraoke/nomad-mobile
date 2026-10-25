@@ -1901,6 +1901,75 @@
       "songValue": "{title} af {artist}",
       "sung": "Markér som sunget",
       "up": "Flyt {song} op"
+    },
+    "allSongs": "Alle dine sange",
+    "home": {
+      "allSongsRow": "Alle dine sange ({count})",
+      "allTime": "Altid",
+      "connectHint": "Få forslag baseret på det, du allerede lytter til",
+      "gotosEmpty": "De sange, du elsker at synge, vises her. Start med at tilføje sange, du har sunget før.",
+      "gotosEmptyCta": "Tilføj sange, jeg har sunget",
+      "gotosTitle": "Dine favoritter",
+      "greatShare": "{percent}% gik fantastisk",
+      "keysLabel": "Dit stemmeomfang på et keyboard",
+      "known": "{count, plural, one {# kendt sang} other {# kendte sange}}",
+      "manage": "Administrer",
+      "manageHint": "Indstil dit stemmeomfang, tilknyt musiktjenester og rediger, hvad vi ved om dig",
+      "mostSung": "Mest sunget: {song} ({count}×)",
+      "nights": "{count, plural, one {# aften} other {# aftener}}",
+      "performances": "{count, plural, one {# optræden} other {# optrædener}}",
+      "saved": "{count, plural, one {# gemt} other {# gemte}}",
+      "seeAll": "Se alle",
+      "setlistsEmpty": "Planlæg en aften: lav en sætliste med sange, du vil synge.",
+      "songs": "{count, plural, one {# sang} other {# sange}}",
+      "sourcesLabel": "Tilknyttet musik",
+      "statsEmpty": "Intet sunget endnu. Marker en sang som sunget for at starte din statistik.",
+      "statsTitle": "Din karaoke",
+      "sung": "{count, plural, one {# sang sunget} other {# sange sunget}}",
+      "thisYear": "I år",
+      "topArtist": "Topkunstner: {artist}",
+      "venues": "{count, plural, one {# sted} other {# steder}}",
+      "voiceCta": "Find dit stemmeomfang",
+      "connectCta": "Forbind din musik",
+      "profileTitle": "Din musikprofil",
+      "voiceHint": "Find sange, der passer til din stemme",
+      "voiceRange": "Toneomfang {range}"
+    },
+    "songs": {
+      "addPast": "Tilføj sange, jeg har sunget",
+      "count": "{count, plural, one {# sang} other {# sange}}",
+      "empty": "Ingen sange endnu. Marker en sang som sunget, eller gem en, så vises den her.",
+      "emptyFiltered": "Ingen sange matcher disse filtre.",
+      "feel": {
+        "unrated": "Ikke bedømt",
+        "bad": "Ikke noget for mig",
+        "great": "Fantastisk",
+        "ok": "OK"
+      },
+      "offline": "Du er offline. Viser sange gemt på denne telefon.",
+      "often": {
+        "once": "Én gang",
+        "twice": "2 eller flere",
+        "unsung": "Ikke sunget endnu"
+      },
+      "oftenLabel": "Hvor ofte",
+      "searchLabel": "Søg i dine sange",
+      "sort": {
+        "most": "Mest sunget",
+        "rated": "Bedst bedømt",
+        "recent": "Seneste",
+        "az": "A til Å"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Stemning",
+      "crowdPleaser": "Publikumsfavorit",
+      "feelLabel": "Aldersgrænse",
+      "loadError": "Kunne ikke indlæse dine sange.",
+      "moodLabel": "Stemning",
+      "saved": "Gemt",
+      "searchPlaceholder": "Sang eller kunstner",
+      "sortLabel": "Sortér",
+      "timesSungLabel": "{count, plural, one {Sunget # gang} other {Sunget # gange}}"
     }
   }
 }
