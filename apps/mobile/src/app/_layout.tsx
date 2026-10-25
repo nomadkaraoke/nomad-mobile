@@ -81,6 +81,8 @@ function RootStack() {
         {/* Me -> Your music profile (Phase 3a spec §8.3). */}
         <Stack.Screen name="me/music-profile" options={(p) => ({ title: tAccount('musicProfile'), ...profileBack(p) })} />
         <Stack.Screen name="me/sung-before" options={{ title: tMe('sungBefore.title') }} />
+        <Stack.Screen name="me/setlists/index" options={{ title: tMe('setlists.title') }} />
+        <Stack.Screen name="me/setlists/[id]" options={{ title: tMe('setlists.detailTitle') }} />
         <Stack.Screen name="me/artists" options={(p) => ({ title: tAccount('artistsAll'), ...profileBack(p) })} />
         {/* Connect your music (Phase 3b): its own stack with its own headers. */}
         <Stack.Screen name="discover/connect" options={{ headerShown: false }} />
