@@ -18,9 +18,9 @@ import { RECS_KEY } from './useRecommendations';
 /**
  * Forgets everything personal Discover holds the moment the person signs out, whichever screen they are on (the
  * Discover tab may not be mounted): the cached picks, music profile and connected-sources summary, the quiz draft
- * (memory and this phone's copy), the stale flag, the offline picks, the voice profile, the voice session in progress
- * the "record my takes" default and the recording upload queue (it isn't per user; the take files go too). The next person to sign in never sees
- * any of it. Mounted once in AppProviders; the API clients stay out of storage.
+ * (memory and this phone's copy), the stale flag, the offline picks, the voice profile, the voice session in progress,
+ * the "record my takes" default and the recording upload queue (it isn't per user; the take files go too). The next
+ * person to sign in never sees any of it. Mounted once in AppProviders; the API clients stay out of storage.
  */
 export function useClearDiscoverOnSignOut(): void {
   const queryClient = useQueryClient();
