@@ -3,12 +3,16 @@
 import { client } from './client/client.gen';
 import {
   addAttemptApiVoiceSessionsSessionIdAttemptsPost,
+  adoptSessionApiVoiceSessionsSessionIdAdoptPost,
   countRecordingsApiVoiceRecordingsCountGet,
   createSessionApiVoiceSessionsPost,
+  deleteRecordingApiVoiceRecordingsRecordingIdDelete,
   deleteRecordingsApiVoiceRecordingsDelete,
   flagsApiVoiceFlagsGet,
   getSessionApiVoiceSessionsSessionIdGet,
+  historyApiVoiceHistoryGet,
   nextSongApiVoiceSessionsSessionIdNextGet,
+  patchAttemptApiVoiceAttemptsAttemptIdPatch,
   patchSessionApiVoiceSessionsSessionIdPatch,
   sessionResultApiVoiceSessionsSessionIdResultGet,
   skipSongApiVoiceSessionsSessionIdSkipsPost,
@@ -16,6 +20,8 @@ import {
   userSongsApiAdminVoiceUsersEmailSongsGet,
   type AttemptIn,
   type AttemptOut,
+  type AttemptPatchIn,
+  type AttemptPatchOut,
   type BodyUploadRecordingApiVoiceRecordingsPost,
   type NextDoneOut,
   type NextSongOut,
@@ -29,6 +35,8 @@ import {
   type SkipIn,
   type UserSongOut,
   type VoiceFlagsOut,
+  type VoiceHistoryOut,
+  type VoiceProfileOut,
 } from './client';
 import { ApiError } from './configure';
 
@@ -67,6 +75,25 @@ export const postVoiceAttempt = async (id: string, body: AttemptIn): Promise<Att
 /** The result; on an active session this also ends it and saves the `session` profile when confident enough. */
 export const getVoiceResult = async (id: string): Promise<ResultOut> =>
   (await sessionResultApiVoiceSessionsSessionIdResultGet({ path: { session_id: id } })).data;
+
+/**
+ * Makes this session's result the user's voice profile, even at low confidence (session flag on). 409 `no_evidence`
+ * when the session has nothing to save. The generated client encodes the id.
+ */
+export const adoptVoiceSession = async (id: string): Promise<VoiceProfileOut> =>
+  (await adoptSessionApiVoiceSessionsSessionIdAdoptPost({ path: { session_id: id } })).data;
+
+// --- Your voice data (Me: sessions, songs, recordings; open even when the session flag is off) ---
+
+/** The user's sessions (newest first, at most 20) with their songs, results and recordings. */
+export const getVoiceHistory = async (): Promise<VoiceHistoryOut> => (await historyApiVoiceHistoryGet()).data;
+
+/**
+ * "Don't count this one" (`excluded: true`) or count it again. decide rebuilds the session's result and says what
+ * happened to the saved profile (`profile`). Attempt ids look like `<session>:<n>`; the generated client encodes them.
+ */
+export const patchVoiceAttempt = async (attemptId: string, body: AttemptPatchIn): Promise<AttemptPatchOut> =>
+  (await patchAttemptApiVoiceAttemptsAttemptIdPatch({ path: { attempt_id: attemptId }, body })).data;
 
 // --- Recordings (private, consent-gated) ---
 
@@ -126,6 +153,18 @@ export const uploadVoiceRecording = async (u: VoiceRecordingUpload): Promise<Rec
 export const deleteVoiceRecordings = async (): Promise<RecordingsDeleted> =>
   (await deleteRecordingsApiVoiceRecordingsDelete()).data;
 
+/** Deletes one recording (object, doc and the attempt's link). 204, idempotent; not the user's: 404. */
+export const deleteVoiceRecording = async (id: string): Promise<void> => {
+  await deleteRecordingApiVoiceRecordingsRecordingIdDelete({ path: { recording_id: id } });
+};
+
+/**
+ * The user's own recording's audio URL on the configured decide base (no Range: download it with the bearer token,
+ * then play the file).
+ */
+export const voiceRecordingAudioUrl = (id: string): string =>
+  `${client.getConfig().baseUrl ?? ''}/api/voice/recordings/${encodeURIComponent(id)}/audio`;
+
 export const voiceRecordingCount = async (): Promise<number> =>
   (await countRecordingsApiVoiceRecordingsCountGet()).data.count;
 
@@ -154,6 +193,8 @@ export const VOICE_ERROR_CODES = [
   'session_not_active',
   'max_attempts',
   'recordings_deleted',
+  'recording_deleted',
+  'no_evidence',
   'recording_too_large',
   'unsupported_media_type',
   'empty_recording',
@@ -179,7 +220,8 @@ export function voiceErrorCode(e: unknown): VoiceErrorCode | null {
 
 /**
  * True when a queued recording upload must be dropped: the server will never take it (decide API.md "App upload
- * queue rules": 403 recording_not_consented, 409 recordings_deleted, 404; plus 403 session_forbidden and the
+ * queue rules": 403 recording_not_consented, 409 recordings_deleted, 409 recording_deleted (this take was deleted
+ * on Me), 404; plus 403 session_forbidden and the
  * 413 / 415 / 422 refusals of the file itself, which a retry cannot fix). Everything else (network errors, 5xx,
  * 401, 429, 403 voice_session_disabled) keeps it for a later retry.
  */
@@ -187,5 +229,10 @@ export function isTerminalUploadError(e: unknown): boolean {
   if (!(e instanceof ApiError)) return false;
   if (e.status === 404 || e.status === 413 || e.status === 415 || e.status === 422) return true;
   const code = voiceErrorCode(e);
-  return code === 'recording_not_consented' || code === 'session_forbidden' || code === 'recordings_deleted';
+  return (
+    code === 'recording_not_consented' ||
+    code === 'session_forbidden' ||
+    code === 'recordings_deleted' ||
+    code === 'recording_deleted'
+  );
 }
