@@ -1790,6 +1790,12 @@
       "play": "Lecture",
       "song": "{title} · {artist}",
       "stop": "Arrêter"
+    },
+    "falsetto": {
+      "chip": "Note aiguë ({note}) : fausset ?",
+      "chipLabel": "Cette note aiguë, {note}, était peut-être en voix de fausset ou en voix de tête. C'était le cas ?",
+      "no": "Non",
+      "yes": "Oui"
     }
   }
 }

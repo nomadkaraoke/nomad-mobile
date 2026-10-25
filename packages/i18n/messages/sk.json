@@ -1790,6 +1790,12 @@
       "play": "Prehrať",
       "song": "{title} · {artist}",
       "stop": "Zastaviť"
+    },
+    "falsetto": {
+      "chip": "Vysoký tón ({note}): falzet?",
+      "chipLabel": "Tento vysoký tón, {note}, mohol byť falzet alebo hlavový tón. Bol to falzet?",
+      "no": "Nie",
+      "yes": "Áno"
     }
   }
 }

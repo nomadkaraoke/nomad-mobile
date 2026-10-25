@@ -1790,6 +1790,12 @@
       },
       "rowFailed": "Couldn't change that. Check your connection and try again.",
       "playFailed": "Couldn't play that recording. Check your connection and try again."
+    },
+    "falsetto": {
+      "chip": "High note ({note}): falsetto?",
+      "chipLabel": "That high note, {note}, may have been falsetto or head voice. Was it?",
+      "yes": "Yes",
+      "no": "No"
     }
   }
 }

@@ -1790,6 +1790,12 @@
       "play": "Phát",
       "song": "{title} · {artist}",
       "stop": "Dừng"
+    },
+    "falsetto": {
+      "chip": "Nốt cao ({note}): giọng giả thanh?",
+      "chipLabel": "Nốt cao đó ({note}) có thể là giọng giả thanh hoặc giọng đầu. Có đúng vậy không bạn?",
+      "no": "Không",
+      "yes": "Có"
     }
   }
 }

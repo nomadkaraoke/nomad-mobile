@@ -1790,6 +1790,12 @@
       "play": "I-play",
       "song": "{title} · {artist}",
       "stop": "Itigil"
+    },
+    "falsetto": {
+      "chip": "Mataas na nota ({note}): falsetto?",
+      "chipLabel": "Maaaring falsetto o head voice ang mataas na notang iyon, {note}. Falsetto nga ba ito?",
+      "no": "Hindi",
+      "yes": "Oo"
     }
   }
 }

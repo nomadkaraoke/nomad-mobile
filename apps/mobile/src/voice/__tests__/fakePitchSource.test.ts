@@ -25,10 +25,10 @@ afterEach(() => jest.useRealTimers());
 
 it('the generated WAV is deterministic', () => {
   const bytes = readFileSync(WAV);
-  expect(createHash('sha256').update(bytes).digest('hex')).toBe('11db3bc4fbce569fa2d6719008c36ca67ba065f1ccb3663c69ae5b7680e88dcf');
+  expect(createHash('sha256').update(bytes).digest('hex')).toBe('ba2c7027589b1edeb69f795388ed4d357d83fcfc435d70f7104d6d68e0febde6');
   const { sampleRate, samples } = parseWav(new Uint8Array(bytes));
   expect(sampleRate).toBe(16000);
-  expect(samples.length / sampleRate).toBeCloseTo(14.4, 5);
+  expect(samples.length / sampleRate).toBeCloseTo(23.1, 5);
 });
 
 it('grants permission, rejects an unknown fake name', async () => {
@@ -70,23 +70,40 @@ it('the high section reads as C4 once the quiet second is over', async () => {
   expect(frames.filter((f) => f.t < 1.0).every((f) => f.rms < 0.003)).toBe(true);
 });
 
-it('fake source song section loops: the sing slice repeats with a timestamp that keeps rising', async () => {
+it('fake source song section: one pass with a held A4 (the falsetto chip E2E), then the sing slice loops', async () => {
   const src = createFakePitchSource('baritone-scale');
   const got: PcmBuffer[] = [];
   await src.start((b) => got.push(b), 'song');
-  const [a, b] = FAKE_MIC_SECTIONS.sing;
-  expect(FAKE_MIC_SECTIONS.song).toEqual([a, b]);
-  const perPass = Math.ceil(((b - a) * 16000) / 1600);
-  jest.advanceTimersByTime(perPass * 2 * 100 + 500);
-  expect(got.length).toBe(perPass * 2 + 5);
-  // The second pass starts with the same audio as the first.
-  expect(Array.from(got[perPass]!.samples)).toEqual(Array.from(got[0]!.samples));
+  const [a, b] = FAKE_MIC_SECTIONS.song;
+  const [sa, sb] = FAKE_MIC_SECTIONS.sing;
+  expect(a).toBe(sb);
+  const first = Math.ceil(((b - a) * 16000) / 1600);
+  const perPass = Math.ceil(((sb - sa) * 16000) / 1600);
+  jest.advanceTimersByTime((first + perPass * 2) * 100 + 500);
+  expect(got.length).toBe(first + perPass * 2 + 5);
+  // After the first pass the sing slice repeats.
+  expect(Array.from(got[first + perPass]!.samples)).toEqual(Array.from(got[first]!.samples));
   for (let i = 1; i < got.length; i++) expect(got[i]!.timestamp).toBeGreaterThan(got[i - 1]!.timestamp);
-  expect(got.at(-1)!.timestamp).toBeGreaterThan(b - a);
   src.stop();
   const n = got.length;
   jest.advanceTimersByTime(1000);
   expect(got).toHaveLength(n);
+});
+
+it('the song pass ends on a held A4 of 1.5 s, above anything the sing slice reaches', async () => {
+  const src = createFakePitchSource('baritone-scale');
+  const frames: PitchFrame[] = [];
+  const framer = createFramer((f) => frames.push(f));
+  await src.start((b) => framer.push(b), 'song');
+  const [a, b] = FAKE_MIC_SECTIONS.song;
+  jest.advanceTimersByTime((b - a) * 1000 + 200);
+  src.stop();
+  const end = b - a;
+  const high = frames.filter((f) => f.t > end - 1.3 && f.t < end - 0.3 && f.hz !== null && f.clarity > 0.9);
+  expect(high.length).toBeGreaterThan(20);
+  for (const f of high) expect(Math.abs(f.hz! - 440)).toBeLessThan(3);
+  const before = frames.filter((f) => f.t < end - 1.7 && f.hz !== null && f.clarity > 0.9);
+  expect(Math.max(...before.map((f) => f.hz!))).toBeLessThan(270); // ≤ C4 (261.6 Hz)
 });
 
 it('a stop() that lands before the asset loads leaves no timer running', async () => {

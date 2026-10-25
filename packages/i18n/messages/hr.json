@@ -1790,6 +1790,12 @@
       "play": "Reproduciraj",
       "song": "{title} · {artist}",
       "stop": "Zaustavi"
+    },
+    "falsetto": {
+      "chip": "Visoki ton ({note}): falset?",
+      "chipLabel": "Taj visoki ton, {note}, možda je bio otpjevan u falsetu ili u glavi (head voice). Je li bio?",
+      "no": "Ne",
+      "yes": "Da"
     }
   }
 }

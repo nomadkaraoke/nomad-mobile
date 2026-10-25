@@ -1790,6 +1790,12 @@
       "play": "Toista",
       "song": "{title} · {artist}",
       "stop": "Pysäytä"
+    },
+    "falsetto": {
+      "chip": "Korkea nuotti ({note}): falsetti?",
+      "chipLabel": "Tuo korkea nuotti, {note}, saattoi olla falsettia tai pää-ääntä. Oliko se?",
+      "no": "Ei",
+      "yes": "Kyllä"
     }
   }
 }

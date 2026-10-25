@@ -194,6 +194,8 @@ export function VoiceSessionFlow() {
           micGranted={mic === 'granted'}
           onStopEarly={() => void vs.stopEarly()}
           onPatch={(p) => void vs.patchContext(p)}
+          falsettoChip={vs.falsettoChip}
+          onFalsetto={vs.answerFalsetto}
         />
       ) : (
         <Waiting testID="vs-loading" label={t('loading')} />

@@ -1790,6 +1790,12 @@
       "play": "Spela",
       "song": "{title} · {artist}",
       "stop": "Stopp"
+    },
+    "falsetto": {
+      "chip": "Hög ton ({note}): falsett?",
+      "chipLabel": "Den där höga tonen, {note}, kan ha varit falsett eller huvudklang. Var den det?",
+      "no": "Nej",
+      "yes": "Ja"
     }
   }
 }

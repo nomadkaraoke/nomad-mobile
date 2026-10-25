@@ -1790,6 +1790,12 @@
       "play": "Odtwórz",
       "song": "{title} · {artist}",
       "stop": "Zatrzymaj"
+    },
+    "falsetto": {
+      "chip": "Wysoki dźwięk ({note}): falset?",
+      "chipLabel": "Ten wysoki dźwięk, {note}, mógł być zaśpiewany falsetem lub głosem głowowym. Czy tak było?",
+      "no": "Nie",
+      "yes": "Tak"
     }
   }
 }

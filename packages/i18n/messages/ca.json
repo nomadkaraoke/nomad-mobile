@@ -1790,6 +1790,12 @@
       "play": "Reprodueix",
       "song": "{title} · {artist}",
       "stop": "Atura"
+    },
+    "falsetto": {
+      "chip": "Nota aguda ({note}): falset?",
+      "chipLabel": "Aquella nota aguda, {note}, podria haver estat falset o veu de cap. Ho era?",
+      "no": "No",
+      "yes": "Sí"
     }
   }
 }

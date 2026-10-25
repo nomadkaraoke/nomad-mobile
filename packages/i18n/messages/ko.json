@@ -1790,6 +1790,12 @@
       "play": "재생",
       "song": "{title} · {artist}",
       "stop": "중지"
+    },
+    "falsetto": {
+      "chip": "고음 ({note}): 가성인가요?",
+      "chipLabel": "방금 부르신 고음({note})은 가성이나 두성일 수 있어요. 맞나요?",
+      "no": "아니요",
+      "yes": "네"
     }
   }
 }

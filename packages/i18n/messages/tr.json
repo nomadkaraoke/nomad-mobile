@@ -1790,6 +1790,12 @@
       "play": "Oynat",
       "song": "{title} · {artist}",
       "stop": "Durdur"
+    },
+    "falsetto": {
+      "chip": "Tiz nota ({note}): falseto mu?",
+      "chipLabel": "Şu tiz nota ({note}) falseto veya kafa sesi olabilir. Öyle miydi?",
+      "no": "Hayır",
+      "yes": "Evet"
     }
   }
 }

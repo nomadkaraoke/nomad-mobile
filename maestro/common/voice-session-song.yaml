@@ -1,6 +1,8 @@
 # One sung song: "I know this" → the fake player (40 s, see e2e-local.sh; the session starts it once the recorder runs) → the quiz →
 # Q1 loved, Q2 comfortable unless the recording pre-filled it, Q3 easy → Next → the next pick or the result.
-# Env: EXPECT_PREFILL ("true": the recording's highest/lowest line shows), SHOT (optional: quiz screenshot path).
+# Env: EXPECT_PREFILL ("true": the recording's highest/lowest line shows), SHOT (optional: quiz screenshot path),
+# FALSETTO ("yes": wait for the live "High note: falsetto?" chip on the fake mic's held A4, about 8 s in, and answer
+# Yes within its 5 s; needs a chest reference, e.g. a seeded profile; FALSETTO_SHOT optional screenshot of it).
 appId: com.nomadkaraoke.mobile
 ---
 - tapOn:
@@ -9,6 +11,23 @@ appId: com.nomadkaraoke.mobile
     visible:
       id: "vs-play"
     timeout: 20000
+- runFlow:
+    when:
+      true: ${FALSETTO == 'yes'}
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: "vs-falsetto-chip"
+          timeout: 30000
+      - runFlow:
+          when:
+            true: ${FALSETTO_SHOT != null && FALSETTO_SHOT != ''}
+          commands:
+            - takeScreenshot: ${FALSETTO_SHOT}
+      - tapOn:
+          id: "vs-falsetto-yes"
+      - assertNotVisible:
+          id: "vs-falsetto-chip"
 - extendedWaitUntil:
     visible:
       id: "vs-quiz-next"

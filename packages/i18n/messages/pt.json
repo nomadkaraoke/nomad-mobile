@@ -1790,6 +1790,12 @@
       "play": "Reproduzir",
       "song": "{title} · {artist}",
       "stop": "Parar"
+    },
+    "falsetto": {
+      "chip": "Nota aguda ({note}): falsete?",
+      "chipLabel": "Aquela nota aguda, {note}, pode ter sido em falsete ou voz de cabeça. Foi?",
+      "no": "Não",
+      "yes": "Sim"
     }
   }
 }

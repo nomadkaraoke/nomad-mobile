@@ -1790,6 +1790,12 @@
       "play": "Riproduci",
       "song": "{title} · {artist}",
       "stop": "Interrompi"
+    },
+    "falsetto": {
+      "chip": "Nota alta ({note}): falsetto?",
+      "chipLabel": "Quella nota alta, {note}, potrebbe essere stata in falsetto o voce di testa. Lo era?",
+      "no": "No",
+      "yes": "Sì"
     }
   }
 }

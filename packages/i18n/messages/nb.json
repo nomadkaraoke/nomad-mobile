@@ -1790,6 +1790,12 @@
       "play": "Spill av",
       "song": "{title} · {artist}",
       "stop": "Stopp"
+    },
+    "falsetto": {
+      "chip": "Høy tone ({note}): falsett?",
+      "chipLabel": "Den høye tonen, {note}, kan ha vært falsett eller hoderøst. Var den det?",
+      "no": "Nei",
+      "yes": "Ja"
     }
   }
 }

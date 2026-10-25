@@ -1790,6 +1790,12 @@
       "play": "Mainkan",
       "song": "{title} · {artist}",
       "stop": "Berhenti"
+    },
+    "falsetto": {
+      "chip": "Nada tinggi ({note}): falseto?",
+      "chipLabel": "Nada tinggi itu, {note}, mungkin falseto atau suara kepala (head voice). Adakah betul begitu?",
+      "no": "Tidak",
+      "yes": "Ya"
     }
   }
 }

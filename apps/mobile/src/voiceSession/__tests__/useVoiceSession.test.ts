@@ -1,10 +1,12 @@
 // useVoiceSession: the voice session's state machine (Phase 3d D5) over mocked decide calls, a fake song recorder
 // and fake timers; sessionStore's resume window (Review Focus 2).
 import { ApiError, type NextVoiceSong, type SessionSetup } from '@nomad/api-decide';
+import type { HeldNote } from '@nomad/core';
 import { act, renderHook } from '@testing-library/react-native';
 
 import { appStorage } from '../../storage';
 import { fsState } from '../../test-utils/memoryFs';
+import { profileFromSelfReport, useVoiceStore } from '../../voice/voiceStore';
 import { useRecordingQueue } from '../recording/recordingQueue';
 import type { SongTake } from '../recording/useSongRecorder';
 import { restoreVoiceSession, SESSION_MAX_AGE_MS, VOICE_SESSION_KEY, useVoiceSessionStore } from '../sessionStore';
@@ -40,7 +42,7 @@ jest.mock('@nomad/api-decide', () => ({
 /** The fake recorder: records call order and hands back `nextTake` on stop(). */
 const mockOrder: string[] = [];
 const mockRec = {
-  opts: null as null | { record: boolean; floor: number },
+  opts: null as null | { record: boolean; floor: number; onHeldNote?: (n: HeldNote) => void },
   nextTake: { pitch: null, file: null, contour: null, held: [], takeOffsetS: 0 } as SongTake,
   start: jest.fn(async () => void mockOrder.push('recorder.start')),
   stop: jest.fn(async (): Promise<SongTake> => {
@@ -49,7 +51,7 @@ const mockRec = {
   }),
 };
 jest.mock('../recording/useSongRecorder', () => ({
-  useSongRecorder: (_src: unknown, opts: { record: boolean; floor: number }) => {
+  useSongRecorder: (_src: unknown, opts: { record: boolean; floor: number; onHeldNote?: (n: HeldNote) => void }) => {
     mockRec.opts = opts;
     return { start: mockRec.start, stop: mockRec.stop, livePitch: null };
   },
@@ -135,6 +137,8 @@ const player = {
   play: jest.fn(() => void mockOrder.push('player.play')),
   pause: jest.fn(),
 };
+const note = (start: number, end: number, n: number): HeldNote => ({ start, end, midi: n, note: n });
+const heard = (n: HeldNote) => act(() => mockRec.opts!.onHeldNote!(n));
 
 async function mount() {
   const h = renderHook(() => useVoiceSession());
@@ -159,6 +163,8 @@ beforeEach(() => {
   mockRec.stop.mockClear();
   mockRec.nextTake = { pitch: null, file: null, contour: null, held: [], takeOffsetS: 0 };
   player.play.mockClear();
+  player.pause.mockClear();
+  useVoiceStore.getState().clear();
   mockOrder.length = 0;
   fsState.reset();
   appStorage.clearAll();
@@ -222,7 +228,7 @@ describe('useVoiceSession', () => {
     expect(r.current.song?.song_key).toBe('a');
     expect(r.current.attemptN).toBe(1);
     expect(r.current.maxAttempts).toBe(12);
-    expect(mockRec.opts).toEqual({ record: true, floor: 0.01 });
+    expect(mockRec.opts).toEqual({ record: true, floor: 0.01, onHeldNote: expect.any(Function) });
 
     for (const [i, key] of ['a', 'b', 'c'].entries()) {
       mockRec.nextTake = takeWithFile(key);
@@ -728,7 +734,7 @@ describe('useVoiceSession', () => {
     await flush();
     await act(() => r.current.startWarmup(0.02));
     expect(r.current.step).toBe('warmup');
-    expect(mockRec.opts).toEqual({ record: false, floor: 0.02 });
+    expect(mockRec.opts).toEqual({ record: false, floor: 0.02, onHeldNote: expect.any(Function) });
     expect(mockRec.start).toHaveBeenCalled();
     await act(() => r.current.endWarmup());
     expect(mockRec.stop).toHaveBeenCalled();
@@ -1046,6 +1052,108 @@ describe('useVoiceSession', () => {
         candidates: [],
         takeOffsetS: 0,
       });
+    });
+  
+    const ESTIMATE = { low: 48, high: 59, sd_high: 2, source: 'model' as const };
+    /** begin → pick → ready (the detector arms) → playing. */
+    async function playing(over: Parameters<typeof song>[2] = {}, setup: SessionSetup = SETUP) {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1, over));
+      const h = await mount();
+      await act(() => h.result.current.begin(setup));
+      await act(() => h.result.current.pickKnow());
+      await act(() => h.result.current.onPlayer({ kind: 'ready' }));
+      await act(() => h.result.current.onPlayer({ kind: 'playing' }));
+      return h;
+    }
+
+    it('chip appears for a candidate and hides after 5 s', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE });
+      heard(note(10, 11, 62)); // 3 above: chest
+      expect(r.current.falsettoChip).toBeNull();
+      heard(note(20, 21.5, 69));
+      expect(r.current.falsettoChip).toEqual({ tStart: 20, tEnd: 21.5, midi: 69 });
+      act(() => jest.advanceTimersByTime(4900));
+      expect(r.current.falsettoChip).not.toBeNull();
+      act(() => jest.advanceTimersByTime(200));
+      expect(r.current.falsettoChip).toBeNull();
+      // Unanswered: the quiz asks about it.
+      await act(() => r.current.onPlayer({ kind: 'ended' }));
+      expect(store().candidates).toEqual([{ tStart: 20, tEnd: 21.5, midi: 69 }]);
+      expect(store().noteLabels).toEqual([]);
+    });
+
+    it('yes records live falsetto label', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE });
+      heard(note(20, 21.5, 69));
+      act(() => r.current.answerFalsetto(r.current.falsettoChip!, 'falsetto'));
+      expect(r.current.falsettoChip).toBeNull();
+      expect(store().noteLabels).toEqual([{ tStart: 20, tEnd: 21.5, midi: 69, label: 'falsetto', source: 'live' }]);
+    });
+
+    it('no chip without a chest reference', async () => {
+      // No estimate and no profile on the phone.
+      const a = await playing();
+      heard(note(20, 21.5, 80));
+      expect(a.result.current.falsettoChip).toBeNull();
+      a.unmount();
+      store().clear();
+      // A model estimate that is still too unsure (sd_high > 3) and no profile on the phone.
+      const b = await playing({ comfort_estimate: { ...ESTIMATE, sd_high: 5 } });
+      heard(note(20, 21.5, 80));
+      expect(b.result.current.falsettoChip).toBeNull();
+    });
+
+    it("an unsure model estimate falls back to the phone's comfort top; measured is used whatever its spread", async () => {
+      act(() => useVoiceStore.getState().save(profileFromSelfReport('baritone', '2026-10-01T00:00:00Z')));
+      const top = useVoiceStore.getState().profile!.comfortHigh;
+      const a = await playing({ comfort_estimate: { ...ESTIMATE, sd_high: 5 } });
+      heard(note(20, 21.5, top + 3));
+      expect(a.result.current.falsettoChip).toBeNull();
+      heard(note(30, 31.5, top + 4));
+      expect(a.result.current.falsettoChip?.midi).toBe(top + 4);
+      a.unmount();
+      store().clear();
+      const b = await playing({ comfort_estimate: { low: 48, high: 59, sd_high: 6, source: 'measured' } });
+      heard(note(20, 21.5, 63));
+      expect(b.result.current.falsettoChip?.midi).toBe(63);
+    });
+
+    it('setup "uses falsetto: yes" lowers the offset to 3', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE }, { ...SETUP, uses_falsetto: 'yes' });
+      heard(note(20, 21.5, 62));
+      expect(r.current.falsettoChip?.midi).toBe(62);
+    });
+
+    it('player never paused by chip', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE });
+      expect(player.play).toHaveBeenCalledTimes(1);
+      heard(note(20, 21.5, 69));
+      act(() => r.current.answerFalsetto(r.current.falsettoChip!, 'full'));
+      heard(note(45, 46.5, 70));
+      act(() => jest.advanceTimersByTime(6000));
+      expect(player.pause).not.toHaveBeenCalled();
+      expect(player.play).toHaveBeenCalledTimes(1);
+      expect(r.current.step).toBe('play');
+    });
+
+    it('two candidates within 20 s show one chip', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE });
+      heard(note(20, 21.5, 69));
+      act(() => jest.advanceTimersByTime(5000));
+      expect(r.current.falsettoChip).toBeNull();
+      heard(note(30, 31.5, 69));
+      expect(r.current.falsettoChip).toBeNull();
+      await act(() => r.current.onPlayer({ kind: 'ended' }));
+      expect(store().candidates).toHaveLength(2);
+    });
+
+    it('the chip goes away when the song ends; the warm-up never asks', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE });
+      heard(note(20, 21.5, 69));
+      await act(() => r.current.onPlayer({ kind: 'ended' }));
+      expect(r.current.falsettoChip).toBeNull();
+      heard(note(40, 41.5, 72));
+      expect(r.current.falsettoChip).toBeNull();
     });
   });
 });

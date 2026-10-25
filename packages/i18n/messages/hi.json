@@ -1790,6 +1790,12 @@
       "play": "चलाओ",
       "song": "{title} · {artist}",
       "stop": "रोको"
+    },
+    "falsetto": {
+      "chip": "ऊँचा सुर ({note}): falsetto?",
+      "chipLabel": "वह ऊँचा सुर, {note}, falsetto या हेड वॉइस हो सकता है। क्या तुमने वही गाया था?",
+      "no": "नहीं",
+      "yes": "हाँ"
     }
   }
 }

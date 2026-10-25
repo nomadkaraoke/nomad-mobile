@@ -172,6 +172,8 @@ function fakeVs(over: Partial<VoiceSession> = {}): VoiceSession {
     quiz: EMPTY_SESSION_QUIZ,
     prefill: null,
     result: null,
+    falsettoChip: null,
+    answerFalsetto: jest.fn(),
     livePitch: null,
     pitchSource: mockSource.current!,
     playerMode: 'embed-hosted',

@@ -1790,6 +1790,12 @@
       "play": "再生",
       "song": "{title} · {artist}",
       "stop": "停止"
+    },
+    "falsetto": {
+      "chip": "高音（{note}）：裏声？",
+      "chipLabel": "高音の「{note}」は裏声（ファルセットや頭声）でしたか？",
+      "no": "いいえ",
+      "yes": "はい"
     }
   }
 }

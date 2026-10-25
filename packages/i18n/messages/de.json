@@ -1790,6 +1790,12 @@
       "play": "Abspielen",
       "song": "{title} · {artist}",
       "stop": "Stopp"
+    },
+    "falsetto": {
+      "chip": "Hoher Ton ({note}): Falsett?",
+      "chipLabel": "Dieser hohe Ton, {note}, war vielleicht Falsett oder Kopfstimme. War er das?",
+      "no": "Nein",
+      "yes": "Ja"
     }
   }
 }

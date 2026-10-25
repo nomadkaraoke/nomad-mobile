@@ -1790,6 +1790,12 @@
       "play": "Lejátszás",
       "song": "{title} · {artist}",
       "stop": "Leállítás"
+    },
+    "falsetto": {
+      "chip": "Magas hang ({note}): falzett?",
+      "chipLabel": "Ez a magas hang ({note}) lehet, hogy falzett vagy fejhang volt. Az volt?",
+      "no": "Nem",
+      "yes": "Igen"
     }
   }
 }

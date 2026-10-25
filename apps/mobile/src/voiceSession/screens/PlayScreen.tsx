@@ -1,4 +1,5 @@
 import type { NextSongOut, SessionPatch, SessionSetup } from '@nomad/api-decide';
+import type { FalsettoCandidate, NoteLabel } from '@nomad/core';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, Chip, colors, PianoStrip, Text } from '@nomad/ui';
 import { useState, type RefObject } from 'react';
@@ -6,6 +7,7 @@ import { View } from 'react-native';
 
 import { StepLayout } from '../../voice/StepLayout';
 import { ContextChip } from '../ContextChip';
+import { FalsettoChip } from '../FalsettoChip';
 import { KaraokePlayer, type PlayerEvent, type PlayerHandle } from '../player/KaraokePlayer';
 import type { PlayerMode } from '../player/playerMode';
 
@@ -23,6 +25,9 @@ export type PlayScreenProps = {
   micGranted: boolean;
   onStopEarly: () => void;
   onPatch: (patch: SessionPatch) => void;
+  /** The live falsetto question (null: none showing). */
+  falsettoChip?: FalsettoCandidate | null;
+  onFalsetto?: (c: FalsettoCandidate, label: NoteLabel) => void;
 };
 
 /**
@@ -30,7 +35,19 @@ export type PlayScreenProps = {
  * a recording dot while consent is on, an optional live pitch ribbon, Stop early and the context chip. The session
  * starts the video itself once the recorder runs (KaraokePlayer's start order).
  */
-export function PlayScreen({ song, setup, playerMode, playerRef, onPlayer, livePitch, micGranted, onStopEarly, onPatch }: PlayScreenProps) {
+export function PlayScreen({
+  song,
+  setup,
+  playerMode,
+  playerRef,
+  onPlayer,
+  livePitch,
+  micGranted,
+  onStopEarly,
+  onPatch,
+  falsettoChip = null,
+  onFalsetto,
+}: PlayScreenProps) {
   const t = useTranslations('voiceSession');
   const [ribbon, setRibbon] = useState(false);
   return (
@@ -57,6 +74,9 @@ export function PlayScreen({ song, setup, playerMode, playerRef, onPlayer, liveP
         onEvent={onPlayer}
         testID="vs-player"
       />
+      {falsettoChip ? (
+        <FalsettoChip key={`${falsettoChip.tStart}`} candidate={falsettoChip} onAnswer={(l) => onFalsetto?.(falsettoChip, l)} />
+      ) : null}
       <View className="flex-row flex-wrap items-center gap-3">
         {setup.record && micGranted ? (
           <View testID="vs-recording" className="flex-row items-center gap-2" accessible accessibilityLabel={t('play.recording')}>

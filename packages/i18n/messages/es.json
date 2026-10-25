@@ -1790,6 +1790,12 @@
       "play": "Reproducir",
       "song": "{title} · {artist}",
       "stop": "Detener"
+    },
+    "falsetto": {
+      "chip": "Nota alta ({note}): ¿falsete?",
+      "chipLabel": "Esa nota alta, {note}, pudo haber sido falsete o voz de cabeza. ¿Lo fue?",
+      "no": "No",
+      "yes": "Sí"
     }
   }
 }

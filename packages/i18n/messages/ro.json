@@ -1790,6 +1790,12 @@
       "play": "Redă",
       "song": "{title} · {artist}",
       "stop": "Oprește"
+    },
+    "falsetto": {
+      "chip": "Notă înaltă ({note}): falset?",
+      "chipLabel": "Acea notă înaltă, {note}, s-ar putea să fi fost falset sau voce de cap. Așa a fost?",
+      "no": "Nu",
+      "yes": "Da"
     }
   }
 }

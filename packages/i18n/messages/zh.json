@@ -1790,6 +1790,12 @@
       "play": "播放",
       "song": "{title} · {artist}",
       "stop": "停止"
+    },
+    "falsetto": {
+      "chip": "高音（{note}）：假音？",
+      "chipLabel": "那个高音 {note} 可能是假音或头声，是这样吗？",
+      "no": "否",
+      "yes": "是"
     }
   }
 }

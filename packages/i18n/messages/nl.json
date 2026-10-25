@@ -1790,6 +1790,12 @@
       "play": "Afspelen",
       "song": "{title} · {artist}",
       "stop": "Stoppen"
+    },
+    "falsetto": {
+      "chip": "Hoge noot ({note}): falset?",
+      "chipLabel": "Die hoge noot, {note}, was misschien falset of kopstem. Klopt dat?",
+      "no": "Nee",
+      "yes": "Ja"
     }
   }
 }
