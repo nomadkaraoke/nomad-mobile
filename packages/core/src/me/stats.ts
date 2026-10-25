@@ -47,7 +47,15 @@ export function karaokeStats(items: MeSong[], log: PendingLog[], scope: { year?:
 
   let mostSung: KaraokeStats['mostSung'] = null;
   for (const r of rows) {
-    if (!mostSung || r.count > mostSung.count) mostSung = { artist: r.artist, title: r.title, count: r.count };
+    if (
+      !mostSung ||
+      r.count > mostSung.count ||
+      (r.count === mostSung.count &&
+        (normalize(r.artist).localeCompare(normalize(mostSung.artist)) ||
+          normalize(r.title).localeCompare(normalize(mostSung.title))) < 0)
+    ) {
+      mostSung = { artist: r.artist, title: r.title, count: r.count };
+    }
   }
 
   // Top artist: by normalised name, displayed with the most common original spelling.
@@ -61,7 +69,7 @@ export function karaokeStats(items: MeSong[], log: PendingLog[], scope: { year?:
   }
   let topArtist: string | null = null;
   let topTotal = 0;
-  for (const a of artists.values()) {
+  for (const [, a] of [...artists.entries()].sort((x, y) => x[0].localeCompare(y[0]))) {
     if (a.total > topTotal) {
       topTotal = a.total;
       let best = '';

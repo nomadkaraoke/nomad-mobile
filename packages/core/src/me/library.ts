@@ -65,8 +65,8 @@ const ratedCount = (s: MeSong) => s.feel_counts.great + s.feel_counts.ok + s.fee
 const azCompare = (a: MeSong, b: MeSong) =>
   normalize(a.artist).localeCompare(normalize(b.artist)) || normalize(a.title).localeCompare(normalize(b.title));
 
-/** Saved = loved or in at least one setlist. */
-const isSaved = (s: MeSong) => s.loved || s.setlist_ids.length > 0;
+/** Saved = loved (Save is Love); setlist-only songs are in the library but not saved. */
+const isSaved = (s: MeSong) => s.loved;
 
 export function queryLibrary(items: MeSong[], q: LibraryQuery): MeSong[] {
   const qTokens = q.text ? normalize(q.text).split(' ').filter(Boolean) : [];
@@ -217,6 +217,8 @@ export function overlayLibrary(
     });
   for (const { r } of surveyed) {
     const sv = r.survey!;
+    // A record that doesn't count as sung must not create a phantom item.
+    if (!countsAsSung(r) && !map.has(libraryKey(r.artist, r.title, r.song_key ?? null))) continue;
     const s = get(r.artist, r.title, r.song_key);
     if (sv.feel && FEELS.has(sv.feel)) {
       s.latest_feel = sv.feel as Feel;

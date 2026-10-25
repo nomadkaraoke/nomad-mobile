@@ -65,4 +65,13 @@ describe('karaokeStats', () => {
     );
     expect(s.topArtist).toBe('the killers');
   });
+
+  it('breaks ties deterministically', () => {
+    const a = karaokeStats([item('Zed', 'Z', { times_sung: 2 }), item('Abe', 'B', { times_sung: 2 }), item('Abe', 'A', { times_sung: 2 })], [], {});
+    const b = karaokeStats([item('Abe', 'A', { times_sung: 2 }), item('Abe', 'B', { times_sung: 2 }), item('Zed', 'Z', { times_sung: 2 })], [], {});
+    expect(a.mostSung).toEqual({ artist: 'Abe', title: 'A', count: 2 });
+    expect(b.mostSung).toEqual(a.mostSung);
+    expect(a.topArtist).toBe('Abe');
+    expect(b.topArtist).toBe('Abe');
+  });
 });

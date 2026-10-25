@@ -89,7 +89,8 @@ describe('queryLibrary', () => {
     expect(titles(queryLibrary(items, q({ library: 'community' })))).toEqual(['Hello']);
     expect(titles(queryLibrary(items, q({ library: 'karafun' })))).toEqual(['Dancing Queen']);
     expect(titles(queryLibrary(items, q({ library: 'any' })))).toHaveLength(4);
-    expect(queryLibrary(items, q({ savedOnly: true })).map((s) => s.artist).sort()).toEqual(['ABBA', 'Adele', 'Cher']);
+    expect(queryLibrary(items, q({ savedOnly: true })).map((s) => s.artist).sort()).toEqual(['Adele', 'Cher']);
+    expect(titles(queryLibrary(items, q({ savedOnly: true })))).not.toContain('Dancing Queen'); // setlist-only
   });
   it('text via normalize, combined with filters', () => {
     expect(titles(queryLibrary(items, q({ text: 'ADELE' })))).toEqual(['Hello']);
@@ -198,6 +199,13 @@ describe('overlayLibrary', () => {
     const k = base[0]!.key;
     const out = overlayLibrary(base, { ...empty, loves: { [k]: { loved: false, artist: 'Cher', title: 'Believe', song_key: k } } });
     expect(out).toHaveLength(1);
+  });
+  it('a survey on a non-counting record creates no phantom item', () => {
+    const out = overlayLibrary([], {
+      ...empty,
+      log: [{ id: '1', artist: 'A', title: 'B', state: 'queued', survey: { feel: 'great' } }],
+    });
+    expect(out).toEqual([]);
   });
   it('pending love adds a new item', () => {
     const k = 'mb:9';
