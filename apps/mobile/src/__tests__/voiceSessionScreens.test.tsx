@@ -68,7 +68,7 @@ const config = jest.requireMock('../config') as { FAKE_YT: boolean };
 
 const mockRec = {
   start: jest.fn(async () => {}),
-  stop: jest.fn(async (): Promise<SongTake> => ({ pitch: null, file: null })),
+  stop: jest.fn(async (): Promise<SongTake> => ({ pitch: null, file: null, contour: null, held: [], takeOffsetS: 0 })),
 };
 jest.mock('../voiceSession/recording/useSongRecorder', () => ({
   useSongRecorder: () => ({ start: mockRec.start, stop: mockRec.stop, livePitch: null }),

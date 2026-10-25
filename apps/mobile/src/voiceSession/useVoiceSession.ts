@@ -134,6 +134,11 @@ const FRESH_SONG = {
   playEndedAt: null,
   stoppedEarly: false,
   take: null,
+  contour: null,
+  held: [],
+  noteLabels: [],
+  candidates: [],
+  takeOffsetS: 0,
 } satisfies Partial<SessionState>;
 
 const warn = (what: string, e: unknown) => console.warn(`[voice session] ${what}: ${String(e)}`);
@@ -277,7 +282,7 @@ export function useVoiceSession(): VoiceSession {
         return await recorderRef.current.stop();
       } catch (e) {
         warn('recorder stop failed', e);
-        return { pitch: null, file: null };
+        return { pitch: null, file: null, contour: null, held: [], takeOffsetS: 0 };
       } finally {
         stopping.current = false;
       }
@@ -398,6 +403,9 @@ export function useVoiceSession(): VoiceSession {
         step: 'quiz',
         pitch: take.pitch,
         take: keep,
+        contour: take.contour,
+        held: take.held,
+        takeOffsetS: take.takeOffsetS,
         stoppedEarly,
         playStartedAt: get().playStartedAt ?? now,
         playEndedAt: now,

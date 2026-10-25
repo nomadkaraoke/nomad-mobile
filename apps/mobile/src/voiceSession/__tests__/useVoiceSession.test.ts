@@ -41,7 +41,7 @@ jest.mock('@nomad/api-decide', () => ({
 const mockOrder: string[] = [];
 const mockRec = {
   opts: null as null | { record: boolean; floor: number },
-  nextTake: { pitch: null, file: null } as SongTake,
+  nextTake: { pitch: null, file: null, contour: null, held: [], takeOffsetS: 0 } as SongTake,
   start: jest.fn(async () => void mockOrder.push('recorder.start')),
   stop: jest.fn(async (): Promise<SongTake> => {
     mockOrder.push('recorder.stop');
@@ -110,6 +110,9 @@ const takeWithFile = (name: string): SongTake => {
   return {
     pitch: PITCH,
     file: { uri, durationS: 190, contentType: 'audio/wav' },
+    contour: null,
+    held: [],
+    takeOffsetS: 0,
   };
 };
 
@@ -154,7 +157,7 @@ beforeEach(() => {
   for (const f of Object.values(mockApi)) f.mockReset();
   mockRec.start.mockClear();
   mockRec.stop.mockClear();
-  mockRec.nextTake = { pitch: null, file: null };
+  mockRec.nextTake = { pitch: null, file: null, contour: null, held: [], takeOffsetS: 0 };
   player.play.mockClear();
   mockOrder.length = 0;
   fsState.reset();
@@ -986,6 +989,63 @@ describe('useVoiceSession', () => {
       await act(() => r.current.begin(SETUP));
       expect(mockApi.createVoiceSession).toHaveBeenCalledTimes(2);
       expect(r.current.step).toBe('pick');
+    });
+  });
+
+  describe('falsetto batch (M6–M8)', () => {
+    const CONTOUR = { t0: 0.5, dt: 0.1, midi: [57, 57.02, null, 64] };
+    const HELD = [{ start: 0.5, end: 1.4, midi: 57, note: 57 }];
+
+    it('session store persists and restores contour/labels', async () => {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1));
+      mockRec.nextTake = { pitch: PITCH, file: null, contour: CONTOUR, held: HELD, takeOffsetS: 1.25 };
+      const first = await mount();
+      await act(() => first.result.current.begin(SETUP));
+      await singIt(first.result);
+      expect(store()).toMatchObject({ step: 'quiz', contour: CONTOUR, held: HELD, takeOffsetS: 1.25 });
+      const label = { tStart: 0.5, tEnd: 1.4, midi: 57, label: 'unsure' as const, source: 'live' as const };
+      act(() => store().update({ noteLabels: [label], candidates: [{ tStart: 0.5, tEnd: 1.4, midi: 57 }] }));
+      first.unmount();
+
+      useVoiceSessionStore.setState({ contour: null, held: [], noteLabels: [], candidates: [] });
+      restoreVoiceSession();
+      expect(store()).toMatchObject({
+        step: 'quiz',
+        contour: CONTOUR,
+        held: HELD,
+        takeOffsetS: 1.25,
+        noteLabels: [label],
+        candidates: [{ tStart: 0.5, tEnd: 1.4, midi: 57 }],
+      });
+    });
+
+    it('a copy stored before the falsetto fields still resumes (empty contour, no labels)', () => {
+      const old = {
+        sessionId: 's1',
+        setup: SETUP,
+        floor: 0.003,
+        song: song('a', 1),
+        step: 'quiz',
+        attemptN: 1,
+        quiz: {},
+        pitch: PITCH,
+        playStartedAt: T0 - 1000,
+        playEndedAt: T0,
+        stoppedEarly: false,
+        take: null,
+        savedAt: T0,
+      };
+      appStorage.set(VOICE_SESSION_KEY, JSON.stringify(old));
+      restoreVoiceSession();
+      expect(store()).toMatchObject({
+        sessionId: 's1',
+        step: 'quiz',
+        contour: null,
+        held: [],
+        noteLabels: [],
+        candidates: [],
+        takeOffsetS: 0,
+      });
     });
   });
 });
