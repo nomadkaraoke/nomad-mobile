@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "ร้องได้พอดี (ทำแบบทดสอบเสียงก่อน)",
     "profileRemoveConfirm": "นำออก",
     "profileMethodSession": "จากเซสชันเสียงร้องของคุณ ({n, plural, one {# เพลง} other {# เพลง}})",
-    "profileMethodSessionPlain": "จากเซสชันเสียงร้องของคุณ"
+    "profileMethodSessionPlain": "จากเซสชันเสียงร้องของคุณ",
+    "profileActive": "ใช้สำหรับการวิเคราะห์ความเข้ากันของเพลง",
+    "profileAdopt": "ใช้ค่านี้เป็นเสียงของฉัน",
+    "profileAdoptFailed": "ไม่สามารถบันทึกเป็นเสียงของคุณได้ โปรดตรวจสอบการเชื่อมต่อของคุณแล้วลองใหม่อีกครั้ง",
+    "profileCardMic": "จากการทดสอบไมโครโฟนของคุณ",
+    "profileCardSongs": "{n, plural, one {จาก # เพลง} other {จาก # เพลง}}",
+    "profileUnsaved": "ยังไม่ได้บันทึกเป็นเสียงของคุณ: เราต้องการข้อมูลจากเพลงมากกว่านี้เพื่อความแม่นยำ",
+    "profileCardSession": "จากเซสชันเสียงร้องของคุณ"
   },
   "voiceSession": {
     "debug": {

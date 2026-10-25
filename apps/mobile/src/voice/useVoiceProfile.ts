@@ -1,7 +1,7 @@
 // The voice profile and decide (Phase 3c 18b). The phone's copy (useVoiceStore) is the source of truth for badges;
 // decide's copy follows it. A save never loses the measurement: it is stored `pending` first and stays pending
 // through offline, 5xx/503 and signed-out states until a PUT succeeds. A decide 401 only marks Discover stale.
-import { ApiError, getVoiceProfile, putVoiceProfile, type VoiceProfileOut } from '@nomad/api-decide';
+import { ApiError, getVoiceProfiles, putVoiceProfile, type VoiceProfileOut, type VoiceProfiles } from '@nomad/api-decide';
 import { VOICE_TYPES, type VoiceType } from '@nomad/core';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef } from 'react';
@@ -43,9 +43,9 @@ let inFlight: Promise<void> | null = null;
 /** Date.now() when the last voice PUT started, and when the last voice GET started (the clear-on-null race guard). */
 let lastPutStartedAt = 0;
 let lastGetStartedAt = 0;
-const fetchVoice = () => {
+const fetchVoice = (): Promise<VoiceProfiles> => {
   lastGetStartedAt = Date.now();
-  return getVoiceProfile();
+  return getVoiceProfiles();
 };
 
 /**
@@ -94,6 +94,7 @@ export function sendPendingVoice(): Promise<boolean> {
  * the local copy is synced means it was removed on another phone: the local copy is cleared too. Not when it is
  * pending (not uploaded yet), was rejected by decide (400/422, never there), or a PUT started after this GET did
  * (the GET read decide before the upload landed: the launch-time flush and fetch run together).
+ * Also returns decide's mic-test result and latest session result (Me shows both), null until read.
  */
 export function useVoiceProfile() {
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
@@ -109,7 +110,7 @@ export function useVoiceProfile() {
     retry: false,
   });
 
-  const server = query.data;
+  const server = query.data === undefined ? undefined : query.data.profile;
   useEffect(() => {
     if (server === undefined) return;
     const { profile: mine, pending: minePending, rejected, adopt, markSynced, clear } = useVoiceStore.getState();
@@ -121,7 +122,13 @@ export function useVoiceProfile() {
     else if (time(server.measured_at) === time(mine.measuredAt)) markSynced(mine.measuredAt);
   }, [server]);
 
-  return { profile, pending, isLoading: query.isLoading };
+  return {
+    profile,
+    pending,
+    isLoading: query.isLoading,
+    mic: query.data?.mic ?? null,
+    latestSession: query.data?.latestSession ?? null,
+  };
 }
 
 /** Turns off the filters that need a voice profile (Singable, sort by fit). */

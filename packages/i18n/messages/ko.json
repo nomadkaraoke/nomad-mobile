@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "부르기 가능한 곡 확인, 먼저 음성 테스트를 받아보세요",
     "profileRemoveConfirm": "제거",
     "profileMethodSession": "보이스 세션 기록 기반 ({n, plural, other {#곡}})",
-    "profileMethodSessionPlain": "보이스 세션 기록 기반"
+    "profileMethodSessionPlain": "보이스 세션 기록 기반",
+    "profileActive": "노래 적합도에 사용 중",
+    "profileAdopt": "내 음성 프로필로 사용하기",
+    "profileAdoptFailed": "내 음성으로 저장하지 못했어요. 네트워크 연결을 확인하고 다시 시도해 주세요.",
+    "profileCardMic": "마이크 테스트 기반",
+    "profileCardSongs": "{n, plural, other {노래 #곡 기반}}",
+    "profileUnsaved": "내 음성으로 저장되지 않음: 정확한 확인을 위해 더 많은 곡이 필요해요",
+    "profileCardSession": "보이스 세션 기록 기반"
   },
   "voiceSession": {
     "debug": {

@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Cantable, haz la prueba de voz primero",
     "profileRemoveConfirm": "Quitar",
     "profileMethodSession": "De tu sesión de voz ({n, plural, one {# canción} other {# canciones}})",
-    "profileMethodSessionPlain": "De tu sesión de voz"
+    "profileMethodSessionPlain": "De tu sesión de voz",
+    "profileActive": "Usado para la compatibilidad de canciones",
+    "profileAdopt": "Usar esto como mi voz",
+    "profileAdoptFailed": "No se pudo guardar como tu voz. Comprueba tu conexión e inténtalo de nuevo.",
+    "profileCardMic": "De tu prueba de micrófono",
+    "profileCardSongs": "{n, plural, one {De # canción} other {De # canciones}}",
+    "profileUnsaved": "No guardado como tu voz: necesitamos más canciones para tener la certeza",
+    "profileCardSession": "De tu sesión de voz"
   },
   "voiceSession": {
     "debug": {

@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Dapat dinyanyikan, ikuti tes suara terlebih dahulu",
     "profileRemoveConfirm": "Hapus",
     "profileMethodSession": "Dari sesi suara Anda ({n, plural, other {# lagu}})",
-    "profileMethodSessionPlain": "Dari sesi suara Anda"
+    "profileMethodSessionPlain": "Dari sesi suara Anda",
+    "profileActive": "Digunakan untuk kecocokan lagu",
+    "profileAdopt": "Gunakan ini sebagai suara saya",
+    "profileAdoptFailed": "Tidak dapat menyimpannya sebagai suara Anda. Periksa koneksi Anda dan coba lagi.",
+    "profileCardMic": "Dari tes mikrofon Anda",
+    "profileCardSongs": "{n, plural, other {Dari # lagu}}",
+    "profileUnsaved": "Belum disimpan sebagai suara Anda: kami butuh lebih banyak lagu untuk memastikannya",
+    "profileCardSession": "Dari sesi suara Anda"
   },
   "voiceSession": {
     "debug": {

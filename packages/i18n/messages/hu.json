@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Énekelhető, először töltsd ki a hangtesztet",
     "profileRemoveConfirm": "Eltávolítás",
     "profileMethodSession": "A hangmunkamenetedből ({n, plural, one {# dal} other {# dal}})",
-    "profileMethodSessionPlain": "A hangmunkamenetedből"
+    "profileMethodSessionPlain": "A hangmunkamenetedből",
+    "profileActive": "A dalok illeszkedéséhez használva",
+    "profileAdopt": "Használd ezt hangprofilként",
+    "profileAdoptFailed": "Nem sikerült elmenteni a hangprofilodként. Ellenőrizd a kapcsolatot, és próbáld újra.",
+    "profileCardMic": "A mikrofonteszted alapján",
+    "profileCardSongs": "{n, plural, one {# dal alapján} other {# dal alapján}}",
+    "profileUnsaved": "Nincs elmentve hangprofilként: több dalra van szükségünk, hogy biztosak lehessünk benne",
+    "profileCardSession": "A hangmunkamenetedből"
   },
   "voiceSession": {
     "debug": {

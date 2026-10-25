@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Zpívatelné, nejdřív si udělej hlasový test",
     "profileRemoveConfirm": "Odstranit",
     "profileMethodSession": "Z tvé hlasové relace ({n, plural, one {# skladba} few {# skladby} other {# skladeb}})",
-    "profileMethodSessionPlain": "Z tvé hlasové relace"
+    "profileMethodSessionPlain": "Z tvé hlasové relace",
+    "profileActive": "Používá se pro shodu s písničkami",
+    "profileAdopt": "Použít jako můj hlas",
+    "profileAdoptFailed": "Nepodařilo se uložit jako tvůj hlas. Zkontroluj připojení a zkus to znovu.",
+    "profileCardMic": "Z tvého testu mikrofonu",
+    "profileCardSongs": "{n, plural, one {Z # písničky} few {Ze # písniček} other {Z # písniček}}",
+    "profileUnsaved": "Neuloženo jako tvůj hlas: potřebujeme víc písniček, abychom si byli jistí",
+    "profileCardSession": "Z tvé hlasové relace"
   },
   "voiceSession": {
     "debug": {

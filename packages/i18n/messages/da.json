@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Syngbar, tag stemmetesten først",
     "profileRemoveConfirm": "Fjern",
     "profileMethodSession": "Fra din stemmesession ({n, plural, one {# sang} other {# sange}})",
-    "profileMethodSessionPlain": "Fra din stemmesession"
+    "profileMethodSessionPlain": "Fra din stemmesession",
+    "profileActive": "Bruges til sangmatch",
+    "profileAdopt": "Brug dette som min stemme",
+    "profileAdoptFailed": "Kunne ikke gemme som din stemme. Tjek din internetforbindelse, og prøv igen.",
+    "profileCardMic": "Fra din mikrofontest",
+    "profileCardSongs": "{n, plural, one {Fra # sang} other {Fra # sange}}",
+    "profileUnsaved": "Ikke gemt som din stemme: Vi skal bruge flere sange for at være sikre",
+    "profileCardSession": "Fra din stemmesession"
   },
   "voiceSession": {
     "debug": {

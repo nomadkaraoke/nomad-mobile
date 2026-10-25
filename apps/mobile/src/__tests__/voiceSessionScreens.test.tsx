@@ -45,7 +45,7 @@ const mockApi = {
   postVoiceAttempt: jest.fn(),
   getVoiceResult: jest.fn(),
   uploadVoiceRecording: jest.fn(),
-  getVoiceProfile: jest.fn(async () => null),
+  getVoiceProfiles: jest.fn(async () => ({ profile: null, mic: null, latestSession: null })),
 };
 jest.mock('@nomad/api-decide', () => ({
   ...jest.requireActual('@nomad/api-decide'),
@@ -58,7 +58,7 @@ jest.mock('@nomad/api-decide', () => ({
   postVoiceAttempt: (...a: unknown[]) => mockApi.postVoiceAttempt(...a),
   getVoiceResult: (...a: unknown[]) => mockApi.getVoiceResult(...a),
   uploadVoiceRecording: (...a: unknown[]) => mockApi.uploadVoiceRecording(...a),
-  getVoiceProfile: () => mockApi.getVoiceProfile(),
+  getVoiceProfiles: () => mockApi.getVoiceProfiles(),
 }));
 
 // The fake player (FAKE_YT): ready on mount, `ended` 20 ms after play().

@@ -1,0 +1,85 @@
+# Me shows both voice results (Phase 3d tuning batch 1, Task M4): decide keeps the mic test result beside the saved
+# profile and returns the latest session result too (GET /api/my/voice {profile, mic, latest_session}, decide ≥ v0.31).
+# Seeded: one finished low-confidence session that wasn't saved (seed-history), then a mic profile (voice-seed, which
+# also writes decide's mic copy). Me → Your music profile → Your voice shows both cards, "Used for song fit" on the
+# mic card and "Not saved as your voice…" on the session card; "Use this as my voice" adopts the session result
+# (decide's profile becomes method session) and the badge moves to the session card.
+appId: com.nomadkaraoke.mobile
+name: voice-me-both-results
+tags:
+  - voice-session
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: vsboth
+# seed-history first: it replaces the user's voice history (sessions only; the profile is seeded after it).
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-seed-history
+      DECIDE_STACK: ${DECIDE_STACK}
+      HISTORY: '{"sessions":[{"state":"done","result_summary":{"voice_type":"baritone","between":"tenor","confidence_label":"low","top_p":0.45,"low":46,"high":70,"comfort_low":50,"comfort_high":60,"attempts":3,"evidence_attempts":3,"profile_saved":false},"attempts":[{"song_key":"muse|starlight","artist":"Muse","title":"Starlight","quiz":{"feel":"loved","position":"comfortable"}},{"song_key":"muse|uprising","artist":"Muse","title":"Uprising","quiz":{"feel":"fine","position":"comfortable"}},{"song_key":"adele|hello","artist":"Adele","title":"Hello","quiz":{"feel":"fine","position":"too_high"}}]}]}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      PROFILE: '{"low_midi":43,"high_midi":67,"comfort_low":48,"comfort_high":58,"voice_type":"bass","confidence":"medium","method":"mic"}'
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["pop"]}'
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- scrollUntilVisible:
+    element:
+      id: "voice-card-session"
+    direction: DOWN
+    timeout: 20000
+- assertVisible:
+    id: "voice-card-mic"
+- assertVisible:
+    id: "voice-session-unsaved"
+# Container testIDs don't carry their children's text on iOS: match the texts themselves.
+- assertVisible: "From your mic test"
+- assertVisible: "From your voice session"
+- assertVisible: "Used for song fit"
+- assertVisible: "Between Baritone and Tenor"
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-me-both-results
+- tapOn:
+    id: "voice-session-adopt"
+- extendedWaitUntil:
+    notVisible:
+      id: "voice-session-adopt"
+    timeout: 15000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_METHOD: session
+# The saved profile's summary says where it came from now; the mic card stays, without the badge.
+- scrollUntilVisible:
+    element:
+      id: "voice-section-method"
+    direction: UP
+    timeout: 15000
+- assertVisible:
+    id: "voice-section-method"
+    text: "From your voice session.*"
+- scrollUntilVisible:
+    element:
+      id: "voice-card-session"
+    direction: DOWN
+    timeout: 15000
+- assertVisible:
+    id: "voice-card-mic"
+- assertNotVisible:
+    id: "voice-session-unsaved"
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-me-both-results-adopted

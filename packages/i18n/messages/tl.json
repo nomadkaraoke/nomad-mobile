@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Kayang kantahin, mag-voice test muna",
     "profileRemoveConfirm": "Alisin",
     "profileMethodSession": "Mula sa iyong voice session ({n, plural, one {# kanta} other {# kanta}})",
-    "profileMethodSessionPlain": "Mula sa iyong voice session"
+    "profileMethodSessionPlain": "Mula sa iyong voice session",
+    "profileActive": "Ginagamit para sa song fit",
+    "profileAdopt": "Gamitin ito bilang boses ko",
+    "profileAdoptFailed": "Hindi mai-save bilang boses mo. Pakisuri ang iyong koneksyon at subukang muli.",
+    "profileCardMic": "Mula sa iyong mic test",
+    "profileCardSongs": "{n, plural, one {Mula sa # kanta} other {Mula sa # na kanta}}",
+    "profileUnsaved": "Hindi na-save bilang boses mo: kailangan pa namin ng mas maraming kanta para makasiguro",
+    "profileCardSession": "Mula sa iyong voice session"
   },
   "voiceSession": {
     "debug": {

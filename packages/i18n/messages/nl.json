@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Zingbaar, doe eerst de stemtest",
     "profileRemoveConfirm": "Verwijderen",
     "profileMethodSession": "Van je stemsessie ({n, plural, one {# nummer} other {# nummers}})",
-    "profileMethodSessionPlain": "Van je stemsessie"
+    "profileMethodSessionPlain": "Van je stemsessie",
+    "profileActive": "Gebruikt voor song fit",
+    "profileAdopt": "Gebruik dit als mijn stem",
+    "profileAdoptFailed": "Kon dit niet opslaan als je stem. Controleer je verbinding en probeer het opnieuw.",
+    "profileCardMic": "Van je microfoontest",
+    "profileCardSongs": "{n, plural, one {Van # nummer} other {Van # nummers}}",
+    "profileUnsaved": "Niet opgeslagen als je stem: we hebben meer nummers nodig om het zeker te weten",
+    "profileCardSession": "Van je stemsessie"
   },
   "voiceSession": {
     "debug": {

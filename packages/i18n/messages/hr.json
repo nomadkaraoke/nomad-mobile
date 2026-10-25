@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Može se pjevati, prvo riješi glasovni test",
     "profileRemoveConfirm": "Ukloni",
     "profileMethodSession": "Iz tvoje glasovne sesije ({n, plural, one {# pjesma} few {# pjesme} other {# pjesama}})",
-    "profileMethodSessionPlain": "Iz tvoje glasovne sesije"
+    "profileMethodSessionPlain": "Iz tvoje glasovne sesije",
+    "profileActive": "Koristi se za prilagođavanje pjesama",
+    "profileAdopt": "Postavi ovo kao moj glas",
+    "profileAdoptFailed": "Spremanje glasa nije uspjelo. Provjeri vezu i pokušaj ponovno.",
+    "profileCardMic": "Iz tvog testa mikrofona",
+    "profileCardSongs": "{n, plural, one {Iz # pjesme} few {Iz # pjesme} other {Iz # pjesama}}",
+    "profileUnsaved": "Nije spremljeno kao tvoj glas: trebamo više pjesama kako bismo bili sigurni",
+    "profileCardSession": "Iz tvoje glasovne sesije"
   },
   "voiceSession": {
     "debug": {

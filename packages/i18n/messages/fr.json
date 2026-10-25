@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Chantable, fais d'abord le test vocal",
     "profileRemoveConfirm": "Retirer",
     "profileMethodSession": "D'après ta session vocale ({n, plural, one {# chanson} other {# chansons}})",
-    "profileMethodSessionPlain": "D'après ta session vocale"
+    "profileMethodSessionPlain": "D'après ta session vocale",
+    "profileActive": "Utilisé pour la compatibilité des morceaux",
+    "profileAdopt": "Utiliser comme ma voix",
+    "profileAdoptFailed": "Impossible de l'enregistrer comme ta voix. Vérifie ta connexion et réessaie.",
+    "profileCardMic": "D'après ton test de micro",
+    "profileCardSongs": "{n, plural, one {D'après # morceau} other {D'après # morceaux}}",
+    "profileUnsaved": "Non enregistré comme ta voix : nous avons besoin de plus de morceaux pour en être sûrs",
+    "profileCardSession": "D'après ta session vocale"
   },
   "voiceSession": {
     "debug": {

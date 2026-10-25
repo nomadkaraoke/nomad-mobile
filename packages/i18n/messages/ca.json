@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Per saber si la pots cantar, fes primer el test de veu",
     "profileRemoveConfirm": "Elimina",
     "profileMethodSession": "De la teva sessió de veu ({n, plural, one {# cançó} other {# cançons}})",
-    "profileMethodSessionPlain": "De la teva sessió de veu"
+    "profileMethodSessionPlain": "De la teva sessió de veu",
+    "profileActive": "S'utilitza per a l'ajust de les cançons",
+    "profileAdopt": "Utilitza aquesta com a la meva veu",
+    "profileAdoptFailed": "No s'ha pogut desar com a la teva veu. Comprova la connexió i torna-ho a provar.",
+    "profileCardMic": "De la teva prova de micròfon",
+    "profileCardSongs": "{n, plural, one {D'# cançó} other {De # cançons}}",
+    "profileUnsaved": "No s'ha desat com a la teva veu: necessitem més cançons per estar-ne segurs",
+    "profileCardSession": "De la teva sessió de veu"
   },
   "voiceSession": {
     "debug": {

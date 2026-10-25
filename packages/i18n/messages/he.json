@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "מתאים לשירה, קודם יש לעשות את מבחן הקול",
     "profileRemoveConfirm": "הסרה",
     "profileMethodSession": "מסשן הקול שלך ({n, plural, one {שיר #} other {# שירים}})",
-    "profileMethodSessionPlain": "מסשן הקול שלך"
+    "profileMethodSessionPlain": "מסשן הקול שלך",
+    "profileActive": "משמש להתאמת שירים",
+    "profileAdopt": "שימוש בזה כקול שלי",
+    "profileAdoptFailed": "לא הצלחנו לשמור את זה כקול שלך. כדאי לבדוק את החיבור ולנסות שוב.",
+    "profileCardMic": "מבדיקת המיקרופון שלך",
+    "profileCardSongs": "{n, plural, one {משיר אחד} two {משני שירים} other {מ-# שירים}}",
+    "profileUnsaved": "לא נשמר כקול שלך: דרושים לנו עוד שירים כדי להיות בטוחים",
+    "profileCardSession": "מסשן הקול שלך"
   },
   "voiceSession": {
     "debug": {

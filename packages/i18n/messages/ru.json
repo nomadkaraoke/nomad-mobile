@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Подходит для пения: сначала пройди тест голоса",
     "profileRemoveConfirm": "Удалить",
     "profileMethodSession": "Из твоей голосовой сессии ({n, plural, one {# песня} few {# песни} many {# песен} other {# песен}})",
-    "profileMethodSessionPlain": "Из твоей голосовой сессии"
+    "profileMethodSessionPlain": "Из твоей голосовой сессии",
+    "profileActive": "Используется для подбора песен",
+    "profileAdopt": "Использовать как мой голос",
+    "profileAdoptFailed": "Не удалось сохранить как твой голос. Проверь подключение к интернету и попробуй снова.",
+    "profileCardMic": "По результатам проверки микрофона",
+    "profileCardSongs": "{n, plural, one {На основе # песни} few {На основе # песен} many {На основе # песен} other {На основе # песен}}",
+    "profileUnsaved": "Не сохранено как твой голос: нужно больше песен, чтобы определить точнее",
+    "profileCardSession": "Из твоей голосовой сессии"
   },
   "voiceSession": {
     "debug": {

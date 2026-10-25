@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "适合演唱，请先进行声音测试",
     "profileRemoveConfirm": "移除",
     "profileMethodSession": "来自您的练唱环节（{n, plural, one {# 首歌曲} other {# 首歌曲}}）",
-    "profileMethodSessionPlain": "来自您的练唱环节"
+    "profileMethodSessionPlain": "来自您的练唱环节",
+    "profileActive": "用于歌曲契合度分析",
+    "profileAdopt": "将此设为我的音域",
+    "profileAdoptFailed": "无法保存为您的音域。请检查网络连接后重试。",
+    "profileCardMic": "来自您的麦克风测试",
+    "profileCardSongs": "{n, plural, other {来自 # 首歌}}",
+    "profileUnsaved": "未保存为您的音域：我们需要更多歌曲数据来确认",
+    "profileCardSession": "来自您的练唱环节"
   },
   "voiceSession": {
     "debug": {

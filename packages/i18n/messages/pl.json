@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Do zaśpiewania – najpierw zrób test głosu",
     "profileRemoveConfirm": "Usuń",
     "profileMethodSession": "Z Twojej sesji głosowej ({n, plural, one {# utwór} few {# utwory} many {# utworów} other {# utworów}})",
-    "profileMethodSessionPlain": "Z Twojej sesji głosowej"
+    "profileMethodSessionPlain": "Z Twojej sesji głosowej",
+    "profileActive": "Używane do dopasowania piosenek",
+    "profileAdopt": "Ustaw jako mój głos",
+    "profileAdoptFailed": "Nie udało się zapisać tego jako Twój głos. Sprawdź połączenie i spróbuj ponownie.",
+    "profileCardMic": "Z Twojego testu mikrofonu",
+    "profileCardSongs": "{n, plural, one {Z # piosenki} few {Z # piosenek} many {Z # piosenek} other {Z # piosenki}}",
+    "profileUnsaved": "Niezapisane jako Twój głos: potrzebujemy więcej piosenek, aby mieć pewność",
+    "profileCardSession": "Z Twojej sesji głosowej"
   },
   "voiceSession": {
     "debug": {

@@ -1526,7 +1526,14 @@
     "profileRemoveConfirm": "Remove",
     "singableCtaLabel": "Singable, take the voice test first",
     "profileMethodSession": "From your voice session ({n, plural, one {# song} other {# songs}})",
-    "profileMethodSessionPlain": "From your voice session"
+    "profileMethodSessionPlain": "From your voice session",
+    "profileCardMic": "From your mic test",
+    "profileCardSession": "From your voice session",
+    "profileCardSongs": "{n, plural, one {From # song} other {From # songs}}",
+    "profileActive": "Used for song fit",
+    "profileUnsaved": "Not saved as your voice: we need more songs to be sure",
+    "profileAdopt": "Use this as my voice",
+    "profileAdoptFailed": "Couldn't save it as your voice. Check your connection and try again."
   },
   "voiceSession": {
     "debug": {

@@ -45,7 +45,7 @@ jest.mock('@nomad/api-decide', () => ({
   listHiddenSongs: jest.fn(async () => []),
   getQuizProgress: jest.fn(async () => null),
   listMusicServices: jest.fn(async () => []),
-  getVoiceProfile: jest.fn(async () => null),
+  getVoiceProfiles: jest.fn(async () => ({ profile: null, mic: null, latestSession: null })),
   getVoiceFlags: jest.fn(),
   voiceRecordingCount: jest.fn(),
   uploadVoiceRecording: jest.fn(),

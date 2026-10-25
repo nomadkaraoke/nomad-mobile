@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Potrivite pentru tine, fă mai întâi testul vocal",
     "profileRemoveConfirm": "Elimină",
     "profileMethodSession": "Din sesiunea ta vocală ({n, plural, one {# melodie} few {# melodii} other {# de melodii}})",
-    "profileMethodSessionPlain": "Din sesiunea ta vocală"
+    "profileMethodSessionPlain": "Din sesiunea ta vocală",
+    "profileActive": "Folosit pentru potrivirea pieselor",
+    "profileAdopt": "Folosește ca vocea mea",
+    "profileAdoptFailed": "Nu s-a putut salva ca vocea ta. Verifică-ți conexiunea și încearcă din nou.",
+    "profileCardMic": "Din testul tău de microfon",
+    "profileCardSongs": "{n, plural, one {Dintr-o piesă} few {Din # piese} other {Din # de piese}}",
+    "profileUnsaved": "Nu este salvat ca vocea ta: avem nevoie de mai multe piese pentru a fi siguri",
+    "profileCardSession": "Din sesiunea ta vocală"
   },
   "voiceSession": {
     "debug": {

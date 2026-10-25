@@ -42,7 +42,7 @@ jest.mock('@nomad/api-decide', () => ({
   submitQuiz: jest.fn(async () => ({ message: 'ok', songs_added: 1, recommendations_ready: true })),
   loveSong: jest.fn(async () => undefined),
   listMusicServices: jest.fn(async () => []),
-  getVoiceProfile: jest.fn(async () => null),
+  getVoiceProfiles: jest.fn(async () => ({ profile: null, mic: null, latestSession: null })),
   putVoiceProfile: jest.fn(async () => ({})),
   deleteVoiceProfile: jest.fn(async () => undefined),
   getVoiceFlags: jest.fn(async () => ({ session_enabled: false, is_admin: false, voice_data: false })),
@@ -306,14 +306,14 @@ describe('Your voice (Phase 3c)', () => {
     act(() => useVoiceStore.getState().clear());
     jest.spyOn(Alert, 'alert').mockImplementation(() => {});
     // decide holds what this phone synced (a synced profile with none on decide would be cleared as removed elsewhere).
-    m(decide.getVoiceProfile).mockImplementation(async () => {
+    m(decide.getVoiceProfiles).mockImplementation(async () => {
       const { profile, pending } = useVoiceStore.getState();
-      return profile && !pending ? (toVoiceProfileIn(profile) as never) : null;
+      return { profile: profile && !pending ? (toVoiceProfileIn(profile) as never) : null, mic: null, latestSession: null };
     });
   });
   afterEach(() => {
     (Alert.alert as jest.Mock).mockRestore();
-    m(decide.getVoiceProfile).mockImplementation(async () => null);
+    m(decide.getVoiceProfiles).mockImplementation(async () => ({ profile: null, mic: null, latestSession: null }));
   });
   /** Lets pending promises run (renderRouter's fake timers would hang a real setTimeout). */
   const flush = async () => {

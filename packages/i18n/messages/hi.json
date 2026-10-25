@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "गाने योग्य, पहले वॉइस टेस्ट दो",
     "profileRemoveConfirm": "हटाओ",
     "profileMethodSession": "तुम्हारे वॉइस सेशन से ({n, plural, one {# गाना} other {# गाने}})",
-    "profileMethodSessionPlain": "तुम्हारे वॉइस सेशन से"
+    "profileMethodSessionPlain": "तुम्हारे वॉइस सेशन से",
+    "profileActive": "सॉन्ग फ़िट के लिए इस्तेमाल किया गया",
+    "profileAdopt": "इसे मेरी आवाज़ की तरह इस्तेमाल करो",
+    "profileAdoptFailed": "इसे तुम्हारी आवाज़ के रूप में सेव नहीं किया जा सका। अपना कनेक्शन जांचो और फिर कोशिश करो।",
+    "profileCardMic": "तुम्हारे माइक टेस्ट से",
+    "profileCardSongs": "{n, plural, one {# गाने से} other {# गानों से}}",
+    "profileUnsaved": "तुम्हारी आवाज़ के रूप में सेव नहीं हुआ: पक्का करने के लिए हमें और गानों की ज़रूरत है",
+    "profileCardSession": "तुम्हारे वॉइस सेशन से"
   },
   "voiceSession": {
     "debug": {

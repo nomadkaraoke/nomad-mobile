@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Підходить для співу: спочатку пройди голосовий тест",
     "profileRemoveConfirm": "Видалити",
     "profileMethodSession": "З твоєї голосової сесії ({n, plural, one {# пісня} few {# пісні} many {# пісень} other {# пісень}})",
-    "profileMethodSessionPlain": "З твоєї голосової сесії"
+    "profileMethodSessionPlain": "З твоєї голосової сесії",
+    "profileActive": "Використовується для сумісності з піснею",
+    "profileAdopt": "Використовувати це як мій голос",
+    "profileAdoptFailed": "Не вдалося зберегти це як твій голос. Перевір з'єднання та спробуй ще раз.",
+    "profileCardMic": "З твого тесту мікрофона",
+    "profileCardSongs": "{n, plural, one {З # пісні} few {З # пісень} many {З # пісень} other {З # пісні}}",
+    "profileUnsaved": "Не збережено як твій голос: нам потрібно більше пісень, щоб переконатися",
+    "profileCardSession": "З твоєї голосової сесії"
   },
   "voiceSession": {
     "debug": {

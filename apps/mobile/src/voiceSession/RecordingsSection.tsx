@@ -5,7 +5,7 @@
 import {
   deleteVoiceRecording,
   getVoiceHistory,
-  getVoiceProfile,
+  getVoiceProfiles,
   patchVoiceAttempt,
   voiceRecordingAudioUrl,
   voiceRecordingCount,
@@ -109,7 +109,9 @@ export function RecordingsSection() {
       // reconcile (which would keep a newer local session profile over decide's older mic result).
       if (out.profile !== 'unchanged') {
         try {
-          followServerVoice(await getVoiceProfile());
+          const voice = await getVoiceProfiles();
+          followServerVoice(voice.profile);
+          queryClient.setQueryData([...VOICE_KEY, email], voice);
         } catch {
           // The app-wide reconcile catches up later.
         }

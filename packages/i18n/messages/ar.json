@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "قابلة للغناء، خض اختبار الصوت أولاً",
     "profileRemoveConfirm": "إزالة",
     "profileMethodSession": "من جلستك الصوتية ({n, plural, zero {ولا أي أغنية} one {أغنية واحدة} two {أغنيتان} few {# أغانٍ} many {# أغنية} other {# أغنية}})",
-    "profileMethodSessionPlain": "من جلستك الصوتية"
+    "profileMethodSessionPlain": "من جلستك الصوتية",
+    "profileActive": "مُستخدم لملاءمة الأغاني",
+    "profileAdopt": "استخدم هذا كصوتي",
+    "profileAdoptFailed": "تعذر حفظه كصوتك. تحقق من اتصالك وحاول مجددًا.",
+    "profileCardMic": "من اختبار الميكروفون",
+    "profileCardSongs": "{n, plural, zero {من 0 أغنية} one {من أغنية واحدة} two {من أغنيتين} few {من # أغانٍ} many {من # أغنية} other {من # أغنية}}",
+    "profileUnsaved": "لم يُحفظ كصوتك: نحتاج إلى مزيد من الأغاني للتأكد",
+    "profileCardSession": "من جلستك الصوتية"
   },
   "voiceSession": {
     "debug": {

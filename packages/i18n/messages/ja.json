@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "歌える曲：まずは声のテストを受けてください",
     "profileRemoveConfirm": "削除",
     "profileMethodSession": "ボイスセッションから ({n, plural, one {#曲} other {#曲}})",
-    "profileMethodSessionPlain": "ボイスセッションから"
+    "profileMethodSessionPlain": "ボイスセッションから",
+    "profileActive": "曲との相性診断に使用中",
+    "profileAdopt": "これを自分の声として設定",
+    "profileAdoptFailed": "声のプロファイルを保存できませんでした。接続を確認してもう一度お試しください。",
+    "profileCardMic": "マイクテストから判定",
+    "profileCardSongs": "{n, plural, one {#曲から判定} other {#曲から判定}}",
+    "profileUnsaved": "声のプロファイルとして未保存：より正確に判定するには、もう少し曲数が必要です",
+    "profileCardSession": "ボイスセッションから"
   },
   "voiceSession": {
     "debug": {

@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Söylenebilir, önce ses testini yap",
     "profileRemoveConfirm": "Kaldır",
     "profileMethodSession": "Ses seansından ({n, plural, one {# şarkı} other {# şarkı}})",
-    "profileMethodSessionPlain": "Ses seansından"
+    "profileMethodSessionPlain": "Ses seansından",
+    "profileActive": "Şarkı uyumu için kullanılıyor",
+    "profileAdopt": "Bunu sesim olarak kullan",
+    "profileAdoptFailed": "Sesin olarak kaydedilemedi. Bağlantını kontrol et ve tekrar dene.",
+    "profileCardMic": "Mikrofon testinden",
+    "profileCardSongs": "{n, plural, one {# şarkıdan} other {# şarkıdan}}",
+    "profileUnsaved": "Sesin olarak kaydedilmedi: Emin olmak için daha fazla şarkıya ihtiyacımız var",
+    "profileCardSession": "Ses seansından"
   },
   "voiceSession": {
     "debug": {

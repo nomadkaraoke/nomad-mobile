@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Singbar, mach zuerst den Stimmtest",
     "profileRemoveConfirm": "Entfernen",
     "profileMethodSession": "Aus deiner Gesangssitzung ({n, plural, one {# Song} other {# Songs}})",
-    "profileMethodSessionPlain": "Aus deiner Gesangssitzung"
+    "profileMethodSessionPlain": "Aus deiner Gesangssitzung",
+    "profileActive": "Für Song-Passung verwendet",
+    "profileAdopt": "Als meine Stimme verwenden",
+    "profileAdoptFailed": "Konnte nicht als deine Stimme gespeichert werden. Überprüfe deine Verbindung und versuche es erneut.",
+    "profileCardMic": "Aus deinem Mikrofontest",
+    "profileCardSongs": "{n, plural, one {Aus # Song} other {Aus # Songs}}",
+    "profileUnsaved": "Nicht als deine Stimme gespeichert: Wir brauchen mehr Songs, um sicher zu sein",
+    "profileCardSession": "Aus deiner Gesangssitzung"
   },
   "voiceSession": {
     "debug": {

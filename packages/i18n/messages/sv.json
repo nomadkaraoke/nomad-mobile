@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Sångbar, gör rösttestet först",
     "profileRemoveConfirm": "Ta bort",
     "profileMethodSession": "Från din röstsession ({n, plural, one {# låt} other {# låtar}})",
-    "profileMethodSessionPlain": "Från din röstsession"
+    "profileMethodSessionPlain": "Från din röstsession",
+    "profileActive": "Används för låtmatchning",
+    "profileAdopt": "Använd som min röst",
+    "profileAdoptFailed": "Det gick inte att spara som din röst. Kontrollera anslutningen och försök igen.",
+    "profileCardMic": "Från ditt mikrofontest",
+    "profileCardSongs": "{n, plural, one {Från # låt} other {Från # låtar}}",
+    "profileUnsaved": "Inte sparad som din röst: vi behöver fler låtar för att vara säkra",
+    "profileCardSession": "Från din röstsession"
   },
   "voiceSession": {
     "debug": {

@@ -1526,7 +1526,14 @@
     "singableCtaLabel": "Στα μέτρα σου, κάνε πρώτα το τεστ φωνής",
     "profileRemoveConfirm": "Αφαίρεση",
     "profileMethodSession": "Από τη φωνητική σου συνεδρία ({n, plural, one {# τραγούδι} other {# τραγούδια}})",
-    "profileMethodSessionPlain": "Από τη φωνητική σου συνεδρία"
+    "profileMethodSessionPlain": "Από τη φωνητική σου συνεδρία",
+    "profileActive": "Χρησιμοποιείται για την καταλληλότητα τραγουδιών",
+    "profileAdopt": "Χρήση ως φωνή μου",
+    "profileAdoptFailed": "Δεν ήταν δυνατή η αποθήκευση ως φωνή σου. Έλεγξε τη σύνδεσή σου και δοκίμασε ξανά.",
+    "profileCardMic": "Από τη δοκιμή του μικροφώνου σου",
+    "profileCardSongs": "{n, plural, one {Από # τραγούδι} other {Από # τραγούδια}}",
+    "profileUnsaved": "Δεν αποθηκεύτηκε ως φωνή σου: χρειαζόμαστε περισσότερα τραγούδια για να είμαστε σίγουροι",
+    "profileCardSession": "Από τη φωνητική σου συνεδρία"
   },
   "voiceSession": {
     "debug": {
