@@ -18,6 +18,7 @@ import {
 export * from './client';
 export * from './discover';
 export * from './imports';
+export * from './me';
 export * from './services';
 export * from './voice';
 export * from './voiceSession';
@@ -66,11 +67,11 @@ export type KaraokeLogPatch = {
 
 /** One page of the user's records, newest `updated_at` first. With `since`, deleted records are included (sync pull). */
 export const listKaraokeLog = async (
-  opts: { since?: string; nightId?: string; limit?: number; cursor?: string; signal?: AbortSignal } = {},
+  opts: { since?: string; nightId?: string; song?: string; limit?: number; cursor?: string; signal?: AbortSignal } = {},
 ) =>
   (
     await listKaraokeLogApiMyKaraokeLogGet({
-      query: { since: opts.since, night_id: opts.nightId, limit: opts.limit, cursor: opts.cursor },
+      query: { since: opts.since, night_id: opts.nightId, song: opts.song, limit: opts.limit, cursor: opts.cursor },
       signal: opts.signal,
     })
   ).data;
