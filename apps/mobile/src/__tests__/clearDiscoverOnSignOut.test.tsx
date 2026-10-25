@@ -14,6 +14,7 @@ import { RECS_KEY } from '../discover/useRecommendations';
 import { appStorage } from '../storage';
 import { fsState } from '../test-utils/memoryFs';
 import { profileFromSelfReport, useVoiceStore, VOICE_STORAGE_KEY } from '../voice/voiceStore';
+import { RECORD_DEFAULT_KEY } from '../voiceSession/recordDefault';
 import { RECORDING_QUEUE_KEY, useRecordingQueue } from '../voiceSession/recording/recordingQueue';
 import { useVoiceSessionStore, VOICE_SESSION_KEY } from '../voiceSession/sessionStore';
 
@@ -104,4 +105,11 @@ it('drops the voice session in progress and the recording upload queue (and thei
   expect(appStorage.getString(VOICE_SESSION_KEY)).toBeUndefined();
   expect(fsState.files.has(queued)).toBe(false);
   expect(fsState.files.has(take)).toBe(false);
+});
+
+it("forgets the previous person's record-my-takes default when the session ends", () => {
+  render();
+  appStorage.set(RECORD_DEFAULT_KEY, true);
+  useAuth.setState({ state: { status: 'signedOut' } });
+  expect(appStorage.getBoolean(RECORD_DEFAULT_KEY)).toBeUndefined();
 });

@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useAuth } from '../auth/store';
 import { appStorage } from '../storage';
 import { useVoiceStore } from '../voice/voiceStore';
+import { RECORD_DEFAULT_KEY } from '../voiceSession/recordDefault';
 import { deleteFileQuietly } from '../voiceSession/recording/files';
 import { useRecordingQueue } from '../voiceSession/recording/recordingQueue';
 import { useVoiceSessionStore } from '../voiceSession/sessionStore';
@@ -18,7 +19,7 @@ import { RECS_KEY } from './useRecommendations';
  * Forgets everything personal Discover holds the moment the person signs out, whichever screen they are on (the
  * Discover tab may not be mounted): the cached picks, music profile and connected-sources summary, the quiz draft
  * (memory and this phone's copy), the stale flag, the offline picks, the voice profile, the voice session in progress
- * and the recording upload queue (it isn't per user; the take files go too). The next person to sign in never sees
+ * the "record my takes" default and the recording upload queue (it isn't per user; the take files go too). The next person to sign in never sees
  * any of it. Mounted once in AppProviders; the API clients stay out of storage.
  */
 export function useClearDiscoverOnSignOut(): void {
@@ -41,6 +42,7 @@ export function useClearDiscoverOnSignOut(): void {
         deleteFileQuietly(vs.take?.uri);
         vs.clear();
         useRecordingQueue.getState().clearAll();
+        appStorage.remove(RECORD_DEFAULT_KEY);
       }),
     [queryClient],
   );
