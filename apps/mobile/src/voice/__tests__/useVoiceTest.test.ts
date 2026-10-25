@@ -536,6 +536,10 @@ it('range is min/max over all held notes when high is sung lower than low', asyn
   expect(result.current.result?.range.heldCount).toBe(2);
 });
 
+// Median JS ms per mic buffer. Real cost is ~3 ms; the bound only has to catch the old O(L² log L) pass (~130–290 ms),
+// so it stays loose enough that a loaded CI machine running suites in parallel can't flake it.
+const PER_BUFFER_MEDIAN_MS = 60;
+
 describe('at 48 kHz (what a phone delivers if it ignores the 16 kHz request)', () => {
   const R = 48000;
   const t48 = (midi: number | null, secs: number) => tone(midi, secs, 0.3, R);
@@ -570,7 +574,7 @@ describe('at 48 kHz (what a phone delivers if it ignores the 16 kHz request)', (
     // runs suites in parallel) can't flake it; the old re-sorting held-note pass cost ~130 ms here, now ~3 ms.
     const tail = src.timings.slice(-50).sort((a, b) => a - b);
     const median = tail[tail.length >> 1]!;
-    expect(median).toBeLessThan(20);
+    expect(median).toBeLessThan(PER_BUFFER_MEDIAN_MS);
   });
 
   it('a full 30 s sing of one unbroken slide stays fast and still gives a result', async () => {
@@ -584,7 +588,7 @@ describe('at 48 kHz (what a phone delivers if it ignores the 16 kHz request)', (
     // 30 s of held notes with no gap between them: one gap-free segment for the whole step.
     await feed(src, concat(t48(null, 1), ...Array.from({ length: 30 }, (_, i) => t48(52 + (i % 8), 1))));
     const tail = src.timings.slice(-50).sort((a, b) => a - b);
-    expect(tail[tail.length >> 1]!).toBeLessThan(20);
+    expect(tail[tail.length >> 1]!).toBeLessThan(PER_BUFFER_MEDIAN_MS);
     act(() => result.current.skipSing());
     expect(result.current.step).toBe('result');
     expect(result.current.result?.range.freeVoicedS).toBeGreaterThan(25);
@@ -596,7 +600,7 @@ describe('at 48 kHz (what a phone delivers if it ignores the 16 kHz request)', (
     // A held D3 first, then a long unbroken hold of A2 from 2.2 s to 60 s: the old 20 s cap ended it at ~21 s.
     await feed(src, concat(t48(null, 1), t48(50, 1.2), t48(45, 58)));
     const tail = src.timings.slice(-50).sort((a, b) => a - b);
-    expect(tail[tail.length >> 1]!).toBeLessThan(20);
+    expect(tail[tail.length >> 1]!).toBeLessThan(PER_BUFFER_MEDIAN_MS);
     await act(async () => result.current.done());
     expect(result.current.step).toBe('high');
     const a2 = result.current.held.filter((h) => h.note === 45);
