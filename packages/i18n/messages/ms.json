@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Masa menyanyi yang tinggal",
     "micBusyBody": "Aplikasi lain atau panggilan sedang menggunakan mikrofon. Tutup aplikasi tersebut dan cuba lagi, atau pilih jenis suara anda.",
     "micBusyTitle": "Mikrofon sedang digunakan",
-    "typeUnknown": "Jenis suara anda"
+    "typeUnknown": "Jenis suara anda",
+    "highFalsettoBody": "Nada tertinggi anda ialah {note}. Jika ia falsetto, kami tidak akan memasukkannya ke dalam julat suara dada anda, supaya pemilihan lagu lebih padan dan selesa.",
+    "highFalsettoTitle": "Adakah nada tertinggi anda falsetto atau suara kepala (lebih ringan, ada hembusan nafas)?",
+    "highFalsettoNo": "Tidak",
+    "highFalsettoSkip": "Langkau",
+    "highFalsettoUnsure": "Tidak pasti",
+    "highFalsettoYes": "Ya"
   },
   "fit": {
     "fits": "Sesuai dengan suara anda",

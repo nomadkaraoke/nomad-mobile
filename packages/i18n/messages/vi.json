@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Thời gian hát còn lại",
     "micBusyBody": "Một ứng dụng khác hoặc một cuộc gọi đang sử dụng micro. Hãy tắt đi rồi thử lại, hoặc tự chọn loại giọng của bạn.",
     "micBusyTitle": "Micro đang bận",
-    "typeUnknown": "Loại giọng của bạn"
+    "typeUnknown": "Loại giọng của bạn",
+    "highFalsettoBody": "Nốt cao nhất của bạn là {note}. Nếu đó là giọng giả thanh (falsetto), chúng tôi sẽ tách nó khỏi quãng giọng ngực để gợi ý các bài hát phù hợp hơn với bạn.",
+    "highFalsettoTitle": "Nốt cao nhất của bạn là giọng giả thanh (falsetto) hay giọng đầu (nhẹ hơn, nhiều hơi hơn)?",
+    "highFalsettoNo": "Không",
+    "highFalsettoSkip": "Bỏ qua",
+    "highFalsettoUnsure": "Không chắc",
+    "highFalsettoYes": "Có"
   },
   "fit": {
     "fits": "Hợp với giọng của bạn",

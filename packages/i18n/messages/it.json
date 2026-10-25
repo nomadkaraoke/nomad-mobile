@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Tempo rimasto per cantare",
     "micBusyBody": "Un'altra app o una chiamata sta usando il microfono. Chiudila e riprova, oppure scegli direttamente il tuo tipo di voce.",
     "micBusyTitle": "Il microfono è occupato",
-    "typeUnknown": "Il tuo tipo di voce"
+    "typeUnknown": "Il tuo tipo di voce",
+    "highFalsettoBody": "La tua nota più alta è stata {note}. Se era in falsetto, la escluderemo dalla tua estensione di petto, così le canzoni si adatteranno meglio.",
+    "highFalsettoTitle": "La tua nota più alta era in falsetto o voce di testa (più leggera, più ariosa)?",
+    "highFalsettoNo": "No",
+    "highFalsettoSkip": "Salta",
+    "highFalsettoUnsure": "Non ne ho la certezza",
+    "highFalsettoYes": "Sì"
   },
   "fit": {
     "fits": "Adatta alla tua voce",

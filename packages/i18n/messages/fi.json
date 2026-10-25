@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Lauluaikaa jäljellä",
     "micBusyBody": "Toinen sovellus tai puhelu käyttää mikrofonia. Sulje se ja yritä uudelleen, tai valitse sen sijaan äänityyppisi.",
     "micBusyTitle": "Mikrofoni on varattu",
-    "typeUnknown": "Äänityyppisi"
+    "typeUnknown": "Äänityyppisi",
+    "highFalsettoBody": "Korkein sävelesi oli {note}. Jos se oli falsettia, emme laske sitä mukaan rintaäänialaasi, jotta kappaleet sopivat sinulle paremmin.",
+    "highFalsettoTitle": "Oliko korkein sävelesi falsettia tai pää-ääntä (kevyempää, ilmavampaa)?",
+    "highFalsettoNo": "Ei",
+    "highFalsettoSkip": "Ohita",
+    "highFalsettoUnsure": "En ole varma",
+    "highFalsettoYes": "Kyllä"
   },
   "fit": {
     "fits": "Sopii äänellesi",

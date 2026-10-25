@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Timp rămas de cântat",
     "micBusyBody": "O altă aplicație sau un apel folosește microfonul. Închide-o și încearcă din nou sau alege-ți direct tipul de voce.",
     "micBusyTitle": "Microfonul este ocupat",
-    "typeUnknown": "Tipul tău de voce"
+    "typeUnknown": "Tipul tău de voce",
+    "highFalsettoBody": "Cea mai înaltă notă a ta a fost {note}. Dacă a fost în falset, o vom exclude din registrul tău de piept, astfel încât piesele să ți se potrivească mai bine.",
+    "highFalsettoTitle": "Cea mai înaltă notă a ta a fost în falset sau voce de cap (mai lejeră, mai aerată)?",
+    "highFalsettoNo": "Nu",
+    "highFalsettoSkip": "Sari",
+    "highFalsettoUnsure": "Nu știu sigur",
+    "highFalsettoYes": "Da"
   },
   "fit": {
     "fits": "Se potrivește cu vocea ta",

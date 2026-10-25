@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Natitirang oras para kumanta",
     "micBusyBody": "May ibang app o tawag na gumagamit sa mikropono. Isara ito at subukang muli, o piliin na lang ang uri ng iyong boses.",
     "micBusyTitle": "Ginagamit pa ang mikropono",
-    "typeUnknown": "Uri ng boses mo"
+    "typeUnknown": "Uri ng boses mo",
+    "highFalsettoBody": "Ang pinakamataas mong nota ay {note}. Kung falsetto ito, ibubukod namin ito sa iyong chest range para mas bumagay ang mga kanta.",
+    "highFalsettoTitle": "Falsetto o head voice ba ang pinakamataas mong nota (mas magaan, mas mahangin)?",
+    "highFalsettoNo": "Hindi",
+    "highFalsettoSkip": "Laktawan",
+    "highFalsettoUnsure": "Hindi sigurado",
+    "highFalsettoYes": "Oo"
   },
   "fit": {
     "fits": "Bagay sa boses mo",

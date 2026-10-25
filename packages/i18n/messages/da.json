@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Resterende tid til at synge",
     "micBusyBody": "En anden app eller et opkald bruger mikrofonen. Luk appen, og prøv igen, eller vælg din stemmetype i stedet.",
     "micBusyTitle": "Mikrofonen er optaget",
-    "typeUnknown": "Din stemmetype"
+    "typeUnknown": "Din stemmetype",
+    "highFalsettoBody": "Din højeste tone var {note}. Hvis det var falset, holder vi den ude af dit brystregister, så sangene passer bedre.",
+    "highFalsettoTitle": "Var din højeste tone falset eller hovedstemme (lettere, mere luftig)?",
+    "highFalsettoNo": "Nej",
+    "highFalsettoSkip": "Spring over",
+    "highFalsettoUnsure": "Ikke sikker",
+    "highFalsettoYes": "Ja"
   },
   "fit": {
     "fits": "Passer til din stemme",

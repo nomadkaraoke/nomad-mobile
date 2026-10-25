@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Tid kvar att sjunga",
     "micBusyBody": "En annan app eller ett samtal använder mikrofonen. Avsluta det och försök igen, eller välj din rösttyp istället.",
     "micBusyTitle": "Mikrofonen är upptagen",
-    "typeUnknown": "Din rösttyp"
+    "typeUnknown": "Din rösttyp",
+    "highFalsettoBody": "Din högsta ton var {note}. Om det var falsett räknar vi bort den från ditt bröstregister så att låtarna passar bättre.",
+    "highFalsettoTitle": "Var din högsta ton falsett eller huvudröst (ljusare, luftigare)?",
+    "highFalsettoNo": "Nej",
+    "highFalsettoSkip": "Hoppa över",
+    "highFalsettoUnsure": "Inte säker",
+    "highFalsettoYes": "Ja"
   },
   "fit": {
     "fits": "Passar din röst",

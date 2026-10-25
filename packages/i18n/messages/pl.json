@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Pozostały czas na śpiewanie",
     "micBusyBody": "Mikrofon jest używany przez inną aplikację lub trwające połączenie. Zamknij ją i spróbuj ponownie albo po prostu wskaż swój typ głosu.",
     "micBusyTitle": "Mikrofon jest zajęty",
-    "typeUnknown": "Twój typ głosu"
+    "typeUnknown": "Twój typ głosu",
+    "highFalsettoBody": "Twój najwyższy dźwięk to {note}. Jeśli to był falset, wykluczymy go z Twojego rejestru piersiowego, aby piosenki były lepiej dopasowane.",
+    "highFalsettoTitle": "Czy Twój najwyższy dźwięk to był falset lub głos głowowy (lżejszy, bardziej znośny/powietrzny)?",
+    "highFalsettoNo": "Nie",
+    "highFalsettoSkip": "Pomiń",
+    "highFalsettoUnsure": "Nie mam pewności",
+    "highFalsettoYes": "Tak"
   },
   "fit": {
     "fits": "Pasuje do Twojego głosu",

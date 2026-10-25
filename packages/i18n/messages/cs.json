@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Zbývající čas na zpěv",
     "micBusyBody": "Mikrofon právě používá jiná aplikace nebo hovor. Ukonči ji a zkus to znovu, nebo si místo toho vyber svůj typ hlasu.",
     "micBusyTitle": "Mikrofon se právě používá",
-    "typeUnknown": "Tvůj typ hlasu"
+    "typeUnknown": "Tvůj typ hlasu",
+    "highFalsettoBody": "Tvůj nejvyšší tón byl {note}. Pokud to byl falzet, nezahrneme ho do tvého hrudního rozsahu, aby ti písničky lépe seděly.",
+    "highFalsettoTitle": "Byl tvůj nejvyšší tón falzet nebo hlavový tón (lehčí, vzdušnější)?",
+    "highFalsettoNo": "Ne",
+    "highFalsettoSkip": "Přeskočit",
+    "highFalsettoUnsure": "Nevím jistě",
+    "highFalsettoYes": "Ano"
   },
   "fit": {
     "fits": "Sedí tvému hlasu",

@@ -1486,7 +1486,13 @@
     "singProgressLabel": "노래 부를 수 있는 남은 시간",
     "micBusyBody": "다른 앱이나 통화에서 마이크를 사용하고 있어요. 해당 앱을 종료하고 다시 시도하거나, 음역대를 직접 선택해 주세요.",
     "micBusyTitle": "마이크가 사용 중입니다",
-    "typeUnknown": "나의 음성 유형"
+    "typeUnknown": "나의 음성 유형",
+    "highFalsettoBody": "가장 높았던 음은 {note}입니다. 가성이었다면 진성 음역대에서 제외하여 노래가 더 잘 맞도록 해 드려요.",
+    "highFalsettoTitle": "가장 높았던 음이 가성이나 두성(더 가볍고 숨소리가 섞인 소리)이었나요?",
+    "highFalsettoNo": "아니요",
+    "highFalsettoSkip": "건너뛰기",
+    "highFalsettoUnsure": "잘 모르겠어요",
+    "highFalsettoYes": "네"
   },
   "fit": {
     "fits": "내 음역대에 맞음",

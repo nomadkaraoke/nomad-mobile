@@ -1486,7 +1486,13 @@
     "singProgressLabel": "歌唱の残り時間",
     "micBusyBody": "他のアプリまたは通話でマイクが使用されています。そのアプリや通話を終了してもう一度お試しいただくか、代わりに声のタイプを選択してください。",
     "micBusyTitle": "マイクが使用中です",
-    "typeUnknown": "あなたの声のタイプ"
+    "typeUnknown": "あなたの声のタイプ",
+    "highFalsettoBody": "最高音は{note}でした。裏声だった場合は地声の音域から除外することで、よりぴったりの曲が見つかりやすくなります。",
+    "highFalsettoTitle": "最高音は裏声（ファルセット）やヘッドボイス（軽めで息混じりの声）でしたか？",
+    "highFalsettoNo": "いいえ",
+    "highFalsettoSkip": "スキップ",
+    "highFalsettoUnsure": "わからない",
+    "highFalsettoYes": "はい"
   },
   "fit": {
     "fits": "あなたの声にぴったり",

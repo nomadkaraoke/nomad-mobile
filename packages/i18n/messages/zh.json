@@ -1486,7 +1486,13 @@
     "singProgressLabel": "剩余演唱时间",
     "micBusyBody": "其他应用或通话正在占用麦克风。请将其关闭后重试，或者直接选择您的声部类型。",
     "micBusyTitle": "麦克风被占用",
-    "typeUnknown": "你的声部"
+    "typeUnknown": "你的声部",
+    "highFalsettoBody": "您的最高音是 {note}。如果这是假音，我们会将其排除在您的胸声音域之外，以便为您推荐更适合的歌曲。",
+    "highFalsettoTitle": "您的最高音是假音还是头声（更轻、带有更多气声）？",
+    "highFalsettoNo": "否",
+    "highFalsettoSkip": "跳过",
+    "highFalsettoUnsure": "不确定",
+    "highFalsettoYes": "是"
   },
   "fit": {
     "fits": "适合你的声线",

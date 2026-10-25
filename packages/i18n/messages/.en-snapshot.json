@@ -1486,7 +1486,13 @@
     "registerLower": "Lower voice",
     "registerMiddle": "Middle voice",
     "registerHigher": "Higher voice",
-    "typeUnknown": "Your voice type"
+    "typeUnknown": "Your voice type",
+    "highFalsettoTitle": "Was your top note falsetto or head voice (lighter, breathier)?",
+    "highFalsettoBody": "Your top note was {note}. If it was falsetto, we keep it out of your chest range, so songs fit better.",
+    "highFalsettoYes": "Yes",
+    "highFalsettoNo": "No",
+    "highFalsettoUnsure": "Not sure",
+    "highFalsettoSkip": "Skip"
   },
   "fit": {
     "fits": "Fits your voice",

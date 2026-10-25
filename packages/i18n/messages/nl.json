@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Resterende zangtijd",
     "micBusyBody": "Een andere app of een oproep gebruikt de microfoon. Sluit deze en probeer het opnieuw, of kies in plaats daarvan je stemtype.",
     "micBusyTitle": "De microfoon is bezet",
-    "typeUnknown": "Je stemtype"
+    "typeUnknown": "Je stemtype",
+    "highFalsettoBody": "Je hoogste noot was {note}. Als dit falset was, houden we deze buiten je borststembereik, zodat nummers beter bij je passen.",
+    "highFalsettoTitle": "Was je hoogste noot falset of kopstem (lichter, luchtiger)?",
+    "highFalsettoNo": "Nee",
+    "highFalsettoSkip": "Overslaan",
+    "highFalsettoUnsure": "Niet zeker",
+    "highFalsettoYes": "Ja"
   },
   "fit": {
     "fits": "Past bij je stem",

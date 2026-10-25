@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Verbleibende Singzeit",
     "micBusyBody": "Eine andere App oder ein Anruf verwendet gerade das Mikrofon. Schließe die App bzw. beende den Anruf und versuche es erneut, oder wähle stattdessen deinen Stimmtyp aus.",
     "micBusyTitle": "Das Mikrofon wird bereits verwendet",
-    "typeUnknown": "Deine Stimmlage"
+    "typeUnknown": "Deine Stimmlage",
+    "highFalsettoBody": "Dein höchster Ton war {note}. Wenn es Falsett war, klammern wir ihn aus deinem Bruststimmbereich aus, damit die Songs besser zu dir passen.",
+    "highFalsettoTitle": "War dein höchster Ton Falsett oder Kopfstimme (leichter, hauchiger)?",
+    "highFalsettoNo": "Nein",
+    "highFalsettoSkip": "Überspringen",
+    "highFalsettoUnsure": "Nicht sicher",
+    "highFalsettoYes": "Ja"
   },
   "fit": {
     "fits": "Passt zu deiner Stimme",

@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Preostalo vrijeme za pjevanje",
     "micBusyBody": "Druga aplikacija ili poziv koristi mikrofon. Zatvori je i pokušaj ponovno ili umjesto toga odaberi svoju vrstu glasa.",
     "micBusyTitle": "Mikrofon je zauzet",
-    "typeUnknown": "Tvoj tip glasa"
+    "typeUnknown": "Tvoj tip glasa",
+    "highFalsettoBody": "Tvoja najviša nota bila je {note}. Ako je to bio falset, izostavit ćemo je iz tvog prsnog raspona kako bi ti pjesme bolje odgovarale.",
+    "highFalsettoTitle": "Je li tvoja najviša nota bila falset ili glaveni glas (svjetliji, s više daha)?",
+    "highFalsettoNo": "Ne",
+    "highFalsettoSkip": "Preskoči",
+    "highFalsettoUnsure": "Nisam siguran/na",
+    "highFalsettoYes": "Da"
   },
   "fit": {
     "fits": "Odgovara tvom glasu",

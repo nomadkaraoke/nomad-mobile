@@ -102,6 +102,7 @@ async function runToResult() {
   await press('voice-low-done');
   expect(await screen.findByTestId('voice-high-done')).toBeEnabled();
   await press('voice-high-done');
+  await press('voice-high-falsetto-skip');
   await press('voice-sing-ready');
   await screen.findByTestId('voice-sing-skip');
   await press('voice-sing-skip');
@@ -136,6 +137,7 @@ describe('voice test', () => {
     await press('voice-low-done');
     expect(screen.getByText('Now slide up to the highest note you can hold comfortably')).toBeTruthy();
     await press('voice-high-done');
+    await press('voice-high-falsetto-skip');
     expect(screen.getByText('Sing something you know')).toBeTruthy();
     await press('voice-sing-ready');
     await press('voice-sing-skip');
@@ -153,6 +155,45 @@ describe('voice test', () => {
     expect(Object.keys(body).sort()).toEqual(API_KEYS);
     expect(body).toMatchObject({ low_midi: 45, high_midi: 69, voice_type: 'baritone', method: 'mic' });
     expect(Number.isNaN(Date.parse(body.measured_at))).toBe(false);
+  });
+
+  it('after the high step, asks whether the top note was falsetto; Yes keeps it out of the chest range and sends falsetto_high', async () => {
+    await signIn();
+    open();
+    await screen.findByTestId('voice-start');
+    await press('voice-start');
+    await press('voice-low-done');
+    await press('voice-high-done');
+    expect(screen.getByTestId('voice-high-falsetto')).toBeTruthy();
+    expect(screen.getByText('Was your top note falsetto or head voice (lighter, breathier)?')).toBeTruthy();
+    expect(screen.getByText(new RegExp(`Your top note was .*A4`))).toBeTruthy();
+    expect(mockSource.current!.sections).toEqual(['low', 'high']);
+    await press('voice-high-falsetto-yes');
+    await press('voice-sing-ready');
+    await press('voice-sing-skip');
+    await screen.findByTestId('voice-result-type');
+    await press('voice-save');
+    const body = toVoiceProfileIn(useVoiceStore.getState().profile!);
+    expect(body.falsetto_high).toBe(69);
+    expect(body.high_midi).toBe(66);
+    expect(body.comfort_high).toBeLessThanOrEqual(66);
+  });
+
+  it('No on the top-note question keeps the range as measured, no falsetto_high', async () => {
+    await signIn();
+    open();
+    await screen.findByTestId('voice-start');
+    await press('voice-start');
+    await press('voice-low-done');
+    await press('voice-high-done');
+    await press('voice-high-falsetto-no');
+    await press('voice-sing-ready');
+    await press('voice-sing-skip');
+    await screen.findByTestId('voice-result-type');
+    await press('voice-save');
+    const body = toVoiceProfileIn(useVoiceStore.getState().profile!);
+    expect(body).not.toHaveProperty('falsetto_high');
+    expect(body.high_midi).toBe(69);
   });
 
   it('Done is disabled until the step has a held note', async () => {
@@ -341,6 +382,7 @@ describe('voice test', () => {
     await press('voice-start');
     await press('voice-low-done');
     await press('voice-high-done');
+    await press('voice-high-falsetto-skip');
     // Waiting: the prompt, the ready button and Finish (the sing is optional), no mic, no countdown.
     expect(screen.getByText('Sing something you know')).toBeTruthy();
     expect(screen.getByText("Take a moment to think of a song you know well, then tap I'm ready.")).toBeTruthy();
@@ -369,6 +411,7 @@ describe('voice test', () => {
     await press('voice-start');
     await press('voice-low-done');
     await press('voice-high-done');
+    await press('voice-high-falsetto-skip');
     await press('voice-sing-skip');
     expect(text('voice-result-type')).toBe('Likely Baritone');
     expect(mockSource.current!.sections).toEqual(['low', 'high']);
@@ -381,6 +424,7 @@ describe('voice test', () => {
     await press('voice-start');
     await press('voice-low-done');
     await press('voice-high-done');
+    await press('voice-high-falsetto-skip');
     const src = mockSource.current!;
     const realStart = src.start;
     let release: () => void = () => {};

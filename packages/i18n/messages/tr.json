@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Şarkı söylemek için kalan süre",
     "micBusyBody": "Mikrofonu başka bir uygulama veya arama kullanıyor. Uygulamayı kapatıp tekrar dene ya da bunun yerine ses türünü seç.",
     "micBusyTitle": "Mikrofon meşgul",
-    "typeUnknown": "Ses türün"
+    "typeUnknown": "Ses türün",
+    "highFalsettoBody": "En yüksek notan {note} oldu. Şarkıların sana daha iyi uyması için, eğer falsettoysa bunu göğüs sesi aralığının dışında tutarız.",
+    "highFalsettoTitle": "En yüksek notan falsetto veya kafa sesi (daha hafif, daha nefesli) miydi?",
+    "highFalsettoNo": "Hayır",
+    "highFalsettoSkip": "Geç",
+    "highFalsettoUnsure": "Emin değilim",
+    "highFalsettoYes": "Evet"
   },
   "fit": {
     "fits": "Sesine uygun",
