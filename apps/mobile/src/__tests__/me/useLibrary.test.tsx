@@ -6,6 +6,7 @@ import { useLibrary } from '../../me/useLibrary';
 import { useLovedOverrides } from '../../me/lovedOverrides';
 import { useSaveSong } from '../../me/useSaveSong';
 import { useSongFeedback } from '../../discover/useSongFeedback';
+import { useLogStore } from '../../tonight/log/logStore';
 import { useOutbox } from '../../tonight/log/outbox';
 import { appStorage } from '../../storage';
 import { userKeyFor } from '../../auth/userKey';
@@ -89,17 +90,27 @@ it('useSaveSong toggles through the outbox and agrees with Discover hearts', asy
   expect(result.current.saved('k_One')).toBe(false);
 });
 
-it('a queued survey-only put on an already-counted record changes feel but not the count', async () => {
+it('a queued put without a survey, or a survey-only one, never recounts a synced record or its feel', async () => {
   const client = resetMe();
-  api.getLibrary.mockResolvedValue({ status: 'ok', etag: '"e"', items: [li('A', 'One', { times_sung: 2 }) as never] });
+  api.getLibrary.mockResolvedValue({
+    status: 'ok',
+    etag: '"e"',
+    items: [li('A', 'One', { times_sung: 2, feel_counts: { great: 1, ok: 0, bad: 0 }, latest_feel: 'great', crowd_pleaser_count: 1 }) as never],
+  });
   const { result } = renderHook(() => useLibrary(), { wrapper: wrapperFor(client) });
   await waitFor(() => expect(result.current.items).toHaveLength(1));
+  // The log store already holds the sung record with its synced survey.
   act(() =>
-    useOutbox.setState({
-      items: [{ key: 'app_1', id: 'app_1', op: 'put', rev: 1, patch: { artist: 'A', title: 'One', song_key: 'k_One', survey: { feel: 'great' } } as never }],
+    useLogStore.setState({
+      entries: { app_1: { id: 'app_1', source: 'app', state: 'sung', artist: 'A', title: 'One', song_key: 'k_One', updatedAt: 1, survey: { feel: 'great', crowd_pleaser: true } as never } },
     }),
   );
-  expect(result.current.items[0]).toMatchObject({ times_sung: 2, latest_feel: 'great' });
+  // 1. a put with no survey (media / ended_at)
+  act(() => useOutbox.setState({ items: [{ key: 'app_1', id: 'app_1', op: 'put', rev: 1, patch: { ended_at: '2026-10-01T22:00:00Z' } as never }] }));
+  expect(result.current.items[0]).toMatchObject({ times_sung: 2, feel_counts: { great: 1, ok: 0, bad: 0 }, crowd_pleaser_count: 1 });
+  // 2. a survey-only put: the count stays, the new feel applies
+  act(() => useOutbox.setState({ items: [{ key: 'app_1', id: 'app_1', op: 'put', rev: 2, patch: { survey: { feel: 'bad' } } as never }] }));
+  expect(result.current.items[0]).toMatchObject({ times_sung: 2, latest_feel: 'bad', feel_counts: { great: 1, ok: 0, bad: 1 }, crowd_pleaser_count: 1 });
 });
 
 describe('Discover and Me hearts agree', () => {
@@ -118,6 +129,27 @@ describe('Discover and Me hearts agree', () => {
     });
     await waitFor(() => expect(api.getLibrary).toHaveBeenCalled());
     expect(useLovedOverrides.getState().byKey.k_One).toBeTruthy(); // held: the request has not finished
+    expect(me.result.current.saved('k_One')).toBe(true);
+  });
+
+  it('a Discover love that succeeds while a library fetch is in flight is not dropped by that fetch', async () => {
+    const client = resetMe();
+    let finish!: (v: never) => void;
+    api.getLibrary.mockResolvedValueOnce({ status: 'ok', etag: '"e"', items: [] });
+    let finishLove!: (v?: never) => void;
+    api.loveSong.mockImplementation(() => new Promise((r) => (finishLove = r as never)));
+    const w = wrapperFor(client);
+    const me = renderHook(() => useSaveSong(), { wrapper: w });
+    const disc = renderHook(() => useSongFeedback(), { wrapper: w });
+    await waitFor(() => expect(api.getLibrary).toHaveBeenCalledTimes(1));
+    await new Promise((r) => setTimeout(r, 5));
+    act(() => disc.result.current.love(rec));
+    api.getLibrary.mockImplementationOnce(() => new Promise((r) => (finish = r as never)));
+    act(() => void client.invalidateQueries({ queryKey: ['decide'] }));
+    await waitFor(() => expect(api.getLibrary).toHaveBeenCalledTimes(2));
+    await new Promise((r) => setTimeout(r, 5));
+    await act(async () => finishLove());
+    await act(async () => finish({ status: 'ok', etag: '"old"', items: [] } as never)); // pre-love data
     expect(me.result.current.saved('k_One')).toBe(true);
   });
 

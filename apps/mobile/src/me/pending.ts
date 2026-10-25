@@ -24,7 +24,8 @@ export function pendingLog(items: OutboxItem[], entries: Record<string, LogEntry
     const artist = (p.artist as string | undefined) ?? e?.artist;
     const title = (p.title as string | undefined) ?? e?.title;
     if (!artist || !title) continue;
-    const survey = { ...(e?.survey ?? {}), ...((p.survey as object | undefined) ?? {}) };
+    // The survey too comes only from the patch: an already-synced survey in the log store must not be re-applied.
+    const survey = (p.survey as object | undefined) ?? {};
     out.push({
       id: it.id,
       artist,
