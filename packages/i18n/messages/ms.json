@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, other {Tinggal # saat}}",
     "singProgressLabel": "Masa menyanyi yang tinggal",
     "micBusyBody": "Aplikasi lain atau panggilan sedang menggunakan mikrofon. Tutup aplikasi tersebut dan cuba lagi, atau pilih jenis suara anda.",
-    "micBusyTitle": "Mikrofon sedang digunakan"
+    "micBusyTitle": "Mikrofon sedang digunakan",
+    "typeUnknown": "Jenis suara anda"
   },
   "fit": {
     "fits": "Sesuai dengan suara anda",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Rakam saya secara lalai",
       "recordDefaultBody": "Memilih awal-siap \"Rakam saya menyanyi?\" apabila anda memulakan sesi suara. Anda masih boleh mengubahnya pada bila-bila masa.",
       "title": "Rakaman anda",
-      "confirmButton": "Padam"
+      "confirmButton": "Padam",
+      "counted": "Dikira",
+      "deleteOneBody": "Rakaman ini akan dipadamkan selama-lamanya. Lagu ini masih dikira dalam keputusan suara anda melainkan anda memilih Jangan kira.",
+      "deleteOneTitle": "Padamkan rakaman ini?",
+      "exclude": "Jangan kira",
+      "excludeBody": "Kami akan mengira semula keputusan suara anda tanpanya. Sama ada anda menyukai lagu tersebut masih diambil kira untuk pilihan anda. Anda boleh memasukkannya semula dalam kiraan kemudian.",
+      "excludeConfirm": "Jangan kira",
+      "excludeTitle": "Jangan kira lagu ini?",
+      "include": "Kira semula",
+      "includeBody": "Kami akan mengira semula keputusan suara anda bersamanya.",
+      "includeConfirm": "Kira lagu ini",
+      "includeTitle": "Kira semula lagu ini?",
+      "noResult": "Belum ada keputusan",
+      "notCounted": "Tidak dikira",
+      "outcome": {
+        "removed": "Tiada lagu daripada sesi tersebut yang dikira sekarang, jadi keputusan suaranya telah dialih keluar.",
+        "reverted_to_mic": "Profil suara anda kembali kepada keputusan ujian mikrofon anda.",
+        "unchanged": "Keputusan sesi anda telah dikira semula.",
+        "updated": "Profil suara anda telah dikemas kini berdasarkan lagu yang masih dikira."
+      },
+      "playFailed": "Tidak dapat memainkan rakaman tersebut. Semak sambungan anda dan cuba lagi.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Tidak dapat membuat perubahan tersebut. Semak sambungan anda dan cuba lagi.",
+      "sessionsBody": "Dengar rakaman nyanyian anda, kecualikan lagu daripada kiraan keputusan suara anda, atau padamkan rakaman.",
+      "sessionsTitle": "Sesi anda",
+      "uploading": "Memuat naik…",
+      "deleteOne": "Padam",
+      "deleteOneConfirm": "Padam",
+      "play": "Mainkan",
+      "song": "{title} · {artist}",
+      "stop": "Berhenti"
     }
   }
 }

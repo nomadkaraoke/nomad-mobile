@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, other {Còn # giây}}",
     "singProgressLabel": "Thời gian hát còn lại",
     "micBusyBody": "Một ứng dụng khác hoặc một cuộc gọi đang sử dụng micro. Hãy tắt đi rồi thử lại, hoặc tự chọn loại giọng của bạn.",
-    "micBusyTitle": "Micro đang bận"
+    "micBusyTitle": "Micro đang bận",
+    "typeUnknown": "Loại giọng của bạn"
   },
   "fit": {
     "fits": "Hợp với giọng của bạn",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Luôn tự động ghi âm giọng tôi",
       "recordDefaultBody": "Tự động chọn \"Ghi âm giọng hát của tôi?\" khi bạn bắt đầu một phiên thu giọng. Bạn vẫn có thể thay đổi tùy chọn này mỗi lần hát.",
       "title": "Bản ghi âm của bạn",
-      "confirmButton": "Xóa"
+      "confirmButton": "Xóa",
+      "counted": "Đã tính",
+      "deleteOneBody": "Bản ghi âm sẽ bị xóa vĩnh viễn. Bài hát vẫn được tính vào kết quả phân tích giọng của bạn trừ khi bạn chọn Không tính.",
+      "deleteOneTitle": "Xóa bản ghi âm này?",
+      "exclude": "Không tính",
+      "excludeBody": "Chúng tôi sẽ tính toán lại kết quả giọng của bạn mà không có bài hát này. Việc bạn thích bài hát hay không vẫn được dùng để gợi ý bài hát cho bạn. Bạn có thể chọn tính lại sau.",
+      "excludeConfirm": "Không tính",
+      "excludeTitle": "Không tính bài hát này?",
+      "include": "Tính lại bài này",
+      "includeBody": "Chúng tôi sẽ tính toán lại kết quả giọng của bạn khi có thêm bài hát này.",
+      "includeConfirm": "Tính bài này",
+      "includeTitle": "Tính lại bài hát này?",
+      "noResult": "Chưa có kết quả",
+      "notCounted": "Không tính",
+      "outcome": {
+        "removed": "Hiện không có bài hát nào trong phiên đó được tính, nên kết quả giọng của phiên đã bị xóa.",
+        "reverted_to_mic": "Kết quả giọng của bạn đã quay về kết quả kiểm tra mic.",
+        "unchanged": "Kết quả phiên của bạn đã được tính toán lại.",
+        "updated": "Kết quả giọng của bạn đã được cập nhật từ các bài hát vẫn được tính."
+      },
+      "playFailed": "Không thể phát bản ghi âm đó. Vui lòng kiểm tra kết nối mạng và thử lại.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Không thể thực hiện thay đổi. Vui lòng kiểm tra kết nối mạng và thử lại.",
+      "sessionsBody": "Nghe lại các bản thu, loại bài hát khỏi kết quả phân tích giọng hoặc xóa bản ghi âm.",
+      "sessionsTitle": "Các phiên hát của bạn",
+      "uploading": "Đang tải lên…",
+      "deleteOne": "Xóa",
+      "deleteOneConfirm": "Xóa",
+      "play": "Phát",
+      "song": "{title} · {artist}",
+      "stop": "Dừng"
     }
   }
 }

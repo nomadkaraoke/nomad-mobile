@@ -72,6 +72,21 @@ jest.mock('expo-video', () => {
 // audio hooks mock expo-audio themselves; this stub only lets screens that create players render.
 jest.mock('expo-audio', () => ({
   setAudioModeAsync: jest.fn(async () => {}),
+  // Me's recordings and the debug screen play through useRecordingPlayback: one stable player per component, like
+  // expo-audio's shared object (a new object per render would re-run the hook's effects). Suites read it from
+  // `useAudioPlayer.mock.results`.
+  useAudioPlayer: jest.fn(() => {
+    const { useRef } = jest.requireActual('react');
+    const ref = useRef(null);
+    ref.current ??= {
+      play: jest.fn(),
+      pause: jest.fn(),
+      replace: jest.fn(),
+      seekTo: jest.fn(async () => {}),
+      addListener: jest.fn(() => ({ remove: jest.fn() })),
+    };
+    return ref.current;
+  }),
   // The voice session's song recorder (useSongRecorder): enough for screens that use it to render.
   useAudioRecorder: jest.fn(() => ({
     uri: null,

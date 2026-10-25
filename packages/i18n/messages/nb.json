@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# sekund igjen} other {# sekunder igjen}}",
     "singProgressLabel": "Tid igjen å synge",
     "micBusyBody": "En annen app eller en samtale bruker mikrofonen. Lukk den og prøv igjen, eller velg stemmetype i stedet.",
-    "micBusyTitle": "Mikrofonen er opptatt"
+    "micBusyTitle": "Mikrofonen er opptatt",
+    "typeUnknown": "Stemmetypen din"
   },
   "fit": {
     "fits": "Passer til stemmen din",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Gjør opptak som standard",
       "recordDefaultBody": "Forhåndsvelger «Gjør opptak når jeg synger?» når du starter en stemmeøkt. Du kan fortsatt endre dette hver gang.",
       "title": "Opptakene dine",
-      "confirmButton": "Slett"
+      "confirmButton": "Slett",
+      "counted": "Telt med",
+      "deleteOneBody": "Opptaket slettes for godt. Sangen teller fortsatt med i stemmeresultatet ditt med mindre du velger «Ikke tell med».",
+      "deleteOneTitle": "Slette dette opptaket?",
+      "exclude": "Ikke tell med",
+      "excludeBody": "Vi beregner stemmeresultatet ditt på nytt uten den. Om du likte sangen teller fortsatt med for anbefalingene dine. Du kan ta den med igjen senere.",
+      "excludeConfirm": "Ikke tell med",
+      "excludeTitle": "Ikke telle med denne sangen?",
+      "include": "Tell med igjen",
+      "includeBody": "Vi beregner stemmeresultatet ditt på nytt med den.",
+      "includeConfirm": "Tell med",
+      "includeTitle": "Telle med denne sangen igjen?",
+      "noResult": "Ikke noe resultat ennå",
+      "notCounted": "Ikke telt med",
+      "outcome": {
+        "removed": "Ingen sanger fra den økten teller med nå, så stemmeresultatet ble fjernet.",
+        "reverted_to_mic": "Stemmen din er tilbakestilt til resultatet fra mikrofontesten.",
+        "unchanged": "Øktresultatet ditt ble beregnet på nytt.",
+        "updated": "Stemmen din ble oppdatert basert på sangene som fortsatt teller med."
+      },
+      "playFailed": "Kunne ikke spille av opptaket. Sjekk tilkoblingen din og prøv igjen.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Kunne ikke endre det. Sjekk tilkoblingen din og prøv igjen.",
+      "sessionsBody": "Hør på opptakene dine, stopp en sang fra å telle med i stemmeresultatet ditt, eller slett et opptak.",
+      "sessionsTitle": "Dine økter",
+      "uploading": "Laster opp…",
+      "deleteOne": "Slett",
+      "deleteOneConfirm": "Slett",
+      "play": "Spill av",
+      "song": "{title} · {artist}",
+      "stop": "Stopp"
     }
   }
 }

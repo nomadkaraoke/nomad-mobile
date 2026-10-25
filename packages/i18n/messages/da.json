@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# sekund tilbage} other {# sekunder tilbage}}",
     "singProgressLabel": "Resterende tid til at synge",
     "micBusyBody": "En anden app eller et opkald bruger mikrofonen. Luk appen, og prøv igen, eller vælg din stemmetype i stedet.",
-    "micBusyTitle": "Mikrofonen er optaget"
+    "micBusyTitle": "Mikrofonen er optaget",
+    "typeUnknown": "Din stemmetype"
   },
   "fit": {
     "fits": "Passer til din stemme",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Optag mig som standard",
       "recordDefaultBody": "Vælger automatisk \"Optag, når jeg synger?\" på forhånd, når du starter en stemmesession. Du kan stadig ændre det hver gang.",
       "title": "Dine optagelser",
-      "confirmButton": "Slet"
+      "confirmButton": "Slet",
+      "counted": "Talt med",
+      "deleteOneBody": "Optagelsen slettes permanent. Sangen tæller stadig med i dit stemmeresultat, medmindre du vælger Tæl ikke med.",
+      "deleteOneTitle": "Vil du slette denne optagelse?",
+      "exclude": "Tæl ikke med",
+      "excludeBody": "Vi beregner dit stemmeresultat igen uden den. Hvorvidt du kunne lide sangen, tæller stadig med i dine anbefalinger. Du kan tælle den med igen senere.",
+      "excludeConfirm": "Tæl ikke med",
+      "excludeTitle": "Vil du undlade at tælle denne sang med?",
+      "include": "Tæl med igen",
+      "includeBody": "Vi beregner dit stemmeresultat igen med den.",
+      "includeConfirm": "Tæl med",
+      "includeTitle": "Vil du tælle denne sang med igen?",
+      "noResult": "Intet resultat endnu",
+      "notCounted": "Ikke talt med",
+      "outcome": {
+        "removed": "Ingen sange fra den session tæller med nu, så dens stemmeresultat blev fjernet.",
+        "reverted_to_mic": "Din stemme er tilbage ved resultatet fra din mikrofontest.",
+        "unchanged": "Dit sessionsresultat blev genberegnet.",
+        "updated": "Din stemme blev opdateret ud fra de sange, der stadig tæller med."
+      },
+      "playFailed": "Optagelsen kunne ikke afspilles. Tjek din internetforbindelse, og prøv igen.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Det kunne ikke ændres. Tjek din internetforbindelse, og prøv igen.",
+      "sessionsBody": "Lyt til dine optagelser, vælg om en sang skal tælle med i dit stemmeresultat, eller slet en optagelse.",
+      "sessionsTitle": "Dine sessioner",
+      "uploading": "Uploader…",
+      "deleteOne": "Slet",
+      "deleteOneConfirm": "Slet",
+      "play": "Afspil",
+      "song": "{title} · {artist}",
+      "stop": "Stop"
     }
   }
 }

@@ -9,9 +9,8 @@ import { useState } from 'react';
 import { Alert, View } from 'react-native';
 
 import { ProfileSection } from '../discover/profile/ProfileSection';
-import { useRecFilters } from '../discover/filtersStore';
 import { RECS_KEY } from '../discover/useRecommendations';
-import { useVoiceProfile, VOICE_KEY, waitForVoiceSend } from './useVoiceProfile';
+import { clearVoiceFilters, useVoiceProfile, VOICE_KEY, waitForVoiceSend } from './useVoiceProfile';
 import { noteRange, useVoiceLabels } from './voiceLabels';
 import { stripBounds } from './VoiceResult';
 import { useVoiceStore } from './voiceStore';
@@ -37,8 +36,7 @@ export function useRemoveVoiceProfile() {
       return false;
     }
     useVoiceStore.getState().clear();
-    const { filters, set } = useRecFilters.getState();
-    if (filters.singable || filters.sort === 'fit') set({ singable: false, ...(filters.sort === 'fit' ? { sort: 'best' } : {}) });
+    clearVoiceFilters();
     queryClient.setQueriesData({ queryKey: VOICE_KEY }, null);
     void queryClient.invalidateQueries({ queryKey: RECS_KEY });
     return true;

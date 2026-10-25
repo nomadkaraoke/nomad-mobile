@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {Queda # segundo} other {Quedan # segundos}}",
     "singProgressLabel": "Tiempo restante para cantar",
     "micBusyBody": "Otra aplicación o una llamada está usando el micrófono. Ciérrala e inténtalo de nuevo, o elige tu tipo de voz.",
-    "micBusyTitle": "El micrófono está ocupado"
+    "micBusyTitle": "El micrófono está ocupado",
+    "typeUnknown": "Tu tipo de voz"
   },
   "fit": {
     "fits": "Se adapta a tu voz",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Grabarme de forma predeterminada",
       "recordDefaultBody": "Marca automáticamente \"¿Grabarme cantando?\" cuando inicias una sesión de voz. Podrás cambiarlo cada vez.",
       "title": "Tus grabaciones",
-      "confirmButton": "Eliminar"
+      "confirmButton": "Eliminar",
+      "counted": "Contada",
+      "deleteOneBody": "La grabación se borrará definitivamente. La canción seguirá contando para el resultado de tu voz a menos que elijas No contar.",
+      "deleteOneTitle": "¿Eliminar esta grabación?",
+      "exclude": "No contar",
+      "excludeBody": "Volveremos a calcular el resultado de tu voz sin ella. Si te gustó la canción, seguirá contando para tus selecciones. Puedes volver a contarla más tarde.",
+      "excludeConfirm": "No contar",
+      "excludeTitle": "¿No contar esta canción?",
+      "include": "Volver a contar",
+      "includeBody": "Volveremos a calcular el resultado de tu voz incluyéndola.",
+      "includeConfirm": "Contar",
+      "includeTitle": "¿Volver a contar esta canción?",
+      "noResult": "Aún no hay resultado",
+      "notCounted": "No contada",
+      "outcome": {
+        "removed": "Ahora ninguna canción de esa sesión cuenta, por lo que se eliminó el resultado de tu voz.",
+        "reverted_to_mic": "Tu voz volvió al resultado de tu prueba de micrófono.",
+        "unchanged": "El resultado de tu sesión se volvió a calcular.",
+        "updated": "Tu voz se actualizó a partir de las canciones que aún cuentan."
+      },
+      "playFailed": "No se pudo reproducir esa grabación. Comprueba tu conexión e inténtalo de nuevo.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "No se pudo cambiar eso. Comprueba tu conexión e inténtalo de nuevo.",
+      "sessionsBody": "Escucha tus tomas, haz que una canción deje de contar para el resultado de tu voz o elimina una grabación.",
+      "sessionsTitle": "Tus sesiones",
+      "uploading": "Subiendo…",
+      "deleteOne": "Eliminar",
+      "deleteOneConfirm": "Eliminar",
+      "play": "Reproducir",
+      "song": "{title} · {artist}",
+      "stop": "Detener"
     }
   }
 }

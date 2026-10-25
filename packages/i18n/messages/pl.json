@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {została # sekunda} few {zostały # sekundy} many {zostało # sekund} other {zostało # sekund}}",
     "singProgressLabel": "Pozostały czas na śpiewanie",
     "micBusyBody": "Mikrofon jest używany przez inną aplikację lub trwające połączenie. Zamknij ją i spróbuj ponownie albo po prostu wskaż swój typ głosu.",
-    "micBusyTitle": "Mikrofon jest zajęty"
+    "micBusyTitle": "Mikrofon jest zajęty",
+    "typeUnknown": "Twój typ głosu"
   },
   "fit": {
     "fits": "Pasuje do Twojego głosu",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Domyślnie nagrywaj mój głos",
       "recordDefaultBody": "Automatycznie zaznacza opcję „Nagrać mój śpiew?”, gdy zaczynasz sesję głosową. Nadal możesz to zmienić za każdym razem.",
       "title": "Twoje nagrania",
-      "confirmButton": "Usuń"
+      "confirmButton": "Usuń",
+      "counted": "Uwzględniono",
+      "deleteOneBody": "Nagranie zostanie bezpowrotnie usunięte. Piosenka nadal wlicza się do wyniku Twojego głosu, chyba że wybierzesz opcję „Nie uwzględniaj”.",
+      "deleteOneTitle": "Usunąć to nagranie?",
+      "exclude": "Nie uwzględniaj",
+      "excludeBody": "Przeliczymy wynik Twojego głosu ponownie bez niej. To, czy piosenka Ci się podobała, nadal ma wpływ na Twoje rekomendacje. W każdej chwili możesz uwzględnić ją ponownie.",
+      "excludeConfirm": "Nie uwzględniaj",
+      "excludeTitle": "Nie uwzględniać tej piosenki?",
+      "include": "Uwzględnij ponownie",
+      "includeBody": "Przeliczymy wynik Twojego głosu ponownie z jej uwzględnieniem.",
+      "includeConfirm": "Uwzględnij",
+      "includeTitle": "Uwzględnić tę piosenkę ponownie?",
+      "noResult": "Brak wyniku",
+      "notCounted": "Nieuwzględnione",
+      "outcome": {
+        "removed": "Żadna piosenka z tej sesji nie jest teraz brana pod uwagę, więc wynik głosu został usunięty.",
+        "reverted_to_mic": "Twój profil głosu powrócił do wyniku testu mikrofonu.",
+        "unchanged": "Wynik Twojej sesji został przeliczony ponownie.",
+        "updated": "Twój profil głosu został zaktualizowany na podstawie piosenek, które nadal są uwzględniane."
+      },
+      "playFailed": "Nie udało się odtworzyć tego nagrania. Sprawdź połączenie z internetem i spróbuj ponownie.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Nie udało się wprowadzić zmiany. Sprawdź połączenie z internetem i spróbuj ponownie.",
+      "sessionsBody": "Odsłuchaj swoje wersje, wyklucz piosenkę z wyniku Twojego głosu lub usuń nagranie.",
+      "sessionsTitle": "Twoje sesje",
+      "uploading": "Przesyłanie…",
+      "deleteOne": "Usuń",
+      "deleteOneConfirm": "Usuń",
+      "play": "Odtwórz",
+      "song": "{title} · {artist}",
+      "stop": "Zatrzymaj"
     }
   }
 }

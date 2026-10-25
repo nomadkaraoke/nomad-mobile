@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# segundo na lang} other {# segundo na lang}}",
     "singProgressLabel": "Natitirang oras para kumanta",
     "micBusyBody": "May ibang app o tawag na gumagamit sa mikropono. Isara ito at subukang muli, o piliin na lang ang uri ng iyong boses.",
-    "micBusyTitle": "Ginagamit pa ang mikropono"
+    "micBusyTitle": "Ginagamit pa ang mikropono",
+    "typeUnknown": "Uri ng boses mo"
   },
   "fit": {
     "fits": "Bagay sa boses mo",
@@ -1751,7 +1752,37 @@
       "recordDefault": "I-record ako bilang default",
       "recordDefaultBody": "Awtomatikong pipiliin ang \"I-record ang aking pagkanta?\" kapag nagsimula ka ng voice session. Maaari mo pa rin itong baguhin bawat pagkakataon.",
       "title": "Iyong mga recording",
-      "confirmButton": "Burahin"
+      "confirmButton": "Burahin",
+      "counted": "Kasama sa bilang",
+      "deleteOneBody": "Mabubura nang tuluyan ang recording. Kasama pa rin ang kanta sa resulta ng iyong boses maliban na lang kung pipiliin mo ang Huwag isama.",
+      "deleteOneTitle": "Burahin ang recording na ito?",
+      "exclude": "Huwag isama",
+      "excludeBody": "Kukuwentahin naming muli ang resulta ng iyong boses nang wala ito. Isasama pa rin sa iyong mga rekomendasyon kung nagustuhan mo ang kanta o hindi. Puwede mo itong isama ulit sa ibang pagkakataon.",
+      "excludeConfirm": "Huwag isama",
+      "excludeTitle": "Huwag isama ang kantang ito?",
+      "include": "Isama ulit",
+      "includeBody": "Kukuwentahin naming muli ang resulta ng iyong boses kasama ito.",
+      "includeConfirm": "Isama ito",
+      "includeTitle": "Isama ulit ang kantang ito?",
+      "noResult": "Wala pang resulta",
+      "notCounted": "Hindi kasama sa bilang",
+      "outcome": {
+        "removed": "Walang kanta mula sa session na iyon ang kasama sa bilang ngayon, kaya inalis ang resulta ng boses nito.",
+        "reverted_to_mic": "Bumalik ang iyong boses sa resulta ng mic test mo.",
+        "unchanged": "Muling kinalkula ang resulta ng iyong session.",
+        "updated": "Na-update ang iyong boses mula sa mga kantang kasama pa rin sa bilang."
+      },
+      "playFailed": "Hindi ma-play ang recording na iyon. Pakisuri ang iyong koneksyon at subukan muli.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Hindi mabago iyon. Pakisuri ang iyong koneksyon at subukan muli.",
+      "sessionsBody": "Pakinggan ang iyong takes, ihinto ang pagsama ng kanta sa resulta ng iyong boses, o magbura ng recording.",
+      "sessionsTitle": "Ang iyong mga session",
+      "uploading": "Nag-a-upload…",
+      "deleteOne": "Burahin",
+      "deleteOneConfirm": "Burahin",
+      "play": "I-play",
+      "song": "{title} · {artist}",
+      "stop": "Itigil"
     }
   }
 }

@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {Ancora # secondo} other {Ancora # secondi}}",
     "singProgressLabel": "Tempo rimasto per cantare",
     "micBusyBody": "Un'altra app o una chiamata sta usando il microfono. Chiudila e riprova, oppure scegli direttamente il tuo tipo di voce.",
-    "micBusyTitle": "Il microfono è occupato"
+    "micBusyTitle": "Il microfono è occupato",
+    "typeUnknown": "Il tuo tipo di voce"
   },
   "fit": {
     "fits": "Adatta alla tua voce",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Registrami per impostazione predefinita",
       "recordDefaultBody": "Seleziona automaticamente \"Vuoi registrare la tua voce?\" quando avvii una sessione vocale. Potrai comunque modificarla ogni volta.",
       "title": "Le tue registrazioni",
-      "confirmButton": "Elimina"
+      "confirmButton": "Elimina",
+      "counted": "Conteggiato",
+      "deleteOneBody": "La registrazione verrà eliminata definitivamente. Il brano continuerà a essere conteggiato per il tuo profilo vocale, a meno che tu non scelga \"Non conteggiare\".",
+      "deleteOneTitle": "Vuoi eliminare questa registrazione?",
+      "exclude": "Non conteggiare",
+      "excludeBody": "Ricalcoleremo il tuo profilo vocale senza questo brano. Se il brano ti è piaciuto, ne terremo comunque conto per i tuoi consigliati. Potrai conteggiarlo di nuovo in seguito.",
+      "excludeConfirm": "Non conteggiare",
+      "excludeTitle": "Non vuoi conteggiare questo brano?",
+      "include": "Conteggia di nuovo",
+      "includeBody": "Ricalcoleremo il tuo profilo vocale includendolo.",
+      "includeConfirm": "Conteggia",
+      "includeTitle": "Vuoi conteggiare di nuovo questo brano?",
+      "noResult": "Ancora nessun risultato",
+      "notCounted": "Non conteggiato",
+      "outcome": {
+        "removed": "Nessun brano di quella sessione viene più conteggiato, quindi il relativo risultato vocale è stato rimosso.",
+        "reverted_to_mic": "Il tuo profilo vocale è tornato al risultato del test del microfono.",
+        "unchanged": "Il risultato della tua sessione è stato ricalcolato.",
+        "updated": "Il tuo profilo vocale è stato aggiornato in base ai brani ancora conteggiati."
+      },
+      "playFailed": "Impossibile riprodurre la registrazione. Controlla la connessione e riprova.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Impossibile applicare la modifica. Controlla la connessione e riprova.",
+      "sessionsBody": "Ascolta le tue registrazioni, escludi un brano dal calcolo del tuo profilo vocale o elimina una registrazione.",
+      "sessionsTitle": "Le tue sessioni",
+      "uploading": "Caricamento…",
+      "deleteOne": "Elimina",
+      "deleteOneConfirm": "Elimina",
+      "play": "Riproduci",
+      "song": "{title} · {artist}",
+      "stop": "Interrompi"
     }
   }
 }

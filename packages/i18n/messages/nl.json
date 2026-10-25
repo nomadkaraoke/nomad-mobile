@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {nog # seconde} other {nog # seconden}}",
     "singProgressLabel": "Resterende zangtijd",
     "micBusyBody": "Een andere app of een oproep gebruikt de microfoon. Sluit deze en probeer het opnieuw, of kies in plaats daarvan je stemtype.",
-    "micBusyTitle": "De microfoon is bezet"
+    "micBusyTitle": "De microfoon is bezet",
+    "typeUnknown": "Je stemtype"
   },
   "fit": {
     "fits": "Past bij je stem",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Mij standaard opnemen",
       "recordDefaultBody": "Vinkt automatisch \"Mij opnemen terwijl ik zing?\" aan wanneer je een stemsessie start. Je kunt dit elke keer nog aanpassen.",
       "title": "Je opnames",
-      "confirmButton": "Verwijderen"
+      "confirmButton": "Verwijderen",
+      "counted": "Meegeteld",
+      "deleteOneBody": "De opname wordt definitief verwijderd. Het nummer telt nog steeds mee voor je stemresultaat, tenzij je kiest voor Niet meetellen.",
+      "deleteOneTitle": "Deze opname verwijderen?",
+      "exclude": "Niet meetellen",
+      "excludeBody": "We berekenen je stemresultaat opnieuw zonder dit nummer. Of je het nummer leuk vond, telt nog steeds mee voor je aanbevelingen. Je kunt het later weer laten meetellen.",
+      "excludeConfirm": "Niet meetellen",
+      "excludeTitle": "Dit nummer niet meetellen?",
+      "include": "Weer meetellen",
+      "includeBody": "We berekenen je stemresultaat opnieuw met dit nummer.",
+      "includeConfirm": "Meetellen",
+      "includeTitle": "Dit nummer weer meetellen?",
+      "noResult": "Nog geen resultaat",
+      "notCounted": "Niet meegeteld",
+      "outcome": {
+        "removed": "Er tellen geen nummers meer mee uit die sessie, dus het stemresultaat is verwijderd.",
+        "reverted_to_mic": "Je stemprofiel is teruggezet naar het resultaat van je microfoontest.",
+        "unchanged": "Je sessieresultaat is opnieuw berekend.",
+        "updated": "Je stemprofiel is bijgewerkt op basis van de nummers die nog meetellen."
+      },
+      "playFailed": "Kon die opname niet afspelen. Controleer je verbinding en probeer het opnieuw.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Kon dat niet wijzigen. Controleer je verbinding en probeer het opnieuw.",
+      "sessionsBody": "Luister naar je opnames, sluit een nummer uit van je stemresultaat of verwijder een opname.",
+      "sessionsTitle": "Je sessies",
+      "uploading": "Uploaden…",
+      "deleteOne": "Verwijderen",
+      "deleteOneConfirm": "Verwijderen",
+      "play": "Afspelen",
+      "song": "{title} · {artist}",
+      "stop": "Stoppen"
     }
   }
 }

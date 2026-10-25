@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, other {残り#秒}}",
     "singProgressLabel": "歌唱の残り時間",
     "micBusyBody": "他のアプリまたは通話でマイクが使用されています。そのアプリや通話を終了してもう一度お試しいただくか、代わりに声のタイプを選択してください。",
-    "micBusyTitle": "マイクが使用中です"
+    "micBusyTitle": "マイクが使用中です",
+    "typeUnknown": "あなたの声のタイプ"
   },
   "fit": {
     "fits": "あなたの声にぴったり",
@@ -1751,7 +1752,37 @@
       "recordDefault": "デフォルトで録音する",
       "recordDefaultBody": "ボイスセッション開始時に「歌声を録音しますか？」があらかじめ選択された状態になります。この設定は毎回変更できます。",
       "title": "保存済みの録音",
-      "confirmButton": "削除"
+      "confirmButton": "削除",
+      "counted": "カウント対象",
+      "deleteOneBody": "録音データは完全に削除されます。「カウントしない」を選択しない限り、この曲は声の分析結果に引き続き反映されます。",
+      "deleteOneTitle": "この録音を削除しますか？",
+      "exclude": "カウントしない",
+      "excludeBody": "この曲を除外して声の分析結果を再計算します。曲をお気に入り登録しているかどうかの情報はおすすめ選曲にそのまま反映されます。後から再度カウントに含めることも可能です。",
+      "excludeConfirm": "カウントしない",
+      "excludeTitle": "この曲をカウントから除外しますか？",
+      "include": "再度カウントする",
+      "includeBody": "この曲を含めて声の分析結果を再計算します。",
+      "includeConfirm": "カウントする",
+      "includeTitle": "この曲を再度カウントしますか？",
+      "noResult": "結果はまだありません",
+      "notCounted": "カウント対象外",
+      "outcome": {
+        "removed": "このセッションの曲がすべてカウント対象外になったため、セッションの声の分析結果が削除されました。",
+        "reverted_to_mic": "マイクテストの結果に戻りました。",
+        "unchanged": "セッション結果が再計算されました。",
+        "updated": "カウント対象の曲をもとに声の分析結果が更新されました。"
+      },
+      "playFailed": "録音を再生できませんでした。接続を確認して、もう一度お試しください。",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "変更できませんでした。接続を確認して、もう一度お試しください。",
+      "sessionsBody": "録音を聴き返したり、声の分析結果への反映を解除したり、録音データを削除したりできます。",
+      "sessionsTitle": "セッション履歴",
+      "uploading": "アップロード中…",
+      "deleteOne": "削除",
+      "deleteOneConfirm": "削除",
+      "play": "再生",
+      "song": "{title} · {artist}",
+      "stop": "停止"
     }
   }
 }

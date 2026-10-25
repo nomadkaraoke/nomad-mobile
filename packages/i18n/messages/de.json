@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {Noch # Sekunde} other {Noch # Sekunden}}",
     "singProgressLabel": "Verbleibende Singzeit",
     "micBusyBody": "Eine andere App oder ein Anruf verwendet gerade das Mikrofon. Schließe die App bzw. beende den Anruf und versuche es erneut, oder wähle stattdessen deinen Stimmtyp aus.",
-    "micBusyTitle": "Das Mikrofon wird bereits verwendet"
+    "micBusyTitle": "Das Mikrofon wird bereits verwendet",
+    "typeUnknown": "Deine Stimmlage"
   },
   "fit": {
     "fits": "Passt zu deiner Stimme",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Mich standardmäßig aufnehmen",
       "recordDefaultBody": "Wählt standardmäßig „Mich beim Singen aufnehmen?“ aus, wenn du eine Gesangssitzung startest. Du kannst dies jedes Mal ändern.",
       "title": "Deine Aufnahmen",
-      "confirmButton": "Löschen"
+      "confirmButton": "Löschen",
+      "counted": "Gewertet",
+      "deleteOneBody": "Die Aufnahme wird endgültig gelöscht. Der Song zählt weiterhin für dein Stimmergebnis, es sei denn, du wählst „Nicht werten“.",
+      "deleteOneTitle": "Diese Aufnahme löschen?",
+      "exclude": "Nicht werten",
+      "excludeBody": "Wir berechnen dein Stimmergebnis ohne diesen Song neu. Ob dir der Song gefallen hat, wird für deine Auswahl weiterhin berücksichtigt. Du kannst ihn später wieder werten.",
+      "excludeConfirm": "Nicht werten",
+      "excludeTitle": "Diesen Song nicht werten?",
+      "include": "Wieder werten",
+      "includeBody": "Wir berechnen dein Stimmergebnis mit diesem Song neu.",
+      "includeConfirm": "Werten",
+      "includeTitle": "Diesen Song wieder werten?",
+      "noResult": "Noch kein Ergebnis",
+      "notCounted": "Nicht gewertet",
+      "outcome": {
+        "removed": "Da aus dieser Session keine Songs mehr gewertet werden, wurde ihr Stimmergebnis entfernt.",
+        "reverted_to_mic": "Deine Stimme wurde auf das Ergebnis deines Mikrofontests zurückgesetzt.",
+        "unchanged": "Dein Session-Ergebnis wurde neu berechnet.",
+        "updated": "Deine Stimme wurde anhand der noch gewerteten Songs aktualisiert."
+      },
+      "playFailed": "Die Aufnahme konnte nicht abgespielt werden. Bitte überprüfe deine Verbindung und versuche es erneut.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Das konnte nicht geändert werden. Bitte überprüfe deine Verbindung und versuche es erneut.",
+      "sessionsBody": "Höre dir deine Takes an, schließe Songs von deinem Stimmergebnis aus oder lösche eine Aufnahme.",
+      "sessionsTitle": "Deine Sessions",
+      "uploading": "Wird hochgeladen…",
+      "deleteOne": "Löschen",
+      "deleteOneConfirm": "Löschen",
+      "play": "Abspielen",
+      "song": "{title} · {artist}",
+      "stop": "Stopp"
     }
   }
 }

@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {Zostáva # sekunda} few {Zostávajú # sekundy} other {Zostáva # sekúnd}}",
     "singProgressLabel": "Zostávajúci čas na spievanie",
     "micBusyBody": "Mikrofón práve používa iná aplikácia alebo hovor. Ukonči ju a skús to znova, alebo si namiesto toho vyber svoj typ hlasu.",
-    "micBusyTitle": "Mikrofón sa práve používa"
+    "micBusyTitle": "Mikrofón sa práve používa",
+    "typeUnknown": "Tvoj typ hlasu"
   },
   "fit": {
     "fits": "Sedí k tvojmu hlasu",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Nahrávať ma automaticky",
       "recordDefaultBody": "Automaticky predvolí možnosť „Nahrávať ma pri spievaní?“, keď spustíš hlasovú reláciu. Vždy to však môžeš zmeniť.",
       "title": "Tvoje nahrávky",
-      "confirmButton": "Vymazať"
+      "confirmButton": "Vymazať",
+      "counted": "Započítané",
+      "deleteOneBody": "Nahrávka sa natrvalo vymaže. Skladba sa bude do tvojho hlasového výsledku naďalej započítavať, pokiaľ nezvolíš Nezapočítavať.",
+      "deleteOneTitle": "Zmazať túto nahrávku?",
+      "exclude": "Nezapočítavať",
+      "excludeBody": "Tvoj hlasový výsledok prepočítame bez nej. To, či sa ti skladba páčila, sa do tvojich výberov stále započíta. Neskôr ju môžeš znova započítať.",
+      "excludeConfirm": "Nezapočítavať",
+      "excludeTitle": "Nezapočítavať túto skladbu?",
+      "include": "Znova započítať",
+      "includeBody": "Tvoj hlasový výsledok prepočítame aj s ňou.",
+      "includeConfirm": "Započítať",
+      "includeTitle": "Znova započítať túto skladbu?",
+      "noResult": "Zatiaľ žiadny výsledok",
+      "notCounted": "Nezapočítané",
+      "outcome": {
+        "removed": "Z tejto relácie sa teraz nezapočítavajú žiadne skladby, takže jej hlasový výsledok bol odstránený.",
+        "reverted_to_mic": "Tvoj hlas sa vrátil k výsledku z testu mikrofónu.",
+        "unchanged": "Výsledok tvojej relácie bol znova prepočítaný.",
+        "updated": "Tvoj hlas bol aktualizovaný podľa skladieb, ktoré sa stále započítavajú."
+      },
+      "playFailed": "Túto nahrávku sa nepodarilo prehrať. Skontroluj pripojenie a skús to znova.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Zmenu sa nepodarilo vykonať. Skontroluj pripojenie a skús to znova.",
+      "sessionsBody": "Vypočuj si svoje nahrávky, vyraď skladbu zo započítavania do hlasového výsledku alebo nahrávku zmaž.",
+      "sessionsTitle": "Tvoje relácie",
+      "uploading": "Nahráva sa…",
+      "deleteOne": "Vymazať",
+      "deleteOneConfirm": "Vymazať",
+      "play": "Prehrať",
+      "song": "{title} · {artist}",
+      "stop": "Zastaviť"
     }
   }
 }

@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# sekund kvar} other {# sekunder kvar}}",
     "singProgressLabel": "Tid kvar att sjunga",
     "micBusyBody": "En annan app eller ett samtal använder mikrofonen. Avsluta det och försök igen, eller välj din rösttyp istället.",
-    "micBusyTitle": "Mikrofonen är upptagen"
+    "micBusyTitle": "Mikrofonen är upptagen",
+    "typeUnknown": "Din rösttyp"
   },
   "fit": {
     "fits": "Passar din röst",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Spela in mig som standard",
       "recordDefaultBody": "Förväljer \"Spela in när jag sjunger?\" när du startar en röstsession. Du kan fortfarande ändra det varje gång.",
       "title": "Dina inspelningar",
-      "confirmButton": "Ta bort"
+      "confirmButton": "Ta bort",
+      "counted": "Räknas med",
+      "deleteOneBody": "Inspelningen raderas för gott. Låten räknas fortfarande med i ditt röstresultat om du inte väljer \"Räkna inte med\".",
+      "deleteOneTitle": "Vill du radera den här inspelningen?",
+      "exclude": "Räkna inte med",
+      "excludeBody": "Vi räknar om ditt röstresultat utan den. Om du gillade låten eller inte påverkar fortfarande dina låtrekommendationer. Du kan välja att räkna med den igen senare.",
+      "excludeConfirm": "Räkna inte med",
+      "excludeTitle": "Ska den här låten inte räknas med?",
+      "include": "Räkna med igen",
+      "includeBody": "Vi räknar om ditt röstresultat med den.",
+      "includeConfirm": "Räkna med",
+      "includeTitle": "Vill du räkna med den här låten igen?",
+      "noResult": "Inget resultat än",
+      "notCounted": "Räknas inte med",
+      "outcome": {
+        "removed": "Inga låtar från den sessionen räknas med längre, så röstresultatet togs bort.",
+        "reverted_to_mic": "Din röstprofil är återställd till resultatet från ditt mikrofontest.",
+        "unchanged": "Ditt sessionsresultat räknades om.",
+        "updated": "Din röstprofil uppdaterades baserat på låtarna som fortfarande räknas med."
+      },
+      "playFailed": "Det gick inte att spela upp inspelningen. Kontrollera anslutningen och försök igen.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Det gick inte att ändra det. Kontrollera anslutningen och försök igen.",
+      "sessionsBody": "Lyssna på dina tagningar, välj om en låt ska räknas med i ditt röstresultat eller radera en inspelning.",
+      "sessionsTitle": "Dina sessioner",
+      "uploading": "Laddar upp…",
+      "deleteOne": "Ta bort",
+      "deleteOneConfirm": "Ta bort",
+      "play": "Spela",
+      "song": "{title} · {artist}",
+      "stop": "Stopp"
     }
   }
 }

@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, other {Tersisa # detik}}",
     "singProgressLabel": "Sisa waktu bernyanyi",
     "micBusyBody": "Aplikasi lain atau panggilan telepon sedang menggunakan mikrofon. Tutup aplikasi tersebut dan coba lagi, atau pilih jenis suara Anda secara manual.",
-    "micBusyTitle": "Mikrofon sedang digunakan"
+    "micBusyTitle": "Mikrofon sedang digunakan",
+    "typeUnknown": "Tipe suara Anda"
   },
   "fit": {
     "fits": "Sesuai suara Anda",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Rekam saya secara default",
       "recordDefaultBody": "Otomatis memilih \"Rekam saat saya bernyanyi?\" saat Anda memulai sesi suara. Anda tetap bisa mengubahnya setiap saat.",
       "title": "Rekaman Anda",
-      "confirmButton": "Hapus"
+      "confirmButton": "Hapus",
+      "counted": "Dihitung",
+      "deleteOneBody": "Rekaman ini akan dihapus secara permanen. Lagu ini tetap diperhitungkan dalam hasil vokalmu kecuali kamu memilih Jangan hitung.",
+      "deleteOneTitle": "Hapus rekaman ini?",
+      "exclude": "Jangan hitung",
+      "excludeBody": "Kami akan menghitung ulang hasil vokalmu tanpa lagu ini. Penilaian suka atau tidak terhadap lagu ini tetap diperhitungkan untuk rekomendasi lagumu. Kamu bisa menghitungnya lagi nanti.",
+      "excludeConfirm": "Jangan hitung",
+      "excludeTitle": "Jangan hitung lagu ini?",
+      "include": "Hitung lagi",
+      "includeBody": "Kami akan menghitung ulang hasil vokalmu dengan menyertakannya.",
+      "includeConfirm": "Hitung",
+      "includeTitle": "Hitung lagi lagu ini?",
+      "noResult": "Belum ada hasil",
+      "notCounted": "Tidak dihitung",
+      "outcome": {
+        "removed": "Tidak ada lagu dari sesi tersebut yang dihitung sekarang, jadi hasil vokalnya telah dihapus.",
+        "reverted_to_mic": "Vokalmu dikembalikan ke hasil tes mikrofonmu.",
+        "unchanged": "Hasil sesimu telah dihitung ulang.",
+        "updated": "Vokalmu telah diperbarui dari lagu-lagu yang masih dihitung."
+      },
+      "playFailed": "Tidak dapat memutar rekaman tersebut. Periksa koneksimu dan coba lagi.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Tidak dapat mengubahnya. Periksa koneksimu dan coba lagi.",
+      "sessionsBody": "Dengarkan rekamanmu, kecualikan lagu dari perhitungan hasil vokalmu, atau hapus rekaman.",
+      "sessionsTitle": "Sesi rekamanmu",
+      "uploading": "Mengunggah…",
+      "deleteOne": "Hapus",
+      "deleteOneConfirm": "Hapus",
+      "play": "Putar",
+      "song": "{title} · {artist}",
+      "stop": "Berhenti"
     }
   }
 }

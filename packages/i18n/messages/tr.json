@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# saniye kaldı} other {# saniye kaldı}}",
     "singProgressLabel": "Şarkı söylemek için kalan süre",
     "micBusyBody": "Mikrofonu başka bir uygulama veya arama kullanıyor. Uygulamayı kapatıp tekrar dene ya da bunun yerine ses türünü seç.",
-    "micBusyTitle": "Mikrofon meşgul"
+    "micBusyTitle": "Mikrofon meşgul",
+    "typeUnknown": "Ses türün"
   },
   "fit": {
     "fits": "Sesine uygun",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Beni varsayılan olarak kaydet",
       "recordDefaultBody": "Bir ses seansı başlattığında \"Şarkı söylerken beni kaydet?\" seçeneğini önceden seçili getirir. Bunu her zaman değiştirebilirsin.",
       "title": "Kayıtların",
-      "confirmButton": "Sil"
+      "confirmButton": "Sil",
+      "counted": "Dahil edildi",
+      "deleteOneBody": "Kayıt tamamen silinir. \"Dahil etme\"yi seçmediğin sürece bu şarkı ses sonucunda hesaba katılmaya devam eder.",
+      "deleteOneTitle": "Bu kayıt silinsin mi?",
+      "exclude": "Dahil etme",
+      "excludeBody": "Ses sonucunu bu şarkı olmadan yeniden hesaplayacağız. Şarkıyı beğenip beğenmediğin sana özel öneriler için dikkate alınmaya devam eder. Daha sonra tekrar dahil edebilirsin.",
+      "excludeConfirm": "Dahil etme",
+      "excludeTitle": "Bu şarkı dahil edilmesin mi?",
+      "include": "Tekrar dahil et",
+      "includeBody": "Ses sonucunu bu şarkıyı da katarak yeniden hesaplayacağız.",
+      "includeConfirm": "Dahil et",
+      "includeTitle": "Bu şarkı tekrar dahil edilsin mi?",
+      "noResult": "Henüz sonuç yok",
+      "notCounted": "Dahil edilmedi",
+      "outcome": {
+        "removed": "O oturumdan artık hiçbir şarkı hesaba katılmadığı için oturumun ses sonucu kaldırıldı.",
+        "reverted_to_mic": "Ses profilin mikrofon testi sonucuna geri döndü.",
+        "unchanged": "Oturum sonucun yeniden hesaplandı.",
+        "updated": "Ses profilin, hâlâ dahil edilen şarkılara göre güncellendi."
+      },
+      "playFailed": "Kayıt oynatılamadı. Bağlantını kontrol edip tekrar dene.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Değişiklik kaydedilemedi. Bağlantını kontrol edip tekrar dene.",
+      "sessionsBody": "Kayıtlarını dinle, bir şarkının ses sonucuna dahil edilmesini engelle veya bir kaydı sil.",
+      "sessionsTitle": "Oturumların",
+      "uploading": "Yükleniyor…",
+      "deleteOne": "Sil",
+      "deleteOneConfirm": "Sil",
+      "play": "Oynat",
+      "song": "{title} · {artist}",
+      "stop": "Durdur"
     }
   }
 }

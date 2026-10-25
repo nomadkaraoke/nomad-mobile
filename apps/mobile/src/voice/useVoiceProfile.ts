@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 
 import { useAuth } from '../auth/store';
+import { useRecFilters } from '../discover/filtersStore';
 import { useOffline } from '../net/useOffline';
 import { toVoiceProfileIn, useVoiceStore, type LocalVoiceProfile } from './voiceStore';
 
@@ -121,6 +122,28 @@ export function useVoiceProfile() {
   }, [server]);
 
   return { profile, pending, isLoading: query.isLoading };
+}
+
+/** Turns off the filters that need a voice profile (Singable, sort by fit). */
+export function clearVoiceFilters(): void {
+  const { filters, set } = useRecFilters.getState();
+  if (filters.singable || filters.sort === 'fit') set({ singable: false, ...(filters.sort === 'fit' ? { sort: 'best' } : {}) });
+}
+
+/**
+ * decide changed the saved profile itself (a "Don't count" recompute, adopting a session result): the phone's copy
+ * follows it at once, even when decide's is older (a revert to the mic result), unless the phone holds a newer
+ * measurement that isn't sent yet (that one wins when it lands).
+ */
+export function followServerVoice(server: VoiceProfileOut | null): void {
+  const { pending, adopt, clear } = useVoiceStore.getState();
+  if (pending) return;
+  if (server) {
+    adopt(fromServer(server));
+    return;
+  }
+  clear();
+  clearVoiceFilters();
 }
 
 /** Settles once no voice PUT is in flight (a remove waits for it, so a PUT can never land after its DELETE). */

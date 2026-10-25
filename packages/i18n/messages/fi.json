@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# sekunti jäljellä} other {# sekuntia jäljellä}}",
     "singProgressLabel": "Lauluaikaa jäljellä",
     "micBusyBody": "Toinen sovellus tai puhelu käyttää mikrofonia. Sulje se ja yritä uudelleen, tai valitse sen sijaan äänityyppisi.",
-    "micBusyTitle": "Mikrofoni on varattu"
+    "micBusyTitle": "Mikrofoni on varattu",
+    "typeUnknown": "Äänityyppisi"
   },
   "fit": {
     "fits": "Sopii äänellesi",
@@ -1751,7 +1752,37 @@
       "recordDefault": "Tallenna lauluni oletusarvoisesti",
       "recordDefaultBody": "Valitsee valmiiksi kohdan ”Tallenna lauluni?”, kun aloitat äänisession. Voit silti muuttaa valintaa joka kerta.",
       "title": "Omat äänitteet",
-      "confirmButton": "Poista"
+      "confirmButton": "Poista",
+      "counted": "Laskettu mukaan",
+      "deleteOneBody": "Äänite poistetaan pysyvästi. Kappale lasketaan edelleen mukaan äänitulokseesi, ellet valitse Älä laske mukaan.",
+      "deleteOneTitle": "Poistetaanko tämä äänite?",
+      "exclude": "Älä laske mukaan",
+      "excludeBody": "Laskemme äänituloksesi uudelleen ilman sitä. Se, piditkö kappaleesta, vaikuttaa edelleen suosituksiisi. Voit ottaa sen mukaan uudelleen myöhemmin.",
+      "excludeConfirm": "Älä laske mukaan",
+      "excludeTitle": "Eikö tätä kappaletta lasketa mukaan?",
+      "include": "Laske mukaan uudelleen",
+      "includeBody": "Laskemme äänituloksesi uudelleen sen kanssa.",
+      "includeConfirm": "Laske mukaan",
+      "includeTitle": "Lasketaanko tämä kappale mukaan uudelleen?",
+      "noResult": "Ei vielä tulosta",
+      "notCounted": "Ei laskettu mukaan",
+      "outcome": {
+        "removed": "Tästä sessiosta ei ole enää kappaleita mukana, joten sen äänitulos poistettiin.",
+        "reverted_to_mic": "Äänesi palautettiin mikrofonitestin tulokseen.",
+        "unchanged": "Sessiosi tulos laskettiin uudelleen.",
+        "updated": "Äänesi päivitettiin edelleen mukana olevien kappaleiden perusteella."
+      },
+      "playFailed": "Äänitettä ei voitu toistaa. Tarkista verkkoyhteytesi ja yritä uudelleen.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Muutosta ei voitu tehdä. Tarkista verkkoyhteytesi ja yritä uudelleen.",
+      "sessionsBody": "Kuuntele ottojamasi äänitteitä, estä kappaletta vaikuttamasta äänitulokseesi tai poista äänite kokonaan.",
+      "sessionsTitle": "Omat sessiot",
+      "uploading": "Ladataan…",
+      "deleteOne": "Poista",
+      "deleteOneConfirm": "Poista",
+      "play": "Toista",
+      "song": "{title} · {artist}",
+      "stop": "Pysäytä"
     }
   }
 }
