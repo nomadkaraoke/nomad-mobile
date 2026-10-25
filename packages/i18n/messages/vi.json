@@ -1596,7 +1596,7 @@
       "dontKnow": "Bỏ qua, không biết bài này",
       "know": "Tôi biết bài này",
       "version": "Phiên bản karaoke: {brand}",
-      "else": "Thể loại khác",
+      "else": "Bài khác",
       "finish": "Hoàn tất"
     },
     "play": {

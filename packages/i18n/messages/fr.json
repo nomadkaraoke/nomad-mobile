@@ -1596,7 +1596,7 @@
       "dontKnow": "Passer, je ne connais pas",
       "know": "Je connais ce morceau",
       "version": "Karaoke Version : {brand}",
-      "else": "Autre style",
+      "else": "Autre chose",
       "finish": "Terminer"
     },
     "play": {

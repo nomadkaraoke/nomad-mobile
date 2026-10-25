@@ -1644,7 +1644,7 @@
         "q": "Lo canteresti al karaoke?",
         "yes_other_key": "Sì, in un'altra tonalità",
         "no": "No",
-        "yes": "Sì, tantissimo"
+        "yes": "Sì"
       },
       "tag": {
         "crowd_song": "Ottimo per scaldare il pubblico",
@@ -1729,7 +1729,7 @@
       "no": "No",
       "openSettings": "Apri Impostazioni",
       "quiet": "Non parlare per un secondo…",
-      "yes": "Sì, tantissimo"
+      "yes": "Sì"
     },
     "title": "Trova la tua voce",
     "warmup": {
