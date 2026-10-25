@@ -1795,7 +1795,13 @@
       "chip": "Nota alta ({note}): falsetto?",
       "chipLabel": "Quella nota alta, {note}, potrebbe essere stata in falsetto o voce di testa. Lo era?",
       "no": "No",
-      "yes": "Sì"
+      "yes": "Sì",
+      "catchUpBody": "Opzionale. Il falsetto o la voce di testa ha un suono più leggero e arioso. Le tue risposte evitano che queste note vengano incluse nella tua estensione di petto.",
+      "catchUpTitle": "Queste note alte erano in falsetto?",
+      "note": "{note} a {time}",
+      "play": "Ascolta",
+      "unsure": "Non ne ho la certezza",
+      "stop": "Interrompi"
     }
   }
 }

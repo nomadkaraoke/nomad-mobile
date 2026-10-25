@@ -21,14 +21,18 @@ import {
 } from '@nomad/api-decide';
 import {
   canSubmitQuiz,
+  chestSummary,
   createFalsettoDetector,
   EMPTY_SESSION_QUIZ,
   falsettoOffset,
   type FalsettoCandidate,
   type FalsettoDetector,
   type HeldNote,
+  type LabelledNote,
   type NoteLabel,
   prefillPosition,
+  sameNote,
+  toNoteLabelsIn,
   toQuizIn,
   type PitchSummary,
   type PositionPrefill,
@@ -55,6 +59,8 @@ export type { VsStep } from './sessionStore';
 export const PLAYER_READY_TIMEOUT_MS = 20_000;
 /** How long the live falsetto chip stays up unanswered. */
 export const FALSETTO_CHIP_MS = 5_000;
+/** The quiz asks about at most this many missed high notes. */
+export const MAX_CATCH_UP = 3;
 
 /**
  * What went wrong, for the screens to word. `network` / `warming_up` / `server` keep the step and offer `retry()`;
@@ -76,8 +82,19 @@ export type VoiceSession = {
   result: ResultOut | null;
   /** The live "High note: falsetto?" chip's note (play only), null when no chip shows. */
   falsettoChip: FalsettoCandidate | null;
-  /** The singer's answer to a falsetto chip (stored as a `live` label; the chip goes away). */
-  answerFalsetto(c: FalsettoCandidate, label: NoteLabel): void;
+  /**
+   * The singer's answer about a falsetto candidate: `live` from the chip (it goes away), `quiz` from the catch-up. One
+   * label per note: a new answer replaces the old one.
+   */
+  answerFalsetto(c: FalsettoCandidate, label: NoteLabel, source?: LabelledNote['source']): void;
+  /** The quiz's catch-up: the song's candidates not answered while singing, highest first, at most 3. */
+  catchUp: FalsettoCandidate[];
+  /** This song's falsetto answers so far. */
+  noteLabels: LabelledNote[];
+  /** The finished song's take still on the phone (consent only), for the catch-up's replay. */
+  take: SessionState['take'];
+  /** Stream time when that take started. */
+  takeOffsetS: number;
   /** The singer's live note (MIDI) while the recorder runs (play, warm-up). */
   livePitch: number | null;
   /** The session's one pitch source (the setup screen's quiet second reads it before the recorder runs). */
@@ -139,6 +156,19 @@ const toPitchIn = (p: PitchSummary | null): AttemptIn['pitch'] =>
     p50: p.p50,
     p90: p.p90,
   };
+
+/**
+ * The attempt's pitch fields. `pitch` is chest-only: with a falsetto or unsure answer it is recomputed from the
+ * contour without those notes (`chestSummary`); `pitch_all` is the song as sung. `note_labels` only when answered.
+ * A song from before batch 1 (no contour) sends its stored summary as both.
+ */
+function attemptPitch(st: SessionState): Pick<AttemptIn, 'pitch' | 'pitch_all' | 'note_labels'> {
+  const all = toPitchIn(st.pitch);
+  const relabels = st.noteLabels.some((l) => l.label !== 'full');
+  const chest = relabels && st.contour ? toPitchIn(chestSummary(st.contour, st.held, st.noteLabels)) : all;
+  const labels = toNoteLabelsIn(st.noteLabels);
+  return { pitch: chest, pitch_all: all, ...(labels.length > 0 && { note_labels: labels }) };
+}
 
 /** The per-song fields reset for a new offer. */
 const FRESH_SONG = {
@@ -536,7 +566,7 @@ export function useVoiceSession(): VoiceSession {
         ended_at: new Date(endedAt).toISOString(),
         stopped_early: st.stoppedEarly,
         quiz: toQuizIn(quiz),
-        pitch: toPitchIn(st.pitch),
+        ...attemptPitch(st),
       };
       const device = setup.device ?? null;
       const posted = { done: false };
@@ -640,9 +670,10 @@ export function useVoiceSession(): VoiceSession {
         });
       }),
       stopEarly: () => endSong(true),
-      answerFalsetto(c: FalsettoCandidate, label: NoteLabel) {
+      answerFalsetto(c: FalsettoCandidate, label: NoteLabel, source: LabelledNote['source'] = 'live') {
         setFalsettoChip((cur) => (cur === c ? null : cur));
-        update({ noteLabels: [...get().noteLabels, { ...c, label, source: 'live' }] });
+        const others = get().noteLabels.filter((l) => !sameNote(l, c));
+        update({ noteLabels: [...others, { tStart: c.tStart, tEnd: c.tEnd, midi: c.midi, label, source }] });
       },
       setAnswer(patch: Partial<QuizAnswers>) {
         update({ quiz: { ...get().quiz, ...patch } });
@@ -763,6 +794,15 @@ export function useVoiceSession(): VoiceSession {
     return () => clearTimeout(timer);
   }, [falsettoChip]);
 
+  const catchUp = useMemo(
+    () =>
+      s.candidates
+        .filter((c) => !s.noteLabels.some((l) => l.source === 'live' && sameNote(l, c)))
+        .sort((a, b) => b.midi - a.midi)
+        .slice(0, MAX_CATCH_UP),
+    [s.candidates, s.noteLabels],
+  );
+
   const prefill = useMemo(() => prefillPosition(s.pitch, s.song?.song_range ?? null), [s.pitch, s.song]);
 
   return {
@@ -776,6 +816,10 @@ export function useVoiceSession(): VoiceSession {
     result,
     falsettoChip,
     answerFalsetto: actions.answerFalsetto,
+    catchUp,
+    noteLabels: s.noteLabels,
+    take: s.take,
+    takeOffsetS: s.takeOffsetS,
     livePitch: recorder.livePitch,
     pitchSource: source,
     playerMode: s.song?.version.embeddable === false ? 'linkout' : PLAYER_MODE,

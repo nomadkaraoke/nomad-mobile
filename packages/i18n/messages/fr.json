@@ -1795,7 +1795,13 @@
       "chip": "Note aiguë ({note}) : fausset ?",
       "chipLabel": "Cette note aiguë, {note}, était peut-être en voix de fausset ou en voix de tête. C'était le cas ?",
       "no": "Non",
-      "yes": "Oui"
+      "yes": "Oui",
+      "catchUpBody": "Facultatif. La voix de fausset (ou voix de tête) a un son plus léger et plus aérien. Tes réponses permettent d'exclure ces notes de ta voix de poitrine.",
+      "catchUpTitle": "Ces notes aiguës étaient-elles en voix de fausset ?",
+      "note": "{note} à {time}",
+      "play": "Écouter",
+      "unsure": "Je ne sais pas",
+      "stop": "Arrêter"
     }
   }
 }

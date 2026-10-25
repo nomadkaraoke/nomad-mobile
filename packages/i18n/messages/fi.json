@@ -1795,7 +1795,13 @@
       "chip": "Korkea nuotti ({note}): falsetti?",
       "chipLabel": "Tuo korkea nuotti, {note}, saattoi olla falsettia tai pää-ääntä. Oliko se?",
       "no": "Ei",
-      "yes": "Kyllä"
+      "yes": "Kyllä",
+      "catchUpBody": "Valinnainen. Falsetti tai pää-ääni kuulostaa kevyemmältä ja ilmavammalta. Vastaustesi avulla näitä säveliä ei lasketa mukaan rintaäänialaasi.",
+      "catchUpTitle": "Ovatko nämä korkeat sävelet falsettia?",
+      "note": "{note} kohdassa {time}",
+      "play": "Kuuntele",
+      "unsure": "En ole varma",
+      "stop": "Pysäytä"
     }
   }
 }

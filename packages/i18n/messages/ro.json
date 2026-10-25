@@ -1795,7 +1795,13 @@
       "chip": "Notă înaltă ({note}): falset?",
       "chipLabel": "Acea notă înaltă, {note}, s-ar putea să fi fost falset sau voce de cap. Așa a fost?",
       "no": "Nu",
-      "yes": "Da"
+      "yes": "Da",
+      "catchUpBody": "Opțional. Falsetul sau vocea de cap sună mai lejer și mai aerat. Răspunsurile tale împiedică includerea acelor note în registrul tău de piept.",
+      "catchUpTitle": "Aceste note înalte au fost în falset?",
+      "note": "{note} la {time}",
+      "play": "Ascultă",
+      "unsure": "Nu știu sigur",
+      "stop": "Oprește"
     }
   }
 }

@@ -1795,7 +1795,13 @@
       "chip": "Hoge noot ({note}): falset?",
       "chipLabel": "Die hoge noot, {note}, was misschien falset of kopstem. Klopt dat?",
       "no": "Nee",
-      "yes": "Ja"
+      "yes": "Ja",
+      "catchUpBody": "Optioneel. Falset of kopstem klinkt lichter en luchtiger. Je antwoorden zorgen ervoor dat die noten buiten je borststem blijven.",
+      "catchUpTitle": "Waren deze hoge noten falset?",
+      "note": "{note} op {time}",
+      "play": "Luisteren",
+      "unsure": "Niet zeker",
+      "stop": "Stoppen"
     }
   }
 }

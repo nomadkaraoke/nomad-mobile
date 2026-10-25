@@ -1795,7 +1795,13 @@
       "chip": "High note ({note}): falsetto?",
       "chipLabel": "That high note, {note}, may have been falsetto or head voice. Was it?",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "catchUpTitle": "Were these high notes falsetto?",
+      "catchUpBody": "Optional. Falsetto or head voice sounds lighter and breathier. Your answers keep those notes out of your chest range.",
+      "note": "{note} at {time}",
+      "play": "Listen",
+      "stop": "Stop",
+      "unsure": "Not sure"
     }
   }
 }

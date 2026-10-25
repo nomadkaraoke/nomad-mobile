@@ -1795,7 +1795,13 @@
       "chip": "Nota aguda ({note}): falsete?",
       "chipLabel": "Aquela nota aguda, {note}, pode ter sido em falsete ou voz de cabeça. Foi?",
       "no": "Não",
-      "yes": "Sim"
+      "yes": "Sim",
+      "catchUpBody": "Opcional. O falsete ou a voz de cabeça soa mais leve e com mais ar. Suas respostas evitam que essas notas entrem na sua extensão de peito.",
+      "catchUpTitle": "Essas notas agudas foram em falsete?",
+      "note": "{note} em {time}",
+      "play": "Ouvir",
+      "unsure": "Não tenho certeza",
+      "stop": "Parar"
     }
   }
 }

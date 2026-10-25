@@ -1795,7 +1795,13 @@
       "chip": "Visoki ton ({note}): falset?",
       "chipLabel": "Taj visoki ton, {note}, možda je bio otpjevan u falsetu ili u glavi (head voice). Je li bio?",
       "no": "Ne",
-      "yes": "Da"
+      "yes": "Da",
+      "catchUpBody": "Neobavezno. Falset ili glas glave zvuče lakše i prozračnije. Tvoji odgovori sprječavaju uvrštavanje tih tonova u tvoj prsni raspon.",
+      "catchUpTitle": "Jesu li ovi visoki tonovi bili falset?",
+      "note": "{note} u {time}",
+      "play": "Poslušaj",
+      "unsure": "Nisam siguran/na",
+      "stop": "Zaustavi"
     }
   }
 }

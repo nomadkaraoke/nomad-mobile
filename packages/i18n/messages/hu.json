@@ -1795,7 +1795,13 @@
       "chip": "Magas hang ({note}): falzett?",
       "chipLabel": "Ez a magas hang ({note}) lehet, hogy falzett vagy fejhang volt. Az volt?",
       "no": "Nem",
-      "yes": "Igen"
+      "yes": "Igen",
+      "catchUpBody": "Opcionális. A falzett vagy a fejhang könnyedebbnek és levegősebbnek hangzik. A válaszaiddal kizárhatod ezeket a hangokat a mellkasi hangterjedelmedből.",
+      "catchUpTitle": "Ezek a magas hangok falzettek voltak?",
+      "note": "{note} ekkor: {time}",
+      "play": "Meghallgatás",
+      "unsure": "Nem vagyok biztos benne",
+      "stop": "Leállítás"
     }
   }
 }

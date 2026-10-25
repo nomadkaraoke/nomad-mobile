@@ -1795,7 +1795,13 @@
       "chip": "Nada tinggi ({note}): falseto?",
       "chipLabel": "Nada tinggi itu ({note}) mungkin berupa falseto atau head voice. Apakah benar?",
       "no": "Tidak",
-      "yes": "Ya"
+      "yes": "Ya",
+      "catchUpBody": "Opsional. Falsetto atau suara kepala (head voice) terdengar lebih ringan dan lebih berangin. Jawaban Anda membantu memisahkan nada-nada tersebut dari jangkauan suara dada (chest voice) Anda.",
+      "catchUpTitle": "Apakah nada-nada tinggi ini falsetto?",
+      "note": "{note} pada {time}",
+      "play": "Dengarkan",
+      "unsure": "Kurang yakin",
+      "stop": "Berhenti"
     }
   }
 }

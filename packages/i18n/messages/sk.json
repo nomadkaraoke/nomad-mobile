@@ -1795,7 +1795,13 @@
       "chip": "Vysoký tón ({note}): falzet?",
       "chipLabel": "Tento vysoký tón, {note}, mohol byť falzet alebo hlavový tón. Bol to falzet?",
       "no": "Nie",
-      "yes": "Áno"
+      "yes": "Áno",
+      "catchUpBody": "Voliteľné. Falzet alebo hlavový hlas znie jemnejšie a dychovejšie. Tvoje odpovede zabezpečia, aby sa tieto tóny nezarátavali do tvojho hrudného rozsahu.",
+      "catchUpTitle": "Boli tieto vysoké tóny falzet?",
+      "note": "{note} v čase {time}",
+      "play": "Vypočuť si",
+      "unsure": "Neviem isto",
+      "stop": "Zastaviť"
     }
   }
 }

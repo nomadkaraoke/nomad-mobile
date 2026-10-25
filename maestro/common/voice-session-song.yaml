@@ -2,7 +2,10 @@
 # Q1 loved, Q2 comfortable unless the recording pre-filled it, Q3 easy → Next → the next pick or the result.
 # Env: EXPECT_PREFILL ("true": the recording's highest/lowest line shows), SHOT (optional: quiz screenshot path),
 # FALSETTO ("yes": wait for the live "High note: falsetto?" chip on the fake mic's held A4, about 8 s in, and answer
-# Yes within its 5 s; needs a chest reference, e.g. a seeded profile; FALSETTO_SHOT optional screenshot of it).
+# Yes within its 5 s; needs a chest reference, e.g. a seeded profile; FALSETTO_SHOT optional screenshot of it),
+# CATCHUP ("assert": the quiz must show the falsetto catch-up). Whenever the catch-up shows, its first row is answered
+# "Not sure" (the note stays in the percentiles but out of the held bounds), so every flow's pitch is the same whether
+# or not a chip came up.
 appId: com.nomadkaraoke.mobile
 ---
 - tapOn:
@@ -38,6 +41,19 @@ appId: com.nomadkaraoke.mobile
     commands:
       - assertVisible:
           id: "vs-prefill"
+- runFlow:
+    when:
+      true: ${CATCHUP == 'assert'}
+    commands:
+      - assertVisible:
+          id: "vs-falsetto-catchup"
+- runFlow:
+    when:
+      visible:
+        id: "vs-falsetto-q-0-unsure"
+    commands:
+      - tapOn:
+          id: "vs-falsetto-q-0-unsure"
 - runFlow:
     when:
       true: ${SHOT != null && SHOT != ''}

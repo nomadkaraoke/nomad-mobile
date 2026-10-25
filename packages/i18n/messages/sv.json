@@ -1795,7 +1795,13 @@
       "chip": "Hög ton ({note}): falsett?",
       "chipLabel": "Den där höga tonen, {note}, kan ha varit falsett eller huvudklang. Var den det?",
       "no": "Nej",
-      "yes": "Ja"
+      "yes": "Ja",
+      "catchUpBody": "Valfritt. Falsett eller huvudklang låter ljusare och luftigare. Dina svar ser till att de tonerna inte räknas till ditt bröstregister.",
+      "catchUpTitle": "Var dessa höga toner falsett?",
+      "note": "{note} vid {time}",
+      "play": "Lyssna",
+      "unsure": "Inte säker",
+      "stop": "Stopp"
     }
   }
 }

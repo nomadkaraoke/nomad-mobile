@@ -1795,7 +1795,13 @@
       "chip": "Hoher Ton ({note}): Falsett?",
       "chipLabel": "Dieser hohe Ton, {note}, war vielleicht Falsett oder Kopfstimme. War er das?",
       "no": "Nein",
-      "yes": "Ja"
+      "yes": "Ja",
+      "catchUpBody": "Optional. Falsett oder Kopfstimme klingt leichter und hauchiger. Deine Antworten sorgen dafür, dass diese Töne nicht zu deinem Bruststimmbereich gezählt werden.",
+      "catchUpTitle": "Waren diese hohen Töne im Falsett?",
+      "note": "{note} bei {time}",
+      "play": "Anhören",
+      "unsure": "Nicht sicher",
+      "stop": "Stopp"
     }
   }
 }

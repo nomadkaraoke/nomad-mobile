@@ -1795,7 +1795,13 @@
       "chip": "Wysoki dźwięk ({note}): falset?",
       "chipLabel": "Ten wysoki dźwięk, {note}, mógł być zaśpiewany falsetem lub głosem głowowym. Czy tak było?",
       "no": "Nie",
-      "yes": "Tak"
+      "yes": "Tak",
+      "catchUpBody": "Opcjonalnie. Falset lub głos głowowy brzmi lżej i bardziej zwiewnie. Twoje odpowiedzi pomogą wykluczyć te dźwięki z Twojego rejestru piersiowego.",
+      "catchUpTitle": "Czy te wysokie dźwięki to był falset?",
+      "note": "{note} w {time}",
+      "play": "Odsłuchaj",
+      "unsure": "Nie mam pewności",
+      "stop": "Zatrzymaj"
     }
   }
 }

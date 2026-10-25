@@ -1795,7 +1795,13 @@
       "chip": "Mataas na nota ({note}): falsetto?",
       "chipLabel": "Maaaring falsetto o head voice ang mataas na notang iyon, {note}. Falsetto nga ba ito?",
       "no": "Hindi",
-      "yes": "Oo"
+      "yes": "Oo",
+      "catchUpBody": "Opsyonal. Ang falsetto o head voice ay mas magaan at mas mahangin pakinggan. Nakakatulong ang mga sagot mo para hindi maisama ang mga notang iyon sa iyong chest range.",
+      "catchUpTitle": "Falsetto ba ang matataas na notang ito?",
+      "note": "{note} sa {time}",
+      "play": "Pakinggan",
+      "unsure": "Hindi sigurado",
+      "stop": "Itigil"
     }
   }
 }

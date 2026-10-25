@@ -174,6 +174,10 @@ function fakeVs(over: Partial<VoiceSession> = {}): VoiceSession {
     result: null,
     falsettoChip: null,
     answerFalsetto: jest.fn(),
+    catchUp: [],
+    noteLabels: [],
+    take: null,
+    takeOffsetS: 0,
     livePitch: null,
     pitchSource: mockSource.current!,
     playerMode: 'embed-hosted',
@@ -482,6 +486,34 @@ describe('voiceSessionScreens: steps', () => {
     expect(screen.getByTestId('vs-quiz-next')).toBeEnabled();
     await press('vs-quiz-next');
     expect(mockVs.current.submitQuiz).toHaveBeenCalled();
+  });
+
+  it('quiz: the falsetto catch-up shows only with missed high notes, answers go to the session as quiz labels, Next is not blocked', async () => {
+    const c = { tStart: 151.2, tEnd: 152.7, midi: 69 };
+    const vs = fakeVs({
+      step: 'quiz',
+      song: SONG,
+      attemptN: 1,
+      catchUp: [c],
+      quiz: { ...EMPTY_SESSION_QUIZ, feel: 'loved', position: 'comfortable' },
+    });
+    mockVs.current = vs;
+    open();
+    await screen.findByTestId('vs-falsetto-catchup');
+    expect(screen.getByText('Were these high notes falsetto?')).toBeTruthy();
+    expect(screen.queryByTestId('vs-falsetto-q-0-play')).toBeNull(); // no take: no replay
+    expect(screen.getByTestId('vs-quiz-next')).toBeEnabled();
+    await press('vs-falsetto-q-0-unsure');
+    expect(vs.answerFalsetto).toHaveBeenCalledWith(c, 'unsure', 'quiz');
+    await press('vs-quiz-next');
+    expect(vs.submitQuiz).toHaveBeenCalled();
+  });
+
+  it('quiz: no missed notes, no catch-up', async () => {
+    mockVs.current = fakeVs({ step: 'quiz', song: SONG, attemptN: 1 });
+    open();
+    await screen.findByTestId('vs-quiz');
+    expect(screen.queryByTestId('vs-falsetto-catchup')).toBeNull();
   });
 
   it('quiz: a "comfortable" prefill pre-selects Q2 once, unless already answered', async () => {

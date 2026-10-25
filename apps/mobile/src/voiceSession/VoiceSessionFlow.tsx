@@ -209,6 +209,11 @@ export function VoiceSessionFlow() {
           busy={vs.busy}
           setAnswer={vs.setAnswer}
           onNext={() => void vs.submitQuiz()}
+          catchUp={vs.catchUp}
+          noteLabels={vs.noteLabels}
+          take={vs.take}
+          takeOffsetS={vs.takeOffsetS}
+          onFalsetto={(c, l) => vs.answerFalsetto(c, l, 'quiz')}
         />
       ) : (
         <Waiting testID="vs-loading" label={t('loading')} />

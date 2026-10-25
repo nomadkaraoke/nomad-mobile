@@ -1795,7 +1795,13 @@
       "chip": "Tiz nota ({note}): falseto mu?",
       "chipLabel": "Şu tiz nota ({note}) falseto veya kafa sesi olabilir. Öyle miydi?",
       "no": "Hayır",
-      "yes": "Evet"
+      "yes": "Evet",
+      "catchUpBody": "İsteğe bağlı. Falsetto veya kafa sesi daha hafif ve nefesli duyulur. Yanıtların, bu notaların göğüs ses aralığına girmesini engeller.",
+      "catchUpTitle": "Bu tiz notalar falsetto muydu?",
+      "note": "{time} anında {note}",
+      "play": "Dinle",
+      "unsure": "Emin değilim",
+      "stop": "Durdur"
     }
   }
 }

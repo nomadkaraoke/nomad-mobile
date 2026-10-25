@@ -1795,7 +1795,13 @@
       "chip": "Nota aguda ({note}): falset?",
       "chipLabel": "Aquella nota aguda, {note}, podria haver estat falset o veu de cap. Ho era?",
       "no": "No",
-      "yes": "Sí"
+      "yes": "Sí",
+      "catchUpBody": "Opcional. El falset o la veu de cap sona més lleugera i amb més aire. Les teves respostes mantenen aquestes notes fora del teu registre de pit.",
+      "catchUpTitle": "Aquestes notes agudes eren en falset?",
+      "note": "{note} a {time}",
+      "play": "Escolta",
+      "unsure": "No n'estic segur",
+      "stop": "Atura"
     }
   }
 }

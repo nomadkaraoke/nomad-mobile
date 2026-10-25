@@ -1795,7 +1795,13 @@
       "chip": "Høy tone ({note}): falsett?",
       "chipLabel": "Den høye tonen, {note}, kan ha vært falsett eller hoderøst. Var den det?",
       "no": "Nei",
-      "yes": "Ja"
+      "yes": "Ja",
+      "catchUpBody": "Valgfritt. Falsett eller hodeklang høres lettere og luftigere ut. Svarene dine sørger for at disse tonene holdes utenfor bryststemmeregisteret ditt.",
+      "catchUpTitle": "Var disse høye tonene falsett?",
+      "note": "{note} ved {time}",
+      "play": "Lytt",
+      "unsure": "Ikke sikker",
+      "stop": "Stopp"
     }
   }
 }

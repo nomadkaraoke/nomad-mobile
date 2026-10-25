@@ -1795,7 +1795,13 @@
       "chip": "Høj tone ({note}): falset?",
       "chipLabel": "Den høje tone, {note}, var måske falset eller hovedstemme. Var den det?",
       "no": "Nej",
-      "yes": "Ja"
+      "yes": "Ja",
+      "catchUpBody": "Valgfrit. Falset eller hovedstemme lyder lysere og mere luftig. Dine svar holder disse toner ude af dit brystregister.",
+      "catchUpTitle": "Var disse høje toner falset?",
+      "note": "{note} ved {time}",
+      "play": "Lyt",
+      "unsure": "Ikke sikker",
+      "stop": "Stop"
     }
   }
 }

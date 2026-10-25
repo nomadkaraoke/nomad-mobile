@@ -1,7 +1,7 @@
 // useVoiceSession: the voice session's state machine (Phase 3d D5) over mocked decide calls, a fake song recorder
 // and fake timers; sessionStore's resume window (Review Focus 2).
 import { ApiError, type NextVoiceSong, type SessionSetup } from '@nomad/api-decide';
-import type { HeldNote } from '@nomad/core';
+import { contourFrom, findHeldNotes, summarizeSongPitch, type HeldNote, type VoicedFrame } from '@nomad/core';
 import { act, renderHook } from '@testing-library/react-native';
 
 import { appStorage } from '../../storage';
@@ -260,6 +260,16 @@ describe('useVoiceSession', () => {
           tags: ['crowd_song'],
         },
         pitch: {
+          voiced_s: 40,
+          held_count: 6,
+          held_low: 50,
+          held_high: 64,
+          p10: 51,
+          p50: 57,
+          p90: 63,
+        },
+        // No falsetto answers: the chest-only pitch is the song as sung.
+        pitch_all: {
           voiced_s: 40,
           held_count: 6,
           held_low: 50,
@@ -1154,6 +1164,91 @@ describe('useVoiceSession', () => {
       expect(r.current.falsettoChip).toBeNull();
       heard(note(40, 41.5, 72));
       expect(r.current.falsettoChip).toBeNull();
+    });
+  
+    /** Steady notes at 100 frames a second. */
+    const framesFor = (notes: { midi: number; dur: number }[]): VoicedFrame[] => {
+      const out: VoicedFrame[] = [];
+      for (const n of notes) for (let i = 0; i < Math.round(n.dur * 100); i++) out.push({ t: out.length / 100, midi: n.midi });
+      return out;
+    };
+    /** 24 s of chest 50..57, then 6 s of A4 (69): a real take's pitch, contour and held notes. */
+    const sungTake = (): SongTake => {
+      const frames = framesFor([...Array.from({ length: 8 }, (_, i) => ({ midi: 50 + i, dur: 3 })), { midi: 69, dur: 6 }]);
+      const held = findHeldNotes(frames);
+      return { pitch: summarizeSongPitch(frames, held), file: null, contour: contourFrom(frames), held, takeOffsetS: 0 };
+    };
+    const A4 = (h: HeldNote[]) => {
+      const n = h.find((x) => x.note === 69)!;
+      return { tStart: n.start, tEnd: n.end, midi: 69 };
+    };
+    async function atQuiz() {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1)).mockResolvedValueOnce(song('b', 2));
+      mockApi.postVoiceAttempt.mockResolvedValue({ attempt_id: 'x1', n: 1, done: false, done_reason: null, top_p: 0.4 });
+      mockRec.nextTake = sungTake();
+      const h = await mount();
+      await act(() => h.result.current.begin(SETUP));
+      await singIt(h.result);
+      act(() => h.result.current.setAnswer({ feel: 'fine', position: 'comfortable' }));
+      return h;
+    }
+    const body = () => mockApi.postVoiceAttempt.mock.calls[0]![1];
+
+    it('catch-up lists unanswered candidates, max 3, highest first', async () => {
+      const { result: r } = await atQuiz();
+      const c = (t: number, m: number) => ({ tStart: t, tEnd: t + 1, midi: m });
+      act(() =>
+        store().update({
+          candidates: [c(10, 64), c(30, 69), c(50, 66), c(70, 70), c(90, 65)],
+          noteLabels: [{ ...c(70, 70), label: 'falsetto', source: 'live' }],
+        }),
+      );
+      expect(r.current.catchUp).toEqual([c(30, 69), c(50, 66), c(90, 65)]);
+      // A quiz answer keeps its row (shown as answered).
+      act(() => r.current.answerFalsetto(c(30, 69), 'unsure', 'quiz'));
+      expect(r.current.catchUp).toEqual([c(30, 69), c(50, 66), c(90, 65)]);
+      // One label per note: answering again replaces it.
+      act(() => r.current.answerFalsetto(c(30, 69), 'falsetto', 'quiz'));
+      expect(store().noteLabels.filter((l) => l.tStart === 30)).toEqual([{ ...c(30, 69), label: 'falsetto', source: 'quiz' }]);
+    });
+
+    it('submit sends chest-only pitch, pitch_all and note_labels', async () => {
+      const { result: r } = await atQuiz();
+      const a4 = A4(store().held);
+      act(() => r.current.answerFalsetto(a4, 'falsetto', 'quiz'));
+      await act(() => r.current.submitQuiz());
+      const b = body();
+      expect(b.pitch_all).toEqual(expect.objectContaining({ held_high: 69 }));
+      expect(b.pitch).toEqual(expect.objectContaining({ held_high: 57, held_count: 8 }));
+      expect(b.pitch.p90).toBeLessThanOrEqual(57);
+      expect(b.note_labels).toEqual([
+        { t_start: expect.any(Number), t_end: expect.any(Number), midi: 69, label: 'falsetto', source: 'quiz' },
+      ]);
+    });
+
+    it('submit without answering still works (pitch as sung, no labels)', async () => {
+      const { result: r } = await atQuiz();
+      act(() => store().update({ candidates: [A4(store().held)] }));
+      await act(() => r.current.submitQuiz());
+      const b = body();
+      expect(b.pitch).toEqual(expect.objectContaining({ held_high: 69 }));
+      expect(b.pitch_all).toEqual(b.pitch);
+      expect(b).not.toHaveProperty('note_labels');
+      expect(r.current.step).toBe('pick');
+    });
+
+    it('restore after kill keeps labels', async () => {
+      const first = await atQuiz();
+      const a4 = A4(store().held);
+      act(() => first.result.current.answerFalsetto(a4, 'falsetto', 'quiz'));
+      first.unmount();
+      restoreVoiceSession();
+      mockApi.getVoiceSession.mockResolvedValue({ session_id: 's1', state: 'active', attempts: 0, last_offer: song('a', 1) });
+      const { result: r } = await mount();
+      expect(r.current.step).toBe('quiz');
+      await act(() => r.current.submitQuiz());
+      expect(body().note_labels).toHaveLength(1);
+      expect(body().pitch.held_high).toBe(57);
     });
   });
 });

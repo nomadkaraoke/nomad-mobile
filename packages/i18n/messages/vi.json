@@ -1795,7 +1795,13 @@
       "chip": "Nốt cao ({note}): giọng giả thanh?",
       "chipLabel": "Nốt cao đó ({note}) có thể là giọng giả thanh hoặc giọng đầu. Có đúng vậy không bạn?",
       "no": "Không",
-      "yes": "Có"
+      "yes": "Có",
+      "catchUpBody": "Không bắt buộc. Giọng gió (falsetto) hoặc giọng đầu nghe nhẹ hơn và nhiều hơi hơn. Câu trả lời của bạn sẽ giúp loại các nốt đó ra khỏi quãng giọng ngực của bạn.",
+      "catchUpTitle": "Những nốt cao này có phải là giọng gió không?",
+      "note": "{note} lúc {time}",
+      "play": "Nghe",
+      "unsure": "Không chắc",
+      "stop": "Dừng"
     }
   }
 }
