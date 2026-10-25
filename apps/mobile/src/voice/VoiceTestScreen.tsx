@@ -132,19 +132,20 @@ export function VoiceTestScreen() {
   return <TestStep test={test} onSkip={toSelfReport} />;
 }
 
-/** Whole seconds since `active` became true (0 while inactive). */
-function useElapsedSeconds(active: boolean): number {
+/** Whole seconds since `since` (a Date.now() value; 0 while null). */
+function useElapsedSeconds(since: number | null): number {
   const [elapsed, setElapsed] = useState(0);
   useEffect(() => {
-    if (!active) return;
-    const t0 = Date.now();
-    const id = setInterval(() => setElapsed(Math.floor((Date.now() - t0) / 1000)), 250);
+    if (since === null) return;
+    const tick = () => setElapsed(Math.max(0, Math.floor((Date.now() - since) / 1000)));
+    tick();
+    const id = setInterval(tick, 250);
     return () => {
       clearInterval(id);
       setElapsed(0);
     };
-  }, [active]);
-  return active ? elapsed : 0;
+  }, [since]);
+  return since === null ? 0 : elapsed;
 }
 
 /** The sing step's countdown: a bar plus "N seconds left". */
@@ -171,9 +172,9 @@ function SingProgress({ elapsed }: { elapsed: number }) {
 function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onSkip: () => void }) {
   const t = useTranslations('voice');
   const { step } = test;
-  // The countdown runs from "I'm ready", not while the singer is still thinking of a song.
   const singWaiting = step === 'sing' && test.phase === 'ready';
-  const singElapsed = useElapsedSeconds(step === 'sing' && !singWaiting);
+  // The countdown runs from when capture started (the hook's SING_MS timer starts then too), not from the tap.
+  const singElapsed = useElapsedSeconds(step === 'sing' ? test.singStartedAt : null);
 
   if (step === 'intro') {
     return (
@@ -277,7 +278,11 @@ function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onS
       testID={`voice-${step}`}
       footer={
         singWaiting ? (
-          <Button testID="voice-sing-ready" label={t('singReady')} onPress={() => void test.ready()} />
+          <>
+            <Button testID="voice-sing-ready" label={t('singReady')} onPress={() => void test.ready()} />
+            {/* The sing is optional: Finish skips it with the low and high notes. */}
+            <Button testID="voice-sing-skip" variant="secondary" label={t('singFinish')} onPress={test.skipSing} />
+          </>
         ) : step === 'sing' ? (
           <Button testID="voice-sing-skip" variant="secondary" label={t('singFinish')} onPress={test.skipSing} />
         ) : (

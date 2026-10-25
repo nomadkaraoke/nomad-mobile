@@ -69,7 +69,7 @@ onFlowComplete:
 - takeScreenshot: ${VOICE_SHOTS}/voice-1-high
 - tapOn:
     id: "voice-high-done"
-# The sing step waits for "I'm ready"; the fake singer's sing slice starts on the tap.
+# The sing step waits for "I'm ready" (Finish already shows, to skip it); the fake singer's sing slice starts on the tap.
 - extendedWaitUntil:
     visible:
       id: "voice-sing-ready"

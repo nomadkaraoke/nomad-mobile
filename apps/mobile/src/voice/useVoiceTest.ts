@@ -40,9 +40,19 @@ type Setters = {
   setHeld: (h: HeldNote[]) => void;
   setStepHeldCount: (n: number) => void;
   setResult: (r: VoiceResult | null) => void;
+  setSingStartedAt: (t: number | null) => void;
 };
 
-function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld, setStepHeldCount, setResult }: Setters) {
+function createMachine({
+  initialSource,
+  setStep,
+  setPhase,
+  setLivePitch,
+  setHeld,
+  setStepHeldCount,
+  setResult,
+  setSingStartedAt,
+}: Setters) {
   const r = {
     source: initialSource,
     gen: 0,
@@ -83,6 +93,7 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
   const stopRun = () => {
     r.gen++;
     r.active = false;
+    setSingStartedAt(null);
     for (const t of r.timers) clearTimeout(t);
     r.timers = [];
     r.source.stop();
@@ -122,8 +133,12 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     setStepBoth('no-notes');
   };
 
+  /**
+   * Ends the sing step, also while it still waits for "I'm ready" (the sing is optional): then there are no sing
+   * frames and no sing notes, and summarizeRange takes comfort a quarter of the span in from the low and high notes.
+   */
   const finishSing = () => {
-    if (r.step !== 'sing' || !r.active) return;
+    if (r.step !== 'sing') return;
     stopRun();
     const all = [...r.committed, ...r.tracker.notes()];
     const range = summarizeRange(all, r.singFrames);
@@ -200,7 +215,11 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
         }
       }, QUIET_FALLBACK_MS),
     );
-    if (s === 'sing') r.timers.push(setTimeout(() => gen === r.gen && finishSing(), SING_MS));
+    if (s === 'sing') {
+      // The screen's countdown runs from this same moment, so it never shows less time than the singer has.
+      setSingStartedAt(Date.now());
+      r.timers.push(setTimeout(() => gen === r.gen && finishSing(), SING_MS));
+    }
     else r.timers.push(setTimeout(() => gen === r.gen && r.stepHeld.length === 0 && fail(s), NOTE_TIMEOUT_MS));
   };
 
@@ -295,7 +314,7 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
  *   intro --begin()--> (permission) --denied--> permission-denied --retry()--> (permission again)
  *                                   --blocked-> permission-blocked --retry()--> (permission again)
  *                                   --granted-> low --done() [>=1 held]--> high --done() [>=1 held]--> sing (ready)
- *   sing (ready: prompt only, mic off, no timer) --ready()--> sing (quiet, listening)
+ *   sing (ready: prompt only, mic off, no timer) --ready()--> sing (quiet, listening) | --skipSing()--> result from low/high
  *   low/high/sing --source.start() throws--> mic-busy --retry()--> the same step
  *   low/high --20 s with no held note--> no-notes --retry()--> the same step
  *   sing --30 s after ready() | skipSing()--> result (range from >=2 held notes spanning >=3 semitones) | no-notes --retry()--> low
@@ -315,9 +334,21 @@ export function useVoiceTest(source: PitchSource) {
   const [held, setHeld] = useState<HeldNote[]>([]);
   const [stepHeldCount, setStepHeldCount] = useState(0);
   const [result, setResult] = useState<VoiceResult | null>(null);
+  const [singStartedAt, setSingStartedAt] = useState<number | null>(null);
 
   // Built once, outside the render analysis: the machine is imperative (timers, refs, Date.now).
-  const [api] = useState(() => createMachine({ initialSource: source, setStep, setPhase, setLivePitch, setHeld, setStepHeldCount, setResult }));
+  const [api] = useState(() =>
+    createMachine({
+      initialSource: source,
+      setStep,
+      setPhase,
+      setLivePitch,
+      setHeld,
+      setStepHeldCount,
+      setResult,
+      setSingStartedAt,
+    }),
+  );
   useEffect(() => {
     api.setSource(source);
   }, [api, source]);
@@ -333,6 +364,8 @@ export function useVoiceTest(source: PitchSource) {
     livePitch,
     held,
     result,
+    /** Date.now() when sing capture started (and its SING_MS timer with it); null otherwise. */
+    singStartedAt,
     /** True once the current low/high step has at least one held note, i.e. done() will advance. */
     canDone: (step === 'low' || step === 'high') && stepHeldCount > 0,
     begin: api.begin,

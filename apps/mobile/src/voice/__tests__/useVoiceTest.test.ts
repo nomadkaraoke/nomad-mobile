@@ -114,7 +114,7 @@ it('walks intro→low→high→sing→result and classifies baritone', async () 
   expect(src.stops).toBeGreaterThanOrEqual(3);
 });
 
-it('sing waits for ready(): no mic, no countdown, skipSing ignored, until the tap', async () => {
+it('sing waits for ready(): no mic, no countdown, until the tap', async () => {
   const src = makeSource();
   const { result } = await begin(src);
   await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
@@ -128,9 +128,9 @@ it('sing waits for ready(): no mic, no countdown, skipSing ignored, until the ta
   // Thinking of a song takes as long as it takes: nothing ends the step, and stray buffers are ignored.
   await feed(src, concat(SILENT_SECOND(), tone(55, 2)));
   await advance(120_000);
-  act(() => result.current.skipSing());
   expect(result.current.step).toBe('sing');
   expect(result.current.phase).toBe('ready');
+  expect(result.current.singStartedAt).toBeNull();
   expect(result.current.livePitch).toBeNull();
   expect(result.current.held).toHaveLength(2);
   expect(src.stops).toBe(stops);
@@ -143,6 +143,69 @@ it('sing waits for ready(): no mic, no countdown, skipSing ignored, until the ta
   // A second ready() while listening does not restart the step.
   await ready(result);
   expect(src.sections).toEqual(['low', 'high', 'sing']);
+});
+
+it('skipSing() while waiting for ready() finishes from the low and high notes alone, mic never started', async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
+  await act(async () => result.current.done());
+  await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
+  await act(async () => result.current.done());
+  expect(result.current.phase).toBe('ready');
+  act(() => result.current.skipSing());
+  expect(result.current.step).toBe('result');
+  expect(src.sections).toEqual(['low', 'high']);
+  // No sing frames: summarizeRange takes comfort a quarter of the span in from each end.
+  expect(result.current.result?.range).toMatchObject({ low: 45, high: 69, comfortLow: 51, comfortHigh: 63, freeVoicedS: 0, heldCount: 2 });
+  expect(result.current.held.map((h) => h.note)).toEqual([45, 69]);
+});
+
+it('skipSing() while waiting with too narrow a low/high → no-notes, retry restarts at low', async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  await feed(src, concat(SILENT_SECOND(), tone(57, 1.2)));
+  await act(async () => result.current.done());
+  await feed(src, concat(SILENT_SECOND(), tone(58, 1.2)));
+  await act(async () => result.current.done());
+  act(() => result.current.skipSing());
+  expect(result.current.step).toBe('no-notes');
+  await act(async () => result.current.retry());
+  expect(result.current.step).toBe('low');
+});
+
+it('singStartedAt is set when capture starts (with the SING_MS timer), not when ready() is tapped', async () => {
+  const src = makeSource();
+  const realStart = src.start;
+  let release: () => void = () => {};
+  const { result } = await begin(src);
+  await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
+  await act(async () => result.current.done());
+  await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
+  await act(async () => result.current.done());
+  src.start = (onBuffer, section) =>
+    new Promise<void>((resolve) => {
+      release = () => void realStart(onBuffer, section).then(resolve);
+    });
+  let pending: Promise<void> = Promise.resolve();
+  act(() => {
+    pending = result.current.ready();
+  });
+  expect(result.current.phase).toBe('quiet');
+  expect(result.current.singStartedAt).toBeNull();
+  // The mic takes 3 s to start: none of it comes off the singer's 30 s.
+  await advance(3000);
+  const t0 = Date.now();
+  await act(async () => {
+    release();
+    await pending;
+  });
+  expect(result.current.singStartedAt).toBe(t0);
+  await advance(SING_MS - 100);
+  expect(result.current.step).toBe('sing');
+  await advance(200);
+  expect(result.current.step).toBe('result');
+  expect(result.current.singStartedAt).toBeNull();
 });
 
 it('ready() does nothing outside the waiting sing step', async () => {
