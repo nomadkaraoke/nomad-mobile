@@ -1,7 +1,7 @@
 import { StrictMode, createElement, type ReactNode } from 'react';
 import { act, renderHook } from '@testing-library/react-native';
 import type { MicPermission, PcmBuffer, PitchSource, VoiceSection } from '../pitchSource';
-import { MAX_STEP_LISTEN_S, useVoiceTest } from '../useVoiceTest';
+import { useVoiceTest } from '../useVoiceTest';
 
 const RATE = 16000;
 const hz = (midi: number) => 440 * 2 ** ((midi - 69) / 12);
@@ -462,15 +462,42 @@ describe('at 48 kHz (what a phone delivers if it ignores the 16 kHz request)', (
     expect(median).toBeLessThan(20);
   });
 
-  it('stops collecting frames after MAX_STEP_LISTEN_S of listening (safety net)', async () => {
+  it('a 60 s step keeps every held note (no listening cap) and stays fast', async () => {
     const src = makeSource('granted', R);
     const { result } = await begin(src);
-    await feed(src, concat(t48(null, 1), t48(45, MAX_STEP_LISTEN_S + 4)));
-    // done() commits the step's final notes; high then shows them.
+    // A held D3 first, then a long unbroken hold of A2 from 2.2 s to 60 s: the old 20 s cap ended it at ~21 s.
+    await feed(src, concat(t48(null, 1), t48(50, 1.2), t48(45, 58)));
+    const tail = src.timings.slice(-50).sort((a, b) => a - b);
+    expect(tail[tail.length >> 1]!).toBeLessThan(20);
     await act(async () => result.current.done());
     expect(result.current.step).toBe('high');
-    expect(result.current.held).toHaveLength(1);
-    expect(result.current.held[0]!.end).toBeLessThan(1 + MAX_STEP_LISTEN_S);
-    expect(result.current.held[0]!.end).toBeGreaterThan(MAX_STEP_LISTEN_S - 0.5);
+    const a2 = result.current.held.filter((h) => h.note === 45);
+    expect(a2.length).toBeGreaterThanOrEqual(1);
+    expect(Math.max(...a2.map((h) => h.end))).toBeGreaterThan(59);
   });
+});
+
+it('a held note that starts after 25 s on the low step still counts and lowers the range', async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  // Held C3 early (Done enables), then 24 s of a fast slide that holds nothing, then G2 held from ~26.2 s.
+  const slide = new Float32Array(Math.round(24 * RATE));
+  let phase = 0;
+  for (let i = 0; i < slide.length; i++) {
+    const t = i / RATE;
+    const m = 50 + 6 * Math.abs(((t * 1.5) % 2) - 1) * 2 - 6; // 44..56 and back, 18 semitones/s
+    phase += (2 * Math.PI * hz(m)) / RATE;
+    slide[i] = 0.3 * Math.sin(phase);
+  }
+  await feed(src, concat(SILENT_SECOND(), tone(48, 1.2), slide, tone(43, 1.5)));
+  expect(result.current.canDone).toBe(true);
+  expect(result.current.held.map((h) => h.note)).toContain(43);
+  expect(result.current.held.find((h) => h.note === 43)!.start).toBeGreaterThan(25);
+  await act(async () => result.current.done());
+  await feed(src, concat(SILENT_SECOND(), tone(64, 1.2)));
+  await act(async () => result.current.done());
+  act(() => result.current.skipSing());
+  expect(result.current.step).toBe('result');
+  expect(result.current.result?.range.low).toBe(43);
+  expect(result.current.result?.range.high).toBe(64);
 });

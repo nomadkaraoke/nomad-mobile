@@ -1,6 +1,6 @@
 import {
   classifyVoice,
-  findHeldNotes,
+  createHeldNoteTracker,
   gateFrames,
   noiseFloor,
   summarizeRange,
@@ -28,13 +28,6 @@ const QUIET_FALLBACK_MS = 2000;
 const NOTE_TIMEOUT_MS = 20_000;
 const SING_MS = 15_000;
 const PITCH_INTERVAL_MS = 1000 / 15;
-/**
- * Safety net: a step keeps at most this many seconds of listening audio (after the quiet second) for held-note
- * detection; later frames still drive the live pitch but are not collected. A low/high step with a held note has
- * no timeout, so without a cap a singer who never taps Done would grow the frame list (and the per-buffer
- * findHeldNotes rerun) without bound. 20 s matches the no-note timeout and is far longer than any held note needs.
- */
-export const MAX_STEP_LISTEN_S = 20;
 
 type Setters = {
   initialSource: PitchSource;
@@ -59,7 +52,18 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     step: 'intro' as VoiceStep,
     quiet: [] as PitchFrame[],
     floor: null as number | null,
-    gated: [] as VoicedFrame[],
+    /**
+     * The step's held notes over ALL its listening audio. A low/high step with a held note has no timeout, so a
+     * singer who never taps Done keeps it growing; the tracker finalises closed segments (and old runs of one long
+     * gap-free segment) and drops their frames, so memory and the per-buffer work stay bounded with no time cap.
+     * (An earlier 20 s cap on collected frames dropped the notes a slide reaches last: its extremes.)
+     */
+    tracker: createHeldNoteTracker(),
+    /** Gated frames since the last buffer's held-note update (a buffer with none skips the update). */
+    newFrames: 0,
+    /** The sing step's voiced frames, for the comfort percentiles in summarizeRange. Only the sing step collects
+     * them, and it is time-limited (SING_MS), so this stays bounded. */
+    singFrames: [] as VoicedFrame[],
     stepHeld: [] as HeldNote[],
     committed: [] as HeldNote[],
     timers: [] as ReturnType<typeof setTimeout>[],
@@ -95,7 +99,11 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     }
     r.floor ??= noiseFloor(r.quiet);
     const [v] = gateFrames([f], r.floor);
-    if (v && f.t < 1.0 + MAX_STEP_LISTEN_S) r.gated.push(v);
+    if (v) {
+      r.tracker.push(v);
+      r.newFrames++;
+      if (r.step === 'sing') r.singFrames.push(v);
+    }
     const now = Date.now();
     if (now - r.lastPitchAt >= PITCH_INTERVAL_MS) {
       r.lastPitchAt = now;
@@ -114,8 +122,8 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
   const finishSing = () => {
     if (r.step !== 'sing') return;
     stopRun();
-    const all = [...r.committed, ...findHeldNotes(r.gated)];
-    const range = summarizeRange(all, r.gated);
+    const all = [...r.committed, ...r.tracker.notes()];
+    const range = summarizeRange(all, r.singFrames);
     setLivePitch(null);
     if (!range) {
       r.committed = [];
@@ -133,7 +141,9 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     const gen = r.gen;
     r.quiet = [];
     r.floor = null;
-    r.gated = [];
+    r.tracker.reset();
+    r.newFrames = 0;
+    r.singFrames = [];
     r.stepHeld = [];
     r.lastPitchAt = 0;
     r.listening = false;
@@ -148,10 +158,12 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     const onBuffer: Parameters<PitchSource['start']>[0] = (b) => {
       if (gen !== r.gen) return;
       r.rate = b.sampleRate;
-      const before = r.gated.length;
+      r.newFrames = 0;
       framer.push(b);
-      if (gen !== r.gen || r.gated.length === before) return;
-      const notes = findHeldNotes(r.gated);
+      if (gen !== r.gen || r.newFrames === 0) return;
+      const notes = r.tracker.notes();
+      // Notes are only ever appended or grow at the end (finalised ones never change), so a change in count is the
+      // only change the UI needs: Done enables on the first, and every held note's key stays pink.
       if (notes.length !== r.stepHeld.length) {
         setStepHeldCount(notes.length);
         setHeld([...r.committed, ...notes]);
@@ -235,7 +247,8 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
       stopRun();
       r.committed = [];
       r.stepHeld = [];
-      r.gated = [];
+      r.tracker.reset();
+      r.singFrames = [];
       setResult(null);
       setHeld([]);
       setStepHeldCount(0);
