@@ -71,6 +71,15 @@ it('month precision shows the month and year; venue, survey summary and notes sh
   expect(row).toHaveTextContent(/Invented note/);
 });
 
+it('the survey summary includes what got in the way (the why chips)', async () => {
+  api.listKaraokeLog.mockResolvedValue({
+    entries: [rec('app_1', { survey: { feel: 'ok', vibes: ['party'], reasons: ['too_long', 'out_of_range'] } })],
+  });
+  renderTonight(<SongHistory libraryKey="sk_1" />);
+  const row = await screen.findByTestId('song-history-app_1');
+  expect(row).toHaveTextContent(/Feel: OK · Party · Too long · Out of my range/);
+});
+
 it('falls back to the per-song list when the mirror is empty', async () => {
   api.listKaraokeLog.mockResolvedValue({ entries: [] });
   api.listSongHistory.mockResolvedValue([rec('app_9', { night: { kind: 'nomad' }, sung_at: '2026-09-05T20:00:00Z' })]);

@@ -120,6 +120,7 @@ export function SongHistory({ libraryKey }: { libraryKey: string }) {
           s?.key ? t('key', { value: ts(`key.${s.key}`) }) : null,
           s?.crowd_pleaser ? t('crowd') : null,
           ...(s?.vibes ?? []).map((v) => ts(`vibe.${v}`)),
+          ...(s?.reasons ?? []).map((r) => ts(`reason.${r}`)),
         ].filter((x): x is string => !!x);
         const head = [date, e.times && e.times > 1 ? t('times', { count: e.times }) : null].filter(Boolean).join(' ');
         return (
