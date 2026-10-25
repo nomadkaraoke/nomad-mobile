@@ -1727,7 +1727,7 @@
       "noHeadphones": "La bande-son va parasiter le micro, les enregistrements seront donc moins précis.",
       "posture": "Comment chantes-tu ?",
       "record": "M'enregistrer en train de chanter ?",
-      "recordBody": "Nous conservons l'enregistrement de manière privée afin de mesurer ta tessiture plus précisément et d'améliorer tes futures suggestions. Seuls toi et notre équipe y avons accès, et tu peux supprimer tous tes enregistrements à tout moment dans Profil.",
+      "recordBody": "Nous importons l'enregistrement et le conservons de manière confidentielle afin de pouvoir mesurer ta tessiture plus précisément et d'améliorer tes suggestions par la suite. Seuls toi et notre équipe pouvez l'écouter, et tu peux supprimer l'un ou l'ensemble de tes enregistrements à tout moment dans Moi.",
       "sitting": "Assis",
       "standing": "Debout",
       "warm": "Parfaitement échauffé",
