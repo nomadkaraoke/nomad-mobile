@@ -1,7 +1,7 @@
 import { StrictMode, createElement, type ReactNode } from 'react';
 import { act, renderHook } from '@testing-library/react-native';
 import type { MicPermission, PcmBuffer, PitchSource, VoiceSection } from '../pitchSource';
-import { MAX_STEP_LISTEN_S, useVoiceTest } from '../useVoiceTest';
+import { SING_MS, useVoiceTest } from '../useVoiceTest';
 
 const RATE = 16000;
 const hz = (midi: number) => 440 * 2 ** ((midi - 69) / 12);
@@ -68,6 +68,8 @@ function makeSource(permission: MicPermission = 'granted', rate = RATE): FakeSou
 const SILENT_SECOND = () => tone(null, 1.0);
 const feed = (src: FakeSource, s: Float32Array) => act(() => src.feed(s));
 const advance = (ms: number) => act(() => void jest.advanceTimersByTime(ms));
+/** The sing step waits for "I'm ready" before it listens. */
+const ready = (result: { current: { ready(): Promise<void> } }) => act(async () => result.current.ready());
 
 beforeEach(() => jest.useFakeTimers());
 afterEach(() => jest.useRealTimers());
@@ -97,6 +99,7 @@ it('walks intro→low→high→sing→result and classifies baritone', async () 
 
   await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
   await act(async () => result.current.done());
+  await ready(result);
   expect(result.current.step).toBe('sing');
   expect(src.sections).toEqual(['low', 'high', 'sing']);
 
@@ -111,15 +114,120 @@ it('walks intro→low→high→sing→result and classifies baritone', async () 
   expect(src.stops).toBeGreaterThanOrEqual(3);
 });
 
-it('sing ends by itself at 15 s', async () => {
+it('sing waits for ready(): no mic, no countdown, until the tap', async () => {
   const src = makeSource();
   const { result } = await begin(src);
   await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
   await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
   await act(async () => result.current.done());
+  expect(result.current.step).toBe('sing');
+  expect(result.current.phase).toBe('ready');
+  expect(src.sections).toEqual(['low', 'high']);
+  const stops = src.stops;
+  // Thinking of a song takes as long as it takes: nothing ends the step, and stray buffers are ignored.
+  await feed(src, concat(SILENT_SECOND(), tone(55, 2)));
+  await advance(120_000);
+  expect(result.current.step).toBe('sing');
+  expect(result.current.phase).toBe('ready');
+  expect(result.current.singStartedAt).toBeNull();
+  expect(result.current.livePitch).toBeNull();
+  expect(result.current.held).toHaveLength(2);
+  expect(src.stops).toBe(stops);
+
+  await ready(result);
+  expect(src.sections).toEqual(['low', 'high', 'sing']);
+  expect(result.current.phase).toBe('quiet');
+  await feed(src, concat(SILENT_SECOND(), tone(55, 2)));
+  expect(result.current.phase).toBe('listening');
+  // A second ready() while listening does not restart the step.
+  await ready(result);
+  expect(src.sections).toEqual(['low', 'high', 'sing']);
+});
+
+it('skipSing() while waiting for ready() finishes from the low and high notes alone, mic never started', async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
+  await act(async () => result.current.done());
+  await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
+  await act(async () => result.current.done());
+  expect(result.current.phase).toBe('ready');
+  act(() => result.current.skipSing());
+  expect(result.current.step).toBe('result');
+  expect(src.sections).toEqual(['low', 'high']);
+  // No sing frames: summarizeRange takes comfort a quarter of the span in from each end.
+  expect(result.current.result?.range).toMatchObject({ low: 45, high: 69, comfortLow: 51, comfortHigh: 63, freeVoicedS: 0, heldCount: 2 });
+  expect(result.current.held.map((h) => h.note)).toEqual([45, 69]);
+});
+
+it('skipSing() while waiting with too narrow a low/high → no-notes, retry restarts at low', async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  await feed(src, concat(SILENT_SECOND(), tone(57, 1.2)));
+  await act(async () => result.current.done());
+  await feed(src, concat(SILENT_SECOND(), tone(58, 1.2)));
+  await act(async () => result.current.done());
+  act(() => result.current.skipSing());
+  expect(result.current.step).toBe('no-notes');
+  await act(async () => result.current.retry());
+  expect(result.current.step).toBe('low');
+});
+
+it('singStartedAt is set when capture starts (with the SING_MS timer), not when ready() is tapped', async () => {
+  const src = makeSource();
+  const realStart = src.start;
+  let release: () => void = () => {};
+  const { result } = await begin(src);
+  await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
+  await act(async () => result.current.done());
+  await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
+  await act(async () => result.current.done());
+  src.start = (onBuffer, section) =>
+    new Promise<void>((resolve) => {
+      release = () => void realStart(onBuffer, section).then(resolve);
+    });
+  let pending: Promise<void> = Promise.resolve();
+  act(() => {
+    pending = result.current.ready();
+  });
+  expect(result.current.phase).toBe('quiet');
+  expect(result.current.singStartedAt).toBeNull();
+  // The mic takes 3 s to start: none of it comes off the singer's 30 s.
+  await advance(3000);
+  const t0 = Date.now();
+  await act(async () => {
+    release();
+    await pending;
+  });
+  expect(result.current.singStartedAt).toBe(t0);
+  await advance(SING_MS - 100);
+  expect(result.current.step).toBe('sing');
+  await advance(200);
+  expect(result.current.step).toBe('result');
+  expect(result.current.singStartedAt).toBeNull();
+});
+
+it('ready() does nothing outside the waiting sing step', async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  await ready(result);
+  expect(result.current.step).toBe('low');
+  expect(src.sections).toEqual(['low']);
+});
+
+it(`sing ends by itself at ${SING_MS / 1000} s after ready()`, async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
+  await act(async () => result.current.done());
+  await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
+  await act(async () => result.current.done());
+  expect(SING_MS).toBe(30_000);
+  await advance(5_000); // thinking time is not charged
+  await ready(result);
   await feed(src, concat(SILENT_SECOND(), tone(55, 4)));
-  await advance(14_900);
+  await advance(SING_MS - 100);
   expect(result.current.step).toBe('sing');
   await advance(200);
   expect(result.current.step).toBe('result');
@@ -241,6 +349,7 @@ it('two held notes less than 3 semitones apart → no-notes, retry restarts at l
   await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(46, 1.2)));
   await act(async () => result.current.done());
+  await ready(result);
   act(() => result.current.skipSing());
   expect(result.current.step).toBe('no-notes');
   expect(result.current.result).toBeNull();
@@ -419,6 +528,7 @@ it('range is min/max over all held notes when high is sung lower than low', asyn
   await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(48, 1.2)));
   await act(async () => result.current.done());
+  await ready(result);
   act(() => result.current.skipSing());
   expect(result.current.step).toBe('result');
   expect(result.current.result?.range.low).toBe(48);
@@ -441,6 +551,7 @@ describe('at 48 kHz (what a phone delivers if it ignores the 16 kHz request)', (
     await act(async () => result.current.done());
     await feed(src, concat(t48(null, 1), t48(69, 1.2)));
     await act(async () => result.current.done());
+    await ready(result);
     expect(result.current.step).toBe('sing');
     await feed(src, concat(t48(null, 1), ...[52, 55, 59, 62, 57, 54].map((m) => t48(m, 0.8))));
     act(() => result.current.skipSing());
@@ -462,15 +573,60 @@ describe('at 48 kHz (what a phone delivers if it ignores the 16 kHz request)', (
     expect(median).toBeLessThan(20);
   });
 
-  it('stops collecting frames after MAX_STEP_LISTEN_S of listening (safety net)', async () => {
+  it('a full 30 s sing of one unbroken slide stays fast and still gives a result', async () => {
     const src = makeSource('granted', R);
     const { result } = await begin(src);
-    await feed(src, concat(t48(null, 1), t48(45, MAX_STEP_LISTEN_S + 4)));
-    // done() commits the step's final notes; high then shows them.
+    await feed(src, concat(t48(null, 1), t48(45, 1.2)));
+    await act(async () => result.current.done());
+    await feed(src, concat(t48(null, 1), t48(69, 1.2)));
+    await act(async () => result.current.done());
+    await ready(result);
+    // 30 s of held notes with no gap between them: one gap-free segment for the whole step.
+    await feed(src, concat(t48(null, 1), ...Array.from({ length: 30 }, (_, i) => t48(52 + (i % 8), 1))));
+    const tail = src.timings.slice(-50).sort((a, b) => a - b);
+    expect(tail[tail.length >> 1]!).toBeLessThan(20);
+    act(() => result.current.skipSing());
+    expect(result.current.step).toBe('result');
+    expect(result.current.result?.range.freeVoicedS).toBeGreaterThan(25);
+  });
+
+  it('a 60 s step keeps every held note (no listening cap) and stays fast', async () => {
+    const src = makeSource('granted', R);
+    const { result } = await begin(src);
+    // A held D3 first, then a long unbroken hold of A2 from 2.2 s to 60 s: the old 20 s cap ended it at ~21 s.
+    await feed(src, concat(t48(null, 1), t48(50, 1.2), t48(45, 58)));
+    const tail = src.timings.slice(-50).sort((a, b) => a - b);
+    expect(tail[tail.length >> 1]!).toBeLessThan(20);
     await act(async () => result.current.done());
     expect(result.current.step).toBe('high');
-    expect(result.current.held).toHaveLength(1);
-    expect(result.current.held[0]!.end).toBeLessThan(1 + MAX_STEP_LISTEN_S);
-    expect(result.current.held[0]!.end).toBeGreaterThan(MAX_STEP_LISTEN_S - 0.5);
+    const a2 = result.current.held.filter((h) => h.note === 45);
+    expect(a2.length).toBeGreaterThanOrEqual(1);
+    expect(Math.max(...a2.map((h) => h.end))).toBeGreaterThan(59);
   });
+});
+
+it('a held note that starts after 25 s on the low step still counts and lowers the range', async () => {
+  const src = makeSource();
+  const { result } = await begin(src);
+  // Held C3 early (Done enables), then 24 s of a fast slide that holds nothing, then G2 held from ~26.2 s.
+  const slide = new Float32Array(Math.round(24 * RATE));
+  let phase = 0;
+  for (let i = 0; i < slide.length; i++) {
+    const t = i / RATE;
+    const m = 50 + 6 * Math.abs(((t * 1.5) % 2) - 1) * 2 - 6; // 44..56 and back, 18 semitones/s
+    phase += (2 * Math.PI * hz(m)) / RATE;
+    slide[i] = 0.3 * Math.sin(phase);
+  }
+  await feed(src, concat(SILENT_SECOND(), tone(48, 1.2), slide, tone(43, 1.5)));
+  expect(result.current.canDone).toBe(true);
+  expect(result.current.held.map((h) => h.note)).toContain(43);
+  expect(result.current.held.find((h) => h.note === 43)!.start).toBeGreaterThan(25);
+  await act(async () => result.current.done());
+  await feed(src, concat(SILENT_SECOND(), tone(64, 1.2)));
+  await act(async () => result.current.done());
+  await ready(result);
+  act(() => result.current.skipSing());
+  expect(result.current.step).toBe('result');
+  expect(result.current.result?.range.low).toBe(43);
+  expect(result.current.result?.range.high).toBe(64);
 });

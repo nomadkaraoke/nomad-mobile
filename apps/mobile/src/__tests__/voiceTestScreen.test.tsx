@@ -102,6 +102,7 @@ async function runToResult() {
   await press('voice-low-done');
   expect(await screen.findByTestId('voice-high-done')).toBeEnabled();
   await press('voice-high-done');
+  await press('voice-sing-ready');
   await screen.findByTestId('voice-sing-skip');
   await press('voice-sing-skip');
   await screen.findByTestId('voice-result-type');
@@ -136,6 +137,7 @@ describe('voice test', () => {
     expect(screen.getByText('Now slide up to the highest note you can hold comfortably')).toBeTruthy();
     await press('voice-high-done');
     expect(screen.getByText('Sing something you know')).toBeTruthy();
+    await press('voice-sing-ready');
     await press('voice-sing-skip');
 
     expect(text('voice-result-type')).toBe('Likely Baritone');
@@ -332,22 +334,69 @@ describe('voice test', () => {
     expect(mockSource.current!.sections).toEqual(['low']);
   });
 
-  it('sing shows a 15 s countdown and captions the keys already lit', async () => {
+  it('sing waits for "I\'m ready", then shows a 30 s countdown and captions the keys already lit', async () => {
     open();
     await screen.findByTestId('voice-start');
     jest.useFakeTimers();
     await press('voice-start');
     await press('voice-low-done');
     await press('voice-high-done');
+    // Waiting: the prompt, the ready button and Finish (the sing is optional), no mic, no countdown.
+    expect(screen.getByText('Sing something you know')).toBeTruthy();
+    expect(screen.getByText("Take a moment to think of a song you know well, then tap I'm ready.")).toBeTruthy();
+    expect(screen.queryByTestId('voice-sing-progress')).toBeNull();
+    expect(screen.getByTestId('voice-sing-skip')).toBeTruthy();
+    expect(mockSource.current!.sections).toEqual(['low', 'high']);
+    act(() => void jest.advanceTimersByTime(60_000));
+    expect(screen.getByTestId('voice-sing-ready')).toBeTruthy();
+
+    await press('voice-sing-ready');
+    expect(mockSource.current!.sections).toEqual(['low', 'high', 'sing']);
     expect(screen.getByText('Your low and high so far')).toBeTruthy();
     const progress = () => screen.getByTestId('voice-sing-progress');
-    expect(progress().props.accessibilityValue).toMatchObject({ min: 0, max: 15, now: 0 });
-    expect(screen.getByText('15 seconds left')).toBeTruthy();
+    expect(progress().props.accessibilityValue).toMatchObject({ min: 0, max: 30, now: 0 });
+    expect(screen.getByText('30 seconds left')).toBeTruthy();
     act(() => void jest.advanceTimersByTime(5000));
     expect(progress().props.accessibilityValue).toMatchObject({ now: 5 });
-    expect(screen.getByText('10 seconds left')).toBeTruthy();
-    act(() => void jest.advanceTimersByTime(9000));
+    expect(screen.getByText('25 seconds left')).toBeTruthy();
+    act(() => void jest.advanceTimersByTime(24_000));
     expect(screen.getByText('1 second left')).toBeTruthy();
+  });
+
+  it('Finish while waiting for "I\'m ready" skips the sing: a result from low and high, mic never started', async () => {
+    open();
+    await screen.findByTestId('voice-start');
+    await press('voice-start');
+    await press('voice-low-done');
+    await press('voice-high-done');
+    await press('voice-sing-skip');
+    expect(text('voice-result-type')).toBe('Likely Baritone');
+    expect(mockSource.current!.sections).toEqual(['low', 'high']);
+  });
+
+  it('the countdown starts when capture starts, not when "I\'m ready" is tapped', async () => {
+    open();
+    await screen.findByTestId('voice-start');
+    jest.useFakeTimers();
+    await press('voice-start');
+    await press('voice-low-done');
+    await press('voice-high-done');
+    const src = mockSource.current!;
+    const realStart = src.start;
+    let release: () => void = () => {};
+    src.start = (onBuffer, section) =>
+      new Promise<void>((resolve) => {
+        release = () => void realStart(onBuffer, section).then(resolve);
+      });
+    await press('voice-sing-ready');
+    const progress = () => screen.getByTestId('voice-sing-progress');
+    act(() => void jest.advanceTimersByTime(4000));
+    // Mic still starting: the singer has lost nothing yet.
+    expect(progress().props.accessibilityValue).toMatchObject({ now: 0 });
+    expect(screen.getByText('30 seconds left')).toBeTruthy();
+    await act(async () => release());
+    act(() => void jest.advanceTimersByTime(5000));
+    expect(screen.getByText('25 seconds left')).toBeTruthy();
   });
 
   it('Try again from the result starts a new measurement', async () => {

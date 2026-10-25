@@ -11,7 +11,7 @@ import { useAuth } from '../auth/store';
 import { SelfReportStep } from './SelfReportStep';
 import { StepLayout } from './StepLayout';
 import { usePitchSource } from './usePitchSource';
-import { useVoiceTest, type VoiceResult as MicResult } from './useVoiceTest';
+import { SING_MS, useVoiceTest, type VoiceResult as MicResult } from './useVoiceTest';
 import { VoiceResult } from './VoiceResult';
 import { useSaveVoiceProfile } from './useVoiceProfile';
 import { profileFromResult, profileFromSelfReport, useVoiceStore, type LocalVoiceProfile } from './voiceStore';
@@ -20,8 +20,8 @@ import { profileFromResult, profileFromSelfReport, useVoiceStore, type LocalVoic
 const STRIP_LOW = 36;
 const STRIP_HIGH = 84;
 const CAPTURE_STEPS = 3;
-/** The sing step ends by itself after this long (useVoiceTest's SING_MS). */
-const SING_S = 15;
+/** The sing step ends by itself this long after "I'm ready". */
+const SING_S = SING_MS / 1000;
 const LISTENING_STEPS: ReadonlySet<string> = new Set(['low', 'high', 'sing']);
 
 /**
@@ -132,19 +132,20 @@ export function VoiceTestScreen() {
   return <TestStep test={test} onSkip={toSelfReport} />;
 }
 
-/** Whole seconds since `active` became true (0 while inactive). */
-function useElapsedSeconds(active: boolean): number {
+/** Whole seconds since `since` (a Date.now() value; 0 while null). */
+function useElapsedSeconds(since: number | null): number {
   const [elapsed, setElapsed] = useState(0);
   useEffect(() => {
-    if (!active) return;
-    const t0 = Date.now();
-    const id = setInterval(() => setElapsed(Math.floor((Date.now() - t0) / 1000)), 250);
+    if (since === null) return;
+    const tick = () => setElapsed(Math.max(0, Math.floor((Date.now() - since) / 1000)));
+    tick();
+    const id = setInterval(tick, 250);
     return () => {
       clearInterval(id);
       setElapsed(0);
     };
-  }, [active]);
-  return active ? elapsed : 0;
+  }, [since]);
+  return since === null ? 0 : elapsed;
 }
 
 /** The sing step's countdown: a bar plus "N seconds left". */
@@ -171,7 +172,9 @@ function SingProgress({ elapsed }: { elapsed: number }) {
 function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onSkip: () => void }) {
   const t = useTranslations('voice');
   const { step } = test;
-  const singElapsed = useElapsedSeconds(step === 'sing');
+  const singWaiting = step === 'sing' && test.phase === 'ready';
+  // The countdown runs from when capture started (the hook's SING_MS timer starts then too), not from the tap.
+  const singElapsed = useElapsedSeconds(step === 'sing' ? test.singStartedAt : null);
 
   if (step === 'intro') {
     return (
@@ -274,7 +277,13 @@ function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onS
     <StepLayout
       testID={`voice-${step}`}
       footer={
-        step === 'sing' ? (
+        singWaiting ? (
+          <>
+            <Button testID="voice-sing-ready" label={t('singReady')} onPress={() => void test.ready()} />
+            {/* The sing is optional: Finish skips it with the low and high notes. */}
+            <Button testID="voice-sing-skip" variant="secondary" label={t('singFinish')} onPress={test.skipSing} />
+          </>
+        ) : step === 'sing' ? (
           <Button testID="voice-sing-skip" variant="secondary" label={t('singFinish')} onPress={test.skipSing} />
         ) : (
           <Button testID={`voice-${step}-done`} label={t('done')} disabled={!test.canDone} onPress={test.done} />
@@ -287,8 +296,8 @@ function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onS
       <Text className="text-2xl font-bold">{prompt}</Text>
       {step === 'sing' ? (
         <>
-          <Text variant="muted">{t('singHint')}</Text>
-          <SingProgress elapsed={singElapsed} />
+          <Text variant="muted">{singWaiting ? t('singReadyHint') : t('singHint')}</Text>
+          {singWaiting ? null : <SingProgress elapsed={singElapsed} />}
         </>
       ) : null}
       <View className="items-center py-4">
@@ -306,9 +315,11 @@ function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onS
         live={listening ? test.livePitch : null}
         accessibilityLabel={t('keyboardLabel')}
       />
-      <StartText testID="voice-status" className={`text-base ${listening ? 'text-text' : 'text-gold'}`}>
-        {status}
-      </StartText>
+      {singWaiting ? null : (
+        <StartText testID="voice-status" className={`text-base ${listening ? 'text-text' : 'text-gold'}`}>
+          {status}
+        </StartText>
+      )}
     </StepLayout>
   );
 }
