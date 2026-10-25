@@ -94,4 +94,10 @@ describe('artistsAll', () => {
     fireEvent.press(await screen.findByTestId('artists-remove-0'));
     await waitFor(() => expect(decide.removeMyArtist).toHaveBeenCalledWith('Alpha Band'));
   });
+
+  it('shows the empty text when there are no artists', async () => {
+    rows = [];
+    renderRouter(appRoutes(), { initialUrl: '/me/artists' });
+    expect(await screen.findByTestId('artists-empty')).toBeTruthy();
+  });
 });

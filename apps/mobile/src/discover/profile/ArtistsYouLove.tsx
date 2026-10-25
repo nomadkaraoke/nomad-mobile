@@ -4,7 +4,7 @@ import { router, type Href } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { sortByAffinity } from './artistGroups';
+import { foldName, sortByAffinity } from './artistGroups';
 
 export const ARTISTS_PREVIEW = 12;
 
@@ -15,9 +15,9 @@ export function ArtistsYouLove({ artists, onRemove }: { artists: readonly Artist
   const t = useTranslations('account');
   const [query, setQuery] = useState('');
   const sorted = useMemo(() => sortByAffinity(artists), [artists]);
-  const q = query.trim().toLowerCase();
+  const q = foldName(query.trim());
   const shown = useMemo(
-    () => (q ? sorted.filter((a) => a.artist_name.toLowerCase().includes(q)) : sorted).slice(0, ARTISTS_PREVIEW),
+    () => (q ? sorted.filter((a) => foldName(a.artist_name).includes(q)) : sorted).slice(0, ARTISTS_PREVIEW),
     [sorted, q],
   );
   return (

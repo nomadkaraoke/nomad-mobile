@@ -1,5 +1,8 @@
 export type ArtistRow = { kind: 'header'; letter: string } | { kind: 'artist'; name: string; index: number };
 
+/** Lowercase with accents stripped, for matching and grouping ("Étoile" -> "etoile"). */
+export const foldName = (name: string) => name.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
 /** First letter A-Z after stripping accents; anything else (digits, non-Latin scripts) is '#'. */
 export function artistLetter(name: string): string {
   const first = name.trim().normalize('NFKD').replace(/[̀-ͯ]/g, '').charAt(0).toUpperCase();

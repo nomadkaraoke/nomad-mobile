@@ -1,7 +1,7 @@
 import { isolate, useTranslations } from '@nomad/i18n';
 import { List, Text, type ListHandle } from '@nomad/ui';
 import { useMemo, useRef } from 'react';
-import { Pressable, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { useAuth } from '../../auth/store';
 import { groupArtists, type ArtistRow } from '../../discover/profile/artistGroups';
@@ -25,6 +25,23 @@ export default function ArtistsAllScreen() {
     return (
       <View testID="artists-screen" className="flex-1 bg-bg p-4">
         <Text variant="muted">{t('musicProfileSignedOut')}</Text>
+      </View>
+    );
+  }
+
+  if (p.artists.isPending) {
+    return (
+      <View testID="artists-screen" className="flex-1 bg-bg p-4">
+        <ActivityIndicator testID="artists-loading" />
+      </View>
+    );
+  }
+  if (rows.length === 0) {
+    return (
+      <View testID="artists-screen" className="flex-1 bg-bg p-4">
+        <Text testID="artists-empty" variant="muted">
+          {t('musicProfileArtistsEmpty')}
+        </Text>
       </View>
     );
   }
