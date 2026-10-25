@@ -52,21 +52,44 @@ export type VoiceProfileInBody = {
   measured_at: string;
 };
 
-/** Saved comfort reaches at least this close to the measured range's edges (keys). */
-export const COMFORT_EDGE_KEYS = 2;
+/**
+ * The narrowest comfortable band a mic result is saved with, in keys counted inclusively (so the semitones between
+ * its edges are one fewer). A 30 s free sing measures a P10–P90 of only about 5–7 keys, and a band that narrow made
+ * too few songs fit (a self-report gets 14). Widening around the measured centre keeps fit badges meaningful; the old
+ * rule stretched the edges to within 2 keys of the range, which made comfort ≈ range so nearly every song "fit".
+ */
+export const MIN_COMFORT_KEYS = 11;
+
+/** `comfortLow`..`comfortHigh` widened symmetrically to MIN_COMFORT_KEYS inside [low, high]; wider bands are untouched. */
+function widenComfort(range: RangeSummary): { comfortLow: number; comfortHigh: number } {
+  const { low, high, comfortLow, comfortHigh } = range;
+  const want = Math.min(MIN_COMFORT_KEYS - 1, high - low); // semitones between the edges
+  const extra = want - (comfortHigh - comfortLow);
+  if (extra <= 0) return { comfortLow, comfortHigh };
+  let lo = comfortLow - Math.floor(extra / 2);
+  let hi = comfortHigh + Math.ceil(extra / 2);
+  // At an edge of the range, move the overhang to the other side so the width is kept.
+  if (lo < low) {
+    hi += low - lo;
+    lo = low;
+  }
+  if (hi > high) {
+    lo -= hi - high;
+    hi = high;
+  }
+  return { comfortLow: Math.max(low, lo), comfortHigh: Math.min(high, hi) };
+}
 
 /**
- * A mic result as the profile to save. The short free sing gave a comfortable middle of only 5–7 keys, so almost no
- * song fit it (a self-report gets 14): the saved comfort reaches to at least 2 keys inside the measured range, never
- * past it. The voice type still comes from the free-sing centre (`c`, classified upstream).
+ * A mic result as the profile to save. The free-sing comfort is kept, widened symmetrically around its centre to at
+ * least MIN_COMFORT_KEYS (clamped to the range). The voice type still comes from the free-sing centre (`c`,
+ * classified upstream). The result screen shows this same profile, so what is shown is what is saved.
  */
 export function profileFromResult(range: RangeSummary, c: Classification, measuredAt: string): LocalVoiceProfile {
-  const clamp = (m: number) => Math.min(range.high, Math.max(range.low, m));
   return {
     lowMidi: range.low,
     highMidi: range.high,
-    comfortLow: clamp(Math.min(range.comfortLow, range.low + COMFORT_EDGE_KEYS)),
-    comfortHigh: clamp(Math.max(range.comfortHigh, range.high - COMFORT_EDGE_KEYS)),
+    ...widenComfort(range),
     voiceType: c.type,
     voiceTypeBetween: c.between,
     register: null,
