@@ -1912,7 +1912,6 @@
       "gotosTitle": "Iyong mga paborito",
       "greatShare": "{percent}% ang naging maganda",
       "keysLabel": "Ang vocal range mo sa keyboard",
-      "known": "{count, plural, one {# kanta ang alam} other {# kanta ang alam}}",
       "manage": "Pamahalaan",
       "manageHint": "I-set up ang range ng iyong boses, ikonekta ang musika, at i-edit ang nalalaman namin tungkol sa iyo",
       "mostSung": "Pinakamadalas kantahin: {song} ({count}×)",

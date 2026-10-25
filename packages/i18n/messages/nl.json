@@ -1912,7 +1912,6 @@
       "gotosTitle": "Je favorieten",
       "greatShare": "{percent}% ging geweldig",
       "keysLabel": "Je stembereik op een toetsenbord",
-      "known": "{count, plural, one {# nummer bekend} other {# nummers bekend}}",
       "manage": "Beheren",
       "manageHint": "Stel je stembereik in, koppel muziek en pas aan wat we over je weten",
       "mostSung": "Meest gezongen: {song} ({count}×)",

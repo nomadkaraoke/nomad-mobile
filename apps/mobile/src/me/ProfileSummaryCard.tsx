@@ -45,7 +45,6 @@ export function ProfileSummaryCard({ items }: { items: MeSong[] }) {
   const summary = useServicesSummary();
   const connected = useMemo(() => (summary.data?.sources ?? []).filter((s) => s.connected), [summary.data]);
   const brands = useMemo(() => [...new Set(connected.map((s) => brandFor(s.source)).filter((b): b is BrandId => b !== null))], [connected]);
-  const known = connected.reduce((n, s) => n + (s.songs ?? 0), 0);
   const sung = items.filter((s) => s.times_sung > 0).length;
   const saved = items.filter((s) => s.loved).length;
 
@@ -97,11 +96,6 @@ export function ProfileSummaryCard({ items }: { items: MeSong[] }) {
         <Cta testID="me-profile-connect" title={t('connectCta')} hint={t('connectHint')} onPress={go('/discover/connect')} />
       ) : null}
       <View className="flex-row flex-wrap gap-x-4 gap-y-1">
-        {connected.length > 0 ? (
-          <Text testID="me-profile-known" variant="muted">
-            {t('known', { count: known })}
-          </Text>
-        ) : null}
         <Text testID="me-profile-sung" variant="muted">
           {t('sung', { count: sung })}
         </Text>

@@ -1912,7 +1912,6 @@
       "gotosTitle": "Luottobiisisi",
       "greatShare": "{percent} % meni loistavasti",
       "keysLabel": "Äänialasi koskettimistolla",
-      "known": "{count, plural, one {# tuttu kappale} other {# tuttua kappaletta}}",
       "manage": "Hallinnoi",
       "manageHint": "Määritä äänialasi, yhdistä musiikkipalvelusi ja muokkaa sinusta tallennettuja tietoja",
       "mostSung": "Eniten laulettu: {song} ({count}×)",

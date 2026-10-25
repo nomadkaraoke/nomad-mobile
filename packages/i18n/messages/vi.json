@@ -1912,7 +1912,6 @@
       "gotosTitle": "Bài tủ của bạn",
       "greatShare": "{percent}% lần hát tuyệt vời",
       "keysLabel": "Quãng giọng của bạn trên phím đàn",
-      "known": "{count, plural, other {# bài hát đã biết}}",
       "manage": "Quản lý",
       "manageHint": "Cài đặt quãng giọng, kết nối dịch vụ âm nhạc và chỉnh sửa thông tin của bạn",
       "mostSung": "Hát nhiều nhất: {song} ({count}×)",

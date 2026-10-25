@@ -1912,7 +1912,6 @@
       "gotosTitle": "Els teus clàssics",
       "greatShare": "El {percent}% han anat genial",
       "keysLabel": "El teu rang vocal en un teclat",
-      "known": "{count, plural, one {# cançó coneguda} other {# cançons conegudes}}",
       "manage": "Gestiona",
       "manageHint": "Configura el teu rang vocal, connecta la teva música i edita el que sabem sobre tu",
       "mostSung": "Més cantada: {song} ({count}×)",

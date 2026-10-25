@@ -1912,7 +1912,6 @@
       "gotosTitle": "Twoje pewniaki",
       "greatShare": "{percent}% poszło świetnie",
       "keysLabel": "Twój zakres głosu na klawiaturze",
-      "known": "{count, plural, one {# znana piosenka} few {# znane piosenki} many {# znanych piosenek} other {# znanych piosenek}}",
       "manage": "Zarządzaj",
       "manageHint": "Ustaw skalę głosu, połącz serwisy muzyczne i edytuj informacje o sobie",
       "mostSung": "Najczęściej śpiewane: {song} ({count}×)",

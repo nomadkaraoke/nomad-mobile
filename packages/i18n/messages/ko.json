@@ -1912,7 +1912,6 @@
       "gotosTitle": "나의 애창곡",
       "greatShare": "{percent}% 대만족",
       "keysLabel": "건반으로 보는 내 음역대",
-      "known": "{count, plural, other {아는 곡 #곡}}",
       "manage": "관리",
       "manageHint": "음역대를 설정하고, 음악 서비스를 연동하고, 내 정보를 수정해 보세요",
       "mostSung": "가장 많이 부른 곡: {song} ({count}회)",

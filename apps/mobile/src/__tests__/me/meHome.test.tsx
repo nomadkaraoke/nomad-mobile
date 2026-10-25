@@ -93,7 +93,7 @@ describe('Me home', () => {
     expect(within(card).getByTestId('me-profile-keys')).toBeTruthy();
     expect(within(card).queryByTestId('me-profile-voice-cta')).toBeNull();
     expect(await within(card).findByTestId('me-profile-source-spotify', { includeHiddenElements: true })).toBeTruthy();
-    expect(within(card).getByTestId('me-profile-known')).toHaveTextContent(/120/);
+    expect(within(card).queryByTestId('me-profile-known')).toBeNull();
     expect(within(card).getByTestId('me-profile-sung')).toHaveTextContent(/8/);
   });
 

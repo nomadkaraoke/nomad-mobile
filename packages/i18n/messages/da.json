@@ -1912,7 +1912,6 @@
       "gotosTitle": "Dine favoritter",
       "greatShare": "{percent}% gik fantastisk",
       "keysLabel": "Dit stemmeomfang på et keyboard",
-      "known": "{count, plural, one {# kendt sang} other {# kendte sange}}",
       "manage": "Administrer",
       "manageHint": "Indstil dit stemmeomfang, tilknyt musiktjenester og rediger, hvad vi ved om dig",
       "mostSung": "Mest sunget: {song} ({count}×)",

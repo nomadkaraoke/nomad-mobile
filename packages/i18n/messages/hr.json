@@ -1912,7 +1912,6 @@
       "gotosTitle": "Tvoji favoriti",
       "greatShare": "{percent}% je prošlo odlično",
       "keysLabel": "Tvoj vokalni raspon na klavijaturi",
-      "known": "{count, plural, one {# poznata pjesma} few {# poznate pjesme} other {# poznatih pjesama}}",
       "manage": "Upravljaj",
       "manageHint": "Postavi svoj vokalni raspon, poveži glazbu i uredi podatke o sebi",
       "mostSung": "Najviše pjevano: {song} ({count}×)",

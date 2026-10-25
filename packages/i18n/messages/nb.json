@@ -1912,7 +1912,6 @@
       "gotosTitle": "Dine faste favoritter",
       "greatShare": "{percent} % gikk kjempebra",
       "keysLabel": "Stemmerekkevidden din på tangenter",
-      "known": "{count, plural, one {# sang du kan} other {# sanger du kan}}",
       "manage": "Administrer",
       "manageHint": "Angi stemmerekkevidde, koble til musikk og rediger det vi vet om deg",
       "mostSung": "Mest sunget: {song} ({count}×)",

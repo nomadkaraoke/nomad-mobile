@@ -1912,7 +1912,6 @@
       "gotosTitle": "Gözdelerin",
       "greatShare": "%{percent} harika geçti",
       "keysLabel": "Klavyede ses aralığın",
-      "known": "{count, plural, one {# bilinen şarkı} other {# bilinen şarkı}}",
       "manage": "Yönet",
       "manageHint": "Ses aralığını ayarla, müzik servislerini bağla ve senin hakkında bildiklerimizi düzenle",
       "mostSung": "En çok söylenen: {song} ({count}×)",

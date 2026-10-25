@@ -4,6 +4,8 @@ import { isolate, useTranslations } from '@nomad/i18n';
 import { colors, Text } from '@nomad/ui';
 import { Pressable, View } from 'react-native';
 
+import { useVoiceStore } from '../voice/voiceStore';
+
 import { LibraryBadge } from '../find/library';
 import { artistLabel } from '../tonight/log/logStore';
 import { FitBadge } from '../voice/FitBadge';
@@ -31,6 +33,9 @@ export function CollectionRow({ song: s, index: i }: { song: MeSong; index: numb
   const tFeel = useTranslations('tonight.survey.feel');
   const tu = useTranslations('tonight.other');
   const feel = s.latest_feel ?? null;
+  // A range lookup is a request per song: only with a voice profile and range data for the song.
+  const hasVoice = useVoiceStore((v) => v.profile !== null);
+  const showFit = hasVoice && s.song_key && s.facets?.vr_tier != null;
   return (
     <Pressable
       testID={`me-song-${i}`}
@@ -57,10 +62,10 @@ export function CollectionRow({ song: s, index: i }: { song: MeSong; index: numb
           {t('timesSung', { count: s.times_sung })}
         </Text>
       </View>
-      {s.facets?.community || s.facets?.karafun || s.song_key ? (
+      {s.facets?.community || s.facets?.karafun || showFit ? (
         <View className="flex-row flex-wrap items-center gap-1.5">
           <LibraryBadge song={tagged(s.facets)} />
-          {s.song_key ? <Fit songKey={s.song_key} index={i} /> : null}
+          {showFit && s.song_key ? <Fit songKey={s.song_key} index={i} /> : null}
         </View>
       ) : null}
     </Pressable>

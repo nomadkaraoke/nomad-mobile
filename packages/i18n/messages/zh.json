@@ -1912,7 +1912,6 @@
       "gotosTitle": "拿手曲目",
       "greatShare": "{percent}% 唱得很棒",
       "keysLabel": "在键盘上查看你的音域",
-      "known": "{count, plural, one {# 首会唱} other {# 首会唱}}",
       "manage": "管理",
       "manageHint": "设置你的音域、关联音乐账号，并编辑你的个人信息",
       "mostSung": "唱得最多：{song}（{count}次）",

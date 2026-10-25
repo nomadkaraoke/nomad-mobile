@@ -1912,7 +1912,6 @@
       "gotosTitle": "Tes incontournables",
       "greatShare": "{percent} % se sont super bien passées",
       "keysLabel": "Ta tessiture vocale sur un clavier",
-      "known": "{count, plural, one {# chanson connue} other {# chansons connues}}",
       "manage": "Gérer",
       "manageHint": "Définis ta tessiture, connecte ta musique et modifie ce qu'on sait sur toi",
       "mostSung": "Plus chantée : {song} ({count}×)",

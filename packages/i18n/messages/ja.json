@@ -1912,7 +1912,6 @@
       "gotosTitle": "定番曲",
       "greatShare": "{percent}%が大好評",
       "keysLabel": "鍵盤で見るあなたの音域",
-      "known": "{count, plural, one {#曲を把握} other {#曲を把握}}",
       "manage": "管理",
       "manageHint": "音域の設定、音楽サービスの連携、登録情報の編集ができます",
       "mostSung": "一番歌った曲: {song}（{count}回）",

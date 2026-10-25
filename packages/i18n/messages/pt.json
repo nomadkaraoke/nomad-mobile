@@ -1912,7 +1912,6 @@
       "gotosTitle": "Suas favoritas",
       "greatShare": "{percent}% foram ótimas",
       "keysLabel": "Seu alcance vocal em um teclado",
-      "known": "{count, plural, one {# música conhecida} other {# músicas conhecidas}}",
       "manage": "Gerenciar",
       "manageHint": "Configure seu alcance vocal, conecte seus serviços de música e edite o que sabemos sobre você",
       "mostSung": "Mais cantada: {song} ({count}×)",

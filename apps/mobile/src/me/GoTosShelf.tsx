@@ -1,4 +1,4 @@
-import { isGoTo, type MeSong } from '@nomad/core';
+import { isGoTo, queryLibrary, type MeSong } from '@nomad/core';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, Text } from '@nomad/ui';
 import { router, type Href } from 'expo-router';
@@ -16,11 +16,7 @@ export function GoTosShelf({ items }: { items: MeSong[] }) {
   const t = useTranslations('me.home');
   const tu = useTranslations('tonight.other');
   const goTos = useMemo(
-    () =>
-      items
-        .filter(isGoTo)
-        .sort((a, b) => b.times_sung - a.times_sung || a.artist.localeCompare(b.artist) || a.title.localeCompare(b.title))
-        .slice(0, MAX),
+    () => queryLibrary(items, { sort: 'goto' }).filter(isGoTo).slice(0, MAX),
     [items],
   );
   return (

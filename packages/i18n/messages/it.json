@@ -1912,7 +1912,6 @@
       "gotosTitle": "I tuoi cavalli di battaglia",
       "greatShare": "{percent}% andati alla grande",
       "keysLabel": "La tua estensione vocale su una tastiera",
-      "known": "{count, plural, one {# brano conosciuto} other {# brani conosciuti}}",
       "manage": "Gestisci",
       "manageHint": "Imposta la tua estensione vocale, collega la tua musica e modifica il tuo profilo",
       "mostSung": "Più cantato: {song} ({count}×)",

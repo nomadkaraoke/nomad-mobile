@@ -1912,7 +1912,6 @@
       "gotosTitle": "Dina favoriter",
       "greatShare": "{percent} % gick toppen",
       "keysLabel": "Ditt röstomfång på en klaviatur",
-      "known": "{count, plural, one {# låt du kan} other {# låtar du kan}}",
       "manage": "Hantera",
       "manageHint": "Ställ in ditt röstomfång, koppla musiktjänster och ändra vad vi vet om dig",
       "mostSung": "Mest sjungen: {song} ({count}×)",

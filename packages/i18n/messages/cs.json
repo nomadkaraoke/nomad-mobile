@@ -1912,7 +1912,6 @@
       "gotosTitle": "Tvoje jistoty",
       "greatShare": "{percent} % dopadlo skvěle",
       "keysLabel": "Tvůj hlasový rozsah na klaviatuře",
-      "known": "{count, plural, one {# známá písnička} few {# známé písničky} other {# známých písniček}}",
       "manage": "Spravovat",
       "manageHint": "Nastav si hlasový rozsah, propoj hudební služby a uprav informace o sobě",
       "mostSung": "Nejzpívanější: {song} ({count}×)",

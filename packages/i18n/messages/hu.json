@@ -1912,7 +1912,6 @@
       "gotosTitle": "A tuti befutóid",
       "greatShare": "{percent}% szuperül sikerült",
       "keysLabel": "A hangterjedelmed zongorabillentyűkön",
-      "known": "{count, plural, one {# ismert dal} other {# ismert dal}}",
       "manage": "Kezelés",
       "manageHint": "Állítsd be a hangterjedelmed, csatlakoztass zenéket, és szerkeszd, amit rólad tudunk",
       "mostSung": "Legtöbbet énekelt: {song} ({count}×)",

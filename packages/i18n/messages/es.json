@@ -1912,7 +1912,6 @@
       "gotosTitle": "Tus infalibles",
       "greatShare": "{percent}% salió genial",
       "keysLabel": "Tu rango vocal en un teclado",
-      "known": "{count, plural, one {# canción conocida} other {# canciones conocidas}}",
       "manage": "Gestionar",
       "manageHint": "Configura tu rango vocal, conecta tu música y edita lo que sabemos sobre ti",
       "mostSung": "Más cantada: {song} ({count}×)",

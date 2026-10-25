@@ -1912,7 +1912,6 @@
       "gotosTitle": "Tvoje istoty",
       "greatShare": "{percent} % dopadlo skvele",
       "keysLabel": "Tvoj hlasový rozsah na klávesnici",
-      "known": "{count, plural, one {# známa pieseň} few {# známe piesne} many {# známych piesní} other {# známych piesní}}",
       "manage": "Spravovať",
       "manageHint": "Nastav si hlasový rozsah, prepoj hudbu a uprav, čo o tebe vieme",
       "mostSung": "Najčastejšie spievaná: {song} ({count}×)",

@@ -1912,7 +1912,6 @@
       "gotosTitle": "Deine Favoriten",
       "greatShare": "{percent} % liefen großartig",
       "keysLabel": "Dein Stimmumfang auf einer Klaviatur",
-      "known": "{count, plural, one {# Song bekannt} other {# Songs bekannt}}",
       "manage": "Verwalten",
       "manageHint": "Richte deinen Stimmumfang ein, verbinde Musik und bearbeite, was wir über dich wissen",
       "mostSung": "Am meisten gesungen: {song} ({count}×)",

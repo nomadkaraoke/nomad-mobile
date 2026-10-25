@@ -1912,7 +1912,6 @@
       "gotosTitle": "Lagu andalanmu",
       "greatShare": "{percent}% berjalan sukses",
       "keysLabel": "Rentang vokalmu di keyboard",
-      "known": "{count, plural, other {# lagu dikenali}}",
       "manage": "Kelola",
       "manageHint": "Atur rentang vokal, hubungkan musik, dan ubah profilmu",
       "mostSung": "Paling sering dinyanyikan: {song} ({count}×)",

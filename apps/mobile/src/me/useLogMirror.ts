@@ -1,4 +1,5 @@
 import { listKaraokeLog, type KaraokeLogEntry } from '@nomad/api-decide';
+import type { PendingLog } from '@nomad/core';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
@@ -48,4 +49,23 @@ export function useLogMirror(): { entries: KaraokeLogEntry[] } {
     },
   });
   return { entries: q.data?.entries ?? [] };
+}
+
+/** Mirror entries as the records `karaokeStats` reads (nulls from the wire become absent fields). */
+export function toPendingLog(entries: KaraokeLogEntry[]): PendingLog[] {
+  return entries.map((e) => ({
+    id: e.id,
+    artist: e.artist ?? '',
+    title: e.title ?? '',
+    song_key: e.song_key ?? null,
+    state: e.state ?? '',
+    times: e.times,
+    origin: e.origin ?? undefined,
+    deleted: e.deleted,
+    sung_at: e.sung_at ?? null,
+    survey: e.survey ? ({ ...e.survey, feel: e.survey.feel ?? undefined, key: e.survey.key ?? undefined } as PendingLog['survey']) : undefined,
+    night: e.night
+      ? { id: e.night.id ?? undefined, date: e.night.date ?? undefined, venue_name: e.night.venue_name ?? undefined, kind: e.night.kind ?? undefined }
+      : undefined,
+  }));
 }

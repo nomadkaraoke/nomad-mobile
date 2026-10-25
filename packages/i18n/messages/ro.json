@@ -1912,7 +1912,6 @@
       "gotosTitle": "Preferatele tale",
       "greatShare": "{percent}% au ieșit grozav",
       "keysLabel": "Întinderea ta vocală pe o claviatură",
-      "known": "{count, plural, one {# melodie știută} few {# melodii știute} other {# de melodii știute}}",
       "manage": "Gestionează",
       "manageHint": "Setează-ți întinderea vocală, conectează serviciile muzicale și modifică ce știm despre tine",
       "mostSung": "Cea mai cântată: {song} ({count}×)",
