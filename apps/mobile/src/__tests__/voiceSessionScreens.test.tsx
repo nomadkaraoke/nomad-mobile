@@ -258,7 +258,7 @@ describe('voiceSessionScreens: steps', () => {
     mockVs.current = vs;
     open();
     await screen.findByTestId('vs-setup');
-    expect(screen.getByText(/We keep the recording privately/)).toBeTruthy();
+    expect(screen.getByText(/We upload the recording and keep it privately/)).toBeTruthy();
     expect(screen.getByTestId('vs-setup-go')).toBeDisabled();
     await press('vs-posture-sitting');
     await press('vs-warmth-bit_warm');
@@ -449,7 +449,7 @@ describe('voiceSessionScreens: steps', () => {
       mockSource.current!.permission = 'granted';
       await act(async () => handlers.forEach((h) => h('active')));
       expect(await screen.findByTestId('vs-record-yes')).toBeTruthy();
-      expect(screen.getByText(/We keep the recording privately/)).toBeTruthy();
+      expect(screen.getByText(/We upload the recording and keep it privately/)).toBeTruthy();
       expect(screen.queryByTestId('vs-mic-off')).toBeNull();
     } finally {
       if (original) spy.mockImplementation(original);
