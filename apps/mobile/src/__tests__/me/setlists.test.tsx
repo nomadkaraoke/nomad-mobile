@@ -1,7 +1,7 @@
 // setlists: list, detail, add-to-setlist sheet, reorder (Phase 4a, B11).
 import * as decide from '@nomad/api-decide';
 import { fireEvent, screen, waitFor, within } from '@testing-library/react-native';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { useSearch } from '../../find/useSearch';
@@ -106,6 +106,29 @@ describe('setlist detail', () => {
     expect(mockListProps['setlist-items']?.showNewRowsAtTop).toBe(true);
     fireEvent.press(screen.getByTestId('setlist-edit-order'));
     expect(mockListProps['setlist-items']?.showNewRowsAtTop).toBe(true);
+  });
+
+  it('Mark as sung on a row offers the survey after Save (the sheet is not remounted when it closes)', async () => {
+    const orig = Platform.OS;
+    Platform.OS = 'android'; // the survey opens straight from Save (iOS waits for the sheet's onDismiss)
+    try {
+      renderRouter(appRoutes(), { initialUrl: `/me/setlists/${SEED}` });
+      fireEvent.press(await screen.findByTestId('setlist-item-sung-0'));
+      fireEvent.press(await screen.findByTestId('mark-when-ago'));
+      fireEvent.press(screen.getByTestId('mark-save'));
+      expect(await screen.findByTestId('survey-save')).toBeTruthy();
+    } finally {
+      Platform.OS = orig;
+    }
+  });
+
+  it('Mark as sung closed without saving starts the next song from Tonight', async () => {
+    renderRouter(appRoutes(), { initialUrl: `/me/setlists/${SEED}` });
+    fireEvent.press(await screen.findByTestId('setlist-item-sung-0'));
+    fireEvent.press(await screen.findByTestId('mark-when-ago'));
+    fireEvent.press(screen.getByTestId('mark-sung-close'));
+    fireEvent.press(screen.getByTestId('setlist-item-sung-1'));
+    expect((await screen.findByTestId('mark-when-tonight')).props.accessibilityState).toMatchObject({ selected: true });
   });
 
   it('delete confirms, then the setlist is gone', async () => {

@@ -149,6 +149,14 @@ export function MarkSungSheet({ song, onClose }: { song: MarkSungSong | null; on
     onClose();
   };
 
+  // Closed without saving: the next song starts from the defaults too (save resets them itself).
+  const close = () => {
+    setWhen('tonight');
+    setDay(0);
+    setTimes(1);
+    onClose();
+  };
+
   const onDismiss = () => {
     if (!waiting.current) return;
     waiting.current = false;
@@ -160,7 +168,7 @@ export function MarkSungSheet({ song, onClose }: { song: MarkSungSong | null; on
     <>
       <Sheet
         visible={song !== null && survey === null}
-        onClose={onClose}
+        onClose={close}
         onDismiss={onDismiss}
         title={t('title')}
         testID="mark-sung"

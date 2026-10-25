@@ -157,7 +157,8 @@ export default function SetlistScreen() {
           return res.full.length === 0;
         }}
       />
-      <MarkSungSheet key={mark?.n ?? 'none'} song={mark?.song ?? null} onClose={() => setMark(null)} />
+      {/* Not keyed by the row: closing after Save (song -> null) must not remount it, or the survey it offers next is lost. */}
+      <MarkSungSheet song={mark?.song ?? null} onClose={() => setMark(null)} />
     </View>
   );
 }
