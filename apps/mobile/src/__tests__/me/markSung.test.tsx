@@ -1,6 +1,6 @@
 // markSung: the Mark as sung sheet (Phase 4a, B10).
 import { act, fireEvent, screen } from '@testing-library/react-native';
-import { Modal } from 'react-native';
+import { Modal, Platform } from 'react-native';
 
 import { MarkSungSheet } from '../../me/MarkSungSheet';
 import { useNightStore } from '../../tonight/nightStore';
@@ -15,6 +15,7 @@ const queued = () => useOutbox.getState().items;
 
 beforeEach(() => {
   resetMe();
+  useNightStore.getState().end();
 });
 
 describe('markSung', () => {
@@ -66,16 +67,14 @@ describe('markSung', () => {
   });
 
   it('Tonight joins the open other-bar night through addOther', () => {
-    const addOther = jest.spyOn(useLogStore.getState(), 'addOther');
     useNightStore.getState().startOther('The Test Bar');
     renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
     fireEvent.press(screen.getByTestId('mark-when-tonight'));
     expect(screen.queryByTestId('mark-times-value')).toBeNull();
     fireEvent.press(screen.getByTestId('mark-save'));
-    expect(addOther).toHaveBeenCalledWith(expect.objectContaining({ title: 'Made Up Song' }), 'sung');
+    expect(entries()[0]).toMatchObject({ title: 'Made Up Song', night: { kind: 'other', venue_name: 'The Test Bar' } });
     expect(entries()[0]).toMatchObject({ state: 'sung' });
     expect(entries()[0]!.origin).toBeUndefined();
-    addOther.mockRestore();
   });
 
   it('offers the survey from the sheet dismissal, not while it is closing', () => {
@@ -86,5 +85,36 @@ describe('markSung', () => {
     const modal = screen.UNSAFE_getAllByType(Modal)[0]!;
     act(() => modal.props.onDismiss());
     expect(screen.getByTestId('survey')).toBeTruthy();
+  });
+
+  it('Tonight with no open night still uses addOther: a live entry, not a backfill', () => {
+    renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
+    fireEvent.press(screen.getByTestId('mark-save'));
+    expect(entries()).toHaveLength(1);
+    expect(entries()[0]).toMatchObject({ state: 'sung' });
+    expect(entries()[0]!.origin).not.toBe('backfill');
+    expect(entries()[0]!.night).toBeUndefined();
+  });
+
+  it('disables future months in the current year', () => {
+    renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
+    fireEvent.press(screen.getByTestId('mark-when-date'));
+    const next = new Date().getMonth() + 2;
+    if (next <= 12) expect(screen.getByTestId(`mark-month-${next}`).props.accessibilityState).toMatchObject({ disabled: true });
+    fireEvent.press(screen.getByTestId(`mark-year-${new Date().getFullYear() - 1}`));
+    expect(screen.getByTestId('mark-month-12').props.accessibilityState).toMatchObject({ disabled: false });
+  });
+
+  it('on Android the survey opens straight away (no onDismiss)', () => {
+    const orig = Platform.OS;
+    Platform.OS = 'android';
+    try {
+      renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
+      fireEvent.press(screen.getByTestId('mark-when-ago'));
+      fireEvent.press(screen.getByTestId('mark-save'));
+      expect(screen.getByTestId('survey')).toBeTruthy();
+    } finally {
+      Platform.OS = orig;
+    }
   });
 });

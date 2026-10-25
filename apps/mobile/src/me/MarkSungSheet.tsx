@@ -4,7 +4,6 @@ import { useRef, useState } from 'react';
 import { Platform, Pressable, View } from 'react-native';
 
 import { useLogStore, type LogSong } from '../tonight/log/logStore';
-import { useNightStore } from '../tonight/nightStore';
 import { SurveySheet } from '../tonight/log/SurveySheet';
 
 export type MarkSungSong = LogSong;
@@ -18,15 +17,28 @@ const PLUS = '+';
 const pad = (n: number) => String(n).padStart(2, '0');
 const daysIn = (year: number, month: number) => new Date(year, month, 0).getDate();
 
-function Chip({ testID, label, selected, onPress }: { testID: string; label: string; selected: boolean; onPress: () => void }) {
+function Chip({
+  testID,
+  label,
+  selected,
+  disabled = false,
+  onPress,
+}: {
+  testID: string;
+  label: string;
+  selected: boolean;
+  disabled?: boolean;
+  onPress: () => void;
+}) {
   return (
     <Pressable
       testID={testID}
       accessibilityRole="button"
       accessibilityLabel={label}
-      accessibilityState={{ selected }}
+      accessibilityState={{ selected, disabled }}
+      disabled={disabled}
       onPress={onPress}
-      className={`min-h-11 justify-center rounded-full border px-4 ${selected ? 'border-primary bg-primary/15' : 'border-border bg-card'}`}
+      className={`min-h-11 justify-center rounded-full border px-4 ${disabled ? 'opacity-40' : ''} ${selected ? 'border-primary bg-primary/15' : 'border-border bg-card'}`}
     >
       <Text className={selected ? 'font-semibold text-primary' : ''}>{label}</Text>
     </Pressable>
@@ -115,10 +127,7 @@ export function MarkSungSheet({ song, onClose }: { song: MarkSungSong | null; on
     const store = useLogStore.getState();
     let id: string | null;
     if (when === 'tonight') {
-      const bar = useNightStore.getState().current()?.kind === 'other';
-      id = bar
-        ? store.addOther(song, 'sung')
-        : store.addBackfill(song, { times: 1, date: `${thisYear}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`, precision: 'day' });
+      id = store.addOther(song, 'sung');
     } else if (when === 'date') {
       const d = Math.min(day, daysIn(year, month));
       id = store.addBackfill(song, {
@@ -171,12 +180,22 @@ export function MarkSungSheet({ song, onClose }: { song: MarkSungSong | null; on
               <View className="gap-3">
                 <View className="flex-row flex-wrap gap-2">
                   {years.map((y) => (
-                    <Chip key={y} testID={`mark-year-${y}`} label={String(y)} selected={year === y} onPress={() => setYear(y)} />
+                    <Chip key={y} testID={`mark-year-${y}`} label={String(y)} selected={year === y} onPress={() => {
+                      setYear(y);
+                      if (y === thisYear && month > now.getMonth() + 1) setMonth(now.getMonth() + 1);
+                    }} />
                   ))}
                 </View>
                 <View className="flex-row flex-wrap gap-2">
                   {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-                    <Chip key={m} testID={`mark-month-${m}`} label={monthName(m)} selected={month === m} onPress={() => setMonth(m)} />
+                    <Chip
+                      key={m}
+                      testID={`mark-month-${m}`}
+                      label={monthName(m)}
+                      selected={month === m}
+                      disabled={year === thisYear && m > now.getMonth() + 1}
+                      onPress={() => setMonth(m)}
+                    />
                   ))}
                 </View>
                 <Stepper
