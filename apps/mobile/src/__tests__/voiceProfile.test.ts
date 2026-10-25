@@ -36,15 +36,15 @@ beforeEach(() => {
 });
 
 describe('profileFromResult', () => {
-  it('copies the range and classification, method mic; comfort widened to 2 keys inside the range', () => {
+  it('copies the range and classification, method mic; a narrow comfort is widened around its centre', () => {
     const c = classifyVoice(range);
     const p = profileFromResult(range, c, AT);
     expect(p).toEqual({
       lowMidi: 45,
       highMidi: 64,
-      // free-sing comfort 50..59 (9 keys) -> min(50, 45+2) .. max(59, 64-2)
-      comfortLow: 47,
-      comfortHigh: 62,
+      // free-sing comfort 50..59 is 10 keys: one short of 11, so the extra key goes to the top
+      comfortLow: 50,
+      comfortHigh: 60,
       voiceType: c.type,
       voiceTypeBetween: c.between,
       register: null,
@@ -55,9 +55,13 @@ describe('profileFromResult', () => {
   });
 
   it.each<[string, Partial<RangeSummary>, [number, number]]>([
-    ['a narrow free sing (the fake mic: G3..C4) widens', { low: 45, high: 64, comfortLow: 55, comfortHigh: 60 }, [47, 62]],
-    ['a free sing wider than range-2 keeps its own edges', { low: 45, high: 64, comfortLow: 46, comfortHigh: 63 }, [46, 63]],
-    ['a tiny range stays inside it (clamped)', { low: 50, high: 52, comfortLow: 51, comfortHigh: 51 }, [51, 51]],
+    ["Andrew's Pixel (E2..A4, free sing 52..58) widens symmetrically to 11 keys, not to the range", { low: 40, high: 69, comfortLow: 52, comfortHigh: 58 }, [50, 60]],
+    ['an odd extra goes to the top', { low: 40, high: 69, comfortLow: 52, comfortHigh: 57 }, [50, 60]],
+    ['a band at the bottom edge shifts up to keep its width', { low: 40, high: 69, comfortLow: 41, comfortHigh: 45 }, [40, 50]],
+    ['a band at the top edge shifts down to keep its width', { low: 40, high: 69, comfortLow: 65, comfortHigh: 69 }, [59, 69]],
+    ['a band already 11 keys wide stays as measured', { low: 40, high: 69, comfortLow: 50, comfortHigh: 60 }, [50, 60]],
+    ['a band wider than 11 keys stays as measured', { low: 36, high: 72, comfortLow: 48, comfortHigh: 64 }, [48, 64]],
+    ['a tiny range clamps to the range', { low: 50, high: 52, comfortLow: 51, comfortHigh: 51 }, [50, 52]],
     ['a 1-key range', { low: 50, high: 51, comfortLow: 50, comfortHigh: 51 }, [50, 51]],
   ])('comfort: %s', (_n, patch, [lo, hi]) => {
     const r = { ...range, ...patch };
@@ -66,17 +70,19 @@ describe('profileFromResult', () => {
     expect(p.lowMidi <= p.comfortLow && p.comfortLow <= p.comfortHigh && p.comfortHigh <= p.highMidi).toBe(true);
   });
 
-  it('the fake-mic tester (A2-E4, free sing G3-C4) now gets fits on the fixture songs', () => {
+  it('a widened band is centred on the measured centre and never narrower than 11 keys', () => {
+    const r = { ...range, low: 36, high: 72, comfortLow: 50, comfortHigh: 56 };
+    const p = profileFromResult(r, classifyVoice(r), AT);
+    expect(p.comfortHigh - p.comfortLow).toBe(10);
+    expect((p.comfortLow + p.comfortHigh) / 2).toBe(53);
+  });
+
+  it('the fake-mic tester (A2-E4, free sing G3-C4) still gets a fit on a song near its centre', () => {
     const r = { ...range, low: 45, high: 64, comfortLow: 55, comfortHigh: 60 };
     const user = toUserRange(profileFromResult(r, classifyVoice(r), AT));
-    const museRough = { low: 47.6, high: 68, p10: 51.5, p50: 58.1, p90: 64.5, tier: 'rough' as const, octaveConfidence: null };
-    const starlight = { low: 47.2, high: 66.1, p10: 51, p50: 57.3, p90: 63, tier: 'measured' as const, octaveConfidence: null };
-    expect(fitSong(user, museRough)).toMatchObject({ bucket: 'fitsIn', transpose: -2 });
-    // Starlight's 18.9-key span vs a 19-key measured range: 0.1 key over at -2 -> a stretch, not a miss.
-    expect(fitSong(user, starlight)).toMatchObject({ bucket: 'stretch', transpose: -2, cost: 0.05 });
-    // Before the widening, both were outside (no badge).
-    const narrow = { low: 45, high: 64, comfortLow: 55, comfortHigh: 60 };
-    expect(fitSong(narrow, museRough).bucket).toBe('outside');
+    expect([user.comfortLow, user.comfortHigh]).toEqual([53, 63]);
+    const centred = { low: 51, high: 63, p10: 54, p50: 57, p90: 61, tier: 'measured' as const, octaveConfidence: null };
+    expect(fitSong(user, centred).bucket).toBe('fits');
   });
 
   it('the voice type still comes from the free-sing centre (classifier input unchanged)', () => {
