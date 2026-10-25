@@ -1739,7 +1739,18 @@
       "no": "Nej",
       "openSettings": "Åbn Indstillinger",
       "quiet": "Vær helt stille et øjeblik…",
-      "yes": "Ja"
+      "yes": "Ja",
+      "background": "Om din sang (valgfrit)",
+      "backgroundHint": "Hjælper os med at skelne din bryststemme fra falset.",
+      "experience": "Sangerfaring?",
+      "experience_none": "Ingen",
+      "experience_some": "Lidt",
+      "experience_trained": "Trænet",
+      "usesFalsetto": "Bruger du falset eller hovedstemme?",
+      "usesFalsetto_sometimes": "Nogle gange",
+      "usesFalsetto_no": "Nej",
+      "usesFalsetto_unsure": "Ikke sikker",
+      "usesFalsetto_yes": "Ja"
     },
     "title": "Find din stemme",
     "warmup": {

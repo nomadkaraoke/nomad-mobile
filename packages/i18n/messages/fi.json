@@ -1739,7 +1739,18 @@
       "no": "Ei",
       "openSettings": "Avaa asetukset",
       "quiet": "Ole hetki hiljaa…",
-      "yes": "Kyllä"
+      "yes": "Kyllä",
+      "background": "Tietoa laulamisestasi (valinnainen)",
+      "backgroundHint": "Auttaa meitä erottamaan rintaäänesi falsetista.",
+      "experience": "Laulukokemus?",
+      "experience_none": "Ei lainkaan",
+      "experience_some": "Jonkin verran",
+      "experience_trained": "Koulutettu",
+      "usesFalsetto": "Käytätkö falsettia tai pää-ääntä?",
+      "usesFalsetto_sometimes": "Joskus",
+      "usesFalsetto_no": "Ei",
+      "usesFalsetto_unsure": "En ole varma",
+      "usesFalsetto_yes": "Kyllä"
     },
     "title": "Löydä äänesi",
     "warmup": {

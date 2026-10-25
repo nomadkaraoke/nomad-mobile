@@ -1739,7 +1739,18 @@
       "no": "Нет",
       "openSettings": "Открыть Настройки",
       "quiet": "Секунду тишины…",
-      "yes": "Да"
+      "yes": "Да",
+      "background": "О твоём вокале (необязательно)",
+      "backgroundHint": "Поможет нам отличить твой грудной голос от фальцета.",
+      "experience": "Есть опыт пения?",
+      "experience_none": "Нет",
+      "experience_some": "Небольшой",
+      "experience_trained": "Занимаюсь вокалом",
+      "usesFalsetto": "Используешь фальцет или головной регистр?",
+      "usesFalsetto_sometimes": "Иногда",
+      "usesFalsetto_no": "Нет",
+      "usesFalsetto_unsure": "Не знаю точно",
+      "usesFalsetto_yes": "Да"
     },
     "title": "Найди свой голос",
     "warmup": {

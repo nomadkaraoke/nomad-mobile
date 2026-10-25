@@ -229,6 +229,7 @@ beforeEach(async () => {
   mockSource.current = quietSource();
   appStorage.remove(VOICE_SESSION_KEY);
   appStorage.remove('voiceSession.recordDefault');
+  appStorage.remove('voiceSession.background.v1');
   appStorage.remove(VOICE_STORAGE_KEY);
   act(() => useVoiceSessionStore.getState().clear());
   act(() => useVoiceStore.getState().clear());
@@ -297,6 +298,63 @@ describe('voiceSessionScreens: steps', () => {
     await press('vs-setup-go');
     await waitFor(() => expect(vs.begin).toHaveBeenCalled());
     expect((vs.begin as jest.Mock).mock.calls[0][0]).toMatchObject({ record: true });
+  });
+
+  it('setup: background optional, sent when answered', async () => {
+    const vs = fakeVs({ step: 'setup', setup: null });
+    mockVs.current = vs;
+    open();
+    await screen.findByTestId('vs-setup');
+    await press('vs-posture-sitting');
+    await press('vs-warmth-warm');
+    await press('vs-record-no');
+    await press('vs-headphones-yes');
+    // Collapsed until opened; Go doesn't wait for it.
+    expect(screen.queryByTestId('vs-setup-experience-some')).toBeNull();
+    expect(screen.getByTestId('vs-setup-go')).toBeEnabled();
+    await press('vs-setup-background');
+    expect(screen.getByText('Do you use falsetto or head voice?')).toBeTruthy();
+    await press('vs-setup-experience-some');
+    await press('vs-setup-falsetto-yes');
+    await press('vs-setup-go');
+    await waitFor(() => expect(vs.begin).toHaveBeenCalled());
+    expect((vs.begin as jest.Mock).mock.calls[0][0]).toMatchObject({ experience: 'some', uses_falsetto: 'yes' });
+    // Remembered for next time.
+    expect(JSON.parse(appStorage.getString('voiceSession.background.v1')!)).toEqual({ experience: 'some', usesFalsetto: 'yes' });
+  });
+
+  it('setup: background not answered, not sent', async () => {
+    const vs = fakeVs({ step: 'setup', setup: null });
+    mockVs.current = vs;
+    open();
+    await screen.findByTestId('vs-setup');
+    await press('vs-posture-sitting');
+    await press('vs-warmth-warm');
+    await press('vs-record-no');
+    await press('vs-headphones-yes');
+    await press('vs-setup-go');
+    await waitFor(() => expect(vs.begin).toHaveBeenCalled());
+    const sent = (vs.begin as jest.Mock).mock.calls[0][0];
+    expect(sent).not.toHaveProperty('experience');
+    expect(sent).not.toHaveProperty('uses_falsetto');
+  });
+
+  it('setup: background prefilled from last session', async () => {
+    appStorage.set('voiceSession.background.v1', JSON.stringify({ experience: 'trained', usesFalsetto: 'no' }));
+    const vs = fakeVs({ step: 'setup', setup: null });
+    mockVs.current = vs;
+    open();
+    await screen.findByTestId('vs-setup');
+    await press('vs-setup-background');
+    expect(screen.getByTestId('vs-setup-experience-trained').props.accessibilityState).toEqual(expect.objectContaining({ selected: true }));
+    expect(screen.getByTestId('vs-setup-falsetto-no').props.accessibilityState).toEqual(expect.objectContaining({ selected: true }));
+    await press('vs-posture-sitting');
+    await press('vs-warmth-warm');
+    await press('vs-record-no');
+    await press('vs-headphones-yes');
+    await press('vs-setup-go');
+    await waitFor(() => expect(vs.begin).toHaveBeenCalled());
+    expect((vs.begin as jest.Mock).mock.calls[0][0]).toMatchObject({ experience: 'trained', uses_falsetto: 'no' });
   });
 
   it('setup: cold offers the warm-up', async () => {

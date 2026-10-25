@@ -1739,7 +1739,18 @@
       "no": "Ні",
       "openSettings": "Відкрити «Параметри»",
       "quiet": "Побудь у тиші секунду…",
-      "yes": "Так"
+      "yes": "Так",
+      "background": "Про твій спів (необов'язково)",
+      "backgroundHint": "Допомагає нам відрізнити твій грудний голос від фальцету.",
+      "experience": "Досвід співу?",
+      "experience_none": "Немає",
+      "experience_some": "Невеликий",
+      "experience_trained": "З підготовкою",
+      "usesFalsetto": "Ти використовуєш фальцет чи головний регістр?",
+      "usesFalsetto_sometimes": "Іноді",
+      "usesFalsetto_no": "Ні",
+      "usesFalsetto_unsure": "Не знаю точно",
+      "usesFalsetto_yes": "Так"
     },
     "title": "Визнач свій голос",
     "warmup": {

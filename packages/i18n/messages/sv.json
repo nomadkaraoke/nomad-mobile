@@ -1739,7 +1739,18 @@
       "no": "Nej",
       "openSettings": "Öppna Inställningar",
       "quiet": "Var tyst en sekund…",
-      "yes": "Ja"
+      "yes": "Ja",
+      "background": "Om din sång (valfritt)",
+      "backgroundHint": "Hjälper oss att skilja din bröströst från falsett.",
+      "experience": "Sångerfarenhet?",
+      "experience_none": "Ingen",
+      "experience_some": "Lite",
+      "experience_trained": "Skolad",
+      "usesFalsetto": "Använder du falsett eller huvudröst?",
+      "usesFalsetto_sometimes": "Ibland",
+      "usesFalsetto_no": "Nej",
+      "usesFalsetto_unsure": "Inte säker",
+      "usesFalsetto_yes": "Ja"
     },
     "title": "Hitta din röst",
     "warmup": {

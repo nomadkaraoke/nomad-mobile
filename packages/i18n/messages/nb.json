@@ -1739,7 +1739,18 @@
       "no": "Nei",
       "openSettings": "Åpne Innstillinger",
       "quiet": "Vær stille et øyeblikk…",
-      "yes": "Ja"
+      "yes": "Ja",
+      "background": "Om syngingen din (valgfritt)",
+      "backgroundHint": "Hjelper oss med å skille bryststemmen din fra falsett.",
+      "experience": "Sangerfaring?",
+      "experience_none": "Ingen",
+      "experience_some": "Noe",
+      "experience_trained": "Skolert",
+      "usesFalsetto": "Bruker du falsett eller hodestemme?",
+      "usesFalsetto_sometimes": "Noen ganger",
+      "usesFalsetto_no": "Nei",
+      "usesFalsetto_unsure": "Ikke sikker",
+      "usesFalsetto_yes": "Ja"
     },
     "title": "Finn stemmen din",
     "warmup": {

@@ -1739,7 +1739,18 @@
       "no": "Nein",
       "openSettings": "Einstellungen öffnen",
       "quiet": "Sei kurz ganz leise …",
-      "yes": "Ja"
+      "yes": "Ja",
+      "background": "Über deinen Gesang (optional)",
+      "backgroundHint": "Hilft uns dabei, deine Bruststimme vom Falsett zu unterscheiden.",
+      "experience": "Gesangserfahrung?",
+      "experience_none": "Keine",
+      "experience_some": "Ein wenig",
+      "experience_trained": "Ausgebildet",
+      "usesFalsetto": "Nutzt du Falsett oder Kopfstimme?",
+      "usesFalsetto_sometimes": "Manchmal",
+      "usesFalsetto_no": "Nein",
+      "usesFalsetto_unsure": "Nicht sicher",
+      "usesFalsetto_yes": "Ja"
     },
     "title": "Finde deine Stimme",
     "warmup": {

@@ -1739,7 +1739,18 @@
       "no": "لا",
       "openSettings": "فتح الإعدادات",
       "quiet": "ابقَ هادئًا لثانية واحدة…",
-      "yes": "نعم"
+      "yes": "نعم",
+      "background": "نبذة عن غنائك (اختياري)",
+      "backgroundHint": "يساعدنا ذلك في التمييز بين صوت الصدر والفالسيتو (الصوت المستعار).",
+      "experience": "خبرتك في الغناء؟",
+      "experience_none": "لا توجد",
+      "experience_some": "متوسطة",
+      "experience_trained": "محترف / متدرب",
+      "usesFalsetto": "هل تستخدم الفالسيتو أو صوت الرأس؟",
+      "usesFalsetto_sometimes": "أحياناً",
+      "usesFalsetto_no": "لا",
+      "usesFalsetto_unsure": "لست متأكداً",
+      "usesFalsetto_yes": "نعم"
     },
     "title": "اكتشف صوتك",
     "warmup": {

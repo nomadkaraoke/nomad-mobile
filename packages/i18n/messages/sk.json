@@ -1739,7 +1739,18 @@
       "no": "Nie",
       "openSettings": "Otvoriť Nastavenia",
       "quiet": "Buď chvíľku potichu…",
-      "yes": "Áno"
+      "yes": "Áno",
+      "background": "O tvojom spievaní (voliteľné)",
+      "backgroundHint": "Pomôže nám to rozlíšiť tvoj hrudný hlas od falzetu.",
+      "experience": "Skúsenosti so spevom?",
+      "experience_none": "Žiadne",
+      "experience_some": "Mierne",
+      "experience_trained": "Vyučený/školený spevák",
+      "usesFalsetto": "Používaš falzet alebo hlavový hlas?",
+      "usesFalsetto_sometimes": "Niekedy",
+      "usesFalsetto_no": "Nie",
+      "usesFalsetto_unsure": "Neviem isto",
+      "usesFalsetto_yes": "Áno"
     },
     "title": "Nájdi svoj hlas",
     "warmup": {

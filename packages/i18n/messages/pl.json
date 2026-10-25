@@ -1739,7 +1739,18 @@
       "no": "Nie",
       "openSettings": "Otwórz Ustawienia",
       "quiet": "Bądź cicho przez chwilę…",
-      "yes": "Tak"
+      "yes": "Tak",
+      "background": "O Twoim śpiewie (opcjonalnie)",
+      "backgroundHint": "Pomoże nam to odróżnić Twój głos piersiowy od falsetu.",
+      "experience": "Doświadczenie wokalne?",
+      "experience_none": "Brak",
+      "experience_some": "Niewielkie",
+      "experience_trained": "Wykształcenie wokalne",
+      "usesFalsetto": "Czy używasz falsetu lub głosu głowowego?",
+      "usesFalsetto_sometimes": "Czasami",
+      "usesFalsetto_no": "Nie",
+      "usesFalsetto_unsure": "Nie mam pewności",
+      "usesFalsetto_yes": "Tak"
     },
     "title": "Odkryj swój głos",
     "warmup": {

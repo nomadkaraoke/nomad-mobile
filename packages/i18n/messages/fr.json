@@ -1739,7 +1739,18 @@
       "no": "Non",
       "openSettings": "Ouvrir les Réglages",
       "quiet": "Ne fais pas de bruit pendant une seconde…",
-      "yes": "Oui"
+      "yes": "Oui",
+      "background": "À propos de ta pratique du chant (facultatif)",
+      "backgroundHint": "Ça nous aide à distinguer ta voix de poitrine de ta voix de tête (fausset).",
+      "experience": "Ton niveau en chant ?",
+      "experience_none": "Aucun",
+      "experience_some": "Débutant",
+      "experience_trained": "Confirmé",
+      "usesFalsetto": "Utilises-tu la voix de tête ou de fausset ?",
+      "usesFalsetto_sometimes": "Parfois",
+      "usesFalsetto_no": "Non",
+      "usesFalsetto_unsure": "Je ne sais pas",
+      "usesFalsetto_yes": "Oui"
     },
     "title": "Trouve ta voix",
     "warmup": {

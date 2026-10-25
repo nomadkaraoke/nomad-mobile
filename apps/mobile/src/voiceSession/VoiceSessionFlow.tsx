@@ -13,6 +13,7 @@ import type { MicPermission } from '../voice/pitchSource';
 import { StepLayout } from '../voice/StepLayout';
 import { VOICE_KEY } from '../voice/useVoiceProfile';
 import { ContextChip } from './ContextChip';
+import { readBackground } from './backgroundDefault';
 import { readRecordDefault } from './recordDefault';
 import { RECORDING_COUNT_KEY } from './RecordingsSection';
 import { PickCard } from './screens/PickCard';
@@ -26,10 +27,19 @@ import { useVoiceSession, type VsErrorKind } from './useVoiceSession';
 
 const ROUTE = '/discover/voice-session';
 
-const draftFrom = (s: SessionSetup | null): SetupDraft =>
-  s
-    ? { posture: s.posture, warmth: s.warmth, record: s.record, headphones: s.headphones }
-    : { ...EMPTY_DRAFT, record: readRecordDefault() };
+const draftFrom = (s: SessionSetup | null): SetupDraft => {
+  const last = readBackground();
+  return s
+    ? {
+        posture: s.posture,
+        warmth: s.warmth,
+        record: s.record,
+        headphones: s.headphones,
+        experience: s.experience ?? last.experience,
+        usesFalsetto: s.uses_falsetto ?? last.usesFalsetto,
+      }
+    : { ...EMPTY_DRAFT, record: readRecordDefault(), ...last };
+};
 
 function Waiting({ testID, label }: { testID: string; label?: string }) {
   return (

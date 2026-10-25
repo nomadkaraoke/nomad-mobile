@@ -1739,7 +1739,18 @@
       "no": "Hayır",
       "openSettings": "Ayarlar'ı Aç",
       "quiet": "Bir saniye sessiz kal…",
-      "yes": "Evet"
+      "yes": "Evet",
+      "background": "Şarkı söyleme geçmişin hakkında (isteğe bağlı)",
+      "backgroundHint": "Göğüs sesini falsettodan ayırt etmemize yardımcı olur.",
+      "experience": "Şarkı söyleme deneyimin var mı?",
+      "experience_none": "Yok",
+      "experience_some": "Biraz",
+      "experience_trained": "Eğitimli",
+      "usesFalsetto": "Falsetto veya kafa sesi kullanıyor musun?",
+      "usesFalsetto_sometimes": "Bazen",
+      "usesFalsetto_no": "Hayır",
+      "usesFalsetto_unsure": "Emin değilim",
+      "usesFalsetto_yes": "Evet"
     },
     "title": "Sesini keşfet",
     "warmup": {

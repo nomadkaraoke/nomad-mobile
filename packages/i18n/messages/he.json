@@ -1739,7 +1739,18 @@
       "no": "לא",
       "openSettings": "פתיחת הגדרות",
       "quiet": "שמור על שקט לרגע…",
-      "yes": "כן"
+      "yes": "כן",
+      "background": "קצת על השירה שלך (אופציונלי)",
+      "backgroundHint": "עוזר לנו להבדיל בין קול חזה לפלסט.",
+      "experience": "ניסיון בשירה?",
+      "experience_none": "ללא ניסיון",
+      "experience_some": "קצת ניסיון",
+      "experience_trained": "הכשרה מקצועית",
+      "usesFalsetto": "האם יצא לך להשתמש בפלסט או בקול ראש?",
+      "usesFalsetto_sometimes": "לפעמים",
+      "usesFalsetto_no": "לא",
+      "usesFalsetto_unsure": "לא בטוח/ה",
+      "usesFalsetto_yes": "כן"
     },
     "title": "גלו את הקול שלכם",
     "warmup": {

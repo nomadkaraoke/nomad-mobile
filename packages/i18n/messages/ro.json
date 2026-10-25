@@ -1739,7 +1739,18 @@
       "no": "Nu",
       "openSettings": "Deschide Setări",
       "quiet": "Păstrează liniștea o secundă…",
-      "yes": "Da"
+      "yes": "Da",
+      "background": "Despre vocea ta (opțional)",
+      "backgroundHint": "Ne ajută să distingem vocea de piept de falset.",
+      "experience": "Experiență la cântat?",
+      "experience_none": "Deloc",
+      "experience_some": "Câteva noțiuni",
+      "experience_trained": "Cu pregătire vocală",
+      "usesFalsetto": "Folosești falset sau voce de cap?",
+      "usesFalsetto_sometimes": "Uneori",
+      "usesFalsetto_no": "Nu",
+      "usesFalsetto_unsure": "Nu știu sigur",
+      "usesFalsetto_yes": "Da"
     },
     "title": "Găsește-ți vocea",
     "warmup": {

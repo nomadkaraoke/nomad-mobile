@@ -4,20 +4,47 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, colors, Text } from '@nomad/ui';
 import * as Device from 'expo-device';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, AppState, Linking, View } from 'react-native';
+import { ActivityIndicator, AppState, Linking, Pressable, View } from 'react-native';
 
 import type { MicPermission, PitchSource } from '../../voice/pitchSource';
 import { StepLayout } from '../../voice/StepLayout';
 import { measureQuietSecond } from '../quietSecond';
-import { POSTURES, WARMTHS, type Posture, type Warmth } from '../setupOptions';
+import { writeBackground } from '../backgroundDefault';
+import {
+  EXPERIENCES,
+  POSTURES,
+  USES_FALSETTO,
+  WARMTHS,
+  type Experience,
+  type Posture,
+  type UsesFalsetto,
+  type Warmth,
+} from '../setupOptions';
 import { ChoiceGroup } from './ChoiceGroup';
 
 const YES_NO = ['yes', 'no'] as const;
 type YesNo = (typeof YES_NO)[number];
 
-/** The setup answers so far (null = not answered). Lives in the route, so it survives the warm-up. */
-export type SetupDraft = { posture: Posture | null; warmth: Warmth | null; record: boolean | null; headphones: boolean | null };
-export const EMPTY_DRAFT: SetupDraft = { posture: null, warmth: null, record: null, headphones: null };
+/**
+ * The setup answers so far (null = not answered). Lives in the route, so it survives the warm-up. `experience` and
+ * `usesFalsetto` ("About your singing") are optional: Go never waits for them.
+ */
+export type SetupDraft = {
+  posture: Posture | null;
+  warmth: Warmth | null;
+  record: boolean | null;
+  headphones: boolean | null;
+  experience?: Experience | null;
+  usesFalsetto?: UsesFalsetto | null;
+};
+export const EMPTY_DRAFT: SetupDraft = {
+  posture: null,
+  warmth: null,
+  record: null,
+  headphones: null,
+  experience: null,
+  usesFalsetto: null,
+};
 
 const yn = (b: boolean | null): YesNo | null => (b === null ? null : b ? 'yes' : 'no');
 
@@ -46,6 +73,7 @@ export type SetupScreenProps = {
 export function SetupScreen({ draft, onDraft, source, floor, onFloor, mic, onMic, afterWarmup, busy, onBegin, onWarmup }: SetupScreenProps) {
   const t = useTranslations('voiceSession.setup');
   const [phase, setPhase] = useState<'form' | 'quiet' | 'cold'>('form');
+  const [aboutOpen, setAboutOpen] = useState(false);
   /** Go is running (permission, quiet second): a second tap must not start another run on the shared source. */
   const starting = useRef(false);
   const live = useRef(true);
@@ -91,7 +119,15 @@ export function SetupScreen({ draft, onDraft, source, floor, onFloor, mic, onMic
     record: record!,
     headphones: draft.headphones!,
     device: Device.modelName ?? null,
+    ...(draft.experience ? { experience: draft.experience } : {}),
+    ...(draft.usesFalsetto ? { uses_falsetto: draft.usesFalsetto } : {}),
   });
+
+  /** Starts the session, remembering the singing-background answers for next time. */
+  const begin = (f?: number) => {
+    writeBackground({ experience: draft.experience ?? null, usesFalsetto: draft.usesFalsetto ?? null });
+    onBegin(setup(), f);
+  };
 
   const go = async () => {
     if (!ready || phase !== 'form' || starting.current) return;
@@ -116,7 +152,7 @@ export function SetupScreen({ draft, onDraft, source, floor, onFloor, mic, onMic
         return;
       }
       setPhase('form');
-      onBegin(setup(), f ?? undefined);
+      begin(f ?? undefined);
     } finally {
       starting.current = false;
     }
@@ -152,7 +188,7 @@ export function SetupScreen({ draft, onDraft, source, floor, onFloor, mic, onMic
               variant="secondary"
               label={t('warmupSkip')}
               disabled={busy}
-              onPress={() => onBegin(setup(), floor ?? undefined)}
+              onPress={() => begin(floor ?? undefined)}
             />
           </>
         }
@@ -223,6 +259,41 @@ export function SetupScreen({ draft, onDraft, source, floor, onFloor, mic, onMic
           <Text testID="vs-headphones-warning" className="text-gold">
             {t('noHeadphones')}
           </Text>
+        ) : null}
+      </View>
+      <View className="gap-3 rounded-xl border border-border bg-card p-3">
+        <Pressable
+          testID="vs-setup-background"
+          accessibilityRole="button"
+          accessibilityState={{ expanded: aboutOpen }}
+          onPress={() => setAboutOpen((o) => !o)}
+          className="min-h-11 flex-row items-center justify-between gap-2"
+        >
+          <View className="flex-1 gap-0.5">
+            <Text className="font-semibold">{t('background')}</Text>
+            <Text variant="muted">{t('backgroundHint')}</Text>
+          </View>
+          <Ionicons name={aboutOpen ? 'chevron-up' : 'chevron-down'} size={20} color={colors.muted} />
+        </Pressable>
+        {aboutOpen ? (
+          <>
+            <ChoiceGroup
+              title={t('experience')}
+              values={EXPERIENCES}
+              selected={draft.experience ?? null}
+              label={(v) => t(`experience_${v}`)}
+              onPick={(v) => onDraft({ experience: draft.experience === v ? null : v })}
+              idPrefix="vs-setup-experience"
+            />
+            <ChoiceGroup
+              title={t('usesFalsetto')}
+              values={USES_FALSETTO}
+              selected={draft.usesFalsetto ?? null}
+              label={(v) => t(`usesFalsetto_${v}`)}
+              onPick={(v) => onDraft({ usesFalsetto: draft.usesFalsetto === v ? null : v })}
+              idPrefix="vs-setup-falsetto"
+            />
+          </>
         ) : null}
       </View>
     </StepLayout>

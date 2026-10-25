@@ -1739,7 +1739,18 @@
       "no": "Tidak",
       "openSettings": "Buka Pengaturan",
       "quiet": "Harap hening sebentar…",
-      "yes": "Ya"
+      "yes": "Ya",
+      "background": "Tentang vokal Anda (opsional)",
+      "backgroundHint": "Membantu kami membedakan suara dada (chest voice) dan falsetto Anda.",
+      "experience": "Pengalaman bernyanyi?",
+      "experience_none": "Tidak ada",
+      "experience_some": "Sedikit",
+      "experience_trained": "Terlatih",
+      "usesFalsetto": "Apakah Anda menggunakan falsetto atau head voice?",
+      "usesFalsetto_sometimes": "Kadang-kadang",
+      "usesFalsetto_no": "Tidak",
+      "usesFalsetto_unsure": "Kurang yakin",
+      "usesFalsetto_yes": "Ya"
     },
     "title": "Temukan suara Anda",
     "warmup": {

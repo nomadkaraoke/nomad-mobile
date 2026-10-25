@@ -1739,7 +1739,18 @@
       "no": "No",
       "openSettings": "Abrir Ajustes",
       "quiet": "Quédate en silencio un segundo…",
-      "yes": "Sí"
+      "yes": "Sí",
+      "background": "Sobre tu forma de cantar (opcional)",
+      "backgroundHint": "Nos ayuda a distinguir tu voz de pecho del falsete.",
+      "experience": "¿Experiencia al cantar?",
+      "experience_none": "Ninguna",
+      "experience_some": "Alguna",
+      "experience_trained": "Con formación",
+      "usesFalsetto": "¿Usas falsete o voz de cabeza?",
+      "usesFalsetto_sometimes": "A veces",
+      "usesFalsetto_no": "No",
+      "usesFalsetto_unsure": "No estoy seguro",
+      "usesFalsetto_yes": "Sí"
     },
     "title": "Encuentra tu voz",
     "warmup": {

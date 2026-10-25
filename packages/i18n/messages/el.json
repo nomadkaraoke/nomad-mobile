@@ -1739,7 +1739,18 @@
       "no": "Όχι",
       "openSettings": "Άνοιγμα Ρυθμίσεων",
       "quiet": "Κάνε ησυχία για ένα δευτερόλεπτο…",
-      "yes": "Ναι"
+      "yes": "Ναι",
+      "background": "Σχετικά με το τραγούδι σου (προαιρετικό)",
+      "backgroundHint": "Μας βοηθά να ξεχωρίσουμε τη στηθική φωνή από το φαλτσέτο σου.",
+      "experience": "Εμπειρία στο τραγούδι;",
+      "experience_none": "Καμία",
+      "experience_some": "Λίγη",
+      "experience_trained": "Έχω κάνει μαθήματα",
+      "usesFalsetto": "Χρησιμοποιείς φαλτσέτο ή κεφαλική φωνή;",
+      "usesFalsetto_sometimes": "Μερικές φορές",
+      "usesFalsetto_no": "Όχι",
+      "usesFalsetto_unsure": "Δεν είμαι σίγουρος/η",
+      "usesFalsetto_yes": "Ναι"
     },
     "title": "Βρες τη φωνή σου",
     "warmup": {

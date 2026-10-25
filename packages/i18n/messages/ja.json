@@ -1739,7 +1739,18 @@
       "no": "いいえ",
       "openSettings": "設定を開く",
       "quiet": "少しの間、静かにしてください…",
-      "yes": "はい"
+      "yes": "はい",
+      "background": "歌唱経験について（任意）",
+      "backgroundHint": "地声（チェストボイス）と裏声（ファルセット）の判定に役立ちます。",
+      "experience": "歌の経験はありますか？",
+      "experience_none": "なし",
+      "experience_some": "少しある",
+      "experience_trained": "本格的なレッスン経験あり",
+      "usesFalsetto": "裏声（ファルセット）やヘッドボイスを使いますか？",
+      "usesFalsetto_sometimes": "たまに使う",
+      "usesFalsetto_no": "いいえ",
+      "usesFalsetto_unsure": "わからない",
+      "usesFalsetto_yes": "はい"
     },
     "title": "自分の声を見つける",
     "warmup": {

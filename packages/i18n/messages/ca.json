@@ -1739,7 +1739,18 @@
       "no": "No",
       "openSettings": "Obre la configuració",
       "quiet": "Fes silenci un segon…",
-      "yes": "Sí"
+      "yes": "Sí",
+      "background": "Sobre com cantes (opcional)",
+      "backgroundHint": "Ens ajuda a distingir la teva veu de pit del falset.",
+      "experience": "Tens experiència cantant?",
+      "experience_none": "Cap",
+      "experience_some": "Una mica",
+      "experience_trained": "Amb formació",
+      "usesFalsetto": "Fas servir el falset o la veu de cap?",
+      "usesFalsetto_sometimes": "De vegades",
+      "usesFalsetto_no": "No",
+      "usesFalsetto_unsure": "No n'estic segur",
+      "usesFalsetto_yes": "Sí"
     },
     "title": "Troba la teva veu",
     "warmup": {

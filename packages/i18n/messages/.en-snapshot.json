@@ -1613,7 +1613,18 @@
       "coldTitle": "Warm up first?",
       "coldBody": "A minute of humming and sirens gets your voice ready and makes the result more accurate.",
       "warmupStart": "Warm up (1 min)",
-      "warmupSkip": "Skip the warm-up"
+      "warmupSkip": "Skip the warm-up",
+      "background": "About your singing (optional)",
+      "backgroundHint": "Helps us tell your chest voice from falsetto.",
+      "experience": "Singing experience?",
+      "experience_none": "None",
+      "experience_some": "Some",
+      "experience_trained": "Trained",
+      "usesFalsetto": "Do you use falsetto or head voice?",
+      "usesFalsetto_yes": "Yes",
+      "usesFalsetto_sometimes": "Sometimes",
+      "usesFalsetto_no": "No",
+      "usesFalsetto_unsure": "Not sure"
     },
     "warmup": {
       "hum": "Hum a comfortable note",

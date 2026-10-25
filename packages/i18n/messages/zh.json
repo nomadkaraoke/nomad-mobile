@@ -1739,7 +1739,18 @@
       "no": "否",
       "openSettings": "打开设置",
       "quiet": "请安静片刻…",
-      "yes": "是"
+      "yes": "是",
+      "background": "关于你的唱歌情况（选填）",
+      "backgroundHint": "有助于我们区分你的真声与假声。",
+      "experience": "唱歌经验",
+      "experience_none": "无",
+      "experience_some": "有一些",
+      "experience_trained": "受过专业训练",
+      "usesFalsetto": "你会使用假声或头声吗？",
+      "usesFalsetto_sometimes": "有时会",
+      "usesFalsetto_no": "否",
+      "usesFalsetto_unsure": "不确定",
+      "usesFalsetto_yes": "是"
     },
     "title": "测测你的声音特质",
     "warmup": {

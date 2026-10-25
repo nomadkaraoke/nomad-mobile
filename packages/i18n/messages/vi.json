@@ -1739,7 +1739,18 @@
       "no": "Không",
       "openSettings": "Mở Cài đặt",
       "quiet": "Giữ yên lặng một chút nhé…",
-      "yes": "Có"
+      "yes": "Có",
+      "background": "Về giọng hát của bạn (không bắt buộc)",
+      "backgroundHint": "Giúp chúng tôi phân biệt giọng ngực và giọng giả thanh (falsetto) của bạn.",
+      "experience": "Kinh nghiệm ca hát của bạn?",
+      "experience_none": "Chưa có",
+      "experience_some": "Có một chút",
+      "experience_trained": "Đã qua đào tạo",
+      "usesFalsetto": "Bạn có dùng giọng giả thanh (falsetto) hoặc giọng đầu không?",
+      "usesFalsetto_sometimes": "Thỉnh thoảng",
+      "usesFalsetto_no": "Không",
+      "usesFalsetto_unsure": "Không chắc",
+      "usesFalsetto_yes": "Có"
     },
     "title": "Khám phá giọng hát của bạn",
     "warmup": {

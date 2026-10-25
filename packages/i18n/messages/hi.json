@@ -1739,7 +1739,18 @@
       "no": "नहीं",
       "openSettings": "सेटिंग्स खोलें",
       "quiet": "एक सेकंड के लिए शांत रहो…",
-      "yes": "हाँ"
+      "yes": "हाँ",
+      "background": "तुम्हारी गायकी के बारे में (वैकल्पिक)",
+      "backgroundHint": "तुम्हारी चेस्ट वॉइस और फाल्सेटो में अंतर समझने में हमारी मदद करता है।",
+      "experience": "गाने का अनुभव?",
+      "experience_none": "कोई अनुभव नहीं",
+      "experience_some": "थोड़ा-बहुत",
+      "experience_trained": "प्रशिक्षित",
+      "usesFalsetto": "क्या तुम फाल्सेटो या हेड वॉइस का इस्तेमाल करते हो?",
+      "usesFalsetto_sometimes": "कभी-कभी",
+      "usesFalsetto_no": "नहीं",
+      "usesFalsetto_unsure": "पक्का नहीं पता",
+      "usesFalsetto_yes": "हाँ"
     },
     "title": "अपनी आवाज़ पहचानो",
     "warmup": {

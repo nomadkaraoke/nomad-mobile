@@ -1739,7 +1739,18 @@
       "no": "Nee",
       "openSettings": "Instellingen openen",
       "quiet": "Wees even stil…",
-      "yes": "Ja"
+      "yes": "Ja",
+      "background": "Over je zang (optioneel)",
+      "backgroundHint": "Helpt ons je borststem van je falsetstem te onderscheiden.",
+      "experience": "Zangervaring?",
+      "experience_none": "Geen",
+      "experience_some": "Een beetje",
+      "experience_trained": "Geschoold",
+      "usesFalsetto": "Gebruik je falset of kopstem?",
+      "usesFalsetto_sometimes": "Soms",
+      "usesFalsetto_no": "Nee",
+      "usesFalsetto_unsure": "Niet zeker",
+      "usesFalsetto_yes": "Ja"
     },
     "title": "Vind je stem",
     "warmup": {

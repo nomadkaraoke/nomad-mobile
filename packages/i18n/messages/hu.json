@@ -1739,7 +1739,18 @@
       "no": "Nem",
       "openSettings": "Beállítások megnyitása",
       "quiet": "Maradj csendben egy pillanatra…",
-      "yes": "Igen"
+      "yes": "Igen",
+      "background": "Az éneklésedről (opcionális)",
+      "backgroundHint": "Segít megkülönböztetni a mellhangodat a falzettől.",
+      "experience": "Éneklési tapasztalatod?",
+      "experience_none": "Nincs",
+      "experience_some": "Valamennyi",
+      "experience_trained": "Képzett",
+      "usesFalsetto": "Használsz falzettet vagy fejhangot?",
+      "usesFalsetto_sometimes": "Néha",
+      "usesFalsetto_no": "Nem",
+      "usesFalsetto_unsure": "Nem vagyok biztos benne",
+      "usesFalsetto_yes": "Igen"
     },
     "title": "Találd meg a hangod",
     "warmup": {

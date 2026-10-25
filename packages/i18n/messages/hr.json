@@ -1739,7 +1739,18 @@
       "no": "Ne",
       "openSettings": "Otvori Postavke",
       "quiet": "Budi u tišini sekundu…",
-      "yes": "Da"
+      "yes": "Da",
+      "background": "O tvom pjevanju (neobavezno)",
+      "backgroundHint": "Pomaže nam razlikovati tvoj prsni glas od falseta.",
+      "experience": "Iskustvo u pjevanju?",
+      "experience_none": "Nikakvo",
+      "experience_some": "Malo",
+      "experience_trained": "Školovani glas",
+      "usesFalsetto": "Koristiš li falset ili glaveni glas?",
+      "usesFalsetto_sometimes": "Ponekad",
+      "usesFalsetto_no": "Ne",
+      "usesFalsetto_unsure": "Nisam siguran/na",
+      "usesFalsetto_yes": "Da"
     },
     "title": "Pronađi svoj glas",
     "warmup": {

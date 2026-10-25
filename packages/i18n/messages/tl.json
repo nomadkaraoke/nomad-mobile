@@ -1739,7 +1739,18 @@
       "no": "Hindi",
       "openSettings": "Buksan ang Mga Setting",
       "quiet": "Manatiling tahimik sandali…",
-      "yes": "Oo"
+      "yes": "Oo",
+      "background": "Tungkol sa iyong pagkanta (opsyonal)",
+      "backgroundHint": "Nakatutulong ito para maibukod ang iyong chest voice mula sa falsetto.",
+      "experience": "Karanasan sa pagkanta?",
+      "experience_none": "Wala",
+      "experience_some": "May kaunti",
+      "experience_trained": "May pagsasanay",
+      "usesFalsetto": "Gumagamit ka ba ng falsetto o head voice?",
+      "usesFalsetto_sometimes": "Paminsan-minsan",
+      "usesFalsetto_no": "Hindi",
+      "usesFalsetto_unsure": "Hindi sigurado",
+      "usesFalsetto_yes": "Oo"
     },
     "title": "Tuklasin ang iyong boses",
     "warmup": {

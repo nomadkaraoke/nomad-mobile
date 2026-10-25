@@ -1739,7 +1739,18 @@
       "no": "ไม่",
       "openSettings": "เปิดการตั้งค่า",
       "quiet": "โปรดเงียบเสียงสักครู่…",
-      "yes": "ใช่"
+      "yes": "ใช่",
+      "background": "เกี่ยวกับการร้องเพลงของคุณ (ไม่บังคับ)",
+      "backgroundHint": "ช่วยให้เราแยกเสียงแท้ (Chest Voice) ออกจากเสียงหลบ (Falsetto) ของคุณได้แม่นยำขึ้น",
+      "experience": "มีประสบการณ์การร้องเพลงไหม?",
+      "experience_none": "ไม่มี",
+      "experience_some": "พอมีบ้าง",
+      "experience_trained": "เคยเรียน/ฝึกฝนมา",
+      "usesFalsetto": "คุณใช้เสียงหลบหรือเสียงหัว (Falsetto หรือ Head Voice) ไหม?",
+      "usesFalsetto_sometimes": "ใช้บ้างบางครั้ง",
+      "usesFalsetto_no": "ไม่",
+      "usesFalsetto_unsure": "ไม่แน่ใจ",
+      "usesFalsetto_yes": "ใช่"
     },
     "title": "ค้นหาช่วงเสียงของคุณ",
     "warmup": {
