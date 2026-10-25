@@ -1,6 +1,7 @@
-import { ApiError, deleteKaraokeLog, putKaraokeLog, type KaraokeLogPatch } from '@nomad/api-decide';
+import { deleteKaraokeLog, putKaraokeLog, type KaraokeLogPatch } from '@nomad/api-decide';
 
 import { createOutbox } from '../../sync/createOutbox';
+import { OUTBOX_BACKOFF_BASE_MS, OUTBOX_BACKOFF_MAX_MS, isPermanent, outboxBackoffMs } from '../../sync/outboxPolicy';
 
 /**
  * The karaoke-log outbox (spec §6.1): writes to decide's `/api/my/karaoke-log` queued on the phone, so a log works
@@ -15,15 +16,8 @@ export type OutboxItem =
 /** What the generic outbox is fed (it assigns `rev`). `key` is the record id. */
 type Queued = { key: string; id: string } & ({ op: 'put'; patch: KaraokeLogPatch } | { op: 'delete' });
 
-export const OUTBOX_BACKOFF_BASE_MS = 5_000;
-export const OUTBOX_BACKOFF_MAX_MS = 5 * 60_000;
-
-/** Backoff after `attempts` consecutive transient failures (1 → 5 s, doubling, capped at 5 min). */
-export const outboxBackoffMs = (attempts: number): number =>
-  Math.min(OUTBOX_BACKOFF_MAX_MS, OUTBOX_BACKOFF_BASE_MS * 2 ** Math.max(0, attempts - 1));
-
-/** decide answers that will never succeed on retry: drop the item (400 invalid, 403 not_owner, 404 not_found, 422). */
-export const isPermanent = (e: unknown): boolean => e instanceof ApiError && [400, 403, 404, 422].includes(e.status);
+// Policy lives in sync/ (shared with the Me outbox); re-exported so this module's API is unchanged.
+export { OUTBOX_BACKOFF_BASE_MS, OUTBOX_BACKOFF_MAX_MS, isPermanent, outboxBackoffMs };
 
 const NESTED = new Set(['survey', 'night', 'media']);
 
@@ -65,6 +59,7 @@ const hook = createOutbox<Queued>({
     if (next.op === 'put' && queued.op === 'put') return { ...next, patch: mergePatch(queued.patch, next.patch) };
     return next;
   },
+  // E8-R4: a 403 not_owner on a kj_ id (kjbox hasn't delivered; decide made a placeholder) is permanent too: dropped.
   isPermanent,
   backoff: outboxBackoffMs,
 });

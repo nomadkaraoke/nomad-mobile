@@ -126,3 +126,47 @@ it('persists per user and clear() empties', async () => {
   useBox.getState().clear();
   expect(useBox.getState().items).toEqual([]);
 });
+
+it('a null merge for an in-flight key keeps a follow-up, even after an earlier coalesce', async () => {
+  const box = createOutbox<Item>({
+    storageKey: (u) => `test3.outbox.${u}`,
+    send,
+    merge: () => null,
+    isPermanent: () => false,
+    backoff: () => 1000,
+  });
+  box.getState().rehydrate('a@example.com');
+  const open = hold();
+  box.getState().enqueue({ key: 'x', v: 1 }); // in flight
+  box.getState().enqueue({ key: 'x', v: 2 });
+  box.getState().enqueue({ key: 'x', v: 3 });
+  expect(box.getState().items.map((i) => i.v)).toEqual([3]);
+  open();
+  await box.idle();
+  expect(send.mock.calls.map((c) => c[0].v)).toEqual([1, 3]);
+});
+
+it('merge sees attempted once a send of the key has started, and purge removes a user queue', async () => {
+  const seen: (boolean | undefined)[] = [];
+  const box = createOutbox<Item>({
+    storageKey: (u) => `test4.outbox.${u}`,
+    send,
+    merge: (q, n) => {
+      seen.push(q.attempted);
+      return n;
+    },
+    isPermanent: () => false,
+    backoff: () => 1000,
+  });
+  box.getState().rehydrate('a@example.com');
+  send.mockRejectedValue(new ApiError(401, 'no'));
+  box.getState().enqueue({ key: 'x', v: 1 });
+  await box.idle();
+  box.getState().enqueue({ key: 'x', v: 2 });
+  await box.idle();
+  expect(seen).toEqual([true]);
+  expect(appStorage.getString(box.storageKeyFor(box.getState().userKey!))).toBeDefined();
+  box.getState().purge(box.getState().userKey!);
+  expect(box.getState().items).toEqual([]);
+  expect(appStorage.getString(box.storageKeyFor(box.getState().userKey!))).toBeUndefined();
+});

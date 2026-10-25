@@ -28,12 +28,15 @@ const save = (o: Partial<Extract<MeOutboxItem, { op: 'save' }>> = {}): MeOutboxI
   ...o,
 });
 
+const echoCreate = async (i: { id: string; name: string; items: decide.SetlistItemIn[] }) =>
+  ({ id: i.id, name: i.name, rev: 1, items: i.items.map((x, n) => ({ item_id: `i${n}`, ...x })) }) as never;
+
 beforeEach(() => {
   jest.clearAllMocks();
   appStorage.clearAll();
   useAuth.setState({ state: { status: 'signedIn', session: { token: 't', email: 'a@example.com', createdAt: 0 } } });
   useMeOutbox.getState().rehydrate('a@example.com');
-  api.createSetlist.mockResolvedValue({} as never);
+  api.createSetlist.mockImplementation(echoCreate);
   api.putSetlistItems.mockResolvedValue({} as never);
   api.renameSetlist.mockResolvedValue({} as never);
   api.deleteSetlist.mockResolvedValue();
@@ -52,6 +55,7 @@ const goOnline = () => {
   for (const f of [api.createSetlist, api.putSetlistItems, api.renameSetlist, api.deleteSetlist, api.loveSong, api.unloveSong])
     (f as jest.Mock).mockResolvedValue(undefined);
   jest.clearAllMocks();
+  api.createSetlist.mockImplementation(echoCreate);
 };
 
 it('merge rules', () => {
@@ -78,15 +82,17 @@ it('create then edits offline sends one createSetlist with the final items', asy
   expect(useMeOutbox.getState().items).toEqual([]);
 });
 
-it('create then delete makes no network call', async () => {
-  goOffline();
+it('create then delete (create never attempted) makes no network call', async () => {
+  let release!: () => void;
+  const gate = new Promise<void>((r) => (release = r));
+  api.loveSong.mockImplementationOnce(() => gate);
   const b = useMeOutbox.getState();
+  b.enqueue({ key: 'love:k9', op: 'love', song_key: 'k9', artist: 'A', title: 'T', loved: true }); // holds the queue
   b.enqueue(save({ create: true }));
-  await useMeOutbox.idle();
   b.enqueue({ key: 'setlist:pl_12345678', op: 'delete', id: 'pl_12345678' });
-  expect(useMeOutbox.getState().items).toEqual([]);
-  goOnline();
-  await useMeOutbox.getState().flush();
+  expect(useMeOutbox.getState().items.map((i) => i.key)).toEqual(['love:k9']);
+  release();
+  await useMeOutbox.idle();
   expect(api.deleteSetlist).not.toHaveBeenCalled();
   expect(api.createSetlist).not.toHaveBeenCalled();
 });
@@ -124,4 +130,60 @@ it('love then unlove coalesce to the last', async () => {
   await useMeOutbox.getState().flush();
   expect(api.unloveSong).toHaveBeenCalledWith('k1');
   expect(api.loveSong).not.toHaveBeenCalled();
+});
+
+const setlist = (items: decide.SetlistItemIn[], name = 'N') =>
+  ({ id: 'pl_12345678', name, rev: 3, items: items.map((i, n) => ({ item_id: `i${n}`, ...i })) }) as never;
+
+it('an edit made while the create is in flight reaches the server (create result reconciled)', async () => {
+  let release!: () => void;
+  const gate = new Promise<void>((r) => (release = r));
+  // the server commits the first version; the follow-up create (edit coalesced, create still true) returns it unchanged
+  api.createSetlist.mockImplementation(async () => {
+    await gate;
+    return setlist([it1(1)]);
+  });
+  const b = useMeOutbox.getState();
+  b.enqueue(save({ create: true, items: [it1(1)] }));
+  b.enqueue(save({ items: [it1(1), it1(2)] })); // coalesces: create stays true
+  release();
+  await useMeOutbox.idle();
+  expect(api.putSetlistItems).toHaveBeenCalledWith('pl_12345678', [it1(1), it1(2)], 3);
+  expect(useMeOutbox.getState().items).toEqual([]);
+});
+
+it('create result with a different name is followed by a rename', async () => {
+  api.createSetlist.mockResolvedValue(setlist([it1(1)], 'Old'));
+  useMeOutbox.getState().enqueue(save({ create: true, name: 'New', items: [it1(1)] }));
+  await useMeOutbox.idle();
+  expect(api.putSetlistItems).not.toHaveBeenCalled();
+  expect(api.renameSetlist).toHaveBeenCalledWith('pl_12345678', 'New');
+});
+
+it('create in flight, edit, then delete still sends the delete', async () => {
+  let release!: () => void;
+  const gate = new Promise<void>((r) => (release = r));
+  api.createSetlist.mockImplementation(async () => {
+    await gate;
+    return setlist([it1(1)]);
+  });
+  const b = useMeOutbox.getState();
+  b.enqueue(save({ create: true, items: [it1(1)] }));
+  b.enqueue(save({ items: [it1(2)] }));
+  b.enqueue({ key: 'setlist:pl_12345678', op: 'delete', id: 'pl_12345678' });
+  release();
+  await useMeOutbox.idle();
+  expect(api.deleteSetlist).toHaveBeenCalledWith('pl_12345678');
+  expect(useMeOutbox.getState().items).toEqual([]);
+});
+
+it('delete after an attempted (failed) create is kept; after a never-attempted create it is dropped', async () => {
+  api.createSetlist.mockRejectedValueOnce(new Error('timeout'));
+  const b = useMeOutbox.getState();
+  b.enqueue(save({ create: true }));
+  await useMeOutbox.idle(); // attempted, parked on backoff
+  b.enqueue({ key: 'setlist:pl_12345678', op: 'delete', id: 'pl_12345678' });
+  expect(useMeOutbox.getState().items.map((i) => i.op)).toEqual(['delete']);
+  await useMeOutbox.getState().flush();
+  expect(api.deleteSetlist).toHaveBeenCalledWith('pl_12345678');
 });

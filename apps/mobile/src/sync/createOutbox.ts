@@ -16,14 +16,15 @@ export type OutboxConfig<I extends { key: string }> = {
   storageKey: (userKey: string) => string;
   send: (item: I) => Promise<void>;
   /** Merge `next` into the `queued` item for the same key. `null` drops the queued item (nothing to send). */
-  merge: (queued: I, next: I) => I | null;
+  merge: (queued: I & { attempted?: boolean }, next: I) => I | null;
   isPermanent: (e: unknown) => boolean;
   backoff: (attempts: number) => number;
   /** Optional: validate / upgrade a persisted raw item (return null to discard it). */
   parse?: (raw: unknown) => I | null;
 };
 
-type Stored<I> = I & { rev: number };
+/** `attempted`: a send of this key has started (it may have committed server-side even if it errored). */
+type Stored<I> = I & { rev: number; attempted?: boolean };
 
 export type OutboxStore<I extends { key: string }> = {
   userKey: string | null;
@@ -40,9 +41,13 @@ export type OutboxStore<I extends { key: string }> = {
   rehydrate(email: string | null): void;
   /** Empties the current user's queue (memory and storage). */
   clear(): void;
+  /** Removes a user's persisted queue (used to purge the previous owner's unsent items). */
+  purge(userKey: string): void;
 };
 
 export type OutboxHook<I extends { key: string }> = UseBoundStore<StoreApi<OutboxStore<I>>> & {
+  /** The MMKV key holding a user's queue. */
+  storageKeyFor(userKey: string): string;
   /** Test hook: waits for the running flush (if any). */
   idle(): Promise<void>;
 };
@@ -101,6 +106,10 @@ export function createOutbox<I extends { key: string }>(cfg: OutboxConfig<I>): O
         const head = get().items[0];
         if (!head) return;
         inFlight = { key: head.key, rev: head.rev };
+        if (!head.attempted) {
+          persist(get().items.map((i) => (i.key === head.key && i.rev === head.rev ? { ...i, attempted: true } : i)));
+          head.attempted = true;
+        }
         try {
           await cfg.send(head);
         } catch (e) {
@@ -146,14 +155,15 @@ export function createOutbox<I extends { key: string }>(cfg: OutboxConfig<I>): O
         const prev = i >= 0 ? items[i] : undefined;
         if (prev) {
           const { rev: _r, ...queued } = prev;
-          const merged = cfg.merge(queued as unknown as I, item);
+          const merged = cfg.merge(queued as unknown as I & { attempted?: boolean }, item);
           if ((merged as unknown) === (queued as unknown)) return; // nothing changed (the write was dropped)
-          const sending = inFlight?.key === item.key && inFlight.rev === prev.rev;
+          const sending = inFlight?.key === item.key;
           if (merged === null && !sending) {
             items.splice(i, 1);
           } else {
-            // A send already in flight cannot be recalled: replace it so the follow-up reaches the server.
-            items[i] = { ...(merged ?? item), rev: ++rev };
+            // A send already in flight cannot be recalled: keep a follow-up so it reaches the server.
+            const { attempted: _a, ...rest } = (merged ?? item) as Stored<I>;
+            items[i] = { ...(rest as unknown as I), rev: ++rev, ...(prev.attempted ? { attempted: true } : {}) };
           }
         } else {
           items.push({ ...item, rev: ++rev });
@@ -182,6 +192,14 @@ export function createOutbox<I extends { key: string }>(cfg: OutboxConfig<I>): O
         set({ userKey, items: load(userKey), attempts: 0, retryAt: null });
       },
 
+      purge(userKey) {
+        appStorage.remove(cfg.storageKey(userKey));
+        if (get().userKey === userKey) {
+          clearTimer();
+          set({ items: [], attempts: 0, retryAt: null });
+        }
+      },
+
       clear() {
         clearTimer();
         const { userKey } = get();
@@ -201,5 +219,5 @@ export function createOutbox<I extends { key: string }>(cfg: OutboxConfig<I>): O
     }
   });
 
-  return Object.assign(store, { idle: (): Promise<void> => flushing ?? Promise.resolve() });
+  return Object.assign(store, { storageKeyFor: cfg.storageKey, idle: (): Promise<void> => flushing ?? Promise.resolve() });
 }

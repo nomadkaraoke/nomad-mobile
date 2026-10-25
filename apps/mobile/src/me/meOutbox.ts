@@ -10,7 +10,7 @@ import {
 } from '@nomad/api-decide';
 
 import { createOutbox } from '../sync/createOutbox';
-import { isPermanent, outboxBackoffMs } from '../tonight/log/outbox';
+import { isPermanent, outboxBackoffMs } from '../sync/outboxPolicy';
 
 /**
  * The Me outbox: setlist writes and loves queued on the phone, so they work offline and sync later. One item per
@@ -31,7 +31,7 @@ export type MeOutboxItem =
   | { key: `setlist:${string}`; op: 'delete'; id: string }
   | { key: `love:${string}`; op: 'love'; song_key: string; artist: string; title: string; loved: boolean };
 
-export function meMerge(queued: MeOutboxItem, next: MeOutboxItem): MeOutboxItem | null {
+export function meMerge(queued: MeOutboxItem & { attempted?: boolean }, next: MeOutboxItem): MeOutboxItem | null {
   if (queued.op === 'save' && next.op === 'save') {
     return {
       ...next,
@@ -40,15 +40,26 @@ export function meMerge(queued: MeOutboxItem, next: MeOutboxItem): MeOutboxItem 
       baseRev: queued.baseRev, // the rev the first queued edit started from
     };
   }
-  if (next.op === 'delete' && queued.op === 'save') return queued.create ? null : next; // never created: nothing to do
+  // A delete after a create that was never attempted: nothing to do. Once a create has been attempted (in flight, or
+  // timed out but maybe committed) the delete must still go out (404 = done).
+  if (next.op === 'delete' && queued.op === 'save') return queued.create && !queued.attempted ? null : next;
   return next; // love after love, delete after delete, save after delete: the newer wins
 }
+
+const sig = (x: { song_key?: string | null; artist?: string; title?: string }) =>
+  x.song_key ? `k:${x.song_key}` : `u:${x.artist ?? ''}|${x.title ?? ''}`;
+const sameItems = (server: { song_key?: string | null; artist?: string; title?: string }[] | undefined, mine: SetlistItemIn[]) =>
+  (server ?? []).length === mine.length && mine.every((m, i) => sig(m) === sig(server![i]!));
 
 export async function sendMe(item: MeOutboxItem): Promise<void> {
   switch (item.op) {
     case 'save':
       if (item.create) {
-        await createSetlist({ id: item.id, name: item.name, items: item.items }); // idempotent on the client id
+        // Idempotent on the client id, but a repeat create returns the existing doc UNCHANGED (an edit made while the
+        // first create was in flight, or after a timed-out-but-committed one, would be lost): reconcile with the result.
+        const made = await createSetlist({ id: item.id, name: item.name, items: item.items });
+        if (!sameItems(made.items, item.items)) await putSetlistItems(item.id, item.items, made.rev ?? null);
+        if (made.name !== item.name) await renameSetlist(item.id, item.name);
         return;
       }
       await putSetlistItems(item.id, item.items, item.baseRev);
