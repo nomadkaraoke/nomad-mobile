@@ -241,7 +241,8 @@ export default function MusicProfileScreen() {
         <Button testID="vs-entry-me" label={tvs('entry')} onPress={() => router.push('/discover/voice-session' as Href)} />
       ) : null}
 
-      {voiceFlags?.session_enabled ? <RecordingsSection /> : null}
+      {/* Deleting recordings stays available to every signed-in person, whatever the session flag says. */}
+      <RecordingsSection />
 
       {isAdmin ? (
         <Button

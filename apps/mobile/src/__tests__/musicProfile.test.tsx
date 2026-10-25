@@ -382,6 +382,15 @@ describe('Your voice (Phase 3c)', () => {
     await waitFor(() => expect(again.getPathname()).toBe('/discover/voice-session'));
   });
 
+  it('keeps Delete my recordings for a signed-in person even when the session flag is off', async () => {
+    await signIn();
+    open();
+    await screen.findByTestId('voice-section');
+    await waitFor(() => expect(decide.getVoiceFlags).toHaveBeenCalled());
+    expect(screen.queryByTestId('vs-entry-me')).toBeNull();
+    expect(await screen.findByTestId('vs-recordings-delete')).toBeTruthy();
+  });
+
   it('remove: DELETEs on decide, clears the phone copy and the voice filters', async () => {
     act(() => useVoiceStore.getState().adopt(MIC));
     act(() => useRecFilters.getState().set({ singable: true, sort: 'fit' }));

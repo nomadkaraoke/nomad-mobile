@@ -187,11 +187,11 @@ describe('Me -> music profile gating', () => {
     expect(await screen.findByTestId('vs-recordings')).toBeTruthy();
   });
 
-  it('hides it when the session is not enabled', async () => {
+  it('still shows it when the session is not enabled, so recordings can be deleted', async () => {
     m(decide.getVoiceFlags).mockResolvedValue(flags(false));
     open();
     await screen.findByTestId('voice-section');
     await waitFor(() => expect(decide.getVoiceFlags).toHaveBeenCalled());
-    expect(screen.queryByTestId('vs-recordings')).toBeNull();
+    expect(await screen.findByTestId('vs-recordings')).toBeTruthy();
   });
 });
