@@ -1,8 +1,9 @@
 import { hideSong, loveSong, unhideSong, type RecSong } from '@nomad/api-decide';
 import { useQueryClient, type Query, type QueryClient, type QueryKey } from '@tanstack/react-query';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAuth } from '../auth/store';
+import { useLovedOverrides } from '../me/lovedOverrides';
 import { RECS_KEY, type RecsPages } from './useRecommendations';
 
 /** How long the "Hidden from your picks · Undo" toast stays up. */
@@ -147,7 +148,11 @@ export function useSongFeedback() {
   const love = useCallback((song: RecSong) => {
     const key = song.song_key;
     setLoved((s) => new Set(s).add(key));
+    // Me's library and saves see this love at once (and Me's un-save un-hearts it here).
+    useLovedOverrides.getState().set(song, true);
+    const at = useLovedOverrides.getState().byKey[key]?.at;
     loveSong(key, { artist: song.artist, title: song.title }).catch(() => {
+      useLovedOverrides.getState().unset(key, at);
       setLoved((s) => {
         const next = new Set(s);
         next.delete(key);
@@ -156,5 +161,16 @@ export function useSongFeedback() {
     });
   }, []);
 
-  return { hide, love, undoHide, hidden, loved };
+  // Me's saves and un-saves win over this view's own record.
+  const overrides = useLovedOverrides((s) => s.byKey);
+  const merged = useMemo(() => {
+    const out = new Set(loved);
+    for (const [k, o] of Object.entries(overrides)) {
+      if (o.loved) out.add(k);
+      else out.delete(k);
+    }
+    return out as ReadonlySet<string>;
+  }, [loved, overrides]);
+
+  return { hide, love, undoHide, hidden, loved: merged };
 }

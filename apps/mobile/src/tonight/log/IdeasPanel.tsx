@@ -1,11 +1,12 @@
-import { listKaraokeLog, type KaraokeLogEntry } from '@nomad/api-decide';
+import type { KaraokeLogEntry } from '@nomad/api-decide';
 import { getMyStats, type MeResult } from '@nomad/api-kjbox';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Text } from '@nomad/ui';
 import { skipToken, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { Pressable, View } from 'react-native';
 
+import { useLogMirror } from '../../me/useLogMirror';
 import { useNightStore } from '../nightStore';
 import { nightKey } from '../nomad/queries';
 import { artistLabel, UNKNOWN_ARTIST } from './logStore';
@@ -13,8 +14,6 @@ import { useOutbox } from './outbox';
 
 /** How many of the singer's most-sung songs the panel shows. */
 export const IDEAS_MINE_MAX = 5;
-/** decide's page cap: one page is the whole history for nearly everyone. */
-const LOG_PAGE = 500;
 
 export type IdeaSong = { artist: string; title: string; count: number };
 
@@ -40,7 +39,7 @@ export function mostSung(entries: KaraokeLogEntry[], max = IDEAS_MINE_MAX): Idea
 }
 
 /** The decide karaoke-log queries of one account (the Ideas panel's most-sung list). */
-const karaokeLogKey = (userKey: string | null) => ['decide', userKey, 'karaoke-log'];
+export const karaokeLogKey = (userKey: string | null) => ['decide', userKey, 'karaoke-log'];
 
 /**
  * Keeps the most-sung list fresh: invalidates the karaoke-log queries when a song becomes sung tonight (the night's
@@ -86,13 +85,7 @@ export function IdeasPanel({ onPick }: IdeasPanelProps) {
   const night = useNightStore((s) => s.active);
   const nomad = night?.kind === 'nomad' ? night : null;
 
-  const mine = useQuery({
-    queryKey: [...karaokeLogKey(userKey), 'most-sung'],
-    queryFn: async () => mostSung((await listKaraokeLog({ limit: LOG_PAGE })).entries),
-    enabled: userKey !== null,
-    staleTime: 5 * 60_000,
-    retry: false,
-  });
+  const { entries } = useLogMirror();
   const crowd = useQuery({
     queryKey: ['kjbox', userKey, nomad?.nightId, 'my-stats'],
     queryFn: async () => (await getMyStats(nomad!.code, nomad!.nightId)).top_songs.slice(0, IDEAS_MINE_MAX),
@@ -101,7 +94,7 @@ export function IdeasPanel({ onPick }: IdeasPanelProps) {
     retry: false,
   });
 
-  const mySongs = mine.data ?? [];
+  const mySongs = useMemo(() => mostSung(entries), [entries]);
   const crowdSongs = crowd.data ?? [];
   if (mySongs.length === 0 && crowdSongs.length === 0) return null;
 

@@ -9,6 +9,7 @@ import { useAuth } from '../auth/store';
 import { useSessionCheck } from '../auth/useSessionCheck';
 import { fakeSocialEnabled } from '../config';
 import { useClearDiscoverOnSignOut } from '../discover/useClearDiscoverOnSignOut';
+import { useClearMeOnAccountChange } from '../me/useClearMeOnAccountChange';
 import { useSearchWarmup } from '../find/useSearchWarmup';
 import { currentLocale } from '../locale';
 import { initObservability } from '../observability';
@@ -61,6 +62,12 @@ function ClearDiscoverOnSignOut() {
   return null;
 }
 
+/** Me's cached library, setlists and unsent writes belong to one account: dropped on sign-out / account change. */
+function ClearMeOnAccountChange() {
+  useClearMeOnAccountChange();
+  return null;
+}
+
 /** i18n + server-state providers; renders nothing until the stored session has been read. */
 export function AppProviders({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({ defaultOptions: { queries: { retry: 1 } } }));
@@ -92,6 +99,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
           <SearchWarmup />
           <LogSync />
           <ClearDiscoverOnSignOut />
+          <ClearMeOnAccountChange />
           <VoiceSync />
           {children}
         </QueryClientProvider>
