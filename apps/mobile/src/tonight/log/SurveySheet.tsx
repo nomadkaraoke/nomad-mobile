@@ -104,7 +104,8 @@ function SurveyForm({
     const sendVibes = vibes.length > 0;
     // Edit mode: only a field that had values in `initial` and is now empty is cleared (reasons also when the feel is
     // now great, where "what got in the way?" no longer applies).
-    const clear: ('vibes' | 'reasons')[] = [];
+    const clear: ('vibes' | 'reasons' | 'notes')[] = [];
+    if (!trimmed && initial?.notes?.trim()) clear.push('notes');
     if (!sendVibes && initial?.vibes?.length) clear.push('vibes');
     if (!sendReasons && initial?.reasons?.length) clear.push('reasons');
     useLogStore.getState().saveSurvey(

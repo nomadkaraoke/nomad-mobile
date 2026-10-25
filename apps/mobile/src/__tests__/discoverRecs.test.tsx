@@ -5,6 +5,8 @@ import { renderRouter } from 'expo-router/testing-library';
 import { Modal, View } from 'react-native';
 
 import { useAuth } from '../auth/store';
+import { useLovedOverrides } from '../me/lovedOverrides';
+import { useMeOutbox } from '../me/meOutbox';
 import { useLibraryFilter } from '../find/library';
 import { resetSearchCacheForTests } from '../find/useSearch';
 import { useMakeIntent } from '../make/intentStore';
@@ -116,6 +118,8 @@ beforeEach(async () => {
   jest.clearAllMocks();
   resetSearchCacheForTests();
   await useAuth.getState().signOut();
+  useLovedOverrides.getState().clear();
+  useMeOutbox.getState().rehydrate(null);
   act(() => useLibraryFilter.getState().set('any'));
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 } as never);
   popularSongs.mockResolvedValue([group('Lionel Richie', 'Hello')]);
@@ -277,6 +281,22 @@ describe('discoverRecs', () => {
     expect(screen.queryByTestId('mark-save')).toBeNull();
     act(() => screen.UNSAFE_getAllByType(Modal).find((m) => m.props.testID === 'song-menu')!.props.onDismiss());
     expect(await screen.findByTestId('mark-save')).toBeTruthy();
+  });
+
+  it('"Saved" in the menu un-saves: queues love:false and the label flips back', async () => {
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('rec-menu-crowd_pleasers-1'));
+    fireEvent.press(await screen.findByTestId('song-menu-love'));
+    expect(await screen.findByTestId('rec-loved-crowd_pleasers-1')).toBeTruthy();
+    fireEvent.press(screen.getByTestId('rec-menu-crowd_pleasers-1'));
+    expect(await screen.findByTestId('song-menu-love')).toHaveTextContent(/Saved/);
+    fireEvent.press(screen.getByTestId('song-menu-love'));
+    expect(api.loveSong).toHaveBeenCalledTimes(1);
+    expect(useMeOutbox.getState().items.find((i) => i.key === 'love:band b|song b')).toMatchObject({ op: 'love', loved: false });
+    await waitFor(() => expect(screen.queryByTestId('rec-loved-crowd_pleasers-1')).toBeNull());
+    fireEvent.press(screen.getByTestId('rec-menu-crowd_pleasers-1'));
+    expect(await screen.findByTestId('song-menu-love')).toHaveTextContent(/Save to My songs/);
   });
 
   it('Love it calls loveSong and marks the row loved', async () => {

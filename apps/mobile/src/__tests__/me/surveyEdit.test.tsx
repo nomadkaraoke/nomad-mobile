@@ -42,3 +42,21 @@ it('a fresh survey (no initial) never sends empty arrays', () => {
   expect(queuedPatch().survey).not.toHaveProperty('vibes');
   expect(queuedPatch().survey).not.toHaveProperty('reasons');
 });
+
+it('emptying the notes sends notes: null (decide applies None as an override) and clears them locally', () => {
+  const initial = { feel: 'great' as const, notes: 'Invented note' };
+  useLogStore.getState().saveSurvey('kj_1', initial);
+  renderTonight(<SurveySheet entryId="kj_1" artist="Invented Band" title="Made Up Song" initial={initial} />);
+  fireEvent.changeText(screen.getByTestId('survey-notes'), '   ');
+  fireEvent.press(screen.getByTestId('survey-save'));
+  const patch = (useOutbox.getState().items.at(-1) as { patch: { survey?: Record<string, unknown> } }).patch;
+  expect(patch.survey).toMatchObject({ feel: 'great', notes: null });
+  expect(useLogStore.getState().entries['kj_1']!.survey!.notes).toBeNull();
+});
+
+it('untouched notes are never cleared or resent as null', () => {
+  const initial = { feel: 'great' as const, notes: 'Invented note' };
+  renderTonight(<SurveySheet entryId="kj_1" artist="Invented Band" title="Made Up Song" initial={initial} />);
+  fireEvent.press(screen.getByTestId('survey-save'));
+  expect(queuedPatch().survey).toMatchObject({ notes: 'Invented note' });
+});

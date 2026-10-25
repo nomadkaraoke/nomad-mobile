@@ -75,9 +75,11 @@ function useWhen() {
     const raw = n?.date ?? (e.origin === 'backfill' ? null : e.sung_at);
     const precision = n?.date_precision ?? 'day';
     if (!raw || precision === 'unknown') return e.origin === 'backfill' ? t('beforeApp') : null;
-    const [y, m, d] = raw.slice(0, 10).split('-').map(Number);
     try {
-      const date = new Date(y!, (m ?? 1) - 1, d ?? 1);
+      // A full timestamp is an instant: format it in local time (slicing to its UTC day could be the wrong day).
+      // A bare YYYY[-MM[-DD]] is a calendar date: build it locally.
+      const [y, m, d] = raw.slice(0, 10).split('-').map(Number);
+      const date = raw.length > 10 ? new Date(raw) : new Date(y!, (m ?? 1) - 1, d ?? 1);
       if (precision === 'year') return f.dateTime(date, { year: 'numeric' });
       if (precision === 'month') return f.dateTime(date, { month: 'long', year: 'numeric' });
       return f.dateTime(date, { dateStyle: 'medium' });

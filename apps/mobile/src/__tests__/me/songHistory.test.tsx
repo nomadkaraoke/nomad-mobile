@@ -5,7 +5,7 @@ import { Alert } from 'react-native';
 
 import { SongHistory } from '../../me/SongHistory';
 import { useLogStore } from '../../tonight/log/logStore';
-import { useOutbox } from '../../tonight/log/outbox';
+import { outboxIdle, useOutbox } from '../../tonight/log/outbox';
 import { renderTonight } from '../../test-utils/tonightFixtures';
 import { resetMe } from './helpers';
 
@@ -16,6 +16,11 @@ jest.mock('@nomad/api-decide', () => ({
   putKaraokeLog: jest.fn(async () => ({})),
   deleteKaraokeLog: jest.fn(async () => ({})),
 }));
+let mockDateTime: ((d: Date) => string) | null = null;
+jest.mock('@nomad/i18n', () => {
+  const actual = jest.requireActual('@nomad/i18n');
+  return { ...actual, useFormatter: () => (mockDateTime ? { dateTime: mockDateTime } : actual.useFormatter()) };
+});
 const api = decide as jest.Mocked<typeof decide>;
 
 const rec = (id: string, o: Record<string, unknown> = {}) =>
@@ -29,6 +34,9 @@ beforeEach(() => {
   resetMe();
   api.listSongHistory.mockResolvedValue([]);
 });
+
+// Queued writes flush in the background: let them land inside act so nothing updates after the test.
+afterEach(() => act(async () => { await outboxIdle(); }));
 
 it('a backfill without a date reads "Before the app ×3"', async () => {
   api.listKaraokeLog.mockResolvedValue({
@@ -101,6 +109,7 @@ it('Edit on a kj_ record opens the survey only, with its answers; saving queues 
   expect(item!.id).toBe('kj_abc');
   expect(Object.keys(item!.patch)).toEqual(['survey']);
   expect(item!.patch.survey).toMatchObject({ feel: 'great', reasons: [] });
+  await act(async () => { await outboxIdle(); });
 });
 
 it('Remove asks, then queues a delete (kj_ too) and the row disappears', async () => {
@@ -119,4 +128,12 @@ it('renders nothing when the song has no records', async () => {
   renderTonight(<SongHistory libraryKey="sk_1" />);
   await waitFor(() => expect(api.listSongHistory).toHaveBeenCalled());
   expect(screen.queryByTestId('song-history')).toBeNull();
+});
+
+it('a day-precision timestamp is formatted as the instant (local day), never sliced to its UTC date', async () => {
+  mockDateTime = (d) => `FMT[${d.toISOString()}]`;
+  api.listKaraokeLog.mockResolvedValue({ entries: [rec('app_t', { sung_at: '2026-09-05T23:30:00Z' })] });
+  renderTonight(<SongHistory libraryKey="sk_1" />);
+  expect(await screen.findByTestId('song-history-app_t')).toHaveTextContent(/FMT\[2026-09-05T23:30:00\.000Z\]/);
+  mockDateTime = null;
 });

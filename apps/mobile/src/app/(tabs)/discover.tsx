@@ -31,6 +31,8 @@ import { RecSection, sectionTestId } from "../../discover/components/RecSection"
 import { RecSongRow } from "../../discover/components/RecSongRow";
 import { SignInCard } from "../../discover/components/SignInCard";
 import { AddToSetlistSheet } from "../../me/AddToSetlistSheet";
+import { useLovedOverrides } from "../../me/lovedOverrides";
+import { useMeOutbox } from "../../me/meOutbox";
 import { MarkSungSheet } from "../../me/MarkSungSheet";
 import { SongMenuSheet } from "../../discover/components/SongMenuSheet";
 import { useRecFilters } from "../../discover/filtersStore";
@@ -759,7 +761,12 @@ export default function DiscoverScreen() {
         song={menuSong}
         onClose={() => setMenuSong(null)}
         onHide={feedback.hide}
-        onLove={feedback.love}
+        onLove={(song) => {
+          // Not a toggle in useSongFeedback: a saved song's "Saved" un-saves (override + Me outbox, like Me's heart).
+          if (!feedback.loved.has(song.song_key)) return feedback.love(song);
+          useLovedOverrides.getState().set(song, false);
+          useMeOutbox.getState().enqueue({ key: `love:${song.song_key}`, op: 'love', song_key: song.song_key, artist: song.artist, title: song.title, loved: false });
+        }}
         saved={menuSong ? feedback.loved.has(menuSong.song_key) : false}
         onAddToSetlist={(song) => setSetlistSong(song)}
         onMarkSung={(song) => setSungSong(song)}
