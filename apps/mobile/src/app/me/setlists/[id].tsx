@@ -1,7 +1,7 @@
 import type { PlaylistItemOut } from '@nomad/api-decide';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, List, Text } from '@nomad/ui';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, type Href } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, View } from 'react-native';
 
@@ -48,7 +48,15 @@ export default function SetlistScreen() {
   const confirmDelete = () =>
     Alert.alert(t('deleteTitle'), t('deleteBody', { name: isolate(list.name) }), [
       { text: t('cancel'), style: 'cancel' },
-      { text: t('delete'), style: 'destructive', onPress: () => deleteSetlist(list.id) },
+      {
+        text: t('delete'),
+        style: 'destructive',
+        onPress: () => {
+          deleteSetlist(list.id);
+          if (router.canGoBack()) router.back();
+          else router.replace('/me/setlists' as Href);
+        },
+      },
     ]);
 
   const make = (item: PlaylistItemOut) => {
@@ -69,7 +77,14 @@ export default function SetlistScreen() {
     });
 
   const saveOrder = () => {
-    if (order) setItems(list.id, order.map((x) => ({ item_id: x.item_id, song_key: x.song_key, artist: x.artist, title: x.title })));
+    if (order) {
+      const ok = setItems(list.id, order.map((x) => ({ item_id: x.item_id, song_key: x.song_key, artist: x.artist, title: x.title })));
+      if (!ok) {
+        setFull(true); // refused (past 500): stay in edit mode so the order isn't lost
+        return;
+      }
+    }
+    setFull(false);
     setOrder(null);
   };
 

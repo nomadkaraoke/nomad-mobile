@@ -3,6 +3,7 @@ import { Button, Sheet, Text, TextField } from '@nomad/ui';
 import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 
+import { artistLabel } from '../tonight/log/logStore';
 import { MAX_NAME } from './SetlistNameSheet';
 import { useSetlists } from './useSetlists';
 
@@ -18,6 +19,7 @@ export function findInSetlist<T extends { song_key?: string | null; artist?: str
 /** "Add to setlist": tick the setlists the song should be in (ticked = already in), or start a new one. Done applies the changes. */
 export function AddToSetlistSheet({ song, onClose }: { song: AddSong | null; onClose(): void }) {
   const t = useTranslations('me.setlists');
+  const tOther = useTranslations('tonight.other');
   const { setlists, createSetlist, addSongs, removeItem } = useSetlists();
   // The person's changes over what each setlist already holds.
   const [ticks, setTicks] = useState<Record<string, boolean>>({});
@@ -62,7 +64,7 @@ export function AddToSetlistSheet({ song, onClose }: { song: AddSong | null; onC
   return (
     <Sheet visible={song !== null} onClose={close} title={t('addToTitle')} testID="add-to-setlist" closeLabel={t('close')} fullHeight>
       <View className="gap-3">
-        {song ? <Text variant="muted">{isolate(t('songValue', { title: song.title, artist: song.artist }))}</Text> : null}
+        {song ? <Text variant="muted">{isolate(t('songValue', { title: song.title, artist: artistLabel(song.artist, tOther('unknownArtist')) }))}</Text> : null}
         <ScrollView className="max-h-72" keyboardShouldPersistTaps="handled">
           <View className="gap-2">
             {setlists.map((s) => {

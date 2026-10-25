@@ -97,8 +97,23 @@ describe('setlist detail', () => {
     const buttons = alert.mock.calls[0]![2]!;
     buttons.find((b) => b.style === 'destructive')!.onPress!();
     await waitFor(() => expect(useMeOutbox.getState().items.some((i) => i.op === 'delete' && i.id === SEED)).toBe(true));
-    expect(await screen.findByTestId('setlist-not-found')).toBeTruthy();
+    expect(await screen.findByTestId('setlists')).toBeTruthy();
+    expect(screen.queryByTestId('setlist-not-found')).toBeNull();
+    expect(screen.queryByTestId(`setlists-row-${SEED}`)).toBeNull();
     alert.mockRestore();
+  });
+
+  it('a reorder refused at 500 songs stays in edit mode with the full message', async () => {
+    const big = Array.from({ length: 501 }, (_, n) => item(n + 1));
+    api.listSetlists.mockResolvedValue([setlist(SEED, 'Big', big)] as never);
+    renderRouter(appRoutes(), { initialUrl: `/me/setlists/${SEED}` });
+    await screen.findByTestId('setlist-item-0');
+    fireEvent.press(screen.getByTestId('setlist-edit-order'));
+    fireEvent.press(screen.getByTestId('setlist-item-down-0'));
+    fireEvent.press(screen.getByTestId('setlist-order-save'));
+    expect(await screen.findByTestId('setlist-full')).toBeTruthy();
+    expect(screen.getByTestId('setlist-order-save')).toBeTruthy();
+    expect(queuedFor(SEED)).toBeUndefined();
   });
 
   it('removes an item', async () => {
@@ -131,6 +146,16 @@ describe('setlist detail', () => {
     fireEvent.press(await screen.findByTestId('setlist-search-typed'));
     await waitFor(() => expect(queuedFor(SEED)?.items).toHaveLength(4));
     expect(queuedFor(SEED)!.items[3]).toMatchObject({ title: 'Invented Song', artist: 'Made Up Band', song_key: null });
+  });
+
+  it('free text with no dash or "by" is added under the Unknown Artist sentinel', async () => {
+    renderRouter(appRoutes(), { initialUrl: `/me/setlists/${SEED}` });
+    await screen.findByTestId('setlist-item-0');
+    fireEvent.press(screen.getByTestId('setlist-add'));
+    fireEvent.changeText(screen.getByTestId('setlist-search-input'), 'Invented Tune');
+    fireEvent.press(await screen.findByTestId('setlist-search-typed'));
+    await waitFor(() => expect(queuedFor(SEED)?.items).toHaveLength(4));
+    expect(queuedFor(SEED)!.items[3]).toMatchObject({ title: 'Invented Tune', artist: 'Unknown Artist', song_key: null });
   });
 
   it('adds a search result with its song_key', async () => {

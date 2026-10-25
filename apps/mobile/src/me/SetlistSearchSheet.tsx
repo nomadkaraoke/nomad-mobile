@@ -5,6 +5,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 
 import { LibraryFilterPicker, useLibraryFilter } from '../find/library';
 import { MIN_QUERY_CHARS, useSearch } from '../find/useSearch';
+import { UNKNOWN_ARTIST } from '../tonight/log/logStore';
 import { splitQuery } from '../tonight/other/AddSong';
 import type { AddSong } from './AddToSetlistSheet';
 
@@ -86,7 +87,7 @@ export function SetlistSearchSheet({ visible, onClose, onPick }: { visible: bool
               <Pressable
                 testID="setlist-search-typed"
                 accessibilityRole="button"
-                onPress={() => pick(`t:${q}`, { artist: typed.artist, title: typed.title, song_key: null })}
+                onPress={() => pick(`t:${q}`, { artist: typed.artist || UNKNOWN_ARTIST, title: typed.title, song_key: null })}
                 className="min-h-11 justify-center rounded-xl border border-dashed border-border p-3"
               >
                 <Text>{t('addTyped', { query: isolate(q) })}</Text>
