@@ -404,13 +404,19 @@ export function useVoiceSession(): VoiceSession {
       });
     };
 
-    const unplayable = async () => {
+    /**
+     * Skips the playing song. `global` (a real player error) reports `not_embeddable`, which decide applies to the
+     * version for everyone; a ready timeout only proves this phone couldn't load it, so it skips for this session.
+     */
+    const unplayable = async (global = true) => {
       const { step, song, sessionId } = get();
       if (step !== 'play' || !song || !sessionId) return;
       const take = await stopTake();
       deleteFileQuietly(take?.file?.uri);
       if (get().sessionId !== sessionId) return;
-      const body: SkipIn = { song_key: song.song_key, reason: 'not_embeddable', video_id: song.version.video_id };
+      const body: SkipIn = global
+        ? { song_key: song.song_key, reason: 'not_embeddable', video_id: song.version.video_id }
+        : { song_key: song.song_key, reason: 'something_else' };
       await attempt({ fn: () => skipVoiceSong(sessionId, body), then: () => loadNext(song.song_key) });
     };
 
@@ -690,12 +696,12 @@ export function useVoiceSession(): VoiceSession {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [s.step]);
 
-  // Play: an embed that never reports ready (offline, a stuck WebView) is skipped as unplayable.
+  // Play: an embed that never reports ready (offline, a stuck WebView) is skipped for this session only.
   const videoId = s.song?.version.video_id ?? null;
   useEffect(() => {
     if (s.step !== 'play' || !videoId || readyFor.current === videoId) return;
     const timer = setTimeout(() => {
-      if (readyFor.current !== videoId) void actions.unplayable();
+      if (readyFor.current !== videoId) void actions.unplayable(false);
     }, PLAYER_READY_TIMEOUT_MS);
     return () => clearTimeout(timer);
   }, [s.step, videoId, actions]);

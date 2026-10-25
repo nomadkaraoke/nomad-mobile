@@ -314,7 +314,7 @@ describe('useVoiceSession', () => {
     expect(r.current.playerMode).toBe('linkout');
   });
 
-  it('an embed that never loads (offline) is skipped as unplayable after the ready timeout', async () => {
+  it('an embed that never loads (offline) is skipped for this session only after the ready timeout', async () => {
     mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1)).mockResolvedValueOnce(song('b', 1));
     const { result: r } = await mount();
     await act(() => r.current.begin(SETUP));
@@ -328,11 +328,8 @@ describe('useVoiceSession', () => {
       jest.advanceTimersByTime(1);
     });
     await flush();
-    expect(mockApi.skipVoiceSong).toHaveBeenCalledWith('s1', {
-      song_key: 'a',
-      reason: 'not_embeddable',
-      video_id: 'vid-a',
-    });
+    // A timeout doesn't prove YouTube refuses the embed (slow network, stuck WebView): never mark it for everyone.
+    expect(mockApi.skipVoiceSong).toHaveBeenCalledWith('s1', { song_key: 'a', reason: 'something_else' });
     expect(r.current.step).toBe('pick');
     expect(r.current.song?.song_key).toBe('b');
   });
