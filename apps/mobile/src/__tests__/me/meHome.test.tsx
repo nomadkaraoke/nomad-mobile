@@ -97,6 +97,25 @@ describe('Me home', () => {
     expect(within(card).getByTestId('me-profile-sung')).toHaveTextContent(/8/);
   });
 
+  it('profile card: each source mark is announced by its service name (a mark alone says nothing)', async () => {
+    api.getServicesSummary.mockResolvedValue({
+      sources: [
+        { source: 'lastfm', connected: true, songs: 2 },
+        { source: 'spotify_export', connected: true, songs: 5 },
+        { source: 'spotify_playlist', connected: true, songs: 9 },
+      ],
+      capabilities: { screenshot_import: false, listenbrainz_oauth: false },
+    } as never);
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    const card = await screen.findByTestId('me-profile-card');
+    const lastfm = await within(card).findByTestId('me-profile-source-lastfm');
+    expect(lastfm).toHaveProp('accessibilityLabel', 'Last.fm');
+    expect(lastfm).toHaveProp('accessible', true);
+    // One mark per brand, named for the brand rather than one of its sources.
+    expect(within(card).getByTestId('me-profile-source-spotify')).toHaveProp('accessibilityLabel', 'Spotify');
+    expect(within(card).getAllByLabelText('Spotify')).toHaveLength(1);
+  });
+
   it('empty go-tos open the bulk picker; New setlist opens a named setlist', async () => {
     api.getLibrary.mockResolvedValue({ status: 'ok', etag: 'e', items: [] } as never);
     renderRouter(appRoutes(), { initialUrl: '/me' });

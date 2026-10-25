@@ -5,7 +5,7 @@ import { router, type Href } from 'expo-router';
 import { useMemo } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { brandFor } from '../discover/connect/ConnectedSources';
+import { brandFor, useSourceName } from '../discover/connect/ConnectedSources';
 import { useServicesSummary } from '../discover/connect/queries';
 import { useVoiceProfile } from '../voice/useVoiceProfile';
 import { noteRange, useVoiceLabels } from '../voice/voiceLabels';
@@ -43,6 +43,7 @@ export function ProfileSummaryCard({ items }: { items: MeSong[] }) {
   const labels = useVoiceLabels();
   const { profile } = useVoiceProfile();
   const summary = useServicesSummary();
+  const sourceName = useSourceName();
   const connected = useMemo(() => (summary.data?.sources ?? []).filter((s) => s.connected), [summary.data]);
   const brands = useMemo(() => [...new Set(connected.map((s) => brandFor(s.source)).filter((b): b is BrandId => b !== null))], [connected]);
   const sung = items.filter((s) => s.times_sung > 0).length;
@@ -88,8 +89,11 @@ export function ProfileSummaryCard({ items }: { items: MeSong[] }) {
       {strip ?? <Cta testID="me-profile-voice-cta" title={t('voiceCta')} hint={t('voiceHint')} onPress={go('/discover/voice')} />}
       {connected.length > 0 ? (
         <View testID="me-profile-sources" accessibilityLabel={t('sourcesLabel')} className="flex-row flex-wrap items-center gap-2">
+          {/* The marks stand alone here (no names next to them), so each one is announced by its service's name. */}
           {brands.map((b) => (
-            <BrandIcon key={b} brand={b} size={24} testID={`me-profile-source-${b}`} />
+            <View key={b} testID={`me-profile-source-${b}`} accessible accessibilityRole="image" accessibilityLabel={sourceName(b)}>
+              <BrandIcon brand={b} size={24} />
+            </View>
           ))}
         </View>
       ) : summary.data ? (
