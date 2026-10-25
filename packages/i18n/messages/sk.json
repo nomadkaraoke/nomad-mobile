@@ -706,7 +706,26 @@
       "skip": "Teraz nie",
       "song": "{title} od {artist}",
       "title": "Aké to bolo?",
-      "save": "Uložiť"
+      "save": "Uložiť",
+      "reason": {
+        "awkward_music": "Zvláštna hudba",
+        "crowd_quiet": "Tiché publikum",
+        "didnt_know_it": "Nepoznal/a som to",
+        "out_of_range": "Mimo môjho rozsahu",
+        "too_hard": "Príliš ťažké",
+        "too_long": "Príliš dlhé"
+      },
+      "reasonsLabel": "Čo ti prekážalo?",
+      "vibe": {
+        "ballad": "Balada",
+        "duet": "Duet",
+        "emotional": "Emocionálna",
+        "party": "Párty",
+        "rock_out": "Poriadny rock",
+        "singalong": "Hromadný spev",
+        "warm_up": "Na rozohriatie"
+      },
+      "vibesLabel": "Aká bola nálada?"
     }
   },
   "credits": {

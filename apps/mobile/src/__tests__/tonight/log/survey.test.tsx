@@ -131,6 +131,68 @@ it('the survey sheet saves every answer', async () => {
   expect(call[1].survey!.notes!.length).toBeLessThanOrEqual(2000);
 });
 
+it('SurveySheet vibe and why chips: reasons are hidden for great and shown for ok', () => {
+  renderTonight(<SurveySheet entryId="app_v1" artist="Adele" title="Hello" />);
+  expect(screen.getByTestId('survey-vibe-party')).toBeTruthy();
+  expect(screen.queryByTestId('survey-reason-too_long')).toBeNull();
+  fireEvent.press(screen.getByTestId('survey-feel-great'));
+  expect(screen.queryByTestId('survey-reason-too_long')).toBeNull();
+  fireEvent.press(screen.getByTestId('survey-feel-ok'));
+  expect(screen.getByTestId('survey-reason-too_long')).toBeTruthy();
+  fireEvent.press(screen.getByTestId('survey-feel-bad'));
+  expect(screen.getByTestId('survey-reason-didnt_know_it')).toBeTruthy();
+});
+
+it('SurveySheet saves vibes and reasons through saveSurvey', async () => {
+  renderTonight(<SurveySheet entryId="app_v2" artist="Adele" title="Hello" />);
+  fireEvent.press(screen.getByTestId('survey-feel-ok'));
+  fireEvent.press(screen.getByTestId('survey-vibe-ballad'));
+  fireEvent.press(screen.getByTestId('survey-reason-too_long'));
+  fireEvent.press(screen.getByTestId('survey-save'));
+  await outboxIdle();
+  expect(dapi.putKaraokeLog).toHaveBeenCalledWith('app_v2', {
+    survey: { feel: 'ok', vibes: ['ballad'], reasons: ['too_long'], answered_at: expect.any(String) },
+  });
+
+});
+
+it('SurveySheet vibes multi-select toggles, and reasons picked under ok are not sent once feel is great', async () => {
+  renderTonight(<SurveySheet entryId="app_v3" artist="A" title="T" />);
+  fireEvent.press(screen.getByTestId('survey-feel-ok'));
+  fireEvent.press(screen.getByTestId('survey-reason-too_hard'));
+  fireEvent.press(screen.getByTestId('survey-feel-great'));
+  fireEvent.press(screen.getByTestId('survey-vibe-party'));
+  fireEvent.press(screen.getByTestId('survey-vibe-duet'));
+  fireEvent.press(screen.getByTestId('survey-vibe-party'));
+  fireEvent.press(screen.getByTestId('survey-save'));
+  await outboxIdle();
+  expect(dapi.putKaraokeLog).toHaveBeenCalledWith('app_v3', {
+    survey: { feel: 'great', vibes: ['duet'], answered_at: expect.any(String) },
+  });
+});
+
+it('SurveySheet initial pre-selects vibes and reasons', () => {
+  renderTonight(
+    <SurveySheet entryId="app_v4" artist="A" title="T" initial={{ feel: 'bad', vibes: ['duet', 'party'], reasons: ['crowd_quiet'] }} />,
+  );
+  const sel = (id: string) => screen.getByTestId(id).props.accessibilityState;
+  expect(sel('survey-vibe-duet')).toMatchObject({ selected: true });
+  expect(sel('survey-vibe-party')).toMatchObject({ selected: true });
+  expect(sel('survey-vibe-ballad')).toMatchObject({ selected: false });
+  expect(sel('survey-reason-crowd_quiet')).toMatchObject({ selected: true });
+  expect(sel('survey-reason-too_long')).toMatchObject({ selected: false });
+});
+
+it('SurveySheet an emptied vibe row is not stored or sent', async () => {
+  renderTonight(<SurveySheet entryId="app_v5" artist="A" title="T" />);
+  fireEvent.press(screen.getByTestId('survey-vibe-party'));
+  fireEvent.press(screen.getByTestId('survey-vibe-party'));
+  fireEvent.press(screen.getByTestId('survey-feel-great'));
+  fireEvent.press(screen.getByTestId('survey-save'));
+  await outboxIdle();
+  expect(dapi.putKaraokeLog).toHaveBeenCalledWith('app_v5', { survey: { feel: 'great', answered_at: expect.any(String) } });
+});
+
 it('a second tap on a chosen answer clears it; closing the sheet skips', async () => {
   const onDone = jest.fn();
   renderTonight(<SurveySheet entryId="kj_q" artist="A" title="T" onDone={onDone} />);
@@ -222,4 +284,10 @@ it('every Tonight sheet goes through TonightSheet', () => {
     return /import\s*\{[^}]*\bSheet\b[^}]*\}\s*from\s*'@nomad\/ui'/.test(src) || /<Modal\b/.test(src);
   });
   expect(offenders).toEqual([]);
+});
+
+it('SurveySheet saveSurvey strips empty arrays', async () => {
+  useLogStore.getState().saveSurvey('app_v6', { vibes: [], reasons: [] });
+  await outboxIdle();
+  expect(dapi.putKaraokeLog).toHaveBeenCalledWith('app_v6', { survey: { answered_at: expect.any(String) } });
 });

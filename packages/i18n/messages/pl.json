@@ -706,7 +706,26 @@
       "skip": "Nie teraz",
       "song": "{title} – {artist}",
       "title": "Jak poszło?",
-      "save": "Zapisz"
+      "save": "Zapisz",
+      "reason": {
+        "awkward_music": "Niezręczny podkład",
+        "crowd_quiet": "Cicha publiczność",
+        "didnt_know_it": "Nie znałem/am utworu",
+        "out_of_range": "Poza moją skalą",
+        "too_hard": "Za trudny",
+        "too_long": "Za długi"
+      },
+      "reasonsLabel": "Co poszło nie tak?",
+      "vibe": {
+        "ballad": "Ballada",
+        "duet": "Duet",
+        "emotional": "Emocjonalnie",
+        "party": "Imprezowo",
+        "rock_out": "Czad / rockowo",
+        "singalong": "Do wspólnego śpiewania",
+        "warm_up": "Na rozgrzewkę"
+      },
+      "vibesLabel": "Jaki to był klimat?"
     }
   },
   "credits": {

@@ -706,7 +706,26 @@
       "skip": "Şimdi değil",
       "song": "{artist} - {title}",
       "title": "Nasıl geçti?",
-      "save": "Kaydet"
+      "save": "Kaydet",
+      "reason": {
+        "awkward_music": "Garip müzik",
+        "crowd_quiet": "Sessiz kitle",
+        "didnt_know_it": "Şarkıyı bilmiyordum",
+        "out_of_range": "Ses aralığımın dışındaydı",
+        "too_hard": "Çok zordu",
+        "too_long": "Çok uzundu"
+      },
+      "reasonsLabel": "Ters giden neydi?",
+      "vibe": {
+        "ballad": "Balad",
+        "duet": "Düet",
+        "emotional": "Duygusal",
+        "party": "Parti",
+        "rock_out": "Coşkulu rock",
+        "singalong": "Hep bir ağızdan",
+        "warm_up": "Isınma"
+      },
+      "vibesLabel": "Ortamın havası nasıldı?"
     }
   },
   "credits": {

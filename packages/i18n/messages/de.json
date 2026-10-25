@@ -706,7 +706,26 @@
       "skip": "Nicht jetzt",
       "song": "{title} von {artist}",
       "title": "Wie lief es?",
-      "save": "Speichern"
+      "save": "Speichern",
+      "reason": {
+        "awkward_music": "Unpassende Musik",
+        "crowd_quiet": "Ruhiges Publikum",
+        "didnt_know_it": "Kannte das Lied nicht",
+        "out_of_range": "Nicht meine Tonlage",
+        "too_hard": "Zu schwer",
+        "too_long": "Zu lang"
+      },
+      "reasonsLabel": "Woran lag es?",
+      "vibe": {
+        "ballad": "Ballade",
+        "duet": "Duett",
+        "emotional": "Gefühlvoll",
+        "party": "Party",
+        "rock_out": "Abrocken",
+        "singalong": "Mitsingen",
+        "warm_up": "Aufwärmen"
+      },
+      "vibesLabel": "Wie war die Stimmung?"
     }
   },
   "credits": {

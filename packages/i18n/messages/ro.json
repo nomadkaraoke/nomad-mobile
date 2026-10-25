@@ -706,7 +706,26 @@
       "skip": "Nu acum",
       "song": "{title} de {artist}",
       "title": "Cum a mers?",
-      "save": "Salvează"
+      "save": "Salvează",
+      "reason": {
+        "awkward_music": "Muzică nepotrivită",
+        "crowd_quiet": "Public prea liniștit",
+        "didnt_know_it": "N-am știut piesa",
+        "out_of_range": "Prea sus/jos pentru vocea mea",
+        "too_hard": "Prea grea",
+        "too_long": "Prea lungă"
+      },
+      "reasonsLabel": "Ce nu a mers?",
+      "vibe": {
+        "ballad": "Baladă",
+        "duet": "Duet",
+        "emotional": "Emoționantă",
+        "party": "Petrecere",
+        "rock_out": "Rock energic",
+        "singalong": "De cântat în cor",
+        "warm_up": "Încălzire"
+      },
+      "vibesLabel": "Care a fost atmosfera?"
     }
   },
   "credits": {

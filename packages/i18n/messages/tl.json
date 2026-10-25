@@ -706,7 +706,26 @@
       "skip": "Huwag muna",
       "song": "{title} ni {artist}",
       "title": "Kumusta ang naging takbo?",
-      "save": "I-save"
+      "save": "I-save",
+      "reason": {
+        "awkward_music": "Alanganing tugtog",
+        "crowd_quiet": "Tahimik ang crowd",
+        "didnt_know_it": "Hindi kabisado ang kanta",
+        "out_of_range": "Wala sa range ng boses ko",
+        "too_hard": "Masyadong mahirap",
+        "too_long": "Masyadong mahaba"
+      },
+      "reasonsLabel": "Ano ang naging aberya?",
+      "vibe": {
+        "ballad": "Ballad",
+        "duet": "Duet",
+        "emotional": "Madrama",
+        "party": "Party",
+        "rock_out": "Rock out",
+        "singalong": "Sing-along",
+        "warm_up": "Warm-up"
+      },
+      "vibesLabel": "Ano ang naging vibe?"
     }
   },
   "credits": {

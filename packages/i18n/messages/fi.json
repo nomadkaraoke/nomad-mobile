@@ -706,7 +706,26 @@
       "skip": "Ei nyt",
       "song": "{title} – {artist}",
       "title": "Miten se meni?",
-      "save": "Tallenna"
+      "save": "Tallenna",
+      "reason": {
+        "awkward_music": "Kankea tausta",
+        "crowd_quiet": "Hiljainen yleisö",
+        "didnt_know_it": "En osannut biisiä",
+        "out_of_range": "Ei sopinut äänialalleni",
+        "too_hard": "Liian vaikea",
+        "too_long": "Liian pitkä"
+      },
+      "reasonsLabel": "Mikä meni pieleen?",
+      "vibe": {
+        "ballad": "Balladi",
+        "duet": "Duetto",
+        "emotional": "Tunteikas",
+        "party": "Bileet",
+        "rock_out": "Kunnon rokkia",
+        "singalong": "Yhteislaulu",
+        "warm_up": "Lämmittely"
+      },
+      "vibesLabel": "Millainen fiilis oli?"
     }
   },
   "credits": {

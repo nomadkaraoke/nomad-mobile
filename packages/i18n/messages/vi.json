@@ -706,7 +706,26 @@
       "skip": "Để sau",
       "song": "{title} - {artist}",
       "title": "Mọi chuyện thế nào rồi?",
-      "save": "Lưu"
+      "save": "Lưu",
+      "reason": {
+        "awkward_music": "Nhạc kỳ lạ",
+        "crowd_quiet": "Khán giả im ắng",
+        "didnt_know_it": "Không thuộc bài",
+        "out_of_range": "Quá tầm giọng",
+        "too_hard": "Quá khó",
+        "too_long": "Quá dài"
+      },
+      "reasonsLabel": "Điều gì đã cản trở bạn?",
+      "vibe": {
+        "ballad": "Ballad",
+        "duet": "Song ca",
+        "emotional": "Cảm xúc",
+        "party": "Tiệc tùng",
+        "rock_out": "Cháy hết mình",
+        "singalong": "Hòa giọng",
+        "warm_up": "Khởi động"
+      },
+      "vibesLabel": "Không khí lúc đó thế nào?"
     }
   },
   "credits": {

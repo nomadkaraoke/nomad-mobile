@@ -706,7 +706,26 @@
       "skip": "Inte nu",
       "song": "{title} med {artist}",
       "title": "Hur gick det?",
-      "save": "Spara"
+      "save": "Spara",
+      "reason": {
+        "awkward_music": "Konstig musik",
+        "crowd_quiet": "Tyst publik",
+        "didnt_know_it": "Kunde den inte",
+        "out_of_range": "Utanför mitt röstomfång",
+        "too_hard": "För svår",
+        "too_long": "För lång"
+      },
+      "reasonsLabel": "Vad kom i vägen?",
+      "vibe": {
+        "ballad": "Ballad",
+        "duet": "Duett",
+        "emotional": "Känslosam",
+        "party": "Fest",
+        "rock_out": "Ösigt/rockigt",
+        "singalong": "Allsång",
+        "warm_up": "Uppvärmning"
+      },
+      "vibesLabel": "Hur var stämningen?"
     }
   },
   "credits": {

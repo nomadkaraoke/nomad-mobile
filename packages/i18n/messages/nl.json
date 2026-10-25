@@ -706,7 +706,26 @@
       "skip": "Niet nu",
       "song": "{title} van {artist}",
       "title": "Hoe ging het?",
-      "save": "Opslaan"
+      "save": "Opslaan",
+      "reason": {
+        "awkward_music": "Ongemakkelijke muziek",
+        "crowd_quiet": "Stil publiek",
+        "didnt_know_it": "Kende het niet",
+        "out_of_range": "Buiten mijn bereik",
+        "too_hard": "Te moeilijk",
+        "too_long": "Te lang"
+      },
+      "reasonsLabel": "Wat zat er in de weg?",
+      "vibe": {
+        "ballad": "Ballad",
+        "duet": "Duet",
+        "emotional": "Emotioneel",
+        "party": "Feest",
+        "rock_out": "Lekker rocken",
+        "singalong": "Meezinger",
+        "warm_up": "Opwarmertje"
+      },
+      "vibesLabel": "Wat was de sfeer?"
     }
   },
   "credits": {

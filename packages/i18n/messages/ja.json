@@ -706,7 +706,26 @@
       "skip": "今はしない",
       "song": "{artist} - {title}",
       "title": "いかがでしたか？",
-      "save": "保存"
+      "save": "保存",
+      "reason": {
+        "awkward_music": "曲のノリが合わなかった",
+        "crowd_quiet": "周りの反応が薄かった",
+        "didnt_know_it": "曲をよく知らなかった",
+        "out_of_range": "キー・音域が合わなかった",
+        "too_hard": "難しすぎた",
+        "too_long": "長すぎた"
+      },
+      "reasonsLabel": "うまくいかなかった理由は？",
+      "vibe": {
+        "ballad": "バラード",
+        "duet": "デュエット",
+        "emotional": "エモい・しっとり",
+        "party": "パーティー・盛り上がり",
+        "rock_out": "ロック全開",
+        "singalong": "みんなで熱唱",
+        "warm_up": "ウォーミングアップ"
+      },
+      "vibesLabel": "どんな雰囲気でしたか？"
     }
   },
   "credits": {

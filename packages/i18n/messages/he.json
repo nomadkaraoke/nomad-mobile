@@ -706,7 +706,26 @@
       "skip": "לא עכשיו",
       "song": "{title} מאת {artist}",
       "title": "איך היה?",
-      "save": "שמור"
+      "save": "שמור",
+      "reason": {
+        "awkward_music": "מוזיקה לא זורמת",
+        "crowd_quiet": "קהל שקט",
+        "didnt_know_it": "לא הכרתי את השיר",
+        "out_of_range": "מחוץ למנעד שלי",
+        "too_hard": "קשה מדי",
+        "too_long": "ארוך מדי"
+      },
+      "reasonsLabel": "מה הפריע?",
+      "vibe": {
+        "ballad": "בלדה",
+        "duet": "דואט",
+        "emotional": "מרגש",
+        "party": "מסיבה",
+        "rock_out": "רוק מחשמל",
+        "singalong": "כולם שרים יחד",
+        "warm_up": "חימום"
+      },
+      "vibesLabel": "איך היה הוייב?"
     }
   },
   "credits": {

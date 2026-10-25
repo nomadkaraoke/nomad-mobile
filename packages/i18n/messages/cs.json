@@ -706,7 +706,26 @@
       "skip": "Teď ne",
       "song": "{title} od {artist}",
       "title": "Jak to šlo?",
-      "save": "Uložit"
+      "save": "Uložit",
+      "reason": {
+        "awkward_music": "Zvláštní hudba",
+        "crowd_quiet": "Vlažné publikum",
+        "didnt_know_it": "Neznal/a jsem to",
+        "out_of_range": "Mimo můj rozsah",
+        "too_hard": "Příliš těžké",
+        "too_long": "Příliš dlouhé"
+      },
+      "reasonsLabel": "Co ti v tom bránilo?",
+      "vibe": {
+        "ballad": "Balada",
+        "duet": "Duet",
+        "emotional": "Doják",
+        "party": "Párty",
+        "rock_out": "Nářez",
+        "singalong": "Sborový zpěv",
+        "warm_up": "Na rozehřátí"
+      },
+      "vibesLabel": "Jaká byla atmosféra?"
     }
   },
   "credits": {

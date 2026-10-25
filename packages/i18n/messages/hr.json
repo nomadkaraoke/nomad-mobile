@@ -706,7 +706,26 @@
       "skip": "Ne sada",
       "song": "{title} – {artist}",
       "title": "Kako je prošlo?",
-      "save": "Spremi"
+      "save": "Spremi",
+      "reason": {
+        "awkward_music": "Čudna glazba",
+        "crowd_quiet": "Tiha publika",
+        "didnt_know_it": "Nisam je znao/la",
+        "out_of_range": "Izvan mog raspona",
+        "too_hard": "Preteško",
+        "too_long": "Predugo"
+      },
+      "reasonsLabel": "Što je pošlo po zlu?",
+      "vibe": {
+        "ballad": "Balada",
+        "duet": "Duet",
+        "emotional": "Emotivno",
+        "party": "Tulum",
+        "rock_out": "Rokačina",
+        "singalong": "Zajedničko pjevanje",
+        "warm_up": "Zagrijavanje"
+      },
+      "vibesLabel": "Kakva je bila atmosfera?"
     }
   },
   "credits": {

@@ -706,7 +706,26 @@
       "skip": "나중에 하기",
       "song": "{artist}의 {title}",
       "title": "어떠셨나요?",
-      "save": "저장"
+      "save": "저장",
+      "reason": {
+        "awkward_music": "어색한 반주/음악",
+        "crowd_quiet": "조용한 관객 반응",
+        "didnt_know_it": "노래를 잘 몰랐음",
+        "out_of_range": "음역대가 안 맞음",
+        "too_hard": "너무 어려움",
+        "too_long": "곡이 너무 김"
+      },
+      "reasonsLabel": "어떤 점이 아쉬웠나요?",
+      "vibe": {
+        "ballad": "발라드",
+        "duet": "듀엣",
+        "emotional": "감성적",
+        "party": "파티",
+        "rock_out": "신나는 록",
+        "singalong": "떼창",
+        "warm_up": "워밍업"
+      },
+      "vibesLabel": "분위기는 어땠나요?"
     }
   },
   "credits": {

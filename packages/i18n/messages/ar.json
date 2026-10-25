@@ -706,7 +706,26 @@
       "skip": "ليس الآن",
       "song": "{title} لـ {artist}",
       "title": "كيف كان أداؤك الليلة؟",
-      "save": "حفظ"
+      "save": "حفظ",
+      "reason": {
+        "awkward_music": "موسيقى غير مناسبة",
+        "crowd_quiet": "تفاعل الجمهور هادئ",
+        "didnt_know_it": "لم أكن أعرف الأغنية",
+        "out_of_range": "خارج طبقتي الصوتية",
+        "too_hard": "صعبة جداً",
+        "too_long": "طويلة جداً"
+      },
+      "reasonsLabel": "ما الذي لم يسر على ما يرام؟",
+      "vibe": {
+        "ballad": "أغنية هادئة (Ballad)",
+        "duet": "دويتو (ثنائي)",
+        "emotional": "مفعمة بالمشاعر",
+        "party": "حفلة وحماس",
+        "rock_out": "روك صاخب",
+        "singalong": "غناء جماعي",
+        "warm_up": "إحماء"
+      },
+      "vibesLabel": "كيف كانت الأجواء؟"
     }
   },
   "credits": {

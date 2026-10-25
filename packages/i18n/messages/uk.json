@@ -706,7 +706,26 @@
       "skip": "Не зараз",
       "song": "{title} — {artist}",
       "title": "Як усе пройшло?",
-      "save": "Зберегти"
+      "save": "Зберегти",
+      "reason": {
+        "awkward_music": "Незручна музика",
+        "crowd_quiet": "Тиха публіка",
+        "didnt_know_it": "Не знав(-ла) пісню",
+        "out_of_range": "Не мій діапазон",
+        "too_hard": "Занадто складно",
+        "too_long": "Занадто довго"
+      },
+      "reasonsLabel": "Що стало на заваді?",
+      "vibe": {
+        "ballad": "Балада",
+        "duet": "Дует",
+        "emotional": "Емоційна",
+        "party": "Вечірка",
+        "rock_out": "Запальний рок",
+        "singalong": "Співаємо разом",
+        "warm_up": "Розігрів"
+      },
+      "vibesLabel": "Який був вайб?"
     }
   },
   "credits": {

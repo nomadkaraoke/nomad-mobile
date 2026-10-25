@@ -706,7 +706,26 @@
       "skip": "Ikke nå",
       "song": "{title} av {artist}",
       "title": "Hvordan gikk det?",
-      "save": "Lagre"
+      "save": "Lagre",
+      "reason": {
+        "awkward_music": "Merkelig musikk",
+        "crowd_quiet": "Stille publikum",
+        "didnt_know_it": "Kunne den ikke",
+        "out_of_range": "Utenfor mitt stemmeleie",
+        "too_hard": "For vanskelig",
+        "too_long": "For lang"
+      },
+      "reasonsLabel": "Hva kom i veien?",
+      "vibe": {
+        "ballad": "Ballade",
+        "duet": "Duett",
+        "emotional": "Følelsesladet",
+        "party": "Fest",
+        "rock_out": "Rokkefot",
+        "singalong": "Allsang",
+        "warm_up": "Oppvarming"
+      },
+      "vibesLabel": "Hva var stemningen?"
     }
   },
   "credits": {

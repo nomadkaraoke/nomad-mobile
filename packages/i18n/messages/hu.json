@@ -706,7 +706,26 @@
       "skip": "Most ne",
       "song": "{artist} – {title}",
       "title": "Hogy sikerült?",
-      "save": "Mentés"
+      "save": "Mentés",
+      "reason": {
+        "awkward_music": "Kellemetlen zene",
+        "crowd_quiet": "Csendes közönség",
+        "didnt_know_it": "Nem ismertem",
+        "out_of_range": "Kívül esik a hangterjedelmemen",
+        "too_hard": "Túl nehéz",
+        "too_long": "Túl hosszú"
+      },
+      "reasonsLabel": "Mi volt a gond?",
+      "vibe": {
+        "ballad": "Ballada",
+        "duet": "Duett",
+        "emotional": "Érzelmes",
+        "party": "Buli",
+        "rock_out": "Zúzós",
+        "singalong": "Közös éneklés",
+        "warm_up": "Bemelegítés"
+      },
+      "vibesLabel": "Milyen volt a hangulat?"
     }
   },
   "credits": {

@@ -706,7 +706,26 @@
       "skip": "Όχι τώρα",
       "song": "{title} από {artist}",
       "title": "Πώς πήγε;",
-      "save": "Αποθήκευση"
+      "save": "Αποθήκευση",
+      "reason": {
+        "awkward_music": "Άβολη μουσική",
+        "crowd_quiet": "Ήσυχο κοινό",
+        "didnt_know_it": "Δεν το ήξερα",
+        "out_of_range": "Εκτός της φωνητικής μου έκτασης",
+        "too_hard": "Πολύ δύσκολο",
+        "too_long": "Πολύ μεγάλο σε διάρκεια"
+      },
+      "reasonsLabel": "Τι πήγε στραβά;",
+      "vibe": {
+        "ballad": "Μπαλάντα",
+        "duet": "Ντουέτο",
+        "emotional": "Συγκινητικό",
+        "party": "Πάρτι",
+        "rock_out": "Ροκάρισμα",
+        "singalong": "Όλοι μαζί",
+        "warm_up": "Ζέσταμα"
+      },
+      "vibesLabel": "Ποιο ήταν το vibe;"
     }
   },
   "credits": {

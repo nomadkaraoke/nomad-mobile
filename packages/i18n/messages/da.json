@@ -706,7 +706,26 @@
       "skip": "Ikke nu",
       "song": "{title} af {artist}",
       "title": "Hvordan gik det?",
-      "save": "Gem"
+      "save": "Gem",
+      "reason": {
+        "awkward_music": "Akavet musik",
+        "crowd_quiet": "Stille publikum",
+        "didnt_know_it": "Kendte den ikke",
+        "out_of_range": "Uden for mit toneleje",
+        "too_hard": "For svær",
+        "too_long": "For lang"
+      },
+      "reasonsLabel": "Hvad kom i vejen?",
+      "vibe": {
+        "ballad": "Ballade",
+        "duet": "Duet",
+        "emotional": "Følelsesladet",
+        "party": "Fest",
+        "rock_out": "Rocke igennem",
+        "singalong": "Fællessang",
+        "warm_up": "Opvarmning"
+      },
+      "vibesLabel": "Hvordan var stemningen?"
     }
   },
   "credits": {

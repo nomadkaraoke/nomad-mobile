@@ -706,7 +706,26 @@
       "skip": "Non ora",
       "song": "{title} di {artist}",
       "title": "Com'è andata?",
-      "save": "Salva"
+      "save": "Salva",
+      "reason": {
+        "awkward_music": "Brano poco adatto",
+        "crowd_quiet": "Pubblico freddo",
+        "didnt_know_it": "Non la conoscevo",
+        "out_of_range": "Fuori dalla mia estensione",
+        "too_hard": "Troppo difficile",
+        "too_long": "Troppo lunga"
+      },
+      "reasonsLabel": "Cosa è andato storto?",
+      "vibe": {
+        "ballad": "Ballata",
+        "duet": "Duetto",
+        "emotional": "Emozionante",
+        "party": "Festa",
+        "rock_out": "Rock scatenato",
+        "singalong": "Tutti insieme",
+        "warm_up": "Riscaldamento"
+      },
+      "vibesLabel": "Com'era l'atmosfera?"
     }
   },
   "credits": {

@@ -706,7 +706,26 @@
       "skip": "暂不填写",
       "song": "{artist}《{title}》",
       "title": "唱得怎么样？",
-      "save": "保存"
+      "save": "保存",
+      "reason": {
+        "awkward_music": "伴奏不对劲",
+        "crowd_quiet": "观众太安静",
+        "didnt_know_it": "不太会唱这首",
+        "out_of_range": "不在我的音域内",
+        "too_hard": "难度太高",
+        "too_long": "时间太长"
+      },
+      "reasonsLabel": "是什么影响了发挥？",
+      "vibe": {
+        "ballad": "抒情慢歌",
+        "duet": "双人对唱",
+        "emotional": "走心情歌",
+        "party": "派对狂欢",
+        "rock_out": "摇滚炸场",
+        "singalong": "全场大合唱",
+        "warm_up": "热身开嗓"
+      },
+      "vibesLabel": "现场氛围如何？"
     }
   },
   "credits": {

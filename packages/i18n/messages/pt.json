@@ -706,7 +706,26 @@
       "skip": "Agora não",
       "song": "{title} de {artist}",
       "title": "Como foi?",
-      "save": "Salvar"
+      "save": "Salvar",
+      "reason": {
+        "awkward_music": "Música desconfortável",
+        "crowd_quiet": "Público desanimado",
+        "didnt_know_it": "Não conhecia direito",
+        "out_of_range": "Fora do meu alcance",
+        "too_hard": "Muito difícil",
+        "too_long": "Muito longa"
+      },
+      "reasonsLabel": "O que atrapalhou?",
+      "vibe": {
+        "ballad": "Balada romântica",
+        "duet": "Dueto",
+        "emotional": "Emocionante",
+        "party": "Festa",
+        "rock_out": "Puro rock",
+        "singalong": "Cantar junto",
+        "warm_up": "Aquecimento"
+      },
+      "vibesLabel": "Qual foi a vibe?"
     }
   },
   "credits": {

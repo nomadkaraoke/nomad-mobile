@@ -552,6 +552,25 @@
         "yes": "Yes",
         "no": "Not really"
       },
+      "vibesLabel": "What was the vibe?",
+      "vibe": {
+        "party": "Party",
+        "ballad": "Ballad",
+        "warm_up": "Warm-up",
+        "duet": "Duet",
+        "emotional": "Emotional",
+        "rock_out": "Rock out",
+        "singalong": "Sing-along"
+      },
+      "reasonsLabel": "What got in the way?",
+      "reason": {
+        "out_of_range": "Out of my range",
+        "too_hard": "Too hard",
+        "crowd_quiet": "Quiet crowd",
+        "awkward_music": "Awkward music",
+        "too_long": "Too long",
+        "didnt_know_it": "Didn't know it"
+      },
       "notesLabel": "Notes (optional)",
       "notesPlaceholder": "Anything to remember next time?",
       "save": "Save",

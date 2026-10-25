@@ -194,7 +194,7 @@ export const useLogStore = create<LogStore>((set, get) => {
       if (!get().userKey) return;
       const survey: Survey = {};
       for (const [k, v] of Object.entries(answers)) {
-        if (v !== undefined && v !== null && v !== '') (survey as Record<string, unknown>)[k] = v;
+        if (v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && v.length === 0)) (survey as Record<string, unknown>)[k] = v;
       }
       survey.answered_at = iso();
       const e = get().entries[id];

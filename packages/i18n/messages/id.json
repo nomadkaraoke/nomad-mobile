@@ -706,7 +706,26 @@
       "skip": "Jangan sekarang",
       "song": "{title} oleh {artist}",
       "title": "Bagaimana tadi penampilannya?",
-      "save": "Simpan"
+      "save": "Simpan",
+      "reason": {
+        "awkward_music": "Musiknya canggung",
+        "crowd_quiet": "Penonton kurang heboh",
+        "didnt_know_it": "Kurang tahu lagunya",
+        "out_of_range": "Nadanya ketinggian/kerendahan",
+        "too_hard": "Terlalu sulit",
+        "too_long": "Terlalu panjang"
+      },
+      "reasonsLabel": "Apa yang bikin kurang pas?",
+      "vibe": {
+        "ballad": "Balada",
+        "duet": "Duet",
+        "emotional": "Emosional",
+        "party": "Pesta",
+        "rock_out": "Nge-rock",
+        "singalong": "Sing-along",
+        "warm_up": "Pemanasan"
+      },
+      "vibesLabel": "Bagaimana suasananya?"
     }
   },
   "credits": {

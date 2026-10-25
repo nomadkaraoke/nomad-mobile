@@ -24,6 +24,11 @@ type Feel = NonNullable<LogSurvey['feel']>;
 type Key = NonNullable<LogSurvey['key']>;
 const FEELS: Feel[] = ['great', 'ok', 'bad'];
 const KEYS: Key[] = ['too_low', 'right', 'too_high'];
+type Vibe = NonNullable<LogSurvey['vibes']>[number];
+type Reason = NonNullable<LogSurvey['reasons']>[number];
+const VIBES: Vibe[] = ['party', 'ballad', 'warm_up', 'duet', 'emotional', 'rock_out', 'singalong'];
+const REASONS: Reason[] = ['out_of_range', 'too_hard', 'crowd_quiet', 'awkward_music', 'too_long', 'didnt_know_it'];
+const toggle = <T,>(list: T[], v: T): T[] => (list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
 const CROWD = ['yes', 'no'] as const;
 
 function Chip({ testID, label, selected, onPress }: { testID: string; label: string; selected: boolean; onPress: () => void }) {
@@ -87,14 +92,20 @@ function SurveyForm({
   const [feel, setFeel] = useState<Feel | null>(initial?.feel ?? null);
   const [key, setKey] = useState<Key | null>(initial?.key ?? null);
   const [crowd, setCrowd] = useState<boolean | null>(initial?.crowd_pleaser ?? null);
+  const [vibes, setVibes] = useState<Vibe[]>(initial?.vibes ?? []);
+  const [reasons, setReasons] = useState<Reason[]>(initial?.reasons ?? []);
   const [notes, setNotes] = useState(initial?.notes ?? '');
 
   const save = () => {
     const trimmed = notes.trim();
+    // "What got in the way?" only applies to ok/bad: a reason picked before switching to great is dropped.
+    const whyAsked = feel === 'ok' || feel === 'bad';
     useLogStore.getState().saveSurvey(entryId, {
       ...(feel ? { feel } : {}),
       ...(key ? { key } : {}),
       ...(crowd !== null ? { crowd_pleaser: crowd } : {}),
+      ...(vibes.length ? { vibes } : {}),
+      ...(whyAsked && reasons.length ? { reasons } : {}),
       ...(trimmed ? { notes: trimmed } : {}),
     });
     onDone?.();
@@ -136,6 +147,30 @@ function SurveyForm({
           })}
         </View>
       </View>
+      <View className="gap-2">
+        <Text className="font-semibold">{t('vibesLabel')}</Text>
+        <View className="flex-row flex-wrap gap-2">
+          {VIBES.map((v) => (
+            <Chip key={v} testID={`survey-vibe-${v}`} label={t(`vibe.${v}`)} selected={vibes.includes(v)} onPress={() => setVibes(toggle(vibes, v))} />
+          ))}
+        </View>
+      </View>
+      {feel === 'ok' || feel === 'bad' ? (
+        <View className="gap-2">
+          <Text className="font-semibold">{t('reasonsLabel')}</Text>
+          <View className="flex-row flex-wrap gap-2">
+            {REASONS.map((v) => (
+              <Chip
+                key={v}
+                testID={`survey-reason-${v}`}
+                label={t(`reason.${v}`)}
+                selected={reasons.includes(v)}
+                onPress={() => setReasons(toggle(reasons, v))}
+              />
+            ))}
+          </View>
+        </View>
+      ) : null}
       <TextField
         testID="survey-notes"
         label={t('notesLabel')}

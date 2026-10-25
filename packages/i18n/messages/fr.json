@@ -706,7 +706,26 @@
       "skip": "Pas maintenant",
       "song": "{title} par {artist}",
       "title": "Comment ça s'est passé ?",
-      "save": "Enregistrer"
+      "save": "Enregistrer",
+      "reason": {
+        "awkward_music": "Musique gênante",
+        "crowd_quiet": "Public timide",
+        "didnt_know_it": "Je ne la connaissais pas",
+        "out_of_range": "Hors de ma tessiture",
+        "too_hard": "Trop difficile",
+        "too_long": "Trop long"
+      },
+      "reasonsLabel": "Qu'est-ce qui a coincé ?",
+      "vibe": {
+        "ballad": "Ballade",
+        "duet": "Duo",
+        "emotional": "Émotion",
+        "party": "Fête",
+        "rock_out": "Rock",
+        "singalong": "À reprendre en chœur",
+        "warm_up": "Échauffement"
+      },
+      "vibesLabel": "C'était quoi l'ambiance ?"
     }
   },
   "credits": {

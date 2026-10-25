@@ -706,7 +706,26 @@
       "skip": "Ara no",
       "song": "{title} de {artist}",
       "title": "Com ha anat?",
-      "save": "Desa"
+      "save": "Desa",
+      "reason": {
+        "awkward_music": "Música incòmoda",
+        "crowd_quiet": "Públic apàtic",
+        "didnt_know_it": "No me la sabia",
+        "out_of_range": "Fora del meu registre",
+        "too_hard": "Massa difícil",
+        "too_long": "Massa llarga"
+      },
+      "reasonsLabel": "Què ha fallat?",
+      "vibe": {
+        "ballad": "Balada",
+        "duet": "Duet",
+        "emotional": "Emotiva",
+        "party": "Festa",
+        "rock_out": "Per donar-ho tot",
+        "singalong": "Per cantar tots junts",
+        "warm_up": "Escalfament"
+      },
+      "vibesLabel": "Quin era l'ambient?"
     }
   },
   "credits": {

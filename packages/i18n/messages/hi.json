@@ -706,7 +706,26 @@
       "skip": "अभी नहीं",
       "song": "{artist} का {title}",
       "title": "कैसा रहा?",
-      "save": "सेव करो"
+      "save": "सेव करो",
+      "reason": {
+        "awkward_music": "अजीब म्यूज़िक",
+        "crowd_quiet": "शांत भीड़",
+        "didnt_know_it": "गाना नहीं आता था",
+        "out_of_range": "मेरी रेंज से बाहर",
+        "too_hard": "बहुत मुश्किल",
+        "too_long": "बहुत लंबा"
+      },
+      "reasonsLabel": "किस चीज़ ने मज़ा किरकिरा किया?",
+      "vibe": {
+        "ballad": "बैलाड",
+        "duet": "डुएट",
+        "emotional": "इमोशनल",
+        "party": "पार्टी",
+        "rock_out": "रॉक आउट",
+        "singalong": "साथ गाने वाला",
+        "warm_up": "वॉर्म-अप"
+      },
+      "vibesLabel": "माहौल कैसा था?"
     }
   },
   "credits": {
