@@ -117,7 +117,26 @@
     "noKaraokeHint": "Stwórz własne wideo karaoke z tego utworu – gotowe do śpiewania i udostępniania.",
     "offlineMissing": "Jesteś offline, a tego utworu nie ma na liście zapisanej na tym telefonie.",
     "offlineNote": "Offline · z listy utworów zapisanej na tym telefonie",
-    "cloudErrorNote": "Nie można teraz połączyć się z wyszukiwarką · wyświetlam listę utworów zapisaną na tym telefonie"
+    "cloudErrorNote": "Nie można teraz połączyć się z wyszukiwarką · wyświetlam listę utworów zapisaną na tym telefonie",
+    "history": {
+      "beforeApp": "Przed aplikacją",
+      "crowd": "Hit publiczności",
+      "feel": "Klimat: {value}",
+      "key": "Tonacja: {value}",
+      "nomadNight": "Noc Nomad",
+      "otherVenue": "Inny bar",
+      "pageTitle": "Historia piosenki",
+      "removeBody": "Nie będzie już liczona jako zaśpiewana.",
+      "removeTitle": "Usunąć ten wpis?",
+      "times": "×{count}",
+      "title": "Twoja historia",
+      "edit": "Edytuj",
+      "remove": "Usuń"
+    },
+    "save": "Zapisz w Moich piosenkach",
+    "saved": "Zapisano",
+    "addToSetlist": "Dodaj do playlisty",
+    "markSung": "Oznacz jako zaśpiewane"
   },
   "tabs": {
     "discover": "Odkrywaj",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Katalog lokalu",
     "loved": "Uwielbiane",
-    "menuLoveIt": "Uwielbiam",
+    "menuLoveIt": "Zapisz w Moich piosenkach",
     "menuNotForMe": "Nie dla mnie",
     "menuOpen": "Więcej opcji dla: {title}",
     "offlinePicks": "Tryb offline: wyświetlamy Twoje ostatnie propozycje",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Społecznościowe",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Spróbuj ponownie",
-    "signInForPicksAction": "Zaloguj się"
+    "signInForPicksAction": "Zaloguj się",
+    "menuSaved": "Zapisano",
+    "menuAddToSetlist": "Dodaj do playlisty",
+    "menuMarkSung": "Oznacz jako zaśpiewane"
   },
   "review": {
     "discard": "Odrzuć moje zmiany",

@@ -117,7 +117,26 @@
     "noKaraokeHint": "इसका अपना खुद का कराओके वीडियो बनाओ, गाने और शेयर करने के लिए बिल्कुल तैयार।",
     "offlineMissing": "तुम ऑफ़लाइन हो, और यह गाना इस फ़ोन पर सेव की गई गानों की लिस्ट में नहीं है।",
     "offlineNote": "ऑफ़लाइन · इस फ़ोन पर सेव की गई गानों की लिस्ट से",
-    "cloudErrorNote": "अभी सर्च से कनेक्ट नहीं हो पा रहा है · इस फ़ोन पर सेव की गई गानों की सूची दिखाई जा रही है"
+    "cloudErrorNote": "अभी सर्च से कनेक्ट नहीं हो पा रहा है · इस फ़ोन पर सेव की गई गानों की सूची दिखाई जा रही है",
+    "history": {
+      "beforeApp": "ऐप से पहले",
+      "crowd": "सबका पसंदीदा",
+      "feel": "माहौल: {value}",
+      "key": "Key: {value}",
+      "nomadNight": "Nomad नाइट",
+      "otherVenue": "कोई दूसरा बार",
+      "pageTitle": "गाने की हिस्ट्री",
+      "removeBody": "इसे अब गाया हुआ नहीं माना जाएगा।",
+      "removeTitle": "क्या इस रिकॉर्ड को हटाना चाहते हो?",
+      "times": "×{count}",
+      "title": "तुम्हारी हिस्ट्री",
+      "edit": "एडिट करो",
+      "remove": "हटाओ"
+    },
+    "save": "मेरे गानों में सेव करें",
+    "saved": "सेव किया गया",
+    "addToSetlist": "सेटलिस्ट में जोड़ो",
+    "markSung": "गाया हुआ मार्क करो"
   },
   "tabs": {
     "discover": "एक्सप्लोर करो",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "वेन्यू लाइब्रेरी",
     "loved": "पसंदीदा",
-    "menuLoveIt": "बहुत पसंद है",
+    "menuLoveIt": "मेरे गानों में सेव करें",
     "menuNotForMe": "मेरे लिए नहीं",
     "menuOpen": "{title} के लिए और विकल्प",
     "offlinePicks": "ऑफ़लाइन: तुम्हारी पिछली पसंद दिखाई जा रही है",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "कम्युनिटी",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "फिर से कोशिश करो",
-    "signInForPicksAction": "साइन इन करो"
+    "signInForPicksAction": "साइन इन करो",
+    "menuSaved": "सेव किया गया",
+    "menuAddToSetlist": "सेटलिस्ट में जोड़ो",
+    "menuMarkSung": "गाया हुआ मार्क करो"
   },
   "review": {
     "discard": "मेरे बदलाव हटाएं",

@@ -117,7 +117,26 @@
     "noKaraokeHint": "Maak er je eigen karaokevideo van, klaar om te zingen en te delen.",
     "offlineMissing": "Je bent offline en dit nummer staat niet in de nummerslijst die op deze telefoon is opgeslagen.",
     "offlineNote": "Offline · uit de nummerslijst die op deze telefoon is opgeslagen",
-    "cloudErrorNote": "Kan de zoekfunctie nu niet bereiken · nummerslijst op deze telefoon wordt getoond"
+    "cloudErrorNote": "Kan de zoekfunctie nu niet bereiken · nummerslijst op deze telefoon wordt getoond",
+    "history": {
+      "beforeApp": "Vóór de app",
+      "crowd": "Publieksfavoriet",
+      "feel": "Gevoel: {value}",
+      "key": "Toonsoort: {value}",
+      "nomadNight": "Nomad-avond",
+      "otherVenue": "Andere bar",
+      "pageTitle": "Nummergeschiedenis",
+      "removeBody": "Het telt niet meer mee als gezongen.",
+      "removeTitle": "Dit item verwijderen?",
+      "times": "×{count}",
+      "title": "Je geschiedenis",
+      "edit": "Bewerken",
+      "remove": "Verwijderen"
+    },
+    "save": "Opslaan in Mijn nummers",
+    "saved": "Opgeslagen",
+    "addToSetlist": "Toevoegen aan setlist",
+    "markSung": "Markeren als gezongen"
   },
   "tabs": {
     "discover": "Ontdekken",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Locatiecatalogus",
     "loved": "Favoriet",
-    "menuLoveIt": "Geweldig",
+    "menuLoveIt": "Opslaan in Mijn nummers",
     "menuNotForMe": "Niks voor mij",
     "menuOpen": "Meer opties voor {title}",
     "offlinePicks": "Offline: toont je laatste selecties",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Probeer opnieuw",
-    "signInForPicksAction": "Inloggen"
+    "signInForPicksAction": "Inloggen",
+    "menuSaved": "Opgeslagen",
+    "menuAddToSetlist": "Toevoegen aan setlist",
+    "menuMarkSung": "Markeren als gezongen"
   },
   "review": {
     "discard": "Mijn bewerkingen wissen",

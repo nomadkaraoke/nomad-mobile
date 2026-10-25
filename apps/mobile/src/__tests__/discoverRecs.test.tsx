@@ -2,7 +2,7 @@
 import * as decide from '@nomad/api-decide';
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
-import { View } from 'react-native';
+import { Modal, View } from 'react-native';
 
 import { useAuth } from '../auth/store';
 import { useLibraryFilter } from '../find/library';
@@ -257,6 +257,26 @@ describe('discoverRecs', () => {
     await waitFor(() => expect(api.hideSong).toHaveBeenCalled());
     expect(await screen.findByText('Song A')).toBeTruthy();
     expect(screen.queryByTestId('discover-hidden-toast')).toBeNull();
+  });
+
+  it('the menu offers Save to My songs, Add to setlist and Mark as sung', async () => {
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('rec-menu-crowd_pleasers-1'));
+    expect(await screen.findByTestId('song-menu-love')).toHaveTextContent(/Save to My songs/);
+    expect(screen.getByTestId('song-menu-setlist')).toBeTruthy();
+    expect(screen.getByTestId('song-menu-sung')).toBeTruthy();
+  });
+
+  it('Mark as sung opens its sheet for that song once the menu has dismissed', async () => {
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('rec-menu-crowd_pleasers-1'));
+    fireEvent.press(await screen.findByTestId('song-menu-sung'));
+    // iOS: the follow-up sheet waits for the menu Modal's onDismiss.
+    expect(screen.queryByTestId('mark-save')).toBeNull();
+    act(() => screen.UNSAFE_getAllByType(Modal).find((m) => m.props.testID === 'song-menu')!.props.onDismiss());
+    expect(await screen.findByTestId('mark-save')).toBeTruthy();
   });
 
   it('Love it calls loveSong and marks the row loved', async () => {

@@ -117,7 +117,26 @@
     "noKaraokeHint": "Tự tạo video karaoke cho bài này, sẵn sàng để hát và chia sẻ.",
     "offlineMissing": "Bạn đang ngoại tuyến và bài hát này không có trong danh sách đã lưu trên điện thoại này.",
     "offlineNote": "Ngoại tuyến · từ danh sách bài hát đã lưu trên điện thoại này",
-    "cloudErrorNote": "Hiện không thể tìm kiếm trực tuyến · đang hiển thị danh sách bài hát đã lưu trên điện thoại này"
+    "cloudErrorNote": "Hiện không thể tìm kiếm trực tuyến · đang hiển thị danh sách bài hát đã lưu trên điện thoại này",
+    "history": {
+      "beforeApp": "Trước khi dùng ứng dụng",
+      "crowd": "Được khán giả yêu thích",
+      "feel": "Cảm xúc: {value}",
+      "key": "Tone: {value}",
+      "nomadNight": "Đêm nhạc Nomad",
+      "otherVenue": "Quán khác",
+      "pageTitle": "Lịch sử bài hát",
+      "removeBody": "Bài hát này sẽ không còn được tính là đã hát.",
+      "removeTitle": "Xóa lượt hát này?",
+      "times": "×{count}",
+      "title": "Lịch sử của bạn",
+      "edit": "Chỉnh sửa",
+      "remove": "Xóa"
+    },
+    "save": "Lưu vào Bài hát của tôi",
+    "saved": "Đã lưu",
+    "addToSetlist": "Thêm vào danh sách bài hát",
+    "markSung": "Đánh dấu đã hát"
   },
   "tabs": {
     "discover": "Khám phá",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Thư viện quán",
     "loved": "Đã thích",
-    "menuLoveIt": "Yêu thích",
+    "menuLoveIt": "Lưu vào Bài hát của tôi",
     "menuNotForMe": "Không hợp với mình",
     "menuOpen": "Tùy chọn khác cho {title}",
     "offlinePicks": "Ngoại tuyến: đang hiển thị các gợi ý gần nhất của bạn",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Cộng đồng",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Thử lại",
-    "signInForPicksAction": "Đăng nhập"
+    "signInForPicksAction": "Đăng nhập",
+    "menuSaved": "Đã lưu",
+    "menuAddToSetlist": "Thêm vào danh sách bài hát",
+    "menuMarkSung": "Đánh dấu đã hát"
   },
   "review": {
     "discard": "Bỏ các chỉnh sửa của tôi",

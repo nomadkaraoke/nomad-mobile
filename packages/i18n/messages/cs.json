@@ -117,7 +117,26 @@
     "noKaraokeHint": "Vytvoř si z toho vlastní karaoke video, připravené ke zpěvu i sdílení.",
     "offlineMissing": "Jsi offline a tato skladba není v seznamu skladeb uloženém v tomto telefonu.",
     "offlineNote": "Offline · ze seznamu skladeb uloženého v tomto telefonu",
-    "cloudErrorNote": "Vyhledávání je teď nedostupné · zobrazuje se seznam skladeb uložený v tomto telefonu"
+    "cloudErrorNote": "Vyhledávání je teď nedostupné · zobrazuje se seznam skladeb uložený v tomto telefonu",
+    "history": {
+      "beforeApp": "Před aplikací",
+      "crowd": "Trhák pro publikum",
+      "feel": "Nálada: {value}",
+      "key": "Tónina: {value}",
+      "nomadNight": "Nomad večer",
+      "otherVenue": "Jiný bar",
+      "pageTitle": "Historie písničky",
+      "removeBody": "Už se nebude počítat jako odzpívaná.",
+      "removeTitle": "Odebrat tento záznam?",
+      "times": "×{count}",
+      "title": "Tvoje historie",
+      "edit": "Upravit",
+      "remove": "Odstranit"
+    },
+    "save": "Uložit do Mých písniček",
+    "saved": "Uloženo",
+    "addToSetlist": "Přidat do setlistu",
+    "markSung": "Označit jako zazpívané"
   },
   "tabs": {
     "discover": "Objevovat",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Katalog podniku",
     "loved": "Oblíbené",
-    "menuLoveIt": "To miluju",
+    "menuLoveIt": "Uložit do Mých písniček",
     "menuNotForMe": "Není pro mě",
     "menuOpen": "Další možnosti pro {title}",
     "offlinePicks": "Offline: zobrazují se tvá poslední doporučení",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Komunitní",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Zkusit znovu",
-    "signInForPicksAction": "Přihlásit se"
+    "signInForPicksAction": "Přihlásit se",
+    "menuSaved": "Uloženo",
+    "menuAddToSetlist": "Přidat do setlistu",
+    "menuMarkSung": "Označit jako zazpívané"
   },
   "review": {
     "discard": "Zahodit moje úpravy",

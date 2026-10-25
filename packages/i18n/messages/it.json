@@ -117,7 +117,26 @@
     "noKaraokeHint": "Crea il tuo video karaoke del brano, pronto da cantare e condividere.",
     "offlineMissing": "Sei offline e questo brano non è presente nell'elenco salvato su questo telefono.",
     "offlineNote": "Offline · dall'elenco dei brani salvato su questo telefono",
-    "cloudErrorNote": "Impossibile accedere alla ricerca in questo momento · mostro l'elenco dei brani salvato su questo telefono"
+    "cloudErrorNote": "Impossibile accedere alla ricerca in questo momento · mostro l'elenco dei brani salvato su questo telefono",
+    "history": {
+      "beforeApp": "Prima dell'app",
+      "crowd": "Pezzo forte",
+      "feel": "Atmosfera: {value}",
+      "key": "Tonalità: {value}",
+      "nomadNight": "Serata Nomad",
+      "otherVenue": "Un altro locale",
+      "pageTitle": "Cronologia brani",
+      "removeBody": "Non risulterà più tra quelli cantati.",
+      "removeTitle": "Rimuovere questa voce?",
+      "times": "×{count}",
+      "title": "La tua cronologia",
+      "edit": "Modifica",
+      "remove": "Rimuovi"
+    },
+    "save": "Salva nei Miei brani",
+    "saved": "Salvato",
+    "addToSetlist": "Aggiungi alla scaletta",
+    "markSung": "Segna come cantata"
   },
   "tabs": {
     "discover": "Scopri",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Catalogo del locale",
     "loved": "Preferiti",
-    "menuLoveIt": "Lo adoro",
+    "menuLoveIt": "Salva nei Miei brani",
     "menuNotForMe": "Non fa per me",
     "menuOpen": "Altre opzioni per {title}",
     "offlinePicks": "Offline: visualizzazione degli ultimi brani scelti per te",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Riprova",
-    "signInForPicksAction": "Accedi"
+    "signInForPicksAction": "Accedi",
+    "menuSaved": "Salvato",
+    "menuAddToSetlist": "Aggiungi alla scaletta",
+    "menuMarkSung": "Segna come cantata"
   },
   "review": {
     "discard": "Scarta le mie modifiche",

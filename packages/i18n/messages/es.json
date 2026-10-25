@@ -117,7 +117,26 @@
     "noKaraokeHint": "Crea tu propio video de karaoke con esta canción, listo para cantar y compartir.",
     "offlineMissing": "Estás sin conexión y esta canción no está en la lista de canciones guardada en este teléfono.",
     "offlineNote": "Sin conexión · de la lista de canciones guardada en este teléfono",
-    "cloudErrorNote": "No se puede acceder a la búsqueda ahora mismo · mostrando la lista de canciones guardada en este teléfono"
+    "cloudErrorNote": "No se puede acceder a la búsqueda ahora mismo · mostrando la lista de canciones guardada en este teléfono",
+    "history": {
+      "beforeApp": "Antes de la app",
+      "crowd": "Éxito asegurado",
+      "feel": "Sensación: {value}",
+      "key": "Tono: {value}",
+      "nomadNight": "Noche Nomad",
+      "otherVenue": "Otro bar",
+      "pageTitle": "Historial de la canción",
+      "removeBody": "Ya no contará como cantada.",
+      "removeTitle": "¿Eliminar este registro?",
+      "times": "×{count}",
+      "title": "Tu historial",
+      "edit": "Editar",
+      "remove": "Quitar"
+    },
+    "save": "Guardar en Mis canciones",
+    "saved": "Guardado",
+    "addToSetlist": "Añadir a la lista",
+    "markSung": "Marcar como cantada"
   },
   "tabs": {
     "discover": "Descubrir",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Biblioteca del local",
     "loved": "Me encanta",
-    "menuLoveIt": "Me encanta",
+    "menuLoveIt": "Guardar en Mis canciones",
     "menuNotForMe": "No es para mí",
     "menuOpen": "Más opciones para {title}",
     "offlinePicks": "Sin conexión: mostrando tus últimas selecciones",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Comunidad",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Intentar de nuevo",
-    "signInForPicksAction": "Iniciar sesión"
+    "signInForPicksAction": "Iniciar sesión",
+    "menuSaved": "Guardado",
+    "menuAddToSetlist": "Añadir a la lista",
+    "menuMarkSung": "Marcar como cantada"
   },
   "review": {
     "discard": "Descartar mis ediciones",

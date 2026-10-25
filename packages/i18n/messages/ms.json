@@ -117,7 +117,26 @@
     "noKaraokeHint": "Cipta video karaoke anda sendiri untuk lagu ini, sedia untuk dinyanyikan dan dikongsi.",
     "offlineMissing": "Anda sedang berada di luar talian, dan lagu ini tiada dalam senarai lagu yang disimpan pada telefon ini.",
     "offlineNote": "Luar talian · daripada senarai lagu yang disimpan pada telefon ini",
-    "cloudErrorNote": "Carian tidak dapat dihubungi buat masa ini · memaparkan senarai lagu yang disimpan pada telefon ini"
+    "cloudErrorNote": "Carian tidak dapat dihubungi buat masa ini · memaparkan senarai lagu yang disimpan pada telefon ini",
+    "history": {
+      "beforeApp": "Sebelum ada aplikasi",
+      "crowd": "Pilihan ramai",
+      "feel": "Rasa: {value}",
+      "key": "Kunci: {value}",
+      "nomadNight": "Malam Nomad",
+      "otherVenue": "Bar lain",
+      "pageTitle": "Sejarah lagu",
+      "removeBody": "Ia tidak akan dikira sebagai pernah dinyanyikan lagi.",
+      "removeTitle": "Padamkan rekod ini?",
+      "times": "×{count}",
+      "title": "Sejarah anda",
+      "edit": "Edit",
+      "remove": "Alih keluar"
+    },
+    "save": "Simpan ke Lagu saya",
+    "saved": "Disimpan",
+    "addToSetlist": "Tambah ke setlist",
+    "markSung": "Tandakan sebagai pernah dinyanyikan"
   },
   "tabs": {
     "discover": "Teroka",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Pustaka premis",
     "loved": "Digemari",
-    "menuLoveIt": "Suka sangat",
+    "menuLoveIt": "Simpan ke Lagu saya",
     "menuNotForMe": "Bukan untuk saya",
     "menuOpen": "Lagi pilihan untuk {title}",
     "offlinePicks": "Luar talian: memaparkan pilihan terakhir anda",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Komuniti",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Cuba lagi",
-    "signInForPicksAction": "Log masuk"
+    "signInForPicksAction": "Log masuk",
+    "menuSaved": "Disimpan",
+    "menuAddToSetlist": "Tambah ke setlist",
+    "menuMarkSung": "Tandakan sebagai pernah dinyanyikan"
   },
   "review": {
     "discard": "Buang suntingan saya",

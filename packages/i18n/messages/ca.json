@@ -117,7 +117,26 @@
     "noKaraokeHint": "Crea el teu propi vídeo de karaoke d'aquesta cançó, a punt per cantar i compartir.",
     "offlineMissing": "No tens connexió i aquesta cançó no és a la llista desada en aquest telèfon.",
     "offlineNote": "Sense connexió · de la llista de cançons desada en aquest telèfon",
-    "cloudErrorNote": "Ara mateix no es pot accedir a la cerca · es mostra la llista de cançons desada en aquest telèfon"
+    "cloudErrorNote": "Ara mateix no es pot accedir a la cerca · es mostra la llista de cançons desada en aquest telèfon",
+    "history": {
+      "beforeApp": "Abans de l'aplicació",
+      "crowd": "Èxit assegurat",
+      "feel": "Sensació: {value}",
+      "key": "Tonalitat: {value}",
+      "nomadNight": "Nit Nomad",
+      "otherVenue": "Un altre bar",
+      "pageTitle": "Historial de cançons",
+      "removeBody": "Ja no comptarà com a cantada.",
+      "removeTitle": "Vols eliminar aquest registre?",
+      "times": "×{count}",
+      "title": "El teu historial",
+      "edit": "Edita",
+      "remove": "Elimina"
+    },
+    "save": "Desa a Les meves cançons",
+    "saved": "Desat",
+    "addToSetlist": "Afegeix al repertori",
+    "markSung": "Marca com a cantada"
   },
   "tabs": {
     "discover": "Descobreix",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Catàleg del local",
     "loved": "Preferides",
-    "menuLoveIt": "M'encanta",
+    "menuLoveIt": "Desa a Les meves cançons",
     "menuNotForMe": "No és per a mi",
     "menuOpen": "Més opcions per a {title}",
     "offlinePicks": "Sense connexió: es mostren les teves últimes seleccions",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Comunitat",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Torna-ho a provar",
-    "signInForPicksAction": "Inicia la sessió"
+    "signInForPicksAction": "Inicia la sessió",
+    "menuSaved": "Desat",
+    "menuAddToSetlist": "Afegeix al repertori",
+    "menuMarkSung": "Marca com a cantada"
   },
   "review": {
     "discard": "Descarta les meves edicions",

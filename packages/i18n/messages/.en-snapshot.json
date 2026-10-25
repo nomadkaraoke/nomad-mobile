@@ -82,7 +82,7 @@
     "menuTitle": "{title} · {artist}",
     "menuOpen": "More options for {title}",
     "menuNotForMe": "Not for me",
-    "menuLoveIt": "Love it",
+    "menuLoveIt": "Save to My songs",
     "loved": "Loved",
     "hiddenToast": "Hidden from your picks",
     "reason": {
@@ -201,7 +201,10 @@
         "yes": "Has karaoke",
         "make": "Make it"
       }
-    }
+    },
+    "menuSaved": "Saved",
+    "menuAddToSetlist": "Add to setlist",
+    "menuMarkSung": "Mark as sung"
   },
   "song": {
     "artistLabel": "Artist",
@@ -213,7 +216,26 @@
     "hasKaraokeHint": "You can still make your own, from the audio you pick.",
     "offlineNote": "Offline · from the song list saved on this phone",
     "offlineMissing": "You're offline, and this song isn't in the song list saved on this phone.",
-    "cloudErrorNote": "Can't reach search right now · showing the song list saved on this phone"
+    "cloudErrorNote": "Can't reach search right now · showing the song list saved on this phone",
+    "save": "Save to My songs",
+    "saved": "Saved",
+    "addToSetlist": "Add to setlist",
+    "markSung": "Mark as sung",
+    "history": {
+      "title": "Your history",
+      "pageTitle": "Song history",
+      "beforeApp": "Before the app",
+      "times": "×{count}",
+      "nomadNight": "Nomad night",
+      "otherVenue": "Another bar",
+      "feel": "Feel: {value}",
+      "key": "Key: {value}",
+      "crowd": "Crowd-pleaser",
+      "edit": "Edit",
+      "remove": "Remove",
+      "removeTitle": "Remove this record?",
+      "removeBody": "It will no longer count as sung."
+    }
   },
   "signIn": {
     "emailTitle": "Sign in",

@@ -117,7 +117,26 @@
     "noKaraokeHint": "Gumawa ng sarili mong karaoke video nito, handa nang kantahin at i-share.",
     "offlineMissing": "Offline ka, at wala ang kantang ito sa listahan ng mga kanta na naka-save sa teleponong ito.",
     "offlineNote": "Offline · mula sa listahan ng mga kanta na naka-save sa teleponong ito",
-    "cloudErrorNote": "Hindi ma-access ang search sa ngayon · ipinapakita ang listahan ng mga kanta na naka-save sa teleponong ito"
+    "cloudErrorNote": "Hindi ma-access ang search sa ngayon · ipinapakita ang listahan ng mga kanta na naka-save sa teleponong ito",
+    "history": {
+      "beforeApp": "Bago ang app",
+      "crowd": "Paborito ng marami",
+      "feel": "Pakiramdam: {value}",
+      "key": "Key: {value}",
+      "nomadNight": "Nomad night",
+      "otherVenue": "Ibang bar",
+      "pageTitle": "History ng kanta",
+      "removeBody": "Hindi na ito mabibilang na nakanta.",
+      "removeTitle": "Alisin ang record na ito?",
+      "times": "×{count}",
+      "title": "Iyong history",
+      "edit": "I-edit",
+      "remove": "Alisin"
+    },
+    "save": "I-save sa Aking mga kanta",
+    "saved": "Nai-save na",
+    "addToSetlist": "Idagdag sa setlist",
+    "markSung": "Markahan bilang nakanta na"
   },
   "tabs": {
     "discover": "Mag-discover",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Library ng venue",
     "loved": "Paborito",
-    "menuLoveIt": "I-love ito",
+    "menuLoveIt": "I-save sa Aking mga kanta",
     "menuNotForMe": "Hindi para sa akin",
     "menuOpen": "Higit pang opsyon para sa {title}",
     "offlinePicks": "Offline: ipinapakita ang huli mong mga napili",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Subukan muli",
-    "signInForPicksAction": "Mag-sign in"
+    "signInForPicksAction": "Mag-sign in",
+    "menuSaved": "Nai-save na",
+    "menuAddToSetlist": "Idagdag sa setlist",
+    "menuMarkSung": "Markahan bilang nakanta na"
   },
   "review": {
     "discard": "I-discard ang aking mga edit",

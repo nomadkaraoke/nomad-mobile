@@ -117,7 +117,26 @@
     "noKaraokeHint": "Lav din egen karaokevideo af den, klar til at synge og dele.",
     "offlineMissing": "Du er offline, og denne sang findes ikke i sanglisten, der er gemt på denne telefon.",
     "offlineNote": "Offline · fra sanglisten gemt på denne telefon",
-    "cloudErrorNote": "Kan ikke få forbindelse til søgningen lige nu · viser sanglisten, der er gemt på denne telefon"
+    "cloudErrorNote": "Kan ikke få forbindelse til søgningen lige nu · viser sanglisten, der er gemt på denne telefon",
+    "history": {
+      "beforeApp": "Før appen",
+      "crowd": "Publikumsfavorit",
+      "feel": "Stemning: {value}",
+      "key": "Toneart: {value}",
+      "nomadNight": "Nomad-aften",
+      "otherVenue": "En anden bar",
+      "pageTitle": "Sanghistorik",
+      "removeBody": "Den vil ikke længere tælle som sunget.",
+      "removeTitle": "Fjern denne registrering?",
+      "times": "×{count}",
+      "title": "Din historik",
+      "edit": "Rediger",
+      "remove": "Fjern"
+    },
+    "save": "Gem i Mine sange",
+    "saved": "Gemt",
+    "addToSetlist": "Tilføj til setliste",
+    "markSung": "Markér som sunget"
   },
   "tabs": {
     "discover": "Udforsk",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Stedets sangkatalog",
     "loved": "Favoritter",
-    "menuLoveIt": "Elsker den",
+    "menuLoveIt": "Gem i Mine sange",
     "menuNotForMe": "Ikke noget for mig",
     "menuOpen": "Flere muligheder for {title}",
     "offlinePicks": "Offline: viser dine seneste anbefalinger",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Fællesskab",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Prøv igen",
-    "signInForPicksAction": "Log ind"
+    "signInForPicksAction": "Log ind",
+    "menuSaved": "Gemt",
+    "menuAddToSetlist": "Tilføj til setliste",
+    "menuMarkSung": "Markér som sunget"
   },
   "review": {
     "discard": "Kassér mine ændringer",

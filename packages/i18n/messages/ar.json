@@ -117,7 +117,26 @@
     "noKaraokeHint": "أنشئ فيديو كاريوكي خاصاً بك لهذه الأغنية، جاهزاً للغناء والمشاركة.",
     "offlineMissing": "أنت غير متصل بالإنترنت، وهذه الأغنية ليست ضمن قائمة الأغاني المحفوظة على هذا الهاتف.",
     "offlineNote": "بلا اتصال · من قائمة الأغاني المحفوظة على هذا الهاتف",
-    "cloudErrorNote": "تعذر الاتصال بالبحث حاليًا · نعرض لك قائمة الأغاني المحفوظة على هذا الهاتف"
+    "cloudErrorNote": "تعذر الاتصال بالبحث حاليًا · نعرض لك قائمة الأغاني المحفوظة على هذا الهاتف",
+    "history": {
+      "beforeApp": "قبل التطبيق",
+      "crowd": "المفضلة لدى الجمهور",
+      "feel": "المشاعر: {value}",
+      "key": "الطبقة: {value}",
+      "nomadNight": "ليلة Nomad",
+      "otherVenue": "مكان آخر",
+      "pageTitle": "سجل الأغنية",
+      "removeBody": "لن يتم احتسابها كأغنية غنّيتها بعد الآن.",
+      "removeTitle": "إزالة هذا السجل؟",
+      "times": "×{count}",
+      "title": "سجلك",
+      "edit": "تعديل",
+      "remove": "إزالة"
+    },
+    "save": "حفظ في أغنياتي",
+    "saved": "تم الحفظ",
+    "addToSetlist": "إضافة إلى قائمة الأغاني",
+    "markSung": "تحديد كمُغنّاة"
   },
   "tabs": {
     "discover": "استكشف",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "مكتبة المكان",
     "loved": "مفضلة",
-    "menuLoveIt": "أحببتها",
+    "menuLoveIt": "حفظ في أغنياتي",
     "menuNotForMe": "لا تناسبني",
     "menuOpen": "المزيد من الخيارات لـ {title}",
     "offlinePicks": "غير متصل بالإنترنت: نعرض آخر ترشيحاتك",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "مجتمعي",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "حاول مرة أخرى",
-    "signInForPicksAction": "تسجيل الدخول"
+    "signInForPicksAction": "تسجيل الدخول",
+    "menuSaved": "تم الحفظ",
+    "menuAddToSetlist": "إضافة إلى قائمة الأغاني",
+    "menuMarkSung": "تحديد كمُغنّاة"
   },
   "review": {
     "discard": "تجاهل تعديلاتي",

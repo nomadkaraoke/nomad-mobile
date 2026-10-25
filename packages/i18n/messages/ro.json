@@ -117,7 +117,26 @@
     "noKaraokeHint": "Creează-ți propriul videoclip karaoke cu această piesă, gata de cântat și distribuit.",
     "offlineMissing": "Ești offline, iar această melodie nu se află în lista salvată pe acest telefon.",
     "offlineNote": "Offline · din lista de melodii salvată pe acest telefon",
-    "cloudErrorNote": "Căutarea nu este disponibilă acum · se afișează lista de melodii salvată pe acest telefon"
+    "cloudErrorNote": "Căutarea nu este disponibilă acum · se afișează lista de melodii salvată pe acest telefon",
+    "history": {
+      "beforeApp": "Înainte de aplicație",
+      "crowd": "Pe placul publicului",
+      "feel": "Stare: {value}",
+      "key": "Gamă: {value}",
+      "nomadNight": "Seară Nomad",
+      "otherVenue": "Alt bar",
+      "pageTitle": "Istoricul piesei",
+      "removeBody": "Nu va mai fi considerată cântată.",
+      "removeTitle": "Ștergi această înregistrare?",
+      "times": "×{count}",
+      "title": "Istoricul tău",
+      "edit": "Editează",
+      "remove": "Elimină"
+    },
+    "save": "Salvează în Piesele mele",
+    "saved": "Salvat",
+    "addToSetlist": "Adaugă în setlist",
+    "markSung": "Marchează ca fiind cântată"
   },
   "tabs": {
     "discover": "Descoperă",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Catalogul localului",
     "loved": "Favorite",
-    "menuLoveIt": "Ador piesa",
+    "menuLoveIt": "Salvează în Piesele mele",
     "menuNotForMe": "Nu e pentru mine",
     "menuOpen": "Mai multe opțiuni pentru {title}",
     "offlinePicks": "Offline: se afișează ultimele tale recomandări",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Comunitate",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Încearcă din nou",
-    "signInForPicksAction": "Conectează-te"
+    "signInForPicksAction": "Conectează-te",
+    "menuSaved": "Salvat",
+    "menuAddToSetlist": "Adaugă în setlist",
+    "menuMarkSung": "Marchează ca fiind cântată"
   },
   "review": {
     "discard": "Renunță la modificările mele",

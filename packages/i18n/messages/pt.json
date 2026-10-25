@@ -117,7 +117,26 @@
     "noKaraokeHint": "Crie seu próprio vídeo de karaokê desta música, pronto para cantar e compartilhar.",
     "offlineMissing": "Você está offline e esta música não está na lista salva neste celular.",
     "offlineNote": "Offline · da lista de músicas salva neste celular",
-    "cloudErrorNote": "Não foi possível acessar a busca no momento · mostrando a lista de músicas salva neste celular"
+    "cloudErrorNote": "Não foi possível acessar a busca no momento · mostrando a lista de músicas salva neste celular",
+    "history": {
+      "beforeApp": "Antes do app",
+      "crowd": "Favorita do público",
+      "feel": "Vibe: {value}",
+      "key": "Tom: {value}",
+      "nomadNight": "Noite Nomad",
+      "otherVenue": "Outro bar",
+      "pageTitle": "Histórico da música",
+      "removeBody": "Ela não contará mais como cantada.",
+      "removeTitle": "Remover este registro?",
+      "times": "×{count}",
+      "title": "Seu histórico",
+      "edit": "Editar",
+      "remove": "Remover"
+    },
+    "save": "Salvar em Minhas músicas",
+    "saved": "Salvo",
+    "addToSetlist": "Adicionar à setlist",
+    "markSung": "Marcar como cantada"
   },
   "tabs": {
     "discover": "Descobrir",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Catálogo do local",
     "loved": "Favoritas",
-    "menuLoveIt": "Adorei",
+    "menuLoveIt": "Salvar em Minhas músicas",
     "menuNotForMe": "Não é para mim",
     "menuOpen": "Mais opções para {title}",
     "offlinePicks": "Offline: mostrando suas últimas sugestões",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Comunidade",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Tentar novamente",
-    "signInForPicksAction": "Entrar"
+    "signInForPicksAction": "Entrar",
+    "menuSaved": "Salvo",
+    "menuAddToSetlist": "Adicionar à setlist",
+    "menuMarkSung": "Marcar como cantada"
   },
   "review": {
     "discard": "Descartar minhas edições",

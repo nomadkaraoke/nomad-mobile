@@ -117,7 +117,26 @@
     "noKaraokeHint": "Crée ta propre vidéo karaoké à partir de ce morceau, prête à chanter et à partager.",
     "offlineMissing": "Tu es hors ligne et cette chanson ne figure pas dans la liste enregistrée sur ce téléphone.",
     "offlineNote": "Hors ligne · depuis la liste de chansons enregistrée sur ce téléphone",
-    "cloudErrorNote": "Impossible d'accéder à la recherche pour l'instant · affichage de la liste de chansons enregistrée sur ce téléphone"
+    "cloudErrorNote": "Impossible d'accéder à la recherche pour l'instant · affichage de la liste de chansons enregistrée sur ce téléphone",
+    "history": {
+      "beforeApp": "Avant l'application",
+      "crowd": "Succès garanti",
+      "feel": "Ambiance : {value}",
+      "key": "Tonalité : {value}",
+      "nomadNight": "Soirée Nomad",
+      "otherVenue": "Autre bar",
+      "pageTitle": "Historique du morceau",
+      "removeBody": "Il ne sera plus comptabilisé comme chanté.",
+      "removeTitle": "Supprimer cette entrée ?",
+      "times": "×{count}",
+      "title": "Ton historique",
+      "edit": "Modifier",
+      "remove": "Retirer"
+    },
+    "save": "Ajouter à Mes chansons",
+    "saved": "Enregistré",
+    "addToSetlist": "Ajouter à la setlist",
+    "markSung": "Marquer comme chantée"
   },
   "tabs": {
     "discover": "Découvrir",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Catalogue du lieu",
     "loved": "Adoré",
-    "menuLoveIt": "J'adore",
+    "menuLoveIt": "Ajouter à Mes chansons",
     "menuNotForMe": "Pas pour moi",
     "menuOpen": "Plus d'options pour {title}",
     "offlinePicks": "Hors ligne : affichage de tes dernières sélections",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Communautaire",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Réessayer",
-    "signInForPicksAction": "Se connecter"
+    "signInForPicksAction": "Se connecter",
+    "menuSaved": "Enregistré",
+    "menuAddToSetlist": "Ajouter à la setlist",
+    "menuMarkSung": "Marquer comme chantée"
   },
   "review": {
     "discard": "Ignorer mes modifications",

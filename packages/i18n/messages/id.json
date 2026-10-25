@@ -117,7 +117,26 @@
     "noKaraokeHint": "Buat video karaokemu sendiri, siap dinyanyikan dan dibagikan.",
     "offlineMissing": "Anda sedang offline, dan lagu ini tidak ada di daftar lagu yang tersimpan di ponsel ini.",
     "offlineNote": "Offline · dari daftar lagu yang tersimpan di ponsel ini",
-    "cloudErrorNote": "Tidak dapat mengakses pencarian saat ini · menampilkan daftar lagu yang tersimpan di ponsel ini"
+    "cloudErrorNote": "Tidak dapat mengakses pencarian saat ini · menampilkan daftar lagu yang tersimpan di ponsel ini",
+    "history": {
+      "beforeApp": "Sebelum ada aplikasi",
+      "crowd": "Favorit penonton",
+      "feel": "Suasana: {value}",
+      "key": "Nada dasar: {value}",
+      "nomadNight": "Malam Nomad",
+      "otherVenue": "Bar lain",
+      "pageTitle": "Riwayat lagu",
+      "removeBody": "Lagu ini tidak akan lagi dihitung sebagai pernah dinyanyikan.",
+      "removeTitle": "Hapus catatan ini?",
+      "times": "×{count}",
+      "title": "Riwayat Anda",
+      "edit": "Edit",
+      "remove": "Hapus"
+    },
+    "save": "Simpan ke Lagu Saya",
+    "saved": "Tersimpan",
+    "addToSetlist": "Tambah ke setlist",
+    "markSung": "Tandai sudah dinyanyikan"
   },
   "tabs": {
     "discover": "Jelajahi",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Katalog tempat",
     "loved": "Favorit",
-    "menuLoveIt": "Suka banget",
+    "menuLoveIt": "Simpan ke Lagu Saya",
     "menuNotForMe": "Bukan untuk saya",
     "menuOpen": "Opsi lainnya untuk {title}",
     "offlinePicks": "Offline: menampilkan pilihan terakhir Anda",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Komunitas",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Coba lagi",
-    "signInForPicksAction": "Masuk"
+    "signInForPicksAction": "Masuk",
+    "menuSaved": "Tersimpan",
+    "menuAddToSetlist": "Tambah ke setlist",
+    "menuMarkSung": "Tandai sudah dinyanyikan"
   },
   "review": {
     "discard": "Buang editan saya",

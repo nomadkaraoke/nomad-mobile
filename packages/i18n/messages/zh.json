@@ -117,7 +117,26 @@
     "noKaraokeHint": "为这首歌制作专属的卡拉OK视频，随时开唱与分享。",
     "offlineMissing": "您当前处于离线状态，且本设备保存的歌单中未包含这首歌曲。",
     "offlineNote": "离线 · 来自保存在本设备上的歌单",
-    "cloudErrorNote": "暂时无法连接搜索 · 正在显示保存在此手机上的歌曲列表"
+    "cloudErrorNote": "暂时无法连接搜索 · 正在显示保存在此手机上的歌曲列表",
+    "history": {
+      "beforeApp": "使用应用之前",
+      "crowd": "全场嗨唱",
+      "feel": "感觉：{value}",
+      "key": "音调：{value}",
+      "nomadNight": "Nomad之夜",
+      "otherVenue": "其他酒吧",
+      "pageTitle": "点唱历史",
+      "removeBody": "此记录将不再计入已唱歌曲。",
+      "removeTitle": "删除这条记录？",
+      "times": "×{count}",
+      "title": "你的点唱历史",
+      "edit": "编辑",
+      "remove": "移除"
+    },
+    "save": "保存到我的歌曲",
+    "saved": "已保存",
+    "addToSetlist": "添加到歌单",
+    "markSung": "标记为已唱"
   },
   "tabs": {
     "discover": "发现",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "场地曲库",
     "loved": "特别喜爱",
-    "menuLoveIt": "特别喜欢",
+    "menuLoveIt": "保存到我的歌曲",
     "menuNotForMe": "不合口味",
     "menuOpen": "查看《{title}》的更多选项",
     "offlinePicks": "离线状态：显示上次的精选",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "社区版",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "重试",
-    "signInForPicksAction": "登录"
+    "signInForPicksAction": "登录",
+    "menuSaved": "已保存",
+    "menuAddToSetlist": "添加到歌单",
+    "menuMarkSung": "标记为已唱"
   },
   "review": {
     "discard": "放弃我的修改",

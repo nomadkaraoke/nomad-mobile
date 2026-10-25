@@ -117,7 +117,26 @@
     "noKaraokeHint": "אפשר להכין סרטון קריוקי משלך, שמוכן לשירה ולשיתוף.",
     "offlineMissing": "אין לך חיבור לאינטרנט, והשיר הזה אינו מופיע ברשימת השירים שנשמרה בטלפון זה.",
     "offlineNote": "ללא חיבור לאינטרנט · מתוך רשימת השירים שנשמרה בטלפון זה",
-    "cloudErrorNote": "לא ניתן לגשת לחיפוש כרגע · מוצגת רשימת השירים השמורה בטלפון הזה"
+    "cloudErrorNote": "לא ניתן לגשת לחיפוש כרגע · מוצגת רשימת השירים השמורה בטלפון הזה",
+    "history": {
+      "beforeApp": "לפני השימוש באפליקציה",
+      "crowd": "להיט שכולם אוהבים",
+      "feel": "אווירה: {value}",
+      "key": "סולם: {value}",
+      "nomadNight": "ערב Nomad",
+      "otherVenue": "בר אחר",
+      "pageTitle": "היסטוריית שירים",
+      "removeBody": "השיר כבר לא ייחשב כשיר ששרת בעבר.",
+      "removeTitle": "להסיר את התיעוד הזה?",
+      "times": "×{count}",
+      "title": "ההיסטוריה שלך",
+      "edit": "עריכה",
+      "remove": "הסרה"
+    },
+    "save": "שמירה ב'השירים שלי'",
+    "saved": "נשמר",
+    "addToSetlist": "הוספה לרשימת השמעה",
+    "markSung": "סימון כשיר ששרתי"
   },
   "tabs": {
     "discover": "גילוי",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "מאגר המקום",
     "loved": "אהבתי",
-    "menuLoveIt": "אהבתי",
+    "menuLoveIt": "שמירה ב'השירים שלי'",
     "menuNotForMe": "לא בשבילי",
     "menuOpen": "אפשרויות נוספות עבור {title}",
     "offlinePicks": "מצב לא מקוון: מוצגות הבחירות האחרונות שלך",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "קהילתי",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "נסה שוב",
-    "signInForPicksAction": "התחברות"
+    "signInForPicksAction": "התחברות",
+    "menuSaved": "נשמר",
+    "menuAddToSetlist": "הוספה לרשימת השמעה",
+    "menuMarkSung": "סימון כשיר ששרתי"
   },
   "review": {
     "discard": "מחיקת העריכות שלי",

@@ -117,7 +117,26 @@
     "noKaraokeHint": "Lag din egen karaokevideo av den, klar til å synges og deles.",
     "offlineMissing": "Du er frakoblet, og denne sangen finnes ikke i sanglisten som er lagret på denne telefonen.",
     "offlineNote": "Frakoblet · fra sanglisten som er lagret på denne telefonen",
-    "cloudErrorNote": "Får ikke kontakt med søketjenesten akkurat nå · viser sanglisten som er lagret på denne telefonen"
+    "cloudErrorNote": "Får ikke kontakt med søketjenesten akkurat nå · viser sanglisten som er lagret på denne telefonen",
+    "history": {
+      "beforeApp": "Før appen",
+      "crowd": "Publikumsfavoritt",
+      "feel": "Stemning: {value}",
+      "key": "Toneart: {value}",
+      "nomadNight": "Nomad-kveld",
+      "otherVenue": "En annen bar",
+      "pageTitle": "Sanghistorikk",
+      "removeBody": "Den vil ikke lenger telle som sunget.",
+      "removeTitle": "Fjerne denne oppføringen?",
+      "times": "×{count}",
+      "title": "Historikken din",
+      "edit": "Rediger",
+      "remove": "Fjern"
+    },
+    "save": "Lagre i Mine sanger",
+    "saved": "Lagret",
+    "addToSetlist": "Legg til i spilleliste",
+    "markSung": "Marker som sunget"
   },
   "tabs": {
     "discover": "Oppdag",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Lokalets sangutvalg",
     "loved": "Elsket",
-    "menuLoveIt": "Elsker den",
+    "menuLoveIt": "Lagre i Mine sanger",
     "menuNotForMe": "Ikke noe for meg",
     "menuOpen": "Flere alternativer for {title}",
     "offlinePicks": "Frakoblet: viser dine siste anbefalinger",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Prøv igjen",
-    "signInForPicksAction": "Logg inn"
+    "signInForPicksAction": "Logg inn",
+    "menuSaved": "Lagret",
+    "menuAddToSetlist": "Legg til i spilleliste",
+    "menuMarkSung": "Marker som sunget"
   },
   "review": {
     "discard": "Forkast endringene mine",

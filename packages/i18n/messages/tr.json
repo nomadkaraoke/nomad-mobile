@@ -117,7 +117,26 @@
     "noKaraokeHint": "Şarkı söylemeye ve paylaşmaya hazır, kendi karaoke videonu oluştur.",
     "offlineMissing": "Çevrimdışısın ve bu şarkı telefonuna kaydedilen şarkı listesinde bulunmuyor.",
     "offlineNote": "Çevrimdışı · Bu telefona kaydedilen şarkı listesinden",
-    "cloudErrorNote": "Şu anda aramaya ulaşılamıyor · bu telefona kaydedilen şarkı listesi gösteriliyor"
+    "cloudErrorNote": "Şu anda aramaya ulaşılamıyor · bu telefona kaydedilen şarkı listesi gösteriliyor",
+    "history": {
+      "beforeApp": "Uygulamadan önce",
+      "crowd": "Herkesin sevdiği",
+      "feel": "Hissiyat: {value}",
+      "key": "Ton: {value}",
+      "nomadNight": "Nomad gecesi",
+      "otherVenue": "Başka bir bar",
+      "pageTitle": "Şarkı geçmişi",
+      "removeBody": "Artık söylenmiş olarak sayılmayacak.",
+      "removeTitle": "Bu kayıt silinsin mi?",
+      "times": "×{count}",
+      "title": "Geçmişin",
+      "edit": "Düzenle",
+      "remove": "Kaldır"
+    },
+    "save": "Şarkılarıma kaydet",
+    "saved": "Kaydedildi",
+    "addToSetlist": "Çalma listesine ekle",
+    "markSung": "Söylendi olarak işaretle"
   },
   "tabs": {
     "discover": "Keşfet",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Mekân arşivi",
     "loved": "Sevilenler",
-    "menuLoveIt": "Çok sevdim",
+    "menuLoveIt": "Şarkılarıma kaydet",
     "menuNotForMe": "Bana göre değil",
     "menuOpen": "{title} için daha fazla seçenek",
     "offlinePicks": "Çevrimdışı: son seçimlerin gösteriliyor",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Topluluk",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Tekrar dene",
-    "signInForPicksAction": "Giriş yap"
+    "signInForPicksAction": "Giriş yap",
+    "menuSaved": "Kaydedildi",
+    "menuAddToSetlist": "Çalma listesine ekle",
+    "menuMarkSung": "Söylendi olarak işaretle"
   },
   "review": {
     "discard": "Düzenlemelerimi sil",

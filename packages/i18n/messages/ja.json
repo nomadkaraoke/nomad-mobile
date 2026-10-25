@@ -117,7 +117,26 @@
     "noKaraokeHint": "自分だけのカラオケ動画を作成して、歌ったりシェアしたりしましょう。",
     "offlineMissing": "オフラインです。この曲はこの端末に保存された曲リストに含まれていません。",
     "offlineNote": "オフライン · この端末に保存された曲リストより",
-    "cloudErrorNote": "現在検索に接続できません · このスマートフォンに保存されている曲リストを表示しています"
+    "cloudErrorNote": "現在検索に接続できません · このスマートフォンに保存されている曲リストを表示しています",
+    "history": {
+      "beforeApp": "アプリ利用前",
+      "crowd": "盛り上がり曲",
+      "feel": "雰囲気: {value}",
+      "key": "キー: {value}",
+      "nomadNight": "Nomadナイト",
+      "otherVenue": "別のお店",
+      "pageTitle": "歌唱履歴",
+      "removeBody": "歌った記録としてカウントされなくなります。",
+      "removeTitle": "この記録を削除しますか？",
+      "times": "×{count}",
+      "title": "あなたの歌唱履歴",
+      "edit": "編集",
+      "remove": "削除"
+    },
+    "save": "マイソングに保存",
+    "saved": "保存済み",
+    "addToSetlist": "セットリストに追加",
+    "markSung": "歌った曲として記録"
   },
   "tabs": {
     "discover": "見つける",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "店舗ライブラリ",
     "loved": "お気に入り",
-    "menuLoveIt": "大好き",
+    "menuLoveIt": "マイソングに保存",
     "menuNotForMe": "好みに合わない",
     "menuOpen": "「{title}」のその他のオプション",
     "offlinePicks": "オフライン: 前回のおすすめを表示中",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "コミュニティ",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "もう一度試す",
-    "signInForPicksAction": "サインイン"
+    "signInForPicksAction": "サインイン",
+    "menuSaved": "保存済み",
+    "menuAddToSetlist": "セットリストに追加",
+    "menuMarkSung": "歌った曲として記録"
   },
   "review": {
     "discard": "編集内容を破棄",

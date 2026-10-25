@@ -117,7 +117,26 @@
     "noKaraokeHint": "Tee siitä oma karaokevideosi, valmiina laulettavaksi ja jaettavaksi.",
     "offlineMissing": "Olet offline-tilassa, eikä tätä kappaletta löydy tähän puhelimeen tallennetusta kappalelistasta.",
     "offlineNote": "Offline · tähän puhelimeen tallennetusta kappalelistasta",
-    "cloudErrorNote": "Hakuun ei juuri nyt saada yhteyttä · näytetään tähän puhelimeen tallennettu kappalelista"
+    "cloudErrorNote": "Hakuun ei juuri nyt saada yhteyttä · näytetään tähän puhelimeen tallennettu kappalelista",
+    "history": {
+      "beforeApp": "Ennen sovellusta",
+      "crowd": "Yleisön suosikki",
+      "feel": "Fiilis: {value}",
+      "key": "Sävellaji: {value}",
+      "nomadNight": "Nomad-ilta",
+      "otherVenue": "Toinen baari",
+      "pageTitle": "Kappalehistoria",
+      "removeBody": "Tätä ei enää lasketa lauletuksi.",
+      "removeTitle": "Poistetaanko tämä merkintä?",
+      "times": "×{count}",
+      "title": "Oma historiasi",
+      "edit": "Muokkaa",
+      "remove": "Poista"
+    },
+    "save": "Tallenna Omiin kappaleisiin",
+    "saved": "Tallennettu",
+    "addToSetlist": "Lisää settilistaan",
+    "markSung": "Merkitse lauletuksi"
   },
   "tabs": {
     "discover": "Löydä uutta",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Karaokepaikan valikoima",
     "loved": "Suosikit",
-    "menuLoveIt": "Tykkään tosi paljon",
+    "menuLoveIt": "Tallenna Omiin kappaleisiin",
     "menuNotForMe": "Ei minua varten",
     "menuOpen": "Lisää vaihtoehtoja kappaleelle {title}",
     "offlinePicks": "Offline-tila: näytetään viimeisimmät suosituksesi",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Yhteisö",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Yritä uudelleen",
-    "signInForPicksAction": "Kirjaudu sisään"
+    "signInForPicksAction": "Kirjaudu sisään",
+    "menuSaved": "Tallennettu",
+    "menuAddToSetlist": "Lisää settilistaan",
+    "menuMarkSung": "Merkitse lauletuksi"
   },
   "review": {
     "discard": "Hylkää muokkaukseni",

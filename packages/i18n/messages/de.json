@@ -117,7 +117,26 @@
     "noKaraokeHint": "Erstelle dein eigenes Karaoke-Video davon – bereit zum Mitsingen und Teilen.",
     "offlineMissing": "Du bist offline und dieser Song ist nicht in der auf diesem Smartphone gespeicherten Songliste enthalten.",
     "offlineNote": "Offline · aus der auf diesem Smartphone gespeicherten Songliste",
-    "cloudErrorNote": "Suche gerade nicht erreichbar · es wird die auf diesem Smartphone gespeicherte Songliste angezeigt"
+    "cloudErrorNote": "Suche gerade nicht erreichbar · es wird die auf diesem Smartphone gespeicherte Songliste angezeigt",
+    "history": {
+      "beforeApp": "Vor der App",
+      "crowd": "Publikumsliebling",
+      "feel": "Stimmung: {value}",
+      "key": "Tonart: {value}",
+      "nomadNight": "Nomad-Abend",
+      "otherVenue": "Andere Bar",
+      "pageTitle": "Song-Verlauf",
+      "removeBody": "Wird nicht mehr als gesungen gezählt.",
+      "removeTitle": "Diesen Eintrag entfernen?",
+      "times": "×{count}",
+      "title": "Dein Verlauf",
+      "edit": "Bearbeiten",
+      "remove": "Entfernen"
+    },
+    "save": "In „Meine Songs“ speichern",
+    "saved": "Gespeichert",
+    "addToSetlist": "Zur Setlist hinzufügen",
+    "markSung": "Als gesungen markieren"
   },
   "tabs": {
     "discover": "Entdecken",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Katalog der Location",
     "loved": "Favoriten",
-    "menuLoveIt": "Liebe ich",
+    "menuLoveIt": "In „Meine Songs“ speichern",
     "menuNotForMe": "Nicht mein Fall",
     "menuOpen": "Mehr Optionen für {title}",
     "offlinePicks": "Offline: deine letzten Empfehlungen werden angezeigt",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Erneut versuchen",
-    "signInForPicksAction": "Anmelden"
+    "signInForPicksAction": "Anmelden",
+    "menuSaved": "Gespeichert",
+    "menuAddToSetlist": "Zur Setlist hinzufügen",
+    "menuMarkSung": "Als gesungen markieren"
   },
   "review": {
     "discard": "Meine Änderungen verwerfen",

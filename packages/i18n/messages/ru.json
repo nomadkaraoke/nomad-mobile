@@ -117,7 +117,26 @@
     "noKaraokeHint": "Создай своё караоке-видео — пой и делись им с другими.",
     "offlineMissing": "Ты не в сети, и этой песни нет в списке, сохранённом на этом телефоне.",
     "offlineNote": "Офлайн · из списка песен, сохранённого на этом телефоне",
-    "cloudErrorNote": "Поиск сейчас недоступен · показан список песен, сохранённый на этом телефоне"
+    "cloudErrorNote": "Поиск сейчас недоступен · показан список песен, сохранённый на этом телефоне",
+    "history": {
+      "beforeApp": "До приложения",
+      "crowd": "Любимица публики",
+      "feel": "Вайб: {value}",
+      "key": "Тональность: {value}",
+      "nomadNight": "Вечер с Nomad",
+      "otherVenue": "Другой бар",
+      "pageTitle": "История песни",
+      "removeBody": "Она больше не будет считаться спетой.",
+      "removeTitle": "Удалить эту запись?",
+      "times": "×{count}",
+      "title": "Твоя история",
+      "edit": "Редактировать",
+      "remove": "Удалить"
+    },
+    "save": "Сохранить в «Мои песни»",
+    "saved": "Сохранено",
+    "addToSetlist": "Добавить в сет-лист",
+    "markSung": "Отметить как спетое"
   },
   "tabs": {
     "discover": "Каталог",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Каталог заведения",
     "loved": "Любимое",
-    "menuLoveIt": "Обожаю",
+    "menuLoveIt": "Сохранить в «Мои песни»",
     "menuNotForMe": "Не моё",
     "menuOpen": "Параметры для {title}",
     "offlinePicks": "Офлайн-режим: показаны последние рекомендации",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Любительский",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Попробовать снова",
-    "signInForPicksAction": "Войти"
+    "signInForPicksAction": "Войти",
+    "menuSaved": "Сохранено",
+    "menuAddToSetlist": "Добавить в сет-лист",
+    "menuMarkSung": "Отметить как спетое"
   },
   "review": {
     "discard": "Сбросить мои правки",

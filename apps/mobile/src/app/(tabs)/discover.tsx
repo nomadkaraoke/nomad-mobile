@@ -30,6 +30,8 @@ import { FilterBar } from "../../discover/components/FilterBar";
 import { RecSection, sectionTestId } from "../../discover/components/RecSection";
 import { RecSongRow } from "../../discover/components/RecSongRow";
 import { SignInCard } from "../../discover/components/SignInCard";
+import { AddToSetlistSheet } from "../../me/AddToSetlistSheet";
+import { MarkSungSheet } from "../../me/MarkSungSheet";
 import { SongMenuSheet } from "../../discover/components/SongMenuSheet";
 import { useRecFilters } from "../../discover/filtersStore";
 import { useRecommendations } from "../../discover/useRecommendations";
@@ -176,6 +178,8 @@ export default function DiscoverScreen() {
   const recs = useRecommendations(filters);
   const feedback = useSongFeedback();
   const [menuSong, setMenuSong] = useState<RecSong | null>(null);
+  const [setlistSong, setSetlistSong] = useState<RecSong | null>(null);
+  const [sungSong, setSungSong] = useState<RecSong | null>(null);
   const [pulling, setPulling] = useState(false);
   const filtersActive = activeFilterCount(filters) > 0 || library !== "any";
   // "No range data yet" only when Singable is the one filter narrowing the picks: with genre/decade/library on
@@ -756,8 +760,13 @@ export default function DiscoverScreen() {
         onClose={() => setMenuSong(null)}
         onHide={feedback.hide}
         onLove={feedback.love}
+        saved={menuSong ? feedback.loved.has(menuSong.song_key) : false}
+        onAddToSetlist={(song) => setSetlistSong(song)}
+        onMarkSung={(song) => setSungSong(song)}
         disabled={recs.offlineSnapshot}
       />
+      <AddToSetlistSheet song={setlistSong} onClose={() => setSetlistSong(null)} />
+      <MarkSungSheet song={sungSong} onClose={() => setSungSong(null)} />
       {feedback.hidden ? (
         <View
           testID="discover-hidden-toast"

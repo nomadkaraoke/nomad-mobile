@@ -46,6 +46,7 @@ function RootStack() {
   // Android Share -> Nomad Karaoke: a shared export zip/CSV opens the import screen (Phase 3b).
   useSharedFileIntake();
   const tMe = useTranslations('me');
+  const tSong = useTranslations('song');
   const tVoice = useTranslations('voice');
   const tVoiceDebug = useTranslations('voiceSession.debug');
   const tVoiceSession = useTranslations('voiceSession');
@@ -83,6 +84,7 @@ function RootStack() {
         <Stack.Screen name="me/sung-before" options={{ title: tMe('sungBefore.title') }} />
         <Stack.Screen name="me/setlists/index" options={{ title: tMe('setlists.title') }} />
         <Stack.Screen name="me/setlists/[id]" options={{ title: tMe('setlists.detailTitle') }} />
+        <Stack.Screen name="me/history/[key]" options={{ title: tSong('history.pageTitle') }} />
         <Stack.Screen name="me/artists" options={(p) => ({ title: tAccount('artistsAll'), ...profileBack(p) })} />
         {/* Connect your music (Phase 3b): its own stack with its own headers. */}
         <Stack.Screen name="discover/connect" options={{ headerShown: false }} />

@@ -117,7 +117,26 @@
     "noKaraokeHint": "Gör en egen karaokevideo av den, redo att sjungas till och delas.",
     "offlineMissing": "Du är offline och den här låten finns inte i låtlistan som sparats på den här telefonen.",
     "offlineNote": "Offline · från låtlistan som sparats på den här telefonen",
-    "cloudErrorNote": "Det går inte att nå sökningen just nu · visar låtlistan som sparats på denna telefon"
+    "cloudErrorNote": "Det går inte att nå sökningen just nu · visar låtlistan som sparats på denna telefon",
+    "history": {
+      "beforeApp": "Före appen",
+      "crowd": "Publikfavorit",
+      "feel": "Känsla: {value}",
+      "key": "Tonart: {value}",
+      "nomadNight": "Nomad-kväll",
+      "otherVenue": "Annan bar",
+      "pageTitle": "Låthistorik",
+      "removeBody": "Den kommer inte längre räknas som sjungen.",
+      "removeTitle": "Ta bort den här posten?",
+      "times": "×{count}",
+      "title": "Din historik",
+      "edit": "Redigera",
+      "remove": "Ta bort"
+    },
+    "save": "Spara till Mina låtar",
+    "saved": "Sparad",
+    "addToSetlist": "Lägg till i setlist",
+    "markSung": "Markera som sjungen"
   },
   "tabs": {
     "discover": "Upptäck",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Ställets låtbibliotek",
     "loved": "Favoriter",
-    "menuLoveIt": "Älskar den",
+    "menuLoveIt": "Spara till Mina låtar",
     "menuNotForMe": "Inte för mig",
     "menuOpen": "Fler alternativ för {title}",
     "offlinePicks": "Offline: visar dina senaste låtförslag",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Försök igen",
-    "signInForPicksAction": "Logga in"
+    "signInForPicksAction": "Logga in",
+    "menuSaved": "Sparad",
+    "menuAddToSetlist": "Lägg till i setlist",
+    "menuMarkSung": "Markera som sjungen"
   },
   "review": {
     "discard": "Ignorera mina ändringar",

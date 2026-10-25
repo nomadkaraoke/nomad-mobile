@@ -100,14 +100,25 @@ function SurveyForm({
     const trimmed = notes.trim();
     // "What got in the way?" only applies to ok/bad: a reason picked before switching to great is dropped.
     const whyAsked = feel === 'ok' || feel === 'bad';
-    useLogStore.getState().saveSurvey(entryId, {
-      ...(feel ? { feel } : {}),
-      ...(key ? { key } : {}),
-      ...(crowd !== null ? { crowd_pleaser: crowd } : {}),
-      ...(vibes.length ? { vibes } : {}),
-      ...(whyAsked && reasons.length ? { reasons } : {}),
-      ...(trimmed ? { notes: trimmed } : {}),
-    });
+    const sendReasons = whyAsked && reasons.length > 0;
+    const sendVibes = vibes.length > 0;
+    // Edit mode: only a field that had values in `initial` and is now empty is cleared (reasons also when the feel is
+    // now great, where "what got in the way?" no longer applies).
+    const clear: ('vibes' | 'reasons')[] = [];
+    if (!sendVibes && initial?.vibes?.length) clear.push('vibes');
+    if (!sendReasons && initial?.reasons?.length) clear.push('reasons');
+    useLogStore.getState().saveSurvey(
+      entryId,
+      {
+        ...(feel ? { feel } : {}),
+        ...(key ? { key } : {}),
+        ...(crowd !== null ? { crowd_pleaser: crowd } : {}),
+        ...(sendVibes ? { vibes } : {}),
+        ...(sendReasons ? { reasons } : {}),
+        ...(trimmed ? { notes: trimmed } : {}),
+      },
+      clear,
+    );
     onDone?.();
   };
 

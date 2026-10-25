@@ -116,8 +116,8 @@ type LogStore = {
   noteNomad(id: string, song: { artist: string; title: string; nightId?: string }): void;
   /** Moves an app entry along planned → requested → sung (or skipped). kjbox owns Nomad entries' state: ignored. */
   setState(id: string, state: LogState): void;
-  /** Saves the survey (answered now) and sends only `{survey}` to decide. */
-  saveSurvey(id: string, survey: LogSurvey): void;
+  /** Saves the survey (answered now) and sends only `{survey}` to decide; `clear` names vibes/reasons to empty (sent as []). */
+  saveSurvey(id: string, survey: LogSurvey, clear?: ('vibes' | 'reasons')[]): void;
   /** Dismissed survey: never asked again for this song. */
   skipSurvey(id: string): void;
   /** Removes a mistaken log (soft delete in decide). */
@@ -229,12 +229,15 @@ export const useLogStore = create<LogStore>((set, get) => {
       put(id, { state, ...(sungAt ? { sung_at: sungAt } : {}) });
     },
 
-    saveSurvey(id, answers) {
+    saveSurvey(id, answers, clear = []) {
       if (!get().userKey) return;
       const survey: Survey = {};
       for (const [k, v] of Object.entries(answers)) {
         if (v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && v.length === 0)) (survey as Record<string, unknown>)[k] = v;
       }
+      // Explicit clears (an edit that emptied vibes/reasons): decide merges survey sub-fields, so omitted keys are
+      // kept and a clear has to be sent as [].
+      for (const k of clear) if (!survey[k]) survey[k] = [];
       survey.answered_at = iso();
       const e = get().entries[id];
       if (e) saveEntries({ ...get().entries, [id]: { ...e, survey: { ...e.survey, ...survey }, updatedAt: clock() } });

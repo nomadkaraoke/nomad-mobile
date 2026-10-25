@@ -117,7 +117,26 @@
     "noKaraokeHint": "직접 노래방 영상을 만들어 바로 부르고 공유해 보세요.",
     "offlineMissing": "현재 오프라인 상태이며, 이 노래는 이 휴대폰에 저장된 노래 목록에 없습니다.",
     "offlineNote": "오프라인 · 이 휴대폰에 저장된 노래 목록 기준",
-    "cloudErrorNote": "지금은 검색에 연결할 수 없습니다 · 이 휴대전화에 저장된 노래 목록을 표시합니다"
+    "cloudErrorNote": "지금은 검색에 연결할 수 없습니다 · 이 휴대전화에 저장된 노래 목록을 표시합니다",
+    "history": {
+      "beforeApp": "앱 사용 전",
+      "crowd": "분위기 메이커",
+      "feel": "분위기: {value}",
+      "key": "키: {value}",
+      "nomadNight": "Nomad 나이트",
+      "otherVenue": "다른 바",
+      "pageTitle": "노래 기록",
+      "removeBody": "더 이상 부른 횟수에 포함되지 않습니다.",
+      "removeTitle": "이 기록을 삭제하시겠어요?",
+      "times": "×{count}",
+      "title": "내 기록",
+      "edit": "편집",
+      "remove": "제거"
+    },
+    "save": "내 노래에 저장",
+    "saved": "저장됨",
+    "addToSetlist": "세트리스트에 추가",
+    "markSung": "부른 곡으로 표시"
   },
   "tabs": {
     "discover": "둘러보기",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "매장 라이브러리",
     "loved": "좋아하는 곡",
-    "menuLoveIt": "좋아요",
+    "menuLoveIt": "내 노래에 저장",
     "menuNotForMe": "관심 없음",
     "menuOpen": "{title}의 옵션 더보기",
     "offlinePicks": "오프라인: 최근 추천 목록을 표시합니다",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "커뮤니티",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "다시 시도",
-    "signInForPicksAction": "로그인"
+    "signInForPicksAction": "로그인",
+    "menuSaved": "저장됨",
+    "menuAddToSetlist": "세트리스트에 추가",
+    "menuMarkSung": "부른 곡으로 표시"
   },
   "review": {
     "discard": "수정 내용 삭제",

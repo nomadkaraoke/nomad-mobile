@@ -117,7 +117,26 @@
     "noKaraokeHint": "Készíts belőle saját karaoke videót, készen az éneklésre és megosztásra.",
     "offlineMissing": "Offline módban vagy, és ez a dal nem szerepel az erre a telefonra mentett dallistában.",
     "offlineNote": "Offline · az erre a telefonra mentett dallistából",
-    "cloudErrorNote": "A keresés jelenleg nem érhető el · az erre a telefonra mentett dallista jelenik meg"
+    "cloudErrorNote": "A keresés jelenleg nem érhető el · az erre a telefonra mentett dallista jelenik meg",
+    "history": {
+      "beforeApp": "Az alkalmazás előtt",
+      "crowd": "Közönségkedvenc",
+      "feel": "Hangulat: {value}",
+      "key": "Hangnem: {value}",
+      "nomadNight": "Nomad este",
+      "otherVenue": "Másik bár",
+      "pageTitle": "Dalelőzmények",
+      "removeBody": "Már nem fog énekeltként szerepelni.",
+      "removeTitle": "Törlöd ezt a bejegyzést?",
+      "times": "×{count}",
+      "title": "Előzményeid",
+      "edit": "Szerkesztés",
+      "remove": "Eltávolítás"
+    },
+    "save": "Mentés a Dalaim közé",
+    "saved": "Mentve",
+    "addToSetlist": "Hozzáadás a dallistához",
+    "markSung": "Megjelölés elénekeltként"
   },
   "tabs": {
     "discover": "Felfedezés",
@@ -946,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Helyszín zenei könyvtára",
     "loved": "Kedvenc",
-    "menuLoveIt": "Imádom",
+    "menuLoveIt": "Mentés a Dalaim közé",
     "menuNotForMe": "Nem nekem való",
     "menuOpen": "További lehetőségek ehhez: {title}",
     "offlinePicks": "Offline: legutóbbi ajánlataid megjelenítése",
@@ -989,7 +1008,10 @@
     "libraryCommunity": "Közösségi",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Próbáld újra",
-    "signInForPicksAction": "Bejelentkezés"
+    "signInForPicksAction": "Bejelentkezés",
+    "menuSaved": "Mentve",
+    "menuAddToSetlist": "Hozzáadás a dallistához",
+    "menuMarkSung": "Megjelölés elénekeltként"
   },
   "review": {
     "discard": "Módosításaim elvetése",
