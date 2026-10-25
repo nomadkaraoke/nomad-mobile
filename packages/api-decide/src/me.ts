@@ -3,12 +3,12 @@ import {
   createPlaylistApiPlaylistsPost,
   deletePlaylistApiPlaylistsPlaylistIdDelete,
   getLibraryApiMyLibraryGet,
+  listKaraokeLogApiMyKaraokeLogGet,
   listPlaylistsApiPlaylistsGet,
   replacePlaylistItemsApiPlaylistsPlaylistIdItemsPut,
   updatePlaylistApiPlaylistsPlaylistIdPut,
 } from './client';
 import type { KaraokeLogEntry, LibraryItem, PlaylistItemIn, PlaylistResponse } from './client';
-import { listKaraokeLog } from './index';
 
 // Me tab: the singer's library (catalogued songs + facets), setlists (decide playlists with ordered items) and per-song history.
 export type Setlist = PlaylistResponse;
@@ -67,7 +67,8 @@ export const listSongHistory = async (libraryKey: string): Promise<KaraokeLogEnt
   const all: KaraokeLogEntry[] = [];
   let cursor: string | undefined;
   do {
-    const page = await listKaraokeLog({ song: libraryKey, cursor });
+    // (Not `listKaraokeLog` from ./index: that import would make a cycle with index's `export * from './me'`.)
+    const page = (await listKaraokeLogApiMyKaraokeLogGet({ query: { song: libraryKey, cursor } })).data;
     all.push(...page.entries);
     cursor = page.next_cursor ?? undefined;
   } while (cursor);
