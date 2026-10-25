@@ -1,6 +1,6 @@
 import * as decide from '@nomad/api-decide';
 import * as kjbox from '@nomad/api-kjbox';
-import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 
 import { useAuth } from '../../../auth/store';
 import { appStorage } from '../../../storage';
@@ -169,6 +169,20 @@ it('SurveySheet vibes multi-select toggles, and reasons picked under ok are not 
   expect(dapi.putKaraokeLog).toHaveBeenCalledWith('app_v3', {
     survey: { feel: 'great', vibes: ['duet'], answered_at: expect.any(String) },
   });
+});
+
+it('SurveySheet scrolls its questions and keeps Save and Not now pinned under them (the form outgrew the sheet)', () => {
+  renderTonight(<SurveySheet entryId="app_scroll" artist="A" title="T" initial={{ feel: 'ok' }} />);
+  const scroll = within(screen.getByTestId('survey-scroll'));
+  expect(scroll.getByTestId('survey-feel-ok')).toBeTruthy();
+  expect(scroll.getByTestId('survey-vibe-party')).toBeTruthy();
+  expect(scroll.getByTestId('survey-reason-too_long')).toBeTruthy();
+  expect(scroll.getByTestId('survey-notes')).toBeTruthy();
+  expect(scroll.queryByTestId('survey-save')).toBeNull();
+  expect(scroll.queryByTestId('survey-skip')).toBeNull();
+  const actions = within(screen.getByTestId('survey-actions'));
+  expect(actions.getByTestId('survey-save')).toBeTruthy();
+  expect(actions.getByTestId('survey-skip')).toBeTruthy();
 });
 
 it('SurveySheet initial pre-selects vibes and reasons', () => {
