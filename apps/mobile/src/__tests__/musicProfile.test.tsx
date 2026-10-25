@@ -122,6 +122,50 @@ describe('musicProfile', () => {
     expect(screen.queryByTestId('profile-hidden-unhide-1')).toBeNull();
   });
 
+  it('puts the voice profile first, then connected sources, before the artists', async () => {
+    await signIn();
+    open();
+    const voice = await screen.findByTestId('voice-section');
+    const connected = screen.getByTestId('profile-connected');
+    const artists = screen.getByTestId('profile-artists');
+    const order = (a: unknown, b: unknown) => {
+      const tree = JSON.stringify(screen.toJSON());
+      return tree.indexOf(`"testID":"${(a as { props: { testID: string } }).props.testID}"`) < tree.indexOf(`"testID":"${(b as { props: { testID: string } }).props.testID}"`);
+    };
+    expect(order(voice, connected)).toBe(true);
+    expect(order(connected, artists)).toBe(true);
+  });
+
+  it('shows 12 artist chips and "See all (30)" for 30 artists, best affinity first', async () => {
+    artistRows = Array.from({ length: 30 }, (_, i) => ({
+      artist_name: `Artist ${String(i).padStart(2, '0')}`,
+      sources: ['quiz'],
+      affinity: i === 29 ? 'love' : 'like',
+    }));
+    await signIn();
+    open();
+    expect(await screen.findByTestId('profile-artist-chip-0')).toHaveTextContent(/Artist 29/);
+    expect(screen.getByTestId('profile-artist-chip-11')).toBeTruthy();
+    expect(screen.queryByTestId('profile-artist-chip-12')).toBeNull();
+    expect(screen.getByTestId('profile-artists-all')).toHaveTextContent('See all (30)');
+  });
+
+  it('filters the artist chips with the search field', async () => {
+    artistRows = [userArtist('Alpha Band'), userArtist('Beta Band'), userArtist('Gamma Group')];
+    await signIn();
+    open();
+    fireEvent.changeText(await screen.findByTestId('profile-artists-search'), 'gam');
+    await waitFor(() => expect(screen.queryByText(/Alpha Band/)).toBeNull());
+    expect(screen.getByTestId('profile-artist-chip-0')).toHaveTextContent(/Gamma Group/);
+  });
+
+  it('See all opens the A-Z artists screen', async () => {
+    await signIn();
+    const app = open();
+    fireEvent.press(await screen.findByTestId('profile-artists-all'));
+    await waitFor(() => expect(app.getPathname()).toBe('/me/artists'));
+  });
+
   it('removing an artist calls removeMyArtist(name)', async () => {
     await signIn();
     open();

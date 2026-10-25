@@ -52,7 +52,13 @@
     "appleMusicReconnect": "התחברות מחדש ל-Apple Music",
     "musicServices": "שירותי המוזיקה שלך",
     "appleMusicDenied": "ל-Nomad Karaoke אין גישה ל-Apple Music. יש להפעיל את הגישה ב'הגדרות' › Nomad Karaoke ‏› 'מדיה ו-Apple Music', ואז לנסות שוב.",
-    "appleMusicNoSubscription": "Apple Music לא שיתף את הספרייה שלך. כדי להתחבר דרוש מנוי ל-Apple Music."
+    "appleMusicNoSubscription": "Apple Music לא שיתף את הספרייה שלך. כדי להתחבר דרוש מנוי ל-Apple Music.",
+    "artistsAll": "כל האמנים",
+    "artistsNoMatch": "לא נמצאו אמנים תואמים.",
+    "artistsRemoveA11y": "הסרת {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {הצגת הכל (#)} other {הצגת הכל (#)}}",
+    "artistsSearch": "חיפוש אמן"
   },
   "common": {
     "error": "משהו השתבש.",

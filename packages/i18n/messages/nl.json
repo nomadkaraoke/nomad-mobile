@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Koppel Apple Music opnieuw",
     "musicServices": "Je muziekdiensten",
     "appleMusicDenied": "Nomad Karaoke heeft geen toegang tot Apple Music. Schakel dit in via Instellingen › Nomad Karaoke › Media en Apple Music en probeer het opnieuw.",
-    "appleMusicNoSubscription": "Apple Music heeft je bibliotheek niet gedeeld. Om te verbinden heb je een Apple Music-abonnement nodig."
+    "appleMusicNoSubscription": "Apple Music heeft je bibliotheek niet gedeeld. Om te verbinden heb je een Apple Music-abonnement nodig.",
+    "artistsAll": "Alle artiesten",
+    "artistsNoMatch": "Geen overeenkomende artiesten.",
+    "artistsRemoveA11y": "{artist} verwijderen",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Alles bekijken (#)} other {Alles bekijken (#)}}",
+    "artistsSearch": "Zoek een artiest"
   },
   "common": {
     "error": "Er is iets misgegaan.",

@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Kết nối lại Apple Music",
     "musicServices": "Dịch vụ âm nhạc của bạn",
     "appleMusicDenied": "Nomad Karaoke không có quyền truy cập Apple Music. Hãy bật quyền này trong Cài đặt › Nomad Karaoke › Phương tiện & Apple Music, rồi thử lại.",
-    "appleMusicNoSubscription": "Apple Music không chia sẻ thư viện của bạn. Bạn cần có gói đăng ký Apple Music để kết nối."
+    "appleMusicNoSubscription": "Apple Music không chia sẻ thư viện của bạn. Bạn cần có gói đăng ký Apple Music để kết nối.",
+    "artistsAll": "Tất cả nghệ sĩ",
+    "artistsNoMatch": "Không có nghệ sĩ nào khớp.",
+    "artistsRemoveA11y": "Xóa {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, other {Xem tất cả (#)}}",
+    "artistsSearch": "Tìm nghệ sĩ"
   },
   "common": {
     "error": "Đã có lỗi xảy ra.",

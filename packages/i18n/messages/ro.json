@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Reconectează Apple Music",
     "musicServices": "Serviciile tale de muzică",
     "appleMusicDenied": "Nomad Karaoke nu are acces la Apple Music. Activează permisiunea din Configurări › Nomad Karaoke › Media și Apple Music, apoi încearcă din nou.",
-    "appleMusicNoSubscription": "Apple Music nu a partajat biblioteca ta. Conectarea necesită un abonament Apple Music."
+    "appleMusicNoSubscription": "Apple Music nu a partajat biblioteca ta. Conectarea necesită un abonament Apple Music.",
+    "artistsAll": "Toți artiștii",
+    "artistsNoMatch": "Niciun artist găsit.",
+    "artistsRemoveA11y": "Elimină {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Vezi tot (#)} few {Vezi tot (#)} other {Vezi tot (#)}}",
+    "artistsSearch": "Găsește un artist"
   },
   "common": {
     "error": "Ceva nu a funcționat.",

@@ -52,7 +52,13 @@
     "appleMusicReconnect": "เชื่อมต่อ Apple Music อีกครั้ง",
     "musicServices": "บริการเพลงของคุณ",
     "appleMusicDenied": "Nomad Karaoke ไม่ได้รับสิทธิ์เข้าถึง Apple Music โปรดเปิดการเข้าถึงที่ การตั้งค่า › Nomad Karaoke › สื่อและ Apple Music แล้วลองใหม่อีกครั้ง",
-    "appleMusicNoSubscription": "Apple Music ไม่ได้แชร์คลังเพลงของคุณ การเชื่อมต่อจำเป็นต้องมีการสมัครสมาชิก Apple Music"
+    "appleMusicNoSubscription": "Apple Music ไม่ได้แชร์คลังเพลงของคุณ การเชื่อมต่อจำเป็นต้องมีการสมัครสมาชิก Apple Music",
+    "artistsAll": "ศิลปินทั้งหมด",
+    "artistsNoMatch": "ไม่พบศิลปินที่ตรงกัน",
+    "artistsRemoveA11y": "ลบ {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {ดูทั้งหมด (#)} other {ดูทั้งหมด (#)}}",
+    "artistsSearch": "ค้นหาศิลปิน"
   },
   "common": {
     "error": "เกิดข้อผิดพลาดบางอย่าง",

@@ -52,7 +52,13 @@
     "appleMusicReconnect": "重新关联 Apple Music",
     "musicServices": "已绑定的音乐服务",
     "appleMusicDenied": "Nomad Karaoke 无权访问 Apple Music。请前往“设置”› Nomad Karaoke ›“媒体与 Apple Music”中开启权限，然后重试。",
-    "appleMusicNoSubscription": "Apple Music 未共享您的资料库。连接需要订阅 Apple Music。"
+    "appleMusicNoSubscription": "Apple Music 未共享您的资料库。连接需要订阅 Apple Music。",
+    "artistsAll": "所有歌手",
+    "artistsNoMatch": "未找到匹配的歌手。",
+    "artistsRemoveA11y": "移除 {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, other {查看全部 (#)}}",
+    "artistsSearch": "查找歌手"
   },
   "common": {
     "error": "出错了。",

@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Подключить Apple Music заново",
     "musicServices": "Музыкальные сервисы",
     "appleMusicDenied": "У Nomad Karaoke нет доступа к Apple Music. Включи его в меню Настройки › Nomad Karaoke › Мультимедиа и Apple Music, затем попробуй снова.",
-    "appleMusicNoSubscription": "Apple Music не предоставил доступ к твоей медиатеке. Для подключения требуется подписка на Apple Music."
+    "appleMusicNoSubscription": "Apple Music не предоставил доступ к твоей медиатеке. Для подключения требуется подписка на Apple Music.",
+    "artistsAll": "Все исполнители",
+    "artistsNoMatch": "Исполнители не найдены.",
+    "artistsRemoveA11y": "Удалить {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Посмотреть всех (#)} few {Посмотреть всех (#)} many {Посмотреть всех (#)} other {Посмотреть всех (#)}}",
+    "artistsSearch": "Найти исполнителя"
   },
   "common": {
     "error": "Что-то пошло не так.",

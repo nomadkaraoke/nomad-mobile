@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Ikonekta ulit ang Apple Music",
     "musicServices": "Iyong mga music service",
     "appleMusicDenied": "Walang access ang Nomad Karaoke sa Apple Music. I-on ito sa Settings › Nomad Karaoke › Media & Apple Music, pagkatapos ay subukang muli.",
-    "appleMusicNoSubscription": "Hindi ibinahagi ng Apple Music ang iyong library. Kinakailangan ng subscription sa Apple Music para makakonekta."
+    "appleMusicNoSubscription": "Hindi ibinahagi ng Apple Music ang iyong library. Kinakailangan ng subscription sa Apple Music para makakonekta.",
+    "artistsAll": "Lahat ng artist",
+    "artistsNoMatch": "Walang tumutugmang artist.",
+    "artistsRemoveA11y": "Alisin ang {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Tingnan lahat (#)} other {Tingnan lahat (#)}}",
+    "artistsSearch": "Maghanap ng artist"
   },
   "common": {
     "error": "May nagkaproblema.",

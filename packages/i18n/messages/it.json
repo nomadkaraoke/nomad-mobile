@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Riconnetti Apple Music",
     "musicServices": "I tuoi servizi musicali",
     "appleMusicDenied": "Nomad Karaoke non ha accesso ad Apple Music. Attivalo in Impostazioni › Nomad Karaoke › File multimediali e Apple Music, poi riprova.",
-    "appleMusicNoSubscription": "Apple Music non ha condiviso la tua libreria. Per connetterti è necessario un abbonamento ad Apple Music."
+    "appleMusicNoSubscription": "Apple Music non ha condiviso la tua libreria. Per connetterti è necessario un abbonamento ad Apple Music.",
+    "artistsAll": "Tutti gli artisti",
+    "artistsNoMatch": "Nessun artista trovato.",
+    "artistsRemoveA11y": "Rimuovi {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Vedi tutti (#)} other {Vedi tutti (#)}}",
+    "artistsSearch": "Cerca un artista"
   },
   "common": {
     "error": "Qualcosa è andato storto.",

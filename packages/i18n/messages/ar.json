@@ -52,7 +52,13 @@
     "appleMusicReconnect": "إعادة ربط Apple Music",
     "musicServices": "خدمات الموسيقى الخاصة بك",
     "appleMusicDenied": "لا يملك Nomad Karaoke إذن الوصول إلى Apple Music. يرجى تفعيله من الإعدادات › Nomad Karaoke › الوسائط وApple Music، ثم أعد المحاولة.",
-    "appleMusicNoSubscription": "لم تتم مشاركة مكتبتك من Apple Music. يتطلب الربط وجود اشتراك في Apple Music."
+    "appleMusicNoSubscription": "لم تتم مشاركة مكتبتك من Apple Music. يتطلب الربط وجود اشتراك في Apple Music.",
+    "artistsAll": "جميع الفنانين",
+    "artistsNoMatch": "لا يوجد فنانون مطابقون.",
+    "artistsRemoveA11y": "إزالة {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {عرض الكل (#)} other {عرض الكل (#)}}",
+    "artistsSearch": "ابحث عن فنان"
   },
   "common": {
     "error": "حدث خطأ ما.",

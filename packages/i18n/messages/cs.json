@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Znovu připojit Apple Music",
     "musicServices": "Tvoje hudební služby",
     "appleMusicDenied": "Nomad Karaoke nemá přístup k Apple Music. Zapni ho v Nastavení › Nomad Karaoke › Média a Apple Music a zkus to znovu.",
-    "appleMusicNoSubscription": "Služba Apple Music nenasdílela tvou knihovnu. K propojení je potřeba mít předplatné Apple Music."
+    "appleMusicNoSubscription": "Služba Apple Music nenasdílela tvou knihovnu. K propojení je potřeba mít předplatné Apple Music.",
+    "artistsAll": "Všichni interpreti",
+    "artistsNoMatch": "Žádní odpovídající interpreti.",
+    "artistsRemoveA11y": "Odebrat {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Zobrazit všechny (#)} few {Zobrazit všechny (#)} many {Zobrazit všechny (#)} other {Zobrazit všechny (#)}}",
+    "artistsSearch": "Najít umělce"
   },
   "common": {
     "error": "Něco se pokazilo.",

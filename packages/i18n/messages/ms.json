@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Sambung semula Apple Music",
     "musicServices": "Perkhidmatan muzik anda",
     "appleMusicDenied": "Nomad Karaoke tidak mempunyai akses kepada Apple Music. Hidupkannya dalam Tetapan › Nomad Karaoke › Media & Apple Music, kemudian cuba lagi.",
-    "appleMusicNoSubscription": "Apple Music tidak berkongsi pustaka anda. Langganan Apple Music diperlukan untuk menyambung."
+    "appleMusicNoSubscription": "Apple Music tidak berkongsi pustaka anda. Langganan Apple Music diperlukan untuk menyambung.",
+    "artistsAll": "Semua artis",
+    "artistsNoMatch": "Tiada artis yang sepadan.",
+    "artistsRemoveA11y": "Alih keluar {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, other {Lihat semua (#)}}",
+    "artistsSearch": "Cari artis"
   },
   "common": {
     "error": "Sesuatu telah berlaku masalah.",

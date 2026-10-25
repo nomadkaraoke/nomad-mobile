@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Apple Music फिर से कनेक्ट करो",
     "musicServices": "तुम्हारी म्यूजिक सेवाएं",
     "appleMusicDenied": "Nomad Karaoke के पास Apple Music का एक्सेस नहीं है। इसे Settings › Nomad Karaoke › Media & Apple Music में जाकर चालू करो, फिर दोबारा कोशिश करो।",
-    "appleMusicNoSubscription": "Apple Music ने तुम्हारी लाइब्रेरी शेयर नहीं की। कनेक्ट करने के लिए Apple Music सब्सक्रिप्शन होना ज़रूरी है।"
+    "appleMusicNoSubscription": "Apple Music ने तुम्हारी लाइब्रेरी शेयर नहीं की। कनेक्ट करने के लिए Apple Music सब्सक्रिप्शन होना ज़रूरी है।",
+    "artistsAll": "सभी कलाकार",
+    "artistsNoMatch": "कोई कलाकार मेल नहीं खाता।",
+    "artistsRemoveA11y": "{artist} को हटाओ",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {सभी (#) देखें} other {सभी (#) देखें}}",
+    "artistsSearch": "कोई आर्टिस्ट खोजो"
   },
   "common": {
     "error": "कुछ गड़बड़ हो गई।",

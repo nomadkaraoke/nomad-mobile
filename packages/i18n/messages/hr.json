@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Ponovno poveži Apple Music",
     "musicServices": "Tvoji glazbeni servisi",
     "appleMusicDenied": "Nomad Karaoke nema pristup servisu Apple Music. Uključi ga u Postavke › Nomad Karaoke › Mediji i Apple Music, pa pokušaj ponovno.",
-    "appleMusicNoSubscription": "Apple Music nije podijelio tvoju zbirku. Za povezivanje je potrebna pretplata na Apple Music."
+    "appleMusicNoSubscription": "Apple Music nije podijelio tvoju zbirku. Za povezivanje je potrebna pretplata na Apple Music.",
+    "artistsAll": "Svi izvođači",
+    "artistsNoMatch": "Nema podudarnih izvođača.",
+    "artistsRemoveA11y": "Ukloni izvođača {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Prikaži sve (#)} few {Prikaži sve (#)} other {Prikaži sve (#)}}",
+    "artistsSearch": "Pronađi izvođača"
   },
   "common": {
     "error": "Nešto je pošlo po zlu.",

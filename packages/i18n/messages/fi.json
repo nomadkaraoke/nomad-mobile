@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Yhdistä Apple Music uudelleen",
     "musicServices": "Musiikkipalvelusi",
     "appleMusicDenied": "Nomad Karaokella ei ole pääsyä Apple Musiciin. Ota se käyttöön kohdassa Asetukset › Nomad Karaoke › Media ja Apple Music ja yritä sitten uudelleen.",
-    "appleMusicNoSubscription": "Apple Music ei jakanut kirjastoasi. Yhdistäminen vaatii Apple Music -tilauksen."
+    "appleMusicNoSubscription": "Apple Music ei jakanut kirjastoasi. Yhdistäminen vaatii Apple Music -tilauksen.",
+    "artistsAll": "Kaikki artistit",
+    "artistsNoMatch": "Yksikään artisti ei vastaa hakua.",
+    "artistsRemoveA11y": "Poista {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Näytä kaikki (#)} other {Näytä kaikki (#)}}",
+    "artistsSearch": "Etsi artisti"
   },
   "common": {
     "error": "Jokin meni pieleen.",

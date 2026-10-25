@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Επανασύνδεση Apple Music",
     "musicServices": "Οι μουσικές υπηρεσίες σου",
     "appleMusicDenied": "Το Nomad Karaoke δεν έχει πρόσβαση στο Apple Music. Ενεργοποίησέ την στις Ρυθμίσεις › Nomad Karaoke › Πολυμέσα και Apple Music και, στη συνέχεια, προσπάθησε ξανά.",
-    "appleMusicNoSubscription": "Το Apple Music δεν έκανε κοινή χρήση της βιβλιοθήκης σου. Για τη σύνδεση απαιτείται συνδρομή στο Apple Music."
+    "appleMusicNoSubscription": "Το Apple Music δεν έκανε κοινή χρήση της βιβλιοθήκης σου. Για τη σύνδεση απαιτείται συνδρομή στο Apple Music.",
+    "artistsAll": "Όλοι οι καλλιτέχνες",
+    "artistsNoMatch": "Δεν βρέθηκαν καλλιτέχνες.",
+    "artistsRemoveA11y": "Αφαίρεση {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Δες όλους (#)} other {Δες όλους (#)}}",
+    "artistsSearch": "Βρες έναν καλλιτέχνη"
   },
   "common": {
     "error": "Κάτι πήγε στραβά.",

@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Apple Music újrakapcsolása",
     "musicServices": "Zenei szolgáltatásaid",
     "appleMusicDenied": "A Nomad Karaoke nem fér hozzá az Apple Music szolgáltatáshoz. Kapcsold be a Beállítások › Nomad Karaoke › Média és Apple Music menüpontban, majd próbáld újra.",
-    "appleMusicNoSubscription": "Az Apple Music nem osztotta meg a könyvtáradat. Az összekapcsoláshoz Apple Music-előfizetés szükséges."
+    "appleMusicNoSubscription": "Az Apple Music nem osztotta meg a könyvtáradat. Az összekapcsoláshoz Apple Music-előfizetés szükséges.",
+    "artistsAll": "Összes előadó",
+    "artistsNoMatch": "Nincs találat az előadók között.",
+    "artistsRemoveA11y": "{artist} eltávolítása",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Összes megtekintése (#)} other {Összes megtekintése (#)}}",
+    "artistsSearch": "Keress előadót"
   },
   "common": {
     "error": "Valami hiba történt.",

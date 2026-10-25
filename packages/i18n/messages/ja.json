@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Apple Musicを再連携",
     "musicServices": "連携中の音楽サービス",
     "appleMusicDenied": "Nomad KaraokeはApple Musicへのアクセス権限がありません。「設定」›「Nomad Karaoke」›「メディアとApple Music」で許可をオンにしてから、もう一度お試しください。",
-    "appleMusicNoSubscription": "Apple Musicのライブラリが共有されませんでした。接続するにはApple Musicのサブスクリプションが必要です。"
+    "appleMusicNoSubscription": "Apple Musicのライブラリが共有されませんでした。接続するにはApple Musicのサブスクリプションが必要です。",
+    "artistsAll": "すべてのアーティスト",
+    "artistsNoMatch": "一致するアーティストが見つかりません。",
+    "artistsRemoveA11y": "{artist}を削除",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, other {すべて表示 (#)}}",
+    "artistsSearch": "アーティストを探す"
   },
   "common": {
     "error": "問題が発生しました。",

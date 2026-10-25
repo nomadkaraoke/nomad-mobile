@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Apple Music'e Tekrar Bağlan",
     "musicServices": "Müzik servislerin",
     "appleMusicDenied": "Nomad Karaoke'nin Apple Music'e erişimi yok. Ayarlar › Nomad Karaoke › Ortamlar ve Apple Music bölümünden bu izni aç, ardından tekrar dene.",
-    "appleMusicNoSubscription": "Apple Music arşivini paylaşmadı. Bağlanmak için Apple Music aboneliği gerekir."
+    "appleMusicNoSubscription": "Apple Music arşivini paylaşmadı. Bağlanmak için Apple Music aboneliği gerekir.",
+    "artistsAll": "Tüm sanatçılar",
+    "artistsNoMatch": "Eşleşen sanatçı bulunamadı.",
+    "artistsRemoveA11y": "{artist} adlı sanatçıyı kaldır",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Tümünü gör (#)} other {Tümünü gör (#)}}",
+    "artistsSearch": "Bir sanatçı bul"
   },
   "common": {
     "error": "Bir şeyler ters gitti.",

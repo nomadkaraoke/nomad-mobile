@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Genopret forbindelse til Apple Music",
     "musicServices": "Dine musiktjenester",
     "appleMusicDenied": "Nomad Karaoke har ikke adgang til Apple Music. Slå det til under Indstillinger › Nomad Karaoke › Medier og Apple Music, og prøv igen.",
-    "appleMusicNoSubscription": "Apple Music delte ikke dit bibliotek. Tilknytning kræver et Apple Music-abonnement."
+    "appleMusicNoSubscription": "Apple Music delte ikke dit bibliotek. Tilknytning kræver et Apple Music-abonnement.",
+    "artistsAll": "Alle kunstnere",
+    "artistsNoMatch": "Ingen kunstnere matcher.",
+    "artistsRemoveA11y": "Fjern {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Se alle (#)} other {Se alle (#)}}",
+    "artistsSearch": "Find en kunstner"
   },
   "common": {
     "error": "Der gik noget galt.",
