@@ -1,6 +1,6 @@
 import { removeSourceData, type SourceSummary } from '@nomad/api-decide';
 import { isolate, useTranslations } from '@nomad/i18n';
-import { Button, Text } from '@nomad/ui';
+import { BrandIcon, Button, Text, type BrandId } from '@nomad/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { router, type Href } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
@@ -23,6 +23,16 @@ const SOURCE_NAME = {
   spotify_export: 'spotifyExport',
   apple_export: 'appleExport',
 } as const;
+
+/** The service logo for a decide source id; screenshot imports (and unknown ids) have none. */
+export function brandFor(source: string): BrandId | null {
+  if (source.startsWith('spotify')) return 'spotify';
+  if (source.startsWith('apple_')) return 'apple_music';
+  if (source === 'youtube_music') return 'youtube_music';
+  if (source === 'lastfm') return 'lastfm';
+  if (source === 'listenbrainz') return 'listenbrainz';
+  return null;
+}
 
 const STATUS: Record<string, 'ok' | 'needsReconnect' | 'importing' | 'stale' | 'error'> = {
   ok: 'ok',
@@ -164,9 +174,11 @@ function SourceRow({
   const status = s.status ?? 'ok';
   // A status this build doesn't know yet reads as the neutral one.
   const statusKey = STATUS[status] ?? 'ok';
+  const brand = brandFor(s.source);
   return (
     <View testID={`connected-row-${s.source}`} className="gap-1 border-b border-border pb-3">
       <View className="flex-row items-center gap-2">
+        {brand ? <BrandIcon brand={brand} size={22} /> : null}
         <Text className="flex-1 font-semibold">{name}</Text>
         <View
           testID={`connected-status-${s.source}`}
