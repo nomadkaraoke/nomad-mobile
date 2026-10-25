@@ -70,6 +70,25 @@ it('the high section reads as C4 once the quiet second is over', async () => {
   expect(frames.filter((f) => f.t < 1.0).every((f) => f.rms < 0.003)).toBe(true);
 });
 
+it('fake source song section loops: the sing slice repeats with a timestamp that keeps rising', async () => {
+  const src = createFakePitchSource('baritone-scale');
+  const got: PcmBuffer[] = [];
+  await src.start((b) => got.push(b), 'song');
+  const [a, b] = FAKE_MIC_SECTIONS.sing;
+  expect(FAKE_MIC_SECTIONS.song).toEqual([a, b]);
+  const perPass = Math.ceil(((b - a) * 16000) / 1600);
+  jest.advanceTimersByTime(perPass * 2 * 100 + 500);
+  expect(got.length).toBe(perPass * 2 + 5);
+  // The second pass starts with the same audio as the first.
+  expect(Array.from(got[perPass]!.samples)).toEqual(Array.from(got[0]!.samples));
+  for (let i = 1; i < got.length; i++) expect(got[i]!.timestamp).toBeGreaterThan(got[i - 1]!.timestamp);
+  expect(got.at(-1)!.timestamp).toBeGreaterThan(b - a);
+  src.stop();
+  const n = got.length;
+  jest.advanceTimersByTime(1000);
+  expect(got).toHaveLength(n);
+});
+
 it('a stop() that lands before the asset loads leaves no timer running', async () => {
   const src = createFakePitchSource('baritone-scale');
   const got: PcmBuffer[] = [];

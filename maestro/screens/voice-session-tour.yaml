@@ -1,0 +1,146 @@
+# Screenshot tour of the voice session (Phase 3d UX review, plan Task D8 step 4): intro, setup (top, the long
+# recording-consent copy, filled in), the pick card, the play screen on the fake player, the quiz (top and scrolled
+# to the end), the next pick with Finish, and the result (top and scrolled), in the app language LOCALE. Not part of
+# the E2E suite: run it through scripts/e2e-local.sh, which sets the app language first (and back afterwards) and
+# passes TOUR_SHOTS = docs/screenshots/phase3d/<platform>/<locale>:
+#
+#   scripts/e2e-local.sh --platform ios --locale ar --screen voice-session-tour
+#
+# Needs Metro with EXPO_PUBLIC_FAKE_MIC=baritone-scale and EXPO_PUBLIC_FAKE_YT=1 (e2e-local.sh sets both). Targets
+# testIDs only, so it works in any language.
+appId: com.nomadkaraoke.mobile
+name: screens-voice-session-tour
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: vstour
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: decide-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      PROFILE: '{"genres":["pop"]}'
+- runFlow:
+    file: ../common/tour-launch.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "rec-row-.*-0"
+    timeout: 30000
+- runFlow: ../common/voice-session-scroll-to-entry.yaml
+- takeScreenshot: ${TOUR_SHOTS}/vs-00-entry
+- tapOn:
+    id: "vs-entry-discover"
+- extendedWaitUntil:
+    visible:
+      id: "vs-intro-start"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/vs-01-intro
+- tapOn:
+    id: "vs-intro-start"
+- extendedWaitUntil:
+    visible:
+      id: "vs-setup-go"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/vs-02-setup
+- tapOn:
+    id: "vs-posture-standing"
+- tapOn:
+    id: "vs-warmth-warm"
+- scrollUntilVisible:
+    element:
+      id: "vs-headphones-no"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "vs-record-yes"
+- tapOn:
+    id: "vs-headphones-no"
+# The no-headphones warning, the consent copy and the footer button together.
+- takeScreenshot: ${TOUR_SHOTS}/vs-03-setup-filled
+- tapOn:
+    id: "vs-headphones-yes"
+- tapOn:
+    id: "vs-setup-go"
+- extendedWaitUntil:
+    visible:
+      id: "vs-pick-know"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/vs-04-pick
+- tapOn:
+    id: "vs-pick-know"
+- extendedWaitUntil:
+    visible:
+      id: "vs-play"
+    timeout: 20000
+- tapOn:
+    id: "vs-ribbon-toggle"
+- takeScreenshot: ${TOUR_SHOTS}/vs-05-play
+- extendedWaitUntil:
+    visible:
+      id: "vs-quiz-next"
+    timeout: 70000
+- takeScreenshot: ${TOUR_SHOTS}/vs-06-quiz
+- tapOn:
+    id: "vs-q-feel-loved"
+# Q2 while it is on screen (Next stays off without it).
+- runFlow:
+    when:
+      notVisible:
+        id: "vs-q-position-.*"
+        selected: true
+    commands:
+      - tapOn:
+          id: "vs-q-position-comfortable"
+- scrollUntilVisible:
+    element:
+      id: "vs-q-version-not_great"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "vs-q-version-not_great"
+- scrollUntilVisible:
+    element:
+      id: "vs-q-tag-mood_only"
+    direction: DOWN
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/vs-07-quiz-end
+- tapOn:
+    id: "vs-quiz-next"
+- extendedWaitUntil:
+    visible:
+      id: "vs-finish"
+    timeout: 30000
+- tapOn:
+    id: "vs-context-chip"
+- extendedWaitUntil:
+    visible:
+      id: "vs-ctx-record-off"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/vs-08-context-sheet
+- tapOn:
+    id: "vs-context-sheet-close"
+- extendedWaitUntil:
+    visible:
+      id: "vs-finish"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/vs-09-pick-finish
+- tapOn:
+    id: "vs-finish"
+- extendedWaitUntil:
+    visible:
+      id: "vs-result-type"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/vs-10-result
+- scrollUntilVisible:
+    element:
+      id: "vs-result-done"
+    direction: DOWN
+    timeout: 5000
+    optional: true
+- scroll
+- takeScreenshot: ${TOUR_SHOTS}/vs-11-result-end

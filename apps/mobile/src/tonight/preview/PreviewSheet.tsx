@@ -7,6 +7,7 @@ import { useVideoPlayer, VideoView } from 'expo-video';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ActivityIndicator, AppState, Linking, Pressable, View } from 'react-native';
 
+import { openYouTubeUrl } from '../../media/youtube';
 import { safePlay } from '../../review/audio/playback';
 import { singWebUrl } from '../links';
 import { TonightSheet } from '../TonightSheet';
@@ -222,7 +223,7 @@ export function PreviewSheet({ owner, focused }: { owner: string; focused: boole
     body = (
       <View className="gap-2">
         <Text testID="tonight-preview-youtube-note">{t('youtube')}</Text>
-        <Button testID="tonight-preview-youtube" variant="secondary" label={t('openYoutube')} onPress={() => void Linking.openURL(url)} />
+        <Button testID="tonight-preview-youtube" variant="secondary" label={t('openYoutube')} onPress={() => void openYouTubeUrl(url).catch(() => {})} />
       </View>
     );
   } else {

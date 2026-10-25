@@ -2,7 +2,9 @@ import type { Version } from '@nomad/api-decide';
 import { useTranslations } from '@nomad/i18n';
 import { Text } from '@nomad/ui';
 import { useState } from 'react';
-import { Linking, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+
+import { openYouTubeUrl } from '../../media/youtube';
 
 /** Rows shown before "Show all N". */
 export const VERSIONS_SHOWN = 5;
@@ -18,7 +20,7 @@ export type VersionListProps = {
   openUrl?: (url: string) => void;
 };
 
-const openExternal = (url: string) => void Linking.openURL(url).catch(() => {});
+const openExternal = (url: string) => void openYouTubeUrl(url).catch(() => {});
 
 function VersionRow({ v, index, openUrl }: { v: Version; index: number; openUrl: (url: string) => void }) {
   const t = useTranslations('discover');

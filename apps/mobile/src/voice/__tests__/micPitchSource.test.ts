@@ -7,6 +7,7 @@ jest.mock('expo-audio', () => {
   return {
     setAudioModeAsync: jest.fn(async () => {}),
     requestRecordingPermissionsAsync: jest.fn(),
+    getRecordingPermissionsAsync: jest.fn(),
     useAudioStream: jest.fn(() => ({ stream, isStreaming: false })),
     __stream: stream,
   };
@@ -15,6 +16,7 @@ jest.mock('expo-audio', () => {
 const mocked = audio as unknown as {
   setAudioModeAsync: jest.Mock;
   requestRecordingPermissionsAsync: jest.Mock;
+  getRecordingPermissionsAsync: jest.Mock;
   useAudioStream: jest.Mock;
   __stream: { start: jest.Mock; stop: jest.Mock };
 };
@@ -42,6 +44,17 @@ it('maps permission results to granted / denied / blocked', async () => {
   await expect(result.current.requestPermission()).resolves.toBe('denied');
   mocked.requestRecordingPermissionsAsync.mockResolvedValueOnce(perm(false, false));
   await expect(result.current.requestPermission()).resolves.toBe('blocked');
+});
+
+it('checkPermission reads the permission without asking, mapped the same way', async () => {
+  const { result } = renderHook(() => useMicPitchSource());
+  mocked.getRecordingPermissionsAsync.mockResolvedValueOnce(perm(true, true));
+  await expect(result.current.checkPermission()).resolves.toBe('granted');
+  mocked.getRecordingPermissionsAsync.mockResolvedValueOnce(perm(false, true));
+  await expect(result.current.checkPermission()).resolves.toBe('denied');
+  mocked.getRecordingPermissionsAsync.mockResolvedValueOnce(perm(false, false));
+  await expect(result.current.checkPermission()).resolves.toBe('blocked');
+  expect(mocked.requestRecordingPermissionsAsync).not.toHaveBeenCalled();
 });
 
 it('start enables recording mode before starting the stream; stop stops it and turns recording mode off', async () => {
@@ -78,6 +91,21 @@ it('unmount does not throw when expo-audio already released the stream', () => {
   const { unmount } = renderHook(() => useMicPitchSource());
   expect(() => unmount()).not.toThrow();
   expect(mocked.setAudioModeAsync).toHaveBeenLastCalledWith(AFTER);
+});
+
+it('stop() after the release (a voice-session timer or child cleanup, Phase 3d) never throws, so callers need no guard', () => {
+  const released = () => {
+    throw Object.assign(new Error('Cannot use shared object that was already released'), {
+      code: 'ERR_USING_RELEASED_SHARED_OBJECT',
+    });
+  };
+  const { result, unmount } = renderHook(() => useMicPitchSource());
+  const source = result.current;
+  mocked.__stream.stop.mockImplementation(released);
+  unmount();
+  expect(() => source.stop()).not.toThrow();
+  expect(() => source.stop()).not.toThrow();
+  mocked.__stream.stop.mockReset();
 });
 
 it('drops buffers after stop', async () => {

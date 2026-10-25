@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "Discover n'associera plus les morceaux à ta voix. Tu peux refaire le test à tout moment.",
     "profileRemoveTitle": "Supprimer ta voix ?",
     "singableCtaLabel": "Chantable, fais d'abord le test vocal",
-    "profileRemoveConfirm": "Retirer"
+    "profileRemoveConfirm": "Retirer",
+    "profileMethodSession": "D'après ta session vocale ({n, plural, one {# chanson} other {# chansons}})",
+    "profileMethodSessionPlain": "D'après ta session vocale"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Tentative {n} : ressenti {feel}, position {position}, difficulté {difficulty}",
+      "attemptPitch": "Chanté P10-P90 {core}",
+      "empty": "Aucune chanson étiquetée ou essayée pour le moment.",
+      "error": "Impossible de charger les chansons. Reviens en arrière et réessaie.",
+      "label": "Feuille : {good} {tags}",
+      "labelNone": "Aucune étiquette de feuille",
+      "loading": "Chargement des chansons...",
+      "markers": "Tessiture {range}, P10-P90 {core}, aigus soutenus {sustained}, densité {density}/s, intro {intro}s",
+      "markersNone": "Aucun marqueur calculé",
+      "octaveBoth": "hommes et femmes",
+      "octaveFemale": "femmes",
+      "octaveMale": "hommes",
+      "octaveSplit": "Séparation d'octave : {who}",
+      "open": "Débogage vocal (admin)",
+      "play": "Écouter l'enregistrement",
+      "playFailed": "Impossible de lire cet enregistrement.",
+      "prediction": "Modèle : {verdict} (p {p})",
+      "predictionNone": "Aucune prédiction",
+      "stop": "Arrêter",
+      "title": "Débogage vocal",
+      "unknown": "-",
+      "verdictGood": "bon",
+      "verdictNotGood": "pas bon",
+      "notAvailable": "L'écran de débogage vocal est réservé aux administrateurs."
+    },
+    "notify": {
+      "body": "Appuie pour donner une note et obtenir ta prochaine chanson",
+      "channel": "Session vocale",
+      "title": "Tu as fini de chanter ?"
+    },
+    "player": {
+      "back": "Je suis de retour",
+      "fake": "Vidéo test",
+      "linkoutBody": "Ouvre-la dans YouTube et chante en même temps. Quand la chanson se termine, reviens ici pour dire comment ça s'est passé.",
+      "linkoutTitle": "Celle-ci se lit dans YouTube",
+      "openFailed": "Impossible d'ouvrir YouTube. Réessaie.",
+      "video": "Vidéo karaoké",
+      "open": "Ouvrir dans YouTube"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Modifie ta façon de chanter : {posture}, {warmth}",
+      "title": "En ce moment",
+      "recordOff": "Enregistrement désactivé",
+      "recordTurnOff": "Désactiver l'enregistrement"
+    },
+    "disabled": {
+      "title": "Bientôt disponible"
+    },
+    "entry": "Trouve ta voix (30 min)",
+    "error": {
+      "network": "Tu es hors ligne ou la connexion a été coupée. Vérifie-la et réessaie.",
+      "restart": "Recommencer",
+      "server": "Une erreur est survenue de notre côté. Réessaie.",
+      "session_lost": "Impossible de continuer cette session. Démarre-en une nouvelle.",
+      "warming_up": "Préparation des morceaux en cours, réessaie dans une minute",
+      "retry": "Réessayer"
+    },
+    "intro": {
+      "body": "Chante 5 à 10 chansons que tu connais, environ 30 minutes. C'est idéal à la maison, avec des écouteurs.",
+      "title": "Trouve ta voix",
+      "close": "Pas maintenant",
+      "start": "Commencer"
+    },
+    "loading": "Choix de ton prochain morceau…",
+    "pick": {
+      "dontKnow": "Passer, je ne connais pas",
+      "know": "Je connais ce morceau",
+      "version": "Karaoke Version : {brand}",
+      "else": "Autre chose",
+      "finish": "Terminer"
+    },
+    "play": {
+      "keys": "Clavier affichant la note que tu chantes",
+      "recording": "Enregistrement",
+      "ribbon": "Afficher mes notes",
+      "stopEarly": "Arrêter avant la fin"
+    },
+    "progress": "Morceau {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Certains passages étaient hors de portée",
+        "q": "C'était difficile ?",
+        "stretch": "Un peu limite",
+        "easy": "Facile"
+      },
+      "feel": {
+        "fine": "Bien",
+        "loved": "J'ai adoré",
+        "q": "Qu'as-tu pensé de ce morceau ?",
+        "not_for_me": "Pas pour moi"
+      },
+      "issue": {
+        "bad_sync": "Mauvaise synchronisation",
+        "low_quality": "Basse qualité",
+        "no_intro": "Pas d'intro",
+        "wrong_lyrics": "Mauvaises paroles"
+      },
+      "knew": {
+        "barely": "À peine",
+        "partly": "En partie",
+        "q": "À quel point connaissais-tu le morceau ?",
+        "well": "Je le connaissais bien"
+      },
+      "position": {
+        "both_ends": "Difficile dans les graves et les aigus",
+        "q": "Où se situait le morceau pour ta voix ?",
+        "comfortable": "Confortable",
+        "too_high": "Trop aigu",
+        "too_low": "Trop grave"
+      },
+      "prefill": "Ta note tenue la plus haute était {high}, la plus basse {low}",
+      "required": "Les deux premières questions sont obligatoires. Passe le reste si tu veux.",
+      "sing": {
+        "q": "Le chanterais-tu au karaoké ?",
+        "yes_other_key": "Oui, dans une autre tonalité",
+        "no": "Non",
+        "yes": "Oui"
+      },
+      "tag": {
+        "crowd_song": "Idéal pour enflammer le public",
+        "fast_lyrics": "Paroles rapides",
+        "long_gaps": "Longs passages instrumentaux",
+        "mood_only": "Seulement si je suis d'humeur",
+        "needed_warmup": "Besoin d'un échauffement",
+        "q": "Tags facultatifs"
+      },
+      "version": {
+        "good": "Bonne",
+        "not_great": "Pas terrible",
+        "q": "Cette Karaoke Version"
+      },
+      "voice": {
+        "fresh": "En forme",
+        "q": "Ta voix actuellement",
+        "tired": "Commence à fatiguer",
+        "warm": "Échauffée"
+      },
+      "work": {
+        "fine": "C'est très bien comme ça",
+        "other_key": "Dans une autre tonalité",
+        "other_octave": "Une octave plus bas ou plus haut",
+        "practice": "Après un peu d'entraînement",
+        "q": "Est-ce que ça irait si… ?",
+        "warmer": "Tu étais plus échauffé"
+      },
+      "next": "Suivant"
+    },
+    "reason": {
+      "comfortable_start": "Un morceau facile pour commencer",
+      "explore": "Quelque chose de nouveau à essayer",
+      "known": "Une chanson que tu connais",
+      "loved": "Une chanson que tu adores",
+      "lower_range": "Teste tes graves",
+      "upper_range": "Teste tes aigus"
+    },
+    "result": {
+      "confidenceLow": "Fiabilité faible",
+      "confidenceMedium": "Fiabilité moyenne",
+      "hint": {
+        "more_songs": "Encore quelques chansons permettraient d'en être plus sûrs",
+        "sing_higher_warm": "Chante 2 chansons plus aiguës une fois bien échauffé",
+        "sing_lower": "Essaie deux ou trois morceaux plus graves"
+      },
+      "keys": "Clavier montrant ta tessiture et ta zone de confort",
+      "loved": "Chansons que tu as adorées",
+      "more": "Continuer",
+      "partial": "Issu d'une session courte, prends cela comme une première estimation.",
+      "probably": "Probablement {type}, mais il nous faut d'autres chansons pour en être sûrs",
+      "range": "{range}, zone de confort {comfort}",
+      "saved": "Enregistré dans ton profil musical.",
+      "suited": "Chansons qui te correspondent",
+      "confidenceHigh": "Certitude élevée",
+      "done": "Terminé",
+      "typeUnknown": "Ton type de voix"
+    },
+    "setup": {
+      "bit_warm": "Un peu échauffé",
+      "cold": "À froid",
+      "coldBody": "Une minute de fredonnement et de sirènes prépare ta voix et rend le résultat plus précis.",
+      "coldTitle": "S'échauffer d'abord ?",
+      "go": "Commencer à chanter",
+      "headphones": "Des écouteurs ?",
+      "lying": "Allongé",
+      "micBlockedBody": "Active le micro pour Nomad Karaoke dans les Réglages. Tu peux quand même chanter et répondre aux questions, mais rien ne sera enregistré.",
+      "micDeniedBody": "Nous avons besoin du micro pour entendre les notes que tu chantes. Sans lui, rien n'est enregistré, mais tu peux toujours chanter et répondre aux questions.",
+      "micRetry": "Autoriser le micro",
+      "noHeadphones": "La bande-son va parasiter le micro, les enregistrements seront donc moins précis.",
+      "posture": "Comment chantes-tu ?",
+      "record": "M'enregistrer en train de chanter ?",
+      "recordBody": "Nous conservons l'enregistrement de manière privée afin de mesurer ta tessiture plus précisément et d'améliorer tes futures suggestions. Seuls toi et notre équipe y avons accès, et tu peux supprimer tous tes enregistrements à tout moment dans Profil.",
+      "sitting": "Assis",
+      "standing": "Debout",
+      "warm": "Parfaitement échauffé",
+      "warmth": "Ta voix en ce moment ?",
+      "warmthAgain": "Comment te semble ta voix maintenant ?",
+      "warmupSkip": "Passer l'échauffement",
+      "warmupStart": "S'échauffer (1 min)",
+      "micOffTitle": "Le micro est désactivé",
+      "no": "Non",
+      "openSettings": "Ouvrir les Réglages",
+      "quiet": "Ne fais pas de bruit pendant une seconde…",
+      "yes": "Oui"
+    },
+    "title": "Trouve ta voix",
+    "warmup": {
+      "hum": "Fredonne une note confortable",
+      "keys": "Clavier affichant la note que tu chantes",
+      "siren": "Glisse vers l'aigu et vers le grave comme une sirène",
+      "done": "Terminé",
+      "left": "{seconds, plural, one {# seconde restante} other {# secondes restantes}}"
+    },
+    "close": "Fermer",
+    "recordings": {
+      "confirmBody": "Cela supprimera tous les enregistrements conservés de tes sessions vocales et nous arrêterons d'enregistrer jusqu'à ce que tu donnes à nouveau ton accord. Cette action est irréversible.",
+      "confirmTitle": "Supprimer tous tes enregistrements ?",
+      "count": "{count, plural, one {# enregistrement conservé} other {# enregistrements conservés}} en toute confidentialité",
+      "delete": "Supprimer tous mes enregistrements",
+      "failed": "Impossible de supprimer tes enregistrements. Vérifie ta connexion et réessaie.",
+      "recordDefault": "M'enregistrer par défaut",
+      "recordDefaultBody": "Coche automatiquement « M'enregistrer quand je chante ? » lorsque tu lances une session vocale. Tu pourras toujours modifier ce choix à chaque fois.",
+      "title": "Tes enregistrements",
+      "confirmButton": "Supprimer"
+    }
   }
 }

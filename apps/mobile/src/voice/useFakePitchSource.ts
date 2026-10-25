@@ -10,7 +10,12 @@ export const FAKE_MIC_SECTIONS: Record<VoiceSection, [number, number]> = {
   low: [0, 4.4],
   high: [4.4, 7.2],
   sing: [7.2, 14.4],
+  // A voice-session song: the sing part, looped (see LOOPED).
+  song: [7.2, 14.4],
 };
+
+/** Sections that start again from their beginning instead of going quiet at their end. */
+const LOOPED: ReadonlySet<VoiceSection> = new Set(['song']);
 
 const FAKE_MIC_FILES: Record<string, number> = {
   'baritone-scale': require('../../assets/fake-mic/baritone-scale.wav'),
@@ -21,7 +26,8 @@ const TICK_MS = 100;
 
 /**
  * E2E-only source: plays a bundled synthetic WAV in 100 ms real-time chunks. Each start() plays that section's
- * slice from its beginning and then goes quiet (the step's own timeout or Done applies).
+ * slice from its beginning and then goes quiet (the step's own timeout or Done applies); `song` loops its slice until
+ * stop(), its timestamps still counting up from 0.
  */
 export function createFakePitchSource(name: string): PitchSource {
   const module = FAKE_MIC_FILES[name];
@@ -47,23 +53,32 @@ export function createFakePitchSource(name: string): PitchSource {
     async requestPermission(): Promise<MicPermission> {
       return 'granted';
     },
+    async checkPermission(): Promise<MicPermission> {
+      return 'granted';
+    },
     async start(onBuffer, section) {
       stop();
       const mine = gen;
       const { sampleRate, samples } = await load();
       if (gen !== mine) return; // stop() or a newer start() landed while the asset loaded
       const [from, to] = FAKE_MIC_SECTIONS[section];
-      let pos = Math.round(from * sampleRate);
+      const start = Math.round(from * sampleRate);
       const end = Math.min(samples.length, Math.round(to * sampleRate));
-      const t0 = pos;
+      const loop = LOOPED.has(section);
+      let pos = start;
+      let emitted = 0;
       timer = setInterval(() => {
-        if (pos >= end) return stop();
+        if (pos >= end) {
+          if (!loop) return stop();
+          pos = start;
+        }
         const chunk: PcmBuffer = {
           samples: samples.slice(pos, Math.min(end, pos + BUFFER_SAMPLES)),
           sampleRate,
-          timestamp: (pos - t0) / sampleRate,
+          timestamp: emitted / sampleRate,
         };
         pos += BUFFER_SAMPLES;
+        emitted += chunk.samples.length;
         onBuffer(chunk);
       }, TICK_MS);
     },

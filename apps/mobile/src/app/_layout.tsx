@@ -9,6 +9,7 @@ import { useReminderTapRouting } from '../discover/connect/reminders';
 import { useSharedFileIntake } from '../discover/connect/useSharedFileIntake';
 import { AppProviders } from '../providers/AppProviders';
 import { headerBackWhenFirst } from '../ui/HeaderBack';
+import { voiceSessionScreenProps } from '../voiceSession/screenProps';
 
 /** Your music profile opened cold (e.g. the Apple Music hand-back) goes back to Me. */
 const profileBack = headerBackWhenFirst('/me', 'profile-back');
@@ -45,6 +46,8 @@ function RootStack() {
   // Android Share -> Nomad Karaoke: a shared export zip/CSV opens the import screen (Phase 3b).
   useSharedFileIntake();
   const tVoice = useTranslations('voice');
+  const tVoiceDebug = useTranslations('voiceSession.debug');
+  const tVoiceSession = useTranslations('voiceSession');
   return (
     <ThemeProvider value={theme}>
       <Stack
@@ -72,10 +75,13 @@ function RootStack() {
         <Stack.Screen name="discover/quiz" options={{ presentation: 'modal', title: tQuiz('title') }} />
         {/* The voice range test (Phase 3c spec §4.2): a modal over Discover, like the quiz. */}
         <Stack.Screen name="discover/voice" options={{ presentation: 'modal', title: tVoice('title') }} />
+        {/* The voice session (Phase 3d spec §4): a modal over Discover or Me. */}
+        <Stack.Screen name="discover/voice-session" {...voiceSessionScreenProps(tVoiceSession('title'))} />
         {/* Me -> Your music profile (Phase 3a spec §8.3). */}
         <Stack.Screen name="me/music-profile" options={(p) => ({ title: tAccount('musicProfile'), ...profileBack(p) })} />
         {/* Connect your music (Phase 3b): its own stack with its own headers. */}
         <Stack.Screen name="discover/connect" options={{ headerShown: false }} />
+        <Stack.Screen name="me/voice-debug" options={{ title: tVoiceDebug('title') }} />
       </Stack>
     </ThemeProvider>
   );

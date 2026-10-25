@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "Discover에서 회원님의 음역대에 맞는 곡 추천이 중단됩니다. 테스트는 언제든지 다시 진행하실 수 있습니다.",
     "profileRemoveTitle": "음성 프로필을 삭제하시겠습니까?",
     "singableCtaLabel": "부르기 가능한 곡 확인, 먼저 음성 테스트를 받아보세요",
-    "profileRemoveConfirm": "제거"
+    "profileRemoveConfirm": "제거",
+    "profileMethodSession": "보이스 세션 기록 기반 ({n, plural, other {#곡}})",
+    "profileMethodSessionPlain": "보이스 세션 기록 기반"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "시도 {n}: 느낌 {feel}, 위치 {position}, 난이도 {difficulty}",
+      "attemptPitch": "가창 P10-P90 {core}",
+      "empty": "아직 라벨이 지정되었거나 시도한 곡이 없습니다.",
+      "error": "곡을 불러올 수 없습니다. 뒤로 이동한 후 다시 시도해 주세요.",
+      "label": "시트: {good} {tags}",
+      "labelNone": "시트 라벨 없음",
+      "loading": "곡을 불러오는 중...",
+      "markers": "음역 {range}, P10-P90 {core}, 고음 지속 {sustained}, 밀도 {density}/초, 인트로 {intro}초",
+      "markersNone": "계산된 마커 없음",
+      "octaveBoth": "남성 및 여성",
+      "octaveFemale": "여성",
+      "octaveMale": "남성",
+      "octaveSplit": "옥타브 분할: {who}",
+      "open": "보이스 디버그 (관리자)",
+      "play": "녹음 재생",
+      "playFailed": "해당 녹음을 재생할 수 없습니다.",
+      "prediction": "모델: {verdict} (p {p})",
+      "predictionNone": "예측 없음",
+      "stop": "중지",
+      "title": "보이스 디버그",
+      "unknown": "-",
+      "verdictGood": "적합",
+      "verdictNotGood": "부적합",
+      "notAvailable": "음성 디버그 화면은 관리자 전용입니다."
+    },
+    "notify": {
+      "body": "탭하여 평가하고 다음 곡을 받아보세요",
+      "channel": "음성 세션",
+      "title": "노래를 다 부르셨나요?"
+    },
+    "player": {
+      "back": "돌아왔어요",
+      "fake": "테스트 영상",
+      "linkoutBody": "YouTube에서 열고 함께 불러보세요. 노래가 끝나면 여기로 돌아와 어땠는지 알려주세요.",
+      "linkoutTitle": "이 곡은 YouTube에서 재생됩니다",
+      "openFailed": "YouTube를 열 수 없습니다. 다시 시도해 주세요.",
+      "video": "노래방 영상",
+      "open": "YouTube에서 열기"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "노래 부르는 상태 변경: {posture}, {warmth}",
+      "title": "현재 상태",
+      "recordOff": "녹음 꺼짐",
+      "recordTurnOff": "녹음 끄기"
+    },
+    "disabled": {
+      "title": "출시 예정"
+    },
+    "entry": "내 목소리 찾기 (30분)",
+    "error": {
+      "network": "오프라인 상태이거나 연결이 끊어졌습니다. 네트워크를 확인하고 다시 시도해 주세요.",
+      "restart": "다시 시작하기",
+      "server": "서버에 문제가 발생했습니다. 다시 시도해 주세요.",
+      "session_lost": "이 세션을 계속 진행할 수 없습니다. 새 세션을 시작해 주세요.",
+      "warming_up": "곡을 준비 중입니다. 잠시 후 다시 시도해 주세요",
+      "retry": "다시 시도"
+    },
+    "intro": {
+      "body": "잘 아는 노래 5~10곡을 약 30분 동안 불러보세요. 집에서 헤드폰을 착용하고 부르면 가장 좋습니다.",
+      "title": "내 목소리 찾기",
+      "close": "나중에 하기",
+      "start": "시작하기"
+    },
+    "loading": "다음 곡을 고르는 중…",
+    "pick": {
+      "dontKnow": "잘 모르는 곡이라 넘어가기",
+      "know": "아는 노래예요",
+      "version": "노래방 버전: {brand}",
+      "else": "다른 곡",
+      "finish": "완료"
+    },
+    "play": {
+      "keys": "부르고 있는 음을 보여주는 건반",
+      "recording": "녹음 중",
+      "ribbon": "내가 내는 음 보기",
+      "stopEarly": "일찍 종료"
+    },
+    "progress": "{n}번째 곡",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "소화하기 힘든 파트가 있었어요",
+        "q": "얼마나 어려웠나요?",
+        "stretch": "조금 벅찼어요",
+        "easy": "쉬움"
+      },
+      "feel": {
+        "fine": "괜찮았어요",
+        "loved": "정말 좋았어요",
+        "q": "부르고 나니 어떠셨나요?",
+        "not_for_me": "관심 없음"
+      },
+      "issue": {
+        "bad_sync": "싱크가 안 맞음",
+        "low_quality": "음질이 낮음",
+        "no_intro": "전주 없음",
+        "wrong_lyrics": "가사가 틀림"
+      },
+      "knew": {
+        "barely": "거의 몰라요",
+        "partly": "어느 정도 알아요",
+        "q": "이 노래를 얼마나 잘 아시나요?",
+        "well": "잘 알아요"
+      },
+      "position": {
+        "both_ends": "고음과 저음 둘 다 힘들었어요",
+        "q": "목소리 음역대에 잘 맞았나요?",
+        "comfortable": "편안함",
+        "too_high": "너무 높았음",
+        "too_low": "너무 낮았음"
+      },
+      "prefill": "가장 길게 유지한 최고음은 {high}, 최저음은 {low}입니다",
+      "required": "처음 두 질문은 필수입니다. 나머지는 원하시면 건너뛰셔도 돼요.",
+      "sing": {
+        "q": "노래방에서 이 노래를 부르시겠어요?",
+        "yes_other_key": "네, 키를 바꾸면요",
+        "no": "아니요",
+        "yes": "네"
+      },
+      "tag": {
+        "crowd_song": "분위기 띄우기 좋은 곡",
+        "fast_lyrics": "빠른 가사",
+        "long_gaps": "긴 간주",
+        "mood_only": "기분 내킬 때만",
+        "needed_warmup": "목풀기가 필요했음",
+        "q": "추가 태그 (선택)"
+      },
+      "version": {
+        "good": "좋음",
+        "not_great": "그저 그럼",
+        "q": "이 노래방 버전 평가"
+      },
+      "voice": {
+        "fresh": "생생함",
+        "q": "현재 목 상태",
+        "tired": "피로해지는 중",
+        "warm": "목이 풀림"
+      },
+      "work": {
+        "fine": "지금 그대로도 괜찮아요",
+        "other_key": "키를 바꾸면",
+        "other_octave": "한 옥타브 낮추거나 높이면",
+        "practice": "연습을 좀 더 하면",
+        "q": "다음과 같다면 부를 만할까요?",
+        "warmer": "목이 더 풀린 상태라면"
+      },
+      "next": "다음"
+    },
+    "reason": {
+      "comfortable_start": "시작하기 편안한 곡",
+      "explore": "새롭게 시도해 볼 만한 곡",
+      "known": "잘 아는 노래",
+      "loved": "좋아하는 노래",
+      "lower_range": "저음 음역대 확인",
+      "upper_range": "고음 음역대 확인"
+    },
+    "result": {
+      "confidenceLow": "낮은 신뢰도",
+      "confidenceMedium": "보통 신뢰도",
+      "hint": {
+        "more_songs": "몇 곡 더 부르면 더 정확해져요",
+        "sing_higher_warm": "목이 풀렸을 때 더 높은 노래 2곡을 불러보세요",
+        "sing_lower": "더 낮은 노래를 두세 곡 불러보세요"
+      },
+      "keys": "음역대와 가장 편안한 중간 음역을 보여주는 건반",
+      "loved": "좋아했던 노래",
+      "more": "계속하기",
+      "partial": "짧은 세션을 바탕으로 추정한 첫 분석 결과입니다.",
+      "probably": "{type} 타입일 가능성이 높지만, 확실하게 확인하려면 노래를 더 불러봐야 해요",
+      "range": "{range}, 편안한 음역 {comfort}",
+      "saved": "음악 프로필에 저장되었습니다.",
+      "suited": "나에게 잘 어울리는 노래",
+      "confidenceHigh": "높은 확신도",
+      "done": "완료",
+      "typeUnknown": "나의 음성 유형"
+    },
+    "setup": {
+      "bit_warm": "조금 풀림",
+      "cold": "목이 안 풀림",
+      "coldBody": "1분 동안 허밍과 사이렌 발성을 하면 목을 풀 수 있고 결과를 훨씬 더 정확하게 측정할 수 있어요.",
+      "coldTitle": "먼저 목을 푸시겠어요?",
+      "go": "노래 시작하기",
+      "headphones": "헤드폰을 착용하셨나요?",
+      "lying": "누워서",
+      "micBlockedBody": "설정에서 Nomad Karaoke의 마이크 권한을 켜주세요. 권한 없이도 노래를 부르고 질문에 답할 수 있지만, 아무것도 녹음되지 않습니다.",
+      "micDeniedBody": "부르는 음을 감지하려면 마이크가 필요합니다. 마이크가 없어도 노래를 부르고 질문에 답할 수 있지만, 녹음은 되지 않습니다.",
+      "micRetry": "마이크 허용하기",
+      "noHeadphones": "반주 소리가 마이크로 흘러들어가 녹음 데이터의 신뢰도가 떨어질 수 있습니다.",
+      "posture": "어떤 자세로 노래하시나요?",
+      "record": "노래를 녹음할까요?",
+      "recordBody": "음역대를 더 정확히 측정하고 이후 맞춤 추천을 개선하기 위해 녹음본을 비공개로 보관합니다. 본인과 저희 팀만 액세스할 수 있으며, '내 정보'에서 언제든지 녹음본을 모두 삭제할 수 있습니다.",
+      "sitting": "앉아서",
+      "standing": "서서",
+      "warm": "완전히 풀림",
+      "warmth": "현재 목 상태는 어떤가요?",
+      "warmthAgain": "지금 목 상태는 어떠신가요?",
+      "warmupSkip": "목풀기 건너뛰기",
+      "warmupStart": "목풀기 (1분)",
+      "micOffTitle": "마이크가 꺼져 있어요",
+      "no": "아니요",
+      "openSettings": "설정 열기",
+      "quiet": "잠시 조용히 해주세요…",
+      "yes": "네"
+    },
+    "title": "내 목소리 찾기",
+    "warmup": {
+      "hum": "편안한 음으로 허밍해 보세요",
+      "keys": "부르고 있는 음을 보여주는 건반",
+      "siren": "사이렌처럼 음을 위아래로 미끄러지듯 내보세요",
+      "done": "완료",
+      "left": "{seconds, plural, other {#초 남음}}"
+    },
+    "close": "닫기",
+    "recordings": {
+      "confirmBody": "보이스 세션에서 보관된 모든 녹음본이 삭제되며, 다시 동의하실 때까지 녹음되지 않습니다. 이 작업은 되돌릴 수 없습니다.",
+      "confirmTitle": "모든 녹음본을 삭제하시겠습니까?",
+      "count": "안전하게 비공개 보관 중인 녹음본 {count, plural, other {#개}}",
+      "delete": "내 녹음본 모두 삭제",
+      "failed": "녹음본을 삭제하지 못했습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.",
+      "recordDefault": "기본으로 녹음하기",
+      "recordDefaultBody": "보이스 세션을 시작할 때 '노래 녹음하기'가 기본으로 선택됩니다. 매번 직접 변경하실 수도 있습니다.",
+      "title": "내 녹음본",
+      "confirmButton": "삭제"
+    }
   }
 }

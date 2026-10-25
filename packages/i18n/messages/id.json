@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "Discover akan berhenti mencocokkan lagu dengan suaramu. Kamu bisa mengikuti tes lagi kapan saja.",
     "profileRemoveTitle": "Hapus profil suaramu?",
     "singableCtaLabel": "Dapat dinyanyikan, ikuti tes suara terlebih dahulu",
-    "profileRemoveConfirm": "Hapus"
+    "profileRemoveConfirm": "Hapus",
+    "profileMethodSession": "Dari sesi suara Anda ({n, plural, other {# lagu}})",
+    "profileMethodSessionPlain": "Dari sesi suara Anda"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Percobaan {n}: sensasi {feel}, posisi {position}, tingkat kesulitan {difficulty}",
+      "attemptPitch": "Dinyanyikan P10-P90 {core}",
+      "empty": "Belum ada lagu yang dilabeli atau dicoba.",
+      "error": "Gagal memuat lagu. Kembali dan coba lagi.",
+      "label": "Sheet: {good} {tags}",
+      "labelNone": "Tidak ada label sheet",
+      "loading": "Memuat lagu...",
+      "markers": "Rentang {range}, P10-P90 {core}, nada tinggi tertahan {sustained}, kepadatan {density}/dtk, intro {intro} dtk",
+      "markersNone": "Tidak ada penanda yang dihitung",
+      "octaveBoth": "pria dan wanita",
+      "octaveFemale": "wanita",
+      "octaveMale": "pria",
+      "octaveSplit": "Pemisahan oktaf: {who}",
+      "open": "Debug suara (admin)",
+      "play": "Putar rekaman",
+      "playFailed": "Gagal memutar rekaman tersebut.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Tidak ada prediksi",
+      "stop": "Berhenti",
+      "title": "Debug suara",
+      "unknown": "-",
+      "verdictGood": "bagus",
+      "verdictNotGood": "kurang bagus",
+      "notAvailable": "Layar debug suara hanya untuk admin."
+    },
+    "notify": {
+      "body": "Ketuk untuk memberi rating dan dapatkan lagu berikutnya",
+      "channel": "Sesi suara",
+      "title": "Selesai bernyanyi?"
+    },
+    "player": {
+      "back": "Saya kembali",
+      "fake": "Video uji coba",
+      "linkoutBody": "Buka di YouTube dan bernyanyilah. Setelah lagunya selesai, kembali ke sini untuk memberi tahu kesanmu.",
+      "linkoutTitle": "Lagu ini diputar di YouTube",
+      "openFailed": "Tidak dapat membuka YouTube. Coba lagi.",
+      "video": "Video karaoke",
+      "open": "Buka di YouTube"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Ubah cara bernyanyi Anda: {posture}, {warmth}",
+      "title": "Saat ini",
+      "recordOff": "Perekaman nonaktif",
+      "recordTurnOff": "Nonaktifkan perekaman"
+    },
+    "disabled": {
+      "title": "Segera hadir"
+    },
+    "entry": "Temukan suara Anda (30 mnt)",
+    "error": {
+      "network": "Anda sedang offline atau koneksi terputus. Periksa koneksi dan coba lagi.",
+      "restart": "Mulai lagi",
+      "server": "Terjadi kendala di pihak kami. Coba lagi.",
+      "session_lost": "Sesi ini tidak dapat dilanjutkan. Mulai sesi baru.",
+      "warming_up": "Menyiapkan lagu, coba lagi sebentar lagi",
+      "retry": "Coba lagi"
+    },
+    "intro": {
+      "body": "Nyanyikan 5–10 lagu yang Anda tahu, sekitar 30 menit. Paling pas di rumah, dengan headphone.",
+      "title": "Temukan suara Anda",
+      "close": "Jangan sekarang",
+      "start": "Mulai"
+    },
+    "loading": "Memilihkan lagu berikutnya…",
+    "pick": {
+      "dontKnow": "Lewati, tidak tahu lagunya",
+      "know": "Saya tahu lagu ini",
+      "version": "Karaoke version: {brand}",
+      "else": "Lainnya",
+      "finish": "Selesai"
+    },
+    "play": {
+      "keys": "Keyboard menampilkan nada yang sedang Anda nyanyikan",
+      "recording": "Merekam",
+      "ribbon": "Tampilkan nada saya",
+      "stopEarly": "Berhenti lebih awal"
+    },
+    "progress": "Lagu {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Tidak sampai di beberapa bagian",
+        "q": "Seberapa sulit lagu tadi?",
+        "stretch": "Agak menantang",
+        "easy": "Mudah"
+      },
+      "feel": {
+        "fine": "Biasa saja",
+        "loved": "Suka banget",
+        "q": "Bagaimana rasanya?",
+        "not_for_me": "Bukan untuk saya"
+      },
+      "issue": {
+        "bad_sync": "Sinkronisasi buruk",
+        "low_quality": "Kualitas rendah",
+        "no_intro": "Tanpa intro",
+        "wrong_lyrics": "Lirik salah"
+      },
+      "knew": {
+        "barely": "Hampir tidak tahu",
+        "partly": "Tahu sebagian",
+        "q": "Seberapa hafal Anda dengan lagunya?",
+        "well": "Hafal sekali"
+      },
+      "position": {
+        "both_ends": "Sulit di nada terendah dan tertinggi",
+        "q": "Di mana letak rentang nadanya untuk suara Anda?",
+        "comfortable": "Nyaman",
+        "too_high": "Terlalu tinggi",
+        "too_low": "Terlalu rendah"
+      },
+      "prefill": "Nada tahan tertinggi Anda adalah {high}, terendah {low}",
+      "required": "Dua yang pertama wajib diisi. Lewati sisanya jika mau.",
+      "sing": {
+        "q": "Mau menyanyikannya saat karaoke?",
+        "yes_other_key": "Ya, di nada dasar berbeda",
+        "no": "Tidak",
+        "yes": "Ya"
+      },
+      "tag": {
+        "crowd_song": "Cocok untuk nyanyi bersama",
+        "fast_lyrics": "Lirik cepat",
+        "long_gaps": "Jeda instrumental panjang",
+        "mood_only": "Hanya saat sedang berminat",
+        "needed_warmup": "Perlu pemanasan dulu",
+        "q": "Tag opsional"
+      },
+      "version": {
+        "good": "Bagus",
+        "not_great": "Kurang bagus",
+        "q": "Karaoke version ini"
+      },
+      "voice": {
+        "fresh": "Segar",
+        "q": "Kondisi suara sekarang",
+        "tired": "Mulai lelah",
+        "warm": "Sudah panas"
+      },
+      "work": {
+        "fine": "Sudah pas apa adanya",
+        "other_key": "Di nada dasar berbeda",
+        "other_octave": "Satu oktaf lebih rendah atau lebih tinggi",
+        "practice": "Setelah latihan dulu",
+        "q": "Apakah cocok jika…?",
+        "warmer": "Pemanasan Anda lebih cukup"
+      },
+      "next": "Selanjutnya"
+    },
+    "reason": {
+      "comfortable_start": "Lagu santai untuk pembuka",
+      "explore": "Sesuatu yang baru untuk dicoba",
+      "known": "Lagu yang Anda tahu",
+      "loved": "Lagu yang Anda sukai",
+      "lower_range": "Menguji rentang nada rendah Anda",
+      "upper_range": "Menguji rentang nada tinggi Anda"
+    },
+    "result": {
+      "confidenceLow": "Tingkat keyakinan rendah",
+      "confidenceMedium": "Tingkat keyakinan sedang",
+      "hint": {
+        "more_songs": "Beberapa lagu lagi akan membuat hasil ini lebih akurat",
+        "sing_higher_warm": "Nyanyikan 2 lagu bernada lebih tinggi lagi saat sudah pemanasan",
+        "sing_lower": "Coba beberapa lagu bernada lebih rendah"
+      },
+      "keys": "Keyboard menampilkan rentang nada Anda dan bagian tengah yang nyaman",
+      "loved": "Lagu yang Anda sukai",
+      "more": "Lanjutkan",
+      "partial": "Berasal dari sesi singkat, anggap saja sebagai tebakan awal.",
+      "probably": "Kemungkinan {type}, tetapi butuh lebih banyak lagu untuk memastikannya",
+      "range": "{range}, nyaman di {comfort}",
+      "saved": "Tersimpan di profil musik Anda.",
+      "suited": "Lagu yang cocok untuk Anda",
+      "confidenceHigh": "Keyakinan tinggi",
+      "done": "Selesai",
+      "typeUnknown": "Tipe suara Anda"
+    },
+    "setup": {
+      "bit_warm": "Sedikit pemanasan",
+      "cold": "Belum pemanasan",
+      "coldBody": "Satu menit bersenandung dan latihan sirine akan menyiapkan suara Anda dan membuat hasilnya lebih akurat.",
+      "coldTitle": "Pemanasan dulu?",
+      "go": "Mulai bernyanyi",
+      "headphones": "Pakai headphone?",
+      "lying": "Berbaring",
+      "micBlockedBody": "Aktifkan mikrofon untuk Nomad Karaoke di Pengaturan. Anda tetap bisa bernyanyi dan menjawab pertanyaan, tetapi tidak ada yang direkam.",
+      "micDeniedBody": "Kami memerlukan mikrofon untuk mendeteksi nada yang Anda nyanyikan. Tanpanya tidak ada yang direkam, tetapi Anda tetap bisa bernyanyi dan menjawab pertanyaan.",
+      "micRetry": "Izinkan mikrofon",
+      "noHeadphones": "Musik pengiring akan bocor ke mikrofon, sehingga rekaman kurang begitu dihitung.",
+      "posture": "Bagaimana posisi Anda saat bernyanyi?",
+      "record": "Rekam saya saat bernyanyi?",
+      "recordBody": "Kami menyimpan rekaman secara privat agar dapat mengukur rentang vokal Anda lebih akurat dan menyempurnakan pilihan lagu Anda nanti. Hanya Anda dan tim kami yang dapat mengaksesnya, dan Anda dapat menghapus semua rekaman kapan saja di Saya.",
+      "sitting": "Duduk",
+      "standing": "Berdiri",
+      "warm": "Sudah pemanasan penuh",
+      "warmth": "Kondisi suara sekarang?",
+      "warmthAgain": "Bagaimana kondisi suara Anda sekarang?",
+      "warmupSkip": "Lewati pemanasan",
+      "warmupStart": "Pemanasan (1 mnt)",
+      "micOffTitle": "Mikrofon mati",
+      "no": "Tidak",
+      "openSettings": "Buka Pengaturan",
+      "quiet": "Harap hening sebentar…",
+      "yes": "Ya"
+    },
+    "title": "Temukan suara Anda",
+    "warmup": {
+      "hum": "Bersenandunglah di nada yang nyaman",
+      "keys": "Keyboard menampilkan nada yang sedang Anda nyanyikan",
+      "siren": "Luncurkan nada naik turun seperti sirine",
+      "done": "Selesai",
+      "left": "{seconds, plural, other {Tersisa # detik}}"
+    },
+    "close": "Tutup",
+    "recordings": {
+      "confirmBody": "Tindakan ini akan menghapus semua rekaman yang kami simpan dari sesi suara Anda dan menghentikan kami merekam hingga Anda menyetujuinya lagi. Tindakan ini tidak dapat dibatalkan.",
+      "confirmTitle": "Hapus semua rekaman Anda?",
+      "count": "{count, plural, other {# rekaman}} disimpan secara privat",
+      "delete": "Hapus semua rekaman saya",
+      "failed": "Gagal menghapus rekaman Anda. Periksa koneksi internet Anda dan coba lagi.",
+      "recordDefault": "Rekam saya secara default",
+      "recordDefaultBody": "Otomatis memilih \"Rekam saat saya bernyanyi?\" saat Anda memulai sesi suara. Anda tetap bisa mengubahnya setiap saat.",
+      "title": "Rekaman Anda",
+      "confirmButton": "Hapus"
+    }
   }
 }

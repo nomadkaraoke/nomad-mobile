@@ -19,7 +19,7 @@ export type VoiceConfidence = 'low' | 'medium' | 'high';
 /** `session`: measured by decide's voice sessions (decide v0.28, Phase 3d); the phone only adopts it, never PUTs one. */
 export type VoiceMethod = 'mic' | 'self' | 'session';
 
-/** decide's `VoiceProfileIn`, camelCase. */
+/** decide's voice profile, camelCase. */
 export type LocalVoiceProfile = {
   lowMidi: number;
   highMidi: number;
@@ -32,9 +32,12 @@ export type LocalVoiceProfile = {
   method: VoiceMethod;
   /** ISO 8601. */
   measuredAt: string;
+  /** Session profiles: how many attempts carried evidence, and the session. Absent on the phone's own mic/self. */
+  evidenceCount?: number | null;
+  sessionId?: string | null;
 };
 
-/** The body of decide's `PUT /api/my/voice` (`VoiceProfileIn`, extra="forbid": no other keys). */
+/** The body of decide's `PUT /api/my/voice` (`VoiceProfilePutIn`, extra="forbid": no other keys). */
 export type VoiceProfileInBody = {
   low_midi: number;
   high_midi: number;
@@ -44,7 +47,8 @@ export type VoiceProfileInBody = {
   voice_type_between: VoiceType | null;
   register: Register | null;
   confidence: VoiceConfidence;
-  method: VoiceMethod;
+  /** The public PUT rejects `session` (422). */
+  method: 'mic' | 'self';
   measured_at: string;
 };
 
@@ -88,7 +92,9 @@ export function profileFromSelfReport(choice: VoiceType | Register, measuredAt: 
   };
 }
 
+/** The PUT body of a mic/self profile. Throws for a `session` profile: decide writes those itself. */
 export function toVoiceProfileIn(p: LocalVoiceProfile): VoiceProfileInBody {
+  if (p.method === 'session') throw new Error('toVoiceProfileIn: session profiles are written by decide only');
   return {
     low_midi: p.lowMidi,
     high_midi: p.highMidi,
@@ -127,7 +133,9 @@ function parseProfile(raw: unknown): LocalVoiceProfile | null {
     oneOrNull(o.register, REGISTERS) &&
     (o.confidence === 'low' || o.confidence === 'medium' || o.confidence === 'high') &&
     (o.method === 'mic' || o.method === 'self' || o.method === 'session') &&
-    typeof o.measuredAt === 'string';
+    typeof o.measuredAt === 'string' &&
+    (o.evidenceCount === undefined || o.evidenceCount === null || (int(o.evidenceCount) && o.evidenceCount >= 0)) &&
+    (o.sessionId === undefined || o.sessionId === null || typeof o.sessionId === 'string');
   if (!ok) return null;
   // decide's rule: low ≤ comfortLow ≤ comfortHigh ≤ high.
   const { lowMidi, highMidi, comfortLow, comfortHigh } = o as LocalVoiceProfile;
@@ -135,7 +143,7 @@ function parseProfile(raw: unknown): LocalVoiceProfile | null {
   return toLocal(o as LocalVoiceProfile);
 }
 
-/** Only the profile's own fields. */
+/** Only the profile's own fields (the session ones only when present). */
 const toLocal = (p: LocalVoiceProfile): LocalVoiceProfile => ({
   lowMidi: p.lowMidi,
   highMidi: p.highMidi,
@@ -147,6 +155,8 @@ const toLocal = (p: LocalVoiceProfile): LocalVoiceProfile => ({
   confidence: p.confidence,
   method: p.method,
   measuredAt: p.measuredAt,
+  ...(p.evidenceCount !== undefined && { evidenceCount: p.evidenceCount }),
+  ...(p.sessionId !== undefined && { sessionId: p.sessionId }),
 });
 
 /**

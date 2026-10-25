@@ -1,4 +1,10 @@
-import { requestRecordingPermissionsAsync, setAudioModeAsync, useAudioStream } from 'expo-audio';
+import {
+  getRecordingPermissionsAsync,
+  requestRecordingPermissionsAsync,
+  setAudioModeAsync,
+  useAudioStream,
+  type PermissionResponse,
+} from 'expo-audio';
 import { useEffect, useMemo, useRef } from 'react';
 import { PLAYBACK_AUDIO_MODE } from '../audio/playbackMode';
 import type { MicPermission, PcmBuffer, PitchSource } from './pitchSource';
@@ -19,6 +25,9 @@ export const MIC_SAMPLE_RATE = 16000;
  * `ensurePlaybackAudioMode` runs once per launch, so it would never put it back.
  */
 export const AFTER_RECORDING_AUDIO_MODE = { ...PLAYBACK_AUDIO_MODE, allowsRecording: false } as const;
+
+const toMicPermission = (r: Pick<PermissionResponse, 'granted' | 'canAskAgain'>): MicPermission =>
+  r.granted ? 'granted' : r.canAskAgain ? 'denied' : 'blocked';
 
 /** Live microphone PCM via expo-audio's native stream (SDK 57 `useAudioStream`). Ignores `section`. */
 export function useMicPitchSource(): PitchSource {
@@ -69,9 +78,10 @@ export function useMicPitchSource(): PitchSource {
       return {
         kind: 'mic',
         async requestPermission(): Promise<MicPermission> {
-          const r = await requestRecordingPermissionsAsync();
-          if (r.granted) return 'granted';
-          return r.canAskAgain ? 'denied' : 'blocked';
+          return toMicPermission(await requestRecordingPermissionsAsync());
+        },
+        async checkPermission(): Promise<MicPermission> {
+          return toMicPermission(await getRecordingPermissionsAsync());
         },
         async start(onBuffer) {
           const mine = ++gen.current;

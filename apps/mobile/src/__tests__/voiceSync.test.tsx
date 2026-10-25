@@ -19,7 +19,7 @@ import {
   useVoiceProfile,
   useVoiceSync,
 } from '../voice/useVoiceProfile';
-import { profileFromSelfReport, toVoiceProfileIn, useVoiceStore, VOICE_STORAGE_KEY } from '../voice/voiceStore';
+import { loadVoice, profileFromSelfReport, toVoiceProfileIn, useVoiceStore, VOICE_STORAGE_KEY } from '../voice/voiceStore';
 
 jest.mock('@react-native-community/netinfo', () => ({ useNetInfo: jest.fn() }));
 const setConnected = (c: boolean) =>
@@ -184,6 +184,27 @@ describe('useVoiceProfile', () => {
     expect(useVoiceStore.getState().profile).toEqual(local(T1));
   });
 
+  it('a newer server session profile is adopted with its evidence count and session id, and survives a reload', async () => {
+    act(() => useVoiceStore.getState().save(local(T0)));
+    act(() => useVoiceStore.getState().markSynced(T0));
+    const out = { ...serverOut(T1), method: 'session', confidence: 'medium', evidence_count: 6, session_id: 'sess-9' };
+    fetchMock.mockResolvedValue(json({ profile: out }));
+    renderHook(() => useVoiceProfile(), { wrapper: wrapperFor() });
+    await waitFor(() => expect(useVoiceStore.getState().profile?.measuredAt).toBe(T1));
+    expect(useVoiceStore.getState()).toMatchObject({
+      pending: false,
+      profile: { method: 'session', evidenceCount: 6, sessionId: 'sess-9', voiceType: 'alto' },
+    });
+    expect(loadVoice().profile).toMatchObject({ method: 'session', evidenceCount: 6, sessionId: 'sess-9' });
+  });
+
+  it('a server profile without the session fields maps them to null', async () => {
+    fetchMock.mockResolvedValue(json({ profile: serverOut(T1) }));
+    renderHook(() => useVoiceProfile(), { wrapper: wrapperFor() });
+    await waitFor(() => expect(useVoiceStore.getState().profile?.measuredAt).toBe(T1));
+    expect(useVoiceStore.getState().profile).toMatchObject({ method: 'self', evidenceCount: null, sessionId: null });
+  });
+
   it('a server with no profile leaves a local one alone', async () => {
     act(() => useVoiceStore.getState().save(local(T1)));
     fetchMock.mockResolvedValue(json({ profile: null }));
@@ -329,6 +350,16 @@ describe('rejections', () => {
     await act(async () => void (await result.current(local())));
     expect(useVoiceStore.getState()).toMatchObject({ pending: true, profile: local() });
     expect(useAuth.getState().state.status).toBe('signedIn');
+  });
+});
+
+describe('session profiles are never PUT', () => {
+  it('a pending session profile is marked synced without a request (decide wrote it)', async () => {
+    const p = { ...local(T1), method: 'session' as const, evidenceCount: 4, sessionId: 'sess-2' };
+    act(() => useVoiceStore.getState().save(p));
+    await act(async () => void (await sendPendingVoice()));
+    expect(voiceCalls('PUT')).toHaveLength(0);
+    expect(useVoiceStore.getState()).toMatchObject({ pending: false, profile: { method: 'session' } });
   });
 });
 

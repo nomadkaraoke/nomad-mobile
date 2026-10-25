@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "Mục Khám phá sẽ ngừng gợi ý bài hát theo chất giọng của bạn. Bạn có thể làm lại bài kiểm tra bất cứ lúc nào.",
     "profileRemoveTitle": "Xóa hồ sơ giọng hát của bạn?",
     "singableCtaLabel": "Hát được ngay, hãy kiểm tra giọng hát trước",
-    "profileRemoveConfirm": "Xóa"
+    "profileRemoveConfirm": "Xóa",
+    "profileMethodSession": "Từ phiên thu giọng của bạn ({n, plural, one {# bài hát} other {# bài hát}})",
+    "profileMethodSessionPlain": "Từ phiên thu giọng của bạn"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Lần thử {n}: cảm giác {feel}, vị trí {position}, độ khó {difficulty}",
+      "attemptPitch": "Cao độ đã hát P10-P90 {core}",
+      "empty": "Chưa có bài hát nào được gắn nhãn hoặc đã hát thử.",
+      "error": "Không thể tải danh sách bài hát. Vui lòng quay lại và thử lại.",
+      "label": "Bảng dữ liệu: {good} {tags}",
+      "labelNone": "Không có nhãn từ bảng dữ liệu",
+      "loading": "Đang tải bài hát...",
+      "markers": "Âm vực {range}, P10-P90 {core}, nốt cao ngân dài {sustained}, mật độ {density}/s, dạo đầu {intro}s",
+      "markersNone": "Chưa tính toán chỉ số đánh dấu",
+      "octaveBoth": "nam và nữ",
+      "octaveFemale": "nữ",
+      "octaveMale": "nam",
+      "octaveSplit": "Phân chia quãng tám: {who}",
+      "open": "Gỡ lỗi giọng hát (quản trị viên)",
+      "play": "Phát bản ghi âm",
+      "playFailed": "Không thể phát bản ghi âm này.",
+      "prediction": "Mô hình: {verdict} (p {p})",
+      "predictionNone": "Không có dự đoán",
+      "stop": "Dừng",
+      "title": "Gỡ lỗi giọng hát",
+      "unknown": "-",
+      "verdictGood": "tốt",
+      "verdictNotGood": "không tốt",
+      "notAvailable": "Màn hình gỡ lỗi giọng nói chỉ dành cho quản trị viên."
+    },
+    "notify": {
+      "body": "Nhấn để đánh giá và nhận bài hát tiếp theo",
+      "channel": "Phiên bằng giọng nói",
+      "title": "Bạn hát xong chưa?"
+    },
+    "player": {
+      "back": "Tôi đã quay lại",
+      "fake": "Video thử nghiệm",
+      "linkoutBody": "Mở video trong YouTube và hát theo nhé. Khi hát xong, hãy quay lại đây để cho biết cảm nhận của bạn.",
+      "linkoutTitle": "Bài này phát trên YouTube",
+      "openFailed": "Không thể mở YouTube. Vui lòng thử lại.",
+      "video": "Video karaoke",
+      "open": "Mở trên YouTube"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Thay đổi trạng thái hát: {posture}, {warmth}",
+      "title": "Hiện tại",
+      "recordOff": "Đã tắt ghi âm",
+      "recordTurnOff": "Tắt ghi âm"
+    },
+    "disabled": {
+      "title": "Sắp ra mắt"
+    },
+    "entry": "Khám phá giọng hát của bạn (30 phút)",
+    "error": {
+      "network": "Bạn đang ngoại tuyến hoặc kết nối bị gián đoạn. Hãy kiểm tra lại và thử lại nhé.",
+      "restart": "Bắt đầu lại",
+      "server": "Đã xảy ra lỗi từ phía chúng tôi. Vui lòng thử lại.",
+      "session_lost": "Không thể tiếp tục phiên này. Hãy bắt đầu một phiên mới.",
+      "warming_up": "Đang chuẩn bị danh sách bài hát, vui lòng thử lại sau một phút",
+      "retry": "Thử lại"
+    },
+    "intro": {
+      "body": "Hát 5–10 bài bạn quen thuộc, mất khoảng 30 phút. Tốt nhất là thực hiện ở nhà và có đeo tai nghe.",
+      "title": "Khám phá giọng hát của bạn",
+      "close": "Để sau",
+      "start": "Bắt đầu"
+    },
+    "loading": "Đang chọn bài hát tiếp theo cho bạn…",
+    "pick": {
+      "dontKnow": "Bỏ qua, không biết bài này",
+      "know": "Tôi biết bài này",
+      "version": "Phiên bản karaoke: {brand}",
+      "else": "Bài khác",
+      "finish": "Hoàn tất"
+    },
+    "play": {
+      "keys": "Bàn phím hiển thị nốt bạn đang hát",
+      "recording": "Đang ghi âm",
+      "ribbon": "Hiển thị nốt của tôi",
+      "stopEarly": "Dừng sớm"
+    },
+    "progress": "Bài {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Không lên/xuống tới một số đoạn",
+        "q": "Bạn thấy bài này khó thế nào?",
+        "stretch": "Hơi với một chút",
+        "easy": "Dễ dàng"
+      },
+      "feel": {
+        "fine": "Bình thường",
+        "loved": "Rất thích",
+        "q": "Bạn cảm thấy thế nào?",
+        "not_for_me": "Không hợp với mình"
+      },
+      "issue": {
+        "bad_sync": "Lệch nhạc / lệch lời",
+        "low_quality": "Chất lượng kém",
+        "no_intro": "Không có đoạn dạo đầu",
+        "wrong_lyrics": "Sai lời bài hát"
+      },
+      "knew": {
+        "barely": "Hầu như không thuộc",
+        "partly": "Thuộc một phần",
+        "q": "Bạn thuộc bài này đến mức nào?",
+        "well": "Thuộc rất rõ"
+      },
+      "position": {
+        "both_ends": "Khó ở cả nốt thấp lẫn nốt cao",
+        "q": "Bài này nằm ở quãng nào so với giọng của bạn?",
+        "comfortable": "Thoải mái",
+        "too_high": "Quá cao",
+        "too_low": "Quá thấp"
+      },
+      "prefill": "Nốt ngân cao nhất của bạn là {high}, thấp nhất là {low}",
+      "required": "Chỉ bắt buộc hai câu đầu tiên. Bạn có thể bỏ qua phần còn lại nếu muốn.",
+      "sing": {
+        "q": "Bạn có chọn bài này khi đi hát karaoke không?",
+        "yes_other_key": "Có, nhưng đổi tông khác",
+        "no": "Không",
+        "yes": "Có"
+      },
+      "tag": {
+        "crowd_song": "Bài hát khuấy động đám đông",
+        "fast_lyrics": "Lời nhanh",
+        "long_gaps": "Nhiều đoạn nhạc dạo dài",
+        "mood_only": "Chỉ hát khi có hứng",
+        "needed_warmup": "Cần khởi động giọng trước",
+        "q": "Thẻ tùy chọn"
+      },
+      "version": {
+        "good": "Tốt",
+        "not_great": "Chưa hay lắm",
+        "q": "Bản karaoke này thế nào?"
+      },
+      "voice": {
+        "fresh": "Sung sức",
+        "q": "Tình trạng giọng lúc này",
+        "tired": "Bắt đầu mệt",
+        "warm": "Đã ấm giọng"
+      },
+      "work": {
+        "fine": "Để nguyên như vậy là ổn",
+        "other_key": "Đổi sang tông khác",
+        "other_octave": "Hạ hoặc nâng một quãng tám",
+        "practice": "Sau khi luyện tập thêm",
+        "q": "Liệu bài này có ổn hơn nếu…?",
+        "warmer": "Bạn đã khởi động giọng kỹ hơn"
+      },
+      "next": "Tiếp theo"
+    },
+    "reason": {
+      "comfortable_start": "Một bài dễ để khởi động",
+      "explore": "Một bài mới để bạn thử sức",
+      "known": "Một bài hát bạn biết",
+      "loved": "Một bài hát bạn yêu thích",
+      "lower_range": "Kiểm tra quãng trầm của bạn",
+      "upper_range": "Kiểm tra quãng cao của bạn"
+    },
+    "result": {
+      "confidenceLow": "Độ tin cậy thấp",
+      "confidenceMedium": "Độ tin cậy trung bình",
+      "hint": {
+        "more_songs": "Hát thêm vài bài nữa sẽ giúp kết quả chuẩn xác hơn",
+        "sing_higher_warm": "Hát thêm 2 bài tông cao hơn khi giọng bạn đã ấm",
+        "sing_lower": "Hãy thử thêm vài bài tông trầm hơn"
+      },
+      "keys": "Bàn phím hiển thị âm vực và khoảng cữ giọng thoải mái nhất của bạn",
+      "loved": "Những bài hát bạn yêu thích",
+      "more": "Hát tiếp",
+      "partial": "Kết quả từ một phiên ngắn, hãy xem đây là phỏng đoán ban đầu nhé.",
+      "probably": "Nhiều khả năng là {type}, nhưng chúng tôi cần thêm vài bài hát để chắc chắn",
+      "range": "{range}, thoải mái nhất ở {comfort}",
+      "saved": "Đã lưu vào hồ sơ âm nhạc của bạn.",
+      "suited": "Những bài hát phù hợp với bạn",
+      "confidenceHigh": "Độ chắc chắn cao",
+      "done": "Xong",
+      "typeUnknown": "Loại giọng của bạn"
+    },
+    "setup": {
+      "bit_warm": "Hơi ấm giọng rồi",
+      "cold": "Chưa khởi động",
+      "coldBody": "Một phút ngâm nga và trượt giọng (siren) sẽ giúp giọng bạn sẵn sàng và cho kết quả chuẩn xác hơn.",
+      "coldTitle": "Khởi động giọng trước nhé?",
+      "go": "Bắt đầu hát",
+      "headphones": "Có đeo tai nghe không?",
+      "lying": "Nằm",
+      "micBlockedBody": "Hãy bật quyền truy cập micrô cho Nomad Karaoke trong Cài đặt. Bạn vẫn có thể hát và trả lời các câu hỏi, nhưng hệ thống sẽ không ghi âm lại.",
+      "micDeniedBody": "Chúng tôi cần micrô để lắng nghe các nốt bạn hát. Nếu không có micrô thì sẽ không thể ghi lại cao độ, nhưng bạn vẫn có thể hát và trả lời các câu hỏi.",
+      "micRetry": "Cho phép dùng micrô",
+      "noHeadphones": "Tiếng nhạc đệm sẽ lọt vào micrô, khiến kết quả ghi âm kém chính xác hơn.",
+      "posture": "Bạn đang hát ở tư thế nào?",
+      "record": "Ghi âm khi bạn hát?",
+      "recordBody": "Chúng tôi lưu trữ bản ghi âm một cách riêng tư để đo quãng giọng của bạn chuẩn xác hơn và gợi ý bài hát tốt hơn sau này. Chỉ bạn và đội ngũ của chúng tôi mới có quyền truy cập, và bạn có thể xóa tất cả bản ghi âm bất cứ lúc nào trong mục Tôi.",
+      "sitting": "Ngồi",
+      "standing": "Đứng",
+      "warm": "Đã khởi động kỹ",
+      "warmth": "Giọng bạn lúc này thế nào?",
+      "warmthAgain": "Hiện tại bạn cảm thấy giọng của mình thế nào?",
+      "warmupSkip": "Bỏ qua khởi động",
+      "warmupStart": "Khởi động giọng (1 phút)",
+      "micOffTitle": "Micro đang tắt",
+      "no": "Không",
+      "openSettings": "Mở Cài đặt",
+      "quiet": "Giữ yên lặng một chút nhé…",
+      "yes": "Có"
+    },
+    "title": "Khám phá giọng hát của bạn",
+    "warmup": {
+      "hum": "Ngâm nga (hum) một nốt nhạc thoải mái",
+      "keys": "Bàn phím hiển thị nốt bạn đang hát",
+      "siren": "Trượt giọng lên và xuống như tiếng còi hú (siren)",
+      "done": "Xong",
+      "left": "{seconds, plural, other {Còn # giây}}"
+    },
+    "close": "Đóng",
+    "recordings": {
+      "confirmBody": "Thao tác này sẽ xóa mọi bản ghi âm được lưu từ các phiên thu giọng của bạn và ngừng ghi âm cho đến khi bạn bật lại. Thao tác này không thể hoàn tác.",
+      "confirmTitle": "Xóa tất cả bản ghi âm của bạn?",
+      "count": "{count, plural, one {# bản ghi âm} other {# bản ghi âm}} được lưu riêng tư",
+      "delete": "Xóa tất cả bản ghi âm của tôi",
+      "failed": "Không thể xóa các bản ghi âm của bạn. Vui lòng kiểm tra kết nối mạng và thử lại.",
+      "recordDefault": "Luôn tự động ghi âm giọng tôi",
+      "recordDefaultBody": "Tự động chọn \"Ghi âm giọng hát của tôi?\" khi bạn bắt đầu một phiên thu giọng. Bạn vẫn có thể thay đổi tùy chọn này mỗi lần hát.",
+      "title": "Bản ghi âm của bạn",
+      "confirmButton": "Xóa"
+    }
   }
 }

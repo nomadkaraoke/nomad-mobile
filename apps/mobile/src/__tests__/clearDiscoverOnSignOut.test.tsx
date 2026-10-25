@@ -12,7 +12,14 @@ import { useDiscoverStale } from '../discover/staleStore';
 import { useClearDiscoverOnSignOut } from '../discover/useClearDiscoverOnSignOut';
 import { RECS_KEY } from '../discover/useRecommendations';
 import { appStorage } from '../storage';
+import { fsState } from '../test-utils/memoryFs';
 import { profileFromSelfReport, useVoiceStore, VOICE_STORAGE_KEY } from '../voice/voiceStore';
+import { RECORD_DEFAULT_KEY } from '../voiceSession/recordDefault';
+import { RECORDING_QUEUE_KEY, useRecordingQueue } from '../voiceSession/recording/recordingQueue';
+import { useVoiceSessionStore, VOICE_SESSION_KEY } from '../voiceSession/sessionStore';
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports -- jest.mock factories can't use imports
+jest.mock('expo-file-system', () => require('../test-utils/memoryFs'));
 
 const data = { sections: [], has_profile: true } as never;
 const signedIn = { status: 'signedIn', session: { token: 't', email: 'me@example.com', createdAt: 0 } } as const;
@@ -71,4 +78,38 @@ it('keeps everything while signed in', () => {
   useAuth.setState({ state: signedIn });
   expect(loadRecsSnapshot()).not.toBeNull();
   expect(queryClient.getQueryData([...PROFILE_KEY, 'artists'])).toBeDefined();
+});
+
+it('drops the voice session in progress and the recording upload queue (and their files) when the session ends', () => {
+  render();
+  const queued = 'file:///document/voice-recordings/s1-1.wav';
+  const take = 'file:///document/voice-recordings/s1-2.wav';
+  fsState.files.set(queued, new Uint8Array(8));
+  fsState.files.set(take, new Uint8Array(8));
+  useRecordingQueue
+    .getState()
+    .enqueue({ sessionId: 's1', attemptN: 1, uri: queued, contentType: 'audio/wav', durationS: 9, device: null });
+  useVoiceSessionStore.getState().update({
+    sessionId: 's1',
+    setup: { posture: 'sitting', warmth: 'warm', record: true, headphones: true },
+    step: 'quiz',
+    take: { uri: take, durationS: 9, contentType: 'audio/wav' },
+  });
+  expect(appStorage.getString(VOICE_SESSION_KEY)).toBeDefined();
+
+  useAuth.setState({ state: { status: 'signedOut' } });
+
+  expect(useRecordingQueue.getState().items).toEqual([]);
+  expect(appStorage.getString(RECORDING_QUEUE_KEY)).toBeUndefined();
+  expect(useVoiceSessionStore.getState().sessionId).toBeNull();
+  expect(appStorage.getString(VOICE_SESSION_KEY)).toBeUndefined();
+  expect(fsState.files.has(queued)).toBe(false);
+  expect(fsState.files.has(take)).toBe(false);
+});
+
+it("forgets the previous person's record-my-takes default when the session ends", () => {
+  render();
+  appStorage.set(RECORD_DEFAULT_KEY, true);
+  useAuth.setState({ state: { status: 'signedOut' } });
+  expect(appStorage.getBoolean(RECORD_DEFAULT_KEY)).toBeUndefined();
 });

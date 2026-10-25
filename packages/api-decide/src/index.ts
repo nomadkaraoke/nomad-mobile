@@ -20,6 +20,7 @@ export * from './discover';
 export * from './imports';
 export * from './services';
 export * from './voice';
+export * from './voiceSession';
 export { ApiError, configureClient, type ClientDeps } from './configure';
 // Search-service models (the search client's other generated names would collide with the catalog client's).
 export type {

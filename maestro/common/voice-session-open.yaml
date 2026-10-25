@@ -1,0 +1,23 @@
+# Signed in on Discover (a seeded pop profile, so the picks and their Improve card show) → "Find your voice" →
+# the intro's Start → the setup screen. Env: EMAIL (setup's output.email).
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    file: discover-seeded.yaml
+    env:
+      EMAIL: ${EMAIL}
+      PROFILE: '{"genres":["pop"]}'
+# The Improve card is last on the picks list; its session row needs decide's voice flags (session_enabled).
+- runFlow: voice-session-scroll-to-entry.yaml
+- tapOn:
+    id: "vs-entry-discover"
+- extendedWaitUntil:
+    visible:
+      id: "vs-intro-start"
+    timeout: 20000
+- tapOn:
+    id: "vs-intro-start"
+- extendedWaitUntil:
+    visible:
+      id: "vs-setup-go"
+    timeout: 20000

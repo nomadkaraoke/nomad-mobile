@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "“发现”将不再根据您的声音匹配歌曲。您可以随时重新进行测试。",
     "profileRemoveTitle": "移除您的声音档案？",
     "singableCtaLabel": "适合演唱，请先进行声音测试",
-    "profileRemoveConfirm": "移除"
+    "profileRemoveConfirm": "移除",
+    "profileMethodSession": "来自您的练唱环节（{n, plural, one {# 首歌曲} other {# 首歌曲}}）",
+    "profileMethodSessionPlain": "来自您的练唱环节"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "尝试 {n}：感受 {feel}，位置 {position}，难度 {difficulty}",
+      "attemptPitch": "演唱音高 P10-P90 {core}",
+      "empty": "暂无已标记或已尝试的歌曲。",
+      "error": "无法加载歌曲。请返回并重试。",
+      "label": "乐谱：{good} {tags}",
+      "labelNone": "无乐谱标签",
+      "loading": "正在加载歌曲...",
+      "markers": "音域 {range}，P10-P90 {core}，持续高音 {sustained}，密度 {density}/秒，前奏 {intro} 秒",
+      "markersNone": "未计算标记",
+      "octaveBoth": "男声和女声",
+      "octaveFemale": "女声",
+      "octaveMale": "男声",
+      "octaveSplit": "八度分离：{who}",
+      "open": "声音调试（管理员）",
+      "play": "播放录音",
+      "playFailed": "无法播放该录音。",
+      "prediction": "模型：{verdict} (p {p})",
+      "predictionNone": "无预测",
+      "stop": "停止",
+      "title": "声音调试",
+      "unknown": "-",
+      "verdictGood": "良好",
+      "verdictNotGood": "不佳",
+      "notAvailable": "语音调试界面仅供管理员使用。"
+    },
+    "notify": {
+      "body": "轻点评分并获取下一首歌",
+      "channel": "语音会话",
+      "title": "唱完了吗？"
+    },
+    "player": {
+      "back": "我回来了",
+      "fake": "测试视频",
+      "linkoutBody": "在 YouTube 中打开并跟着唱。唱完后，返回这里说说感觉如何吧。",
+      "linkoutTitle": "这首歌将在 YouTube 中播放",
+      "openFailed": "无法打开 YouTube，请重试。",
+      "video": "卡拉OK视频",
+      "open": "在 YouTube 中打开"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "更改演唱状态：{posture}，{warmth}",
+      "title": "当前状态",
+      "recordOff": "录音已关闭",
+      "recordTurnOff": "关闭录音"
+    },
+    "disabled": {
+      "title": "即将推出"
+    },
+    "entry": "测测你的声音特质（30 分钟）",
+    "error": {
+      "network": "你处于离线状态或网络连接已断开，请检查后重试。",
+      "restart": "重新开始",
+      "server": "我们这边出了点问题，请重试。",
+      "session_lost": "本次测试无法继续，请重新开始。",
+      "warming_up": "正在准备歌曲，请稍候再试",
+      "retry": "重试"
+    },
+    "intro": {
+      "body": "唱 5–10 首你熟悉的歌，大约需要 30 分钟。建议在家中佩戴耳机进行。",
+      "title": "测测你的声音特质",
+      "close": "暂不填写",
+      "start": "开始"
+    },
+    "loading": "正在为你挑选下一首歌…",
+    "pick": {
+      "dontKnow": "跳过，我不会唱",
+      "know": "这首歌我会唱",
+      "version": "卡拉OK版本：{brand}",
+      "else": "其他",
+      "finish": "完成"
+    },
+    "play": {
+      "keys": "显示你演唱音高的键盘",
+      "recording": "正在录音",
+      "ribbon": "显示我的音高",
+      "stopEarly": "提前结束"
+    },
+    "progress": "第 {n} 首歌",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "有些地方唱不上去/唱不下来",
+        "q": "难度如何？",
+        "stretch": "稍微有点吃力",
+        "easy": "轻松"
+      },
+      "feel": {
+        "fine": "还行",
+        "loved": "非常喜欢",
+        "q": "唱完感觉如何？",
+        "not_for_me": "不合口味"
+      },
+      "issue": {
+        "bad_sync": "伴奏与歌词不同步",
+        "low_quality": "音质较差",
+        "no_intro": "缺少前奏",
+        "wrong_lyrics": "歌词有误"
+      },
+      "knew": {
+        "barely": "几乎不会",
+        "partly": "会唱一部分",
+        "q": "你对这首歌熟悉吗？",
+        "well": "非常熟悉"
+      },
+      "position": {
+        "both_ends": "高低两端都很吃力",
+        "q": "这首歌落在你声音的什么位置？",
+        "comfortable": "舒适",
+        "too_high": "太高了",
+        "too_low": "太低了"
+      },
+      "prefill": "你唱出的最高长音为 {high}，最低为 {low}",
+      "required": "前两题为必填项。其余题目可直接跳过。",
+      "sing": {
+        "q": "去唱卡拉OK时你会点这首歌吗？",
+        "yes_other_key": "会，但需要换个调",
+        "no": "否",
+        "yes": "是"
+      },
+      "tag": {
+        "crowd_song": "超能带动气氛的歌",
+        "fast_lyrics": "歌词语速很快",
+        "long_gaps": "间奏时间很长",
+        "mood_only": "看心情才会唱",
+        "needed_warmup": "需要先开嗓",
+        "q": "可选标签"
+      },
+      "version": {
+        "good": "挺好",
+        "not_great": "一般般",
+        "q": "这个卡拉OK版本如何？"
+      },
+      "voice": {
+        "fresh": "状态很好",
+        "q": "当前嗓音状态",
+        "tired": "开始感到疲劳",
+        "warm": "已充分开嗓"
+      },
+      "work": {
+        "fine": "保持原样就挺好",
+        "other_key": "换个调唱",
+        "other_octave": "升或降一个八度唱",
+        "practice": "多加练习之后",
+        "q": "如果做些调整会更好唱吗…？",
+        "warmer": "嗓子开得更充分一些"
+      },
+      "next": "下一页"
+    },
+    "reason": {
+      "comfortable_start": "一首轻松的开场曲",
+      "explore": "尝试一首新歌",
+      "known": "你熟悉的一首歌",
+      "loved": "你喜爱的一首歌",
+      "lower_range": "测测你的低音音域",
+      "upper_range": "测测你的高音音域"
+    },
+    "result": {
+      "confidenceLow": "可信度较低",
+      "confidenceMedium": "可信度中等",
+      "hint": {
+        "more_songs": "多唱几首歌结果会更准",
+        "sing_higher_warm": "充分开嗓后再唱 2 首音调更高的歌",
+        "sing_lower": "尝试唱几首音调更低的歌"
+      },
+      "keys": "显示你的音域及舒适音区的键盘",
+      "loved": "你喜爱的歌曲",
+      "more": "继续演唱",
+      "partial": "由于测试歌曲较少，此结果仅供初步参考。",
+      "probably": "大概率属于 {type}，但需要唱更多歌才能确认",
+      "range": "{range}，舒适音区 {comfort}",
+      "saved": "已保存至你的音乐档案。",
+      "suited": "适合你的歌曲",
+      "confidenceHigh": "高置信度",
+      "done": "完成",
+      "typeUnknown": "你的声部"
+    },
+    "setup": {
+      "bit_warm": "稍稍开嗓",
+      "cold": "完全没开嗓",
+      "coldBody": "花一分钟做做哼鸣和汽笛发声练习，可以让嗓子进入状态，并让测试结果更加准确。",
+      "coldTitle": "先开嗓热身吗？",
+      "go": "开始演唱",
+      "headphones": "戴耳机了吗？",
+      "lying": "躺着",
+      "micBlockedBody": "请在设置中开启 Nomad Karaoke 的麦克风权限。你仍可以继续演唱并回答问题，但系统不会录制任何声音。",
+      "micDeniedBody": "我们需要使用麦克风来识别你演唱的音高。未开启麦克风将无法录音，但你依然可以继续演唱并回答问题。",
+      "micRetry": "允许使用麦克风",
+      "noHeadphones": "伴奏音乐会漏进麦克风中，这会降低录音结果的参考价值。",
+      "posture": "你现在的演唱姿势是？",
+      "record": "是否录制我的演唱？",
+      "recordBody": "我们会私密保存录音，以便更精准地测量你的音域，并在日后为你推荐更合适的歌曲。只有你和我们的团队可以访问录音，你也可以随时在“我的”页面中删除所有录音。",
+      "sitting": "坐着",
+      "standing": "站着",
+      "warm": "已充分开嗓",
+      "warmth": "目前的嗓音状态？",
+      "warmthAgain": "现在感觉嗓子怎么样？",
+      "warmupSkip": "跳过热身",
+      "warmupStart": "开始开嗓（1 分钟）",
+      "micOffTitle": "麦克风已关闭",
+      "no": "否",
+      "openSettings": "打开设置",
+      "quiet": "请安静片刻…",
+      "yes": "是"
+    },
+    "title": "测测你的声音特质",
+    "warmup": {
+      "hum": "自然舒适地哼唱一个音符",
+      "keys": "显示你演唱音高的键盘",
+      "siren": "像警报声一样由低到高再滑下来发声",
+      "done": "完成",
+      "left": "{seconds, plural, one {还剩 # 秒} other {还剩 # 秒}}"
+    },
+    "close": "关闭",
+    "recordings": {
+      "confirmBody": "这将删除我们保存的所有练唱录音，且在您再次同意前不再进行录音。此操作无法撤销。",
+      "confirmTitle": "删除您的所有录音？",
+      "count": "已私密保存 {count, plural, one {# 条录音} other {# 条录音}}",
+      "delete": "删除我的所有录音",
+      "failed": "无法删除您的录音。请检查网络连接后重试。",
+      "recordDefault": "默认录制我的声音",
+      "recordDefaultBody": "在您开始练唱环节时，自动勾选“录制我的演唱？”。您每次仍可手动更改该选项。",
+      "title": "您的录音",
+      "confirmButton": "删除"
+    }
   }
 }

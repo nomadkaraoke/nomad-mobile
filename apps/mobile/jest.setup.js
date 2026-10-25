@@ -72,6 +72,16 @@ jest.mock('expo-video', () => {
 // audio hooks mock expo-audio themselves; this stub only lets screens that create players render.
 jest.mock('expo-audio', () => ({
   setAudioModeAsync: jest.fn(async () => {}),
+  // The voice session's song recorder (useSongRecorder): enough for screens that use it to render.
+  useAudioRecorder: jest.fn(() => ({
+    uri: null,
+    prepareToRecordAsync: jest.fn(async () => {}),
+    record: jest.fn(),
+    stop: jest.fn(async () => {}),
+    getStatus: jest.fn(() => ({ durationMillis: 0 })),
+  })),
+  IOSOutputFormat: { MPEG4AAC: 'aac ' },
+  AudioQuality: { MEDIUM: 64 },
   createAudioPlayer: jest.fn(() => ({
     muted: false,
     currentTime: 0,
@@ -101,7 +111,7 @@ jest.mock('expo-notifications', () => ({
   clearLastNotificationResponse: jest.fn(),
   addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
   AndroidImportance: { DEFAULT: 5 },
-  SchedulableTriggerInputTypes: { DATE: 'date' },
+  SchedulableTriggerInputTypes: { DATE: 'date', TIME_INTERVAL: 'timeInterval' },
 }));
 jest.mock('expo-document-picker', () => ({ getDocumentAsync: jest.fn(async () => ({ canceled: true, assets: null })) }));
 jest.mock('expo-media-library', () => ({ requestPermissionsAsync: jest.fn(), Asset: { create: jest.fn() } }));
@@ -142,4 +152,12 @@ jest.mock('@expo/vector-icons', () => {
   const { View } = jest.requireActual('react-native');
   const Icon = ({ testID }) => createElement(View, { testID });
   return new Proxy({ __esModule: true }, { get: (target, key) => (key in target ? target[key] : Icon) });
+});
+
+// The voice session's embedded player (any suite that loads the route table imports it): a plain View.
+// player.test.tsx mocks it itself to drive the page's messages.
+jest.mock('react-native-webview', () => {
+  const { createElement } = jest.requireActual('react');
+  const { View } = jest.requireActual('react-native');
+  return { WebView: ({ testID }) => createElement(View, { testID }) };
 });

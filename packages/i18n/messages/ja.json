@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "「見つける」であなたの声に合わせた曲のマッチングが行われなくなります。テストはいつでもやり直せます。",
     "profileRemoveTitle": "声のプロファイルを削除しますか？",
     "singableCtaLabel": "歌える曲：まずは声のテストを受けてください",
-    "profileRemoveConfirm": "削除"
+    "profileRemoveConfirm": "削除",
+    "profileMethodSession": "ボイスセッションから ({n, plural, one {#曲} other {#曲}})",
+    "profileMethodSessionPlain": "ボイスセッションから"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "試行 {n}: フィール {feel}、ポジション {position}、難易度 {difficulty}",
+      "attemptPitch": "歌唱音域 P10-P90 {core}",
+      "empty": "ラベル付けまたは試行された曲はまだありません。",
+      "error": "曲を読み込めませんでした。前の画面に戻ってもう一度お試しください。",
+      "label": "シート: {good} {tags}",
+      "labelNone": "シートラベルなし",
+      "loading": "曲を読み込み中...",
+      "markers": "音域 {range}、P10-P90 {core}、ロングトーン高音 {sustained}、密度 {density}/秒、イントロ {intro}秒",
+      "markersNone": "計算されたマーカーはありません",
+      "octaveBoth": "男女両方",
+      "octaveFemale": "女性",
+      "octaveMale": "男性",
+      "octaveSplit": "オクターブ分割: {who}",
+      "open": "音声デバッグ (管理者)",
+      "play": "録音を再生",
+      "playFailed": "録音を再生できませんでした。",
+      "prediction": "モデル: {verdict} (p {p})",
+      "predictionNone": "予測なし",
+      "stop": "停止",
+      "title": "音声デバッグ",
+      "unknown": "-",
+      "verdictGood": "良好",
+      "verdictNotGood": "不良",
+      "notAvailable": "音声デバッグ画面は管理者専用です。"
+    },
+    "notify": {
+      "body": "タップして評価し、次の曲を見つけましょう",
+      "channel": "ボイスセッション",
+      "title": "歌い終わりましたか？"
+    },
+    "player": {
+      "back": "戻りました",
+      "fake": "テスト動画",
+      "linkoutBody": "YouTubeで開いて一緒に歌いましょう。歌い終わったらここに戻って感想を教えてくださいね。",
+      "linkoutTitle": "この曲はYouTubeで再生されます",
+      "openFailed": "YouTubeを開けませんでした。もう一度お試しください。",
+      "video": "カラオケ動画",
+      "open": "YouTubeで開く"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "歌い方の状態を変更: {posture}、{warmth}",
+      "title": "現在の状態",
+      "recordOff": "録音オフ",
+      "recordTurnOff": "録音をオフにする"
+    },
+    "disabled": {
+      "title": "近日公開"
+    },
+    "entry": "自分の声を見つける (30分)",
+    "error": {
+      "network": "オフラインか接続が切断されました。接続を確認してもう一度お試しください。",
+      "restart": "最初からやり直す",
+      "server": "こちら側で問題が発生しました。もう一度お試しください。",
+      "session_lost": "このセッションは続けられません。新しくやり直してください。",
+      "warming_up": "曲を準備中です。1分後にもう一度お試しください",
+      "retry": "もう一度試す"
+    },
+    "intro": {
+      "body": "知っている曲を5〜10曲、約30分歌います。自宅でヘッドホンを使って行うのがおすすめです。",
+      "title": "自分の声を見つける",
+      "close": "今はしない",
+      "start": "スタート"
+    },
+    "loading": "次の曲を選んでいます…",
+    "pick": {
+      "dontKnow": "スキップ（知らない曲）",
+      "know": "知っている",
+      "version": "カラオケバージョン: {brand}",
+      "else": "その他",
+      "finish": "完了"
+    },
+    "play": {
+      "keys": "歌っている音を表示する鍵盤",
+      "recording": "録音中",
+      "ribbon": "音程を表示",
+      "stopEarly": "途中で終了する"
+    },
+    "progress": "曲 {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "出ない部分があった",
+        "q": "歌いやすさはどうでしたか？",
+        "stretch": "少しキツかった",
+        "easy": "簡単"
+      },
+      "feel": {
+        "fine": "普通",
+        "loved": "最高だった",
+        "q": "歌ってみてどうでしたか？",
+        "not_for_me": "好みに合わない"
+      },
+      "issue": {
+        "bad_sync": "ズレがある",
+        "low_quality": "音質が悪い",
+        "no_intro": "イントロがない",
+        "wrong_lyrics": "歌詞が違う"
+      },
+      "knew": {
+        "barely": "ほとんど知らない",
+        "partly": "うろ覚え・一部知っている",
+        "q": "どれくらい知っている曲でしたか？",
+        "well": "よく知っている"
+      },
+      "position": {
+        "both_ends": "高音も低音もキツかった",
+        "q": "声の高さ・音域の収まりはどうでしたか？",
+        "comfortable": "快適",
+        "too_high": "高すぎた",
+        "too_low": "低すぎた"
+      },
+      "prefill": "最も高くキープできた音は{high}、最も低い音は{low}でした",
+      "required": "最初の2問は必須です。残りはスキップしても構いません。",
+      "sing": {
+        "q": "カラオケで歌いたいですか？",
+        "yes_other_key": "はい（キーを変えて）",
+        "no": "いいえ",
+        "yes": "はい"
+      },
+      "tag": {
+        "crowd_song": "みんなで盛り上がれる曲",
+        "fast_lyrics": "歌詞が速い",
+        "long_gaps": "間奏が長い",
+        "mood_only": "気分が乗ったときなら",
+        "needed_warmup": "ウォームアップが必要だった",
+        "q": "タグ（任意）"
+      },
+      "version": {
+        "good": "良かった",
+        "not_great": "いまいち",
+        "q": "このカラオケ音源はどうでしたか？"
+      },
+      "voice": {
+        "fresh": "絶好調・疲れていない",
+        "q": "今の声の状態",
+        "tired": "疲れてきた",
+        "warm": "しっかり温まっている"
+      },
+      "work": {
+        "fine": "このままで歌える",
+        "other_key": "別のキーなら",
+        "other_octave": "1オクターブ上か下なら",
+        "practice": "少し練習すれば",
+        "q": "どうすれば歌いやすくなりそうですか？",
+        "warmer": "もっと声が温まっていれば"
+      },
+      "next": "次へ"
+    },
+    "reason": {
+      "comfortable_start": "スタートにぴったりな歌いやすい曲",
+      "explore": "新しい挑戦としての一曲",
+      "known": "知っている曲",
+      "loved": "大好きな曲",
+      "lower_range": "低音域をチェックする曲",
+      "upper_range": "高音域をチェックする曲"
+    },
+    "result": {
+      "confidenceLow": "判定精度: 低",
+      "confidenceMedium": "判定精度: 中",
+      "hint": {
+        "more_songs": "あと数曲歌うと、より確実になります",
+        "sing_higher_warm": "声が温まったら、もう少し高めの曲を2曲歌ってみてください",
+        "sing_lower": "もう少し低めの曲を2曲ほど試してみてください"
+      },
+      "keys": "あなたの音域と、無理なく歌える真ん中の音域を示す鍵盤",
+      "loved": "気に入った曲",
+      "more": "もっと続ける",
+      "partial": "短いセッションに基づいているため、大まかな目安として参考にしてください。",
+      "probably": "おそらく{type}ですが、確実に判断するにはもう少し曲数が必要です",
+      "range": "{range}（無理なく歌える音域: {comfort}）",
+      "saved": "音楽プロフィールに保存されました。",
+      "suited": "あなたに合う曲",
+      "confidenceHigh": "高い確信度",
+      "done": "完了",
+      "typeUnknown": "あなたの声のタイプ"
+    },
+    "setup": {
+      "bit_warm": "少し温まっている",
+      "cold": "温まっていない",
+      "coldBody": "ハミングやサイレンのような発声を1分ほど行うと声の準備ができ、結果の精度も上がります。",
+      "coldTitle": "先にウォームアップしますか？",
+      "go": "歌い始める",
+      "headphones": "ヘッドホンを使っていますか？",
+      "lying": "横になっている",
+      "micBlockedBody": "設定でNomad Karaokeのマイクアクセスをオンにしてください。録音はされませんが、そのまま歌って質問に回答することは可能です。",
+      "micDeniedBody": "歌った音程を測定するためにマイクが必要です。マイクなしでも録音はされませんが、そのまま歌って質問に回答することは可能です。",
+      "micRetry": "マイクの使用を許可する",
+      "noHeadphones": "伴奏がマイクに入り込んでしまうため、録音データの判定精度が下がります。",
+      "posture": "どんな姿勢で歌っていますか？",
+      "record": "歌声を録音しますか？",
+      "recordBody": "音域をより正確に測定し、今後の選曲精度を高めるために録音データを非公開で保存します。データにアクセスできるのはあなたと当社のチームのみで、「Me」からいつでもすべての録音を削除できます。",
+      "sitting": "座っている",
+      "standing": "立っている",
+      "warm": "しっかり温まっている",
+      "warmth": "今の声の調子は？",
+      "warmthAgain": "今の声の調子はどうですか？",
+      "warmupSkip": "ウォームアップをスキップ",
+      "warmupStart": "ウォームアップする (1分)",
+      "micOffTitle": "マイクがオフになっています",
+      "no": "いいえ",
+      "openSettings": "設定を開く",
+      "quiet": "少しの間、静かにしてください…",
+      "yes": "はい"
+    },
+    "title": "自分の声を見つける",
+    "warmup": {
+      "hum": "出しやすい音でハミングしてみましょう",
+      "keys": "歌っている音を表示する鍵盤",
+      "siren": "サイレンのように音程を上下させてみましょう",
+      "done": "完了",
+      "left": "{seconds, plural, other {残り#秒}}"
+    },
+    "close": "閉じる",
+    "recordings": {
+      "confirmBody": "ボイスセッションから保存されたすべての録音が消去され、再度許可するまで録音は停止されます。この操作は取り消せません。",
+      "confirmTitle": "すべての録音を削除しますか？",
+      "count": "{count, plural, one {#件の録音} other {#件の録音}}を非公開で保存中",
+      "delete": "すべての録音を削除",
+      "failed": "録音を削除できませんでした。接続環境を確認して、もう一度お試しください。",
+      "recordDefault": "デフォルトで録音する",
+      "recordDefaultBody": "ボイスセッション開始時に「歌声を録音しますか？」があらかじめ選択された状態になります。この設定は毎回変更できます。",
+      "title": "保存済みの録音",
+      "confirmButton": "削除"
+    }
   }
 }

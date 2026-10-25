@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "A Felfedezés többé nem igazítja a dalokat a hangodhoz. Bármikor újra kitöltheted a tesztet.",
     "profileRemoveTitle": "Eltávolítod a hangodat?",
     "singableCtaLabel": "Énekelhető, először töltsd ki a hangtesztet",
-    "profileRemoveConfirm": "Eltávolítás"
+    "profileRemoveConfirm": "Eltávolítás",
+    "profileMethodSession": "A hangmunkamenetedből ({n, plural, one {# dal} other {# dal}})",
+    "profileMethodSessionPlain": "A hangmunkamenetedből"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "{n}. próbálkozás: érzet {feel}, pozíció {position}, nehézség {difficulty}",
+      "attemptPitch": "Énekelt P10-P90 {core}",
+      "empty": "Még nincsenek felcímkézett vagy megpróbált dalok.",
+      "error": "Nem sikerült betölteni a dalokat. Lépj vissza, és próbáld újra.",
+      "label": "Táblázat: {good} {tags}",
+      "labelNone": "Nincs táblázatcímke",
+      "loading": "Dalok betöltése...",
+      "markers": "Hangterjedelem {range}, P10-P90 {core}, kitartott magas hangok {sustained}, sűrűség {density}/mp, intro {intro} mp",
+      "markersNone": "Nincsenek kiszámított jelölők",
+      "octaveBoth": "férfiak és nők",
+      "octaveFemale": "nők",
+      "octaveMale": "férfiak",
+      "octaveSplit": "Oktávbontás: {who}",
+      "open": "Hanghibakeresés (admin)",
+      "play": "Felvétel lejátszása",
+      "playFailed": "Nem sikerült lejátszani a felvételt.",
+      "prediction": "Modell: {verdict} (p {p})",
+      "predictionNone": "Nincs előrejelzés",
+      "stop": "Leállítás",
+      "title": "Hanghibakeresés",
+      "unknown": "-",
+      "verdictGood": "jó",
+      "verdictNotGood": "nem jó",
+      "notAvailable": "A hang hibakeresési képernyője csak rendszergazdák számára érhető el."
+    },
+    "notify": {
+      "body": "Koppints az értékeléshez és a következő dalod kéréséhez",
+      "channel": "Hangalapú munkamenet",
+      "title": "Befejezted az éneklést?"
+    },
+    "player": {
+      "back": "Visszatértem",
+      "fake": "Tesztvideó",
+      "linkoutBody": "Nyisd meg a YouTube-on, és énekelj vele! Ha véget ért a dal, gyere vissza ide, és meséld el, milyen volt.",
+      "linkoutTitle": "Ez a YouTube-on játszható le",
+      "openFailed": "Nem sikerült megnyitni a YouTube-ot. Próbáld újra.",
+      "video": "Karaokevideó",
+      "open": "Megnyitás a YouTube-on"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Változtasd meg, hogyan énekelsz: {posture}, {warmth}",
+      "title": "Jelenleg",
+      "recordOff": "Felvétel kikapcsolva",
+      "recordTurnOff": "Felvétel kikapcsolása"
+    },
+    "disabled": {
+      "title": "Hamarosan"
+    },
+    "entry": "Találd meg a hangod (30 perc)",
+    "error": {
+      "network": "Offline vagy, vagy megszakadt a kapcsolat. Ellenőrizd, és próbáld újra.",
+      "restart": "Újrakezdés",
+      "server": "Hiba történt a szerverünkön. Próbáld újra.",
+      "session_lost": "Ez a munkamenet nem folytatható. Indíts egy újat.",
+      "warming_up": "Dalok előkészítése, próbáld újra egy perc múlva",
+      "retry": "Próbáld újra"
+    },
+    "intro": {
+      "body": "Énekelj el 5–10 dalt, amit ismersz, körülbelül 30 perc alatt. A legjobb otthon, fejhallgatóval.",
+      "title": "Találd meg a hangod",
+      "close": "Most ne",
+      "start": "Indítás"
+    },
+    "loading": "Következő dal kiválasztása…",
+    "pick": {
+      "dontKnow": "Kihagyom, nem ismerem",
+      "know": "Ezt ismerem",
+      "version": "Karaoke verzió: {brand}",
+      "else": "Egyéb",
+      "finish": "Befejezés"
+    },
+    "play": {
+      "keys": "Billentyűzet, amely mutatja az énekelt hangot",
+      "recording": "Felvétel",
+      "ribbon": "Hangjaim megjelenítése",
+      "stopEarly": "Befejezés most"
+    },
+    "progress": "{n}. dal",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Néhány részt nem tudtam kiénekelni",
+        "q": "Mennyire volt nehéz?",
+        "stretch": "Kicsit határeset volt",
+        "easy": "Könnyű"
+      },
+      "feel": {
+        "fine": "Rendben volt",
+        "loved": "Nagyon tetszett",
+        "q": "Milyen érzés volt?",
+        "not_for_me": "Nem nekem való"
+      },
+      "issue": {
+        "bad_sync": "Rossz szinkronizáció",
+        "low_quality": "Gyenge minőség",
+        "no_intro": "Nincs bevezető",
+        "wrong_lyrics": "Hibás dalszöveg"
+      },
+      "knew": {
+        "barely": "Alig",
+        "partly": "Részben",
+        "q": "Mennyire ismerted?",
+        "well": "Jól ismertem"
+      },
+      "position": {
+        "both_ends": "A végleteknél nehéz",
+        "q": "Hogyan feküdt a hangodnak?",
+        "comfortable": "Kényelmes",
+        "too_high": "Túl magas",
+        "too_low": "Túl mély"
+      },
+      "prefill": "A legmagasabb kitartott hangod {high}, a legmélyebb {low} volt",
+      "required": "Az első kettő megadása kötelező. A többit kihagyhatod, ha szeretnéd.",
+      "sing": {
+        "q": "Elénekelnéd karaokén?",
+        "yes_other_key": "Igen, más hangnemben",
+        "no": "Nem",
+        "yes": "Igen"
+      },
+      "tag": {
+        "crowd_song": "Kiváló közönségdal",
+        "fast_lyrics": "Gyors szöveg",
+        "long_gaps": "Hosszú hangszeres szünetek",
+        "mood_only": "Csak ha olyan hangulatban vagyok",
+        "needed_warmup": "Bemelegítést igényelt",
+        "q": "Opcionális címkék"
+      },
+      "version": {
+        "good": "Jó",
+        "not_great": "Nem a legjobb",
+        "q": "Ez a karaoke verzió"
+      },
+      "voice": {
+        "fresh": "Friss",
+        "q": "A hangod állapota most",
+        "tired": "Kezd fáradni",
+        "warm": "Bemelegedett"
+      },
+      "work": {
+        "fine": "Így jó, ahogy van",
+        "other_key": "Más hangnemben",
+        "other_octave": "Egy oktávval mélyebben vagy magasabban",
+        "practice": "Egy kis gyakorlással",
+        "q": "Működne, ha…?",
+        "warmer": "Jobban be lennél melegedve"
+      },
+      "next": "Következő"
+    },
+    "reason": {
+      "comfortable_start": "Egy könnyű dal kezdésnek",
+      "explore": "Valami új, amit érdemes kipróbálni",
+      "known": "Egy dal, amit ismersz",
+      "loved": "Egy dal, amit imádsz",
+      "lower_range": "A mély hangterjedelmedet teszteli",
+      "upper_range": "A magas hangterjedelmedet teszteli"
+    },
+    "result": {
+      "confidenceLow": "Alacsony megbízhatóság",
+      "confidenceMedium": "Közepes megbízhatóság",
+      "hint": {
+        "more_songs": "Még néhány dal biztosabbá tenné",
+        "sing_higher_warm": "Énekelj még 2 magasabb dalt, ha bemelegedtél",
+        "sing_lower": "Próbálj ki pár mélyebb dalt"
+      },
+      "keys": "Billentyűzet, amely mutatja a hangterjedelmedet és a kényelmes középtartományt",
+      "loved": "Dalok, amiket szerettél",
+      "more": "Folytatás",
+      "partial": "Rövid munkamenetből származik, így tekintsd előzetes becslésnek.",
+      "probably": "Valószínűleg {type}, de több dalra van szükség, hogy biztosak lehessünk benne",
+      "range": "{range}, kényelmes: {comfort}",
+      "saved": "Elmentve a zenei profilodba.",
+      "suited": "Dalok, amelyek illenek hozzád",
+      "confidenceHigh": "Nagy bizonyosság",
+      "done": "Kész",
+      "typeUnknown": "A hangtípusod"
+    },
+    "setup": {
+      "bit_warm": "Kissé bemelegedett",
+      "cold": "Hideg",
+      "coldBody": "Egy percnyi dúdolás és szirénázás felkészíti a hangodat, és pontosabbá teszi az eredményt.",
+      "coldTitle": "Bemelegítesz előbb?",
+      "go": "Éneklés indítása",
+      "headphones": "Fejhallgató?",
+      "lying": "Fekve",
+      "micBlockedBody": "Kapcsold be a mikrofont a Nomad Karaoke számára a Beállításokban. Így is énekelhetsz és válaszolhatsz a kérdésekre, de semmit sem rögzítünk.",
+      "micDeniedBody": "Szükségünk van a mikrofonra, hogy halljuk az énekelt hangokat. Enélkül semmit sem rögzítünk, de ettől még énekelhetsz és válaszolhatsz a kérdésekre.",
+      "micRetry": "Mikrofon engedélyezése",
+      "noHeadphones": "Az alapzene áthallatszik a mikrofonba, így a felvételek kevésbé megbízhatóak.",
+      "posture": "Hogyan énekelsz?",
+      "record": "Rögzítsük az énekedet?",
+      "recordBody": "A felvételt bizalmasan kezeljük, hogy pontosabban felmérhessük a hangterjedelmedet, és később jobb dalokat ajánlhassunk. Csak te és a csapatunk férhet hozzá, és bármikor törölheted az összes felvételedet a Profilodban.",
+      "sitting": "Ülve",
+      "standing": "Állva",
+      "warm": "Teljesen bemelegedett",
+      "warmth": "Milyen most a hangod?",
+      "warmthAgain": "Milyennek érzed most a hangodat?",
+      "warmupSkip": "Bemelegítés kihagyása",
+      "warmupStart": "Bemelegítés (1 perc)",
+      "micOffTitle": "A mikrofon ki van kapcsolva",
+      "no": "Nem",
+      "openSettings": "Beállítások megnyitása",
+      "quiet": "Maradj csendben egy pillanatra…",
+      "yes": "Igen"
+    },
+    "title": "Találd meg a hangod",
+    "warmup": {
+      "hum": "Dúdolj egy kényelmes hangot",
+      "keys": "Billentyűzet, amely mutatja az énekelt hangot",
+      "siren": "Csúsztasd a hangod fel és le, mint egy sziréna",
+      "done": "Kész",
+      "left": "{seconds, plural, one {# másodperc van hátra} other {# másodperc van hátra}}"
+    },
+    "close": "Bezárás",
+    "recordings": {
+      "confirmBody": "Ez törli a hangmunkameneteidből megőrzött összes felvételt, és leállítja a felvételkészítést, amíg újra hozzá nem járulsz. A művelet nem vonható vissza.",
+      "confirmTitle": "Törlöd az összes felvételedet?",
+      "count": "{count, plural, one {# felvétel} other {# felvétel}} bizalmasan tárolva",
+      "delete": "Minden felvételem törlése",
+      "failed": "Nem sikerült törölni a felvételeidet. Ellenőrizd a kapcsolatodat, és próbáld újra.",
+      "recordDefault": "Alapértelmezés szerint vegyen fel",
+      "recordDefaultBody": "Automatikusan bejelöli a „Felvegyük, ahogy énekelsz?” opciót, amikor hangmunkamenetet indítasz. Később ezt alkalmanként bármikor módosíthatod.",
+      "title": "Felvételeid",
+      "confirmButton": "Törlés"
+    }
   }
 }

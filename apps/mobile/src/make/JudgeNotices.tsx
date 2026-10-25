@@ -1,9 +1,10 @@
 import type { CommunityCheck } from '@nomad/api-gen';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Text } from '@nomad/ui';
-import { Linking, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { logEvent } from '../find/searchSession';
+import { openYouTubeUrl } from '../media/youtube';
 import type { Correction, Song } from './useMatchJudge';
 
 /**
@@ -86,7 +87,7 @@ export function CommunityExists({ check }: { check: CommunityCheck }) {
         hitSlop={8}
         onPress={() => {
           logEvent('open_youtube', { where: 'make_community' });
-          Linking.openURL(url).catch(() => {});
+          openYouTubeUrl(url).catch(() => {});
         }}
       >
         <Text className="text-sm font-semibold text-primary">{t('communityWatch')}</Text>

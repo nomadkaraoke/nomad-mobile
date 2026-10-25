@@ -49,6 +49,7 @@ describe('installDevWarningTrace (Ruling T)', () => {
     expect(ignore).not.toHaveBeenCalled();
     __resetDevWarningTrace();
     installDevWarningTrace({ dev: true, e2e: true });
-    expect(ignore).toHaveBeenCalledWith(["hasn't mounted yet"]);
+    // The trace line too: it doesn't contain the warning's text, and its toast covered discover-4's (Android suite).
+    expect(ignore).toHaveBeenCalledWith(["hasn't mounted yet", '[Ruling T]']);
   });
 });

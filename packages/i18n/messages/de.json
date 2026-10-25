@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "Discover wird keine Songs mehr mit deiner Stimme abgleichen. Du kannst den Test jederzeit wiederholen.",
     "profileRemoveTitle": "Deine Stimme entfernen?",
     "singableCtaLabel": "Singbar, mach zuerst den Stimmtest",
-    "profileRemoveConfirm": "Entfernen"
+    "profileRemoveConfirm": "Entfernen",
+    "profileMethodSession": "Aus deiner Gesangssitzung ({n, plural, one {# Song} other {# Songs}})",
+    "profileMethodSessionPlain": "Aus deiner Gesangssitzung"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Versuch {n}: Gefühl {feel}, Position {position}, Schwierigkeit {difficulty}",
+      "attemptPitch": "Gesungen P10-P90 {core}",
+      "empty": "Noch keine gelabelten oder versuchten Songs vorhanden.",
+      "error": "Songs konnten nicht geladen werden. Geh zurück und versuche es erneut.",
+      "label": "Tabelle: {good} {tags}",
+      "labelNone": "Kein Tabellen-Label",
+      "loading": "Songs werden geladen...",
+      "markers": "Tonumfang {range}, P10-P90 {core}, gehaltene hohe Töne {sustained}, Dichte {density}/s, Intro {intro}s",
+      "markersNone": "Keine Marker berechnet",
+      "octaveBoth": "Männer und Frauen",
+      "octaveFemale": "Frauen",
+      "octaveMale": "Männer",
+      "octaveSplit": "Oktaventeilung: {who}",
+      "open": "Stimm-Debug (Admin)",
+      "play": "Aufnahme abspielen",
+      "playFailed": "Diese Aufnahme konnte nicht abgespielt werden.",
+      "prediction": "Modell: {verdict} (p {p})",
+      "predictionNone": "Keine Vorhersage",
+      "stop": "Stopp",
+      "title": "Stimm-Debug",
+      "unknown": "-",
+      "verdictGood": "gut",
+      "verdictNotGood": "nicht gut",
+      "notAvailable": "Der Sprach-Debug-Bildschirm ist nur für Admins verfügbar."
+    },
+    "notify": {
+      "body": "Tippe hier, um zu bewerten und deinen nächsten Song zu bekommen",
+      "channel": "Sprach-Session",
+      "title": "Fertig gesungen?"
+    },
+    "player": {
+      "back": "Ich bin zurück",
+      "fake": "Testvideo",
+      "linkoutBody": "Öffne es auf YouTube und sing mit. Wenn der Song zu Ende ist, komm hierher zurück und erzähle, wie es war.",
+      "linkoutTitle": "Dieser Song wird auf YouTube abgespielt",
+      "openFailed": "YouTube konnte nicht geöffnet werden. Versuche es noch einmal.",
+      "video": "Karaoke-Video",
+      "open": "In YouTube öffnen"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Ändere, wie du singst: {posture}, {warmth}",
+      "title": "Gerade jetzt",
+      "recordOff": "Aufnahme aus",
+      "recordTurnOff": "Aufnahme ausschalten"
+    },
+    "disabled": {
+      "title": "Demnächst verfügbar"
+    },
+    "entry": "Finde deine Stimme (30 Min.)",
+    "error": {
+      "network": "Du bist offline oder die Verbindung wurde unterbrochen. Bitte überprüfen und erneut versuchen.",
+      "restart": "Neu starten",
+      "server": "Auf unserer Seite ist etwas schiefgelaufen. Versuche es erneut.",
+      "session_lost": "Diese Session kann nicht fortgesetzt werden. Starte eine neue.",
+      "warming_up": "Songs werden vorbereitet, versuche es in einer Minute erneut",
+      "retry": "Erneut versuchen"
+    },
+    "intro": {
+      "body": "Singe 5–10 Songs, die du kennst, etwa 30 Minuten lang. Am besten zu Hause mit Kopfhörern.",
+      "title": "Finde deine Stimme",
+      "close": "Nicht jetzt",
+      "start": "Starten"
+    },
+    "loading": "Dein nächster Song wird ausgewählt…",
+    "pick": {
+      "dontKnow": "Überspringen, kenne ich nicht",
+      "know": "Kenne ich",
+      "version": "Karaoke-Version: {brand}",
+      "else": "Etwas anderes",
+      "finish": "Fertigstellen"
+    },
+    "play": {
+      "keys": "Klaviatur zeigt den Ton an, den du singst",
+      "recording": "Aufnahme läuft",
+      "ribbon": "Meine Töne anzeigen",
+      "stopEarly": "Vorzeitig beenden"
+    },
+    "progress": "Song {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Konnte manche Stellen nicht treffen",
+        "q": "Wie schwer war es?",
+        "stretch": "Etwas anstrengend",
+        "easy": "Einfach"
+      },
+      "feel": {
+        "fine": "In Ordnung",
+        "loved": "Fand ich super",
+        "q": "Wie hat es sich angefühlt?",
+        "not_for_me": "Nicht mein Fall"
+      },
+      "issue": {
+        "bad_sync": "Schlechte Textsynchronisation",
+        "low_quality": "Geringe Qualität",
+        "no_intro": "Kein Intro",
+        "wrong_lyrics": "Falscher Text"
+      },
+      "knew": {
+        "barely": "Kaum",
+        "partly": "Teilweise",
+        "q": "Wie gut kanntest du ihn?",
+        "well": "Kannte ich gut"
+      },
+      "position": {
+        "both_ends": "Schwer in den Höhen und Tiefen",
+        "q": "Wie lag der Song für deine Stimme?",
+        "comfortable": "Bequem",
+        "too_high": "Zu hoch",
+        "too_low": "Zu tief"
+      },
+      "prefill": "Dein höchster gehaltener Ton war {high}, der tiefste {low}",
+      "required": "Die ersten beiden sind Pflicht. Den Rest kannst du überspringen, wenn du möchtest.",
+      "sing": {
+        "q": "Würdest du ihn beim Karaoke singen?",
+        "yes_other_key": "Ja, in einer anderen Tonart",
+        "no": "Nein",
+        "yes": "Ja"
+      },
+      "tag": {
+        "crowd_song": "Klasse Stimmungsmacher",
+        "fast_lyrics": "Schneller Text",
+        "long_gaps": "Lange Instrumentallücken",
+        "mood_only": "Nur wenn ich in der Stimmung bin",
+        "needed_warmup": "Hätte Aufwärmen gebraucht",
+        "q": "Optionale Tags"
+      },
+      "version": {
+        "good": "Gut",
+        "not_great": "Nicht so toll",
+        "q": "Diese Karaoke-Version"
+      },
+      "voice": {
+        "fresh": "Frisch",
+        "q": "Stimme aktuell",
+        "tired": "Wird müde",
+        "warm": "Aufgewärmt"
+      },
+      "work": {
+        "fine": "Passt so, wie es ist",
+        "other_key": "In einer anderen Tonart",
+        "other_octave": "Eine Oktave tiefer oder höher",
+        "practice": "Mit etwas Übung",
+        "q": "Würde es klappen, wenn…?",
+        "warmer": "Du besser aufgewärmt wärst"
+      },
+      "next": "Weiter"
+    },
+    "reason": {
+      "comfortable_start": "Ein leichter zum Einstieg",
+      "explore": "Etwas Neues zum Ausprobieren",
+      "known": "Ein Song, den du kennst",
+      "loved": "Ein Song, den du liebst",
+      "lower_range": "Testet deinen tieferen Stimmbereich",
+      "upper_range": "Testet deinen höheren Stimmbereich"
+    },
+    "result": {
+      "confidenceLow": "Geringe Verlässlichkeit",
+      "confidenceMedium": "Mittlere Verlässlichkeit",
+      "hint": {
+        "more_songs": "Ein paar weitere Songs würden das Ergebnis sicherer machen",
+        "sing_higher_warm": "Singe 2 weitere höhere Songs, wenn du gut aufgewärmt bist",
+        "sing_lower": "Probiere ein paar tiefere Songs aus"
+      },
+      "keys": "Klaviatur zeigt deinen Stimmumfang und dessen angenehme Mitte",
+      "loved": "Songs, die du geliebt hast",
+      "more": "Weitermachen",
+      "partial": "Aus einer kurzen Session – nimm es als erste Einschätzung.",
+      "probably": "Wahrscheinlich {type}, aber wir brauchen noch mehr Songs, um sicher zu sein",
+      "range": "{range}, angenehm {comfort}",
+      "saved": "In deinem Musikprofil gespeichert.",
+      "suited": "Songs, die zu dir passen",
+      "confidenceHigh": "Hohe Sicherheit",
+      "done": "Fertig",
+      "typeUnknown": "Deine Stimmlage"
+    },
+    "setup": {
+      "bit_warm": "Ein bisschen aufgewärmt",
+      "cold": "Kalt",
+      "coldBody": "Eine Minute Summen und Sirenen-Glissandi wärmt deine Stimme auf und macht das Ergebnis genauer.",
+      "coldTitle": "Zuerst aufwärmen?",
+      "go": "Mit dem Singen beginnen",
+      "headphones": "Kopfhörer?",
+      "lying": "Liegend",
+      "micBlockedBody": "Aktiviere das Mikrofon für Nomad Karaoke in den Einstellungen. Du kannst trotzdem mitsingen und die Fragen beantworten, aber es wird nichts aufgenommen.",
+      "micDeniedBody": "Wir brauchen das Mikrofon, um die Töne zu hören, die du singst. Ohne Mikrofon wird nichts aufgenommen, aber du kannst trotzdem mitsingen und die Fragen beantworten.",
+      "micRetry": "Mikrofon erlauben",
+      "noHeadphones": "Die Begleitmusik dringt ins Mikrofon durch, daher sind die Aufnahmen weniger aussagekräftig.",
+      "posture": "Wie singst du?",
+      "record": "Gesang aufnehmen?",
+      "recordBody": "Wir speichern die Aufnahme vertraulich, um deinen Stimmumfang genauer zu bestimmen und deine Songauswahl später zu verbessern. Nur du und unser Team haben Zugriff darauf, und du kannst alle deine Aufnahmen jederzeit unter „Ich“ löschen.",
+      "sitting": "Sitzend",
+      "standing": "Stehend",
+      "warm": "Voll aufgewärmt",
+      "warmth": "Stimme gerade jetzt?",
+      "warmthAgain": "Wie fühlt sich deine Stimme jetzt an?",
+      "warmupSkip": "Aufwärmen überspringen",
+      "warmupStart": "Aufwärmen (1 Min.)",
+      "micOffTitle": "Mikrofon ist ausgeschaltet",
+      "no": "Nein",
+      "openSettings": "Einstellungen öffnen",
+      "quiet": "Sei kurz ganz leise …",
+      "yes": "Ja"
+    },
+    "title": "Finde deine Stimme",
+    "warmup": {
+      "hum": "Summe einen angenehmen Ton",
+      "keys": "Klaviatur zeigt den Ton an, den du singst",
+      "siren": "Gleite mit der Stimme wie eine Sirene nach oben und unten",
+      "done": "Fertig",
+      "left": "{seconds, plural, one {Noch # Sekunde} other {Noch # Sekunden}}"
+    },
+    "close": "Schließen",
+    "recordings": {
+      "confirmBody": "Dadurch werden alle Aufnahmen gelöscht, die wir aus deinen Gesangssitzungen gespeichert haben, und wir nehmen nichts mehr auf, bis du wieder zustimmst. Dies kann nicht rückgängig gemacht werden.",
+      "confirmTitle": "Alle deine Aufnahmen löschen?",
+      "count": "{count, plural, one {# Aufnahme} other {# Aufnahmen}} privat gespeichert",
+      "delete": "Alle meine Aufnahmen löschen",
+      "failed": "Deine Aufnahmen konnten nicht gelöscht werden. Überprüfe deine Verbindung und versuche es erneut.",
+      "recordDefault": "Mich standardmäßig aufnehmen",
+      "recordDefaultBody": "Wählt standardmäßig „Mich beim Singen aufnehmen?“ aus, wenn du eine Gesangssitzung startest. Du kannst dies jedes Mal ändern.",
+      "title": "Deine Aufnahmen",
+      "confirmButton": "Löschen"
+    }
   }
 }

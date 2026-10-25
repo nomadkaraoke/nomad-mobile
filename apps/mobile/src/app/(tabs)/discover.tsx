@@ -16,7 +16,6 @@ import {
   AppState,
   Keyboard,
   KeyboardAvoidingView,
-  Linking,
   Pressable,
   ScrollView,
   View,
@@ -59,6 +58,7 @@ import {
   useMakeIntent,
   type SongIdentity,
 } from "../../make/intentStore";
+import { openYouTubeUrl } from "../../media/youtube";
 import { useOfflineIndex } from "../../offline/offlineIndex";
 import { useVoiceStore } from "../../voice/voiceStore";
 import { useFlushVoiceOnDiscoverMount } from "../../voice/useVoiceProfile";
@@ -443,7 +443,7 @@ export default function DiscoverScreen() {
                 onShowAll={guard(() => openSong(o.song.song_key, o.keys))}
                 openUrl={guard((url: string) => {
                   logEvent("open_youtube", { song_key: o.song.song_key });
-                  Linking.openURL(url).catch(() => {});
+                  openYouTubeUrl(url).catch(() => {});
                 })}
               />
             ) : null}

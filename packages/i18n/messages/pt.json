@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "O Descobrir vai parar de combinar músicas com a sua voz. Você pode fazer o teste novamente a qualquer momento.",
     "profileRemoveTitle": "Remover sua voz?",
     "singableCtaLabel": "Cantável, faça o teste de voz primeiro",
-    "profileRemoveConfirm": "Remover"
+    "profileRemoveConfirm": "Remover",
+    "profileMethodSession": "Da sua sessão de voz ({n, plural, one {# música} other {# músicas}})",
+    "profileMethodSessionPlain": "Da sua sessão de voz"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Tentativa {n}: sensação {feel}, posição {position}, dificuldade {difficulty}",
+      "attemptPitch": "Cantado P10-P90 {core}",
+      "empty": "Nenhuma música rotulada ou tentada ainda.",
+      "error": "Não foi possível carregar as músicas. Volte e tente novamente.",
+      "label": "Planilha: {good} {tags}",
+      "labelNone": "Sem rótulo de planilha",
+      "loading": "Carregando músicas...",
+      "markers": "Extensão {range}, P10-P90 {core}, agudos sustentados {sustained}, densidade {density}/s, introdução {intro}s",
+      "markersNone": "Nenhum marcador calculado",
+      "octaveBoth": "homens e mulheres",
+      "octaveFemale": "mulheres",
+      "octaveMale": "homens",
+      "octaveSplit": "Divisão de oitava: {who}",
+      "open": "Depuração de voz (admin)",
+      "play": "Reproduzir gravação",
+      "playFailed": "Não foi possível reproduzir essa gravação.",
+      "prediction": "Modelo: {verdict} (p {p})",
+      "predictionNone": "Nenhuma previsão",
+      "stop": "Parar",
+      "title": "Depuração de voz",
+      "unknown": "-",
+      "verdictGood": "bom",
+      "verdictNotGood": "não bom",
+      "notAvailable": "A tela de depuração de voz é apenas para administradores."
+    },
+    "notify": {
+      "body": "Toque para avaliar e receber sua próxima música",
+      "channel": "Sessão de voz",
+      "title": "Terminou de cantar?"
+    },
+    "player": {
+      "back": "Voltei",
+      "fake": "Vídeo de teste",
+      "linkoutBody": "Abra no YouTube e cante junto. Quando a música terminar, volte aqui para contar como foi.",
+      "linkoutTitle": "Esta música toca no YouTube",
+      "openFailed": "Não foi possível abrir o YouTube. Tente novamente.",
+      "video": "Vídeo de karaokê",
+      "open": "Abrir no YouTube"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Mude como você está cantando: {posture}, {warmth}",
+      "title": "Agora mesmo",
+      "recordOff": "Gravação desativada",
+      "recordTurnOff": "Desativar gravação"
+    },
+    "disabled": {
+      "title": "Em breve"
+    },
+    "entry": "Encontre sua voz (30 min)",
+    "error": {
+      "network": "Você está offline ou a conexão caiu. Verifique e tente novamente.",
+      "restart": "Começar de novo",
+      "server": "Algo deu errado do nosso lado. Tente novamente.",
+      "session_lost": "Não é possível continuar esta sessão. Comece uma nova.",
+      "warming_up": "Preparando as músicas, tente novamente em um minuto",
+      "retry": "Tentar novamente"
+    },
+    "intro": {
+      "body": "Cante de 5 a 10 músicas que você conhece, cerca de 30 minutos. Melhor em casa, com fones de ouvido.",
+      "title": "Encontre sua voz",
+      "close": "Agora não",
+      "start": "Começar"
+    },
+    "loading": "Escolhendo sua próxima música…",
+    "pick": {
+      "dontKnow": "Pular, não conheço",
+      "know": "Conheço esta",
+      "version": "Versão de karaokê: {brand}",
+      "else": "Outra coisa",
+      "finish": "Concluir"
+    },
+    "play": {
+      "keys": "Teclado mostrando a nota que você está cantando",
+      "recording": "Gravando",
+      "ribbon": "Mostrar minhas notas",
+      "stopEarly": "Parar antes"
+    },
+    "progress": "Música {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Não consegui alcançar algumas partes",
+        "q": "Qual foi o nível de dificuldade?",
+        "stretch": "Exigiu um pouco",
+        "easy": "Fácil"
+      },
+      "feel": {
+        "fine": "De boa",
+        "loved": "Adorei",
+        "q": "Como foi a sensação?",
+        "not_for_me": "Não é para mim"
+      },
+      "issue": {
+        "bad_sync": "Sincronização ruim",
+        "low_quality": "Baixa qualidade",
+        "no_intro": "Sem introdução",
+        "wrong_lyrics": "Letra errada"
+      },
+      "knew": {
+        "barely": "Mal conhecia",
+        "partly": "Mais ou menos",
+        "q": "Você conhecia bem a música?",
+        "well": "Conhecia bem"
+      },
+      "position": {
+        "both_ends": "Difícil nos extremos",
+        "q": "Como ficou para a sua voz?",
+        "comfortable": "Confortável",
+        "too_high": "Muito alto",
+        "too_low": "Muito baixo"
+      },
+      "prefill": "Sua nota mais aguda sustentada foi {high}, a mais grave {low}",
+      "required": "As duas primeiras são obrigatórias. Pule o restante se quiser.",
+      "sing": {
+        "q": "Você cantaria no karaokê?",
+        "yes_other_key": "Sim, em outro tom",
+        "no": "Não",
+        "yes": "Sim"
+      },
+      "tag": {
+        "crowd_song": "Ótima para animar a galera",
+        "fast_lyrics": "Letra rápida",
+        "long_gaps": "Longas pausas instrumentais",
+        "mood_only": "Só se eu estiver no clima",
+        "needed_warmup": "Precisava de aquecimento",
+        "q": "Tags opcionais"
+      },
+      "version": {
+        "good": "Boa",
+        "not_great": "Mais ou menos",
+        "q": "Esta versão de karaokê"
+      },
+      "voice": {
+        "fresh": "Descansada",
+        "q": "Sua voz agora",
+        "tired": "Ficando cansada",
+        "warm": "Aquecida"
+      },
+      "work": {
+        "fine": "Fica ótima assim",
+        "other_key": "Em outro tom",
+        "other_octave": "Uma oitava abaixo ou acima",
+        "practice": "Com um pouco de treino",
+        "q": "Funcionaria se…?",
+        "warmer": "Sua voz estivesse mais aquecida"
+      },
+      "next": "Próximo"
+    },
+    "reason": {
+      "comfortable_start": "Uma fácil para começar",
+      "explore": "Algo novo para experimentar",
+      "known": "Uma música que você conhece",
+      "loved": "Uma música que você adora",
+      "lower_range": "Testa seus graves",
+      "upper_range": "Testa seus agudos"
+    },
+    "result": {
+      "confidenceLow": "Baixa confiança",
+      "confidenceMedium": "Média confiança",
+      "hint": {
+        "more_songs": "Mais algumas músicas deixariam o resultado mais certeiro",
+        "sing_higher_warm": "Cante mais 2 músicas mais agudas quando estiver com a voz aquecida",
+        "sing_lower": "Tente cantar mais algumas músicas graves"
+      },
+      "keys": "Teclado mostrando sua extensão e a faixa confortável",
+      "loved": "Músicas que você adorou",
+      "more": "Continuar",
+      "partial": "Baseado em uma sessão curta, considere como uma primeira estimativa.",
+      "probably": "Provavelmente {type}, mas precisamos de mais músicas para ter certeza",
+      "range": "{range}, confortável {comfort}",
+      "saved": "Salvo no seu perfil musical.",
+      "suited": "Músicas que combinam com você",
+      "confidenceHigh": "Alta confiança",
+      "done": "Concluído",
+      "typeUnknown": "Seu tipo de voz"
+    },
+    "setup": {
+      "bit_warm": "Um pouco aquecida",
+      "cold": "Fria",
+      "coldBody": "Um minuto cantarolando e fazendo sirenes prepara sua voz e deixa o resultado mais preciso.",
+      "coldTitle": "Quer aquecer primeiro?",
+      "go": "Começar a cantar",
+      "headphones": "Com fones de ouvido?",
+      "lying": "Deitado(a)",
+      "micBlockedBody": "Ative o microfone para o Nomad Karaoke nas Configurações. Você ainda pode cantar e responder às perguntas, mas nada será gravado.",
+      "micDeniedBody": "Precisamos do microfone para ouvir as notas que você canta. Sem ele nada será gravado, mas você ainda pode cantar e responder às perguntas.",
+      "micRetry": "Permitir microfone",
+      "noHeadphones": "O áudio de fundo vai vazar no microfone, então as gravações terão menos precisão.",
+      "posture": "Como você está cantando?",
+      "record": "Gravar enquanto canto?",
+      "recordBody": "Mantemos a gravação de forma privada para medir sua extensão com mais precisão e melhorar suas recomendações depois. Apenas você e nossa equipe têm acesso, e você pode excluir todas as gravações a qualquer momento na sua conta.",
+      "sitting": "Sentado(a)",
+      "standing": "Em pé",
+      "warm": "Totalmente aquecida",
+      "warmth": "Como está sua voz agora?",
+      "warmthAgain": "Como está sua voz agora?",
+      "warmupSkip": "Pular aquecimento",
+      "warmupStart": "Aquecer (1 min)",
+      "micOffTitle": "O microfone está desativado",
+      "no": "Não",
+      "openSettings": "Abrir Ajustes",
+      "quiet": "Fique em silêncio por um instante…",
+      "yes": "Sim"
+    },
+    "title": "Encontre sua voz",
+    "warmup": {
+      "hum": "Cantarole uma nota confortável",
+      "keys": "Teclado mostrando a nota que você está cantando",
+      "siren": "Deslize para cima e para baixo como uma sirene",
+      "done": "Concluído",
+      "left": "{seconds, plural, one {# segundo restante} other {# segundos restantes}}"
+    },
+    "close": "Fechar",
+    "recordings": {
+      "confirmBody": "Isso apaga todas as gravações guardadas das suas sessões de voz e interrompe novas gravações até você autorizar novamente. Não é possível desfazer.",
+      "confirmTitle": "Excluir todas as suas gravações?",
+      "count": "{count, plural, one {# gravação guardada} other {# gravações guardadas}} com privacidade",
+      "delete": "Excluir todas as minhas gravações",
+      "failed": "Não foi possível excluir suas gravações. Verifique sua conexão e tente novamente.",
+      "recordDefault": "Gravar por padrão",
+      "recordDefaultBody": "Deixa pré-marcado \"Gravar minha voz cantando?\" ao iniciar uma sessão de voz. Você ainda pode alterar essa opção a cada vez.",
+      "title": "Suas gravações",
+      "confirmButton": "Excluir"
+    }
   }
 }

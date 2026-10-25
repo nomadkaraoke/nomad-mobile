@@ -12,10 +12,12 @@
 #                                     # language (default en); shots go to docs/screenshots/phase2/review/<platform>/<locale>
 #                                     # (discover-* screens: docs/screenshots/phase3a/<platform>/<locale>;
 #                                     # tonight-* screens: docs/screenshots/phase5/<platform>/<locale>;
-#                                     # voice-* / fit-* screens: docs/screenshots/phase3c/<platform>/<locale>)
-#   scripts/e2e-local.sh --platform ios voice-           # the vocal range flows (voice-1…3, Phase 3c)
+#                                     # voice-* / fit-* screens: docs/screenshots/phase3c/<platform>/<locale>;
+#                                     # voice-session-* screens: docs/screenshots/phase3d/<platform>/<locale>)
+#   scripts/e2e-local.sh --platform ios voice-           # the vocal range flows (voice-1…3, Phase 3c) and voice-session-*
 #   scripts/e2e-local.sh --platform ios --skip tonight   # every flow except those whose name contains "tonight"
 #   scripts/e2e-local.sh --platform ios tonight          # the Tonight flows (tonight-1…11)
+#   scripts/e2e-local.sh --platform ios voice-session    # the voice session flows (decide's fixture voice.db)
 #
 # Env: GEN_DIR (gen checkout with scripts/local-stack.sh, at least v0.278.2 plus the fake match judge; default
 #      ../karaoke-gen, the main clone: pull it first, or point GEN_DIR at a gen worktree with the code you want),
@@ -83,7 +85,7 @@ while [[ $# -gt 0 ]]; do
     --locale) LOCALE="$2"; shift 2 ;;
     --screen) SCREEN="$2"; shift 2 ;;
     --skip) SKIP="$2"; shift 2 ;;
-    -h|--help) sed -n '2,44p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,51p' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
@@ -211,7 +213,12 @@ else
 fi
 
 # 4. Metro with the local-stack env (EXPO_PUBLIC_* are inlined at bundle time, so a Metro started without them
-#    must be restarted). Started here only if nothing is serving :$METRO_PORT; stopped again on exit.
+#    must be restarted). Started here only if nothing is serving :$METRO_PORT; stopped again on exit. The voice test and
+#    the voice session hear the bundled fake singer (FAKE_MIC=baritone-scale) instead of the microphone, and the
+#    session's karaoke video is a fake player (FAKE_YT) instead of YouTube; both only against a local gen. 40 s:
+#    decide only uses a song's pitch summary with >= 20 s voiced (the app's own pre-fill needs 10 s), and the fake
+#    singer's looped song section (1.2 s quiet + 6 s of notes) gives about 25 s of voiced frames in 40 s. With less,
+#    decide ignores the pitch and the type comes from the quiz answers alone (voice-session-1 then ends at Tenor).
 METRO_PID=""
 if [[ "$METRO_PORT" == 8081 ]]; then METRO_LOG=/tmp/nomad-mobile-metro.log; else METRO_LOG="/tmp/nomad-mobile-metro-$METRO_PORT.log"; fi
 metro_up() { curl -sf -m 2 "http://127.0.0.1:$METRO_PORT/status" | grep -q running; }
@@ -235,7 +242,8 @@ start_metro() {
   # (e.g. +native-intent) need a fresh route context.
   (cd "$ROOT/apps/mobile" && exec env EXPO_PUBLIC_GEN_API_URL="$STACK" EXPO_PUBLIC_GEN_WEB_URL="$WEB" \
     EXPO_PUBLIC_DECIDE_API_URL="$DECIDE" EXPO_PUBLIC_DECIDE_SEARCH_URL="$SEARCH" EXPO_PUBLIC_KJBOX_API_URL="$KJBOX_APP" \
-    EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 EXPO_PUBLIC_FAKE_MIC=baritone-scale CI=1 "$@" \
+    EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 EXPO_PUBLIC_FAKE_MIC=baritone-scale EXPO_PUBLIC_FAKE_YT=1 \
+    EXPO_PUBLIC_FAKE_YT_SECONDS=40 CI=1 "$@" \
     npx expo start --dev-client --port "$METRO_PORT" --clear) >"$METRO_LOG" 2>&1 &
   METRO_PID=$!
   local deadline=$((SECONDS + 120))
@@ -272,7 +280,9 @@ TONIGHT_SHOTS="docs/screenshots/phase5/$PLATFORM"
 SHOTS3B="docs/screenshots/phase3b/$PLATFORM"
 # Vocal range (voice-*, Phase 3c).
 VOICE_SHOTS="docs/screenshots/phase3c/$PLATFORM"
-mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B" "$VOICE_SHOTS"
+# Voice session (voice-session-*, Phase 3d).
+VOICE_SESSION_SHOTS="docs/screenshots/phase3d/$PLATFORM"
+mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B" "$VOICE_SHOTS" "$VOICE_SESSION_SHOTS"
 ALL=()
 while IFS= read -r f; do ALL+=("maestro/flows/${f##*/}"); done < <(list_flows)
 [[ ${#ALL[@]} -gt 0 ]] || { echo "no flow matches $FILTER" >&2; exit 2; }
@@ -341,7 +351,7 @@ run_flows() {
   "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" \
     -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
     -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" \
-    -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" "$@"
+    -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" -e VOICE_SESSION_SHOTS="$VOICE_SESSION_SHOTS" "$@"
 }
 status=0
 
@@ -352,6 +362,7 @@ if [[ -n "$SCREEN" ]]; then
   lang="${LOCALE:-en}"
   if [[ "$SCREEN" == discover* ]]; then TOUR_SHOTS="$DISCOVER_SHOTS/$lang"
   elif [[ "$SCREEN" == tonight* ]]; then TOUR_SHOTS="$TONIGHT_SHOTS/$lang"
+  elif [[ "$SCREEN" == voice-session* ]]; then TOUR_SHOTS="$VOICE_SESSION_SHOTS/$lang"
   elif [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; then TOUR_SHOTS="$VOICE_SHOTS/$lang"
   else TOUR_SHOTS="docs/screenshots/phase2/review/$PLATFORM/$lang"; fi
   mkdir -p "$TOUR_SHOTS"

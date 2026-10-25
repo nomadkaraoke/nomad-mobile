@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "Discover ei enää etsi äänellesi sopivia kappaleita. Voit tehdä testin uudelleen milloin tahansa.",
     "profileRemoveTitle": "Poistetaanko äänesi?",
     "singableCtaLabel": "Laulettava, tee äänitesti ensin",
-    "profileRemoveConfirm": "Poista"
+    "profileRemoveConfirm": "Poista",
+    "profileMethodSession": "Äänisessiostasi ({n, plural, one {# kappale} other {# kappaletta}})",
+    "profileMethodSessionPlain": "Äänisessiostasi"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Yritys {n}: fiilis {feel}, sijainti {position}, vaikeusaste {difficulty}",
+      "attemptPitch": "Laulettu P10-P90 {core}",
+      "empty": "Ei vielä merkittyjä tai kokeiltuja kappaleita.",
+      "error": "Kappaleita ei voitu ladata. Palaa takaisin ja yritä uudelleen.",
+      "label": "Taulukko: {good} {tags}",
+      "labelNone": "Ei taulukkomerkintää",
+      "loading": "Ladataan kappaleita...",
+      "markers": "Ääniala {range}, P10-P90 {core}, pitkät korkeat {sustained}, tiheys {density}/s, intro {intro} s",
+      "markersNone": "Merkitsimiä ei ole laskettu",
+      "octaveBoth": "miehet ja naiset",
+      "octaveFemale": "naiset",
+      "octaveMale": "miehet",
+      "octaveSplit": "Oktaavijako: {who}",
+      "open": "Äänen virheenkorjaus (admin)",
+      "play": "Toista tallenne",
+      "playFailed": "Tallenteen toistaminen epäonnistui.",
+      "prediction": "Malli: {verdict} (p {p})",
+      "predictionNone": "Ei ennustetta",
+      "stop": "Pysäytä",
+      "title": "Äänen virheenkorjaus",
+      "unknown": "-",
+      "verdictGood": "hyvä",
+      "verdictNotGood": "ei hyvä",
+      "notAvailable": "Äänen virheenkorjausnäkymä on vain ylläpitäjille."
+    },
+    "notify": {
+      "body": "Napauta arvioidaksesi sen ja valitaksesi seuraavan kappaleen",
+      "channel": "Äänisessio",
+      "title": "Saitko laulettua?"
+    },
+    "player": {
+      "back": "Olen takaisin",
+      "fake": "Testivideo",
+      "linkoutBody": "Avaa se YouTubessa ja laula mukana. Kun kappale päättyy, palaa tänne kertomaan, miten meni.",
+      "linkoutTitle": "Tämä toistetaan YouTubessa",
+      "openFailed": "YouTubea ei voitu avata. Yritä uudelleen.",
+      "video": "Karaokevideo",
+      "open": "Avaa YouTubessa"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Muuta laulutapaasi: {posture}, {warmth}",
+      "title": "Juuri nyt",
+      "recordOff": "Tallennus pois päältä",
+      "recordTurnOff": "Ota tallennus pois päältä"
+    },
+    "disabled": {
+      "title": "Tulossa pian"
+    },
+    "entry": "Löydä äänesi (30 min)",
+    "error": {
+      "network": "Olet offline-tilassa tai yhteys katkesi. Tarkista yhteys ja yritä uudelleen.",
+      "restart": "Aloita alusta",
+      "server": "Jokin meni pieleen meidän puolellamme. Yritä uudelleen.",
+      "session_lost": "Tätä sessiota ei voida jatkaa. Aloita uusi.",
+      "warming_up": "Kappaleita valmistellaan, yritä minuutin kuluttua uudelleen",
+      "retry": "Yritä uudelleen"
+    },
+    "intro": {
+      "body": "Laula 5–10 tuntemaasi kappaletta, noin 30 minuuttia. Onnistuu parhaiten kotona kuulokkeiden kanssa.",
+      "title": "Löydä äänesi",
+      "close": "Ei nyt",
+      "start": "Aloita"
+    },
+    "loading": "Valitaan seuraavaa kappaletta…",
+    "pick": {
+      "dontKnow": "Ohita, en tunne tätä",
+      "know": "Tunnen tämän",
+      "version": "Karaokeversio: {brand}",
+      "else": "Jokin muu",
+      "finish": "Valmis"
+    },
+    "play": {
+      "keys": "Koskettimet näyttävät laulamasi sävelen",
+      "recording": "Äänitetään",
+      "ribbon": "Näytä säveleni",
+      "stopEarly": "Lopeta kesken"
+    },
+    "progress": "Kappale {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "En osunut kaikkiin kohtiin",
+        "q": "Kuinka vaikeaa se oli?",
+        "stretch": "Hieman tiukkaa teki",
+        "easy": "Helppo"
+      },
+      "feel": {
+        "fine": "Ihan hyvä",
+        "loved": "Tuntui mahtavalta",
+        "q": "Miltä se tuntui?",
+        "not_for_me": "Ei minua varten"
+      },
+      "issue": {
+        "bad_sync": "Huono synkronointi",
+        "low_quality": "Heikko laatu",
+        "no_intro": "Ei introa",
+        "wrong_lyrics": "Väärät sanat"
+      },
+      "knew": {
+        "barely": "Tuskin lainkaan",
+        "partly": "Osittain",
+        "q": "Kuinka hyvin tunsit kappaleen?",
+        "well": "Tunsin hyvin"
+      },
+      "position": {
+        "both_ends": "Vaikeaa molemmissa päissä",
+        "q": "Miten se sopi äänellesi?",
+        "comfortable": "Mukava",
+        "too_high": "Liian korkea",
+        "too_low": "Liian matala"
+      },
+      "prefill": "Korkein pitämäsi sävel oli {high}, matalin {low}",
+      "required": "Kaksi ensimmäistä vaaditaan. Voit ohittaa loput halutessasi.",
+      "sing": {
+        "q": "Laulaisitko tämän karaokessa?",
+        "yes_other_key": "Kyllä, eri sävellajissa",
+        "no": "Ei",
+        "yes": "Kyllä"
+      },
+      "tag": {
+        "crowd_song": "Loistava yleisönlaulattaja",
+        "fast_lyrics": "Nopeat sanat",
+        "long_gaps": "Pitkiä instrumentaaliosuuksia",
+        "mood_only": "Vain oikealla tuulella",
+        "needed_warmup": "Olisi vaatinut lämmittelyä",
+        "q": "Valinnaiset tunnisteet"
+      },
+      "version": {
+        "good": "Hyvä",
+        "not_great": "Ei kovin hyvä",
+        "q": "Tämä karaokeversio"
+      },
+      "voice": {
+        "fresh": "Levännyt",
+        "q": "Ääni nyt",
+        "tired": "Alkaa väsyä",
+        "warm": "Lämmin"
+      },
+      "work": {
+        "fine": "Toimii sellaisenaan",
+        "other_key": "Eri sävellajissa",
+        "other_octave": "Oktaavia alempaa tai ylempää",
+        "practice": "Pienen harjoittelun jälkeen",
+        "q": "Toimisiko se, jos…?",
+        "warmer": "Olisit lämmitellyt enemmän"
+      },
+      "next": "Seuraava"
+    },
+    "reason": {
+      "comfortable_start": "Helppo aloitus",
+      "explore": "Jotain uutta kokeiltavaksi",
+      "known": "Tuntemasi kappale",
+      "loved": "Kappale, josta pidät",
+      "lower_range": "Testaa ala-aluettasi",
+      "upper_range": "Testaa yläaluettasi"
+    },
+    "result": {
+      "confidenceLow": "Matala luotettavuus",
+      "confidenceMedium": "Kohtalainen luotettavuus",
+      "hint": {
+        "more_songs": "Muutama lisäkappale toisi lisää varmuutta",
+        "sing_higher_warm": "Laula vielä 2 korkeampaa kappaletta, kun olet lämmitellyt",
+        "sing_lower": "Kokeile paria matalampaa kappaletta"
+      },
+      "keys": "Koskettimet näyttävät äänialasi ja sen mukavimman keskialueen",
+      "loved": "Kappaleet, joista pidit",
+      "more": "Jatka",
+      "partial": "Perustuu lyhyeen sessioon, joten ota tämä alustavana arviona.",
+      "probably": "Todennäköisesti {type}, mutta tarvitsemme lisää kappaleita varmistukseen",
+      "range": "{range}, mukava alue {comfort}",
+      "saved": "Tallennettu musiikkiprofiiliisi.",
+      "suited": "Sinulle sopivat kappaleet",
+      "confidenceHigh": "Korkea varmuus",
+      "done": "Valmis",
+      "typeUnknown": "Äänityyppisi"
+    },
+    "setup": {
+      "bit_warm": "Hieman lämmitelty",
+      "cold": "Kylmä",
+      "coldBody": "Minuutti hyräilyä ja sireeniääniä avaa äänesi ja antaa tarkemman tuloksen.",
+      "coldTitle": "Lämmitelläänkö ensin?",
+      "go": "Aloita laulaminen",
+      "headphones": "Kuulokkeet?",
+      "lying": "Makuulla",
+      "micBlockedBody": "Salli mikrofonin käyttö Nomad Karaokelle asetuksissa. Voit silti laulaa ja vastata kysymyksiin, mutta mitään ei tallenneta.",
+      "micDeniedBody": "Tarvitsemme mikrofonin kuullaksemme laulamasi sävelet. Ilman sitä mitään ei tallenneta, mutta voit silti laulaa ja vastata kysymyksiin.",
+      "micRetry": "Salli mikrofoni",
+      "noHeadphones": "Taustaraita vuotaa mikrofoniin, jolloin äänitteistä saatava hyöty on heikompi.",
+      "posture": "Missä asennossa laulat?",
+      "record": "Äänitetäänkö laulusi?",
+      "recordBody": "Säilytämme äänitteen yksityisenä, jotta voimme mitata äänialasi tarkemmin ja suositella paremmin sopivia kappaleita jatkossa. Vain sinä ja tiimimme pääsevät siihen käsiksi, ja voit poistaa kaikki äänitteesi milloin tahansa Minä-osiossa.",
+      "sitting": "Istuallaan",
+      "standing": "Seisaallaan",
+      "warm": "Täysin lämmin",
+      "warmth": "Ääni juuri nyt?",
+      "warmthAgain": "Miltä äänesi tuntuu nyt?",
+      "warmupSkip": "Ohita lämmittely",
+      "warmupStart": "Lämmittele (1 min)",
+      "micOffTitle": "Mikrofoni on pois päältä",
+      "no": "Ei",
+      "openSettings": "Avaa asetukset",
+      "quiet": "Ole hetki hiljaa…",
+      "yes": "Kyllä"
+    },
+    "title": "Löydä äänesi",
+    "warmup": {
+      "hum": "Hyräile itsellesi mukavaa säveltä",
+      "keys": "Koskettimet näyttävät laulamasi sävelen",
+      "siren": "Liu'uta ääntä ylös ja alas kuin sireeni",
+      "done": "Valmis",
+      "left": "{seconds, plural, one {# sekunti jäljellä} other {# sekuntia jäljellä}}"
+    },
+    "close": "Sulje",
+    "recordings": {
+      "confirmBody": "Tämä poistaa kaikki äänisessioistasi säilytetyt äänitteet ja lopettaa tallentamisen, kunnes annat luvan uudelleen. Toimintoa ei voi kumota.",
+      "confirmTitle": "Poistetaanko kaikki äänitteesi?",
+      "count": "{count, plural, one {# äänite} other {# äänitettä}} säilytetty yksityisenä",
+      "delete": "Poista kaikki äänitteeni",
+      "failed": "Äänitteidesi poistaminen epäonnistui. Tarkista verkkoyhteytesi ja yritä uudelleen.",
+      "recordDefault": "Tallenna lauluni oletusarvoisesti",
+      "recordDefaultBody": "Valitsee valmiiksi kohdan ”Tallenna lauluni?”, kun aloitat äänisession. Voit silti muuttaa valintaa joka kerta.",
+      "title": "Omat äänitteet",
+      "confirmButton": "Poista"
+    }
   }
 }

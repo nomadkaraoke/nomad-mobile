@@ -1,0 +1,49 @@
+# One sung song: "I know this" → the fake player (40 s, see e2e-local.sh; the session starts it once the recorder runs) → the quiz →
+# Q1 loved, Q2 comfortable unless the recording pre-filled it, Q3 easy → Next → the next pick or the result.
+# Env: EXPECT_PREFILL ("true": the recording's highest/lowest line shows), SHOT (optional: quiz screenshot path).
+appId: com.nomadkaraoke.mobile
+---
+- tapOn:
+    id: "vs-pick-know"
+- extendedWaitUntil:
+    visible:
+      id: "vs-play"
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: "vs-quiz-next"
+    timeout: 70000
+- runFlow:
+    when:
+      true: ${EXPECT_PREFILL == 'true'}
+    commands:
+      - assertVisible:
+          id: "vs-prefill"
+- runFlow:
+    when:
+      true: ${SHOT != null && SHOT != ''}
+    commands:
+      - takeScreenshot: ${SHOT}
+- tapOn:
+    id: "vs-q-feel-loved"
+- runFlow:
+    when:
+      notVisible:
+        id: "vs-q-position-.*"
+        selected: true
+    commands:
+      - tapOn:
+          id: "vs-q-position-comfortable"
+- scrollUntilVisible:
+    element:
+      id: "vs-q-difficulty-easy"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "vs-q-difficulty-easy"
+- tapOn:
+    id: "vs-quiz-next"
+- extendedWaitUntil:
+    visible:
+      id: "vs-pick-know|vs-result-type"
+    timeout: 30000

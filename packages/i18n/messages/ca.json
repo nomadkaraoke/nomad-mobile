@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "Discover deixarà de recomanar-te cançons adaptades a la teva veu. Pots tornar a fer el test quan vulguis.",
     "profileRemoveTitle": "Vols eliminar la teva veu?",
     "singableCtaLabel": "Per saber si la pots cantar, fes primer el test de veu",
-    "profileRemoveConfirm": "Elimina"
+    "profileRemoveConfirm": "Elimina",
+    "profileMethodSession": "De la teva sessió de veu ({n, plural, one {# cançó} other {# cançons}})",
+    "profileMethodSessionPlain": "De la teva sessió de veu"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Intent {n}: sensació {feel}, posició {position}, dificultat {difficulty}",
+      "attemptPitch": "Cantat P10-P90 {core}",
+      "empty": "Encara no hi ha cançons etiquetades o intentades.",
+      "error": "No s'han pogut carregar les cançons. Torna enrere i torna-ho a provar.",
+      "label": "Full: {good} {tags}",
+      "labelNone": "Sense etiqueta de full",
+      "loading": "S'estan carregant les cançons...",
+      "markers": "Rang {range}, P10-P90 {core}, aguts sostinguts {sustained}, densitat {density}/s, intro {intro}s",
+      "markersNone": "Sense marcadors calculats",
+      "octaveBoth": "homes i dones",
+      "octaveFemale": "dones",
+      "octaveMale": "homes",
+      "octaveSplit": "Divisió d'octava: {who}",
+      "open": "Depuració de veu (admin)",
+      "play": "Reprodueix la gravació",
+      "playFailed": "No s'ha pogut reproduir aquesta gravació.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Sense predicció",
+      "stop": "Atura",
+      "title": "Depuració de veu",
+      "unknown": "-",
+      "verdictGood": "bo",
+      "verdictNotGood": "no bo",
+      "notAvailable": "La pantalla de depuració de veu només és per a administradors."
+    },
+    "notify": {
+      "body": "Toca per valorar-la i rebre la teva propera cançó",
+      "channel": "Sessió de veu",
+      "title": "Ja has acabat de cantar?"
+    },
+    "player": {
+      "back": "Ja he tornat",
+      "fake": "Vídeo de prova",
+      "linkoutBody": "Obre'l a YouTube i canta. Quan acabi la cançó, torna aquí per dir com ha anat.",
+      "linkoutTitle": "Aquest es reprodueix a YouTube",
+      "openFailed": "No s'ha pogut obrir YouTube. Torna-ho a provar.",
+      "video": "Vídeo de karaoke",
+      "open": "Obre a YouTube"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Canvia com cantes: {posture}, {warmth}",
+      "title": "Ara mateix",
+      "recordOff": "Enregistrament desactivat",
+      "recordTurnOff": "Desactiva l'enregistrament"
+    },
+    "disabled": {
+      "title": "Properament"
+    },
+    "entry": "Troba la teva veu (30 min)",
+    "error": {
+      "network": "No tens connexió o s'ha interromput. Comprova-la i torna-ho a provar.",
+      "restart": "Torna a començar",
+      "server": "Hi ha hagut un error per part nostra. Torna-ho a provar.",
+      "session_lost": "Aquesta sessió no pot continuar. Comença'n una de nova.",
+      "warming_up": "Preparant les cançons, torna-ho a provar d'aquí a un minut",
+      "retry": "Torna-ho a provar"
+    },
+    "intro": {
+      "body": "Canta entre 5 i 10 cançons que coneguis, uns 30 minuts. Millor a casa i amb auriculars.",
+      "title": "Troba la teva veu",
+      "close": "Ara no",
+      "start": "Comença"
+    },
+    "loading": "Triant la teva propera cançó…",
+    "pick": {
+      "dontKnow": "Salta, no me la sé",
+      "know": "Me la sé",
+      "version": "Versió de karaoke: {brand}",
+      "else": "Altres",
+      "finish": "Finalitza"
+    },
+    "play": {
+      "keys": "Teclat que mostra la nota que cantes",
+      "recording": "Enregistrant",
+      "ribbon": "Mostra les meves notes",
+      "stopEarly": "Atura abans"
+    },
+    "progress": "Cançó {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "No he arribat a algunes parts",
+        "q": "Com de difícil ha estat?",
+        "stretch": "Ha costat una mica",
+        "easy": "Fàcil"
+      },
+      "feel": {
+        "fine": "Bé",
+        "loved": "M'ha encantat",
+        "q": "Com t'has sentit?",
+        "not_for_me": "No és per a mi"
+      },
+      "issue": {
+        "bad_sync": "Mala sincronització",
+        "low_quality": "Baixa qualitat",
+        "no_intro": "Sense introducció",
+        "wrong_lyrics": "Lletra incorrecta"
+      },
+      "knew": {
+        "barely": "Gairebé gens",
+        "partly": "En part",
+        "q": "Com de bé te la sabies?",
+        "well": "Me la sabia molt bé"
+      },
+      "position": {
+        "both_ends": "Difícil als dos extrems",
+        "q": "Com ha anat per a la teva veu?",
+        "comfortable": "Còmode",
+        "too_high": "Massa aguda",
+        "too_low": "Massa greu"
+      },
+      "prefill": "La teva nota mantinguda més aguda ha estat {high}, la més greu {low}",
+      "required": "Les dues primeres són necessàries. Pots saltar-te la resta si vols.",
+      "sing": {
+        "q": "La cantaries al karaoke?",
+        "yes_other_key": "Sí, en un altre to",
+        "no": "No",
+        "yes": "Sí"
+      },
+      "tag": {
+        "crowd_song": "Ideal per animar el públic",
+        "fast_lyrics": "Lletra ràpida",
+        "long_gaps": "Pausas instrumentals llargues",
+        "mood_only": "Només si en tinc ganes",
+        "needed_warmup": "Necessitava escalfar",
+        "q": "Etiquetes opcionals"
+      },
+      "version": {
+        "good": "Bona",
+        "not_great": "Millorable",
+        "q": "Aquesta versió de karaoke"
+      },
+      "voice": {
+        "fresh": "Descansada",
+        "q": "La veu ara",
+        "tired": "Comença a cansar-se",
+        "warm": "Escalfada"
+      },
+      "work": {
+        "fine": "Està bé tal com està",
+        "other_key": "En un altre to",
+        "other_octave": "Una octava més greu o més aguda",
+        "practice": "Amb una mica de pràctica",
+        "q": "Funcionaria si…?",
+        "warmer": "Haguessis escalfat més"
+      },
+      "next": "Següent"
+    },
+    "reason": {
+      "comfortable_start": "Una de fàcil per començar",
+      "explore": "Quelcom nou per provar",
+      "known": "Una cançó que coneixes",
+      "loved": "Una cançó que t'encanta",
+      "lower_range": "Comprova el teu registre greu",
+      "upper_range": "Comprova el teu registre agut"
+    },
+    "result": {
+      "confidenceLow": "Confiança baixa",
+      "confidenceMedium": "Confiança mitjana",
+      "hint": {
+        "more_songs": "Un parell més de cançons ho farien més fiable",
+        "sing_higher_warm": "Canta 2 cançons més agudes quan hagis escalfat",
+        "sing_lower": "Prova un parell de cançons més greus"
+      },
+      "keys": "Teclat que mostra el teu rang i la teva zona còmoda",
+      "loved": "Cançons que t'han encantat",
+      "more": "Continua",
+      "partial": "D'una sessió curta, així que pren-t'ho com una primera aproximació.",
+      "probably": "Probablement {type}, però necessitem més cançons per confirmar-ho",
+      "range": "{range}, zona còmoda {comfort}",
+      "saved": "S'ha desat al teu perfil musical.",
+      "suited": "Cançons que et van bé",
+      "confidenceHigh": "Certesa alta",
+      "done": "Fet",
+      "typeUnknown": "El teu tipus de veu"
+    },
+    "setup": {
+      "bit_warm": "Una mica escalfada",
+      "cold": "Freda",
+      "coldBody": "Un minut de brescall i sirenes prepara la teva veu i fa que el resultat sigui més precís.",
+      "coldTitle": "Vols escalfar primer?",
+      "go": "Comença a cantar",
+      "headphones": "Portes auriculars?",
+      "lying": "Estirant-te",
+      "micBlockedBody": "Activa el micròfon per a Nomad Karaoke a Configuració. Pots continuar cantant i responent a les preguntes, però no s'enregistrarà res.",
+      "micDeniedBody": "Necessitem el micròfon per sentir les notes que cantes. Sense el micròfon no s'enregistrarà res, però pots continuar cantant i responent a les preguntes.",
+      "micRetry": "Permet el micròfon",
+      "noHeadphones": "La base musical es colarà pel micròfon, així que els enregistraments tindran menys valor.",
+      "posture": "Com cantaràs?",
+      "record": "Vols enregistrar com canto?",
+      "recordBody": "Guardem l'enregistrament de manera privada per mesurar el teu rang amb més precisió i millorar les teves seleccions més endavant. Només tu i el nostre equip hi tenim accés, i pots suprimir tots els teus enregistraments quan vulguis a Jo.",
+      "sitting": "Assegut",
+      "standing": "Dret",
+      "warm": "Completament escalfada",
+      "warmth": "Com tens la veu ara mateix?",
+      "warmthAgain": "Com sents la veu ara?",
+      "warmupSkip": "Salta't l'escalfament",
+      "warmupStart": "Escalfa (1 min)",
+      "micOffTitle": "El micròfon està desactivat",
+      "no": "No",
+      "openSettings": "Obre la configuració",
+      "quiet": "Fes silenci un segon…",
+      "yes": "Sí"
+    },
+    "title": "Troba la teva veu",
+    "warmup": {
+      "hum": "Fes un brunzit amb la boca closa en una nota còmoda",
+      "keys": "Teclat que mostra la nota que cantes",
+      "siren": "Fes lliscaments amunt i avall com una sirena",
+      "done": "Fet",
+      "left": "{seconds, plural, one {Queda # segon} other {Queden # segons}}"
+    },
+    "close": "Tanca",
+    "recordings": {
+      "confirmBody": "Això esborrarà totes les gravacions que hem guardat de les teves sessions de veu i deixarem de gravar fins que tornis a acceptar-ho. Aquesta acció no es pot desfer.",
+      "confirmTitle": "Vols eliminar totes les teves gravacions?",
+      "count": "{count, plural, one {# gravació guardada} other {# gravacions guardades}} de manera privada",
+      "delete": "Elimina totes les meves gravacions",
+      "failed": "No s'han pogut eliminar les teves gravacions. Comprova la connexió i torna-ho a provar.",
+      "recordDefault": "Grava'm per defecte",
+      "recordDefaultBody": "Marca prèviament l'opció «Grava'm cantant?» quan iniciïs una sessió de veu. Ho podràs canviar cada vegada.",
+      "title": "Les teves gravacions",
+      "confirmButton": "Suprimeix"
+    }
   }
 }

@@ -38,3 +38,4 @@ export {
 export * from './discover';
 export * from './imports';
 export * from './voice';
+export * from './voice/session';

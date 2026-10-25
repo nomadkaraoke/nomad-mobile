@@ -1,0 +1,59 @@
+# Voice session 2 (plan Task D8): record no → song 1 sung, the next pick skipped ("don't know it"), song 2 sung →
+# Finish → the result's low-confidence wording ("Probably …") → decide has 2 attempts and no recordings.
+appId: com.nomadkaraoke.mobile
+name: voice-session-2-quiz-only
+tags:
+  - voice-session
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: vs2
+- runFlow:
+    file: ../common/voice-session-open.yaml
+    env:
+      EMAIL: ${output.email}
+- runFlow:
+    file: ../common/voice-session-setup.yaml
+    env:
+      RECORD: "no"
+- runFlow: ../common/voice-session-song.yaml
+- copyTextFrom:
+    id: "vs-pick-title"
+# Regex-escaped (titles hold ( ) . ? and the like; Maestro text matchers are regexes).
+- runScript:
+    file: ../scripts/remember-text.js
+    env:
+      NAME: skipped
+- tapOn:
+    id: "vs-pick-dont-know"
+# A different song is offered.
+- extendedWaitUntil:
+    visible:
+      id: "vs-pick-know"
+    timeout: 30000
+- assertNotVisible:
+    id: "vs-pick-title"
+    text: ${output.skipped}
+- runFlow: ../common/voice-session-song.yaml
+- runFlow: ../common/voice-session-finish.yaml
+- assertVisible:
+    id: "vs-result-type"
+    text: "Probably .*"
+- assertVisible:
+    id: "vs-result-confidence"
+    text: "Low confidence"
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-2-result-low
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-session-assert
+      EXPECT_ATTEMPTS: "2"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-recordings-count
+      EXPECT_COUNT: "0"
+      WAIT_MS: "3000"

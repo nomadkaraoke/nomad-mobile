@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Image, Pressable, View } from 'react-native';
 
 import { openWebHandoff } from './openWebHandoff';
-import { youtubeId, youtubeThumbnail } from './youtube';
+import { youtubeId, youtubeThumbnail } from '../media/youtube';
 
 type Kind = 'working' | 'review' | 'duration' | 'web' | 'done' | 'failed' | 'cancelled';
 

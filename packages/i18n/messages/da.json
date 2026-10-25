@@ -1521,6 +1521,235 @@
     "profileRemoveBody": "Discover stopper med at matche sange til din stemme. Du kan tage testen igen når som helst.",
     "profileRemoveTitle": "Fjern din stemme?",
     "singableCtaLabel": "Syngbar, tag stemmetesten først",
-    "profileRemoveConfirm": "Fjern"
+    "profileRemoveConfirm": "Fjern",
+    "profileMethodSession": "Fra din stemmesession ({n, plural, one {# sang} other {# sange}})",
+    "profileMethodSessionPlain": "Fra din stemmesession"
+  },
+  "voiceSession": {
+    "debug": {
+      "attempt": "Forsøg {n}: fornemmelse {feel}, position {position}, sværhedsgrad {difficulty}",
+      "attemptPitch": "Sunget P10-P90 {core}",
+      "empty": "Ingen mærkede eller forsøgte sange endnu.",
+      "error": "Kunne ikke indlæse sangene. Træk tilbage, og prøv igen.",
+      "label": "Ark: {good} {tags}",
+      "labelNone": "Ingen arkmærkning",
+      "loading": "Indlæser sange...",
+      "markers": "Område {range}, P10-P90 {core}, holdte høje toner {sustained}, tæthed {density}/s, intro {intro}s",
+      "markersNone": "Ingen markører beregnet",
+      "octaveBoth": "mænd og kvinder",
+      "octaveFemale": "kvinder",
+      "octaveMale": "mænd",
+      "octaveSplit": "Oktavopdeling: {who}",
+      "open": "Stemmedebug (admin)",
+      "play": "Afspil optagelse",
+      "playFailed": "Kunne ikke afspille optagelsen.",
+      "prediction": "Model: {verdict} (p {p})",
+      "predictionNone": "Ingen forudsigelse",
+      "stop": "Stop",
+      "title": "Stemmedebug",
+      "unknown": "-",
+      "verdictGood": "god",
+      "verdictNotGood": "ikke god",
+      "notAvailable": "Fejlfindingssiden for stemme er kun for administratorer."
+    },
+    "notify": {
+      "body": "Tryk for at bedømme den og få din næste sang",
+      "channel": "Stemmesession",
+      "title": "Færdig med at synge?"
+    },
+    "player": {
+      "back": "Jeg er tilbage",
+      "fake": "Testvideo",
+      "linkoutBody": "Åbn den på YouTube og syng med. Når sangen er slut, vender du tilbage hertil for at fortælle, hvordan det gik.",
+      "linkoutTitle": "Denne afspilles på YouTube",
+      "openFailed": "Kunne ikke åbne YouTube. Prøv igen.",
+      "video": "Karaokevideo",
+      "open": "Åbn på YouTube"
+    },
+    "context": {
+      "chip": "{posture} · {warmth}",
+      "chipLabel": "Skift hvordan du synger: {posture}, {warmth}",
+      "title": "Lige nu",
+      "recordOff": "Optagelse slået fra",
+      "recordTurnOff": "Slå optagelse fra"
+    },
+    "disabled": {
+      "title": "Kommer snart"
+    },
+    "entry": "Find din stemme (30 min)",
+    "error": {
+      "network": "Du er offline, eller forbindelsen blev afbrudt. Tjek den og prøv igen.",
+      "restart": "Start forfra",
+      "server": "Noget gik galt hos os. Prøv igen.",
+      "session_lost": "Denne session kan ikke fortsætte. Start en ny.",
+      "warming_up": "Gør sange klar, prøv igen om et øjeblik",
+      "retry": "Prøv igen"
+    },
+    "intro": {
+      "body": "Syng 5–10 sange du kender, ca. 30 minutter. Bedst derhjemme med hovedtelefoner.",
+      "title": "Find din stemme",
+      "close": "Ikke nu",
+      "start": "Start"
+    },
+    "loading": "Vælger din næste sang…",
+    "pick": {
+      "dontKnow": "Spring over, kender den ikke",
+      "know": "Jeg kender denne",
+      "version": "Karaoke Version: {brand}",
+      "else": "Noget andet",
+      "finish": "Afslut"
+    },
+    "play": {
+      "keys": "Klaviatur, der viser den tone, du synger",
+      "recording": "Optager",
+      "ribbon": "Vis mine toner",
+      "stopEarly": "Stop før tid"
+    },
+    "progress": "Sang {n}",
+    "quiz": {
+      "difficulty": {
+        "couldnt": "Kunne ikke ramme visse steder",
+        "q": "Hvor svær var den?",
+        "stretch": "Lidt af en udfordring",
+        "easy": "Nem"
+      },
+      "feel": {
+        "fine": "Fint",
+        "loved": "Elskede den",
+        "q": "Hvordan føltes det?",
+        "not_for_me": "Ikke noget for mig"
+      },
+      "issue": {
+        "bad_sync": "Dårlig synkronisering",
+        "low_quality": "Lav kvalitet",
+        "no_intro": "Ingen intro",
+        "wrong_lyrics": "Forkert sangtekst"
+      },
+      "knew": {
+        "barely": "Knap nok",
+        "partly": "Delvist",
+        "q": "Hvor godt kendte du den?",
+        "well": "Kendte den godt"
+      },
+      "position": {
+        "both_ends": "Svær i begge ender",
+        "q": "Hvor lå den for din stemme?",
+        "comfortable": "Komfortabel",
+        "too_high": "For høj",
+        "too_low": "For dyb"
+      },
+      "prefill": "Din højeste holdte tone var {high}, laveste {low}",
+      "required": "De to første er påkrævede. Spring resten over, hvis du vil.",
+      "sing": {
+        "q": "Ville du synge den til karaoke?",
+        "yes_other_key": "Ja, i en anden toneart",
+        "no": "Nej",
+        "yes": "Ja"
+      },
+      "tag": {
+        "crowd_song": "Fantastisk fællessang",
+        "fast_lyrics": "Hurtig tekst",
+        "long_gaps": "Lange instrumentale pauser",
+        "mood_only": "Kun hvis jeg er i humør til det",
+        "needed_warmup": "Krævede opvarmning",
+        "q": "Valgfrie tags"
+      },
+      "version": {
+        "good": "God",
+        "not_great": "Ikke så god",
+        "q": "Denne Karaoke Version"
+      },
+      "voice": {
+        "fresh": "Frisk",
+        "q": "Stemmen lige nu",
+        "tired": "Bliver træt",
+        "warm": "Varm"
+      },
+      "work": {
+        "fine": "Den er fin som den er",
+        "other_key": "I en anden toneart",
+        "other_octave": "En oktav lavere eller højere",
+        "practice": "Efter lidt øvelse",
+        "q": "Ville det fungere, hvis…?",
+        "warmer": "Du var mere opvarmet"
+      },
+      "next": "Næste"
+    },
+    "reason": {
+      "comfortable_start": "En nem sang at starte på",
+      "explore": "Noget nyt at prøve",
+      "known": "En sang du kender",
+      "loved": "En sang du elsker",
+      "lower_range": "Tester dit dybe leje",
+      "upper_range": "Tester dit høje leje"
+    },
+    "result": {
+      "confidenceLow": "Lav sikkerhed",
+      "confidenceMedium": "Mellem sikkerhed",
+      "hint": {
+        "more_songs": "Et par sange mere ville gøre dette mere sikkert",
+        "sing_higher_warm": "Syng 2 højere sange mere, når du er opvarmet",
+        "sing_lower": "Prøv et par dybere sange"
+      },
+      "keys": "Klaviatur, der viser dit toneomfang og dit behagelige midterleje",
+      "loved": "Sange du elskede",
+      "more": "Fortsæt",
+      "partial": "Fra en kort session, så tag det som et indledende gæt.",
+      "probably": "Sandsynligvis {type}, men vi skal bruge flere sange for at være sikre",
+      "range": "{range}, behageligt {comfort}",
+      "saved": "Gemt på din musikprofil.",
+      "suited": "Sange der passer til dig",
+      "confidenceHigh": "Høj sikkerhed",
+      "done": "Færdig",
+      "typeUnknown": "Din stemmetype"
+    },
+    "setup": {
+      "bit_warm": "Lidt opvarmet",
+      "cold": "Kold",
+      "coldBody": "Et minuts nynnen og sirener gør din stemme klar og gør resultatet mere præcist.",
+      "coldTitle": "Varme op først?",
+      "go": "Begynd at synge",
+      "headphones": "Hovedtelefoner?",
+      "lying": "Liggende",
+      "micBlockedBody": "Slå mikrofonen til for Nomad Karaoke i Indstillinger. Du kan stadig synge og besvare spørgsmålene, men intet bliver optaget.",
+      "micDeniedBody": "Vi skal bruge mikrofonen for at høre de toner, du synger. Uden den optages intet, men du kan stadig synge og besvare spørgsmålene.",
+      "micRetry": "Giv adgang til mikrofonen",
+      "noHeadphones": "Backingtracket vil gå i mikrofonen, så optagelserne tæller mindre.",
+      "posture": "Hvordan synger du?",
+      "record": "Vil du optage mig, mens jeg synger?",
+      "recordBody": "Vi gemmer optagelsen privat, så vi kan måle dit toneomfang mere præcist og forbedre dine sangvalg senere. Kun du og vores team har adgang til den, og du kan til enhver tid slette alle dine optagelser under Mig.",
+      "sitting": "Siddende",
+      "standing": "Stående",
+      "warm": "Helt opvarmet",
+      "warmth": "Stemmen lige nu?",
+      "warmthAgain": "Hvordan føles din stemme nu?",
+      "warmupSkip": "Spring opvarmningen over",
+      "warmupStart": "Varm op (1 min)",
+      "micOffTitle": "Mikrofonen er slået fra",
+      "no": "Nej",
+      "openSettings": "Åbn Indstillinger",
+      "quiet": "Vær helt stille et øjeblik…",
+      "yes": "Ja"
+    },
+    "title": "Find din stemme",
+    "warmup": {
+      "hum": "Nyn en behagelig tone",
+      "keys": "Klaviatur, der viser den tone, du synger",
+      "siren": "Glid op og ned som en sirene",
+      "done": "Færdig",
+      "left": "{seconds, plural, one {# sekund tilbage} other {# sekunder tilbage}}"
+    },
+    "close": "Luk",
+    "recordings": {
+      "confirmBody": "Dette sletter alle optagelser, vi har gemt fra dine stemmesessioner, og stopper med at optage dig, indtil du giver samtykke igen. Det kan ikke fortrydes.",
+      "confirmTitle": "Slet alle dine optagelser?",
+      "count": "{count, plural, one {# optagelse} other {# optagelser}} gemt privat",
+      "delete": "Slet alle mine optagelser",
+      "failed": "Kunne ikke slette dine optagelser. Tjek din internetforbindelse, og prøv igen.",
+      "recordDefault": "Optag mig som standard",
+      "recordDefaultBody": "Vælger automatisk \"Optag, når jeg synger?\" på forhånd, når du starter en stemmesession. Du kan stadig ændre det hver gang.",
+      "title": "Dine optagelser",
+      "confirmButton": "Slet"
+    }
   }
 }
