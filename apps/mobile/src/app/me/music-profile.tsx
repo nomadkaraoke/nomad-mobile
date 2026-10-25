@@ -1,6 +1,6 @@
 import { GENRE_IDS } from '@nomad/core';
 import { isolate, useTranslations } from '@nomad/i18n';
-import { Button, Screen, Text } from '@nomad/ui';
+import { BrandIcon, Button, Screen, Text } from '@nomad/ui';
 import { router, type Href } from 'expo-router';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
@@ -97,7 +97,10 @@ export default function MusicProfileScreen() {
       </ProfileSection>
       <ProfileSection testID="profile-services" title={t('musicServices')} isEmpty={false} empty="">
         <View className="gap-2">
-          <Text className="font-semibold">{t('appleMusic')}</Text>
+          <View className="flex-row items-center gap-2">
+            <BrandIcon brand="apple_music" size={22} testID="profile-apple-mark" />
+            <Text className="flex-1 font-semibold">{t('appleMusic')}</Text>
+          </View>
           {apple.loading ? <ActivityIndicator testID="profile-apple-loading" /> : null}
           {!apple.loading && apple.status === 'notConnected' ? (
             <>

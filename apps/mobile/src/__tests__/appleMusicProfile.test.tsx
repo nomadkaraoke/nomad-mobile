@@ -211,3 +211,10 @@ describe('Apple Music on iOS (native MusicKit)', () => {
     expect(await screen.findByTestId('profile-apple-failed')).toBeTruthy();
   });
 });
+
+it('the Apple Music block carries the Apple Music mark, like the connected sources above it', async () => {
+  open();
+  const services = await screen.findByTestId('profile-services');
+  expect(await screen.findByTestId('profile-apple-mark', { includeHiddenElements: true })).toBeTruthy();
+  expect(services).toContainElement(screen.getByTestId('profile-apple-mark', { includeHiddenElements: true }));
+});

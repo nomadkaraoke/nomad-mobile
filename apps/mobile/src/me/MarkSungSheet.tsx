@@ -75,7 +75,7 @@ function Stepper({
           onPress={() => onChange(Math.max(min, value - 1))}
           className="h-11 w-11 items-center justify-center rounded-full border border-border bg-card"
         >
-          <Text>{'−'}</Text>
+          <Text>{MINUS}</Text>
         </Pressable>
         <Text testID={`${idPrefix}-value`} className="min-w-10 text-center text-lg font-semibold">
           {display}
