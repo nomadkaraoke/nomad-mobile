@@ -65,6 +65,14 @@ appId: com.nomadkaraoke.mobile
 - takeScreenshot: ${VOICE_SHOTS}/voice-high
 - tapOn:
     id: "voice-high-done"
+# The sing step waits for "I'm ready" (mic off, no countdown) so the singer can think of a song.
+- extendedWaitUntil:
+    visible:
+      id: "voice-sing-ready"
+    timeout: 10000
+- takeScreenshot: ${VOICE_SHOTS}/voice-sing-ready
+- tapOn:
+    id: "voice-sing-ready"
 - extendedWaitUntil:
     visible:
       id: "voice-sing-progress"
@@ -74,11 +82,11 @@ appId: com.nomadkaraoke.mobile
     env:
       MS: 2000
 - takeScreenshot: ${VOICE_SHOTS}/voice-sing
-# The sing step ends by itself after 15 s.
+# The sing step ends by itself 30 s after "I'm ready".
 - extendedWaitUntil:
     visible:
       id: "voice-result-type"
-    timeout: 25000
+    timeout: 40000
 - takeScreenshot: ${VOICE_SHOTS}/voice-result
 - tapOn:
     id: "voice-save"

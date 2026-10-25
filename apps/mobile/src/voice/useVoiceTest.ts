@@ -22,17 +22,20 @@ export type VoiceStep =
   | 'low' | 'high' | 'sing' | 'result' | 'no-notes';
 export type VoiceResult = { range: RangeSummary; voice: Classification };
 type ActiveStep = 'low' | 'high' | 'sing';
+/** `ready`: the sing step shows its prompt and waits for "I'm ready" (mic off, no countdown). */
+export type VoicePhase = 'ready' | 'quiet' | 'listening';
 
 /** Wall-clock fallback for the quiet->listening switch, started when start() resolves; the audio clock normally wins. */
 const QUIET_FALLBACK_MS = 2000;
 const NOTE_TIMEOUT_MS = 20_000;
-const SING_MS = 15_000;
+/** The free sing listens this long after "I'm ready" (15 s felt rushed). */
+export const SING_MS = 30_000;
 const PITCH_INTERVAL_MS = 1000 / 15;
 
 type Setters = {
   initialSource: PitchSource;
   setStep: (s: VoiceStep) => void;
-  setPhase: (p: 'quiet' | 'listening') => void;
+  setPhase: (p: VoicePhase) => void;
   setLivePitch: (m: number | null) => void;
   setHeld: (h: HeldNote[]) => void;
   setStepHeldCount: (n: number) => void;
@@ -62,7 +65,7 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     /** Gated frames since the last buffer's held-note update (a buffer with none skips the update). */
     newFrames: 0,
     /** The sing step's voiced frames, for the comfort percentiles in summarizeRange. Only the sing step collects
-     * them, and it is time-limited (SING_MS), so this stays bounded. */
+     * them, and it listens for SING_MS at most (~2.8k frames at 48 kHz), so this stays bounded. */
     singFrames: [] as VoicedFrame[],
     stepHeld: [] as HeldNote[],
     committed: [] as HeldNote[],
@@ -120,7 +123,7 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
   };
 
   const finishSing = () => {
-    if (r.step !== 'sing') return;
+    if (r.step !== 'sing' || !r.active) return;
     stopRun();
     const all = [...r.committed, ...r.tracker.notes()];
     const range = summarizeRange(all, r.singFrames);
@@ -229,7 +232,24 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
     done() {
       if ((r.step !== 'low' && r.step !== 'high') || r.stepHeld.length < 1) return;
       r.committed = [...r.committed, ...r.stepHeld];
-      void enterStep(r.step === 'low' ? 'high' : 'sing');
+      if (r.step === 'low') {
+        void enterStep('high');
+        return;
+      }
+      // The sing step first waits for "I'm ready", so the singer can think of a song: the mic is off meanwhile.
+      stopRun();
+      r.tracker.reset();
+      r.stepHeld = [];
+      setStepBoth('sing');
+      setPhase('ready');
+      setLivePitch(null);
+      setStepHeldCount(0);
+      setHeld(r.committed);
+    },
+    /** "I'm ready" on the sing step: starts listening (quiet second, then capture) and the SING_MS countdown. */
+    async ready(): Promise<void> {
+      if (r.step !== 'sing' || r.active) return;
+      await enterStep('sing');
     },
     async retry(): Promise<void> {
       if (r.step === 'permission-denied' || r.step === 'permission-blocked') return begin();
@@ -274,22 +294,23 @@ function createMachine({ initialSource, setStep, setPhase, setLivePitch, setHeld
  *
  *   intro --begin()--> (permission) --denied--> permission-denied --retry()--> (permission again)
  *                                   --blocked-> permission-blocked --retry()--> (permission again)
- *                                   --granted-> low --done() [>=1 held]--> high --done() [>=1 held]--> sing
+ *                                   --granted-> low --done() [>=1 held]--> high --done() [>=1 held]--> sing (ready)
+ *   sing (ready: prompt only, mic off, no timer) --ready()--> sing (quiet, listening)
  *   low/high/sing --source.start() throws--> mic-busy --retry()--> the same step
  *   low/high --20 s with no held note--> no-notes --retry()--> the same step
- *   sing --15 s | skipSing()--> result (range from >=2 held notes spanning >=3 semitones) | no-notes --retry()--> low
+ *   sing --30 s after ready() | skipSing()--> result (range from >=2 held notes spanning >=3 semitones) | no-notes --retry()--> low
  *
  * Each of low/high/sing starts with a 1 s `quiet` phase (the step's noise floor), then `listening`. Every step
  * resets the framer. The floor uses only frames whose 2048-sample window ends by 1.0 s of AUDIO time; frames
  * straddling 1.0 s are ignored; `listening` starts at the first frame at/after 1.0 s (wall-clock fallback 2 s
- * after start() resolves). The 20 s / 15 s timers also start when start() resolves.
+ * after start() resolves). The 20 s / 30 s timers also start when start() resolves.
  * `source.stop()` runs on every step change and on unmount; buffers from a stopped step are dropped.
  * `cancel()` stops the run and returns to 'intro' with no result: Task 18's screen MUST call it on blur and when
  * the app is backgrounded.
  */
 export function useVoiceTest(source: PitchSource) {
   const [step, setStep] = useState<VoiceStep>('intro');
-  const [phase, setPhase] = useState<'quiet' | 'listening'>('quiet');
+  const [phase, setPhase] = useState<VoicePhase>('quiet');
   const [livePitch, setLivePitch] = useState<number | null>(null);
   const [held, setHeld] = useState<HeldNote[]>([]);
   const [stepHeldCount, setStepHeldCount] = useState(0);
@@ -316,6 +337,7 @@ export function useVoiceTest(source: PitchSource) {
     canDone: (step === 'low' || step === 'high') && stepHeldCount > 0,
     begin: api.begin,
     done: api.done,
+    ready: api.ready,
     retry: api.retry,
     skipSing: api.skipSing,
     cancel: api.cancel,

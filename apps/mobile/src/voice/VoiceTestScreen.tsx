@@ -11,7 +11,7 @@ import { useAuth } from '../auth/store';
 import { SelfReportStep } from './SelfReportStep';
 import { StepLayout } from './StepLayout';
 import { usePitchSource } from './usePitchSource';
-import { useVoiceTest, type VoiceResult as MicResult } from './useVoiceTest';
+import { SING_MS, useVoiceTest, type VoiceResult as MicResult } from './useVoiceTest';
 import { VoiceResult } from './VoiceResult';
 import { useSaveVoiceProfile } from './useVoiceProfile';
 import { profileFromResult, profileFromSelfReport, useVoiceStore, type LocalVoiceProfile } from './voiceStore';
@@ -20,8 +20,8 @@ import { profileFromResult, profileFromSelfReport, useVoiceStore, type LocalVoic
 const STRIP_LOW = 36;
 const STRIP_HIGH = 84;
 const CAPTURE_STEPS = 3;
-/** The sing step ends by itself after this long (useVoiceTest's SING_MS). */
-const SING_S = 15;
+/** The sing step ends by itself this long after "I'm ready". */
+const SING_S = SING_MS / 1000;
 const LISTENING_STEPS: ReadonlySet<string> = new Set(['low', 'high', 'sing']);
 
 /**
@@ -171,7 +171,9 @@ function SingProgress({ elapsed }: { elapsed: number }) {
 function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onSkip: () => void }) {
   const t = useTranslations('voice');
   const { step } = test;
-  const singElapsed = useElapsedSeconds(step === 'sing');
+  // The countdown runs from "I'm ready", not while the singer is still thinking of a song.
+  const singWaiting = step === 'sing' && test.phase === 'ready';
+  const singElapsed = useElapsedSeconds(step === 'sing' && !singWaiting);
 
   if (step === 'intro') {
     return (
@@ -274,7 +276,9 @@ function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onS
     <StepLayout
       testID={`voice-${step}`}
       footer={
-        step === 'sing' ? (
+        singWaiting ? (
+          <Button testID="voice-sing-ready" label={t('singReady')} onPress={() => void test.ready()} />
+        ) : step === 'sing' ? (
           <Button testID="voice-sing-skip" variant="secondary" label={t('singFinish')} onPress={test.skipSing} />
         ) : (
           <Button testID={`voice-${step}-done`} label={t('done')} disabled={!test.canDone} onPress={test.done} />
@@ -287,8 +291,8 @@ function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onS
       <Text className="text-2xl font-bold">{prompt}</Text>
       {step === 'sing' ? (
         <>
-          <Text variant="muted">{t('singHint')}</Text>
-          <SingProgress elapsed={singElapsed} />
+          <Text variant="muted">{singWaiting ? t('singReadyHint') : t('singHint')}</Text>
+          {singWaiting ? null : <SingProgress elapsed={singElapsed} />}
         </>
       ) : null}
       <View className="items-center py-4">
@@ -306,9 +310,11 @@ function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onS
         live={listening ? test.livePitch : null}
         accessibilityLabel={t('keyboardLabel')}
       />
-      <StartText testID="voice-status" className={`text-base ${listening ? 'text-text' : 'text-gold'}`}>
-        {status}
-      </StartText>
+      {singWaiting ? null : (
+        <StartText testID="voice-status" className={`text-base ${listening ? 'text-text' : 'text-gold'}`}>
+          {status}
+        </StartText>
+      )}
     </StepLayout>
   );
 }
