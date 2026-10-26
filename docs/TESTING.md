@@ -50,6 +50,34 @@ log on failure (`scripts/ci/setup-stacks.sh logs`). Artifacts are kept 7 days.
 `workflow_dispatch` (so `e2e-ci.sh run`) needs `e2e.yml` on main, which it is once this lands; on a branch that
 changes the workflow, a PR run tests the changed workflow.
 
+### The spare MacBook Pro runner (`nomad-mbp`)
+
+Andrew's spare MacBook Pro (M3 Max, 36 GB, `ssh andrewmastech`, LAN `AndrewMastechMac.local`; machine setup log:
+`~/Projects/build-host-setup.md` on it) is a self-hosted runner for this repo, set up 2026-10-26:
+
+- `~/actions-runner` (runner name and label `nomad-mbp`), a launchd LaunchAgent in the auto-logged-in GUI session
+  (`./svc.sh status|stop|start`). `.path` puts Homebrew and the Android SDK on PATH; `.env` sets `ANDROID_HOME`,
+  `JAVA_HOME` (Temurin 17) and **`DEVELOPER_DIR=/Applications/Xcode-26.6.app/Contents/Developer`**: the machine's
+  default Xcode is 27.1, but the app and flows are on Xcode 26.6 / iOS 26.5 like CI, so jobs use the 26.6 copy.
+  Simulator runtimes: iOS 26.5 ("iPhone 17 Pro" created), 27.0, 27.1.
+- **Only `workflow_dispatch` runs use it** (`scripts/e2e-ci.sh run --self-hosted`): on a public repo a self-hosted
+  runner must never take a fork's PR. With `--self-hosted` both the iOS build (minutes instead of ~33 min cold on
+  hosted) and the iOS shards run there.
+- **One job at a time**: the stacks use fixed ports, so shards queue on it (4 iOS shards ≈ 4 × 20 min). For the
+  shortest wall-clock use the hosted runners; use the MBP when hosted macOS is queued, for a quick iOS rebuild after a
+  native change. (`scripts/ci/run-shard.sh` takes `IOS_RUNTIME=27-0` for an iOS 27 run; it isn't a dispatch input yet.)
+- If it is offline (`gh api repos/nomadkaraoke/nomad-mobile/actions/runners`), `--self-hosted` jobs wait in the queue;
+  rerun without it.
+
+- **The iPad lives on it** (USB, paired 2026-10-26: "Lindrew iPad", UDID `00008120-001E11593CF80032`, iPadOS 26.6.1,
+  Developer Mode on). From any session, over SSH, no root:
+  `ssh andrewmastech 'xcrun devicectl device process launch --device 00008120-001E11593CF80032 --payload-url nomadkaraoke://tonight com.nomadkaraoke.mobile'`;
+  screenshot with `ssh andrewmastech '~/.venvs/pmd3/bin/pymobiledevice3 developer dvt screenshot /tmp/ipad.png'` then
+  `scp andrewmastech:/tmp/ipad.png .`; install a team-signed build with `xcrun devicectl device install app`. Signing on
+  the MBP needs Andrew's Apple ID in its Xcode (not added yet); until then install builds signed on Andrew's laptop. Maestro flows on the real iPad are a follow-up
+  (flows use simctl prep and 127.0.0.1 stacks; a device needs the MBP's LAN address).
+- **Screen:** `open vnc://AndrewMastechMac.local` (macOS Screen Sharing; RealVNC can't do Apple's auth).
+
 ### Public repo rules
 
 Logs and artifacts are world-readable. The E2E workflow uses **no secrets** and only the local stacks' fake

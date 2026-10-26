@@ -4,7 +4,8 @@
 # (../karaoke-gen, ../karaoke-decide, ../kjbox, the layout e2e-local.sh defaults to) and Python 3.13, Node and Java
 # 21 on PATH.
 #
-#   scripts/ci/setup-stacks.sh install            # poetry venvs (gen, decide), kjbox venv, gen web deps if WITH_WEB=1
+#   scripts/ci/setup-stacks.sh install            # poetry venvs (gen, decide), kjbox venv, gen web deps if WITH_WEB=1,
+#                                                 # emulators, a static ffmpeg in $EMULATOR_CACHE/bin if none is on PATH
 #   scripts/ci/setup-stacks.sh up                 # emulators + gen (+ web if WITH_WEB=1) + decide; kjbox is left to
 #                                                 # e2e-local.sh (it resets it fresh for Tonight runs)
 #   scripts/ci/setup-stacks.sh logs               # tail every stack log (on failure)
@@ -53,6 +54,27 @@ fetch_emulators() {
   fi
 }
 
+# gen's fake workers still transcode with ffmpeg (audio download / stems). GitHub's macOS image has none and the
+# Ubuntu one may not: static builds into $CACHE/bin, which the workflow puts on PATH.
+FFMPEG_STATIC=b6.1.1
+fetch_ffmpeg() {
+  command -v ffmpeg >/dev/null && command -v ffprobe >/dev/null && return 0
+  local plat
+  case "$(uname -s)-$(uname -m)" in
+    Darwin-arm64) plat=darwin-arm64 ;;
+    Linux-x86_64) plat=linux-x64 ;;
+    *) echo "no static ffmpeg for $(uname -s)-$(uname -m)" >&2; return 1 ;;
+  esac
+  mkdir -p "$CACHE/bin"
+  local tool
+  for tool in ffmpeg ffprobe; do
+    [[ -x "$CACHE/bin/$tool" ]] && continue
+    curl -fsSL "https://github.com/eugeneware/ffmpeg-static/releases/download/$FFMPEG_STATIC/$tool-$plat.gz" | gunzip >"$CACHE/bin/$tool"
+    chmod +x "$CACHE/bin/$tool"
+  done
+  echo "ffmpeg: $CACHE/bin (add it to PATH)"
+}
+
 install() {
   python3 -m pip install --quiet poetry
   poetry config virtualenvs.in-project true
@@ -64,6 +86,7 @@ install() {
   (cd "$KJBOX/kj-controller" && python3 -m venv .venv && .venv/bin/pip install --quiet -r requirements.txt)
   if [[ "${WITH_WEB:-}" == 1 ]]; then (cd "$GEN/frontend" && npm ci --legacy-peer-deps --no-audit --no-fund --loglevel=error); fi
   fetch_emulators
+  fetch_ffmpeg
 }
 
 up() {

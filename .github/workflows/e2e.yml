@@ -259,6 +259,7 @@ jobs:
             curl -fsSL https://get.maestro.mobile.dev | bash
           echo "$HOME/.maestro/bin" >>"$GITHUB_PATH"
           scripts/ci/setup-stacks.sh install
+          echo "$HOME/.cache/nomad-emulators/bin" >>"$GITHUB_PATH"
           echo "PYTHON=$GITHUB_WORKSPACE/kjbox/kj-controller/.venv/bin/python" >>"$GITHUB_ENV"
       - &stacks_up
         name: Start the local stacks

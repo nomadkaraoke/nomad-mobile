@@ -32,7 +32,15 @@ if [[ "$platform" == ios ]]; then
   echo "Simulator: $name on ${runtime##*.} ($udid)"
   xcrun simctl boot "$udid" 2>/dev/null || true
   xcrun simctl bootstatus "$udid" -b >/dev/null
-  xcrun simctl install "$udid" "$app"
+  # A fresh simulator's dev launcher has no last-opened server and its discovery never finds Metro on CI ("Searching
+  # for development servers…"), so the flows' launch.yaml waited for a server row forever. Without a last server the
+  # launcher opens DEV_CLIENT_DEFAULT_LAUNCHER_URL (expo-dev-launcher; simulators count as network-permitted): set it
+  # in a copy of the app (an unsigned simulator build, so editing Info.plist is fine; the cached build stays as is).
+  patched="$(mktemp -d)/$(basename "$app")"
+  cp -R "$app" "$patched"
+  /usr/libexec/PlistBuddy -c "Delete :DEV_CLIENT_DEFAULT_LAUNCHER_URL" "$patched/Info.plist" 2>/dev/null || true
+  /usr/libexec/PlistBuddy -c "Add :DEV_CLIENT_DEFAULT_LAUNCHER_URL string http://127.0.0.1:${METRO_PORT:-8081}" "$patched/Info.plist"
+  xcrun simctl install "$udid" "$patched"
   export IOS_DEVICE="$udid" E2E_POINT_DEV_CLIENT=1
 else
   adb wait-for-device
