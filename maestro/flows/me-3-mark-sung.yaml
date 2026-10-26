@@ -1,0 +1,81 @@
+# Me 3 (Phase 4a spec §6.6, §6.4 backfill): search "hello" → the song page → Mark as sung → A while ago, 3 times →
+# Save → the survey offer → Not now → decide's library has Hello sung 3 times (one backfill record, times 3).
+appId: com.nomadkaraoke.mobile
+name: me-3-mark-sung
+tags:
+  - me
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me3
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{}'
+      ENTRIES: '[]'
+- tapOn:
+    id: "tab-discover"
+- tapOn:
+    id: "discover-search-input"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "song-card"
+    timeout: 30000
+- tapOn:
+    id: "song-card"
+- extendedWaitUntil:
+    visible:
+      id: "song-screen"
+    timeout: 20000
+- scrollUntilVisible:
+    element:
+      id: "song-mark-sung"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "song-mark-sung"
+- extendedWaitUntil:
+    visible:
+      id: "mark-when-ago"
+    timeout: 10000
+- tapOn:
+    id: "mark-when-ago"
+- tapOn:
+    id: "mark-times-plus"
+- tapOn:
+    id: "mark-times-plus"
+- assertVisible:
+    id: "mark-times-value"
+    text: "3"
+- takeScreenshot: ${ME_SHOTS}/me-3-mark-sung
+- tapOn:
+    id: "mark-save"
+- extendedWaitUntil:
+    visible:
+      id: "survey-skip"
+    timeout: 10000
+- takeScreenshot: ${ME_SHOTS}/me-3-survey-offer
+- tapOn:
+    id: "survey-skip"
+- extendedWaitUntil:
+    notVisible:
+      id: "survey-skip"
+    timeout: 10000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: library-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_KEY: "adele|hello"
+      EXPECT_TIMES: "3"
+- scrollUntilVisible:
+    element:
+      id: "song-history"
+    direction: DOWN
+    centerElement: true
+- takeScreenshot: ${ME_SHOTS}/me-3-history

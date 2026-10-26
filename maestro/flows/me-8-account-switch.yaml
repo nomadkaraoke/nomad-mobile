@@ -1,0 +1,114 @@
+# Me 8 (Phase 4a spec §6.9 privacy): user A has a sung song and a setlist → Sign out → user B signs in on the same
+# phone → B's Me has no setlists and an empty All your songs (A's cached library, log mirror and setlists are gone).
+appId: com.nomadkaraoke.mobile
+name: me-8-account-switch
+tags:
+  - me
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me8a
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{}'
+      ENTRIES: '[{"id":"app_me8-hello","state":"sung","artist":"Adele","title":"Hello","song_key":"adele|hello","sung_at":"2026-10-03T21:00:00Z","night":{"kind":"other","venue_name":"The Rusty Mic","date":"2026-10-03","date_precision":"day"},"origin":"live","survey":{"feel":"great"}}]'
+- scrollUntilVisible:
+    element:
+      id: "me-setlist-new"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "me-setlist-new"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-name-input"
+    timeout: 10000
+- inputText: "Private set"
+- tapOn:
+    id: "setlist-name-save"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-name"
+      text: ".*Private set.*"
+    timeout: 10000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setlists-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_NAME: "Private set"
+- tapOn: "Back|Navigate up"
+- extendedWaitUntil:
+    visible:
+      id: "me-setlist-.*"
+      text: ".*Private set.*"
+    timeout: 10000
+- takeScreenshot: ${ME_SHOTS}/me-8-user-a
+- scrollUntilVisible:
+    element:
+      id: "me-signout"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "me-signout"
+- extendedWaitUntil:
+    visible:
+      id: "me-signin"
+    timeout: 10000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me8b
+- tapOn:
+    id: "me-signin"
+- runFlow:
+    file: ../common/google-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-card"
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-sung"
+      text: "0 songs sung"
+    timeout: 20000
+- assertVisible:
+    id: "me-gotos-empty-cta"
+- scrollUntilVisible:
+    element:
+      id: "me-setlist-new"
+    direction: DOWN
+    centerElement: true
+- assertNotVisible:
+    id: "me-setlist-.*"
+    text: ".*Private set.*"
+- assertVisible: "Plan a night: make a setlist of songs you want to sing."
+- takeScreenshot: ${ME_SHOTS}/me-8-user-b
+- scrollUntilVisible:
+    element:
+      id: "me-all-songs"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "me-all-songs"
+- extendedWaitUntil:
+    visible:
+      id: "me-songs-empty"
+    timeout: 20000
+- assertNotVisible:
+    id: "me-song-0"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setlists-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_COUNT: "0"

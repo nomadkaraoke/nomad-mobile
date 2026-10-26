@@ -1,0 +1,86 @@
+# Me 4 (Phase 4a spec §6.5, §6.6 bulk picker): no go-tos yet (two saved songs, nothing sung) → "Add songs I've sung"
+# → tick both saved songs → Add 2 songs → back on Me, All your songs has both, sung once.
+appId: com.nomadkaraoke.mobile
+name: me-4-bulk
+tags:
+  - me
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me4
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"loved":["adele|hello","muse|starlight"]}'
+      ENTRIES: '[]'
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-saved"
+      text: "2 saved"
+    timeout: 30000
+- assertVisible:
+    id: "me-gotos-empty-cta"
+- takeScreenshot: ${ME_SHOTS}/me-4-gotos-empty
+- tapOn:
+    id: "me-gotos-empty-cta"
+- extendedWaitUntil:
+    visible:
+      id: "sung-before-row-1"
+    timeout: 20000
+- tapOn:
+    id: "sung-before-row-0"
+- tapOn:
+    id: "sung-before-row-1"
+- assertVisible:
+    id: "sung-before-done"
+    text: "Add 2 songs"
+- takeScreenshot: ${ME_SHOTS}/me-4-picker
+- tapOn:
+    id: "sung-before-done"
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-card"
+    timeout: 10000
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-sung"
+      text: "2 songs sung"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "me-all-songs"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "me-all-songs"
+- tapOn:
+    id: "me-songs-often-once"
+- extendedWaitUntil:
+    visible:
+      id: "me-song-1"
+    timeout: 10000
+- assertVisible:
+    id: "me-song-.*"
+    text: ".*Hello.*"
+- assertVisible:
+    id: "me-song-.*"
+    text: ".*Starlight.*"
+- takeScreenshot: ${ME_SHOTS}/me-4-collection
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: library-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_KEY: "adele|hello"
+      EXPECT_TIMES: "1"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: library-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_KEY: "muse|starlight"
+      EXPECT_TIMES: "1"

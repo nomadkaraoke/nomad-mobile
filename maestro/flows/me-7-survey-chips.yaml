@@ -1,0 +1,116 @@
+# Me 7 (Phase 4a spec §6.10 survey chips): a night at another bar (no kjbox needed) → Hello requested → sung → the
+# survey with feel OK, vibe Party and why Too long → decide's karaoke log has the feel → Me → All your songs → Hello
+# → its karaoke history shows the answers.
+appId: com.nomadkaraoke.mobile
+name: me-7-survey-chips
+tags:
+  - me
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me7
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{}'
+      ENTRIES: '[]'
+- tapOn:
+    id: "tab-tonight"
+- tapOn:
+    id: "tonight-start-other"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-venue-input"
+    timeout: 10000
+- tapOn:
+    id: "tonight-venue-input"
+- inputText: "The Rusty Mic"
+- tapOn:
+    id: "tonight-start-other-confirm"
+- extendedWaitUntil:
+    visible:
+      id: "other-night-screen"
+    timeout: 10000
+- tapOn:
+    id: "other-add"
+- tapOn:
+    id: "other-add-query"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "other-add-result-0"
+    timeout: 30000
+- tapOn:
+    id: "other-add-result-0"
+- tapOn:
+    id: "other-add-as-requested"
+- extendedWaitUntil:
+    visible:
+      id: "other-group-requested"
+    timeout: 10000
+- tapOn:
+    id: "other-row-.*-sung"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: "survey-feel-ok"
+    timeout: 10000
+- tapOn:
+    id: "survey-feel-ok"
+- tapOn:
+    id: "survey-vibe-party"
+- scrollUntilVisible:
+    element:
+      id: "survey-reason-too_long"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "survey-reason-too_long"
+- takeScreenshot: ${ME_SHOTS}/me-7-survey
+- tapOn:
+    id: "survey-save"
+- extendedWaitUntil:
+    visible:
+      id: "other-group-sung"
+    timeout: 10000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: log
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_COUNT: "1"
+      EXPECT_TITLE: "Hello"
+      EXPECT_STATE: "sung"
+      EXPECT_FEEL: "ok"
+- tapOn:
+    id: "tab-me"
+- scrollUntilVisible:
+    element:
+      id: "me-all-songs"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "me-all-songs"
+- extendedWaitUntil:
+    visible:
+      id: "me-song-0"
+      text: ".*Hello.*"
+    timeout: 20000
+- tapOn:
+    id: "me-song-0"
+- extendedWaitUntil:
+    visible:
+      id: "song-screen"
+    timeout: 20000
+- scrollUntilVisible:
+    element:
+      text: ".*Party.*"
+    direction: DOWN
+    centerElement: true
+- assertVisible: ".*OK.*Party.*"
+- assertVisible: ".*Too long.*"
+- takeScreenshot: ${ME_SHOTS}/me-7-history

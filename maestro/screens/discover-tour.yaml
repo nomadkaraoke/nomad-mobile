@@ -154,11 +154,18 @@ onFlowComplete:
 - tapOn:
     id: "tab-me"
 - tapOn:
-    id: "me-music-profile"
+    id: "me-profile-manage"
+# Phase 4a puts the voice section first: the quiz answers are further down the profile.
 - extendedWaitUntil:
     visible:
-      id: "profile-genres"
+      id: "profile-screen"
     timeout: 20000
+- scrollUntilVisible:
+    element:
+      id: "profile-edit-genres"
+    direction: DOWN
+    timeout: 20000
+    centerElement: true
 - waitForAnimationToEnd:
     timeout: 5000
 - takeScreenshot: ${TOUR_SHOTS}/tour-11-profile

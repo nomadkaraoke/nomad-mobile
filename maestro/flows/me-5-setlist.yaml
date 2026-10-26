@@ -1,0 +1,116 @@
+# Me 5 (Phase 4a spec §6.7): New setlist "Friday" → add "hello" and "starlite muse" from search → Edit order → move
+# Hello down → Save order → decide has one "Friday" setlist with Starlight, then Hello.
+appId: com.nomadkaraoke.mobile
+name: me-5-setlist
+tags:
+  - me
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me5
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{}'
+      ENTRIES: '[]'
+- scrollUntilVisible:
+    element:
+      id: "me-setlist-new"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "me-setlist-new"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-name-input"
+    timeout: 10000
+- inputText: "Friday"
+- tapOn:
+    id: "setlist-name-save"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-name"
+      text: ".*Friday.*"
+    timeout: 10000
+- assertVisible:
+    id: "setlist-empty"
+- tapOn:
+    id: "setlist-add"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-search-input"
+    timeout: 10000
+- tapOn:
+    id: "setlist-search-input"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-search-row-0"
+      text: ".*Hello.*"
+    timeout: 30000
+- tapOn:
+    id: "setlist-search-row-0"
+    text: ".*Hello.*"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-search-row-0"
+      text: ".*Added.*"
+    timeout: 5000
+# Close and reopen for the second search (a fresh query): on Android a tap puts the cursor mid-text, so eraseText
+# would leave part of "hello".
+- tapOn:
+    id: "setlist-search-sheet-close"
+- tapOn:
+    id: "setlist-add"
+- tapOn:
+    id: "setlist-search-input"
+- inputText: "starlite muse"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-search-row-.*"
+      text: ".*Starlight.*"
+    timeout: 30000
+- tapOn:
+    id: "setlist-search-row-.*"
+    text: ".*Starlight.*"
+- takeScreenshot: ${ME_SHOTS}/me-5-search
+- tapOn:
+    id: "setlist-search-sheet-close"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-item-1"
+    timeout: 10000
+# Item rows are containers (no text of their own on iOS): check the order by the titles' positions (isolate()
+# wraps them in invisible marks, hence the .*).
+- assertVisible:
+    text: ".*Hello.*"
+    above:
+      text: ".*Starlight.*"
+- takeScreenshot: ${ME_SHOTS}/me-5-setlist
+- tapOn:
+    id: "setlist-edit-order"
+- tapOn:
+    id: "setlist-item-down-0"
+- takeScreenshot: ${ME_SHOTS}/me-5-edit-order
+- tapOn:
+    id: "setlist-order-save"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-edit-order"
+    timeout: 10000
+- assertVisible:
+    text: ".*Starlight.*"
+    above:
+      text: ".*Hello.*"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setlists-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_NAME: "Friday"
+      EXPECT_TITLES: "Starlight,Hello"
+      EXPECT_COUNT: "1"

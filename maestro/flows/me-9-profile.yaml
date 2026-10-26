@@ -1,0 +1,82 @@
+# Me 9 (Phase 4a spec §6.11 music profile fixes): Me → Manage → the voice section comes first; 30 seeded artists show
+# 12 chips and See all (30) → the A–Z screen → jump to Z; a connected Last.fm source (fake Last.fm user connected
+# through decide) shows its brand mark on the Me card and on the profile's connected row.
+appId: com.nomadkaraoke.mobile
+name: me-9-profile
+tags:
+  - me
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me9
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: fake-lastfm-user
+      DECIDE_STACK: ${DECIDE_STACK}
+      CONNECT_TOKEN: ${output.token}
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"quiz_completed":true,"genres":["pop"],"artists":[{"name":"Amber Lanes","affinity":"love"},{"name":"Bright Harbor","affinity":"love"},{"name":"Cobalt Fields","affinity":"love"},{"name":"Dune Velvet","affinity":"love"},{"name":"Echo Parlour","affinity":"love"},{"name":"Fable Street","affinity":"love"},{"name":"Gilded Moth","affinity":"like"},{"name":"Harlow Gray","affinity":"like"},{"name":"Indigo Tides","affinity":"like"},{"name":"Juniper Row","affinity":"like"},{"name":"Kestrel Bay","affinity":"like"},{"name":"Lumen Vale","affinity":"like"},{"name":"Marlow Kite","affinity":"like"},{"name":"Nova Strand","affinity":"like"},{"name":"Opal Theory","affinity":"like"},{"name":"Pinewood Saints","affinity":"like"},{"name":"Quiet Comets","affinity":"like"},{"name":"Rosewater","affinity":"like"},{"name":"Silver Ferns","affinity":"like"},{"name":"Tidal Choir","affinity":"like"},{"name":"Umber Light","affinity":"like"},{"name":"Velvet Owls","affinity":"like"},{"name":"Willow Static","affinity":"like"},{"name":"Xenon Bloom","affinity":"like"},{"name":"Yarrow Lane","affinity":"like"},{"name":"Zephyr Parade","affinity":"like"},{"name":"Zinc Lanterns","affinity":"like"},{"name":"Atlas Hollow","affinity":"like"},{"name":"Birch Echo","affinity":"like"},{"name":"Cinder Lake","affinity":"like"}]}'
+      ENTRIES: '[]'
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-sources"
+    timeout: 30000
+- assertVisible:
+    id: "me-profile-source-lastfm"
+- takeScreenshot: ${ME_SHOTS}/me-9-card
+- tapOn:
+    id: "me-profile-manage"
+- extendedWaitUntil:
+    visible:
+      id: "voice-section"
+    timeout: 20000
+# Voice first: on screen before any scrolling, above the connected sources.
+- assertVisible:
+    id: "voice-test"
+- takeScreenshot: ${ME_SHOTS}/me-9-profile
+- scrollUntilVisible:
+    element:
+      id: "connected-row-lastfm"
+    direction: DOWN
+    centerElement: true
+- assertVisible:
+    id: "connected-row-lastfm"
+- takeScreenshot: ${ME_SHOTS}/me-9-connected
+- scrollUntilVisible:
+    element:
+      id: "profile-artists-all"
+    direction: DOWN
+    centerElement: true
+- assertVisible:
+    id: "profile-artist-remove-11"
+- assertNotVisible:
+    id: "profile-artist-remove-12"
+- assertVisible:
+    id: "profile-artists-all"
+    text: ".*30.*"
+- takeScreenshot: ${ME_SHOTS}/me-9-artists
+- tapOn:
+    id: "profile-artists-all"
+- extendedWaitUntil:
+    visible:
+      id: "artists-jump-Z"
+    timeout: 20000
+- assertVisible:
+    id: "artists-header-A"
+- tapOn:
+    id: "artists-jump-Z"
+- extendedWaitUntil:
+    visible:
+      id: "artists-header-Z"
+    timeout: 10000
+- assertVisible: ".*Zinc Lanterns.*"
+- assertNotVisible:
+    id: "artists-header-A"
+- takeScreenshot: ${ME_SHOTS}/me-9-artists-z

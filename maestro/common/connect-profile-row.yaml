@@ -6,7 +6,7 @@ appId: com.nomadkaraoke.mobile
 - tapOn:
     id: "tab-me"
 - tapOn:
-    id: "me-music-profile"
+    id: "me-profile-manage"
 - scrollUntilVisible:
     element:
       id: "connected-row-${SOURCE}"

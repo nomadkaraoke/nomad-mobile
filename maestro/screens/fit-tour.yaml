@@ -33,7 +33,7 @@ onFlowComplete:
 - tapOn:
     id: "tab-me"
 - tapOn:
-    id: "me-music-profile"
+    id: "me-profile-manage"
 - scrollUntilVisible:
     element:
       id: "voice-section"
@@ -133,7 +133,7 @@ onFlowComplete:
 - tapOn:
     id: "tab-me"
 - tapOn:
-    id: "me-music-profile"
+    id: "me-profile-manage"
 - scrollUntilVisible:
     element:
       id: "voice-remove"

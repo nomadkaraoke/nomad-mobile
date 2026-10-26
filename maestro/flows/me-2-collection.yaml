@@ -1,0 +1,78 @@
+# Me 2 (Phase 4a spec §6.6): All your songs → How it went: Great → only Hello → sort A to Z → the uncatalogued
+# seeded song (a backfill with no catalog match) opens its history page (me/history), not a song page.
+appId: com.nomadkaraoke.mobile
+name: me-2-collection
+tags:
+  - me
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me2
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{}'
+      ENTRIES: '[{"id":"app_me2-hello","state":"sung","artist":"Adele","title":"Hello","song_key":"adele|hello","sung_at":"2026-10-03T21:00:00Z","night":{"kind":"other","venue_name":"The Rusty Mic","date":"2026-10-03","date_precision":"day"},"origin":"live","survey":{"feel":"great"}},{"id":"app_me2-rocket","state":"sung","artist":"Elton John","title":"Rocket Man (I Think It''s Going to Be a Long, Long Time)","song_key":"elton john|rocket man i think its going to be a long long time","sung_at":"2026-10-03T21:30:00Z","night":{"kind":"other","venue_name":"The Rusty Mic","date":"2026-10-03","date_precision":"day"},"origin":"live","survey":{"feel":"ok"}},{"id":"app_me2-star","state":"sung","artist":"Muse","title":"Starlight","song_key":"muse|starlight","origin":"backfill","times":2,"night":{"date_precision":"unknown"}},{"id":"app_me2-zzq","state":"sung","artist":"The Nobodies","title":"Zzq Unknown Tune","origin":"backfill","times":1,"night":{"date_precision":"unknown"}}]'
+- scrollUntilVisible:
+    element:
+      id: "me-all-songs"
+    direction: DOWN
+    centerElement: true
+- extendedWaitUntil:
+    visible:
+      id: "me-all-songs"
+      text: ".*All your songs \\(4\\).*"
+    timeout: 30000
+- tapOn:
+    id: "me-all-songs"
+- extendedWaitUntil:
+    visible:
+      id: "me-song-3"
+    timeout: 20000
+- takeScreenshot: ${ME_SHOTS}/me-2-collection
+- tapOn:
+    id: "me-songs-feel-great"
+# By text, not by me-song-1: the list keeps recycled row views around (hidden), which Maestro still finds by id.
+- extendedWaitUntil:
+    notVisible: ".*Rocket Man.*"
+    timeout: 10000
+- assertNotVisible: ".*Starlight.*"
+- assertNotVisible: ".*Zzq Unknown Tune.*"
+- assertVisible: ".*Hello.*"
+- takeScreenshot: ${ME_SHOTS}/me-2-great
+- tapOn:
+    id: "me-songs-feel-great"
+- tapOn:
+    id: "me-songs-sort-az"
+- extendedWaitUntil:
+    visible: ".*Zzq Unknown Tune.*"
+    timeout: 10000
+# A to Z: Hello, Rocket Man, Starlight, Zzq Unknown Tune (rows by text and position, as above).
+- assertVisible:
+    text: ".*Hello.*"
+    above:
+      text: ".*Rocket Man.*"
+- assertVisible:
+    text: ".*Rocket Man.*"
+    above:
+      text: ".*Starlight.*"
+- assertVisible:
+    text: ".*Starlight.*"
+    above:
+      text: ".*Zzq Unknown Tune.*"
+- takeScreenshot: ${ME_SHOTS}/me-2-az
+- tapOn: ".*Zzq Unknown Tune.*"
+- extendedWaitUntil:
+    visible:
+      id: "history-screen"
+    timeout: 10000
+- assertVisible:
+    id: "history-title"
+    text: "Zzq Unknown Tune"
+- assertVisible:
+    id: "history-make"
+- takeScreenshot: ${ME_SHOTS}/me-2-history

@@ -17,6 +17,10 @@ appId: com.nomadkaraoke.mobile
       id: "discover-improve-connect"
     direction: DOWN
     timeout: 30000
+# The link can count as visible while it still sits under the tab bar, where the tap lands on a tab: one more scroll
+# reaches the list's end (as the voice flows do; centerElement can't centre it that close to the end).
+- scroll
+- waitForAnimationToEnd
 - tapOn:
     id: "discover-improve-connect"
 - extendedWaitUntil:

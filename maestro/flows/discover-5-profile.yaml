@@ -24,11 +24,18 @@ name: discover-5-profile
 - tapOn:
     id: "tab-me"
 - tapOn:
-    id: "me-music-profile"
+    id: "me-profile-manage"
+# Phase 4a puts the voice section first: the quiz answers are further down the profile.
 - extendedWaitUntil:
     visible:
-      id: "profile-genres"
+      id: "profile-screen"
     timeout: 20000
+- scrollUntilVisible:
+    element:
+      id: "profile-edit-genres"
+    direction: DOWN
+    timeout: 20000
+    centerElement: true
 - takeScreenshot: ${DISCOVER_SHOTS}/discover-5-profile
 - tapOn:
     id: "profile-edit-genres"
@@ -60,13 +67,14 @@ name: discover-5-profile
 # Finish returns to the profile, which now says metal.
 - extendedWaitUntil:
     visible:
-      id: "profile-genres"
+      id: "profile-screen"
     timeout: 20000
-- extendedWaitUntil:
-    visible:
+- scrollUntilVisible:
+    element:
       id: "profile-genres"
       text: ".*Metal.*"
-    timeout: 10000
+    direction: DOWN
+    timeout: 20000
 - takeScreenshot: ${DISCOVER_SHOTS}/discover-5-profile-edited
 - tapOn: "Back|Navigate up"
 - tapOn:

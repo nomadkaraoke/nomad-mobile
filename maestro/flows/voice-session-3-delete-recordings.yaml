@@ -39,7 +39,7 @@ tags:
 - tapOn:
     id: "tab-me"
 - tapOn:
-    id: "me-music-profile"
+    id: "me-profile-manage"
 - scrollUntilVisible:
     element:
       id: "vs-recordings-delete"
