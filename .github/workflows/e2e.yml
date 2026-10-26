@@ -190,8 +190,9 @@ jobs:
   build-ios:
     needs: plan
     if: needs.plan.outputs.ios != '[]'
-    # The spare MacBook Pro builds in minutes (hosted macos-26: ~33 min cold); its runner uses Xcode 26.6 like CI.
-    runs-on: ${{ needs.plan.outputs.ios_runner == 'self-hosted' && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
+    # Always hosted macos-26 (Xcode 26.6, the app's toolchain; cached by native fingerprint, so only after a native
+    # change). The self-hosted Mac runs the shards on its default Xcode 27.1, which can't build this app yet.
+    runs-on: macos-26
     timeout-minutes: 60
     steps:
       - *build_checkout
