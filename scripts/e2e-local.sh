@@ -150,22 +150,26 @@ trap release_locks EXIT
 # 1. The gen local stack (API :8010, web :3010). LOCAL_STACK_API_URL is what fake-checkout and handoff
 #    links point at; 127.0.0.1 works on both platforms (adb reverse on Android). The partner secret lets
 #    decide's /resolve call gen's catalog resolve (the fake judge's global verdict).
-if ! curl -sf -m 3 "$STACK/api/health" >/dev/null; then
+# Retried: on a loaded CI runner a stack's event loop can stall for a few seconds (a single 5 s try failed a whole
+# shard, and a stalled "is it up?" probe made the script start a second decide over a running one).
+retry_curl() { local i; for i in $(seq 1 12); do curl -sf -m 10 "$@" >/dev/null && return 0; sleep 5; done; return 1; }
+is_up() { local i; for i in 1 2 3; do curl -sf -m 5 "$1" >/dev/null && return 0; sleep 2; done; return 1; }
+if ! is_up "$STACK/api/health"; then
   echo "Starting the gen local stack from $GEN_DIR"
   (cd "$GEN_DIR" && DECIDE_GEN_PARTNER_SECRET="$PARTNER_SECRET" LOCAL_STACK_API_URL="$STACK" scripts/local-stack.sh up --frontend)
 fi
-curl -sf -m 5 "$STACK/api/test/status" >/dev/null || { echo "gen stack at $STACK has no /api/test (FAKE_WORKERS off?)" >&2; exit 1; }
+retry_curl "$STACK/api/test/status" || { echo "gen stack at $STACK has no /api/test (FAKE_WORKERS off?)" >&2; exit 1; }
 curl -sf -m 5 -o /dev/null "$WEB" || echo "warning: gen web isn't answering on $WEB (make-5 opens the web review there)" >&2
 
 # 2. decide's local stack: the main API (:8030, fixture catalog, /api/test/*) on gen's Firestore emulator, so gen
 #    sessions validate there, and the search service (:8020, fixture song index; its offline-list URL is on
 #    127.0.0.1 too). `up` is idempotent.
 echo "decide checkout: $DECIDE_DIR (DECIDE_DIR; used when its local stack has to be started)"
-if ! curl -sf -m 3 "$SEARCH/api/search/ready" >/dev/null || ! curl -sf -m 3 "$DECIDE/api/ready" >/dev/null; then
+if ! is_up "$SEARCH/api/search/ready" || ! is_up "$DECIDE/api/ready"; then
   echo "Starting decide's local stack from $DECIDE_DIR"
   (cd "$DECIDE_DIR" && GEN_API_URL="$STACK" DECIDE_LOCAL_PORT="$DECIDE_PORT" SEARCH_LOCAL_PORT="$SEARCH_PORT" scripts/local-stack.sh up)
 fi
-curl -sf -m 5 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@example.com"}' \
+retry_curl -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@example.com"}' \
   "$DECIDE/api/test/profile/reset" || { echo "decide at $DECIDE has no /api/test (DECIDE_TEST_API off?)" >&2; exit 1; }
 # The vocal range flows and tours (voice-*, fit-*) need decide >= v0.25: the vr_* fixture catalog and
 # /api/test/voice/seed. An empty body is a 422 when the route exists; an older decide answers 404.
