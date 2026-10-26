@@ -7,7 +7,8 @@
 # reverse rule to lose). (openLink is only a problem on iOS, see CLAUDE.md.) Typing the URL into the dev
 # launcher instead hung Maestro's driver on the 10th flow of a suite (inputText/eraseText gRPC timeouts).
 # The conditional steps only matter for a dev build that has no server yet; release/E2E builds skip them.
-# METRO_PORT (maestro test -e, set by scripts/e2e-local.sh) is the Metro port, 8081 when unset.
+# METRO_PORT (maestro test -e, set by scripts/e2e-local.sh) is the Metro port, 8081 when unset. LAUNCH_TIMEOUT (ms,
+# default 60000) bounds the launch waits; CI raises it, since a slow runner can still be bundling a route chunk.
 appId: com.nomadkaraoke.mobile
 ---
 - runFlow: close-browser-if-open.yaml
@@ -33,7 +34,7 @@ appId: com.nomadkaraoke.mobile
           text: "http://.*:${typeof METRO_PORT !== 'undefined' && METRO_PORT ? METRO_PORT : '8081'}"
 - extendedWaitUntil:
     visible: "Runtime version.*|Search songs or artists"
-    timeout: 60000
+    timeout: ${typeof LAUNCH_TIMEOUT !== 'undefined' && LAUNCH_TIMEOUT ? LAUNCH_TIMEOUT : 60000}
 - runFlow:
     when:
       visible: "Runtime version.*"
@@ -52,4 +53,4 @@ appId: com.nomadkaraoke.mobile
 - extendedWaitUntil:
     visible:
       id: "discover-search-input"
-    timeout: 60000
+    timeout: ${typeof LAUNCH_TIMEOUT !== 'undefined' && LAUNCH_TIMEOUT ? LAUNCH_TIMEOUT : 60000}

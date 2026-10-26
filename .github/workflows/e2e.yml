@@ -142,7 +142,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: nomad-mobile/dev-client
-          key: dev-client-${{ runner.os == 'macOS' && 'ios-macos26' || 'android-x86_64' }}-${{ steps.fp.outputs.hash }}
+          key: dev-client-${{ runner.os == 'macOS' && 'ios-macos26-adhoc' || 'android-x86_64' }}-${{ steps.fp.outputs.hash }}
       - uses: actions/setup-java@v4
         if: steps.cache.outputs.cache-hit != 'true'
         with:

@@ -11,7 +11,7 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 platform="$1"; app="$2"; flows="$3"; out="$4"
 mkdir -p "$out"
 out="$(cd "$out" && pwd)"
-export CI=true E2E_WARM_BUNDLE=1
+export CI=true E2E_WARM_BUNDLE=1 E2E_LAUNCH_TIMEOUT="${E2E_LAUNCH_TIMEOUT:-240000}"
 export MAESTRO_TEST_ARGS="--format junit --output $out/junit-{run}.xml --debug-output $out/debug-{run} --flatten-debug-output"
 
 if [[ "$platform" == ios ]]; then
@@ -35,11 +35,14 @@ if [[ "$platform" == ios ]]; then
   # A fresh simulator's dev launcher has no last-opened server and its discovery never finds Metro on CI ("Searching
   # for development servers…"), so the flows' launch.yaml waited for a server row forever. Without a last server the
   # launcher opens DEV_CLIENT_DEFAULT_LAUNCHER_URL (expo-dev-launcher; simulators count as network-permitted): set it
-  # in a copy of the app (an unsigned simulator build, so editing Info.plist is fine; the cached build stays as is).
+  # in a copy of the app (the cached build stays as is).
   patched="$(mktemp -d)/$(basename "$app")"
   cp -R "$app" "$patched"
   /usr/libexec/PlistBuddy -c "Delete :DEV_CLIENT_DEFAULT_LAUNCHER_URL" "$patched/Info.plist" 2>/dev/null || true
   /usr/libexec/PlistBuddy -c "Add :DEV_CLIENT_DEFAULT_LAUNCHER_URL string http://127.0.0.1:${METRO_PORT:-8081}" "$patched/Info.plist"
+  # The edit breaks the ad-hoc signature; re-sign the same way (the simulator reads entitlements, e.g. keychain access,
+  # from the binary itself, so --sign - keeps them).
+  codesign --force --sign - --timestamp=none "$patched" >/dev/null
   xcrun simctl install "$udid" "$patched"
   export IOS_DEVICE="$udid" E2E_POINT_DEV_CLIENT=1
 else

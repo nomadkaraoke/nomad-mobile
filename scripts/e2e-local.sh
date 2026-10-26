@@ -34,6 +34,7 @@
 #      its own Metro and decide stack beside the default one (on its own simulator / emulator).
 #      MAESTRO_TEST_ARGS (extra `maestro test` options, e.g. "--format junit --output r-{run}.xml"; CI; {run} becomes
 #      the Maestro run's number, since a suite is up to four runs: online, Hebrew, offline),
+#      E2E_LAUNCH_TIMEOUT (ms, default 60000: launch.yaml's waits; CI uses 240000),
 #      E2E_POINT_DEV_CLIENT=1 (iOS: point a freshly installed dev client at Metro even on :8081; CI),
 #      E2E_NO_LOCK=1 (skip the local device lock, scripts/device-lock.sh; CI sets CI=true, which skips it too).
 #
@@ -250,12 +251,22 @@ fi
 METRO_PID=""
 if [[ "$METRO_PORT" == 8081 ]]; then METRO_LOG=/tmp/nomad-mobile-metro.log; else METRO_LOG="/tmp/nomad-mobile-metro-$METRO_PORT.log"; fi
 metro_up() { curl -sf -m 2 "http://127.0.0.1:$METRO_PORT/status" | grep -q running; }
+kill_tree() {
+  local c
+  for c in $(pgrep -P "$1" 2>/dev/null); do kill_tree "$c"; done
+  kill "$1" 2>/dev/null || true
+}
 stop_metro() {
   [[ -n "$METRO_PID" ]] || return 0
-  # npx → node: stop the children too. Never kill by port: the Android emulator holds a connection to Metro's.
-  pkill -P "$METRO_PID" 2>/dev/null || true
-  kill "$METRO_PID" 2>/dev/null || true
+  # npx → node: stop the whole tree (on CI Metro's node is a grandchild that outlived a children-only kill, so the
+  # force-offline restart kept the online bundle). Never kill everything on the port: the Android emulator holds a
+  # connection to Metro's. Only the process *listening* there, as a last resort.
+  kill_tree "$METRO_PID"
   for _ in $(seq 1 15); do metro_up || break; sleep 1; done
+  if metro_up; then
+    lsof -ti "tcp:$METRO_PORT" -sTCP:LISTEN 2>/dev/null | xargs kill 2>/dev/null || true
+    for _ in $(seq 1 10); do metro_up || break; sleep 1; done
+  fi
   METRO_PID=""
 }
 cleanup() {
@@ -394,7 +405,8 @@ run_flows() {
   "$MAESTRO" --device "$DEVICE" test ${extra[@]+"${extra[@]}"} -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" \
     -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
     -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" \
-    -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" -e VOICE_SESSION_SHOTS="$VOICE_SESSION_SHOTS" "$@"
+    -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" -e VOICE_SESSION_SHOTS="$VOICE_SESSION_SHOTS" \
+    -e LAUNCH_TIMEOUT="${E2E_LAUNCH_TIMEOUT:-60000}" "$@"
 }
 status=0
 

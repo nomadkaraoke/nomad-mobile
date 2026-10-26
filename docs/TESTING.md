@@ -70,13 +70,20 @@ Andrew's spare MacBook Pro (M3 Max, 36 GB, `ssh andrewmastech`, LAN `AndrewMaste
   rerun without it.
 
 - **The iPad lives on it** (USB, paired 2026-10-26: "Lindrew iPad", UDID `00008120-001E11593CF80032`, iPadOS 26.6.1,
-  Developer Mode on). From any session, over SSH, no root:
+  Developer Mode on; cover Lock / Unlock off and Auto-Lock Never, so it stays unlocked until a reboot). Check it is
+  usable first: `ssh andrewmastech 'xcrun devicectl device info lockState --device 00008120-001E11593CF80032'`
+  (`passcodeRequired: true` means locked: ask Andrew to unlock it). From any session, over SSH, no root:
   `ssh andrewmastech 'xcrun devicectl device process launch --device 00008120-001E11593CF80032 --payload-url nomadkaraoke://tonight com.nomadkaraoke.mobile'`;
   screenshot with `ssh andrewmastech '~/.venvs/pmd3/bin/pymobiledevice3 developer dvt screenshot /tmp/ipad.png'` then
   `scp andrewmastech:/tmp/ipad.png .`; install a team-signed build with `xcrun devicectl device install app`. Signing on
   the MBP needs Andrew's Apple ID in its Xcode (not added yet); until then install builds signed on Andrew's laptop. Maestro flows on the real iPad are a follow-up
   (flows use simctl prep and 127.0.0.1 stacks; a device needs the MBP's LAN address).
-- **Screen:** `open vnc://AndrewMastechMac.local` (macOS Screen Sharing; RealVNC can't do Apple's auth).
+- **Screen:** Andrew uses `open vnc://AndrewMastechMac.local` (macOS Screen Sharing; RealVNC can't do Apple's auth).
+  Sessions see and click it over SSH (Screen Recording + Accessibility are granted to sshd; the display is 1512×982
+  points, so shrink shots to 1512 wide and image coordinates are click coordinates):
+  `ssh andrewmastech 'screencapture -x /tmp/s.png && sips -Z 1512 /tmp/s.png >/dev/null' && scp andrewmastech:/tmp/s.png .`,
+  then `ssh andrewmastech '/opt/homebrew/bin/cliclick c:X,Y'` (`t:"text"`, `kp:return`). Use it for a dialog that
+  needs a click; ask Andrew before clicking anything that grants permissions, signs in or deletes.
 
 ### Public repo rules
 
