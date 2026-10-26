@@ -139,7 +139,8 @@ jobs:
   build-android:
     needs: plan
     if: needs.plan.outputs.android != '[]'
-    runs-on: ubuntu-latest
+    # With the Android shards (the self-hosted Mac or hosted Linux); one dual-ABI APK serves both.
+    runs-on: ${{ needs.plan.outputs.android_runner == 'self-hosted' && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'ubuntu-latest' }}
     timeout-minutes: 60
     steps:
       - &build_checkout
@@ -164,13 +165,13 @@ jobs:
         id: fp
         run: echo "hash=$(scripts/ci/build-dev-client.sh fingerprint "$PLATFORM")" >>"$GITHUB_OUTPUT"
         env:
-          PLATFORM: ${{ runner.os == 'macOS' && 'ios' || 'android' }}
+          PLATFORM: ${{ github.job == 'build-ios' && 'ios' || 'android' }}
       - &build_cache
         id: cache
         uses: actions/cache@v4
         with:
           path: nomad-mobile/dev-client
-          key: dev-client-${{ runner.os == 'macOS' && 'ios-macos26-adhoc' || 'android-x86_64-arm64' }}-${{ steps.fp.outputs.hash }}
+          key: dev-client-${{ github.job == 'build-ios' && 'ios-macos26-adhoc' || 'android-x86_64-arm64' }}-${{ steps.fp.outputs.hash }}
       - uses: actions/setup-java@v4
         if: steps.cache.outputs.cache-hit != 'true'
         with:
@@ -183,20 +184,20 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: scripts/ci/build-dev-client.sh build "$PLATFORM" dev-client
         env:
-          PLATFORM: ${{ runner.os == 'macOS' && 'ios' || 'android' }}
+          PLATFORM: ${{ github.job == 'build-ios' && 'ios' || 'android' }}
       - &build_upload
         uses: actions/upload-artifact@v4
         with:
-          name: dev-client-${{ runner.os == 'macOS' && 'ios' || 'android' }}
+          name: dev-client-${{ github.job == 'build-ios' && 'ios' || 'android' }}
           path: nomad-mobile/dev-client
           retention-days: 1
 
   build-ios:
     needs: plan
     if: needs.plan.outputs.ios != '[]'
-    # Always hosted macos-26 (Xcode 26.6, the app's toolchain; cached by native fingerprint, so only after a native
-    # change). The self-hosted Mac runs the shards on its default Xcode 27.1, which can't build this app yet.
-    runs-on: macos-26
+    # With the iOS shards: the self-hosted Mac (Xcode 26.6, minutes) or hosted macos-26 (~33 min cold). Cached by
+    # native fingerprint either way, so it only builds after a native change.
+    runs-on: ${{ needs.plan.outputs.ios_runner == 'self-hosted' && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
     timeout-minutes: 60
     steps:
       - *build_checkout
@@ -310,7 +311,7 @@ jobs:
       - &download_app
         uses: actions/download-artifact@v4
         with:
-          name: dev-client-${{ runner.os == 'macOS' && 'ios' || 'android' }}
+          name: dev-client-${{ github.job == 'e2e-ios' && 'ios' || 'android' }}
           path: nomad-mobile/dev-client
       - name: Run the shard on an emulator (hosted)
         if: runner.environment == 'github-hosted'
@@ -348,7 +349,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: e2e-${{ runner.os == 'macOS' && 'ios' || 'android' }}-${{ matrix.shard.index }}
+          name: e2e-${{ github.job == 'e2e-ios' && 'ios' || 'android' }}-${{ matrix.shard.index }}
           path: e2e-out
           retention-days: 7
           if-no-files-found: ignore
