@@ -61,6 +61,8 @@ permissions:
 
 env:
   MAESTRO_VERSION: 2.12.0
+  MAESTRO_CLI_NO_ANALYTICS: '1'
+  MAESTRO_CLI_ANALYSIS_NOTIFICATION_DISABLED: 'true'
   NODE_VERSION: 24
   PYTHON_VERSION: '3.13'
 
@@ -148,6 +150,8 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           package_json_file: nomad-mobile/package.json
+          # Per runner: the self-hosted Mac's lanes share one home directory (~/setup-pnpm raced, ENOTEMPTY).
+          dest: ${{ runner.temp }}/setup-pnpm
       - &build_node
         uses: actions/setup-node@v4
         with:
@@ -251,6 +255,8 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           package_json_file: nomad-mobile/package.json
+          # Per runner: the self-hosted Mac's lanes share one home directory (~/setup-pnpm raced, ENOTEMPTY).
+          dest: ${{ runner.temp }}/setup-pnpm
       - &setup_node
         uses: actions/setup-node@v4
         with:
@@ -272,10 +278,18 @@ jobs:
           path: |
             karaoke-gen/.venv
             karaoke-decide/.venv
+          key: stacks-${{ runner.environment }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('karaoke-gen/poetry.lock', 'karaoke-decide/poetry.lock') }}
+          restore-keys: stacks-${{ runner.environment }}-${{ runner.os }}-${{ runner.arch }}-
+      # Home-directory tools: hosted runners only. The self-hosted Mac's lanes share one home, so Maestro and the
+      # emulators are installed there once (docs: the private workspace BUILD-HOST.md), never restored concurrently.
+      - &cache_tools
+        if: runner.environment == 'github-hosted'
+        uses: actions/cache@v4
+        with:
+          path: |
             ~/.cache/nomad-emulators
             ~/.maestro
-          key: stacks-${{ runner.os }}-${{ runner.arch }}-${{ env.MAESTRO_VERSION }}-${{ hashFiles('karaoke-gen/poetry.lock', 'karaoke-decide/poetry.lock') }}
-          restore-keys: stacks-${{ runner.os }}-${{ runner.arch }}-${{ env.MAESTRO_VERSION }}-
+          key: tools-${{ runner.os }}-${{ runner.arch }}-${{ env.MAESTRO_VERSION }}
       - &install
         name: Install app deps, Maestro and the stacks
         env:
@@ -361,6 +375,7 @@ jobs:
       - *setup_python
       - *setup_java
       - *cache_stacks
+      - *cache_tools
       - *install
       - *stacks_up
       - *download_app
