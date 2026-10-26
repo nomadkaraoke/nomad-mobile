@@ -18,6 +18,7 @@
 #   scripts/e2e-local.sh --platform ios --skip tonight   # every flow except those whose name contains "tonight"
 #   scripts/e2e-local.sh --platform ios tonight          # the Tonight flows (tonight-1…11)
 #   scripts/e2e-local.sh --platform ios voice-session    # the voice session flows (decide's fixture voice.db)
+#   scripts/e2e-local.sh --platform ios --flows make-1-happy-path,review-1-approve   # exactly these flows (a CI shard)
 #
 # Env: GEN_DIR (gen checkout with scripts/local-stack.sh, at least v0.278.2 plus the fake match judge; default
 #      ../karaoke-gen, the main clone: pull it first, or point GEN_DIR at a gen worktree with the code you want),
@@ -31,6 +32,10 @@
 #      (decide's main API and search service, default 8030 / 8020; passed to decide's local-stack.sh as
 #      DECIDE_LOCAL_PORT / SEARCH_LOCAL_PORT when this script starts it). Another port set lets a second session run
 #      its own Metro and decide stack beside the default one (on its own simulator / emulator).
+#      MAESTRO_TEST_ARGS (extra `maestro test` options, e.g. "--format junit --output r-{run}.xml"; CI; {run} becomes
+#      the Maestro run's number, since a suite is up to four runs: online, Hebrew, offline),
+#      E2E_POINT_DEV_CLIENT=1 (iOS: point a freshly installed dev client at Metro even on :8081; CI),
+#      E2E_NO_LOCK=1 (skip the local device lock, scripts/device-lock.sh; CI sets CI=true, which skips it too).
 #
 # Connect flows (connect-*, Phase 3b) pick fixture files: when the run has any, scripts/make-import-fixtures.ts
 # writes the Spotify export zip and maestro/scripts/push-fixtures.sh puts it and a screenshot on the device.
@@ -78,6 +83,7 @@ FILTER=""
 SKIP=""
 LOCALE=""
 SCREEN=""
+FLOWS=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -85,7 +91,8 @@ while [[ $# -gt 0 ]]; do
     --locale) LOCALE="$2"; shift 2 ;;
     --screen) SCREEN="$2"; shift 2 ;;
     --skip) SKIP="$2"; shift 2 ;;
-    -h|--help) sed -n '2,51p' "$0"; exit 0 ;;
+    --flows) FLOWS="$2"; shift 2 ;;
+    -h|--help) sed -n '2,55p' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
@@ -99,6 +106,8 @@ list_flows() {
   local f name
   for f in "$ROOT"/maestro/flows/*.yaml; do
     name="${f##*/}"
+    # --flows: exactly the listed flow names (comma-separated, with or without .yaml).
+    if [[ -n "$FLOWS" && ",${FLOWS//.yaml/}," != *",${name%.yaml},"* ]]; then continue; fi
     [[ -n "$FILTER" && "$name" != *"$FILTER"* ]] && continue
     [[ -n "$SKIP" && "$name" == *"$SKIP"* ]] && continue
     echo "$f"
@@ -117,6 +126,25 @@ needs_kjbox() {
 }
 NEED_KJBOX=0
 if needs_kjbox; then NEED_KJBOX=1; fi
+
+# 0. Local device lock (scripts/device-lock.sh): parallel sessions on this Mac queue here instead of breaking each
+#     other's runs. The device itself, the gen stack (its search knobs and step delay are GLOBAL fake-config, so two
+#     suites on one stack break each other even on different devices) and, before Maestro 2.2, the fixed iOS driver
+#     port. Taken before any stack starts (kjbox's reset would wipe another run's night). Released on exit (a holder that died is taken over). Not on CI (each job has its own stacks and device).
+LOCKS=()
+if [[ "${CI:-}" != true && "${E2E_NO_LOCK:-}" != 1 ]]; then
+  # shellcheck source=device-lock.sh
+  source "$ROOT/scripts/device-lock.sh"
+  if [[ "$PLATFORM" == ios ]]; then LOCK_DEVICE="${IOS_DEVICE:-iPhone 17 Pro}"; else LOCK_DEVICE="${ANDROID_SERIAL:-emulator-5554}"; fi
+  LOCKS=("$PLATFORM-$LOCK_DEVICE" "gen-stack-8010")
+  if [[ "$PLATFORM" == ios ]]; then
+    mv="$("$MAESTRO" --version 2>/dev/null | tail -1)"
+    if [[ "$(printf '%s\n2.2.0\n' "$mv" | sort -V | head -1)" != 2.2.0 ]]; then LOCKS+=(maestro-ios-driver); fi
+  fi
+  for l in "${LOCKS[@]}"; do device_lock_acquire "$l" "e2e-local.sh --platform $PLATFORM ${FILTER:-}${FLOWS:+--flows $FLOWS}${SCREEN:+--screen $SCREEN}"; done
+fi
+release_locks() { local l; for l in ${LOCKS[@]+"${LOCKS[@]}"}; do device_lock_release "$l"; done; }
+trap release_locks EXIT
 
 # 1. The gen local stack (API :8010, web :3010). LOCAL_STACK_API_URL is what fake-checkout and handoff
 #    links point at; 127.0.0.1 works on both platforms (adb reverse on Android). The partner secret lets
@@ -233,6 +261,7 @@ stop_metro() {
 cleanup() {
   stop_metro
   [[ -z "$CONTROL_PID" ]] || kill "$CONTROL_PID" 2>/dev/null || true
+  release_locks
 }
 trap cleanup EXIT
 # Args: extra VAR=value pairs for the bundle.
@@ -255,12 +284,19 @@ start_metro() {
     fi
     sleep 2
   done
+  # E2E_WARM_BUNDLE=1 (CI): build the bundle once now, so the first launch.yaml doesn't time out (60 s) while a cold
+  # runner transforms every module. Metro's transform cache is per file, so the app's own request reuses it.
+  if [[ "${E2E_WARM_BUNDLE:-}" == 1 ]]; then
+    echo "Warming the $PLATFORM bundle…"
+    curl -sf -m 900 -o /dev/null "http://127.0.0.1:$METRO_PORT/node_modules/expo-router/entry.bundle?platform=$PLATFORM&dev=true&minify=false" ||
+      echo "warning: bundle warm-up failed; the first flow may time out" >&2
+  fi
 }
 
 # iOS on another Metro port: point the dev client at it once Metro is up. A fresh `expo run:ios` build opens the
 # default :8081 (another session's Metro), and launch.yaml relaunches whatever server the dev client last used.
 point_dev_client() {
-  [[ "$PLATFORM" == ios && "$METRO_PORT" != 8081 ]] || return 0
+  [[ "$PLATFORM" == ios && ( "$METRO_PORT" != 8081 || "${E2E_POINT_DEV_CLIENT:-}" == 1 ) ]] || return 0
   xcrun simctl terminate "$DEVICE" com.nomadkaraoke.mobile 2>/dev/null || true
   # A failure here would leave the dev client on whatever Metro it used last (another session's), so stop.
   if ! xcrun simctl openurl "$DEVICE" "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F127.0.0.1%3A$METRO_PORT"; then
@@ -347,8 +383,15 @@ run_hebrew() {
   return "$s"
 }
 
+# MAESTRO_TEST_ARGS: extra `maestro test` options (CI: JUnit report, debug output). Word-split on purpose.
+read -r -a EXTRA_TEST_ARGS <<<"${MAESTRO_TEST_ARGS:-}"
+RUN_SEQ=0
 run_flows() {
-  "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" \
+  # Each call is one Maestro run; give its report its own name so a later group doesn't overwrite it.
+  RUN_SEQ=$((RUN_SEQ + 1))
+  local extra=() a
+  for a in ${EXTRA_TEST_ARGS[@]+"${EXTRA_TEST_ARGS[@]}"}; do extra+=("${a//\{run\}/$RUN_SEQ}"); done
+  "$MAESTRO" --device "$DEVICE" test ${extra[@]+"${extra[@]}"} -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" \
     -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
     -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" \
     -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" -e VOICE_SESSION_SHOTS="$VOICE_SESSION_SHOTS" "$@"

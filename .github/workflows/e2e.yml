@@ -1,0 +1,335 @@
+# Maestro E2E on GitHub-hosted simulators and emulators, off Andrew's Mac (docs/TESTING.md § E2E in CI).
+# Each shard is one runner with its own gen + decide + kjbox local stacks (fake workers, emulators, fixture data;
+# no secrets anywhere in this workflow: the repo is public and so are its logs and artifacts).
+#
+# - pull_request: only the flows the PR's changes affect (scripts/e2e-plan-lib.mjs), sharded; the label
+#   `e2e-full` runs every flow.
+# - schedule (nightly) and workflow_dispatch: the full suite (dispatch can narrow it with filter / skip / flows).
+# Trigger and read results from a session: scripts/e2e-ci.sh.
+name: E2E
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+  schedule:
+    - cron: '23 7 * * *' # 03:23 US Eastern
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'ios, android or ios,android'
+        default: 'ios,android'
+      filter:
+        description: 'Only flows whose name contains this (empty: all)'
+        default: ''
+      skip:
+        description: 'Drop flows whose name contains this'
+        default: ''
+      affected:
+        description: 'Only the flows affected by changes since origin/main (like a PR run)'
+        type: boolean
+        default: false
+      ios_shards:
+        default: '4'
+      android_shards:
+        default: '5'
+      ios_runner:
+        description: 'github (hosted macos-26) or self-hosted (the spare MacBook Pro, label nomad-mbp)'
+        type: choice
+        options: [github, self-hosted]
+        default: github
+      gen_ref:
+        default: main
+      decide_ref:
+        default: main
+      kjbox_ref:
+        default: main
+
+concurrency:
+  group: e2e-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  MAESTRO_VERSION: 2.12.0
+  NODE_VERSION: 24
+  PYTHON_VERSION: '3.13'
+
+defaults:
+  run:
+    working-directory: nomad-mobile
+
+jobs:
+  plan:
+    # A label other than e2e-full changes nothing.
+    if: github.event.action != 'labeled' || github.event.label.name == 'e2e-full'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      ios: ${{ steps.plan.outputs.ios }}
+      android: ${{ steps.plan.outputs.android }}
+      summary: ${{ steps.plan.outputs.summary }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: nomad-mobile
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - id: plan
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          FULL_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'e2e-full') }}
+          PLATFORMS: ${{ inputs.platforms || 'ios,android' }}
+          FILTER: ${{ inputs.filter }}
+          SKIP: ${{ inputs.skip }}
+          AFFECTED: ${{ inputs.affected }}
+          IOS_SHARDS: ${{ inputs.ios_shards || '4' }}
+          ANDROID_SHARDS: ${{ inputs.android_shards || '5' }}
+        run: |
+          args=()
+          if [[ "$EVENT" == pull_request && "$FULL_LABEL" != true ]]; then args+=(--base "origin/$BASE_REF"); fi
+          if [[ "$EVENT" == workflow_dispatch && "$AFFECTED" == true ]]; then args+=(--base origin/main); fi
+          [[ -n "$FILTER" ]] && args+=(--filter "$FILTER")
+          [[ -n "$SKIP" ]] && args+=(--skip "$SKIP")
+          for p in ios android; do
+            if [[ ",$PLATFORMS," != *",$p,"* ]]; then echo "$p=[]" >>"$GITHUB_OUTPUT"; continue; fi
+            n="$IOS_SHARDS"; [[ "$p" == android ]] && n="$ANDROID_SHARDS"
+            plan="$(node scripts/e2e-plan.mjs --shards "$n" ${args[@]+"${args[@]}"})"
+            # One matrix entry per shard; web = the shard needs gen web on :3010 (the web review handoffs).
+            echo "$p=$(node -e '
+              const p = JSON.parse(process.argv[1]);
+              console.log(JSON.stringify(p.shards.map((s) => ({ index: s.index, flows: s.flows.join(","), minutes: Math.round(s.seconds / 60),
+                web: s.flows.some((f) => /^(make-5|review-12)/.test(f)) ? "1" : "" }))));' "$plan")" >>"$GITHUB_OUTPUT"
+            node -e '
+              const p = JSON.parse(process.argv[1]);
+              console.log(`### ${process.argv[2]}: ${p.flows.length} flows, ~${Math.round(p.seconds / 60)} min of flow time, ${p.shards.length} shards (prefixes: ${p.prefixes.join(" ") || "none"})`);
+              for (const s of p.shards) console.log(`- shard ${s.index}: ~${Math.round(s.seconds / 60)} min, ${s.flows.join(", ")}`);' "$plan" "$p" >>"$GITHUB_STEP_SUMMARY"
+          done
+
+  build:
+    needs: plan
+    if: needs.plan.outputs.ios != '[]' || needs.plan.outputs.android != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ios, android]
+    # iOS builds on macOS; the Android build runs on Linux even when unused, cheap and cached.
+    runs-on: ${{ matrix.platform == 'ios' && 'macos-26' || 'ubuntu-latest' }}
+    timeout-minutes: 60
+    steps:
+      - name: Skip a platform with no shards
+        id: want
+        working-directory: .
+        run: echo "run=${{ (matrix.platform == 'ios' && needs.plan.outputs.ios != '[]') || (matrix.platform == 'android' && needs.plan.outputs.android != '[]') }}" >>"$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        if: steps.want.outputs.run == 'true'
+        with:
+          path: nomad-mobile
+      - uses: pnpm/action-setup@v4
+        if: steps.want.outputs.run == 'true'
+        with:
+          package_json_file: nomad-mobile/package.json
+      - uses: actions/setup-node@v4
+        if: steps.want.outputs.run == 'true'
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: nomad-mobile/pnpm-lock.yaml
+      - if: steps.want.outputs.run == 'true'
+        run: pnpm install --frozen-lockfile
+      - id: fp
+        if: steps.want.outputs.run == 'true'
+        run: echo "hash=$(scripts/ci/build-dev-client.sh fingerprint ${{ matrix.platform }})" >>"$GITHUB_OUTPUT"
+      - id: cache
+        if: steps.want.outputs.run == 'true'
+        uses: actions/cache@v4
+        with:
+          path: nomad-mobile/dev-client
+          key: dev-client-${{ matrix.platform }}-${{ matrix.platform == 'ios' && 'macos26' || 'x86_64' }}-${{ steps.fp.outputs.hash }}
+      - uses: actions/setup-java@v4
+        if: steps.want.outputs.run == 'true' && steps.cache.outputs.cache-hit != 'true' && matrix.platform == 'android'
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        if: steps.want.outputs.run == 'true' && steps.cache.outputs.cache-hit != 'true' && matrix.platform == 'android'
+      - name: Build the dev client (native fingerprint changed)
+        if: steps.want.outputs.run == 'true' && steps.cache.outputs.cache-hit != 'true'
+        run: scripts/ci/build-dev-client.sh build ${{ matrix.platform }} dev-client
+      - uses: actions/upload-artifact@v4
+        if: steps.want.outputs.run == 'true'
+        with:
+          name: dev-client-${{ matrix.platform }}
+          path: nomad-mobile/dev-client
+          retention-days: 1
+
+  e2e-android:
+    needs: [plan, build]
+    if: needs.plan.outputs.android != '[]'
+    name: android ${{ matrix.shard.index }} (~${{ matrix.shard.minutes }} min)
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(needs.plan.outputs.android) }}
+    steps:
+      - &checkout_app
+        uses: actions/checkout@v4
+        with:
+          path: nomad-mobile
+      - &checkout_gen
+        uses: actions/checkout@v4
+        with:
+          repository: nomadkaraoke/karaoke-gen
+          ref: ${{ inputs.gen_ref || 'main' }}
+          path: karaoke-gen
+      - &checkout_decide
+        uses: actions/checkout@v4
+        with:
+          repository: nomadkaraoke/karaoke-decide
+          ref: ${{ inputs.decide_ref || 'main' }}
+          path: karaoke-decide
+      - &checkout_kjbox
+        uses: actions/checkout@v4
+        with:
+          repository: nomadkaraoke/kjbox
+          ref: ${{ inputs.kjbox_ref || 'main' }}
+          path: kjbox
+      - name: Free disk space
+        working-directory: .
+        run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
+      - name: Enable KVM
+        working-directory: .
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - &setup_pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: nomad-mobile/package.json
+      - &setup_node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: nomad-mobile/pnpm-lock.yaml
+      - &setup_python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - &setup_java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - &cache_stacks
+        uses: actions/cache@v4
+        with:
+          path: |
+            karaoke-gen/.venv
+            karaoke-decide/.venv
+            ~/.cache/nomad-emulators
+            ~/.maestro
+          key: stacks-${{ runner.os }}-${{ runner.arch }}-${{ env.MAESTRO_VERSION }}-${{ hashFiles('karaoke-gen/poetry.lock', 'karaoke-decide/poetry.lock') }}
+          restore-keys: stacks-${{ runner.os }}-${{ runner.arch }}-${{ env.MAESTRO_VERSION }}-
+      - &install
+        name: Install app deps, Maestro and the stacks
+        env:
+          WITH_WEB: ${{ matrix.shard.web }}
+        run: |
+          pnpm install --frozen-lockfile
+          [[ -x ~/.maestro/bin/maestro ]] && ~/.maestro/bin/maestro --version | grep -qx "$MAESTRO_VERSION" ||
+            curl -fsSL https://get.maestro.mobile.dev | bash
+          echo "$HOME/.maestro/bin" >>"$GITHUB_PATH"
+          scripts/ci/setup-stacks.sh install
+          echo "PYTHON=$GITHUB_WORKSPACE/kjbox/kj-controller/.venv/bin/python" >>"$GITHUB_ENV"
+      - &stacks_up
+        name: Start the local stacks
+        env:
+          WITH_WEB: ${{ matrix.shard.web }}
+        run: scripts/ci/setup-stacks.sh up
+      - &download_app
+        uses: actions/download-artifact@v4
+        with:
+          name: dev-client-${{ runner.os == 'macOS' && 'ios' || 'android' }}
+          path: nomad-mobile/dev-client
+      - name: Run the shard on an emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_7
+          ram-size: 4096M
+          disk-size: 6G
+          cores: 3
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          disable-animations: true
+          working-directory: nomad-mobile
+          script: scripts/ci/run-shard.sh android dev-client/app-debug.apk "${{ matrix.shard.flows }}" ../e2e-out
+      - &logs
+        name: Stack logs (on failure)
+        if: failure()
+        run: scripts/ci/setup-stacks.sh logs
+      - &upload
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-${{ runner.os == 'macOS' && 'ios' || 'android' }}-${{ matrix.shard.index }}
+          path: e2e-out
+          retention-days: 7
+          if-no-files-found: ignore
+
+  e2e-ios:
+    needs: [plan, build]
+    if: needs.plan.outputs.ios != '[]'
+    name: ios ${{ matrix.shard.index }} (~${{ matrix.shard.minutes }} min)
+    # The spare MacBook Pro only for trusted runs: never for a fork's PR on this public repo.
+    runs-on: ${{ (inputs.ios_runner == 'self-hosted' && github.event_name == 'workflow_dispatch') && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(needs.plan.outputs.ios) }}
+    steps:
+      - *checkout_app
+      - *checkout_gen
+      - *checkout_decide
+      - *checkout_kjbox
+      - *setup_pnpm
+      - *setup_node
+      - *setup_python
+      - *setup_java
+      - *cache_stacks
+      - *install
+      - *stacks_up
+      - *download_app
+      - name: Run the shard on a simulator
+        run: scripts/ci/run-shard.sh ios dev-client/NomadKaraoke.app "${{ matrix.shard.flows }}" ../e2e-out
+      - *logs
+      - *upload
+
+  report:
+    needs: [plan, e2e-ios, e2e-android]
+    if: always() && needs.plan.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: nomad-mobile
+          sparse-checkout: scripts
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: e2e-*
+          path: e2e-out
+      - name: Summary
+        run: node scripts/ci/e2e-report.mjs ../e2e-out >>"$GITHUB_STEP_SUMMARY"
+      - name: Fail if a shard failed
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1

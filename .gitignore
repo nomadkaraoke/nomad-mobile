@@ -76,3 +76,6 @@ __pycache__/
 
 # Maestro fixtures written by scripts/make-import-fixtures.ts
 maestro/fixtures/generated/
+
+# scripts/e2e-ci.sh downloads
+.e2e-ci/
