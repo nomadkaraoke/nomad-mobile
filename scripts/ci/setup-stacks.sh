@@ -11,7 +11,8 @@
 #
 # Emulators run natively, without Docker (GitHub's macOS runners have none): the Firestore emulator jar that
 # firebase-tools pins on :8080 and fake-gcs-server on :4443, with the flags gen's start-emulators.sh gives its
-# container. gen's start-emulators.sh then sees both ports taken and starts nothing. Downloads are cached in
+# container (plus -backend memory: its default store, /storage, is the container's and unwritable here). gen's
+# start-emulators.sh then sees both ports taken and starts nothing. Downloads are cached in
 # $EMULATOR_CACHE (default ~/.cache/nomad-emulators; the workflow caches it).
 set -euo pipefail
 
@@ -70,7 +71,7 @@ up() {
   nohup java -jar "$CACHE/cloud-firestore-emulator-v$FIRESTORE_JAR_VERSION.jar" --host 127.0.0.1 --port 8080 \
     >"$LOGS/firestore.log" 2>&1 &
   nohup "$CACHE/fake-gcs-server" -scheme http -port 4443 -external-url http://127.0.0.1:4443 \
-    -public-host 127.0.0.1:4443 >"$LOGS/gcs.log" 2>&1 &
+    -public-host 127.0.0.1:4443 -backend memory >"$LOGS/gcs.log" 2>&1 &
   wait_port 8080 "Firestore emulator" 90
   wait_port 4443 "GCS emulator" 30
   local web=()

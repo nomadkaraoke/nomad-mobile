@@ -110,65 +110,77 @@ jobs:
               for (const s of p.shards) console.log(`- shard ${s.index}: ~${Math.round(s.seconds / 60)} min, ${s.flows.join(", ")}`);' "$plan" "$p" >>"$GITHUB_STEP_SUMMARY"
           done
 
-  build:
+  build-android:
     needs: plan
-    if: needs.plan.outputs.ios != '[]' || needs.plan.outputs.android != '[]'
-    strategy:
-      fail-fast: false
-      matrix:
-        platform: [ios, android]
-    # iOS builds on macOS; the Android build runs on Linux even when unused, cheap and cached.
-    runs-on: ${{ matrix.platform == 'ios' && 'macos-26' || 'ubuntu-latest' }}
+    if: needs.plan.outputs.android != '[]'
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - name: Skip a platform with no shards
-        id: want
-        working-directory: .
-        run: echo "run=${{ (matrix.platform == 'ios' && needs.plan.outputs.ios != '[]') || (matrix.platform == 'android' && needs.plan.outputs.android != '[]') }}" >>"$GITHUB_OUTPUT"
-      - uses: actions/checkout@v4
-        if: steps.want.outputs.run == 'true'
+      - &build_checkout
+        uses: actions/checkout@v4
         with:
           path: nomad-mobile
-      - uses: pnpm/action-setup@v4
-        if: steps.want.outputs.run == 'true'
+      - &build_pnpm
+        uses: pnpm/action-setup@v4
         with:
           package_json_file: nomad-mobile/package.json
-      - uses: actions/setup-node@v4
-        if: steps.want.outputs.run == 'true'
+      - &build_node
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
           cache-dependency-path: nomad-mobile/pnpm-lock.yaml
-      - if: steps.want.outputs.run == 'true'
+      - &build_install
         run: pnpm install --frozen-lockfile
-      - id: fp
-        if: steps.want.outputs.run == 'true'
-        run: echo "hash=$(scripts/ci/build-dev-client.sh fingerprint ${{ matrix.platform }})" >>"$GITHUB_OUTPUT"
-      - id: cache
-        if: steps.want.outputs.run == 'true'
+      - &build_fp
+        id: fp
+        run: echo "hash=$(scripts/ci/build-dev-client.sh fingerprint "$PLATFORM")" >>"$GITHUB_OUTPUT"
+        env:
+          PLATFORM: ${{ runner.os == 'macOS' && 'ios' || 'android' }}
+      - &build_cache
+        id: cache
         uses: actions/cache@v4
         with:
           path: nomad-mobile/dev-client
-          key: dev-client-${{ matrix.platform }}-${{ matrix.platform == 'ios' && 'macos26' || 'x86_64' }}-${{ steps.fp.outputs.hash }}
+          key: dev-client-${{ runner.os == 'macOS' && 'ios-macos26' || 'android-x86_64' }}-${{ steps.fp.outputs.hash }}
       - uses: actions/setup-java@v4
-        if: steps.want.outputs.run == 'true' && steps.cache.outputs.cache-hit != 'true' && matrix.platform == 'android'
+        if: steps.cache.outputs.cache-hit != 'true'
         with:
           distribution: temurin
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v4
-        if: steps.want.outputs.run == 'true' && steps.cache.outputs.cache-hit != 'true' && matrix.platform == 'android'
-      - name: Build the dev client (native fingerprint changed)
-        if: steps.want.outputs.run == 'true' && steps.cache.outputs.cache-hit != 'true'
-        run: scripts/ci/build-dev-client.sh build ${{ matrix.platform }} dev-client
-      - uses: actions/upload-artifact@v4
-        if: steps.want.outputs.run == 'true'
+        if: steps.cache.outputs.cache-hit != 'true'
+      - &build_build
+        name: Build the dev client (native fingerprint changed)
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: scripts/ci/build-dev-client.sh build "$PLATFORM" dev-client
+        env:
+          PLATFORM: ${{ runner.os == 'macOS' && 'ios' || 'android' }}
+      - &build_upload
+        uses: actions/upload-artifact@v4
         with:
-          name: dev-client-${{ matrix.platform }}
+          name: dev-client-${{ runner.os == 'macOS' && 'ios' || 'android' }}
           path: nomad-mobile/dev-client
           retention-days: 1
 
+  build-ios:
+    needs: plan
+    if: needs.plan.outputs.ios != '[]'
+    # The spare MacBook Pro builds in minutes (hosted macos-26: ~33 min cold); its runner uses Xcode 26.6 like CI.
+    runs-on: ${{ (inputs.ios_runner == 'self-hosted' && github.event_name == 'workflow_dispatch') && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
+    timeout-minutes: 60
+    steps:
+      - *build_checkout
+      - *build_pnpm
+      - *build_node
+      - *build_install
+      - *build_fp
+      - *build_cache
+      - *build_build
+      - *build_upload
+
   e2e-android:
-    needs: [plan, build]
+    needs: [plan, build-android]
     if: needs.plan.outputs.android != '[]'
     name: android ${{ matrix.shard.index }} (~${{ matrix.shard.minutes }} min)
     runs-on: ubuntu-latest
@@ -286,7 +298,7 @@ jobs:
           if-no-files-found: ignore
 
   e2e-ios:
-    needs: [plan, build]
+    needs: [plan, build-ios]
     if: needs.plan.outputs.ios != '[]'
     name: ios ${{ matrix.shard.index }} (~${{ matrix.shard.minutes }} min)
     # The spare MacBook Pro only for trusted runs: never for a fork's PR on this public repo.

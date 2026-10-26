@@ -15,12 +15,21 @@ export CI=true E2E_WARM_BUNDLE=1
 export MAESTRO_TEST_ARGS="--format junit --output $out/junit-{run}.xml --debug-output $out/debug-{run} --flatten-debug-output"
 
 if [[ "$platform" == ios ]]; then
+  # The flows are tuned on iOS 26 (sheet / accessibility quirks, CLAUDE.md § Tonight gotchas): use an iOS 26 device when
+  # the machine has the runtime (the spare MacBook Pro also has iOS 27), else the newest. IOS_RUNTIME overrides (e.g. 27-0).
   name="${IOS_DEVICE:-iPhone 17 Pro}"
-  udid="$(xcrun simctl list devices available | grep -F "$name (" | head -1 | grep -oE '[0-9A-F-]{36}' || true)"
+  runtimes="$(xcrun simctl list runtimes available | grep -oE 'com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+')"
+  runtime="$(grep -E "iOS-${IOS_RUNTIME:-26-}" <<<"$runtimes" | tail -1 || true)"
+  [[ -n "$runtime" ]] || runtime="$(tail -1 <<<"$runtimes")"
+  udid="$(xcrun simctl list devices available -j | node -e '
+    let s = ""; process.stdin.on("data", (d) => (s += d)).on("end", () => {
+      const d = (JSON.parse(s).devices[process.argv[1]] ?? []).find((x) => x.name === process.argv[2]);
+      console.log(d ? d.udid : "");
+    });' "$runtime" "$name")"
   if [[ -z "$udid" ]]; then
-    runtime="$(xcrun simctl list runtimes available | grep -oE 'com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+' | tail -1)"
     udid="$(xcrun simctl create "$name" "com.apple.CoreSimulator.SimDeviceType.${name// /-}" "$runtime")"
   fi
+  echo "Simulator: $name on ${runtime##*.} ($udid)"
   xcrun simctl boot "$udid" 2>/dev/null || true
   xcrun simctl bootstatus "$udid" -b >/dev/null
   xcrun simctl install "$udid" "$app"
