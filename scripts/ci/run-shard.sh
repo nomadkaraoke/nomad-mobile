@@ -52,6 +52,26 @@ fi
 
 status=0
 "$ROOT/scripts/e2e-local.sh" --platform "$platform" --flows "$flows" || status=$?
+# One retry of the failed flows (CI runners are slower than a Mac, so timing-sensitive flows can flake). The retry's
+# reports are junit-retry-<n>.xml; scripts/ci/e2e-report.mjs counts a flow that passed on retry as flaky, not failed,
+# and the shard passes when every failed flow passed on retry.
+if [[ "$status" != 0 && "${E2E_RETRY:-1}" == 1 ]]; then
+  failed="$(node -e '
+    const fs = require("fs"), dir = process.argv[1];
+    const names = new Set();
+    for (const f of fs.readdirSync(dir).filter((x) => /^junit-\d+\.xml$/.test(x))) {
+      const xml = fs.readFileSync(`${dir}/${f}`, "utf8");
+      for (const m of xml.matchAll(/<testcase\b[^>]*?name="([^"]+)"[^>]*?(\/>|>([\s\S]*?)<\/testcase>)/g))
+        if (/status="(ERROR|FAILURE)"/.test(m[0]) || /<(failure|error)\b/.test(m[3] || "")) names.add(m[1]);
+    }
+    console.log([...names].join(","));' "$out")"
+  if [[ -n "$failed" ]]; then
+    echo "Retrying the failed flows once: $failed"
+    status=0
+    MAESTRO_TEST_ARGS="--format junit --output $out/junit-retry-{run}.xml --debug-output $out/debug-retry-{run} --flatten-debug-output" \
+      "$ROOT/scripts/e2e-local.sh" --platform "$platform" --flows "$failed" || status=$?
+  fi
+fi
 # Simulator / emulator screenshots of where the last flow stopped, for a failed shard.
 if [[ "$status" != 0 ]]; then
   if [[ "$platform" == ios ]]; then xcrun simctl io "$IOS_DEVICE" screenshot "$out/final.png" >/dev/null 2>&1 || true

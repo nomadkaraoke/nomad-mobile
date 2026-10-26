@@ -37,8 +37,14 @@ for (const d of readdirSync(dir).sort()) {
   const m = /^e2e-(ios|android)-(\d+)$/.exec(d);
   if (!m) continue;
   shardsSeen.push(d);
-  for (const f of readdirSync(join(dir, d)).filter((x) => /^junit-\d+\.xml$/.test(x))) {
-    rows.push(...parseJunit(readFileSync(join(dir, d, f), 'utf8'), m[1], Number(m[2])));
+  const files = readdirSync(join(dir, d));
+  const first = files.filter((x) => /^junit-\d+\.xml$/.test(x)).flatMap((f) => parseJunit(readFileSync(join(dir, d, f), 'utf8'), m[1], Number(m[2])));
+  // run-shard.sh retries failed flows once (junit-retry-<n>.xml): passed on retry = flaky.
+  const retried = new Map(files.filter((x) => /^junit-retry-\d+\.xml$/.test(x))
+    .flatMap((f) => parseJunit(readFileSync(join(dir, d, f), 'utf8'), m[1], Number(m[2]))).map((r) => [r.flow, r]));
+  for (const r of first) {
+    const again = retried.get(r.flow);
+    rows.push(!r.ok && again?.ok ? { ...r, ok: true, flaky: true, message: r.message } : r);
   }
 }
 
@@ -50,6 +56,7 @@ for (const platform of ['ios', 'android']) {
   const mins = Math.round(mine.reduce((s, r) => s + r.seconds, 0) / 60);
   console.log(`### ${platform}: ${mine.length - failed.length}/${mine.length} passed (${shards.length} shards, ${mins} min of flow time)`);
   for (const r of failed) console.log(`- ❌ \`${r.flow}\` (shard ${r.shard}): ${r.message || 'failed'}`);
+  for (const r of mine.filter((x) => x.flaky)) console.log(`- ⚠️ flaky \`${r.flow}\` (shard ${r.shard}): passed on retry; first run: ${r.message || 'failed'}`);
   if (!mine.length) console.log('- no JUnit report: the shard failed before Maestro ran (see its log)');
   console.log('');
 }
