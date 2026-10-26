@@ -34,7 +34,7 @@ appId: com.nomadkaraoke.mobile
           text: "http://.*:${typeof METRO_PORT !== 'undefined' && METRO_PORT ? METRO_PORT : '8081'}"
 - extendedWaitUntil:
     visible: "Runtime version.*|Search songs or artists"
-    timeout: ${typeof LAUNCH_TIMEOUT !== 'undefined' && LAUNCH_TIMEOUT ? LAUNCH_TIMEOUT : 60000}
+    timeout: "${typeof LAUNCH_TIMEOUT !== 'undefined' && LAUNCH_TIMEOUT ? LAUNCH_TIMEOUT : 60000}"
 - runFlow:
     when:
       visible: "Runtime version.*"
@@ -53,4 +53,4 @@ appId: com.nomadkaraoke.mobile
 - extendedWaitUntil:
     visible:
       id: "discover-search-input"
-    timeout: ${typeof LAUNCH_TIMEOUT !== 'undefined' && LAUNCH_TIMEOUT ? LAUNCH_TIMEOUT : 60000}
+    timeout: "${typeof LAUNCH_TIMEOUT !== 'undefined' && LAUNCH_TIMEOUT ? LAUNCH_TIMEOUT : 60000}"

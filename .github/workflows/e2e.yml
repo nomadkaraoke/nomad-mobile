@@ -2,8 +2,8 @@
 # Each shard is one runner with its own gen + decide + kjbox local stacks (fake workers, emulators, fixture data;
 # no secrets anywhere in this workflow: the repo is public and so are its logs and artifacts).
 #
-# - pull_request: only the flows the PR's changes affect (scripts/e2e-plan-lib.mjs), sharded; the label
-#   `e2e-full` runs every flow.
+# - pull_request: only the flows the PR's changes affect (scripts/e2e-plan-lib.mjs), sharded, Android only for now;
+#   the label `e2e-ios` adds iOS, `e2e-full` runs every flow on both.
 # - schedule (nightly) and workflow_dispatch: the full suite (dispatch can narrow it with filter / skip / flows).
 # Trigger and read results from a session: scripts/e2e-ci.sh.
 name: E2E
@@ -63,7 +63,7 @@ defaults:
 jobs:
   plan:
     # A label other than e2e-full changes nothing.
-    if: github.event.action != 'labeled' || github.event.label.name == 'e2e-full'
+    if: github.event.action != 'labeled' || github.event.label.name == 'e2e-full' || github.event.label.name == 'e2e-ios'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
@@ -83,7 +83,8 @@ jobs:
           EVENT: ${{ github.event_name }}
           BASE_REF: ${{ github.base_ref }}
           FULL_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'e2e-full') }}
-          PLATFORMS: ${{ inputs.platforms || 'ios,android' }}
+          # PRs: Android only until the iOS CI path is proven (label e2e-ios or e2e-full adds iOS); nightly and dispatch: both.
+          PLATFORMS: ${{ inputs.platforms || ((github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'e2e-ios') || contains(github.event.pull_request.labels.*.name, 'e2e-full')) && 'ios,android' || 'android') }}
           FILTER: ${{ inputs.filter }}
           SKIP: ${{ inputs.skip }}
           AFFECTED: ${{ inputs.affected }}

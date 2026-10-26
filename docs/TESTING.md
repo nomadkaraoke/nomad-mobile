@@ -70,7 +70,11 @@ Andrew's spare MacBook Pro (M3 Max, 36 GB, `ssh andrewmastech`, LAN `AndrewMaste
   rerun without it.
 
 - **The iPad lives on it** (USB, paired 2026-10-26: "Lindrew iPad", UDID `00008120-001E11593CF80032`, iPadOS 26.6.1,
-  Developer Mode on; cover Lock / Unlock off and Auto-Lock Never, so it stays unlocked until a reboot). Check it is
+  Developer Mode on; cover Lock / Unlock off. A management profile caps its Auto-Lock at 15 min, so a LaunchAgent on
+  the MBP (`com.nomadkaraoke.ipad-keepalive`, every 4 min) re-activates Karaoke to keep it unlocked; it skips while
+  `~/.nomad-device-locks/ipad` exists on the MBP, so hold that lock while you drive the iPad yourself
+  (`ssh andrewmastech 'mkdir ~/.nomad-device-locks/ipad'`; it fails if another session holds it; `rmdir` when done). Run `devicectl`
+  with the MBP's default Xcode: under the runner's Xcode 26.6 copy it hangs. Check it is
   usable first: `ssh andrewmastech 'xcrun devicectl device info lockState --device 00008120-001E11593CF80032'`
   (`passcodeRequired: true` means locked: ask Andrew to unlock it). From any session, over SSH, no root:
   `ssh andrewmastech 'xcrun devicectl device process launch --device 00008120-001E11593CF80032 --payload-url nomadkaraoke://tonight com.nomadkaraoke.mobile'`;

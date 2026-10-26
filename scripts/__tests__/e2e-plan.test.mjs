@@ -1,4 +1,4 @@
-// node --test scripts/__tests__/  (CI: .github/workflows/ci.yml)
+// node --test 'scripts/__tests__/*.test.mjs'  (CI: .github/workflows/ci.yml)
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
