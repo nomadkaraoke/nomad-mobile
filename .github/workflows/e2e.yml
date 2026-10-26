@@ -29,11 +29,12 @@ on:
         type: boolean
         default: false
       ios_shards:
-        default: '4'
+        description: 'iOS shards (empty: 3 on the self-hosted Mac, its lane count; 4 hosted)'
+        default: ''
       android_shards:
         default: '5'
       ios_runner:
-        description: 'github (hosted macos-26) or self-hosted (the spare MacBook Pro, label nomad-mbp)'
+        description: 'github (hosted macos-26) or self-hosted (the nomad-mbp runner lanes)'
         type: choice
         options: [github, self-hosted]
         default: github
@@ -69,6 +70,7 @@ jobs:
     timeout-minutes: 5
     outputs:
       ios: ${{ steps.plan.outputs.ios }}
+      ios_runner: ${{ steps.plan.outputs.ios_runner }}
       android: ${{ steps.plan.outputs.android }}
       summary: ${{ steps.plan.outputs.summary }}
     steps:
@@ -89,7 +91,11 @@ jobs:
           FILTER: ${{ inputs.filter }}
           SKIP: ${{ inputs.skip }}
           AFFECTED: ${{ inputs.affected }}
-          IOS_SHARDS: ${{ inputs.ios_shards || '4' }}
+          # iOS on the self-hosted Mac (3 lanes, scripts/e2e-lane.sh) when a dispatch asks for it, or by default when
+          # the repo variable E2E_IOS_RUNNER is self-hosted; never for a fork's PR (the machine's job-started guard
+          # refuses those too). Hosted macos-26 otherwise.
+          IOS_RUNNER: ${{ (inputs.ios_runner == 'self-hosted' || (github.event_name != 'workflow_dispatch' && vars.E2E_IOS_RUNNER == 'self-hosted' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository))) && 'self-hosted' || 'github' }}
+          IOS_SHARDS: ${{ inputs.ios_shards }}
           ANDROID_SHARDS: ${{ inputs.android_shards || '5' }}
         run: |
           args=()
@@ -97,6 +103,10 @@ jobs:
           if [[ "$EVENT" == workflow_dispatch && "$AFFECTED" == true ]]; then args+=(--base origin/main); fi
           [[ -n "$FILTER" ]] && args+=(--filter "$FILTER")
           [[ -n "$SKIP" ]] && args+=(--skip "$SKIP")
+          echo "ios_runner=$IOS_RUNNER" >>"$GITHUB_OUTPUT"
+          # Default iOS shards: one per self-hosted lane, else 4 hosted runners (5 macOS jobs per org).
+          [[ -n "$IOS_SHARDS" ]] || { if [[ "$IOS_RUNNER" == self-hosted ]]; then IOS_SHARDS=3; else IOS_SHARDS=4; fi; }
+          echo "iOS runner: $IOS_RUNNER" >>"$GITHUB_STEP_SUMMARY"
           for p in ios android; do
             if [[ ",$PLATFORMS," != *",$p,"* ]]; then echo "$p=[]" >>"$GITHUB_OUTPUT"; continue; fi
             n="$IOS_SHARDS"; [[ "$p" == android ]] && n="$ANDROID_SHARDS"
@@ -169,7 +179,7 @@ jobs:
     needs: plan
     if: needs.plan.outputs.ios != '[]'
     # The spare MacBook Pro builds in minutes (hosted macos-26: ~33 min cold); its runner uses Xcode 26.6 like CI.
-    runs-on: ${{ (inputs.ios_runner == 'self-hosted' && github.event_name == 'workflow_dispatch') && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
+    runs-on: ${{ needs.plan.outputs.ios_runner == 'self-hosted' && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
     timeout-minutes: 60
     steps:
       - *build_checkout
@@ -306,7 +316,7 @@ jobs:
     name: ios ${{ matrix.shard.index }} (~${{ matrix.shard.minutes }} min)
     # The self-hosted runner only for dispatch runs; the runner itself also refuses fork PRs (a job-started hook on the
     # machine, which a workflow edit can't bypass).
-    runs-on: ${{ (inputs.ios_runner == 'self-hosted' && github.event_name == 'workflow_dispatch') && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
+    runs-on: ${{ needs.plan.outputs.ios_runner == 'self-hosted' && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
     timeout-minutes: 75
     strategy:
       fail-fast: false

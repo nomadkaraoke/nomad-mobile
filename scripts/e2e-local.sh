@@ -68,14 +68,16 @@ if [[ -z "${DECIDE_DIR:-}" ]]; then
 fi
 PARTNER_SECRET="${DECIDE_GEN_PARTNER_SECRET:-local-stack-secret}"
 KJBOX_DIR="${KJBOX_DIR:-$ROOT/../kjbox}"
-STACK="http://127.0.0.1:8010"
-WEB="http://127.0.0.1:3010"
-METRO_PORT="${METRO_PORT:-8081}"
-DECIDE_PORT="${DECIDE_PORT:-8030}"
-SEARCH_PORT="${SEARCH_PORT:-8020}"
+# LANE (default 0) picks the port block and state of this run's stacks and Metro (scripts/e2e-lane.sh), so several
+# runs can share one machine; GEN_PORT / GEN_WEB_PORT / DECIDE_PORT / SEARCH_PORT / KJBOX_PORT / METRO_PORT override.
+# shellcheck source=e2e-lane.sh
+source "$ROOT/scripts/e2e-lane.sh"
+STACK="http://127.0.0.1:$GEN_PORT"
+WEB="http://127.0.0.1:$GEN_WEB_PORT"
 SEARCH="http://127.0.0.1:$SEARCH_PORT"
 DECIDE="http://127.0.0.1:$DECIDE_PORT"
-KJBOX="http://127.0.0.1:8040"
+KJBOX="http://127.0.0.1:$KJBOX_PORT"
+CONTROL="http://127.0.0.1:$CONTROL_PORT"
 # The app's kjbox base: the box serves the singer API under /sing (on sing.nomadkaraoke.com the tunnel maps / to it).
 KJBOX_APP="$KJBOX/sing"
 MAESTRO="${MAESTRO:-$(command -v maestro || echo "$HOME/.maestro/bin/maestro")}"
@@ -137,7 +139,7 @@ if [[ "${CI:-}" != true && "${E2E_NO_LOCK:-}" != 1 ]]; then
   # shellcheck source=device-lock.sh
   source "$ROOT/scripts/device-lock.sh"
   if [[ "$PLATFORM" == ios ]]; then LOCK_DEVICE="${IOS_DEVICE:-iPhone 17 Pro}"; else LOCK_DEVICE="${ANDROID_SERIAL:-emulator-5554}"; fi
-  LOCKS=("$PLATFORM-$LOCK_DEVICE" "gen-stack-8010")
+  LOCKS=("$PLATFORM-$LOCK_DEVICE" "gen-stack-$GEN_PORT")
   if [[ "$PLATFORM" == ios ]]; then
     mv="$("$MAESTRO" --version 2>/dev/null | tail -1)"
     if [[ "$(printf '%s\n2.2.0\n' "$mv" | sort -V | head -1)" != 2.2.0 ]]; then LOCKS+=(maestro-ios-driver); fi
@@ -156,7 +158,9 @@ retry_curl() { local i; for i in $(seq 1 12); do curl -sf -m 10 "$@" >/dev/null 
 is_up() { local i; for i in 1 2 3; do curl -sf -m 5 "$1" >/dev/null && return 0; sleep 2; done; return 1; }
 if ! is_up "$STACK/api/health"; then
   echo "Starting the gen local stack from $GEN_DIR"
-  (cd "$GEN_DIR" && DECIDE_GEN_PARTNER_SECRET="$PARTNER_SECRET" LOCAL_STACK_API_URL="$STACK" scripts/local-stack.sh up --frontend)
+  # shellcheck disable=SC2046 # one VAR=value per line, no spaces
+  (cd "$GEN_DIR" && env DECIDE_GEN_PARTNER_SECRET="$PARTNER_SECRET" LOCAL_STACK_API_URL="$STACK" $(lane_gen_env) \
+    scripts/local-stack.sh up --frontend)
 fi
 retry_curl "$STACK/api/test/status" || { echo "gen stack at $STACK has no /api/test (FAKE_WORKERS off?)" >&2; exit 1; }
 curl -sf -m 5 -o /dev/null "$WEB" || echo "warning: gen web isn't answering on $WEB (make-5 opens the web review there)" >&2
@@ -167,7 +171,8 @@ curl -sf -m 5 -o /dev/null "$WEB" || echo "warning: gen web isn't answering on $
 echo "decide checkout: $DECIDE_DIR (DECIDE_DIR; used when its local stack has to be started)"
 if ! is_up "$SEARCH/api/search/ready" || ! is_up "$DECIDE/api/ready"; then
   echo "Starting decide's local stack from $DECIDE_DIR"
-  (cd "$DECIDE_DIR" && GEN_API_URL="$STACK" DECIDE_LOCAL_PORT="$DECIDE_PORT" SEARCH_LOCAL_PORT="$SEARCH_PORT" scripts/local-stack.sh up)
+  # shellcheck disable=SC2046
+  (cd "$DECIDE_DIR" && env $(lane_decide_env) scripts/local-stack.sh up)
 fi
 retry_curl -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@example.com"}' \
   "$DECIDE/api/test/profile/reset" || { echo "decide at $DECIDE has no /api/test (DECIDE_TEST_API off?)" >&2; exit 1; }
@@ -200,14 +205,18 @@ if [[ "$NEED_KJBOX" == 1 ]]; then
   if [[ "${KJBOX_KEEP:-}" == 1 ]] && kjbox_ready; then :
   else
     echo "Starting kjbox's local stack fresh from $KJBOX_DIR"
-    (cd "$KJBOX_DIR/kj-controller" && scripts/local-stack.sh reset)
+    # shellcheck disable=SC2046
+    (cd "$KJBOX_DIR/kj-controller" && env $(lane_kjbox_env) scripts/local-stack.sh reset)
   fi
   curl -sf -m 5 -o /dev/null "$KJBOX/sing/api/test/state" || { echo "kjbox at $KJBOX has no /sing/api/test (KJBOX_TEST_API off?)" >&2; exit 1; }
   # tonight-9 stops and restarts the kjbox stack mid-flow ("box unreachable"), tonight-10 decide's (the karaoke log
   # offline); Maestro scripts can only make HTTP calls, so a loopback helper (scripts/stack-control.py, :8049) runs
   # local-stack.sh down/up for them.
-  if ! curl -sf -m 2 http://127.0.0.1:8049/health >/dev/null; then
-    python3 "$ROOT/scripts/stack-control.py" --kjbox-dir "$KJBOX_DIR" --decide-dir "$DECIDE_DIR" >/tmp/nomad-mobile-stack-control.log 2>&1 &
+  if ! curl -sf -m 2 "$CONTROL/health" >/dev/null; then
+    # It restarts this lane's kjbox and decide stacks, so it gets their env.
+    # shellcheck disable=SC2046
+    env $(lane_kjbox_env) $(lane_decide_env) python3 "$ROOT/scripts/stack-control.py" --kjbox-dir "$KJBOX_DIR" \
+      --decide-dir "$DECIDE_DIR" --port "$CONTROL_PORT" >"/tmp/nomad-mobile-stack-control-$CONTROL_PORT.log" 2>&1 &
     CONTROL_PID=$!
   fi
 else
@@ -220,7 +229,7 @@ if [[ "$PLATFORM" == android ]]; then
   adb -s "$SERIAL" wait-for-device
   # An AVD left in airplane mode (a manual offline check) can't reach Metro on 10.0.2.2 (ENETUNREACH on every launch).
   adb -s "$SERIAL" shell cmd connectivity airplane-mode disable >/dev/null 2>&1 || true
-  for port in 8010 3010 "$SEARCH_PORT" "$DECIDE_PORT" 8040; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
+  for port in "$GEN_PORT" "$GEN_WEB_PORT" "$SEARCH_PORT" "$DECIDE_PORT" "$KJBOX_PORT"; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
   # Skip Chrome's first-run screen inside the Custom Tab (the flows also tap past it if it shows).
   adb -s "$SERIAL" shell 'echo "_ --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line'
   adb -s "$SERIAL" shell am set-debug-app --persistent com.android.chrome >/dev/null
@@ -406,7 +415,7 @@ run_flows() {
   RUN_SEQ=$((RUN_SEQ + 1))
   local extra=() a
   for a in ${EXTRA_TEST_ARGS[@]+"${EXTRA_TEST_ARGS[@]}"}; do extra+=("${a//\{run\}/$RUN_SEQ}"); done
-  "$MAESTRO" --device "$DEVICE" test ${extra[@]+"${extra[@]}"} -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" \
+  "$MAESTRO" --device "$DEVICE" test ${extra[@]+"${extra[@]}"} -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" -e CONTROL="$CONTROL" \
     -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
     -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" \
     -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" -e VOICE_SESSION_SHOTS="$VOICE_SESSION_SHOTS" \

@@ -8,6 +8,11 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+# LANE: this job's ports (scripts/e2e-lane.sh; e2e-local.sh reads the same), e.g. the default launcher URL's Metro.
+GEN_DIR="$ROOT/../karaoke-gen" DECIDE_DIR="$ROOT/../karaoke-decide"
+# shellcheck source=../e2e-lane.sh
+source "$ROOT/scripts/e2e-lane.sh"
+export LANE
 platform="$1"; app="$2"; flows="$3"; out="$4"
 mkdir -p "$out"
 out="$(cd "$out" && pwd)"
@@ -17,7 +22,9 @@ export MAESTRO_TEST_ARGS="--format junit --output $out/junit-{run}.xml --debug-o
 if [[ "$platform" == ios ]]; then
   # The flows are tuned on iOS 26 (sheet / accessibility quirks, CLAUDE.md § Tonight gotchas): use an iOS 26 device when
   # the machine has the runtime (the spare MacBook Pro also has iOS 27), else the newest. IOS_RUNTIME overrides (e.g. 27-0).
-  name="${IOS_DEVICE:-iPhone 17 Pro}"
+  # One simulator per lane: "iPhone 17 Pro" on lane 0, "iPhone 17 Pro lane N" beside it.
+  model="iPhone 17 Pro"
+  name="${IOS_DEVICE:-$model$( (( LANE > 0 )) && echo " lane $LANE")}"
   runtimes="$(xcrun simctl list runtimes available | grep -oE 'com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+')"
   runtime="$(grep -E "iOS-${IOS_RUNTIME:-26-}" <<<"$runtimes" | tail -1 || true)"
   [[ -n "$runtime" ]] || runtime="$(tail -1 <<<"$runtimes")"
@@ -27,7 +34,7 @@ if [[ "$platform" == ios ]]; then
       console.log(d ? d.udid : "");
     });' "$runtime" "$name")"
   if [[ -z "$udid" ]]; then
-    udid="$(xcrun simctl create "$name" "com.apple.CoreSimulator.SimDeviceType.${name// /-}" "$runtime")"
+    udid="$(xcrun simctl create "$name" "com.apple.CoreSimulator.SimDeviceType.${model// /-}" "$runtime")"
   fi
   echo "Simulator: $name on ${runtime##*.} ($udid)"
   xcrun simctl boot "$udid" 2>/dev/null || true
@@ -39,7 +46,7 @@ if [[ "$platform" == ios ]]; then
   patched="$(mktemp -d)/$(basename "$app")"
   cp -R "$app" "$patched"
   /usr/libexec/PlistBuddy -c "Delete :DEV_CLIENT_DEFAULT_LAUNCHER_URL" "$patched/Info.plist" 2>/dev/null || true
-  /usr/libexec/PlistBuddy -c "Add :DEV_CLIENT_DEFAULT_LAUNCHER_URL string http://127.0.0.1:${METRO_PORT:-8081}" "$patched/Info.plist"
+  /usr/libexec/PlistBuddy -c "Add :DEV_CLIENT_DEFAULT_LAUNCHER_URL string http://127.0.0.1:$METRO_PORT" "$patched/Info.plist"
   # The edit breaks the ad-hoc signature; re-sign the same way (the simulator reads entitlements, e.g. keychain access,
   # from the binary itself, so --sign - keeps them).
   codesign --force --sign - --timestamp=none "$patched" >/dev/null

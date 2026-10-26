@@ -28,6 +28,10 @@ FIRESTORE_JAR_VERSION=1.22.0
 FIRESTORE_JAR_SHA256=9b6498b7f62714d67f48f59b3818883cd682dbcd46b9f59511de81c97bb5166c
 FAKE_GCS_VERSION=1.56.1
 PARTNER_SECRET=local-stack-secret
+# LANE (the self-hosted runner's lanes; hosted runners are lane 0): this job's ports and state (scripts/e2e-lane.sh).
+GEN_DIR="$GEN" DECIDE_DIR="$DECIDE"
+# shellcheck source=../e2e-lane.sh
+source "$ROOT/scripts/e2e-lane.sh"
 mkdir -p "$CACHE" "$LOGS"
 
 wait_port() { # PORT NAME SECONDS
@@ -89,24 +93,34 @@ install() {
   fetch_ffmpeg
 }
 
+emulators_up() { (exec 3<>/dev/tcp/127.0.0.1/8080) 2>/dev/null && (exec 3<>/dev/tcp/127.0.0.1/4443) 2>/dev/null; }
+
 up() {
   fetch_emulators
+  # Shared by every lane on a machine: start them only once.
+  if emulators_up; then echo "emulators already up (shared)"; else start_emulators; fi
+  local web=()
+  [[ "${WITH_WEB:-}" == 1 ]] && web=(--frontend)
+  # shellcheck disable=SC2046 # one VAR=value per line, no spaces
+  (cd "$GEN" && env DECIDE_GEN_PARTNER_SECRET="$PARTNER_SECRET" LOCAL_STACK_API_URL="http://127.0.0.1:$GEN_PORT" \
+    $(lane_gen_env) scripts/local-stack.sh up ${web[@]+"${web[@]}"})
+  # shellcheck disable=SC2046
+  (cd "$DECIDE" && env $(lane_decide_env) scripts/local-stack.sh up)
+}
+
+start_emulators() {
   nohup java -jar "$CACHE/cloud-firestore-emulator-v$FIRESTORE_JAR_VERSION.jar" --host 127.0.0.1 --port 8080 \
     >"$LOGS/firestore.log" 2>&1 &
   nohup "$CACHE/fake-gcs-server" -scheme http -port 4443 -external-url http://127.0.0.1:4443 \
     -public-host 127.0.0.1:4443 -backend memory >"$LOGS/gcs.log" 2>&1 &
   wait_port 8080 "Firestore emulator" 90
   wait_port 4443 "GCS emulator" 30
-  local web=()
-  [[ "${WITH_WEB:-}" == 1 ]] && web=(--frontend)
-  (cd "$GEN" && DECIDE_GEN_PARTNER_SECRET="$PARTNER_SECRET" LOCAL_STACK_API_URL=http://127.0.0.1:8010 \
-    scripts/local-stack.sh up ${web[@]+"${web[@]}"})
-  (cd "$DECIDE" && GEN_API_URL=http://127.0.0.1:8010 scripts/local-stack.sh up)
 }
 
 logs() {
   local f
-  for f in "$LOGS"/*.log "$GEN"/.local-stack/*.log "$DECIDE"/.local-stack/*.log "$HOME"/kjdata-localstack/*.log \
+  for f in "$LOGS"/*.log "${GEN_STATE_DIR:-$GEN/.local-stack}"/*.log "${DECIDE_STATE_DIR:-$DECIDE/.local-stack}"/*.log \
+    "${KJBOX_DATA_DIR:-$HOME/kjdata-localstack}"/*.log \
     /tmp/nomad-mobile-metro*.log /tmp/nomad-mobile-stack-control.log; do
     [[ -f "$f" ]] || continue
     echo "::group::$f"
