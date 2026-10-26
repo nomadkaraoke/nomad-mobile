@@ -21,6 +21,7 @@ case "$cmd" in
   build)
     out="${3:?OUT_DIR}"
     mkdir -p "$out"
+    out="$(cd "$out" && pwd)"
     cd "$APP"
     CI=1 npx expo prebuild --platform "$platform" --no-install --clean
     if [[ "$platform" == ios ]]; then
