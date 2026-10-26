@@ -34,6 +34,12 @@ device_lock_acquire() {
   dir="$(_lock_dir "$key")"
   mkdir -p "$LOCK_ROOT"
   while ! mkdir "$dir" 2>/dev/null; do
+    # The winner writes owner just after its mkdir: an ownerless lock is being taken, not stale. Recheck once.
+    if [[ ! -f "$dir/owner" ]]; then
+      sleep 1
+      [[ -f "$dir/owner" ]] || rm -rf "$dir"
+      continue
+    fi
     if ! _lock_alive "$dir"; then
       rm -rf "$dir"
       continue

@@ -45,7 +45,8 @@ on:
         default: main
 
 concurrency:
-  group: e2e-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}
+  # A label other than e2e-full / e2e-ios gets its own group, so it never cancels a running E2E run.
+  group: e2e-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}${{ (github.event.action == 'labeled' && github.event.label.name != 'e2e-full' && github.event.label.name != 'e2e-ios') && format('-label-{0}', github.run_id) || '' }}
   cancel-in-progress: true
 
 permissions:
@@ -303,7 +304,8 @@ jobs:
     needs: [plan, build-ios]
     if: needs.plan.outputs.ios != '[]'
     name: ios ${{ matrix.shard.index }} (~${{ matrix.shard.minutes }} min)
-    # The spare MacBook Pro only for trusted runs: never for a fork's PR on this public repo.
+    # The self-hosted runner only for dispatch runs; the runner itself also refuses fork PRs (a job-started hook on the
+    # machine, which a workflow edit can't bypass).
     runs-on: ${{ (inputs.ios_runner == 'self-hosted' && github.event_name == 'workflow_dispatch') && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
     timeout-minutes: 75
     strategy:

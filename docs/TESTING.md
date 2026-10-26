@@ -50,44 +50,20 @@ log on failure (`scripts/ci/setup-stacks.sh logs`). Artifacts are kept 7 days.
 `workflow_dispatch` (so `e2e-ci.sh run`) needs `e2e.yml` on main, which it is once this lands; on a branch that
 changes the workflow, a PR run tests the changed workflow.
 
-### The spare MacBook Pro runner (`nomad-mbp`)
+### The self-hosted runner (`nomad-mbp`)
 
-Andrew's spare MacBook Pro (M3 Max, 36 GB, `ssh andrewmastech`, LAN `AndrewMastechMac.local`; machine setup log:
-`~/Projects/build-host-setup.md` on it) is a self-hosted runner for this repo, set up 2026-10-26:
+A spare Mac at Andrew's place is a self-hosted runner for this repo (label `nomad-mbp`). Its setup, access, the USB
+iPad on it and how to see and click its screen are in the **private** workspace doc `docs/BUILD-HOST.md` (workspace
+root, not this public repo); read it before using the machine or the iPad.
 
-- `~/actions-runner` (runner name and label `nomad-mbp`), a launchd LaunchAgent in the auto-logged-in GUI session
-  (`./svc.sh status|stop|start`). `.path` puts Homebrew and the Android SDK on PATH; `.env` sets `ANDROID_HOME`,
-  `JAVA_HOME` (Temurin 17) and **`DEVELOPER_DIR=/Applications/Xcode-26.6.app/Contents/Developer`**: the machine's
-  default Xcode is 27.1, but the app and flows are on Xcode 26.6 / iOS 26.5 like CI, so jobs use the 26.6 copy.
-  Simulator runtimes: iOS 26.5 ("iPhone 17 Pro" created), 27.0, 27.1.
-- **Only `workflow_dispatch` runs use it** (`scripts/e2e-ci.sh run --self-hosted`): on a public repo a self-hosted
-  runner must never take a fork's PR. With `--self-hosted` both the iOS build (minutes instead of ~33 min cold on
-  hosted) and the iOS shards run there.
-- **One job at a time**: the stacks use fixed ports, so shards queue on it (4 iOS shards ≈ 4 × 20 min). For the
-  shortest wall-clock use the hosted runners; use the MBP when hosted macOS is queued, for a quick iOS rebuild after a
-  native change. (`scripts/ci/run-shard.sh` takes `IOS_RUNTIME=27-0` for an iOS 27 run; it isn't a dispatch input yet.)
-- If it is offline (`gh api repos/nomadkaraoke/nomad-mobile/actions/runners`), `--self-hosted` jobs wait in the queue;
-  rerun without it.
-
-- **The iPad lives on it** (USB, paired 2026-10-26: "Lindrew iPad", UDID `00008120-001E11593CF80032`, iPadOS 26.6.1,
-  Developer Mode on; cover Lock / Unlock off. A management profile caps its Auto-Lock at 15 min, so a LaunchAgent on
-  the MBP (`com.nomadkaraoke.ipad-keepalive`, every 4 min) re-activates Karaoke to keep it unlocked; it skips while
-  `~/.nomad-device-locks/ipad` exists on the MBP, so hold that lock while you drive the iPad yourself
-  (`ssh andrewmastech 'mkdir ~/.nomad-device-locks/ipad'`; it fails if another session holds it; `rmdir` when done). Run `devicectl`
-  with the MBP's default Xcode: under the runner's Xcode 26.6 copy it hangs. Check it is
-  usable first: `ssh andrewmastech 'xcrun devicectl device info lockState --device 00008120-001E11593CF80032'`
-  (`passcodeRequired: true` means locked: ask Andrew to unlock it). From any session, over SSH, no root:
-  `ssh andrewmastech 'xcrun devicectl device process launch --device 00008120-001E11593CF80032 --payload-url nomadkaraoke://tonight com.nomadkaraoke.mobile'`;
-  screenshot with `ssh andrewmastech '~/.venvs/pmd3/bin/pymobiledevice3 developer dvt screenshot /tmp/ipad.png'` then
-  `scp andrewmastech:/tmp/ipad.png .`; install a team-signed build with `xcrun devicectl device install app`. Signing on
-  the MBP needs Andrew's Apple ID in its Xcode (not added yet); until then install builds signed on Andrew's laptop. Maestro flows on the real iPad are a follow-up
-  (flows use simctl prep and 127.0.0.1 stacks; a device needs the MBP's LAN address).
-- **Screen:** Andrew uses `open vnc://AndrewMastechMac.local` (macOS Screen Sharing; RealVNC can't do Apple's auth).
-  Sessions see and click it over SSH (Screen Recording + Accessibility are granted to sshd; the display is 1512×982
-  points, so shrink shots to 1512 wide and image coordinates are click coordinates):
-  `ssh andrewmastech 'screencapture -x /tmp/s.png && sips -Z 1512 /tmp/s.png >/dev/null' && scp andrewmastech:/tmp/s.png .`,
-  then `ssh andrewmastech '/opt/homebrew/bin/cliclick c:X,Y'` (`t:"text"`, `kp:return`). Use it for a dialog that
-  needs a click; ask Andrew before clicking anything that grants permissions, signs in or deletes.
+- **Only `workflow_dispatch` runs use it** (`scripts/e2e-ci.sh run --self-hosted`). On a public repo a fork's PR runs
+  its own copy of the workflow, so the machine also enforces this itself: a job-started hook refuses every job that
+  isn't a dispatch, schedule, push or same-repo PR. Never approve workflow runs for a fork's PR.
+- Its jobs use Xcode 26.6 / iOS 26.5, like the hosted runners. With `--self-hosted` both the iOS build (minutes
+  instead of ~33 min cold on hosted) and the iOS shards run there, **one job at a time** for now (the stacks use fixed
+  ports), so shards queue on it.
+- Offline (`gh api repos/nomadkaraoke/nomad-mobile/actions/runners`): `--self-hosted` jobs wait in the queue; rerun
+  without it.
 
 ### Public repo rules
 
