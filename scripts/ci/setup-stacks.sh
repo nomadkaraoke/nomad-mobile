@@ -84,10 +84,12 @@ install() {
   # externally managed, so pip install is refused there).
   command -v poetry >/dev/null || python3 -m pip install --quiet poetry
   poetry config virtualenvs.in-project true
-  (cd "$GEN" && poetry install --no-interaction --quiet 2>&1 | tail -5) &
+  # pipefail so a failed install fails the step (a `| tail` used to hide it until "uvicorn: command not found").
+  (set -o pipefail; cd "$GEN" && poetry install --no-interaction --quiet 2>&1 | tail -5) &
   local gen_pid=$!
-  (cd "$DECIDE" && poetry install --no-interaction --quiet 2>&1 | tail -5)
+  (set -o pipefail; cd "$DECIDE" && poetry install --no-interaction --quiet 2>&1 | tail -5)
   wait "$gen_pid"
+  (cd "$GEN" && poetry run uvicorn --version >/dev/null) || { echo "gen's venv has no working uvicorn" >&2; exit 1; }
   # kjbox's local-stack.sh runs "$PYTHON": the workflow sets PYTHON to this venv's python.
   (cd "$KJBOX/kj-controller" && python3 -m venv .venv && .venv/bin/pip install --quiet -r requirements.txt)
   if [[ "${WITH_WEB:-}" == 1 ]]; then (cd "$GEN/frontend" && npm ci --legacy-peer-deps --no-audit --no-fund --loglevel=error); fi

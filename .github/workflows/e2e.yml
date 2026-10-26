@@ -285,8 +285,10 @@ jobs:
           path: |
             karaoke-gen/.venv
             karaoke-decide/.venv
-          key: stacks-${{ runner.environment }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('karaoke-gen/poetry.lock', 'karaoke-decide/poetry.lock') }}
-          restore-keys: stacks-${{ runner.environment }}-${{ runner.os }}-${{ runner.arch }}-
+          # Venvs hard-code their absolute path (script shebangs), so a self-hosted lane only restores its own: a
+          # venv from another lane's work dir left "Command not found: uvicorn".
+          key: stacks-${{ runner.environment == 'self-hosted' && runner.name || 'hosted' }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('karaoke-gen/poetry.lock', 'karaoke-decide/poetry.lock') }}
+          restore-keys: stacks-${{ runner.environment == 'self-hosted' && runner.name || 'hosted' }}-${{ runner.os }}-${{ runner.arch }}-
       # Home-directory tools: hosted runners only. The self-hosted Mac's lanes share one home, so Maestro and the
       # emulators are installed there once (docs: the private workspace BUILD-HOST.md), never restored concurrently.
       - &cache_tools
