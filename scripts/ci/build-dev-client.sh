@@ -6,7 +6,8 @@
 #   scripts/ci/build-dev-client.sh build ios|android OUT_DIR # prebuild + build; OUT_DIR gets NomadKaraoke.app or app-debug.apk
 #
 # iOS: a simulator build, ad-hoc signed like `expo run:ios` (unsigned, the app gets no keychain: SecureStore and
-# expo-notifications fail with ERR_..._KEYCHAIN_ACCESS). Android: x86_64 only (the CI emulator's ABI; ANDROID_ABI overrides).
+# expo-notifications fail with ERR_..._KEYCHAIN_ACCESS). Android: x86_64 (hosted Linux emulators) + arm64-v8a (the
+# self-hosted Mac's); ANDROID_ABI overrides.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -33,7 +34,7 @@ case "$cmd" in
       rm -rf "$out/NomadKaraoke.app"
       cp -R ios/build/Build/Products/Debug-iphonesimulator/NomadKaraoke.app "$out/"
     else
-      (cd android && ./gradlew :app:assembleDebug -PreactNativeArchitectures="${ANDROID_ABI:-x86_64}" --no-daemon -q)
+      (cd android && ./gradlew :app:assembleDebug -PreactNativeArchitectures="${ANDROID_ABI:-x86_64,arm64-v8a}" --no-daemon -q)
       cp android/app/build/outputs/apk/debug/app-debug.apk "$out/"
     fi
     ;;

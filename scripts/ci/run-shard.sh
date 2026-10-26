@@ -53,8 +53,10 @@ if [[ "$platform" == ios ]]; then
   xcrun simctl install "$udid" "$patched"
   export IOS_DEVICE="$udid" E2E_POINT_DEV_CLIENT=1
 else
-  adb wait-for-device
-  adb install -r -g "$app" >/dev/null
+  # The lane's own emulator (scripts/e2e-lane.sh): a self-hosted machine runs one per lane.
+  export ANDROID_SERIAL
+  adb -s "$ANDROID_SERIAL" wait-for-device
+  adb -s "$ANDROID_SERIAL" install -r -g "$app" >/dev/null
 fi
 
 status=0
@@ -82,6 +84,6 @@ fi
 # Simulator / emulator screenshots of where the last flow stopped, for a failed shard.
 if [[ "$status" != 0 ]]; then
   if [[ "$platform" == ios ]]; then xcrun simctl io "$IOS_DEVICE" screenshot "$out/final.png" >/dev/null 2>&1 || true
-  else adb exec-out screencap -p >"$out/final.png" 2>/dev/null || true; fi
+  else adb -s "$ANDROID_SERIAL" exec-out screencap -p >"$out/final.png" 2>/dev/null || true; fi
 fi
 exit "$status"

@@ -4,8 +4,8 @@
 # stacks their own Firestore project (gen's global fake-config lives in Firestore, per project), GCS bucket (gen's
 # test reset empties it) and state dirs.
 #
-#   lane 0: gen 8010 · web 3010 · search 8020 · decide 8030 · kjbox 8040 · stack-control 8049 · Metro 8081
-#   lane 1: gen 8110 · web 3110 · search 8120 · decide 8130 · kjbox 8140 · stack-control 8149 · Metro 8181
+#   lane 0: gen 8010 · web 3010 · search 8020 · decide 8030 · kjbox 8040 · stack-control 8049 · Metro 8081 · emulator-5554
+#   lane 1: gen 8110 · web 3110 · search 8120 · decide 8130 · kjbox 8140 · stack-control 8149 · Metro 8181 · emulator-5556
 #
 # The Firestore (:8080) and GCS (:4443) emulators are shared by every lane. An explicit GEN_PORT, METRO_PORT, … still
 # wins. Needs GEN_DIR / DECIDE_DIR set first (for the per-lane state dirs).
@@ -19,6 +19,9 @@ DECIDE_PORT="${DECIDE_PORT:-$((8030 + _lane_off))}"
 KJBOX_PORT="${KJBOX_PORT:-$((8040 + _lane_off))}"
 CONTROL_PORT="${CONTROL_PORT:-$((8049 + _lane_off))}"
 METRO_PORT="${METRO_PORT:-$((8081 + _lane_off))}"
+# Android: one emulator per lane on its own console port (serial emulator-5554, -5556, …; scripts/ci/android-emulator.sh).
+EMULATOR_PORT="${EMULATOR_PORT:-$((5554 + 2 * LANE))}"
+ANDROID_SERIAL="${ANDROID_SERIAL:-emulator-$EMULATOR_PORT}"
 # Per-lane stack env, passed to each stack's script call (gen and decide both read LOCAL_STACK_STATE_DIR, so it is
 # never exported). Lane 0 leaves them empty: the scripts' own defaults.
 LANE_PROJECT=""; GEN_STATE_DIR=""; DECIDE_STATE_DIR=""; KJBOX_DATA_DIR=""
