@@ -1,7 +1,8 @@
 # Sourced by scripts/e2e-local.sh, scripts/ci/setup-stacks.sh and scripts/ci/run-shard.sh: the ports and state of
 # one E2E "lane", so several runs (each with its own simulator / emulator, Metro and gen + decide + kjbox stacks) can
 # share one machine. LANE=0 (default) is today's layout exactly; LANE=N moves every port up by 100·N and gives the
-# stacks their own Firestore project (gen's global fake-config lives in Firestore, per project) and state dirs.
+# stacks their own Firestore project (gen's global fake-config lives in Firestore, per project), GCS bucket (gen's
+# test reset empties it) and state dirs.
 #
 #   lane 0: gen 8010 · web 3010 · search 8020 · decide 8030 · kjbox 8040 · stack-control 8049 · Metro 8081
 #   lane 1: gen 8110 · web 3110 · search 8120 · decide 8130 · kjbox 8140 · stack-control 8149 · Metro 8181
@@ -30,7 +31,8 @@ fi
 # `env` arguments for each stack script (empty values are dropped, so lane 0 passes nothing new).
 lane_gen_env() {
   local a=(LOCAL_STACK_API_PORT="$GEN_PORT" LOCAL_STACK_WEB_PORT="$GEN_WEB_PORT")
-  [[ -n "$LANE_PROJECT" ]] && a+=(LOCAL_STACK_PROJECT="$LANE_PROJECT" LOCAL_STACK_STATE_DIR="$GEN_STATE_DIR")
+  [[ -n "$LANE_PROJECT" ]] && a+=(LOCAL_STACK_PROJECT="$LANE_PROJECT" LOCAL_STACK_STATE_DIR="$GEN_STATE_DIR"
+    LOCAL_STACK_GCS_BUCKET="test-bucket-lane$LANE")
   printf '%s\n' "${a[@]}"
 }
 lane_decide_env() {
