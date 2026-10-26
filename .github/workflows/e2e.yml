@@ -265,9 +265,15 @@ jobs:
           cache: pnpm
           cache-dependency-path: nomad-mobile/pnpm-lock.yaml
       - &setup_python
+        if: runner.environment == 'github-hosted'
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+      # The self-hosted Mac: Homebrew's Python 3.13 (setup-python's macOS installer writes to /Users/runner).
+      - &python_self_hosted
+        if: runner.environment == 'self-hosted'
+        working-directory: .
+        run: echo "/opt/homebrew/opt/python@3.13/libexec/bin" >>"$GITHUB_PATH"
       - &setup_java
         uses: actions/setup-java@v4
         with:
@@ -374,6 +380,7 @@ jobs:
       - *setup_pnpm
       - *setup_node
       - *setup_python
+      - *python_self_hosted
       - *setup_java
       - *cache_stacks
       - *cache_tools

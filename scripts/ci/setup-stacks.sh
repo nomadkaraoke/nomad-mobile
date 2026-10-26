@@ -80,7 +80,9 @@ fetch_ffmpeg() {
 }
 
 install() {
-  python3 -m pip install --quiet poetry
+  # Hosted runners: pip into setup-python's Python. The self-hosted Mac has Homebrew's poetry (its Python 3.13 is
+  # externally managed, so pip install is refused there).
+  command -v poetry >/dev/null || python3 -m pip install --quiet poetry
   poetry config virtualenvs.in-project true
   (cd "$GEN" && poetry install --no-interaction --quiet 2>&1 | tail -5) &
   local gen_pid=$!
