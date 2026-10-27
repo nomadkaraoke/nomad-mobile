@@ -1843,12 +1843,12 @@
     "mark": {
       "aWhileAgo": "Prije nekog vremena",
       "day": "Dan (neobavezno)",
-      "less": "Manje",
+      "less": "Smanji",
       "onDate": "Određenog datuma",
       "times": "Koliko je puta otpjevano",
       "title": "Označi kao otpjevano",
       "close": "Zatvori",
-      "more": "Više",
+      "more": "Povećaj",
       "save": "Spremi",
       "song": "{title} – {artist}",
       "tonight": "Večeras"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Ugođaj",
       "crowdPleaser": "Favorit publike",
-      "feelLabel": "Dobna oznaka",
+      "feelLabel": "Tvoja ocjena",
       "loadError": "Učitavanje tvojih pjesama nije uspjelo.",
       "moodLabel": "Raspoloženje",
       "saved": "Spremljeno",

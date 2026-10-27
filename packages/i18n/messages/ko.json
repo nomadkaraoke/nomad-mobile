@@ -1841,14 +1841,14 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "오래전",
+      "aWhileAgo": "얼마 전",
       "day": "날짜 (선택 사항)",
-      "less": "더 적게",
+      "less": "줄이기",
       "onDate": "특정 날짜",
       "times": "부른 횟수",
       "title": "부른 곡으로 표시",
       "close": "닫기",
-      "more": "더보기",
+      "more": "늘리기",
       "save": "저장",
       "song": "{artist}의 {title}",
       "tonight": "투나잇"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}회",
       "vibeLabel": "분위기",
       "crowdPleaser": "분위기 메이커",
-      "feelLabel": "등급",
+      "feelLabel": "내 평가",
       "loadError": "노래를 불러오지 못했습니다.",
       "moodLabel": "분위기",
       "saved": "저장됨",

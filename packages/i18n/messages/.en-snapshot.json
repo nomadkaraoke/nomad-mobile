@@ -1846,11 +1846,11 @@
       "song": "{title} by {artist}",
       "tonight": "Tonight",
       "onDate": "On a date",
-      "aWhileAgo": "A while ago",
+      "aWhileAgo": "Some time ago",
       "day": "Day (optional)",
-      "times": "Times sung",
-      "less": "Fewer",
-      "more": "More",
+      "times": "How many times sung",
+      "less": "Decrease",
+      "more": "Increase",
       "save": "Save"
     },
     "sungBefore": {
@@ -1913,7 +1913,6 @@
       "keysLabel": "Your vocal range on a keyboard",
       "voiceRange": "Range {range}",
       "sourcesLabel": "Connected music",
-      "known": "{count, plural, one {# song known} other {# songs known}}",
       "sung": "{count, plural, one {# song sung} other {# songs sung}}",
       "saved": "{count, plural, one {# saved} other {# saved}}",
       "seeAll": "See all",
@@ -1946,7 +1945,7 @@
         "rated": "Best rated",
         "az": "A to Z"
       },
-      "feelLabel": "Rating",
+      "feelLabel": "Your rating",
       "feel": {
         "great": "Great",
         "ok": "OK",

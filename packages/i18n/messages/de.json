@@ -1841,14 +1841,14 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "Vor einer Weile",
+      "aWhileAgo": "Vor einiger Zeit",
       "day": "Tag (optional)",
-      "less": "Weniger",
+      "less": "Verringern",
       "onDate": "An einem bestimmten Datum",
       "times": "Wie oft gesungen",
       "title": "Als gesungen markieren",
       "close": "Schließen",
-      "more": "Mehr",
+      "more": "Erhöhen",
       "save": "Speichern",
       "song": "{title} von {artist}",
       "tonight": "Heute Abend"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Vibe",
       "crowdPleaser": "Publikumsliebling",
-      "feelLabel": "Freigabe",
+      "feelLabel": "Deine Bewertung",
       "loadError": "Deine Songs konnten nicht geladen werden.",
       "moodLabel": "Stimmung",
       "saved": "Gespeichert",

@@ -1841,14 +1841,14 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "Trước đây một thời gian",
+      "aWhileAgo": "Cách đây một thời gian",
       "day": "Ngày (không bắt buộc)",
-      "less": "Ít hơn",
+      "less": "Giảm",
       "onDate": "Vào một ngày cụ thể",
-      "times": "Số lần hát",
+      "times": "Số lần đã hát",
       "title": "Đánh dấu đã hát",
       "close": "Đóng",
-      "more": "Thêm",
+      "more": "Tăng",
       "save": "Lưu",
       "song": "{title} - {artist}",
       "tonight": "Tối nay"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Giai điệu & cảm xúc",
       "crowdPleaser": "Được khán giả yêu thích",
-      "feelLabel": "Phân loại",
+      "feelLabel": "Đánh giá của bạn",
       "loadError": "Không thể tải các bài hát của bạn.",
       "moodLabel": "Tâm trạng",
       "saved": "Đã lưu",

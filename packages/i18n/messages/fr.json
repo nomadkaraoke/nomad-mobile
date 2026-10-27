@@ -1841,14 +1841,14 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "Il y a un moment",
+      "aWhileAgo": "Il y a quelque temps",
       "day": "Jour (optionnel)",
-      "less": "Moins",
+      "less": "Diminuer",
       "onDate": "À une date précise",
       "times": "Nombre de fois chantée",
       "title": "Marquer comme chantée",
       "close": "Fermer",
-      "more": "Plus",
+      "more": "Augmenter",
       "save": "Enregistrer",
       "song": "{title} par {artist}",
       "tonight": "Ce soir"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Ambiance",
       "crowdPleaser": "Succès garanti",
-      "feelLabel": "Classification",
+      "feelLabel": "Ton avis",
       "loadError": "Impossible de charger tes morceaux.",
       "moodLabel": "Ambiance",
       "saved": "Enregistré",

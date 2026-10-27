@@ -1843,12 +1843,12 @@
     "mark": {
       "aWhileAgo": "Beberapa waktu lalu",
       "day": "Hari (opsional)",
-      "less": "Lebih sedikit",
+      "less": "Kurangi",
       "onDate": "Pada tanggal tertentu",
       "times": "Berapa kali dinyanyikan",
       "title": "Tandai sudah dinyanyikan",
       "close": "Tutup",
-      "more": "Lainnya",
+      "more": "Tambah",
       "save": "Simpan",
       "song": "{title} oleh {artist}",
       "tonight": "Malam Ini"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Vibe",
       "crowdPleaser": "Favorit penonton",
-      "feelLabel": "Rating",
+      "feelLabel": "Penilaianmu",
       "loadError": "Tidak bisa memuat lagu-lagumu.",
       "moodLabel": "Suasana hati",
       "saved": "Tersimpan",

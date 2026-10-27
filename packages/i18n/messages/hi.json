@@ -1843,12 +1843,12 @@
     "mark": {
       "aWhileAgo": "कुछ समय पहले",
       "day": "दिन (वैकल्पिक)",
-      "less": "कम",
+      "less": "कम करो",
       "onDate": "किसी तारीख पर",
       "times": "कितनी बार गाया",
       "title": "गाया हुआ मार्क करो",
       "close": "बंद करो",
-      "more": "और विकल्प",
+      "more": "बढ़ाओ",
       "save": "सेव करो",
       "song": "{artist} का {title}",
       "tonight": "आज रात"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "वाइब",
       "crowdPleaser": "सबका पसंदीदा",
-      "feelLabel": "रेटिंग",
+      "feelLabel": "तुम्हारी रेटिंग",
       "loadError": "तुम्हारे गाने लोड नहीं हो सके।",
       "moodLabel": "मूड",
       "saved": "सेव किया गया",

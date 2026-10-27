@@ -1843,12 +1843,12 @@
     "mark": {
       "aWhileAgo": "For et stykke tid siden",
       "day": "Dag (valgfrit)",
-      "less": "Færre",
+      "less": "Formindsk",
       "onDate": "På en bestemt dato",
       "times": "Antal gange sunget",
       "title": "Markér som sunget",
       "close": "Luk",
-      "more": "Mere",
+      "more": "Forøg",
       "save": "Gem",
       "song": "{title} af {artist}",
       "tonight": "I aften"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Stemning",
       "crowdPleaser": "Publikumsfavorit",
-      "feelLabel": "Aldersgrænse",
+      "feelLabel": "Din bedømmelse",
       "loadError": "Kunne ikke indlæse dine sange.",
       "moodLabel": "Stemning",
       "saved": "Gemt",

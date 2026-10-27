@@ -1841,14 +1841,14 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "Régebben",
+      "aWhileAgo": "Valamikor régebben",
       "day": "Nap (nem kötelező)",
-      "less": "Kevesebb",
+      "less": "Csökkentés",
       "onDate": "Adott napon",
       "times": "Hányszor énekelted",
       "title": "Megjelölés elénekeltként",
       "close": "Bezárás",
-      "more": "Továbbiak",
+      "more": "Növelés",
       "save": "Mentés",
       "song": "{artist} – {title}",
       "tonight": "Ma este"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Hangulat",
       "crowdPleaser": "Közönségkedvenc",
-      "feelLabel": "Korhatár",
+      "feelLabel": "Értékelésed",
       "loadError": "Nem sikerült betölteni a dalaidat.",
       "moodLabel": "Hangulat",
       "saved": "Mentve",

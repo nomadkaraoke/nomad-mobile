@@ -1841,14 +1841,14 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "Kani-kanina lang",
+      "aWhileAgo": "Ilang panahon na ang nakalipas",
       "day": "Araw (opsyonal)",
       "less": "Bawasan",
       "onDate": "Sa petsang ito",
       "times": "Ilang beses kinanta",
       "title": "Markahan bilang nakanta na",
       "close": "Isara",
-      "more": "Higit pa",
+      "more": "Dagdagan",
       "save": "I-save",
       "song": "{title} ni {artist}",
       "tonight": "Ngayong Gabi"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Vibe",
       "crowdPleaser": "Paborito ng marami",
-      "feelLabel": "Rating",
+      "feelLabel": "Iyong rating",
       "loadError": "Hindi ma-load ang iyong mga kanta.",
       "moodLabel": "Mood",
       "saved": "Nai-save na",

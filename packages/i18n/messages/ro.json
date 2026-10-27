@@ -1841,14 +1841,14 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "Acum ceva timp",
+      "aWhileAgo": "Cu ceva timp în urmă",
       "day": "Ziua (opțional)",
-      "less": "Mai puține",
+      "less": "Scade",
       "onDate": "La o dată anume",
-      "times": "Cântată de",
+      "times": "De câte ori a fost cântată",
       "title": "Marchează ca fiind cântată",
       "close": "Închide",
-      "more": "Mai multe",
+      "more": "Crește",
       "save": "Salvează",
       "song": "{title} de {artist}",
       "tonight": "În această seară"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Vibe",
       "crowdPleaser": "Pe placul publicului",
-      "feelLabel": "Rating",
+      "feelLabel": "Evaluarea ta",
       "loadError": "Nu s-au putut încărca piesele tale.",
       "moodLabel": "Stare",
       "saved": "Salvat",

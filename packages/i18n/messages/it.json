@@ -1841,14 +1841,14 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "Un po' di tempo fa",
+      "aWhileAgo": "Qualche tempo fa",
       "day": "Giorno (facoltativo)",
-      "less": "Meno",
+      "less": "Riduci",
       "onDate": "In una data specifica",
-      "times": "Volte cantata",
+      "times": "Quante volte cantata",
       "title": "Segna come cantata",
       "close": "Chiudi",
-      "more": "Altro",
+      "more": "Aumenta",
       "save": "Salva",
       "song": "{title} di {artist}",
       "tonight": "Stasera"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Vibe",
       "crowdPleaser": "Pezzo forte",
-      "feelLabel": "Rating",
+      "feelLabel": "La tua valutazione",
       "loadError": "Impossibile caricare i tuoi brani.",
       "moodLabel": "Umore",
       "saved": "Salvato",

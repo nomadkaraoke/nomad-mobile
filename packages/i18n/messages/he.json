@@ -1843,12 +1843,12 @@
     "mark": {
       "aWhileAgo": "לפני זמן מה",
       "day": "יום (אופציונלי)",
-      "less": "פחות",
+      "less": "הפחתה",
       "onDate": "בתאריך מסוים",
       "times": "כמה פעמים שרת",
       "title": "סימון כשיר ששרתי",
       "close": "סגירה",
-      "more": "עוד",
+      "more": "הוספה",
       "save": "שמור",
       "song": "{title} מאת {artist}",
       "tonight": "הערב"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "וייב",
       "crowdPleaser": "להיט שכולם אוהבים",
-      "feelLabel": "דירוג",
+      "feelLabel": "הדירוג שלך",
       "loadError": "לא הצלחנו לטעון את השירים שלך.",
       "moodLabel": "מצב רוח",
       "saved": "נשמר",

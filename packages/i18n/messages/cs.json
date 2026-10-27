@@ -1843,12 +1843,12 @@
     "mark": {
       "aWhileAgo": "Před nějakou dobou",
       "day": "Den (volitelné)",
-      "less": "Méně",
+      "less": "Snížit",
       "onDate": "V konkrétní den",
       "times": "Kolikrát zazpíváno",
       "title": "Označit jako zazpívané",
       "close": "Zavřít",
-      "more": "Více",
+      "more": "Zvýšit",
       "save": "Uložit",
       "song": "{title} od {artist}",
       "tonight": "Dnes večer"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Vibe",
       "crowdPleaser": "Trhák pro publikum",
-      "feelLabel": "Hodnocení",
+      "feelLabel": "Tvoje hodnocení",
       "loadError": "Nepodařilo se načíst tvoje skladby.",
       "moodLabel": "Nálada",
       "saved": "Uloženo",

@@ -1841,11 +1841,11 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "For en stund siden",
+      "aWhileAgo": "En stund siden",
       "day": "Dag (valgfritt)",
-      "less": "Færre",
+      "less": "Mindre",
       "onDate": "På en dato",
-      "times": "Ganger sunget",
+      "times": "Antall ganger sunget",
       "title": "Marker som sunget",
       "close": "Lukk",
       "more": "Mer",
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Vibe",
       "crowdPleaser": "Publikumsfavoritt",
-      "feelLabel": "Aldersgrense",
+      "feelLabel": "Din vurdering",
       "loadError": "Kunne ikke laste inn sangene dine.",
       "moodLabel": "Stemning",
       "saved": "Lagret",

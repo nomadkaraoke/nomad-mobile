@@ -1843,12 +1843,12 @@
     "mark": {
       "aWhileAgo": "För ett tag sedan",
       "day": "Dag (valfritt)",
-      "less": "Färre",
+      "less": "Minska",
       "onDate": "Ett visst datum",
       "times": "Antal gånger sjungen",
       "title": "Markera som sjungen",
       "close": "Stäng",
-      "more": "Mer",
+      "more": "Öka",
       "save": "Spara",
       "song": "{title} med {artist}",
       "tonight": "I kväll"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Känsla",
       "crowdPleaser": "Publikfavorit",
-      "feelLabel": "Åldersgräns",
+      "feelLabel": "Ditt betyg",
       "loadError": "Kunde inte läsa in dina låtar.",
       "moodLabel": "Stämning",
       "saved": "Sparad",

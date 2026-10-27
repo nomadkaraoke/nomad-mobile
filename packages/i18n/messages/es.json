@@ -1841,14 +1841,14 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "Hace un tiempo",
+      "aWhileAgo": "Hace algún tiempo",
       "day": "Día (opcional)",
-      "less": "Menos",
+      "less": "Disminuir",
       "onDate": "En una fecha",
-      "times": "Veces cantada",
+      "times": "Cuántas veces cantada",
       "title": "Marcar como cantada",
       "close": "Cerrar",
-      "more": "Más",
+      "more": "Aumentar",
       "save": "Guardar",
       "song": "{title} de {artist}",
       "tonight": "Esta noche"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Vibra",
       "crowdPleaser": "Éxito asegurado",
-      "feelLabel": "Clasificación",
+      "feelLabel": "Tu calificación",
       "loadError": "No se pudieron cargar tus canciones.",
       "moodLabel": "Estado de ánimo",
       "saved": "Guardado",

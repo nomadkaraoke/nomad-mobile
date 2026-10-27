@@ -1841,14 +1841,14 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "之前唱过",
+      "aWhileAgo": "前段时间",
       "day": "具体日期（可选）",
-      "less": "更少",
+      "less": "减少",
       "onDate": "指定日期",
       "times": "演唱次数",
       "title": "标记为已唱",
       "close": "关闭",
-      "more": "更多",
+      "more": "增加",
       "save": "保存",
       "song": "{artist}《{title}》",
       "tonight": "今晚"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}次",
       "vibeLabel": "曲风氛围",
       "crowdPleaser": "全场嗨唱",
-      "feelLabel": "分级",
+      "feelLabel": "你的评分",
       "loadError": "无法加载您的歌曲。",
       "moodLabel": "心情",
       "saved": "已保存",

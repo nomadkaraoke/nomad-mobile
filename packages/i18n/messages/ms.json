@@ -1841,14 +1841,14 @@
   },
   "me": {
     "mark": {
-      "aWhileAgo": "Sudah agak lama",
+      "aWhileAgo": "Beberapa ketika dahulu",
       "day": "Hari (pilihan)",
-      "less": "Kurang",
+      "less": "Kurangkan",
       "onDate": "Pada tarikh tertentu",
-      "times": "Kekerapan dinyanyikan",
+      "times": "Berapa kali dinyanyikan",
       "title": "Tandakan sebagai pernah dinyanyikan",
       "close": "Tutup",
-      "more": "Lagi",
+      "more": "Tambah",
       "save": "Simpan",
       "song": "{title} oleh {artist}",
       "tonight": "Malam Ini"
@@ -1962,7 +1962,7 @@
       "timesSung": "{count}×",
       "vibeLabel": "Vibe",
       "crowdPleaser": "Pilihan ramai",
-      "feelLabel": "Penarafan",
+      "feelLabel": "Penilaian anda",
       "loadError": "Tidak dapat memuatkan lagu anda.",
       "moodLabel": "Suasana",
       "saved": "Disimpan",
