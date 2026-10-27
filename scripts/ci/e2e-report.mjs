@@ -16,6 +16,11 @@ const unescape = (s) => s.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replac
 /** { platform, shard, flow, ok, seconds, message } per <testcase> in a Maestro JUnit file. */
 export function parseJunit(xml, platform, shard) {
   const out = [];
+  // Guard against a report from the other platform (a stale file on a self-hosted runner): iOS runs on a simulator
+  // UDID, Android on an emulator / AVD name, never a UDID.
+  const device = /device="([^"]*)"/.exec(xml)?.[1] ?? '';
+  const udid = /[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}/i.test(device);
+  if (device && (platform === 'ios') !== udid) return out;
   for (const m of xml.matchAll(/<testcase\b([^>]*?)(\/>|>([\s\S]*?)<\/testcase>)/g)) {
     const body = m[3] ?? '';
     const failure = /<(failure|error)\b([^>]*)>?([\s\S]*?)(<\/\1>|$)/.exec(body);
