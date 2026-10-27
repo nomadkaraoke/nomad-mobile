@@ -1,0 +1,63 @@
+# Voice session 5 (Phase 3d Part F, F2): Me → Your music profile → "Analyse my music". decide counts a singer with
+# ≥ 1000 listens as eligible (`history`), so the flow connects a fake Last.fm user whose top tracks add up to 1100
+# plays (decide's fakes, as in connect-5; the sync runs inline on the local stack). The card shows the pitch with
+# decide's cap; "Prepare my songs" POSTs `/api/voice/personal-pool` (Muse "Starlight" has a community version in
+# the fixture catalog and is not in the fixture voice.db), and the card reads the pool again: "Preparing N of your
+# songs…". Needs decide with the personal pool (Part F1).
+appId: com.nomadkaraoke.mobile
+name: voice-session-5-analyse-my-music
+tags:
+  - voice-session
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: vs5
+- runFlow:
+    file: ../common/connect-open.yaml
+    env:
+      EMAIL: ${output.email}
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: fake-lastfm-user
+      DECIDE_STACK: ${DECIDE_STACK}
+      TOP_TRACKS: '[{"artist":"Muse","title":"Starlight","playcount":700},{"artist":"Adele","title":"Hello","playcount":400}]'
+- tapOn:
+    id: "connect-card-lastfm"
+- tapOn:
+    id: "connect-lastfm-username"
+- inputText: ${output.lastfmUsername}
+- tapOn:
+    id: "connect-lastfm-submit"
+- extendedWaitUntil:
+    visible:
+      id: "connect-import-result"
+    timeout: 60000
+- runFlow: ../common/connect-back-to-tabs.yaml
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- scrollUntilVisible:
+    element:
+      id: "vs-personal-request"
+    direction: DOWN
+    timeout: 30000
+    centerElement: true
+- assertVisible:
+    id: "vs-personal-body"
+    text: "We'll prepare up to [0-9]+ songs you listen to most, overnight\\."
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-5-analyse-idle
+- tapOn:
+    id: "vs-personal-request"
+- extendedWaitUntil:
+    visible:
+      id: "vs-personal-preparing"
+      text: "Preparing [0-9]+ of your songs…"
+    timeout: 20000
+- assertNotVisible:
+    id: "vs-personal-request"
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-5-analyse-preparing

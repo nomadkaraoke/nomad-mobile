@@ -4,8 +4,9 @@ import { Button, colors, Text } from '@nomad/ui';
 import { View } from 'react-native';
 
 import { StepLayout } from '../../voice/StepLayout';
+import { AnalyseMyMusicCard } from '../personal/AnalyseMyMusicCard';
 
-/** What a session involves (spec §4.1), with Start and Not now. */
+/** What a session involves (spec §4.1), with Start and Not now, and "Analyse my music" when eligible. */
 export function SessionIntro({ onStart, onClose }: { onStart: () => void; onClose: () => void }) {
   const t = useTranslations('voiceSession.intro');
   return (
@@ -25,6 +26,8 @@ export function SessionIntro({ onStart, onClose }: { onStart: () => void; onClos
       </View>
       <Text className="text-2xl font-bold">{t('title')}</Text>
       <Text>{t('body')}</Text>
+      {/* Its songs join the session's pool: "find your voice" here is just Start. */}
+      <AnalyseMyMusicCard onFindVoice={onStart} />
     </StepLayout>
   );
 }

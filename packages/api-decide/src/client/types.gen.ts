@@ -2282,6 +2282,88 @@ export type PendingListenBrainzImport = {
 };
 
 /**
+ * PersonalBatchCreated
+ */
+export type PersonalBatchCreated = {
+    /**
+     * Batch Id
+     */
+    batch_id: string;
+    /**
+     * Songs
+     */
+    songs: Array<string>;
+    /**
+     * Est Cost Usd
+     */
+    est_cost_usd: number;
+};
+
+/**
+ * PersonalBatchOut
+ */
+export type PersonalBatchOut = {
+    /**
+     * Batch Id
+     */
+    batch_id: string;
+    /**
+     * Requested At
+     */
+    requested_at: string;
+    /**
+     * Total
+     */
+    total: number;
+    /**
+     * Ready
+     */
+    ready: number;
+    /**
+     * Status
+     */
+    status: 'queued' | 'running' | 'done';
+};
+
+/**
+ * PersonalPoolOut
+ */
+export type PersonalPoolOut = {
+    /**
+     * Eligible
+     */
+    eligible: boolean;
+    /**
+     * Reason
+     */
+    reason: 'paid' | 'history' | 'admin' | 'not_eligible';
+    /**
+     * Listens
+     */
+    listens: number;
+    /**
+     * Songs With Plays
+     */
+    songs_with_plays: number;
+    /**
+     * Next Allowed At
+     */
+    next_allowed_at: string | null;
+    /**
+     * Cap
+     */
+    cap: number;
+    /**
+     * Used
+     */
+    used: number;
+    /**
+     * Batches
+     */
+    batches: Array<PersonalBatchOut>;
+};
+
+/**
  * PitchSummaryIn
  *
  * On-device pitch summary (MIDI note numbers); no frames, no audio.
@@ -5015,6 +5097,44 @@ export type VersionOut = {
      * Embeddable
      */
     embeddable?: boolean;
+};
+
+/**
+ * VoiceCostsOut
+ */
+export type VoiceCostsOut = {
+    /**
+     * Month
+     */
+    month: string;
+    /**
+     * Personal Batches
+     */
+    personal_batches: number;
+    /**
+     * Personal Songs
+     */
+    personal_songs: number;
+    /**
+     * Est Cost Usd
+     */
+    est_cost_usd: number;
+    /**
+     * Budget Usd
+     */
+    budget_usd: number;
+    /**
+     * Paused
+     */
+    paused: boolean;
+    /**
+     * Shared Songs Analysed
+     */
+    shared_songs_analysed: number;
+    /**
+     * Est Cost Per Song Usd
+     */
+    est_cost_per_song_usd: number;
 };
 
 /**
@@ -8500,6 +8620,38 @@ export type PatchAttemptApiVoiceAttemptsAttemptIdPatchResponses = {
 
 export type PatchAttemptApiVoiceAttemptsAttemptIdPatchResponse = PatchAttemptApiVoiceAttemptsAttemptIdPatchResponses[keyof PatchAttemptApiVoiceAttemptsAttemptIdPatchResponses];
 
+export type PersonalPoolApiVoicePersonalPoolGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/voice/personal-pool';
+};
+
+export type PersonalPoolApiVoicePersonalPoolGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: PersonalPoolOut;
+};
+
+export type PersonalPoolApiVoicePersonalPoolGetResponse = PersonalPoolApiVoicePersonalPoolGetResponses[keyof PersonalPoolApiVoicePersonalPoolGetResponses];
+
+export type RequestPersonalPoolApiVoicePersonalPoolPostData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/voice/personal-pool';
+};
+
+export type RequestPersonalPoolApiVoicePersonalPoolPostResponses = {
+    /**
+     * Successful Response
+     */
+    201: PersonalBatchCreated;
+};
+
+export type RequestPersonalPoolApiVoicePersonalPoolPostResponse = RequestPersonalPoolApiVoicePersonalPoolPostResponses[keyof RequestPersonalPoolApiVoicePersonalPoolPostResponses];
+
 export type DeleteRecordingsApiVoiceRecordingsDeleteData = {
     body?: never;
     path?: never;
@@ -8927,6 +9079,37 @@ export type UserSongsApiAdminVoiceUsersEmailSongsGetResponses = {
 };
 
 export type UserSongsApiAdminVoiceUsersEmailSongsGetResponse = UserSongsApiAdminVoiceUsersEmailSongsGetResponses[keyof UserSongsApiAdminVoiceUsersEmailSongsGetResponses];
+
+export type CostsApiAdminVoiceCostsGetData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Admin-Token
+         */
+        'x-admin-token'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/admin/voice/costs';
+};
+
+export type CostsApiAdminVoiceCostsGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CostsApiAdminVoiceCostsGetError = CostsApiAdminVoiceCostsGetErrors[keyof CostsApiAdminVoiceCostsGetErrors];
+
+export type CostsApiAdminVoiceCostsGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: VoiceCostsOut;
+};
+
+export type CostsApiAdminVoiceCostsGetResponse = CostsApiAdminVoiceCostsGetResponses[keyof CostsApiAdminVoiceCostsGetResponses];
 
 export type AgreementReportApiAdminVoiceAgreementGetData = {
     body?: never;

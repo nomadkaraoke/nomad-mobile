@@ -11,12 +11,15 @@ import {
   getVoiceHistory,
   getVoiceResult,
   getVoiceSession,
+  getPersonalPool,
   isTerminalUploadError,
   isWarmingUp,
   nextVoiceSong,
   patchVoiceAttempt,
   patchVoiceSession,
+  personalPoolRefusal,
   postVoiceAttempt,
+  requestPersonalPool,
   skipVoiceSong,
   uploadVoiceRecording,
   voiceErrorCode,
@@ -292,6 +295,62 @@ describe('your voice data', () => {
     fetchMock.mockResolvedValue(json({ detail: 'no_evidence' }, 409));
     const err = await adoptVoiceSession('s1').catch((e) => e);
     expect(voiceErrorCode(err)).toBe('no_evidence');
+  });
+});
+
+describe('personal pool', () => {
+  const POOL = {
+    eligible: true,
+    reason: 'history',
+    listens: 1320,
+    songs_with_plays: 8,
+    next_allowed_at: null,
+    cap: 20,
+    used: 0,
+    batches: [],
+  };
+
+  it('getPersonalPool reads the pool', async () => {
+    fetchMock.mockResolvedValue(json(POOL));
+    await expect(getPersonalPool()).resolves.toEqual(POOL);
+    expect(last().method).toBe('GET');
+    expect(path()).toBe('/api/voice/personal-pool');
+  });
+
+  it('requestPersonalPool POSTs with no body', async () => {
+    const out = { batch_id: 'b1', songs: ['artist|title'], est_cost_usd: 0.027 };
+    fetchMock.mockResolvedValue(json(out, 201));
+    await expect(requestPersonalPool()).resolves.toEqual(out);
+    expect(last().method).toBe('POST');
+    expect(path()).toBe('/api/voice/personal-pool');
+  });
+
+  it('a 429 cap refusal carries next_allowed_at', async () => {
+    const next = '2026-11-20T19:04:11.123456+00:00';
+    fetchMock.mockResolvedValue(json({ detail: { reason: 'cap', next_allowed_at: next } }, 429));
+    const err = await requestPersonalPool().catch((e) => e);
+    expect(err).toBeInstanceOf(ApiError);
+    expect(personalPoolRefusal(err)).toEqual({ reason: 'cap', nextAllowedAt: next });
+  });
+
+  it.each([
+    [403, { reason: 'not_eligible' }, 'not_eligible'],
+    [409, { reason: 'nothing_to_add' }, 'nothing_to_add'],
+    [409, { reason: 'concurrent_request' }, 'concurrent_request'],
+    [503, { reason: 'budget_paused' }, 'budget_paused'],
+    [503, 'warming_up', 'warming_up'],
+    [403, 'voice_session_disabled', 'voice_session_disabled'],
+  ] as const)('%i %j', (status, detail, reason) => {
+    expect(personalPoolRefusal(new ApiError(status, detail))).toEqual({ reason, nextAllowedAt: null });
+  });
+
+  it.each([
+    ['not an ApiError', new Error('boom')],
+    ['a 5xx without a code', new ApiError(500, 'Internal Server Error')],
+    ['an unknown reason', new ApiError(409, { reason: 'something_else' })],
+    ['a 422 list', new ApiError(422, [{ msg: 'bad' }])],
+  ])('null for %s', (_, e) => {
+    expect(personalPoolRefusal(e)).toBeNull();
   });
 });
 

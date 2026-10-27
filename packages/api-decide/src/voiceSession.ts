@@ -1,5 +1,5 @@
-// Voice session facades (decide /api/voice/*, Phase 3d): flags, the session, attempts, the result, private recordings
-// and the admin views. Errors are ApiError with `detail` = decide's code (see `voiceErrorCode`).
+// Voice session facades (decide /api/voice/*, Phase 3d): flags, the session, attempts, the result, private recordings,
+// the personal pool ("Analyse my music") and the admin views. Errors are ApiError with `detail` = decide's code (see `voiceErrorCode`).
 import { client } from './client/client.gen';
 import {
   addAttemptApiVoiceSessionsSessionIdAttemptsPost,
@@ -14,6 +14,8 @@ import {
   nextSongApiVoiceSessionsSessionIdNextGet,
   patchAttemptApiVoiceAttemptsAttemptIdPatch,
   patchSessionApiVoiceSessionsSessionIdPatch,
+  personalPoolApiVoicePersonalPoolGet,
+  requestPersonalPoolApiVoicePersonalPoolPost,
   sessionResultApiVoiceSessionsSessionIdResultGet,
   skipSongApiVoiceSessionsSessionIdSkipsPost,
   uploadRecordingApiVoiceRecordingsPost,
@@ -25,6 +27,8 @@ import {
   type BodyUploadRecordingApiVoiceRecordingsPost,
   type NextDoneOut,
   type NextSongOut,
+  type PersonalBatchCreated,
+  type PersonalPoolOut,
   type RecordingCreated,
   type RecordingsDeleted,
   type ResultOut,
@@ -167,6 +171,44 @@ export const voiceRecordingAudioUrl = (id: string): string =>
 
 export const voiceRecordingCount = async (): Promise<number> =>
   (await countRecordingsApiVoiceRecordingsCountGet()).data.count;
+
+// --- Personal pool ("Analyse my music", Part F) ---
+
+/** Eligibility, the 30-day cap (`used` of `cap`, `next_allowed_at` once used up) and the batches, newest first. */
+export const getPersonalPool = async (): Promise<PersonalPoolOut> => (await personalPoolApiVoicePersonalPoolGet()).data;
+
+/** Queues up to `cap` of the user's most-played songs for analysis (no body). 201. Refusals: `personalPoolRefusal`. */
+export const requestPersonalPool = async (): Promise<PersonalBatchCreated> =>
+  (await requestPersonalPoolApiVoicePersonalPoolPost()).data;
+
+export const PERSONAL_POOL_REFUSALS = [
+  'not_eligible',
+  'cap',
+  'nothing_to_add',
+  'concurrent_request',
+  'budget_paused',
+  'warming_up',
+  'voice_session_disabled',
+] as const;
+export type PersonalPoolRefusalReason = (typeof PERSONAL_POOL_REFUSALS)[number];
+export type PersonalPoolRefusal = { reason: PersonalPoolRefusalReason; nextAllowedAt: string | null };
+
+const REFUSALS: ReadonlySet<string> = new Set(PERSONAL_POOL_REFUSALS);
+
+/**
+ * Why decide refused a personal-pool request, or null (not an ApiError, a 5xx without a code...). The pool's own
+ * refusals are objects (`{reason, next_allowed_at?}`: 403 not_eligible, 429 cap, 409 nothing_to_add /
+ * concurrent_request, 503 budget_paused); the session gate's are strings (403 voice_session_disabled, 503 warming_up).
+ */
+export function personalPoolRefusal(e: unknown): PersonalPoolRefusal | null {
+  if (!(e instanceof ApiError)) return null;
+  const d = e.detail;
+  if (typeof d === 'string') return REFUSALS.has(d) ? { reason: d as PersonalPoolRefusalReason, nextAllowedAt: null } : null;
+  if (!d || typeof d !== 'object' || !('reason' in d)) return null;
+  const { reason, next_allowed_at: next } = d as { reason: unknown; next_allowed_at?: unknown };
+  if (typeof reason !== 'string' || !REFUSALS.has(reason)) return null;
+  return { reason: reason as PersonalPoolRefusalReason, nextAllowedAt: typeof next === 'string' ? next : null };
+}
 
 // --- Admin ---
 

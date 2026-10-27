@@ -12,6 +12,7 @@ import { useMusicProfile } from '../../discover/profile/useMusicProfile';
 import { VoiceProfileSection } from '../../voice/VoiceProfileSection';
 import { RecordingsSection } from '../../voiceSession/RecordingsSection';
 import { useVoiceFlags } from '../../voiceSession/debug/useVoiceDebug';
+import { AnalyseMyMusicCard } from '../../voiceSession/personal/AnalyseMyMusicCard';
 
 /** decide's genre ids to their message keys (`classic-rock` is `classicRock`). */
 const genreKey = (id: string) => id.replace(/-(\w)/g, (_, c: string) => c.toUpperCase());
@@ -243,6 +244,7 @@ export default function MusicProfileScreen() {
 
       {/* Deleting recordings stays available to every signed-in person, whatever the session flag says. */}
       <RecordingsSection />
+      <AnalyseMyMusicCard />
 
       {isAdmin ? (
         <Button
