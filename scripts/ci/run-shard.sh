@@ -24,7 +24,8 @@ if [[ "$platform" == ios ]]; then
   # the machine has the runtime (the spare MacBook Pro also has iOS 27), else the newest. IOS_RUNTIME overrides (e.g. 27-0).
   # One simulator per lane: "iPhone 17 Pro" on lane 0, "iPhone 17 Pro lane N" beside it.
   model="iPhone 17 Pro"
-  name="${IOS_DEVICE:-$model$( (( LANE > 0 )) && echo " lane $LANE")}"
+  suffix=""; if (( LANE > 0 )); then suffix=" lane $LANE"; fi   # (a bare `(( … ))` that is false exits under set -e)
+  name="${IOS_DEVICE:-$model$suffix}"
   runtimes="$(xcrun simctl list runtimes available | grep -oE 'com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+')"
   runtime="$(grep -E "iOS-${IOS_RUNTIME:-26-}" <<<"$runtimes" | tail -1 || true)"
   [[ -n "$runtime" ]] || runtime="$(tail -1 <<<"$runtimes")"
@@ -74,6 +75,15 @@ if [[ "$status" != 0 && "${E2E_RETRY:-1}" == 1 ]]; then
         if (/status="(ERROR|FAILURE)"/.test(m[0]) || /<(failure|error)\b/.test(m[3] || "")) names.add(m[1]);
     }
     console.log([...names].join(","));' "$out")"
+  # The offline group (tags offline-warmup / force-offline: discover-6a leaves the picks 6b reads, and the Metro restart
+  # happens once per run) only works as a whole: retry all of this shard's group flows when one failed.
+  group=""
+  for f in ${flows//,/ }; do
+    grep -qE '^\s*-\s*(force-offline|offline-warmup)\s*$' "$ROOT/maestro/flows/$f.yaml" 2>/dev/null && group+="${group:+,}$f"
+  done
+  if [[ -n "$group" ]] && grep -qE "(^|,)(${group//,/|})(,|$)" <<<"$failed"; then
+    for f in ${group//,/ }; do [[ ",$failed," == *",$f,"* ]] || failed+=",$f"; done
+  fi
   if [[ -n "$failed" ]]; then
     echo "Retrying the failed flows once: $failed"
     status=0

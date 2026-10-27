@@ -35,15 +35,15 @@ on:
         description: 'Android shards (empty: 3 on the self-hosted Mac, 5 hosted)'
         default: ''
       android_runner:
-        description: 'github (hosted ubuntu + KVM) or self-hosted (the nomad-mbp runner lanes)'
+        description: 'default (follow the repo variable E2E_ANDROID_RUNNER), github (hosted ubuntu + KVM) or self-hosted (the nomad-mbp runner lanes)'
         type: choice
-        options: [github, self-hosted]
-        default: github
+        options: [default, github, self-hosted]
+        default: default
       ios_runner:
-        description: 'github (hosted macos-26) or self-hosted (the nomad-mbp runner lanes)'
+        description: 'default (follow the repo variable E2E_IOS_RUNNER), github (hosted macos-26) or self-hosted (the nomad-mbp runner lanes)'
         type: choice
-        options: [github, self-hosted]
-        default: github
+        options: [default, github, self-hosted]
+        default: default
       gen_ref:
         default: main
       decide_ref:
@@ -103,10 +103,10 @@ jobs:
           # iOS on the self-hosted Mac (3 lanes, scripts/e2e-lane.sh) when a dispatch asks for it, or by default when
           # the repo variable E2E_IOS_RUNNER is self-hosted; never for a fork's PR (the machine's job-started guard
           # refuses those too). Hosted macos-26 otherwise.
-          IOS_RUNNER: ${{ (inputs.ios_runner == 'self-hosted' || (github.event_name != 'workflow_dispatch' && vars.E2E_IOS_RUNNER == 'self-hosted' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository))) && 'self-hosted' || 'github' }}
+          IOS_RUNNER: ${{ (inputs.ios_runner == 'self-hosted' || (inputs.ios_runner != 'github' && vars.E2E_IOS_RUNNER == 'self-hosted' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository))) && 'self-hosted' || 'github' }}
           IOS_SHARDS: ${{ inputs.ios_shards }}
           # Android likewise: repo variable E2E_ANDROID_RUNNER (or a dispatch's android_runner).
-          ANDROID_RUNNER: ${{ (inputs.android_runner == 'self-hosted' || (github.event_name != 'workflow_dispatch' && vars.E2E_ANDROID_RUNNER == 'self-hosted' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository))) && 'self-hosted' || 'github' }}
+          ANDROID_RUNNER: ${{ (inputs.android_runner == 'self-hosted' || (inputs.android_runner != 'github' && vars.E2E_ANDROID_RUNNER == 'self-hosted' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository))) && 'self-hosted' || 'github' }}
           ANDROID_SHARDS: ${{ inputs.android_shards }}
         run: |
           args=()
@@ -394,7 +394,7 @@ jobs:
       - name: Shut down the lane's simulator (self-hosted; frees RAM for the lane's next job)
         if: always() && runner.environment == 'self-hosted'
         run: |
-          name="iPhone 17 Pro$( (( ${LANE:-0} > 0 )) && echo " lane $LANE")"
+          name="iPhone 17 Pro"; if (( ${LANE:-0} > 0 )); then name+=" lane $LANE"; fi
           xcrun simctl list devices booted | grep -F "$name (" | grep -oE '[0-9A-F-]{36}' | xargs -n1 xcrun simctl shutdown 2>/dev/null || true
       - *logs
       - *upload

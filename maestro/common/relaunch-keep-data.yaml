@@ -17,7 +17,7 @@ appId: com.nomadkaraoke.mobile
       - openLink: "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F10.0.2.2%3A${typeof METRO_PORT !== 'undefined' && METRO_PORT ? METRO_PORT : '8081'}"
 - extendedWaitUntil:
     visible: "Runtime version.*|Search songs or artists"
-    timeout: 60000
+    timeout: "${typeof LAUNCH_TIMEOUT !== 'undefined' && LAUNCH_TIMEOUT ? LAUNCH_TIMEOUT : 60000}"
 - runFlow:
     when:
       visible: "Runtime version.*"
@@ -26,4 +26,4 @@ appId: com.nomadkaraoke.mobile
 - extendedWaitUntil:
     visible:
       id: "discover-search-input"
-    timeout: 60000
+    timeout: "${typeof LAUNCH_TIMEOUT !== 'undefined' && LAUNCH_TIMEOUT ? LAUNCH_TIMEOUT : 60000}"

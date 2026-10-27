@@ -5,7 +5,8 @@
 #   scripts/e2e-ci.sh run --platforms android --filter tonight
 #   scripts/e2e-ci.sh run --affected              # only the flows the branch's changes affect (like a PR run)
 #   scripts/e2e-ci.sh run --gen-ref my-gen-branch # against unmerged gen (also --decide-ref, --kjbox-ref)
-#   scripts/e2e-ci.sh run --self-hosted           # iOS on the spare MacBook Pro runner (label nomad-mbp)
+#   scripts/e2e-ci.sh run --self-hosted           # both platforms on the self-hosted Mac's lanes (label nomad-mbp)
+#   scripts/e2e-ci.sh run --hosted                # both platforms on GitHub-hosted runners
 #   scripts/e2e-ci.sh run --no-wait               # print the run URL and return
 #   scripts/e2e-ci.sh pr                          # wait for the newest E2E run of this branch (PR or dispatch)
 #   scripts/e2e-ci.sh results RUN_ID              # download reports + failure screenshots, print the summary
@@ -48,7 +49,8 @@ case "$cmd" in
         --filter) fields+=(-f "filter=$2"); shift 2 ;;
         --skip) fields+=(-f "skip=$2"); shift 2 ;;
         --affected) fields+=(-f affected=true); shift ;;
-        --self-hosted) fields+=(-f ios_runner=self-hosted); shift ;;
+        --self-hosted) fields+=(-f ios_runner=self-hosted -f android_runner=self-hosted); shift ;;
+        --hosted) fields+=(-f ios_runner=github -f android_runner=github); shift ;;
         --ios-shards) fields+=(-f "ios_shards=$2"); shift 2 ;;
         --android-shards) fields+=(-f "android_shards=$2"); shift 2 ;;
         --gen-ref) fields+=(-f "gen_ref=$2"); shift 2 ;;
