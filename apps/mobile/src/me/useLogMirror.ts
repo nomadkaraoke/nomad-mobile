@@ -88,3 +88,15 @@ export function syncedFeels(userKey: string | null, client?: QueryClient | null)
   }
   return out;
 }
+
+/**
+ * id -> the record the server has counted (sung, not deleted), from the mirror in the query cache, else the phone's
+ * copy. Lets the library overlay tell an edit of a synced record from a new performance, and subtract a delete.
+ */
+export function syncedRecords(userKey: string | null, client?: QueryClient | null): Map<string, PendingLog> {
+  const out = new Map<string, PendingLog>();
+  if (!userKey) return out;
+  const mirror = client?.getQueryData<Mirror>(logMirrorKeyFor(userKey)) ?? readCache(logMirrorStorageKey(userKey), isMirror);
+  for (const r of toPendingLog((mirror?.entries ?? []).filter((e) => !e.deleted && (e.state === 'sung' || e.state === 'sung_unplayed')))) out.set(r.id, r);
+  return out;
+}

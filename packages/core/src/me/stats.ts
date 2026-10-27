@@ -79,11 +79,27 @@ export function karaokeStats(items: MeSong[], log: PendingLog[], scope: { year?:
     }
   }
 
-  const byKey = new Map(items.map((s) => [s.key, s]));
+  // All-time: each song's current latest feel. A year: the latest feel among that year's own dated records, so a
+  // song rated great in 2025 and bad in 2026 counts as great in 2025's scope.
+  const feelOf = new Map<string, string | null | undefined>();
+  if (year === undefined) {
+    for (const s of items) feelOf.set(s.key, s.latest_feel);
+  } else {
+    const latest = new Map<string, { at: string; feel: string }>();
+    for (const r of sung) {
+      const feel = r.survey?.feel;
+      if (!feel) continue;
+      const key = libraryKey(r.artist, r.title, r.song_key ?? null);
+      const at = r.survey?.answered_at ?? r.sung_at ?? r.night?.date ?? '';
+      const cur = latest.get(key);
+      if (!cur || at >= cur.at) latest.set(key, { at, feel });
+    }
+    for (const [k, v] of latest) feelOf.set(k, v.feel);
+  }
   let great = 0;
   let rated = 0;
   for (const r of rows) {
-    const f = byKey.get(r.key)?.latest_feel;
+    const f = feelOf.get(r.key);
     if (f) {
       rated += 1;
       if (f === 'great') great += 1;

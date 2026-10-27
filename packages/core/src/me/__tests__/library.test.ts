@@ -244,3 +244,40 @@ describe('overlayLibrary', () => {
     expect(byTitle['Old']!.setlist_ids).toEqual([]);
   });
 });
+
+describe('overlayLibrary: synced records', () => {
+  const base = [song({ artist: 'Cher', title: 'Believe', times_sung: 1, feel_counts: { great: 1, ok: 0, bad: 0 }, latest_feel: 'great' })];
+  const rec = (o: Partial<PendingLog>): PendingLog => ({ id: 'r1', artist: 'Cher', title: 'Believe', state: 'sung', ...o });
+
+  it('an edited survey on a synced record moves the feel without adding a performance', () => {
+    const out = overlayLibrary(base, { ...empty, log: [rec({ synced: true, times: 1, survey: { feel: 'bad' }, prev_feel: 'great' })] });
+    expect(out[0]).toMatchObject({ times_sung: 1, latest_feel: 'bad', feel_counts: { great: 0, ok: 0, bad: 1 } });
+  });
+
+  it('a new (unsynced) record still adds its performance', () => {
+    expect(overlayLibrary(base, { ...empty, log: [rec({ id: 'r2' })] })[0]!.times_sung).toBe(2);
+  });
+
+  it('deleting a synced backfill "sung x5" subtracts the times and drops the item', () => {
+    const items = [song({ artist: 'Cher', title: 'Believe', times_sung: 5, backfill_times: 5 })];
+    const out = overlayLibrary(items, { ...empty, log: [rec({ deleted: true, synced: true, times: 5, origin: 'backfill' })] });
+    expect(out).toEqual([]);
+  });
+
+  it('a deleted synced record keeps a loved song, at zero times', () => {
+    const items = [song({ artist: 'Cher', title: 'Believe', times_sung: 5, backfill_times: 5, loved: true })];
+    const out = overlayLibrary(items, { ...empty, log: [rec({ deleted: true, synced: true, times: 5, origin: 'backfill' })] });
+    expect(out[0]).toMatchObject({ times_sung: 0, backfill_times: 0, loved: true });
+  });
+
+  it('deleting a synced feel=great record takes one great off', () => {
+    const items = [song({ artist: 'Cher', title: 'Believe', times_sung: 2, feel_counts: { great: 2, ok: 0, bad: 0 }, latest_feel: 'great' })];
+    const out = overlayLibrary(items, { ...empty, log: [rec({ deleted: true, synced: true, survey: { feel: 'great' } })] });
+    expect(out[0]).toMatchObject({ times_sung: 1, feel_counts: { great: 1, ok: 0, bad: 0 } });
+  });
+
+  it('a delete of a record the server never had subtracts nothing, and never goes below zero', () => {
+    expect(overlayLibrary(base, { ...empty, log: [rec({ deleted: true })] })[0]!.times_sung).toBe(1);
+    expect(overlayLibrary(base, { ...empty, log: [rec({ deleted: true, synced: true, times: 9 })] })).toEqual([]);
+  });
+});

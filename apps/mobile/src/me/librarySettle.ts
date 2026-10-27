@@ -8,7 +8,7 @@ import { useLovedOverrides } from './lovedOverrides';
 import { useMeOutbox } from './meOutbox';
 import { foldLog, pendingLog, pendingSetlists } from './pending';
 import { meQueryClient } from './queryClientRef';
-import { syncedFeels } from './useLogMirror';
+import { syncedFeels, syncedRecords } from './useLogMirror';
 
 type Sent<T> = T & { sentAt: number };
 
@@ -38,16 +38,20 @@ export const useLibrarySettle = create<Store>((set, get) => ({
 useOutbox.addSentListener((item, _result, owner) => {
   if (currentUserKey() !== owner) return;
   const { log } = useLibrarySettle.getState();
+  const old = log[item.id];
+  const mirror = syncedRecords(owner, meQueryClient());
+  const syncedRec = (id: string) => mirror.get(id);
   if (item.op === 'delete') {
+    // A delete of a record the server had keeps taking its counts off the cached library until a later fetch sees it.
     const { [item.id]: _gone, ...rest } = log;
-    useLibrarySettle.setState({ log: rest });
+    const rec = old && !old.deleted ? (old.synced ? { ...old, deleted: true } : undefined) : pendingLog([item], useLogStore.getState().entries, undefined, syncedRec)[0];
+    useLibrarySettle.setState({ log: rec?.deleted && rec.synced ? { ...rest, [item.id]: { ...rec, sentAt: Date.now() } } : rest });
     return;
   }
-  const old = log[item.id];
   const feel = (id: string) => old?.survey?.feel ?? syncedFeels(owner, meQueryClient()).get(id);
-  const rec = pendingLog([{ ...item, rev: item.rev }], useLogStore.getState().entries, feel)[0];
+  const rec = pendingLog([{ ...item, rev: item.rev }], useLogStore.getState().entries, feel, syncedRec)[0];
   if (!rec) return;
-  useLibrarySettle.setState({ log: { ...log, [item.id]: { ...foldLog(old, rec, item.patch), sentAt: Date.now() } } });
+  useLibrarySettle.setState({ log: { ...log, [item.id]: { ...foldLog(old && !old.deleted ? old : undefined, rec, item.patch), sentAt: Date.now() } } });
 });
 
 useMeOutbox.addSentListener((item, _result, owner) => {

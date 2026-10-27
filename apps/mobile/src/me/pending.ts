@@ -18,12 +18,29 @@ export function pendingLog(
   items: OutboxItem[],
   entries: Record<string, LogEntry>,
   syncedFeel?: (id: string) => string | null | undefined,
+  syncedRec?: (id: string) => PendingLog | undefined,
 ): PendingLog[] {
   const out: PendingLog[] = [];
   for (const it of items) {
     const e = entries[it.id];
+    const mirrored = syncedRec?.(it.id);
     if (it.op === 'delete') {
-      if (e) out.push({ id: it.id, artist: e.artist, title: e.title, song_key: e.song_key, state: e.state, deleted: true });
+      if (mirrored) {
+        const feel = mirrored.survey?.feel;
+        out.push({
+          id: it.id,
+          artist: mirrored.artist,
+          title: mirrored.title,
+          song_key: mirrored.song_key,
+          state: mirrored.state,
+          times: mirrored.times,
+          origin: mirrored.origin,
+          survey: feel ? { feel } : undefined,
+          sung_at: mirrored.sung_at,
+          deleted: true,
+          synced: true,
+        });
+      } else if (e) out.push({ id: it.id, artist: e.artist, title: e.title, song_key: e.song_key, state: e.state, deleted: true });
       continue;
     }
     const p = it.patch as Record<string, unknown>;
@@ -45,6 +62,7 @@ export function pendingLog(
       sung_at: it.patch.sung_at,
       night: (p.night ?? e?.night) as PendingLog['night'] | undefined,
       ...(prev ? { prev_feel: prev } : {}),
+      ...(mirrored || prev ? { synced: true } : {}),
     });
   }
   return out;
@@ -80,13 +98,27 @@ export function libraryLog(
   items: OutboxItem[],
   entries: Record<string, LogEntry>,
   syncedFeel?: (id: string) => string | null | undefined,
+  syncedRec?: (id: string) => PendingLog | undefined,
 ): PendingLog[] {
   const out = new Map(Object.entries(settled));
   for (const it of items) if (it.op === 'delete') out.delete(it.id);
   const feel = (id: string) => settled[id]?.survey?.feel ?? syncedFeel?.(id);
-  for (const rec of pendingLog(items, entries, feel)) {
+  for (const rec of pendingLog(items, entries, feel, syncedRec)) {
     const it = items.find((i) => i.id === rec.id);
-    out.set(rec.id, foldLog(settled[rec.id], rec, it?.op === 'put' ? it.patch : undefined));
+    const old = settled[rec.id];
+    // A record sent earlier this session keeps the answer it had when it was sent: the mirror may have caught up
+    // since, which says nothing about whether the library cache has.
+    if (old && !old.deleted) {
+      if (rec.deleted) {
+        // Deleting a record sent here: its counts are only in the library cache if it was an edit of a synced one.
+        if (old.synced) out.set(rec.id, { ...old, deleted: true });
+        else out.delete(rec.id);
+        continue;
+      }
+      out.set(rec.id, { ...foldLog(old, rec, it?.op === 'put' ? it.patch : undefined), synced: old.synced });
+      continue;
+    }
+    out.set(rec.id, rec.deleted && !rec.synced ? rec : foldLog(undefined, rec, undefined));
   }
   return [...out.values()];
 }

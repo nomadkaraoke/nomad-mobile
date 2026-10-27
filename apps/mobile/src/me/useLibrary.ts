@@ -1,5 +1,5 @@
 import { ApiError, getLibrary } from '@nomad/api-decide';
-import { overlayLibrary, type MeSong } from '@nomad/core';
+import { overlayLibrary, type MeSong, type PendingLog } from '@nomad/core';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef } from 'react';
 
@@ -12,7 +12,7 @@ import { useLovedOverrides } from './lovedOverrides';
 import { useMeOutbox } from './meOutbox';
 import { libraryLog, pendingLoves, pendingSetlists, toMeSong } from './pending';
 import { useBindMeQueryClient } from './queryClientRef';
-import { syncedFeels } from './useLogMirror';
+import { syncedFeels, syncedRecords } from './useLogMirror';
 
 export type LibraryCache = { etag: string; items: MeSong[]; savedAt: number };
 const isCache = (v: unknown): v is LibraryCache => isObj(v) && typeof v.etag === 'string' && Array.isArray(v.items) && typeof v.savedAt === 'number';
@@ -88,8 +88,10 @@ export function useLibrary(): { items: MeSong[]; loading: boolean; offline: bool
     // The server's feel per record, read only when a queued survey needs it (a re-edit moves the count).
     let feels: Map<string, string> | undefined;
     const syncedFeel = (id: string) => (feels ??= syncedFeels(userKey, queryClient)).get(id);
+    let recs: Map<string, PendingLog> | undefined;
+    const syncedRec = (id: string) => (recs ??= syncedRecords(userKey, queryClient)).get(id);
     return overlayLibrary(base ?? [], {
-      log: libraryLog(sentLog, logItems, logEntries, syncedFeel),
+      log: libraryLog(sentLog, logItems, logEntries, syncedFeel, syncedRec),
       loves: { ...overrides, ...pendingLoves(meItems) },
       // Sent first, so a queued write for the same list replaces its membership.
       setlists: [...Object.values(sentSetlists), ...pendingSetlists(meItems)],

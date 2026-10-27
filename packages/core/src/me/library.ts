@@ -126,6 +126,12 @@ export type PendingLog = {
    * moves that count to the new feel instead of adding a second one.
    */
   prev_feel?: string | null;
+  /**
+   * True when the server already counted this record (it is in the log mirror / server data): a pending write on it
+   * is an edit, not a new performance, so it only moves the survey fields. For a deleted record the overlay then
+   * subtracts what it contributed (`times`, `origin`, `survey.feel`, taken from the synced copy).
+   */
+  synced?: boolean;
   /** Night context (needed by karaokeStats for nights and venues). */
   night?: { id?: string; date?: string; venue_name?: string; kind?: string };
 };
@@ -168,8 +174,8 @@ const blank = (artist: string, title: string, song_key: string | null): MeSong =
 /**
  * Apply unsynced edits on top of the server items. Returns new objects; inputs are untouched.
  *
- * ASSUMPTION: every `PendingLog` entry is treated as NOT yet counted by the server (we cannot tell
- * a new record from an edited one), so the caller must pass only entries still in the outbox.
+ * A `PendingLog` entry is a new performance unless it is marked `synced` (the server already counted it): then it
+ * only moves the survey fields, and a deleted one subtracts its synced contribution.
  * Surveys use the server's per-field semantics: `latest_feel` and `latest_key` are each the newest
  * answer to that field by `answered_at`; a survey that skips a field leaves the older answer alone.
  * A pending survey with no `answered_at` was answered now, so it sorts after everything else.
@@ -198,9 +204,9 @@ export function overlayLibrary(
     return s;
   };
 
-  // 1. Sung records.
+  // 1. Sung records. A synced record is already in the server counts: only a NEW performance adds to them.
   for (const r of pending.log) {
-    if (!countsAsSung(r)) continue;
+    if (!countsAsSung(r) || r.synced) continue;
     const s = get(r.artist, r.title, r.song_key);
     const n = r.times ?? 1;
     s.times_sung += n;
@@ -209,6 +215,25 @@ export function overlayLibrary(
       if (!s.first_sung_at || r.sung_at < s.first_sung_at) s.first_sung_at = r.sung_at;
       if (!s.last_sung_at || r.sung_at > s.last_sung_at) s.last_sung_at = r.sung_at;
     }
+  }
+
+  // 1b. Deleted records the server already counted: take back their contribution (never below zero).
+  for (const r of pending.log) {
+    if (!r.deleted || !r.synced || !(r.state === 'sung' || r.state === 'sung_unplayed') || !r.artist || !r.title) continue;
+    const key = libraryKey(r.artist, r.title, r.song_key ?? null);
+    const s = map.get(key);
+    if (!s) continue;
+    const n = r.times ?? 1;
+    s.times_sung = Math.max(0, s.times_sung - n);
+    if (r.origin === 'backfill') s.backfill_times = Math.max(0, s.backfill_times - n);
+    const feel = r.survey?.feel;
+    if (feel && FEELS.has(feel) && s.feel_counts[feel as Feel] > 0) s.feel_counts[feel as Feel] -= 1;
+    if (s.feel_counts.great + s.feel_counts.ok + s.feel_counts.bad === 0) s.latest_feel = null;
+    if (s.times_sung === 0) {
+      s.first_sung_at = null;
+      s.last_sung_at = null;
+    }
+    touched.add(key);
   }
 
   // 2. Surveys, oldest first so the newest answer per field wins.
@@ -223,7 +248,7 @@ export function overlayLibrary(
   for (const { r } of surveyed) {
     const sv = r.survey!;
     // A record that doesn't count as sung must not create a phantom item.
-    if (!countsAsSung(r) && !map.has(libraryKey(r.artist, r.title, r.song_key ?? null))) continue;
+    if ((!countsAsSung(r) || r.synced) && !map.has(libraryKey(r.artist, r.title, r.song_key ?? null))) continue;
     const s = get(r.artist, r.title, r.song_key);
     if (sv.feel && FEELS.has(sv.feel)) {
       s.latest_feel = sv.feel as Feel;
