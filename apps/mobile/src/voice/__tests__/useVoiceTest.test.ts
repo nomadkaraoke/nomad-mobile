@@ -606,7 +606,9 @@ describe('at 48 kHz (what a phone delivers if it ignores the 16 kHz request)', (
     const a2 = result.current.held.filter((h) => h.note === 45);
     expect(a2.length).toBeGreaterThanOrEqual(1);
     expect(Math.max(...a2.map((h) => h.end))).toBeGreaterThan(59);
-  });
+    // The per-buffer bound above is the real check; the whole simulated 60 s step can take >5 s (Jest's default) on a
+    // loaded CI runner, so give the test itself room.
+  }, 20_000);
 });
 
 it('a held note that starts after 25 s on the low step still counts and lowers the range', async () => {
