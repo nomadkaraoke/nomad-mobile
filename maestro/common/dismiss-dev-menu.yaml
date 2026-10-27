@@ -7,6 +7,11 @@ appId: com.nomadkaraoke.mobile
     visible: "Runtime version.*"
     timeout: 20000
     optional: true
+- runFlow:  # the menu's first-run onboarding (see launch.yaml)
+    when:
+      visible: "This is the developer menu.*"
+    commands:
+      - tapOn: "Continue"
 - runFlow:
     when:
       visible: "Runtime version.*"

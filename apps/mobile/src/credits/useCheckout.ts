@@ -1,15 +1,14 @@
-import { createAppCheckout, getMe } from '@nomad/api-gen';
-import { useQueryClient } from '@tanstack/react-query';
+import { createAppCheckout } from '@nomad/api-gen';
 import * as WebBrowser from 'expo-web-browser';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
+
+import { track } from '../observability';
+import { createPurchaseLock, type PurchaseLock } from './purchaseLock';
+import { pollConfig, useBalanceWatch } from './useBalanceWatch';
+
+export { pollConfig } from './useBalanceWatch';
 
 export const RETURN_URL = 'nomadkaraoke://checkout';
-/**
- * Spec: poll every 1s for up to 10s after a paid return. A dismissed browser (closed after paying, before the
- * redirect) checks 3 times (~2s) before "No payment made". Mutable so tests can shrink the wait instead of
- * faking timers.
- */
-export const pollConfig = { intervalMs: 1000, tries: 10, dismissTries: 3 };
 
 export type CheckoutPhase = 'idle' | 'opening' | 'confirming' | 'added' | 'noPayment' | 'pending' | 'failed';
 
@@ -20,89 +19,53 @@ const returnStatus = (url: string | undefined): string | null => url?.match(/[?&
  * Stripe checkout in an in-app browser (spec §4.5). Gen's web-hook credit can land a moment after the redirect,
  * so a paid return polls the balance for up to ~10s; a balance that never rises is "on its way", not an error.
  */
-export function useCheckout(email: string) {
-  const queryClient = useQueryClient();
+export function useCheckout(email: string, sharedLock?: PurchaseLock) {
   const [phase, setPhase] = useState<CheckoutPhase>('idle');
-  const alive = useRef(true);
-  const baseline = useRef(0);
-  const timers = useRef(new Set<ReturnType<typeof setTimeout>>());
-  useEffect(() => {
-    alive.current = true;
-    const pending = timers.current;
-    return () => {
-      alive.current = false;
-      pending.forEach(clearTimeout);
-      pending.clear();
-    };
-  }, []);
+  const [ownLock] = useState(createPurchaseLock);
+  const lock = sharedLock ?? ownLock;
+  const { alive, markBaseline, waitForCredits, refreshBalance } = useBalanceWatch(email);
 
-  /**
-   * Resolves after `ms`. On unmount the timer is cleared and the promise never settles, so a poll waiting on it
-   * just stops (nothing outlives the screen); pending awaits are garbage-collected with it.
-   */
-  const sleep = useCallback(
-    (ms: number) =>
-      new Promise<void>((resolve) => {
-        const id = setTimeout(() => {
-          timers.current.delete(id);
-          resolve();
-        }, ms);
-        timers.current.add(id);
-      }),
-    [],
+  const set = useCallback(
+    (p: CheckoutPhase) => {
+      if (alive.current) setPhase(p);
+    },
+    [alive],
   );
-
-  const set = (p: CheckoutPhase) => {
-    if (alive.current) setPhase(p);
-  };
-
-  /** Polls until credits exceed `baseline`; true when they did. */
-  const waitForCredits = useCallback(async (tries: number) => {
-    for (let i = 0; i < tries; i++) {
-      if (!alive.current) return false;
-      try {
-        const me = await getMe();
-        if (me.credits > baseline.current) {
-          queryClient.setQueryData(['me', email], me);
-          return true;
-        }
-      } catch {
-        // a blip while polling: keep trying until the window closes
-      }
-      if (i < tries - 1) await sleep(pollConfig.intervalMs);
-    }
-    return false;
-  }, [email, queryClient, sleep]);
 
   const finish = useCallback(
     async (tries: number) => {
       set('confirming');
       const ok = await waitForCredits(tries);
-      void queryClient.invalidateQueries({ queryKey: ['me'] });
+      refreshBalance();
+      if (ok) track('purchase_completed', { channel: 'web' });
       set(ok ? 'added' : 'pending');
     },
-    [queryClient, waitForCredits],
+    [refreshBalance, set, waitForCredits],
   );
 
   const start = useCallback(
     async (packageId: string) => {
+      if (!lock.tryAcquire()) return;
       set('opening');
       try {
-        // Always fresh: a stale cached balance below the real one would read as "credits rose".
-        baseline.current = (await getMe()).credits;
+        await markBaseline();
         const url = await createAppCheckout(packageId, email);
+        track('purchase_started', { channel: 'web', package_id: packageId });
         const result = await WebBrowser.openAuthSessionAsync(url, RETURN_URL);
         if (result.type === 'success' && returnStatus(result.url) === 'success') await finish(pollConfig.tries);
         else if (result.type === 'dismiss' && (await waitForCredits(pollConfig.dismissTries))) {
           // Closed the browser after paying, before the redirect: the credit is already there.
-          void queryClient.invalidateQueries({ queryKey: ['me'] });
+          refreshBalance();
+          track('purchase_completed', { channel: 'web' });
           set('added');
         } else set('noPayment');
       } catch {
         set('failed');
+      } finally {
+        lock.release();
       }
     },
-    [email, finish, queryClient, waitForCredits],
+    [email, finish, lock, markBaseline, refreshBalance, set, waitForCredits],
   );
 
   /** The "on its way" refresh button: one more short wait for the webhook. */

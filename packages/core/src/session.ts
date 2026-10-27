@@ -1,4 +1,8 @@
-export type Session = { token: string; email: string; createdAt: number };
+/** How the person signed in on this phone (Apple accounts re-confirm with Apple before account deletion). */
+export type SignInMethod = 'apple' | 'google' | 'email';
+
+/** `method` is absent on sessions stored before Phase 6 recorded it. */
+export type Session = { token: string; email: string; createdAt: number; method?: SignInMethod };
 
 export type AuthState =
   | { status: 'signedOut' }

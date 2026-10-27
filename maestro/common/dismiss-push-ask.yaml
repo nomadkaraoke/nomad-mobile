@@ -1,0 +1,13 @@
+# The app's own push question ("Get a notification when your video is ready?" after a make starts, "… when it's your
+# turn?" after joining a night; Phase 6 push.ts) shows once per context per install, ~1 s after landing on the Make
+# tab / Tonight. Taps "Not now" when it comes up (so the OS prompt never shows); a no-op when it doesn't. Env NOT_NOW:
+# the button text in the app's language (default English "Not now").
+appId: com.nomadkaraoke.mobile
+---
+- extendedWaitUntil:
+    visible: ${NOT_NOW || 'Not now'}
+    timeout: 4000
+    optional: true
+- tapOn:
+    text: ${NOT_NOW || 'Not now'}
+    optional: true

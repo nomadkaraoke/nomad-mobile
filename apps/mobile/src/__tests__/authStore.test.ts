@@ -1,8 +1,11 @@
 import * as SecureStore from 'expo-secure-store';
 
 import { MAX_CODE_ATTEMPTS } from '../auth/authApi';
-import { useAuth } from '../auth/store';
+import { onBeforeSignOut, signOutAndWipe, useAuth } from '../auth/store';
+import { resetObservability } from '../observability';
 import { apiError, gen, session } from '../test-utils/genAuthMock';
+
+jest.mock('../observability', () => ({ track: jest.fn(), resetObservability: jest.fn() }));
 
 jest.mock('@nomad/api-gen', () => ({
   ...jest.requireActual('@nomad/api-gen'),
@@ -158,4 +161,38 @@ it.each(['null', '{}', '{"token":1,"email":"a@b.co"}'])('treats malformed stored
   await useAuth.getState().hydrate();
   expect(useAuth.getState().state.status).toBe('signedOut');
   expect(useAuth.getState().getToken()).toBeNull();
+});
+
+it('remembers how the person signed in, across a restart (Apple accounts re-confirm before deletion)', async () => {
+  await signIn();
+  const s1 = useAuth.getState().state;
+  expect(s1.status === 'signedIn' && s1.session.method).toBe('email');
+  await useAuth.getState().signInWithSession(session(), 'apple');
+  await useAuth.getState().hydrate();
+  const s2 = useAuth.getState().state;
+  expect(s2.status === 'signedIn' && s2.session.method).toBe('apple');
+});
+
+it('a session stored before the method was recorded restores without one', async () => {
+  await SecureStore.setItemAsync('nomad.session.v1', JSON.stringify({ token: 't', email: 'me@example.com', createdAt: 1 }));
+  await useAuth.getState().hydrate();
+  expect(useAuth.getState().state).toEqual({ status: 'signedIn', session: { token: 't', email: 'me@example.com', createdAt: 1 } });
+});
+
+it('signOutAndWipe skips the before-sign-out hooks and removes the stored session', async () => {
+  const hook = jest.fn(async () => {});
+  const off = onBeforeSignOut(hook);
+  await signIn();
+  await signOutAndWipe();
+  off();
+  expect(hook).not.toHaveBeenCalled();
+  expect(useAuth.getState().state.status).toBe('signedOut');
+  expect(await SecureStore.getItemAsync('nomad.session.v1')).toBeNull();
+});
+
+it('signOut resets observability (Sentry user + a new anonymous PostHog id)', async () => {
+  await signIn();
+  jest.mocked(resetObservability).mockClear();
+  await useAuth.getState().signOut();
+  expect(resetObservability).toHaveBeenCalledTimes(1);
 });

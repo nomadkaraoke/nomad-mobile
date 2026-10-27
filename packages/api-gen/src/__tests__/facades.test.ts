@@ -9,15 +9,21 @@ import {
   createHandoffUrl,
   createJobFromSearch,
   createJobFromUrl,
+  deleteExpoToken,
+  deleteMyAccount,
+  getDeletionPreview,
   exchangeAppleToken,
   exchangeGoogleToken,
   getJob,
+  getCreditCatalog,
   getMe,
+  updatePushPrefs,
   isApiError,
   JobSummarySchema,
   listCreditPackages,
   listMyJobs,
   matchJudge,
+  registerExpoToken,
   retryJob,
   searchAudio,
   sendCode,
@@ -113,6 +119,44 @@ describe('auth', () => {
     expectRequest('GET', '/api/users/me');
   });
 
+  it('getMe passes gen\'s top-level app_user_id through, and tolerates a missing or malformed one', async () => {
+    fetchMock.mockResolvedValue(json({ user: USER, has_session: true, app_user_id: 'u-1' }));
+    await expect(getMe()).resolves.toEqual({ email: 'a@b.co', credits: 3, appUserId: 'u-1' });
+    fetchMock.mockResolvedValue(json({ user: USER, has_session: true, app_user_id: 42 }));
+    await expect(getMe()).resolves.toEqual({ email: 'a@b.co', credits: 3 });
+  });
+
+  it('getMe reads push_prefs, and ignores a malformed one', async () => {
+    const prefs = { ready: true, review: false, problems: true };
+    fetchMock.mockResolvedValue(json({ user: USER, has_session: true, push_prefs: prefs }));
+    await expect(getMe()).resolves.toEqual({ email: 'a@b.co', credits: 3, pushPrefs: prefs });
+    fetchMock.mockResolvedValue(json({ user: USER, has_session: true, push_prefs: { ready: 'x' } }));
+    await expect(getMe()).resolves.toEqual({ email: 'a@b.co', credits: 3 });
+  });
+
+  it('getMe reports an active referral discount percent, and nothing once it expired', async () => {
+    const discounted = { ...USER, has_active_referral_discount: true, referral_discount_percent: 15 };
+    fetchMock.mockResolvedValue(json({ user: discounted, has_session: true }));
+    await expect(getMe()).resolves.toEqual({ email: 'a@b.co', credits: 3, referralDiscountPercent: 15 });
+    const expired = { ...USER, has_active_referral_discount: false, referral_discount_percent: null };
+    fetchMock.mockResolvedValue(json({ user: expired, has_session: true }));
+    await expect(getMe()).resolves.toEqual({ email: 'a@b.co', credits: 3 });
+  });
+
+  it('getMe reads capabilities.account_deletion, and ignores a missing or malformed one', async () => {
+    fetchMock.mockResolvedValue(json({ user: USER, has_session: true, capabilities: { account_deletion: true } }));
+    await expect(getMe()).resolves.toEqual({ email: 'a@b.co', credits: 3, capabilities: { accountDeletion: true } });
+    fetchMock.mockResolvedValue(json({ user: USER, has_session: true, capabilities: { account_deletion: 'yes' } }));
+    await expect(getMe()).resolves.toEqual({ email: 'a@b.co', credits: 3, capabilities: { accountDeletion: false } });
+    fetchMock.mockResolvedValue(json({ user: USER, has_session: true, capabilities: 'nope' }));
+    await expect(getMe()).resolves.toEqual({ email: 'a@b.co', credits: 3 });
+  });
+
+  it('getMe keeps a negative balance (a store refund after the credits were spent) as gen sent it', async () => {
+    fetchMock.mockResolvedValue(json({ user: { ...USER, credits: -2 }, has_session: true }));
+    await expect(getMe()).resolves.toMatchObject({ credits: -2 });
+  });
+
   it('a 401 from handoff-token (session expired) still signs out', async () => {
     fetchMock.mockResolvedValue(json({ detail: 'invalid_session' }, 401));
     await expect(createHandoffUrl('job-1', 'en')).rejects.toMatchObject({ status: 401 });
@@ -134,6 +178,33 @@ describe('credits', () => {
     );
     await expect(listCreditPackages()).resolves.toEqual([{ id: '5', credits: 5, priceCents: 3500, name: '5 credits' }]);
     expect(lastRequest().url).toBe('https://gen.test/api/users/credits/packages');
+  });
+
+  it('getCreditCatalog maps store product ids and the web link rollout', async () => {
+    fetchMock.mockResolvedValue(
+      json({
+        packages: [
+          { id: '1_credit', credits: 1, price_cents: 999, name: '1 credit', description: '', store_product_id: 'nomad_credits_1' },
+          { id: 'legacy', credits: 2, price_cents: 1800, name: '2 credits', description: '', store_product_id: null },
+        ],
+        web_link: { show_for: { ios: ['USA'], android: [] }, copy_key: 'credits.webLink.default' },
+      }),
+    );
+    await expect(getCreditCatalog()).resolves.toEqual({
+      packages: [
+        { id: '1_credit', credits: 1, priceCents: 999, name: '1 credit', storeProductId: 'nomad_credits_1' },
+        { id: 'legacy', credits: 2, priceCents: 1800, name: '2 credits' },
+      ],
+      webLink: { showFor: { ios: ['USA'], android: [] }, copyKey: 'credits.webLink.default' },
+    });
+  });
+
+  it('getCreditCatalog reads an older gen (or a malformed web_link) as no web link', async () => {
+    const pkg = { id: '5', credits: 5, price_cents: 3500, name: '5 credits', description: '' };
+    fetchMock.mockResolvedValue(json({ packages: [pkg] }));
+    await expect(getCreditCatalog()).resolves.toEqual({ packages: [{ id: '5', credits: 5, priceCents: 3500, name: '5 credits' }] });
+    fetchMock.mockResolvedValue(json({ packages: [pkg], web_link: { show_for: 'USA' } }));
+    await expect(getCreditCatalog()).resolves.toEqual({ packages: [{ id: '5', credits: 5, priceCents: 3500, name: '5 credits' }] });
   });
 
   it('createAppCheckout asks for an app return and returns the checkout url', async () => {
@@ -354,5 +425,76 @@ describe('isApiError', () => {
     expect(isApiError(e, 409, 'other')).toBe(false);
     expect(isApiError(e, 402)).toBe(false);
     expect(isApiError(new Error('x'), 409)).toBe(false);
+  });
+});
+
+describe('push', () => {
+  it('registerExpoToken posts token, platform and device_id with the session', async () => {
+    fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
+    await expect(registerExpoToken('ExponentPushToken[abc]', 'android', 'dev-1')).resolves.toBeUndefined();
+    expectRequest('POST', '/api/push/expo-token');
+    expect(await lastBody()).toEqual({ token: 'ExponentPushToken[abc]', platform: 'android', device_id: 'dev-1' });
+  });
+
+  it('updatePushPrefs PATCHes a partial body and returns the full prefs', async () => {
+    const full = { ready: true, review: false, problems: true };
+    fetchMock.mockResolvedValue(json(full));
+    await expect(updatePushPrefs({ review: false })).resolves.toEqual(full);
+    expectRequest('PATCH', '/api/users/me/push-prefs');
+    expect(await lastBody()).toEqual({ review: false });
+  });
+
+  it('deleteExpoToken sends DELETE with the token in a JSON body', async () => {
+    fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
+    await deleteExpoToken('ExponentPushToken[abc]');
+    expectRequest('DELETE', '/api/push/expo-token');
+    expect(lastRequest().headers.get('content-type')).toBe('application/json');
+    expect(await lastBody()).toEqual({ token: 'ExponentPushToken[abc]' });
+  });
+
+  it('deleteExpoToken with a bearer sends that session instead (signed-out retry)', async () => {
+    configureClient({ baseUrl: 'https://gen.test', getToken: () => null, getLocale: () => 'de', onUnauthorized });
+    fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
+    await deleteExpoToken('ExponentPushToken[abc]', 'old-session');
+    expect(lastRequest().headers.get('authorization')).toBe('Bearer old-session');
+  });
+
+  it('a failed register rejects with ApiError', async () => {
+    fetchMock.mockResolvedValue(json({ detail: 'bad token' }, 422));
+    await expect(registerExpoToken('nope', 'ios', 'd')).rejects.toMatchObject({ status: 422 });
+  });
+});
+
+describe('account deletion', () => {
+  it('getDeletionPreview maps credits, jobs in progress and the block', async () => {
+    fetchMock.mockResolvedValue(json({ credits: 4, jobs_in_progress: 2, blocked: null }));
+    await expect(getDeletionPreview()).resolves.toEqual({ credits: 4, jobsInProgress: 2, blocked: null });
+    expectRequest('GET', '/api/users/me/deletion-preview');
+    fetchMock.mockResolvedValue(json({ credits: 0, jobs_in_progress: 0, blocked: 'referral_balance' }));
+    await expect(getDeletionPreview()).resolves.toMatchObject({ blocked: 'referral_balance' });
+  });
+
+  it('getDeletionPreview: 404 (deletion off) and a malformed body reject with ApiError', async () => {
+    fetchMock.mockResolvedValue(json({ detail: 'Not Found' }, 404));
+    await expect(getDeletionPreview()).rejects.toMatchObject({ status: 404 });
+    fetchMock.mockResolvedValue(json({ credits: 'x' }));
+    await expect(getDeletionPreview()).rejects.toMatchObject({ status: 0, detail: 'invalid_response' });
+  });
+
+  it('deleteMyAccount sends DELETE with the Apple code when given, an empty body otherwise', async () => {
+    fetchMock.mockImplementation(async () => json({ deleted: true, summary: {} }));
+    await expect(deleteMyAccount({ appleAuthorizationCode: 'apple-code' })).resolves.toBeUndefined();
+    expectRequest('DELETE', '/api/users/me');
+    expect(lastRequest().headers.get('content-type')).toBe('application/json');
+    expect(await lastBody()).toEqual({ apple_authorization_code: 'apple-code' });
+    await deleteMyAccount();
+    expect(await lastBody()).toEqual({});
+  });
+
+  it('deleteMyAccount: 409 carries the top-level code, 503 the step', async () => {
+    fetchMock.mockResolvedValue(json({ code: 'admin' }, 409));
+    await expect(deleteMyAccount()).rejects.toMatchObject({ status: 409, detail: { code: 'admin' } });
+    fetchMock.mockResolvedValue(json({ step: 'dropbox' }, 503));
+    await expect(deleteMyAccount()).rejects.toMatchObject({ status: 503, detail: { step: 'dropbox' } });
   });
 });

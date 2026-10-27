@@ -1,0 +1,74 @@
+# Purchase 1 (Phase 6 spec §4): a fresh user with 0 credits → Me → Buy credits → the store packs at their US prices →
+# 3 credits ($23.99, nomad_credits_3) → Buy → "Credits added" → back on Me with 3 credits, and gen holds 3.
+# Metro bundles with EXPO_PUBLIC_FAKE_IAP=1: the fake store "buys" through gen's /api/test/fake-iap/purchase, which
+# grants the pack through the same IapService as the RevenueCat webhook.
+appId: com.nomadkaraoke.mobile
+name: purchase-1-iap
+tags:
+  - purchase
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: iap
+      CREDITS: "0"
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/me-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- assertVisible:
+    id: "me-credits"
+    text: "0 credits"
+- tapOn:
+    id: "me-buy"
+- extendedWaitUntil:
+    visible:
+      id: "credits-pkg-3_credits"
+    timeout: 30000
+- assertVisible:
+    id: "credits-balance"
+    text: "You have 0 credits"
+# The store's own prices (the fake store's US price list), not gen's web prices. A row's text is one accessibility
+# label on iOS ("3 credits, Popular, $23.99"), so match within it.
+- assertVisible:
+    id: "credits-pkg-1_credit"
+    text: ".*\\$9\\.99.*"
+- assertVisible:
+    id: "credits-pkg-3_credits"
+    text: ".*\\$23\\.99.*"
+- assertVisible:
+    id: "credits-pkg-5_credits"
+    text: ".*\\$34\\.99.*"
+- assertVisible:
+    id: "credits-pkg-10_credits"
+    text: ".*\\$59\\.99.*"
+- tapOn:
+    id: "credits-pkg-3_credits"
+- assertVisible:
+    id: "credits-buy"
+    text: "Buy for \\$23\\.99"
+- takeScreenshot: ${PHASE6_SHOTS}/purchase-1-packs
+- tapOn:
+    id: "credits-buy"
+# "Credits added" shows for 1.5 s before the screen goes back to Me; the proof of payment is the balance there.
+- runFlow:
+    when:
+      visible:
+        id: "credits-added"
+    commands:
+      - takeScreenshot: ${PHASE6_SHOTS}/purchase-1-added
+- extendedWaitUntil:
+    visible:
+      id: "me-credits"
+      text: "3 credits"
+    timeout: 30000
+- takeScreenshot: ${PHASE6_SHOTS}/purchase-1-me-3-credits
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: credits
+      STACK: ${STACK}
+      EXPECT_CREDITS: "3"

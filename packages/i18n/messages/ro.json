@@ -778,7 +778,18 @@
     "signInPrompt": "Conectează-te pentru a cumpăra credite",
     "packageCredits": "{credits, plural, one {# credit} few {# credite} other {# de credite}}",
     "popular": "Popular",
-    "title": "Cumpără credite"
+    "title": "Cumpără credite",
+    "balance": "Ai {credits, plural, one {# credit} few {# credite} other {# de credite}}",
+    "buy": "Cumpără",
+    "buyFor": "Cumpără cu {price}",
+    "purchaseFailed": "Achiziția nu a reușit. Încearcă din nou.",
+    "referralNote": "Reducerea ta de {percent}% prin recomandare se aplică atunci când cumperi de pe web.",
+    "webLink": {
+      "default": "Cumpără de pe web"
+    },
+    "store": {
+      "awaitingApproval": "În așteptarea aprobării. Creditele tale vor apărea de îndată ce achiziția este aprobată."
+    }
   },
   "duration": {
     "body": "Această piesă are o durată de {duration}, așa că va costa {total, plural, one {# credit} few {# credite} other {# de credite}} în total (cu {extra} în plus).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Alege alte capturi de ecran",
       "reading": "Se citesc capturile tale de ecran…",
       "unmatched": "Nu este încă în catalogul nostru de karaoke",
-      "retry": "Încearcă din nou"
+      "retry": "Încearcă din nou",
+      "aiConsentBody": "Pentru a găsi melodiile, captura ta de ecran este trimisă către Gemini AI de la Google. Este folosită doar pentru a citi numele melodiilor și nu este păstrată ulterior.",
+      "aiConsentTitle": "Vrei să citim captura de ecran cu AI?",
+      "aiNote": "Capturile de ecran sunt citite de Gemini AI de la Google și nu sunt păstrate.",
+      "aiConsentCancel": "Anulează",
+      "aiConsentContinue": "Continuă"
     },
     "source": {
       "appleExport": "Istoric Apple Music",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Ai importat deja acest fișier, așa că nu a fost nimic nou de adăugat."
   },
   "permissions": {
-    "microphone": "Permite aplicației Nomad Karaoke să te audă cântând, ca să-ți poată măsura ambitusul vocal. Înregistrarea audio rămâne pe telefonul tău."
+    "microphone": "Nomad Karaoke folosește microfonul pentru a-ți măsura ambitusul vocal. Dacă alegi să te înregistrezi într-o sesiune vocală, înregistrarea este încărcată și păstrată în mod confidențial (doar tu și echipa Nomad Karaoke o puteți asculta) și o poți șterge oricând din secțiunea Eu."
   },
   "voice": {
     "between": "Între {low} și {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Prea multe deodată. Încearcă din nou în câteva minute."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Activează",
+      "make": {
+        "body": "Te anunțăm când este gata de vizionat sau dacă e nevoie să verifici versurile.",
+        "title": "Vrei să primești o notificare când videoclipul tău e gata?"
+      },
+      "night": {
+        "body": "Te anunțăm când urmezi și când e rândul tău să cânți.",
+        "title": "Vrei să primești o notificare când e rândul tău?"
+      },
+      "notNow": "Nu acum"
+    },
+    "channels": {
+      "jobs": "Videoclipurile tale",
+      "tonight": "Seri Nomad"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Notificări",
+      "row": "Cont și notificări",
+      "title": "Cont și notificări"
+    },
+    "notifications": {
+      "askBody": "Activează notificările pentru a afla când videoclipul tău este gata sau necesită atenția ta.",
+      "askButton": "Activează notificările",
+      "deniedBody": "Notificările sunt dezactivate pentru Nomad Karaoke pe acest telefon. Activează-le din Setări pentru a afla când videoclipurile tale sunt gata.",
+      "error": "Nu s-a putut salva modificarea. Verifică conexiunea la internet și încearcă din nou.",
+      "night": {
+        "hint": "Când urmezi la rând și când îți vine rândul să cânți.",
+        "label": "Alerte pentru serile Nomad"
+      },
+      "problems": {
+        "hint": "Când apare o problemă la un videoclip.",
+        "label": "Probleme"
+      },
+      "ready": {
+        "hint": "Când videoclipul tău de karaoke este gata de vizionat.",
+        "label": "Videoclip gata"
+      },
+      "review": {
+        "hint": "Când versurile au nevoie de o verificare rapidă din partea ta.",
+        "label": "Necesită verificarea ta"
+      },
+      "title": "Notificări",
+      "openSettings": "Deschide Setări",
+      "loadFailed": "Nu ți-am putut încărca setările de notificare. Verifică conexiunea și încearcă din nou."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Nu s-a putut confirma cu Apple. Te rugăm să încerci din nou.",
+    "blocked": {
+      "admin": "Acesta este un cont de membru al echipei, așa că nu poate fi șters din aplicație.",
+      "connect_account": "Contul tău este conectat la un cont de plăți, așa că nu poate fi șters din aplicație.",
+      "generic": "Nu putem șterge acest cont din aplicație.",
+      "order_in_progress": "Ai o comandă în curs de procesare, așa că deocamdată contul tău nu poate fi șters din aplicație.",
+      "referral_balance": "Ai câștiguri din recomandări care nu au fost încă plătite, așa că deocamdată contul tău nu poate fi șters din aplicație.",
+      "unavailable": "Ștergerea contului din aplicație nu este disponibilă în acest moment."
+    },
+    "contactSupport": "Trimite e-mail la asistență",
+    "creditsLost": "{count, plural, one {# credit va fi pierdut.} few {# credite vor fi pierdute.} other {# de credite vor fi pierdute.}}",
+    "deletedDetails": "Datele tale personale",
+    "deletedDiscover": "Muzica și datele tale vocale din Discover",
+    "deletedUploads": "Fișierele încărcate de tine",
+    "doneBody": "Contul tău a fost șters, iar datele de pe acest telefon au fost curățate.",
+    "doneTitle": "Contul tău a fost șters",
+    "intro": "Această acțiune îți va șterge definitiv contul Nomad Karaoke. Acțiunea este ireversibilă.",
+    "jobsCancelled": "{count, plural, one {# videoclip în curs de procesare va fi anulat.} few {# videoclipuri în curs de procesare vor fi anulate.} other {# de videoclipuri în curs de procesare vor fi anulate.}}",
+    "keep": "Păstrează-mi contul",
+    "keptRecords": "Istoricul procesărilor și al plăților, de care avem nevoie pentru contabilitate",
+    "loadError": "Nu s-au putut încărca detaliile contului tău. Verifică conexiunea și încearcă din nou.",
+    "retryNetwork": "Nu ți-am putut șterge contul. Verifică conexiunea și încearcă din nou.",
+    "signedOutTitle": "Ai fost deconectat",
+    "support": "Trimite-ne un e-mail la {email} și ne vom ocupa noi.",
+    "confirm": "Șterge-mi contul",
+    "deletedHeading": "Ce ștergem",
+    "deletedNights": "Linkurile tale Nomad night",
+    "deletedRecordings": "Înregistrările tale",
+    "keptHeading": "Ce păstrăm",
+    "keptVideos": "Videoclipurile de karaoke deja publicate pe YouTube",
+    "ok": "OK",
+    "retryPartWay": "Ceva nu a funcționat pe parcurs. Te rugăm să încerci din nou — ștergerea va continua de unde a rămas.",
+    "row": "Ștergere cont",
+    "signedOutBody": "Ai fost deconectat. Dacă tocmai ți-ai șters contul, acesta nu mai există. Altfel, conectează-te și încearcă din nou.",
+    "title": "Șterge-ți contul"
   }
 }

@@ -16,7 +16,7 @@ export function setupApiClients() {
     baseUrl: GEN_API_URL,
     getToken: () => useAuth.getState().getToken(),
     getLocale: currentLocale,
-    onUnauthorized: () => void useAuth.getState().signOut(),
+    onUnauthorized: () => void useAuth.getState().signOut({ sessionDead: true }),
   });
   // Decide accepts the gen session token (spec §4.2). Gen still owns identity: a decide 401 (an unknown or
   // expired session on its side) never signs the user out, it only marks Discover's personal data stale (and the

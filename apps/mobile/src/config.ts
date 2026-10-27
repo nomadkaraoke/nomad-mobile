@@ -74,3 +74,37 @@ export const FAKE_YT_SECONDS: number = Number.isFinite(fakeYtSeconds) && fakeYtS
 export const PLAYER_MODE: PlayerMode = isLocalUrl(GEN_API_URL)
   ? parsePlayerMode(process.env.EXPO_PUBLIC_VS_PLAYER_MODE)
   : DEFAULT_PLAYER_MODE;
+
+/**
+ * RevenueCat public SDK keys (EAS `release` profiles set them). Unset = in-app purchases off, and the credits screen
+ * keeps the web checkout (dev builds, the local stack).
+ */
+export const REVENUECAT_IOS_KEY: string | null = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || null;
+export const REVENUECAT_ANDROID_KEY: string | null = process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY || null;
+
+/**
+ * E2E only: in-app purchases go through the fake adapter (gen's `/api/test/fake-iap/purchase`) instead of the store.
+ * Off unless gen is a local host, so a release build can never fake a purchase.
+ */
+export const FAKE_IAP: boolean = process.env.EXPO_PUBLIC_FAKE_IAP === '1' && isLocalUrl(GEN_API_URL);
+
+/** The fake adapter's store country (App Store storefront code), `USA` by default. */
+export const FAKE_STOREFRONT: string = process.env.EXPO_PUBLIC_FAKE_STOREFRONT || 'USA';
+
+/**
+ * EAS project (keep in step with app.config.ts EAS_PROJECT_ID; appConfig.test.ts and push.test.ts pin both). The push
+ * token is attributed to it; the built config's `extra.eas.projectId` wins when present.
+ */
+export const EAS_PROJECT_ID = 'c6092d15-ad6e-4e3d-bfc2-befc2e239af2';
+
+/**
+ * Push notifications (Phase 6). Off only with EXPO_PUBLIC_PUSH=0 (the e2e-test profile and the E2E Metro): those builds
+ * have no push entitlement (app.config.ts strips `aps-environment`), so no real Expo token.
+ */
+export const PUSH_ENABLED: boolean = process.env.EXPO_PUBLIC_PUSH !== '0';
+
+/**
+ * E2E only: with push off against a local gen, the app registers a made-up Expo token (`ExponentPushToken[e2e-<device
+ * id>]`) so gen's and the box's fake push outboxes record what they would send. Never against a deployed gen.
+ */
+export const FAKE_PUSH_TOKEN: boolean = !PUSH_ENABLED && isLocalUrl(GEN_API_URL);

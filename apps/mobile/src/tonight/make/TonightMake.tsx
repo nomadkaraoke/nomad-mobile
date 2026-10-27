@@ -15,6 +15,7 @@ import { DidYouMean, MatchNotice } from '../../make/JudgeNotices';
 import { PickCard, SourceGroups } from '../../make/SourcePicker';
 import { useAudioSearch } from '../../make/useAudioSearch';
 import { useMatchJudge } from '../../make/useMatchJudge';
+import { track } from '../../observability';
 import { consentFields, loadNightConsent, serverNightConsent } from '../manage/NightConsent';
 import { storedPhone } from '../manage/PhoneSheet';
 import { useNightStore, type NomadNight } from '../nightStore';
@@ -262,6 +263,7 @@ function useMakeSend(night: NomadNight, userKey: string | null, wanted: Wanted) 
         alive: () => alive.current,
       });
       clearPendingMake(userKey, night.nightId, wanted);
+      track('song_requested', { mode: 'make' });
       void queryClient.invalidateQueries({ queryKey: nightKey(night, userKey) });
       if (alive.current) router.dismissTo(NIGHT_ROUTE);
     } catch (e) {

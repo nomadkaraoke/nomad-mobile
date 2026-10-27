@@ -5,8 +5,9 @@ import { colors } from '@nomad/ui';
 import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
 
 import { useImportQueueRunner } from '../discover/connect/importQueue';
-import { useReminderTapRouting } from '../discover/connect/reminders';
 import { useSharedFileIntake } from '../discover/connect/useSharedFileIntake';
+import { useNotificationTapRouting } from '../notifications/tapRouting';
+import { wrapRoot } from '../observability';
 import { AppProviders } from '../providers/AppProviders';
 import { headerBackWhenFirst } from '../ui/HeaderBack';
 import { voiceSessionScreenProps } from '../voiceSession/screenProps';
@@ -26,13 +27,16 @@ const SIGN_IN_SHEET = {
 
 const theme = { ...DarkTheme, colors: { ...DarkTheme.colors, background: colors.bg, card: colors.card } };
 
-export default function RootLayout() {
+function RootLayout() {
   return (
     <AppProviders>
       <RootStack />
     </AppProviders>
   );
 }
+
+// Sentry's root wrapper: crash boundary + touch breadcrumbs (a no-op passthrough while Sentry isn't initialised).
+export default wrapRoot(RootLayout);
 
 /** Inside AppProviders, so screen titles can be translated. */
 function RootStack() {
@@ -41,8 +45,8 @@ function RootStack() {
   const tAccount = useTranslations('account');
   // Sends privacy-export uploads parsed on the phone once online and signed in (Phase 3b).
   useImportQueueRunner();
-  // A tapped Spotify-export reminder opens its screen (Phase 3b).
-  useReminderTapRouting();
+  // The one notification tap router: reminders (3b, 3d) and pushes (Phase 6) open their data.url.
+  useNotificationTapRouting();
   // Android Share -> Nomad Karaoke: a shared export zip/CSV opens the import screen (Phase 3b).
   useSharedFileIntake();
   const tMe = useTranslations('me');

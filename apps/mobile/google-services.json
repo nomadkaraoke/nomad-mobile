@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "718638054799",
+    "project_id": "nomadkaraoke",
+    "storage_bucket": "nomadkaraoke.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718638054799:android:af245e1c3cba60766adffa",
+        "android_client_info": {
+          "package_name": "com.nomadkaraoke.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "718638054799-6jtvlqajgg3ckltmpipvr122j7olpefh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANOTg-RBAXH5h54tHfxa8Bi6umfpFJBMo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "718638054799-6jtvlqajgg3ckltmpipvr122j7olpefh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "718638054799-hre535n83p8i85tsqf6ai759nlubhd2o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nomadkaraoke.mobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

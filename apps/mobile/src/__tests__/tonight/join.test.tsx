@@ -2,9 +2,11 @@ import * as kjbox from '@nomad/api-kjbox';
 import type { NightClosed } from '@nomad/api-kjbox';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
+import { Alert } from 'react-native';
 
 import { useAuth } from '../../auth/store';
 import { openSignIn } from '../../auth/signInUi';
+import { takePendingPushAsk } from '../../notifications/push';
 import { useNightStore } from '../../tonight/nightStore';
 import { nightOpen } from '../../test-utils/tonightFixtures';
 import { getInRoutes, type CameraMockState } from './getInHelpers';
@@ -87,6 +89,20 @@ describe('first time: name confirm (spec §4.1 Join tonight)', () => {
     await waitFor(() => expect(api.joinNight).toHaveBeenCalledWith('2121', 'Sammy', TONIGHT));
     await waitFor(() => expect(app.getPathname()).toBe('/tonight'));
     expect(useNightStore.getState().active).toMatchObject({ kind: 'nomad', code: '2121', nightId: TONIGHT });
+  });
+
+  it('the push question is queued for Tonight, not raised while the name sheet closes (iOS drops that Alert)', async () => {
+    takePendingPushAsk('night');
+    const alert = jest.spyOn(Alert, 'alert');
+    api.getNight.mockResolvedValue(nightOpen({ night_id: TONIGHT, kj_name: 'Andrew', needs_name: true, suggested_name: 'Sam' }));
+    const app = open();
+    await screen.findByTestId('tonight-name-input');
+    fireEvent.press(screen.getByTestId('tonight-name-confirm'));
+    await waitFor(() => expect(app.getPathname()).toBe('/tonight'));
+    // Nothing raised during the join; the Tonight tab picked the queued ask up (usePendingPushAsk asks once settled).
+    expect(alert).not.toHaveBeenCalled();
+    expect(takePendingPushAsk('night')).toBe(false);
+    alert.mockRestore();
   });
 
   it.each([[''], [null]])('no prefill when suggested_name is %p; a name is required', async (suggested) => {

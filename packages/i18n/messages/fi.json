@@ -778,7 +778,18 @@
     "signInPrompt": "Kirjaudu sisään ostaaksesi krediittejä",
     "packageCredits": "{credits, plural, one {# krediitti} other {# krediittiä}}",
     "popular": "Suosittu",
-    "title": "Osta krediittejä"
+    "title": "Osta krediittejä",
+    "balance": "Sinulla on {credits, plural, one {# krediitti} other {# krediittiä}}",
+    "buy": "Osta",
+    "buyFor": "Osta hintaan {price}",
+    "purchaseFailed": "Ostos ei mennyt läpi. Yritä uudelleen.",
+    "referralNote": "{percent} %:n suosittelualennuksesi on voimassa, kun teet ostoksen verkossa.",
+    "webLink": {
+      "default": "Osta verkossa"
+    },
+    "store": {
+      "awaitingApproval": "Odottaa hyväksyntää. Krediittisi tulevat näkyviin, kun ostos on hyväksytty."
+    }
   },
   "duration": {
     "body": "Tämä kappale on {duration} pitkä, joten se maksaa yhteensä {total, plural, one {# krediitin} other {# krediittiä}} ({extra} lisää).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Valitse toiset kuvakaappaukset",
       "reading": "Luetaan kuvakaappauksiasi…",
       "unmatched": "Ei vielä karaokeluettelossamme",
-      "retry": "Yritä uudelleen"
+      "retry": "Yritä uudelleen",
+      "aiConsentBody": "Kappaleiden löytämiseksi kuvakaappauksesi lähetetään Googlen Gemini-tekoälylle. Sitä käytetään vain kappaleiden nimien lukemiseen, eikä sitä säilytetä sen jälkeen.",
+      "aiConsentTitle": "Luetaanko kuvakaappauksesi tekoälyllä?",
+      "aiNote": "Kuvakaappaukset luetaan Googlen Gemini-tekoälyllä, eikä niitä säilytetä.",
+      "aiConsentCancel": "Peruuta",
+      "aiConsentContinue": "Jatka"
     },
     "source": {
       "appleExport": "Apple Music -historia",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Olet jo tuonut tämän tiedoston, joten mitään uutta lisättävää ei ollut."
   },
   "permissions": {
-    "microphone": "Anna Nomad Karaoken kuulla lauluasi, jotta se voi mitata äänialasi. Ääni pysyy puhelimessasi."
+    "microphone": "Nomad Karaoke käyttää mikrofonia äänialasi mittaamiseen. Jos päätät äänittää itseäsi äänisessiossa, tallenne ladataan palveluun ja pidetään yksityisenä (vain sinä ja Nomad Karaoke -tiimi voitte kuunnella sitä), ja voit poistaa sen milloin tahansa Minä-osiossa."
   },
   "voice": {
     "between": "Välillä {low}–{high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Liian monta kerralla. Yritä uudelleen muutaman minuutin kuluttua."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Ota käyttöön",
+      "make": {
+        "body": "Ilmoitamme, kun se on valmis katsottavaksi tai jos sinun täytyy tarkistaa sanoitukset.",
+        "title": "Haluatko ilmoituksen, kun videosi on valmis?"
+      },
+      "night": {
+        "body": "Ilmoitamme, kun olet seuraavana vuorossa ja kun on sinun vuorosi laulaa.",
+        "title": "Haluatko ilmoituksen, kun on sinun vuorosi?"
+      },
+      "notNow": "Ei nyt"
+    },
+    "channels": {
+      "jobs": "Omat videot",
+      "tonight": "Nomad-illat"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Ilmoitukset",
+      "row": "Tili ja ilmoitukset",
+      "title": "Tili ja ilmoitukset"
+    },
+    "notifications": {
+      "askBody": "Ota ilmoitukset käyttöön, niin saat tiedon, kun videosi on valmis tai kaipaa huomiotasi.",
+      "askButton": "Ota ilmoitukset käyttöön",
+      "deniedBody": "Nomad Karaoken ilmoitukset on poistettu käytöstä tällä puhelimella. Ota ne käyttöön asetuksista, niin saat tiedon, kun videosi ovat valmiita.",
+      "error": "Muutosta ei voitu tallentaa. Tarkista internetyhteys ja yritä uudelleen.",
+      "night": {
+        "hint": "Kun olet seuraavana vuorossa ja kun on sinun vuorosi laulaa.",
+        "label": "Nomad-karaokeillan ilmoitukset"
+      },
+      "problems": {
+        "hint": "Kun videon kanssa ilmenee ongelmia.",
+        "label": "Ongelmat"
+      },
+      "ready": {
+        "hint": "Kun karaokevideosi on valmis katsottavaksi.",
+        "label": "Video valmis"
+      },
+      "review": {
+        "hint": "Kun sanoitukset kaipaavat nopeaa tarkistustasi.",
+        "label": "Vaatii tarkistustasi"
+      },
+      "title": "Ilmoitukset",
+      "openSettings": "Avaa asetukset",
+      "loadFailed": "Ilmoitusasetuksiasi ei voitu ladata. Tarkista internetyhteytesi ja yritä uudelleen."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Vahvistus Applelta epäonnistui. Yritä uudelleen.",
+    "blocked": {
+      "admin": "Tämä on henkilökuntatili, joten sitä ei voi poistaa sovelluksesta.",
+      "connect_account": "Tilisi on yhdistetty maksutiliin, joten sitä ei voi poistaa sovelluksesta.",
+      "generic": "Tätä tiliä ei voida poistaa sovelluksesta.",
+      "order_in_progress": "Sinulla on tilaus kesken, joten tiliäsi ei voi vielä poistaa sovelluksesta.",
+      "referral_balance": "Sinulla on maksamattomia suosittelutuloja, joten tiliäsi ei voi poistaa sovelluksesta.",
+      "unavailable": "Tilin poistaminen sovelluksesta ei ole juuri nyt mahdollista."
+    },
+    "contactSupport": "Ota yhteyttä tukeen sähköpostitse",
+    "creditsLost": "{count, plural, one {# krediitti menetetään.} other {# krediittiä menetetään.}}",
+    "deletedDetails": "Henkilötietosi",
+    "deletedDiscover": "Musiikki- ja äänitietosi Discover-osiossa",
+    "deletedUploads": "Lataamasi tiedostot",
+    "doneBody": "Tilisi on poistettu ja tämän puhelimen tiedot on tyhjennetty.",
+    "doneTitle": "Tilisi on poistettu",
+    "intro": "Tämä poistaa Nomad Karaoke -tilisi pysyvästi. Toimintoa ei voi kumota.",
+    "jobsCancelled": "{count, plural, one {# keskeneräinen video peruutetaan.} other {# keskeneräistä videota peruutetaan.}}",
+    "keep": "Pidä tilini",
+    "keptRecords": "Työ- ja maksutiedot, joita tarvitsemme kirjanpitoon",
+    "loadError": "Tilitietojesi lataaminen epäonnistui. Tarkista verkkoyhteys ja yritä uudelleen.",
+    "retryNetwork": "Tilisi poistaminen epäonnistui. Tarkista verkkoyhteys ja yritä uudelleen.",
+    "signedOutTitle": "Sinut on kirjattu ulos",
+    "support": "Lähetä meille sähköpostia osoitteeseen {email}, niin hoidamme asian.",
+    "confirm": "Poista tilini",
+    "deletedHeading": "Mitä poistamme",
+    "deletedNights": "Nomad-iltalinkkisi",
+    "deletedRecordings": "Omat äänitteet",
+    "keptHeading": "Mitä säilytämme",
+    "keptVideos": "YouTubessa jo julkaistut karaokevideot",
+    "ok": "OK",
+    "retryPartWay": "Jokin meni vikaan kesken kaiken. Yritä uudelleen – poisto jatkuu siitä, mihin se jäi.",
+    "row": "Poista tili",
+    "signedOutBody": "Sinut on kirjattu ulos. Jos juuri poistit tilisi, se on nyt poistettu. Muussa tapauksessa kirjaudu sisään ja yritä uudelleen.",
+    "title": "Poista tilisi"
   }
 }

@@ -53,7 +53,7 @@ jest.mock('expo-apple-authentication', () => ({
 
 // The real Sentry SDK starts timers at import, which keeps jest workers alive after the run.
 // observability.test.ts overrides this with its own mock to assert init().
-jest.mock('@sentry/react-native', () => ({ init: jest.fn(), wrap: (c) => c, captureException: jest.fn() }));
+jest.mock('@sentry/react-native', () => ({ init: jest.fn(), wrap: (c) => c, setUser: jest.fn(), captureException: jest.fn() }));
 
 // Ready screen native modules (any suite that loads the route table imports them). Tests drive the jest.fns.
 jest.mock('expo-video', () => {
@@ -117,16 +117,23 @@ jest.mock('expo-haptics', () => ({
   NotificationFeedbackType: { Success: 'success', Warning: 'warning', Error: 'error' },
 }));
 jest.mock('expo-clipboard', () => ({ setStringAsync: jest.fn(async () => true) }));
-// Local reminders (Connect → Spotify export): the root layout listens for reminder taps. Suites drive the jest.fns.
+// Local reminders (Connect → Spotify export) and push (Phase 6): the root layout listens for notification taps, and
+// AppProviders registers push only once permission is granted (undetermined here, so screens register nothing).
+// Suites drive the jest.fns.
 jest.mock('expo-notifications', () => ({
   requestPermissionsAsync: jest.fn(async () => ({ granted: true, status: 'granted', canAskAgain: true })),
+  getPermissionsAsync: jest.fn(async () => ({ granted: false, status: 'undetermined', canAskAgain: true })),
+  getExpoPushTokenAsync: jest.fn(async () => ({ type: 'expo', data: 'ExponentPushToken[test]' })),
+  setNotificationHandler: jest.fn(),
+  addPushTokenListener: jest.fn(() => ({ remove: jest.fn() })),
   setNotificationChannelAsync: jest.fn(async () => null),
   scheduleNotificationAsync: jest.fn(async () => 'reminder-id'),
   cancelScheduledNotificationAsync: jest.fn(async () => {}),
+  cancelAllScheduledNotificationsAsync: jest.fn(async () => {}),
   getLastNotificationResponse: jest.fn(() => null),
   clearLastNotificationResponse: jest.fn(),
   addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
-  AndroidImportance: { DEFAULT: 5 },
+  AndroidImportance: { DEFAULT: 5, HIGH: 6 },
   SchedulableTriggerInputTypes: { DATE: 'date', TIME_INTERVAL: 'timeInterval' },
 }));
 jest.mock('expo-document-picker', () => ({ getDocumentAsync: jest.fn(async () => ({ canceled: true, assets: null })) }));
@@ -177,3 +184,20 @@ jest.mock('react-native-webview', () => {
   const { View } = jest.requireActual('react-native');
   return { WebView: ({ testID }) => createElement(View, { testID }) };
 });
+
+// RevenueCat's native module is absent under jest; the app only touches it with a key set (never in tests).
+// revenueCatAdapter.test.ts mocks it itself to drive the SDK.
+jest.mock('react-native-purchases', () => ({
+  __esModule: true,
+  default: {
+    configure: jest.fn(),
+    logIn: jest.fn(async () => ({})),
+    logOut: jest.fn(async () => ({})),
+    getProducts: jest.fn(async () => []),
+    purchaseStoreProduct: jest.fn(async () => ({})),
+    getStorefront: jest.fn(async () => null),
+    getAppUserID: jest.fn(async () => '$RCAnonymousID:jest'),
+  },
+  PRODUCT_CATEGORY: { NON_SUBSCRIPTION: 'NON_SUBSCRIPTION', SUBSCRIPTION: 'SUBSCRIPTION' },
+  PURCHASES_ERROR_CODE: { PURCHASE_CANCELLED_ERROR: '1', PAYMENT_PENDING_ERROR: '20' },
+}));

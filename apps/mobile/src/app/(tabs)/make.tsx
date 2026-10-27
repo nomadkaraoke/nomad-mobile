@@ -8,6 +8,7 @@ import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
 import { JobCard } from '../../jobs/JobCard';
 import { useMyJobs } from '../../jobs/useMyJobs';
+import { usePendingPushAsk } from '../../notifications/usePendingPushAsk';
 
 /** The Make tab (spec §4.6): the person's jobs, needs-you first, polled while any is unfinished. */
 export default function MakeTabScreen() {
@@ -18,6 +19,8 @@ export default function MakeTabScreen() {
   const auth = useAuth((s) => s.state);
   const email = auth.status === 'signedIn' ? auth.session.email : null;
   const jobs = useMyJobs(email);
+  // A make just started: the in-context push question, once the make screen has gone.
+  usePendingPushAsk('make');
 
   const title = <Text variant="title">{t('title')}</Text>;
 

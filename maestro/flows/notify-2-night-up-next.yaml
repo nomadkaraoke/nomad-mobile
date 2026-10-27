@@ -1,0 +1,73 @@
+# Notify 2 (Phase 6 spec §5): join night 2121 (fake Google sign-in), allow notifications with Nomad night alerts on
+# (the app registers its fake Expo token with the box, POST /push-token), request a song, then the host moves the
+# rotation on until the singer is next → the box's push outbox has an `up_next` push opening /tonight. Needs the
+# default stacks (gen :8010, decide :8030, kjbox :8040; tagged tonight, so e2e-local.sh starts the box).
+appId: com.nomadkaraoke.mobile
+name: notify-2-night-up-next
+tags:
+  - tonight
+  - notify
+---
+- runFlow:
+    file: ../common/tonight-reset.yaml
+    env:
+      NAME: notify2
+- runFlow:
+    file: ../common/tonight-join-code.yaml
+    env:
+      EMAIL: ${output.email}
+      SINGER_NAME: "Nova"
+- runFlow:
+    file: ../common/tonight-request.yaml
+    env:
+      QUERY: "hello"
+      TITLE: "Hello"
+# Allow notifications (registers with gen and, at this night, the box) and make sure night alerts are on.
+- runFlow: ../common/open-notifications.yaml
+- runFlow:
+    when:
+      visible:
+        id: "notif-night"
+        checked: false
+    commands:
+      - tapOn:
+          id: "notif-night"
+- assertVisible:
+    id: "notif-night"
+    checked: true
+- tapOn: "Back|Navigate up"
+- tapOn: "Back|Navigate up"
+- tapOn:
+    id: "tab-tonight"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-your-songs"
+    timeout: 15000
+# The host moves the rotation on until the singer is next (up_next goes to the first two waiting places).
+- repeat:
+    times: 12
+    while:
+      notVisible:
+        id: "tonight-status-next|tonight-status-onStage"
+    commands:
+      - runScript:
+          file: ../scripts/stack.js
+          env:
+            ACTION: kjbox
+            KJBOX_STACK: ${KJBOX_STACK}
+            OP: advance
+      - runFlow: ../common/tonight-refresh.yaml
+      - extendedWaitUntil:
+          visible:
+            id: "tonight-status-next|tonight-status-onStage"
+          timeout: 4000
+          optional: true
+- takeScreenshot: ${PHASE6_SHOTS}/notify-2-up-next
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: push-outbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      SOURCE: kjbox
+      EXPECT_KIND: up_next
+      EXPECT_URL: /tonight

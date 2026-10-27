@@ -15,6 +15,7 @@
 #                                     # voice-* / fit-* screens: docs/screenshots/phase3c/<platform>/<locale>;
 #                                     # voice-session-* screens: docs/screenshots/phase3d/<platform>/<locale>;
 #                                     # me-* screens: docs/screenshots/phase4/<platform>/<locale>)
+#                                     # store-tour: $STORE_SHOTS, default docs/store/screenshots/<platform>/<locale>)
 #   scripts/e2e-local.sh --platform ios voice-           # the vocal range flows (voice-1…3, Phase 3c) and voice-session-*
 #   scripts/e2e-local.sh --platform ios --skip tonight   # every flow except those whose name contains "tonight"
 #   scripts/e2e-local.sh --platform ios tonight          # the Tonight flows (tonight-1…11)
@@ -39,6 +40,10 @@
 #      E2E_LAUNCH_TIMEOUT (ms, default 60000: launch.yaml's waits; CI uses 240000),
 #      E2E_POINT_DEV_CLIENT=1 (iOS: point a freshly installed dev client at Metro even on :8081; CI),
 #      E2E_NO_LOCK=1 (skip the local device lock, scripts/device-lock.sh; CI sets CI=true, which skips it too).
+#
+# Metro also bundles with EXPO_PUBLIC_FAKE_IAP=1 (credit packs "bought" through gen's /api/test/fake-iap/purchase) and
+# EXPO_PUBLIC_PUSH=0 (no push entitlement; the app registers a fake Expo token so gen's and the box's fake push
+# outboxes record what they would send; the notify-* flows read them, emptied first by this script).
 #
 # Connect flows (connect-*, Phase 3b) pick fixture files: when the run has any, scripts/make-import-fixtures.ts
 # writes the Spotify export zip and maestro/scripts/push-fixtures.sh puts it and a screenshot on the device.
@@ -97,7 +102,7 @@ while [[ $# -gt 0 ]]; do
     --screen) SCREEN="$2"; shift 2 ;;
     --skip) SKIP="$2"; shift 2 ;;
     --flows) FLOWS="$2"; shift 2 ;;
-    -h|--help) sed -n '2,59p' "$0"; exit 0 ;;
+    -h|--help) awk 'NR > 1 && /^#/ { print; next } NR > 1 { exit }' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
@@ -123,8 +128,8 @@ list_flows() {
 # `tonight` or `kjbox` (Me's past-night claims, me-13/14, R46) among the filtered ones, or a tonight* / me-tour screen tour.
 # Make / Search / Review / Discover runs don't need ../kjbox.
 needs_kjbox() {
-  # me-tour's 4c shots (me-32/33) read past nights from the box.
-  if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == tonight* || "$SCREEN" == me-tour ]]; return; fi
+  # me-tour's 4c shots (me-32/33) read past nights from the box; the store tour visits Tonight.
+  if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == tonight* || "$SCREEN" == me-tour || "$SCREEN" == store* ]]; return; fi
   local f
   while IFS= read -r f; do
     grep -qE '^\s*-\s*(tonight|kjbox)\s*$' "$f" && return 0
@@ -183,7 +188,7 @@ retry_curl -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@e
 # The vocal range flows and tours (voice-*, fit-*) need decide >= v0.25: the vr_* fixture catalog and
 # /api/test/voice/seed. An empty body is a 422 when the route exists; an older decide answers 404.
 needs_voice() {
-  if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; return; fi
+  if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == voice* || "$SCREEN" == fit* || "$SCREEN" == store* ]]; return; fi
   # The selected flow files (FILTER minus --skip), like needs_kjbox: `--skip voice` needs no voice routes.
   list_flows | grep -qE '/(voice|fit)[^/]*\.yaml$'
 }
@@ -234,6 +239,19 @@ if needs_control && ! curl -sf -m 2 "$CONTROL/health" >/dev/null; then
   env $(lane_kjbox_env) $(lane_decide_env) python3 "$ROOT/scripts/stack-control.py" --kjbox-dir "$KJBOX_DIR" \
     --decide-dir "$DECIDE_DIR" --port "$CONTROL_PORT" >"/tmp/nomad-mobile-stack-control-$CONTROL_PORT.log" 2>&1 &
   CONTROL_PID=$!
+fi
+
+# 2c. The fake push outboxes (gen's /api/test/push-outbox and the box's /sing/api/test/push-outbox capture the Expo
+#     pushes instead of sending them; the app registers a fake token, EXPO_PUBLIC_PUSH=0). The notify flows assert
+#     what was "sent", so they start from empty outboxes. Only when the run has notify flows: gen's outbox is shared
+#     by every session on that stack (its rows are per email, the box's are not).
+if list_flows | grep -q '/notify-'; then
+  curl -sf -m 5 -o /dev/null -X DELETE "$STACK/api/test/push-outbox" ||
+    echo "warning: couldn't clear gen's push outbox at $STACK (gen older than its Expo push sink?)" >&2
+  if [[ "$NEED_KJBOX" == 1 ]]; then
+    curl -sf -m 5 -o /dev/null -X DELETE "$KJBOX/sing/api/test/push-outbox" ||
+      echo "warning: couldn't clear the box's push outbox at $KJBOX (kjbox older than v0.137?)" >&2
+  fi
 fi
 
 # 3. Device prep.
@@ -309,7 +327,7 @@ start_metro() {
   (cd "$ROOT/apps/mobile" && exec env EXPO_PUBLIC_GEN_API_URL="$STACK" EXPO_PUBLIC_GEN_WEB_URL="$WEB" \
     EXPO_PUBLIC_DECIDE_API_URL="$DECIDE" EXPO_PUBLIC_DECIDE_SEARCH_URL="$SEARCH" EXPO_PUBLIC_KJBOX_API_URL="$KJBOX_APP" \
     EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 EXPO_PUBLIC_FAKE_MIC=baritone-scale EXPO_PUBLIC_FAKE_YT=1 \
-    EXPO_PUBLIC_FAKE_YT_SECONDS=40 CI=1 "$@" \
+    EXPO_PUBLIC_FAKE_YT_SECONDS=40 EXPO_PUBLIC_FAKE_IAP=1 EXPO_PUBLIC_PUSH=0 CI=1 "$@" \
     npx expo start --dev-client --port "$METRO_PORT" --clear) >"$METRO_LOG" 2>&1 &
   METRO_PID=$!
   local deadline=$((SECONDS + 120))
@@ -364,7 +382,9 @@ VOICE_SHOTS="docs/screenshots/phase3c/$PLATFORM"
 VOICE_SESSION_SHOTS="docs/screenshots/phase3d/$PLATFORM"
 # Me (me-*, Phase 4a).
 ME_SHOTS="docs/screenshots/phase4/$PLATFORM"
-mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B" "$VOICE_SHOTS" "$VOICE_SESSION_SHOTS" "$ME_SHOTS"
+# Purchases, account deletion and notifications (purchase-*, account-*, notify-*, Phase 6).
+PHASE6_SHOTS="docs/screenshots/phase6/$PLATFORM"
+mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B" "$VOICE_SHOTS" "$VOICE_SESSION_SHOTS" "$ME_SHOTS" "$PHASE6_SHOTS"
 ALL=()
 while IFS= read -r f; do ALL+=("maestro/flows/${f##*/}"); done < <(list_flows)
 [[ ${#ALL[@]} -gt 0 ]] || { echo "no flow matches $FILTER" >&2; exit 2; }
@@ -441,7 +461,7 @@ run_flows() {
     -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
     -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" \
     -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" -e VOICE_SESSION_SHOTS="$VOICE_SESSION_SHOTS" -e ME_SHOTS="$ME_SHOTS" \
-    -e LAUNCH_TIMEOUT="${E2E_LAUNCH_TIMEOUT:-60000}" "$@"
+    -e LAUNCH_TIMEOUT="${E2E_LAUNCH_TIMEOUT:-60000}" -e PHASE6_SHOTS="$PHASE6_SHOTS" -e STORE_SHOTS="${STORE_SHOTS:-}" "$@"
 }
 status=0
 
@@ -450,7 +470,11 @@ status=0
 if [[ -n "$SCREEN" ]]; then
   [[ -f "maestro/screens/$SCREEN.yaml" ]] || { echo "no maestro/screens/$SCREEN.yaml" >&2; exit 2; }
   lang="${LOCALE:-en}"
-  if [[ "$SCREEN" == discover* ]]; then TOUR_SHOTS="$DISCOVER_SHOTS/$lang"
+  # store-tour: the store listing's shots, STORE_SHOTS from the caller (scripts/store-screenshots.sh) or
+  # docs/store/screenshots/<platform>/<locale>.
+  STORE_SHOTS="${STORE_SHOTS:-docs/store/screenshots/$PLATFORM/$lang}"
+  if [[ "$SCREEN" == store* ]]; then TOUR_SHOTS="$STORE_SHOTS"
+  elif [[ "$SCREEN" == discover* ]]; then TOUR_SHOTS="$DISCOVER_SHOTS/$lang"
   elif [[ "$SCREEN" == tonight* ]]; then TOUR_SHOTS="$TONIGHT_SHOTS/$lang"
   elif [[ "$SCREEN" == voice-session* ]]; then TOUR_SHOTS="$VOICE_SESSION_SHOTS/$lang"
   elif [[ "$SCREEN" == me-* ]]; then TOUR_SHOTS="$ME_SHOTS/$lang"
@@ -472,7 +496,8 @@ fi
 # out on iOS, which drops the picks the phone kept).
 if metro_up; then
   echo "Using the Metro already on :$METRO_PORT (it must have EXPO_PUBLIC_GEN_API_URL=$STACK, EXPO_PUBLIC_DECIDE_API_URL=$DECIDE," \
-    "EXPO_PUBLIC_DECIDE_SEARCH_URL=$SEARCH, EXPO_PUBLIC_KJBOX_API_URL=$KJBOX_APP, EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 and EXPO_PUBLIC_FAKE_MIC=baritone-scale; the force-offline flows also need" \
+    "EXPO_PUBLIC_DECIDE_SEARCH_URL=$SEARCH, EXPO_PUBLIC_KJBOX_API_URL=$KJBOX_APP, EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1, EXPO_PUBLIC_FAKE_MIC=baritone-scale," \
+    "EXPO_PUBLIC_FAKE_IAP=1 and EXPO_PUBLIC_PUSH=0; the force-offline flows also need" \
     "EXPO_PUBLIC_SEARCH_FORCE_OFFLINE=1)"
   point_dev_client
   if [[ ${#ONLINE[@]} -gt 0 ]]; then run_flows "${ONLINE[@]}" || status=$?; fi

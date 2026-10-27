@@ -778,7 +778,18 @@
     "signInPrompt": "Masuk untuk membeli kredit",
     "packageCredits": "{credits, plural, other {# kredit}}",
     "popular": "Populer",
-    "title": "Beli kredit"
+    "title": "Beli kredit",
+    "balance": "Anda memiliki {credits, plural, other {# kredit}}",
+    "buy": "Beli",
+    "buyFor": "Beli seharga {price}",
+    "purchaseFailed": "Pembelian tidak berhasil. Coba lagi.",
+    "referralNote": "Diskon referral {percent}% Anda berlaku jika membeli lewat web.",
+    "webLink": {
+      "default": "Beli di web"
+    },
+    "store": {
+      "awaitingApproval": "Menunggu persetujuan. Kredit Anda akan muncul setelah pembelian disetujui."
+    }
   },
   "duration": {
     "body": "Trek ini berdurasi {duration}, jadi total biayanya {total, plural, one {# kredit} other {# kredit}} (tambahan {extra}).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Pilih tangkapan layar lain",
       "reading": "Membaca tangkapan layar Anda…",
       "unmatched": "Belum ada di katalog karaoke kami",
-      "retry": "Coba lagi"
+      "retry": "Coba lagi",
+      "aiConsentBody": "Untuk menemukan lagu, tangkapan layar Anda akan dikirim ke Gemini AI milik Google. Gambar ini hanya digunakan untuk membaca judul lagu dan tidak akan disimpan setelahnya.",
+      "aiConsentTitle": "Baca tangkapan layar dengan AI?",
+      "aiNote": "Tangkapan layar dibaca oleh Gemini AI milik Google dan tidak disimpan.",
+      "aiConsentCancel": "Batal",
+      "aiConsentContinue": "Lanjutkan"
     },
     "source": {
       "appleExport": "Riwayat Apple Music",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Anda sudah mengimpor file ini sebelumnya, jadi tidak ada yang baru untuk ditambahkan."
   },
   "permissions": {
-    "microphone": "Izinkan Nomad Karaoke mendengarkan Anda bernyanyi agar dapat mengukur rentang vokal Anda. Rekaman audio tetap berada di ponsel Anda."
+    "microphone": "Nomad Karaoke menggunakan mikrofon untuk mengukur jangkauan vokal Anda. Jika Anda memilih untuk merekam suara dalam sesi vokal, rekaman tersebut akan diunggah dan disimpan secara privat (hanya Anda dan tim Nomad Karaoke yang dapat mendengarkannya), dan Anda dapat menghapusnya kapan saja di menu Saya."
   },
   "voice": {
     "between": "Antara {low} dan {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Terlalu banyak permintaan sekaligus. Coba lagi dalam beberapa menit."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Aktifkan",
+      "make": {
+        "body": "Kami akan memberi tahu Anda saat video siap ditonton, atau jika liriknya perlu diperiksa.",
+        "title": "Ingin diberi tahu saat video Anda siap?"
+      },
+      "night": {
+        "body": "Kami akan memberi tahu saat giliran Anda berikutnya dan saat giliran Anda bernyanyi.",
+        "title": "Ingin diberi tahu saat giliran Anda tiba?"
+      },
+      "notNow": "Jangan sekarang"
+    },
+    "channels": {
+      "jobs": "Video Anda",
+      "tonight": "Malam Nomad"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Notifikasi",
+      "row": "Akun dan notifikasi",
+      "title": "Akun dan notifikasi"
+    },
+    "notifications": {
+      "askBody": "Aktifkan notifikasi untuk mengetahui saat video Anda sudah siap atau membutuhkan tindakan Anda.",
+      "askButton": "Aktifkan notifikasi",
+      "deniedBody": "Notifikasi dinonaktifkan untuk Nomad Karaoke di ponsel ini. Aktifkan di Pengaturan agar tahu saat video Anda sudah siap.",
+      "error": "Gagal menyimpan perubahan tersebut. Periksa koneksi Anda dan coba lagi.",
+      "night": {
+        "hint": "Saat giliran Anda berikutnya dan saat tiba giliran Anda untuk bernyanyi.",
+        "label": "Notifikasi acara Nomad"
+      },
+      "problems": {
+        "hint": "Saat terjadi kendala pada video.",
+        "label": "Kendala"
+      },
+      "ready": {
+        "hint": "Saat video karaoke Anda siap ditonton.",
+        "label": "Video siap"
+      },
+      "review": {
+        "hint": "Saat lirik perlu Anda periksa sejenak.",
+        "label": "Perlu tinjauan Anda"
+      },
+      "title": "Notifikasi",
+      "openSettings": "Buka Pengaturan",
+      "loadFailed": "Gagal memuat pengaturan notifikasi Anda. Periksa koneksi Anda dan coba lagi."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Tidak dapat mengonfirmasi ke Apple. Silakan coba lagi.",
+    "blocked": {
+      "admin": "Ini adalah akun staf, jadi tidak dapat dihapus dari aplikasi.",
+      "connect_account": "Akun Anda terhubung ke akun pembayaran (payout), sehingga tidak dapat dihapus dari aplikasi.",
+      "generic": "Kami tidak dapat menghapus akun ini dari aplikasi.",
+      "order_in_progress": "Anda masih memiliki pesanan yang sedang diproses, jadi akun Anda belum dapat dihapus dari aplikasi.",
+      "referral_balance": "Anda memiliki penghasilan referral yang belum dicairkan, jadi akun Anda belum dapat dihapus dari aplikasi.",
+      "unavailable": "Penghapusan akun lewat aplikasi sedang tidak tersedia saat ini."
+    },
+    "contactSupport": "Hubungi dukungan lewat email",
+    "creditsLost": "{count, plural, other {# kredit akan hangus.}}",
+    "deletedDetails": "Data pribadi Anda",
+    "deletedDiscover": "Data musik dan vokal Anda di Discover",
+    "deletedUploads": "Unggahan Anda",
+    "doneBody": "Akun Anda telah dihapus, dan data di ponsel ini telah dibersihkan.",
+    "doneTitle": "Akun Anda telah dihapus",
+    "intro": "Tindakan ini akan menghapus akun Nomad Karaoke Anda secara permanen dan tidak dapat dibatalkan.",
+    "jobsCancelled": "{count, plural, other {# video yang sedang diproses akan dibatalkan.}}",
+    "keep": "Tetap simpan akun saya",
+    "keptRecords": "Riwayat proses dan pembayaran yang kami perlukan untuk pembukuan",
+    "loadError": "Tidak dapat memuat detail akun Anda. Periksa koneksi internet Anda lalu coba lagi.",
+    "retryNetwork": "Tidak dapat menghapus akun Anda. Periksa koneksi internet Anda lalu coba lagi.",
+    "signedOutTitle": "Anda telah keluar",
+    "support": "Kirim email ke {email} dan kami akan membantu menyelesaikannya.",
+    "confirm": "Hapus akun saya",
+    "deletedHeading": "Data yang kami hapus",
+    "deletedNights": "Tautan Nomad night Anda",
+    "deletedRecordings": "Rekaman Anda",
+    "keptHeading": "Data yang kami simpan",
+    "keptVideos": "Video karaoke yang sudah dipublikasikan di YouTube",
+    "ok": "OK",
+    "retryPartWay": "Terjadi kendala di tengah proses. Silakan coba lagi — penghapusan akan dilanjutkan dari bagian terakhir.",
+    "row": "Hapus akun",
+    "signedOutBody": "Anda telah keluar. Jika Anda baru saja menghapus akun, akun tersebut sudah terhapus. Jika tidak, silakan masuk kembali dan coba lagi.",
+    "title": "Hapus akun Anda"
   }
 }

@@ -778,7 +778,18 @@
     "signInPrompt": "Prihlás sa, aby si si mohol kúpiť kredity",
     "packageCredits": "{credits, plural, one {# kredit} few {# kredity} other {# kreditov}}",
     "popular": "Populárne",
-    "title": "Kúpiť kredity"
+    "title": "Kúpiť kredity",
+    "balance": "Máš {credits, plural, one {# kredit} few {# kredity} other {# kreditov}}",
+    "buy": "Kúpiť",
+    "buyFor": "Kúpiť za {price}",
+    "purchaseFailed": "Nákup neprebehol. Skús to znova.",
+    "referralNote": "Tvoja {percent} % zľava za odporúčanie sa uplatní pri nákupe na webe.",
+    "webLink": {
+      "default": "Kúpiť na webe"
+    },
+    "store": {
+      "awaitingApproval": "Čaká sa na schválenie. Tvoje kredity sa zobrazia hneď po schválení nákupu."
+    }
   },
   "duration": {
     "body": "Táto skladba má dĺžku {duration}, takže celkovo stojí {total, plural, one {# kredit} few {# kredity} other {# kreditov}} (o {extra} viac).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Vybrať iné snímky",
       "reading": "Čítam tvoje snímky obrazovky…",
       "unmatched": "Zatiaľ nie je v našom karaoke katalógu",
-      "retry": "Skúsiť znova"
+      "retry": "Skúsiť znova",
+      "aiConsentBody": "Na vyhľadanie skladieb sa tvoja snímka obrazovky odošle do umelej inteligencie Gemini od Google. Použije sa iba na prečítanie názvov skladieb a potom sa neuchováva.",
+      "aiConsentTitle": "Prečítať snímku obrazovky pomocou AI?",
+      "aiNote": "Snímky obrazovky číta umelá inteligencia Gemini od Google a neuchovávajú sa.",
+      "aiConsentCancel": "Zrušiť",
+      "aiConsentContinue": "Pokračovať"
     },
     "source": {
       "appleExport": "História Apple Music",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Tento súbor si už importoval/a, takže nebolo čo nové pridať."
   },
   "permissions": {
-    "microphone": "Povoľ aplikácii Nomad Karaoke počúvať tvoj spev, aby mohla zmerať tvoj hlasový rozsah. Zvuk zostáva v tvojom telefóne."
+    "microphone": "Nomad Karaoke používa mikrofón na meranie tvojho hlasového rozsahu. Ak sa rozhodneš nahrať svoj hlas v hlasovej relácii, nahrávka sa nahrá a uchová ako súkromná (môžeš si ju vypočuť len ty a tím Nomad Karaoke) a kedykoľvek ju môžeš vymazať v sekcii Ja."
   },
   "voice": {
     "between": "Medzi {low} a {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Príliš veľa požiadaviek naraz. Skús to znova o niekoľko minút."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Zapnúť",
+      "make": {
+        "body": "Dáme ti vedieť, keď bude video pripravené na pozeranie, alebo ak bude potrebné skontrolovať text.",
+        "title": "Chceš dostať upozornenie, keď bude tvoje video hotové?"
+      },
+      "night": {
+        "body": "Dáme ti vedieť, keď budeš ďalší na rade a keď príde tvoj čas spievať.",
+        "title": "Chceš dostať upozornenie, keď budeš na rade?"
+      },
+      "notNow": "Teraz nie"
+    },
+    "channels": {
+      "jobs": "Tvoje videá",
+      "tonight": "Karaoke večery Nomad"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Upozornenia",
+      "row": "Účet a upozornenia",
+      "title": "Účet a upozornenia"
+    },
+    "notifications": {
+      "askBody": "Zapni si upozornenia, aby si vedel, kedy je tvoje video hotové alebo vyžaduje tvoju pozornosť.",
+      "askButton": "Zapnúť upozornenia",
+      "deniedBody": "Upozornenia pre Nomad Karaoke sú na tomto telefóne vypnuté. Zapni ich v Nastaveniach, aby si vedel, kedy sú tvoje videá hotové.",
+      "error": "Túto zmenu sa nepodarilo uložiť. Skontroluj pripojenie a skús to znova.",
+      "night": {
+        "hint": "Keď si ďalší na rade a keď príde tvoj čas spievať.",
+        "label": "Upozornenia na Nomad karaoke večer"
+      },
+      "problems": {
+        "hint": "Keď sa pri videu niečo pokazí.",
+        "label": "Problémy"
+      },
+      "ready": {
+        "hint": "Keď je tvoje karaoke video pripravené na prehratie.",
+        "label": "Video je hotové"
+      },
+      "review": {
+        "hint": "Keď text piesne potrebuje tvoju rýchlu kontrolu.",
+        "label": "Vyžaduje tvoju kontrolu"
+      },
+      "title": "Upozornenia",
+      "openSettings": "Otvoriť Nastavenia",
+      "loadFailed": "Nepodarilo sa načítať tvoje nastavenia upozornení. Skontroluj internetové pripojenie a skús to znova."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Nepodarilo sa overiť cez Apple. Skús to znova.",
+    "blocked": {
+      "admin": "Toto je zamestnanecký účet, takže ho nie je možné vymazať z aplikácie.",
+      "connect_account": "Tvoj účet je prepojený s výplatným účtom, takže ho nie je možné vymazať z aplikácie.",
+      "generic": "Tento účet nemôžeme z aplikácie vymazať.",
+      "order_in_progress": "Máš rozpracovanú objednávku, takže tvoj účet zatiaľ nie je možné z aplikácie vymazať.",
+      "referral_balance": "Máš provízie za odporúčanie, ktoré ešte neboli vyplatené, takže tvoj účet nie je možné z aplikácie vymazať.",
+      "unavailable": "Vymazanie účtu z aplikácie momentálne nie je k dispozícii."
+    },
+    "contactSupport": "Napísať na podporu",
+    "creditsLost": "{count, plural, one {Prídeš o # kredit.} few {Prídeš o # kredity.} other {Prídeš o # kreditov.}}",
+    "deletedDetails": "Tvoje osobné údaje",
+    "deletedDiscover": "Tvoje hudobné a hlasové dáta v sekcii Discover",
+    "deletedUploads": "Tvoje nahrané súbory",
+    "doneBody": "Tvoj účet je zrušený a údaje z tohto telefónu boli odstránené.",
+    "doneTitle": "Tvoj účet bol vymazaný",
+    "intro": "Týmto natrvalo vymažeš svoj účet Nomad Karaoke. Túto akciu nemožno vrátiť späť.",
+    "jobsCancelled": "{count, plural, one {# rozpracované video bude zrušené.} few {# rozpracované videá budú zrušené.} other {# rozpracovaných videí bude zrušených.}}",
+    "keep": "Ponechať si účet",
+    "keptRecords": "Záznamy o spracovaní a platbách, ktoré potrebujeme na účtovné účely",
+    "loadError": "Nepodarilo sa načítať údaje o tvojom účte. Skontroluj pripojenie a skús to znova.",
+    "retryNetwork": "Tvoj účet sa nepodarilo vymazať. Skontroluj pripojenie a skús to znova.",
+    "signedOutTitle": "Boli ste odhlásení",
+    "support": "Napíš nám na {email} a my sa o to postaráme.",
+    "confirm": "Odstrániť môj účet",
+    "deletedHeading": "Čo vymažeme",
+    "deletedNights": "Tvoje odkazy na Nomad night",
+    "deletedRecordings": "Tvoje nahrávky",
+    "keptHeading": "Čo si ponecháme",
+    "keptVideos": "Karaoke videá, ktoré už boli zverejnené na YouTube",
+    "ok": "OK",
+    "retryPartWay": "Niečo sa pokazilo v priebehu procesu. Skús to znova – odstraňovanie bude pokračovať tam, kde skončilo.",
+    "row": "Odstrániť účet",
+    "signedOutBody": "Tvoje konto bolo odhlásené. Ak si práve zmazal svoj účet, bol úspešne odstránený. V opačnom prípade sa prihlás a skús to znova.",
+    "title": "Odstránenie účtu"
   }
 }

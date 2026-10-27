@@ -778,7 +778,18 @@
     "signInPrompt": "Log masuk untuk membeli kredit",
     "packageCredits": "{credits, plural, other {# kredit}}",
     "popular": "Popular",
-    "title": "Beli kredit"
+    "title": "Beli kredit",
+    "balance": "Anda mempunyai {credits, plural, other {# kredit}}",
+    "buy": "Beli",
+    "buyFor": "Beli dengan harga {price}",
+    "purchaseFailed": "Pembelian tidak berjaya. Sila cuba lagi.",
+    "referralNote": "Diskaun rujukan {percent}% anda akan digunakan apabila anda membeli di web.",
+    "webLink": {
+      "default": "Beli di web"
+    },
+    "store": {
+      "awaitingApproval": "Menunggu kelulusan. Kredit anda akan dipaparkan sebaik sahaja pembelian diluluskan."
+    }
   },
   "duration": {
     "body": "Trek ini berdurasi {duration}, jadi jumlah kosnya ialah {total, plural, other {# kredit}} ({extra} lagi).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Pilih tangkapan skrin lain",
       "reading": "Membaca tangkapan skrin anda…",
       "unmatched": "Belum ada dalam katalog karaoke kami",
-      "retry": "Cuba lagi"
+      "retry": "Cuba lagi",
+      "aiConsentBody": "Untuk mencari lagu-lagu tersebut, tangkapan skrin anda akan dihantar ke AI Gemini Google. Ia hanya digunakan untuk membaca tajuk lagu dan tidak akan disimpan selepas itu.",
+      "aiConsentTitle": "Baca tangkapan skrin anda dengan AI?",
+      "aiNote": "Tangkapan skrin dibaca oleh AI Gemini Google dan tidak disimpan.",
+      "aiConsentCancel": "Batal",
+      "aiConsentContinue": "Teruskan"
     },
     "source": {
       "appleExport": "Sejarah Apple Music",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Anda sudah mengimport fail ini, jadi tiada apa-apa yang baharu untuk ditambah."
   },
   "permissions": {
-    "microphone": "Benarkan Nomad Karaoke mendengar anda menyanyi supaya ia dapat mengukur julat vokal anda. Audio hanya kekal dalam telefon anda."
+    "microphone": "Nomad Karaoke menggunakan mikrofon untuk mengukur julat vokal anda. Jika anda memilih untuk merakam suara anda dalam sesi suara, rakaman tersebut akan dimuat naik dan disimpan secara peribadi (hanya anda dan pasukan Nomad Karaoke yang boleh mendengarnya), dan anda boleh memadamkannya pada bila-bila masa di bahagian Saya."
   },
   "voice": {
     "between": "Antara {low} dan {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Terlalu banyak permintaan serentak. Cuba lagi dalam beberapa minit."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Hidupkan",
+      "make": {
+        "body": "Kami akan beritahu anda apabila ia sedia untuk ditonton, atau jika anda perlu menyemak liriknya.",
+        "title": "Dapatkan pemberitahuan apabila video anda sudah siap?"
+      },
+      "night": {
+        "body": "Kami akan beritahu anda apabila giliran anda sudah dekat dan apabila tiba giliran anda untuk menyanyi.",
+        "title": "Dapatkan pemberitahuan apabila tiba giliran anda?"
+      },
+      "notNow": "Bukan sekarang"
+    },
+    "channels": {
+      "jobs": "Video anda",
+      "tonight": "Malam Nomad"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Pemberitahuan",
+      "row": "Akaun dan pemberitahuan",
+      "title": "Akaun dan pemberitahuan"
+    },
+    "notifications": {
+      "askBody": "Hidupkan pemberitahuan untuk mengetahui apabila video anda sudah siap atau memerlukan tindakan anda.",
+      "askButton": "Hidupkan pemberitahuan",
+      "deniedBody": "Pemberitahuan dimatikan untuk Nomad Karaoke pada telefon ini. Hidupkannya dalam Tetapan untuk mengetahui apabila video anda sudah siap.",
+      "error": "Tidak dapat menyimpan perubahan tersebut. Semak sambungan anda dan cuba lagi.",
+      "night": {
+        "hint": "Apabila giliran anda seterusnya dan apabila tiba masa anda untuk menyanyi.",
+        "label": "Makluman malam Nomad"
+      },
+      "problems": {
+        "hint": "Apabila berlaku masalah dengan video.",
+        "label": "Masalah"
+      },
+      "ready": {
+        "hint": "Apabila video karaoke anda sedia untuk ditonton.",
+        "label": "Video siap"
+      },
+      "review": {
+        "hint": "Apabila lirik memerlukan semakan pantas daripada anda.",
+        "label": "Perlu semakan anda"
+      },
+      "title": "Pemberitahuan",
+      "openSettings": "Buka Tetapan",
+      "loadFailed": "Tidak dapat memuatkan tetapan pemberitahuan anda. Periksa sambungan anda dan cuba lagi."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Tidak dapat mengesahkan dengan Apple. Sila cuba lagi.",
+    "blocked": {
+      "admin": "Ini ialah akaun kakitangan, jadi ia tidak boleh dipadamkan daripada aplikasi.",
+      "connect_account": "Akaun anda dipautkan kepada akaun pembayaran keluar, jadi ia tidak boleh dipadamkan daripada aplikasi.",
+      "generic": "Kami tidak dapat memadamkan akaun ini daripada aplikasi.",
+      "order_in_progress": "Anda mempunyai pesanan yang sedang diproses, jadi akaun anda belum boleh dipadamkan daripada aplikasi lagi.",
+      "referral_balance": "Anda mempunyai pendapatan rujukan yang belum dibayar, jadi akaun anda tidak boleh dipadamkan daripada aplikasi.",
+      "unavailable": "Pemadaman akaun anda daripada aplikasi tidak tersedia buat masa ini."
+    },
+    "contactSupport": "E-mel sokongan",
+    "creditsLost": "{count, plural, other {# kredit akan hilang.}}",
+    "deletedDetails": "Butiran peribadi anda",
+    "deletedDiscover": "Data muzik dan suara anda dalam Discover",
+    "deletedUploads": "Muat naik anda",
+    "doneBody": "Akaun anda telah dipadamkan, dan data pada telefon ini telah dibersihkan.",
+    "doneTitle": "Akaun anda telah dipadamkan",
+    "intro": "Tindakan ini akan memadamkan akaun Nomad Karaoke anda secara kekal dan tidak boleh dibuat asal.",
+    "jobsCancelled": "{count, plural, other {# video yang sedang diproses akan dibatalkan.}}",
+    "keep": "Kekalkan akaun saya",
+    "keptRecords": "Rekod tugasan dan pembayaran, yang kami perlukan untuk tujuan perakaunan",
+    "loadError": "Tidak dapat memuatkan butiran akaun anda. Semak sambungan internet anda dan cuba lagi.",
+    "retryNetwork": "Tidak dapat memadamkan akaun anda. Semak sambungan internet anda dan cuba lagi.",
+    "signedOutTitle": "Anda telah dilog keluar",
+    "support": "E-mel kami di {email} dan kami akan bantu uruskannya.",
+    "confirm": "Padam akaun saya",
+    "deletedHeading": "Perkara yang kami padamkan",
+    "deletedNights": "Pautan malam Nomad anda",
+    "deletedRecordings": "Rakaman anda",
+    "keptHeading": "Perkara yang kami simpan",
+    "keptVideos": "Video karaoke yang telah diterbitkan di YouTube",
+    "ok": "OK",
+    "retryPartWay": "Terdapat masalah di pertengahan proses. Sila cuba lagi — proses pemadaman akan bersambung dari tempat ia terhenti.",
+    "row": "Padam akaun",
+    "signedOutBody": "Anda telah dilog keluar. Jika anda baru sahaja memadamkan akaun anda, akaun tersebut telah tiada. Jika tidak, sila log masuk dan cuba lagi.",
+    "title": "Padam akaun anda"
   }
 }

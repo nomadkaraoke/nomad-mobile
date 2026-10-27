@@ -778,7 +778,18 @@
     "signInPrompt": "クレジットを購入するにはサインインしてください",
     "packageCredits": "{credits, plural, one {# クレジット} other {# クレジット}}",
     "popular": "人気",
-    "title": "クレジットを購入"
+    "title": "クレジットを購入",
+    "balance": "クレジット残高: {credits, plural, other {#クレジット}}",
+    "buy": "購入",
+    "buyFor": "{price}で購入",
+    "purchaseFailed": "購入を完了できませんでした。もう一度お試しください。",
+    "referralNote": "Webサイトで購入すると、{percent}%のお友達紹介割引が適用されます。",
+    "webLink": {
+      "default": "Webサイトで購入"
+    },
+    "store": {
+      "awaitingApproval": "承認待ちです。購入が承認されるとクレジットが反映されます。"
+    }
   },
   "duration": {
     "body": "この曲の長さは{duration}のため、合計{total, plural, one {#クレジット} other {#クレジット}}（追加で{extra}）が必要です。",
@@ -1422,7 +1433,12 @@
       "pickMore": "別のスクリーンショットを選択",
       "reading": "スクリーンショットを読み取り中…",
       "unmatched": "カラオケカタログにまだありません",
-      "retry": "もう一度試す"
+      "retry": "もう一度試す",
+      "aiConsentBody": "曲を検索するために、スクリーンショットがGoogleのGemini AIに送信されます。曲名の読み取りにのみ使用され、処理後に保存されることはありません。",
+      "aiConsentTitle": "AIでスクリーンショットを読み取りますか？",
+      "aiNote": "スクリーンショットはGoogleのGemini AIによって読み取られ、保存されることはありません。",
+      "aiConsentCancel": "キャンセル",
+      "aiConsentContinue": "続ける"
     },
     "source": {
       "appleExport": "Apple Musicの履歴",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "このファイルはすでにインポートされているため、新しく追加されたものはありません。"
   },
   "permissions": {
-    "microphone": "Nomad Karaokeが歌声を聴いて音域を測定できるように、マイクへのアクセスを許可してください。音声データがスマートフォンから外部に送信されることはありません。"
+    "microphone": "Nomad Karaokeは音域を測定するためにマイクを使用します。ボイスセッションでご自身の声を録音した場合、録音データはアップロードされて非公開で保存され（ご自身とNomad Karaokeチームのみが聴くことができます）、「マイページ」からいつでも削除できます。"
   },
   "voice": {
     "between": "{low}から{high}まで",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "リクエストが多すぎます。数分後にもう一度お試しください。"
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "通知をオンにする",
+      "make": {
+        "body": "動画が完成して視聴できるようになった時や、歌詞の確認が必要な際にお知らせします。",
+        "title": "動画の準備ができたら通知を受け取りますか？"
+      },
+      "night": {
+        "body": "次があなたの番になった時や、歌う順番が回ってきた際にお知らせします。",
+        "title": "歌う順番が来たら通知を受け取りますか？"
+      },
+      "notNow": "今はしない"
+    },
+    "channels": {
+      "jobs": "あなたの動画",
+      "tonight": "Nomad nights"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "通知",
+      "row": "アカウントと通知",
+      "title": "アカウントと通知"
+    },
+    "notifications": {
+      "askBody": "通知をオンにすると、動画の完成時や確認が必要なときにお知らせが届きます。",
+      "askButton": "通知をオンにする",
+      "deniedBody": "このスマートフォンではNomad Karaokeの通知がオフになっています。動画の完成通知を受け取るには、設定から通知をオンにしてください。",
+      "error": "変更を保存できませんでした。通信環境をご確認のうえ、もう一度お試しください。",
+      "night": {
+        "hint": "歌う順番が近づいたときや、自分の番が回ってきたときにお知らせします。",
+        "label": "Nomadナイト通知"
+      },
+      "problems": {
+        "hint": "動画の処理でエラーが発生したときにお知らせします。",
+        "label": "エラー・不具合"
+      },
+      "ready": {
+        "hint": "カラオケ動画が完成して視聴できるようになったときにお知らせします。",
+        "label": "動画の完成"
+      },
+      "review": {
+        "hint": "歌詞の簡単な確認が必要になったときにお知らせします。",
+        "label": "確認が必要"
+      },
+      "title": "通知",
+      "openSettings": "設定を開く",
+      "loadFailed": "通知設定を読み込めませんでした。通信環境をご確認の上、もう一度お試しください。"
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Appleとの認証に失敗しました。もう一度お試しください。",
+    "blocked": {
+      "admin": "スタッフアカウントのため、アプリからは削除できません。",
+      "connect_account": "送金先アカウントと連携されているため、アプリからは削除できません。",
+      "generic": "アプリからこのアカウントを削除することはできません。",
+      "order_in_progress": "処理中の注文があるため、まだアプリからは削除できません。",
+      "referral_balance": "未払いの紹介報酬残高があるため、アプリからは削除できません。",
+      "unavailable": "現在、アプリからのアカウント削除はご利用いただけません。"
+    },
+    "contactSupport": "サポートにメールを送る",
+    "creditsLost": "{count, plural, other {# クレジットが失効します。}}",
+    "deletedDetails": "個人情報",
+    "deletedDiscover": "Discover内の楽曲および音声データ",
+    "deletedUploads": "アップロードしたファイル",
+    "doneBody": "アカウントが削除され、この端末のデータが消去されました。",
+    "doneTitle": "アカウントを削除しました",
+    "intro": "これによりNomad Karaokeアカウントが完全に削除されます。この操作は取り消せません。",
+    "jobsCancelled": "{count, plural, other {処理中の動画 # 件がキャンセルされます。}}",
+    "keep": "アカウントを維持する",
+    "keptRecords": "会計上保管が必要なジョブおよび支払い記録",
+    "loadError": "アカウント情報を読み込めませんでした。通信環境を確認して、もう一度お試しください。",
+    "retryNetwork": "アカウントを削除できませんでした。通信環境を確認して、もう一度お試しください。",
+    "signedOutTitle": "サインアウトしました",
+    "support": "{email} までメールでお問い合わせいただければ対応いたします。",
+    "confirm": "アカウントを削除する",
+    "deletedHeading": "削除されるデータ",
+    "deletedNights": "Nomadナイトリンク",
+    "deletedRecordings": "保存済みの録音",
+    "keptHeading": "保持されるデータ",
+    "keptVideos": "YouTubeで公開済みのカラオケ動画",
+    "ok": "OK",
+    "retryPartWay": "途中で問題が発生しました。もう一度お試しください。削除は中断したところから再開されます。",
+    "row": "アカウントの削除",
+    "signedOutBody": "サインアウトされました。直前にアカウント削除を行った場合は、すでに削除が完了しています。そうでない場合は、サインインしてもう一度お試しください。",
+    "title": "アカウントの削除"
   }
 }

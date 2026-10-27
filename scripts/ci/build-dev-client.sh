@@ -9,6 +9,11 @@
 # expo-notifications fail with ERR_..._KEYCHAIN_ACCESS). Android: x86_64 (hosted Linux emulators) + arm64-v8a (the
 # self-hosted Mac's); ANDROID_ABI overrides.
 set -euo pipefail
+# EXPO_PUBLIC_PUSH=0, like the eas.json e2e-test profile: no push (aps-environment) entitlement, which an ad-hoc
+# signed simulator build can't carry; the E2E Metro bundles with it too, so the app registers a fake Expo token
+# and the notify flows read gen's and the box's fake push outboxes. Set for both commands, since app.config.ts
+# reads it: the fingerprint (the build cache key) must match the build it names.
+export EXPO_PUBLIC_PUSH=0
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 APP="$ROOT/apps/mobile"

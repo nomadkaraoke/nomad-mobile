@@ -42,8 +42,6 @@
           "imageWidth": 240
         }
       ],
-      "expo-secure-store",
-      "expo-localization",
       [
         "expo-media-library",
         {
@@ -58,7 +56,7 @@
       [
         "expo-audio",
         {
-          "microphonePermission": "Allow $(PRODUCT_NAME) to hear you sing so it can measure your vocal range. Audio stays on your phone.",
+          "microphonePermission": "Nomad Karaoke uses the microphone to measure your vocal range. If you choose to record yourself in a voice session, the recording is uploaded and kept privately (only you and the Nomad Karaoke team can listen to it), and you can delete it any time in Me.",
           "recordAudioAndroid": true,
           "enableBackgroundPlayback": false,
           "enableBackgroundRecording": false

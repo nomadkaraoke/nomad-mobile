@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Gi Nomad Karaoke tilgang til å høre deg synge, slik at appen kan måle stemmeomfanget ditt. Lydopptaket forblir på telefonen din."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke bruker mikrofonen til å måle stemmeomfanget ditt. Hvis du velger å gjøre opptak i en stemmeøkt, blir opptaket lastet opp og oppbevart privat (bare du og Nomad Karaoke-teamet kan lytte til det), og du kan slette det når som helst under Meg."
   }
 }

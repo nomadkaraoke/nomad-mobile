@@ -26,6 +26,9 @@ import * as setlistDetail from '../app/me/setlists/[id]';
 import * as songHistory from '../app/me/history/[key]';
 import * as sungBefore from '../app/me/sung-before';
 import * as meSongs from '../app/me/songs';
+import * as account from '../app/me/account';
+import * as deleteAccount from '../app/me/delete-account';
+import * as notifications from '../app/me/notifications';
 import * as musicProfile from '../app/me/music-profile';
 import * as voiceDebug from '../app/me/voice-debug';
 import * as readyScreen from '../app/job/[id]';
@@ -60,6 +63,9 @@ export function appRoutes() {
     'discover/connect/lastfm': connectLastfm,
     'discover/voice': voice,
     'discover/voice-session': voiceSession,
+    'me/account': account,
+    'me/delete-account': deleteAccount,
+    'me/notifications': notifications,
     'me/music-profile': musicProfile,
     'me/artists': artistsAll,
     'me/get-made': getMade,

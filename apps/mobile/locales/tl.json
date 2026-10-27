@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Payagan ang Nomad Karaoke na marinig kang kumanta upang masukat nito ang iyong vocal range. Mananatili ang audio sa iyong telepono."
+    "NSMicrophoneUsageDescription": "Ginagamit ng Nomad Karaoke ang mikropono upang sukatin ang iyong vocal range. Kung pipiliin mong i-record ang iyong sarili sa isang voice session, ia-upload ang recording at pananatilihing pribado (ikaw at ang team ng Nomad Karaoke lamang ang makakarinig nito), at maaari mo itong burahin anumang oras sa Me."
   }
 }

@@ -18,6 +18,11 @@ appId: com.nomadkaraoke.mobile
 - extendedWaitUntil:
     visible: "Runtime version.*|Search songs or artists"
     timeout: "${typeof LAUNCH_TIMEOUT !== 'undefined' && LAUNCH_TIMEOUT ? LAUNCH_TIMEOUT : 60000}"
+- runFlow:  # the menu's first-run onboarding (see launch.yaml)
+    when:
+      visible: "This is the developer menu.*"
+    commands:
+      - tapOn: "Continue"
 - runFlow:
     when:
       visible: "Runtime version.*"

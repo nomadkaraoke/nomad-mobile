@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Benarkan Nomad Karaoke mendengar anda menyanyi supaya ia dapat mengukur julat vokal anda. Audio hanya kekal dalam telefon anda."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke menggunakan mikrofon untuk mengukur julat vokal anda. Jika anda memilih untuk merakam suara anda dalam sesi suara, rakaman tersebut akan dimuat naik dan disimpan secara peribadi (hanya anda dan pasukan Nomad Karaoke yang boleh mendengarnya), dan anda boleh memadamkannya pada bila-bila masa di bahagian Saya."
   }
 }

@@ -9,6 +9,7 @@ import { ActivityIndicator, Alert, View } from 'react-native';
 
 import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
+import { displayCredits } from '../../credits/balance';
 import { currentLocale } from '../../locale';
 import { MeHome } from '../../me/MeHome';
 import { useOfflineIndex } from '../../offline/offlineIndex';
@@ -92,6 +93,7 @@ function OfflineSongList() {
 /** Me (spec §4.1): credit balance, buy credits, the offline song list, language, signed-in email, sign out. */
 export default function MeScreen() {
   const t = useTranslations('account');
+  const tSettings = useTranslations('settings');
   const state = useAuth((s) => s.state);
   const signOut = useAuth((s) => s.signOut);
   const signedIn = state.status === 'signedIn';
@@ -106,7 +108,7 @@ export default function MeScreen() {
           <MeHome />
           {me.data ? (
             <Text testID="me-credits" className="text-lg font-semibold">
-              {t('credits', { credits: me.data.credits })}
+              {t('credits', { credits: displayCredits(me.data.credits) })}
             </Text>
           ) : (
             <ActivityIndicator testID="me-credits-loading" />
@@ -130,7 +132,14 @@ export default function MeScreen() {
       <OfflineSongList />
       <Text variant="muted">{t('language')}</Text>
       <Text testID="me-language">{LOCALE_NAMES[locale]}</Text>
-      {/* Bottom block: Phase 6 adds an "Account and notifications" row here, above Sign out. */}
+      {signedIn ? (
+        <Button
+          testID="me-account"
+          label={tSettings('account.row')}
+          variant="secondary"
+          onPress={() => router.push('/me/account')}
+        />
+      ) : null}
       {signedIn ? (
         <Button testID="me-signout" label={t('signOut')} variant="secondary" onPress={() => void signOut()} />
       ) : null}

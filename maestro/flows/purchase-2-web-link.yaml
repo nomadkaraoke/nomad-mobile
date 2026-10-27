@@ -1,0 +1,50 @@
+# Purchase 2 (Phase 6 spec §4, gen's default web_link {"show_for": {"ios": ["USA"], "android": []}}): with the store
+# country USA (the fake store's default, EXPO_PUBLIC_FAKE_STOREFRONT) iOS offers "Buy on the web" beside Buy; Android
+# doesn't. Another country (GBR) needs its own Metro bundle, so that case is a unit test
+# (apps/mobile/src/__tests__/credits.test.tsx "non-US storefront hides the web link").
+appId: com.nomadkaraoke.mobile
+name: purchase-2-web-link
+tags:
+  - purchase
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: weblink
+      CREDITS: "1"
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/me-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- tapOn:
+    id: "me-buy"
+- extendedWaitUntil:
+    visible:
+      id: "credits-buy"
+      enabled: true
+    timeout: 30000
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: "credits-web-link"
+            text: "Buy on the web"
+          timeout: 10000
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      # The store country resolves after the packs show: give it a moment before asserting there is no link.
+      - extendedWaitUntil:
+          visible:
+            id: "credits-web-link"
+          timeout: 3000
+          optional: true
+      - assertNotVisible:
+          id: "credits-web-link"
+- takeScreenshot: ${PHASE6_SHOTS}/purchase-2-web-link

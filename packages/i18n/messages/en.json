@@ -968,7 +968,18 @@
     "refresh": "Refresh balance",
     "loadFailed": "Couldn't load the credit packages.",
     "checkoutFailed": "Couldn't start checkout. Try again.",
-    "signInPrompt": "Sign in to buy credits"
+    "signInPrompt": "Sign in to buy credits",
+    "balance": "You have {credits, plural, one {# credit} other {# credits}}",
+    "buy": "Buy",
+    "buyFor": "Buy for {price}",
+    "purchaseFailed": "The purchase didn't go through. Try again.",
+    "referralNote": "Your {percent}% referral discount applies when you buy on the web.",
+    "webLink": {
+      "default": "Buy on the web"
+    },
+    "store": {
+      "awaitingApproval": "Waiting for approval. Your credits will appear once the purchase is approved."
+    }
   },
   "jobs": {
     "untitled": "Untitled song",
@@ -1356,6 +1367,11 @@
       "pick": "Choose screenshots",
       "pickMore": "Choose different screenshots",
       "limit": "Up to 5 screenshots at a time.",
+      "aiNote": "Screenshots are read by Google's Gemini AI and not kept.",
+      "aiConsentTitle": "Read your screenshot with AI?",
+      "aiConsentBody": "To find the songs, your screenshot is sent to Google's Gemini AI. It's only used to read the song names and isn't kept afterwards.",
+      "aiConsentContinue": "Continue",
+      "aiConsentCancel": "Cancel",
       "reading": "Reading your screenshots…",
       "confirmTitle": "Is this right?",
       "confirmBody": "Untick anything we got wrong.",
@@ -1483,7 +1499,7 @@
     }
   },
   "permissions": {
-    "microphone": "Allow Nomad Karaoke to hear you sing so it can measure your vocal range. Audio stays on your phone."
+    "microphone": "Nomad Karaoke uses the microphone to measure your vocal range. If you choose to record yourself in a voice session, the recording is uploaded and kept privately (only you and the Nomad Karaoke team can listen to it), and you can delete it any time in Me."
   },
   "voice": {
     "title": "Your voice",
@@ -2074,5 +2090,92 @@
       "seeAll": "{count, plural, one {See all # night} other {See all # nights}}",
       "showingRecent": "{count, plural, one {Showing your most recent night} other {Showing your # most recent nights}}"
     }
+  },
+  "push": {
+    "channels": {
+      "jobs": "Your videos",
+      "tonight": "Nomad nights"
+    },
+    "ask": {
+      "make": {
+        "title": "Get a notification when your video is ready?",
+        "body": "We'll let you know when it's ready to watch, or if it needs you to check the lyrics."
+      },
+      "night": {
+        "title": "Get a notification when it's your turn?",
+        "body": "We'll let you know when you're up next and when it's your turn to sing."
+      },
+      "allow": "Turn on",
+      "notNow": "Not now"
+    }
+  },
+  "settings": {
+    "account": {
+      "row": "Account and notifications",
+      "title": "Account and notifications",
+      "notifications": "Notifications"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "deniedBody": "Notifications are turned off for Nomad Karaoke on this phone. Turn them on in Settings to hear when your videos are ready.",
+      "openSettings": "Open Settings",
+      "askBody": "Turn on notifications to hear when your video is ready or needs you.",
+      "askButton": "Turn on notifications",
+      "ready": {
+        "label": "Video ready",
+        "hint": "When your karaoke video is ready to watch."
+      },
+      "review": {
+        "label": "Needs your review",
+        "hint": "When the lyrics need a quick check from you."
+      },
+      "problems": {
+        "label": "Problems",
+        "hint": "When something goes wrong with a video."
+      },
+      "night": {
+        "label": "Nomad night alerts",
+        "hint": "When you're up next and when it's your turn to sing."
+      },
+      "error": "Couldn't save that change. Check your connection and try again.",
+      "loadFailed": "Couldn't load your notification settings. Check your connection and try again."
+    }
+  },
+  "deleteAccount": {
+    "row": "Delete account",
+    "title": "Delete your account",
+    "intro": "This permanently deletes your Nomad Karaoke account. It can't be undone.",
+    "deletedHeading": "What we delete",
+    "deletedDetails": "Your personal details",
+    "deletedUploads": "Your uploads",
+    "deletedDiscover": "Your music and voice data in Discover",
+    "deletedNights": "Your Nomad night links",
+    "deletedRecordings": "Your recordings",
+    "keptHeading": "What we keep",
+    "keptRecords": "Job and payment records, which we need for accounting",
+    "keptVideos": "Karaoke videos already published on YouTube",
+    "creditsLost": "{count, plural, one {# credit will be lost.} other {# credits will be lost.}}",
+    "jobsCancelled": "{count, plural, one {# video in progress will be cancelled.} other {# videos in progress will be cancelled.}}",
+    "confirm": "Delete my account",
+    "keep": "Keep my account",
+    "loadError": "Couldn't load your account details. Check your connection and try again.",
+    "blocked": {
+      "admin": "This is a staff account, so it can't be deleted from the app.",
+      "referral_balance": "You have referral earnings that haven't been paid out yet, so your account can't be deleted from the app.",
+      "connect_account": "Your account is linked to a payout account, so it can't be deleted from the app.",
+      "order_in_progress": "You have an order in progress, so your account can't be deleted from the app yet.",
+      "unavailable": "Deleting your account from the app isn't available right now.",
+      "generic": "We can't delete this account from the app."
+    },
+    "support": "Email us at {email} and we'll take care of it.",
+    "contactSupport": "Email support",
+    "retryNetwork": "Couldn't delete your account. Check your connection and try again.",
+    "retryPartWay": "Something went wrong part-way. Please try again — deletion picks up where it left off.",
+    "appleFailed": "Couldn't confirm with Apple. Please try again.",
+    "doneTitle": "Your account was deleted",
+    "doneBody": "Your account is gone, and this phone has been cleared.",
+    "signedOutTitle": "You've been signed out",
+    "signedOutBody": "You've been signed out. If you just deleted your account, it's gone. Otherwise sign in and try again.",
+    "ok": "OK"
   }
 }

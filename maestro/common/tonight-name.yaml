@@ -18,3 +18,5 @@ appId: com.nomadkaraoke.mobile
     visible:
       id: "tonight-your-songs"
     timeout: 30000
+# Tonight asks about push once per install after a join.
+- runFlow: dismiss-push-ask.yaml

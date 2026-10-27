@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Povoľ aplikácii Nomad Karaoke počúvať tvoj spev, aby mohla zmerať tvoj hlasový rozsah. Zvuk zostáva v tvojom telefóne."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke používa mikrofón na meranie tvojho hlasového rozsahu. Ak sa rozhodneš nahrať svoj hlas v hlasovej relácii, nahrávka sa nahrá a uchová ako súkromná (môžeš si ju vypočuť len ty a tím Nomad Karaoke) a kedykoľvek ju môžeš vymazať v sekcii Ja."
   }
 }

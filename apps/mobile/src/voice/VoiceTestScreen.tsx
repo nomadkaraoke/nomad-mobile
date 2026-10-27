@@ -8,6 +8,7 @@ import { AppState, Linking, View } from 'react-native';
 
 import { openSignIn } from '../auth/signInUi';
 import { useAuth } from '../auth/store';
+import { track } from '../observability';
 import { SelfReportStep } from './SelfReportStep';
 import { StepLayout } from './StepLayout';
 import { usePitchSource } from './usePitchSource';
@@ -44,6 +45,11 @@ export function VoiceTestScreen() {
   const [saved, setSaved] = useState(false);
   const [awaitingSignIn, setAwaitingSignIn] = useState(false);
 
+  // The mic test reached a result (a self-report pick isn't a test).
+  const micResult = test.result;
+  useEffect(() => {
+    if (micResult) track('voice_test_completed');
+  }, [micResult]);
   if (test.result && test.result !== kept) {
     setKept(test.result);
     setChosen(null);

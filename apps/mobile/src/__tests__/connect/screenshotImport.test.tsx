@@ -7,6 +7,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { useAuth } from '../../auth/store';
+import { aiConsentKey } from '../../discover/connect/ScreenshotImport';
+import { appStorage } from '../../storage';
 import * as memoryFs from '../../test-utils/memoryFs';
 import { gen, session } from '../../test-utils/genAuthMock';
 import { appRoutes } from '../../test-utils/routes';
@@ -37,6 +39,7 @@ jest.mock('@nomad/api-decide', () => ({
 }));
 jest.mock('@nomad/api-gen', () => ({ ...jest.requireActual('@nomad/api-gen'), getMe: jest.fn() }));
 
+const AI_CONSENT_KEY = aiConsentKey('me@example.com'); // the account beforeEach signs in
 const m = (f: unknown) => f as jest.Mock;
 const manipulate = m(ImageManipulator.ImageManipulator.manipulate);
 const resize = jest.fn();
@@ -59,6 +62,7 @@ const pickShots = async (widths: number[] = [1170]) => {
 
 beforeEach(async () => {
   jest.clearAllMocks();
+  appStorage.set(AI_CONSENT_KEY, true); // consent has its own describe below
   await useAuth.getState().signOut();
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 } as never);
   resize.mockClear();
@@ -199,5 +203,68 @@ describe('Screenshot import', () => {
     await pickShots();
     expect(await screen.findByTestId('connect-shot-empty')).toBeTruthy();
     expect(decide.confirmScreenshotItems).not.toHaveBeenCalled();
+  });
+});
+
+describe('Screenshot import: AI consent', () => {
+  beforeEach(() => {
+    appStorage.remove(AI_CONSENT_KEY);
+    m(ImagePicker.launchImageLibraryAsync).mockResolvedValue({ canceled: false, assets: [asset(0, 1170)] });
+  });
+
+  it('always shows the permanent Gemini disclosure', async () => {
+    open();
+    expect(await screen.findByTestId('connect-shot-ai-note')).toHaveTextContent(
+      "Screenshots are read by Google's Gemini AI and not kept.",
+    );
+  });
+
+  it('asks before the first upload; cancel sends nothing', async () => {
+    open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-shot-pick')));
+    expect(await screen.findByText('Read your screenshot with AI?')).toBeTruthy();
+    expect(screen.getByText(/sent to Google's Gemini AI/)).toBeTruthy();
+    await act(async () => fireEvent.press(screen.getByTestId('screenshot-ai-consent-cancel')));
+    expect(screen.queryByTestId('screenshot-ai-consent')).toBeNull();
+    expect(ImagePicker.launchImageLibraryAsync).not.toHaveBeenCalled();
+    expect(decide.extractScreenshots).not.toHaveBeenCalled();
+    expect(appStorage.getBoolean(AI_CONSENT_KEY)).toBeUndefined();
+  });
+
+  it('continue remembers consent and uploads; the next use does not ask', async () => {
+    open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-shot-pick')));
+    await act(async () => fireEvent.press(await screen.findByTestId('screenshot-ai-consent-continue')));
+    await screen.findByTestId('connect-shot-confirm');
+    expect(decide.extractScreenshots).toHaveBeenCalledTimes(1);
+    expect(appStorage.getBoolean(AI_CONSENT_KEY)).toBe(true);
+
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-shot-confirm')));
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-shot-again')));
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-shot-pick')));
+    await screen.findByTestId('connect-shot-confirm');
+    expect(screen.queryByTestId('screenshot-ai-consent')).toBeNull();
+    expect(decide.extractScreenshots).toHaveBeenCalledTimes(2);
+  });
+  it('consent is per account: someone else signing in on this phone is asked again', async () => {
+    await act(() => useAuth.getState().signInWithSession(session('a@example.com')));
+    open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-shot-pick')));
+    await act(async () => fireEvent.press(await screen.findByTestId('screenshot-ai-consent-continue')));
+    await screen.findByTestId('connect-shot-confirm');
+    expect(appStorage.getBoolean(aiConsentKey('a@example.com'))).toBe(true);
+    expect(appStorage.getBoolean(aiConsentKey('b@example.com'))).toBeUndefined();
+
+    await act(() => useAuth.getState().signInWithSession(session('b@example.com')));
+    open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-shot-pick')));
+    expect(await screen.findByTestId('screenshot-ai-consent')).toBeTruthy();
+    expect(decide.extractScreenshots).toHaveBeenCalledTimes(1);
+
+    await act(() => useAuth.getState().signInWithSession(session(' A@Example.com')));
+    open();
+    await act(async () => fireEvent.press(await screen.findByTestId('connect-shot-pick')));
+    await waitFor(() => expect(decide.extractScreenshots).toHaveBeenCalledTimes(2));
+    expect(screen.queryByTestId('screenshot-ai-consent')).toBeNull();
   });
 });

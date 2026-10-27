@@ -1,0 +1,167 @@
+# Store screenshots (Phase 6 R4): the six hero screens of the App Store / Play listing, in listing order, as
+# store-01-discover ... store-06-me in ${STORE_SHOTS}. Re-runnable after every UI change (Phase 7 polish):
+#
+#   scripts/store-screenshots.sh                      # every device, locale en
+#   scripts/e2e-local.sh --platform ios --screen store-tour   # one device (STORE_SHOTS defaults per platform)
+#
+# 1 Discover: personalised picks with a fit badge (seeded profile + voice, as fit-tour)
+# 2 Song page: the fit card and versions
+# 3 Make: one job needing you (Review lyrics) and one ready (gen fake workers)
+# 4 Native lyrics review (review fixture "corrections")
+# 5 Tonight at the fixture night 2121 with a song queued (needs kjbox's local stack; e2e-local.sh starts it)
+# 6 Me: the music profile with the voice section
+# Targets testIDs only, so any LOCALE works. Not part of the E2E suite.
+appId: com.nomadkaraoke.mobile
+name: screens-store-tour
+tags:
+  - tonight
+onFlowComplete:
+  - runScript:
+      file: ../scripts/stack.js
+      env:
+        ACTION: kjbox
+        KJBOX_STACK: ${KJBOX_STACK}
+        OP: start
+  - runFlow: ../common/discover-reset-filters.yaml
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: storetour
+      USER_CONFIG: '{"auto_approve": false}'
+# Make list: a job awaiting the singer's review (the in-progress one) and a finished one.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+      SCENARIO: job_complete
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+      USER_CONFIG: '{"review_fixture":"corrections","stems_delay_seconds":0}'
+- evalScript: ${output.reviewJobId = output.jobId}
+# A fresh night for Tonight, with the default budgets.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: reset
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: rate-limits
+      BODY: '{"per_device": 8, "per_ip": 60}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      EMAIL: ${output.email}
+      PROFILE: '{"low_midi":45,"high_midi":69,"comfort_low":50,"comfort_high":64,"voice_type":"baritone","confidence":"low","method":"self"}'
+- runFlow:
+    file: ../common/seed-decide-profile.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["rock","pop"],"decades":["2000s","2010s"],"energy":"high","artists":[{"name":"Muse","affinity":"love"},{"name":"Adele","affinity":"love"}]}'
+- runFlow:
+    file: ../common/tour-launch.yaml
+    env:
+      EMAIL: ${output.email}
+
+# 1. Discover: picks with a fit badge.
+- tapOn:
+    id: "tab-discover"
+- extendedWaitUntil:
+    visible:
+      id: "rec-row-.*-0"
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+      id: "fit-badge-.*"
+    timeout: 30000
+- takeScreenshot: ${STORE_SHOTS}/store-01-discover
+
+# 2. Song page of a pick with a fit badge: fit card and versions.
+- tapOn:
+    id: "fit-badge-.*"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: "fit-badge-song"
+    timeout: 20000
+- assertVisible:
+    id: "fit-tier"
+- takeScreenshot: ${STORE_SHOTS}/store-02-song
+- runFlow: ../common/header-back.yaml
+
+# 3. Make: the job list.
+- tapOn:
+    id: "tab-make"
+- extendedWaitUntil:
+    visible:
+      id: "make-list"
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+      id: "job-review-${output.reviewJobId}"
+    timeout: 30000
+- takeScreenshot: ${STORE_SHOTS}/store-03-make
+
+# 4. The native lyrics review.
+- runFlow:
+    file: ../common/tap-job-review.yaml
+    env:
+      JOB_ID: ${output.reviewJobId}
+- extendedWaitUntil:
+    visible:
+      id: "review-line-5"
+    timeout: 20000
+- takeScreenshot: ${STORE_SHOTS}/store-04-review
+- runFlow: ../common/header-back.yaml
+
+# 5. Tonight: join the fixture night (already signed in) and queue a song.
+- tapOn:
+    id: "tab-tonight"
+- extendedWaitUntil:
+    visible:
+      id: "tonight-enter-code"
+    timeout: 15000
+- tapOn:
+    id: "tonight-enter-code"
+- tapOn:
+    id: "tonight-code-input"
+- inputText: "2121"
+- tapOn:
+    id: "tonight-code-submit"
+- runFlow:
+    file: ../common/tonight-name.yaml
+    env:
+      SINGER_NAME: Wren
+- runFlow:
+    file: ../common/tonight-request.yaml
+    env:
+      QUERY: hello
+      TITLE: Hello
+- takeScreenshot: ${STORE_SHOTS}/store-05-tonight
+
+# 6. Me: the music profile and its voice section.
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- scrollUntilVisible:
+    element:
+      id: "voice-section"
+    direction: DOWN
+    timeout: 15000
+- assertVisible:
+    id: "voice-section-type"
+- takeScreenshot: ${STORE_SHOTS}/store-06-me

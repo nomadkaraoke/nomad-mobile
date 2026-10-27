@@ -1,0 +1,107 @@
+# Notify 1 (Phase 6 spec §5): Me → Account and notifications → Notifications. The switches persist across a relaunch
+# (gen's push_prefs for Video ready, the phone's own Nomad night alerts). With Video ready off, a finished job writes
+# no `ready` push; back on, the next finished job writes one to /job/<id> (gen's fake push outbox: the app registered
+# a fake Expo token, EXPO_PUBLIC_PUSH=0). Jobs are made by gen's job_complete scenario for the same user.
+appId: com.nomadkaraoke.mobile
+name: notify-1-settings-and-job-push
+tags:
+  - notify
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: notify1
+      CREDITS: "2"
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/me-signin.yaml
+    env:
+      EMAIL: ${output.email}
+# Allows notifications if the OS can still ask (this registers the device with gen).
+- runFlow: ../common/open-notifications.yaml
+- assertVisible:
+    id: "notif-ready"
+    checked: true
+- assertVisible:
+    id: "notif-night"
+    checked: true
+- takeScreenshot: ${PHASE6_SHOTS}/notify-1-defaults
+- tapOn:
+    id: "notif-ready"
+- tapOn:
+    id: "notif-night"
+- assertVisible:
+    id: "notif-ready"
+    checked: false
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: push-prefs
+      STACK: ${STACK}
+      EXPECT_READY: "false"
+# Both stay off after a relaunch: Video ready from gen, night alerts from the phone.
+- runFlow: ../common/relaunch-keep-data.yaml
+- runFlow: ../common/open-notifications.yaml
+- assertVisible:
+    id: "notif-ready"
+    checked: false
+- assertVisible:
+    id: "notif-night"
+    checked: false
+- assertVisible:
+    id: "notif-review"
+    checked: true
+- assertNotVisible:
+    id: "notif-error"
+- takeScreenshot: ${PHASE6_SHOTS}/notify-1-after-relaunch
+# Video ready off: a finished job sends nothing of kind ready.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+      SCENARIO: job_complete
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: push-outbox
+      STACK: ${STACK}
+      SOURCE: gen
+      EXPECT_KIND: ready
+      EXPECT_COUNT: "0"
+      WAIT_MS: "8000"
+# Back on (and night alerts back on: the phone keeps the switch for later flows).
+- tapOn:
+    id: "notif-ready"
+- tapOn:
+    id: "notif-night"
+- assertVisible:
+    id: "notif-ready"
+    checked: true
+- assertVisible:
+    id: "notif-night"
+    checked: true
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: push-prefs
+      STACK: ${STACK}
+      EXPECT_READY: "true"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+      SCENARIO: job_complete
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: push-outbox
+      STACK: ${STACK}
+      SOURCE: gen
+      EXPECT_KIND: ready
+      EXPECT_URL: /job/${output.jobId}
+      EXPECT_COUNT: "1"
+- takeScreenshot: ${PHASE6_SHOTS}/notify-1-ready-on

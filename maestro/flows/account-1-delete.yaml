@@ -1,0 +1,96 @@
+# Account 1 (Phase 6 spec §6, App Store 5.1.1(v)): a user with 2 credits → Me → Account and notifications → Delete
+# account → "2 credits will be lost." → Delete my account → "Your account was deleted" (the phone is cleared, signed
+# out) → gen no longer has the user → signing in again with the same email makes a fresh account with no welcome
+# credit (gen's deleted_users keeps sha256(email) for that). Needs gen's ACCOUNT_DELETION_ENABLED (the local stack).
+appId: com.nomadkaraoke.mobile
+name: account-1-delete
+tags:
+  - account
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: delete
+      CREDITS: "2"
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/me-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- assertVisible:
+    id: "me-credits"
+    text: "2 credits"
+- scrollUntilVisible:
+    element:
+      id: "me-account"
+    direction: DOWN
+    timeout: 15000
+- tapOn:
+    id: "me-account"
+# Shown only once /me says gen offers deletion (capabilities.account_deletion).
+- extendedWaitUntil:
+    visible:
+      id: "account-delete"
+    timeout: 20000
+- tapOn:
+    id: "account-delete"
+- extendedWaitUntil:
+    visible:
+      id: "delete-account-credits"
+    timeout: 20000
+- assertVisible:
+    id: "delete-account-credits"
+    text: "2 credits will be lost\\."
+- assertVisible:
+    id: "delete-account-keep"
+- takeScreenshot: ${PHASE6_SHOTS}/account-1-preview
+- scrollUntilVisible:
+    element:
+      id: "delete-account-confirm"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "delete-account-confirm"
+- extendedWaitUntil:
+    visible: "Your account was deleted"
+    timeout: 60000
+- takeScreenshot: ${PHASE6_SHOTS}/account-1-deleted
+- tapOn: "OK"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: user-exists
+      STACK: ${STACK}
+      EXPECT: "false"
+# Signed out on the phone too: Me offers sign-in again.
+- tapOn:
+    id: "tab-me"
+- extendedWaitUntil:
+    visible:
+      id: "me-signin"
+    timeout: 15000
+- assertNotVisible:
+    id: "me-account"
+# The same email again: a new, empty account (no second welcome credit).
+- runFlow:
+    file: ../common/me-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- assertVisible:
+    id: "me-credits"
+    text: "0 credits"
+- takeScreenshot: ${PHASE6_SHOTS}/account-1-fresh-account
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: user-exists
+      STACK: ${STACK}
+      EXPECT: "true"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: credits
+      STACK: ${STACK}
+      EXPECT_CREDITS: "0"

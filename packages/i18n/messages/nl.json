@@ -778,7 +778,18 @@
     "signInPrompt": "Log in om credits te kopen",
     "packageCredits": "{credits, plural, one {# credit} other {# credits}}",
     "popular": "Populair",
-    "title": "Credits kopen"
+    "title": "Credits kopen",
+    "balance": "Je hebt {credits, plural, one {# credit} other {# credits}}",
+    "buy": "Kopen",
+    "buyFor": "Kopen voor {price}",
+    "purchaseFailed": "De aankoop is mislukt. Probeer het opnieuw.",
+    "referralNote": "Je vriendenkorting van {percent}% geldt wanneer je via de website koopt.",
+    "webLink": {
+      "default": "Koop via de website"
+    },
+    "store": {
+      "awaitingApproval": "Wachten op goedkeuring. Je credits verschijnen zodra de aankoop is goedgekeurd."
+    }
   },
   "duration": {
     "body": "Dit nummer duurt {duration}, dus kost het in totaal {total, plural, one {# credit} other {# credits}} ({extra} extra).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Kies andere screenshots",
       "reading": "Je screenshots lezen…",
       "unmatched": "Nog niet in onze karaokecatalogus",
-      "retry": "Probeer opnieuw"
+      "retry": "Probeer opnieuw",
+      "aiConsentBody": "Om de nummers te vinden, wordt je screenshot naar Gemini AI van Google gestuurd. Dit wordt alleen gebruikt om de titels van de nummers te lezen en wordt daarna niet bewaard.",
+      "aiConsentTitle": "Je screenshot laten lezen met AI?",
+      "aiNote": "Screenshots worden gelezen door Gemini AI van Google en niet bewaard.",
+      "aiConsentCancel": "Annuleren",
+      "aiConsentContinue": "Doorgaan"
     },
     "source": {
       "appleExport": "Apple Music-geschiedenis",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Je hebt dit bestand al geïmporteerd, dus er viel niets nieuws toe te voegen."
   },
   "permissions": {
-    "microphone": "Geef Nomad Karaoke toestemming om je te horen zingen, zodat het je stembereik kan meten. Audio blijft op je telefoon."
+    "microphone": "Nomad Karaoke gebruikt de microfoon om je stembereik te meten. Als je ervoor kiest om jezelf op te nemen in een stemsessie, wordt de opname geüpload en privé bewaard (alleen jij en het Nomad Karaoke-team kunnen deze beluisteren). Je kunt deze op elk moment verwijderen in 'Ik'."
   },
   "voice": {
     "between": "Tussen {low} en {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Te veel tegelijk. Probeer het over een paar minuten opnieuw."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Inschakelen",
+      "make": {
+        "body": "We laten je weten wanneer hij klaar is om te bekijken, of als je de songtekst nog moet controleren.",
+        "title": "Melding ontvangen wanneer je video klaar is?"
+      },
+      "night": {
+        "body": "We laten je weten wanneer je bijna aan de beurt bent en wanneer het jouw beurt is om te zingen.",
+        "title": "Melding ontvangen wanneer het jouw beurt is?"
+      },
+      "notNow": "Niet nu"
+    },
+    "channels": {
+      "jobs": "Je video's",
+      "tonight": "Nomad-avonden"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Meldingen",
+      "row": "Account en meldingen",
+      "title": "Account en meldingen"
+    },
+    "notifications": {
+      "askBody": "Schakel meldingen in om een seintje te krijgen wanneer je video klaar is of je hulp nodig heeft.",
+      "askButton": "Meldingen inschakelen",
+      "deniedBody": "Meldingen zijn uitgeschakeld voor Nomad Karaoke op deze telefoon. Schakel ze in via Instellingen om te horen wanneer je video's klaar zijn.",
+      "error": "Kon die wijziging niet opslaan. Controleer je verbinding en probeer het opnieuw.",
+      "night": {
+        "hint": "Wanneer je bijna aan de beurt bent en wanneer je mag zingen.",
+        "label": "Nomad night-meldingen"
+      },
+      "problems": {
+        "hint": "Wanneer er iets misgaat met een video.",
+        "label": "Problemen"
+      },
+      "ready": {
+        "hint": "Wanneer je karaokevideo klaar is om te bekijken.",
+        "label": "Video klaar"
+      },
+      "review": {
+        "hint": "Wanneer de songtekst nog even een snelle check van jou nodig heeft.",
+        "label": "Jouw controle nodig"
+      },
+      "title": "Meldingen",
+      "openSettings": "Instellingen openen",
+      "loadFailed": "Kan je meldingsinstellingen niet laden. Controleer je verbinding en probeer het opnieuw."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Kon niet bevestigen via Apple. Probeer het opnieuw.",
+    "blocked": {
+      "admin": "Dit is een medewerkersaccount, dus het kan niet vanuit de app worden verwijderd.",
+      "connect_account": "Je account is gekoppeld aan een uitbetalingsaccount, dus het kan niet vanuit de app worden verwijderd.",
+      "generic": "We kunnen dit account niet verwijderen vanuit de app.",
+      "order_in_progress": "Je hebt een lopende bestelling, dus je account kan nu nog niet vanuit de app worden verwijderd.",
+      "referral_balance": "Je hebt referral-inkomsten die nog niet zijn uitbetaald, dus je account kan niet vanuit de app worden verwijderd.",
+      "unavailable": "Je account verwijderen vanuit de app is momenteel niet mogelijk."
+    },
+    "contactSupport": "E-mail support",
+    "creditsLost": "{count, plural, one {# credit gaat verloren.} other {# credits gaan verloren.}}",
+    "deletedDetails": "Je persoonlijke gegevens",
+    "deletedDiscover": "Je muziek- en stemgegevens in Discover",
+    "deletedUploads": "Je uploads",
+    "doneBody": "Je account is verwijderd en de gegevens op deze telefoon zijn gewist.",
+    "doneTitle": "Je account is verwijderd",
+    "intro": "Dit verwijdert je Nomad Karaoke-account definitief. Dit kan niet ongedaan worden gemaakt.",
+    "jobsCancelled": "{count, plural, one {# video in behandeling wordt geannuleerd.} other {# video's in behandeling worden geannuleerd.}}",
+    "keep": "Mijn account behouden",
+    "keptRecords": "Opdracht- en betalingsgegevens, die we nodig hebben voor de boekhouding",
+    "loadError": "Kon je accountgegevens niet laden. Controleer je verbinding en probeer het opnieuw.",
+    "retryNetwork": "Kon je account niet verwijderen. Controleer je verbinding en probeer het opnieuw.",
+    "signedOutTitle": "Je bent uitgelogd",
+    "support": "Stuur een e-mail naar {email} en we lossen het voor je op.",
+    "confirm": "Mijn account verwijderen",
+    "deletedHeading": "Wat we verwijderen",
+    "deletedNights": "Je Nomad Night-links",
+    "deletedRecordings": "Je opnames",
+    "keptHeading": "Wat we bewaren",
+    "keptVideos": "Karaokevideo's die al op YouTube zijn gepubliceerd",
+    "ok": "OK",
+    "retryPartWay": "Er ging onderweg iets mis. Probeer het opnieuw — het verwijderen gaat verder waar het gebleven was.",
+    "row": "Account verwijderen",
+    "signedOutBody": "Je bent uitgelogd. Als je zojuist je account hebt verwijderd, is deze nu weg. Log anders opnieuw in en probeer het nog eens.",
+    "title": "Je account verwijderen"
   }
 }

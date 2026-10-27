@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Engedélyezd, hogy a Nomad Karaoke hallja az éneklésedet, és megmérhesse a hangterjedelmedet. A hangfelvétel nem hagyja el a telefonodat."
+    "NSMicrophoneUsageDescription": "A Nomad Karaoke a mikrofont a hangterjedelmed mérésére használja. Ha úgy döntesz, hogy hangfelvételt készítesz magadról egy énekes felmérés során, a felvételt feltöltjük és bizalmasan kezeljük (csak te és a Nomad Karaoke csapata hallgathatja meg), és bármikor törölheted a Me menüpontban."
   }
 }

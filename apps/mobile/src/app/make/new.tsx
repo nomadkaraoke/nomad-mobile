@@ -18,11 +18,14 @@ import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { openSignIn } from '../../auth/signInUi';
 import { useAuth } from '../../auth/store';
+import { displayCredits } from '../../credits/balance';
 import { isFreshIntent, useMakeIntent } from '../../make/intentStore';
 import { CommunityExists, DidYouMean, MatchNotice } from '../../make/JudgeNotices';
 import { PickCard, SourceGroups } from '../../make/SourcePicker';
 import { useAudioSearch } from '../../make/useAudioSearch';
 import { useMatchJudge } from '../../make/useMatchJudge';
+import { requestPushAsk } from '../../notifications/push';
+import { track } from '../../observability';
 
 // Only a basic shape check: gen downloads from many sites, and `validateUrl` asks gen before creating.
 const LINK = /^https?:\/\/\S+$/i;
@@ -163,12 +166,16 @@ export default function MakeScreen() {
       to.kind === 'url'
         ? createJobFromUrl({ url: to.url, ...as })
         : createJobFromSearch({ sessionId: to.sessionId, index: to.index, ...as }),
-    onSuccess: () => {
+    onSuccess: (_job, { to }) => {
+      track('make_started', { source: to.kind });
       // The intent is cleared when this screen unmounts, so it never flashes "Pick a song" on the way out.
       created.current = true;
       router.dismissTo('/(tabs)/make');
       void queryClient.invalidateQueries({ queryKey: ['jobs'] });
       void queryClient.invalidateQueries({ queryKey: ['me'] });
+      // In context (spec §5): "Get a notification when your video is ready?", asked once per install, on the Make
+      // tab once the dismiss has settled.
+      requestPushAsk('make');
     },
     onError: (e, { to }) => {
       const failure = createFailure(e, to);
@@ -385,7 +392,7 @@ export default function MakeScreen() {
           )}
 
           <View testID="make-cost" className="gap-1 rounded-xl border border-border bg-card p-3">
-            <Text>{me.data ? t('cost', { credits: me.data.credits }) : t('costOnly')}</Text>
+            <Text>{me.data ? t('cost', { credits: displayCredits(me.data.credits) }) : t('costOnly')}</Text>
             <Text variant="muted">{t('publicNote')}</Text>
           </View>
           {failure === 'youtube_blocked' ? (

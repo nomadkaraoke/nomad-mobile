@@ -13,7 +13,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
+import { useAuth } from '../../auth/store';
+import { userKeyFor } from '../../auth/userKey';
 import { useOffline } from '../../net/useOffline';
+import { appStorage } from '../../storage';
 import { importErrorKey } from './importErrors';
 import { ImportResult } from './ImportResult';
 import { useInvalidateAfterImport } from './queries';
@@ -23,6 +26,12 @@ const MAX_IMAGES = 5;
 /** Phone screenshots are ~1170-1290 px wide; wider adds bytes, not legibility (decide caps each image at 4 MiB). */
 const MAX_WIDTH = 1290;
 const JPEG_QUALITY = 0.8;
+/**
+ * Set once a person has agreed to screenshots going to Google's Gemini AI, per account (`userKeyFor(email)`; one
+ * bucket while signed out): someone else signing in on the same phone is asked again.
+ */
+export const aiConsentKey = (email: string | null) =>
+  `connect.screenshotAiConsent.${email ? userKeyFor(email) : 'signedOut'}`;
 
 type Phase = 'picking' | 'reading' | 'confirm' | 'saving' | 'done' | 'error';
 
@@ -65,14 +74,30 @@ export function ScreenshotImport() {
     setPhase('error');
   };
 
+  const [askingConsent, setAskingConsent] = useState(false);
+  const email = useAuth((s) => (s.state.status === 'signedIn' ? s.state.session.email : null));
+  const consentKey = aiConsentKey(email);
+
   const pickAndRead = async () => {
     if (picking.current || phase === 'reading' || phase === 'saving') return;
+    // First upload ever: the screenshot goes to a third-party AI, so ask first (inline card below). Nothing is sent
+    // until "Continue".
+    if (!appStorage.getBoolean(consentKey)) {
+      setAskingConsent(true);
+      return;
+    }
     picking.current = true;
     try {
       await pickAndReadOnce();
     } finally {
       picking.current = false;
     }
+  };
+
+  const agree = () => {
+    appStorage.set(consentKey, true);
+    setAskingConsent(false);
+    void pickAndRead();
   };
 
   const pickAndReadOnce = async () => {
@@ -138,6 +163,26 @@ export function ScreenshotImport() {
       {phase === 'picking' || phase === 'reading' ? (
         <>
           <Text variant="muted">{t('screenshot.limit')}</Text>
+          <Text testID="connect-shot-ai-note" variant="muted">
+            {t('screenshot.aiNote')}
+          </Text>
+          {askingConsent ? (
+            <View testID="screenshot-ai-consent" className="gap-3 rounded-xl border border-border bg-card p-4">
+              <Text className="text-lg font-semibold">{t('screenshot.aiConsentTitle')}</Text>
+              <Text>{t('screenshot.aiConsentBody')}</Text>
+              <Button
+                testID="screenshot-ai-consent-continue"
+                label={t('screenshot.aiConsentContinue')}
+                onPress={agree}
+              />
+              <Button
+                testID="screenshot-ai-consent-cancel"
+                variant="secondary"
+                label={t('screenshot.aiConsentCancel')}
+                onPress={() => setAskingConsent(false)}
+              />
+            </View>
+          ) : null}
           <Button
             testID="connect-shot-pick"
             label={t('screenshot.pick')}

@@ -6,6 +6,7 @@ import {
   claimTip,
   configureKjbox,
   getHistorySuggestions,
+  deleteKjboxPushToken,
   getMe,
   getNight,
   getNow,
@@ -13,6 +14,7 @@ import {
   getTips,
   joinNight,
   makeSearch,
+  registerKjboxPushToken,
   previewResolve,
   reorder,
   searchSongs,
@@ -285,5 +287,24 @@ describe('past-night history (no event code, no night id)', () => {
   it('accepts a null venue', async () => {
     fetchMock.mockResolvedValueOnce(json({ api_version: '1.0', nights: [{ ...night, venue: null }], more_nights: 0 }));
     await expect(getHistorySuggestions()).resolves.toMatchObject({ nights: [{ venue: null }] });
+  });
+});
+
+describe('push token', () => {
+  it('registerKjboxPushToken posts the Expo token, platform, t and night_id', async () => {
+    fetchMock.mockImplementation(async () => json({ api_version: '1.0', ok: true }));
+    await registerKjboxPushToken('2121', 'ExponentPushToken[abc]', 'ios', 'n1');
+    expect(last().method).toBe('POST');
+    expect(new URL(last().url).pathname).toBe('/api/v1/push-token');
+    expect(await lastBody()).toEqual({ t: '2121', night_id: 'n1', expo_push_token: 'ExponentPushToken[abc]', platform: 'ios' });
+  });
+
+  it('deleteKjboxPushToken sends DELETE with the token in a JSON body', async () => {
+    fetchMock.mockImplementation(async () => json({ api_version: '1.0', ok: true }));
+    await deleteKjboxPushToken('2121', 'ExponentPushToken[abc]', 'n1');
+    expect(last().method).toBe('DELETE');
+    expect(new URL(last().url).pathname).toBe('/api/v1/push-token');
+    expect(last().headers.get('authorization')).toBe('Bearer tok');
+    expect(await lastBody()).toEqual({ t: '2121', night_id: 'n1', expo_push_token: 'ExponentPushToken[abc]' });
   });
 });

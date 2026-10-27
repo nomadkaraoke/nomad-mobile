@@ -6,6 +6,7 @@ import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
+import { track } from '../../observability';
 import { duetToSend, ReviewStoreContext } from '../store';
 
 /** What `instrumental_selection` gen gets: a stem, `auto` (gen resolves its confident verdict) or `custom` (BYO). */
@@ -97,6 +98,7 @@ export function useSubmitReview(jobId: string, selection: SubmitSelection): Subm
     }
     // `busy` stays set: the review is finished, nothing may submit again.
     store.getState().finish();
+    track('review_submitted');
     void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => undefined);
     void queryClient.invalidateQueries({ queryKey: ['jobs'] });
     void queryClient.invalidateQueries({ queryKey: ['job', jobId] });

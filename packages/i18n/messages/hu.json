@@ -778,7 +778,18 @@
     "signInPrompt": "Jelentkezz be kreditek vásárlásához",
     "packageCredits": "{credits, plural, one {# kredit} other {# kredit}}",
     "popular": "Népszerű",
-    "title": "Kredit vásárlása"
+    "title": "Kredit vásárlása",
+    "balance": "{credits, plural, one {# kredited} other {# kredited}} van",
+    "buy": "Vásárlás",
+    "buyFor": "Vásárlás ennyiért: {price}",
+    "purchaseFailed": "A vásárlás nem sikerült. Próbáld újra.",
+    "referralNote": "A(z) {percent}%-os ajánlói kedvezményed akkor érvényes, ha a weben vásárolsz.",
+    "webLink": {
+      "default": "Vásárlás a weben"
+    },
+    "store": {
+      "awaitingApproval": "Jóváhagyásra vár. A kreditjeid megjelennek, amint a vásárlást jóváhagyták."
+    }
   },
   "duration": {
     "body": "Ez a szám {duration} hosszú, így összesen {total, plural, one {# kreditbe} other {# kreditbe}} kerül (még {extra}).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Másik képernyőképek kiválasztása",
       "reading": "A képernyőképeid beolvasása…",
       "unmatched": "Még nem szerepel a karaoke katalógusunkban",
-      "retry": "Próbáld újra"
+      "retry": "Próbáld újra",
+      "aiConsentBody": "A dalok megtalálásához a képernyőképedet elküldjük a Google Gemini AI-nak. Ezt kizárólag a dalcímek beolvasására használjuk, és utána nem tároljuk el.",
+      "aiConsentTitle": "Beolvashatja az AI a képernyőképedet?",
+      "aiNote": "A képernyőképeket a Google Gemini AI olvassa be, és utána nem tároljuk el őket.",
+      "aiConsentCancel": "Mégse",
+      "aiConsentContinue": "Folytatás"
     },
     "source": {
       "appleExport": "Apple Music-előzmények",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Ezt a fájlt már importáltad, így nem volt új hozzáadnivaló."
   },
   "permissions": {
-    "microphone": "Engedélyezd, hogy a Nomad Karaoke hallja az éneklésedet, és megmérhesse a hangterjedelmedet. A hangfelvétel nem hagyja el a telefonodat."
+    "microphone": "A Nomad Karaoke a mikrofont a hangterjedelmed mérésére használja. Ha úgy döntesz, hogy hangfelvételt készítesz magadról egy énekes felmérés során, a felvételt feltöltjük és bizalmasan kezeljük (csak te és a Nomad Karaoke csapata hallgathatja meg), és bármikor törölheted a Me menüpontban."
   },
   "voice": {
     "between": "{low} és {high} között",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Túl sok egyszerre. Próbáld újra néhány perc múlva."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Bekapcsolás",
+      "make": {
+        "body": "Szólunk, amint megnézheted, vagy ha ellenőrizned kell a dalszöveget.",
+        "title": "Kérsz értesítést, ha elkészül a videód?"
+      },
+      "night": {
+        "body": "Szólunk, ha hamarosan te következel, és akkor is, amikor te jössz énekelni.",
+        "title": "Kérsz értesítést, amikor te jössz?"
+      },
+      "notNow": "Most ne"
+    },
+    "channels": {
+      "jobs": "Videóid",
+      "tonight": "Nomad estek"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Értesítések",
+      "row": "Fiók és értesítések",
+      "title": "Fiók és értesítések"
+    },
+    "notifications": {
+      "askBody": "Kapcsold be az értesítéseket, hogy tudd, ha a videód elkészült, vagy ha a segítségedre van szükség.",
+      "askButton": "Értesítések bekapcsolása",
+      "deniedBody": "A Nomad Karaoke értesítései ki vannak kapcsolva ezen a telefonon. Kapcsold be őket a Beállításokban, hogy értesülj, amint elkészülnek a videóid.",
+      "error": "Nem sikerült menteni a módosítást. Ellenőrizd a kapcsolatot, majd próbáld újra.",
+      "night": {
+        "hint": "Amikor te következel, vagy amikor rád kerül a sor az éneklésben.",
+        "label": "Nomad parti értesítések"
+      },
+      "problems": {
+        "hint": "Ha valami probléma merül fel egy videóval.",
+        "label": "Problémák"
+      },
+      "ready": {
+        "hint": "Amikor a karaoke videód készen áll a megtekintésre.",
+        "label": "Videó elkészült"
+      },
+      "review": {
+        "hint": "Amikor a dalszöveget át kell nézned egy pillanatra.",
+        "label": "Átnézésre vár"
+      },
+      "title": "Értesítések",
+      "openSettings": "Beállítások megnyitása",
+      "loadFailed": "Nem sikerült betölteni az értesítési beállításaidat. Ellenőrizd az internetkapcsolatodat, és próbáld újra."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Nem sikerült az Apple-lel megerősíteni. Kérlek, próbáld újra.",
+    "blocked": {
+      "admin": "Ez egy munkatársi fiók, ezért nem törölhető az alkalmazásból.",
+      "connect_account": "A fiókod kifizetési fiókhoz van kapcsolva, ezért nem törölhető az alkalmazásból.",
+      "generic": "Ezt a fiókot nem tudjuk törölni az alkalmazásból.",
+      "order_in_progress": "Folyamatban lévő rendelésed van, ezért a fiókodat még nem lehet törölni az alkalmazásból.",
+      "referral_balance": "Még kifizetetlen ajánlói jutalékod van, ezért a fiókodat még nem lehet törölni az alkalmazásból.",
+      "unavailable": "A fióktörlés az alkalmazásból jelenleg nem érhető el."
+    },
+    "contactSupport": "Írj az ügyfélszolgálatnak",
+    "creditsLost": "{count, plural, one {# kredit elvész.} other {# kredit elvész.}}",
+    "deletedDetails": "A személyes adataid",
+    "deletedDiscover": "A zenéid és hanganyagaid a Discoverben",
+    "deletedUploads": "A feltöltéseid",
+    "doneBody": "A fiókod megszűnt, és minden adatot töröltünk erről a telefonról.",
+    "doneTitle": "A fiókodat töröltük",
+    "intro": "Ez a lépés véglegesen törli a Nomad Karaoke fiókodat. Nem vonható vissza.",
+    "jobsCancelled": "{count, plural, one {# folyamatban lévő videó törlésre kerül.} other {# folyamatban lévő videó törlésre kerül.}}",
+    "keep": "Megtartom a fiókomat",
+    "keptRecords": "A feladat- és fizetési előzmények, amelyekre könyvelési okokból van szükségünk",
+    "loadError": "Nem sikerült betölteni a fiókod adatait. Ellenőrizd az internetkapcsolatot, és próbáld újra.",
+    "retryNetwork": "Nem sikerült törölni a fiókodat. Ellenőrizd az internetkapcsolatot, és próbáld újra.",
+    "signedOutTitle": "Kijelentkeztél",
+    "support": "Írj nekünk a(z) {email} címre, és segítünk elintézni.",
+    "confirm": "Fiókom törlése",
+    "deletedHeading": "Amit törlünk",
+    "deletedNights": "A Nomad night linkjeid",
+    "deletedRecordings": "Felvételeid",
+    "keptHeading": "Amit megőrzünk",
+    "keptVideos": "A YouTube-on már közzétett karaokevideók",
+    "ok": "OK",
+    "retryPartWay": "Hiba történt a folyamat közben. Kérjük, próbáld újra — a törlés onnan folytatódik, ahol abbamaradt.",
+    "row": "Fiók törlése",
+    "signedOutBody": "Kijelentkeztél. Ha épp az imént törölted a fiókodat, az már meg is szűnt. Ellenkező esetben jelentkezz be, és próbáld újra.",
+    "title": "Fiók törlése"
   }
 }
