@@ -78,7 +78,7 @@ export function SetlistSearchSheet({ visible, onClose, onPick }: { visible: bool
                 className={`min-h-11 flex-row items-center justify-between gap-2 rounded-xl border p-3 ${added[s.song_key] ? 'border-primary bg-primary/15' : 'border-border bg-card'}`}
               >
                 <Text className="flex-1" numberOfLines={2}>
-                  {isolate(t('songValue', { title: s.title, artist: s.artist }))}
+                  {t('songValue', { title: isolate(s.title), artist: isolate(s.artist) })}
                 </Text>
                 {added[s.song_key] ? <Text className="text-xs font-bold text-primary">{t('added')}</Text> : null}
               </Pressable>

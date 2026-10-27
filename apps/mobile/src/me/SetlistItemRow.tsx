@@ -39,7 +39,7 @@ export function SetlistItemRow({ item, index: i, count, editing, onMove, onSung,
   const tOther = useTranslations('tonight.other');
   const s = itemSong(item);
   const artist = s.artist ? artistLabel(s.artist, tOther('unknownArtist')) : '';
-  const name = isolate(artist ? t('songValue', { title: s.title || s.song_key || '', artist }) : s.title);
+  const name = artist ? t('songValue', { title: isolate(s.title || s.song_key || ''), artist: isolate(artist) }) : isolate(s.title);
   return (
     <View testID={`setlist-item-${i}`} className="gap-2 border-b border-border px-4 py-3">
       <View className="flex-row items-center gap-2">

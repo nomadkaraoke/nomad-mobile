@@ -21,6 +21,8 @@ export type OutboxConfig<I extends { key: string }> = {
    * updated here never leaves a gap where neither the queue nor the cache has the write. Errors are swallowed.
    */
   onSent?: (item: I & { rev: number }, result: unknown, userKey: string) => void;
+  /** Optional: a permanent error dropped this item (the account is still the owner), so its optimistic UI can roll back. Errors are swallowed. */
+  onDropped?: (item: I & { rev: number }, error: unknown, userKey: string) => void;
   /** Merge `next` into the `queued` item for the same key. `null` drops the queued item (nothing to send). */
   merge: (queued: I & { attempted?: boolean }, next: I) => I | null;
   isPermanent: (e: unknown) => boolean;
@@ -58,6 +60,8 @@ export type OutboxHook<I extends { key: string }> = UseBoundStore<StoreApi<Outbo
   idle(): Promise<void>;
   /** Also told about every successful send (after `onSent`); returns an unsubscribe. */
   addSentListener(fn: NonNullable<OutboxConfig<I>['onSent']>): () => void;
+  /** Told about every item dropped for a permanent error (after `onDropped`); returns an unsubscribe. */
+  addDroppedListener(fn: NonNullable<OutboxConfig<I>['onDropped']>): () => void;
 };
 
 const emailOf = (): string | null => {
@@ -77,6 +81,16 @@ export function createOutbox<I extends { key: string }>(cfg: OutboxConfig<I>): O
         fn?.(item, result, owner);
       } catch (e) {
         console.warn(`[outbox] onSent failed for ${item.key}: ${String(e)}`);
+      }
+    }
+  };
+  const droppedListeners = new Set<NonNullable<OutboxConfig<I>['onDropped']>>();
+  const notifyDropped = (item: Stored<I>, error: unknown, owner: string) => {
+    for (const fn of [cfg.onDropped, ...droppedListeners]) {
+      try {
+        fn?.(item, error, owner);
+      } catch (err) {
+        console.warn(`[outbox] onDropped failed for ${item.key}: ${String(err)}`);
       }
     }
   };
@@ -138,6 +152,7 @@ export function createOutbox<I extends { key: string }>(cfg: OutboxConfig<I>): O
             const detail = e instanceof ApiError ? `${e.status} ${String(e.detail)}` : String(e);
             console.warn(`[outbox] dropped ${head.key}: ${detail}`);
             persist(without(head));
+            notifyDropped(head, e, owner);
             continue;
           }
           if (e instanceof ApiError && e.status === 401) return;
@@ -245,6 +260,10 @@ export function createOutbox<I extends { key: string }>(cfg: OutboxConfig<I>): O
     addSentListener: (fn: NonNullable<OutboxConfig<I>['onSent']>) => {
       listeners.add(fn);
       return () => void listeners.delete(fn);
+    },
+    addDroppedListener: (fn: NonNullable<OutboxConfig<I>['onDropped']>) => {
+      droppedListeners.add(fn);
+      return () => void droppedListeners.delete(fn);
     },
   });
 }

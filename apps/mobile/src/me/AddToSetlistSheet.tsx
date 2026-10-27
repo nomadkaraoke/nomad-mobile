@@ -64,7 +64,7 @@ export function AddToSetlistSheet({ song, onClose }: { song: AddSong | null; onC
   return (
     <Sheet visible={song !== null} onClose={close} title={t('addToTitle')} testID="add-to-setlist" closeLabel={t('close')} fullHeight>
       <View className="gap-3">
-        {song ? <Text variant="muted">{isolate(t('songValue', { title: song.title, artist: artistLabel(song.artist, tOther('unknownArtist')) }))}</Text> : null}
+        {song ? <Text variant="muted">{t('songValue', { title: isolate(song.title), artist: isolate(artistLabel(song.artist, tOther('unknownArtist'))) })}</Text> : null}
         <ScrollView className="max-h-72" keyboardShouldPersistTaps="handled">
           <View className="gap-2">
             {setlists.map((s) => {

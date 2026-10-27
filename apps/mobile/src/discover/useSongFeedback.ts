@@ -1,9 +1,10 @@
-import { hideSong, loveSong, unhideSong, type RecSong } from '@nomad/api-decide';
+import { hideSong, unhideSong, type RecSong } from '@nomad/api-decide';
 import { useQueryClient, type Query, type QueryClient, type QueryKey } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAuth } from '../auth/store';
 import { useLovedOverrides } from '../me/lovedOverrides';
+import { useMeOutbox } from '../me/meOutbox';
 import { RECS_KEY, type RecsPages } from './useRecommendations';
 
 /** How long the "Hidden from your picks · Undo" toast stays up. */
@@ -148,20 +149,26 @@ export function useSongFeedback() {
   const love = useCallback((song: RecSong) => {
     const key = song.song_key;
     setLoved((s) => new Set(s).add(key));
-    // Me's library and saves see this love at once (and Me's un-save un-hearts it here).
-    useLovedOverrides.getState().set(song, true, true);
-    const at = useLovedOverrides.getState().byKey[key]?.at;
-    loveSong(key, { artist: song.artist, title: song.title })
-      .then(() => useLovedOverrides.getState().release(key, at))
-      .catch(() => {
-      useLovedOverrides.getState().unset(key, at);
-      setLoved((s) => {
-        const next = new Set(s);
-        next.delete(key);
-        return next;
-      });
-    });
+    // Me's library and saves see this love at once (and Me's un-save un-hearts it here). The request goes through
+    // the Me outbox (one item per song), so a later un-save is ordered after it and never overtaken by it.
+    useLovedOverrides.getState().set(song, true);
+    useMeOutbox.getState().enqueue({ key: `love:${key}`, op: 'love', song_key: key, artist: song.artist, title: song.title, loved: true });
   }, []);
+
+  // The outbox gave up on a love (permanent error): the heart goes back (librarySettle drops the shared override).
+  useEffect(
+    () =>
+      useMeOutbox.addDroppedListener((item) => {
+        if (item.op !== 'love' || !item.loved) return;
+        setLoved((s) => {
+          if (!s.has(item.song_key)) return s;
+          const next = new Set(s);
+          next.delete(item.song_key);
+          return next;
+        });
+      }),
+    [],
+  );
 
   // Me's saves and un-saves win over this view's own record.
   const overrides = useLovedOverrides((s) => s.byKey);

@@ -177,7 +177,7 @@ export function MarkSungSheet({ song, onClose }: { song: MarkSungSong | null; on
         {song ? (
           <View className="gap-4">
             <Text className="font-semibold" numberOfLines={2}>
-              {isolate(t('song', { title: song.title, artist: song.artist }))}
+              {t('song', { title: isolate(song.title), artist: isolate(song.artist) })}
             </Text>
             <View className="flex-row flex-wrap gap-2">
               <Chip testID="mark-when-tonight" label={t('tonight')} selected={when === 'tonight'} onPress={() => setWhen('tonight')} />

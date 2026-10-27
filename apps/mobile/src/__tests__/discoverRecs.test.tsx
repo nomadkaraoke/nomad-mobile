@@ -305,7 +305,22 @@ describe('discoverRecs', () => {
     fireEvent.press(await screen.findByTestId('rec-menu-crowd_pleasers-1'));
     fireEvent.press(await screen.findByTestId('song-menu-love'));
     expect(await screen.findByTestId('rec-loved-crowd_pleasers-1')).toBeTruthy();
-    expect(api.loveSong).toHaveBeenCalledWith('band b|song b', { artist: 'Band B', title: 'Song B' });
+    // The love goes through the Me outbox (ordered with a later un-save), not straight to the API.
+    await waitFor(() => expect(api.loveSong).toHaveBeenCalledWith('band b|song b', { artist: 'Band B', title: 'Song B' }));
+    await act(() => useMeOutbox.idle());
+    expect(useMeOutbox.getState().items).toHaveLength(0);
+    expect(useLovedOverrides.getState().byKey['band b|song b']).toMatchObject({ loved: true });
+  });
+
+  it('a love the server refuses for good takes the heart back', async () => {
+    (api.loveSong as jest.Mock).mockRejectedValueOnce(new api.ApiError(404, 'gone'));
+    await signIn();
+    open();
+    fireEvent.press(await screen.findByTestId('rec-menu-crowd_pleasers-1'));
+    fireEvent.press(await screen.findByTestId('song-menu-love'));
+    await act(() => useMeOutbox.idle());
+    await waitFor(() => expect(screen.queryByTestId('rec-loved-crowd_pleasers-1')).toBeNull());
+    expect(useLovedOverrides.getState().byKey['band b|song b']).toBeUndefined();
   });
 
   it("a love doesn't follow into someone else's session", async () => {

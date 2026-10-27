@@ -40,6 +40,8 @@ export function useLogMirror(): { entries: KaraokeLogEntry[] } {
     queryKey: logMirrorKeyFor(userKey),
     enabled: userKey !== null,
     initialData: cached,
+    // The cache is a seed, not fresh data: the incremental `since` sync still runs on mount (cold start).
+    initialDataUpdatedAt: 0,
     staleTime: 5 * 60_000,
     retry: false,
     queryFn: async () => {

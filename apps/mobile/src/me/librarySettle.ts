@@ -61,3 +61,10 @@ useMeOutbox.addSentListener((item, _result, owner) => {
   const rec = pendingSetlists([item])[0];
   if (rec) useLibrarySettle.setState({ setlists: { ...useLibrarySettle.getState().setlists, [rec.id]: { ...rec, sentAt: Date.now() } } });
 });
+
+// A love the server refused for good (permanent error): take the optimistic heart back (unless a newer answer shows).
+useMeOutbox.addDroppedListener((item, _error, owner) => {
+  if (currentUserKey() !== owner || item.op !== 'love' || !item.loved) return;
+  const cur = useLovedOverrides.getState().byKey[item.song_key];
+  if (cur?.loved) useLovedOverrides.getState().unset(item.song_key);
+});

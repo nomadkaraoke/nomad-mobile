@@ -23,8 +23,20 @@ const api = decide as jest.Mocked<typeof decide>;
 const { ApiError } = jest.requireActual<typeof decide>('@nomad/api-decide');
 const CACHE = `me.library.v1.${userKeyFor('a@example.com')}`;
 
+// Sends that stay in flight until the test ends: the outbox is shared module state, so a never-settling send would
+// block every later test's flush.
+const hung: (() => void)[] = [];
+const hang = () => new Promise<void>((r) => hung.push(r));
+
 beforeEach(() => {
   jest.clearAllMocks();
+});
+
+afterEach(async () => {
+  await act(async () => {
+    hung.splice(0).forEach((r) => r());
+    await useMeOutbox.idle();
+  });
 });
 
 it('a 304 keeps the cached items', async () => {
@@ -69,7 +81,7 @@ it('a pending backfill shows immediately', async () => {
 it('a queued love shows immediately', async () => {
   const client = resetMe();
   api.getLibrary.mockResolvedValue({ status: 'ok', etag: '"e"', items: [li('A', 'One') as never] });
-  api.loveSong.mockImplementation(() => new Promise(() => {}));
+  api.loveSong.mockImplementation(hang);
   const { result } = renderHook(() => useLibrary(), { wrapper: wrapperFor(client) });
   await waitFor(() => expect(result.current.items).toHaveLength(1));
   useMeOutbox.getState().enqueue({ key: 'love:k_One', op: 'love', song_key: 'k_One', artist: 'A', title: 'One', loved: true });
@@ -79,7 +91,7 @@ it('a queued love shows immediately', async () => {
 it('useSaveSong toggles through the outbox and agrees with Discover hearts', async () => {
   const client = resetMe();
   api.getLibrary.mockResolvedValue({ status: 'ok', etag: '"e"', items: [li('A', 'One') as never] });
-  api.loveSong.mockImplementation(() => new Promise(() => {}));
+  api.loveSong.mockImplementation(hang);
   const { result } = renderHook(() => useSaveSong(), { wrapper: wrapperFor(client) });
   await waitFor(() => expect(result.current.saved('k_One')).toBe(false));
   act(() => result.current.toggle({ song_key: 'k_One', artist: 'A', title: 'One' }));
@@ -118,7 +130,7 @@ describe('Discover and Me hearts agree', () => {
   it('a Discover love shows as saved in Me, and survives a library refetch while in flight', async () => {
     const client = resetMe();
     api.getLibrary.mockResolvedValue({ status: 'ok', etag: '"e"', items: [] });
-    api.loveSong.mockImplementation(() => new Promise(() => {}));
+    api.loveSong.mockImplementation(hang);
     const w = wrapperFor(client);
     const me = renderHook(() => useSaveSong(), { wrapper: w });
     const disc = renderHook(() => useSongFeedback(), { wrapper: w });
@@ -128,7 +140,7 @@ describe('Discover and Me hearts agree', () => {
       await client.invalidateQueries({ queryKey: ['decide'] });
     });
     await waitFor(() => expect(api.getLibrary).toHaveBeenCalled());
-    expect(useLovedOverrides.getState().byKey.k_One).toBeTruthy(); // held: the request has not finished
+    expect(useLovedOverrides.getState().byKey.k_One).toBeTruthy(); // kept: the love is still queued/in flight
     expect(me.result.current.saved('k_One')).toBe(true);
   });
 
@@ -145,6 +157,8 @@ describe('Discover and Me hearts agree', () => {
     await new Promise((r) => setTimeout(r, 5));
     act(() => disc.result.current.love(rec));
     api.getLibrary.mockImplementationOnce(() => new Promise((r) => (finish = r as never)));
+    // The refetch the sent love triggers (after the pre-love one) stays pending: only the in-flight fetch is under test.
+    api.getLibrary.mockImplementation(() => new Promise(() => {}));
     act(() => void client.invalidateQueries({ queryKey: ['decide'] }));
     await waitFor(() => expect(api.getLibrary).toHaveBeenCalledTimes(2));
     await new Promise((r) => setTimeout(r, 5));
@@ -157,7 +171,7 @@ describe('Discover and Me hearts agree', () => {
     const client = resetMe();
     api.getLibrary.mockResolvedValue({ status: 'ok', etag: '"e"', items: [] });
     api.loveSong.mockResolvedValue(undefined as never);
-    api.unloveSong.mockImplementation(() => new Promise(() => {}));
+    api.unloveSong.mockImplementation(hang);
     const w = wrapperFor(client);
     const me = renderHook(() => useSaveSong(), { wrapper: w });
     const disc = renderHook(() => useSongFeedback(), { wrapper: w });

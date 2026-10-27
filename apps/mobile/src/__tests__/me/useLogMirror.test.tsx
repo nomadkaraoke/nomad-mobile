@@ -48,3 +48,13 @@ it('compares updated_at as instants, not strings', async () => {
   // 10:00+02:00 = 08:00Z, so b (09:00Z) is the later one though its string sorts earlier
   expect(JSON.parse(appStorage.getString(KEY)!).since).toBe('2026-10-01T09:00:00Z');
 });
+
+it('a cached mirror seeds the view but a cold start still runs the incremental since sync', async () => {
+  const client = resetMe();
+  appStorage.set(KEY, JSON.stringify({ entries: [e('a')], since: '2026-10-01T00:00:00Z' }));
+  api.listKaraokeLog.mockResolvedValueOnce({ entries: [e('z', { updated_at: '2026-10-05T00:00:00Z' })] });
+  const { result } = renderHook(() => useLogMirror(), { wrapper: wrapperFor(client) });
+  expect(result.current.entries.map((x) => x.id)).toEqual(['a']); // the seed shows at once
+  await waitFor(() => expect(result.current.entries.map((x) => x.id).sort()).toEqual(['a', 'z']));
+  expect(api.listKaraokeLog).toHaveBeenCalledWith(expect.objectContaining({ since: '2026-10-01T00:00:00Z' }));
+});
