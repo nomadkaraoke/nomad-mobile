@@ -1759,7 +1759,7 @@
       "recordDefault": "Mij standaard opnemen",
       "recordDefaultBody": "Vinkt automatisch \"Mij opnemen terwijl ik zing?\" aan wanneer je een stemsessie start. Je kunt dit elke keer nog aanpassen.",
       "title": "Je opnames",
-      "confirmButton": "Verwijderen",
+      "confirmButton": "Alles verwijderen",
       "counted": "Meegeteld",
       "deleteOneBody": "De opname wordt definitief verwijderd. Het nummer telt nog steeds mee voor je stemresultaat, tenzij je kiest voor Niet meetellen.",
       "deleteOneTitle": "Deze opname verwijderen?",
@@ -1786,7 +1786,7 @@
       "sessionsTitle": "Je sessies",
       "uploading": "Uploaden…",
       "deleteOne": "Verwijderen",
-      "deleteOneConfirm": "Verwijderen",
+      "deleteOneConfirm": "Opname verwijderen",
       "play": "Afspelen",
       "song": "{title} · {artist}",
       "stop": "Stoppen"

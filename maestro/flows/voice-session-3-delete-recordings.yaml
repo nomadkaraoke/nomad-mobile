@@ -59,7 +59,8 @@ tags:
 - extendedWaitUntil:
     visible: "Delete all your recordings?"
     timeout: 10000
-- tapOn: "Delete|DELETE"
+# The confirm reads "Delete all", unlike the rows' "Delete" buttons behind the alert.
+- tapOn: "Delete all|DELETE ALL"
 - extendedWaitUntil:
     visible: "0 recordings kept privately"
     timeout: 20000

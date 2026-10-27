@@ -1759,7 +1759,7 @@
       "recordDefault": "デフォルトで録音する",
       "recordDefaultBody": "ボイスセッション開始時に「歌声を録音しますか？」があらかじめ選択された状態になります。この設定は毎回変更できます。",
       "title": "保存済みの録音",
-      "confirmButton": "削除",
+      "confirmButton": "すべて削除",
       "counted": "カウント対象",
       "deleteOneBody": "録音データは完全に削除されます。「カウントしない」を選択しない限り、この曲は声の分析結果に引き続き反映されます。",
       "deleteOneTitle": "この録音を削除しますか？",
@@ -1786,7 +1786,7 @@
       "sessionsTitle": "セッション履歴",
       "uploading": "アップロード中…",
       "deleteOne": "削除",
-      "deleteOneConfirm": "削除",
+      "deleteOneConfirm": "録音を削除",
       "play": "再生",
       "song": "{title} · {artist}",
       "stop": "停止"

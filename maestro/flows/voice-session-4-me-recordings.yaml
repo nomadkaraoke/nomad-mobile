@@ -54,8 +54,9 @@ tags:
 - extendedWaitUntil:
     visible: "Don't count this song\\?"
     timeout: 10000
+# The confirm's own label ("Don't count it") differs from the row's button ("Don't count"): Maestro matches whole texts.
 - tapOn:
-    text: "Don't count|DON'T COUNT"
+    text: "Don't count it|DON'T COUNT IT"
     below: "Don't count this song\\?"
 - extendedWaitUntil:
     visible:
@@ -100,7 +101,7 @@ tags:
     visible: "Delete this recording\\?"
     timeout: 10000
 - tapOn:
-    text: "Delete|DELETE"
+    text: "Delete recording|DELETE RECORDING"
     below: "Delete this recording\\?"
 - runScript:
     file: ../scripts/stack.js
