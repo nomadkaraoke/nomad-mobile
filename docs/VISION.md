@@ -121,10 +121,15 @@ Phase specs refine these. decide's own [VISION.md](https://github.com/nomadkarao
 | **4. Me** | 4 | The browsable karaoke collection on Tonight's log, crowd singability data from the surveys, playlists and library, "get this made" | decide playlist APIs (some exist); aggregates over `karaoke_log` |
 | **5. Tonight** | 3 (+ any bar) | Nomad nights natively (deep link + scanner, signed in, web parity, make on the spot, automatic karaoke log), the karaoke log at other bars, the post-song survey, web claim. Spec: [2026-10-21-mobile-phase5-tonight-design.md](superpowers/specs/2026-10-21-mobile-phase5-tonight-design.md) | kjbox singer API v1 + history outbox + web claim + local stack; decide `karaoke_log` API |
 | **6. Release readiness** | all | In-app purchases (RevenueCat), push notifications, account deletion, Sentry and PostHog, store listings and privacy labels, test builds (TestFlight and Google Play internal testing), switching on Sign in with Apple (built in phase 1; needs a team-signed iOS build), a real Android release signing key (plus its Google OAuth SHA-1) | RevenueCat webhook, Expo push tokens, `DELETE /api/users/me` |
+| **7. UX review and polish (Mobbin)** | all | A thorough, research-led UX/UI pass over every part of the app, aligning it with industry standards, mobile best practice and intuitive design. Deep research on Mobbin (the `mobbin` MCP: real screens and flows from leading iOS apps) for each area: onboarding and sign-in, search and song pages, Discover (quiz, recommendations, filters), Make (job progress, ready screen, credits/paywall), native review, Tonight, Me (collection, setlists, profile, voice), settings, empty, loading and error states. Then a written UX plan per area, implemented and verified with screenshots on both platforms | Expected none; anything backend-shaped gets its own small PR |
 
 Push notifications are in the release, but Expo's push service needs an EAS project ID, so they arrive in phase 6 with the account decisions. Until then, job progress is polled.
 
 Tonight could move ahead of Discover if Andrew wants to try it at his own nights sooner.
+
+**Phase 7 timing (Andrew, 2026-10-26).** It starts once the feature phases (3d's app, 4) have merged, so every screen exists, and it finishes before Andrew's full manual pass, so he reviews a polished app. Phase 6's store screenshots and listing copy come after it. Phase 6's infrastructure can run in parallel. Mobbin covers iOS and web only, not Android: use its iOS references, then apply Material/Android conventions where they differ (back behaviour, system bars, sheets). In Andrew's words:
+
+> please check it works then add a UX review/improvment phase to our overall mobile app plan which leverages mobbin thoroughly to improve the UX/UI of our mobile app to align with industry standards, best practices and intuitive user experience design. in that phase we probably need the claude session which picks it up to do deep research on mobbin to get ideas for each part of our app before making a plan to make our app super intuitive and easy to use etc.
 
 ## After release
 
