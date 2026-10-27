@@ -1795,7 +1795,7 @@
       "title": "Analyse my music",
       "body": "We'll prepare up to {cap} songs you listen to most, overnight.",
       "request": "Prepare my songs",
-      "preparing": "Preparing {total} of your songs…",
+      "preparing": "{total, plural, one {Preparing # of your songs…} other {Preparing # of your songs…}}",
       "ready": "{ready, plural, one {# of your songs is ready — find your voice} other {# of your songs are ready — find your voice}}",
       "cap": "You can ask again on {date}",
       "paused": "Busy right now, try again tomorrow",

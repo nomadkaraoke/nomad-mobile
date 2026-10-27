@@ -1,11 +1,13 @@
 // "Analyse my music" (Phase 3d Part F): decide's personal pool (`GET /api/voice/personal-pool`) and the request
-// (`POST`). Read again whenever Me comes back into focus and after a request; no timers and no push (Phase 6).
+// (`POST`). Read again whenever Me comes back into focus and after a request; no timers and no push (Phase 6). Only
+// asked when decide's voice flags say the session is open to this user.
 import { getPersonalPool, personalPoolRefusal, requestPersonalPool, type PersonalPoolOut } from '@nomad/api-decide';
 import { useQuery } from '@tanstack/react-query';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useRef, useState } from 'react';
 
 import { useAuth } from '../../auth/store';
+import { useVoiceFlags } from '../debug/useVoiceDebug';
 
 export const PERSONAL_POOL_KEY = ['voiceSession', 'personalPool'] as const;
 
@@ -50,11 +52,16 @@ export function personalPoolView(pool: PersonalPoolOut | undefined): PersonalPoo
   };
 }
 
+/** A refusal from the last request, stamped with when it was shown (a newer read of the pool clears it). */
+type Refusal = { problem: PersonalPoolProblem | null; hide: boolean; at: number; email: string | null };
+
 export function usePersonalPool() {
   const email = useAuth((s) => (s.state.status === 'signedIn' ? s.state.session.email : null));
+  // Closed to this user (decide's session flag, admins only until G1): don't ask, it would 403 on every Me focus.
+  const open = useVoiceFlags().data?.session_enabled === true;
   const query = useQuery<PersonalPoolOut>({
     queryKey: [...PERSONAL_POOL_KEY, email],
-    enabled: !!email,
+    enabled: !!email && open,
     queryFn: getPersonalPool,
     retry: false,
   });
@@ -67,35 +74,51 @@ export function usePersonalPool() {
         firstFocus.current = false; // the query's own mount fetch covers this one
         return;
       }
-      if (email) void refetch();
-    }, [email, refetch]),
+      if (email && open) void refetch();
+    }, [email, open, refetch]),
   );
 
   const [busy, setBusy] = useState(false);
-  const [problem, setProblem] = useState<PersonalPoolProblem | null>(null);
-  /** decide said the user can't use the pool after all (not eligible, or the session gate closed): hide the card. */
-  const [refused, setRefused] = useState(false);
+  const [refusal, setRefusal] = useState<Refusal | null>(null);
 
   const request = async () => {
     setBusy(true);
-    setProblem(null);
+    setRefusal(null);
+    let next: Omit<Refusal, 'at' | 'email'> | null = null;
     try {
       await requestPersonalPool();
     } catch (e) {
       const r = personalPoolRefusal(e);
-      if (r?.reason === 'cap') setProblem({ kind: 'cap', nextAllowedAt: r.nextAllowedAt });
-      else if (r?.reason === 'budget_paused') setProblem({ kind: 'paused' });
-      else if (r?.reason === 'nothing_to_add') setProblem({ kind: 'nothingToAdd' });
-      else if (r?.reason === 'not_eligible' || r?.reason === 'voice_session_disabled') setRefused(true);
+      if (r?.reason === 'cap') next = { problem: { kind: 'cap', nextAllowedAt: r.nextAllowedAt }, hide: false };
+      else if (r?.reason === 'budget_paused') next = { problem: { kind: 'paused' }, hide: false };
+      else if (r?.reason === 'nothing_to_add') next = { problem: { kind: 'nothingToAdd' }, hide: false };
+      // decide says the user can't use the pool after all (not eligible, or the session gate closed): hide the card.
+      else if (r?.reason === 'not_eligible' || r?.reason === 'voice_session_disabled') next = { problem: null, hide: true };
       // concurrent_request: another request (another device, a double tap) is making the batch: the refetch shows it.
-      else if (r?.reason !== 'concurrent_request') setProblem({ kind: 'failed' });
+      else if (r?.reason !== 'concurrent_request') next = { problem: { kind: 'failed' }, hide: false };
     } finally {
       await refetch();
+      // Stamped after this refetch, so only a later read of the pool (a focus, the next request) clears it.
+      if (next) setRefusal({ ...next, at: Date.now(), email });
       setBusy(false);
     }
   };
 
-  // A failed read, still loading, or not eligible: render nothing (no spinner, no layout jump).
-  const view: PersonalPoolView = query.isError || refused ? { kind: 'hidden' } : personalPoolView(query.data);
+  // Another account's refusal, or one older than the latest read of the pool, no longer applies.
+  const current = refusal && refusal.email === email && query.dataUpdatedAt <= refusal.at ? refusal : null;
+  let problem = current?.problem ?? null;
+  // A cap that had already run out by the last read (or by the refusal) is no reason to wait.
+  if (
+    problem?.kind === 'cap' &&
+    problem.nextAllowedAt &&
+    Date.parse(problem.nextAllowedAt) <= Math.max(query.dataUpdatedAt, current?.at ?? 0)
+  )
+    problem = null;
+  // The gate closed (or the user lost eligibility) on a later read: hide even over the last good data.
+  const gateClosed = ['voice_session_disabled', 'not_eligible'].includes(personalPoolRefusal(query.error)?.reason ?? '');
+  // Still loading, a failed first read, not eligible or closed: render nothing (no spinner, no layout jump). A later
+  // failed read keeps the last pool.
+  const hidden = !open || (query.isError && !query.data) || gateClosed || current?.hide;
+  const view: PersonalPoolView = hidden ? { kind: 'hidden' } : personalPoolView(query.data);
   return { view, busy, problem, request };
 }

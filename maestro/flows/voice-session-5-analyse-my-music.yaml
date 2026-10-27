@@ -1,9 +1,10 @@
-# Voice session 5 (Phase 3d Part F, F2): Me → Your music profile → "Analyse my music". decide counts a singer with
-# ≥ 1000 listens as eligible (`history`), so the flow connects a fake Last.fm user whose top tracks add up to 1100
-# plays (decide's fakes, as in connect-5; the sync runs inline on the local stack). The card shows the pitch with
-# decide's cap; "Prepare my songs" POSTs `/api/voice/personal-pool` (Muse "Starlight" has a community version in
-# the fixture catalog and is not in the fixture voice.db), and the card reads the pool again: "Preparing N of your
-# songs…". Needs decide with the personal pool (Part F1).
+# Voice session 5 (Phase 3d Part F, F2): Me → Your music profile → "Analyse my music". decide's test API resets the
+# personal pool (`voice-reset`: this user's batches plus every personal fetch-queue doc and this month's budget, so an
+# earlier run can't turn this one into "nothing to add") and seeds listening history that makes the singer eligible
+# with songs the pool can pick (`voice-personal-seed`: fixture songs with a community version that the fixture
+# voice.db doesn't hold; after discover-seeded, whose profile seed clears user_songs). The card shows the pitch with
+# decide's cap; "Prepare my songs" POSTs `/api/voice/personal-pool` and the card reads the pool again: "Preparing N
+# of your songs…". Needs decide ≥ v0.34.2.
 appId: com.nomadkaraoke.mobile
 name: voice-session-5-analyse-my-music
 tags:
@@ -15,28 +16,21 @@ tags:
       ACTION: setup
       STACK: ${STACK}
       NAME: vs5
-- runFlow:
-    file: ../common/connect-open.yaml
-    env:
-      EMAIL: ${output.email}
 - runScript:
     file: ../scripts/stack.js
     env:
-      ACTION: fake-lastfm-user
+      ACTION: voice-reset
       DECIDE_STACK: ${DECIDE_STACK}
-      TOP_TRACKS: '[{"artist":"Muse","title":"Starlight","playcount":700},{"artist":"Adele","title":"Hello","playcount":400}]'
-- tapOn:
-    id: "connect-card-lastfm"
-- tapOn:
-    id: "connect-lastfm-username"
-- inputText: ${output.lastfmUsername}
-- tapOn:
-    id: "connect-lastfm-submit"
-- extendedWaitUntil:
-    visible:
-      id: "connect-import-result"
-    timeout: 60000
-- runFlow: ../common/connect-back-to-tabs.yaml
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["pop"]}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-personal-seed
+      DECIDE_STACK: ${DECIDE_STACK}
 - tapOn:
     id: "tab-me"
 - tapOn:

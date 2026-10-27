@@ -11,20 +11,26 @@ import { gen, session } from '../test-utils/genAuthMock';
 import { AnalyseMyMusicCard } from '../voiceSession/personal/AnalyseMyMusicCard';
 import { personalPoolView } from '../voiceSession/personal/usePersonalPool';
 
-// The card runs outside a navigator here: a focus effect is just an effect (the first call is mount).
+// The card runs outside a navigator here: a focus effect is just an effect (the first call is mount), and the
+// latest callback is kept so a test can "come back to Me" (`refocus`).
+const mockFocus: { cb: (() => void) | null } = { cb: null };
 jest.mock('expo-router', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { useEffect } = require('react');
   return {
     ...jest.requireActual('expo-router'),
     router: { push: jest.fn() },
-    useFocusEffect: (cb: () => void) => useEffect(cb, [cb]),
+    useFocusEffect: (cb: () => void) => {
+      mockFocus.cb = cb;
+      useEffect(cb, [cb]);
+    },
   };
 });
 jest.mock('@nomad/api-gen', () => ({ ...jest.requireActual('@nomad/api-gen'), getMe: jest.fn() }));
 jest.mock('@nomad/api-decide', () => ({
   ...jest.requireActual('@nomad/api-decide'),
   configureClient: jest.fn(),
+  getVoiceFlags: jest.fn(),
   getPersonalPool: jest.fn(),
   requestPersonalPool: jest.fn(),
 }));
@@ -66,9 +72,14 @@ const renderCard = (props: { onFindVoice?: () => void } = {}) => {
 };
 /** Waits for the first read, then the card (or its absence). */
 const settled = async () => waitFor(() => expect(m(decide.getPersonalPool)).toHaveBeenCalled());
+/** Me comes back into focus. */
+const refocus = () => act(async () => mockFocus.cb?.());
+const flags = (session_enabled: boolean) => ({ session_enabled, is_admin: false, voice_data: true, active_session_id: null });
 
 beforeEach(async () => {
   jest.clearAllMocks();
+  mockFocus.cb = null;
+  m(decide.getVoiceFlags).mockResolvedValue(flags(true));
   m(decide.getPersonalPool).mockResolvedValue(POOL);
   await useAuth.getState().signOut();
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 } as never);
@@ -140,6 +151,18 @@ describe('analyseMyMusic: states', () => {
   });
 });
 
+describe('analyseMyMusic: reads', () => {
+  it('reads the pool on mount and again each time Me comes back into focus', async () => {
+    renderCard();
+    await screen.findByTestId('vs-personal-request');
+    expect(decide.getPersonalPool).toHaveBeenCalledTimes(1);
+    m(decide.getPersonalPool).mockResolvedValue({ ...POOL, batches: [batch({ total: 6, status: 'running' })] });
+    await refocus();
+    expect(await screen.findByTestId('vs-personal-preparing')).toHaveTextContent('Preparing 6 of your songs…');
+    expect(decide.getPersonalPool).toHaveBeenCalledTimes(2);
+  });
+});
+
 describe('analyseMyMusic: hidden', () => {
   it('not eligible', async () => {
     m(decide.getPersonalPool).mockResolvedValue({ ...POOL, eligible: false, reason: 'not_eligible' });
@@ -170,6 +193,33 @@ describe('analyseMyMusic: hidden', () => {
     renderCard();
     await settled();
     expect(screen.toJSON()).toBeNull();
+  });
+
+  it('the session flag is closed for this user: no read at all, no card', async () => {
+    m(decide.getVoiceFlags).mockResolvedValue(flags(false));
+    renderCard();
+    await waitFor(() => expect(decide.getVoiceFlags).toHaveBeenCalled());
+    await act(async () => {});
+    await refocus();
+    expect(decide.getPersonalPool).not.toHaveBeenCalled();
+    expect(screen.queryByTestId('vs-personal')).toBeNull();
+  });
+
+  it('a later failed read keeps the last pool', async () => {
+    renderCard();
+    await screen.findByTestId('vs-personal-request');
+    m(decide.getPersonalPool).mockRejectedValue(new decide.ApiError(500, 'Internal Server Error'));
+    await refocus();
+    await waitFor(() => expect(decide.getPersonalPool).toHaveBeenCalledTimes(2));
+    expect(screen.getByTestId('vs-personal-request')).toBeTruthy();
+  });
+
+  it('the gate closes on a later read: hidden over the last pool', async () => {
+    renderCard();
+    await screen.findByTestId('vs-personal-request');
+    m(decide.getPersonalPool).mockRejectedValue(new decide.ApiError(403, 'voice_session_disabled'));
+    await refocus();
+    await waitFor(() => expect(screen.queryByTestId('vs-personal')).toBeNull());
   });
 
   it('signed out: no read, no card', async () => {
@@ -231,6 +281,43 @@ describe('analyseMyMusic: the request', () => {
     renderCard();
     fireEvent.press(await screen.findByTestId('vs-personal-request'));
     expect(await screen.findByTestId('vs-personal-failed')).toHaveTextContent("Couldn't ask just now. Try again in a minute.");
+    expect(screen.getByTestId('vs-personal-request')).toBeTruthy();
+  });
+
+  it('a refusal clears on the next read of the pool', async () => {
+    m(decide.requestPersonalPool).mockRejectedValue(new decide.ApiError(503, { reason: 'budget_paused' }));
+    renderCard();
+    fireEvent.press(await screen.findByTestId('vs-personal-request'));
+    await screen.findByTestId('vs-personal-paused');
+    await new Promise((r) => setTimeout(r, 5)); // the next read is newer than the refusal
+    await refocus();
+    await waitFor(() => expect(decide.getPersonalPool).toHaveBeenCalledTimes(3));
+    await waitFor(() => expect(screen.queryByTestId('vs-personal-paused')).toBeNull());
+    expect(screen.getByTestId('vs-personal-request')).toBeTruthy();
+  });
+
+  it('a cap refusal whose date has passed is dropped', async () => {
+    m(decide.requestPersonalPool).mockRejectedValue(
+      new decide.ApiError(429, { reason: 'cap', next_allowed_at: '2020-01-01T00:00:00+00:00' }),
+    );
+    renderCard();
+    fireEvent.press(await screen.findByTestId('vs-personal-request'));
+    await waitFor(() => expect(decide.getPersonalPool).toHaveBeenCalledTimes(2));
+    await act(async () => {});
+    expect(screen.queryByTestId('vs-personal-cap')).toBeNull();
+    expect(screen.getByTestId('vs-personal-request')).toBeTruthy();
+  });
+
+  it('another account: the last one\'s refusal is gone', async () => {
+    m(decide.requestPersonalPool).mockRejectedValue(new decide.ApiError(409, { reason: 'nothing_to_add' }));
+    renderCard();
+    fireEvent.press(await screen.findByTestId('vs-personal-request'));
+    await screen.findByTestId('vs-personal-nothing');
+    gen.getMe.mockResolvedValue({ email: 'other@example.com', credits: 3 } as never);
+    await act(() => useAuth.getState().signInWithSession(session('other@example.com')));
+    await waitFor(() => expect(decide.getPersonalPool).toHaveBeenCalledTimes(3));
+    await act(async () => {});
+    expect(screen.queryByTestId('vs-personal-nothing')).toBeNull();
     expect(screen.getByTestId('vs-personal-request')).toBeTruthy();
   });
 
