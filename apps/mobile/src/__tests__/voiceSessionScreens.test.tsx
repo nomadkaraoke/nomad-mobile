@@ -232,6 +232,9 @@ beforeEach(async () => {
 });
 afterEach(() => jest.useRealTimers());
 
+// The full walk through the real hook is slow on loaded CI runners (36 s seen): give each step room.
+const SLOW = { timeout: 10_000 };
+
 describe('voiceSessionScreens: steps', () => {
   it('intro: pinned copy; Start opens the setup when signed in', async () => {
     await signIn();
@@ -607,26 +610,26 @@ describe('voiceSessionScreens: through the real hook', () => {
     mockApi.postVoiceAttempt.mockResolvedValue({ attempt_id: 's1:1', n: 1, done: true, done_reason: 'confident', top_p: 0.8 });
     mockApi.getVoiceResult.mockResolvedValue(RESULT);
     open();
-    await screen.findByTestId('vs-intro');
+    await screen.findByTestId('vs-intro', {}, SLOW);
     await press('vs-intro-start');
-    await screen.findByTestId('vs-setup');
+    await screen.findByTestId('vs-setup', {}, SLOW);
     await press('vs-posture-standing');
     await press('vs-warmth-bit_warm');
     await press('vs-record-no');
     await press('vs-headphones-yes');
     await press('vs-setup-go');
-    await screen.findByTestId('vs-pick');
+    await screen.findByTestId('vs-pick', {}, SLOW);
     expect(screen.getByText(isolate('Invented Tune'))).toBeTruthy();
     expect(mockApi.createVoiceSession).toHaveBeenCalledWith(expect.objectContaining({ posture: 'standing', record: false }));
     await press('vs-pick-know');
-    await screen.findByTestId('vs-fake-player');
+    await screen.findByTestId('vs-fake-player', {}, SLOW);
     // ready → recorder → play() → ended after FAKE_YT_SECONDS: the quiz.
-    await screen.findByTestId('vs-quiz', {}, { timeout: 3000 });
+    await screen.findByTestId('vs-quiz', {}, SLOW);
     expect(mockRec.start).toHaveBeenCalled();
     await press('vs-q-feel-fine');
     await press('vs-q-position-too_high');
     await press('vs-quiz-next');
-    await screen.findByTestId('vs-result');
+    await screen.findByTestId('vs-result', {}, SLOW);
     expect(text('vs-result-type')).toBe('Likely Baritone');
     expect(mockApi.postVoiceAttempt).toHaveBeenCalledWith(
       's1',
@@ -636,6 +639,7 @@ describe('voiceSessionScreens: through the real hook', () => {
 });
 
 describe('voiceSessionScreens: link-out', () => {
+
   it('a version decide marks not embeddable plays through the link-out card', async () => {
     config.FAKE_YT = false;
     try {
