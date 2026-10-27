@@ -3,8 +3,9 @@ import { act, fireEvent, screen } from '@testing-library/react-native';
 import { Modal, Platform } from 'react-native';
 
 import { MarkSungSheet } from '../../me/MarkSungSheet';
+import { SurveySheet } from '../../tonight/log/SurveySheet';
 import { useNightStore } from '../../tonight/nightStore';
-import { useLogStore } from '../../tonight/log/logStore';
+import { UNKNOWN_ARTIST, useLogStore } from '../../tonight/log/logStore';
 import { useOutbox } from '../../tonight/log/outbox';
 import { renderTonight } from '../../test-utils/tonightFixtures';
 import { resetMe } from './helpers';
@@ -116,5 +117,20 @@ describe('markSung', () => {
     } finally {
       Platform.OS = orig;
     }
+  });
+});
+
+describe('markSung unknown artist', () => {
+  it('shows the translated "Unknown artist", not the stored sentinel', () => {
+    renderTonight(<MarkSungSheet song={{ artist: UNKNOWN_ARTIST, title: 'Made Up Song' }} onClose={jest.fn()} />);
+    expect(screen.getByText(/Made Up Song.* by .*Unknown artist/)).toBeTruthy();
+    expect(screen.queryByText(/Unknown Artist/)).toBeNull();
+  });
+
+  it('the survey sheet title translates it too', () => {
+    useLogStore.getState().noteNomad('kj_9', { artist: UNKNOWN_ARTIST, title: 'Made Up Song' });
+    renderTonight(<SurveySheet entryId="kj_9" artist={UNKNOWN_ARTIST} title="Made Up Song" />);
+    expect(screen.getByText(/Made Up Song.* by .*Unknown artist/)).toBeTruthy();
+    expect(screen.queryByText(/Unknown Artist/)).toBeNull();
   });
 });

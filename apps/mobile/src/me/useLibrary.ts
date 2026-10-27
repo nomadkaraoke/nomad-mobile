@@ -90,8 +90,12 @@ export function useLibrary(): { items: MeSong[]; loading: boolean; offline: bool
     const syncedFeel = (id: string) => (feels ??= syncedFeels(userKey, queryClient)).get(id);
     let recs: Map<string, PendingLog> | undefined;
     const syncedRec = (id: string) => (recs ??= syncedRecords(userKey, queryClient)).get(id);
+    const log = libraryLog(sentLog, logItems, logEntries, syncedFeel, syncedRec);
+    // Only a delete of a synced record needs the mirror (to recompute the song's latest answers).
+    const mirror = log.some((r) => r.deleted && r.synced) ? [...(recs ??= syncedRecords(userKey, queryClient)).values()] : undefined;
     return overlayLibrary(base ?? [], {
-      log: libraryLog(sentLog, logItems, logEntries, syncedFeel, syncedRec),
+      log,
+      mirror,
       loves: { ...overrides, ...pendingLoves(meItems) },
       // Sent first, so a queued write for the same list replaces its membership.
       setlists: [...Object.values(sentSetlists), ...pendingSetlists(meItems)],

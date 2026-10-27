@@ -27,6 +27,7 @@ export function pendingLog(
     if (it.op === 'delete') {
       if (mirrored) {
         const feel = mirrored.survey?.feel;
+        const crowd = mirrored.survey?.crowd_pleaser;
         out.push({
           id: it.id,
           artist: mirrored.artist,
@@ -35,7 +36,7 @@ export function pendingLog(
           state: mirrored.state,
           times: mirrored.times,
           origin: mirrored.origin,
-          survey: feel ? { feel } : undefined,
+          survey: feel || crowd ? { ...(feel ? { feel } : {}), ...(crowd ? { crowd_pleaser: true } : {}) } : undefined,
           sung_at: mirrored.sung_at,
           deleted: true,
           synced: true,
@@ -63,6 +64,7 @@ export function pendingLog(
       night: (p.night ?? e?.night) as PendingLog['night'] | undefined,
       ...(prev ? { prev_feel: prev } : {}),
       ...(mirrored || prev ? { synced: true } : {}),
+      ...(mirrored ? { prev_crowd_pleaser: !!mirrored.survey?.crowd_pleaser } : {}),
     });
   }
   return out;
@@ -86,6 +88,7 @@ export function foldLog(old: PendingLog | undefined, rec: PendingLog, patch: Kar
     night: rec.night ?? old.night,
     survey: old.survey || rec.survey ? { ...old.survey, ...rec.survey } : undefined,
     prev_feel: old.prev_feel,
+    prev_crowd_pleaser: old.prev_crowd_pleaser,
   };
 }
 

@@ -3,7 +3,7 @@ import { Button, Sheet, Text } from '@nomad/ui';
 import { useRef, useState } from 'react';
 import { Platform, Pressable, View } from 'react-native';
 
-import { useLogStore, type LogSong } from '../tonight/log/logStore';
+import { artistLabel, useLogStore, type LogSong } from '../tonight/log/logStore';
 import { SurveySheet } from '../tonight/log/SurveySheet';
 
 export type MarkSungSong = LogSong;
@@ -102,6 +102,7 @@ function Stepper({
  */
 export function MarkSungSheet({ song, onClose }: { song: MarkSungSong | null; onClose(): void }) {
   const t = useTranslations('me.mark');
+  const tOther = useTranslations('tonight.other');
   const f = useFormatter();
   const [when, setWhen] = useState<When>('tonight');
   const now = new Date();
@@ -177,7 +178,7 @@ export function MarkSungSheet({ song, onClose }: { song: MarkSungSong | null; on
         {song ? (
           <View className="gap-4">
             <Text className="font-semibold" numberOfLines={2}>
-              {t('song', { title: isolate(song.title), artist: isolate(song.artist) })}
+              {t('song', { title: isolate(song.title), artist: isolate(artistLabel(song.artist, tOther('unknownArtist'))) })}
             </Text>
             <View className="flex-row flex-wrap gap-2">
               <Chip testID="mark-when-tonight" label={t('tonight')} selected={when === 'tonight'} onPress={() => setWhen('tonight')} />

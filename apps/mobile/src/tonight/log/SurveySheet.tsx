@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 
 import { TonightSheet } from '../TonightSheet';
-import { useLogStore, type LogSurvey } from './logStore';
+import { artistLabel, useLogStore, type LogSurvey } from './logStore';
 
 /** decide caps survey notes at 2000 characters. */
 export const SURVEY_NOTES_MAX = 2000;
@@ -95,6 +95,7 @@ function SurveyForm({
   onDone?: () => void;
 }) {
   const t = useTranslations('tonight.survey');
+  const tOther = useTranslations('tonight.other');
   const [feel, setFeel] = useState<Feel | null>(initial?.feel ?? null);
   const [key, setKey] = useState<Key | null>(initial?.key ?? null);
   const [crowd, setCrowd] = useState<boolean | null>(initial?.crowd_pleaser ?? null);
@@ -132,7 +133,7 @@ function SurveyForm({
   return (
     <View style={BODY_STYLE}>
       <ScrollView testID="survey-scroll" style={SCROLL_STYLE} contentContainerClassName="gap-4 pb-2" keyboardShouldPersistTaps="handled">
-        <Text variant="muted">{t('song', { title: isolate(title), artist: isolate(artist) })}</Text>
+        <Text variant="muted">{t('song', { title: isolate(title), artist: isolate(artistLabel(artist, tOther('unknownArtist'))) })}</Text>
         <View className="gap-2">
           <Text className="font-semibold">{t('feelQuestion')}</Text>
           <View className="flex-row flex-wrap gap-2">

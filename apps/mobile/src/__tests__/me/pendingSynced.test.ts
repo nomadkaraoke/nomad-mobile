@@ -53,3 +53,10 @@ it('a record sent this session then deleted does not subtract (the library cache
   const log = libraryLog(sent, [del], {}, undefined, mirror({ times: 1 }));
   expect(log).toEqual([]);
 });
+
+it('re-editing a synced crowd-pleaser survey keeps the count (prev answer read from the mirror)', () => {
+  const log = libraryLog({}, [put({ state: 'sung', artist: 'Cher', title: 'Believe', survey: { crowd_pleaser: true } })], {}, undefined, mirror({ survey: { crowd_pleaser: true } }));
+  expect(log[0]).toMatchObject({ synced: true, prev_crowd_pleaser: true });
+  const out = overlayLibrary([item({ crowd_pleaser_count: 1 })], { ...none, log });
+  expect(out[0]!.crowd_pleaser_count).toBe(1);
+});

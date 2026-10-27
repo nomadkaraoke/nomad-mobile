@@ -132,6 +132,8 @@ export type PendingLog = {
    * subtracts what it contributed (`times`, `origin`, `survey.feel`, taken from the synced copy).
    */
   synced?: boolean;
+  /** The crowd_pleaser answer the server already counted for this (synced) record, so a re-edit applies only the change. */
+  prev_crowd_pleaser?: boolean;
   /** Night context (needed by karaokeStats for nights and venues). */
   night?: { id?: string; date?: string; venue_name?: string; kind?: string };
 };
@@ -182,7 +184,16 @@ const blank = (artist: string, title: string, song_key: string | null): MeSong =
  */
 export function overlayLibrary(
   items: MeSong[],
-  pending: { log: PendingLog[]; loves: PendingLoves; setlists: PendingSetlist[] },
+  pending: {
+    log: PendingLog[];
+    loves: PendingLoves;
+    setlists: PendingSetlist[];
+    /**
+     * The records the server has counted (the log mirror). With it, deleting a synced record recomputes the song's
+     * latest feel / key from the records that remain, instead of leaving the deleted record's answer standing.
+     */
+    mirror?: PendingLog[];
+  },
 ): MeSong[] {
   const map = new Map<string, MeSong>();
   for (const s of items) {
@@ -218,6 +229,7 @@ export function overlayLibrary(
   }
 
   // 1b. Deleted records the server already counted: take back their contribution (never below zero).
+  const deletedIds = new Set(pending.log.filter((r) => r.deleted).map((r) => r.id));
   for (const r of pending.log) {
     if (!r.deleted || !r.synced || !(r.state === 'sung' || r.state === 'sung_unplayed') || !r.artist || !r.title) continue;
     const key = libraryKey(r.artist, r.title, r.song_key ?? null);
@@ -228,7 +240,27 @@ export function overlayLibrary(
     if (r.origin === 'backfill') s.backfill_times = Math.max(0, s.backfill_times - n);
     const feel = r.survey?.feel;
     if (feel && FEELS.has(feel) && s.feel_counts[feel as Feel] > 0) s.feel_counts[feel as Feel] -= 1;
-    if (s.feel_counts.great + s.feel_counts.ok + s.feel_counts.bad === 0) s.latest_feel = null;
+    if (r.survey?.crowd_pleaser && s.crowd_pleaser_count > 0) s.crowd_pleaser_count -= 1;
+    if (pending.mirror) {
+      // Per-field latest answer among the records that remain (the mirror minus every pending delete).
+      let feelAt = '';
+      let keyAt = '';
+      s.latest_feel = null;
+      s.latest_key = null;
+      for (const m of pending.mirror) {
+        if (m.deleted || deletedIds.has(m.id) || !(m.state === 'sung' || m.state === 'sung_unplayed')) continue;
+        if (libraryKey(m.artist, m.title, m.song_key ?? null) !== key) continue;
+        const at = m.survey?.answered_at ?? m.sung_at ?? '';
+        if (m.survey?.feel && FEELS.has(m.survey.feel) && at >= feelAt) {
+          feelAt = at;
+          s.latest_feel = m.survey.feel as Feel;
+        }
+        if (m.survey?.key && KEYS.has(m.survey.key) && at >= keyAt) {
+          keyAt = at;
+          s.latest_key = m.survey.key as KeyFeel;
+        }
+      }
+    } else if (s.feel_counts.great + s.feel_counts.ok + s.feel_counts.bad === 0) s.latest_feel = null;
     if (s.times_sung === 0) {
       s.first_sung_at = null;
       s.last_sung_at = null;
@@ -259,7 +291,12 @@ export function overlayLibrary(
       }
     }
     if (sv.key && KEYS.has(sv.key)) s.latest_key = sv.key as KeyFeel;
-    if (sv.crowd_pleaser) s.crowd_pleaser_count += 1;
+    if (r.synced) {
+      // Already counted by the server: only a change of the answer moves the count.
+      const was = !!r.prev_crowd_pleaser;
+      if (sv.crowd_pleaser === true && !was) s.crowd_pleaser_count += 1;
+      else if (sv.crowd_pleaser === false && was && s.crowd_pleaser_count > 0) s.crowd_pleaser_count -= 1;
+    } else if (sv.crowd_pleaser) s.crowd_pleaser_count += 1;
     for (const v of sv.vibes ?? []) if (!s.vibes.includes(v)) s.vibes.push(v);
   }
 

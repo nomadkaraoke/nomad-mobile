@@ -281,3 +281,32 @@ describe('overlayLibrary: synced records', () => {
     expect(overlayLibrary(base, { ...empty, log: [rec({ deleted: true, synced: true, times: 9 })] })).toEqual([]);
   });
 });
+
+describe('overlayLibrary: latest answers after a delete, crowd pleasers on edits', () => {
+  const mk = (id: string, o: Partial<PendingLog>): PendingLog => ({ id, artist: 'Cher', title: 'Believe', state: 'sung', synced: true, ...o });
+  const older = mk('o', { sung_at: '2026-01-01T00:00:00Z', survey: { feel: 'great', key: 'right', answered_at: '2026-01-01T01:00:00Z' } });
+  const newer = mk('n', { sung_at: '2026-02-01T00:00:00Z', survey: { feel: 'bad', key: 'too_high', answered_at: '2026-02-01T01:00:00Z' } });
+  const both = song({ artist: 'Cher', title: 'Believe', times_sung: 2, feel_counts: { great: 1, ok: 0, bad: 1 }, latest_feel: 'bad', latest_key: 'too_high' });
+
+  it('deleting the newest answer brings the older one back, so the song is a go-to again', () => {
+    expect(isGoTo(both)).toBe(false);
+    const out = overlayLibrary([both], { ...empty, mirror: [older, newer], log: [{ ...newer, deleted: true }] });
+    expect(out[0]).toMatchObject({ times_sung: 1, latest_feel: 'great', latest_key: 'right', feel_counts: { great: 1, ok: 0, bad: 0 } });
+    expect(isGoTo(out[0]!)).toBe(true);
+  });
+
+  it('deleting the only answered record clears the latest answers', () => {
+    const one = song({ artist: 'Cher', title: 'Believe', times_sung: 1, loved: true, feel_counts: { great: 0, ok: 0, bad: 1 }, latest_feel: 'bad', latest_key: 'too_high' });
+    const out = overlayLibrary([one], { ...empty, mirror: [newer], log: [{ ...newer, deleted: true }] });
+    expect(out[0]).toMatchObject({ times_sung: 0, latest_feel: null, latest_key: null });
+  });
+
+  it('an edit of a synced crowd-pleaser answer applies only the change', () => {
+    const base = [song({ artist: 'Cher', title: 'Believe', times_sung: 1, crowd_pleaser_count: 1 })];
+    const edit = (o: Partial<PendingLog>) => overlayLibrary(base, { ...empty, log: [mk('x', o)] })[0]!.crowd_pleaser_count;
+    expect(edit({ prev_crowd_pleaser: true, survey: { crowd_pleaser: true } })).toBe(1); // unchanged answer: no double count
+    expect(edit({ prev_crowd_pleaser: false, survey: { crowd_pleaser: true } })).toBe(2);
+    expect(edit({ prev_crowd_pleaser: true, survey: { crowd_pleaser: false } })).toBe(0);
+    expect(overlayLibrary(base, { ...empty, log: [{ ...mk('y', {}), synced: false, survey: { crowd_pleaser: true } }] })[0]!.crowd_pleaser_count).toBe(2); // a new record still counts
+  });
+});
