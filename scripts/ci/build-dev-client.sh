@@ -27,6 +27,10 @@ case "$cmd" in
     cd "$APP"
     CI=1 npx expo prebuild --platform "$platform" --no-install --clean
     if [[ "$platform" == ios ]]; then
+      # The self-hosted Mac builds with the app's Xcode (26.6) but runs Maestro on its default Xcode (27.1): under the
+      # 26.6 copy Maestro's XCTest driver never started ("iOS driver not ready in time"), under 27.1 in 8 s. Its runners
+      # set E2E_BUILD_DEVELOPER_DIR for this build step only.
+      if [[ -n "${E2E_BUILD_DEVELOPER_DIR:-}" ]]; then export DEVELOPER_DIR="$E2E_BUILD_DEVELOPER_DIR"; fi
       (cd ios && pod install)
       xcodebuild -workspace ios/NomadKaraoke.xcworkspace -scheme NomadKaraoke -configuration Debug \
         -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath ios/build \

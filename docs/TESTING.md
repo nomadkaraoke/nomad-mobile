@@ -54,7 +54,8 @@ changes the workflow, a PR run tests the changed workflow.
 A spare Mac at Andrew's place runs three self-hosted runners for this repo (label `nomad-mbp`), one per **lane**
 (`scripts/e2e-lane.sh`): `LANE=N` moves every port up by 100·N (gen 8010+100N, decide 8030+100N, kjbox 8040+100N,
 Metro 8081+100N, …) and gives the lane its own Firestore project, GCS bucket, state dirs, simulator and Android
-emulator, so three shards run side by side on one machine. Its setup, the USB iPad on it and how to see and click
+emulator, so three shards run side by side on one machine. Builds use Xcode 26.6 (`E2E_BUILD_DEVELOPER_DIR`), Maestro and the simulators the Mac's
+default Xcode 27.1 (Maestro's iOS driver doesn't start under the 26.6 copy). Its setup, the USB iPad on it and how to see and click
 its screen are in the **private** workspace doc `docs/BUILD-HOST.md` (workspace root, not this public repo).
 
 - **Routing.** Repo variables `E2E_IOS_RUNNER` / `E2E_ANDROID_RUNNER` = `self-hosted` (set since 2026-10-26) send
