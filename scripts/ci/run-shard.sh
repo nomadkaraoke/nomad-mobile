@@ -14,8 +14,14 @@ GEN_DIR="$ROOT/../karaoke-gen" DECIDE_DIR="$ROOT/../karaoke-decide"
 source "$ROOT/scripts/e2e-lane.sh"
 export LANE
 platform="$1"; app="$2"; flows="$3"; out="$4"
+# A self-hosted runner keeps its workspace between jobs and actions/checkout only cleans the checkouts: start from an
+# empty report dir, or a shard that fails before Maestro uploads the previous job's reports (an iOS shard once
+# shipped the lane's earlier Android JUnit, so the iOS summary counted Android flows).
+rm -rf "$out"
 mkdir -p "$out"
 out="$(cd "$out" && pwd)"
+# Maestro's XCTest driver install on a fresh lane simulator, under load, outran its default startup timeout.
+export MAESTRO_DRIVER_STARTUP_TIMEOUT="${MAESTRO_DRIVER_STARTUP_TIMEOUT:-240000}"
 export CI=true E2E_WARM_BUNDLE=1 E2E_LAUNCH_TIMEOUT="${E2E_LAUNCH_TIMEOUT:-240000}"
 export MAESTRO_TEST_ARGS="--format junit --output $out/junit-{run}.xml --debug-output $out/debug-{run} --flatten-debug-output"
 

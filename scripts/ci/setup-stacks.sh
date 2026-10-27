@@ -32,6 +32,8 @@ PARTNER_SECRET=local-stack-secret
 GEN_DIR="$GEN" DECIDE_DIR="$DECIDE"
 # shellcheck source=../e2e-lane.sh
 source "$ROOT/scripts/e2e-lane.sh"
+# Fresh per job (a self-hosted runner's workspace outlives its jobs).
+[[ "${1:-}" == up ]] && rm -rf "$LOGS"
 mkdir -p "$CACHE" "$LOGS"
 
 wait_port() { # PORT NAME SECONDS
