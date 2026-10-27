@@ -6,11 +6,13 @@ import {
   putSetlistItems,
   renameSetlist,
   unloveSong,
+  type Setlist,
   type SetlistItemIn,
 } from '@nomad/api-decide';
 
 import { createOutbox } from '../sync/createOutbox';
 import { isPermanent, outboxBackoffMs } from '../sync/outboxPolicy';
+import { onSetlistSent } from './setlistsCache';
 
 /**
  * The Me outbox: setlist writes and loves queued on the phone, so they work offline and sync later. One item per
@@ -51,20 +53,23 @@ const sig = (x: { song_key?: string | null; artist?: string; title?: string }) =
 const sameItems = (server: { song_key?: string | null; artist?: string; title?: string }[] | undefined, mine: SetlistItemIn[]) =>
   (server ?? []).length === mine.length && mine.every((m, i) => sig(m) === sig(server![i]!));
 
-export async function sendMe(item: MeOutboxItem): Promise<void> {
+/** Sends one write; a setlist save resolves to the server's setlist after the last call (for `onSetlistSent`). */
+export async function sendMe(item: MeOutboxItem): Promise<Setlist | void> {
   switch (item.op) {
-    case 'save':
+    case 'save': {
       if (item.create) {
         // Idempotent on the client id, but a repeat create returns the existing doc UNCHANGED (an edit made while the
         // first create was in flight, or after a timed-out-but-committed one, would be lost): reconcile with the result.
         const made = await createSetlist({ id: item.id, name: item.name, items: item.items });
-        if (!sameItems(made.items, item.items)) await putSetlistItems(item.id, item.items, made.rev ?? null);
-        if (made.name !== item.name) await renameSetlist(item.id, item.name);
-        return;
+        let out = made;
+        if (!sameItems(made.items, item.items)) out = await putSetlistItems(item.id, item.items, made.rev ?? null);
+        if (made.name !== item.name) out = await renameSetlist(item.id, item.name);
+        return out;
       }
-      await putSetlistItems(item.id, item.items, item.baseRev);
-      if (item.rename) await renameSetlist(item.id, item.name);
-      return;
+      let out = await putSetlistItems(item.id, item.items, item.baseRev);
+      if (item.rename) out = await renameSetlist(item.id, item.name);
+      return out;
+    }
     case 'delete':
       try {
         await deleteSetlist(item.id);
@@ -82,6 +87,7 @@ export async function sendMe(item: MeOutboxItem): Promise<void> {
 export const useMeOutbox = createOutbox<MeOutboxItem>({
   storageKey: (userKey) => `me.outbox.v1.${userKey}`,
   send: sendMe,
+  onSent: onSetlistSent,
   merge: meMerge,
   isPermanent,
   backoff: outboxBackoffMs,

@@ -10,6 +10,7 @@ import { useAuth } from '../auth/store';
 import { artistLabel, useLogStore, type LogEntry } from '../tonight/log/logStore';
 import { useOutbox } from '../tonight/log/outbox';
 import { SurveySheet } from '../tonight/log/SurveySheet';
+import { useUserKey } from './account';
 import { useLogMirror } from './useLogMirror';
 
 const entryKey = (e: { artist?: string; title?: string; song_key?: string | null; song_key_status?: string }) =>
@@ -39,13 +40,15 @@ const fromLocal = (e: LogEntry): KaraokeLogEntry => ({
  */
 export function useSongHistory(libraryKey: string): KaraokeLogEntry[] {
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
+  const userKey = useUserKey();
   const { entries: mirror } = useLogMirror();
   const local = useLogStore((s) => s.entries);
   const queued = useOutbox((s) => s.items);
   const remote = useQuery({
-    queryKey: ['decide', 'song-history', libraryKey],
+    // Per account (and purged on sign-out with the rest of Me's queries).
+    queryKey: ['decide', userKey, 'song-history', libraryKey],
     queryFn: () => listSongHistory(libraryKey),
-    enabled: signedIn && mirror.length === 0,
+    enabled: signedIn && userKey !== null && mirror.length === 0,
     retry: false,
   });
   return useMemo(() => {

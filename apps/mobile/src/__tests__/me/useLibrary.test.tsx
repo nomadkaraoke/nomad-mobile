@@ -174,3 +174,37 @@ describe('Discover and Me hearts agree', () => {
     expect(disc.result.current.loved.has('k_One')).toBe(false);
   });
 });
+
+it('a re-edited survey moves its feel (great → ok gives great 0, ok 1) instead of counting it again', async () => {
+  const client = resetMe();
+  const MIRROR = `me.logmirror.v1.${userKeyFor('a@example.com')}`;
+  appStorage.set(MIRROR, JSON.stringify({ entries: [{ id: 'app_1', user_id: 'u', state: 'sung', artist: 'A', title: 'One', song_key: 'k_One', survey: { feel: 'great' } }] }));
+  api.getLibrary.mockResolvedValue({
+    status: 'ok',
+    etag: '"e"',
+    items: [li('A', 'One', { times_sung: 1, feel_counts: { great: 1, ok: 0, bad: 0 }, latest_feel: 'great' }) as never],
+  });
+  const { result } = renderHook(() => useLibrary(), { wrapper: wrapperFor(client) });
+  await waitFor(() => expect(result.current.items).toHaveLength(1));
+  act(() =>
+    useLogStore.setState({
+      entries: { app_1: { id: 'app_1', source: 'app', state: 'sung', artist: 'A', title: 'One', song_key: 'k_One', updatedAt: 1, survey: { feel: 'ok' } as never } },
+    }),
+  );
+  act(() => useOutbox.setState({ items: [{ key: 'app_1', id: 'app_1', op: 'put', rev: 1, patch: { survey: { feel: 'ok' } } as never }] }));
+  expect(result.current.items[0]).toMatchObject({ times_sung: 1, latest_feel: 'ok', feel_counts: { great: 0, ok: 1, bad: 0 } });
+});
+
+it('an aborted library fetch writes no cache and settles nothing', async () => {
+  const client = resetMe();
+  let land!: (v: never) => void;
+  api.getLibrary.mockImplementation(() => new Promise((r) => (land = r as never)));
+  useLovedOverrides.getState().set({ song_key: 'k_One', artist: 'A', title: 'One' }, true);
+  await new Promise((r) => setTimeout(r, 5));
+  renderHook(() => useLibrary(), { wrapper: wrapperFor(client) });
+  await waitFor(() => expect(api.getLibrary).toHaveBeenCalled());
+  await act(async () => client.cancelQueries({ queryKey: ['decide'] }));
+  await act(async () => land({ status: 'ok', etag: '"late"', items: [] } as never));
+  expect(appStorage.getString(CACHE)).toBeUndefined();
+  expect(useLovedOverrides.getState().byKey.k_One).toBeTruthy();
+});

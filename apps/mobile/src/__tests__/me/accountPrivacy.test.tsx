@@ -5,6 +5,7 @@ import { useClearMeOnAccountChange } from '../../me/useClearMeOnAccountChange';
 import { useMeOutbox } from '../../me/meOutbox';
 import { useLibrary } from '../../me/useLibrary';
 import { useSetlists } from '../../me/useSetlists';
+import { useSongHistory } from '../../me/SongHistory';
 import { useLovedOverrides } from '../../me/lovedOverrides';
 import { useAuth } from '../../auth/store';
 import { userKeyFor } from '../../auth/userKey';
@@ -16,6 +17,8 @@ jest.mock('@nomad/api-decide', () => ({
   getLibrary: jest.fn(),
   listSetlists: jest.fn(),
   createSetlist: jest.fn(),
+  listKaraokeLog: jest.fn(),
+  listSongHistory: jest.fn(),
 }));
 const api = decide as jest.Mocked<typeof decide>;
 const { ApiError } = jest.requireActual<typeof decide>('@nomad/api-decide');
@@ -90,4 +93,31 @@ it('a fetch that finishes after sign-out writes no cache for the old account', a
     await Promise.resolve();
   });
   expect(appStorage.getString(`me.library.v1.${A}`)).toBeUndefined();
+});
+
+describe('song history is per account', () => {
+  const rec = { id: 'app_a1', user_id: 'a', state: 'sung', artist: 'A', title: 'Secret', song_key: null, song_key_status: 'unresolved' } as never;
+  const KEY = 'u:secret-key';
+
+  it.each([
+    ['after a sign-out', true],
+    ['on a direct A to B switch', false],
+  ])('B never sees A\'s cached song history %s', async (_l, signOutFirst) => {
+    const client = resetMe('a@example.com');
+    api.listKaraokeLog.mockResolvedValue({ entries: [], next_cursor: null } as never);
+    api.listSongHistory.mockResolvedValue([rec]);
+    const wrapper = wrapperFor(client);
+    renderHook(() => useClearMeOnAccountChange(), { wrapper });
+    const a = renderHook(() => useSongHistory(KEY), { wrapper });
+    await waitFor(() => expect(a.result.current.map((e) => e.id)).toEqual(['app_a1']));
+    a.unmount();
+    if (signOutFirst) {
+      act(() => useAuth.setState({ state: { status: 'signedOut' } }));
+      expect(client.getQueryCache().findAll({ predicate: (q) => q.queryKey[2] === 'song-history' })).toEqual([]);
+    }
+    api.listSongHistory.mockImplementation(() => new Promise(() => {}));
+    act(() => signIn('b@example.com'));
+    const b = renderHook(() => useSongHistory(KEY), { wrapper });
+    expect(b.result.current).toEqual([]);
+  });
 });

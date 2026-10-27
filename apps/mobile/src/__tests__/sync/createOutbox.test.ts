@@ -170,3 +170,68 @@ it('merge sees attempted once a send of the key has started, and purge removes a
   expect(box.getState().items).toEqual([]);
   expect(appStorage.getString(box.storageKeyFor(box.getState().userKey!))).toBeUndefined();
 });
+
+describe('onSent', () => {
+  it('hands the send result to onSent and listeners while the item is still queued, never on failure', async () => {
+    const seen: [string, unknown, string, number][] = [];
+    const box = createOutbox<Item>({
+      storageKey: (u) => `test.outbox.sent.${u}`,
+      send: async (i) => ({ echoed: i.v }),
+      onSent: (item, result, owner) => seen.push([item.key, result, owner, box.getState().items.length]),
+      merge: (_q, n) => n,
+      isPermanent: () => true,
+      backoff: () => 1000,
+    });
+    box.getState().rehydrate('a@example.com');
+    const heard = jest.fn();
+    const off = box.addSentListener(heard);
+    box.getState().enqueue({ key: 'a', v: 7 });
+    await box.idle();
+    expect(seen).toEqual([['a', { echoed: 7 }, expect.any(String), 1]]);
+    expect(heard).toHaveBeenCalledWith(expect.objectContaining({ key: 'a', v: 7 }), { echoed: 7 }, expect.any(String));
+    off();
+    box.getState().enqueue({ key: 'b', v: 1 });
+    await box.idle();
+    expect(heard).toHaveBeenCalledTimes(1);
+  });
+
+  it('a throwing onSent does not block the queue', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const box = createOutbox<Item>({
+      storageKey: (u) => `test.outbox.throw.${u}`,
+      send: async () => undefined,
+      onSent: () => {
+        throw new Error('boom');
+      },
+      merge: (_q, n) => n,
+      isPermanent: () => true,
+      backoff: () => 1000,
+    });
+    box.getState().rehydrate('a@example.com');
+    box.getState().enqueue({ key: 'a', v: 1 });
+    await box.idle();
+    expect(box.getState().items).toEqual([]);
+    expect(box.getState().synced).toBe(1);
+    warn.mockRestore();
+  });
+
+  it('failed sends do not call onSent', async () => {
+    const onSent = jest.fn();
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const box = createOutbox<Item>({
+      storageKey: (u) => `test.outbox.fail.${u}`,
+      send: async () => {
+        throw new ApiError(422, 'bad');
+      },
+      onSent,
+      merge: (_q, n) => n,
+      isPermanent: () => true,
+      backoff: () => 1000,
+    });
+    box.getState().rehydrate('a@example.com');
+    box.getState().enqueue({ key: 'a', v: 1 });
+    await box.idle();
+    expect(onSent).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+});

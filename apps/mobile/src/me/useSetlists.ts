@@ -1,17 +1,17 @@
 import { ApiError, listSetlists, type Setlist, type SetlistItemIn } from '@nomad/api-decide';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { newUuid } from '../tonight/nightStore';
 import { setlistsStorageKey, useUserKey, writeCacheFor } from './account';
-import { isObj, readCache } from './cache';
+import { readCache } from './cache';
 import { useInvalidateOnSynced } from './useLibrary';
 import { useMeOutbox } from './meOutbox';
 import { overlaySetlists } from './pending';
+import { useBindMeQueryClient } from './queryClientRef';
+import { isSetlistsCache as isCache, setlistsKeyFor, type SetlistsCache } from './setlistsCache';
 
-type SetlistsCache = { setlists: Setlist[]; savedAt: number };
-const isCache = (v: unknown): v is SetlistsCache => isObj(v) && Array.isArray(v.setlists) && typeof v.savedAt === 'number';
-export const setlistsKeyFor = (userKey: string | null) => ['decide', userKey, 'setlists'] as const;
+export { setlistsKeyFor };
 
 /** At most this many songs in a setlist. */
 export const MAX_SETLIST_ITEMS = 500;
@@ -22,6 +22,7 @@ const sameSong = (a: SetlistItemIn, b: SongRef) =>
 /** Setlists: server copy cached on the phone, with queued creates, edits and deletes applied at once. */
 export function useSetlists() {
   const queryClient = useQueryClient();
+  useBindMeQueryClient(queryClient);
   const userKey = useUserKey();
   const queryKey = useMemo(() => setlistsKeyFor(userKey), [userKey]);
   const cached = useMemo(() => readCache(userKey && setlistsStorageKey(userKey), isCache), [userKey]);
@@ -43,6 +44,13 @@ export function useSetlists() {
   const pending = useMeOutbox((s) => s.items);
   const setlists = useMemo(() => overlaySetlists(q.data?.setlists ?? [], pending), [q.data, pending]);
   const offline = q.isError && q.error instanceof ApiError && q.error.status === 0;
+  // Every setlist this hook has shown, so an edit from an open screen never loses its list if the cache briefly
+  // lacks it (save() would otherwise have nothing to build on).
+  const lastKnown = useRef({ userKey, byId: new Map<string, Setlist>() });
+  useEffect(() => {
+    if (lastKnown.current.userKey !== userKey) lastKnown.current = { userKey, byId: new Map() }; // per account
+    for (const s of setlists) lastKnown.current.byId.set(s.id, s);
+  }, [setlists, userKey]);
 
   const find = useCallback(
     (id: string) => overlaySetlists(queryClient.getQueryData<SetlistsCache>(queryKey)?.setlists ?? [], useMeOutbox.getState().items).find((s) => s.id === id),
@@ -50,12 +58,16 @@ export function useSetlists() {
   );
   const save = useCallback(
     (id: string, patch: { name?: string; items?: SetlistItemIn[]; create?: boolean }): boolean => {
-      const cur = find(id);
+      const queued = useMeOutbox.getState().items.find((i) => i.key === `setlist:${id}`);
+      if (!patch.create && queued?.op === 'delete') return false; // deleted: nothing to edit
+      const cur = find(id) ?? (patch.create ? undefined : lastKnown.current.byId.get(id));
+      // Never create from an edit: a list we know nothing about would be created nameless (decide 422s and the edit
+      // is dropped for good). Refuse instead.
+      if (!cur && !patch.create) return false;
       if ((patch.items ?? cur?.items ?? []).length > MAX_SETLIST_ITEMS) return false; // never silently truncate
       const items = (patch.items ?? cur?.items ?? []).map((x) => ({
         item_id: x.item_id?.startsWith('local-') ? undefined : x.item_id, song_key: x.song_key, artist: x.artist, title: x.title,
       }));
-      const queued = useMeOutbox.getState().items.find((i) => i.key === `setlist:${id}`);
       const queuedCreate = queued?.op === 'save' && queued.create;
       useMeOutbox.getState().enqueue({
         key: `setlist:${id}`,
@@ -102,6 +114,7 @@ export function useSetlists() {
       if (cur) save(id, { items: (cur.items ?? []).filter((x) => x.item_id !== itemId) });
     },
     deleteSetlist(id: string) {
+      lastKnown.current.byId.delete(id);
       useMeOutbox.getState().enqueue({ key: `setlist:${id}`, op: 'delete', id });
     },
   };

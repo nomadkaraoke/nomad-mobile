@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 
 import { useAuth } from '../../auth/store';
 import { useMeOutbox } from '../../me/meOutbox';
+import { setMeQueryClient } from '../../me/queryClientRef';
+import { useLibrarySettle } from '../../me/librarySettle';
 import { useLovedOverrides } from '../../me/lovedOverrides';
 import { useLogStore } from '../../tonight/log/logStore';
 import { useOutbox } from '../../tonight/log/outbox';
@@ -15,11 +17,14 @@ export const signIn = (email: string) =>
 export function resetMe(email = 'a@example.com'): QueryClient {
   appStorage.clearAll();
   useLovedOverrides.getState().clear();
+  useLibrarySettle.getState().clear();
   signIn(email);
   useMeOutbox.getState().rehydrate(email);
   useOutbox.getState().rehydrate(email);
   useLogStore.getState().rehydrate(email);
-  return new QueryClient();
+  const client = new QueryClient();
+  setMeQueryClient(client);
+  return client;
 }
 
 export const wrapperFor = (client: QueryClient) =>

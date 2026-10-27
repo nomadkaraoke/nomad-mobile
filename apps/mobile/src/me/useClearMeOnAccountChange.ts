@@ -5,8 +5,10 @@ import { useAuth } from '../auth/store';
 import { userKeyFor } from '../auth/userKey';
 import { appStorage } from '../storage';
 import { libraryStorageKey, logMirrorStorageKey, OWNER_KEY, setlistsStorageKey } from './account';
+import { useLibrarySettle } from './librarySettle';
 import { useLovedOverrides } from './lovedOverrides';
 import { useMeOutbox } from './meOutbox';
+import { useBindMeQueryClient } from './queryClientRef';
 
 const keyOf = (s: ReturnType<typeof useAuth.getState>): string | null =>
   s.state.status === 'signedIn' ? userKeyFor(s.state.session.email) : null;
@@ -31,15 +33,20 @@ function adoptOwner(userKey: string): void {
  */
 export function useClearMeOnAccountChange(): void {
   const queryClient = useQueryClient();
+  useBindMeQueryClient(queryClient);
   useEffect(() => {
     const now = keyOf(useAuth.getState());
     if (now) adoptOwner(now);
     return useAuth.subscribe((state, prev) => {
       const was = keyOf(prev);
       const is = keyOf(state);
-      if (is !== was) useLovedOverrides.getState().clear(); // any account change: loves are per person
+      if (is !== was) {
+        // any account change: loves and sent-but-unfetched writes are per person
+        useLovedOverrides.getState().clear();
+        useLibrarySettle.getState().clear();
+      }
       if (was && !is) {
-        for (const kind of ['library', 'setlists', 'karaoke-log']) {
+        for (const kind of ['library', 'setlists', 'karaoke-log', 'song-history']) {
           const predicate = (q: { queryKey: readonly unknown[] }) => q.queryKey[0] === 'decide' && q.queryKey[2] === kind;
           void queryClient.cancelQueries({ predicate });
           queryClient.removeQueries({ predicate });

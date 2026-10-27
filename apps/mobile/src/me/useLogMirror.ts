@@ -1,13 +1,13 @@
 import { listKaraokeLog, type KaraokeLogEntry } from '@nomad/api-decide';
 import type { PendingLog } from '@nomad/core';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type QueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { logMirrorStorageKey, useUserKey, writeCacheFor } from './account';
 import { isObj, readCache } from './cache';
 
-type Mirror = { entries: KaraokeLogEntry[]; since?: string };
-const isMirror = (v: unknown): v is Mirror => isObj(v) && Array.isArray(v.entries) && (v.since === undefined || typeof v.since === 'string');
+export type Mirror = { entries: KaraokeLogEntry[]; since?: string };
+export const isMirror = (v: unknown): v is Mirror => isObj(v) && Array.isArray(v.entries) && (v.since === undefined || typeof v.since === 'string');
 
 /** Under the karaoke-log key family, so `useKaraokeLogFreshness` invalidates it when the log outbox lands a write. */
 export const logMirrorKeyFor = (userKey: string | null) => ['decide', userKey, 'karaoke-log', 'mirror'] as const;
@@ -19,6 +19,8 @@ export async function syncMirror(prev: Mirror): Promise<Mirror> {
   let since = prev.since;
   let cursor: string | undefined;
   do {
+    // Deliberately `prev.since` (not the running `since`) on every page of one run: the cursor pages through the
+    // result set of that one query, so changing `since` mid-run would page a different set.
     const page = await listKaraokeLog({ since: prev.since, limit: PAGE, cursor });
     for (const e of page.entries) {
       if (e.deleted) byId.delete(e.id);
@@ -68,4 +70,19 @@ export function toPendingLog(entries: KaraokeLogEntry[]): PendingLog[] {
       ? { id: e.night.id ?? undefined, date: e.night.date ?? undefined, venue_name: e.night.venue_name ?? undefined, kind: e.night.kind ?? undefined }
       : undefined,
   }));
+}
+
+/**
+ * id → the feel the server has counted for that record (sung records with a synced survey), from the mirror in the
+ * query cache, else the phone's copy. Read on demand (not a subscription): the library overlay asks when a queued
+ * survey needs it.
+ */
+export function syncedFeels(userKey: string | null, client?: QueryClient | null): Map<string, string> {
+  const out = new Map<string, string>();
+  if (!userKey) return out;
+  const mirror = client?.getQueryData<Mirror>(logMirrorKeyFor(userKey)) ?? readCache(logMirrorStorageKey(userKey), isMirror);
+  for (const e of mirror?.entries ?? []) {
+    if (!e.deleted && (e.state === 'sung' || e.state === 'sung_unplayed') && e.survey?.feel) out.set(e.id, e.survey.feel);
+  }
+  return out;
 }

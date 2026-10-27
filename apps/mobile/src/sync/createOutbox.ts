@@ -14,7 +14,13 @@ import { appStorage } from '../storage';
  */
 export type OutboxConfig<I extends { key: string }> = {
   storageKey: (userKey: string) => string;
-  send: (item: I) => Promise<void>;
+  /** Sends one item; what it resolves to is handed to `onSent`. */
+  send: (item: I) => Promise<unknown>;
+  /**
+   * Optional: a send succeeded (the account is still the owner). Runs BEFORE the item leaves the queue, so a cache
+   * updated here never leaves a gap where neither the queue nor the cache has the write. Errors are swallowed.
+   */
+  onSent?: (item: I & { rev: number }, result: unknown, userKey: string) => void;
   /** Merge `next` into the `queued` item for the same key. `null` drops the queued item (nothing to send). */
   merge: (queued: I & { attempted?: boolean }, next: I) => I | null;
   isPermanent: (e: unknown) => boolean;
@@ -50,6 +56,8 @@ export type OutboxHook<I extends { key: string }> = UseBoundStore<StoreApi<Outbo
   storageKeyFor(userKey: string): string;
   /** Test hook: waits for the running flush (if any). */
   idle(): Promise<void>;
+  /** Also told about every successful send (after `onSent`); returns an unsubscribe. */
+  addSentListener(fn: NonNullable<OutboxConfig<I>['onSent']>): () => void;
 };
 
 const emailOf = (): string | null => {
@@ -62,6 +70,16 @@ export function createOutbox<I extends { key: string }>(cfg: OutboxConfig<I>): O
   let flushing: Promise<void> | null = null;
   let timer: ReturnType<typeof setTimeout> | null = null;
   let inFlight: { key: string; rev: number } | null = null;
+  const listeners = new Set<NonNullable<OutboxConfig<I>['onSent']>>();
+  const notifySent = (item: Stored<I>, result: unknown, owner: string) => {
+    for (const fn of [cfg.onSent, ...listeners]) {
+      try {
+        fn?.(item, result, owner);
+      } catch (e) {
+        console.warn(`[outbox] onSent failed for ${item.key}: ${String(e)}`);
+      }
+    }
+  };
   const clearTimer = () => {
     if (timer) clearTimeout(timer);
     timer = null;
@@ -110,8 +128,9 @@ export function createOutbox<I extends { key: string }>(cfg: OutboxConfig<I>): O
           persist(get().items.map((i) => (i.key === head.key && i.rev === head.rev ? { ...i, attempted: true } : i)));
           head.attempted = true;
         }
+        let result: unknown;
         try {
-          await cfg.send(head);
+          result = await cfg.send(head);
         } catch (e) {
           inFlight = null;
           if (get().userKey !== owner) return;
@@ -134,6 +153,7 @@ export function createOutbox<I extends { key: string }>(cfg: OutboxConfig<I>): O
         }
         inFlight = null;
         if (get().userKey !== owner) return;
+        notifySent(head, result, owner);
         set({ attempts: 0, retryAt: null, synced: get().synced + 1 });
         // Coalesced while in flight (a newer rev): kept, sent again with the merged value.
         persist(without(head));
@@ -219,5 +239,12 @@ export function createOutbox<I extends { key: string }>(cfg: OutboxConfig<I>): O
     }
   });
 
-  return Object.assign(store, { storageKeyFor: cfg.storageKey, idle: (): Promise<void> => flushing ?? Promise.resolve() });
+  return Object.assign(store, {
+    storageKeyFor: cfg.storageKey,
+    idle: (): Promise<void> => flushing ?? Promise.resolve(),
+    addSentListener: (fn: NonNullable<OutboxConfig<I>['onSent']>) => {
+      listeners.add(fn);
+      return () => void listeners.delete(fn);
+    },
+  });
 }

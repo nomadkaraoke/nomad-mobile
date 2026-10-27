@@ -7,9 +7,12 @@ import { useLogStore } from '../tonight/log/logStore';
 import { useOutbox } from '../tonight/log/outbox';
 import { libraryStorageKey, useUserKey, writeCacheFor } from './account';
 import { isObj, readCache } from './cache';
+import { useLibrarySettle } from './librarySettle';
 import { useLovedOverrides } from './lovedOverrides';
 import { useMeOutbox } from './meOutbox';
-import { pendingLoves, pendingLog, pendingSetlists, toMeSong } from './pending';
+import { libraryLog, pendingLoves, pendingSetlists, toMeSong } from './pending';
+import { useBindMeQueryClient } from './queryClientRef';
+import { syncedFeels } from './useLogMirror';
 
 export type LibraryCache = { etag: string; items: MeSong[]; savedAt: number };
 const isCache = (v: unknown): v is LibraryCache => isObj(v) && typeof v.etag === 'string' && Array.isArray(v.items) && typeof v.savedAt === 'number';
@@ -37,6 +40,7 @@ export function useInvalidateOnSynced(keys: (readonly unknown[])[]): void {
  */
 export function useLibrary(): { items: MeSong[]; loading: boolean; offline: boolean; error: boolean; refetch(): void } {
   const queryClient = useQueryClient();
+  useBindMeQueryClient(queryClient);
   const userKey = useUserKey();
   const queryKey = useMemo(() => libraryKeyFor(userKey), [userKey]);
   const cached = useMemo(() => readCache(userKey && libraryStorageKey(userKey), isCache), [userKey]);
@@ -48,7 +52,7 @@ export function useLibrary(): { items: MeSong[]; loading: boolean; offline: bool
     initialDataUpdatedAt: cached?.savedAt,
     staleTime: 60_000,
     retry: false,
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       const startedAt = Date.now();
       const prev = queryClient.getQueryData<LibraryCache>(queryKey);
       const res = await getLibrary(prev?.etag);
@@ -61,8 +65,12 @@ export function useLibrary(): { items: MeSong[]; loading: boolean; offline: bool
         if (full.status !== 'ok') throw new Error('library unavailable');
         next = { etag: full.etag, items: full.items.map(toMeSong), savedAt: Date.now() };
       }
+      // Cancelled (account change, unmount): its result is discarded, so it must not write the cache or settle
+      // overrides against data nobody will see.
+      if (signal?.aborted) return next;
       if (userKey) writeCacheFor(userKey, libraryStorageKey(userKey), next);
       useLovedOverrides.getState().settle(startedAt);
+      useLibrarySettle.getState().settle(startedAt);
       return next;
     },
   });
@@ -73,16 +81,20 @@ export function useLibrary(): { items: MeSong[]; loading: boolean; offline: bool
   const logEntries = useLogStore((s) => s.entries);
   const meItems = useMeOutbox((s) => s.items);
   const overrides = useLovedOverrides((s) => s.byKey);
+  const sentLog = useLibrarySettle((s) => s.log);
+  const sentSetlists = useLibrarySettle((s) => s.setlists);
   const base = q.data?.items;
-  const items = useMemo(
-    () =>
-      overlayLibrary(base ?? [], {
-        log: pendingLog(logItems, logEntries),
-        loves: { ...overrides, ...pendingLoves(meItems) },
-        setlists: pendingSetlists(meItems),
-      }),
-    [base, logItems, logEntries, meItems, overrides],
-  );
+  const items = useMemo(() => {
+    // The server's feel per record, read only when a queued survey needs it (a re-edit moves the count).
+    let feels: Map<string, string> | undefined;
+    const syncedFeel = (id: string) => (feels ??= syncedFeels(userKey, queryClient)).get(id);
+    return overlayLibrary(base ?? [], {
+      log: libraryLog(sentLog, logItems, logEntries, syncedFeel),
+      loves: { ...overrides, ...pendingLoves(meItems) },
+      // Sent first, so a queued write for the same list replaces its membership.
+      setlists: [...Object.values(sentSetlists), ...pendingSetlists(meItems)],
+    });
+  }, [base, logItems, logEntries, meItems, overrides, sentLog, sentSetlists, userKey, queryClient]);
 
   const offline = q.isError && q.error instanceof ApiError && q.error.status === 0;
   return {

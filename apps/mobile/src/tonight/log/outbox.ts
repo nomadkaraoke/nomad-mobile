@@ -89,6 +89,8 @@ export const useOutbox = Object.assign(useOutboxImpl, {
       ...(partial.items ? { items: partial.items.map((i) => ({ ...i, key: i.key ?? i.id })) } : {}),
     } as never),
   subscribe: hook.subscribe,
+  /** Told about every successful send (the Me library keeps a sent record in its overlay until a refetch). */
+  addSentListener: hook.addSentListener,
 });
 
 /** Test hook: waits for the running flush (if any). */

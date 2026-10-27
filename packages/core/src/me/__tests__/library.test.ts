@@ -157,6 +157,22 @@ describe('overlayLibrary', () => {
     });
     expect(out[0]).toMatchObject({ latest_feel: 'bad', latest_key: 'right', feel_counts: { great: 1, ok: 0, bad: 1 }, crowd_pleaser_count: 1, vibes: ['ballad'] });
   });
+  it('a re-edited survey moves the record\'s synced feel instead of counting it again (great → ok)', () => {
+    const base = [song({ artist: 'Adele', title: 'Hello', times_sung: 1, latest_feel: 'great', feel_counts: { great: 1, ok: 0, bad: 0 } })];
+    const out = overlayLibrary(base, {
+      ...empty,
+      log: [{ id: '1', artist: 'Adele', title: 'Hello', state: 'survey', survey: { feel: 'ok' }, prev_feel: 'great' }],
+    });
+    expect(out[0]).toMatchObject({ latest_feel: 'ok', feel_counts: { great: 0, ok: 1, bad: 0 } });
+  });
+  it('re-saving the same feel leaves the counts alone', () => {
+    const base = [song({ artist: 'Adele', title: 'Hello', times_sung: 1, latest_feel: 'great', feel_counts: { great: 1, ok: 0, bad: 0 } })];
+    const out = overlayLibrary(base, {
+      ...empty,
+      log: [{ id: '1', artist: 'Adele', title: 'Hello', state: 'survey', survey: { feel: 'great' }, prev_feel: 'great' }],
+    });
+    expect(out[0]!.feel_counts).toEqual({ great: 1, ok: 0, bad: 0 });
+  });
   it('per-field survey semantics: newest answer per field wins', () => {
     const base = [song({ artist: 'A', title: 'B', times_sung: 1, latest_feel: 'ok', latest_key: 'too_low' })];
     const out = overlayLibrary(base, {

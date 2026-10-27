@@ -1,4 +1,4 @@
-import type { Setlist } from '@nomad/api-decide';
+import type { KaraokeLogPatch, Setlist } from '@nomad/api-decide';
 import type { MeSong, PendingLog, PendingLoves, PendingSetlist } from '@nomad/core';
 
 import type { LogEntry } from '../tonight/log/logStore';
@@ -11,8 +11,14 @@ import type { MeOutboxItem } from './meOutbox';
  * already counted must not count it again (its state is 'survey', which never counts as sung, so the survey applies
  * to existing library items only). Accepted limitation: a queued delete of an already-synced record does not subtract
  * from the cached counts (the overlay only adds).
+ * `syncedFeel(id)`: the feel the server already counted for that record (the log mirror's survey), so a re-edited
+ * survey moves the count instead of adding one (`prev_feel`).
  */
-export function pendingLog(items: OutboxItem[], entries: Record<string, LogEntry>): PendingLog[] {
+export function pendingLog(
+  items: OutboxItem[],
+  entries: Record<string, LogEntry>,
+  syncedFeel?: (id: string) => string | null | undefined,
+): PendingLog[] {
   const out: PendingLog[] = [];
   for (const it of items) {
     const e = entries[it.id];
@@ -26,6 +32,7 @@ export function pendingLog(items: OutboxItem[], entries: Record<string, LogEntry
     if (!artist || !title) continue;
     // The survey too comes only from the patch: an already-synced survey in the log store must not be re-applied.
     const survey = (p.survey as object | undefined) ?? {};
+    const prev = (survey as { feel?: unknown }).feel ? syncedFeel?.(it.id) : undefined;
     out.push({
       id: it.id,
       artist,
@@ -37,9 +44,51 @@ export function pendingLog(items: OutboxItem[], entries: Record<string, LogEntry
       survey: Object.keys(survey).length ? (survey as PendingLog['survey']) : undefined,
       sung_at: it.patch.sung_at,
       night: (p.night ?? e?.night) as PendingLog['night'] | undefined,
+      ...(prev ? { prev_feel: prev } : {}),
     });
   }
   return out;
+}
+
+/**
+ * A later queued write folded onto a record already sent (still "settling": the library cache predates it). Fields
+ * the patch didn't set keep the sent record's value; `prev_feel` stays the one the server had before both.
+ */
+export function foldLog(old: PendingLog | undefined, rec: PendingLog, patch: KaraokeLogPatch | undefined): PendingLog {
+  if (!old || rec.deleted || !patch) return rec;
+  return {
+    ...old,
+    artist: rec.artist,
+    title: rec.title,
+    song_key: rec.song_key ?? old.song_key,
+    state: patch.state !== undefined ? rec.state : old.state,
+    times: patch.times !== undefined ? rec.times : old.times,
+    origin: patch.origin !== undefined ? rec.origin : old.origin,
+    sung_at: rec.sung_at ?? old.sung_at,
+    night: rec.night ?? old.night,
+    survey: old.survey || rec.survey ? { ...old.survey, ...rec.survey } : undefined,
+    prev_feel: old.prev_feel,
+  };
+}
+
+/**
+ * The log records the library overlay applies: writes sent but not yet seen by a library fetch (`settled`), with the
+ * ones still queued folded on top (a queued delete drops the record).
+ */
+export function libraryLog(
+  settled: Record<string, PendingLog>,
+  items: OutboxItem[],
+  entries: Record<string, LogEntry>,
+  syncedFeel?: (id: string) => string | null | undefined,
+): PendingLog[] {
+  const out = new Map(Object.entries(settled));
+  for (const it of items) if (it.op === 'delete') out.delete(it.id);
+  const feel = (id: string) => settled[id]?.survey?.feel ?? syncedFeel?.(id);
+  for (const rec of pendingLog(items, entries, feel)) {
+    const it = items.find((i) => i.id === rec.id);
+    out.set(rec.id, foldLog(settled[rec.id], rec, it?.op === 'put' ? it.patch : undefined));
+  }
+  return [...out.values()];
 }
 
 export function pendingLoves(items: MeOutboxItem[]): PendingLoves {

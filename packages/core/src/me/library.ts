@@ -121,6 +121,11 @@ export type PendingLog = {
   };
   deleted?: boolean;
   sung_at?: string | null;
+  /**
+   * The feel the server already counted for this record (its synced survey), when known. A re-edited survey then
+   * moves that count to the new feel instead of adding a second one.
+   */
+  prev_feel?: string | null;
   /** Night context (needed by karaokeStats for nights and venues). */
   night?: { id?: string; date?: string; venue_name?: string; kind?: string };
 };
@@ -222,7 +227,11 @@ export function overlayLibrary(
     const s = get(r.artist, r.title, r.song_key);
     if (sv.feel && FEELS.has(sv.feel)) {
       s.latest_feel = sv.feel as Feel;
-      s.feel_counts[sv.feel as Feel] += 1;
+      const prev = r.prev_feel && FEELS.has(r.prev_feel) ? (r.prev_feel as Feel) : null;
+      if (prev !== sv.feel) {
+        if (prev && s.feel_counts[prev] > 0) s.feel_counts[prev] -= 1;
+        s.feel_counts[sv.feel as Feel] += 1;
+      }
     }
     if (sv.key && KEYS.has(sv.key)) s.latest_key = sv.key as KeyFeel;
     if (sv.crowd_pleaser) s.crowd_pleaser_count += 1;
