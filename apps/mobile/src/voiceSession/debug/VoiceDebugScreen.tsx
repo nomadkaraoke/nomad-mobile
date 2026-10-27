@@ -1,12 +1,13 @@
 // Hidden admin voice debug screen (Phase 3d B3): per song the computed markers next to Andrew's sheet label, his
 // session attempts (with a play button per recording) and the model's prediction.
-import type { UserSongOut } from '@nomad/api-decide';
+import { adminRecordingUrl, type UserSongOut } from '@nomad/api-decide';
 import { midiToName } from '@nomad/core';
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, List, Screen, Text } from '@nomad/ui';
 import { ActivityIndicator, View } from 'react-native';
 
-import { type PlaybackState, useRecordingPlayback, useVoiceDebugSongs, useVoiceFlags } from './useVoiceDebug';
+import { type PlaybackState, useRecordingPlayback } from '../recording/useRecordingPlayback';
+import { useVoiceDebugSongs, useVoiceFlags } from './useVoiceDebug';
 
 type Translate = ReturnType<typeof useTranslations>;
 type Attempt = UserSongOut['attempts'][number];
@@ -108,7 +109,10 @@ export function VoiceDebugScreen() {
   const flags = useVoiceFlags();
   const songs = useVoiceDebugSongs();
   const isAdmin = flags.data?.is_admin === true;
-  const { state, toggle } = useRecordingPlayback();
+  const { state, play, stop } = useRecordingPlayback(adminRecordingUrl, { dirName: 'voice-debug' });
+  // A second tap on the take that is loading or playing stops it.
+  const toggle = (key: string, recordingId: string) =>
+    state.key === key && state.status !== 'failed' ? stop() : void play(recordingId, { key });
 
   return (
     <Screen testID="vs-debug" underHeader>

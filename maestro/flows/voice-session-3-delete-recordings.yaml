@@ -1,5 +1,6 @@
-# Voice session 3 (Phase 3d spec §6, plan Task D8): a one-song recorded session (its take uploads) → Me → Your music
-# profile → Your recordings shows 1 → Delete all my recordings → confirm → the count says 0 → decide has none.
+# Voice session 3 (Phase 3d spec §6, plan Task D8; tuning batch 1 M3): a one-song recorded session (its take uploads)
+# → Me → Your music profile → Your recordings shows 1, and the session's song with ▶ → Delete all my recordings →
+# confirm → the count says 0, the song stays listed without ▶ → decide has none.
 appId: com.nomadkaraoke.mobile
 name: voice-session-3-delete-recordings
 tags:
@@ -47,16 +48,28 @@ tags:
 - extendedWaitUntil:
     visible: "1 recording kept privately"
     timeout: 15000
+# The session's one song, with its uploaded take (the list refetches after the upload lands).
+- extendedWaitUntil:
+    visible:
+      id: "vs-rec-0-1-play"
+    timeout: 20000
 - takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-3-recordings
 - tapOn:
     id: "vs-recordings-delete"
 - extendedWaitUntil:
     visible: "Delete all your recordings?"
     timeout: 10000
-- tapOn: "Delete|DELETE"
+# The confirm reads "Delete all", unlike the rows' "Delete" buttons behind the alert.
+- tapOn: "Delete all|DELETE ALL"
 - extendedWaitUntil:
     visible: "0 recordings kept privately"
     timeout: 20000
+- extendedWaitUntil:
+    notVisible:
+      id: "vs-rec-0-1-play"
+    timeout: 15000
+- assertVisible:
+    id: "vs-rec-0-1"
 - takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-3-recordings-deleted
 - runScript:
     file: ../scripts/stack.js

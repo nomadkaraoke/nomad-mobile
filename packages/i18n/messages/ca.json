@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {Queda # segon} other {Queden # segons}}",
     "singProgressLabel": "Temps que et queda per cantar",
     "micBusyBody": "Una altra aplicació o una trucada està utilitzant el micròfon. Tanca-la i torna-ho a provar, o tria el teu tipus de veu directament.",
-    "micBusyTitle": "El micròfon està ocupat"
+    "micBusyTitle": "El micròfon està ocupat",
+    "typeUnknown": "El teu tipus de veu"
   },
   "fit": {
     "fits": "S'adapta a la teva veu",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Per saber si la pots cantar, fes primer el test de veu",
     "profileRemoveConfirm": "Elimina",
     "profileMethodSession": "De la teva sessió de veu ({n, plural, one {# cançó} other {# cançons}})",
-    "profileMethodSessionPlain": "De la teva sessió de veu"
+    "profileMethodSessionPlain": "De la teva sessió de veu",
+    "profileActive": "S'utilitza per a l'ajust de les cançons",
+    "profileAdopt": "Utilitza aquesta com a la meva veu",
+    "profileAdoptFailed": "No s'ha pogut desar com a la teva veu. Comprova la connexió i torna-ho a provar.",
+    "profileCardMic": "De la teva prova de micròfon",
+    "profileCardSongs": "{n, plural, one {D'# cançó} other {De # cançons}}",
+    "profileUnsaved": "No s'ha desat com a la teva veu: necessitem més cançons per estar-ne segurs",
+    "profileCardSession": "De la teva sessió de veu"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "La base musical es colarà pel micròfon, així que els enregistraments tindran menys valor.",
       "posture": "Com cantaràs?",
       "record": "Vols enregistrar com canto?",
-      "recordBody": "Guardem l'enregistrament de manera privada per mesurar el teu rang amb més precisió i millorar les teves seleccions més endavant. Només tu i el nostre equip hi tenim accés, i pots suprimir tots els teus enregistraments quan vulguis a Jo.",
+      "recordBody": "Pugem la gravació i la guardem de manera privada per poder mesurar el teu rang amb més precisió i millorar les teves seleccions més endavant. Només tu i el nostre equip la podeu escoltar, i pots eliminar qualsevol de les teves gravacions o totes en qualsevol moment a Jo.",
       "sitting": "Assegut",
       "standing": "Dret",
       "warm": "Completament escalfada",
@@ -1751,7 +1759,37 @@
       "recordDefault": "Grava'm per defecte",
       "recordDefaultBody": "Marca prèviament l'opció «Grava'm cantant?» quan iniciïs una sessió de veu. Ho podràs canviar cada vegada.",
       "title": "Les teves gravacions",
-      "confirmButton": "Suprimeix"
+      "confirmButton": "Elimina-ho tot",
+      "counted": "Tinguda en compte",
+      "deleteOneBody": "La gravació s'eliminarà per sempre. La cançó continuarà comptant per al teu resultat vocal tret que triïs «No tenir en compte».",
+      "deleteOneTitle": "Vols eliminar aquesta gravació?",
+      "exclude": "No tenir en compte",
+      "excludeBody": "Tornarem a calcular el teu resultat vocal sense aquesta cançó. Si la cançó t'ha agradat o no, continuarà comptant per a les teves recomanacions. Pots tornar a tenir-la en compte més endavant.",
+      "excludeConfirm": "No ho tinguis en compte",
+      "excludeTitle": "Vols deixar de tenir en compte aquesta cançó?",
+      "include": "Tornar a tenir en compte",
+      "includeBody": "Tornarem a calcular el teu resultat vocal tenint-la en compte.",
+      "includeConfirm": "Tingues-la en compte",
+      "includeTitle": "Vols tornar a tenir en compte aquesta cançó?",
+      "noResult": "Encara no hi ha cap resultat",
+      "notCounted": "No tinguda en compte",
+      "outcome": {
+        "removed": "Ara no compta cap cançó d'aquesta sessió, de manera que se n'ha eliminat el resultat vocal.",
+        "reverted_to_mic": "La teva veu ha tornat al resultat de la prova de micròfon.",
+        "unchanged": "S'ha tornat a calcular el resultat de la teva sessió.",
+        "updated": "La teva veu s'ha actualitzat a partir de les cançons que encara compten."
+      },
+      "playFailed": "No s'ha pogut reproduir aquesta gravació. Comprova la connexió i torna-ho a provar.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "No s'ha pogut canviar. Comprova la connexió i torna-ho a provar.",
+      "sessionsBody": "Escolta les teves preses, fes que una cançó deixi de comptar per al teu resultat vocal o elimina una gravació.",
+      "sessionsTitle": "Les teves sessions",
+      "uploading": "S'està penjant…",
+      "deleteOne": "Suprimeix",
+      "deleteOneConfirm": "Elimina la gravació",
+      "play": "Reprodueix",
+      "song": "{title} · {artist}",
+      "stop": "Atura"
     }
   }
 }

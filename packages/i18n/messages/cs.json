@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {Zbývá # sekunda} few {Zbývají # sekundy} other {Zbývá # sekund}}",
     "singProgressLabel": "Zbývající čas na zpěv",
     "micBusyBody": "Mikrofon právě používá jiná aplikace nebo hovor. Ukonči ji a zkus to znovu, nebo si místo toho vyber svůj typ hlasu.",
-    "micBusyTitle": "Mikrofon se právě používá"
+    "micBusyTitle": "Mikrofon se právě používá",
+    "typeUnknown": "Tvůj typ hlasu"
   },
   "fit": {
     "fits": "Sedí tvému hlasu",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Zpívatelné, nejdřív si udělej hlasový test",
     "profileRemoveConfirm": "Odstranit",
     "profileMethodSession": "Z tvé hlasové relace ({n, plural, one {# skladba} few {# skladby} other {# skladeb}})",
-    "profileMethodSessionPlain": "Z tvé hlasové relace"
+    "profileMethodSessionPlain": "Z tvé hlasové relace",
+    "profileActive": "Používá se pro shodu s písničkami",
+    "profileAdopt": "Použít jako můj hlas",
+    "profileAdoptFailed": "Nepodařilo se uložit jako tvůj hlas. Zkontroluj připojení a zkus to znovu.",
+    "profileCardMic": "Z tvého testu mikrofonu",
+    "profileCardSongs": "{n, plural, one {Z # písničky} few {Ze # písniček} other {Z # písniček}}",
+    "profileUnsaved": "Neuloženo jako tvůj hlas: potřebujeme víc písniček, abychom si byli jistí",
+    "profileCardSession": "Z tvé hlasové relace"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "Hudební podklad bude pronikat do mikrofonu, takže nahrávky budou mít menší váhu.",
       "posture": "V jaké poloze zpíváš?",
       "record": "Nahrávat můj zpěv?",
-      "recordBody": "Nahrávku uchováváme v soukromí, abychom mohli přesněji změřit tvůj rozsah a lépe ti vybírat písničky. Přístup k ní máš jen ty a náš tým a všechny své nahrávky můžeš kdykoli smazat v sekci Já.",
+      "recordBody": "Nahrávku bezpečně uložíme, abychom mohli přesněji změřit tvůj rozsah a v budoucnu ti lépe vybírat skladby. Poslechnout si ji můžeš jen ty a náš tým a kteroukoli ze svých nahrávek můžeš kdykoli smazat v sekci Já.",
       "sitting": "Vsedě",
       "standing": "Vstoje",
       "warm": "Plně rozezpívaný",
@@ -1751,7 +1759,37 @@
       "recordDefault": "Nahrávat mě automaticky",
       "recordDefaultBody": "Předvyplní možnost „Nahrávat můj zpěv?“, když zahájíš hlasovou relaci. Pokaždé to ale můžeš změnit.",
       "title": "Tvé nahrávky",
-      "confirmButton": "Smazat"
+      "confirmButton": "Smazat vše",
+      "counted": "Započítáno",
+      "deleteOneBody": "Nahrávka bude trvale smazána. Písnička se ti bude do hlasového výsledku dál započítávat, pokud nezvolíš možnost „Nezapočítávat“.",
+      "deleteOneTitle": "Smazat tuto nahrávku?",
+      "exclude": "Nezapočítávat",
+      "excludeBody": "Tvůj hlasový výsledek přepočítáme bez ní. To, jestli se ti písnička líbila, se ti bude do výběru dál počítat. Později ji můžeš zase započítat.",
+      "excludeConfirm": "Nezapočítávat",
+      "excludeTitle": "Nezapočítávat tuto písničku?",
+      "include": "Znovu započítat",
+      "includeBody": "Tvůj hlasový výsledek přepočítáme i s ní.",
+      "includeConfirm": "Započítat",
+      "includeTitle": "Znovu započítat tuto písničku?",
+      "noResult": "Zatím žádný výsledek",
+      "notCounted": "Nezapočítáno",
+      "outcome": {
+        "removed": "Z této relace se teď nepočítá žádná písnička, takže její hlasový výsledek byl odebrán.",
+        "reverted_to_mic": "Tvůj hlasový profil odpovídá výsledku testu mikrofonu.",
+        "unchanged": "Výsledek tvé relace byl přepočítán.",
+        "updated": "Tvůj hlasový profil byl aktualizován podle písniček, které se dál započítávají."
+      },
+      "playFailed": "Tuto nahrávku se nepodařilo přehrát. Zkontroluj připojení a zkus to znovu.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Změnu se nepodařilo provést. Zkontroluj připojení a zkus to znovu.",
+      "sessionsBody": "Poslechni si své nahrávky, vyřaď písničku z hlasového výsledku nebo nahrávku smaž.",
+      "sessionsTitle": "Tvoje relace",
+      "uploading": "Nahrávání…",
+      "deleteOne": "Smazat",
+      "deleteOneConfirm": "Smazat nahrávku",
+      "play": "Přehrát",
+      "song": "{title} · {artist}",
+      "stop": "Zastavit"
     }
   }
 }

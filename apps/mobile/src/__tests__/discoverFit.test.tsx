@@ -26,10 +26,10 @@ jest.mock('@nomad/api-decide', () => ({
   configureClient: jest.fn(),
   getRecommendationsV2: jest.fn(),
   // decide holds what this phone synced (a synced profile with none on decide is cleared as removed elsewhere).
-  getVoiceProfile: jest.fn(async () => {
+  getVoiceProfiles: jest.fn(async () => {
     const voice = jest.requireActual<typeof import('../voice/voiceStore')>('../voice/voiceStore');
     const { profile, pending } = voice.useVoiceStore.getState();
-    return profile && !pending ? voice.toVoiceProfileIn(profile) : null;
+    return { profile: profile && !pending ? voice.toVoiceProfileIn(profile) : null, mic: null, latestSession: null };
   }),
   putVoiceProfile: jest.fn(async () => ({})),
   hideSong: jest.fn(async () => {}),

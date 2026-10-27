@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# sekund igjen} other {# sekunder igjen}}",
     "singProgressLabel": "Tid igjen å synge",
     "micBusyBody": "En annen app eller en samtale bruker mikrofonen. Lukk den og prøv igjen, eller velg stemmetype i stedet.",
-    "micBusyTitle": "Mikrofonen er opptatt"
+    "micBusyTitle": "Mikrofonen er opptatt",
+    "typeUnknown": "Stemmetypen din"
   },
   "fit": {
     "fits": "Passer til stemmen din",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Sangbar, ta stemmetesten først",
     "profileRemoveConfirm": "Fjern",
     "profileMethodSession": "Fra stemmeøkten din ({n, plural, one {# sang} other {# sanger}})",
-    "profileMethodSessionPlain": "Fra stemmeøkten din"
+    "profileMethodSessionPlain": "Fra stemmeøkten din",
+    "profileActive": "Brukes til sangtilpasning",
+    "profileAdopt": "Bruk denne som stemmen min",
+    "profileAdoptFailed": "Kunne ikke lagre den som stemmen din. Sjekk tilkoblingen og prøv igjen.",
+    "profileCardMic": "Fra mikrofontesten din",
+    "profileCardSongs": "{n, plural, one {Fra # sang} other {Fra # sanger}}",
+    "profileUnsaved": "Ikke lagret som stemmen din: Vi trenger flere sanger for å være sikre",
+    "profileCardSession": "Fra stemmeøkten din"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "Kompet vil lekke inn i mikrofonen, så opptakene teller mindre.",
       "posture": "Hvordan synger du?",
       "record": "Ta opp at jeg synger?",
-      "recordBody": "Vi lagrer opptaket privat slik at vi kan måle registeret ditt mer nøyaktig og forbedre sangforslagene dine senere. Bare du og teamet vårt har tilgang til det, og du kan slette alle opptakene dine når som helst under Meg.",
+      "recordBody": "Vi laster opp opptaket og lagrer det privat, slik at vi kan måle toneomfanget ditt mer nøyaktig og forbedre sangforslagene dine senere. Bare du og teamet vårt kan lytte til det, og du kan slette ett eller alle opptakene dine når som helst under Meg.",
       "sitting": "Sittende",
       "standing": "Stående",
       "warm": "Helt oppvarmet",
@@ -1751,7 +1759,37 @@
       "recordDefault": "Gjør opptak som standard",
       "recordDefaultBody": "Forhåndsvelger «Gjør opptak når jeg synger?» når du starter en stemmeøkt. Du kan fortsatt endre dette hver gang.",
       "title": "Opptakene dine",
-      "confirmButton": "Slett"
+      "confirmButton": "Slett alle",
+      "counted": "Telt med",
+      "deleteOneBody": "Opptaket slettes for godt. Sangen teller fortsatt med i stemmeresultatet ditt med mindre du velger «Ikke tell med».",
+      "deleteOneTitle": "Slette dette opptaket?",
+      "exclude": "Ikke tell med",
+      "excludeBody": "Vi beregner stemmeresultatet ditt på nytt uten den. Om du likte sangen teller fortsatt med for anbefalingene dine. Du kan ta den med igjen senere.",
+      "excludeConfirm": "Ikke tell det med",
+      "excludeTitle": "Ikke telle med denne sangen?",
+      "include": "Tell med igjen",
+      "includeBody": "Vi beregner stemmeresultatet ditt på nytt med den.",
+      "includeConfirm": "Tell med",
+      "includeTitle": "Telle med denne sangen igjen?",
+      "noResult": "Ikke noe resultat ennå",
+      "notCounted": "Ikke telt med",
+      "outcome": {
+        "removed": "Ingen sanger fra den økten teller med nå, så stemmeresultatet ble fjernet.",
+        "reverted_to_mic": "Stemmen din er tilbakestilt til resultatet fra mikrofontesten.",
+        "unchanged": "Øktresultatet ditt ble beregnet på nytt.",
+        "updated": "Stemmen din ble oppdatert basert på sangene som fortsatt teller med."
+      },
+      "playFailed": "Kunne ikke spille av opptaket. Sjekk tilkoblingen din og prøv igjen.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Kunne ikke endre det. Sjekk tilkoblingen din og prøv igjen.",
+      "sessionsBody": "Hør på opptakene dine, stopp en sang fra å telle med i stemmeresultatet ditt, eller slett et opptak.",
+      "sessionsTitle": "Dine økter",
+      "uploading": "Laster opp…",
+      "deleteOne": "Slett",
+      "deleteOneConfirm": "Slett opptak",
+      "play": "Spill av",
+      "song": "{title} · {artist}",
+      "stop": "Stopp"
     }
   }
 }

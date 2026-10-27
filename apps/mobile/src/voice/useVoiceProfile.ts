@@ -1,13 +1,14 @@
 // The voice profile and decide (Phase 3c 18b). The phone's copy (useVoiceStore) is the source of truth for badges;
 // decide's copy follows it. A save never loses the measurement: it is stored `pending` first and stays pending
 // through offline, 5xx/503 and signed-out states until a PUT succeeds. A decide 401 only marks Discover stale.
-import { ApiError, getVoiceProfile, putVoiceProfile, type VoiceProfileOut } from '@nomad/api-decide';
+import { ApiError, getVoiceProfiles, putVoiceProfile, type VoiceProfileOut, type VoiceProfiles } from '@nomad/api-decide';
 import { VOICE_TYPES, type VoiceType } from '@nomad/core';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 
 import { useAuth } from '../auth/store';
+import { useRecFilters } from '../discover/filtersStore';
 import { useOffline } from '../net/useOffline';
 import { toVoiceProfileIn, useVoiceStore, type LocalVoiceProfile } from './voiceStore';
 
@@ -39,12 +40,23 @@ export function fromServer(o: VoiceProfileOut): LocalVoiceProfile {
 }
 
 let inFlight: Promise<void> | null = null;
+/**
+ * Set when decide reverted or removed the saved profile itself (a "Don't count" recompute) and the app couldn't read
+ * the result: the next server read made after this time is followed as-is (`followServerVoice`), even though decide's
+ * restored mic result is older than the phone's copy, which the reconcile below would otherwise keep forever.
+ */
+let followReadAfter: number | null = null;
+
+/** Follow the next server read of the voice profile, whatever its age (see `followReadAfter`). */
+export function followNextServerRead(): void {
+  followReadAfter = Date.now();
+}
 /** Date.now() when the last voice PUT started, and when the last voice GET started (the clear-on-null race guard). */
 let lastPutStartedAt = 0;
 let lastGetStartedAt = 0;
-const fetchVoice = () => {
+const fetchVoice = (): Promise<VoiceProfiles> => {
   lastGetStartedAt = Date.now();
-  return getVoiceProfile();
+  return getVoiceProfiles();
 };
 
 /**
@@ -93,6 +105,7 @@ export function sendPendingVoice(): Promise<boolean> {
  * the local copy is synced means it was removed on another phone: the local copy is cleared too. Not when it is
  * pending (not uploaded yet), was rejected by decide (400/422, never there), or a PUT started after this GET did
  * (the GET read decide before the upload landed: the launch-time flush and fetch run together).
+ * Also returns decide's mic-test result and latest session result (Me shows both), null until read.
  */
 export function useVoiceProfile() {
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
@@ -108,9 +121,17 @@ export function useVoiceProfile() {
     retry: false,
   });
 
-  const server = query.data;
+  const server = query.data === undefined ? undefined : query.data.profile;
+  const readAt = query.dataUpdatedAt;
   useEffect(() => {
     if (server === undefined) return;
+    if (followReadAfter !== null && readAt >= followReadAfter) {
+      followReadAfter = null;
+      if (!useVoiceStore.getState().pending) {
+        followServerVoice(server);
+        return;
+      }
+    }
     const { profile: mine, pending: minePending, rejected, adopt, markSynced, clear } = useVoiceStore.getState();
     if (server === null) {
       if (mine && !minePending && !rejected && lastPutStartedAt < lastGetStartedAt) clear();
@@ -118,9 +139,37 @@ export function useVoiceProfile() {
     }
     if (!mine || time(server.measured_at) > time(mine.measuredAt)) adopt(fromServer(server));
     else if (time(server.measured_at) === time(mine.measuredAt)) markSynced(mine.measuredAt);
-  }, [server]);
+  }, [server, readAt]);
 
-  return { profile, pending, isLoading: query.isLoading };
+  return {
+    profile,
+    pending,
+    isLoading: query.isLoading,
+    mic: query.data?.mic ?? null,
+    latestSession: query.data?.latestSession ?? null,
+  };
+}
+
+/** Turns off the filters that need a voice profile (Singable, sort by fit). */
+export function clearVoiceFilters(): void {
+  const { filters, set } = useRecFilters.getState();
+  if (filters.singable || filters.sort === 'fit') set({ singable: false, ...(filters.sort === 'fit' ? { sort: 'best' } : {}) });
+}
+
+/**
+ * decide changed the saved profile itself (a "Don't count" recompute, adopting a session result): the phone's copy
+ * follows it at once, even when decide's is older (a revert to the mic result), unless the phone holds a newer
+ * measurement that isn't sent yet (that one wins when it lands).
+ */
+export function followServerVoice(server: VoiceProfileOut | null): void {
+  const { pending, adopt, clear } = useVoiceStore.getState();
+  if (pending) return;
+  if (server) {
+    adopt(fromServer(server));
+    return;
+  }
+  clear();
+  clearVoiceFilters();
 }
 
 /** Settles once no voice PUT is in flight (a remove waits for it, so a PUT can never land after its DELETE). */

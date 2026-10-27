@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# segundo restante} other {# segundos restantes}}",
     "singProgressLabel": "Tempo restante para cantar",
     "micBusyBody": "Outro app ou uma chamada está usando o microfone. Encerre o uso e tente novamente, ou selecione seu tipo de voz.",
-    "micBusyTitle": "O microfone está ocupado"
+    "micBusyTitle": "O microfone está ocupado",
+    "typeUnknown": "Seu tipo de voz"
   },
   "fit": {
     "fits": "Combina com a sua voz",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Cantável, faça o teste de voz primeiro",
     "profileRemoveConfirm": "Remover",
     "profileMethodSession": "Da sua sessão de voz ({n, plural, one {# música} other {# músicas}})",
-    "profileMethodSessionPlain": "Da sua sessão de voz"
+    "profileMethodSessionPlain": "Da sua sessão de voz",
+    "profileActive": "Usado para compatibilidade de músicas",
+    "profileAdopt": "Usar como minha voz",
+    "profileAdoptFailed": "Não foi possível salvar como sua voz. Verifique sua conexão e tente novamente.",
+    "profileCardMic": "Do seu teste de microfone",
+    "profileCardSongs": "{n, plural, one {De # música} other {De # músicas}}",
+    "profileUnsaved": "Não salvo como sua voz: precisamos de mais músicas para ter certeza",
+    "profileCardSession": "Da sua sessão de voz"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "O áudio de fundo vai vazar no microfone, então as gravações terão menos precisão.",
       "posture": "Como você está cantando?",
       "record": "Gravar enquanto canto?",
-      "recordBody": "Mantemos a gravação de forma privada para medir sua extensão com mais precisão e melhorar suas recomendações depois. Apenas você e nossa equipe têm acesso, e você pode excluir todas as gravações a qualquer momento na sua conta.",
+      "recordBody": "Enviamos a gravação e a mantemos de forma privada para podermos medir sua extensão vocal com mais precisão e melhorar suas recomendações mais tarde. Apenas você e nossa equipe podem ouvi-la, e você pode excluir qualquer uma ou todas as suas gravações a qualquer momento em Eu.",
       "sitting": "Sentado(a)",
       "standing": "Em pé",
       "warm": "Totalmente aquecida",
@@ -1751,7 +1759,37 @@
       "recordDefault": "Gravar por padrão",
       "recordDefaultBody": "Deixa pré-marcado \"Gravar minha voz cantando?\" ao iniciar uma sessão de voz. Você ainda pode alterar essa opção a cada vez.",
       "title": "Suas gravações",
-      "confirmButton": "Excluir"
+      "confirmButton": "Excluir tudo",
+      "counted": "Contabilizada",
+      "deleteOneBody": "A gravação será apagada para sempre. A música continuará contando para o resultado da sua voz, a menos que você escolha \"Não contabilizar\".",
+      "deleteOneTitle": "Excluir esta gravação?",
+      "exclude": "Não contabilizar",
+      "excludeBody": "Vamos recalcular o resultado da sua voz sem ela. O fato de você ter gostado ou não da música ainda conta para as suas recomendações. Você pode contabilizá-la novamente mais tarde.",
+      "excludeConfirm": "Não contar",
+      "excludeTitle": "Não contabilizar esta música?",
+      "include": "Contabilizar novamente",
+      "includeBody": "Vamos recalcular o resultado da sua voz com ela.",
+      "includeConfirm": "Contabilizar",
+      "includeTitle": "Contabilizar esta música novamente?",
+      "noResult": "Nenhum resultado ainda",
+      "notCounted": "Não contabilizada",
+      "outcome": {
+        "removed": "Nenhuma música dessa sessão está sendo contabilizada agora, então o resultado de voz dela foi removido.",
+        "reverted_to_mic": "Sua voz voltou ao resultado do seu teste de microfone.",
+        "unchanged": "O resultado da sua sessão foi recalculado.",
+        "updated": "Sua voz foi atualizada com base nas músicas que ainda contam."
+      },
+      "playFailed": "Não foi possível reproduzir essa gravação. Verifique sua conexão e tente novamente.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Não foi possível alterar isso. Verifique sua conexão e tente novamente.",
+      "sessionsBody": "Ouça suas gravações, impeça que uma música conte para o resultado da sua voz ou exclua uma gravação.",
+      "sessionsTitle": "Suas sessões",
+      "uploading": "Enviando…",
+      "deleteOne": "Excluir",
+      "deleteOneConfirm": "Excluir gravação",
+      "play": "Reproduzir",
+      "song": "{title} · {artist}",
+      "stop": "Parar"
     }
   }
 }

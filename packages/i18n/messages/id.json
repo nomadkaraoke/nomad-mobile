@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, other {Tersisa # detik}}",
     "singProgressLabel": "Sisa waktu bernyanyi",
     "micBusyBody": "Aplikasi lain atau panggilan telepon sedang menggunakan mikrofon. Tutup aplikasi tersebut dan coba lagi, atau pilih jenis suara Anda secara manual.",
-    "micBusyTitle": "Mikrofon sedang digunakan"
+    "micBusyTitle": "Mikrofon sedang digunakan",
+    "typeUnknown": "Tipe suara Anda"
   },
   "fit": {
     "fits": "Sesuai suara Anda",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Dapat dinyanyikan, ikuti tes suara terlebih dahulu",
     "profileRemoveConfirm": "Hapus",
     "profileMethodSession": "Dari sesi suara Anda ({n, plural, other {# lagu}})",
-    "profileMethodSessionPlain": "Dari sesi suara Anda"
+    "profileMethodSessionPlain": "Dari sesi suara Anda",
+    "profileActive": "Digunakan untuk kecocokan lagu",
+    "profileAdopt": "Gunakan ini sebagai suara saya",
+    "profileAdoptFailed": "Tidak dapat menyimpannya sebagai suara Anda. Periksa koneksi Anda dan coba lagi.",
+    "profileCardMic": "Dari tes mikrofon Anda",
+    "profileCardSongs": "{n, plural, other {Dari # lagu}}",
+    "profileUnsaved": "Belum disimpan sebagai suara Anda: kami butuh lebih banyak lagu untuk memastikannya",
+    "profileCardSession": "Dari sesi suara Anda"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "Musik pengiring akan bocor ke mikrofon, sehingga rekaman kurang begitu dihitung.",
       "posture": "Bagaimana posisi Anda saat bernyanyi?",
       "record": "Rekam saya saat bernyanyi?",
-      "recordBody": "Kami menyimpan rekaman secara privat agar dapat mengukur rentang vokal Anda lebih akurat dan menyempurnakan pilihan lagu Anda nanti. Hanya Anda dan tim kami yang dapat mengaksesnya, dan Anda dapat menghapus semua rekaman kapan saja di Saya.",
+      "recordBody": "Kami mengunggah rekaman dan menyimpannya secara privat agar kami dapat mengukur rentang vokal Anda dengan lebih akurat serta meningkatkan rekomendasi lagu Anda nanti. Hanya Anda dan tim kami yang dapat mendengarkannya, dan Anda dapat menghapus rekaman Anda kapan saja di bagian Saya.",
       "sitting": "Duduk",
       "standing": "Berdiri",
       "warm": "Sudah pemanasan penuh",
@@ -1751,7 +1759,37 @@
       "recordDefault": "Rekam saya secara default",
       "recordDefaultBody": "Otomatis memilih \"Rekam saat saya bernyanyi?\" saat Anda memulai sesi suara. Anda tetap bisa mengubahnya setiap saat.",
       "title": "Rekaman Anda",
-      "confirmButton": "Hapus"
+      "confirmButton": "Hapus semua",
+      "counted": "Dihitung",
+      "deleteOneBody": "Rekaman ini akan dihapus secara permanen. Lagu ini tetap diperhitungkan dalam hasil vokalmu kecuali kamu memilih Jangan hitung.",
+      "deleteOneTitle": "Hapus rekaman ini?",
+      "exclude": "Jangan hitung",
+      "excludeBody": "Kami akan menghitung ulang hasil vokalmu tanpa lagu ini. Penilaian suka atau tidak terhadap lagu ini tetap diperhitungkan untuk rekomendasi lagumu. Kamu bisa menghitungnya lagi nanti.",
+      "excludeConfirm": "Jangan hitung",
+      "excludeTitle": "Jangan hitung lagu ini?",
+      "include": "Hitung lagi",
+      "includeBody": "Kami akan menghitung ulang hasil vokalmu dengan menyertakannya.",
+      "includeConfirm": "Hitung",
+      "includeTitle": "Hitung lagi lagu ini?",
+      "noResult": "Belum ada hasil",
+      "notCounted": "Tidak dihitung",
+      "outcome": {
+        "removed": "Tidak ada lagu dari sesi tersebut yang dihitung sekarang, jadi hasil vokalnya telah dihapus.",
+        "reverted_to_mic": "Vokalmu dikembalikan ke hasil tes mikrofonmu.",
+        "unchanged": "Hasil sesimu telah dihitung ulang.",
+        "updated": "Vokalmu telah diperbarui dari lagu-lagu yang masih dihitung."
+      },
+      "playFailed": "Tidak dapat memutar rekaman tersebut. Periksa koneksimu dan coba lagi.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Tidak dapat mengubahnya. Periksa koneksimu dan coba lagi.",
+      "sessionsBody": "Dengarkan rekamanmu, kecualikan lagu dari perhitungan hasil vokalmu, atau hapus rekaman.",
+      "sessionsTitle": "Sesi rekamanmu",
+      "uploading": "Mengunggah…",
+      "deleteOne": "Hapus",
+      "deleteOneConfirm": "Hapus rekaman",
+      "play": "Putar",
+      "song": "{title} · {artist}",
+      "stop": "Berhenti"
     }
   }
 }

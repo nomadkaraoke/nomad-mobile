@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# seconde restante} other {# secondes restantes}}",
     "singProgressLabel": "Temps de chant restant",
     "micBusyBody": "Une autre application ou un appel utilise le micro. Ferme-la et réessaie, ou choisis plutôt ton type de voix.",
-    "micBusyTitle": "Le micro est déjà utilisé"
+    "micBusyTitle": "Le micro est déjà utilisé",
+    "typeUnknown": "Ton type de voix"
   },
   "fit": {
     "fits": "Adapté à ta voix",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Chantable, fais d'abord le test vocal",
     "profileRemoveConfirm": "Retirer",
     "profileMethodSession": "D'après ta session vocale ({n, plural, one {# chanson} other {# chansons}})",
-    "profileMethodSessionPlain": "D'après ta session vocale"
+    "profileMethodSessionPlain": "D'après ta session vocale",
+    "profileActive": "Utilisé pour la compatibilité des morceaux",
+    "profileAdopt": "Utiliser comme ma voix",
+    "profileAdoptFailed": "Impossible de l'enregistrer comme ta voix. Vérifie ta connexion et réessaie.",
+    "profileCardMic": "D'après ton test de micro",
+    "profileCardSongs": "{n, plural, one {D'après # morceau} other {D'après # morceaux}}",
+    "profileUnsaved": "Non enregistré comme ta voix : nous avons besoin de plus de morceaux pour en être sûrs",
+    "profileCardSession": "D'après ta session vocale"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "La bande-son va parasiter le micro, les enregistrements seront donc moins précis.",
       "posture": "Comment chantes-tu ?",
       "record": "M'enregistrer en train de chanter ?",
-      "recordBody": "Nous conservons l'enregistrement de manière privée afin de mesurer ta tessiture plus précisément et d'améliorer tes futures suggestions. Seuls toi et notre équipe y avons accès, et tu peux supprimer tous tes enregistrements à tout moment dans Profil.",
+      "recordBody": "Nous importons l'enregistrement et le conservons de manière confidentielle afin de pouvoir mesurer ta tessiture plus précisément et d'améliorer tes suggestions par la suite. Seuls toi et notre équipe pouvez l'écouter, et tu peux supprimer l'un ou l'ensemble de tes enregistrements à tout moment dans Moi.",
       "sitting": "Assis",
       "standing": "Debout",
       "warm": "Parfaitement échauffé",
@@ -1751,7 +1759,37 @@
       "recordDefault": "M'enregistrer par défaut",
       "recordDefaultBody": "Coche automatiquement « M'enregistrer quand je chante ? » lorsque tu lances une session vocale. Tu pourras toujours modifier ce choix à chaque fois.",
       "title": "Tes enregistrements",
-      "confirmButton": "Supprimer"
+      "confirmButton": "Tout supprimer",
+      "counted": "Comptabilisé",
+      "deleteOneBody": "L'enregistrement est définitivement supprimé. Le morceau compte toujours dans le résultat de ta voix, sauf si tu choisis « Ne pas compter ».",
+      "deleteOneTitle": "Supprimer cet enregistrement ?",
+      "exclude": "Ne pas compter",
+      "excludeBody": "Nous recalculerons le résultat de ta voix sans ce morceau. Le fait que tu aies aimé ou non le morceau compte toujours pour tes recommandations. Tu pourras le recompter plus tard.",
+      "excludeConfirm": "Ne pas le compter",
+      "excludeTitle": "Ne pas compter ce morceau ?",
+      "include": "Recompter",
+      "includeBody": "Nous recalculerons le résultat de ta voix avec ce morceau.",
+      "includeConfirm": "Compter",
+      "includeTitle": "Recompter ce morceau ?",
+      "noResult": "Aucun résultat pour l'instant",
+      "notCounted": "Non comptabilisé",
+      "outcome": {
+        "removed": "Aucun morceau de cette session n'est désormais comptabilisé, son résultat vocal a donc été supprimé.",
+        "reverted_to_mic": "Ta voix a été réinitialisée selon le résultat de ton test de micro.",
+        "unchanged": "Le résultat de ta session a été recalculé.",
+        "updated": "Ta voix a été mise à jour à partir des morceaux encore comptabilisés."
+      },
+      "playFailed": "Impossible de lire cet enregistrement. Vérifie ta connexion et réessaie.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Impossible de modifier cela. Vérifie ta connexion et réessaie.",
+      "sessionsBody": "Écoute tes prises, retire un morceau du résultat de ta voix ou supprime un enregistrement.",
+      "sessionsTitle": "Tes sessions",
+      "uploading": "Téléversement…",
+      "deleteOne": "Supprimer",
+      "deleteOneConfirm": "Supprimer l'enregistrement",
+      "play": "Lecture",
+      "song": "{title} · {artist}",
+      "stop": "Arrêter"
     }
   }
 }

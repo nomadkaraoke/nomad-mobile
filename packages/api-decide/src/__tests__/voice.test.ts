@@ -5,6 +5,7 @@ import {
   getRecommendationsV2,
   getSongVocalRange,
   getVoiceProfile,
+  getVoiceProfiles,
   isWarmingUp,
   putVoiceProfile,
   type RecommendationsV2Response,
@@ -48,6 +49,18 @@ describe('voice profile', () => {
     expect(new URL(last().url).pathname).toBe('/api/my/voice');
     expect(last().method).toBe('GET');
     expect(last().headers.get('authorization')).toBe('Bearer tok');
+  });
+
+  it('getVoiceProfiles keeps the profile, the mic result and the latest session', async () => {
+    const latest = { session_id: 's1', voice_type: 'tenor', between: null, confidence_label: 'low', top_p: 0.4, low: 48, high: 70, comfort_low: 52, comfort_high: 63, attempts: 3, evidence_attempts: 3, profile_saved: false, computed_at: '2026-10-25T18:00:00Z' };
+    fetchMock.mockResolvedValue(json({ profile: OUT, mic: OUT, latest_session: latest }));
+    await expect(getVoiceProfiles()).resolves.toEqual({ profile: OUT, mic: OUT, latestSession: latest });
+    expect(new URL(last().url).pathname).toBe('/api/my/voice');
+  });
+
+  it('getVoiceProfiles: an older decide without mic / latest_session gives nulls', async () => {
+    fetchMock.mockResolvedValue(json({ profile: null }));
+    await expect(getVoiceProfiles()).resolves.toEqual({ profile: null, mic: null, latestSession: null });
   });
 
   it('getVoiceProfile is null when there is none', async () => {

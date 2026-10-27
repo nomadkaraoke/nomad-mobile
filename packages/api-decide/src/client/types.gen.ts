@@ -291,7 +291,7 @@ export type AllArtistsResponse = {
     /**
      * Artists
      */
-    artists: Array<BackendApiRoutesMyDataUserArtistResponse>;
+    artists: Array<UserArtistResponse>;
     /**
      * Total
      */
@@ -653,6 +653,37 @@ export type AttemptOut = {
      * Top P
      */
     top_p: number;
+};
+
+/**
+ * AttemptPatchIn
+ *
+ * ``PATCH /api/voice/attempts/{attempt_id}``: "Don't count this one" (and its undo).
+ */
+export type AttemptPatchIn = {
+    /**
+     * Excluded
+     */
+    excluded: boolean;
+};
+
+/**
+ * AttemptPatchOut
+ */
+export type AttemptPatchOut = {
+    /**
+     * Attempt Id
+     */
+    attempt_id: string;
+    /**
+     * Excluded
+     */
+    excluded: boolean;
+    result: SessionResultSummaryOut | null;
+    /**
+     * Profile
+     */
+    profile: 'unchanged' | 'updated' | 'reverted_to_mic' | 'removed';
 };
 
 /**
@@ -1076,6 +1107,16 @@ export type CoverageOut = {
  */
 export type CreatePlaylistRequest = {
     /**
+     * Id
+     *
+     * Client-generated id (idempotent)
+     */
+    id?: string | null;
+    /**
+     * Items
+     */
+    items?: Array<PlaylistItemIn>;
+    /**
      * Name
      *
      * Playlist name
@@ -1119,7 +1160,7 @@ export type DataSummaryResponse = {
      * Services
      */
     services: {
-        [key: string]: BackendApiRoutesMyDataServiceSummary;
+        [key: string]: ServiceSummary;
     };
     artists: ArtistsSummary;
     songs: SongsSummary;
@@ -1212,6 +1253,16 @@ export type DeleteAccountResponse = {
      * Deleted User Id
      */
     deleted_user_id: string;
+};
+
+/**
+ * DeleteUserBody
+ */
+export type DeleteUserBody = {
+    /**
+     * Email
+     */
+    email: string;
 };
 
 /**
@@ -1489,6 +1540,98 @@ export type HealthCheckResponse = {
 };
 
 /**
+ * HistoryAttemptOut
+ */
+export type HistoryAttemptOut = {
+    /**
+     * Attempt Id
+     */
+    attempt_id: string;
+    /**
+     * N
+     */
+    n: number;
+    /**
+     * Song Key
+     */
+    song_key: string;
+    /**
+     * Artist
+     */
+    artist: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Sung At
+     */
+    sung_at: string | null;
+    /**
+     * Feel
+     */
+    feel: 'loved' | 'fine' | 'not_for_me' | null;
+    /**
+     * Position
+     */
+    position: 'too_low' | 'comfortable' | 'too_high' | 'both_ends' | null;
+    /**
+     * Excluded
+     */
+    excluded?: boolean;
+    recording: HistoryRecordingOut | null;
+    /**
+     * Falsetto Notes
+     */
+    falsetto_notes?: number;
+};
+
+/**
+ * HistoryRecordingOut
+ */
+export type HistoryRecordingOut = {
+    /**
+     * Recording Id
+     */
+    recording_id: string;
+    /**
+     * Duration S
+     */
+    duration_s: number | null;
+    /**
+     * Content Type
+     */
+    content_type: string;
+    /**
+     * Bytes
+     */
+    bytes: number | null;
+};
+
+/**
+ * HistorySessionOut
+ */
+export type HistorySessionOut = {
+    /**
+     * Session Id
+     */
+    session_id: string;
+    /**
+     * Created At
+     */
+    created_at: string | null;
+    /**
+     * State
+     */
+    state: 'active' | 'abandoned' | 'done';
+    result: SessionResultSummaryOut | null;
+    /**
+     * Attempts
+     */
+    attempts: Array<HistoryAttemptOut>;
+};
+
+/**
  * ImpersonateRequest
  *
  * Request to impersonate a user.
@@ -1693,6 +1836,14 @@ export type KaraokeLogEntry = {
      */
     deleted?: boolean;
     /**
+     * Origin
+     */
+    origin?: 'live' | 'backfill' | null;
+    /**
+     * Times
+     */
+    times?: number;
+    /**
      * Box Id
      */
     box_id?: string | null;
@@ -1815,6 +1966,93 @@ export type LastFmConnectRequest = {
 };
 
 /**
+ * LibraryItem
+ */
+export type LibraryItem = {
+    /**
+     * Key
+     */
+    key: string;
+    /**
+     * Song Key
+     */
+    song_key?: string | null;
+    /**
+     * Artist
+     */
+    artist: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Times Sung
+     */
+    times_sung?: number;
+    /**
+     * Backfill Times
+     */
+    backfill_times?: number;
+    /**
+     * First Sung At
+     */
+    first_sung_at?: string | null;
+    /**
+     * Last Sung At
+     */
+    last_sung_at?: string | null;
+    /**
+     * Feel Counts
+     */
+    feel_counts?: {
+        [key: string]: number;
+    };
+    /**
+     * Latest Feel
+     */
+    latest_feel?: 'great' | 'ok' | 'bad' | null;
+    /**
+     * Latest Key
+     */
+    latest_key?: 'too_low' | 'right' | 'too_high' | null;
+    /**
+     * Crowd Pleaser Count
+     */
+    crowd_pleaser_count?: number;
+    /**
+     * Vibes
+     */
+    vibes?: Array<'party' | 'ballad' | 'warm_up' | 'duet' | 'emotional' | 'rock_out' | 'singalong'>;
+    /**
+     * Loved
+     */
+    loved?: boolean;
+    /**
+     * Hidden
+     */
+    hidden?: boolean;
+    /**
+     * Setlist Ids
+     */
+    setlist_ids?: Array<string>;
+    facets?: SongFacets | null;
+};
+
+/**
+ * LibraryResponse
+ */
+export type LibraryResponse = {
+    /**
+     * Items
+     */
+    items: Array<LibraryItem>;
+    /**
+     * Etag
+     */
+    etag: string;
+};
+
+/**
  * ListenBrainzConnectRequest
  *
  * Request to connect ListenBrainz account.
@@ -1888,6 +2126,10 @@ export type LogNight = {
      * Date
      */
     date?: string | null;
+    /**
+     * Date Precision
+     */
+    date_precision?: 'day' | 'month' | 'year' | 'unknown' | null;
 };
 
 /**
@@ -2076,6 +2318,59 @@ export type PitchSummaryIn = {
 };
 
 /**
+ * PlaylistItemIn
+ *
+ * A setlist entry as sent by a client.
+ */
+export type PlaylistItemIn = {
+    /**
+     * Item Id
+     */
+    item_id?: string | null;
+    /**
+     * Song Key
+     */
+    song_key?: string | null;
+    /**
+     * Artist
+     */
+    artist?: string;
+    /**
+     * Title
+     */
+    title?: string;
+};
+
+/**
+ * PlaylistItemOut
+ *
+ * One ordered setlist entry, with catalog facets when the song is catalogued.
+ */
+export type PlaylistItemOut = {
+    /**
+     * Item Id
+     */
+    item_id: string;
+    /**
+     * Song Key
+     */
+    song_key: string | null;
+    /**
+     * Artist
+     */
+    artist: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Added At
+     */
+    added_at: string;
+    facets?: SongFacets | null;
+};
+
+/**
  * PlaylistResponse
  *
  * Playlist information.
@@ -2109,6 +2404,14 @@ export type PlaylistResponse = {
      * Updated At
      */
     updated_at: string;
+    /**
+     * Items
+     */
+    items?: Array<PlaylistItemOut>;
+    /**
+     * Rev
+     */
+    rev?: number;
 };
 
 /**
@@ -2894,6 +3197,22 @@ export type RemoveDataResponse = {
 };
 
 /**
+ * ReplaceItemsRequest
+ *
+ * Replace a playlist's ordered items (last writer wins).
+ */
+export type ReplaceItemsRequest = {
+    /**
+     * Items
+     */
+    items: Array<PlaylistItemIn>;
+    /**
+     * Base Rev
+     */
+    base_rev?: number | null;
+};
+
+/**
  * ResultOut
  */
 export type ResultOut = {
@@ -3002,29 +3321,29 @@ export type ServiceStats = {
  */
 export type ServiceSummary = {
     /**
-     * Service Type
+     * Connected
      */
-    service_type: string;
+    connected: boolean;
     /**
-     * Service Username
+     * Username
      */
-    service_username: string;
-    /**
-     * Sync Status
-     */
-    sync_status: string;
-    /**
-     * Last Sync At
-     */
-    last_sync_at: string | null;
+    username?: string | null;
     /**
      * Tracks Synced
      */
-    tracks_synced: number;
+    tracks_synced?: number | null;
     /**
-     * Sync Error
+     * Songs Synced
      */
-    sync_error: string | null;
+    songs_synced?: number | null;
+    /**
+     * Artists Synced
+     */
+    artists_synced?: number | null;
+    /**
+     * Last Sync At
+     */
+    last_sync_at?: string | null;
 };
 
 /**
@@ -3101,6 +3420,67 @@ export type SessionPatch = {
      * Device
      */
     device?: string | null;
+};
+
+/**
+ * SessionResultSummaryOut
+ *
+ * A session's result as last computed (``voice_sessions.result_summary``): written by every
+ * ``GET .../result`` and by a "Don't count this one" recompute.
+ */
+export type SessionResultSummaryOut = {
+    /**
+     * Session Id
+     */
+    session_id: string;
+    /**
+     * Voice Type
+     */
+    voice_type: string;
+    /**
+     * Between
+     */
+    between: string | null;
+    /**
+     * Confidence Label
+     */
+    confidence_label: 'low' | 'medium' | 'high';
+    /**
+     * Top P
+     */
+    top_p: number;
+    /**
+     * Low
+     */
+    low: number;
+    /**
+     * High
+     */
+    high: number;
+    /**
+     * Comfort Low
+     */
+    comfort_low: number;
+    /**
+     * Comfort High
+     */
+    comfort_high: number;
+    /**
+     * Attempts
+     */
+    attempts: number;
+    /**
+     * Evidence Attempts
+     */
+    evidence_attempts: number;
+    /**
+     * Profile Saved
+     */
+    profile_saved: boolean;
+    /**
+     * Computed At
+     */
+    computed_at: string;
 };
 
 /**
@@ -3299,6 +3679,36 @@ export type SmartArtistRequest = {
      * Number of artists to return
      */
     count?: number;
+};
+
+/**
+ * SongFacets
+ */
+export type SongFacets = {
+    /**
+     * Mood
+     */
+    mood?: string | null;
+    /**
+     * Energy Band
+     */
+    energy_band?: 'low' | 'mid' | 'high' | null;
+    /**
+     * Has Karaoke
+     */
+    has_karaoke?: boolean;
+    /**
+     * Community
+     */
+    community?: boolean;
+    /**
+     * Karafun
+     */
+    karafun?: boolean;
+    /**
+     * Vr Tier
+     */
+    vr_tier?: string | null;
 };
 
 /**
@@ -3624,6 +4034,14 @@ export type Survey = {
      * Notes
      */
     notes?: string | null;
+    /**
+     * Vibes
+     */
+    vibes?: Array<'party' | 'ballad' | 'warm_up' | 'duet' | 'emotional' | 'rock_out' | 'singalong'>;
+    /**
+     * Reasons
+     */
+    reasons?: Array<'out_of_range' | 'too_hard' | 'crowd_quiet' | 'awkward_music' | 'too_long' | 'didnt_know_it'>;
     /**
      * Answered At
      */
@@ -4178,29 +4596,36 @@ export type UpgradeGuestResponse = {
 /**
  * UserArtistResponse
  *
- * Artist from user's listening history.
+ * An artist from user's data with merged source information.
+ *
+ * MBID-first: MusicBrainz ID is the primary identifier when available.
+ * Spotify ID is optional enrichment for images and external links.
  */
 export type UserArtistResponse = {
     /**
-     * Id
+     * Mbid
      */
-    id: string;
+    mbid?: string | null;
     /**
      * Artist Name
      */
     artist_name: string;
     /**
-     * Source
+     * Sources
      */
-    source: string;
+    sources: Array<string>;
     /**
-     * Rank
+     * Spotify Id
      */
-    rank: number;
+    spotify_id?: string | null;
     /**
-     * Time Range
+     * Spotify Rank
      */
-    time_range: string;
+    spotify_rank?: number | null;
+    /**
+     * Spotify Time Range
+     */
+    spotify_time_range?: string | null;
     /**
      * Popularity
      */
@@ -4209,6 +4634,30 @@ export type UserArtistResponse = {
      * Genres
      */
     genres?: Array<string>;
+    /**
+     * Lastfm Rank
+     */
+    lastfm_rank?: number | null;
+    /**
+     * Lastfm Playcount
+     */
+    lastfm_playcount?: number | null;
+    /**
+     * Tags
+     */
+    tags?: Array<string>;
+    /**
+     * Is Excluded
+     */
+    is_excluded?: boolean;
+    /**
+     * Is Manual
+     */
+    is_manual?: boolean;
+    /**
+     * Affinity
+     */
+    affinity?: 'love' | 'like' | 'occasionally' | null;
 };
 
 /**
@@ -4220,7 +4669,7 @@ export type UserArtistsResponse = {
     /**
      * Artists
      */
-    artists: Array<UserArtistResponse>;
+    artists: Array<BackendApiRoutesRecommendationsUserArtistResponse>;
     /**
      * Total
      */
@@ -4278,7 +4727,7 @@ export type UserDetail = {
     /**
      * Services
      */
-    services: Array<ServiceSummary>;
+    services: Array<BackendModelsAdminServiceSummary>;
     /**
      * Sync Jobs
      */
@@ -4591,6 +5040,16 @@ export type VoiceFlagsOut = {
 };
 
 /**
+ * VoiceHistoryOut
+ */
+export type VoiceHistoryOut = {
+    /**
+     * Sessions
+     */
+    sessions: Array<HistorySessionOut>;
+};
+
+/**
  * VoiceProfileOut
  */
 export type VoiceProfileOut = {
@@ -4707,9 +5166,14 @@ export type VoiceProfilePutIn = {
 
 /**
  * VoiceProfileResponse
+ *
+ * ``GET /api/my/voice``: the saved profile, the last mic-test result kept beside it, and the latest
+ * session result with evidence (saved or not), so Me can show both.
  */
 export type VoiceProfileResponse = {
     profile: VoiceProfileOut | null;
+    mic?: VoiceProfileOut | null;
+    latest_session?: SessionResultSummaryOut | null;
 };
 
 /**
@@ -4747,70 +5211,31 @@ export type YouTubeMusicImportResponse = {
 };
 
 /**
- * ServiceSummary
- *
- * Summary of a connected music service.
- */
-export type BackendApiRoutesMyDataServiceSummary = {
-    /**
-     * Connected
-     */
-    connected: boolean;
-    /**
-     * Username
-     */
-    username?: string | null;
-    /**
-     * Tracks Synced
-     */
-    tracks_synced?: number | null;
-    /**
-     * Songs Synced
-     */
-    songs_synced?: number | null;
-    /**
-     * Artists Synced
-     */
-    artists_synced?: number | null;
-    /**
-     * Last Sync At
-     */
-    last_sync_at?: string | null;
-};
-
-/**
  * UserArtistResponse
  *
- * An artist from user's data with merged source information.
- *
- * MBID-first: MusicBrainz ID is the primary identifier when available.
- * Spotify ID is optional enrichment for images and external links.
+ * Artist from user's listening history.
  */
-export type BackendApiRoutesMyDataUserArtistResponse = {
+export type BackendApiRoutesRecommendationsUserArtistResponse = {
     /**
-     * Mbid
+     * Id
      */
-    mbid?: string | null;
+    id: string;
     /**
      * Artist Name
      */
     artist_name: string;
     /**
-     * Sources
+     * Source
      */
-    sources: Array<string>;
+    source: string;
     /**
-     * Spotify Id
+     * Rank
      */
-    spotify_id?: string | null;
+    rank: number;
     /**
-     * Spotify Rank
+     * Time Range
      */
-    spotify_rank?: number | null;
-    /**
-     * Spotify Time Range
-     */
-    spotify_time_range?: string | null;
+    time_range: string;
     /**
      * Popularity
      */
@@ -4819,30 +5244,38 @@ export type BackendApiRoutesMyDataUserArtistResponse = {
      * Genres
      */
     genres?: Array<string>;
+};
+
+/**
+ * ServiceSummary
+ *
+ * Summary of a connected music service.
+ */
+export type BackendModelsAdminServiceSummary = {
     /**
-     * Lastfm Rank
+     * Service Type
      */
-    lastfm_rank?: number | null;
+    service_type: string;
     /**
-     * Lastfm Playcount
+     * Service Username
      */
-    lastfm_playcount?: number | null;
+    service_username: string;
     /**
-     * Tags
+     * Sync Status
      */
-    tags?: Array<string>;
+    sync_status: string;
     /**
-     * Is Excluded
+     * Last Sync At
      */
-    is_excluded?: boolean;
+    last_sync_at: string | null;
     /**
-     * Is Manual
+     * Tracks Synced
      */
-    is_manual?: boolean;
+    tracks_synced: number;
     /**
-     * Affinity
+     * Sync Error
      */
-    affinity?: 'love' | 'like' | 'occasionally' | null;
+    sync_error: string | null;
 };
 
 /**
@@ -7111,6 +7544,36 @@ export type UpdatePlaylistApiPlaylistsPlaylistIdPutResponses = {
 
 export type UpdatePlaylistApiPlaylistsPlaylistIdPutResponse = UpdatePlaylistApiPlaylistsPlaylistIdPutResponses[keyof UpdatePlaylistApiPlaylistsPlaylistIdPutResponses];
 
+export type ReplacePlaylistItemsApiPlaylistsPlaylistIdItemsPutData = {
+    body: ReplaceItemsRequest;
+    path: {
+        /**
+         * Playlist Id
+         */
+        playlist_id: string;
+    };
+    query?: never;
+    url: '/api/playlists/{playlist_id}/items';
+};
+
+export type ReplacePlaylistItemsApiPlaylistsPlaylistIdItemsPutErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReplacePlaylistItemsApiPlaylistsPlaylistIdItemsPutError = ReplacePlaylistItemsApiPlaylistsPlaylistIdItemsPutErrors[keyof ReplacePlaylistItemsApiPlaylistsPlaylistIdItemsPutErrors];
+
+export type ReplacePlaylistItemsApiPlaylistsPlaylistIdItemsPutResponses = {
+    /**
+     * Successful Response
+     */
+    200: PlaylistResponse;
+};
+
+export type ReplacePlaylistItemsApiPlaylistsPlaylistIdItemsPutResponse = ReplacePlaylistItemsApiPlaylistsPlaylistIdItemsPutResponses[keyof ReplacePlaylistItemsApiPlaylistsPlaylistIdItemsPutResponses];
+
 export type AddSongToPlaylistApiPlaylistsPlaylistIdSongsPostData = {
     body: AddSongRequest;
     path: {
@@ -7434,6 +7897,12 @@ export type ListKaraokeLogApiMyKaraokeLogGetData = {
          * Cursor
          */
         cursor?: string | null;
+        /**
+         * Song
+         *
+         * Library key: only that song's records
+         */
+        song?: string | null;
     };
     url: '/api/my/karaoke-log';
 };
@@ -7521,6 +7990,37 @@ export type PutKaraokeLogApiMyKaraokeLogEntryIdPutResponses = {
 
 export type PutKaraokeLogApiMyKaraokeLogEntryIdPutResponse = PutKaraokeLogApiMyKaraokeLogEntryIdPutResponses[keyof PutKaraokeLogApiMyKaraokeLogEntryIdPutResponses];
 
+export type GetLibraryApiMyLibraryGetData = {
+    body?: never;
+    headers?: {
+        /**
+         * If-None-Match
+         */
+        'if-none-match'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/my/library';
+};
+
+export type GetLibraryApiMyLibraryGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetLibraryApiMyLibraryGetError = GetLibraryApiMyLibraryGetErrors[keyof GetLibraryApiMyLibraryGetErrors];
+
+export type GetLibraryApiMyLibraryGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: LibraryResponse;
+};
+
+export type GetLibraryApiMyLibraryGetResponse = GetLibraryApiMyLibraryGetResponses[keyof GetLibraryApiMyLibraryGetResponses];
+
 export type PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteData = {
     body?: never;
     headers?: {
@@ -7607,6 +8107,43 @@ export type PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutResponses = {
 
 export type PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutResponse = PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutResponses[keyof PartnerPutKaraokeLogApiPartnerKjboxKaraokeLogEntryIdPutResponses];
 
+export type DeleteUserApiPartnerGenUsersDeleteData = {
+    body: DeleteUserBody;
+    headers?: {
+        /**
+         * X-Partner-Secret
+         */
+        'x-partner-secret'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/partner/gen/users';
+};
+
+export type DeleteUserApiPartnerGenUsersDeleteErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteUserApiPartnerGenUsersDeleteError = DeleteUserApiPartnerGenUsersDeleteErrors[keyof DeleteUserApiPartnerGenUsersDeleteErrors];
+
+export type DeleteUserApiPartnerGenUsersDeleteResponses = {
+    /**
+     * Response Delete User Api Partner Gen Users Delete
+     *
+     * Successful Response
+     */
+    200: {
+        [key: string]: {
+            [key: string]: number;
+        };
+    };
+};
+
+export type DeleteUserApiPartnerGenUsersDeleteResponse = DeleteUserApiPartnerGenUsersDeleteResponses[keyof DeleteUserApiPartnerGenUsersDeleteResponses];
+
 export type DeleteVoiceApiMyVoiceDeleteData = {
     body?: never;
     path?: never;
@@ -7679,6 +8216,22 @@ export type FlagsApiVoiceFlagsGetResponses = {
 };
 
 export type FlagsApiVoiceFlagsGetResponse = FlagsApiVoiceFlagsGetResponses[keyof FlagsApiVoiceFlagsGetResponses];
+
+export type HistoryApiVoiceHistoryGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/voice/history';
+};
+
+export type HistoryApiVoiceHistoryGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: VoiceHistoryOut;
+};
+
+export type HistoryApiVoiceHistoryGetResponse = HistoryApiVoiceHistoryGetResponses[keyof HistoryApiVoiceHistoryGetResponses];
 
 export type CreateSessionApiVoiceSessionsPostData = {
     body: SessionSetup;
@@ -7887,6 +8440,66 @@ export type SessionResultApiVoiceSessionsSessionIdResultGetResponses = {
 
 export type SessionResultApiVoiceSessionsSessionIdResultGetResponse = SessionResultApiVoiceSessionsSessionIdResultGetResponses[keyof SessionResultApiVoiceSessionsSessionIdResultGetResponses];
 
+export type AdoptSessionApiVoiceSessionsSessionIdAdoptPostData = {
+    body?: never;
+    path: {
+        /**
+         * Session Id
+         */
+        session_id: string;
+    };
+    query?: never;
+    url: '/api/voice/sessions/{session_id}/adopt';
+};
+
+export type AdoptSessionApiVoiceSessionsSessionIdAdoptPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AdoptSessionApiVoiceSessionsSessionIdAdoptPostError = AdoptSessionApiVoiceSessionsSessionIdAdoptPostErrors[keyof AdoptSessionApiVoiceSessionsSessionIdAdoptPostErrors];
+
+export type AdoptSessionApiVoiceSessionsSessionIdAdoptPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: VoiceProfileOut;
+};
+
+export type AdoptSessionApiVoiceSessionsSessionIdAdoptPostResponse = AdoptSessionApiVoiceSessionsSessionIdAdoptPostResponses[keyof AdoptSessionApiVoiceSessionsSessionIdAdoptPostResponses];
+
+export type PatchAttemptApiVoiceAttemptsAttemptIdPatchData = {
+    body: AttemptPatchIn;
+    path: {
+        /**
+         * Attempt Id
+         */
+        attempt_id: string;
+    };
+    query?: never;
+    url: '/api/voice/attempts/{attempt_id}';
+};
+
+export type PatchAttemptApiVoiceAttemptsAttemptIdPatchErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type PatchAttemptApiVoiceAttemptsAttemptIdPatchError = PatchAttemptApiVoiceAttemptsAttemptIdPatchErrors[keyof PatchAttemptApiVoiceAttemptsAttemptIdPatchErrors];
+
+export type PatchAttemptApiVoiceAttemptsAttemptIdPatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: AttemptPatchOut;
+};
+
+export type PatchAttemptApiVoiceAttemptsAttemptIdPatchResponse = PatchAttemptApiVoiceAttemptsAttemptIdPatchResponses[keyof PatchAttemptApiVoiceAttemptsAttemptIdPatchResponses];
+
 export type DeleteRecordingsApiVoiceRecordingsDeleteData = {
     body?: never;
     path?: never;
@@ -7927,6 +8540,64 @@ export type UploadRecordingApiVoiceRecordingsPostResponses = {
 };
 
 export type UploadRecordingApiVoiceRecordingsPostResponse = UploadRecordingApiVoiceRecordingsPostResponses[keyof UploadRecordingApiVoiceRecordingsPostResponses];
+
+export type DeleteRecordingApiVoiceRecordingsRecordingIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * Recording Id
+         */
+        recording_id: string;
+    };
+    query?: never;
+    url: '/api/voice/recordings/{recording_id}';
+};
+
+export type DeleteRecordingApiVoiceRecordingsRecordingIdDeleteErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteRecordingApiVoiceRecordingsRecordingIdDeleteError = DeleteRecordingApiVoiceRecordingsRecordingIdDeleteErrors[keyof DeleteRecordingApiVoiceRecordingsRecordingIdDeleteErrors];
+
+export type DeleteRecordingApiVoiceRecordingsRecordingIdDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteRecordingApiVoiceRecordingsRecordingIdDeleteResponse = DeleteRecordingApiVoiceRecordingsRecordingIdDeleteResponses[keyof DeleteRecordingApiVoiceRecordingsRecordingIdDeleteResponses];
+
+export type RecordingAudioApiVoiceRecordingsRecordingIdAudioGetData = {
+    body?: never;
+    path: {
+        /**
+         * Recording Id
+         */
+        recording_id: string;
+    };
+    query?: never;
+    url: '/api/voice/recordings/{recording_id}/audio';
+};
+
+export type RecordingAudioApiVoiceRecordingsRecordingIdAudioGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RecordingAudioApiVoiceRecordingsRecordingIdAudioGetError = RecordingAudioApiVoiceRecordingsRecordingIdAudioGetErrors[keyof RecordingAudioApiVoiceRecordingsRecordingIdAudioGetErrors];
+
+export type RecordingAudioApiVoiceRecordingsRecordingIdAudioGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
 
 export type CountRecordingsApiVoiceRecordingsCountGetData = {
     body?: never;

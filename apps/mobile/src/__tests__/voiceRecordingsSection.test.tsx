@@ -3,7 +3,9 @@
 import * as decide from '@nomad/api-decide';
 import { IntlProvider } from '@nomad/i18n';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
+import { useAudioPlayer } from 'expo-audio';
+import { File } from 'expo-file-system';
 import { renderRouter } from 'expo-router/testing-library';
 import { Alert } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -12,6 +14,9 @@ import { useAuth } from '../auth/store';
 import { appStorage } from '../storage';
 import { gen, session } from '../test-utils/genAuthMock';
 import { appRoutes } from '../test-utils/routes';
+import { RECS_KEY } from '../discover/useRecommendations';
+import { useVoiceProfile, VOICE_KEY } from '../voice/useVoiceProfile';
+import { useVoiceStore, type LocalVoiceProfile } from '../voice/voiceStore';
 import { RECORD_DEFAULT_KEY } from '../voiceSession/recordDefault';
 import { useRecordingQueue } from '../voiceSession/recording/recordingQueue';
 import { RECORDING_COUNT_KEY, RecordingsSection } from '../voiceSession/RecordingsSection';
@@ -41,24 +46,35 @@ jest.mock('@nomad/api-decide', () => ({
   listHiddenSongs: jest.fn(async () => []),
   getQuizProgress: jest.fn(async () => null),
   listMusicServices: jest.fn(async () => []),
-  getVoiceProfile: jest.fn(async () => null),
+  getVoiceProfiles: jest.fn(async () => ({ profile: null, mic: null, latestSession: null })),
   getVoiceFlags: jest.fn(),
   voiceRecordingCount: jest.fn(),
   uploadVoiceRecording: jest.fn(),
   deleteVoiceRecordings: jest.fn(),
+  getVoiceHistory: jest.fn(),
+  patchVoiceAttempt: jest.fn(),
+  deleteVoiceRecording: jest.fn(),
+  voiceRecordingAudioUrl: jest.fn((id: string) => `https://decide.test/api/voice/recordings/${encodeURIComponent(id)}/audio`),
 }));
 
 const m = (f: unknown) => f as jest.Mock;
 const METRICS = { frame: { x: 0, y: 0, width: 390, height: 844 }, insets: { top: 0, left: 0, right: 0, bottom: 0 } };
 const flags = (session_enabled: boolean) => ({ session_enabled, is_admin: false, voice_data: true, active_session_id: null });
 
+/** The app-wide voice reconcile (useVoiceSync's useVoiceProfile), mounted beside the section. */
+function VoiceSync() {
+  useVoiceProfile();
+  return null;
+}
+
 let client: QueryClient;
-const renderSection = () => {
+const renderSection = ({ withSync = false }: { withSync?: boolean } = {}) => {
   client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
     <SafeAreaProvider initialMetrics={METRICS}>
       <IntlProvider locale="en">
         <QueryClientProvider client={client}>
+          {withSync ? <VoiceSync /> : null}
           <RecordingsSection />
         </QueryClientProvider>
       </IntlProvider>
@@ -74,9 +90,69 @@ const confirmDelete = async () => {
   await act(async () => buttons.find((b) => b.style === 'destructive')!.onPress?.());
 };
 
+const SUMMARY = {
+  session_id: 'sB',
+  voice_type: 'baritone',
+  between: null,
+  confidence_label: 'low',
+  top_p: 0.5,
+  low: 45,
+  high: 69,
+  comfort_low: 50,
+  comfort_high: 60,
+  attempts: 2,
+  evidence_attempts: 1,
+  profile_saved: false,
+  computed_at: '2026-10-25T18:00:00Z',
+} as const;
+const MIC_OUT = {
+  low_midi: 43, high_midi: 67, comfort_low: 48, comfort_high: 58, voice_type: 'bass', voice_type_between: null,
+  register: null, confidence: 'medium', method: 'mic', measured_at: '2026-10-20T10:00:00.000Z', updated_at: '2026-10-20T10:00:01Z',
+} as const;
+const SESSION_LOCAL: LocalVoiceProfile = {
+  lowMidi: 46, highMidi: 70, comfortLow: 50, comfortHigh: 60, voiceType: 'baritone', voiceTypeBetween: null,
+  register: null, confidence: 'low', method: 'session', measuredAt: '2026-10-25T18:00:00.000Z', sessionId: 'sB', evidenceCount: 2,
+};
+const SESSION_OUT = {
+  low_midi: 46, high_midi: 70, comfort_low: 50, comfort_high: 60, voice_type: 'baritone', voice_type_between: null,
+  register: null, confidence: 'low', method: 'session', measured_at: '2026-10-25T18:00:00.000Z', updated_at: '2026-10-25T18:00:01Z',
+  session_id: 'sB', evidence_count: 2,
+} as const;
+const attempt = (session: string, n: number, over: Record<string, unknown> = {}) => ({
+  attempt_id: `${session}:${n}`,
+  n,
+  song_key: `song-${n}`,
+  artist: 'Alpha Band',
+  title: `Invented Song ${n}`,
+  sung_at: null,
+  feel: 'fine',
+  position: 'comfortable',
+  excluded: false,
+  recording: null,
+  falsetto_notes: 0,
+  ...over,
+});
+const REC = (id: string) => ({ recording_id: id, duration_s: 30, content_type: 'audio/mp4', bytes: 1000 });
+const HISTORY = {
+  sessions: [
+    {
+      session_id: 'sB',
+      created_at: '2026-10-25T17:00:00Z',
+      state: 'done',
+      result: SUMMARY,
+      attempts: [attempt('sB', 1, { recording: REC('rB1') }), attempt('sB', 2, { excluded: true, title: 'Made Up Tune' })],
+    },
+    { session_id: 'sA', created_at: '2026-10-20T17:00:00Z', state: 'abandoned', result: null, attempts: [attempt('sA', 1)] },
+  ],
+};
+
 beforeEach(async () => {
   jest.clearAllMocks();
   appStorage.remove(RECORD_DEFAULT_KEY);
+  useRecordingQueue.getState().clearAll();
+  act(() => useVoiceStore.getState().clear());
+  m(decide.getVoiceProfiles).mockResolvedValue({ profile: null, mic: null, latestSession: null });
+  m(decide.getVoiceHistory).mockResolvedValue(HISTORY);
   m(decide.voiceRecordingCount).mockResolvedValue(3);
   m(decide.deleteVoiceRecordings).mockResolvedValue({ deleted: 3 });
   jest.spyOn(Alert, 'alert').mockImplementation(() => {});
@@ -175,6 +251,175 @@ describe('RecordingsSection', () => {
     expect(screen.getByTestId('vs-record-default').props.value).toBe(true);
     fireEvent(screen.getByTestId('vs-record-default'), 'valueChange', false);
     expect(appStorage.getBoolean(RECORD_DEFAULT_KEY)).toBe(false);
+  });
+});
+
+describe('Your sessions (history)', () => {
+  type Player = { play: jest.Mock; pause: jest.Mock; replace: jest.Mock };
+  const player = () => m(useAudioPlayer).mock.results.at(-1)!.value as Player;
+  beforeEach(() => jest.requireActual('../test-utils/memoryFs').fsState.reset());
+
+  it('lists sessions and songs from history', async () => {
+    renderSection();
+    const s0 = await screen.findByTestId('vs-rec-session-0');
+    expect(screen.getByTestId('vs-rec-session-0-result')).toHaveTextContent('Likely Baritone · Low confidence');
+    expect(screen.getByTestId('vs-rec-session-0-date')).toHaveTextContent(/2026/);
+    expect(screen.getByTestId('vs-rec-session-1-result')).toHaveTextContent('No result yet');
+    expect(within(s0).getByTestId('vs-rec-0-1')).toHaveTextContent(/Invented Song 1.*Alpha Band/);
+    expect(screen.getByTestId('vs-rec-0-1-state')).toHaveTextContent('Counted');
+    expect(screen.getByTestId('vs-rec-0-2-state')).toHaveTextContent('Not counted');
+    expect(screen.getByTestId('vs-rec-0-2-exclude')).toHaveTextContent('Count it again');
+    // ▶ and Delete only where decide has the recording.
+    expect(screen.getByTestId('vs-rec-0-1-play')).toBeTruthy();
+    expect(screen.getByTestId('vs-rec-0-1-delete')).toBeTruthy();
+    expect(screen.queryByTestId('vs-rec-0-2-play')).toBeNull();
+    expect(screen.queryByTestId('vs-rec-0-2-delete')).toBeNull();
+    expect(screen.getByTestId('vs-rec-1-1')).toBeTruthy();
+  });
+
+  it('no sessions: no list', async () => {
+    m(decide.getVoiceHistory).mockResolvedValue({ sessions: [] });
+    renderSection();
+    await screen.findByTestId('vs-recordings-count');
+    await waitFor(() => expect(decide.getVoiceHistory).toHaveBeenCalled());
+    expect(screen.queryByTestId('vs-rec-sessions')).toBeNull();
+  });
+
+  it('play downloads and plays own recording', async () => {
+    const { fsState } = jest.requireActual('../test-utils/memoryFs');
+    fsState.remote.set('https://decide.test/api/voice/recordings/rB1/audio', new Uint8Array(12));
+    renderSection();
+    fireEvent.press(await screen.findByTestId('vs-rec-0-1-play'));
+    await waitFor(() => expect(player().play).toHaveBeenCalled());
+    const [url, , opts] = m(File.downloadFileAsync).mock.calls[0] as [string, unknown, { headers: unknown }];
+    expect(url).toBe('https://decide.test/api/voice/recordings/rB1/audio');
+    expect(opts.headers).toEqual({ Authorization: `Bearer ${useAuth.getState().getToken()}` });
+    expect(player().replace).toHaveBeenCalledWith('file:///cache/voice-playback/rB1.m4a');
+    expect(screen.getByTestId('vs-rec-0-1-play')).toHaveTextContent('Stop');
+  });
+
+  it('a failed download says so', async () => {
+    renderSection();
+    fireEvent.press(await screen.findByTestId('vs-rec-0-1-play'));
+    expect(await screen.findByTestId('vs-rec-play-error')).toBeTruthy();
+  });
+
+  it('exclude confirms, patches, refetches voice and recs', async () => {
+    act(() => useVoiceStore.getState().adopt(SESSION_LOCAL));
+    m(decide.patchVoiceAttempt).mockResolvedValue({ attempt_id: 'sB:1', excluded: true, result: SUMMARY, profile: 'reverted_to_mic' });
+    m(decide.getVoiceProfiles).mockResolvedValue({ profile: MIC_OUT, mic: MIC_OUT, latestSession: null });
+    renderSection();
+    fireEvent.press(await screen.findByTestId('vs-rec-0-1-exclude'));
+    expect(Alert.alert).toHaveBeenCalledWith("Don't count this song?", expect.stringMatching(/again without it/), expect.anything());
+    expect(decide.patchVoiceAttempt).not.toHaveBeenCalled();
+    const invalidate = jest.spyOn(client, 'invalidateQueries');
+    await confirmDelete();
+    expect(decide.patchVoiceAttempt).toHaveBeenCalledWith('sB:1', { excluded: true });
+    expect(await screen.findByTestId('vs-rec-outcome')).toHaveTextContent('Your voice is back to your mic test result.');
+    // The phone follows decide's (older) mic result at once.
+    await waitFor(() =>
+      expect(useVoiceStore.getState()).toMatchObject({ pending: false, profile: expect.objectContaining({ method: 'mic', voiceType: 'bass' }) }),
+    );
+    const keys = invalidate.mock.calls.map((c) => c[0]?.queryKey);
+    expect(keys).toEqual(expect.arrayContaining([VOICE_KEY, RECS_KEY]));
+    await waitFor(() => expect(decide.getVoiceHistory).toHaveBeenCalledTimes(2));
+  });
+
+  it('a failed read after a revert: the next server read is followed even though it is older', async () => {
+    act(() => useVoiceStore.getState().adopt(SESSION_LOCAL));
+    // On mount decide still has the session profile (the phone's copy is synced).
+    m(decide.getVoiceProfiles).mockResolvedValue({ profile: SESSION_OUT, mic: MIC_OUT, latestSession: null });
+    m(decide.patchVoiceAttempt).mockResolvedValue({ attempt_id: 'sB:1', excluded: true, result: SUMMARY, profile: 'reverted_to_mic' });
+    renderSection({ withSync: true });
+    await waitFor(() => expect(decide.getVoiceProfiles).toHaveBeenCalled());
+    fireEvent.press(await screen.findByTestId('vs-rec-0-1-exclude'));
+    // The follow-up read fails; the refetch after it sees the restored mic result (older than the phone's copy).
+    m(decide.getVoiceProfiles).mockRejectedValueOnce(new Error('offline')).mockResolvedValue({ profile: MIC_OUT, mic: MIC_OUT, latestSession: null });
+    await confirmDelete();
+    await waitFor(() =>
+      expect(useVoiceStore.getState()).toMatchObject({ pending: false, profile: expect.objectContaining({ method: 'mic' }) }),
+    );
+  });
+
+  it('without a pending follow, an older server profile still loses to the phone\'s newer copy', async () => {
+    act(() => useVoiceStore.getState().adopt(SESSION_LOCAL));
+    m(decide.getVoiceProfiles).mockResolvedValue({ profile: MIC_OUT, mic: MIC_OUT, latestSession: null });
+    renderSection({ withSync: true });
+    await waitFor(() => expect(decide.getVoiceProfiles).toHaveBeenCalled());
+    await act(async () => {});
+    expect(useVoiceStore.getState().profile?.method).toBe('session');
+  });
+
+  it('count it again needs no destructive confirm and sends excluded: false', async () => {
+    m(decide.patchVoiceAttempt).mockResolvedValue({ attempt_id: 'sB:2', excluded: false, result: SUMMARY, profile: 'unchanged' });
+    renderSection();
+    fireEvent.press(await screen.findByTestId('vs-rec-0-2-exclude'));
+    const alert = Alert.alert as jest.Mock;
+    const buttons = alert.mock.calls.at(-1)[2] as { style?: string; onPress?: () => void }[];
+    expect(buttons.some((b) => b.style === 'destructive')).toBe(false);
+    await act(async () => buttons.find((b) => b.style !== 'cancel')!.onPress?.());
+    expect(decide.patchVoiceAttempt).toHaveBeenCalledWith('sB:2', { excluded: false });
+    expect(await screen.findByTestId('vs-rec-outcome')).toHaveTextContent('Your session result was worked out again.');
+  });
+
+  it('delete confirms, drops queued take first, then calls API', async () => {
+    const order: string[] = [];
+    const drop = jest.spyOn(useRecordingQueue.getState(), 'dropAttempt').mockImplementation((sid, n) => void order.push(`queue ${sid}:${n}`));
+    m(decide.deleteVoiceRecording).mockImplementation(async (id: string) => void order.push(`api ${id}`));
+    renderSection();
+    fireEvent.press(await screen.findByTestId('vs-rec-0-1-delete'));
+    expect(decide.deleteVoiceRecording).not.toHaveBeenCalled();
+    await confirmDelete();
+    await waitFor(() => expect(order).toEqual(['queue sB:1', 'api rB1']));
+    // The list and the count are read again.
+    await waitFor(() => expect(decide.getVoiceHistory).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(decide.voiceRecordingCount).toHaveBeenCalledTimes(2));
+    drop.mockRestore();
+  });
+
+  it('pending upload row shown', async () => {
+    const { fsState } = jest.requireActual('../test-utils/memoryFs');
+    fsState.files.set('file:///document/voice-recordings/sA-1.m4a', new Uint8Array(10));
+    m(decide.uploadVoiceRecording).mockImplementation(() => new Promise(() => {}));
+    act(() =>
+      useRecordingQueue.getState().enqueue({
+        sessionId: 'sA', attemptN: 1, uri: 'file:///document/voice-recordings/sA-1.m4a', contentType: 'audio/mp4', durationS: 60, device: null,
+      }),
+    );
+    renderSection();
+    expect(await screen.findByTestId('vs-rec-1-1-pending')).toHaveTextContent('Uploading…');
+    // A queued take can be deleted before it reaches decide.
+    expect(screen.getByTestId('vs-rec-1-1-delete')).toBeTruthy();
+    expect(screen.queryByTestId('vs-rec-1-1-play')).toBeNull();
+  });
+
+  it('deleting a take that was still uploading: drops it and deletes it on decide if the upload landed', async () => {
+    const landed = { sessions: [HISTORY.sessions[0], { ...HISTORY.sessions[1], attempts: [attempt('sA', 1, { recording: REC('rA1') })] }] };
+    m(decide.getVoiceHistory).mockResolvedValueOnce(HISTORY).mockResolvedValue(landed);
+    const { fsState } = jest.requireActual('../test-utils/memoryFs');
+    fsState.files.set('file:///document/voice-recordings/sA-1.m4a', new Uint8Array(10));
+    act(() =>
+      useRecordingQueue.getState().enqueue({
+        sessionId: 'sA', attemptN: 1, uri: 'file:///document/voice-recordings/sA-1.m4a', contentType: 'audio/mp4', durationS: 60, device: null,
+      }),
+    );
+    m(decide.deleteVoiceRecording).mockResolvedValue(undefined);
+    renderSection();
+    fireEvent.press(await screen.findByTestId('vs-rec-1-1-delete'));
+    await confirmDelete();
+    await waitFor(() => expect(decide.deleteVoiceRecording).toHaveBeenCalledWith('rA1'));
+    expect(useRecordingQueue.getState().items).toEqual([]);
+  });
+
+  it('failure shows error and keeps row', async () => {
+    m(decide.patchVoiceAttempt).mockRejectedValue(new Error('offline'));
+    renderSection();
+    fireEvent.press(await screen.findByTestId('vs-rec-0-1-exclude'));
+    await confirmDelete();
+    expect(await screen.findByTestId('vs-rec-error')).toBeTruthy();
+    expect(screen.getByTestId('vs-rec-0-1')).toBeTruthy();
+    expect(screen.getByTestId('vs-rec-0-1-state')).toHaveTextContent('Counted');
+    expect(screen.queryByTestId('vs-rec-outcome')).toBeNull();
   });
 });
 

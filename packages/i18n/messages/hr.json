@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {Preostala je # sekunda} few {Preostale su # sekunde} other {Preostalo je # sekundi}}",
     "singProgressLabel": "Preostalo vrijeme za pjevanje",
     "micBusyBody": "Druga aplikacija ili poziv koristi mikrofon. Zatvori je i pokušaj ponovno ili umjesto toga odaberi svoju vrstu glasa.",
-    "micBusyTitle": "Mikrofon je zauzet"
+    "micBusyTitle": "Mikrofon je zauzet",
+    "typeUnknown": "Tvoj tip glasa"
   },
   "fit": {
     "fits": "Odgovara tvom glasu",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Može se pjevati, prvo riješi glasovni test",
     "profileRemoveConfirm": "Ukloni",
     "profileMethodSession": "Iz tvoje glasovne sesije ({n, plural, one {# pjesma} few {# pjesme} other {# pjesama}})",
-    "profileMethodSessionPlain": "Iz tvoje glasovne sesije"
+    "profileMethodSessionPlain": "Iz tvoje glasovne sesije",
+    "profileActive": "Koristi se za prilagođavanje pjesama",
+    "profileAdopt": "Postavi ovo kao moj glas",
+    "profileAdoptFailed": "Spremanje glasa nije uspjelo. Provjeri vezu i pokušaj ponovno.",
+    "profileCardMic": "Iz tvog testa mikrofona",
+    "profileCardSongs": "{n, plural, one {Iz # pjesme} few {Iz # pjesme} other {Iz # pjesama}}",
+    "profileUnsaved": "Nije spremljeno kao tvoj glas: trebamo više pjesama kako bismo bili sigurni",
+    "profileCardSession": "Iz tvoje glasovne sesije"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "Glazbena matrica će ulaziti u mikrofon, pa su snimke manje pouzdane.",
       "posture": "Kako pjevaš?",
       "record": "Snimiti moje pjevanje?",
-      "recordBody": "Snimku čuvamo privatno kako bismo točnije izmjerili tvoj raspon i kasnije poboljšali tvoj odabir pjesama. Pristup imate samo ti i naš tim, a sve svoje snimke možeš izbrisati bilo kada u dijelu Ja.",
+      "recordBody": "Prenijet ćemo snimku i čuvati je na sigurnom kako bismo preciznije izmjerili tvoj raspon i kasnije poboljšali preporuke za tebe. Možete je poslušati samo ti i naš tim, a bilo koju ili sve svoje snimke možeš izbrisati u bilo kojem trenutku pod Ja.",
       "sitting": "Sjedeći",
       "standing": "Stojeći",
       "warm": "Potpuno zagrijan",
@@ -1751,7 +1759,37 @@
       "recordDefault": "Automatski me snimaj",
       "recordDefaultBody": "Unaprijed označava opciju „Snimati me dok pjevam?” kad pokreneš glasovnu sesiju. To i dalje možeš promijeniti svaki put.",
       "title": "Tvoje snimke",
-      "confirmButton": "Izbriši"
+      "confirmButton": "Izbriši sve",
+      "counted": "Uračunato",
+      "deleteOneBody": "Snimka se trajno briše. Pjesma se i dalje računa u rezultat tvog glasa osim ako ne odabereš Nemoj računati.",
+      "deleteOneTitle": "Izbrisati ovu snimku?",
+      "exclude": "Nemoj računati",
+      "excludeBody": "Ponovno ćemo izračunati rezultat tvog glasa bez nje. To je li ti se pjesma svidjela i dalje se uzima u obzir za tvoje preporuke. Možeš je ponovno uračunati kasnije.",
+      "excludeConfirm": "Nemoj ubrojiti",
+      "excludeTitle": "Ne želiš računati ovu pjesmu?",
+      "include": "Uračunaj ponovno",
+      "includeBody": "Ponovno ćemo izračunati rezultat tvog glasa s njom.",
+      "includeConfirm": "Uračunaj",
+      "includeTitle": "Želiš li ponovno uračunati ovu pjesmu?",
+      "noResult": "Još nema rezultata",
+      "notCounted": "Nije uračunato",
+      "outcome": {
+        "removed": "Nijedna pjesma iz te sesije se više ne računa, pa je rezultat glasa za nju uklonjen.",
+        "reverted_to_mic": "Tvoj glas je vraćen na rezultat testiranja mikrofona.",
+        "unchanged": "Rezultat tvoje sesije ponovno je izračunat.",
+        "updated": "Tvoj glas ažuriran je na temelju pjesama koje se još uvijek računaju."
+      },
+      "playFailed": "Reprodukcija te snimke nije uspjela. Provjeri vezu i pokušaj ponovno.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Promjena nije uspjela. Provjeri vezu i pokušaj ponovno.",
+      "sessionsBody": "Poslušaj svoje izvedbe, izuzmi pjesmu iz računanja rezultata tvog glasa ili izbriši snimku.",
+      "sessionsTitle": "Tvoje sesije",
+      "uploading": "Učitavanje…",
+      "deleteOne": "Izbriši",
+      "deleteOneConfirm": "Izbriši snimku",
+      "play": "Reproduciraj",
+      "song": "{title} · {artist}",
+      "stop": "Zaustavi"
     }
   }
 }

@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# saniye kaldı} other {# saniye kaldı}}",
     "singProgressLabel": "Şarkı söylemek için kalan süre",
     "micBusyBody": "Mikrofonu başka bir uygulama veya arama kullanıyor. Uygulamayı kapatıp tekrar dene ya da bunun yerine ses türünü seç.",
-    "micBusyTitle": "Mikrofon meşgul"
+    "micBusyTitle": "Mikrofon meşgul",
+    "typeUnknown": "Ses türün"
   },
   "fit": {
     "fits": "Sesine uygun",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Söylenebilir, önce ses testini yap",
     "profileRemoveConfirm": "Kaldır",
     "profileMethodSession": "Ses seansından ({n, plural, one {# şarkı} other {# şarkı}})",
-    "profileMethodSessionPlain": "Ses seansından"
+    "profileMethodSessionPlain": "Ses seansından",
+    "profileActive": "Şarkı uyumu için kullanılıyor",
+    "profileAdopt": "Bunu sesim olarak kullan",
+    "profileAdoptFailed": "Sesin olarak kaydedilemedi. Bağlantını kontrol et ve tekrar dene.",
+    "profileCardMic": "Mikrofon testinden",
+    "profileCardSongs": "{n, plural, one {# şarkıdan} other {# şarkıdan}}",
+    "profileUnsaved": "Sesin olarak kaydedilmedi: Emin olmak için daha fazla şarkıya ihtiyacımız var",
+    "profileCardSession": "Ses seansından"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "Altyapı müziği mikrofona sızar, bu yüzden kayıtların doğruluk payı azalır.",
       "posture": "Nasıl şarkı söylüyorsun?",
       "record": "Şarkı söylerken sesim kaydedilsin mi?",
-      "recordBody": "Ses aralığını daha doğru ölçebilmemiz ve daha sonra sana uygun seçimleri geliştirebilmemiz için kaydı gizli tutarız. Yalnızca sen ve ekibimiz erişebilir; tüm kayıtlarını Profilim bölümünden istediğin zaman silebilirsin.",
+      "recordBody": "Ses aralığını daha doğru ölçebilmek ve daha sonra sana özel seçimleri geliştirebilmek için kaydı yüklüyor ve gizli tutuyoruz. Kaydı yalnızca sen ve ekibimiz dinleyebilir; kayıtlarının bir kısmını veya tamamını istediğin zaman Ben bölümünden silebilirsin.",
       "sitting": "Oturarak",
       "standing": "Ayakta",
       "warm": "Tamamen ısınmış",
@@ -1751,7 +1759,37 @@
       "recordDefault": "Beni varsayılan olarak kaydet",
       "recordDefaultBody": "Bir ses seansı başlattığında \"Şarkı söylerken beni kaydet?\" seçeneğini önceden seçili getirir. Bunu her zaman değiştirebilirsin.",
       "title": "Kayıtların",
-      "confirmButton": "Sil"
+      "confirmButton": "Tümünü sil",
+      "counted": "Dahil edildi",
+      "deleteOneBody": "Kayıt tamamen silinir. \"Dahil etme\"yi seçmediğin sürece bu şarkı ses sonucunda hesaba katılmaya devam eder.",
+      "deleteOneTitle": "Bu kayıt silinsin mi?",
+      "exclude": "Dahil etme",
+      "excludeBody": "Ses sonucunu bu şarkı olmadan yeniden hesaplayacağız. Şarkıyı beğenip beğenmediğin sana özel öneriler için dikkate alınmaya devam eder. Daha sonra tekrar dahil edebilirsin.",
+      "excludeConfirm": "Bunu sayma",
+      "excludeTitle": "Bu şarkı dahil edilmesin mi?",
+      "include": "Tekrar dahil et",
+      "includeBody": "Ses sonucunu bu şarkıyı da katarak yeniden hesaplayacağız.",
+      "includeConfirm": "Dahil et",
+      "includeTitle": "Bu şarkı tekrar dahil edilsin mi?",
+      "noResult": "Henüz sonuç yok",
+      "notCounted": "Dahil edilmedi",
+      "outcome": {
+        "removed": "O oturumdan artık hiçbir şarkı hesaba katılmadığı için oturumun ses sonucu kaldırıldı.",
+        "reverted_to_mic": "Ses profilin mikrofon testi sonucuna geri döndü.",
+        "unchanged": "Oturum sonucun yeniden hesaplandı.",
+        "updated": "Ses profilin, hâlâ dahil edilen şarkılara göre güncellendi."
+      },
+      "playFailed": "Kayıt oynatılamadı. Bağlantını kontrol edip tekrar dene.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Değişiklik kaydedilemedi. Bağlantını kontrol edip tekrar dene.",
+      "sessionsBody": "Kayıtlarını dinle, bir şarkının ses sonucuna dahil edilmesini engelle veya bir kaydı sil.",
+      "sessionsTitle": "Oturumların",
+      "uploading": "Yükleniyor…",
+      "deleteOne": "Sil",
+      "deleteOneConfirm": "Kaydı sil",
+      "play": "Oynat",
+      "song": "{title} · {artist}",
+      "stop": "Durdur"
     }
   }
 }

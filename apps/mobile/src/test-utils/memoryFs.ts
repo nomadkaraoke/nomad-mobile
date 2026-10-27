@@ -137,6 +137,11 @@ export class File {
     if (!this.exists) throw new Error(`no such file: ${this.uri}`);
     return new FileHandle(this.uri);
   }
+  /** Renames in place (same directory), like expo-file-system's `File.rename`. */
+  rename(name: string) {
+    if (!this.exists) throw new Error(`no such file: ${this.uri}`);
+    this.moveSync(new File(`${this.uri.slice(0, this.uri.lastIndexOf('/'))}/${name}`));
+  }
   async text() {
     const data = fsState.files.get(this.uri);
     if (!data) throw new Error(`no such file: ${this.uri}`);

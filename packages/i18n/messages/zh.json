@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {还剩 # 秒} other {还剩 # 秒}}",
     "singProgressLabel": "剩余演唱时间",
     "micBusyBody": "其他应用或通话正在占用麦克风。请将其关闭后重试，或者直接选择您的声部类型。",
-    "micBusyTitle": "麦克风被占用"
+    "micBusyTitle": "麦克风被占用",
+    "typeUnknown": "你的声部"
   },
   "fit": {
     "fits": "适合你的声线",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "适合演唱，请先进行声音测试",
     "profileRemoveConfirm": "移除",
     "profileMethodSession": "来自您的练唱环节（{n, plural, one {# 首歌曲} other {# 首歌曲}}）",
-    "profileMethodSessionPlain": "来自您的练唱环节"
+    "profileMethodSessionPlain": "来自您的练唱环节",
+    "profileActive": "用于歌曲契合度分析",
+    "profileAdopt": "将此设为我的音域",
+    "profileAdoptFailed": "无法保存为您的音域。请检查网络连接后重试。",
+    "profileCardMic": "来自您的麦克风测试",
+    "profileCardSongs": "{n, plural, other {来自 # 首歌}}",
+    "profileUnsaved": "未保存为您的音域：我们需要更多歌曲数据来确认",
+    "profileCardSession": "来自您的练唱环节"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "伴奏音乐会漏进麦克风中，这会降低录音结果的参考价值。",
       "posture": "你现在的演唱姿势是？",
       "record": "是否录制我的演唱？",
-      "recordBody": "我们会私密保存录音，以便更精准地测量你的音域，并在日后为你推荐更合适的歌曲。只有你和我们的团队可以访问录音，你也可以随时在“我的”页面中删除所有录音。",
+      "recordBody": "我们会上传并私密保存录音，以便更精准地测定您的音域并在日后为您推荐更合适的歌曲。只有您和我们的团队可以收听，且您可以随时在“我的”页面中删除部分或全部录音。",
       "sitting": "坐着",
       "standing": "站着",
       "warm": "已充分开嗓",
@@ -1751,7 +1759,37 @@
       "recordDefault": "默认录制我的声音",
       "recordDefaultBody": "在您开始练唱环节时，自动勾选“录制我的演唱？”。您每次仍可手动更改该选项。",
       "title": "您的录音",
-      "confirmButton": "删除"
+      "confirmButton": "全部删除",
+      "counted": "已计入",
+      "deleteOneBody": "录音将被永久删除。除非选择“不计入”，否则这首歌仍会计入你的声音测试结果。",
+      "deleteOneTitle": "删除此录音？",
+      "exclude": "不计入",
+      "excludeBody": "我们将在此歌曲不计入的情况下重新计算你的声音分析结果。你对这首歌的喜好仍会用于为你精选歌曲。之后你也可以随时重新计入。",
+      "excludeConfirm": "不计入",
+      "excludeTitle": "不计入这首歌？",
+      "include": "重新计入",
+      "includeBody": "我们将重新将此歌曲计入并计算你的声音分析结果。",
+      "includeConfirm": "计入",
+      "includeTitle": "重新计入这首歌？",
+      "noResult": "暂无结果",
+      "notCounted": "未计入",
+      "outcome": {
+        "removed": "该录音记录中已没有计入的歌曲，因此其声音分析结果已被移除。",
+        "reverted_to_mic": "你的声音数据已恢复为麦克风测试结果。",
+        "unchanged": "已重新计算该次录音记录的结果。",
+        "updated": "已根据保留计入的歌曲更新你的声音数据。"
+      },
+      "playFailed": "无法播放该录音。请检查网络连接后重试。",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "更改失败。请检查网络连接后重试。",
+      "sessionsBody": "试听你的录音、取消歌曲计入声音结果，或删除录音。",
+      "sessionsTitle": "你的录音记录",
+      "uploading": "正在上传…",
+      "deleteOne": "删除",
+      "deleteOneConfirm": "删除录音",
+      "play": "播放",
+      "song": "{title} · {artist}",
+      "stop": "停止"
     }
   }
 }

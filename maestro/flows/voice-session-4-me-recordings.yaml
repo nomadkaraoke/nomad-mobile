@@ -1,0 +1,118 @@
+# Voice session 4 (Phase 3d tuning batch 1, Task M3): Me → Your music profile → Your recordings lists the singer's
+# sessions and songs from decide's history. decide seeds one finished session (two songs, each with a short synthetic
+# WAV take; decide `POST /api/test/voice/seed-history`, ≥ v0.31). The flow plays a take (downloaded with the bearer,
+# then played), marks the second song "Don't count" (confirm; decide recomputes, the outcome line shows), counts it
+# again, and deletes the first song's recording (confirm; decide keeps one).
+appId: com.nomadkaraoke.mobile
+name: voice-session-4-me-recordings
+tags:
+  - voice-session
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: vs4
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-seed-history
+      DECIDE_STACK: ${DECIDE_STACK}
+      HISTORY: '{"sessions":[{"state":"done","result_summary":{"voice_type":"baritone","between":null,"confidence_label":"low","top_p":0.5,"low":45,"high":69,"comfort_low":50,"comfort_high":60,"attempts":2,"evidence_attempts":2,"profile_saved":false},"attempts":[{"song_key":"muse|starlight","artist":"Muse","title":"Starlight","quiz":{"feel":"loved","position":"comfortable"},"recording":true},{"song_key":"adele|hello","artist":"Adele","title":"Hello","quiz":{"feel":"fine","position":"too_high"},"recording":true}]}]}'
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["pop"]}'
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- scrollUntilVisible:
+    element:
+      id: "vs-rec-0-2"
+    direction: DOWN
+    timeout: 20000
+- assertVisible:
+    id: "vs-rec-session-0-result"
+    text: "Likely Baritone · Low confidence"
+- assertVisible:
+    id: "vs-rec-0-1-state"
+    text: "Counted"
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-4-recordings
+# ▶: decide streams the seeded take to its owner; the app downloads it, then plays (no error line).
+- tapOn:
+    id: "vs-rec-0-1-play"
+- waitForAnimationToEnd:
+    timeout: 3000
+- assertNotVisible:
+    id: "vs-rec-play-error"
+# Don't count the second song: a confirm (anchored below its title: the row's own button reads the same).
+- tapOn:
+    id: "vs-rec-0-2-exclude"
+- extendedWaitUntil:
+    visible: "Don't count this song\\?"
+    timeout: 10000
+# The confirm's own label ("Don't count it") differs from the row's button ("Don't count"): Maestro matches whole texts.
+- tapOn:
+    text: "Don't count it|DON'T COUNT IT"
+    below: "Don't count this song\\?"
+- extendedWaitUntil:
+    visible:
+      id: "vs-rec-outcome"
+    timeout: 15000
+- extendedWaitUntil:
+    visible:
+      id: "vs-rec-0-2-state"
+      text: "Not counted"
+    timeout: 15000
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-4-not-counted
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-history-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_EXCLUDED: "1"
+# ...and count it again (undo).
+- tapOn:
+    id: "vs-rec-0-2-exclude"
+- extendedWaitUntil:
+    visible: "Count this song again\\?"
+    timeout: 10000
+- tapOn:
+    text: "Count it|COUNT IT"
+    below: "Count this song again\\?"
+- extendedWaitUntil:
+    visible:
+      id: "vs-rec-0-2-state"
+      text: "Counted"
+    timeout: 15000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-history-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_EXCLUDED: "0"
+# Delete the first song's recording: a confirm, then decide keeps one recording and the row has no ▶.
+- tapOn:
+    id: "vs-rec-0-1-delete"
+- extendedWaitUntil:
+    visible: "Delete this recording\\?"
+    timeout: 10000
+- tapOn:
+    text: "Delete recording|DELETE RECORDING"
+    below: "Delete this recording\\?"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-recordings-count
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_COUNT: "1"
+- extendedWaitUntil:
+    notVisible:
+      id: "vs-rec-0-1-play"
+    timeout: 15000
+- assertVisible:
+    id: "vs-rec-0-2-play"
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-4-deleted-one

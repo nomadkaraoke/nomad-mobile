@@ -1,21 +1,26 @@
 import {
   adminRecordingUrl,
   adminVoiceSongs,
+  adoptVoiceSession,
   ApiError,
   configureClient,
   createVoiceSession,
+  deleteVoiceRecording,
   deleteVoiceRecordings,
   getVoiceFlags,
+  getVoiceHistory,
   getVoiceResult,
   getVoiceSession,
   isTerminalUploadError,
   isWarmingUp,
   nextVoiceSong,
+  patchVoiceAttempt,
   patchVoiceSession,
   postVoiceAttempt,
   skipVoiceSong,
   uploadVoiceRecording,
   voiceErrorCode,
+  voiceRecordingAudioUrl,
   voiceRecordingCount,
   voiceRecordingForm,
 } from '../index';
@@ -217,6 +222,79 @@ describe('recordings', () => {
   });
 });
 
+const SUMMARY = {
+  session_id: 's1',
+  voice_type: 'baritone',
+  between: null,
+  confidence_label: 'low',
+  top_p: 0.5,
+  low: 45,
+  high: 69,
+  comfort_low: 50,
+  comfort_high: 60,
+  attempts: 3,
+  evidence_attempts: 2,
+  profile_saved: false,
+  computed_at: '2026-10-25T18:00:00Z',
+} as const;
+
+describe('your voice data', () => {
+  it('getVoiceHistory', async () => {
+    const h = {
+      sessions: [
+        {
+          session_id: 's1',
+          created_at: '2026-10-25T17:00:00Z',
+          state: 'done',
+          result: SUMMARY,
+          attempts: [
+            { attempt_id: 's1:1', n: 1, song_key: 'a|t', artist: 'A', title: 'T', sung_at: null, feel: 'loved', position: 'comfortable', excluded: false, recording: { recording_id: 'r1', duration_s: 30, content_type: 'audio/mp4', bytes: 1000 }, falsetto_notes: 0 },
+          ],
+        },
+      ],
+    };
+    fetchMock.mockResolvedValue(json(h));
+    await expect(getVoiceHistory()).resolves.toEqual(h);
+    expect(last().method).toBe('GET');
+    expect(path()).toBe('/api/voice/history');
+    expect(last().headers.get('authorization')).toBe('Bearer tok');
+  });
+
+  it('voiceRecordingAudioUrl builds the owner audio URL (encoded id)', () => {
+    expect(voiceRecordingAudioUrl('s1:2')).toBe('https://decide.test/api/voice/recordings/s1%3A2/audio');
+  });
+
+  it('deleteVoiceRecording DELETEs one recording (encoded id), 204', async () => {
+    fetchMock.mockResolvedValue(noContent());
+    await expect(deleteVoiceRecording('s1:2')).resolves.toBeUndefined();
+    expect(last().method).toBe('DELETE');
+    expect(last().url).toBe('https://decide.test/api/voice/recordings/s1%3A2');
+  });
+
+  it('patchVoiceAttempt PATCHes {excluded} on the encoded attempt id', async () => {
+    const out = { attempt_id: 's1:2', excluded: true, result: SUMMARY, profile: 'reverted_to_mic' };
+    fetchMock.mockResolvedValue(json(out));
+    await expect(patchVoiceAttempt('s1:2', { excluded: true })).resolves.toEqual(out);
+    expect(last().method).toBe('PATCH');
+    expect(last().url).toBe('https://decide.test/api/voice/attempts/s1%3A2');
+    expect(await last().json()).toEqual({ excluded: true });
+  });
+
+  it('adoptVoiceSession POSTs adopt and returns the profile', async () => {
+    const prof = { low_midi: 45, high_midi: 69, comfort_low: 50, comfort_high: 60, voice_type: 'baritone', voice_type_between: null, register: null, confidence: 'low', method: 'session', measured_at: '2026-10-25T18:00:00Z', updated_at: '2026-10-25T18:00:01Z' };
+    fetchMock.mockResolvedValue(json(prof));
+    await expect(adoptVoiceSession('a/b')).resolves.toEqual(prof);
+    expect(last().method).toBe('POST');
+    expect(last().url).toBe('https://decide.test/api/voice/sessions/a%2Fb/adopt');
+  });
+
+  it('adoptVoiceSession 409 no_evidence maps', async () => {
+    fetchMock.mockResolvedValue(json({ detail: 'no_evidence' }, 409));
+    const err = await adoptVoiceSession('s1').catch((e) => e);
+    expect(voiceErrorCode(err)).toBe('no_evidence');
+  });
+});
+
 describe('admin', () => {
   it('adminVoiceSongs encodes the email', async () => {
     fetchMock.mockResolvedValue(json([]));
@@ -239,6 +317,8 @@ describe('error codes', () => {
     [409, 'session_not_active'],
     [409, 'max_attempts'],
     [409, 'recordings_deleted'],
+    [409, 'recording_deleted'],
+    [409, 'no_evidence'],
     [413, 'recording_too_large'],
     [415, 'unsupported_media_type'],
     [422, 'empty_recording'],
@@ -265,6 +345,7 @@ describe('isTerminalUploadError', () => {
     ['403 recording_not_consented', new ApiError(403, 'recording_not_consented')],
     ['403 session_forbidden', new ApiError(403, 'session_forbidden')],
     ['409 recordings_deleted', new ApiError(409, 'recordings_deleted')],
+    ['409 recording_deleted (this take was deleted on Me)', new ApiError(409, 'recording_deleted')],
     ['404 attempt_not_found', new ApiError(404, 'attempt_not_found')],
     ['404 any', new ApiError(404, 'Not Found')],
     ['413', new ApiError(413, 'recording_too_large')],

@@ -190,6 +190,28 @@ Claude's calls on the builder's other questions:
 - **Paid-user gate:** decide reads gen's user documents in the shared Firestore (as it already reads gen sessions) to check for a past credit purchase.
 - **Extra marker source:** `spotify_audio_analysis_sections` (section timing, key/tempo changes) for verse/chorus and intro-length markers.
 
+## 10c. Tuning batch 1 (2026-10-25, after Andrew's first real session)
+Plan: [docs/superpowers/plans/2026-10-25-mobile-phase3d-tuning-batch-1.md](../plans/2026-10-25-mobile-phase3d-tuning-batch-1.md) (copied from the workspace `docs/archive/2026-10-25-mobile-phase3d-tuning-batch-1-plan.md`). It overrides earlier sections where they disagree.
+
+Andrew's words (2026-10-25): "we probably need to add a way for users to hear their own recordings and optionally delete them from being counted by the system if they choose." "i agree with showing both results on Me, but I also think we need to try and figure out how to better suggest songs such that we can achieve a higher level of confidence after only 3-5 songs sung". He also went into falsetto on high notes and asked for a "Potential falsetto detected: confirm?" prompt while singing.
+
+**Decisions.**
+- **Your recordings on Me** become a list of sessions and songs (decide `GET /api/voice/history`). Each song can be played (`GET /api/voice/recordings/{id}/audio`, owner only: the app downloads with the bearer token, then plays), not counted (`PATCH /api/voice/attempts/{id} {excluded}`, undoable; decide rebuilds the result and, if the saved profile came from that session, updates it, reverts it to the mic result or removes it) and its recording deleted (`DELETE /api/voice/recordings/{id}`; a late upload of a deleted take gets 409 `recording_deleted` and the queue drops it). Takes still waiting to upload show "Uploading…". Every destructive action has a confirm.
+- **Both results on Me.** decide keeps the last mic-test result beside the saved profile (`voice_profile_mic`), and `GET /api/my/voice` returns `{profile, mic, latest_session}`. Me shows a "From your mic test" card and a "From your voice session" card (type or "between", confidence, comfort, songs, date); the card behind the saved profile is marked "Used for song fit". A session result that wasn't saved (low confidence) offers "Use this as my voice" (`POST /api/voice/sessions/{id}/adopt`).
+- **Converge in 3–5 songs** (decide only): tessitura evidence from comfortable songs, the mic test as a range-shaped prior, selection that separates the top two types among songs the singer knows and likes, comfort measured from songs rated comfortable. "Songs that suit you" are ranked by taste first.
+- **Falsetto** (later mobile PR): a live "High note: falsetto?" chip while singing (never pauses the video), a quiz catch-up with replay of the local take, a chest-only pitch summary plus note labels on submit, an optional singing-background block at setup, and a falsetto question after the mic test's high step.
+
+**Defaults for the open questions** (Andrew can change them):
+1. Replay without "Record me": nothing is kept without consent. The catch-up row shows the note and time with no ▶ (`KEEP_LOCAL_TAKE_WITHOUT_CONSENT` can change this later).
+2. "Don't count this one" removes only the voice evidence; taste labels (`user_songs`) stay.
+3. Live falsetto chip: a held note ≥ 0.6 s at ≥ 4 semitones above the running chest comfort top (3 if setup says "uses falsetto: yes", 5 if "no"); no chip until a reference exists; at most one chip per 20 s, shown for 5 s.
+
+**Gates.**
+- Simulation (mic prior, headphone pitch, seed 20261025, n = 300): exact type within 5 songs ≥ 70%, adjacent ≥ 92%, confident stop ≥ 50%; open-mic exact ≥ 60%; the 10-song gates still pass.
+- Andrew's replay (his four songs, notes ≥ A4 labelled falsetto): baritone at medium or high confidence, comfort within ±2 of 49–59.
+- Andrew's second session: 3–5 songs reach medium or better; Me shows both cards; the chip fires on falsetto notes only; he can play, exclude and delete a take, and the result updates after an exclude.
+- Privacy: deleting one recording removes the stored object; another user's ids give 404; no new collections.
+
 ## 11. Claude's calls
 - Sub-phase 3d inside Phase 3 (release scope per Andrew).
 - Embedded official YouTube player with a link fallback.

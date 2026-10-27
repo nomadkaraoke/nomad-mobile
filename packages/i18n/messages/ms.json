@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, other {Tinggal # saat}}",
     "singProgressLabel": "Masa menyanyi yang tinggal",
     "micBusyBody": "Aplikasi lain atau panggilan sedang menggunakan mikrofon. Tutup aplikasi tersebut dan cuba lagi, atau pilih jenis suara anda.",
-    "micBusyTitle": "Mikrofon sedang digunakan"
+    "micBusyTitle": "Mikrofon sedang digunakan",
+    "typeUnknown": "Jenis suara anda"
   },
   "fit": {
     "fits": "Sesuai dengan suara anda",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Boleh dinyanyikan, ambil ujian suara dahulu",
     "profileRemoveConfirm": "Alih keluar",
     "profileMethodSession": "Daripada sesi suara anda ({n, plural, other {# lagu}})",
-    "profileMethodSessionPlain": "Daripada sesi suara anda"
+    "profileMethodSessionPlain": "Daripada sesi suara anda",
+    "profileActive": "Digunakan untuk kesesuaian lagu",
+    "profileAdopt": "Gunakan ini sebagai suara saya",
+    "profileAdoptFailed": "Tidak dapat menyimpannya sebagai suara anda. Semak sambungan anda dan cuba lagi.",
+    "profileCardMic": "Daripada ujian mikrofon anda",
+    "profileCardSongs": "{n, plural, other {Daripada # lagu}}",
+    "profileUnsaved": "Tidak disimpan sebagai suara anda: kami perlukan lebih banyak lagu untuk memastikannya",
+    "profileCardSession": "Daripada sesi suara anda"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "Muzik latar akan masuk ke mikrofon, jadi rakaman menjadi kurang tepat.",
       "posture": "Bagaimanakah posisi anda menyanyi?",
       "record": "Rakam nyanyian saya?",
-      "recordBody": "Kami menyimpan rakaman secara tertutup supaya kami dapat mengukur julat suara anda dengan lebih tepat dan menambah baik pilihan lagu anda kelak. Hanya anda dan pasukan kami yang boleh mengaksesnya, dan anda boleh memadamkan semua rakaman anda pada bila-bila masa di bahagian Profil.",
+      "recordBody": "Kami memuat naik rakaman dan menyimpannya secara peribadi supaya kami dapat mengukur julat vokal anda dengan lebih tepat dan menambah baik pilihan lagu anda kemudian. Hanya anda dan pasukan kami yang boleh mendengarnya, dan anda boleh memadamkan mana-mana atau semua rakaman anda pada bila-bila masa di bahagian Saya.",
       "sitting": "Duduk",
       "standing": "Berdiri",
       "warm": "Sedia sepenuhnya",
@@ -1751,7 +1759,37 @@
       "recordDefault": "Rakam saya secara lalai",
       "recordDefaultBody": "Memilih awal-siap \"Rakam saya menyanyi?\" apabila anda memulakan sesi suara. Anda masih boleh mengubahnya pada bila-bila masa.",
       "title": "Rakaman anda",
-      "confirmButton": "Padam"
+      "confirmButton": "Padam semua",
+      "counted": "Dikira",
+      "deleteOneBody": "Rakaman ini akan dipadamkan selama-lamanya. Lagu ini masih dikira dalam keputusan suara anda melainkan anda memilih Jangan kira.",
+      "deleteOneTitle": "Padamkan rakaman ini?",
+      "exclude": "Jangan kira",
+      "excludeBody": "Kami akan mengira semula keputusan suara anda tanpanya. Sama ada anda menyukai lagu tersebut masih diambil kira untuk pilihan anda. Anda boleh memasukkannya semula dalam kiraan kemudian.",
+      "excludeConfirm": "Jangan kira ini",
+      "excludeTitle": "Jangan kira lagu ini?",
+      "include": "Kira semula",
+      "includeBody": "Kami akan mengira semula keputusan suara anda bersamanya.",
+      "includeConfirm": "Kira lagu ini",
+      "includeTitle": "Kira semula lagu ini?",
+      "noResult": "Belum ada keputusan",
+      "notCounted": "Tidak dikira",
+      "outcome": {
+        "removed": "Tiada lagu daripada sesi tersebut yang dikira sekarang, jadi keputusan suaranya telah dialih keluar.",
+        "reverted_to_mic": "Profil suara anda kembali kepada keputusan ujian mikrofon anda.",
+        "unchanged": "Keputusan sesi anda telah dikira semula.",
+        "updated": "Profil suara anda telah dikemas kini berdasarkan lagu yang masih dikira."
+      },
+      "playFailed": "Tidak dapat memainkan rakaman tersebut. Semak sambungan anda dan cuba lagi.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Tidak dapat membuat perubahan tersebut. Semak sambungan anda dan cuba lagi.",
+      "sessionsBody": "Dengar rakaman nyanyian anda, kecualikan lagu daripada kiraan keputusan suara anda, atau padamkan rakaman.",
+      "sessionsTitle": "Sesi anda",
+      "uploading": "Memuat naik…",
+      "deleteOne": "Padam",
+      "deleteOneConfirm": "Padam rakaman",
+      "play": "Mainkan",
+      "song": "{title} · {artist}",
+      "stop": "Berhenti"
     }
   }
 }

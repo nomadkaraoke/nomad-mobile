@@ -13,7 +13,9 @@ import { useClearDiscoverOnSignOut } from '../discover/useClearDiscoverOnSignOut
 import { RECS_KEY } from '../discover/useRecommendations';
 import { appStorage } from '../storage';
 import { fsState } from '../test-utils/memoryFs';
+import { VOICE_KEY } from '../voice/useVoiceProfile';
 import { profileFromSelfReport, useVoiceStore, VOICE_STORAGE_KEY } from '../voice/voiceStore';
+import { RECORDING_COUNT_KEY, VOICE_HISTORY_KEY } from '../voiceSession/useVoiceHistory';
 import { RECORD_DEFAULT_KEY } from '../voiceSession/recordDefault';
 import { RECORDING_QUEUE_KEY, useRecordingQueue } from '../voiceSession/recording/recordingQueue';
 import { useVoiceSessionStore, VOICE_SESSION_KEY } from '../voiceSession/sessionStore';
@@ -69,6 +71,17 @@ it('removes cached picks and music profile, the quiz draft and the stale flag wh
   // The voice profile is personal too.
   expect(useVoiceStore.getState().profile).toBeNull();
   expect(appStorage.getString(VOICE_STORAGE_KEY)).toBeUndefined();
+});
+
+it("drops the cached voice data (profiles, sessions history, recordings count) when the session ends", () => {
+  render();
+  queryClient.setQueryData([...VOICE_KEY, 'me@example.com'], { profile: null, mic: null, latestSession: null });
+  queryClient.setQueryData([...VOICE_HISTORY_KEY, 'me@example.com'], { sessions: [] });
+  queryClient.setQueryData([...RECORDING_COUNT_KEY, 'me@example.com'], 3);
+  useAuth.setState({ state: { status: 'signedOut' } });
+  expect(queryClient.getQueriesData({ queryKey: VOICE_KEY })).toEqual([]);
+  expect(queryClient.getQueriesData({ queryKey: VOICE_HISTORY_KEY })).toEqual([]);
+  expect(queryClient.getQueriesData({ queryKey: RECORDING_COUNT_KEY })).toEqual([]);
 });
 
 it('keeps everything while signed in', () => {

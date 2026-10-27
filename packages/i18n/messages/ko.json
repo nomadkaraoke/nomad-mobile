@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, other {#초 남음}}",
     "singProgressLabel": "노래 부를 수 있는 남은 시간",
     "micBusyBody": "다른 앱이나 통화에서 마이크를 사용하고 있어요. 해당 앱을 종료하고 다시 시도하거나, 음역대를 직접 선택해 주세요.",
-    "micBusyTitle": "마이크가 사용 중입니다"
+    "micBusyTitle": "마이크가 사용 중입니다",
+    "typeUnknown": "나의 음성 유형"
   },
   "fit": {
     "fits": "내 음역대에 맞음",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "부르기 가능한 곡 확인, 먼저 음성 테스트를 받아보세요",
     "profileRemoveConfirm": "제거",
     "profileMethodSession": "보이스 세션 기록 기반 ({n, plural, other {#곡}})",
-    "profileMethodSessionPlain": "보이스 세션 기록 기반"
+    "profileMethodSessionPlain": "보이스 세션 기록 기반",
+    "profileActive": "노래 적합도에 사용 중",
+    "profileAdopt": "내 음성 프로필로 사용하기",
+    "profileAdoptFailed": "내 음성으로 저장하지 못했어요. 네트워크 연결을 확인하고 다시 시도해 주세요.",
+    "profileCardMic": "마이크 테스트 기반",
+    "profileCardSongs": "{n, plural, other {노래 #곡 기반}}",
+    "profileUnsaved": "내 음성으로 저장되지 않음: 정확한 확인을 위해 더 많은 곡이 필요해요",
+    "profileCardSession": "보이스 세션 기록 기반"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "반주 소리가 마이크로 흘러들어가 녹음 데이터의 신뢰도가 떨어질 수 있습니다.",
       "posture": "어떤 자세로 노래하시나요?",
       "record": "노래를 녹음할까요?",
-      "recordBody": "음역대를 더 정확히 측정하고 이후 맞춤 추천을 개선하기 위해 녹음본을 비공개로 보관합니다. 본인과 저희 팀만 액세스할 수 있으며, '내 정보'에서 언제든지 녹음본을 모두 삭제할 수 있습니다.",
+      "recordBody": "음역대를 더 정확히 측정하고 맞춤 추천을 개선하기 위해 녹음본을 비공개로 안전하게 업로드 및 보관합니다. 녹음본은 회원님과 저희 팀만 들을 수 있으며, '내 정보(Me)'에서 언제든지 일부 또는 전체를 삭제하실 수 있습니다.",
       "sitting": "앉아서",
       "standing": "서서",
       "warm": "완전히 풀림",
@@ -1751,7 +1759,37 @@
       "recordDefault": "기본으로 녹음하기",
       "recordDefaultBody": "보이스 세션을 시작할 때 '노래 녹음하기'가 기본으로 선택됩니다. 매번 직접 변경하실 수도 있습니다.",
       "title": "내 녹음본",
-      "confirmButton": "삭제"
+      "confirmButton": "모두 삭제",
+      "counted": "반영됨",
+      "deleteOneBody": "녹음본이 완전히 삭제됩니다. '반영 안 함'을 선택하지 않는 한, 이 곡은 음성 분석 결과에 계속 반영됩니다.",
+      "deleteOneTitle": "이 녹음본을 삭제하시겠어요?",
+      "exclude": "반영 안 함",
+      "excludeBody": "이 곡을 제외하고 음성 분석 결과를 다시 계산합니다. 이 곡에 대한 선호도는 추천 곡에 계속 반영됩니다. 나중에 언제든 다시 반영할 수 있습니다.",
+      "excludeConfirm": "포함하지 않기",
+      "excludeTitle": "이 곡을 반영하지 않을까요?",
+      "include": "다시 반영하기",
+      "includeBody": "이 곡을 포함하여 음성 분석 결과를 다시 계산합니다.",
+      "includeConfirm": "반영하기",
+      "includeTitle": "이 곡을 다시 반영할까요?",
+      "noResult": "아직 결과가 없습니다",
+      "notCounted": "반영 안 됨",
+      "outcome": {
+        "removed": "해당 세션에 반영된 곡이 없어 음성 분석 결과가 삭제되었습니다.",
+        "reverted_to_mic": "음성 분석 결과가 마이크 테스트 결과로 되돌아갔습니다.",
+        "unchanged": "세션 결과가 다시 계산되었습니다.",
+        "updated": "현재 반영된 곡들을 바탕으로 음성 분석 결과가 업데이트되었습니다."
+      },
+      "playFailed": "녹음본을 재생할 수 없습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "변경하지 못했습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.",
+      "sessionsBody": "녹음본을 들어보거나, 음성 분석 결과에서 특정 곡을 제외하거나, 녹음본을 삭제할 수 있습니다.",
+      "sessionsTitle": "내 세션",
+      "uploading": "업로드 중…",
+      "deleteOne": "삭제",
+      "deleteOneConfirm": "녹음 삭제",
+      "play": "재생",
+      "song": "{title} · {artist}",
+      "stop": "중지"
     }
   }
 }

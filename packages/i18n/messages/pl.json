@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {została # sekunda} few {zostały # sekundy} many {zostało # sekund} other {zostało # sekund}}",
     "singProgressLabel": "Pozostały czas na śpiewanie",
     "micBusyBody": "Mikrofon jest używany przez inną aplikację lub trwające połączenie. Zamknij ją i spróbuj ponownie albo po prostu wskaż swój typ głosu.",
-    "micBusyTitle": "Mikrofon jest zajęty"
+    "micBusyTitle": "Mikrofon jest zajęty",
+    "typeUnknown": "Twój typ głosu"
   },
   "fit": {
     "fits": "Pasuje do Twojego głosu",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Do zaśpiewania – najpierw zrób test głosu",
     "profileRemoveConfirm": "Usuń",
     "profileMethodSession": "Z Twojej sesji głosowej ({n, plural, one {# utwór} few {# utwory} many {# utworów} other {# utworów}})",
-    "profileMethodSessionPlain": "Z Twojej sesji głosowej"
+    "profileMethodSessionPlain": "Z Twojej sesji głosowej",
+    "profileActive": "Używane do dopasowania piosenek",
+    "profileAdopt": "Ustaw jako mój głos",
+    "profileAdoptFailed": "Nie udało się zapisać tego jako Twój głos. Sprawdź połączenie i spróbuj ponownie.",
+    "profileCardMic": "Z Twojego testu mikrofonu",
+    "profileCardSongs": "{n, plural, one {Z # piosenki} few {Z # piosenek} many {Z # piosenek} other {Z # piosenki}}",
+    "profileUnsaved": "Niezapisane jako Twój głos: potrzebujemy więcej piosenek, aby mieć pewność",
+    "profileCardSession": "Z Twojej sesji głosowej"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "Podkład muzyczny będzie przedostawać się do mikrofonu, więc nagrania będą mniej wiarygodne.",
       "posture": "W jakiej pozycji śpiewasz?",
       "record": "Nagrać mój śpiew?",
-      "recordBody": "Przechowujemy nagranie prywatnie, aby dokładniej zmierzyć Twoją skalę głosu i później lepiej dobierać piosenki. Dostęp masz tylko Ty i nasz zespół, a wszystkie swoje nagrania możesz w każdej chwili usunąć w zakładce Ja.",
+      "recordBody": "Przesyłamy nagranie i przechowujemy je prywatnie, aby móc dokładniej zmierzyć Twoją skalę głosu i później ulepszać dobierane dla Ciebie utwory. Tylko Ty i nasz zespół możecie go odsłuchać, a w zakładce Ja możesz w każdej chwili usunąć dowolne lub wszystkie swoje nagrania.",
       "sitting": "Na siedząco",
       "standing": "Na stojąco",
       "warm": "W pełni rozgrzany",
@@ -1751,7 +1759,37 @@
       "recordDefault": "Domyślnie nagrywaj mój głos",
       "recordDefaultBody": "Automatycznie zaznacza opcję „Nagrać mój śpiew?”, gdy zaczynasz sesję głosową. Nadal możesz to zmienić za każdym razem.",
       "title": "Twoje nagrania",
-      "confirmButton": "Usuń"
+      "confirmButton": "Usuń wszystko",
+      "counted": "Uwzględniono",
+      "deleteOneBody": "Nagranie zostanie bezpowrotnie usunięte. Piosenka nadal wlicza się do wyniku Twojego głosu, chyba że wybierzesz opcję „Nie uwzględniaj”.",
+      "deleteOneTitle": "Usunąć to nagranie?",
+      "exclude": "Nie uwzględniaj",
+      "excludeBody": "Przeliczymy wynik Twojego głosu ponownie bez niej. To, czy piosenka Ci się podobała, nadal ma wpływ na Twoje rekomendacje. W każdej chwili możesz uwzględnić ją ponownie.",
+      "excludeConfirm": "Nie wliczaj tego",
+      "excludeTitle": "Nie uwzględniać tej piosenki?",
+      "include": "Uwzględnij ponownie",
+      "includeBody": "Przeliczymy wynik Twojego głosu ponownie z jej uwzględnieniem.",
+      "includeConfirm": "Uwzględnij",
+      "includeTitle": "Uwzględnić tę piosenkę ponownie?",
+      "noResult": "Brak wyniku",
+      "notCounted": "Nieuwzględnione",
+      "outcome": {
+        "removed": "Żadna piosenka z tej sesji nie jest teraz brana pod uwagę, więc wynik głosu został usunięty.",
+        "reverted_to_mic": "Twój profil głosu powrócił do wyniku testu mikrofonu.",
+        "unchanged": "Wynik Twojej sesji został przeliczony ponownie.",
+        "updated": "Twój profil głosu został zaktualizowany na podstawie piosenek, które nadal są uwzględniane."
+      },
+      "playFailed": "Nie udało się odtworzyć tego nagrania. Sprawdź połączenie z internetem i spróbuj ponownie.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Nie udało się wprowadzić zmiany. Sprawdź połączenie z internetem i spróbuj ponownie.",
+      "sessionsBody": "Odsłuchaj swoje wersje, wyklucz piosenkę z wyniku Twojego głosu lub usuń nagranie.",
+      "sessionsTitle": "Twoje sesje",
+      "uploading": "Przesyłanie…",
+      "deleteOne": "Usuń",
+      "deleteOneConfirm": "Usuń nagranie",
+      "play": "Odtwórz",
+      "song": "{title} · {artist}",
+      "stop": "Zatrzymaj"
     }
   }
 }

@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {Noch # Sekunde} other {Noch # Sekunden}}",
     "singProgressLabel": "Verbleibende Singzeit",
     "micBusyBody": "Eine andere App oder ein Anruf verwendet gerade das Mikrofon. Schließe die App bzw. beende den Anruf und versuche es erneut, oder wähle stattdessen deinen Stimmtyp aus.",
-    "micBusyTitle": "Das Mikrofon wird bereits verwendet"
+    "micBusyTitle": "Das Mikrofon wird bereits verwendet",
+    "typeUnknown": "Deine Stimmlage"
   },
   "fit": {
     "fits": "Passt zu deiner Stimme",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Singbar, mach zuerst den Stimmtest",
     "profileRemoveConfirm": "Entfernen",
     "profileMethodSession": "Aus deiner Gesangssitzung ({n, plural, one {# Song} other {# Songs}})",
-    "profileMethodSessionPlain": "Aus deiner Gesangssitzung"
+    "profileMethodSessionPlain": "Aus deiner Gesangssitzung",
+    "profileActive": "Für Song-Passung verwendet",
+    "profileAdopt": "Als meine Stimme verwenden",
+    "profileAdoptFailed": "Konnte nicht als deine Stimme gespeichert werden. Überprüfe deine Verbindung und versuche es erneut.",
+    "profileCardMic": "Aus deinem Mikrofontest",
+    "profileCardSongs": "{n, plural, one {Aus # Song} other {Aus # Songs}}",
+    "profileUnsaved": "Nicht als deine Stimme gespeichert: Wir brauchen mehr Songs, um sicher zu sein",
+    "profileCardSession": "Aus deiner Gesangssitzung"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "Die Begleitmusik dringt ins Mikrofon durch, daher sind die Aufnahmen weniger aussagekräftig.",
       "posture": "Wie singst du?",
       "record": "Gesang aufnehmen?",
-      "recordBody": "Wir speichern die Aufnahme vertraulich, um deinen Stimmumfang genauer zu bestimmen und deine Songauswahl später zu verbessern. Nur du und unser Team haben Zugriff darauf, und du kannst alle deine Aufnahmen jederzeit unter „Ich“ löschen.",
+      "recordBody": "Wir laden die Aufnahme hoch und speichern sie privat, damit wir deinen Stimmumfang genauer messen und deine Songauswahl später verbessern können. Nur du und unser Team können sie anhören, und du kannst jederzeit einzelne oder alle deine Aufnahmen unter „Ich“ löschen.",
       "sitting": "Sitzend",
       "standing": "Stehend",
       "warm": "Voll aufgewärmt",
@@ -1751,7 +1759,37 @@
       "recordDefault": "Mich standardmäßig aufnehmen",
       "recordDefaultBody": "Wählt standardmäßig „Mich beim Singen aufnehmen?“ aus, wenn du eine Gesangssitzung startest. Du kannst dies jedes Mal ändern.",
       "title": "Deine Aufnahmen",
-      "confirmButton": "Löschen"
+      "confirmButton": "Alle löschen",
+      "counted": "Gewertet",
+      "deleteOneBody": "Die Aufnahme wird endgültig gelöscht. Der Song zählt weiterhin für dein Stimmergebnis, es sei denn, du wählst „Nicht werten“.",
+      "deleteOneTitle": "Diese Aufnahme löschen?",
+      "exclude": "Nicht werten",
+      "excludeBody": "Wir berechnen dein Stimmergebnis ohne diesen Song neu. Ob dir der Song gefallen hat, wird für deine Auswahl weiterhin berücksichtigt. Du kannst ihn später wieder werten.",
+      "excludeConfirm": "Nicht mitzählen",
+      "excludeTitle": "Diesen Song nicht werten?",
+      "include": "Wieder werten",
+      "includeBody": "Wir berechnen dein Stimmergebnis mit diesem Song neu.",
+      "includeConfirm": "Werten",
+      "includeTitle": "Diesen Song wieder werten?",
+      "noResult": "Noch kein Ergebnis",
+      "notCounted": "Nicht gewertet",
+      "outcome": {
+        "removed": "Da aus dieser Session keine Songs mehr gewertet werden, wurde ihr Stimmergebnis entfernt.",
+        "reverted_to_mic": "Deine Stimme wurde auf das Ergebnis deines Mikrofontests zurückgesetzt.",
+        "unchanged": "Dein Session-Ergebnis wurde neu berechnet.",
+        "updated": "Deine Stimme wurde anhand der noch gewerteten Songs aktualisiert."
+      },
+      "playFailed": "Die Aufnahme konnte nicht abgespielt werden. Bitte überprüfe deine Verbindung und versuche es erneut.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Das konnte nicht geändert werden. Bitte überprüfe deine Verbindung und versuche es erneut.",
+      "sessionsBody": "Höre dir deine Takes an, schließe Songs von deinem Stimmergebnis aus oder lösche eine Aufnahme.",
+      "sessionsTitle": "Deine Sessions",
+      "uploading": "Wird hochgeladen…",
+      "deleteOne": "Löschen",
+      "deleteOneConfirm": "Aufnahme löschen",
+      "play": "Abspielen",
+      "song": "{title} · {artist}",
+      "stop": "Stopp"
     }
   }
 }

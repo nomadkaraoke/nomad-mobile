@@ -123,6 +123,8 @@ type RecordingQueue = {
   flush(): Promise<void>;
   /** Consent turned off: drops that session's queued takes and deletes their files. */
   dropSession(sessionId: string): void;
+  /** "Delete this recording" on Me: drops that attempt's queued take (if any) and deletes its file. */
+  dropAttempt(sessionId: string, attemptN: number): void;
   /** Drops every queued take and deletes the files ("Delete my recordings" runs this first). */
   clearAll(): void;
 };
@@ -224,6 +226,13 @@ export const useRecordingQueue = create<RecordingQueue>((set, get) => {
       save(kept);
       for (const i of gone) deleteFileQuietly(i.uri);
     },
+    dropAttempt(sessionId, attemptN) {
+      const id = `${sessionId}:${attemptN}`;
+      const [gone, kept] = partition(get().items, (i) => i.id === id);
+      if (!gone.length) return;
+      save(kept);
+      for (const i of gone) deleteFileQuietly(i.uri);
+    },
     clearAll() {
       const gone = get().items;
       save([]);
@@ -231,6 +240,14 @@ export const useRecordingQueue = create<RecordingQueue>((set, get) => {
     },
   };
 });
+
+/**
+ * Settles once no flush is running (at once when none is). An upload already in flight when a take was dropped may
+ * still have landed: "delete this recording" waits for it, then looks for the recording on decide.
+ */
+export function waitForRecordingFlush(): Promise<void> {
+  return flushing ? flushing.then(() => undefined, () => undefined) : Promise.resolve();
+}
 
 function partition<T>(xs: T[], pred: (x: T) => boolean): [T[], T[]] {
   const yes: T[] = [];

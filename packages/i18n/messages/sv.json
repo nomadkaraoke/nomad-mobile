@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# sekund kvar} other {# sekunder kvar}}",
     "singProgressLabel": "Tid kvar att sjunga",
     "micBusyBody": "En annan app eller ett samtal använder mikrofonen. Avsluta det och försök igen, eller välj din rösttyp istället.",
-    "micBusyTitle": "Mikrofonen är upptagen"
+    "micBusyTitle": "Mikrofonen är upptagen",
+    "typeUnknown": "Din rösttyp"
   },
   "fit": {
     "fits": "Passar din röst",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Sångbar, gör rösttestet först",
     "profileRemoveConfirm": "Ta bort",
     "profileMethodSession": "Från din röstsession ({n, plural, one {# låt} other {# låtar}})",
-    "profileMethodSessionPlain": "Från din röstsession"
+    "profileMethodSessionPlain": "Från din röstsession",
+    "profileActive": "Används för låtmatchning",
+    "profileAdopt": "Använd som min röst",
+    "profileAdoptFailed": "Det gick inte att spara som din röst. Kontrollera anslutningen och försök igen.",
+    "profileCardMic": "Från ditt mikrofontest",
+    "profileCardSongs": "{n, plural, one {Från # låt} other {Från # låtar}}",
+    "profileUnsaved": "Inte sparad som din röst: vi behöver fler låtar för att vara säkra",
+    "profileCardSession": "Från din röstsession"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "Bakgrundsmusiken läcker in i mikrofonen, så inspelningarna väger inte lika tungt.",
       "posture": "Hur sjunger du?",
       "record": "Spela in när jag sjunger?",
-      "recordBody": "Vi sparar inspelningen privat så att vi kan mäta ditt röstomfång mer exakt och förbättra dina låtförslag framöver. Endast du och vårt team har tillgång till den, och du kan när som helst radera alla dina inspelningar under Mig.",
+      "recordBody": "Vi laddar upp inspelningen och sparar den privat så att vi kan mäta ditt röstomfång mer exakt och ge dig bättre låtrekommendationer framöver. Bara du och vårt team kan lyssna på den, och du kan när som helst ta bort enstaka eller alla dina inspelningar under Jag.",
       "sitting": "Sittande",
       "standing": "Stående",
       "warm": "Helt uppvärmd",
@@ -1751,7 +1759,37 @@
       "recordDefault": "Spela in mig som standard",
       "recordDefaultBody": "Förväljer \"Spela in när jag sjunger?\" när du startar en röstsession. Du kan fortfarande ändra det varje gång.",
       "title": "Dina inspelningar",
-      "confirmButton": "Ta bort"
+      "confirmButton": "Ta bort alla",
+      "counted": "Räknas med",
+      "deleteOneBody": "Inspelningen raderas för gott. Låten räknas fortfarande med i ditt röstresultat om du inte väljer \"Räkna inte med\".",
+      "deleteOneTitle": "Vill du radera den här inspelningen?",
+      "exclude": "Räkna inte med",
+      "excludeBody": "Vi räknar om ditt röstresultat utan den. Om du gillade låten eller inte påverkar fortfarande dina låtrekommendationer. Du kan välja att räkna med den igen senare.",
+      "excludeConfirm": "Räkna inte med den",
+      "excludeTitle": "Ska den här låten inte räknas med?",
+      "include": "Räkna med igen",
+      "includeBody": "Vi räknar om ditt röstresultat med den.",
+      "includeConfirm": "Räkna med",
+      "includeTitle": "Vill du räkna med den här låten igen?",
+      "noResult": "Inget resultat än",
+      "notCounted": "Räknas inte med",
+      "outcome": {
+        "removed": "Inga låtar från den sessionen räknas med längre, så röstresultatet togs bort.",
+        "reverted_to_mic": "Din röstprofil är återställd till resultatet från ditt mikrofontest.",
+        "unchanged": "Ditt sessionsresultat räknades om.",
+        "updated": "Din röstprofil uppdaterades baserat på låtarna som fortfarande räknas med."
+      },
+      "playFailed": "Det gick inte att spela upp inspelningen. Kontrollera anslutningen och försök igen.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Det gick inte att ändra det. Kontrollera anslutningen och försök igen.",
+      "sessionsBody": "Lyssna på dina tagningar, välj om en låt ska räknas med i ditt röstresultat eller radera en inspelning.",
+      "sessionsTitle": "Dina sessioner",
+      "uploading": "Laddar upp…",
+      "deleteOne": "Ta bort",
+      "deleteOneConfirm": "Ta bort inspelning",
+      "play": "Spela",
+      "song": "{title} · {artist}",
+      "stop": "Stopp"
     }
   }
 }

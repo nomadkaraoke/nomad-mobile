@@ -1485,7 +1485,8 @@
     "singLeft": "{seconds, plural, one {# segundo na lang} other {# segundo na lang}}",
     "singProgressLabel": "Natitirang oras para kumanta",
     "micBusyBody": "May ibang app o tawag na gumagamit sa mikropono. Isara ito at subukang muli, o piliin na lang ang uri ng iyong boses.",
-    "micBusyTitle": "Ginagamit pa ang mikropono"
+    "micBusyTitle": "Ginagamit pa ang mikropono",
+    "typeUnknown": "Uri ng boses mo"
   },
   "fit": {
     "fits": "Bagay sa boses mo",
@@ -1525,7 +1526,14 @@
     "singableCtaLabel": "Kayang kantahin, mag-voice test muna",
     "profileRemoveConfirm": "Alisin",
     "profileMethodSession": "Mula sa iyong voice session ({n, plural, one {# kanta} other {# kanta}})",
-    "profileMethodSessionPlain": "Mula sa iyong voice session"
+    "profileMethodSessionPlain": "Mula sa iyong voice session",
+    "profileActive": "Ginagamit para sa song fit",
+    "profileAdopt": "Gamitin ito bilang boses ko",
+    "profileAdoptFailed": "Hindi mai-save bilang boses mo. Pakisuri ang iyong koneksyon at subukang muli.",
+    "profileCardMic": "Mula sa iyong mic test",
+    "profileCardSongs": "{n, plural, one {Mula sa # kanta} other {Mula sa # na kanta}}",
+    "profileUnsaved": "Hindi na-save bilang boses mo: kailangan pa namin ng mas maraming kanta para makasiguro",
+    "profileCardSession": "Mula sa iyong voice session"
   },
   "voiceSession": {
     "debug": {
@@ -1719,7 +1727,7 @@
       "noHeadphones": "Tatalbog o maririnig ang backing track sa mic, kaya hindi magiging ganoon katumpak ang recordings.",
       "posture": "Ano ang puwesto mo habang kumakanta?",
       "record": "I-record ang pagkanta ko?",
-      "recordBody": "Itatabi namin ang recording nang pribado upang mas tumpak na masukat ang iyong range at mapaganda ang mga kanta naming mairerekomenda. Ikaw at ang aming team lamang ang may access dito, at maaari mong burahin ang lahat ng iyong recordings anumang oras sa tab na Me.",
+      "recordBody": "I-a-upload namin ang recording at pananatilihing pribado ito para mas tumpak naming masukat ang iyong range at mapaganda ang iyong mga rekomendasyon sa hinaharap. Ikaw at ang aming team lamang ang makakapakinig dito, at maaari mong i-delete ang alinman o lahat ng iyong mga recording anumang oras sa Me.",
       "sitting": "Nakaupo",
       "standing": "Nakatayo",
       "warm": "Warm na warm na",
@@ -1751,7 +1759,37 @@
       "recordDefault": "I-record ako bilang default",
       "recordDefaultBody": "Awtomatikong pipiliin ang \"I-record ang aking pagkanta?\" kapag nagsimula ka ng voice session. Maaari mo pa rin itong baguhin bawat pagkakataon.",
       "title": "Iyong mga recording",
-      "confirmButton": "Burahin"
+      "confirmButton": "Burahin lahat",
+      "counted": "Kasama sa bilang",
+      "deleteOneBody": "Mabubura nang tuluyan ang recording. Kasama pa rin ang kanta sa resulta ng iyong boses maliban na lang kung pipiliin mo ang Huwag isama.",
+      "deleteOneTitle": "Burahin ang recording na ito?",
+      "exclude": "Huwag isama",
+      "excludeBody": "Kukuwentahin naming muli ang resulta ng iyong boses nang wala ito. Isasama pa rin sa iyong mga rekomendasyon kung nagustuhan mo ang kanta o hindi. Puwede mo itong isama ulit sa ibang pagkakataon.",
+      "excludeConfirm": "Huwag isama sa bilang",
+      "excludeTitle": "Huwag isama ang kantang ito?",
+      "include": "Isama ulit",
+      "includeBody": "Kukuwentahin naming muli ang resulta ng iyong boses kasama ito.",
+      "includeConfirm": "Isama ito",
+      "includeTitle": "Isama ulit ang kantang ito?",
+      "noResult": "Wala pang resulta",
+      "notCounted": "Hindi kasama sa bilang",
+      "outcome": {
+        "removed": "Walang kanta mula sa session na iyon ang kasama sa bilang ngayon, kaya inalis ang resulta ng boses nito.",
+        "reverted_to_mic": "Bumalik ang iyong boses sa resulta ng mic test mo.",
+        "unchanged": "Muling kinalkula ang resulta ng iyong session.",
+        "updated": "Na-update ang iyong boses mula sa mga kantang kasama pa rin sa bilang."
+      },
+      "playFailed": "Hindi ma-play ang recording na iyon. Pakisuri ang iyong koneksyon at subukan muli.",
+      "resultChip": "{type} · {confidence}",
+      "rowFailed": "Hindi mabago iyon. Pakisuri ang iyong koneksyon at subukan muli.",
+      "sessionsBody": "Pakinggan ang iyong takes, ihinto ang pagsama ng kanta sa resulta ng iyong boses, o magbura ng recording.",
+      "sessionsTitle": "Ang iyong mga session",
+      "uploading": "Nag-a-upload…",
+      "deleteOne": "Burahin",
+      "deleteOneConfirm": "Burahin ang recording",
+      "play": "I-play",
+      "song": "{title} · {artist}",
+      "stop": "Itigil"
     }
   }
 }

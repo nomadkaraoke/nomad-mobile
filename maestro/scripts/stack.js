@@ -2,7 +2,7 @@
 // Env (pass with runScript `env:`; STACK comes from `maestro test -e STACK=http://127.0.0.1:8010`):
 //   ACTION   setup | code | config | judge | job | scenario | review | decide-seed | decide-reset | voice-seed |
 //            voice-assert | kjbox | decide | log | fake-externals | fake-lb-user | fake-lastfm-user | lb-poll | source-counts |
-//            voice-session-assert | voice-recordings-count | voice-reset
+//            voice-session-assert | voice-recordings-count | voice-reset | voice-seed-history | voice-history-assert
 //   setup:   NAME (flow name, used in the unique email), CREDITS (default 2),
 //            USER_CONFIG (JSON, per-user fake-config knobs: fail_at, auto_approve, audio_duration_seconds,
 //            youtube_url_enabled, step_delay_seconds, judge_*), GLOBAL_CONFIG (JSON, merged over the defaults
@@ -94,6 +94,13 @@
 //            user, polled until it is EXPECT_COUNT or WAIT_MS (default 30000) passes (the app uploads in the
 //            background) -> output.voiceRecordings
 //   voice-reset: EMAIL (default output.email) -> deletes the user's voice sessions, attempts and recordings
+//   voice-seed-history: EMAIL (default output.email), HISTORY (JSON {sessions: [{state, result_summary?, attempts:
+//            [{song_key, artist, title, quiz, pitch?, recording, excluded?, demand?}]}]}, the first session the oldest)
+//            -> replaces the user's voice history (POST ${DECIDE_STACK}/api/test/voice/seed-history, decide ≥ v0.31;
+//            `recording: true` stores a short synthetic WAV) -> output.voiceHistory (JSON)
+//   voice-history-assert: TOKEN (default output.token) -> the user's own GET ${DECIDE_STACK}/api/voice/history,
+//            polled until EXPECT_EXCLUDED (attempts marked "Don't count") and / or EXPECT_RECORDINGS (attempts with a
+//            recording) hold or WAIT_MS (default 15000) passes -> output.voiceHistory (JSON)
 // Wrapped in a function: a flow can run this file more than once, and top-level `let`s must not collide.
 (function () {
   const base = (typeof STACK !== 'undefined' && STACK && STACK !== 'undefined' && STACK) || 'http://127.0.0.1:8010';
@@ -615,6 +622,47 @@
     }
     output.sourceSongs = String(row.songs);
     output.sourceArtists = String(row.artists);
+  } else if (action === 'voice-seed-history') {
+    const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+    if (!email) throw new Error('ACTION voice-seed-history needs EMAIL (or ACTION setup first)');
+    const history = envJson(typeof HISTORY !== 'undefined' ? HISTORY : undefined);
+    if (!history || !Array.isArray(history.sessions)) throw new Error('ACTION voice-seed-history needs HISTORY {sessions: [...]}');
+    const res = check(
+      http.post(decideBase + '/api/test/voice/seed-history', {
+        headers: JSON_HEADERS,
+        body: JSON.stringify({ email: email, sessions: history.sessions }),
+      }),
+      'voice history seed',
+    );
+    output.voiceHistory = JSON.stringify(res);
+  } else if (action === 'voice-history-assert') {
+    const token = envValue(typeof TOKEN !== 'undefined' ? TOKEN : undefined) || output.token;
+    if (!token) throw new Error('ACTION voice-history-assert needs TOKEN (setup output.token)');
+    const want = {
+      excluded: envValue(typeof EXPECT_EXCLUDED !== 'undefined' ? EXPECT_EXCLUDED : undefined),
+      recordings: envValue(typeof EXPECT_RECORDINGS !== 'undefined' ? EXPECT_RECORDINGS : undefined),
+    };
+    const waitMs = Number(envValue(typeof WAIT_MS !== 'undefined' ? WAIT_MS : undefined) || 15000);
+    const deadline = new Date().getTime() + waitMs;
+    let h = null;
+    let why = null;
+    do {
+      h = check(http.get(decideBase + '/api/voice/history', { headers: { Authorization: 'Bearer ' + token } }), 'voice history');
+      const attempts = h.sessions.reduce((all, s) => all.concat(s.attempts), []);
+      const excluded = attempts.filter((a) => a.excluded).length;
+      const recordings = attempts.filter((a) => a.recording).length;
+      why = null;
+      if (want.excluded !== null && excluded !== Number(want.excluded)) why = excluded + ' excluded, expected ' + want.excluded;
+      else if (want.recordings !== null && recordings !== Number(want.recordings)) why = recordings + ' recordings, expected ' + want.recordings;
+      if (why !== null) {
+        const until = new Date().getTime() + 1000;
+        while (new Date().getTime() < until) {
+          // busy-wait: the script engine has no timers
+        }
+      }
+    } while (why !== null && new Date().getTime() < deadline);
+    output.voiceHistory = JSON.stringify(h);
+    if (why !== null) throw new Error('voice history: ' + why + '\n' + JSON.stringify(h));
   } else if (action === 'voice-session-assert' || action === 'voice-recordings-count' || action === 'voice-reset') {
     const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
     if (!email) throw new Error('ACTION ' + action + ' needs EMAIL (or ACTION setup first)');

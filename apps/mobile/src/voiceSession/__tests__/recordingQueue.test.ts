@@ -10,6 +10,7 @@ import {
   uploadBackoffMs,
   useFlushRecordingQueue,
   useRecordingQueue,
+  waitForRecordingFlush,
   type RecordingUploadInput,
 } from '../recording/recordingQueue';
 
@@ -241,6 +242,49 @@ describe('recordingQueue', () => {
     expect(fsState.files.has(b.uri)).toBe(false);
     expect(fsState.files.has(c.uri)).toBe(true);
     expect(relaunch().getState().items.map((i) => i.sessionId)).toEqual(['s2']);
+  });
+
+  it('dropAttempt drops that one take (file and item) only', () => {
+    const a = take('s1', 1);
+    const b = take('s1', 2);
+    const c = take('s2', 2);
+    q().enqueue(a);
+    q().enqueue(b);
+    q().enqueue(c);
+    q().dropAttempt('s1', 2);
+    expect(q().items.map((i) => i.id)).toEqual(['s1:1', 's2:2']);
+    expect(fsState.files.has(b.uri)).toBe(false);
+    expect(fsState.files.has(a.uri)).toBe(true);
+    expect(fsState.files.has(c.uri)).toBe(true);
+    expect(relaunch().getState().items.map((i) => i.id)).toEqual(['s1:1', 's2:2']);
+    // Nothing queued for it: a no-op.
+    q().dropAttempt('s9', 1);
+    expect(q().items).toHaveLength(2);
+  });
+
+  it('a 409 recording_deleted (deleted on Me while queued) drops the take for good', async () => {
+    const t = take('s1', 1);
+    mockUpload.mockRejectedValueOnce(new ApiError(409, 'recording_deleted'));
+    q().enqueue(t);
+    await q().flush();
+    expect(q().items).toEqual([]);
+    expect(fsState.files.has(t.uri)).toBe(false);
+  });
+
+  it('waitForRecordingFlush settles once the running flush is over (and at once when none runs)', async () => {
+    await expect(waitForRecordingFlush()).resolves.toBeUndefined();
+    const t = take('s1', 1);
+    let done!: (v: unknown) => void;
+    mockUpload.mockImplementationOnce(() => new Promise((r) => (done = r)));
+    q().enqueue(t);
+    void q().flush();
+    let settled = false;
+    const waiting = waitForRecordingFlush().then(() => (settled = true));
+    await Promise.resolve();
+    expect(settled).toBe(false);
+    done({ recording_id: 'r1' });
+    await waiting;
+    expect(settled).toBe(true);
   });
 
   it('an item dropped while its upload is in flight is not put back', async () => {

@@ -1485,7 +1485,8 @@
     "typeSoprano": "Soprano",
     "registerLower": "Lower voice",
     "registerMiddle": "Middle voice",
-    "registerHigher": "Higher voice"
+    "registerHigher": "Higher voice",
+    "typeUnknown": "Your voice type"
   },
   "fit": {
     "fits": "Fits your voice",
@@ -1525,7 +1526,14 @@
     "profileRemoveConfirm": "Remove",
     "singableCtaLabel": "Singable, take the voice test first",
     "profileMethodSession": "From your voice session ({n, plural, one {# song} other {# songs}})",
-    "profileMethodSessionPlain": "From your voice session"
+    "profileMethodSessionPlain": "From your voice session",
+    "profileCardMic": "From your mic test",
+    "profileCardSession": "From your voice session",
+    "profileCardSongs": "{n, plural, one {From # song} other {From # songs}}",
+    "profileActive": "Used for song fit",
+    "profileUnsaved": "Not saved as your voice: we need more songs to be sure",
+    "profileAdopt": "Use this as my voice",
+    "profileAdoptFailed": "Couldn't save it as your voice. Check your connection and try again."
   },
   "voiceSession": {
     "debug": {
@@ -1590,7 +1598,7 @@
       "bit_warm": "A bit warmed up",
       "warm": "Fully warmed up",
       "record": "Record me singing?",
-      "recordBody": "We keep the recording privately so we can measure your range more accurately and improve your picks later. Only you and our team can access it, and you can delete all your recordings any time in Me.",
+      "recordBody": "We upload the recording and keep it privately so we can measure your range more accurately and improve your picks later. Only you and our team can listen to it, and you can delete any or all of your recordings any time in Me.",
       "headphones": "Headphones?",
       "yes": "Yes",
       "no": "No",
@@ -1748,10 +1756,40 @@
       "delete": "Delete all my recordings",
       "confirmTitle": "Delete all your recordings?",
       "confirmBody": "This erases every recording we kept from your voice sessions and stops us recording until you say yes again. It cannot be undone.",
-      "confirmButton": "Delete",
+      "confirmButton": "Delete all",
       "failed": "Could not delete your recordings. Check your connection and try again.",
       "recordDefault": "Record me by default",
-      "recordDefaultBody": "Pre-fills \"Record me singing?\" when you start a voice session. You can still change it each time."
+      "recordDefaultBody": "Pre-fills \"Record me singing?\" when you start a voice session. You can still change it each time.",
+      "sessionsTitle": "Your sessions",
+      "sessionsBody": "Listen to your takes, stop a song counting toward your voice result, or delete a recording.",
+      "resultChip": "{type} · {confidence}",
+      "noResult": "No result yet",
+      "song": "{title} · {artist}",
+      "counted": "Counted",
+      "notCounted": "Not counted",
+      "uploading": "Uploading…",
+      "play": "Play",
+      "stop": "Stop",
+      "exclude": "Don't count",
+      "include": "Count it again",
+      "excludeTitle": "Don't count this song?",
+      "excludeBody": "We'll work out your voice result again without it. Whether you liked the song still counts for your picks. You can count it again later.",
+      "excludeConfirm": "Don't count it",
+      "includeTitle": "Count this song again?",
+      "includeBody": "We'll work out your voice result again with it.",
+      "includeConfirm": "Count it",
+      "deleteOne": "Delete",
+      "deleteOneTitle": "Delete this recording?",
+      "deleteOneBody": "The recording is erased for good. The song still counts toward your voice result unless you choose Don't count.",
+      "deleteOneConfirm": "Delete recording",
+      "outcome": {
+        "unchanged": "Your session result was worked out again.",
+        "updated": "Your voice was updated from the songs that still count.",
+        "reverted_to_mic": "Your voice is back to your mic test result.",
+        "removed": "No songs from that session count now, so its voice result was removed."
+      },
+      "rowFailed": "Couldn't change that. Check your connection and try again.",
+      "playFailed": "Couldn't play that recording. Check your connection and try again."
     }
   }
 }
