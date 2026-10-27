@@ -308,12 +308,19 @@ start_metro() {
     fi
     sleep 2
   done
-  # E2E_WARM_BUNDLE=1 (CI): build the bundle once now, so the first launch.yaml doesn't time out (60 s) while a cold
-  # runner transforms every module. Metro's transform cache is per file, so the app's own request reuses it.
+  # E2E_WARM_BUNDLE=1 (CI): build the bundle once now, so the first launch doesn't time out while a cold runner
+  # transforms every module. Warm the exact URL the dev client will load (the launchAsset of Metro's Expo manifest:
+  # Hermes, bytecode, React Compiler, lazy routes). A generic ?platform=…&dev=true URL has other transform options and
+  # shares nothing with it, and on a slow runner the dev launcher's short request timeout then gave up on Metro and
+  # showed its server list (every hosted iOS flow failed at launch).
   if [[ "${E2E_WARM_BUNDLE:-}" == 1 ]]; then
-    echo "Warming the $PLATFORM bundle…"
-    curl -sf -m 900 -o /dev/null "http://127.0.0.1:$METRO_PORT/node_modules/expo-router/entry.bundle?platform=$PLATFORM&dev=true&minify=false" ||
-      echo "warning: bundle warm-up failed; the first flow may time out" >&2
+    local bundle
+    bundle="$(curl -sf -m 120 -H "expo-platform: $PLATFORM" -H 'Accept: application/expo+json,application/json' \
+      "http://127.0.0.1:$METRO_PORT" | node -e 'let s = ""; process.stdin.on("data", (d) => (s += d)).on("end", () => {
+        try { console.log(JSON.parse(s).launchAsset.url); } catch { console.log(""); } });')"
+    [[ -n "$bundle" ]] || bundle="http://127.0.0.1:$METRO_PORT/node_modules/expo-router/entry.bundle?platform=$PLATFORM&dev=true&minify=false"
+    echo "Warming the $PLATFORM bundle: $bundle"
+    curl -sf -m 900 -o /dev/null "$bundle" || echo "warning: bundle warm-up failed; the first flow may time out" >&2
   fi
 }
 
