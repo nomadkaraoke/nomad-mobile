@@ -1790,6 +1790,17 @@
       "play": "Oynat",
       "song": "{title} · {artist}",
       "stop": "Durdur"
+    },
+    "personal": {
+      "body": "En çok dinlediğin şarkılardan en fazla {cap} tanesini bu gece hazırlayacağız.",
+      "cap": "{date} tarihinde tekrar talep edebilirsin",
+      "failed": "Şu anda istek gönderilemedi. Bir dakika sonra tekrar dene.",
+      "nothingToAdd": "En çok dinlediğin şarkıları zaten aldık. Biraz daha müzik dinledikten sonra tekrar dene.",
+      "paused": "Şu anda yoğunluk var, yarın tekrar dene",
+      "preparing": "{total, plural, one {Şarkılarından # tanesi hazırlanıyor…} other {Şarkılarından # tanesi hazırlanıyor…}}",
+      "ready": "{ready, plural, one {Şarkılarından # tanesi hazır — kendi sesini keşfet} other {Şarkılarından # tanesi hazır — kendi sesini keşfet}}",
+      "request": "Şarkılarımı hazırla",
+      "title": "Müziğimi analiz et"
     }
   }
 }

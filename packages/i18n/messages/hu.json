@@ -1790,6 +1790,17 @@
       "play": "Lejátszás",
       "song": "{title} · {artist}",
       "stop": "Leállítás"
+    },
+    "personal": {
+      "body": "Egy éjszaka alatt előkészítünk akár {cap} dalt a legtöbbet hallgatottak közül.",
+      "cap": "Legközelebb ekkor kérheted: {date}",
+      "failed": "Most nem sikerült elküldeni a kérést. Próbáld újra egy perc múlva.",
+      "nothingToAdd": "A kedvenc dalaid már megvannak nálunk. Próbáld újra, ha több zenét hallgattál.",
+      "paused": "Jelenleg túl sok a kérés, próbáld újra holnap",
+      "preparing": "{total, plural, one {# dalodat készítjük elő…} other {# dalodat készítjük elő…}}",
+      "ready": "{ready, plural, one {# dalod elkészült — találd meg a hangod} other {# dalod elkészült — találd meg a hangod}}",
+      "request": "Dalaim előkészítése",
+      "title": "Zenéim elemzése"
     }
   }
 }

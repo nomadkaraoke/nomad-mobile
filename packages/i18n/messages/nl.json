@@ -1790,6 +1790,17 @@
       "play": "Afspelen",
       "song": "{title} · {artist}",
       "stop": "Stoppen"
+    },
+    "personal": {
+      "body": "We bereiden vannacht tot wel {cap} nummers voor waar je het meest naar luistert.",
+      "cap": "Je kunt het opnieuw aanvragen op {date}",
+      "failed": "Aanvragen is nu niet gelukt. Probeer het over een minuutje opnieuw.",
+      "nothingToAdd": "We hebben je topnummers al. Probeer het opnieuw als je naar meer muziek hebt geluisterd.",
+      "paused": "Het is momenteel druk, probeer het morgen opnieuw",
+      "preparing": "{total, plural, one {# van je nummers wordt voorbereid…} other {# van je nummers worden voorbereid…}}",
+      "ready": "{ready, plural, one {# van je nummers is klaar — ontdek je stem} other {# van je nummers zijn klaar — ontdek je stem}}",
+      "request": "Mijn nummers voorbereiden",
+      "title": "Mijn muziek analyseren"
     }
   }
 }

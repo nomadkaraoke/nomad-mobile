@@ -1790,6 +1790,17 @@
       "play": "播放",
       "song": "{title} · {artist}",
       "stop": "停止"
+    },
+    "personal": {
+      "body": "我们会连夜为您准备多达 {cap} 首您最常听的歌曲。",
+      "cap": "您可以在 {date} 再次申请",
+      "failed": "刚刚提交失败，请稍后重试。",
+      "nothingToAdd": "我们已经收录了您最常听的歌曲。多听听新歌后再来试试吧！",
+      "paused": "目前繁忙，请明天再试",
+      "preparing": "{total, plural, one {正在为您准备 # 首歌曲…} other {正在为您准备 # 首歌曲…}}",
+      "ready": "{ready, plural, one {您的 # 首歌曲已准备就绪 — 快来一展歌喉} other {您的 # 首歌曲已准备就绪 — 快来一展歌喉}}",
+      "request": "准备我的歌曲",
+      "title": "分析我的音乐"
     }
   }
 }

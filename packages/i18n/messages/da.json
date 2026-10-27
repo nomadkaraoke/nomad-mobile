@@ -1790,6 +1790,17 @@
       "play": "Afspil",
       "song": "{title} · {artist}",
       "stop": "Stop"
+    },
+    "personal": {
+      "body": "Vi klargør op til {cap} af de sange, du lytter mest til, i løbet af natten.",
+      "cap": "Du kan anmode igen den {date}",
+      "failed": "Kunne ikke anmode lige nu. Prøv igen om et øjeblik.",
+      "nothingToAdd": "Vi har allerede dine mest spillede sange. Prøv igen, når du har lyttet til mere musik.",
+      "paused": "Der er travlt lige nu, prøv igen i morgen",
+      "preparing": "{total, plural, one {Klargør # af dine sange…} other {Klargør # af dine sange…}}",
+      "ready": "{ready, plural, one {# af dine sange er klar – find din stemme} other {# af dine sange er klar – find din stemme}}",
+      "request": "Klargør mine sange",
+      "title": "Analysér min musik"
     }
   }
 }

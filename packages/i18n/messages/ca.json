@@ -1790,6 +1790,17 @@
       "play": "Reprodueix",
       "song": "{title} · {artist}",
       "stop": "Atura"
+    },
+    "personal": {
+      "body": "Prepararem durant la nit fins a {cap} de les cançons que més escoltes.",
+      "cap": "Pots tornar-ho a demanar el {date}",
+      "failed": "No s'ha pogut demanar ara mateix. Torna-ho a provar d'aquí a un minut.",
+      "nothingToAdd": "Ja tenim les teves cançons preferides. Torna-ho a provar quan hagis escoltat més música.",
+      "paused": "Ara mateix estem ocupats, torna-ho a provar demà",
+      "preparing": "{total, plural, one {S'està preparant # de les teves cançons…} other {S'estan preparant # de les teves cançons…}}",
+      "ready": "{ready, plural, one {# de les teves cançons està a punt — troba la teva veu} other {# de les teves cançons estan a punt — troba la teva veu}}",
+      "request": "Prepara les meves cançons",
+      "title": "Analitza la meva música"
     }
   }
 }

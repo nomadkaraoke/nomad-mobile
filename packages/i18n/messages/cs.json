@@ -1790,6 +1790,17 @@
       "play": "Přehrát",
       "song": "{title} · {artist}",
       "stop": "Zastavit"
+    },
+    "personal": {
+      "body": "Do rána ti připravíme až {cap} tvých nejposlouchanějších skladeb.",
+      "cap": "Znovu můžeš požádat {date}",
+      "failed": "Právě teď se to nepovedlo odeslat. Zkus to za chvíli znovu.",
+      "nothingToAdd": "Tvoje nejoblíbenější skladby už máme. Zkus to znovu, až si poslechneš další hudbu.",
+      "paused": "Momentálně máme plno, zkus to zase zítra",
+      "preparing": "{total, plural, one {Připravuje se # z tvých skladeb…} few {Připravují se # z tvých skladeb…} other {Připravuje se # z tvých skladeb…}}",
+      "ready": "{ready, plural, one {# z tvých skladeb je připravena – najdi svůj hlas} few {# z tvých skladeb jsou připraveny – najdi svůj hlas} other {# z tvých skladeb je připraveno – najdi svůj hlas}}",
+      "request": "Připravit moje skladby",
+      "title": "Analyzovat moji hudbu"
     }
   }
 }

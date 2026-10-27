@@ -1790,6 +1790,17 @@
       "play": "Redă",
       "song": "{title} · {artist}",
       "stop": "Oprește"
+    },
+    "personal": {
+      "body": "Vom pregăti peste noapte până la {cap} dintre melodiile pe care le asculți cel mai des.",
+      "cap": "Poți solicita din nou pe {date}",
+      "failed": "Nu am putut trimite solicitarea acum. Încearcă din nou într-un minut.",
+      "nothingToAdd": "Avem deja melodiile tale preferate. Încearcă din nou după ce asculți mai multă muzică.",
+      "paused": "Sistemul este ocupat acum, încearcă din nou mâine",
+      "preparing": "{total, plural, one {Se pregătește # dintre melodiile tale…} few {Se pregătesc # dintre melodiile tale…} other {Se pregătesc # de melodii dintre ale tale…}}",
+      "ready": "{ready, plural, one {# dintre melodiile tale este gata — găsește-ți vocea} few {# dintre melodiile tale sunt gata — găsește-ți vocea} other {# de melodii dintre ale tale sunt gata — găsește-ți vocea}}",
+      "request": "Pregătește-mi melodiile",
+      "title": "Analizează-mi muzica"
     }
   }
 }

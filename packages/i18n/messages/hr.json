@@ -1790,6 +1790,17 @@
       "play": "Reproduciraj",
       "song": "{title} · {artist}",
       "stop": "Zaustavi"
+    },
+    "personal": {
+      "body": "Preko noći ćemo pripremiti do {cap} pjesama koje najviše slušaš.",
+      "cap": "Možeš ponovno zatražiti {date}",
+      "failed": "Slanje upita trenutno nije uspjelo. Pokušaj ponovno za minutu.",
+      "nothingToAdd": "Već imamo tvoje najslušanije pjesme. Pokušaj ponovno nakon što poslušaš još glazbe.",
+      "paused": "Trenutno je gužva, pokušaj ponovno sutra",
+      "preparing": "{total, plural, one {Priprema se # tvoja pjesma…} few {Pripremaju se # tvoje pjesme…} other {Priprema se # tvojih pjesama…}}",
+      "ready": "{ready, plural, one {# tvoja pjesma je spremna — pronađi svoj glas} few {# tvoje pjesme su spremne — pronađi svoj glas} other {# tvojih pjesama je spremno — pronađi svoj glas}}",
+      "request": "Pripremi moje pjesme",
+      "title": "Analiziraj moju glazbu"
     }
   }
 }

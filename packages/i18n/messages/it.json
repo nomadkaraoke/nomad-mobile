@@ -1790,6 +1790,17 @@
       "play": "Riproduci",
       "song": "{title} · {artist}",
       "stop": "Interrompi"
+    },
+    "personal": {
+      "body": "Durante la notte prepareremo fino a {cap} dei brani che ascolti di più.",
+      "cap": "Puoi fare una nuova richiesta il {date}",
+      "failed": "Impossibile inviare la richiesta in questo momento. Riprova tra un minuto.",
+      "nothingToAdd": "Abbiamo già i tuoi brani più ascoltati. Riprova dopo aver ascoltato altra musica.",
+      "paused": "Al momento siamo al completo, riprova domani",
+      "preparing": "{total, plural, one {Preparazione di # dei tuoi brani in corso…} other {Preparazione di # dei tuoi brani in corso…}}",
+      "ready": "{ready, plural, one {# dei tuoi brani è pronto — trova la tua voce} other {# dei tuoi brani sono pronti — trova la tua voce}}",
+      "request": "Prepara i miei brani",
+      "title": "Analizza la mia musica"
     }
   }
 }
