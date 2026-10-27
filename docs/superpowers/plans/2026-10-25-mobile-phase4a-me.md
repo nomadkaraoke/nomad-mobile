@@ -599,4 +599,30 @@ Aggregation rules (from the spec):
 
 ## Execution ledger
 
-(Filled in during execution: task, commit, reviewer verdict, amendments.)
+Subagent-driven, one implementer and one reviewer per task; fix rounds in brackets. Decide = karaoke-decide (Part A, merged as #191, v0.29.0; the Pulumi playlists index imported, #192 removed `import_`); mobile = this branch.
+
+| Task | Commits | Review outcome |
+|---|---|---|
+| A1 karaoke_log as UserSong source | decide a83989f..3f1c8ef | clean |
+| A2 survey chips + backfill records | decide 3f1c8ef..f74f0ec | clean |
+| A3 `?song=` filter on the log list | decide f74f0ec..5216c4e | clean |
+| A4 library endpoint + catalog facets | decide 5216c4e..3d075b0 | clean |
+| A5 ordered setlists on `playlists` | decide 3d075b0..69ca1c7 | clean after 1 fix round |
+| A6 test API seeding | decide 69ca1c7..afd17e9 | clean |
+| A7 web playlists titles | decide afd17e9..a6a0f39 | clean after 2 fix rounds |
+| A8 docs, version, PR | decide d154fe2, 751f28e, 3182371, ccee5e6; #191 merged 734faea | CodeRabbit clean after 1 cycle |
+| B1 decide client + Me facades | b64f0c9 | clean |
+| B2 pure Me logic in core | a4a54d1, f6c0f8f | clean after 1 fix round |
+| B3 generic outbox + Me outbox | 98d3ea6, 62b4ee2 | clean after 1 fix round |
+| B4 data layer, caches, account privacy | 6b7e771, 6599db3, d910ea0 | clean after 2 fix rounds |
+| B5 survey vibe + why chips | c3a7329 | clean |
+| B6 BrandIcon | d76539d | clean |
+| B7 music profile fixes | fff5fcd, 642fd05 | clean after 1 fix round |
+| B10 Mark as sung + bulk picker | e206b17, dd8d235 | clean after 1 fix round |
+| B11 setlist screens | 656773d, f31ed1f | clean after 1 fix round |
+| B9 song page actions + history | 0ec2f8f, 3294843 | clean after 1 fix round |
+| B8 Me home + collection | 4aa953f, 1d7eb78 | clean after 1 fix round |
+| B12 flows, tour, UX review | dfef2e6, 96cca6c, f9a221b, 5bf39a5, c1b555a, d359b59, 5f29fe6, ff8d7c1, 3674118, de0bf6d | me-1…9 pass on iOS and Android; 7 app fixes found by the flows and tour; CI regression run 40428907823 |
+| B13 docs, review, PR | docs commit (this one) | controller: checks, review, PR |
+
+Amendments and rulings: R1–R12 are listed in the spec's §5 "As built (4a)". Process notes: Order was A1–A8, B1–B7, B10, B11, B9, B8, B12, B13; the shared Maestro driver port and the shared kjbox stack cost B12 several reruns, so local runs were replaced by CI on the build host.

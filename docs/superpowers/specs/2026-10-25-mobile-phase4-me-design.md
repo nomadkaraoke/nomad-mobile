@@ -105,6 +105,41 @@ Full detail with paths: the survey companion. These are the points the build mus
 
 Each slice: plan part(s) → subagent-driven development → tests → `/coderabbit` (or reviewer subagent) → PR → merge when CI is green, then the next. Shared-file claims and merge order are agreed with the other sessions first (§9).
 
+### As built (4a)
+
+Rulings and deviations from building 4a (full ledger: the plan's "Execution ledger"):
+
+- **R1** A4 reads setlist membership from `items` when present, else `song_ids`, so it works before and after A5.
+- **R2** decide target 0.29.0 (new endpoints = minor); shipped as decide #191.
+- **R3** `latest_feel` / `latest_key` are the newest survey that answered that field (per field), and the mobile overlay uses the same semantics.
+- **R4** (amended) Legacy playlist add stores empty artist/title when the catalog can't name the song, and API responses never substitute the song id into artist/title; clients (web, mobile) display `song_key` as the fallback. **R5** `PlaylistItemIn` accepts empty names when `song_key` is set (a client never invents names).
+- **R6** `savedOnly` / the Saved filter = loved only (Save is Love); setlist-only songs are in the library but not Saved.
+- **R7** `api-decide/src/me.ts` calls the generated `listKaraokeLog` directly, which removes an import cycle with `index` that broke `ApiError` in mocked tests.
+- **R8** "Delete after a pending create drops both" applies only if the create was never attempted; once a send was tried the pair becomes a delete (404 = done).
+- **R9** Backfills do not send `sung_at`: the library derives dates from the night's date and skips undated backfill.
+- **R10** Setlist rename / delete / add / Edit order are inline header buttons, not a native header menu.
+- **R11** The Save heart is hidden for uncatalogued songs (decide love is keyed by `song_key`); they reach the library through sung or a setlist.
+- **R12** "Songs known" is dropped from the profile card (decide's services summary has no deduplicated total, summing double-counts); the card shows sources, songs sung and saved.
+- Tonight always logs through `addOther`; future months are disabled in the Mark as sung date picker.
+- Survey sheet: questions scroll with Save / Not now pinned (the chips pushed the sheet past its height cap); the history shows the why chips.
+
+**4b follow-ups found during 4a:**
+
+- A deduplicated known-songs total in decide, to restore "songs known" on the profile card (R12).
+- decide `user_songs.last_sung_at` falls back to now for undated backfill (R9); `_inc` should ignore `now` for `origin=backfill`.
+- Re-editing a survey can't clear vibes/reasons (empty arrays are stripped; reasons survive a switch to Great): send explicit clears.
+- The jest open handle that needs `--forceExit` predates B9 (shared setup: resetMe / renderTonight / outbox timers).
+- UX review, noted and not fixed:
+  - All your songs header: "Add songs I've sung" is a long text button beside the title; it may truncate in long locales (de, fi); use a + icon button with that label.
+  - All your songs has five chip rows (sort, rating, how often, mood, library) that fill the first screen; the unused `sortLabel` / `feelLabel` row labels would explain them.
+  - Me's bottom block still has the old "Your music profile" button, which duplicates the card's Manage.
+  - Song page order: "Your history" sits above Save / Add to setlist / Mark as sung (the uncatalogued history page has actions first).
+  - Songs I've sung: already-sung rows look ticked and disabled; add "already in your history" text.
+  - The Arabic survey title says "tonight" even for a backfill (translation issue).
+  - App-wide, pre-existing: pushed screens with a native header leave a ~100 pt empty band under it.
+  - Apple Music's mark is a flat red tile, not the gradient; Last.fm's red is low-contrast on dark.
+- Deferred minors: queued delete of a synced record doesn't subtract cached counts; rename/remove on lists over 500 items return silently false; Ø/Ł/ß sort under `#`; `listMyArtists` first page only in the quiz store; `head.attempted` mutates the previous snapshot object; stats year scope uses all-time `latest_feel`; the nights fallback uses UTC date; decide: `?song=` empty string, `update_playlist` rename rev race, seed partial write on mid-batch error.
+
 ## 6. Design
 
 ### 6.1 Library model (decide)
