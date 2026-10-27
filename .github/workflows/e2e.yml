@@ -389,6 +389,11 @@ jobs:
       - *install
       - *stacks_up
       - *download_app
+      - name: Maestro on the self-hosted Mac's default Xcode (27.1)
+        # Maestro's XCTest driver never starts under the Mac's Xcode 26.6 copy (that one only builds the dev client).
+        # Set here, not only in the runner's .env, so a runner still running with an older .env can't pick 26.6.
+        if: runner.environment == 'self-hosted'
+        run: echo "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer" >>"$GITHUB_ENV"
       - name: Run the shard on a simulator
         run: scripts/ci/run-shard.sh ios dev-client/NomadKaraoke.app "${{ matrix.shard.flows }}" ../e2e-out
       - name: Shut down the lane's simulator (self-hosted; frees RAM for the lane's next job)
