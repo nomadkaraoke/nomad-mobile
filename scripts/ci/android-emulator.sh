@@ -7,7 +7,10 @@
 #                                          # sessions share the adb server)
 #
 # AVD: Pixel 8, system-images;android-35;google_apis;arm64-v8a (the image the flows were written on), 4 cores, booted
-# with 3 GB RAM (EMULATOR_RAM_MB; three lanes share 36 GB), ANR / crash dialogs hidden.
+# with 3 GB RAM (EMULATOR_RAM_MB; three lanes share 36 GB), ANR / crash dialogs hidden. Each lane is isolated from the
+# others: its own netsim instance (by default every emulator on a machine shares one netsimd, and when one lane's
+# emulator stopped the others lost their network: "Netsim Wifi … is gone", then device-not-found) and a software GPU
+# (EMULATOR_GPU; with -gpu host, headless emulators preempted each other's GL contexts).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -29,7 +32,8 @@ start() {
   adb_ emu kill >/dev/null 2>&1 || true
   sleep 2
   nohup "$SDK/emulator/emulator" -avd "$AVD" -port "$EMULATOR_PORT" -no-window -no-audio -no-boot-anim \
-    -no-snapshot -gpu host -wipe-data -memory "${EMULATOR_RAM_MB:-3072}" >"/tmp/emulator-$AVD.log" 2>&1 &
+    -no-snapshot -wipe-data -memory "${EMULATOR_RAM_MB:-3072}" -gpu "${EMULATOR_GPU:-swiftshader_indirect}" \
+    -netsim-args "--instance=$((LANE + 1))" >"/tmp/emulator-$AVD.log" 2>&1 &
   adb_ wait-for-device
   local deadline=$((SECONDS + 300))
   until [[ "$(adb_ shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" == 1 ]]; do
