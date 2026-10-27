@@ -18,6 +18,7 @@
 #   scripts/e2e-local.sh --platform ios --skip tonight   # every flow except those whose name contains "tonight"
 #   scripts/e2e-local.sh --platform ios tonight          # the Tonight flows (tonight-1…11)
 #   scripts/e2e-local.sh --platform ios voice-session    # the voice session flows (decide's fixture voice.db)
+#   scripts/e2e-local.sh --platform ios --flows make-1-happy-path,review-1-approve   # exactly these flows (a CI shard)
 #
 # Env: GEN_DIR (gen checkout with scripts/local-stack.sh, at least v0.278.2 plus the fake match judge; default
 #      ../karaoke-gen, the main clone: pull it first, or point GEN_DIR at a gen worktree with the code you want),
@@ -31,6 +32,11 @@
 #      (decide's main API and search service, default 8030 / 8020; passed to decide's local-stack.sh as
 #      DECIDE_LOCAL_PORT / SEARCH_LOCAL_PORT when this script starts it). Another port set lets a second session run
 #      its own Metro and decide stack beside the default one (on its own simulator / emulator).
+#      MAESTRO_TEST_ARGS (extra `maestro test` options, e.g. "--format junit --output r-{run}.xml"; CI; {run} becomes
+#      the Maestro run's number, since a suite is up to four runs: online, Hebrew, offline),
+#      E2E_LAUNCH_TIMEOUT (ms, default 60000: launch.yaml's waits; CI uses 240000),
+#      E2E_POINT_DEV_CLIENT=1 (iOS: point a freshly installed dev client at Metro even on :8081; CI),
+#      E2E_NO_LOCK=1 (skip the local device lock, scripts/device-lock.sh; CI sets CI=true, which skips it too).
 #
 # Connect flows (connect-*, Phase 3b) pick fixture files: when the run has any, scripts/make-import-fixtures.ts
 # writes the Spotify export zip and maestro/scripts/push-fixtures.sh puts it and a screenshot on the device.
@@ -62,14 +68,16 @@ if [[ -z "${DECIDE_DIR:-}" ]]; then
 fi
 PARTNER_SECRET="${DECIDE_GEN_PARTNER_SECRET:-local-stack-secret}"
 KJBOX_DIR="${KJBOX_DIR:-$ROOT/../kjbox}"
-STACK="http://127.0.0.1:8010"
-WEB="http://127.0.0.1:3010"
-METRO_PORT="${METRO_PORT:-8081}"
-DECIDE_PORT="${DECIDE_PORT:-8030}"
-SEARCH_PORT="${SEARCH_PORT:-8020}"
+# LANE (default 0) picks the port block and state of this run's stacks and Metro (scripts/e2e-lane.sh), so several
+# runs can share one machine; GEN_PORT / GEN_WEB_PORT / DECIDE_PORT / SEARCH_PORT / KJBOX_PORT / METRO_PORT override.
+# shellcheck source=e2e-lane.sh
+source "$ROOT/scripts/e2e-lane.sh"
+STACK="http://127.0.0.1:$GEN_PORT"
+WEB="http://127.0.0.1:$GEN_WEB_PORT"
 SEARCH="http://127.0.0.1:$SEARCH_PORT"
 DECIDE="http://127.0.0.1:$DECIDE_PORT"
-KJBOX="http://127.0.0.1:8040"
+KJBOX="http://127.0.0.1:$KJBOX_PORT"
+CONTROL="http://127.0.0.1:$CONTROL_PORT"
 # The app's kjbox base: the box serves the singer API under /sing (on sing.nomadkaraoke.com the tunnel maps / to it).
 KJBOX_APP="$KJBOX/sing"
 MAESTRO="${MAESTRO:-$(command -v maestro || echo "$HOME/.maestro/bin/maestro")}"
@@ -78,6 +86,7 @@ FILTER=""
 SKIP=""
 LOCALE=""
 SCREEN=""
+FLOWS=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -85,7 +94,8 @@ while [[ $# -gt 0 ]]; do
     --locale) LOCALE="$2"; shift 2 ;;
     --screen) SCREEN="$2"; shift 2 ;;
     --skip) SKIP="$2"; shift 2 ;;
-    -h|--help) sed -n '2,51p' "$0"; exit 0 ;;
+    --flows) FLOWS="$2"; shift 2 ;;
+    -h|--help) sed -n '2,55p' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
@@ -99,6 +109,8 @@ list_flows() {
   local f name
   for f in "$ROOT"/maestro/flows/*.yaml; do
     name="${f##*/}"
+    # --flows: exactly the listed flow names (comma-separated, with or without .yaml).
+    if [[ -n "$FLOWS" && ",${FLOWS//.yaml/}," != *",${name%.yaml},"* ]]; then continue; fi
     [[ -n "$FILTER" && "$name" != *"$FILTER"* ]] && continue
     [[ -n "$SKIP" && "$name" == *"$SKIP"* ]] && continue
     echo "$f"
@@ -118,25 +130,51 @@ needs_kjbox() {
 NEED_KJBOX=0
 if needs_kjbox; then NEED_KJBOX=1; fi
 
+# 0. Local device lock (scripts/device-lock.sh): parallel sessions on this Mac queue here instead of breaking each
+#     other's runs. The device itself, the gen stack (its search knobs and step delay are GLOBAL fake-config, so two
+#     suites on one stack break each other even on different devices) and, before Maestro 2.2, the fixed iOS driver
+#     port. Taken before any stack starts (kjbox's reset would wipe another run's night). Released on exit (a holder that died is taken over). Not on CI (each job has its own stacks and device).
+LOCKS=()
+if [[ "${CI:-}" != true && "${E2E_NO_LOCK:-}" != 1 ]]; then
+  # shellcheck source=device-lock.sh
+  source "$ROOT/scripts/device-lock.sh"
+  if [[ "$PLATFORM" == ios ]]; then LOCK_DEVICE="${IOS_DEVICE:-iPhone 17 Pro}"; else LOCK_DEVICE="${ANDROID_SERIAL:-emulator-5554}"; fi
+  LOCKS=("$PLATFORM-$LOCK_DEVICE" "gen-stack-$GEN_PORT")
+  if [[ "$PLATFORM" == ios ]]; then
+    mv="$("$MAESTRO" --version 2>/dev/null | tail -1)"
+    if [[ "$(printf '%s\n2.2.0\n' "$mv" | sort -V | head -1)" != 2.2.0 ]]; then LOCKS+=(maestro-ios-driver); fi
+  fi
+  for l in "${LOCKS[@]}"; do device_lock_acquire "$l" "e2e-local.sh --platform $PLATFORM ${FILTER:-}${FLOWS:+--flows $FLOWS}${SCREEN:+--screen $SCREEN}"; done
+fi
+release_locks() { local l; for l in ${LOCKS[@]+"${LOCKS[@]}"}; do device_lock_release "$l"; done; }
+trap release_locks EXIT
+
 # 1. The gen local stack (API :8010, web :3010). LOCAL_STACK_API_URL is what fake-checkout and handoff
 #    links point at; 127.0.0.1 works on both platforms (adb reverse on Android). The partner secret lets
 #    decide's /resolve call gen's catalog resolve (the fake judge's global verdict).
-if ! curl -sf -m 3 "$STACK/api/health" >/dev/null; then
+# Retried: on a loaded CI runner a stack's event loop can stall for a few seconds (a single 5 s try failed a whole
+# shard, and a stalled "is it up?" probe made the script start a second decide over a running one).
+retry_curl() { local i; for i in $(seq 1 12); do curl -sf -m 10 "$@" >/dev/null && return 0; sleep 5; done; return 1; }
+is_up() { local i; for i in 1 2 3; do curl -sf -m 5 "$1" >/dev/null && return 0; sleep 2; done; return 1; }
+if ! is_up "$STACK/api/health"; then
   echo "Starting the gen local stack from $GEN_DIR"
-  (cd "$GEN_DIR" && DECIDE_GEN_PARTNER_SECRET="$PARTNER_SECRET" LOCAL_STACK_API_URL="$STACK" scripts/local-stack.sh up --frontend)
+  # shellcheck disable=SC2046 # one VAR=value per line, no spaces
+  (cd "$GEN_DIR" && env DECIDE_GEN_PARTNER_SECRET="$PARTNER_SECRET" LOCAL_STACK_API_URL="$STACK" $(lane_gen_env) \
+    scripts/local-stack.sh up --frontend)
 fi
-curl -sf -m 5 "$STACK/api/test/status" >/dev/null || { echo "gen stack at $STACK has no /api/test (FAKE_WORKERS off?)" >&2; exit 1; }
+retry_curl "$STACK/api/test/status" || { echo "gen stack at $STACK has no /api/test (FAKE_WORKERS off?)" >&2; exit 1; }
 curl -sf -m 5 -o /dev/null "$WEB" || echo "warning: gen web isn't answering on $WEB (make-5 opens the web review there)" >&2
 
 # 2. decide's local stack: the main API (:8030, fixture catalog, /api/test/*) on gen's Firestore emulator, so gen
 #    sessions validate there, and the search service (:8020, fixture song index; its offline-list URL is on
 #    127.0.0.1 too). `up` is idempotent.
 echo "decide checkout: $DECIDE_DIR (DECIDE_DIR; used when its local stack has to be started)"
-if ! curl -sf -m 3 "$SEARCH/api/search/ready" >/dev/null || ! curl -sf -m 3 "$DECIDE/api/ready" >/dev/null; then
+if ! is_up "$SEARCH/api/search/ready" || ! is_up "$DECIDE/api/ready"; then
   echo "Starting decide's local stack from $DECIDE_DIR"
-  (cd "$DECIDE_DIR" && GEN_API_URL="$STACK" DECIDE_LOCAL_PORT="$DECIDE_PORT" SEARCH_LOCAL_PORT="$SEARCH_PORT" scripts/local-stack.sh up)
+  # shellcheck disable=SC2046
+  (cd "$DECIDE_DIR" && env $(lane_decide_env) scripts/local-stack.sh up)
 fi
-curl -sf -m 5 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@example.com"}' \
+retry_curl -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@example.com"}' \
   "$DECIDE/api/test/profile/reset" || { echo "decide at $DECIDE has no /api/test (DECIDE_TEST_API off?)" >&2; exit 1; }
 # The vocal range flows and tours (voice-*, fit-*) need decide >= v0.25: the vr_* fixture catalog and
 # /api/test/voice/seed. An empty body is a 422 when the route exists; an older decide answers 404.
@@ -167,14 +205,18 @@ if [[ "$NEED_KJBOX" == 1 ]]; then
   if [[ "${KJBOX_KEEP:-}" == 1 ]] && kjbox_ready; then :
   else
     echo "Starting kjbox's local stack fresh from $KJBOX_DIR"
-    (cd "$KJBOX_DIR/kj-controller" && scripts/local-stack.sh reset)
+    # shellcheck disable=SC2046
+    (cd "$KJBOX_DIR/kj-controller" && env $(lane_kjbox_env) scripts/local-stack.sh reset)
   fi
   curl -sf -m 5 -o /dev/null "$KJBOX/sing/api/test/state" || { echo "kjbox at $KJBOX has no /sing/api/test (KJBOX_TEST_API off?)" >&2; exit 1; }
   # tonight-9 stops and restarts the kjbox stack mid-flow ("box unreachable"), tonight-10 decide's (the karaoke log
   # offline); Maestro scripts can only make HTTP calls, so a loopback helper (scripts/stack-control.py, :8049) runs
   # local-stack.sh down/up for them.
-  if ! curl -sf -m 2 http://127.0.0.1:8049/health >/dev/null; then
-    python3 "$ROOT/scripts/stack-control.py" --kjbox-dir "$KJBOX_DIR" --decide-dir "$DECIDE_DIR" >/tmp/nomad-mobile-stack-control.log 2>&1 &
+  if ! curl -sf -m 2 "$CONTROL/health" >/dev/null; then
+    # It restarts this lane's kjbox and decide stacks, so it gets their env.
+    # shellcheck disable=SC2046
+    env $(lane_kjbox_env) $(lane_decide_env) python3 "$ROOT/scripts/stack-control.py" --kjbox-dir "$KJBOX_DIR" \
+      --decide-dir "$DECIDE_DIR" --port "$CONTROL_PORT" >"/tmp/nomad-mobile-stack-control-$CONTROL_PORT.log" 2>&1 &
     CONTROL_PID=$!
   fi
 else
@@ -187,7 +229,7 @@ if [[ "$PLATFORM" == android ]]; then
   adb -s "$SERIAL" wait-for-device
   # An AVD left in airplane mode (a manual offline check) can't reach Metro on 10.0.2.2 (ENETUNREACH on every launch).
   adb -s "$SERIAL" shell cmd connectivity airplane-mode disable >/dev/null 2>&1 || true
-  for port in 8010 3010 "$SEARCH_PORT" "$DECIDE_PORT" 8040; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
+  for port in "$GEN_PORT" "$GEN_WEB_PORT" "$SEARCH_PORT" "$DECIDE_PORT" "$KJBOX_PORT"; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
   # Skip Chrome's first-run screen inside the Custom Tab (the flows also tap past it if it shows).
   adb -s "$SERIAL" shell 'echo "_ --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line'
   adb -s "$SERIAL" shell am set-debug-app --persistent com.android.chrome >/dev/null
@@ -222,17 +264,28 @@ fi
 METRO_PID=""
 if [[ "$METRO_PORT" == 8081 ]]; then METRO_LOG=/tmp/nomad-mobile-metro.log; else METRO_LOG="/tmp/nomad-mobile-metro-$METRO_PORT.log"; fi
 metro_up() { curl -sf -m 2 "http://127.0.0.1:$METRO_PORT/status" | grep -q running; }
+kill_tree() {
+  local c
+  for c in $(pgrep -P "$1" 2>/dev/null); do kill_tree "$c"; done
+  kill "$1" 2>/dev/null || true
+}
 stop_metro() {
   [[ -n "$METRO_PID" ]] || return 0
-  # npx → node: stop the children too. Never kill by port: the Android emulator holds a connection to Metro's.
-  pkill -P "$METRO_PID" 2>/dev/null || true
-  kill "$METRO_PID" 2>/dev/null || true
+  # npx → node: stop the whole tree (on CI Metro's node is a grandchild that outlived a children-only kill, so the
+  # force-offline restart kept the online bundle). Never kill everything on the port: the Android emulator holds a
+  # connection to Metro's. Only the process *listening* there, as a last resort.
+  kill_tree "$METRO_PID"
   for _ in $(seq 1 15); do metro_up || break; sleep 1; done
+  if metro_up; then
+    lsof -ti "tcp:$METRO_PORT" -sTCP:LISTEN 2>/dev/null | xargs kill 2>/dev/null || true
+    for _ in $(seq 1 10); do metro_up || break; sleep 1; done
+  fi
   METRO_PID=""
 }
 cleanup() {
   stop_metro
   [[ -z "$CONTROL_PID" ]] || kill "$CONTROL_PID" 2>/dev/null || true
+  release_locks
 }
 trap cleanup EXIT
 # Args: extra VAR=value pairs for the bundle.
@@ -255,12 +308,19 @@ start_metro() {
     fi
     sleep 2
   done
+  # E2E_WARM_BUNDLE=1 (CI): build the bundle once now, so the first launch.yaml doesn't time out (60 s) while a cold
+  # runner transforms every module. Metro's transform cache is per file, so the app's own request reuses it.
+  if [[ "${E2E_WARM_BUNDLE:-}" == 1 ]]; then
+    echo "Warming the $PLATFORM bundle…"
+    curl -sf -m 900 -o /dev/null "http://127.0.0.1:$METRO_PORT/node_modules/expo-router/entry.bundle?platform=$PLATFORM&dev=true&minify=false" ||
+      echo "warning: bundle warm-up failed; the first flow may time out" >&2
+  fi
 }
 
 # iOS on another Metro port: point the dev client at it once Metro is up. A fresh `expo run:ios` build opens the
 # default :8081 (another session's Metro), and launch.yaml relaunches whatever server the dev client last used.
 point_dev_client() {
-  [[ "$PLATFORM" == ios && "$METRO_PORT" != 8081 ]] || return 0
+  [[ "$PLATFORM" == ios && ( "$METRO_PORT" != 8081 || "${E2E_POINT_DEV_CLIENT:-}" == 1 ) ]] || return 0
   xcrun simctl terminate "$DEVICE" com.nomadkaraoke.mobile 2>/dev/null || true
   # A failure here would leave the dev client on whatever Metro it used last (another session's), so stop.
   if ! xcrun simctl openurl "$DEVICE" "exp+nomad-karaoke://expo-development-client/?url=http%3A%2F%2F127.0.0.1%3A$METRO_PORT"; then
@@ -347,11 +407,19 @@ run_hebrew() {
   return "$s"
 }
 
+# MAESTRO_TEST_ARGS: extra `maestro test` options (CI: JUnit report, debug output). Word-split on purpose.
+read -r -a EXTRA_TEST_ARGS <<<"${MAESTRO_TEST_ARGS:-}"
+RUN_SEQ=0
 run_flows() {
-  "$MAESTRO" --device "$DEVICE" test -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" \
+  # Each call is one Maestro run; give its report its own name so a later group doesn't overwrite it.
+  RUN_SEQ=$((RUN_SEQ + 1))
+  local extra=() a
+  for a in ${EXTRA_TEST_ARGS[@]+"${EXTRA_TEST_ARGS[@]}"}; do extra+=("${a//\{run\}/$RUN_SEQ}"); done
+  "$MAESTRO" --device "$DEVICE" test ${extra[@]+"${extra[@]}"} -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" -e CONTROL="$CONTROL" \
     -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
     -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" \
-    -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" -e VOICE_SESSION_SHOTS="$VOICE_SESSION_SHOTS" "$@"
+    -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" -e VOICE_SESSION_SHOTS="$VOICE_SESSION_SHOTS" \
+    -e LAUNCH_TIMEOUT="${E2E_LAUNCH_TIMEOUT:-60000}" "$@"
 }
 status=0
 

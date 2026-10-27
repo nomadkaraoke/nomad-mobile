@@ -1,0 +1,420 @@
+# Maestro E2E on GitHub-hosted simulators and emulators, off Andrew's Mac (docs/TESTING.md § E2E in CI).
+# Each shard is one runner with its own gen + decide + kjbox local stacks (fake workers, emulators, fixture data;
+# no secrets anywhere in this workflow: the repo is public and so are its logs and artifacts).
+#
+# - pull_request: only the flows the PR's changes affect (scripts/e2e-plan-lib.mjs), sharded, Android only for now;
+#   the label `e2e-ios` adds iOS, `e2e-full` runs every flow on both.
+# - schedule (nightly) and workflow_dispatch: the full suite (dispatch can narrow it with filter / skip / flows).
+# Trigger and read results from a session: scripts/e2e-ci.sh.
+name: E2E
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+  schedule:
+    - cron: '23 7 * * *' # 03:23 US Eastern
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'ios, android or ios,android'
+        default: 'ios,android'
+      filter:
+        description: 'Only flows whose name contains this (empty: all)'
+        default: ''
+      skip:
+        description: 'Drop flows whose name contains this'
+        default: ''
+      affected:
+        description: 'Only the flows affected by changes since origin/main (like a PR run)'
+        type: boolean
+        default: false
+      ios_shards:
+        description: 'iOS shards (empty: 3 on the self-hosted Mac, its lane count; 4 hosted)'
+        default: ''
+      android_shards:
+        description: 'Android shards (empty: 3 on the self-hosted Mac, 5 hosted)'
+        default: ''
+      android_runner:
+        description: 'default (follow the repo variable E2E_ANDROID_RUNNER), github (hosted ubuntu + KVM) or self-hosted (the nomad-mbp runner lanes)'
+        type: choice
+        options: [default, github, self-hosted]
+        default: default
+      ios_runner:
+        description: 'default (follow the repo variable E2E_IOS_RUNNER), github (hosted macos-26) or self-hosted (the nomad-mbp runner lanes)'
+        type: choice
+        options: [default, github, self-hosted]
+        default: default
+      gen_ref:
+        default: main
+      decide_ref:
+        default: main
+      kjbox_ref:
+        default: main
+
+concurrency:
+  # A label other than e2e-full / e2e-ios gets its own group, so it never cancels a running E2E run.
+  group: e2e-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}${{ (github.event.action == 'labeled' && github.event.label.name != 'e2e-full' && github.event.label.name != 'e2e-ios') && format('-label-{0}', github.run_id) || '' }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  MAESTRO_VERSION: 2.12.0
+  MAESTRO_CLI_NO_ANALYTICS: '1'
+  MAESTRO_CLI_ANALYSIS_NOTIFICATION_DISABLED: 'true'
+  NODE_VERSION: 24
+  PYTHON_VERSION: '3.13'
+
+defaults:
+  run:
+    working-directory: nomad-mobile
+
+jobs:
+  plan:
+    # A label other than e2e-full changes nothing.
+    if: github.event.action != 'labeled' || github.event.label.name == 'e2e-full' || github.event.label.name == 'e2e-ios'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      ios: ${{ steps.plan.outputs.ios }}
+      ios_runner: ${{ steps.plan.outputs.ios_runner }}
+      android_runner: ${{ steps.plan.outputs.android_runner }}
+      android: ${{ steps.plan.outputs.android }}
+      summary: ${{ steps.plan.outputs.summary }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: nomad-mobile
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - id: plan
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          FULL_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'e2e-full') }}
+          # PRs: Android only until the iOS CI path is proven (label e2e-ios or e2e-full adds iOS); nightly and dispatch: both.
+          PLATFORMS: ${{ inputs.platforms || ((github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'e2e-ios') || contains(github.event.pull_request.labels.*.name, 'e2e-full')) && 'ios,android' || 'android') }}
+          FILTER: ${{ inputs.filter }}
+          SKIP: ${{ inputs.skip }}
+          AFFECTED: ${{ inputs.affected }}
+          # iOS on the self-hosted Mac (3 lanes, scripts/e2e-lane.sh) when a dispatch asks for it, or by default when
+          # the repo variable E2E_IOS_RUNNER is self-hosted; never for a fork's PR (the machine's job-started guard
+          # refuses those too). Hosted macos-26 otherwise.
+          IOS_RUNNER: ${{ (inputs.ios_runner == 'self-hosted' || (inputs.ios_runner != 'github' && vars.E2E_IOS_RUNNER == 'self-hosted' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository))) && 'self-hosted' || 'github' }}
+          IOS_SHARDS: ${{ inputs.ios_shards }}
+          # Android likewise: repo variable E2E_ANDROID_RUNNER (or a dispatch's android_runner).
+          ANDROID_RUNNER: ${{ (inputs.android_runner == 'self-hosted' || (inputs.android_runner != 'github' && vars.E2E_ANDROID_RUNNER == 'self-hosted' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository))) && 'self-hosted' || 'github' }}
+          ANDROID_SHARDS: ${{ inputs.android_shards }}
+        run: |
+          args=()
+          if [[ "$EVENT" == pull_request && "$FULL_LABEL" != true ]]; then args+=(--base "origin/$BASE_REF"); fi
+          if [[ "$EVENT" == workflow_dispatch && "$AFFECTED" == true ]]; then args+=(--base origin/main); fi
+          [[ -n "$FILTER" ]] && args+=(--filter "$FILTER")
+          [[ -n "$SKIP" ]] && args+=(--skip "$SKIP")
+          echo "ios_runner=$IOS_RUNNER" >>"$GITHUB_OUTPUT"
+          echo "android_runner=$ANDROID_RUNNER" >>"$GITHUB_OUTPUT"
+          [[ -n "$ANDROID_SHARDS" ]] || { if [[ "$ANDROID_RUNNER" == self-hosted ]]; then ANDROID_SHARDS=3; else ANDROID_SHARDS=5; fi; }
+          echo "Android runner: $ANDROID_RUNNER" >>"$GITHUB_STEP_SUMMARY"
+          # Default iOS shards: one per self-hosted lane, else 4 hosted runners (5 macOS jobs per org).
+          [[ -n "$IOS_SHARDS" ]] || { if [[ "$IOS_RUNNER" == self-hosted ]]; then IOS_SHARDS=3; else IOS_SHARDS=4; fi; }
+          echo "iOS runner: $IOS_RUNNER" >>"$GITHUB_STEP_SUMMARY"
+          for p in ios android; do
+            if [[ ",$PLATFORMS," != *",$p,"* ]]; then echo "$p=[]" >>"$GITHUB_OUTPUT"; continue; fi
+            n="$IOS_SHARDS"; [[ "$p" == android ]] && n="$ANDROID_SHARDS"
+            plan="$(node scripts/e2e-plan.mjs --shards "$n" ${args[@]+"${args[@]}"})"
+            # One matrix entry per shard; web = the shard needs gen web on :3010 (the web review handoffs).
+            echo "$p=$(node -e '
+              const p = JSON.parse(process.argv[1]);
+              console.log(JSON.stringify(p.shards.map((s) => ({ index: s.index, flows: s.flows.join(","), minutes: Math.round(s.seconds / 60),
+                web: s.flows.some((f) => /^(make-5|review-12)/.test(f)) ? "1" : "" }))));' "$plan")" >>"$GITHUB_OUTPUT"
+            node -e '
+              const p = JSON.parse(process.argv[1]);
+              console.log(`### ${process.argv[2]}: ${p.flows.length} flows, ~${Math.round(p.seconds / 60)} min of flow time, ${p.shards.length} shards (prefixes: ${p.prefixes.join(" ") || "none"})`);
+              for (const s of p.shards) console.log(`- shard ${s.index}: ~${Math.round(s.seconds / 60)} min, ${s.flows.join(", ")}`);' "$plan" "$p" >>"$GITHUB_STEP_SUMMARY"
+          done
+
+  build-android:
+    needs: plan
+    if: needs.plan.outputs.android != '[]'
+    # With the Android shards (the self-hosted Mac or hosted Linux); one dual-ABI APK serves both.
+    runs-on: ${{ needs.plan.outputs.android_runner == 'self-hosted' && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'ubuntu-latest' }}
+    timeout-minutes: 60
+    steps:
+      - &build_checkout
+        uses: actions/checkout@v4
+        with:
+          path: nomad-mobile
+      - &build_pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: nomad-mobile/package.json
+          # Per runner: the self-hosted Mac's lanes share one home directory (~/setup-pnpm raced, ENOTEMPTY).
+          dest: ${{ runner.temp }}/setup-pnpm
+      - &build_node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: nomad-mobile/pnpm-lock.yaml
+      - &build_install
+        run: pnpm install --frozen-lockfile
+      - &build_fp
+        id: fp
+        run: echo "hash=$(scripts/ci/build-dev-client.sh fingerprint "$PLATFORM")" >>"$GITHUB_OUTPUT"
+        env:
+          PLATFORM: ${{ github.job == 'build-ios' && 'ios' || 'android' }}
+      - &build_cache
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: nomad-mobile/dev-client
+          key: dev-client-${{ github.job == 'build-ios' && 'ios-macos26-adhoc' || 'android-x86_64-arm64' }}-${{ steps.fp.outputs.hash }}
+      - uses: actions/setup-java@v4
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        if: steps.cache.outputs.cache-hit != 'true'
+      - &build_build
+        name: Build the dev client (native fingerprint changed)
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: scripts/ci/build-dev-client.sh build "$PLATFORM" dev-client
+        env:
+          PLATFORM: ${{ github.job == 'build-ios' && 'ios' || 'android' }}
+      - &build_upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-client-${{ github.job == 'build-ios' && 'ios' || 'android' }}
+          path: nomad-mobile/dev-client
+          retention-days: 1
+
+  build-ios:
+    needs: plan
+    if: needs.plan.outputs.ios != '[]'
+    # With the iOS shards: the self-hosted Mac (Xcode 26.6, minutes) or hosted macos-26 (~33 min cold). Cached by
+    # native fingerprint either way, so it only builds after a native change.
+    runs-on: ${{ needs.plan.outputs.ios_runner == 'self-hosted' && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
+    timeout-minutes: 60
+    steps:
+      - *build_checkout
+      - *build_pnpm
+      - *build_node
+      - *build_install
+      - *build_fp
+      - *build_cache
+      - *build_build
+      - *build_upload
+
+  e2e-android:
+    needs: [plan, build-android]
+    if: needs.plan.outputs.android != '[]'
+    name: android ${{ matrix.shard.index }} (~${{ matrix.shard.minutes }} min)
+    runs-on: ${{ needs.plan.outputs.android_runner == 'self-hosted' && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'ubuntu-latest' }}
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(needs.plan.outputs.android) }}
+    steps:
+      - &checkout_app
+        uses: actions/checkout@v4
+        with:
+          path: nomad-mobile
+      - &checkout_gen
+        uses: actions/checkout@v4
+        with:
+          repository: nomadkaraoke/karaoke-gen
+          ref: ${{ inputs.gen_ref || 'main' }}
+          path: karaoke-gen
+      - &checkout_decide
+        uses: actions/checkout@v4
+        with:
+          repository: nomadkaraoke/karaoke-decide
+          ref: ${{ inputs.decide_ref || 'main' }}
+          path: karaoke-decide
+      - &checkout_kjbox
+        uses: actions/checkout@v4
+        with:
+          repository: nomadkaraoke/kjbox
+          ref: ${{ inputs.kjbox_ref || 'main' }}
+          path: kjbox
+      - name: Free disk space
+        if: runner.environment == 'github-hosted'
+        working-directory: .
+        run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
+      - name: Enable KVM
+        if: runner.environment == 'github-hosted'
+        working-directory: .
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - &setup_pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: nomad-mobile/package.json
+          # Per runner: the self-hosted Mac's lanes share one home directory (~/setup-pnpm raced, ENOTEMPTY).
+          dest: ${{ runner.temp }}/setup-pnpm
+      - &setup_node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: nomad-mobile/pnpm-lock.yaml
+      - &setup_python
+        if: runner.environment == 'github-hosted'
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      # The self-hosted Mac: Homebrew's Python 3.13 (setup-python's macOS installer writes to /Users/runner).
+      - &python_self_hosted
+        if: runner.environment == 'self-hosted'
+        working-directory: .
+        run: echo "/opt/homebrew/opt/python@3.13/libexec/bin" >>"$GITHUB_PATH"
+      - &setup_java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - &cache_stacks
+        uses: actions/cache@v4
+        with:
+          path: |
+            karaoke-gen/.venv
+            karaoke-decide/.venv
+          # Venvs hard-code their absolute path (script shebangs), so a self-hosted lane only restores its own: a
+          # venv from another lane's work dir left "Command not found: uvicorn".
+          key: stacks-${{ runner.environment == 'self-hosted' && runner.name || 'hosted' }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('karaoke-gen/poetry.lock', 'karaoke-decide/poetry.lock') }}
+          restore-keys: stacks-${{ runner.environment == 'self-hosted' && runner.name || 'hosted' }}-${{ runner.os }}-${{ runner.arch }}-
+      # Home-directory tools: hosted runners only. The self-hosted Mac's lanes share one home, so Maestro and the
+      # emulators are installed there once (docs: the private workspace BUILD-HOST.md), never restored concurrently.
+      - &cache_tools
+        if: runner.environment == 'github-hosted'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/nomad-emulators
+            ~/.maestro
+          key: tools-${{ runner.os }}-${{ runner.arch }}-${{ env.MAESTRO_VERSION }}
+      - &install
+        name: Install app deps, Maestro and the stacks
+        env:
+          WITH_WEB: ${{ matrix.shard.web }}
+        run: |
+          pnpm install --frozen-lockfile
+          [[ -x ~/.maestro/bin/maestro ]] && ~/.maestro/bin/maestro --version | grep -qx "$MAESTRO_VERSION" ||
+            curl -fsSL https://get.maestro.mobile.dev | bash
+          echo "$HOME/.maestro/bin" >>"$GITHUB_PATH"
+          scripts/ci/setup-stacks.sh install
+          echo "$HOME/.cache/nomad-emulators/bin" >>"$GITHUB_PATH"
+          echo "PYTHON=$GITHUB_WORKSPACE/kjbox/kj-controller/.venv/bin/python" >>"$GITHUB_ENV"
+      - &stacks_up
+        name: Start the local stacks
+        env:
+          WITH_WEB: ${{ matrix.shard.web }}
+        run: scripts/ci/setup-stacks.sh up
+      - &download_app
+        uses: actions/download-artifact@v4
+        with:
+          name: dev-client-${{ github.job == 'e2e-ios' && 'ios' || 'android' }}
+          path: nomad-mobile/dev-client
+      - name: Run the shard on an emulator (hosted)
+        if: runner.environment == 'github-hosted'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_7
+          ram-size: 4096M
+          disk-size: 6G
+          cores: 3
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          disable-animations: true
+          working-directory: nomad-mobile
+          script: scripts/ci/run-shard.sh android dev-client/app-debug.apk "${{ matrix.shard.flows }}" ../e2e-out
+      - name: Run the shard on the lane's emulator (self-hosted)
+        if: runner.environment == 'self-hosted'
+        env:
+          FLOWS: ${{ matrix.shard.flows }}
+        run: |
+          scripts/ci/android-emulator.sh start
+          status=0
+          scripts/ci/run-shard.sh android dev-client/app-debug.apk "$FLOWS" ../e2e-out || status=$?
+          scripts/ci/android-emulator.sh stop
+          exit "$status"
+      - name: Stop the lane's emulator (self-hosted, after a cancel or failure)
+        if: always() && runner.environment == 'self-hosted'
+        run: scripts/ci/android-emulator.sh stop
+      - &logs
+        name: Stack logs (on failure)
+        if: failure()
+        run: scripts/ci/setup-stacks.sh logs
+      - &upload
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-${{ github.job == 'e2e-ios' && 'ios' || 'android' }}-${{ matrix.shard.index }}
+          path: e2e-out
+          retention-days: 7
+          if-no-files-found: ignore
+
+  e2e-ios:
+    needs: [plan, build-ios]
+    if: needs.plan.outputs.ios != '[]'
+    name: ios ${{ matrix.shard.index }} (~${{ matrix.shard.minutes }} min)
+    # The self-hosted runner only for dispatch runs; the runner itself also refuses fork PRs (a job-started hook on the
+    # machine, which a workflow edit can't bypass).
+    runs-on: ${{ needs.plan.outputs.ios_runner == 'self-hosted' && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(needs.plan.outputs.ios) }}
+    steps:
+      - *checkout_app
+      - *checkout_gen
+      - *checkout_decide
+      - *checkout_kjbox
+      - *setup_pnpm
+      - *setup_node
+      - *setup_python
+      - *python_self_hosted
+      - *setup_java
+      - *cache_stacks
+      - *cache_tools
+      - *install
+      - *stacks_up
+      - *download_app
+      - name: Run the shard on a simulator
+        run: scripts/ci/run-shard.sh ios dev-client/NomadKaraoke.app "${{ matrix.shard.flows }}" ../e2e-out
+      - name: Shut down the lane's simulator (self-hosted; frees RAM for the lane's next job)
+        if: always() && runner.environment == 'self-hosted'
+        run: |
+          name="iPhone 17 Pro"; if (( ${LANE:-0} > 0 )); then name+=" lane $LANE"; fi
+          xcrun simctl list devices booted | grep -F "$name (" | grep -oE '[0-9A-F-]{36}' | xargs -n1 xcrun simctl shutdown 2>/dev/null || true
+      - *logs
+      - *upload
+
+  report:
+    needs: [plan, e2e-ios, e2e-android]
+    if: always() && needs.plan.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: nomad-mobile
+          sparse-checkout: scripts
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: e2e-*
+          path: e2e-out
+      - name: Summary
+        run: node scripts/ci/e2e-report.mjs ../e2e-out >>"$GITHUB_STEP_SUMMARY"
+      - name: Fail if a shard failed
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Lets a Maestro flow stop and start a local stack (tonight-9's "box unreachable", tonight-10's offline log).
 
-Maestro scripts can only make HTTP calls, so scripts/e2e-local.sh runs this on 127.0.0.1:8049 for the length of a
+Maestro scripts can only make HTTP calls, so scripts/e2e-local.sh runs this on 127.0.0.1:8049 (8049 + 100 x LANE) for the length of a
 run: POST /kjbox/stop runs `kj-controller/scripts/local-stack.sh down` in KJBOX_DIR, POST /kjbox/start runs `up`
 (which keeps the night and its night_id); POST /decide/stop and /decide/start do the same with decide's
 `scripts/local-stack.sh` in DECIDE_DIR (its data lives in gen's Firestore emulator, so a restart keeps it).
@@ -33,7 +33,8 @@ def main() -> None:
         decide = Path(args.decide_dir).resolve() / "scripts" / "local-stack.sh"
         if not decide.is_file():
             raise SystemExit(f"no decide local-stack script at {decide}")
-        gen = {"GEN_API_URL": "http://127.0.0.1:8010"}
+        # The lane's gen (scripts/e2e-lane.sh passes it, with the lane's decide and kjbox env, to this process).
+        gen = {"GEN_API_URL": os.environ.get("GEN_API_URL", "http://127.0.0.1:8010")}
         commands.update({"/decide/stop": (decide, "down", {}), "/decide/start": (decide, "up", gen)})
 
     class Handler(BaseHTTPRequestHandler):
