@@ -74,6 +74,9 @@ appId: com.nomadkaraoke.mobile
       id: "vs-q-difficulty-easy"
     direction: DOWN
     timeout: 10000
+    # Centred: with the falsetto catch-up the quiz is taller and the row stopped under the sticky
+    # footer, so on iOS the tap landed on Next and sent the quiz unanswered.
+    centerElement: true
 - tapOn:
     id: "vs-q-difficulty-easy"
 - tapOn:
