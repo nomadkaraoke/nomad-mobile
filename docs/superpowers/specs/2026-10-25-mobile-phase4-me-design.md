@@ -127,7 +127,6 @@ Rulings and deviations from building 4a (full ledger: the plan's "Execution ledg
 
 - A deduplicated known-songs total in decide, to restore "songs known" on the profile card (R12).
 - decide `user_songs.last_sung_at` falls back to now for undated backfill (R9); `_inc` should ignore `now` for `origin=backfill`.
-- Re-editing a survey can't clear vibes/reasons (empty arrays are stripped; reasons survive a switch to Great): send explicit clears.
 - The jest open handle that needs `--forceExit` predates B9 (shared setup: resetMe / renderTonight / outbox timers).
 - UX review, noted and not fixed:
   - All your songs header: "Add songs I've sung" is a long text button beside the title; it may truncate in long locales (de, fi); use a + icon button with that label.

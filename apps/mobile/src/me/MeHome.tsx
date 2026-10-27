@@ -1,7 +1,6 @@
 import { useTranslations } from '@nomad/i18n';
 import { Text } from '@nomad/ui';
 import { router, type Href } from 'expo-router';
-import { useMemo } from 'react';
 import { Pressable } from 'react-native';
 
 import { GoTosShelf } from './GoTosShelf';
@@ -9,7 +8,7 @@ import { ProfileSummaryCard } from './ProfileSummaryCard';
 import { SetlistsShelf } from './SetlistsShelf';
 import { StatsCard } from './StatsCard';
 import { useLibrary } from './useLibrary';
-import { toPendingLog, useLogMirror } from './useLogMirror';
+import { useStatsLog } from './useStatsLog';
 
 /**
  * The signed-in top of Me: profile card, shelves, All your songs, stats. Phase 4c's "Were these you?" row goes
@@ -18,8 +17,7 @@ import { toPendingLog, useLogMirror } from './useLogMirror';
 export function MeHome() {
   const t = useTranslations('me.home');
   const { items } = useLibrary();
-  const { entries } = useLogMirror();
-  const log = useMemo(() => toPendingLog(entries), [entries]);
+  const log = useStatsLog();
   return (
     <>
       <ProfileSummaryCard items={items} />
