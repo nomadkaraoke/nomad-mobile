@@ -18,10 +18,16 @@ const KIND = 'recs-gotos';
 
 /** Every recs go-tos query (any account, any voice key). */
 export const isRecsGoTosKey = (k: QueryKey): boolean => k[0] === 'decide' && k[2] === KIND;
-const recsGoTosFilter = { predicate: (q: { queryKey: QueryKey }) => isRecsGoTosKey(q.queryKey) };
+/** The signed-in account's go-tos queries (another account's are never touched by this one's hide). */
+const recsGoTosFilter = (userKey: string | null) => ({
+  predicate: (q: { queryKey: QueryKey }) => isRecsGoTosKey(q.queryKey) && q.queryKey[1] === userKey,
+});
 
-/** Where a hidden song sat, in a go-tos query or in the offline cache (`queryKey` null), to put it back on undo. */
-export type GoToSpot = { queryKey: QueryKey | null; index: number };
+/**
+ * Where a hidden song sat, in a go-tos query or in the offline cache (`queryKey` null), to put it back on undo.
+ * `userKey` is the account it was hidden for: an undo after an account change never writes into the new one's cache.
+ */
+export type GoToSpot = { queryKey: QueryKey | null; index: number; userKey: string };
 
 const without = (c: GoTosCache, songKey: string): { next: GoTosCache; index: number } => {
   const index = c.songs?.findIndex((s) => s.song_key === songKey) ?? -1;
@@ -41,23 +47,26 @@ const withSong = (c: GoTosCache, song: RecSong, index: number): GoTosCache => {
  * at once (the Me shelf must not keep a song the singer just hid, online or off). Returns where it was.
  */
 export function dropRecsGoTo(queryClient: QueryClient, songKey: string): GoToSpot[] {
-  void queryClient.cancelQueries(recsGoTosFilter); // a refetch landing now would bring it back
+  const userKey = currentUserKey();
+  if (!userKey) return [];
+  const filter = recsGoTosFilter(userKey);
+  // A refetch landing now would bring it back; a first load (no data yet) is left alone, as Discover does.
+  void queryClient.cancelQueries({ predicate: (q) => filter.predicate(q) && q.state.data !== undefined });
   const spots: GoToSpot[] = [];
-  for (const [queryKey, data] of queryClient.getQueriesData<GoTosCache>(recsGoTosFilter)) {
+  for (const [queryKey, data] of queryClient.getQueriesData<GoTosCache>(filter)) {
     if (!data) continue;
     const { next, index } = without(data, songKey);
     if (index < 0) continue;
     queryClient.setQueryData(queryKey, next);
-    spots.push({ queryKey, index });
+    spots.push({ queryKey, index, userKey });
   }
-  const userKey = currentUserKey();
-  const storageKey = userKey && goTosStorageKey(userKey);
+  const storageKey = goTosStorageKey(userKey);
   const cached = readCache(storageKey, isCache);
-  if (storageKey && cached) {
+  if (cached) {
     const { next, index } = without(cached, songKey);
     if (index >= 0) {
       writeCache(storageKey, next);
-      spots.push({ queryKey: null, index });
+      spots.push({ queryKey: null, index, userKey });
     }
   }
   return spots;
@@ -65,20 +74,21 @@ export function dropRecsGoTo(queryClient: QueryClient, songKey: string): GoToSpo
 
 /** Undo of a hide (or a hide decide refused): the song goes back where it was. */
 export function restoreRecsGoTo(queryClient: QueryClient, song: RecSong, spots: GoToSpot[]): void {
-  for (const { queryKey, index } of spots) {
+  for (const { queryKey, index, userKey } of spots) {
+    if (currentUserKey() !== userKey) continue; // another account now: its data is not this hide's
     if (queryKey) {
       queryClient.setQueryData<GoTosCache>(queryKey, (d) => (d ? withSong(d, song, index) : d));
       continue;
     }
-    const userKey = currentUserKey();
-    const storageKey = userKey && goTosStorageKey(userKey);
+    const storageKey = goTosStorageKey(userKey);
     const cached = readCache(storageKey, isCache);
-    if (storageKey && cached) writeCache(storageKey, withSong(cached, song, index));
+    if (cached) writeCache(storageKey, withSong(cached, song, index));
   }
 }
 
 /** Once decide has a hide or unhide, the go-tos are refetched from it. */
-export const invalidateRecsGoTos = (queryClient: QueryClient) => void queryClient.invalidateQueries(recsGoTosFilter);
+export const invalidateRecsGoTos = (queryClient: QueryClient) =>
+  void queryClient.invalidateQueries(recsGoTosFilter(currentUserKey()));
 
 /**
  * The voice profile decide has: a measuredAt once synced. While a new profile is still being sent, the last synced

@@ -12,7 +12,7 @@ import { goTosStorageKey } from '../../me/account';
 import { goToRows, GoTosShelf } from '../../me/GoTosShelf';
 import { appStorage } from '../../storage';
 import { useVoiceStore } from '../../voice/voiceStore';
-import { resetMe, wrapperFor } from './helpers';
+import { resetMe, signIn, wrapperFor } from './helpers';
 
 jest.mock('@nomad/api-decide', () => ({
   ...jest.requireActual('@nomad/api-decide'),
@@ -128,5 +128,21 @@ describe('GoTosShelf', () => {
     const disc = renderHook(() => useSongFeedback(), { wrapper: wrapperFor(client) });
     act(() => disc.result.current.hide(rec('Hit')));
     expect(cachedTitles()).toEqual(['Other']);
+  });
+
+  it("an undo after switching accounts never writes the hidden song into the new account's cache", async () => {
+    const client = resetMe(EMAIL);
+    const other = 'b@example.com';
+    appStorage.set(goTosStorageKey(userKeyFor(EMAIL)), JSON.stringify({ songs: [rec('Hit')], savedAt: Date.now() }));
+    appStorage.set(goTosStorageKey(userKeyFor(other)), JSON.stringify({ songs: [rec('Theirs')], savedAt: Date.now() }));
+    api.hideSong.mockImplementation(() => new Promise(() => {}) as never);
+    const disc = renderHook(() => useSongFeedback(), { wrapper: wrapperFor(client) });
+    act(() => disc.result.current.hide(rec('Hit')));
+    const hiddenSong = disc.result.current.hidden;
+    act(() => signIn(other));
+    // The toast resets on an account change; call undo directly with the song, as a late tap would.
+    act(() => disc.result.current.undoHide(hiddenSong ?? rec('Hit')));
+    const raw = JSON.parse(appStorage.getString(goTosStorageKey(userKeyFor(other))) ?? '{}') as { songs: { title: string }[] };
+    expect(raw.songs.map((x) => x.title)).toEqual(['Theirs']);
   });
 });
