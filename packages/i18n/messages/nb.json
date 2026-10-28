@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Tid igjen å synge",
     "micBusyBody": "En annen app eller en samtale bruker mikrofonen. Lukk den og prøv igjen, eller velg stemmetype i stedet.",
     "micBusyTitle": "Mikrofonen er opptatt",
-    "typeUnknown": "Stemmetypen din"
+    "typeUnknown": "Stemmetypen din",
+    "highFalsettoBody": "Den høyeste tonen din var {note}. Hvis det var falsett, holder vi den utenfor bryststemmeregisteret ditt, slik at sangene passer bedre.",
+    "highFalsettoTitle": "Var den høyeste tonen din falsett eller hodeklang (lysere, med mer luft)?",
+    "highFalsettoNo": "Nei",
+    "highFalsettoSkip": "Hopp over",
+    "highFalsettoUnsure": "Ikke sikker",
+    "highFalsettoYes": "Ja"
   },
   "fit": {
     "fits": "Passer til stemmen din",
@@ -1708,10 +1714,15 @@
       "probably": "Sannsynligvis {type}, men vi trenger flere sanger for å være sikre",
       "range": "{range}, behagelig {comfort}",
       "saved": "Lagret i musikkprofilen din.",
-      "suited": "Sanger som passer til deg",
+      "suited": "Sanger du liker som passer for deg",
       "confidenceHigh": "Høy sikkerhet",
       "done": "Ferdig",
-      "typeUnknown": "Stemmetypen din"
+      "typeUnknown": "Stemmetypen din",
+      "comfortEstimated": "Beregnet",
+      "comfortMeasured": "Målt ut fra sangene du syntes var behagelige",
+      "falsetto": "Falsett opp til {note}",
+      "adopt": "Bruk denne som stemmen min",
+      "adoptFailed": "Kunne ikke lagre den som stemmen din. Sjekk tilkoblingen og prøv igjen."
     },
     "setup": {
       "bit_warm": "Litt oppvarmet",
@@ -1739,7 +1750,18 @@
       "no": "Nei",
       "openSettings": "Åpne Innstillinger",
       "quiet": "Vær stille et øyeblikk…",
-      "yes": "Ja"
+      "yes": "Ja",
+      "background": "Om syngingen din (valgfritt)",
+      "backgroundHint": "Hjelper oss med å skille bryststemmen din fra falsett.",
+      "experience": "Sangerfaring?",
+      "experience_none": "Ingen",
+      "experience_some": "Noe",
+      "experience_trained": "Skolert",
+      "usesFalsetto": "Bruker du falsett eller hodestemme?",
+      "usesFalsetto_sometimes": "Noen ganger",
+      "usesFalsetto_no": "Nei",
+      "usesFalsetto_unsure": "Ikke sikker",
+      "usesFalsetto_yes": "Ja"
     },
     "title": "Finn stemmen din",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Slett opptak",
       "play": "Spill av",
       "song": "{title} · {artist}",
+      "stop": "Stopp"
+    },
+    "falsetto": {
+      "chip": "Høy tone ({note}): falsett?",
+      "chipLabel": "Den høye tonen, {note}, kan ha vært falsett eller hoderøst. Var den det?",
+      "no": "Nei",
+      "yes": "Ja",
+      "catchUpBody": "Valgfritt. Falsett eller hodeklang høres lettere og luftigere ut. Svarene dine sørger for at disse tonene holdes utenfor bryststemmeregisteret ditt.",
+      "catchUpTitle": "Var disse høye tonene falsett?",
+      "note": "{note} ved {time}",
+      "play": "Lytt",
+      "unsure": "Ikke sikker",
       "stop": "Stopp"
     }
   }

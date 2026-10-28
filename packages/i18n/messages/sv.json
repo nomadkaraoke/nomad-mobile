@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Tid kvar att sjunga",
     "micBusyBody": "En annan app eller ett samtal använder mikrofonen. Avsluta det och försök igen, eller välj din rösttyp istället.",
     "micBusyTitle": "Mikrofonen är upptagen",
-    "typeUnknown": "Din rösttyp"
+    "typeUnknown": "Din rösttyp",
+    "highFalsettoBody": "Din högsta ton var {note}. Om det var falsett räknar vi bort den från ditt bröstregister så att låtarna passar bättre.",
+    "highFalsettoTitle": "Var din högsta ton falsett eller huvudröst (ljusare, luftigare)?",
+    "highFalsettoNo": "Nej",
+    "highFalsettoSkip": "Hoppa över",
+    "highFalsettoUnsure": "Inte säker",
+    "highFalsettoYes": "Ja"
   },
   "fit": {
     "fits": "Passar din röst",
@@ -1708,10 +1714,15 @@
       "probably": "Förmodligen {type}, men vi behöver fler låtar för att vara säkra",
       "range": "{range}, bekvämt {comfort}",
       "saved": "Sparat i din musikprofil.",
-      "suited": "Låtar som passar dig",
+      "suited": "Låtar du gillar som passar dig",
       "confidenceHigh": "Hög säkerhet",
       "done": "Klar",
-      "typeUnknown": "Din rösttyp"
+      "typeUnknown": "Din rösttyp",
+      "comfortEstimated": "Uppskattat",
+      "comfortMeasured": "Mätt utifrån de låtar du tyckte kändes bekväma",
+      "falsetto": "Falsett upp till {note}",
+      "adopt": "Använd som min röst",
+      "adoptFailed": "Det gick inte att spara som din röst. Kontrollera anslutningen och försök igen."
     },
     "setup": {
       "bit_warm": "Lite uppvärmd",
@@ -1739,7 +1750,18 @@
       "no": "Nej",
       "openSettings": "Öppna Inställningar",
       "quiet": "Var tyst en sekund…",
-      "yes": "Ja"
+      "yes": "Ja",
+      "background": "Om din sång (valfritt)",
+      "backgroundHint": "Hjälper oss att skilja din bröströst från falsett.",
+      "experience": "Sångerfarenhet?",
+      "experience_none": "Ingen",
+      "experience_some": "Lite",
+      "experience_trained": "Skolad",
+      "usesFalsetto": "Använder du falsett eller huvudröst?",
+      "usesFalsetto_sometimes": "Ibland",
+      "usesFalsetto_no": "Nej",
+      "usesFalsetto_unsure": "Inte säker",
+      "usesFalsetto_yes": "Ja"
     },
     "title": "Hitta din röst",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Ta bort inspelning",
       "play": "Spela",
       "song": "{title} · {artist}",
+      "stop": "Stopp"
+    },
+    "falsetto": {
+      "chip": "Hög ton ({note}): falsett?",
+      "chipLabel": "Den där höga tonen, {note}, kan ha varit falsett eller huvudklang. Var den det?",
+      "no": "Nej",
+      "yes": "Ja",
+      "catchUpBody": "Valfritt. Falsett eller huvudklang låter ljusare och luftigare. Dina svar ser till att de tonerna inte räknas till ditt bröstregister.",
+      "catchUpTitle": "Var dessa höga toner falsett?",
+      "note": "{note} vid {time}",
+      "play": "Lyssna",
+      "unsure": "Inte säker",
       "stop": "Stopp"
     }
   }

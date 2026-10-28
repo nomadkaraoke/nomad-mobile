@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Hátralévő éneklési idő",
     "micBusyBody": "Egy másik alkalmazás vagy hívás használja a mikrofont. Zárd be, és próbáld újra, vagy válaszd ki inkább a hangtípusodat.",
     "micBusyTitle": "A mikrofon foglalt",
-    "typeUnknown": "A hangtípusod"
+    "typeUnknown": "A hangtípusod",
+    "highFalsettoBody": "A legmagasabb kiénekelt hangod a(z) {note} volt. Ha falzett volt, nem számoljuk bele a mellhang-terjedelmedbe, így a dalok jobban fognak illeni hozzád.",
+    "highFalsettoTitle": "A legmagasabb hangod falzett vagy fejhang volt (könnyedebb, levegősebb)?",
+    "highFalsettoNo": "Nem",
+    "highFalsettoSkip": "Kihagyás",
+    "highFalsettoUnsure": "Nem vagyok biztos benne",
+    "highFalsettoYes": "Igen"
   },
   "fit": {
     "fits": "Illik a hangodhoz",
@@ -1708,10 +1714,15 @@
       "probably": "Valószínűleg {type}, de több dalra van szükség, hogy biztosak lehessünk benne",
       "range": "{range}, kényelmes: {comfort}",
       "saved": "Elmentve a zenei profilodba.",
-      "suited": "Dalok, amelyek illenek hozzád",
+      "suited": "Dalok, amiket szeretsz, és illenek hozzád",
       "confidenceHigh": "Nagy bizonyosság",
       "done": "Kész",
-      "typeUnknown": "A hangtípusod"
+      "typeUnknown": "A hangtípusod",
+      "comfortEstimated": "Becsült",
+      "comfortMeasured": "A számodra kényelmesnek jelölt dalok alapján mérve",
+      "falsetto": "Falzett egészen eddig: {note}",
+      "adopt": "Használd ezt hangprofilként",
+      "adoptFailed": "Nem sikerült elmenteni a hangprofilodként. Ellenőrizd a kapcsolatot, és próbáld újra."
     },
     "setup": {
       "bit_warm": "Kissé bemelegedett",
@@ -1739,7 +1750,18 @@
       "no": "Nem",
       "openSettings": "Beállítások megnyitása",
       "quiet": "Maradj csendben egy pillanatra…",
-      "yes": "Igen"
+      "yes": "Igen",
+      "background": "Az éneklésedről (opcionális)",
+      "backgroundHint": "Segít megkülönböztetni a mellhangodat a falzettől.",
+      "experience": "Éneklési tapasztalatod?",
+      "experience_none": "Nincs",
+      "experience_some": "Valamennyi",
+      "experience_trained": "Képzett",
+      "usesFalsetto": "Használsz falzettet vagy fejhangot?",
+      "usesFalsetto_sometimes": "Néha",
+      "usesFalsetto_no": "Nem",
+      "usesFalsetto_unsure": "Nem vagyok biztos benne",
+      "usesFalsetto_yes": "Igen"
     },
     "title": "Találd meg a hangod",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Felvétel törlése",
       "play": "Lejátszás",
       "song": "{title} · {artist}",
+      "stop": "Leállítás"
+    },
+    "falsetto": {
+      "chip": "Magas hang ({note}): falzett?",
+      "chipLabel": "Ez a magas hang ({note}) lehet, hogy falzett vagy fejhang volt. Az volt?",
+      "no": "Nem",
+      "yes": "Igen",
+      "catchUpBody": "Opcionális. A falzett vagy a fejhang könnyedebbnek és levegősebbnek hangzik. A válaszaiddal kizárhatod ezeket a hangokat a mellkasi hangterjedelmedből.",
+      "catchUpTitle": "Ezek a magas hangok falzettek voltak?",
+      "note": "{note} ekkor: {time}",
+      "play": "Meghallgatás",
+      "unsure": "Nem vagyok biztos benne",
       "stop": "Leállítás"
     }
   }

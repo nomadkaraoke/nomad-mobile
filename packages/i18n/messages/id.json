@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Sisa waktu bernyanyi",
     "micBusyBody": "Aplikasi lain atau panggilan telepon sedang menggunakan mikrofon. Tutup aplikasi tersebut dan coba lagi, atau pilih jenis suara Anda secara manual.",
     "micBusyTitle": "Mikrofon sedang digunakan",
-    "typeUnknown": "Tipe suara Anda"
+    "typeUnknown": "Tipe suara Anda",
+    "highFalsettoBody": "Nada tertinggi Anda adalah {note}. Jika itu falsetto, kami tidak akan memasukkannya ke dalam rentang chest voice Anda agar lagu-lagunya lebih pas.",
+    "highFalsettoTitle": "Apakah nada tertinggi Anda berupa falsetto atau head voice (lebih ringan dan berangin)?",
+    "highFalsettoNo": "Tidak",
+    "highFalsettoSkip": "Lewati",
+    "highFalsettoUnsure": "Kurang yakin",
+    "highFalsettoYes": "Ya"
   },
   "fit": {
     "fits": "Sesuai suara Anda",
@@ -1708,10 +1714,15 @@
       "probably": "Kemungkinan {type}, tetapi butuh lebih banyak lagu untuk memastikannya",
       "range": "{range}, nyaman di {comfort}",
       "saved": "Tersimpan di profil musik Anda.",
-      "suited": "Lagu yang cocok untuk Anda",
+      "suited": "Lagu favorit yang cocok untukmu",
       "confidenceHigh": "Keyakinan tinggi",
       "done": "Selesai",
-      "typeUnknown": "Tipe suara Anda"
+      "typeUnknown": "Tipe suara Anda",
+      "comfortEstimated": "Perkiraan",
+      "comfortMeasured": "Diukur dari lagu-lagu yang kamu rasa nyaman dinyanyikan",
+      "falsetto": "Falseto hingga {note}",
+      "adopt": "Gunakan ini sebagai suara saya",
+      "adoptFailed": "Tidak dapat menyimpannya sebagai suara Anda. Periksa koneksi Anda dan coba lagi."
     },
     "setup": {
       "bit_warm": "Sedikit pemanasan",
@@ -1739,7 +1750,18 @@
       "no": "Tidak",
       "openSettings": "Buka Pengaturan",
       "quiet": "Harap hening sebentar…",
-      "yes": "Ya"
+      "yes": "Ya",
+      "background": "Tentang vokal Anda (opsional)",
+      "backgroundHint": "Membantu kami membedakan suara dada (chest voice) dan falsetto Anda.",
+      "experience": "Pengalaman bernyanyi?",
+      "experience_none": "Tidak ada",
+      "experience_some": "Sedikit",
+      "experience_trained": "Terlatih",
+      "usesFalsetto": "Apakah Anda menggunakan falsetto atau head voice?",
+      "usesFalsetto_sometimes": "Kadang-kadang",
+      "usesFalsetto_no": "Tidak",
+      "usesFalsetto_unsure": "Kurang yakin",
+      "usesFalsetto_yes": "Ya"
     },
     "title": "Temukan suara Anda",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Hapus rekaman",
       "play": "Putar",
       "song": "{title} · {artist}",
+      "stop": "Berhenti"
+    },
+    "falsetto": {
+      "chip": "Nada tinggi ({note}): falseto?",
+      "chipLabel": "Nada tinggi itu ({note}) mungkin berupa falseto atau head voice. Apakah benar?",
+      "no": "Tidak",
+      "yes": "Ya",
+      "catchUpBody": "Opsional. Falsetto atau suara kepala (head voice) terdengar lebih ringan dan lebih berangin. Jawaban Anda membantu memisahkan nada-nada tersebut dari jangkauan suara dada (chest voice) Anda.",
+      "catchUpTitle": "Apakah nada-nada tinggi ini falsetto?",
+      "note": "{note} pada {time}",
+      "play": "Dengarkan",
+      "unsure": "Kurang yakin",
       "stop": "Berhenti"
     }
   }

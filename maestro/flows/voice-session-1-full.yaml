@@ -1,7 +1,10 @@
 # Voice session 1 (Phase 3d spec §4, plan Task D8): Discover → Find your voice → setup (record yes, headphones) →
 # three songs on the fake player with the fake mic singing (the quiz's pre-fill shows each time) → Finish → the
-# result's primary type is Baritone (decide's fixture voice.db + the fake mic's baritone scale) → decide has 3 attempts and 3
-# uploaded take recordings.
+# result's primary type is Baritone (decide's fixture voice.db + the fake mic's baritone scale) → decide has 3 attempts
+# and 3 uploaded take recordings.
+# Batch 1 (M7): a seeded baritone mic profile (comfort top A3 = 57) is the session's prior, so decide's first offer
+# carries a "profile" comfort estimate; the fake mic's held A4 in the first song then raises the live falsetto chip
+# ("High note (A4): falsetto?", threshold 57 + 4 = 61, above the sing notes' C4), answered Yes.
 appId: com.nomadkaraoke.mobile
 name: voice-session-1-full
 tags:
@@ -13,6 +16,12 @@ tags:
       ACTION: setup
       STACK: ${STACK}
       NAME: vs1
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      PROFILE: '{"low_midi":43,"high_midi":64,"comfort_low":47,"comfort_high":57,"voice_type":"baritone","confidence":"medium","method":"mic"}'
 - runFlow:
     file: ../common/voice-session-open.yaml
     env:
@@ -28,6 +37,8 @@ tags:
     file: ../common/voice-session-song.yaml
     env:
       EXPECT_PREFILL: "true"
+      FALSETTO: "yes"
+      FALSETTO_SHOT: ${VOICE_SESSION_SHOTS}/vs-1-falsetto-chip
       SHOT: ${VOICE_SESSION_SHOTS}/vs-1-quiz
 - runFlow:
     file: ../common/voice-session-song.yaml

@@ -1,6 +1,7 @@
 import { StrictMode, createElement, type ReactNode } from 'react';
 import { act, renderHook } from '@testing-library/react-native';
 import type { MicPermission, PcmBuffer, PitchSource, VoiceSection } from '../pitchSource';
+import { classifyVoice } from '@nomad/core';
 import { SING_MS, useVoiceTest } from '../useVoiceTest';
 
 const RATE = 16000;
@@ -99,6 +100,7 @@ it('walks intro→low→high→sing→result and classifies baritone', async () 
 
   await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
   await act(async () => result.current.done());
+  act(() => result.current.answerHighFalsetto(null)); // the top-note question, skipped
   await ready(result);
   expect(result.current.step).toBe('sing');
   expect(src.sections).toEqual(['low', 'high', 'sing']);
@@ -121,6 +123,7 @@ it('sing waits for ready(): no mic, no countdown, until the tap', async () => {
   await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
   await act(async () => result.current.done());
+  act(() => result.current.answerHighFalsetto(null)); // the top-note question, skipped
   expect(result.current.step).toBe('sing');
   expect(result.current.phase).toBe('ready');
   expect(src.sections).toEqual(['low', 'high']);
@@ -152,6 +155,7 @@ it('skipSing() while waiting for ready() finishes from the low and high notes al
   await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
   await act(async () => result.current.done());
+  act(() => result.current.answerHighFalsetto(null)); // the top-note question, skipped
   expect(result.current.phase).toBe('ready');
   act(() => result.current.skipSing());
   expect(result.current.step).toBe('result');
@@ -168,6 +172,7 @@ it('skipSing() while waiting with too narrow a low/high → no-notes, retry rest
   await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(58, 1.2)));
   await act(async () => result.current.done());
+  act(() => result.current.answerHighFalsetto(null)); // the top-note question, skipped
   act(() => result.current.skipSing());
   expect(result.current.step).toBe('no-notes');
   await act(async () => result.current.retry());
@@ -183,6 +188,7 @@ it('singStartedAt is set when capture starts (with the SING_MS timer), not when 
   await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
   await act(async () => result.current.done());
+  act(() => result.current.answerHighFalsetto(null)); // the top-note question, skipped
   src.start = (onBuffer, section) =>
     new Promise<void>((resolve) => {
       release = () => void realStart(onBuffer, section).then(resolve);
@@ -223,6 +229,7 @@ it(`sing ends by itself at ${SING_MS / 1000} s after ready()`, async () => {
   await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(69, 1.2)));
   await act(async () => result.current.done());
+  act(() => result.current.answerHighFalsetto(null)); // the top-note question, skipped
   expect(SING_MS).toBe(30_000);
   await advance(5_000); // thinking time is not charged
   await ready(result);
@@ -349,6 +356,7 @@ it('two held notes less than 3 semitones apart → no-notes, retry restarts at l
   await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(46, 1.2)));
   await act(async () => result.current.done());
+  act(() => result.current.answerHighFalsetto(null)); // the top-note question, skipped
   await ready(result);
   act(() => result.current.skipSing());
   expect(result.current.step).toBe('no-notes');
@@ -528,6 +536,7 @@ it('range is min/max over all held notes when high is sung lower than low', asyn
   await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(48, 1.2)));
   await act(async () => result.current.done());
+  act(() => result.current.answerHighFalsetto(null)); // the top-note question, skipped
   await ready(result);
   act(() => result.current.skipSing());
   expect(result.current.step).toBe('result');
@@ -555,6 +564,7 @@ describe('at 48 kHz (what a phone delivers if it ignores the 16 kHz request)', (
     await act(async () => result.current.done());
     await feed(src, concat(t48(null, 1), t48(69, 1.2)));
     await act(async () => result.current.done());
+    act(() => result.current.answerHighFalsetto(null)); // the top-note question, skipped
     await ready(result);
     expect(result.current.step).toBe('sing');
     await feed(src, concat(t48(null, 1), ...[52, 55, 59, 62, 57, 54].map((m) => t48(m, 0.8))));
@@ -584,6 +594,7 @@ describe('at 48 kHz (what a phone delivers if it ignores the 16 kHz request)', (
     await act(async () => result.current.done());
     await feed(src, concat(t48(null, 1), t48(69, 1.2)));
     await act(async () => result.current.done());
+    act(() => result.current.answerHighFalsetto(null)); // the top-note question, skipped
     await ready(result);
     // 30 s of held notes with no gap between them: one gap-free segment for the whole step.
     await feed(src, concat(t48(null, 1), ...Array.from({ length: 30 }, (_, i) => t48(52 + (i % 8), 1))));
@@ -630,9 +641,75 @@ it('a held note that starts after 25 s on the low step still counts and lowers t
   await act(async () => result.current.done());
   await feed(src, concat(SILENT_SECOND(), tone(64, 1.2)));
   await act(async () => result.current.done());
+  act(() => result.current.answerHighFalsetto(null)); // the top-note question, skipped
   await ready(result);
   act(() => result.current.skipSing());
   expect(result.current.step).toBe('result');
   expect(result.current.result?.range.low).toBe(43);
   expect(result.current.result?.range.high).toBe(64);
+});
+
+describe('the top note: falsetto? (batch 1, M10)', () => {
+  /** low A2, then the high step's notes, then done() on high. */
+  async function toQuestion(high: number[]) {
+    const src = makeSource();
+    const hook = await begin(src);
+    await feed(src, concat(SILENT_SECOND(), tone(45, 1.2)));
+    await act(async () => hook.result.current.done());
+    await feed(src, concat(SILENT_SECOND(), ...high.map((m) => tone(m, 1.2))));
+    await act(async () => hook.result.current.done());
+    return { src, ...hook };
+  }
+  const singAndFinish = async (src: FakeSource, result: { current: ReturnType<typeof useVoiceTest> }) => {
+    await ready(result);
+    await feed(src, concat(SILENT_SECOND(), ...[52, 55, 59, 62, 57, 54].map((m) => tone(m, 0.8))));
+    act(() => result.current.skipSing());
+  };
+
+  it('asks after high step when a top note exists (mic off meanwhile)', async () => {
+    const { src, result } = await toQuestion([64, 69]);
+    expect(result.current.step).toBe('high-falsetto');
+    expect(result.current.highTop).toBe(69);
+    expect(src.sections).toEqual(['low', 'high']);
+    // Nothing ends the question by itself.
+    await advance(60_000);
+    expect(result.current.step).toBe('high-falsetto');
+  });
+
+  it('yes moves top to falsettoHigh and lowers highMidi to the highest note ≥ 2 below it', async () => {
+    const { src, result } = await toQuestion([64, 69]);
+    act(() => result.current.answerHighFalsetto('yes'));
+    expect(result.current.step).toBe('sing');
+    expect(result.current.phase).toBe('ready');
+    await singAndFinish(src, result);
+    const r = result.current.result!;
+    expect(r.falsettoHigh).toBe(69);
+    expect(r.range.high).toBe(64);
+    expect(r.range.comfortHigh).toBeLessThanOrEqual(64);
+    expect(r.range.low).toBe(45);
+  });
+
+  it('yes with no lower note in the high step: three below the top', async () => {
+    const { src, result } = await toQuestion([69]);
+    act(() => result.current.answerHighFalsetto('yes'));
+    await singAndFinish(src, result);
+    expect(result.current.result!.range.high).toBe(66);
+    expect(result.current.result!.falsettoHigh).toBe(69);
+  });
+
+  it('the type is classified on the chest range only', async () => {
+    const { src, result } = await toQuestion([64, 69]);
+    act(() => result.current.answerHighFalsetto('yes'));
+    await singAndFinish(src, result);
+    const r = result.current.result!;
+    expect(r.voice).toEqual(classifyVoice(r.range));
+  });
+
+  it.each(['no', 'unsure', null] as const)('%s (or skip) keeps today\'s behaviour', async (answer) => {
+    const { src, result } = await toQuestion([64, 69]);
+    act(() => result.current.answerHighFalsetto(answer));
+    await singAndFinish(src, result);
+    expect(result.current.result!.range.high).toBe(69);
+    expect(result.current.result!.falsettoHigh).toBeNull();
+  });
 });

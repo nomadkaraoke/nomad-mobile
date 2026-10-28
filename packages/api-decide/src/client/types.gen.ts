@@ -603,6 +603,10 @@ export type AttemptDebugOut = {
 
 /**
  * AttemptIn
+ *
+ * ``pitch`` is the chest-only summary (the app drops falsetto-labelled spans; Phase 3d batch 1, Part C);
+ * ``pitch_all`` the unfiltered one, kept for analysis. Old apps send an unfiltered ``pitch`` and neither new
+ * field, which stays valid.
  */
 export type AttemptIn = {
     /**
@@ -627,6 +631,11 @@ export type AttemptIn = {
     stopped_early: boolean;
     quiz: QuizIn;
     pitch?: PitchSummaryIn | null;
+    pitch_all?: PitchSummaryIn | null;
+    /**
+     * Note Labels
+     */
+    note_labels?: Array<NoteLabelIn>;
 };
 
 /**
@@ -988,6 +997,34 @@ export type CollectEmailResponse = {
      * User Id
      */
     user_id: string;
+};
+
+/**
+ * ComfortEstimateOut
+ *
+ * The session's chest comfort estimate when the song is offered (the live falsetto chip's reference).
+ *
+ * ``source``: "measured" (from the songs rated comfortable, as the result shows it), "model" (the posterior
+ * mean) or "profile" (no attempt counts yet: the prior profile's own band). ``sd_high`` is always the model's
+ * posterior SD of the comfort top, so the app can tell a settled model estimate from a guess.
+ */
+export type ComfortEstimateOut = {
+    /**
+     * Low
+     */
+    low: number;
+    /**
+     * High
+     */
+    high: number;
+    /**
+     * Sd High
+     */
+    sd_high: number;
+    /**
+     * Source
+     */
+    source: 'measured' | 'model' | 'profile';
 };
 
 /**
@@ -2265,6 +2302,36 @@ export type NextSongOut = {
      * Max Attempts
      */
     max_attempts?: number;
+    comfort_estimate?: ComfortEstimateOut | null;
+};
+
+/**
+ * NoteLabelIn
+ *
+ * One held high note the singer labelled: live (the "High note: falsetto?" chip) or in the quiz catch-up.
+ * ``t_start`` / ``t_end`` are seconds on the take's stream clock; ``midi`` the held note.
+ */
+export type NoteLabelIn = {
+    /**
+     * T Start
+     */
+    t_start: number;
+    /**
+     * T End
+     */
+    t_end: number;
+    /**
+     * Midi
+     */
+    midi: number;
+    /**
+     * Label
+     */
+    label: 'falsetto' | 'full' | 'unsure';
+    /**
+     * Source
+     */
+    source: 'live' | 'quiz';
 };
 
 /**
@@ -3249,6 +3316,14 @@ export type ResultOut = {
      */
     comfort_high: number;
     /**
+     * Comfort Source
+     */
+    comfort_source?: 'measured' | 'model';
+    /**
+     * Falsetto High
+     */
+    falsetto_high?: number | null;
+    /**
      * Attempts
      */
     attempts: number;
@@ -3319,31 +3394,31 @@ export type ServiceStats = {
  *
  * Summary of a connected music service.
  */
-export type ServiceSummary = {
+export type BackendModelsAdminServiceSummary = {
     /**
-     * Connected
+     * Service Type
      */
-    connected: boolean;
+    service_type: string;
     /**
-     * Username
+     * Service Username
      */
-    username?: string | null;
+    service_username: string;
     /**
-     * Tracks Synced
+     * Sync Status
      */
-    tracks_synced?: number | null;
-    /**
-     * Songs Synced
-     */
-    songs_synced?: number | null;
-    /**
-     * Artists Synced
-     */
-    artists_synced?: number | null;
+    sync_status: string;
     /**
      * Last Sync At
      */
-    last_sync_at?: string | null;
+    last_sync_at: string | null;
+    /**
+     * Tracks Synced
+     */
+    tracks_synced: number;
+    /**
+     * Sync Error
+     */
+    sync_error: string | null;
 };
 
 /**
@@ -3420,6 +3495,14 @@ export type SessionPatch = {
      * Device
      */
     device?: string | null;
+    /**
+     * Experience
+     */
+    experience?: 'none' | 'some' | 'trained' | null;
+    /**
+     * Uses Falsetto
+     */
+    uses_falsetto?: 'yes' | 'sometimes' | 'no' | 'unsure' | null;
 };
 
 /**
@@ -3466,6 +3549,14 @@ export type SessionResultSummaryOut = {
      */
     comfort_high: number;
     /**
+     * Comfort Source
+     */
+    comfort_source?: 'measured' | 'model';
+    /**
+     * Falsetto High
+     */
+    falsetto_high?: number | null;
+    /**
      * Attempts
      */
     attempts: number;
@@ -3507,6 +3598,14 @@ export type SessionSetup = {
      * Device
      */
     device?: string | null;
+    /**
+     * Experience
+     */
+    experience?: 'none' | 'some' | 'trained' | null;
+    /**
+     * Uses Falsetto
+     */
+    uses_falsetto?: 'yes' | 'sometimes' | 'no' | 'unsure' | null;
 };
 
 /**
@@ -4596,36 +4695,29 @@ export type UpgradeGuestResponse = {
 /**
  * UserArtistResponse
  *
- * An artist from user's data with merged source information.
- *
- * MBID-first: MusicBrainz ID is the primary identifier when available.
- * Spotify ID is optional enrichment for images and external links.
+ * Artist from user's listening history.
  */
-export type UserArtistResponse = {
+export type BackendApiRoutesRecommendationsUserArtistResponse = {
     /**
-     * Mbid
+     * Id
      */
-    mbid?: string | null;
+    id: string;
     /**
      * Artist Name
      */
     artist_name: string;
     /**
-     * Sources
+     * Source
      */
-    sources: Array<string>;
+    source: string;
     /**
-     * Spotify Id
+     * Rank
      */
-    spotify_id?: string | null;
+    rank: number;
     /**
-     * Spotify Rank
+     * Time Range
      */
-    spotify_rank?: number | null;
-    /**
-     * Spotify Time Range
-     */
-    spotify_time_range?: string | null;
+    time_range: string;
     /**
      * Popularity
      */
@@ -4634,30 +4726,6 @@ export type UserArtistResponse = {
      * Genres
      */
     genres?: Array<string>;
-    /**
-     * Lastfm Rank
-     */
-    lastfm_rank?: number | null;
-    /**
-     * Lastfm Playcount
-     */
-    lastfm_playcount?: number | null;
-    /**
-     * Tags
-     */
-    tags?: Array<string>;
-    /**
-     * Is Excluded
-     */
-    is_excluded?: boolean;
-    /**
-     * Is Manual
-     */
-    is_manual?: boolean;
-    /**
-     * Affinity
-     */
-    affinity?: 'love' | 'like' | 'occasionally' | null;
 };
 
 /**
@@ -5102,6 +5170,22 @@ export type VoiceProfileOut = {
      */
     session_id?: string | null;
     /**
+     * Falsetto High
+     */
+    falsetto_high?: number | null;
+    /**
+     * Falsetto Low
+     */
+    falsetto_low?: number | null;
+    /**
+     * Experience
+     */
+    experience?: 'none' | 'some' | 'trained' | null;
+    /**
+     * Uses Falsetto
+     */
+    uses_falsetto?: 'yes' | 'sometimes' | 'no' | 'unsure' | null;
+    /**
      * Updated At
      */
     updated_at: string;
@@ -5162,6 +5246,22 @@ export type VoiceProfilePutIn = {
      * Session Id
      */
     session_id?: string | null;
+    /**
+     * Falsetto High
+     */
+    falsetto_high?: number | null;
+    /**
+     * Falsetto Low
+     */
+    falsetto_low?: number | null;
+    /**
+     * Experience
+     */
+    experience?: 'none' | 'some' | 'trained' | null;
+    /**
+     * Uses Falsetto
+     */
+    uses_falsetto?: 'yes' | 'sometimes' | 'no' | 'unsure' | null;
 };
 
 /**
@@ -5211,31 +5311,70 @@ export type YouTubeMusicImportResponse = {
 };
 
 /**
+ * ServiceSummary
+ *
+ * Summary of a connected music service.
+ */
+export type ServiceSummary = {
+    /**
+     * Connected
+     */
+    connected: boolean;
+    /**
+     * Username
+     */
+    username?: string | null;
+    /**
+     * Tracks Synced
+     */
+    tracks_synced?: number | null;
+    /**
+     * Songs Synced
+     */
+    songs_synced?: number | null;
+    /**
+     * Artists Synced
+     */
+    artists_synced?: number | null;
+    /**
+     * Last Sync At
+     */
+    last_sync_at?: string | null;
+};
+
+/**
  * UserArtistResponse
  *
- * Artist from user's listening history.
+ * An artist from user's data with merged source information.
+ *
+ * MBID-first: MusicBrainz ID is the primary identifier when available.
+ * Spotify ID is optional enrichment for images and external links.
  */
-export type BackendApiRoutesRecommendationsUserArtistResponse = {
+export type UserArtistResponse = {
     /**
-     * Id
+     * Mbid
      */
-    id: string;
+    mbid?: string | null;
     /**
      * Artist Name
      */
     artist_name: string;
     /**
-     * Source
+     * Sources
      */
-    source: string;
+    sources: Array<string>;
     /**
-     * Rank
+     * Spotify Id
      */
-    rank: number;
+    spotify_id?: string | null;
     /**
-     * Time Range
+     * Spotify Rank
      */
-    time_range: string;
+    spotify_rank?: number | null;
+    /**
+     * Spotify Time Range
+     */
+    spotify_time_range?: string | null;
     /**
      * Popularity
      */
@@ -5244,38 +5383,30 @@ export type BackendApiRoutesRecommendationsUserArtistResponse = {
      * Genres
      */
     genres?: Array<string>;
-};
-
-/**
- * ServiceSummary
- *
- * Summary of a connected music service.
- */
-export type BackendModelsAdminServiceSummary = {
     /**
-     * Service Type
+     * Lastfm Rank
      */
-    service_type: string;
+    lastfm_rank?: number | null;
     /**
-     * Service Username
+     * Lastfm Playcount
      */
-    service_username: string;
+    lastfm_playcount?: number | null;
     /**
-     * Sync Status
+     * Tags
      */
-    sync_status: string;
+    tags?: Array<string>;
     /**
-     * Last Sync At
+     * Is Excluded
      */
-    last_sync_at: string | null;
+    is_excluded?: boolean;
     /**
-     * Tracks Synced
+     * Is Manual
      */
-    tracks_synced: number;
+    is_manual?: boolean;
     /**
-     * Sync Error
+     * Affinity
      */
-    sync_error: string | null;
+    affinity?: 'love' | 'like' | 'occasionally' | null;
 };
 
 /**

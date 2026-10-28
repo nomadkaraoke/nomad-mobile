@@ -65,6 +65,14 @@ appId: com.nomadkaraoke.mobile
 - takeScreenshot: ${VOICE_SHOTS}/voice-high
 - tapOn:
     id: "voice-high-done"
+# The top-note falsetto question (batch 1, M10).
+- extendedWaitUntil:
+    visible:
+      id: "voice-high-falsetto"
+    timeout: 10000
+- takeScreenshot: ${VOICE_SHOTS}/voice-high-falsetto
+- tapOn:
+    id: "voice-high-falsetto-no"
 # The sing step waits for "I'm ready" (mic off, no countdown) so the singer can think of a song.
 - extendedWaitUntil:
     visible:

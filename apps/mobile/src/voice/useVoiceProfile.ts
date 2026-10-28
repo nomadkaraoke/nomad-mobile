@@ -10,7 +10,7 @@ import { AppState } from 'react-native';
 import { useAuth } from '../auth/store';
 import { useRecFilters } from '../discover/filtersStore';
 import { useOffline } from '../net/useOffline';
-import { toVoiceProfileIn, useVoiceStore, type LocalVoiceProfile } from './voiceStore';
+import { toVoiceProfileIn, useVoiceStore, type LocalVoiceProfile, type VoiceProfileInBody } from './voiceStore';
 
 export const VOICE_KEY = ['voice'] as const;
 
@@ -36,7 +36,33 @@ export function fromServer(o: VoiceProfileOut): LocalVoiceProfile {
     measuredAt: o.measured_at,
     evidenceCount: o.evidence_count ?? null,
     sessionId: o.session_id ?? null,
+    ...(o.falsetto_high != null && { falsettoHigh: o.falsetto_high }),
   };
+}
+
+/** decide before v0.33 refuses `falsetto_high` (422, pydantic `extra_forbidden` on that field). */
+function refusedFalsettoHigh(e: unknown): boolean {
+  if (!(e instanceof ApiError) || e.status !== 422 || !Array.isArray(e.detail)) return false;
+  return e.detail.some(
+    (d: unknown) =>
+      typeof d === 'object' &&
+      d !== null &&
+      (d as { type?: unknown }).type === 'extra_forbidden' &&
+      Array.isArray((d as { loc?: unknown }).loc) &&
+      ((d as { loc: unknown[] }).loc).includes('falsetto_high'),
+  );
+}
+
+/** PUTs the profile; an older decide that refuses `falsetto_high` gets it again without that field. */
+async function putProfile(body: VoiceProfileInBody): Promise<void> {
+  try {
+    await putVoiceProfile(body);
+  } catch (e) {
+    if (body.falsetto_high === undefined || !refusedFalsettoHigh(e)) throw e;
+    console.warn('decide refused falsetto_high (older decide): sending the profile without it');
+    const { falsetto_high: _dropped, ...rest } = body;
+    await putVoiceProfile(rest);
+  }
 }
 
 let inFlight: Promise<void> | null = null;
@@ -76,7 +102,7 @@ export function sendPendingVoice(): Promise<boolean> {
       }
       try {
         lastPutStartedAt = Date.now();
-        await putVoiceProfile(toVoiceProfileIn(profile));
+        await putProfile(toVoiceProfileIn(profile));
       } catch (e) {
         // 400/422: decide will never take this measurement; keep it for badges and stop retrying (not an error).
         // Everything else (401 — api/setup.ts marks Discover stale and never signs out —, 403, 404, 408, 429, 5xx,

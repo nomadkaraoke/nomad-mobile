@@ -95,14 +95,16 @@ export function VoiceTestScreen() {
 
   const close = () => (router.canGoBack() ? router.back() : router.replace('/discover'));
 
-  const shown = chosen ?? (kept ? profileFromResult(kept.range, kept.voice, '') : null);
+  const shown = chosen ?? (kept ? profileFromResult(kept.range, kept.voice, '', kept.falsettoHigh) : null);
   if (shown) {
     return (
       <VoiceResult
         profile={shown}
         saved={saved}
         signedIn={signedIn}
-        onSave={() => save(chosen ?? profileFromResult(kept!.range, kept!.voice, new Date().toISOString()))}
+        onSave={() =>
+          save(chosen ?? profileFromResult(kept!.range, kept!.voice, new Date().toISOString(), kept!.falsettoHigh))
+        }
         onTryAgain={() => {
           const self = shown.method === 'self';
           setChosen(null);
@@ -259,6 +261,43 @@ function TestStep({ test, onSkip }: { test: ReturnType<typeof useVoiceTest>; onS
   }
 
   if (step === 'result') return null; // VoiceTestScreen shows the kept result
+
+  if (step === 'high-falsetto') {
+    return (
+      <StepLayout
+        testID="voice-high-falsetto"
+        footer={
+          <Button
+            testID="voice-high-falsetto-skip"
+            variant="secondary"
+            label={t('highFalsettoSkip')}
+            onPress={() => test.answerHighFalsetto(null)}
+          />
+        }
+      >
+        <Text testID="voice-step" variant="muted">
+          {t('stepOf', { step: 2, total: CAPTURE_STEPS })}
+        </Text>
+        <Text className="text-2xl font-bold">{t('highFalsettoTitle')}</Text>
+        <Text>{t('highFalsettoBody', { note: isolate(midiToName(test.highTop ?? 0)) })}</Text>
+        <View className="gap-3">
+          <Button testID="voice-high-falsetto-yes" label={t('highFalsettoYes')} onPress={() => test.answerHighFalsetto('yes')} />
+          <Button
+            testID="voice-high-falsetto-no"
+            variant="secondary"
+            label={t('highFalsettoNo')}
+            onPress={() => test.answerHighFalsetto('no')}
+          />
+          <Button
+            testID="voice-high-falsetto-unsure"
+            variant="secondary"
+            label={t('highFalsettoUnsure')}
+            onPress={() => test.answerHighFalsetto('unsure')}
+          />
+        </View>
+      </StepLayout>
+    );
+  }
 
   const index = step === 'low' ? 1 : step === 'high' ? 2 : 3;
   const prompt = step === 'low' ? t('lowPrompt') : step === 'high' ? t('highPrompt') : t('singPrompt');

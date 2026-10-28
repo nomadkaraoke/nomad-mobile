@@ -1,4 +1,5 @@
 import {
+  chestRangeBelowFalsetto,
   classifyVoice,
   createHeldNoteTracker,
   gateFrames,
@@ -19,8 +20,11 @@ export type VoiceStep =
   | 'permission-denied'
   | 'permission-blocked'
   | 'mic-busy'
-  | 'low' | 'high' | 'sing' | 'result' | 'no-notes';
-export type VoiceResult = { range: RangeSummary; voice: Classification };
+  | 'low' | 'high' | 'high-falsetto' | 'sing' | 'result' | 'no-notes';
+/** `falsettoHigh`: the high step's top note when the singer said it was falsetto (then kept out of `range`). */
+export type VoiceResult = { range: RangeSummary; voice: Classification; falsettoHigh: number | null };
+/** The answer to "Was your top note falsetto or head voice?" (null: skipped). */
+export type HighFalsettoAnswer = 'yes' | 'no' | 'unsure' | null;
 type ActiveStep = 'low' | 'high' | 'sing';
 /** `ready`: the sing step shows its prompt and waits for "I'm ready" (mic off, no countdown). */
 export type VoicePhase = 'ready' | 'quiet' | 'listening';
@@ -41,6 +45,7 @@ type Setters = {
   setStepHeldCount: (n: number) => void;
   setResult: (r: VoiceResult | null) => void;
   setSingStartedAt: (t: number | null) => void;
+  setHighTop: (m: number | null) => void;
 };
 
 function createMachine({
@@ -52,6 +57,7 @@ function createMachine({
   setStepHeldCount,
   setResult,
   setSingStartedAt,
+  setHighTop,
 }: Setters) {
   const r = {
     source: initialSource,
@@ -82,6 +88,10 @@ function createMachine({
     timers: [] as ReturnType<typeof setTimeout>[],
     lastPitchAt: 0,
     retryTo: 'low' as ActiveStep,
+    /** The high step's held notes (rounded) and its top, for the falsetto question. */
+    highNotes: [] as number[],
+    highTop: null as number | null,
+    highFalsetto: null as HighFalsettoAnswer,
   };
 
   const setStepBoth = (s: VoiceStep) => {
@@ -141,7 +151,10 @@ function createMachine({
     if (r.step !== 'sing') return;
     stopRun();
     const all = [...r.committed, ...r.tracker.notes()];
-    const range = summarizeRange(all, r.singFrames);
+    const measured = summarizeRange(all, r.singFrames);
+    const falsettoHigh = r.highFalsetto === 'yes' ? r.highTop : null;
+    const range =
+      measured && falsettoHigh !== null ? chestRangeBelowFalsetto(measured, r.highNotes, falsettoHigh) : measured;
     setLivePitch(null);
     if (!range) {
       r.committed = [];
@@ -150,7 +163,7 @@ function createMachine({
       return;
     }
     setHeld(all);
-    setResult({ range, voice: classifyVoice(range) });
+    setResult({ range, voice: classifyVoice(range), falsettoHigh });
     setStepBoth('result');
   };
 
@@ -255,10 +268,24 @@ function createMachine({
         void enterStep('high');
         return;
       }
-      // The sing step first waits for "I'm ready", so the singer can think of a song: the mic is off meanwhile.
+      // Then the falsetto question about the high step's top note, mic off (done() needs a held note, so one exists).
       stopRun();
+      r.highNotes = r.stepHeld.map((h) => h.note);
+      r.highTop = Math.max(...r.highNotes);
+      r.highFalsetto = null;
       r.tracker.reset();
       r.stepHeld = [];
+      setHighTop(r.highTop);
+      setStepBoth('high-falsetto');
+      setLivePitch(null);
+      setStepHeldCount(0);
+      setHeld(r.committed);
+    },
+    /** The answer to the top-note question (null = skipped); then the sing step waits for "I'm ready". */
+    answerHighFalsetto(answer: HighFalsettoAnswer) {
+      if (r.step !== 'high-falsetto') return;
+      r.highFalsetto = answer;
+      // The sing step first waits for "I'm ready", so the singer can think of a song: the mic is off meanwhile.
       setStepBoth('sing');
       setPhase('ready');
       setLivePitch(null);
@@ -274,7 +301,10 @@ function createMachine({
       if (r.step === 'permission-denied' || r.step === 'permission-blocked') return begin();
       if (r.step === 'mic-busy') return enterStep(r.retryTo);
       if (r.step === 'no-notes') {
-        if (r.retryTo === 'low') r.committed = [];
+        if (r.retryTo === 'low') {
+          r.committed = [];
+          r.highFalsetto = null;
+        }
         setResult(null);
         return enterStep(r.retryTo);
       }
@@ -288,6 +318,9 @@ function createMachine({
       r.stepHeld = [];
       r.tracker.reset();
       r.singFrames = [];
+      r.highFalsetto = null;
+      r.highTop = null;
+      setHighTop(null);
       setResult(null);
       setHeld([]);
       setStepHeldCount(0);
@@ -313,7 +346,8 @@ function createMachine({
  *
  *   intro --begin()--> (permission) --denied--> permission-denied --retry()--> (permission again)
  *                                   --blocked-> permission-blocked --retry()--> (permission again)
- *                                   --granted-> low --done() [>=1 held]--> high --done() [>=1 held]--> sing (ready)
+ *                                   --granted-> low --done() [>=1 held]--> high --done() [>=1 held]--> high-falsetto
+ *   high-falsetto ("was your top note falsetto?", mic off) --answerHighFalsetto(yes|no|unsure|null)--> sing (ready)
  *   sing (ready: prompt only, mic off, no timer) --ready()--> sing (quiet, listening) | --skipSing()--> result from low/high
  *   low/high/sing --source.start() throws--> mic-busy --retry()--> the same step
  *   low/high --20 s with no held note--> no-notes --retry()--> the same step
@@ -335,6 +369,7 @@ export function useVoiceTest(source: PitchSource) {
   const [stepHeldCount, setStepHeldCount] = useState(0);
   const [result, setResult] = useState<VoiceResult | null>(null);
   const [singStartedAt, setSingStartedAt] = useState<number | null>(null);
+  const [highTop, setHighTop] = useState<number | null>(null);
 
   // Built once, outside the render analysis: the machine is imperative (timers, refs, Date.now).
   const [api] = useState(() =>
@@ -347,6 +382,7 @@ export function useVoiceTest(source: PitchSource) {
       setStepHeldCount,
       setResult,
       setSingStartedAt,
+      setHighTop,
     }),
   );
   useEffect(() => {
@@ -366,11 +402,14 @@ export function useVoiceTest(source: PitchSource) {
     result,
     /** Date.now() when sing capture started (and its SING_MS timer with it); null otherwise. */
     singStartedAt,
+    /** The high step's top note (MIDI), asked about on the `high-falsetto` step. */
+    highTop,
     /** True once the current low/high step has at least one held note, i.e. done() will advance. */
     canDone: (step === 'low' || step === 'high') && stepHeldCount > 0,
     begin: api.begin,
     done: api.done,
     ready: api.ready,
+    answerHighFalsetto: api.answerHighFalsetto,
     retry: api.retry,
     skipSing: api.skipSing,
     cancel: api.cancel,

@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Lauluaikaa jäljellä",
     "micBusyBody": "Toinen sovellus tai puhelu käyttää mikrofonia. Sulje se ja yritä uudelleen, tai valitse sen sijaan äänityyppisi.",
     "micBusyTitle": "Mikrofoni on varattu",
-    "typeUnknown": "Äänityyppisi"
+    "typeUnknown": "Äänityyppisi",
+    "highFalsettoBody": "Korkein sävelesi oli {note}. Jos se oli falsettia, emme laske sitä mukaan rintaäänialaasi, jotta kappaleet sopivat sinulle paremmin.",
+    "highFalsettoTitle": "Oliko korkein sävelesi falsettia tai pää-ääntä (kevyempää, ilmavampaa)?",
+    "highFalsettoNo": "Ei",
+    "highFalsettoSkip": "Ohita",
+    "highFalsettoUnsure": "En ole varma",
+    "highFalsettoYes": "Kyllä"
   },
   "fit": {
     "fits": "Sopii äänellesi",
@@ -1708,10 +1714,15 @@
       "probably": "Todennäköisesti {type}, mutta tarvitsemme lisää kappaleita varmistukseen",
       "range": "{range}, mukava alue {comfort}",
       "saved": "Tallennettu musiikkiprofiiliisi.",
-      "suited": "Sinulle sopivat kappaleet",
+      "suited": "Kappaleet, joista pidät ja jotka sopivat äänellesi",
       "confidenceHigh": "Korkea varmuus",
       "done": "Valmis",
-      "typeUnknown": "Äänityyppisi"
+      "typeUnknown": "Äänityyppisi",
+      "comfortEstimated": "Arvioitu",
+      "comfortMeasured": "Mitattu kappaleista, jotka tuntuivat sinulle mukavilta laulaa",
+      "falsetto": "Falsetti säveleen {note} asti",
+      "adopt": "Käytä tätä äänenäni",
+      "adoptFailed": "Tallentaminen ääneksesi epäonnistui. Tarkista verkkoyhteytesi ja yritä uudelleen."
     },
     "setup": {
       "bit_warm": "Hieman lämmitelty",
@@ -1739,7 +1750,18 @@
       "no": "Ei",
       "openSettings": "Avaa asetukset",
       "quiet": "Ole hetki hiljaa…",
-      "yes": "Kyllä"
+      "yes": "Kyllä",
+      "background": "Tietoa laulamisestasi (valinnainen)",
+      "backgroundHint": "Auttaa meitä erottamaan rintaäänesi falsetista.",
+      "experience": "Laulukokemus?",
+      "experience_none": "Ei lainkaan",
+      "experience_some": "Jonkin verran",
+      "experience_trained": "Koulutettu",
+      "usesFalsetto": "Käytätkö falsettia tai pää-ääntä?",
+      "usesFalsetto_sometimes": "Joskus",
+      "usesFalsetto_no": "Ei",
+      "usesFalsetto_unsure": "En ole varma",
+      "usesFalsetto_yes": "Kyllä"
     },
     "title": "Löydä äänesi",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Poista äänitys",
       "play": "Toista",
       "song": "{title} · {artist}",
+      "stop": "Pysäytä"
+    },
+    "falsetto": {
+      "chip": "Korkea nuotti ({note}): falsetti?",
+      "chipLabel": "Tuo korkea nuotti, {note}, saattoi olla falsettia tai pää-ääntä. Oliko se?",
+      "no": "Ei",
+      "yes": "Kyllä",
+      "catchUpBody": "Valinnainen. Falsetti tai pää-ääni kuulostaa kevyemmältä ja ilmavammalta. Vastaustesi avulla näitä säveliä ei lasketa mukaan rintaäänialaasi.",
+      "catchUpTitle": "Ovatko nämä korkeat sävelet falsettia?",
+      "note": "{note} kohdassa {time}",
+      "play": "Kuuntele",
+      "unsure": "En ole varma",
       "stop": "Pysäytä"
     }
   }

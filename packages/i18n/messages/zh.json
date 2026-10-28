@@ -1486,7 +1486,13 @@
     "singProgressLabel": "剩余演唱时间",
     "micBusyBody": "其他应用或通话正在占用麦克风。请将其关闭后重试，或者直接选择您的声部类型。",
     "micBusyTitle": "麦克风被占用",
-    "typeUnknown": "你的声部"
+    "typeUnknown": "你的声部",
+    "highFalsettoBody": "您的最高音是 {note}。如果这是假音，我们会将其排除在您的胸声音域之外，以便为您推荐更适合的歌曲。",
+    "highFalsettoTitle": "您的最高音是假音还是头声（更轻、带有更多气声）？",
+    "highFalsettoNo": "否",
+    "highFalsettoSkip": "跳过",
+    "highFalsettoUnsure": "不确定",
+    "highFalsettoYes": "是"
   },
   "fit": {
     "fits": "适合你的声线",
@@ -1708,10 +1714,15 @@
       "probably": "大概率属于 {type}，但需要唱更多歌才能确认",
       "range": "{range}，舒适音区 {comfort}",
       "saved": "已保存至你的音乐档案。",
-      "suited": "适合你的歌曲",
+      "suited": "适合您且您喜欢的歌曲",
       "confidenceHigh": "高置信度",
       "done": "完成",
-      "typeUnknown": "你的声部"
+      "typeUnknown": "你的声部",
+      "comfortEstimated": "预估",
+      "comfortMeasured": "根据您唱着最舒适的歌曲测得",
+      "falsetto": "假音最高可达 {note}",
+      "adopt": "将此设为我的音域",
+      "adoptFailed": "无法保存为您的音域。请检查网络连接后重试。"
     },
     "setup": {
       "bit_warm": "稍稍开嗓",
@@ -1739,7 +1750,18 @@
       "no": "否",
       "openSettings": "打开设置",
       "quiet": "请安静片刻…",
-      "yes": "是"
+      "yes": "是",
+      "background": "关于你的唱歌情况（选填）",
+      "backgroundHint": "有助于我们区分你的真声与假声。",
+      "experience": "唱歌经验",
+      "experience_none": "无",
+      "experience_some": "有一些",
+      "experience_trained": "受过专业训练",
+      "usesFalsetto": "你会使用假声或头声吗？",
+      "usesFalsetto_sometimes": "有时会",
+      "usesFalsetto_no": "否",
+      "usesFalsetto_unsure": "不确定",
+      "usesFalsetto_yes": "是"
     },
     "title": "测测你的声音特质",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "删除录音",
       "play": "播放",
       "song": "{title} · {artist}",
+      "stop": "停止"
+    },
+    "falsetto": {
+      "chip": "高音（{note}）：假音？",
+      "chipLabel": "那个高音 {note} 可能是假音或头声，是这样吗？",
+      "no": "否",
+      "yes": "是",
+      "catchUpBody": "选填。假音或头声听起来更轻柔、气息感更强。你的回答可以避免将这些音符计入你的胸声音域。",
+      "catchUpTitle": "这些高音是假音吗？",
+      "note": "{time} 处的 {note}",
+      "play": "试听",
+      "unsure": "不确定",
       "stop": "停止"
     }
   }

@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Zostávajúci čas na spievanie",
     "micBusyBody": "Mikrofón práve používa iná aplikácia alebo hovor. Ukonči ju a skús to znova, alebo si namiesto toho vyber svoj typ hlasu.",
     "micBusyTitle": "Mikrofón sa práve používa",
-    "typeUnknown": "Tvoj typ hlasu"
+    "typeUnknown": "Tvoj typ hlasu",
+    "highFalsettoBody": "Tvoj najvyšší tón bol {note}. Ak to bol falzet, nezahrnieme ho do tvojho hrudného rozsahu, aby ti piesne lepšie sedeli.",
+    "highFalsettoTitle": "Bol tvoj najvyšší tón falzet alebo hlavový hlas (ľahší, vzdušnejší)?",
+    "highFalsettoNo": "Nie",
+    "highFalsettoSkip": "Preskočiť",
+    "highFalsettoUnsure": "Neviem isto",
+    "highFalsettoYes": "Áno"
   },
   "fit": {
     "fits": "Sedí k tvojmu hlasu",
@@ -1708,10 +1714,15 @@
       "probably": "Pravdepodobne {type}, ale potrebujeme viac piesní, aby sme si boli istí",
       "range": "{range}, pohodlný {comfort}",
       "saved": "Uložené do tvojho hudobného profilu.",
-      "suited": "Piesne, ktoré ti sadnú",
+      "suited": "Piesne, ktoré sa ti páčia a sedia ti",
       "confidenceHigh": "Vysoká istota",
       "done": "Hotovo",
-      "typeUnknown": "Tvoj typ hlasu"
+      "typeUnknown": "Tvoj typ hlasu",
+      "comfortEstimated": "Odhadnuté",
+      "comfortMeasured": "Zmerané z piesní, ktoré sa ti spievali pohodlne",
+      "falsetto": "Falzet až po {note}",
+      "adopt": "Použiť ako môj hlas",
+      "adoptFailed": "Nepodarilo sa uložiť ako tvoj hlas. Skontroluj pripojenie a skús to znova."
     },
     "setup": {
       "bit_warm": "Trochu rozospievaný",
@@ -1739,7 +1750,18 @@
       "no": "Nie",
       "openSettings": "Otvoriť Nastavenia",
       "quiet": "Buď chvíľku potichu…",
-      "yes": "Áno"
+      "yes": "Áno",
+      "background": "O tvojom spievaní (voliteľné)",
+      "backgroundHint": "Pomôže nám to rozlíšiť tvoj hrudný hlas od falzetu.",
+      "experience": "Skúsenosti so spevom?",
+      "experience_none": "Žiadne",
+      "experience_some": "Mierne",
+      "experience_trained": "Vyučený/školený spevák",
+      "usesFalsetto": "Používaš falzet alebo hlavový hlas?",
+      "usesFalsetto_sometimes": "Niekedy",
+      "usesFalsetto_no": "Nie",
+      "usesFalsetto_unsure": "Neviem isto",
+      "usesFalsetto_yes": "Áno"
     },
     "title": "Nájdi svoj hlas",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Vymazať nahrávku",
       "play": "Prehrať",
       "song": "{title} · {artist}",
+      "stop": "Zastaviť"
+    },
+    "falsetto": {
+      "chip": "Vysoký tón ({note}): falzet?",
+      "chipLabel": "Tento vysoký tón, {note}, mohol byť falzet alebo hlavový tón. Bol to falzet?",
+      "no": "Nie",
+      "yes": "Áno",
+      "catchUpBody": "Voliteľné. Falzet alebo hlavový hlas znie jemnejšie a dychovejšie. Tvoje odpovede zabezpečia, aby sa tieto tóny nezarátavali do tvojho hrudného rozsahu.",
+      "catchUpTitle": "Boli tieto vysoké tóny falzet?",
+      "note": "{note} v čase {time}",
+      "play": "Vypočuť si",
+      "unsure": "Neviem isto",
       "stop": "Zastaviť"
     }
   }

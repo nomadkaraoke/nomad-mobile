@@ -2,6 +2,9 @@ import type { NextSongOut } from '@nomad/api-decide';
 import {
   canSubmitQuiz,
   midiToName,
+  type FalsettoCandidate,
+  type LabelledNote,
+  type NoteLabel,
   toggleWouldWorkIf,
   type PositionPrefill,
   type QuizAnswers,
@@ -22,7 +25,9 @@ import { useEffect } from 'react';
 import { View } from 'react-native';
 
 import { StepLayout } from '../../voice/StepLayout';
+import type { SongRecording } from '../recording/useSongRecorder';
 import { ChoiceGroup } from './ChoiceGroup';
+import { FalsettoCatchUp } from './FalsettoCatchUp';
 
 const FEEL: readonly QuizFeel[] = ['loved', 'fine', 'not_for_me'];
 const POSITION: readonly QuizPosition[] = ['too_low', 'comfortable', 'too_high', 'both_ends'];
@@ -46,13 +51,31 @@ export type QuizScreenProps = {
   busy: boolean;
   setAnswer: (patch: Partial<QuizAnswers>) => void;
   onNext: () => void;
+  /** Missed high notes to ask about (empty: no catch-up block). */
+  catchUp?: FalsettoCandidate[];
+  noteLabels?: LabelledNote[];
+  take?: SongRecording | null;
+  takeOffsetS?: number;
+  onFalsetto?: (c: FalsettoCandidate, label: NoteLabel) => void;
 };
 
 /**
  * The after-song quiz (spec §4.3 step 3): one scrolling screen, Q1–Q2 required (Next stays off until both), the rest
  * optional. Q2 is pre-filled from the recording when the singer reached both ends of the song.
  */
-export function QuizScreen({ song, quiz, prefill, busy, setAnswer, onNext }: QuizScreenProps) {
+export function QuizScreen({
+  song,
+  quiz,
+  prefill,
+  busy,
+  setAnswer,
+  onNext,
+  catchUp = [],
+  noteLabels = [],
+  take = null,
+  takeOffsetS = 0,
+  onFalsetto,
+}: QuizScreenProps) {
   const t = useTranslations('voiceSession.quiz');
 
   const suggested = prefill?.suggested ?? null;
@@ -73,6 +96,15 @@ export function QuizScreen({ song, quiz, prefill, busy, setAnswer, onNext }: Qui
         </Text>
         <Text variant="muted">{t('required')}</Text>
       </View>
+      {catchUp.length > 0 ? (
+        <FalsettoCatchUp
+          candidates={catchUp}
+          labels={noteLabels.filter((l) => l.source === 'quiz')}
+          take={take}
+          takeOffsetS={takeOffsetS}
+          onAnswer={(c, l) => onFalsetto?.(c, l)}
+        />
+      ) : null}
       <ChoiceGroup
         title={t('feel.q')}
         values={FEEL}

@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Tempo restante para cantar",
     "micBusyBody": "Outro app ou uma chamada está usando o microfone. Encerre o uso e tente novamente, ou selecione seu tipo de voz.",
     "micBusyTitle": "O microfone está ocupado",
-    "typeUnknown": "Seu tipo de voz"
+    "typeUnknown": "Seu tipo de voz",
+    "highFalsettoBody": "Sua nota mais aguda foi {note}. Se foi em falsete, nós a deixamos fora da sua extensão de peito para que as músicas combinem melhor com a sua voz.",
+    "highFalsettoTitle": "A sua nota mais aguda foi em falsete ou voz de cabeça (mais leve e com mais ar)?",
+    "highFalsettoNo": "Não",
+    "highFalsettoSkip": "Pular",
+    "highFalsettoUnsure": "Não tenho certeza",
+    "highFalsettoYes": "Sim"
   },
   "fit": {
     "fits": "Combina com a sua voz",
@@ -1708,10 +1714,15 @@
       "probably": "Provavelmente {type}, mas precisamos de mais músicas para ter certeza",
       "range": "{range}, confortável {comfort}",
       "saved": "Salvo no seu perfil musical.",
-      "suited": "Músicas que combinam com você",
+      "suited": "Músicas que você gosta que combinam com você",
       "confidenceHigh": "Alta confiança",
       "done": "Concluído",
-      "typeUnknown": "Seu tipo de voz"
+      "typeUnknown": "Seu tipo de voz",
+      "comfortEstimated": "Estimado",
+      "comfortMeasured": "Medido a partir das músicas que você achou confortáveis",
+      "falsetto": "Falsete até {note}",
+      "adopt": "Usar como minha voz",
+      "adoptFailed": "Não foi possível salvar como sua voz. Verifique sua conexão e tente novamente."
     },
     "setup": {
       "bit_warm": "Um pouco aquecida",
@@ -1739,7 +1750,18 @@
       "no": "Não",
       "openSettings": "Abrir Ajustes",
       "quiet": "Fique em silêncio por um instante…",
-      "yes": "Sim"
+      "yes": "Sim",
+      "background": "Sobre seu canto (opcional)",
+      "backgroundHint": "Isso nos ajuda a diferenciar sua voz de peito do falsete.",
+      "experience": "Experiência cantando?",
+      "experience_none": "Nenhuma",
+      "experience_some": "Alguma",
+      "experience_trained": "Com treinamento",
+      "usesFalsetto": "Você usa falsete ou voz de cabeça?",
+      "usesFalsetto_sometimes": "Às vezes",
+      "usesFalsetto_no": "Não",
+      "usesFalsetto_unsure": "Não tenho certeza",
+      "usesFalsetto_yes": "Sim"
     },
     "title": "Encontre sua voz",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Excluir gravação",
       "play": "Reproduzir",
       "song": "{title} · {artist}",
+      "stop": "Parar"
+    },
+    "falsetto": {
+      "chip": "Nota aguda ({note}): falsete?",
+      "chipLabel": "Aquela nota aguda, {note}, pode ter sido em falsete ou voz de cabeça. Foi?",
+      "no": "Não",
+      "yes": "Sim",
+      "catchUpBody": "Opcional. O falsete ou a voz de cabeça soa mais leve e com mais ar. Suas respostas evitam que essas notas entrem na sua extensão de peito.",
+      "catchUpTitle": "Essas notas agudas foram em falsete?",
+      "note": "{note} em {time}",
+      "play": "Ouvir",
+      "unsure": "Não tenho certeza",
       "stop": "Parar"
     }
   }

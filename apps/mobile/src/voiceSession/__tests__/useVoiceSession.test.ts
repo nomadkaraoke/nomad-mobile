@@ -1,10 +1,12 @@
 // useVoiceSession: the voice session's state machine (Phase 3d D5) over mocked decide calls, a fake song recorder
 // and fake timers; sessionStore's resume window (Review Focus 2).
 import { ApiError, type NextVoiceSong, type SessionSetup } from '@nomad/api-decide';
+import { contourFrom, findHeldNotes, summarizeSongPitch, type HeldNote, type VoicedFrame } from '@nomad/core';
 import { act, renderHook } from '@testing-library/react-native';
 
 import { appStorage } from '../../storage';
 import { fsState } from '../../test-utils/memoryFs';
+import { profileFromSelfReport, useVoiceStore } from '../../voice/voiceStore';
 import { useRecordingQueue } from '../recording/recordingQueue';
 import type { SongTake } from '../recording/useSongRecorder';
 import { restoreVoiceSession, SESSION_MAX_AGE_MS, VOICE_SESSION_KEY, useVoiceSessionStore } from '../sessionStore';
@@ -23,6 +25,7 @@ const mockApi = {
   postVoiceAttempt: jest.fn(),
   getVoiceResult: jest.fn(),
   uploadVoiceRecording: jest.fn(),
+  adoptVoiceSession: jest.fn(),
 };
 jest.mock('@nomad/api-decide', () => ({
   ...jest.requireActual('@nomad/api-decide'),
@@ -35,13 +38,14 @@ jest.mock('@nomad/api-decide', () => ({
   postVoiceAttempt: (...a: unknown[]) => mockApi.postVoiceAttempt(...a),
   getVoiceResult: (...a: unknown[]) => mockApi.getVoiceResult(...a),
   uploadVoiceRecording: (...a: unknown[]) => mockApi.uploadVoiceRecording(...a),
+  adoptVoiceSession: (...a: unknown[]) => mockApi.adoptVoiceSession(...a),
 }));
 
 /** The fake recorder: records call order and hands back `nextTake` on stop(). */
 const mockOrder: string[] = [];
 const mockRec = {
-  opts: null as null | { record: boolean; floor: number },
-  nextTake: { pitch: null, file: null } as SongTake,
+  opts: null as null | { record: boolean; floor: number; onHeldNote?: (n: HeldNote) => void },
+  nextTake: { pitch: null, file: null, contour: null, held: [], takeOffsetS: 0 } as SongTake,
   start: jest.fn(async () => void mockOrder.push('recorder.start')),
   stop: jest.fn(async (): Promise<SongTake> => {
     mockOrder.push('recorder.stop');
@@ -49,7 +53,7 @@ const mockRec = {
   }),
 };
 jest.mock('../recording/useSongRecorder', () => ({
-  useSongRecorder: (_src: unknown, opts: { record: boolean; floor: number }) => {
+  useSongRecorder: (_src: unknown, opts: { record: boolean; floor: number; onHeldNote?: (n: HeldNote) => void }) => {
     mockRec.opts = opts;
     return { start: mockRec.start, stop: mockRec.stop, livePitch: null };
   },
@@ -110,6 +114,9 @@ const takeWithFile = (name: string): SongTake => {
   return {
     pitch: PITCH,
     file: { uri, durationS: 190, contentType: 'audio/wav' },
+    contour: null,
+    held: [],
+    takeOffsetS: 0,
   };
 };
 
@@ -132,6 +139,8 @@ const player = {
   play: jest.fn(() => void mockOrder.push('player.play')),
   pause: jest.fn(),
 };
+const note = (start: number, end: number, n: number): HeldNote => ({ start, end, midi: n, note: n });
+const heard = (n: HeldNote) => act(() => mockRec.opts!.onHeldNote!(n));
 
 async function mount() {
   const h = renderHook(() => useVoiceSession());
@@ -154,8 +163,10 @@ beforeEach(() => {
   for (const f of Object.values(mockApi)) f.mockReset();
   mockRec.start.mockClear();
   mockRec.stop.mockClear();
-  mockRec.nextTake = { pitch: null, file: null };
+  mockRec.nextTake = { pitch: null, file: null, contour: null, held: [], takeOffsetS: 0 };
   player.play.mockClear();
+  player.pause.mockClear();
+  useVoiceStore.getState().clear();
   mockOrder.length = 0;
   fsState.reset();
   appStorage.clearAll();
@@ -219,7 +230,7 @@ describe('useVoiceSession', () => {
     expect(r.current.song?.song_key).toBe('a');
     expect(r.current.attemptN).toBe(1);
     expect(r.current.maxAttempts).toBe(12);
-    expect(mockRec.opts).toEqual({ record: true, floor: 0.01 });
+    expect(mockRec.opts).toEqual({ record: true, floor: 0.01, onHeldNote: expect.any(Function) });
 
     for (const [i, key] of ['a', 'b', 'c'].entries()) {
       mockRec.nextTake = takeWithFile(key);
@@ -251,6 +262,16 @@ describe('useVoiceSession', () => {
           tags: ['crowd_song'],
         },
         pitch: {
+          voiced_s: 40,
+          held_count: 6,
+          held_low: 50,
+          held_high: 64,
+          p10: 51,
+          p50: 57,
+          p90: 63,
+        },
+        // No falsetto answers: the chest-only pitch is the song as sung.
+        pitch_all: {
           voiced_s: 40,
           held_count: 6,
           held_low: 50,
@@ -725,7 +746,7 @@ describe('useVoiceSession', () => {
     await flush();
     await act(() => r.current.startWarmup(0.02));
     expect(r.current.step).toBe('warmup');
-    expect(mockRec.opts).toEqual({ record: false, floor: 0.02 });
+    expect(mockRec.opts).toEqual({ record: false, floor: 0.02, onHeldNote: expect.any(Function) });
     expect(mockRec.start).toHaveBeenCalled();
     await act(() => r.current.endWarmup());
     expect(mockRec.stop).toHaveBeenCalled();
@@ -986,6 +1007,325 @@ describe('useVoiceSession', () => {
       await act(() => r.current.begin(SETUP));
       expect(mockApi.createVoiceSession).toHaveBeenCalledTimes(2);
       expect(r.current.step).toBe('pick');
+    });
+  });
+
+  describe('falsetto batch (M6–M8)', () => {
+    const CONTOUR = { t0: 0.5, dt: 0.1, midi: [57, 57.02, null, 64] };
+    const HELD = [{ start: 0.5, end: 1.4, midi: 57, note: 57 }];
+
+    it('session store persists and restores contour/labels', async () => {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1));
+      mockRec.nextTake = { pitch: PITCH, file: null, contour: CONTOUR, held: HELD, takeOffsetS: 1.25 };
+      const first = await mount();
+      await act(() => first.result.current.begin(SETUP));
+      await singIt(first.result);
+      expect(store()).toMatchObject({ step: 'quiz', contour: CONTOUR, held: HELD, takeOffsetS: 1.25 });
+      const label = { tStart: 0.5, tEnd: 1.4, midi: 57, label: 'unsure' as const, source: 'live' as const };
+      act(() => store().update({ noteLabels: [label], candidates: [{ tStart: 0.5, tEnd: 1.4, midi: 57 }] }));
+      first.unmount();
+
+      useVoiceSessionStore.setState({ contour: null, held: [], noteLabels: [], candidates: [] });
+      restoreVoiceSession();
+      expect(store()).toMatchObject({
+        step: 'quiz',
+        contour: CONTOUR,
+        held: HELD,
+        takeOffsetS: 1.25,
+        noteLabels: [label],
+        candidates: [{ tStart: 0.5, tEnd: 1.4, midi: 57 }],
+      });
+    });
+
+    it('a copy stored before the falsetto fields still resumes (empty contour, no labels)', () => {
+      const old = {
+        sessionId: 's1',
+        setup: SETUP,
+        floor: 0.003,
+        song: song('a', 1),
+        step: 'quiz',
+        attemptN: 1,
+        quiz: {},
+        pitch: PITCH,
+        playStartedAt: T0 - 1000,
+        playEndedAt: T0,
+        stoppedEarly: false,
+        take: null,
+        savedAt: T0,
+      };
+      appStorage.set(VOICE_SESSION_KEY, JSON.stringify(old));
+      restoreVoiceSession();
+      expect(store()).toMatchObject({
+        sessionId: 's1',
+        step: 'quiz',
+        contour: null,
+        held: [],
+        noteLabels: [],
+        candidates: [],
+        takeOffsetS: 0,
+      });
+    });
+  
+    const ESTIMATE = { low: 48, high: 59, sd_high: 2, source: 'model' as const };
+    /** begin → pick → ready (the detector arms) → playing. */
+    async function playing(over: Parameters<typeof song>[2] = {}, setup: SessionSetup = SETUP) {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1, over));
+      const h = await mount();
+      await act(() => h.result.current.begin(setup));
+      await act(() => h.result.current.pickKnow());
+      await act(() => h.result.current.onPlayer({ kind: 'ready' }));
+      await act(() => h.result.current.onPlayer({ kind: 'playing' }));
+      return h;
+    }
+
+    it('chip appears for a candidate and hides after 5 s', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE });
+      heard(note(10, 11, 62)); // 3 above: chest
+      expect(r.current.falsettoChip).toBeNull();
+      heard(note(20, 21.5, 69));
+      expect(r.current.falsettoChip).toEqual({ tStart: 20, tEnd: 21.5, midi: 69 });
+      act(() => jest.advanceTimersByTime(4900));
+      expect(r.current.falsettoChip).not.toBeNull();
+      act(() => jest.advanceTimersByTime(200));
+      expect(r.current.falsettoChip).toBeNull();
+      // Unanswered: the quiz asks about it.
+      await act(() => r.current.onPlayer({ kind: 'ended' }));
+      expect(store().candidates).toEqual([{ tStart: 20, tEnd: 21.5, midi: 69 }]);
+      expect(store().noteLabels).toEqual([]);
+    });
+
+    it('yes records live falsetto label', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE });
+      heard(note(20, 21.5, 69));
+      act(() => r.current.answerFalsetto(r.current.falsettoChip!, 'falsetto'));
+      expect(r.current.falsettoChip).toBeNull();
+      expect(store().noteLabels).toEqual([{ tStart: 20, tEnd: 21.5, midi: 69, label: 'falsetto', source: 'live' }]);
+    });
+
+    it('no chip without a chest reference', async () => {
+      // No estimate and no profile on the phone.
+      const a = await playing();
+      heard(note(20, 21.5, 80));
+      expect(a.result.current.falsettoChip).toBeNull();
+      a.unmount();
+      store().clear();
+      // A model estimate that is still too unsure (sd_high > 3) and no profile on the phone.
+      const b = await playing({ comfort_estimate: { ...ESTIMATE, sd_high: 5 } });
+      heard(note(20, 21.5, 80));
+      expect(b.result.current.falsettoChip).toBeNull();
+    });
+
+    it("an unsure model estimate falls back to the phone's comfort top; measured is used whatever its spread", async () => {
+      act(() => useVoiceStore.getState().save(profileFromSelfReport('baritone', '2026-10-01T00:00:00Z')));
+      const top = useVoiceStore.getState().profile!.comfortHigh;
+      const a = await playing({ comfort_estimate: { ...ESTIMATE, sd_high: 5 } });
+      heard(note(20, 21.5, top + 3));
+      expect(a.result.current.falsettoChip).toBeNull();
+      heard(note(30, 31.5, top + 4));
+      expect(a.result.current.falsettoChip?.midi).toBe(top + 4);
+      a.unmount();
+      store().clear();
+      const b = await playing({ comfort_estimate: { low: 48, high: 59, sd_high: 6, source: 'measured' } });
+      heard(note(20, 21.5, 63));
+      expect(b.result.current.falsettoChip?.midi).toBe(63);
+    });
+
+    it('setup "uses falsetto: yes" lowers the offset to 3', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE }, { ...SETUP, uses_falsetto: 'yes' });
+      heard(note(20, 21.5, 62));
+      expect(r.current.falsettoChip?.midi).toBe(62);
+    });
+
+    it('player never paused by chip', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE });
+      expect(player.play).toHaveBeenCalledTimes(1);
+      heard(note(20, 21.5, 69));
+      act(() => r.current.answerFalsetto(r.current.falsettoChip!, 'full'));
+      heard(note(45, 46.5, 70));
+      act(() => jest.advanceTimersByTime(6000));
+      expect(player.pause).not.toHaveBeenCalled();
+      expect(player.play).toHaveBeenCalledTimes(1);
+      expect(r.current.step).toBe('play');
+    });
+
+    it('two candidates within 20 s show one chip', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE });
+      heard(note(20, 21.5, 69));
+      act(() => jest.advanceTimersByTime(5000));
+      expect(r.current.falsettoChip).toBeNull();
+      heard(note(30, 31.5, 69));
+      expect(r.current.falsettoChip).toBeNull();
+      await act(() => r.current.onPlayer({ kind: 'ended' }));
+      expect(store().candidates).toHaveLength(2);
+    });
+
+    it('the chip goes away when the song ends; the warm-up never asks', async () => {
+      const { result: r } = await playing({ comfort_estimate: ESTIMATE });
+      heard(note(20, 21.5, 69));
+      await act(() => r.current.onPlayer({ kind: 'ended' }));
+      expect(r.current.falsettoChip).toBeNull();
+      heard(note(40, 41.5, 72));
+      expect(r.current.falsettoChip).toBeNull();
+    });
+  
+    /** Steady notes at 100 frames a second. */
+    const framesFor = (notes: { midi: number; dur: number }[]): VoicedFrame[] => {
+      const out: VoicedFrame[] = [];
+      for (const n of notes) for (let i = 0; i < Math.round(n.dur * 100); i++) out.push({ t: out.length / 100, midi: n.midi });
+      return out;
+    };
+    /** 24 s of chest 50..57, then 6 s of A4 (69): a real take's pitch, contour and held notes. */
+    const sungTake = (): SongTake => {
+      const frames = framesFor([...Array.from({ length: 8 }, (_, i) => ({ midi: 50 + i, dur: 3 })), { midi: 69, dur: 6 }]);
+      const held = findHeldNotes(frames);
+      return { pitch: summarizeSongPitch(frames, held), file: null, contour: contourFrom(frames), held, takeOffsetS: 0 };
+    };
+    const A4 = (h: HeldNote[]) => {
+      const n = h.find((x) => x.note === 69)!;
+      return { tStart: n.start, tEnd: n.end, midi: 69 };
+    };
+    async function atQuiz() {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1)).mockResolvedValueOnce(song('b', 2));
+      mockApi.postVoiceAttempt.mockResolvedValue({ attempt_id: 'x1', n: 1, done: false, done_reason: null, top_p: 0.4 });
+      mockRec.nextTake = sungTake();
+      const h = await mount();
+      await act(() => h.result.current.begin(SETUP));
+      await singIt(h.result);
+      act(() => h.result.current.setAnswer({ feel: 'fine', position: 'comfortable' }));
+      return h;
+    }
+    const body = () => mockApi.postVoiceAttempt.mock.calls[0]![1];
+
+    it('catch-up lists unanswered candidates, max 3, highest first', async () => {
+      const { result: r } = await atQuiz();
+      const c = (t: number, m: number) => ({ tStart: t, tEnd: t + 1, midi: m });
+      act(() =>
+        store().update({
+          candidates: [c(10, 64), c(30, 69), c(50, 66), c(70, 70), c(90, 65)],
+          noteLabels: [{ ...c(70, 70), label: 'falsetto', source: 'live' }],
+        }),
+      );
+      expect(r.current.catchUp).toEqual([c(30, 69), c(50, 66), c(90, 65)]);
+      // A quiz answer keeps its row (shown as answered).
+      act(() => r.current.answerFalsetto(c(30, 69), 'unsure', 'quiz'));
+      expect(r.current.catchUp).toEqual([c(30, 69), c(50, 66), c(90, 65)]);
+      // One label per note: answering again replaces it.
+      act(() => r.current.answerFalsetto(c(30, 69), 'falsetto', 'quiz'));
+      expect(store().noteLabels.filter((l) => l.tStart === 30)).toEqual([{ ...c(30, 69), label: 'falsetto', source: 'quiz' }]);
+    });
+
+    it('submit sends chest-only pitch, pitch_all and note_labels', async () => {
+      const { result: r } = await atQuiz();
+      const a4 = A4(store().held);
+      act(() => r.current.answerFalsetto(a4, 'falsetto', 'quiz'));
+      await act(() => r.current.submitQuiz());
+      const b = body();
+      expect(b.pitch_all).toEqual(expect.objectContaining({ held_high: 69 }));
+      expect(b.pitch).toEqual(expect.objectContaining({ held_high: 57, held_count: 8 }));
+      expect(b.pitch.p90).toBeLessThanOrEqual(57);
+      expect(b.note_labels).toEqual([
+        { t_start: expect.any(Number), t_end: expect.any(Number), midi: 69, label: 'falsetto', source: 'quiz' },
+      ]);
+    });
+
+    it('submit without answering still works (pitch as sung, no labels)', async () => {
+      const { result: r } = await atQuiz();
+      act(() => store().update({ candidates: [A4(store().held)] }));
+      await act(() => r.current.submitQuiz());
+      const b = body();
+      expect(b.pitch).toEqual(expect.objectContaining({ held_high: 69 }));
+      expect(b.pitch_all).toEqual(b.pitch);
+      expect(b).not.toHaveProperty('note_labels');
+      expect(r.current.step).toBe('pick');
+    });
+
+    it('no whole-song summary: pitch and pitch_all are both null even with a falsetto answer', async () => {
+      const { result: r } = await atQuiz();
+      const a4 = A4(store().held);
+      act(() => store().update({ pitch: null }));
+      act(() => r.current.answerFalsetto(a4, 'falsetto', 'quiz'));
+      await act(() => r.current.submitQuiz());
+      expect(body().pitch).toBeNull();
+      expect(body().pitch_all).toBeNull();
+      expect(body().note_labels).toHaveLength(1);
+    });
+
+    it('chest voiced_s never exceeds the whole song (frame counts × hop)', async () => {
+      const { result: r } = await atQuiz();
+      act(() => r.current.answerFalsetto(A4(store().held), 'falsetto', 'quiz'));
+      await act(() => r.current.submitQuiz());
+      expect(body().pitch.voiced_s).toBeLessThanOrEqual(body().pitch_all.voiced_s);
+      // 24 s of chest singing less the 0.2 s pad before the labelled A4.
+      expect(body().pitch.voiced_s).toBeCloseTo(23.8, 0);
+    });
+
+    it('a stored contour without frame counts (saved before them) scales the whole song', () => {
+      const old = { t0: 0, dt: 0.1, midi: [50, 50, null, 51] };
+      appStorage.set(
+        VOICE_SESSION_KEY,
+        JSON.stringify({
+          sessionId: 's1', setup: SETUP, floor: 0.003, song: song('a', 1), step: 'quiz', attemptN: 1, quiz: {},
+          pitch: PITCH, playStartedAt: T0 - 1000, playEndedAt: T0, stoppedEarly: false, take: null, savedAt: T0,
+          contour: old, held: [], noteLabels: [], candidates: [], takeOffsetS: 0,
+        }),
+      );
+      restoreVoiceSession();
+      expect(store().contour).toEqual(old);
+    });
+
+    it('restore after kill keeps labels', async () => {
+      const first = await atQuiz();
+      const a4 = A4(store().held);
+      act(() => first.result.current.answerFalsetto(a4, 'falsetto', 'quiz'));
+      first.unmount();
+      restoreVoiceSession();
+      mockApi.getVoiceSession.mockResolvedValue({ session_id: 's1', state: 'active', attempts: 0, last_offer: song('a', 1) });
+      const { result: r } = await mount();
+      expect(r.current.step).toBe('quiz');
+      await act(() => r.current.submitQuiz());
+      expect(body().note_labels).toHaveLength(1);
+      expect(body().pitch.held_high).toBe(57);
+    });
+  
+    it('adoptResult saves the session result as the voice and marks the result saved', async () => {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1));
+      mockApi.getVoiceResult.mockResolvedValue({ ...(RESULT as object), profile_saved: false, suited: [], loved: [] });
+      const PROFILE = {
+        low_midi: 45, high_midi: 64, comfort_low: 49, comfort_high: 59, voice_type: 'baritone', voice_type_between: null,
+        register: null, confidence: 'low', method: 'session', measured_at: '2026-10-25T20:00:00Z', updated_at: '2026-10-25T20:00:00Z',
+        evidence_count: 2, session_id: 's1',
+      };
+      mockApi.adoptVoiceSession.mockResolvedValue(PROFILE);
+      const { result: r } = await mount();
+      await act(() => r.current.begin(SETUP));
+      await act(() => r.current.finish());
+      expect(r.current.step).toBe('result');
+      let ok = false;
+      await act(async () => {
+        ok = await r.current.adoptResult();
+      });
+      expect(ok).toBe(true);
+      expect(mockApi.adoptVoiceSession).toHaveBeenCalledWith('s1');
+      expect(r.current.result?.profile_saved).toBe(true);
+      expect(useVoiceStore.getState().profile).toMatchObject({ method: 'session', voiceType: 'baritone', sessionId: 's1' });
+    });
+
+    it('adoptResult failing (409 no_evidence, offline) returns false and changes nothing', async () => {
+      mockApi.nextVoiceSong.mockResolvedValueOnce(song('a', 1));
+      mockApi.getVoiceResult.mockResolvedValue({ ...(RESULT as object), profile_saved: false, suited: [], loved: [] });
+      mockApi.adoptVoiceSession.mockRejectedValue(new ApiError(409, 'no_evidence'));
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const { result: r } = await mount();
+      await act(() => r.current.begin(SETUP));
+      await act(() => r.current.finish());
+      let ok = true;
+      await act(async () => {
+        ok = await r.current.adoptResult();
+      });
+      expect(ok).toBe(false);
+      expect(r.current.result?.profile_saved).toBe(false);
+      expect(useVoiceStore.getState().profile).toBeNull();
+      warn.mockRestore();
     });
   });
 });

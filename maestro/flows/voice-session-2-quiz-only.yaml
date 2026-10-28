@@ -1,5 +1,8 @@
 # Voice session 2 (plan Task D8): record no → song 1 sung, the next pick skipped ("don't know it"), song 2 sung →
 # Finish → the result's low-confidence wording ("Probably …") → decide has 2 attempts and no recordings.
+# Batch 1 (M8): a seeded low-confidence baritone mic profile (comfort top A3 = 57) gives the first song a chest
+# reference; the live chip on the fake mic's held A4 is left unanswered, so the quiz's catch-up asks about it and gets
+# "Not sure".
 appId: com.nomadkaraoke.mobile
 name: voice-session-2-quiz-only
 tags:
@@ -11,6 +14,12 @@ tags:
       ACTION: setup
       STACK: ${STACK}
       NAME: vs2
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      PROFILE: '{"low_midi":43,"high_midi":64,"comfort_low":47,"comfort_high":57,"voice_type":"baritone","confidence":"low","method":"mic"}'
 - runFlow:
     file: ../common/voice-session-open.yaml
     env:
@@ -19,7 +28,11 @@ tags:
     file: ../common/voice-session-setup.yaml
     env:
       RECORD: "no"
-- runFlow: ../common/voice-session-song.yaml
+- runFlow:
+    file: ../common/voice-session-song.yaml
+    env:
+      CATCHUP: assert
+      SHOT: ${VOICE_SESSION_SHOTS}/vs-2-catchup
 - copyTextFrom:
     id: "vs-pick-title"
 # Regex-escaped (titles hold ( ) . ? and the like; Maestro text matchers are regexes).
