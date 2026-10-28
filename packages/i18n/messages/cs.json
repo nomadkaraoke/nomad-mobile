@@ -136,7 +136,19 @@
     "save": "Uložit do Mých písniček",
     "saved": "Uloženo",
     "addToSetlist": "Přidat do setlistu",
-    "markSung": "Označit jako zazpívané"
+    "markSung": "Označit jako zazpívané",
+    "crowd": {
+      "bucket": {
+        "alto": "Pro {share, number, percent} altů byla tónina pohodlná",
+        "baritone": "Pro {share, number, percent} barytonů byla tónina pohodlná",
+        "bass": "Pro {share, number, percent} basů byla tónina pohodlná",
+        "mezzo": "Pro {share, number, percent} mezzosopránů byla tónina pohodlná",
+        "soprano": "Pro {share, number, percent} sopránů byla tónina pohodlná",
+        "tenor": "Pro {share, number, percent} tenorů byla tónina pohodlná"
+      },
+      "mostlyHigh": "Většině zpěváků přišla tónina trochu moc vysoko",
+      "overall": "Pro {comfortable, number} z {singers, plural, one {# zpěváka} few {# zpěváků} other {# zpěváků}} byla tato tónina pohodlná"
+    }
   },
   "tabs": {
     "discover": "Objevovat",

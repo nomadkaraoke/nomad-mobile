@@ -136,7 +136,19 @@
     "save": "I-save sa Aking mga kanta",
     "saved": "Nai-save na",
     "addToSetlist": "Idagdag sa setlist",
-    "markSung": "Markahan bilang nakanta na"
+    "markSung": "Markahan bilang nakanta na",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} ng mga alto ang naging komportable sa tono",
+        "baritone": "{share, number, percent} ng mga baritone ang naging komportable sa tono",
+        "bass": "{share, number, percent} ng mga bass ang naging komportable sa tono",
+        "mezzo": "{share, number, percent} ng mga mezzo-soprano ang naging komportable sa tono",
+        "soprano": "{share, number, percent} ng mga soprano ang naging komportable sa tono",
+        "tenor": "{share, number, percent} ng mga tenor ang naging komportable sa tono"
+      },
+      "mostlyHigh": "Medyo mataas ito para sa karamihan ng mga mang-aawit",
+      "overall": "{comfortable, number} sa {singers, plural, one {# mang-aawit} other {# mang-aawit}} ang naging komportable sa tono"
+    }
   },
   "tabs": {
     "discover": "Mag-discover",

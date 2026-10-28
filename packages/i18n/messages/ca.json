@@ -136,7 +136,19 @@
     "save": "Desa a Les meves cançons",
     "saved": "Desat",
     "addToSetlist": "Afegeix al repertori",
-    "markSung": "Marca com a cantada"
+    "markSung": "Marca com a cantada",
+    "crowd": {
+      "bucket": {
+        "alto": "El {share, number, percent} de les contralts van trobar el to còmode",
+        "baritone": "El {share, number, percent} dels barítons van trobar el to còmode",
+        "bass": "El {share, number, percent} dels baixos van trobar el to còmode",
+        "mezzo": "El {share, number, percent} de les mezzosopranos van trobar el to còmode",
+        "soprano": "El {share, number, percent} de les sopranos van trobar el to còmode",
+        "tenor": "El {share, number, percent} dels tenors van trobar el to còmode"
+      },
+      "mostlyHigh": "La majoria de cantants el van trobar una mica alt",
+      "overall": "{comfortable, number} de {singers, plural, one {# cantant} other {# cantants}} van trobar el to còmode"
+    }
   },
   "tabs": {
     "discover": "Descobreix",

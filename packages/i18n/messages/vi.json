@@ -136,7 +136,19 @@
     "save": "Lưu vào Bài hát của tôi",
     "saved": "Đã lưu",
     "addToSetlist": "Thêm vào danh sách bài hát",
-    "markSung": "Đánh dấu đã hát"
+    "markSung": "Đánh dấu đã hát",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} giọng nữ trầm (alto) thấy tông nhạc này vừa sức",
+        "baritone": "{share, number, percent} giọng nam trung (baritone) thấy tông nhạc này vừa sức",
+        "bass": "{share, number, percent} giọng nam trầm (bass) thấy tông nhạc này vừa sức",
+        "mezzo": "{share, number, percent} giọng nữ trung (mezzo-soprano) thấy tông nhạc này vừa sức",
+        "soprano": "{share, number, percent} giọng nữ cao (soprano) thấy tông nhạc này vừa sức",
+        "tenor": "{share, number, percent} giọng nam cao (tenor) thấy tông nhạc này vừa sức"
+      },
+      "mostlyHigh": "Hầu hết người hát thấy tông này hơi cao",
+      "overall": "{comfortable, number} trên {singers, plural, one {# người hát} other {# người hát}} thấy tông nhạc này vừa sức"
+    }
   },
   "tabs": {
     "discover": "Khám phá",

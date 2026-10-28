@@ -136,7 +136,19 @@
     "save": "שמירה ב'השירים שלי'",
     "saved": "נשמר",
     "addToSetlist": "הוספה לרשימת השמעה",
-    "markSung": "סימון כשיר ששרתי"
+    "markSung": "סימון כשיר ששרתי",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} מזמרות האלט מצאו את הסולם נוח",
+        "baritone": "{share, number, percent} מזמרי הבריטון מצאו את הסולם נוח",
+        "bass": "{share, number, percent} מזמרי הבס מצאו את הסולם נוח",
+        "mezzo": "{share, number, percent} מזמרות המצו-סופרן מצאו את הסולם נוח",
+        "soprano": "{share, number, percent} מזמרות הסופרן מצאו את הסולם נוח",
+        "tenor": "{share, number, percent} מזמרי הטנור מצאו את הסולם נוח"
+      },
+      "mostlyHigh": "רוב הזמרים הרגישו שזה מעט גבוה",
+      "overall": "{comfortable, number} מתוך {singers, plural, one {זמר אחד} other {# זמרים}} מצאו את הסולם נוח"
+    }
   },
   "tabs": {
     "discover": "גילוי",

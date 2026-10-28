@@ -136,7 +136,19 @@
     "save": "Gem i Mine sange",
     "saved": "Gemt",
     "addToSetlist": "Tilføj til setliste",
-    "markSung": "Markér som sunget"
+    "markSung": "Markér som sunget",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} af alterne fandt tonearten behagelig",
+        "baritone": "{share, number, percent} af barytonerne fandt tonearten behagelig",
+        "bass": "{share, number, percent} af basserne fandt tonearten behagelig",
+        "mezzo": "{share, number, percent} af mezzosopranerne fandt tonearten behagelig",
+        "soprano": "{share, number, percent} af sopranerne fandt tonearten behagelig",
+        "tenor": "{share, number, percent} af tenorerne fandt tonearten behagelig"
+      },
+      "mostlyHigh": "De fleste sangere syntes, den var lidt høj",
+      "overall": "{comfortable, number} ud af {singers, plural, one {# sanger} other {# sangere}} fandt tonearten behagelig"
+    }
   },
   "tabs": {
     "discover": "Udforsk",

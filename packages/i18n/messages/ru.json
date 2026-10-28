@@ -136,7 +136,19 @@
     "save": "Сохранить в «Мои песни»",
     "saved": "Сохранено",
     "addToSetlist": "Добавить в сет-лист",
-    "markSung": "Отметить как спетое"
+    "markSung": "Отметить как спетое",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} альтов сочли тональность удобной",
+        "baritone": "{share, number, percent} баритонов сочли тональность удобной",
+        "bass": "{share, number, percent} басов сочли тональность удобной",
+        "mezzo": "{share, number, percent} меццо-сопрано сочли тональность удобной",
+        "soprano": "{share, number, percent} сопрано сочли тональность удобной",
+        "tenor": "{share, number, percent} теноров сочли тональность удобной"
+      },
+      "mostlyHigh": "Большинство певцов сочли её высоковатой",
+      "overall": "{comfortable, number} из {singers, plural, one {# певца} few {# певцов} many {# певцов} other {# певцов}} сочли тональность удобной"
+    }
   },
   "tabs": {
     "discover": "Каталог",

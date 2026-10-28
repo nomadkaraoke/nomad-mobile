@@ -136,7 +136,19 @@
     "save": "Zapisz w Moich piosenkach",
     "saved": "Zapisano",
     "addToSetlist": "Dodaj do playlisty",
-    "markSung": "Oznacz jako zaśpiewane"
+    "markSung": "Oznacz jako zaśpiewane",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} altów uznało tę tonację za wygodną",
+        "baritone": "{share, number, percent} barytonów uznało tę tonację za wygodną",
+        "bass": "{share, number, percent} basów uznało tę tonację za wygodną",
+        "mezzo": "{share, number, percent} mezzosopranów uznało tę tonację za wygodną",
+        "soprano": "{share, number, percent} sopranów uznało tę tonację za wygodną",
+        "tenor": "{share, number, percent} tenorów uznało tę tonację za wygodną"
+      },
+      "mostlyHigh": "Większość wokalistów uznała ją za nieco zbyt wysoką",
+      "overall": "{comfortable, number} z {singers, plural, one {# wokalisty} few {# wokalistów} many {# wokalistów} other {# wokalistów}} uznało tę tonację za wygodną"
+    }
   },
   "tabs": {
     "discover": "Odkrywaj",

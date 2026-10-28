@@ -136,7 +136,19 @@
     "save": "保存到我的歌曲",
     "saved": "已保存",
     "addToSetlist": "添加到歌单",
-    "markSung": "标记为已唱"
+    "markSung": "标记为已唱",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent}的女低音觉得这个调很舒服",
+        "baritone": "{share, number, percent}的男中音觉得这个调很舒服",
+        "bass": "{share, number, percent}的男低音觉得这个调很舒服",
+        "mezzo": "{share, number, percent}的女中音觉得这个调很舒服",
+        "soprano": "{share, number, percent}的女高音觉得这个调很舒服",
+        "tenor": "{share, number, percent}的男高音觉得这个调很舒服"
+      },
+      "mostlyHigh": "大多数演唱者觉得音调偏高",
+      "overall": "{singers, plural, one {# 位演唱者} other {# 位演唱者}}中有 {comfortable, number} 位觉得这个调很合适"
+    }
   },
   "tabs": {
     "discover": "发现",

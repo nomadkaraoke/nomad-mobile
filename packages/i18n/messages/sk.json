@@ -136,7 +136,19 @@
     "save": "Uložiť do Mojich piesní",
     "saved": "Uložené",
     "addToSetlist": "Pridať do setlistu",
-    "markSung": "Označiť ako odspievané"
+    "markSung": "Označiť ako odspievané",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} altistiek považovalo túto tóninu za pohodlnú",
+        "baritone": "{share, number, percent} barytonistov považovalo túto tóninu za pohodlnú",
+        "bass": "{share, number, percent} basistov považovalo túto tóninu za pohodlnú",
+        "mezzo": "{share, number, percent} mezzosopranistiek považovalo túto tóninu za pohodlnú",
+        "soprano": "{share, number, percent} sopranistiek považovalo túto tóninu za pohodlnú",
+        "tenor": "{share, number, percent} tenoristov považovalo túto tóninu za pohodlnú"
+      },
+      "mostlyHigh": "Väčšine spevákov sa zdala trochu privysoká",
+      "overall": "{comfortable, number} z {singers, plural, one {# speváka} few {# spevákov} many {# speváka} other {# spevákov}} považovalo túto tóninu za pohodlnú"
+    }
   },
   "tabs": {
     "discover": "Objavovať",

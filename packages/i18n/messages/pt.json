@@ -136,7 +136,19 @@
     "save": "Salvar em Minhas músicas",
     "saved": "Salvo",
     "addToSetlist": "Adicionar à setlist",
-    "markSung": "Marcar como cantada"
+    "markSung": "Marcar como cantada",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} dos contraltos acharam o tom confortável",
+        "baritone": "{share, number, percent} dos barítonos acharam o tom confortável",
+        "bass": "{share, number, percent} dos baixos acharam o tom confortável",
+        "mezzo": "{share, number, percent} dos mezzo-sopranos acharam o tom confortável",
+        "soprano": "{share, number, percent} dos sopranos acharam o tom confortável",
+        "tenor": "{share, number, percent} dos tenores acharam o tom confortável"
+      },
+      "mostlyHigh": "A maioria dos cantores achou o tom um pouco alto",
+      "overall": "{comfortable, number} de {singers, plural, one {# cantor achou} other {# cantores acharam}} o tom confortável"
+    }
   },
   "tabs": {
     "discover": "Descobrir",

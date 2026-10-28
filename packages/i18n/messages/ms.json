@@ -136,7 +136,19 @@
     "save": "Simpan ke Lagu saya",
     "saved": "Disimpan",
     "addToSetlist": "Tambah ke setlist",
-    "markSung": "Tandakan sebagai pernah dinyanyikan"
+    "markSung": "Tandakan sebagai pernah dinyanyikan",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} penyanyi alto mendapati nada kuncinya selesa",
+        "baritone": "{share, number, percent} penyanyi bariton mendapati nada kuncinya selesa",
+        "bass": "{share, number, percent} penyanyi bes mendapati nada kuncinya selesa",
+        "mezzo": "{share, number, percent} penyanyi mezzo-soprano mendapati nada kuncinya selesa",
+        "soprano": "{share, number, percent} penyanyi soprano mendapati nada kuncinya selesa",
+        "tenor": "{share, number, percent} penyanyi tenor mendapati nada kuncinya selesa"
+      },
+      "mostlyHigh": "Kebanyakan penyanyi mendapatinya agak tinggi",
+      "overall": "{comfortable, number} daripada {singers, plural, one {# orang penyanyi} other {# orang penyanyi}} mendapati nada kuncinya selesa"
+    }
   },
   "tabs": {
     "discover": "Teroka",

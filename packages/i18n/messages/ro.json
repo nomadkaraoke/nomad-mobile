@@ -136,7 +136,19 @@
     "save": "Salvează în Piesele mele",
     "saved": "Salvat",
     "addToSetlist": "Adaugă în setlist",
-    "markSung": "Marchează ca fiind cântată"
+    "markSung": "Marchează ca fiind cântată",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} dintre altiști au considerat tonalitatea confortabilă",
+        "baritone": "{share, number, percent} dintre baritoni au considerat tonalitatea confortabilă",
+        "bass": "{share, number, percent} dintre bași au considerat tonalitatea confortabilă",
+        "mezzo": "{share, number, percent} dintre mezzosoprane au considerat tonalitatea confortabilă",
+        "soprano": "{share, number, percent} dintre soprane au considerat tonalitatea confortabilă",
+        "tenor": "{share, number, percent} dintre tenori au considerat tonalitatea confortabilă"
+      },
+      "mostlyHigh": "Majoritatea cântăreților au considerat-o puțin cam înaltă",
+      "overall": "{comfortable, number} din {singers, plural, one {# cântăreț} few {# cântăreți} other {# de cântăreți}} au considerat tonalitatea confortabilă"
+    }
   },
   "tabs": {
     "discover": "Descoperă",

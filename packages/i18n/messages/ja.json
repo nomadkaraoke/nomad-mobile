@@ -136,7 +136,19 @@
     "save": "マイソングに保存",
     "saved": "保存済み",
     "addToSetlist": "セットリストに追加",
-    "markSung": "歌った曲として記録"
+    "markSung": "歌った曲として記録",
+    "crowd": {
+      "bucket": {
+        "alto": "アルトの{share, number, percent}が「ちょうどいいキー」と回答しました",
+        "baritone": "バリトンの{share, number, percent}が「ちょうどいいキー」と回答しました",
+        "bass": "バスの{share, number, percent}が「ちょうどいいキー」と回答しました",
+        "mezzo": "メゾソプラノの{share, number, percent}が「ちょうどいいキー」と回答しました",
+        "soprano": "ソプラノの{share, number, percent}が「ちょうどいいキー」と回答しました",
+        "tenor": "テノールの{share, number, percent}が「ちょうどいいキー」と回答しました"
+      },
+      "mostlyHigh": "ほとんどの人が少し高めだと感じました",
+      "overall": "{singers, plural, one {#人} other {#人}}中{comfortable, number}人が「ちょうどいいキー」と回答しました"
+    }
   },
   "tabs": {
     "discover": "見つける",

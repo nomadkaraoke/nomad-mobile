@@ -136,7 +136,19 @@
     "save": "Зберегти в «Мої пісні»",
     "saved": "Збережено",
     "addToSetlist": "Додати до сетліста",
-    "markSung": "Позначити як заспівану"
+    "markSung": "Позначити як заспівану",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} альтів вважають цю тональність зручною",
+        "baritone": "{share, number, percent} баритонів вважають цю тональність зручною",
+        "bass": "{share, number, percent} басів вважають цю тональність зручною",
+        "mezzo": "{share, number, percent} мецо-сопрано вважають цю тональність зручною",
+        "soprano": "{share, number, percent} сопрано вважають цю тональність зручною",
+        "tenor": "{share, number, percent} тенорів вважають цю тональність зручною"
+      },
+      "mostlyHigh": "Більшості виконавців тональність здалася зависокою",
+      "overall": "{comfortable, number} з {singers, plural, one {# виконавця} few {# виконавців} many {# виконавців} other {# виконавців}} вважають цю тональність зручною"
+    }
   },
   "tabs": {
     "discover": "Огляд",

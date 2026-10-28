@@ -238,6 +238,18 @@
       "remove": "Remove",
       "removeTitle": "Remove this record?",
       "removeBody": "It will no longer count as sung."
+    },
+    "crowd": {
+      "bucket": {
+        "bass": "{share, number, percent} of basses found the key comfortable",
+        "baritone": "{share, number, percent} of baritones found the key comfortable",
+        "tenor": "{share, number, percent} of tenors found the key comfortable",
+        "alto": "{share, number, percent} of altos found the key comfortable",
+        "mezzo": "{share, number, percent} of mezzo-sopranos found the key comfortable",
+        "soprano": "{share, number, percent} of sopranos found the key comfortable"
+      },
+      "overall": "{comfortable, number} of {singers, plural, one {# singer} other {# singers}} found the key comfortable",
+      "mostlyHigh": "Most singers found it a bit high"
     }
   },
   "signIn": {

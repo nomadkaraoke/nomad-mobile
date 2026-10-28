@@ -136,7 +136,19 @@
     "save": "Simpan ke Lagu Saya",
     "saved": "Tersimpan",
     "addToSetlist": "Tambah ke setlist",
-    "markSung": "Tandai sudah dinyanyikan"
+    "markSung": "Tandai sudah dinyanyikan",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} penyanyi alto merasa nadanya pas",
+        "baritone": "{share, number, percent} penyanyi bariton merasa nadanya pas",
+        "bass": "{share, number, percent} penyanyi bas merasa nadanya pas",
+        "mezzo": "{share, number, percent} penyanyi mezzo-sopran merasa nadanya pas",
+        "soprano": "{share, number, percent} penyanyi sopran merasa nadanya pas",
+        "tenor": "{share, number, percent} penyanyi tenor merasa nadanya pas"
+      },
+      "mostlyHigh": "Sebagian besar penyanyi merasa nadanya agak ketinggian",
+      "overall": "{comfortable, number} dari {singers, plural, other {# penyanyi}} merasa nadanya pas"
+    }
   },
   "tabs": {
     "discover": "Jelajahi",

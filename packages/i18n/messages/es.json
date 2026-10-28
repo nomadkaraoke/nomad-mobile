@@ -136,7 +136,19 @@
     "save": "Guardar en Mis canciones",
     "saved": "Guardado",
     "addToSetlist": "Añadir a la lista",
-    "markSung": "Marcar como cantada"
+    "markSung": "Marcar como cantada",
+    "crowd": {
+      "bucket": {
+        "alto": "El {share, number, percent} de las contraltos consideró cómodo el tono",
+        "baritone": "El {share, number, percent} de los barítonos consideró cómodo el tono",
+        "bass": "El {share, number, percent} de los bajos consideró cómodo el tono",
+        "mezzo": "El {share, number, percent} de las mezzosopranos consideró cómodo el tono",
+        "soprano": "El {share, number, percent} de las sopranos consideró cómodo el tono",
+        "tenor": "El {share, number, percent} de los tenores consideró cómodo el tono"
+      },
+      "mostlyHigh": "La mayoría de los cantantes lo consideró un poco alto",
+      "overall": "{comfortable, number} de {singers, plural, one {# cantante consideró} other {# cantantes consideraron}} cómodo el tono"
+    }
   },
   "tabs": {
     "discover": "Descubrir",

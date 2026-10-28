@@ -136,7 +136,19 @@
     "save": "Salva nei Miei brani",
     "saved": "Salvato",
     "addToSetlist": "Aggiungi alla scaletta",
-    "markSung": "Segna come cantata"
+    "markSung": "Segna come cantata",
+    "crowd": {
+      "bucket": {
+        "alto": "Il {share, number, percent} dei contralti ha trovato la tonalità comoda",
+        "baritone": "Il {share, number, percent} dei baritoni ha trovato la tonalità comoda",
+        "bass": "Il {share, number, percent} dei bassi ha trovato la tonalità comoda",
+        "mezzo": "Il {share, number, percent} dei mezzosoprani ha trovato la tonalità comoda",
+        "soprano": "Il {share, number, percent} dei soprani ha trovato la tonalità comoda",
+        "tenor": "Il {share, number, percent} dei tenori ha trovato la tonalità comoda"
+      },
+      "mostlyHigh": "La maggior parte dei cantanti l'ha trovata un po' alta",
+      "overall": "{comfortable, number} su {singers, plural, one {# cantante} other {# cantanti}} hanno trovato la tonalità comoda"
+    }
   },
   "tabs": {
     "discover": "Scopri",

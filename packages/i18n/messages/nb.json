@@ -136,7 +136,19 @@
     "save": "Lagre i Mine sanger",
     "saved": "Lagret",
     "addToSetlist": "Legg til i spilleliste",
-    "markSung": "Marker som sunget"
+    "markSung": "Marker som sunget",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} av alter syntes tonearten var behagelig",
+        "baritone": "{share, number, percent} av barytoner syntes tonearten var behagelig",
+        "bass": "{share, number, percent} av basser syntes tonearten var behagelig",
+        "mezzo": "{share, number, percent} av mezzosopraner syntes tonearten var behagelig",
+        "soprano": "{share, number, percent} av sopraner syntes tonearten var behagelig",
+        "tenor": "{share, number, percent} av tenorer syntes tonearten var behagelig"
+      },
+      "mostlyHigh": "De fleste sangere syntes den var litt for høy",
+      "overall": "{comfortable, number} av {singers, plural, one {# sanger} other {# sangere}} syntes tonearten var behagelig"
+    }
   },
   "tabs": {
     "discover": "Oppdag",

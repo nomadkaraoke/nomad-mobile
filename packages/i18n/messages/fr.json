@@ -136,7 +136,19 @@
     "save": "Ajouter à Mes chansons",
     "saved": "Enregistré",
     "addToSetlist": "Ajouter à la setlist",
-    "markSung": "Marquer comme chantée"
+    "markSung": "Marquer comme chantée",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} des altos ont trouvé la tonalité confortable",
+        "baritone": "{share, number, percent} des barytons ont trouvé la tonalité confortable",
+        "bass": "{share, number, percent} des basses ont trouvé la tonalité confortable",
+        "mezzo": "{share, number, percent} des mezzo-sopranos ont trouvé la tonalité confortable",
+        "soprano": "{share, number, percent} des sopranos ont trouvé la tonalité confortable",
+        "tenor": "{share, number, percent} des ténors ont trouvé la tonalité confortable"
+      },
+      "mostlyHigh": "La plupart des chanteurs l'ont trouvée un peu haute",
+      "overall": "{comfortable, number} sur {singers, plural, one {# chanteur} other {# chanteurs}} ont trouvé la tonalité confortable"
+    }
   },
   "tabs": {
     "discover": "Découvrir",

@@ -136,7 +136,19 @@
     "save": "حفظ في أغنياتي",
     "saved": "تم الحفظ",
     "addToSetlist": "إضافة إلى قائمة الأغاني",
-    "markSung": "تحديد كمُغنّاة"
+    "markSung": "تحديد كمُغنّاة",
+    "crowd": {
+      "bucket": {
+        "alto": "وجد {share, number, percent} من مغني الألتو أن طبقة الصوت مريحة",
+        "baritone": "وجد {share, number, percent} من مغني الباريتون أن طبقة الصوت مريحة",
+        "bass": "وجد {share, number, percent} من مغني الباص أن طبقة الصوت مريحة",
+        "mezzo": "وجد {share, number, percent} من مغني الميزو-سوبرانو أن طبقة الصوت مريحة",
+        "soprano": "وجد {share, number, percent} من مغني السوبرانو أن طبقة الصوت مريحة",
+        "tenor": "وجد {share, number, percent} من مغني التينور أن طبقة الصوت مريحة"
+      },
+      "mostlyHigh": "وجد معظم المغنين أنها عالية بعض الشيء",
+      "overall": "وجد {comfortable, number} من أصل {singers, plural, zero {مغنٍ} one {مغنٍ واحد} two {مغنيَين} few {# مغنين} many {# مغنياً} other {# مغنٍ}} أن طبقة الصوت مريحة"
+    }
   },
   "tabs": {
     "discover": "استكشف",

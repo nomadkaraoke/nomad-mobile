@@ -136,7 +136,19 @@
     "save": "Mentés a Dalaim közé",
     "saved": "Mentve",
     "addToSetlist": "Hozzáadás a dallistához",
-    "markSung": "Megjelölés elénekeltként"
+    "markSung": "Megjelölés elénekeltként",
+    "crowd": {
+      "bucket": {
+        "alto": "Az alt énekesek {share, number, percent}-a találta kényelmesnek a hangnemet",
+        "baritone": "A bariton énekesek {share, number, percent}-a találta kényelmesnek a hangnemet",
+        "bass": "A basszus énekesek {share, number, percent}-a találta kényelmesnek a hangnemet",
+        "mezzo": "A mezzoszoprán énekesek {share, number, percent}-a találta kényelmesnek a hangnemet",
+        "soprano": "A szoprán énekesek {share, number, percent}-a találta kényelmesnek a hangnemet",
+        "tenor": "A tenor énekesek {share, number, percent}-a találta kényelmesnek a hangnemet"
+      },
+      "mostlyHigh": "A legtöbb énekes kissé magasnak találta",
+      "overall": "{singers, plural, one {# énekesből #} other {# énekesből {comfortable, number}}} találta kényelmesnek a hangnemet"
+    }
   },
   "tabs": {
     "discover": "Felfedezés",

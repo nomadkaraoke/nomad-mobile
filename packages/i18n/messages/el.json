@@ -136,7 +136,19 @@
     "save": "Αποθήκευση στα Τραγούδια μου",
     "saved": "Αποθηκεύτηκε",
     "addToSetlist": "Προσθήκη σε setlist",
-    "markSung": "Επισήμανση ως τραγουδισμένο"
+    "markSung": "Επισήμανση ως τραγουδισμένο",
+    "crowd": {
+      "bucket": {
+        "alto": "Το {share, number, percent} των άλτο βρήκε τον τόνο άνετο",
+        "baritone": "Το {share, number, percent} των βαρύτονων βρήκε τον τόνο άνετο",
+        "bass": "Το {share, number, percent} των μπάσων βρήκε τον τόνο άνετο",
+        "mezzo": "Το {share, number, percent} των μέτζο σοπράνο βρήκε τον τόνο άνετο",
+        "soprano": "Το {share, number, percent} των σοπράνο βρήκε τον τόνο άνετο",
+        "tenor": "Το {share, number, percent} των τενόρων βρήκε τον τόνο άνετο"
+      },
+      "mostlyHigh": "Οι περισσότεροι τραγουδιστές τον βρήκαν λίγο ψηλό",
+      "overall": "{comfortable, number} στους {singers, plural, one {# τραγουδιστή} other {# τραγουδιστές}} βρήκαν τον τόνο άνετο"
+    }
   },
   "tabs": {
     "discover": "Ανακάλυψη",

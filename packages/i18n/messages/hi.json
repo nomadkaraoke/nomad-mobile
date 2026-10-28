@@ -136,7 +136,19 @@
     "save": "मेरे गानों में सेव करें",
     "saved": "सेव किया गया",
     "addToSetlist": "सेटलिस्ट में जोड़ो",
-    "markSung": "गाया हुआ मार्क करो"
+    "markSung": "गाया हुआ मार्क करो",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} ऑल्टो सिंगर्स को यह key आरामदायक लगी",
+        "baritone": "{share, number, percent} बैरीटोन सिंगर्स को यह key आरामदायक लगी",
+        "bass": "{share, number, percent} बास सिंगर्स को यह key आरामदायक लगी",
+        "mezzo": "{share, number, percent} मेज़ो-सोप्रानो सिंगर्स को यह key आरामदायक लगी",
+        "soprano": "{share, number, percent} सोप्रानो सिंगर्स को यह key आरामदायक लगी",
+        "tenor": "{share, number, percent} टेनर सिंगर्स को यह key आरामदायक लगी"
+      },
+      "mostlyHigh": "ज़्यादातर सिंगर्स को यह थोड़ा ऊँचा लगा",
+      "overall": "{singers, plural, one {# सिंगर} other {# सिंगर्स}} में से {comfortable, number} को यह key आरामदायक लगी"
+    }
   },
   "tabs": {
     "discover": "एक्सप्लोर करो",

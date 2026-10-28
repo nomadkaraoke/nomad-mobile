@@ -136,7 +136,19 @@
     "save": "In „Meine Songs“ speichern",
     "saved": "Gespeichert",
     "addToSetlist": "Zur Setlist hinzufügen",
-    "markSung": "Als gesungen markieren"
+    "markSung": "Als gesungen markieren",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} der Altstimmen fanden die Tonart angenehm",
+        "baritone": "{share, number, percent} der Baritone fanden die Tonart angenehm",
+        "bass": "{share, number, percent} der Bässe fanden die Tonart angenehm",
+        "mezzo": "{share, number, percent} der Mezzosoprane fanden die Tonart angenehm",
+        "soprano": "{share, number, percent} der Soprane fanden die Tonart angenehm",
+        "tenor": "{share, number, percent} der Tenöre fanden die Tonart angenehm"
+      },
+      "mostlyHigh": "Die meisten Sänger fanden es etwas zu hoch",
+      "overall": "{comfortable, number} von {singers, plural, one {# Sänger} other {# Sängern}} fanden die Tonart angenehm"
+    }
   },
   "tabs": {
     "discover": "Entdecken",

@@ -136,7 +136,19 @@
     "save": "Spremi u Moje pjesme",
     "saved": "Spremljeno",
     "addToSetlist": "Dodaj na setlistu",
-    "markSung": "Označi kao otpjevano"
+    "markSung": "Označi kao otpjevano",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} altova smatralo je tonalitet ugodnim",
+        "baritone": "{share, number, percent} baritona smatralo je tonalitet ugodnim",
+        "bass": "{share, number, percent} basova smatralo je tonalitet ugodnim",
+        "mezzo": "{share, number, percent} mecosoprana smatralo je tonalitet ugodnim",
+        "soprano": "{share, number, percent} soprana smatralo je tonalitet ugodnim",
+        "tenor": "{share, number, percent} tenora smatralo je tonalitet ugodnim"
+      },
+      "mostlyHigh": "Većini pjevača bilo je malo previsoko",
+      "overall": "{comfortable, number} od {singers, plural, one {# pjevača} few {# pjevača} other {# pjevača}} smatralo je tonalitet ugodnim"
+    }
   },
   "tabs": {
     "discover": "Otkrij",

@@ -136,7 +136,19 @@
     "save": "Tallenna Omiin kappaleisiin",
     "saved": "Tallennettu",
     "addToSetlist": "Lisää settilistaan",
-    "markSung": "Merkitse lauletuksi"
+    "markSung": "Merkitse lauletuksi",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} altoista piti sävellajia sopivana",
+        "baritone": "{share, number, percent} baritoneista piti sävellajia sopivana",
+        "bass": "{share, number, percent} bassoista piti sävellajia sopivana",
+        "mezzo": "{share, number, percent} mezzosopraanoista piti sävellajia sopivana",
+        "soprano": "{share, number, percent} sopraanoista piti sävellajia sopivana",
+        "tenor": "{share, number, percent} tenoreista piti sävellajia sopivana"
+      },
+      "mostlyHigh": "Useimpien laulajien mielestä sävellaji oli hieman liian korkea",
+      "overall": "{comfortable, number} / {singers, plural, one {# laulajasta} other {# laulajasta}} piti sävellajia sopivana"
+    }
   },
   "tabs": {
     "discover": "Löydä uutta",

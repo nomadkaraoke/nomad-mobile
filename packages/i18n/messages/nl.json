@@ -136,7 +136,19 @@
     "save": "Opslaan in Mijn nummers",
     "saved": "Opgeslagen",
     "addToSetlist": "Toevoegen aan setlist",
-    "markSung": "Markeren als gezongen"
+    "markSung": "Markeren als gezongen",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} van de alten vond de toonsoort prettig",
+        "baritone": "{share, number, percent} van de baritons vond de toonsoort prettig",
+        "bass": "{share, number, percent} van de bassen vond de toonsoort prettig",
+        "mezzo": "{share, number, percent} van de mezzosopranen vond de toonsoort prettig",
+        "soprano": "{share, number, percent} van de sopranen vond de toonsoort prettig",
+        "tenor": "{share, number, percent} van de tenoren vond de toonsoort prettig"
+      },
+      "mostlyHigh": "De meeste zangers vonden het aan de hoge kant",
+      "overall": "{comfortable, number} van de {singers, plural, one {# zanger} other {# zangers}} vond de toonsoort prettig"
+    }
   },
   "tabs": {
     "discover": "Ontdekken",

@@ -136,7 +136,19 @@
     "save": "내 노래에 저장",
     "saved": "저장됨",
     "addToSetlist": "세트리스트에 추가",
-    "markSung": "부른 곡으로 표시"
+    "markSung": "부른 곡으로 표시",
+    "crowd": {
+      "bucket": {
+        "alto": "알토의 {share, number, percent}가 이 키가 편하다고 응답했어요",
+        "baritone": "바리톤의 {share, number, percent}가 이 키가 편하다고 응답했어요",
+        "bass": "베이스의 {share, number, percent}가 이 키가 편하다고 응답했어요",
+        "mezzo": "메조소프라노의 {share, number, percent}가 이 키가 편하다고 응답했어요",
+        "soprano": "소프라노의 {share, number, percent}가 이 키가 편하다고 응답했어요",
+        "tenor": "테너의 {share, number, percent}가 이 키가 편하다고 응답했어요"
+      },
+      "mostlyHigh": "대부분의 사용자가 키가 조금 높다고 느꼈어요",
+      "overall": "{singers, plural, one {#명} other {#명}} 중 {comfortable, number}명이 이 키가 편하다고 응답했어요"
+    }
   },
   "tabs": {
     "discover": "둘러보기",

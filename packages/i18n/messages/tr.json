@@ -136,7 +136,19 @@
     "save": "Şarkılarıma kaydet",
     "saved": "Kaydedildi",
     "addToSetlist": "Çalma listesine ekle",
-    "markSung": "Söylendi olarak işaretle"
+    "markSung": "Söylendi olarak işaretle",
+    "crowd": {
+      "bucket": {
+        "alto": "Altoların {share, number, percent} kadarı tonu rahat buldu",
+        "baritone": "Baritonların {share, number, percent} kadarı tonu rahat buldu",
+        "bass": "Basların {share, number, percent} kadarı tonu rahat buldu",
+        "mezzo": "Mezzo-sopranoların {share, number, percent} kadarı tonu rahat buldu",
+        "soprano": "Sopranoların {share, number, percent} kadarı tonu rahat buldu",
+        "tenor": "Tenorların {share, number, percent} kadarı tonu rahat buldu"
+      },
+      "mostlyHigh": "Şarkı söyleyenlerin çoğu tonu biraz tiz buldu",
+      "overall": "{singers, plural, one {# şarkıcıdan} other {# şarkıcıdan}} {comfortable, number} tanesi tonu rahat buldu"
+    }
   },
   "tabs": {
     "discover": "Keşfet",

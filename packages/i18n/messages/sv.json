@@ -136,7 +136,19 @@
     "save": "Spara till Mina låtar",
     "saved": "Sparad",
     "addToSetlist": "Lägg till i setlist",
-    "markSung": "Markera som sjungen"
+    "markSung": "Markera som sjungen",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} av altarna tyckte att tonarten var bekväm",
+        "baritone": "{share, number, percent} av barytonerna tyckte att tonarten var bekväm",
+        "bass": "{share, number, percent} av basarna tyckte att tonarten var bekväm",
+        "mezzo": "{share, number, percent} av mezzosopranerna tyckte att tonarten var bekväm",
+        "soprano": "{share, number, percent} av sopranerna tyckte att tonarten var bekväm",
+        "tenor": "{share, number, percent} av tenorerna tyckte att tonarten var bekväm"
+      },
+      "mostlyHigh": "De flesta sångare tyckte att den var lite hög",
+      "overall": "{comfortable, number} av {singers, plural, one {# sångare} other {# sångare}} tyckte att tonarten var bekväm"
+    }
   },
   "tabs": {
     "discover": "Upptäck",
