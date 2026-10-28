@@ -70,10 +70,17 @@ tags:
 - assertNotVisible:
     id: "getmade-request-0"
 - takeScreenshot: ${ME_SHOTS}/me-11-getmade-requested
+# Not common/header-back.yaml: its Android hideKeyboard with no keyboard up also went back (two screens).
 - runFlow:
-    file: ../common/header-back.yaml
-    env:
-      LOCALE: en
+    when:
+      platform: Android
+    commands:
+      - back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Back|Navigate up"
 # Back on Me: the shelf shares the outcome; Make it (enabled once the user's gen jobs are known) opens make.
 - scrollUntilVisible:
     element:
@@ -101,10 +108,17 @@ tags:
     id: "make-song-artist"
     text: ".*Fixture Artist 01.*"
 - takeScreenshot: ${ME_SHOTS}/me-11-make
+# Not common/header-back.yaml: its Android hideKeyboard with no keyboard up also went back (two screens).
 - runFlow:
-    file: ../common/header-back.yaml
-    env:
-      LOCALE: en
+    when:
+      platform: Android
+    commands:
+      - back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Back|Navigate up"
 # Dismiss → gone (undo toast) → Undo → back.
 - scrollUntilVisible:
     element:
