@@ -2,13 +2,17 @@ import { ApiError } from './configure';
 import {
   createPlaylistApiPlaylistsPost,
   deletePlaylistApiPlaylistsPlaylistIdDelete,
+  dismissApiMyGetMadeKeyDismissPost,
   getLibraryApiMyLibraryGet,
+  getMadeApiMyGetMadeGet,
   listKaraokeLogApiMyKaraokeLogGet,
   listPlaylistsApiPlaylistsGet,
   replacePlaylistItemsApiPlaylistsPlaylistIdItemsPut,
+  songCrowdApiSongsSongKeyCrowdGet,
+  undismissApiMyGetMadeKeyDismissDelete,
   updatePlaylistApiPlaylistsPlaylistIdPut,
 } from './client';
-import type { KaraokeLogEntry, LibraryItem, PlaylistItemIn, PlaylistResponse } from './client';
+import type { GetMadeItem, KaraokeLogEntry, LibraryItem, PlaylistItemIn, PlaylistResponse, SongCrowd } from './client';
 
 // Me tab: the singer's library (catalogued songs + facets), setlists (decide playlists with ordered items) and per-song history.
 export type Setlist = PlaylistResponse;
@@ -74,3 +78,23 @@ export const listSongHistory = async (libraryKey: string): Promise<KaraokeLogEnt
   } while (cursor);
   return all;
 };
+
+// Get this made: the user's songs (and top-up recs) with no karaoke version yet. `GetMadeItem` and `SongCrowd`
+// come from the generated client (re-exported by index.ts).
+
+/** The Get-this-made list, strongest first. Throws ApiError (503 `warming_up` while the catalog loads). */
+export const getGetMade = async (): Promise<GetMadeItem[]> => (await getMadeApiMyGetMadeGet()).data.items;
+
+/** Hide one item from Get this made (idempotent). `key` is the item's `key` (catalog key or `u:` key). */
+export const dismissGetMade = async (key: string): Promise<void> => {
+  await dismissApiMyGetMadeKeyDismissPost({ path: { key } });
+};
+
+/** Undo `dismissGetMade` (idempotent). */
+export const undismissGetMade = async (key: string): Promise<void> => {
+  await undismissApiMyGetMadeKeyDismissDelete({ path: { key } });
+};
+
+/** The crowd's key figure for one song. Fields below decide's thresholds come back null. */
+export const getSongCrowd = async (songKey: string): Promise<SongCrowd> =>
+  (await songCrowdApiSongsSongKeyCrowdGet({ path: { song_key: songKey } })).data;

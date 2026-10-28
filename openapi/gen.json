@@ -3,7 +3,7 @@
   "info": {
     "title": "Karaoke Generator API",
     "description": "Backend API for web-based karaoke video generation",
-    "version": "0.280.2"
+    "version": "0.285.2"
   },
   "paths": {
     "/api/health": {
@@ -3884,7 +3884,7 @@
           "internal"
         ],
         "summary": "Process Stale Reviews Endpoint",
-        "description": "Process stale review jobs — send reminders and expire old ones.\n\nCalled by Cloud Scheduler (hourly). Can also be triggered manually\nfrom the admin dashboard.\n\n- Jobs in review for >= 24h get a reminder email\n- Jobs in review for >= 48h are auto-cancelled with credit refund\n- Signed-URL upload jobs whose browser upload never finished (>= 2h) are\n  auto-cancelled with credit refund\n- Free-to-paid conversion emails (when CONVERSION_EMAILS_ENABLED)",
+        "description": "Process stale review jobs — send reminders and expire old ones.\n\nCalled by Cloud Scheduler (hourly). Can also be triggered manually\nfrom the admin dashboard.\n\n- Jobs in review for >= 24h get a reminder email\n- Jobs in review for >= 48h are auto-cancelled with credit refund\n- Signed-URL upload jobs whose browser upload never finished (>= 2h) are\n  auto-cancelled with credit refund\n- Free-to-paid conversion emails (when CONVERSION_EMAILS_ENABLED)\n- Dropbox space-usage check (one #alerts message when >= 95% full)",
         "operationId": "process_stale_reviews_endpoint_api_internal_process_stale_reviews_post",
         "security": [
           {
@@ -9517,7 +9517,193 @@
         }
       }
     },
+    "/api/users/me/push-prefs": {
+      "patch": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update Push Prefs",
+        "description": "Set per-type push preferences (gen Expo and Web Push both honour them).",
+        "operationId": "update_push_prefs_api_users_me_push_prefs_patch",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushPrefsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushPrefs"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/me/deletion-preview": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Account Deletion Preview",
+        "description": "What deleting the account would cost: credits lost, videos cancelled, or a 409 reason.",
+        "operationId": "account_deletion_preview_api_users_me_deletion_preview_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/users/me": {
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete My Account",
+        "description": "Self-serve account deletion (App Store 5.1.1(v), Google Play). 503 = retry.",
+        "operationId": "delete_my_account_api_users_me_delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/DeleteAccountRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "tags": [
           "users"
@@ -9755,6 +9941,54 @@
             "schema": {
               "type": "string",
               "title": "Stripe-Signature"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/webhooks/revenuecat": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Revenuecat Webhook",
+        "description": "RevenueCat events for mobile in-app credit packs (see backend/services/iap_service.py).\n\nAuthenticated by the Authorization header configured in the RevenueCat\ndashboard (REVENUECAT_WEBHOOK_AUTH; 503 while unset). Every handled outcome,\nincluding duplicates and unmatched users, is a 200 so RevenueCat stops\nretrying; a Firestore failure is a 5xx so it retries.",
+        "operationId": "revenuecat_webhook_api_users_webhooks_revenuecat_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
             }
           }
         ],
@@ -16245,6 +16479,120 @@
         }
       }
     },
+    "/api/push/expo-token": {
+      "post": {
+        "tags": [
+          "push"
+        ],
+        "summary": "Register Expo Token",
+        "description": "Register this device's Expo token. Moves it off any other account that held it.",
+        "operationId": "register_expo_token_api_push_expo_token_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpoTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "push"
+        ],
+        "summary": "Delete Expo Token",
+        "description": "Remove one of the caller's Expo tokens (the app calls this before sign-out).",
+        "operationId": "delete_expo_token_api_push_expo_token_delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpoTokenDeleteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/push/subscriptions": {
       "get": {
         "tags": [
@@ -17784,6 +18132,123 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/kjbox/account-deletions": {
+      "get": {
+        "tags": [
+          "kjbox"
+        ],
+        "summary": "List Account Deletions",
+        "description": "Deleted gen accounts the box still has to erase (it pulls: it may be offline).\n\nOnly the sha256 of the email is sent; the box hashes the ``gen_email`` values\nit stores to match. Lists entries still pending for kjbox, created after ``since``.",
+        "operationId": "list_account_deletions_api_kjbox_account_deletions_get",
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Since"
+            }
+          },
+          {
+            "name": "x-kjbox-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Kjbox-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/kjbox/account-deletions/{entry_id}/ack": {
+      "post": {
+        "tags": [
+          "kjbox"
+        ],
+        "summary": "Ack Account Deletion",
+        "description": "The box erased this account's data; stop listing it. ``entry_id`` = sha256(email).",
+        "operationId": "ack_account_deletion_api_kjbox_account_deletions__entry_id__ack_post",
+        "parameters": [
+          {
+            "name": "entry_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Entry Id"
+            }
+          },
+          {
+            "name": "x-kjbox-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Kjbox-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
           },
           "422": {
             "description": "Validation Error",
@@ -22235,6 +22700,49 @@
         ],
         "title": "BulkAlbum"
       },
+      "BulkAlbumRef": {
+        "properties": {
+          "artist": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Title"
+          },
+          "release_group_mbid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Group Mbid"
+          },
+          "release_mbid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Mbid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "artist",
+          "title"
+        ],
+        "title": "BulkAlbumRef",
+        "description": "The album an album-mode batch was picked from. Lets the search worker find\nthe album's torrent once instead of searching every track separately."
+      },
       "BulkAnalyzeRequest": {
         "properties": {
           "filenames": {
@@ -22295,6 +22803,17 @@
               }
             ],
             "title": "Country"
+          },
+          "alias": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alias"
           }
         },
         "type": "object",
@@ -22547,6 +23066,17 @@
               }
             ],
             "title": "Display Title"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
           }
         },
         "type": "object",
@@ -22567,6 +23097,16 @@
           },
           "settings": {
             "$ref": "#/components/schemas/BulkSettings"
+          },
+          "album": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BulkAlbumRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -24995,6 +25535,17 @@
           "description": {
             "type": "string",
             "title": "Description"
+          },
+          "store_product_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Store Product Id"
           }
         },
         "type": "object",
@@ -25016,6 +25567,18 @@
             },
             "type": "array",
             "title": "Packages"
+          },
+          "web_link": {
+            "$ref": "#/components/schemas/WebLink",
+            "default": {
+              "show_for": {
+                "android": [],
+                "ios": [
+                  "USA"
+                ]
+              },
+              "copy_key": "credits.webLink.default"
+            }
           }
         },
         "type": "object",
@@ -25141,6 +25704,23 @@
           "voted_today"
         ],
         "title": "DailyVoteStatus"
+      },
+      "DeleteAccountRequest": {
+        "properties": {
+          "apple_authorization_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Apple Authorization Code"
+          }
+        },
+        "type": "object",
+        "title": "DeleteAccountRequest"
       },
       "DeleteOutputsResponse": {
         "properties": {
@@ -25586,6 +26166,50 @@
           "url"
         ],
         "title": "EstimateRequest"
+      },
+      "ExpoTokenDeleteRequest": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "title": "ExpoTokenDeleteRequest"
+      },
+      "ExpoTokenRequest": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "pattern": "^Expo(nent)?PushToken\\[[^\\]\\s]+\\]$",
+            "title": "Token"
+          },
+          "platform": {
+            "type": "string",
+            "enum": [
+              "ios",
+              "android"
+            ],
+            "title": "Platform"
+          },
+          "device_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Device Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token",
+          "platform",
+          "device_id"
+        ],
+        "title": "ExpoTokenRequest",
+        "description": "Register an Expo push token for one device of the mobile app."
       },
       "FeedbackEligibilityResponse": {
         "properties": {
@@ -27949,6 +28573,68 @@
         "title": "ProvideUrlRequest",
         "description": "Request to attach a YouTube/yt-dlp URL to an existing parked job."
       },
+      "PushPrefs": {
+        "properties": {
+          "ready": {
+            "type": "boolean",
+            "title": "Ready",
+            "default": true
+          },
+          "review": {
+            "type": "boolean",
+            "title": "Review",
+            "default": true
+          },
+          "problems": {
+            "type": "boolean",
+            "title": "Problems",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "PushPrefs",
+        "description": "Mobile push categories; all default on."
+      },
+      "PushPrefsUpdate": {
+        "properties": {
+          "ready": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ready"
+          },
+          "review": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Review"
+          },
+          "problems": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Problems"
+          }
+        },
+        "type": "object",
+        "title": "PushPrefsUpdate",
+        "description": "Partial update of mobile push categories; omitted keys are unchanged."
+      },
       "ReferralInterstitialResponse": {
         "properties": {
           "valid": {
@@ -28570,6 +29256,11 @@
             "type": "boolean",
             "title": "Cc Admin",
             "default": true
+          },
+          "allow_missing_dropbox_link": {
+            "type": "boolean",
+            "title": "Allow Missing Dropbox Link",
+            "default": false
           }
         },
         "type": "object",
@@ -29021,6 +29712,11 @@
               }
             ],
             "title": "Your Vote"
+          },
+          "request_deleted": {
+            "type": "boolean",
+            "title": "Request Deleted",
+            "default": false
           }
         },
         "type": "object",
@@ -30758,6 +31454,18 @@
         "title": "UploadsCompleteRequest",
         "description": "Request to mark uploads as complete and start processing."
       },
+      "UserCapabilities": {
+        "properties": {
+          "account_deletion": {
+            "type": "boolean",
+            "title": "Account Deletion",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "UserCapabilities",
+        "description": "Server-side feature switches the mobile app reads from /me."
+      },
       "UserDetailResponse": {
         "properties": {
           "email": {
@@ -31152,6 +31860,31 @@
           "has_session": {
             "type": "boolean",
             "title": "Has Session"
+          },
+          "app_user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "App User Id"
+          },
+          "capabilities": {
+            "$ref": "#/components/schemas/UserCapabilities",
+            "default": {
+              "account_deletion": false
+            }
+          },
+          "push_prefs": {
+            "$ref": "#/components/schemas/PushPrefs",
+            "default": {
+              "ready": true,
+              "review": true,
+              "problems": true
+            }
           }
         },
         "type": "object",
@@ -31586,6 +32319,11 @@
               "down"
             ],
             "title": "Direction"
+          },
+          "confirm_delete": {
+            "type": "boolean",
+            "title": "Confirm Delete",
+            "default": false
           }
         },
         "type": "object",
@@ -31593,6 +32331,49 @@
           "direction"
         ],
         "title": "VoteBody"
+      },
+      "WebLink": {
+        "properties": {
+          "show_for": {
+            "$ref": "#/components/schemas/WebLinkShowFor"
+          },
+          "copy_key": {
+            "type": "string",
+            "title": "Copy Key"
+          }
+        },
+        "type": "object",
+        "required": [
+          "show_for",
+          "copy_key"
+        ],
+        "title": "WebLink",
+        "description": "Where the mobile app shows the \"buy on the web\" link, and its copy (app i18n key)."
+      },
+      "WebLinkShowFor": {
+        "properties": {
+          "ios": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Ios"
+          },
+          "android": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Android"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ios",
+          "android"
+        ],
+        "title": "WebLinkShowFor",
+        "description": "Store countries (App Store / Play storefront codes) where the app may link to web checkout."
       },
       "WebhookEventItem": {
         "properties": {

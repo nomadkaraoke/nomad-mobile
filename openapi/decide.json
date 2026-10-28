@@ -2669,6 +2669,53 @@
         }
       }
     },
+    "/api/songs/{song_key}/crowd": {
+      "get": {
+        "tags": [
+          "songs"
+        ],
+        "summary": "Song Crowd",
+        "operationId": "song_crowd_api_songs__song_key__crowd_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "song_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Song Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SongCrowd"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/my/songs": {
       "get": {
         "tags": [
@@ -4813,6 +4860,110 @@
           },
           "304": {
             "description": "Not modified"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/my/get-made": {
+      "get": {
+        "tags": [
+          "get-made"
+        ],
+        "summary": "Get Made",
+        "operationId": "get_made_api_my_get_made_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMadeResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/my/get-made/{key}/dismiss": {
+      "post": {
+        "tags": [
+          "get-made"
+        ],
+        "summary": "Dismiss",
+        "operationId": "dismiss_api_my_get_made__key__dismiss_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Key"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "get-made"
+        ],
+        "summary": "Undismiss",
+        "operationId": "undismiss_api_my_get_made__key__dismiss_delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Key"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
           },
           "422": {
             "description": "Validation Error",
@@ -8994,6 +9145,73 @@
         ],
         "title": "FeedbackSongsResponse"
       },
+      "GetMadeItem": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "song_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Song Key"
+          },
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "why": {
+            "type": "string",
+            "enum": [
+              "saved",
+              "sung",
+              "imported",
+              "voice",
+              "recommended"
+            ],
+            "title": "Why"
+          },
+          "weight": {
+            "type": "number",
+            "title": "Weight"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "artist",
+          "title",
+          "why",
+          "weight"
+        ],
+        "title": "GetMadeItem"
+      },
+      "GetMadeResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/GetMadeItem"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "GetMadeResponse"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -11855,6 +12073,16 @@
                 "type": "null"
               }
             ]
+          },
+          "crowd": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SongCrowd"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -12354,37 +12582,13 @@
         "title": "ServiceStats",
         "description": "Music service connection statistics."
       },
-      "backend__models__admin__ServiceSummary": {
+      "ServiceSummary": {
         "properties": {
-          "service_type": {
-            "type": "string",
-            "title": "Service Type"
+          "connected": {
+            "type": "boolean",
+            "title": "Connected"
           },
-          "service_username": {
-            "type": "string",
-            "title": "Service Username"
-          },
-          "sync_status": {
-            "type": "string",
-            "title": "Sync Status"
-          },
-          "last_sync_at": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Last Sync At"
-          },
-          "tracks_synced": {
-            "type": "integer",
-            "title": "Tracks Synced"
-          },
-          "sync_error": {
+          "username": {
             "anyOf": [
               {
                 "type": "string"
@@ -12393,17 +12597,56 @@
                 "type": "null"
               }
             ],
-            "title": "Sync Error"
+            "title": "Username"
+          },
+          "tracks_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tracks Synced"
+          },
+          "songs_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Songs Synced"
+          },
+          "artists_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artists Synced"
+          },
+          "last_sync_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sync At"
           }
         },
         "type": "object",
         "required": [
-          "service_type",
-          "service_username",
-          "sync_status",
-          "last_sync_at",
-          "tracks_synced",
-          "sync_error"
+          "connected"
         ],
         "title": "ServiceSummary",
         "description": "Summary of a connected music service."
@@ -13084,6 +13327,101 @@
         "title": "SmartArtistRequest",
         "description": "Request for smart artist suggestions based on user input."
       },
+      "SongCrowd": {
+        "properties": {
+          "singers": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Singers"
+          },
+          "comfortable_share": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comfortable Share"
+          },
+          "too_high_share": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Too High Share"
+          },
+          "too_low_share": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Too Low Share"
+          },
+          "bucket": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bucket"
+          },
+          "bucket_singers": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bucket Singers"
+          },
+          "bucket_comfortable_share": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bucket Comfortable Share"
+          },
+          "crowd_pleaser_share": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crowd Pleaser Share"
+          }
+        },
+        "type": "object",
+        "title": "SongCrowd",
+        "description": "How the crowd found a song, thresholded server-side: raw counts below the minimums never leave.\n\nThe overall fields are null below ``CROWD_MIN_SINGERS`` key answers; the bucket fields are null\nunless the viewer has a bucket with at least ``CROWD_MIN_BUCKET`` answers;\n``crowd_pleaser_share`` is null below ``CROWD_MIN_SINGERS`` crowd-pleaser answers (R17)."
+      },
       "SongFacets": {
         "properties": {
           "mood": {
@@ -13466,6 +13804,11 @@
           },
           "capabilities": {
             "$ref": "#/components/schemas/Capabilities"
+          },
+          "known_songs": {
+            "type": "integer",
+            "title": "Known Songs",
+            "default": 0
           }
         },
         "type": "object",
@@ -14619,27 +14962,62 @@
         "title": "UpgradeGuestResponse",
         "description": "Response after requesting guest upgrade."
       },
-      "backend__api__routes__recommendations__UserArtistResponse": {
+      "UserArtistResponse": {
         "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
+          "mbid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mbid"
           },
           "artist_name": {
             "type": "string",
             "title": "Artist Name"
           },
-          "source": {
-            "type": "string",
-            "title": "Source"
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sources"
           },
-          "rank": {
-            "type": "integer",
-            "title": "Rank"
+          "spotify_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Id"
           },
-          "time_range": {
-            "type": "string",
-            "title": "Time Range"
+          "spotify_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Rank"
+          },
+          "spotify_time_range": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Time Range"
           },
           "popularity": {
             "anyOf": [
@@ -14659,18 +15037,71 @@
             "type": "array",
             "title": "Genres",
             "default": []
+          },
+          "lastfm_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Rank"
+          },
+          "lastfm_playcount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Playcount"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "default": []
+          },
+          "is_excluded": {
+            "type": "boolean",
+            "title": "Is Excluded",
+            "default": false
+          },
+          "is_manual": {
+            "type": "boolean",
+            "title": "Is Manual",
+            "default": false
+          },
+          "affinity": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "love",
+                  "like",
+                  "occasionally"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Affinity"
           }
         },
         "type": "object",
         "required": [
-          "id",
           "artist_name",
-          "source",
-          "rank",
-          "time_range"
+          "sources"
         ],
         "title": "UserArtistResponse",
-        "description": "Artist from user's listening history."
+        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
       },
       "UserArtistsResponse": {
         "properties": {
@@ -15861,131 +16292,27 @@
         "title": "YouTubeMusicImportResponse",
         "description": "Result of a YouTube Music playlist import."
       },
-      "ServiceSummary": {
+      "backend__api__routes__recommendations__UserArtistResponse": {
         "properties": {
-          "connected": {
-            "type": "boolean",
-            "title": "Connected"
-          },
-          "username": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Username"
-          },
-          "tracks_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Tracks Synced"
-          },
-          "songs_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Songs Synced"
-          },
-          "artists_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Artists Synced"
-          },
-          "last_sync_at": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Last Sync At"
-          }
-        },
-        "type": "object",
-        "required": [
-          "connected"
-        ],
-        "title": "ServiceSummary",
-        "description": "Summary of a connected music service."
-      },
-      "UserArtistResponse": {
-        "properties": {
-          "mbid": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Mbid"
+          "id": {
+            "type": "string",
+            "title": "Id"
           },
           "artist_name": {
             "type": "string",
             "title": "Artist Name"
           },
-          "sources": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Sources"
+          "source": {
+            "type": "string",
+            "title": "Source"
           },
-          "spotify_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Id"
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
           },
-          "spotify_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Rank"
-          },
-          "spotify_time_range": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Time Range"
+          "time_range": {
+            "type": "string",
+            "title": "Time Range"
           },
           "popularity": {
             "anyOf": [
@@ -16005,71 +16332,72 @@
             "type": "array",
             "title": "Genres",
             "default": []
-          },
-          "lastfm_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Rank"
-          },
-          "lastfm_playcount": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Playcount"
-          },
-          "tags": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Tags",
-            "default": []
-          },
-          "is_excluded": {
-            "type": "boolean",
-            "title": "Is Excluded",
-            "default": false
-          },
-          "is_manual": {
-            "type": "boolean",
-            "title": "Is Manual",
-            "default": false
-          },
-          "affinity": {
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "love",
-                  "like",
-                  "occasionally"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Affinity"
           }
         },
         "type": "object",
         "required": [
+          "id",
           "artist_name",
-          "sources"
+          "source",
+          "rank",
+          "time_range"
         ],
         "title": "UserArtistResponse",
-        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
+        "description": "Artist from user's listening history."
+      },
+      "backend__models__admin__ServiceSummary": {
+        "properties": {
+          "service_type": {
+            "type": "string",
+            "title": "Service Type"
+          },
+          "service_username": {
+            "type": "string",
+            "title": "Service Username"
+          },
+          "sync_status": {
+            "type": "string",
+            "title": "Sync Status"
+          },
+          "last_sync_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sync At"
+          },
+          "tracks_synced": {
+            "type": "integer",
+            "title": "Tracks Synced"
+          },
+          "sync_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sync Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "service_type",
+          "service_username",
+          "sync_status",
+          "last_sync_at",
+          "tracks_synced",
+          "sync_error"
+        ],
+        "title": "ServiceSummary",
+        "description": "Summary of a connected music service."
       }
     },
     "securitySchemes": {

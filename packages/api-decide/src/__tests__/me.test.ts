@@ -1,4 +1,17 @@
-import { configureClient, createSetlist, deleteSetlist, getLibrary, listSetlists, listSongHistory, putSetlistItems, renameSetlist } from '../index';
+import {
+  configureClient,
+  createSetlist,
+  deleteSetlist,
+  dismissGetMade,
+  getGetMade,
+  getLibrary,
+  getSongCrowd,
+  listSetlists,
+  listSongHistory,
+  putSetlistItems,
+  renameSetlist,
+  undismissGetMade,
+} from '../index';
 
 const fetchMock = jest.fn();
 const json = (body: unknown, status = 200, headers: Record<string, string> = {}) =>
@@ -115,5 +128,52 @@ describe('listSongHistory', () => {
     expect(u0.searchParams.get('cursor')).toBeNull();
     expect(u1.searchParams.get('song')).toBe('u:a|b/c');
     expect(u1.searchParams.get('cursor')).toBe('c2');
+  });
+});
+
+describe('get this made', () => {
+  const item = { key: 'u:a|b', song_key: null, artist: 'A', title: 'B', why: 'sung', weight: 0.8 };
+
+  it('getGetMade GETs /api/my/get-made and returns the items', async () => {
+    fetchMock.mockResolvedValue(json({ items: [item] }));
+    await expect(getGetMade()).resolves.toEqual([item]);
+    expect(lastRequest().method).toBe('GET');
+    expect(new URL(lastRequest().url).pathname).toBe('/api/my/get-made');
+  });
+
+  it('getGetMade throws on a 503 warming_up', async () => {
+    fetchMock.mockResolvedValue(json({ detail: 'warming_up' }, 503));
+    await expect(getGetMade()).rejects.toMatchObject({ status: 503 });
+  });
+
+  it('dismissGetMade POSTs and undismissGetMade DELETEs the encoded key', async () => {
+    const key = 'u:ac/dc|back in black #1';
+    const enc = encodeURIComponent(key);
+    fetchMock.mockImplementation(async () => new Response(null, { status: 204 }));
+    await expect(dismissGetMade(key)).resolves.toBeUndefined();
+    expect(lastRequest().method).toBe('POST');
+    expect(lastRequest().url).toBe(`https://decide.test/api/my/get-made/${enc}/dismiss`);
+    await expect(undismissGetMade(key)).resolves.toBeUndefined();
+    expect(lastRequest().method).toBe('DELETE');
+    expect(lastRequest().url).toBe(`https://decide.test/api/my/get-made/${enc}/dismiss`);
+  });
+});
+
+describe('getSongCrowd', () => {
+  it('encodes a key containing | and returns the figure', async () => {
+    const crowd = {
+      singers: 6,
+      comfortable_share: 0.8333,
+      too_high_share: 0.1667,
+      too_low_share: 0,
+      bucket: 'baritone',
+      bucket_singers: 5,
+      bucket_comfortable_share: 1,
+      crowd_pleaser_share: null,
+    };
+    fetchMock.mockResolvedValue(json(crowd));
+    await expect(getSongCrowd('adele|hello')).resolves.toEqual(crowd);
+    expect(lastRequest().method).toBe('GET');
+    expect(lastRequest().url).toBe('https://decide.test/api/songs/adele%7Chello/crowd');
   });
 });
