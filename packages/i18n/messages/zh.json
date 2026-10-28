@@ -986,7 +986,8 @@
       "known_song": "你熟悉这首歌",
       "similar_artist": "类似 {artist}",
       "crowd_pleaser": "能带动全场",
-      "make_it": "暂无伴奏版本"
+      "make_it": "暂无伴奏版本",
+      "sung_before": "你的拿手曲目"
     },
     "section": {
       "all": "为你精选",
@@ -1000,7 +1001,9 @@
       "make_itReason": "暂无伴奏版本：点击即可制作专属伴奏",
       "songs_you_know": "你熟悉的歌曲",
       "songs_you_knowReason": "你已经熟悉且有伴奏版本的歌曲",
-      "make_it": "立即制作"
+      "make_it": "立即制作",
+      "go_tosReason": "那些让你百唱不厌的歌曲",
+      "go_tos": "拿手曲目"
     },
     "signInForPicks": "登录以获取专属精选",
     "signInForPicksBody": "告诉我们你的喜好，我们会为你精选你会爱唱的卡拉OK歌曲。",

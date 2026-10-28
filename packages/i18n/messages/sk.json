@@ -986,7 +986,8 @@
       "known_song": "Toto poznáš",
       "similar_artist": "Podobné ako {artist}",
       "crowd_pleaser": "Páči sa davu",
-      "make_it": "Zatiaľ bez karaoke verzie"
+      "make_it": "Zatiaľ bez karaoke verzie",
+      "sung_before": "Tvoja istota"
     },
     "section": {
       "all": "Tvoje tipy",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Zatiaľ bez karaoke verzie: ťuknutím vytvoríš vlastnú",
       "songs_you_know": "Skladby, ktoré poznáš",
       "songs_you_knowReason": "Skladby, ktoré už poznáš a majú karaoke verziu",
-      "make_it": "Vytvoriť"
+      "make_it": "Vytvoriť",
+      "go_tosReason": "Skladby, ku ktorým sa neustále vraciaš",
+      "go_tos": "Tvoje istoty"
     },
     "signInForPicks": "Prihlás sa a získaj tipy na mieru",
     "signInForPicksBody": "Povedz nám, čo sa ti páči, a my ti vyberieme karaoke skladby, ktoré budeš spievať s radosťou.",

@@ -986,7 +986,8 @@
       "known_song": "Znasz ten utwór",
       "similar_artist": "Podobne do: {artist}",
       "crowd_pleaser": "Ulubieniec tłumu",
-      "make_it": "Brak jeszcze wersji karaoke"
+      "make_it": "Brak jeszcze wersji karaoke",
+      "sung_before": "Twój pewniak"
     },
     "section": {
       "all": "Twoje propozycje",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Brak wersji karaoke: stuknij, aby stworzyć własną",
       "songs_you_know": "Utwory, które znasz",
       "songs_you_knowReason": "Znane Ci utwory, które mają wersję karaoke",
-      "make_it": "Stwórz"
+      "make_it": "Stwórz",
+      "go_tosReason": "Piosenki, do których chętnie wracasz",
+      "go_tos": "Twoje pewniaki"
     },
     "signInForPicks": "Zaloguj się, aby otrzymać propozycje",
     "signInForPicksBody": "Powiedz nam, co lubisz, a dobierzemy utwory karaoke, które pokochasz śpiewać.",

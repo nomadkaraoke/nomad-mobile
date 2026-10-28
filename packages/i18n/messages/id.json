@@ -986,7 +986,8 @@
       "known_song": "Anda tahu lagu ini",
       "similar_artist": "Mirip {artist}",
       "crowd_pleaser": "Favorit banyak orang",
-      "make_it": "Belum ada versi karaoke"
+      "make_it": "Belum ada versi karaoke",
+      "sung_before": "Andalanmu"
     },
     "section": {
       "all": "Pilihan Anda",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Belum ada versi karaoke: ketuk salah satu untuk membuatnya sendiri",
       "songs_you_know": "Lagu yang Anda tahu",
       "songs_you_knowReason": "Lagu yang sudah Anda tahu dan memiliki versi karaoke",
-      "make_it": "Buat"
+      "make_it": "Buat",
+      "go_tosReason": "Lagu yang selalu ingin kamu nyanyikan lagi",
+      "go_tos": "Lagu andalanmu"
     },
     "signInForPicks": "Masuk untuk mendapatkan pilihan Anda",
     "signInForPicksBody": "Beri tahu kami apa yang Anda sukai dan kami akan memilihkan lagu karaoke yang pasti Anda suka nyanyikan.",

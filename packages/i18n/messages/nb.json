@@ -986,7 +986,8 @@
       "known_song": "Denne kan du",
       "similar_artist": "Ligner på {artist}",
       "crowd_pleaser": "Publikumsfavoritt",
-      "make_it": "Ingen karaokeversjon ennå"
+      "make_it": "Ingen karaokeversjon ennå",
+      "sung_before": "Din favoritt"
     },
     "section": {
       "all": "Dine anbefalinger",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Ingen karaokeversjon ennå: trykk på en for å lage din egen",
       "songs_you_know": "Sanger du kan",
       "songs_you_knowReason": "Sanger du allerede kan som har en karaokeversjon",
-      "make_it": "Lag den"
+      "make_it": "Lag den",
+      "go_tosReason": "Sanger du stadig vender tilbake til",
+      "go_tos": "Dine faste favoritter"
     },
     "signInForPicks": "Logg inn for å få anbefalingene dine",
     "signInForPicksBody": "Fortell oss hva du liker, så finner vi karaokesanger du vil elske å synge.",

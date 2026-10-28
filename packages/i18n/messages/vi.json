@@ -986,7 +986,8 @@
       "known_song": "Bài này bạn đã biết",
       "similar_artist": "Tương tự {artist}",
       "crowd_pleaser": "Được nhiều người thích",
-      "make_it": "Chưa có bản karaoke"
+      "make_it": "Chưa có bản karaoke",
+      "sung_before": "Bài tủ của bạn"
     },
     "section": {
       "all": "Gợi ý cho bạn",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Chưa có bản karaoke: chạm vào bài hát để tự tạo bản karaoke riêng nhé",
       "songs_you_know": "Bài hát quen thuộc",
       "songs_you_knowReason": "Những bài hát bạn đã biết và có sẵn bản karaoke",
-      "make_it": "Tạo bài hát"
+      "make_it": "Tạo bài hát",
+      "go_tosReason": "Những bài hát bạn luôn quay lại hát",
+      "go_tos": "Bài tủ của bạn"
     },
     "signInForPicks": "Đăng nhập để nhận gợi ý bài hát",
     "signInForPicksBody": "Hãy cho chúng tôi biết sở thích của bạn và chúng tôi sẽ gợi ý những bài karaoke bạn sẽ mê tít khi hát.",

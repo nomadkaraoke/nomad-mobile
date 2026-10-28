@@ -986,7 +986,8 @@
       "known_song": "Coneixes aquest tema",
       "similar_artist": "Semblant a {artist}",
       "crowd_pleaser": "Agrada al públic",
-      "make_it": "Encara no hi ha cap versió de karaoke"
+      "make_it": "Encara no hi ha cap versió de karaoke",
+      "sung_before": "El teu clàssic"
     },
     "section": {
       "all": "Les teves seleccions",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Encara no hi ha versió de karaoke: toca'n una per crear la teva",
       "songs_you_know": "Cançons que coneixes",
       "songs_you_knowReason": "Cançons que ja coneixes i que tenen versió de karaoke",
-      "make_it": "Crea'l"
+      "make_it": "Crea'l",
+      "go_tosReason": "Cançons a les quals sempre tornes",
+      "go_tos": "Els teus clàssics"
     },
     "signInForPicks": "Inicia la sessió per veure les teves seleccions",
     "signInForPicksBody": "Explica'ns què t'agrada i triarem cançons de karaoke que t'encantarà cantar.",

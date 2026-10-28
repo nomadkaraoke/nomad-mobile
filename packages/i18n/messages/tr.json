@@ -986,7 +986,8 @@
       "known_song": "Bunu biliyorsun",
       "similar_artist": "{artist} benzeri",
       "crowd_pleaser": "Kalabalığı coşturan",
-      "make_it": "Henüz karaoke versiyonu yok"
+      "make_it": "Henüz karaoke versiyonu yok",
+      "sung_before": "Favorin"
     },
     "section": {
       "all": "Senin seçimlerin",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Henüz karaoke versiyonu yok: kendininkini yapmak için birine dokun",
       "songs_you_know": "Bildiğin şarkılar",
       "songs_you_knowReason": "Zaten bildiğin ve karaoke versiyonu olan şarkılar",
-      "make_it": "Oluştur"
+      "make_it": "Oluştur",
+      "go_tosReason": "Dönüp dolaşıp söylediğin şarkılar",
+      "go_tos": "Gözdelerin"
     },
     "signInForPicks": "Seçimlerini almak için giriş yap",
     "signInForPicksBody": "Bize nelerden hoşlandığını söyle, sana söylemeyi çok seveceğin karaoke şarkıları seçelim.",

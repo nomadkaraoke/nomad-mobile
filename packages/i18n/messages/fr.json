@@ -986,7 +986,8 @@
       "known_song": "Tu connais ce morceau",
       "similar_artist": "Dans le style de {artist}",
       "crowd_pleaser": "Plaît au public",
-      "make_it": "Aucune version karaoké pour l'instant"
+      "make_it": "Aucune version karaoké pour l'instant",
+      "sung_before": "Ton incontournable"
     },
     "section": {
       "all": "Tes sélections",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Pas encore de version karaoké : appuie sur un morceau pour créer la tienne",
       "songs_you_know": "Morceaux que tu connais",
       "songs_you_knowReason": "Des morceaux que tu connais déjà et disponibles en karaoké",
-      "make_it": "Créer"
+      "make_it": "Créer",
+      "go_tosReason": "Les chansons sur lesquelles tu reviens toujours",
+      "go_tos": "Tes incontournables"
     },
     "signInForPicks": "Connecte-toi pour obtenir tes sélections",
     "signInForPicksBody": "Dis-nous ce que tu aimes et nous choisirons des morceaux de karaoké que tu vas adorer chanter.",

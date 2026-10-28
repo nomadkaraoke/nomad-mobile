@@ -986,7 +986,8 @@
       "known_song": "知っている曲",
       "similar_artist": "{artist}が好きな人向け",
       "crowd_pleaser": "盛り上がる",
-      "make_it": "まだカラオケ音源がありません"
+      "make_it": "まだカラオケ音源がありません",
+      "sung_before": "いつもの定番曲"
     },
     "section": {
       "all": "あなたへのおすすめ",
@@ -1000,7 +1001,9 @@
       "make_itReason": "カラオケ版がまだありません: タップして自分で作成",
       "songs_you_know": "知っている曲",
       "songs_you_knowReason": "あなたが知っていて、カラオケ版もある曲",
-      "make_it": "作成する"
+      "make_it": "作成する",
+      "go_tosReason": "何度も歌いたくなるお気に入りの曲",
+      "go_tos": "定番曲"
     },
     "signInForPicks": "サインインしておすすめを表示",
     "signInForPicksBody": "好みを教えていただければ、歌いたくなるカラオケ曲をお選びします。",

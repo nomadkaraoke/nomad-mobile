@@ -986,7 +986,8 @@
       "known_song": "Dit nummer ken je",
       "similar_artist": "Vergelijkbaar met {artist}",
       "crowd_pleaser": "Publiekslieveling",
-      "make_it": "Nog geen karaokeversie"
+      "make_it": "Nog geen karaokeversie",
+      "sung_before": "Je favoriet"
     },
     "section": {
       "all": "Jouw selecties",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Nog geen karaokeversie: tik op een nummer om er zelf een te maken",
       "songs_you_know": "Nummers die je kent",
       "songs_you_knowReason": "Nummers die je al kent met een karaokeversie",
-      "make_it": "Maken"
+      "make_it": "Maken",
+      "go_tosReason": "Nummers waar je steeds naar terugkeert",
+      "go_tos": "Je favorieten"
     },
     "signInForPicks": "Log in om je selecties te zien",
     "signInForPicksBody": "Vertel ons wat je leuk vindt en we kiezen karaokenummers die je met plezier zingt.",

@@ -7,6 +7,7 @@ const REASON_TYPES = new Set([
   'decade_match',
   'crowd_pleaser',
   'make_it',
+  'sung_before',
 ]);
 
 export function reasonKey(reasonType: string): string {
@@ -19,7 +20,7 @@ export interface SectionTitleSource {
 }
 
 /** The sections the app has copy for (packages/i18n `discover.section.*`). */
-const SECTIONS = new Set(['songs_you_know', 'artists_you_love', 'because', 'crowd_pleasers', 'make_it', 'all']);
+const SECTIONS = new Set(['go_tos', 'songs_you_know', 'artists_you_love', 'because', 'crowd_pleasers', 'make_it', 'all']);
 
 /**
  * `recs.section.<x>.title` -> `discover.section.<x>` for a known section; anything else (an unknown shape, or a

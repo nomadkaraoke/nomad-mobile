@@ -986,7 +986,8 @@
       "known_song": "Știi piesa asta",
       "similar_artist": "În stilul {artist}",
       "crowd_pleaser": "Pe placul publicului",
-      "make_it": "Nu există încă o versiune karaoke"
+      "make_it": "Nu există încă o versiune karaoke",
+      "sung_before": "Preferata ta"
     },
     "section": {
       "all": "Recomandările tale",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Nu există încă versiune karaoke: apasă pe una pentru a crea propria ta versiune",
       "songs_you_know": "Piese pe care le știi",
       "songs_you_knowReason": "Piese pe care le știi deja și care au versiune karaoke",
-      "make_it": "Creează"
+      "make_it": "Creează",
+      "go_tosReason": "Piese la care revii mereu",
+      "go_tos": "Preferatele tale"
     },
     "signInForPicks": "Conectează-te pentru a primi recomandări",
     "signInForPicksBody": "Spune-ne ce îți place și vom alege piese de karaoke pe care vei adora să le cânți.",

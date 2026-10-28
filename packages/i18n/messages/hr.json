@@ -986,7 +986,8 @@
       "known_song": "Ovo već znaš",
       "similar_artist": "Slično kao {artist}",
       "crowd_pleaser": "Podiže publiku",
-      "make_it": "Još nema karaoke verzije"
+      "make_it": "Još nema karaoke verzije",
+      "sung_before": "Tvoj favorit"
     },
     "section": {
       "all": "Tvoje preporuke",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Još nema karaoke verzije: dodirni za izradu vlastite",
       "songs_you_know": "Pjesme koje znaš",
       "songs_you_knowReason": "Pjesme koje već znaš, a imaju karaoke verziju",
-      "make_it": "Izradi"
+      "make_it": "Izradi",
+      "go_tosReason": "Pjesme kojima se stalno vraćaš",
+      "go_tos": "Tvoji favoriti"
     },
     "signInForPicks": "Prijavi se za svoje preporuke",
     "signInForPicksBody": "Reci nam što voliš i odabrat ćemo karaoke pjesme koje ćeš rado pjevati.",

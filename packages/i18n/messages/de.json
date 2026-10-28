@@ -986,7 +986,8 @@
       "known_song": "Das kennst du",
       "similar_artist": "Ähnlich wie {artist}",
       "crowd_pleaser": "Publikumsliebling",
-      "make_it": "Noch keine Karaoke-Version verfügbar"
+      "make_it": "Noch keine Karaoke-Version verfügbar",
+      "sung_before": "Dein Favorit"
     },
     "section": {
       "all": "Deine Empfehlungen",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Noch keine Karaoke-Version vorhanden: Tippe auf einen Song, um deine eigene zu erstellen",
       "songs_you_know": "Songs, die du kennst",
       "songs_you_knowReason": "Songs, die du bereits kennst und zu denen es eine Karaoke-Version gibt",
-      "make_it": "Erstellen"
+      "make_it": "Erstellen",
+      "go_tosReason": "Songs, zu denen du immer wieder zurückkehrst",
+      "go_tos": "Deine Favoriten"
     },
     "signInForPicks": "Melde dich an, um deine Empfehlungen zu erhalten",
     "signInForPicksBody": "Verrate uns, was du magst, und wir suchen Karaoke-Songs aus, die du mit Begeisterung singen wirst.",

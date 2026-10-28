@@ -986,7 +986,8 @@
       "known_song": "Questo lo conosci",
       "similar_artist": "Simile a {artist}",
       "crowd_pleaser": "Piace al pubblico",
-      "make_it": "Nessuna versione karaoke per ora"
+      "make_it": "Nessuna versione karaoke per ora",
+      "sung_before": "Il tuo cavallo di battaglia"
     },
     "section": {
       "all": "I tuoi consigliati",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Non c'è ancora una versione karaoke: toccane uno per crearne una tua",
       "songs_you_know": "Brani che conosci",
       "songs_you_knowReason": "Brani che conosci già disponibili in karaoke",
-      "make_it": "Crea"
+      "make_it": "Crea",
+      "go_tosReason": "I brani su cui ritorni sempre",
+      "go_tos": "I tuoi cavalli di battaglia"
     },
     "signInForPicks": "Accedi per ricevere i tuoi brani consigliati",
     "signInForPicksBody": "Dicci cosa ti piace e sceglieremo i brani karaoke che adorerai cantare.",

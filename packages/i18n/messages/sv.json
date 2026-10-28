@@ -986,7 +986,8 @@
       "known_song": "Du kan den här",
       "similar_artist": "Liknar {artist}",
       "crowd_pleaser": "Publikfavorit",
-      "make_it": "Ingen karaokeversion än"
+      "make_it": "Ingen karaokeversion än",
+      "sung_before": "Ditt säkra kort"
     },
     "section": {
       "all": "Dina låtförslag",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Finns inte som karaoke än: tryck på en för att göra din egen",
       "songs_you_know": "Låtar du kan",
       "songs_you_knowReason": "Låtar du redan kan som har en karaokeversion",
-      "make_it": "Skapa"
+      "make_it": "Skapa",
+      "go_tosReason": "Låtar du alltid återvänder till",
+      "go_tos": "Dina favoriter"
     },
     "signInForPicks": "Logga in för att få dina låtförslag",
     "signInForPicksBody": "Berätta vad du gillar så väljer vi karaokelåtar du kommer att älska att sjunga.",

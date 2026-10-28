@@ -986,7 +986,8 @@
       "known_song": "Conoces esta canción",
       "similar_artist": "Como {artist}",
       "crowd_pleaser": "Anima al público",
-      "make_it": "Aún no hay versión de karaoke"
+      "make_it": "Aún no hay versión de karaoke",
+      "sung_before": "Tus favoritas de siempre"
     },
     "section": {
       "all": "Tus selecciones",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Aún no hay versión de karaoke: toca una para crear la tuya",
       "songs_you_know": "Canciones que conoces",
       "songs_you_knowReason": "Canciones que ya conoces que tienen versión de karaoke",
-      "make_it": "Crear"
+      "make_it": "Crear",
+      "go_tosReason": "Canciones a las que siempre vuelves",
+      "go_tos": "Tus infalibles"
     },
     "signInForPicks": "Inicia sesión para obtener tus selecciones",
     "signInForPicksBody": "Cuéntanos qué te gusta y elegiremos canciones de karaoke que te encantará cantar.",

@@ -986,7 +986,8 @@
       "known_song": "알고 있는 노래",
       "similar_artist": "{artist}와(과) 비슷한 아티스트",
       "crowd_pleaser": "분위기 띄우기 좋음",
-      "make_it": "아직 노래방 버전이 없어요"
+      "make_it": "아직 노래방 버전이 없어요",
+      "sung_before": "나의 애창곡"
     },
     "section": {
       "all": "맞춤 추천",
@@ -1000,7 +1001,9 @@
       "make_itReason": "아직 노래방 버전이 없습니다. 탭하여 직접 만들어 보세요",
       "songs_you_know": "내가 아는 노래",
       "songs_you_knowReason": "이미 알고 있는 곡 중 노래방 버전이 있는 노래",
-      "make_it": "만들기"
+      "make_it": "만들기",
+      "go_tosReason": "자주 찾게 되는 노래",
+      "go_tos": "나의 애창곡"
     },
     "signInForPicks": "로그인하고 맞춤 추천 받기",
     "signInForPicksBody": "취향을 알려주시면 부르기 딱 좋은 노래방 곡들을 골라 드릴게요.",

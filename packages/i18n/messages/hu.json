@@ -986,7 +986,8 @@
       "known_song": "Ezt a dalt ismered",
       "similar_artist": "Hasonló, mint {artist}",
       "crowd_pleaser": "Közönségkedvenc",
-      "make_it": "Még nincs karaoke verzió"
+      "make_it": "Még nincs karaoke verzió",
+      "sung_before": "A tuti befutód"
     },
     "section": {
       "all": "Neked ajánlott dalok",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Még nincs karaoke verzió: koppints rá a sajátod elkészítéséhez",
       "songs_you_know": "Dalok, amiket ismersz",
       "songs_you_knowReason": "Olyan ismert dalok, amelyekből már elérhető karaoke verzió",
-      "make_it": "Készítsd el"
+      "make_it": "Készítsd el",
+      "go_tosReason": "Dalok, amikhez mindig visszatérsz",
+      "go_tos": "A tuti befutóid"
     },
     "signInForPicks": "Jelentkezz be az ajánlatokért",
     "signInForPicksBody": "Mondd el, mit szeretsz, és mi olyan karaoke dalokat választunk, amiket imádni fogsz énekelni.",

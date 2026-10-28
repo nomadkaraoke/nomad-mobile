@@ -986,7 +986,8 @@
       "known_song": "Anda tahu lagu ini",
       "similar_artist": "Serupa dengan {artist}",
       "crowd_pleaser": "Pilihan ramai",
-      "make_it": "Belum ada versi karaoke"
+      "make_it": "Belum ada versi karaoke",
+      "sung_before": "Pilihan utama anda"
     },
     "section": {
       "all": "Pilihan anda",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Belum ada versi karaoke: ketik untuk cipta versi anda sendiri",
       "songs_you_know": "Lagu yang anda tahu",
       "songs_you_knowReason": "Lagu yang sudah anda tahu dan ada versi karaoke",
-      "make_it": "Buat"
+      "make_it": "Buat",
+      "go_tosReason": "Lagu yang sentiasa anda nyanyikan semula",
+      "go_tos": "Lagu kegemaran anda"
     },
     "signInForPicks": "Log masuk untuk mendapatkan pilihan anda",
     "signInForPicksBody": "Beritahu kami minat anda dan kami akan pilih lagu karaoke yang anda pasti seronok nyanyikan.",

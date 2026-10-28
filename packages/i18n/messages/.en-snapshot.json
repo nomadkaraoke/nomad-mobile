@@ -92,9 +92,12 @@
       "genre_match": "Matches your genres",
       "decade_match": "From your favourite decades",
       "crowd_pleaser": "Crowd pleaser",
-      "make_it": "No karaoke version yet"
+      "make_it": "No karaoke version yet",
+      "sung_before": "Your go-to"
     },
     "section": {
+      "go_tos": "Your go-tos",
+      "go_tosReason": "Songs you keep coming back to",
       "songs_you_know": "Songs you know",
       "songs_you_knowReason": "Songs you already know that have a karaoke version",
       "artists_you_love": "From artists you love",

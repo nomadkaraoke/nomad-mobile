@@ -986,7 +986,8 @@
       "known_song": "Tohle znáš",
       "similar_artist": "Podobné jako {artist}",
       "crowd_pleaser": "Líbí se davu",
-      "make_it": "Zatím bez karaoke verze"
+      "make_it": "Zatím bez karaoke verze",
+      "sung_before": "Tvoje jistota"
     },
     "section": {
       "all": "Tvoje doporučení",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Zatím bez karaoke verze: klepnutím si vytvoř vlastní",
       "songs_you_know": "Skladby, které znáš",
       "songs_you_knowReason": "Skladby, které už znáš a mají karaoke verzi",
-      "make_it": "Vytvořit"
+      "make_it": "Vytvořit",
+      "go_tosReason": "Písničky, ke kterým se pořád vracíš",
+      "go_tos": "Tvoje jistoty"
     },
     "signInForPicks": "Přihlas se a získej doporučení",
     "signInForPicksBody": "Řekni nám, co máš rád, a my ti vybereme karaoke skladby, které budeš milovat zpívat.",

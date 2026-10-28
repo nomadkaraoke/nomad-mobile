@@ -986,7 +986,8 @@
       "known_song": "Tiedät tämän",
       "similar_artist": "Kuten {artist}",
       "crowd_pleaser": "Yleisön suosikki",
-      "make_it": "Ei vielä karaokeversiota"
+      "make_it": "Ei vielä karaokeversiota",
+      "sung_before": "Luottobiisisi"
     },
     "section": {
       "all": "Sinun suosituksesi",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Ei vielä karaokeversiota: napauta ja luo omasi",
       "songs_you_know": "Kappaleet, jotka tunnet",
       "songs_you_knowReason": "Entuudestaan tuttuja kappaleita, joista löytyy karaokeversio",
-      "make_it": "Luo versio"
+      "make_it": "Luo versio",
+      "go_tosReason": "Kappaleet, joihin palaat yhä uudelleen",
+      "go_tos": "Luottobiisisi"
     },
     "signInForPicks": "Kirjaudu sisään nähdäksesi suosituksesi",
     "signInForPicksBody": "Kerro meille musiikkimaustasi, niin suosittelemme karaokekappaleita, joita rakastat laulaa.",

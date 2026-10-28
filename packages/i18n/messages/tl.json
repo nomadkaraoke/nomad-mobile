@@ -986,7 +986,8 @@
       "known_song": "Alam mo ito",
       "similar_artist": "Katulad ni {artist}",
       "crowd_pleaser": "Paborito ng karamihan",
-      "make_it": "Wala pang karaoke version"
+      "make_it": "Wala pang karaoke version",
+      "sung_before": "Paborito mong kantahin"
     },
     "section": {
       "all": "Iyong mga napili",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Wala pang karaoke version: mag-tap para gumawa ng sarili mo",
       "songs_you_know": "Mga kantang alam mo",
       "songs_you_knowReason": "Mga kantang alam mo na may karaoke version",
-      "make_it": "Gawin ito"
+      "make_it": "Gawin ito",
+      "go_tosReason": "Mga kantang lagi mong binabalik-balikan",
+      "go_tos": "Iyong mga paborito"
     },
     "signInForPicks": "Mag-sign in para makuha ang iyong mga napili",
     "signInForPicksBody": "Sabihin sa amin kung ano ang gusto mo at pipili kami ng mga karaoke song na magugustuhan mong kantahin.",

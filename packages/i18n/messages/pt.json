@@ -986,7 +986,8 @@
       "known_song": "Você conhece esta",
       "similar_artist": "Parecido com {artist}",
       "crowd_pleaser": "Agrada a galera",
-      "make_it": "Ainda não há versão de karaokê"
+      "make_it": "Ainda não há versão de karaokê",
+      "sung_before": "Sua favorita"
     },
     "section": {
       "all": "Suas sugestões",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Ainda sem versão karaokê: toque em uma para criar a sua",
       "songs_you_know": "Músicas que você conhece",
       "songs_you_knowReason": "Músicas que você já conhece e que têm versão karaokê",
-      "make_it": "Criar"
+      "make_it": "Criar",
+      "go_tosReason": "Músicas que você sempre volta a cantar",
+      "go_tos": "Suas favoritas"
     },
     "signInForPicks": "Entre para ver suas sugestões",
     "signInForPicksBody": "Conte o que você curte e escolheremos músicas de karaokê que você vai amar cantar.",

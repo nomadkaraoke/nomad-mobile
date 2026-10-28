@@ -986,7 +986,8 @@
       "known_song": "Denne kender du",
       "similar_artist": "Minder om {artist}",
       "crowd_pleaser": "Publikumsfavorit",
-      "make_it": "Ingen karaokeversion endnu"
+      "make_it": "Ingen karaokeversion endnu",
+      "sung_before": "Din faste favorit"
     },
     "section": {
       "all": "Dine anbefalinger",
@@ -1000,7 +1001,9 @@
       "make_itReason": "Findes ikke som karaoke endnu: tryk på en for at lave din egen",
       "songs_you_know": "Sange du kender",
       "songs_you_knowReason": "Sange du allerede kender, som findes i en karaokeversion",
-      "make_it": "Lav den"
+      "make_it": "Lav den",
+      "go_tosReason": "Sange, du bliver ved med at vende tilbage til",
+      "go_tos": "Dine favoritter"
     },
     "signInForPicks": "Log ind for at få dine anbefalinger",
     "signInForPicksBody": "Fortæl os, hvad du kan lide, så finder vi karaokesange, du vil elske at synge.",
