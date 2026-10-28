@@ -3,7 +3,7 @@
 import * as decide from '@nomad/api-decide';
 import type { SongDetail, Version } from '@nomad/api-decide';
 import type { SqlReader } from '@nomad/core';
-import { fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 import Database from 'better-sqlite3';
 import { renderRouter } from 'expo-router/testing-library';
 import path from 'node:path';
@@ -22,6 +22,7 @@ jest.mock('@nomad/api-decide', () => ({
   pingSearch: jest.fn(async () => true),
   getSongDetail: jest.fn(),
   getSongVocalRange: jest.fn(),
+  getSongCrowd: jest.fn(),
   ApiError: class ApiError extends Error {},
   getLibrary: jest.fn(async () => ({ notModified: false, etag: 'e', items: [] })),
   listSetlists: jest.fn(async () => []),
@@ -48,6 +49,7 @@ jest.mock('@react-native-community/netinfo', () => {
 
 const getSongDetail = decide.getSongDetail as jest.Mock;
 const getSongVocalRange = decide.getSongVocalRange as jest.Mock;
+const getSongCrowd = decide.getSongCrowd as jest.Mock;
 const log = logEvent as jest.Mock;
 
 const raw = new Database(path.join(__dirname, '../../../../packages/core/src/search/__fixtures__/offline_fixture.db'), {
@@ -80,6 +82,7 @@ beforeEach(async () => {
   mockConnected = true;
   getSongDetail.mockResolvedValue(detail([version(0), version(1, 'commercial', false)]));
   getSongVocalRange.mockResolvedValue({ song_key: 'muse|starlight', range: null });
+  getSongCrowd.mockResolvedValue({ singers: null, comfortable_share: null, bucket: null, bucket_comfortable_share: null });
   useVoiceStore.getState().clear();
 });
 
@@ -190,6 +193,28 @@ describe('Make it', () => {
     expect(await screen.findByTestId('make-stub')).toBeTruthy();
     expect(app.getPathname()).toBe('/make/new');
     expect(useMakeIntent.getState().get()).toMatchObject({ title: 'Starlight', source: 'identified' });
+  });
+});
+
+describe('crowd singability (Phase 4b)', () => {
+  it('signed in: the crowd line sits in the badge card', async () => {
+    getSongCrowd.mockResolvedValue({
+      singers: 6, comfortable_share: 0.8333, too_high_share: 0.1667, too_low_share: 0,
+      bucket: 'baritone', bucket_singers: 5, bucket_comfortable_share: 1, crowd_pleaser_share: null,
+    });
+    await useAuth.getState().signInWithSession(session('crowd@example.com'));
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    const line = await screen.findByTestId('song-crowd');
+    expect(line).toHaveTextContent('100% of baritones found the key comfortable');
+    expect(within(screen.getByTestId('song-badge-card')).getByTestId('song-crowd')).toBe(line);
+    expect(getSongCrowd).toHaveBeenCalledWith('muse|starlight');
+  });
+
+  it('signed out: no crowd line and decide is not asked', async () => {
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    await screen.findByText('Starlight');
+    expect(screen.queryByTestId('song-crowd')).toBeNull();
+    expect(getSongCrowd).not.toHaveBeenCalled();
   });
 });
 

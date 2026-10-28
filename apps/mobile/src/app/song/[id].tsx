@@ -18,6 +18,7 @@ import { useOffline } from '../../net/useOffline';
 import { openOfflineReader } from '../../offline/offlineIndex';
 import { openYouTubeUrl } from '../../media/youtube';
 import { useOfflineIndexStore } from '../../offline/offlineIndexStore';
+import { SongCrowdLine } from '../../me/SongCrowdLine';
 import { SongHistory } from '../../me/SongHistory';
 import { SongLibraryActions } from '../../me/SongLibraryActions';
 import { SongTonightAction } from '../../tonight/other/SongTonightAction';
@@ -196,6 +197,7 @@ function KnownSong({ songKey, also = [] }: { songKey: string; also?: string[] })
           </Text>
           <Text variant="muted">{hasVersions ? t('song.hasKaraokeHint') : t('song.noKaraokeHint')}</Text>
           <SongFitCard songKey={songKey} />
+          <SongCrowdLine songKey={songKey} />
         </View>
         {hasVersions ? <VersionList key={song.song_key} versions={versions} total={versions.length} openUrl={openUrl} /> : null}
         {signedIn ? <SongHistory libraryKey={libraryKey(song.artist, song.title, song.song_key)} /> : null}
