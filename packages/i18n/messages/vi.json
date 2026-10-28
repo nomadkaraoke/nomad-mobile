@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Thời gian hát còn lại",
     "micBusyBody": "Một ứng dụng khác hoặc một cuộc gọi đang sử dụng micro. Hãy tắt đi rồi thử lại, hoặc tự chọn loại giọng của bạn.",
     "micBusyTitle": "Micro đang bận",
-    "typeUnknown": "Loại giọng của bạn"
+    "typeUnknown": "Loại giọng của bạn",
+    "highFalsettoBody": "Nốt cao nhất của bạn là {note}. Nếu đó là giọng giả thanh (falsetto), chúng tôi sẽ tách nó khỏi quãng giọng ngực để gợi ý các bài hát phù hợp hơn với bạn.",
+    "highFalsettoTitle": "Nốt cao nhất của bạn là giọng giả thanh (falsetto) hay giọng đầu (nhẹ hơn, nhiều hơi hơn)?",
+    "highFalsettoNo": "Không",
+    "highFalsettoSkip": "Bỏ qua",
+    "highFalsettoUnsure": "Không chắc",
+    "highFalsettoYes": "Có"
   },
   "fit": {
     "fits": "Hợp với giọng của bạn",
@@ -1708,10 +1714,15 @@
       "probably": "Nhiều khả năng là {type}, nhưng chúng tôi cần thêm vài bài hát để chắc chắn",
       "range": "{range}, thoải mái nhất ở {comfort}",
       "saved": "Đã lưu vào hồ sơ âm nhạc của bạn.",
-      "suited": "Những bài hát phù hợp với bạn",
+      "suited": "Bài hát bạn thích và phù hợp với giọng của bạn",
       "confidenceHigh": "Độ chắc chắn cao",
       "done": "Xong",
-      "typeUnknown": "Loại giọng của bạn"
+      "typeUnknown": "Loại giọng của bạn",
+      "comfortEstimated": "Ước tính",
+      "comfortMeasured": "Đo từ các bài hát bạn thấy thoải mái khi hát",
+      "falsetto": "Giọng giả thanh lên đến {note}",
+      "adopt": "Dùng hồ sơ này làm giọng của tôi",
+      "adoptFailed": "Không thể lưu làm giọng của bạn. Vui lòng kiểm tra kết nối mạng và thử lại."
     },
     "setup": {
       "bit_warm": "Hơi ấm giọng rồi",
@@ -1739,7 +1750,18 @@
       "no": "Không",
       "openSettings": "Mở Cài đặt",
       "quiet": "Giữ yên lặng một chút nhé…",
-      "yes": "Có"
+      "yes": "Có",
+      "background": "Về giọng hát của bạn (không bắt buộc)",
+      "backgroundHint": "Giúp chúng tôi phân biệt giọng ngực và giọng giả thanh (falsetto) của bạn.",
+      "experience": "Kinh nghiệm ca hát của bạn?",
+      "experience_none": "Chưa có",
+      "experience_some": "Có một chút",
+      "experience_trained": "Đã qua đào tạo",
+      "usesFalsetto": "Bạn có dùng giọng giả thanh (falsetto) hoặc giọng đầu không?",
+      "usesFalsetto_sometimes": "Thỉnh thoảng",
+      "usesFalsetto_no": "Không",
+      "usesFalsetto_unsure": "Không chắc",
+      "usesFalsetto_yes": "Có"
     },
     "title": "Khám phá giọng hát của bạn",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Xóa bản ghi âm",
       "play": "Phát",
       "song": "{title} · {artist}",
+      "stop": "Dừng"
+    },
+    "falsetto": {
+      "chip": "Nốt cao ({note}): giọng giả thanh?",
+      "chipLabel": "Nốt cao đó ({note}) có thể là giọng giả thanh hoặc giọng đầu. Có đúng vậy không bạn?",
+      "no": "Không",
+      "yes": "Có",
+      "catchUpBody": "Không bắt buộc. Giọng gió (falsetto) hoặc giọng đầu nghe nhẹ hơn và nhiều hơi hơn. Câu trả lời của bạn sẽ giúp loại các nốt đó ra khỏi quãng giọng ngực của bạn.",
+      "catchUpTitle": "Những nốt cao này có phải là giọng gió không?",
+      "note": "{note} lúc {time}",
+      "play": "Nghe",
+      "unsure": "Không chắc",
       "stop": "Dừng"
     },
     "personal": {

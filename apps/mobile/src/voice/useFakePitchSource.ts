@@ -10,12 +10,13 @@ export const FAKE_MIC_SECTIONS: Record<VoiceSection, [number, number]> = {
   low: [0, 4.4],
   high: [4.4, 7.2],
   sing: [7.2, 14.4],
-  // A voice-session song: the sing part, looped (see LOOPED).
-  song: [7.2, 14.4],
+  // A voice-session song: once the sing notes ending on a held A4 (a falsetto candidate for the live chip), then the
+  // sing part, looped (see LOOP_AFTER).
+  song: [14.4, 23.1],
 };
 
-/** Sections that start again from their beginning instead of going quiet at their end. */
-const LOOPED: ReadonlySet<VoiceSection> = new Set(['song']);
+/** Sections that go on with another slice, looped, instead of going quiet at their end. */
+const LOOP_AFTER: Partial<Record<VoiceSection, VoiceSection>> = { song: 'sing' };
 
 const FAKE_MIC_FILES: Record<string, number> = {
   'baritone-scale': require('../../assets/fake-mic/baritone-scale.wav'),
@@ -26,8 +27,8 @@ const TICK_MS = 100;
 
 /**
  * E2E-only source: plays a bundled synthetic WAV in 100 ms real-time chunks. Each start() plays that section's
- * slice from its beginning and then goes quiet (the step's own timeout or Done applies); `song` loops its slice until
- * stop(), its timestamps still counting up from 0.
+ * slice from its beginning and then goes quiet (the step's own timeout or Done applies); `song` plays its own slice
+ * once, then loops the sing slice until stop(), its timestamps still counting up from 0.
  */
 export function createFakePitchSource(name: string): PitchSource {
   const module = FAKE_MIC_FILES[name];
@@ -61,15 +62,18 @@ export function createFakePitchSource(name: string): PitchSource {
       const mine = gen;
       const { sampleRate, samples } = await load();
       if (gen !== mine) return; // stop() or a newer start() landed while the asset loaded
-      const [from, to] = FAKE_MIC_SECTIONS[section];
-      const start = Math.round(from * sampleRate);
-      const end = Math.min(samples.length, Math.round(to * sampleRate));
-      const loop = LOOPED.has(section);
+      const bounds = (s: VoiceSection) => {
+        const [from, to] = FAKE_MIC_SECTIONS[s];
+        return [Math.round(from * sampleRate), Math.min(samples.length, Math.round(to * sampleRate))] as const;
+      };
+      let [start, end] = bounds(section);
+      const loop = LOOP_AFTER[section];
       let pos = start;
       let emitted = 0;
       timer = setInterval(() => {
         if (pos >= end) {
           if (!loop) return stop();
+          [start, end] = bounds(loop);
           pos = start;
         }
         const chunk: PcmBuffer = {

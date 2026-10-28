@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Natitirang oras para kumanta",
     "micBusyBody": "May ibang app o tawag na gumagamit sa mikropono. Isara ito at subukang muli, o piliin na lang ang uri ng iyong boses.",
     "micBusyTitle": "Ginagamit pa ang mikropono",
-    "typeUnknown": "Uri ng boses mo"
+    "typeUnknown": "Uri ng boses mo",
+    "highFalsettoBody": "Ang pinakamataas mong nota ay {note}. Kung falsetto ito, ibubukod namin ito sa iyong chest range para mas bumagay ang mga kanta.",
+    "highFalsettoTitle": "Falsetto o head voice ba ang pinakamataas mong nota (mas magaan, mas mahangin)?",
+    "highFalsettoNo": "Hindi",
+    "highFalsettoSkip": "Laktawan",
+    "highFalsettoUnsure": "Hindi sigurado",
+    "highFalsettoYes": "Oo"
   },
   "fit": {
     "fits": "Bagay sa boses mo",
@@ -1708,10 +1714,15 @@
       "probably": "Malamang na {type}, pero kailangan pa namin ng mas maraming kanta para makasiguro",
       "range": "{range}, komportable sa {comfort}",
       "saved": "Nai-save sa iyong music profile.",
-      "suited": "Mga kantang babagay sa iyo",
+      "suited": "Mga kantang gusto mo na bagay sa iyo",
       "confidenceHigh": "Mataas na kasiguraduhan",
       "done": "Tapos na",
-      "typeUnknown": "Uri ng boses mo"
+      "typeUnknown": "Uri ng boses mo",
+      "comfortEstimated": "Tantiya",
+      "comfortMeasured": "Sinukat mula sa mga kantang naging komportable ka",
+      "falsetto": "Falsetto hanggang {note}",
+      "adopt": "Gamitin ito bilang boses ko",
+      "adoptFailed": "Hindi mai-save bilang boses mo. Pakisuri ang iyong koneksyon at subukang muli."
     },
     "setup": {
       "bit_warm": "Medyo warm na",
@@ -1739,7 +1750,18 @@
       "no": "Hindi",
       "openSettings": "Buksan ang Mga Setting",
       "quiet": "Manatiling tahimik sandali…",
-      "yes": "Oo"
+      "yes": "Oo",
+      "background": "Tungkol sa iyong pagkanta (opsyonal)",
+      "backgroundHint": "Nakatutulong ito para maibukod ang iyong chest voice mula sa falsetto.",
+      "experience": "Karanasan sa pagkanta?",
+      "experience_none": "Wala",
+      "experience_some": "May kaunti",
+      "experience_trained": "May pagsasanay",
+      "usesFalsetto": "Gumagamit ka ba ng falsetto o head voice?",
+      "usesFalsetto_sometimes": "Paminsan-minsan",
+      "usesFalsetto_no": "Hindi",
+      "usesFalsetto_unsure": "Hindi sigurado",
+      "usesFalsetto_yes": "Oo"
     },
     "title": "Tuklasin ang iyong boses",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Burahin ang recording",
       "play": "I-play",
       "song": "{title} · {artist}",
+      "stop": "Itigil"
+    },
+    "falsetto": {
+      "chip": "Mataas na nota ({note}): falsetto?",
+      "chipLabel": "Maaaring falsetto o head voice ang mataas na notang iyon, {note}. Falsetto nga ba ito?",
+      "no": "Hindi",
+      "yes": "Oo",
+      "catchUpBody": "Opsyonal. Ang falsetto o head voice ay mas magaan at mas mahangin pakinggan. Nakakatulong ang mga sagot mo para hindi maisama ang mga notang iyon sa iyong chest range.",
+      "catchUpTitle": "Falsetto ba ang matataas na notang ito?",
+      "note": "{note} sa {time}",
+      "play": "Pakinggan",
+      "unsure": "Hindi sigurado",
       "stop": "Itigil"
     },
     "personal": {

@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Pozostały czas na śpiewanie",
     "micBusyBody": "Mikrofon jest używany przez inną aplikację lub trwające połączenie. Zamknij ją i spróbuj ponownie albo po prostu wskaż swój typ głosu.",
     "micBusyTitle": "Mikrofon jest zajęty",
-    "typeUnknown": "Twój typ głosu"
+    "typeUnknown": "Twój typ głosu",
+    "highFalsettoBody": "Twój najwyższy dźwięk to {note}. Jeśli to był falset, wykluczymy go z Twojego rejestru piersiowego, aby piosenki były lepiej dopasowane.",
+    "highFalsettoTitle": "Czy Twój najwyższy dźwięk to był falset lub głos głowowy (lżejszy, bardziej znośny/powietrzny)?",
+    "highFalsettoNo": "Nie",
+    "highFalsettoSkip": "Pomiń",
+    "highFalsettoUnsure": "Nie mam pewności",
+    "highFalsettoYes": "Tak"
   },
   "fit": {
     "fits": "Pasuje do Twojego głosu",
@@ -1708,10 +1714,15 @@
       "probably": "Prawdopodobnie {type}, ale potrzebujemy więcej piosenek, aby mieć pewność",
       "range": "{range}, komfortowo {comfort}",
       "saved": "Zapisano w Twoim profilu muzycznym.",
-      "suited": "Piosenki, które do Ciebie pasują",
+      "suited": "Piosenki, które lubisz i które do Ciebie pasują",
       "confidenceHigh": "Wysoka pewność",
       "done": "Gotowe",
-      "typeUnknown": "Twój typ głosu"
+      "typeUnknown": "Twój typ głosu",
+      "comfortEstimated": "Szacowany",
+      "comfortMeasured": "Zmierzony na podstawie utworów, które były dla Ciebie komfortowe",
+      "falsetto": "Falset do {note}",
+      "adopt": "Ustaw jako mój głos",
+      "adoptFailed": "Nie udało się zapisać tego jako Twój głos. Sprawdź połączenie i spróbuj ponownie."
     },
     "setup": {
       "bit_warm": "Trochę rozgrzany",
@@ -1739,7 +1750,18 @@
       "no": "Nie",
       "openSettings": "Otwórz Ustawienia",
       "quiet": "Bądź cicho przez chwilę…",
-      "yes": "Tak"
+      "yes": "Tak",
+      "background": "O Twoim śpiewie (opcjonalnie)",
+      "backgroundHint": "Pomoże nam to odróżnić Twój głos piersiowy od falsetu.",
+      "experience": "Doświadczenie wokalne?",
+      "experience_none": "Brak",
+      "experience_some": "Niewielkie",
+      "experience_trained": "Wykształcenie wokalne",
+      "usesFalsetto": "Czy używasz falsetu lub głosu głowowego?",
+      "usesFalsetto_sometimes": "Czasami",
+      "usesFalsetto_no": "Nie",
+      "usesFalsetto_unsure": "Nie mam pewności",
+      "usesFalsetto_yes": "Tak"
     },
     "title": "Odkryj swój głos",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Usuń nagranie",
       "play": "Odtwórz",
       "song": "{title} · {artist}",
+      "stop": "Zatrzymaj"
+    },
+    "falsetto": {
+      "chip": "Wysoki dźwięk ({note}): falset?",
+      "chipLabel": "Ten wysoki dźwięk, {note}, mógł być zaśpiewany falsetem lub głosem głowowym. Czy tak było?",
+      "no": "Nie",
+      "yes": "Tak",
+      "catchUpBody": "Opcjonalnie. Falset lub głos głowowy brzmi lżej i bardziej zwiewnie. Twoje odpowiedzi pomogą wykluczyć te dźwięki z Twojego rejestru piersiowego.",
+      "catchUpTitle": "Czy te wysokie dźwięki to był falset?",
+      "note": "{note} w {time}",
+      "play": "Odsłuchaj",
+      "unsure": "Nie mam pewności",
       "stop": "Zatrzymaj"
     },
     "personal": {

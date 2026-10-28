@@ -11,8 +11,10 @@ import { openSignIn } from '../auth/signInUi';
 import { useAuth } from '../auth/store';
 import type { MicPermission } from '../voice/pitchSource';
 import { StepLayout } from '../voice/StepLayout';
+import { RECS_KEY } from '../discover/useRecommendations';
 import { VOICE_KEY } from '../voice/useVoiceProfile';
 import { ContextChip } from './ContextChip';
+import { readBackground } from './backgroundDefault';
 import { readRecordDefault } from './recordDefault';
 import { RECORDING_COUNT_KEY } from './RecordingsSection';
 import { PickCard } from './screens/PickCard';
@@ -26,10 +28,19 @@ import { useVoiceSession, type VsErrorKind } from './useVoiceSession';
 
 const ROUTE = '/discover/voice-session';
 
-const draftFrom = (s: SessionSetup | null): SetupDraft =>
-  s
-    ? { posture: s.posture, warmth: s.warmth, record: s.record, headphones: s.headphones }
-    : { ...EMPTY_DRAFT, record: readRecordDefault() };
+const draftFrom = (s: SessionSetup | null): SetupDraft => {
+  const last = readBackground();
+  return s
+    ? {
+        posture: s.posture,
+        warmth: s.warmth,
+        record: s.record,
+        headphones: s.headphones,
+        experience: s.experience ?? last.experience,
+        usesFalsetto: s.uses_falsetto ?? last.usesFalsetto,
+      }
+    : { ...EMPTY_DRAFT, record: readRecordDefault(), ...last };
+};
 
 function Waiting({ testID, label }: { testID: string; label?: string }) {
   return (
@@ -93,12 +104,14 @@ export function VoiceSessionFlow() {
     };
   }, [mic, vs.step, recordOn, vs.pitchSource]);
 
-  // A result that saved the session profile: Me's voice profile reads it again.
+  // A result that saved the session profile (by itself, or adopted here): Me's voice profile and the picks' fit badges
+  // read it again.
   const savedFor = useRef<object | null>(null);
   useEffect(() => {
     if (vs.result?.profile_saved && savedFor.current !== vs.result) {
       savedFor.current = vs.result;
       void queryClient.invalidateQueries({ queryKey: VOICE_KEY });
+      void queryClient.invalidateQueries({ queryKey: RECS_KEY });
     }
   }, [vs.result, queryClient]);
 
@@ -194,6 +207,8 @@ export function VoiceSessionFlow() {
           micGranted={mic === 'granted'}
           onStopEarly={() => void vs.stopEarly()}
           onPatch={(p) => void vs.patchContext(p)}
+          falsettoChip={vs.falsettoChip}
+          onFalsetto={vs.answerFalsetto}
         />
       ) : (
         <Waiting testID="vs-loading" label={t('loading')} />
@@ -207,6 +222,11 @@ export function VoiceSessionFlow() {
           busy={vs.busy}
           setAnswer={vs.setAnswer}
           onNext={() => void vs.submitQuiz()}
+          catchUp={vs.catchUp}
+          noteLabels={vs.noteLabels}
+          take={vs.take}
+          takeOffsetS={vs.takeOffsetS}
+          onFalsetto={(c, l) => vs.answerFalsetto(c, l, 'quiz')}
         />
       ) : (
         <Waiting testID="vs-loading" label={t('loading')} />
@@ -216,6 +236,7 @@ export function VoiceSessionFlow() {
         <ResultScreen
           result={vs.result}
           busy={vs.busy}
+          onAdopt={vs.adoptResult}
           onDone={() => {
             vs.reset();
             close();

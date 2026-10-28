@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Temps de chant restant",
     "micBusyBody": "Une autre application ou un appel utilise le micro. Ferme-la et réessaie, ou choisis plutôt ton type de voix.",
     "micBusyTitle": "Le micro est déjà utilisé",
-    "typeUnknown": "Ton type de voix"
+    "typeUnknown": "Ton type de voix",
+    "highFalsettoBody": "Ta note la plus haute était {note}. Si c'était en fausset, on l'exclut de ta voix de poitrine pour que les chansons te correspondent mieux.",
+    "highFalsettoTitle": "Ta note la plus haute était-elle en fausset ou en voix de tête (plus légère, plus aérienne) ?",
+    "highFalsettoNo": "Non",
+    "highFalsettoSkip": "Passer",
+    "highFalsettoUnsure": "Je ne sais pas",
+    "highFalsettoYes": "Oui"
   },
   "fit": {
     "fits": "Adapté à ta voix",
@@ -1708,10 +1714,15 @@
       "probably": "Probablement {type}, mais il nous faut d'autres chansons pour en être sûrs",
       "range": "{range}, zone de confort {comfort}",
       "saved": "Enregistré dans ton profil musical.",
-      "suited": "Chansons qui te correspondent",
+      "suited": "Morceaux que tu aimes et qui te conviennent",
       "confidenceHigh": "Certitude élevée",
       "done": "Terminé",
-      "typeUnknown": "Ton type de voix"
+      "typeUnknown": "Ton type de voix",
+      "comfortEstimated": "Estimé",
+      "comfortMeasured": "Mesuré à partir des morceaux où tu étais à l'aise",
+      "falsetto": "Voix de tête jusqu'à {note}",
+      "adopt": "Utiliser comme ma voix",
+      "adoptFailed": "Impossible de l'enregistrer comme ta voix. Vérifie ta connexion et réessaie."
     },
     "setup": {
       "bit_warm": "Un peu échauffé",
@@ -1739,7 +1750,18 @@
       "no": "Non",
       "openSettings": "Ouvrir les Réglages",
       "quiet": "Ne fais pas de bruit pendant une seconde…",
-      "yes": "Oui"
+      "yes": "Oui",
+      "background": "À propos de ta pratique du chant (facultatif)",
+      "backgroundHint": "Ça nous aide à distinguer ta voix de poitrine de ta voix de tête (fausset).",
+      "experience": "Ton niveau en chant ?",
+      "experience_none": "Aucun",
+      "experience_some": "Débutant",
+      "experience_trained": "Confirmé",
+      "usesFalsetto": "Utilises-tu la voix de tête ou de fausset ?",
+      "usesFalsetto_sometimes": "Parfois",
+      "usesFalsetto_no": "Non",
+      "usesFalsetto_unsure": "Je ne sais pas",
+      "usesFalsetto_yes": "Oui"
     },
     "title": "Trouve ta voix",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Supprimer l'enregistrement",
       "play": "Lecture",
       "song": "{title} · {artist}",
+      "stop": "Arrêter"
+    },
+    "falsetto": {
+      "chip": "Note aiguë ({note}) : fausset ?",
+      "chipLabel": "Cette note aiguë, {note}, était peut-être en voix de fausset ou en voix de tête. C'était le cas ?",
+      "no": "Non",
+      "yes": "Oui",
+      "catchUpBody": "Facultatif. La voix de fausset (ou voix de tête) a un son plus léger et plus aérien. Tes réponses permettent d'exclure ces notes de ta voix de poitrine.",
+      "catchUpTitle": "Ces notes aiguës étaient-elles en voix de fausset ?",
+      "note": "{note} à {time}",
+      "play": "Écouter",
+      "unsure": "Je ne sais pas",
       "stop": "Arrêter"
     },
     "personal": {

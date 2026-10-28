@@ -1,5 +1,8 @@
-# The setup screen: standing, fully warmed up, record RECORD (yes | no), headphones yes → Start singing → the first
-# pick (after the fake mic's quiet second). Env: RECORD, SHOT (optional: a screenshot path for the filled-in form).
+# The setup screen: standing, fully warmed up, record RECORD (yes | no), headphones yes, "About your singing" opened
+# with experience Some and falsetto Sometimes (offset 4, so the falsetto chip's threshold stays above the fake mic's
+# sing notes) → Start singing → the first pick (after the fake mic's quiet second). The background answers are
+# remembered on the phone, so each is tapped only when not already selected (a second tap clears it).
+# Env: RECORD, SHOT (optional: a screenshot path for the filled-in form).
 appId: com.nomadkaraoke.mobile
 ---
 - tapOn:
@@ -17,6 +20,37 @@ appId: com.nomadkaraoke.mobile
     id: "vs-headphones-yes"
 - assertVisible:
     id: "vs-record-${RECORD}"
+    selected: true
+- scrollUntilVisible:
+    element:
+      id: "vs-setup-background"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "vs-setup-background"
+- scrollUntilVisible:
+    element:
+      id: "vs-setup-falsetto-sometimes"
+    direction: DOWN
+    timeout: 10000
+- runFlow:
+    when:
+      notVisible:
+        id: "vs-setup-experience-some"
+        selected: true
+    commands:
+      - tapOn:
+          id: "vs-setup-experience-some"
+- runFlow:
+    when:
+      notVisible:
+        id: "vs-setup-falsetto-sometimes"
+        selected: true
+    commands:
+      - tapOn:
+          id: "vs-setup-falsetto-sometimes"
+- assertVisible:
+    id: "vs-setup-falsetto-sometimes"
     selected: true
 - runFlow:
     when:

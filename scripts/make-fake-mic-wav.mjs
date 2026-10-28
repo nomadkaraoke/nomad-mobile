@@ -1,5 +1,6 @@
 // Generates apps/mobile/assets/fake-mic/baritone-scale.wav: a synthetic "singer" for the FAKE_MIC E2E source.
-// 16 kHz mono PCM16, 14.4 s, three sections (low / high / sing). Each opens with 1.2 s of silence (the quiet
+// 16 kHz mono PCM16, 23.1 s, four sections (low / high / sing / song: the sing notes ending on a held A4, the
+// voice session's falsetto-chip E2E). Each opens with 1.2 s of silence (the quiet
 // second the noise floor is measured on). Deterministic: a test asserts the sha256 of the output.
 // Usage: node scripts/make-fake-mic-wav.mjs
 import { Buffer } from 'node:buffer';
@@ -16,6 +17,8 @@ const SECTIONS = [
   { notes: [57, 52, 48, 45].map((m) => [m, 0.8]) }, // low: A3 E3 C3 A2
   { notes: [60, 64].map((m) => [m, 0.8]) }, // high: C4 E4
   { notes: [55, 57, 59, 60, 57, 55, 59, 57, 53, 55].map((m) => [m, 0.6]) }, // sing
+  // song: the sing notes, then A4 held 1.5 s (well above a baritone's chest comfort top: a falsetto candidate)
+  { notes: [...[55, 57, 59, 60, 57, 55, 59, 57, 53, 55].map((m) => [m, 0.6]), [69, 1.5]] },
 ];
 
 const midiToHz = (m) => 440 * 2 ** ((m - 69) / 12);

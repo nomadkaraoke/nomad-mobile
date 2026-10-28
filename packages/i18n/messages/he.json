@@ -1486,7 +1486,13 @@
     "singProgressLabel": "הזמן שנותר לשיר",
     "micBusyBody": "אפליקציה אחרת או שיחה משתמשת במיקרופון כרגע. סגרו אותה ונסו שוב, או פשוט בחרו את סוג הקול שלכם.",
     "micBusyTitle": "המיקרופון תפוס",
-    "typeUnknown": "סוג הקול שלך"
+    "typeUnknown": "סוג הקול שלך",
+    "highFalsettoBody": "התו הגבוה ביותר שלך היה {note}. אם זה היה בפלסט, נשמור אותו מחוץ לטווח קול החזה שלך, כדי שהשירים יתאימו לך טוב יותר.",
+    "highFalsettoTitle": "האם התו הגבוה ביותר שלך היה בפלסט או בקול ראש (קל יותר, אוורירי יותר)?",
+    "highFalsettoNo": "לא",
+    "highFalsettoSkip": "דילוג",
+    "highFalsettoUnsure": "לא בטוח/ה",
+    "highFalsettoYes": "כן"
   },
   "fit": {
     "fits": "מתאים לקול שלך",
@@ -1708,10 +1714,15 @@
       "probably": "כנראה {type}, אבל אנחנו צריכים עוד שירים כדי לוודא",
       "range": "{range}, טווח נוח {comfort}",
       "saved": "נשמר בפרופיל המוזיקלי שלכם.",
-      "suited": "שירים שמתאימים לכם",
+      "suited": "שירים אהובים שמתאימים לך",
       "confidenceHigh": "ביטחון גבוה",
       "done": "סיום",
-      "typeUnknown": "סוג הקול שלך"
+      "typeUnknown": "סוג הקול שלך",
+      "comfortEstimated": "משוער",
+      "comfortMeasured": "נמדד מהשירים שהיו לך נוחים",
+      "falsetto": "פאלסטו עד {note}",
+      "adopt": "שימוש בזה כקול שלי",
+      "adoptFailed": "לא הצלחנו לשמור את זה כקול שלך. כדאי לבדוק את החיבור ולנסות שוב."
     },
     "setup": {
       "bit_warm": "מחומם מעט",
@@ -1739,7 +1750,18 @@
       "no": "לא",
       "openSettings": "פתיחת הגדרות",
       "quiet": "שמור על שקט לרגע…",
-      "yes": "כן"
+      "yes": "כן",
+      "background": "קצת על השירה שלך (אופציונלי)",
+      "backgroundHint": "עוזר לנו להבדיל בין קול חזה לפלסט.",
+      "experience": "ניסיון בשירה?",
+      "experience_none": "ללא ניסיון",
+      "experience_some": "קצת ניסיון",
+      "experience_trained": "הכשרה מקצועית",
+      "usesFalsetto": "האם יצא לך להשתמש בפלסט או בקול ראש?",
+      "usesFalsetto_sometimes": "לפעמים",
+      "usesFalsetto_no": "לא",
+      "usesFalsetto_unsure": "לא בטוח/ה",
+      "usesFalsetto_yes": "כן"
     },
     "title": "גלו את הקול שלכם",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "מחיקת הקלטה",
       "play": "נגן",
       "song": "{title} · {artist}",
+      "stop": "עצירה"
+    },
+    "falsetto": {
+      "chip": "תו גבוה ({note}): פלסטו?",
+      "chipLabel": "יכול להיות שהתו הגבוה הזה ({note}) הושר בפלסטו או בקול ראש. זה נכון?",
+      "no": "לא",
+      "yes": "כן",
+      "catchUpBody": "אופציונלי. פלסט או קול ראש נשמעים קלילים ואווריריים יותר. התשובות שלך יעזרו לנו לא לכלול את התווים האלה במנעד החזה שלך.",
+      "catchUpTitle": "האם התווים הגבוהים האלה היו בפלסט?",
+      "note": "{note} ב-{time}",
+      "play": "האזנה",
+      "unsure": "לא בטוח/ה",
       "stop": "עצירה"
     },
     "personal": {

@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Preostalo vrijeme za pjevanje",
     "micBusyBody": "Druga aplikacija ili poziv koristi mikrofon. Zatvori je i pokušaj ponovno ili umjesto toga odaberi svoju vrstu glasa.",
     "micBusyTitle": "Mikrofon je zauzet",
-    "typeUnknown": "Tvoj tip glasa"
+    "typeUnknown": "Tvoj tip glasa",
+    "highFalsettoBody": "Tvoja najviša nota bila je {note}. Ako je to bio falset, izostavit ćemo je iz tvog prsnog raspona kako bi ti pjesme bolje odgovarale.",
+    "highFalsettoTitle": "Je li tvoja najviša nota bila falset ili glaveni glas (svjetliji, s više daha)?",
+    "highFalsettoNo": "Ne",
+    "highFalsettoSkip": "Preskoči",
+    "highFalsettoUnsure": "Nisam siguran/na",
+    "highFalsettoYes": "Da"
   },
   "fit": {
     "fits": "Odgovara tvom glasu",
@@ -1708,10 +1714,15 @@
       "probably": "Vjerojatno {type}, ali treba nam još pjesama za sigurnu procjenu",
       "range": "{range}, ugodno {comfort}",
       "saved": "Spremljeno u tvoj glazbeni profil.",
-      "suited": "Pjesme koje ti odgovaraju",
+      "suited": "Pjesme koje voliš i koje ti odgovaraju",
       "confidenceHigh": "Visoka pouzdanost",
       "done": "Gotovo",
-      "typeUnknown": "Tvoj tip glasa"
+      "typeUnknown": "Tvoj tip glasa",
+      "comfortEstimated": "Procijenjeno",
+      "comfortMeasured": "Izmjereno na temelju pjesama koje su ti bile ugodne",
+      "falsetto": "Falset do {note}",
+      "adopt": "Postavi ovo kao moj glas",
+      "adoptFailed": "Spremanje glasa nije uspjelo. Provjeri vezu i pokušaj ponovno."
     },
     "setup": {
       "bit_warm": "Djelomično zagrijan",
@@ -1739,7 +1750,18 @@
       "no": "Ne",
       "openSettings": "Otvori Postavke",
       "quiet": "Budi u tišini sekundu…",
-      "yes": "Da"
+      "yes": "Da",
+      "background": "O tvom pjevanju (neobavezno)",
+      "backgroundHint": "Pomaže nam razlikovati tvoj prsni glas od falseta.",
+      "experience": "Iskustvo u pjevanju?",
+      "experience_none": "Nikakvo",
+      "experience_some": "Malo",
+      "experience_trained": "Školovani glas",
+      "usesFalsetto": "Koristiš li falset ili glaveni glas?",
+      "usesFalsetto_sometimes": "Ponekad",
+      "usesFalsetto_no": "Ne",
+      "usesFalsetto_unsure": "Nisam siguran/na",
+      "usesFalsetto_yes": "Da"
     },
     "title": "Pronađi svoj glas",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Izbriši snimku",
       "play": "Reproduciraj",
       "song": "{title} · {artist}",
+      "stop": "Zaustavi"
+    },
+    "falsetto": {
+      "chip": "Visoki ton ({note}): falset?",
+      "chipLabel": "Taj visoki ton, {note}, možda je bio otpjevan u falsetu ili u glavi (head voice). Je li bio?",
+      "no": "Ne",
+      "yes": "Da",
+      "catchUpBody": "Neobavezno. Falset ili glas glave zvuče lakše i prozračnije. Tvoji odgovori sprječavaju uvrštavanje tih tonova u tvoj prsni raspon.",
+      "catchUpTitle": "Jesu li ovi visoki tonovi bili falset?",
+      "note": "{note} u {time}",
+      "play": "Poslušaj",
+      "unsure": "Nisam siguran/na",
       "stop": "Zaustavi"
     },
     "personal": {

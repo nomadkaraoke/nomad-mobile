@@ -16,6 +16,7 @@ import { fsState } from '../test-utils/memoryFs';
 import { VOICE_KEY } from '../voice/useVoiceProfile';
 import { profileFromSelfReport, useVoiceStore, VOICE_STORAGE_KEY } from '../voice/voiceStore';
 import { RECORDING_COUNT_KEY, VOICE_HISTORY_KEY } from '../voiceSession/useVoiceHistory';
+import { BACKGROUND_KEY } from '../voiceSession/backgroundDefault';
 import { RECORD_DEFAULT_KEY } from '../voiceSession/recordDefault';
 import { RECORDING_QUEUE_KEY, useRecordingQueue } from '../voiceSession/recording/recordingQueue';
 import { useVoiceSessionStore, VOICE_SESSION_KEY } from '../voiceSession/sessionStore';
@@ -125,4 +126,11 @@ it("forgets the previous person's record-my-takes default when the session ends"
   appStorage.set(RECORD_DEFAULT_KEY, true);
   useAuth.setState({ state: { status: 'signedOut' } });
   expect(appStorage.getBoolean(RECORD_DEFAULT_KEY)).toBeUndefined();
+});
+
+it('background cleared on sign-out (the singing-background answers are personal)', () => {
+  render();
+  appStorage.set(BACKGROUND_KEY, JSON.stringify({ experience: 'some', usesFalsetto: 'yes' }));
+  useAuth.setState({ state: { status: 'signedOut' } });
+  expect(appStorage.getString(BACKGROUND_KEY)).toBeUndefined();
 });

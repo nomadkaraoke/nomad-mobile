@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Temps que et queda per cantar",
     "micBusyBody": "Una altra aplicació o una trucada està utilitzant el micròfon. Tanca-la i torna-ho a provar, o tria el teu tipus de veu directament.",
     "micBusyTitle": "El micròfon està ocupat",
-    "typeUnknown": "El teu tipus de veu"
+    "typeUnknown": "El teu tipus de veu",
+    "highFalsettoBody": "La teva nota més aguda ha estat {note}. Si ha estat en falset, la deixarem fora del teu registre de pit perquè les cançons s'adaptin millor.",
+    "highFalsettoTitle": "La teva nota més aguda ha estat en falset o veu de cap (més lleugera, amb més aire)?",
+    "highFalsettoNo": "No",
+    "highFalsettoSkip": "Omet",
+    "highFalsettoUnsure": "No n'estic segur",
+    "highFalsettoYes": "Sí"
   },
   "fit": {
     "fits": "S'adapta a la teva veu",
@@ -1708,10 +1714,15 @@
       "probably": "Probablement {type}, però necessitem més cançons per confirmar-ho",
       "range": "{range}, zona còmoda {comfort}",
       "saved": "S'ha desat al teu perfil musical.",
-      "suited": "Cançons que et van bé",
+      "suited": "Cançons que t'agraden i que et van bé",
       "confidenceHigh": "Certesa alta",
       "done": "Fet",
-      "typeUnknown": "El teu tipus de veu"
+      "typeUnknown": "El teu tipus de veu",
+      "comfortEstimated": "Estimat",
+      "comfortMeasured": "Mesurat a partir de les cançons que t'han resultat còmodes",
+      "falsetto": "Falset fins a {note}",
+      "adopt": "Utilitza aquesta com a la meva veu",
+      "adoptFailed": "No s'ha pogut desar com a la teva veu. Comprova la connexió i torna-ho a provar."
     },
     "setup": {
       "bit_warm": "Una mica escalfada",
@@ -1739,7 +1750,18 @@
       "no": "No",
       "openSettings": "Obre la configuració",
       "quiet": "Fes silenci un segon…",
-      "yes": "Sí"
+      "yes": "Sí",
+      "background": "Sobre com cantes (opcional)",
+      "backgroundHint": "Ens ajuda a distingir la teva veu de pit del falset.",
+      "experience": "Tens experiència cantant?",
+      "experience_none": "Cap",
+      "experience_some": "Una mica",
+      "experience_trained": "Amb formació",
+      "usesFalsetto": "Fas servir el falset o la veu de cap?",
+      "usesFalsetto_sometimes": "De vegades",
+      "usesFalsetto_no": "No",
+      "usesFalsetto_unsure": "No n'estic segur",
+      "usesFalsetto_yes": "Sí"
     },
     "title": "Troba la teva veu",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Elimina la gravació",
       "play": "Reprodueix",
       "song": "{title} · {artist}",
+      "stop": "Atura"
+    },
+    "falsetto": {
+      "chip": "Nota aguda ({note}): falset?",
+      "chipLabel": "Aquella nota aguda, {note}, podria haver estat falset o veu de cap. Ho era?",
+      "no": "No",
+      "yes": "Sí",
+      "catchUpBody": "Opcional. El falset o la veu de cap sona més lleugera i amb més aire. Les teves respostes mantenen aquestes notes fora del teu registre de pit.",
+      "catchUpTitle": "Aquestes notes agudes eren en falset?",
+      "note": "{note} a {time}",
+      "play": "Escolta",
+      "unsure": "No n'estic segur",
       "stop": "Atura"
     },
     "personal": {

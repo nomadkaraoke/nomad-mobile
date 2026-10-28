@@ -47,3 +47,16 @@ export function summarizeRange(held: HeldNote[], free: VoicedFrame[]): RangeSumm
   const clamp = (n: number) => Math.min(high, Math.max(low, n));
   return { low, high, comfortLow: clamp(comfortLow), comfortHigh: clamp(comfortHigh), heldCount: held.length, freeVoicedS };
 }
+
+/**
+ * The range with the high step's top note taken out as falsetto (the singer said so): `high` becomes the highest
+ * high-step note at least 2 semitones below the top, else the top − 3 (never under `low`), and comfort is kept at or
+ * under it. The voice type is then classified on this chest range.
+ */
+export function chestRangeBelowFalsetto(range: RangeSummary, highStepNotes: number[], top: number): RangeSummary {
+  const below = highStepNotes.filter((n) => n <= top - 2);
+  const high = Math.max(range.low, below.length ? Math.max(...below) : top - 3);
+  if (high >= range.high) return range;
+  const comfortHigh = Math.min(range.comfortHigh, high);
+  return { ...range, high, comfortHigh, comfortLow: Math.min(range.comfortLow, comfortHigh) };
+}

@@ -1486,7 +1486,13 @@
     "singProgressLabel": "Resterende tid til at synge",
     "micBusyBody": "En anden app eller et opkald bruger mikrofonen. Luk appen, og prøv igen, eller vælg din stemmetype i stedet.",
     "micBusyTitle": "Mikrofonen er optaget",
-    "typeUnknown": "Din stemmetype"
+    "typeUnknown": "Din stemmetype",
+    "highFalsettoBody": "Din højeste tone var {note}. Hvis det var falset, holder vi den ude af dit brystregister, så sangene passer bedre.",
+    "highFalsettoTitle": "Var din højeste tone falset eller hovedstemme (lettere, mere luftig)?",
+    "highFalsettoNo": "Nej",
+    "highFalsettoSkip": "Spring over",
+    "highFalsettoUnsure": "Ikke sikker",
+    "highFalsettoYes": "Ja"
   },
   "fit": {
     "fits": "Passer til din stemme",
@@ -1708,10 +1714,15 @@
       "probably": "Sandsynligvis {type}, men vi skal bruge flere sange for at være sikre",
       "range": "{range}, behageligt {comfort}",
       "saved": "Gemt på din musikprofil.",
-      "suited": "Sange der passer til dig",
+      "suited": "Sange, du kan lide, og som passer til dig",
       "confidenceHigh": "Høj sikkerhed",
       "done": "Færdig",
-      "typeUnknown": "Din stemmetype"
+      "typeUnknown": "Din stemmetype",
+      "comfortEstimated": "Estimeret",
+      "comfortMeasured": "Målt ud fra de sange, der føles rare at synge",
+      "falsetto": "Falset op til {note}",
+      "adopt": "Brug dette som min stemme",
+      "adoptFailed": "Kunne ikke gemme som din stemme. Tjek din internetforbindelse, og prøv igen."
     },
     "setup": {
       "bit_warm": "Lidt opvarmet",
@@ -1739,7 +1750,18 @@
       "no": "Nej",
       "openSettings": "Åbn Indstillinger",
       "quiet": "Vær helt stille et øjeblik…",
-      "yes": "Ja"
+      "yes": "Ja",
+      "background": "Om din sang (valgfrit)",
+      "backgroundHint": "Hjælper os med at skelne din bryststemme fra falset.",
+      "experience": "Sangerfaring?",
+      "experience_none": "Ingen",
+      "experience_some": "Lidt",
+      "experience_trained": "Trænet",
+      "usesFalsetto": "Bruger du falset eller hovedstemme?",
+      "usesFalsetto_sometimes": "Nogle gange",
+      "usesFalsetto_no": "Nej",
+      "usesFalsetto_unsure": "Ikke sikker",
+      "usesFalsetto_yes": "Ja"
     },
     "title": "Find din stemme",
     "warmup": {
@@ -1789,6 +1811,18 @@
       "deleteOneConfirm": "Slet optagelse",
       "play": "Afspil",
       "song": "{title} · {artist}",
+      "stop": "Stop"
+    },
+    "falsetto": {
+      "chip": "Høj tone ({note}): falset?",
+      "chipLabel": "Den høje tone, {note}, var måske falset eller hovedstemme. Var den det?",
+      "no": "Nej",
+      "yes": "Ja",
+      "catchUpBody": "Valgfrit. Falset eller hovedstemme lyder lysere og mere luftig. Dine svar holder disse toner ude af dit brystregister.",
+      "catchUpTitle": "Var disse høje toner falset?",
+      "note": "{note} ved {time}",
+      "play": "Lyt",
+      "unsure": "Ikke sikker",
       "stop": "Stop"
     },
     "personal": {

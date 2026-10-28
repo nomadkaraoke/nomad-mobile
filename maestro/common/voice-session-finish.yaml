@@ -1,5 +1,6 @@
 # From a pick (after at least one song) → Finish → the result. decide may also end the session by itself (done_reason),
-# in which case the result is already showing.
+# in which case the result is already showing. The result says how its comfortable range was found (batch 1, M11):
+# measured from the songs rated comfortable, or estimated.
 appId: com.nomadkaraoke.mobile
 ---
 - runFlow:
@@ -13,3 +14,5 @@ appId: com.nomadkaraoke.mobile
     visible:
       id: "vs-result-type"
     timeout: 30000
+- assertVisible:
+    id: "vs-result-comfort-source"

@@ -338,7 +338,7 @@ describe('useSongRecorder', () => {
       release();
       await started.catch(() => {});
     });
-    expect(out).toEqual({ pitch: null, file: null });
+    expect(out).toEqual({ pitch: null, file: null, contour: null, held: [], takeOffsetS: 0 });
     expect(mocked.__recorder.record).not.toHaveBeenCalled();
     expect(source.stop).toHaveBeenCalled();
     expect(fsState.files.size).toBe(0);
@@ -417,5 +417,79 @@ describe('useSongRecorder', () => {
     unmount();
     expect(source.stop).toHaveBeenCalled();
     expect(fsState.files.size).toBe(0);
+  });
+
+  describe('held notes, contour and take offset (batch 1, M6)', () => {
+    it('emits each held note once', async () => {
+      const { source, emit } = fakeSource('fake');
+      const onHeldNote = jest.fn();
+      const { result } = renderHook(() => useSongRecorder(source, { record: false, floor: 0.003, onHeldNote }));
+      await act(() => result.current.start());
+      // A3, E4, A4: each emitted once it has ended (the next note started, or a gap passed).
+      act(() => {
+        emit(220, 2);
+        emit(329.63, 2);
+        emit(440, 2);
+      });
+      expect(onHeldNote.mock.calls.map(([n]) => n.note)).toEqual([57, 64]);
+      act(() => emit(0, 0.5)); // silence: the last note is over
+      expect(onHeldNote.mock.calls.map(([n]) => n.note)).toEqual([57, 64, 69]);
+      await act(async () => {
+        await result.current.stop();
+      });
+      expect(onHeldNote).toHaveBeenCalledTimes(3);
+    });
+
+    it('stop() emits a note still open at the end', async () => {
+      const { source, emit } = fakeSource('fake');
+      const onHeldNote = jest.fn();
+      const { result } = renderHook(() => useSongRecorder(source, { record: false, floor: 0.003, onHeldNote }));
+      await act(() => result.current.start());
+      act(() => emit(220, 2));
+      expect(onHeldNote).not.toHaveBeenCalled();
+      await act(async () => {
+        await result.current.stop();
+      });
+      expect(onHeldNote.mock.calls.map(([n]) => n.note)).toEqual([57]);
+    });
+
+    it('take carries contour, held and takeOffsetS (aac starts after stream)', async () => {
+      const { source, emit } = fakeSource('mic');
+      const r = mocked.__recorder;
+      r.prepareToRecordAsync.mockImplementation(async () => {
+        // 1.5 s of stream audio before the AAC recorder starts.
+        emit(220, 1.5);
+        r.uri = AAC_URI;
+        fsState.files.set(AAC_URI, new Uint8Array(0));
+      });
+      const { result } = renderHook(() => useSongRecorder(source, { record: true, floor: 0.003 }));
+      await act(() => result.current.start());
+      act(() => sing(emit));
+      let out!: Awaited<ReturnType<typeof result.current.stop>>;
+      await act(async () => {
+        out = await result.current.stop();
+      });
+      expect(out.takeOffsetS).toBeCloseTo(1.5, 1);
+      expect(out.held.map((h) => h.note)).toEqual([57, 64]);
+      expect(out.contour).not.toBeNull();
+      expect(out.contour!.dt).toBeCloseTo(0.1);
+      // ~13.5 s of singing at 10 Hz.
+      expect(out.contour!.midi.length).toBeGreaterThan(120);
+      // The sung notes (a stray detector frame at a joint aside).
+      expect(out.contour!.midi.filter((m) => m !== null && (m < 56 || m > 65)).length).toBeLessThanOrEqual(2);
+    });
+
+    it('a WAV take starts with the stream: takeOffsetS 0', async () => {
+      const { source, emit } = fakeSource('fake');
+      const { result } = renderHook(() => useSongRecorder(source, { record: true, floor: 0.003 }));
+      await act(() => result.current.start());
+      act(() => sing(emit));
+      let out!: Awaited<ReturnType<typeof result.current.stop>>;
+      await act(async () => {
+        out = await result.current.stop();
+      });
+      expect(out.takeOffsetS).toBe(0);
+      expect(out.held).toHaveLength(2);
+    });
   });
 });

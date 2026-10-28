@@ -2,7 +2,15 @@
 // Focus 2). A copy older than 6 h is dropped: the singer starts fresh (decide abandons the old session on the next
 // create). Only the session's own fields are stored: never a token. Cleared on sign-out (useClearDiscoverOnSignOut).
 import type { NextSongOut, SessionSetup } from '@nomad/api-decide';
-import { EMPTY_SESSION_QUIZ, type PitchSummary, type QuizAnswers } from '@nomad/core';
+import {
+  EMPTY_SESSION_QUIZ,
+  type FalsettoCandidate,
+  type HeldNote,
+  type LabelledNote,
+  type PitchContour,
+  type PitchSummary,
+  type QuizAnswers,
+} from '@nomad/core';
 import { create } from 'zustand';
 
 import { appStorage } from '../storage';
@@ -33,6 +41,16 @@ export type SessionState = {
   stoppedEarly: boolean;
   /** The finished song's consented recording, waiting for the quiz (queued with the attempt's `n`). */
   take: SongRecording | null;
+  /** The finished song's pitch at 10 Hz (null without one), for the chest-only summary sent with the quiz. */
+  contour: PitchContour | null;
+  /** The finished song's held notes (stream time). */
+  held: HeldNote[];
+  /** The singer's falsetto answers for this song (the live chip and the quiz catch-up). */
+  noteLabels: LabelledNote[];
+  /** Every falsetto candidate of this song, shown as a chip or not (the quiz asks about unanswered ones). */
+  candidates: FalsettoCandidate[];
+  /** Stream time when the take's recording started (to replay a moment of the local take). */
+  takeOffsetS: number;
   /** ms epoch of the last write. */
   savedAt: number;
 };
@@ -53,6 +71,11 @@ export const EMPTY_SESSION: SessionState = {
   playEndedAt: null,
   stoppedEarly: false,
   take: null,
+  contour: null,
+  held: [],
+  noteLabels: [],
+  candidates: [],
+  takeOffsetS: 0,
   savedAt: 0,
 };
 
@@ -70,8 +93,45 @@ const toStored = (s: SessionState): SessionState => ({
   playEndedAt: s.playEndedAt,
   stoppedEarly: s.stoppedEarly,
   take: s.take,
+  contour: s.contour,
+  held: s.held,
+  noteLabels: s.noteLabels,
+  candidates: s.candidates,
+  takeOffsetS: s.takeOffsetS,
   savedAt: s.savedAt,
 });
+
+/** The falsetto fields of a stored copy, or their defaults (copies saved before batch 1 have none). */
+function falsettoFields(v: Record<string, unknown>): Pick<
+  SessionState,
+  'contour' | 'held' | 'noteLabels' | 'candidates' | 'takeOffsetS'
+> {
+  const c = v.contour;
+  const contour =
+    obj(c) && num(c.t0) && num(c.dt) && Array.isArray(c.midi) && c.midi.every(numOrNull)
+      ? ({
+          t0: c.t0,
+          dt: c.dt,
+          midi: c.midi,
+          // Frame counts and hop: only when well-formed (older copies have none; chestSummary then scales).
+          ...(Array.isArray(c.n) && c.n.length === c.midi.length && c.n.every(num) && num(c.hop)
+            ? { n: c.n, hop: c.hop }
+            : {}),
+        } as PitchContour)
+      : null;
+  const list = <T,>(x: unknown, ok: (e: Record<string, unknown>) => boolean): T[] =>
+    Array.isArray(x) && x.every((e) => obj(e) && ok(e)) ? (x as T[]) : [];
+  return {
+    contour,
+    held: list<HeldNote>(v.held, (h) => num(h.start) && num(h.end) && num(h.midi) && num(h.note)),
+    noteLabels: list<LabelledNote>(
+      v.noteLabels,
+      (l) => num(l.tStart) && num(l.tEnd) && num(l.midi) && typeof l.label === 'string' && typeof l.source === 'string',
+    ),
+    candidates: list<FalsettoCandidate>(v.candidates, (l) => num(l.tStart) && num(l.tEnd) && num(l.midi)),
+    takeOffsetS: num(v.takeOffsetS) ? (v.takeOffsetS as number) : 0,
+  };
+}
 
 const STEPS: readonly VsStep[] = [
   'intro',
@@ -119,7 +179,11 @@ export function loadVoiceSession(now = Date.now()): SessionState {
     if (raw === undefined) return EMPTY_SESSION;
     const v: unknown = JSON.parse(raw);
     if (isStored(v) && now - v.savedAt < SESSION_MAX_AGE_MS && v.savedAt <= now) {
-      const s = toStored({ ...v, quiz: { ...EMPTY_SESSION_QUIZ, ...v.quiz } });
+      const s = toStored({
+        ...v,
+        ...falsettoFields(v as unknown as Record<string, unknown>),
+        quiz: { ...EMPTY_SESSION_QUIZ, ...v.quiz },
+      });
       if (s.step === 'play' && s.song) {
         return {
           ...s,
@@ -129,6 +193,9 @@ export function loadVoiceSession(now = Date.now()): SessionState {
           playStartedAt: s.playStartedAt ?? s.savedAt,
           pitch: null,
           take: null,
+          contour: null,
+          held: [],
+          takeOffsetS: 0,
         };
       }
       return s;
