@@ -1,4 +1,4 @@
-# Voice session 5 (Phase 3d Part F, F2): Me → Your music profile → "Analyse my music". decide's test API resets the
+# Voice session 5 (Phase 3d Part F, F2): Me → profile card's Manage → Your music profile → "Analyse my music". decide's test API resets the
 # personal pool (`voice-reset`: this user's batches plus every personal fetch-queue doc and this month's budget, so an
 # earlier run can't turn this one into "nothing to add") and seeds listening history that makes the singer eligible
 # with songs the pool can pick (`voice-personal-seed`: fixture songs with a community version that the fixture
@@ -33,8 +33,12 @@ tags:
       DECIDE_STACK: ${DECIDE_STACK}
 - tapOn:
     id: "tab-me"
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-manage"
+    timeout: 15000
 - tapOn:
-    id: "me-music-profile"
+    id: "me-profile-manage"
 - scrollUntilVisible:
     element:
       id: "vs-personal-request"
