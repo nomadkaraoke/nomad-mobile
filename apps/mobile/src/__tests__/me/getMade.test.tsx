@@ -369,4 +369,47 @@ describe('Get this made screen', () => {
     await waitFor(() => expect(useGetMadeLocal.getState().dismissed['band 0|song 0']).toBeUndefined());
     expect(screen.getByText(/Song 0/)).toBeTruthy();
   });
+
+  it('a failed background refetch of jobs (data kept) leaves Make it on', async () => {
+    await openScreen();
+    await screen.findByText(/Song 0/);
+    await waitFor(() => expect(screen.getByTestId('getmade-make-0')).not.toBeDisabled());
+    g.listMyJobs.mockRejectedValue(new gen.ApiError(500, 'x'));
+    const calls = g.listMyJobs.mock.calls.length;
+    // renderRouter runs on fake timers: kick the refetch, then step through react-query's retries until it errors.
+    void meQueryClient()?.refetchQueries({ queryKey: ['jobs'] });
+    for (let n = 0; n < 6; n++) {
+      await act(async () => {
+        jest.advanceTimersByTime(10_000);
+        await Promise.resolve();
+      });
+    }
+    await waitFor(() => expect(meQueryClient()?.getQueryState(['jobs', 'me@example.com'])?.status).toBe('error'));
+    expect(g.listMyJobs.mock.calls.length).toBeGreaterThan(calls);
+    expect(screen.getByTestId('getmade-make-0')).not.toBeDisabled();
+  });
+
+  it('while Retry is fetching, the error line is hidden and the spinner shows', async () => {
+    let resolve!: (v: decide.GetMadeItem[]) => void;
+    api.getGetMade.mockRejectedValueOnce(new decide.ApiError(503, { code: 'warming_up' }));
+    api.getGetMade.mockImplementationOnce(() => new Promise((r) => (resolve = r)));
+    await openScreen();
+    await screen.findByTestId('getmade-error');
+    fireEvent.press(screen.getByTestId('getmade-retry'));
+    await waitFor(() => expect(screen.queryByTestId('getmade-error')).toBeNull());
+    expect(screen.getByTestId('getmade-loading')).toBeTruthy();
+    await act(async () => resolve([item(0)]));
+    expect(await screen.findByText(/Song 0/)).toBeTruthy();
+  });
+
+  it('the shelf hides its error while Retry is fetching', async () => {
+    let resolve!: (v: decide.GetMadeItem[]) => void;
+    api.getGetMade.mockRejectedValueOnce(new decide.ApiError(503, { code: 'warming_up' }));
+    api.getGetMade.mockImplementationOnce(() => new Promise((r) => (resolve = r)));
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    fireEvent.press(await screen.findByTestId('me-getmade-retry'));
+    await waitFor(() => expect(screen.queryByTestId('me-getmade-error')).toBeNull());
+    await act(async () => resolve([item(0)]));
+    expect(await screen.findByTestId('me-getmade-0')).toBeTruthy();
+  });
 });

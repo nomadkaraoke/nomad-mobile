@@ -146,7 +146,7 @@ export function useGetMade() {
    */
   const request = useCallback(
     async (row: Pick<GetMadeItem, 'key' | 'artist' | 'title'>) => {
-        const local = useGetMadeLocal.getState();
+      const local = useGetMadeLocal.getState();
       if (local.requests[row.key]?.kind === 'pending') return;
       // The outcome belongs to the account that tapped: a sign-out or switch mid-request drops it.
       const owner = currentUserKey();
@@ -170,13 +170,14 @@ export function useGetMade() {
   // Make it and Request it free go to gen, so only a lost connection turns them off (a decide outage doesn't).
   const offline = netOffline;
   // Until the user's jobs are known, Make it could start a second paid make of a song they already made.
-  const jobsKnown = email === null || jobs.isSuccess;
+  // Known once loaded at all: a failed background refetch keeps the last list, which is still good enough.
+  const jobsKnown = email === null || jobs.data !== undefined;
   return {
     items,
     loading: userKey !== null && q.data === undefined && q.isFetching,
     offline,
-    /** The list failed to load and there is nothing cached to show. */
-    error: q.isError && !q.data,
+    /** The list failed to load and there is nothing cached to show (hidden while a retry is fetching). */
+    error: q.isError && !q.data && !q.isFetching,
     refetch: () => void q.refetch(),
     makeDisabled: offline || !jobsKnown,
     dismiss,
