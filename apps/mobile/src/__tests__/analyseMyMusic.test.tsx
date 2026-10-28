@@ -74,6 +74,22 @@ const renderCard = (props: { onFindVoice?: () => void } = {}) => {
 const settled = async () => waitFor(() => expect(m(decide.getPersonalPool)).toHaveBeenCalled());
 /** Me comes back into focus. */
 const refocus = () => act(async () => mockFocus.cb?.());
+/**
+ * Waits for `check` after a refocus, letting React and TanStack flush inside act between tries. On CI's runner
+ * RNTL's waitFor never saw the refocus read's update land (the gate's 403, a newer read clearing a refusal), while
+ * a real sleep did; locally both worked.
+ */
+const until = async (check: () => void) => {
+  for (let i = 0; i < 100; i++) {
+    try {
+      check();
+      return;
+    } catch {
+      await act(() => new Promise((r) => setTimeout(r, 20)));
+    }
+  }
+  check();
+};
 const flags = (session_enabled: boolean) => ({ session_enabled, is_admin: false, voice_data: true, active_session_id: null });
 
 beforeEach(async () => {
@@ -219,7 +235,7 @@ describe('analyseMyMusic: hidden', () => {
     await screen.findByTestId('vs-personal-request');
     m(decide.getPersonalPool).mockRejectedValue(new decide.ApiError(403, 'voice_session_disabled'));
     await refocus();
-    await waitFor(() => expect(screen.queryByTestId('vs-personal')).toBeNull());
+    await until(() => expect(screen.queryByTestId('vs-personal')).toBeNull());
   });
 
   it('signed out: no read, no card', async () => {
@@ -291,8 +307,8 @@ describe('analyseMyMusic: the request', () => {
     await screen.findByTestId('vs-personal-paused');
     await new Promise((r) => setTimeout(r, 5)); // the next read is newer than the refusal
     await refocus();
-    await waitFor(() => expect(decide.getPersonalPool).toHaveBeenCalledTimes(3));
-    await waitFor(() => expect(screen.queryByTestId('vs-personal-paused')).toBeNull());
+    await until(() => expect(decide.getPersonalPool).toHaveBeenCalledTimes(3));
+    await until(() => expect(screen.queryByTestId('vs-personal-paused')).toBeNull());
     expect(screen.getByTestId('vs-personal-request')).toBeTruthy();
   });
 
