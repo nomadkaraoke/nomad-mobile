@@ -64,10 +64,6 @@ export function usePersonalPool() {
     enabled: !!email && open,
     queryFn: getPersonalPool,
     retry: false,
-    // Re-render on every read. The card reads dataUpdatedAt / error only on some renders (a refusal is cleared by a
-    // newer read, the gate by a later error), and with tracked props a refetch that returned the same pool didn't
-    // re-render on CI's runner, so a cleared refusal or a closed gate stayed on screen.
-    notifyOnChangeProps: 'all',
   });
   const refetch = query.refetch;
   // Me stays mounted under the session modal: read the pool again on coming back.
