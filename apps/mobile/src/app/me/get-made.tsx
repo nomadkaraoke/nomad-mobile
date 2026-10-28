@@ -11,7 +11,7 @@ export default function GetMadeScreen() {
   const { items, loading, offline, makeDisabled, error, refetch, dismiss, undismiss, request } = useGetMade();
   return (
     <Screen testID="me-getmade-screen" scroll>
-      <Text variant="title">{t('title')}</Text>
+      {/* The native header already shows the title (_layout: me.getMade.title). */}
       <Text variant="muted">{t('intro')}</Text>
       {offline ? (
         <Text testID="getmade-offline" variant="muted">

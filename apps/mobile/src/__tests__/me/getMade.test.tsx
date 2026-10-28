@@ -110,6 +110,12 @@ describe('Get this made shelf', () => {
 });
 
 describe('Get this made screen', () => {
+  it('leaves the title to the native header (the body starts with the intro, no second "Get this made")', async () => {
+    const body = await openScreen();
+    expect(await within(body).findByText(/no karaoke version yet/)).toBeTruthy();
+    expect(within(body).queryByText('Get this made')).toBeNull();
+  });
+
   it('hides a song the user already made (normalised artist|title), but not one whose job failed', async () => {
     g.listMyJobs.mockResolvedValue([
       job({ job_id: 'j1', status: 'complete', artist: 'BAND  0', title: 'Song 0!' }),
