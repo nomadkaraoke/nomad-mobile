@@ -1,0 +1,318 @@
+# Me screen tour (Phase 4a): every Me screen and sheet with a seeded user (a voice profile, a connected Last.fm
+# source, a karaoke log with survey answers, saved songs), in any app language (testIDs and deep links only; the
+# back button through common/header-back.yaml). Shots in ${TOUR_SHOTS}:
+#   scripts/e2e-local.sh --platform ios --locale ar --screen me-tour   # docs/screenshots/phase4/ios/ar/
+appId: com.nomadkaraoke.mobile
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: metour
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: fake-lastfm-user
+      DECIDE_STACK: ${DECIDE_STACK}
+      CONNECT_TOKEN: ${output.token}
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: decide-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      PROFILE: '{"quiz_completed":true,"genres":["pop","rock"],"decades":["2000s","2010s"],"energy":"high","artists":[{"name":"Adele","affinity":"love"},{"name":"Muse","affinity":"love"},{"name":"Elton John","affinity":"like"},{"name":"Amber Lanes","affinity":"like"},{"name":"Bright Harbor","affinity":"like"},{"name":"Cobalt Fields","affinity":"like"},{"name":"Dune Velvet","affinity":"like"},{"name":"Echo Parlour","affinity":"like"},{"name":"Fable Street","affinity":"like"},{"name":"Gilded Moth","affinity":"like"},{"name":"Harlow Gray","affinity":"like"},{"name":"Indigo Tides","affinity":"like"},{"name":"Juniper Row","affinity":"like"},{"name":"Zephyr Parade","affinity":"like"}],"loved":["muse|uprising"]}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      PROFILE: '{"low_midi":45,"high_midi":67,"comfort_low":50,"comfort_high":62,"voice_type":"baritone","confidence":"high","method":"mic"}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: log-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      ENTRIES: '[{"id":"app_tour-hello","state":"sung","artist":"Adele","title":"Hello","song_key":"adele|hello","sung_at":"2026-10-03T21:00:00Z","night":{"kind":"other","venue_name":"The Rusty Mic","date":"2026-10-03","date_precision":"day"},"origin":"live","survey":{"feel":"great","key":"right","crowd_pleaser":true,"vibes":["ballad","emotional"],"notes":"Start softer next time"}},{"id":"app_tour-star1","state":"sung","artist":"Muse","title":"Starlight","song_key":"muse|starlight","sung_at":"2026-10-03T21:30:00Z","night":{"kind":"other","venue_name":"The Rusty Mic","date":"2026-10-03","date_precision":"day"},"origin":"live","survey":{"feel":"great","vibes":["rock_out","singalong"]}},{"id":"app_tour-star2","state":"sung","artist":"Muse","title":"Starlight","song_key":"muse|starlight","sung_at":"2026-10-10T21:30:00Z","night":{"kind":"other","venue_name":"Blue Note Bar","date":"2026-10-10","date_precision":"day"},"origin":"live"},{"id":"app_tour-rocket","state":"sung","artist":"Elton John","title":"Rocket Man (I Think It''s Going to Be a Long, Long Time)","song_key":"elton john|rocket man i think its going to be a long long time","sung_at":"2026-10-10T22:00:00Z","night":{"kind":"other","venue_name":"Blue Note Bar","date":"2026-10-10","date_precision":"day"},"origin":"live","survey":{"feel":"ok","key":"too_high","vibes":["party"],"reasons":["too_long","out_of_range"]}},{"id":"app_tour-zzq","state":"sung","artist":"The Nobodies","title":"A Very Long Invented Song Title That Keeps Going On","origin":"backfill","times":3,"night":{"date_precision":"unknown"}}]'
+- runFlow:
+    file: ../common/tour-launch.yaml
+    env:
+      EMAIL: ${output.email}
+# Discover first, to compare spacing with Me.
+- extendedWaitUntil:
+    visible:
+      id: "rec-row-.*-0"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/me-00-discover
+# Me home: the card (voice strip, brand marks), go-tos, setlists, All your songs, stats.
+- tapOn:
+    id: "tab-me"
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-sources"
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+      id: "me-goto-1"
+    timeout: 20000
+- waitForAnimationToEnd
+- takeScreenshot: ${TOUR_SHOTS}/me-01-home
+- scrollUntilVisible:
+    element:
+      id: "me-all-songs"
+    direction: DOWN
+    centerElement: true
+- takeScreenshot: ${TOUR_SHOTS}/me-02-home-shelves
+- scrollUntilVisible:
+    element:
+      id: "me-stats-all"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "me-stats-all"
+- scrollUntilVisible:
+    element:
+      id: "me-stats-great"
+    direction: DOWN
+- takeScreenshot: ${TOUR_SHOTS}/me-03-home-stats
+# New setlist: the name sheet, then the empty setlist, the search sheet and the filled setlist.
+- scrollUntilVisible:
+    element:
+      id: "me-setlist-new"
+    direction: UP
+    centerElement: true
+- tapOn:
+    id: "me-setlist-new"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-name-input"
+    timeout: 10000
+- inputText: "Friday night"
+- takeScreenshot: ${TOUR_SHOTS}/me-04-setlist-name
+- tapOn:
+    id: "setlist-name-save"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-empty"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/me-05-setlist-empty
+- tapOn:
+    id: "setlist-add"
+- tapOn:
+    id: "setlist-search-input"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-search-row-0"
+    timeout: 30000
+- tapOn:
+    id: "setlist-search-row-0"
+- takeScreenshot: ${TOUR_SHOTS}/me-06-setlist-search
+- tapOn:
+    id: "setlist-search-sheet-close"
+- tapOn:
+    id: "setlist-add"
+- tapOn:
+    id: "setlist-search-input"
+- inputText: "starlite muse"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-search-row-0"
+    timeout: 30000
+- tapOn:
+    id: "setlist-search-row-0"
+- tapOn:
+    id: "setlist-search-sheet-close"
+- tapOn:
+    id: "setlist-add"
+- tapOn:
+    id: "setlist-search-input"
+- inputText: "machu picchu strokes"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-search-typed"
+    timeout: 30000
+- runFlow:
+    when:
+      visible:
+        id: "setlist-search-row-0"
+    commands:
+      - tapOn:
+          id: "setlist-search-row-0"
+- tapOn:
+    id: "setlist-search-sheet-close"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-item-1"
+    timeout: 10000
+- waitForAnimationToEnd
+- takeScreenshot: ${TOUR_SHOTS}/me-07-setlist
+- tapOn:
+    id: "setlist-edit-order"
+- takeScreenshot: ${TOUR_SHOTS}/me-08-setlist-order
+- tapOn:
+    id: "setlist-order-cancel"
+- tapOn:
+    id: "setlist-item-sung-0"
+- extendedWaitUntil:
+    visible:
+      id: "mark-when-date"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/me-09-mark-tonight
+- tapOn:
+    id: "mark-when-date"
+- takeScreenshot: ${TOUR_SHOTS}/me-10-mark-date
+- tapOn:
+    id: "mark-when-ago"
+- tapOn:
+    id: "mark-times-plus"
+- takeScreenshot: ${TOUR_SHOTS}/me-11-mark-ago
+- tapOn:
+    id: "mark-save"
+- extendedWaitUntil:
+    visible:
+      id: "survey-feel-ok"
+    timeout: 10000
+- tapOn:
+    id: "survey-feel-ok"
+- tapOn:
+    id: "survey-vibe-party"
+- takeScreenshot: ${TOUR_SHOTS}/me-12-survey
+- scrollUntilVisible:
+    element:
+      id: "survey-reason-too_long"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "survey-reason-too_long"
+- takeScreenshot: ${TOUR_SHOTS}/me-13-survey-reasons
+- tapOn:
+    id: "survey-skip"
+- runFlow:
+    file: ../common/header-back.yaml
+    env:
+      LOCALE: ${LOCALE}
+# The setlists list.
+- openLink: "nomadkaraoke://me/setlists"
+- extendedWaitUntil:
+    visible:
+      id: "setlists"
+    timeout: 10000
+- waitForAnimationToEnd
+- takeScreenshot: ${TOUR_SHOTS}/me-14-setlists
+# All your songs, then filters.
+- openLink: "nomadkaraoke://me/songs"
+- extendedWaitUntil:
+    visible:
+      id: "me-song-3"
+    timeout: 20000
+- waitForAnimationToEnd
+- takeScreenshot: ${TOUR_SHOTS}/me-15-songs
+- tapOn:
+    id: "me-songs-feel-great"
+- takeScreenshot: ${TOUR_SHOTS}/me-16-songs-great
+- tapOn:
+    id: "me-songs-feel-great"
+- scrollUntilVisible:
+    element:
+      id: "me-song-4"
+    direction: DOWN
+    centerElement: true
+- takeScreenshot: ${TOUR_SHOTS}/me-17-songs-end
+# A song page: library actions and the karaoke history; the Add to setlist sheet.
+- tapOn: ".*Rocket Man.*"
+- extendedWaitUntil:
+    visible:
+      id: "song-screen"
+    timeout: 20000
+- scrollUntilVisible:
+    element:
+      id: "song-history"
+    direction: DOWN
+    centerElement: true
+- takeScreenshot: ${TOUR_SHOTS}/me-18-song-history
+- scrollUntilVisible:
+    element:
+      id: "song-add-setlist"
+    direction: DOWN
+    centerElement: true
+- takeScreenshot: ${TOUR_SHOTS}/me-19-song-actions
+- tapOn:
+    id: "song-add-setlist"
+- extendedWaitUntil:
+    visible:
+      id: "add-setlist-done"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/me-20-add-to-setlist
+- tapOn:
+    id: "add-to-setlist-close"
+# An uncatalogued song's history page.
+- openLink: "nomadkaraoke://me/songs"
+- extendedWaitUntil:
+    visible:
+      id: "me-songs-sort-az"
+    timeout: 20000
+- tapOn:
+    id: "me-songs-sort-az"
+# A to Z ignores a leading "A", so this one sorts under V, near the end.
+- scrollUntilVisible:
+    element:
+      text: ".*A Very Long Invented Song.*"
+    direction: DOWN
+    centerElement: true
+- tapOn: ".*A Very Long Invented Song.*"
+- extendedWaitUntil:
+    visible:
+      id: "history-screen"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/me-21-history
+# Songs I've sung (the bulk picker).
+- openLink: "nomadkaraoke://me/sung-before"
+- extendedWaitUntil:
+    visible:
+      id: "sung-before-row-0"
+    timeout: 20000
+- tapOn:
+    id: "sung-before-search"
+- inputText: "baby"
+- extendedWaitUntil:
+    visible:
+      id: "sung-before-row-2"
+    timeout: 30000
+- tapOn:
+    id: "sung-before-row-1"
+- takeScreenshot: ${TOUR_SHOTS}/me-22-sung-before
+# Music profile: voice first, connected sources, artists; then the A-Z screen and Connect.
+- openLink: "nomadkaraoke://me/music-profile"
+- extendedWaitUntil:
+    visible:
+      id: "voice-section"
+    timeout: 20000
+- waitForAnimationToEnd
+- takeScreenshot: ${TOUR_SHOTS}/me-23-profile
+- scrollUntilVisible:
+    element:
+      id: "connected-row-lastfm"
+    direction: DOWN
+    centerElement: true
+- takeScreenshot: ${TOUR_SHOTS}/me-24-profile-connected
+- scrollUntilVisible:
+    element:
+      id: "profile-artists-all"
+    direction: DOWN
+    centerElement: true
+- takeScreenshot: ${TOUR_SHOTS}/me-25-profile-artists
+- openLink: "nomadkaraoke://me/artists"
+- extendedWaitUntil:
+    visible:
+      id: "artists-list"
+    timeout: 20000
+- waitForAnimationToEnd
+- takeScreenshot: ${TOUR_SHOTS}/me-26-artists
+- openLink: "nomadkaraoke://discover/connect"
+- extendedWaitUntil:
+    visible:
+      id: "connect-card-apple"
+    timeout: 20000
+- waitForAnimationToEnd
+- takeScreenshot: ${TOUR_SHOTS}/me-27-connect

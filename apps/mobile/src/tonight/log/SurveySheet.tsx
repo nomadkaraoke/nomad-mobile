@@ -1,10 +1,10 @@
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, Text, TextField } from '@nomad/ui';
 import { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 
 import { TonightSheet } from '../TonightSheet';
-import { useLogStore, type LogSurvey } from './logStore';
+import { artistLabel, useLogStore, type LogSurvey } from './logStore';
 
 /** decide caps survey notes at 2000 characters. */
 export const SURVEY_NOTES_MAX = 2000;
@@ -24,7 +24,18 @@ type Feel = NonNullable<LogSurvey['feel']>;
 type Key = NonNullable<LogSurvey['key']>;
 const FEELS: Feel[] = ['great', 'ok', 'bad'];
 const KEYS: Key[] = ['too_low', 'right', 'too_high'];
+type Vibe = NonNullable<LogSurvey['vibes']>[number];
+type Reason = NonNullable<LogSurvey['reasons']>[number];
+const VIBES: Vibe[] = ['party', 'ballad', 'warm_up', 'duet', 'emotional', 'rock_out', 'singalong'];
+const REASONS: Reason[] = ['out_of_range', 'too_hard', 'crowd_quiet', 'awkward_music', 'too_long', 'didnt_know_it'];
+const toggle = <T,>(list: T[], v: T): T[] => (list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
 const CROWD = ['yes', 'no'] as const;
+/**
+ * The questions scroll inside the sheet and Save / Not now stay pinned under them: with the vibe and why chips the
+ * form is taller than the sheet's 85% cap, which clipped both buttons off the bottom of an iPhone 17 Pro.
+ */
+const BODY_STYLE = { flexShrink: 1 } as const;
+const SCROLL_STYLE = { flexGrow: 0, flexShrink: 1 } as const;
 
 function Chip({ testID, label, selected, onPress }: { testID: string; label: string; selected: boolean; onPress: () => void }) {
   return (
@@ -84,68 +95,115 @@ function SurveyForm({
   onDone?: () => void;
 }) {
   const t = useTranslations('tonight.survey');
+  const tOther = useTranslations('tonight.other');
   const [feel, setFeel] = useState<Feel | null>(initial?.feel ?? null);
   const [key, setKey] = useState<Key | null>(initial?.key ?? null);
   const [crowd, setCrowd] = useState<boolean | null>(initial?.crowd_pleaser ?? null);
+  const [vibes, setVibes] = useState<Vibe[]>(initial?.vibes ?? []);
+  const [reasons, setReasons] = useState<Reason[]>(initial?.reasons ?? []);
   const [notes, setNotes] = useState(initial?.notes ?? '');
 
   const save = () => {
     const trimmed = notes.trim();
-    useLogStore.getState().saveSurvey(entryId, {
-      ...(feel ? { feel } : {}),
-      ...(key ? { key } : {}),
-      ...(crowd !== null ? { crowd_pleaser: crowd } : {}),
-      ...(trimmed ? { notes: trimmed } : {}),
-    });
+    // "What got in the way?" only applies to ok/bad: a reason picked before switching to great is dropped.
+    const whyAsked = feel === 'ok' || feel === 'bad';
+    const sendReasons = whyAsked && reasons.length > 0;
+    const sendVibes = vibes.length > 0;
+    // Edit mode: only a field that had values in `initial` and is now empty is cleared (reasons also when the feel is
+    // now great, where "what got in the way?" no longer applies).
+    const clear: ('vibes' | 'reasons' | 'notes')[] = [];
+    if (!trimmed && initial?.notes?.trim()) clear.push('notes');
+    if (!sendVibes && initial?.vibes?.length) clear.push('vibes');
+    if (!sendReasons && initial?.reasons?.length) clear.push('reasons');
+    useLogStore.getState().saveSurvey(
+      entryId,
+      {
+        ...(feel ? { feel } : {}),
+        ...(key ? { key } : {}),
+        ...(crowd !== null ? { crowd_pleaser: crowd } : {}),
+        ...(sendVibes ? { vibes } : {}),
+        ...(sendReasons ? { reasons } : {}),
+        ...(trimmed ? { notes: trimmed } : {}),
+      },
+      clear,
+    );
     onDone?.();
   };
 
   return (
-    <View className="gap-4 pb-2">
-      <Text variant="muted">{t('song', { title: isolate(title), artist: isolate(artist) })}</Text>
-      <View className="gap-2">
-        <Text className="font-semibold">{t('feelQuestion')}</Text>
-        <View className="flex-row flex-wrap gap-2">
-          {FEELS.map((v) => (
-            <Chip key={v} testID={`survey-feel-${v}`} label={t(`feel.${v}`)} selected={feel === v} onPress={() => setFeel(feel === v ? null : v)} />
-          ))}
+    <View style={BODY_STYLE}>
+      <ScrollView testID="survey-scroll" style={SCROLL_STYLE} contentContainerClassName="gap-4 pb-2" keyboardShouldPersistTaps="handled">
+        <Text variant="muted">{t('song', { title: isolate(title), artist: isolate(artistLabel(artist, tOther('unknownArtist'))) })}</Text>
+        <View className="gap-2">
+          <Text className="font-semibold">{t('feelQuestion')}</Text>
+          <View className="flex-row flex-wrap gap-2">
+            {FEELS.map((v) => (
+              <Chip key={v} testID={`survey-feel-${v}`} label={t(`feel.${v}`)} selected={feel === v} onPress={() => setFeel(feel === v ? null : v)} />
+            ))}
+          </View>
         </View>
-      </View>
-      <View className="gap-2">
-        <Text className="font-semibold">{t('keyQuestion')}</Text>
-        <View className="flex-row flex-wrap gap-2">
-          {KEYS.map((v) => (
-            <Chip key={v} testID={`survey-key-${v}`} label={t(`key.${v}`)} selected={key === v} onPress={() => setKey(key === v ? null : v)} />
-          ))}
+        <View className="gap-2">
+          <Text className="font-semibold">{t('keyQuestion')}</Text>
+          <View className="flex-row flex-wrap gap-2">
+            {KEYS.map((v) => (
+              <Chip key={v} testID={`survey-key-${v}`} label={t(`key.${v}`)} selected={key === v} onPress={() => setKey(key === v ? null : v)} />
+            ))}
+          </View>
         </View>
-      </View>
-      <View className="gap-2">
-        <Text className="font-semibold">{t('crowdQuestion')}</Text>
-        <View className="flex-row flex-wrap gap-2">
-          {CROWD.map((v) => {
-            const value = v === 'yes';
-            return (
-              <Chip
-                key={v}
-                testID={`survey-crowd-${v}`}
-                label={t(`crowd.${v}`)}
-                selected={crowd === value}
-                onPress={() => setCrowd(crowd === value ? null : value)}
-              />
-            );
-          })}
+        <View className="gap-2">
+          <Text className="font-semibold">{t('crowdQuestion')}</Text>
+          <View className="flex-row flex-wrap gap-2">
+            {CROWD.map((v) => {
+              const value = v === 'yes';
+              return (
+                <Chip
+                  key={v}
+                  testID={`survey-crowd-${v}`}
+                  label={t(`crowd.${v}`)}
+                  selected={crowd === value}
+                  onPress={() => setCrowd(crowd === value ? null : value)}
+                />
+              );
+            })}
+          </View>
         </View>
+        <View className="gap-2">
+          <Text className="font-semibold">{t('vibesLabel')}</Text>
+          <View className="flex-row flex-wrap gap-2">
+            {VIBES.map((v) => (
+              <Chip key={v} testID={`survey-vibe-${v}`} label={t(`vibe.${v}`)} selected={vibes.includes(v)} onPress={() => setVibes(toggle(vibes, v))} />
+            ))}
+          </View>
+        </View>
+        {feel === 'ok' || feel === 'bad' ? (
+          <View className="gap-2">
+            <Text className="font-semibold">{t('reasonsLabel')}</Text>
+            <View className="flex-row flex-wrap gap-2">
+              {REASONS.map((v) => (
+                <Chip
+                  key={v}
+                  testID={`survey-reason-${v}`}
+                  label={t(`reason.${v}`)}
+                  selected={reasons.includes(v)}
+                  onPress={() => setReasons(toggle(reasons, v))}
+                />
+              ))}
+            </View>
+          </View>
+        ) : null}
+        <TextField
+          testID="survey-notes"
+          label={t('notesLabel')}
+          placeholder={t('notesPlaceholder')}
+          value={notes}
+          onChangeText={(s) => setNotes(s.slice(0, SURVEY_NOTES_MAX))}
+          autoCapitalize="sentences"
+        />
+      </ScrollView>
+      <View testID="survey-actions" className="gap-2 pt-3">
+        <Button testID="survey-save" label={t('save')} onPress={save} />
+        <Button testID="survey-skip" variant="secondary" label={t('skip')} onPress={onSkip} />
       </View>
-      <TextField
-        testID="survey-notes"
-        label={t('notesLabel')}
-        placeholder={t('notesPlaceholder')}
-        value={notes}
-        onChangeText={(s) => setNotes(s.slice(0, SURVEY_NOTES_MAX))}
-        autoCapitalize="sentences"
-      />
-      <Button testID="survey-save" label={t('save')} onPress={save} />
-      <Button testID="survey-skip" variant="secondary" label={t('skip')} onPress={onSkip} />
     </View>
   );
 }

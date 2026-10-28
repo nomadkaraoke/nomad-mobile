@@ -1,5 +1,5 @@
 import { getSongDetail, type SongDetail } from '@nomad/api-decide';
-import { offlineSongGroup } from '@nomad/core';
+import { libraryKey, offlineSongGroup } from '@nomad/core';
 import { useTranslations } from '@nomad/i18n';
 import { ArtTile, Button, Screen, Text, TextField } from '@nomad/ui';
 import { useQueries, useQuery } from '@tanstack/react-query';
@@ -18,6 +18,8 @@ import { useOffline } from '../../net/useOffline';
 import { openOfflineReader } from '../../offline/offlineIndex';
 import { openYouTubeUrl } from '../../media/youtube';
 import { useOfflineIndexStore } from '../../offline/offlineIndexStore';
+import { SongHistory } from '../../me/SongHistory';
+import { SongLibraryActions } from '../../me/SongLibraryActions';
 import { SongTonightAction } from '../../tonight/other/SongTonightAction';
 import { SongFitCard } from '../../voice/SongFitCard';
 
@@ -196,6 +198,7 @@ function KnownSong({ songKey, also = [] }: { songKey: string; also?: string[] })
           <SongFitCard songKey={songKey} />
         </View>
         {hasVersions ? <VersionList key={song.song_key} versions={versions} total={versions.length} openUrl={openUrl} /> : null}
+        {signedIn ? <SongHistory libraryKey={libraryKey(song.artist, song.title, song.song_key)} /> : null}
       </>
     );
   } else if (local.isLoading || (!offline && cloud.isLoading)) {
@@ -219,6 +222,7 @@ function KnownSong({ songKey, also = [] }: { songKey: string; also?: string[] })
     <Screen testID="song-screen" scroll>
       {body}
       {detail ? <SongTonightAction song={detail.song} /> : null}
+      {detail && signedIn ? <SongLibraryActions song={detail.song} /> : null}
       {offline ? (
         detail ? (
           <Text testID="song-make-offline" variant="muted">

@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Apple Music 다시 연결",
     "musicServices": "연동된 음악 서비스",
     "appleMusicDenied": "Nomad Karaoke에 Apple Music 접근 권한이 없습니다. 설정 › Nomad Karaoke › 미디어 및 Apple Music에서 켠 다음 다시 시도해 주세요.",
-    "appleMusicNoSubscription": "Apple Music에서 보관함을 공유하지 않았습니다. 연결하려면 Apple Music 구독이 필요합니다."
+    "appleMusicNoSubscription": "Apple Music에서 보관함을 공유하지 않았습니다. 연결하려면 Apple Music 구독이 필요합니다.",
+    "artistsAll": "모든 아티스트",
+    "artistsNoMatch": "일치하는 아티스트가 없습니다.",
+    "artistsRemoveA11y": "{artist} 삭제",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, other {전체 보기 (#)}}",
+    "artistsSearch": "아티스트 찾기"
   },
   "common": {
     "error": "문제가 발생했습니다.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "직접 노래방 영상을 만들어 바로 부르고 공유해 보세요.",
     "offlineMissing": "현재 오프라인 상태이며, 이 노래는 이 휴대폰에 저장된 노래 목록에 없습니다.",
     "offlineNote": "오프라인 · 이 휴대폰에 저장된 노래 목록 기준",
-    "cloudErrorNote": "지금은 검색에 연결할 수 없습니다 · 이 휴대전화에 저장된 노래 목록을 표시합니다"
+    "cloudErrorNote": "지금은 검색에 연결할 수 없습니다 · 이 휴대전화에 저장된 노래 목록을 표시합니다",
+    "history": {
+      "beforeApp": "앱 사용 전",
+      "crowd": "분위기 메이커",
+      "feel": "분위기: {value}",
+      "key": "키: {value}",
+      "nomadNight": "Nomad 나이트",
+      "otherVenue": "다른 바",
+      "pageTitle": "노래 기록",
+      "removeBody": "더 이상 부른 횟수에 포함되지 않습니다.",
+      "removeTitle": "이 기록을 삭제하시겠어요?",
+      "times": "×{count}",
+      "title": "내 기록",
+      "edit": "편집",
+      "remove": "제거"
+    },
+    "save": "내 노래에 저장",
+    "saved": "저장됨",
+    "addToSetlist": "세트리스트에 추가",
+    "markSung": "부른 곡으로 표시"
   },
   "tabs": {
     "discover": "둘러보기",
@@ -706,7 +731,26 @@
       "skip": "나중에 하기",
       "song": "{artist}의 {title}",
       "title": "어떠셨나요?",
-      "save": "저장"
+      "save": "저장",
+      "reason": {
+        "awkward_music": "어색한 반주/음악",
+        "crowd_quiet": "조용한 관객 반응",
+        "didnt_know_it": "노래를 잘 몰랐음",
+        "out_of_range": "음역대가 안 맞음",
+        "too_hard": "너무 어려움",
+        "too_long": "곡이 너무 김"
+      },
+      "reasonsLabel": "어떤 점이 아쉬웠나요?",
+      "vibe": {
+        "ballad": "발라드",
+        "duet": "듀엣",
+        "emotional": "감성적",
+        "party": "파티",
+        "rock_out": "신나는 록",
+        "singalong": "떼창",
+        "warm_up": "워밍업"
+      },
+      "vibesLabel": "분위기는 어땠나요?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "매장 라이브러리",
     "loved": "좋아하는 곡",
-    "menuLoveIt": "좋아요",
+    "menuLoveIt": "내 노래에 저장",
     "menuNotForMe": "관심 없음",
     "menuOpen": "{title}의 옵션 더보기",
     "offlinePicks": "오프라인: 최근 추천 목록을 표시합니다",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "커뮤니티",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "다시 시도",
-    "signInForPicksAction": "로그인"
+    "signInForPicksAction": "로그인",
+    "menuSaved": "저장됨",
+    "menuAddToSetlist": "세트리스트에 추가",
+    "menuMarkSung": "부른 곡으로 표시"
   },
   "review": {
     "discard": "수정 내용 삭제",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {노래 #곡이 준비되었어요 — 내게 맞는 노래를 찾아보세요} other {노래 #곡이 준비되었어요 — 내게 맞는 노래를 찾아보세요}}",
       "request": "내 노래 준비하기",
       "title": "내 음악 분석하기"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "얼마 전",
+      "day": "날짜 (선택 사항)",
+      "less": "줄이기",
+      "onDate": "특정 날짜",
+      "times": "부른 횟수",
+      "title": "부른 곡으로 표시",
+      "close": "닫기",
+      "more": "늘리기",
+      "save": "저장",
+      "song": "{artist}의 {title}",
+      "tonight": "투나잇"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {완료} other {#곡 추가}}",
+      "hint": "이전에 불러본 곡을 선택해 보세요. 부른 곡 기록에 추가해 드릴게요.",
+      "title": "내가 부른 곡",
+      "searchLabel": "노래 찾기",
+      "searchPlaceholder": "노래 검색",
+      "songValue": "{artist}의 {title}"
+    },
+    "setlists": {
+      "add": "노래 추가",
+      "addNew": "만들고 추가하기",
+      "addNewPlaceholder": "새 세트리스트 이름",
+      "addToTitle": "세트리스트에 추가",
+      "addTyped": "\"{query}\"을(를) 새 노래로 추가",
+      "count": "{count, plural, =0 {노래 없음} one {노래 #곡} other {노래 #곡}}",
+      "deleteBody": "{name} 세트리스트가 삭제됩니다. 삭제 후에는 되돌릴 수 없습니다.",
+      "deleteTitle": "이 세트리스트를 삭제하시겠어요?",
+      "detailTitle": "세트리스트",
+      "editOrder": "순서 편집",
+      "empty": "아직 세트리스트가 없습니다. 세트리스트를 만들어 오늘 부를 노래들을 계획해 보세요.",
+      "full": "세트리스트가 가득 찼습니다(최대 500곡).",
+      "itemsEmpty": "아직 노래가 없습니다. 노래를 추가해 보세요.",
+      "nameLabel": "세트리스트 이름",
+      "namePlaceholder": "예: 금요일 애창곡",
+      "new": "새 세트리스트",
+      "newTitle": "새 세트리스트",
+      "notFound": "이 세트리스트는 더 이상 존재하지 않습니다.",
+      "number": "{number}",
+      "rename": "이름 변경",
+      "renameTitle": "세트리스트 이름 변경",
+      "saveOrder": "순서 저장",
+      "title": "세트리스트",
+      "addSongTitle": "곡 추가",
+      "added": "추가됨",
+      "cancel": "취소",
+      "cancelOrder": "취소",
+      "close": "닫기",
+      "delete": "삭제",
+      "done": "완료",
+      "down": "{song} 아래로 이동",
+      "make": "만들기",
+      "nameSave": "저장",
+      "remove": "제거",
+      "searchLabel": "노래 찾기",
+      "searchPlaceholder": "노래 검색",
+      "songValue": "{artist}의 {title}",
+      "sung": "부른 곡으로 표시",
+      "up": "{song} 위로 이동"
+    },
+    "allSongs": "내 모든 곡",
+    "home": {
+      "allSongsRow": "내 모든 곡 ({count})",
+      "allTime": "전체 기간",
+      "connectHint": "평소 즐겨 듣는 음악을 바탕으로 추천곡을 받아보세요",
+      "gotosEmpty": "즐겨 부르는 노래가 여기에 표시됩니다. 이전에 불러본 노래를 추가해 보세요.",
+      "gotosEmptyCta": "불러본 노래 추가하기",
+      "gotosTitle": "나의 애창곡",
+      "greatShare": "{percent}% 대만족",
+      "keysLabel": "건반으로 보는 내 음역대",
+      "manage": "관리",
+      "manageHint": "음역대를 설정하고, 음악 서비스를 연동하고, 내 정보를 수정해 보세요",
+      "mostSung": "가장 많이 부른 곡: {song} ({count}회)",
+      "nights": "{count, plural, other {#일}}",
+      "performances": "{count, plural, other {노래 부른 횟수 #회}}",
+      "saved": "{count, plural, other {저장된 곡 #곡}}",
+      "seeAll": "전체 보기",
+      "setlistsEmpty": "노래방 갈 준비: 부르고 싶은 곡들로 세트리스트를 만들어 보세요.",
+      "songs": "{count, plural, other {#곡}}",
+      "sourcesLabel": "연동된 음악",
+      "statsEmpty": "아직 부른 노래가 없습니다. 노래를 불렀다고 표시하고 통계를 시작해 보세요.",
+      "statsTitle": "나의 노래방 기록",
+      "sung": "{count, plural, other {부른 곡 #곡}}",
+      "thisYear": "올해",
+      "topArtist": "최애 아티스트: {artist}",
+      "venues": "{count, plural, other {방문 장소 #곳}}",
+      "voiceCta": "내 음역대 찾기",
+      "connectCta": "내 음악 연결하기",
+      "profileTitle": "내 음악 프로필",
+      "voiceHint": "내 음역대에 맞는 노래 찾기",
+      "voiceRange": "음역대 {range}"
+    },
+    "songs": {
+      "addPast": "불러본 노래 추가하기",
+      "count": "{count, plural, other {#곡}}",
+      "empty": "아직 노래가 없습니다. 노래를 불렀다고 표시하거나 저장하면 여기에 표시됩니다.",
+      "emptyFiltered": "해당 필터와 일치하는 노래가 없습니다.",
+      "feel": {
+        "unrated": "평가 안 됨",
+        "bad": "관심 없음",
+        "great": "아주 좋았음",
+        "ok": "정상"
+      },
+      "offline": "오프라인 상태입니다. 이 기기에 저장된 노래를 표시합니다.",
+      "often": {
+        "once": "1회",
+        "twice": "2회 이상",
+        "unsung": "아직 안 불러봄"
+      },
+      "oftenLabel": "부른 횟수",
+      "searchLabel": "내 노래 검색",
+      "sort": {
+        "most": "많이 부른 순",
+        "rated": "높은 평점 순",
+        "recent": "최신 순",
+        "az": "가나다/ABC순"
+      },
+      "timesSung": "{count}회",
+      "vibeLabel": "분위기",
+      "crowdPleaser": "분위기 메이커",
+      "feelLabel": "내 평가",
+      "loadError": "노래를 불러오지 못했습니다.",
+      "moodLabel": "분위기",
+      "saved": "저장됨",
+      "searchPlaceholder": "곡명 또는 아티스트",
+      "sortLabel": "정렬",
+      "timesSungLabel": "{count, plural, one {#회 부름} other {#회 부름}}"
     }
   }
 }

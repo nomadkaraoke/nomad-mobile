@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Ponovno poveži Apple Music",
     "musicServices": "Tvoji glazbeni servisi",
     "appleMusicDenied": "Nomad Karaoke nema pristup servisu Apple Music. Uključi ga u Postavke › Nomad Karaoke › Mediji i Apple Music, pa pokušaj ponovno.",
-    "appleMusicNoSubscription": "Apple Music nije podijelio tvoju zbirku. Za povezivanje je potrebna pretplata na Apple Music."
+    "appleMusicNoSubscription": "Apple Music nije podijelio tvoju zbirku. Za povezivanje je potrebna pretplata na Apple Music.",
+    "artistsAll": "Svi izvođači",
+    "artistsNoMatch": "Nema podudarnih izvođača.",
+    "artistsRemoveA11y": "Ukloni izvođača {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Prikaži sve (#)} few {Prikaži sve (#)} other {Prikaži sve (#)}}",
+    "artistsSearch": "Pronađi izvođača"
   },
   "common": {
     "error": "Nešto je pošlo po zlu.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Napravi vlastiti karaoke video za ovu pjesmu, spreman za pjevanje i dijeljenje.",
     "offlineMissing": "Nemaš internetsku vezu, a ove pjesme nema na popisu spremljenom na ovom telefonu.",
     "offlineNote": "Izvanmrežno · s popisa pjesama spremljenog na ovom telefonu",
-    "cloudErrorNote": "Pretraživanje trenutačno nije dostupno · prikazuje se popis pjesama spremljen na ovom telefonu"
+    "cloudErrorNote": "Pretraživanje trenutačno nije dostupno · prikazuje se popis pjesama spremljen na ovom telefonu",
+    "history": {
+      "beforeApp": "Prije aplikacije",
+      "crowd": "Favorit publike",
+      "feel": "Ugođaj: {value}",
+      "key": "Tonalitet: {value}",
+      "nomadNight": "Nomad večer",
+      "otherVenue": "Drugi bar",
+      "pageTitle": "Povijest pjesama",
+      "removeBody": "Više se neće računati kao otpjevano.",
+      "removeTitle": "Želiš li ukloniti ovaj zapis?",
+      "times": "×{count}",
+      "title": "Tvoja povijest",
+      "edit": "Uredi",
+      "remove": "Ukloni"
+    },
+    "save": "Spremi u Moje pjesme",
+    "saved": "Spremljeno",
+    "addToSetlist": "Dodaj na setlistu",
+    "markSung": "Označi kao otpjevano"
   },
   "tabs": {
     "discover": "Otkrij",
@@ -706,7 +731,26 @@
       "skip": "Ne sada",
       "song": "{title} – {artist}",
       "title": "Kako je prošlo?",
-      "save": "Spremi"
+      "save": "Spremi",
+      "reason": {
+        "awkward_music": "Čudna glazba",
+        "crowd_quiet": "Tiha publika",
+        "didnt_know_it": "Nisam je znao/la",
+        "out_of_range": "Izvan mog raspona",
+        "too_hard": "Preteško",
+        "too_long": "Predugo"
+      },
+      "reasonsLabel": "Što je pošlo po zlu?",
+      "vibe": {
+        "ballad": "Balada",
+        "duet": "Duet",
+        "emotional": "Emotivno",
+        "party": "Tulum",
+        "rock_out": "Rokačina",
+        "singalong": "Zajedničko pjevanje",
+        "warm_up": "Zagrijavanje"
+      },
+      "vibesLabel": "Kakva je bila atmosfera?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Katalog lokacije",
     "loved": "Omiljeno",
-    "menuLoveIt": "Obožavam",
+    "menuLoveIt": "Spremi u Moje pjesme",
     "menuNotForMe": "Nije za mene",
     "menuOpen": "Više opcija za {title}",
     "offlinePicks": "Izvan mreže: prikazuju se zadnje preporuke",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Pokušaj ponovno",
-    "signInForPicksAction": "Prijavi se"
+    "signInForPicksAction": "Prijavi se",
+    "menuSaved": "Spremljeno",
+    "menuAddToSetlist": "Dodaj na setlistu",
+    "menuMarkSung": "Označi kao otpjevano"
   },
   "review": {
     "discard": "Odbaci moje izmjene",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# tvoja pjesma je spremna — pronađi svoj glas} few {# tvoje pjesme su spremne — pronađi svoj glas} other {# tvojih pjesama je spremno — pronađi svoj glas}}",
       "request": "Pripremi moje pjesme",
       "title": "Analiziraj moju glazbu"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Prije nekog vremena",
+      "day": "Dan (neobavezno)",
+      "less": "Smanji",
+      "onDate": "Određenog datuma",
+      "times": "Koliko je puta otpjevano",
+      "title": "Označi kao otpjevano",
+      "close": "Zatvori",
+      "more": "Povećaj",
+      "save": "Spremi",
+      "song": "{title} – {artist}",
+      "tonight": "Večeras"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Gotovo} one {Dodaj # pjesmu} few {Dodaj # pjesme} other {Dodaj # pjesama}}",
+      "hint": "Označi pjesme koje si već pjevao/la. Dodat ćemo ih u tvoju povijest.",
+      "title": "Pjesme koje sam pjevao/la",
+      "searchLabel": "Pronađi pjesmu",
+      "searchPlaceholder": "Pretraži pjesme",
+      "songValue": "{title} – {artist}"
+    },
+    "setlists": {
+      "add": "Dodaj pjesme",
+      "addNew": "Izradi i dodaj",
+      "addNewPlaceholder": "Naziv nove setliste",
+      "addToTitle": "Dodaj na setlistu",
+      "addTyped": "Dodaj „{query}” kao novu pjesmu",
+      "count": "{count, plural, =0 {Nema pjesama} one {# pjesma} few {# pjesme} other {# pjesama}}",
+      "deleteBody": "{name} će se izbrisati. Ova se radnja ne može poništiti.",
+      "deleteTitle": "Izbrisati ovu setlistu?",
+      "detailTitle": "Setlista",
+      "editOrder": "Uredi redoslijed",
+      "empty": "Još nema setlisti. Izradi jednu kako bi isplanirao/la pjesme za večer.",
+      "full": "Ta je setlista puna (500 pjesama).",
+      "itemsEmpty": "Još nema pjesama. Dodaj neku.",
+      "nameLabel": "Naziv setliste",
+      "namePlaceholder": "npr. Favoriti za petak",
+      "new": "Nova setlista",
+      "newTitle": "Nova setlista",
+      "notFound": "Ova setlista više nije ovdje.",
+      "number": "{number}",
+      "rename": "Preimenuj",
+      "renameTitle": "Preimenuj setlistu",
+      "saveOrder": "Spremi redoslijed",
+      "title": "Setliste",
+      "addSongTitle": "Dodaj pjesmu",
+      "added": "Dodano",
+      "cancel": "Odustani",
+      "cancelOrder": "Odustani",
+      "close": "Zatvori",
+      "delete": "Izbriši",
+      "done": "Gotovo",
+      "down": "Pomakni pjesmu {song} dolje",
+      "make": "Izradi",
+      "nameSave": "Spremi",
+      "remove": "Ukloni",
+      "searchLabel": "Pronađi pjesmu",
+      "searchPlaceholder": "Pretraži pjesme",
+      "songValue": "{title} – {artist}",
+      "sung": "Označi kao otpjevano",
+      "up": "Pomakni pjesmu {song} gore"
+    },
+    "allSongs": "Sve tvoje pjesme",
+    "home": {
+      "allSongsRow": "Sve tvoje pjesme ({count})",
+      "allTime": "Sveukupno",
+      "connectHint": "Primi preporuke na temelju onoga što već slušaš",
+      "gotosEmpty": "Pjesme koje voliš pjevati pojavit će se ovdje. Započni dodavanjem pjesama koje već znaš pjevati.",
+      "gotosEmptyCta": "Dodaj pjesme koje sam pjevao/la",
+      "gotosTitle": "Tvoji favoriti",
+      "greatShare": "{percent}% je prošlo odlično",
+      "keysLabel": "Tvoj vokalni raspon na klavijaturi",
+      "manage": "Upravljaj",
+      "manageHint": "Postavi svoj vokalni raspon, poveži glazbu i uredi podatke o sebi",
+      "mostSung": "Najviše pjevano: {song} ({count}×)",
+      "nights": "{count, plural, one {# večer} few {# večeri} other {# večeri}}",
+      "performances": "{count, plural, one {# izvedba} few {# izvedbe} other {# izvedbi}}",
+      "saved": "{count, plural, one {# spremljena} few {# spremljene} other {# spremljenih}}",
+      "seeAll": "Vidi sve",
+      "setlistsEmpty": "Isplaniraj večer: složi set-listu pjesama koje želiš pjevati.",
+      "songs": "{count, plural, one {# pjesma} few {# pjesme} other {# pjesama}}",
+      "sourcesLabel": "Povezana glazba",
+      "statsEmpty": "Još nema otpjevanih pjesama. Označi pjesmu kao otpjevanu kako bi se pokrenula statistika.",
+      "statsTitle": "Tvoj karaoke",
+      "sung": "{count, plural, one {# otpjevana pjesma} few {# otpjevane pjesme} other {# otpjevanih pjesama}}",
+      "thisYear": "Ove godine",
+      "topArtist": "Najčešći izvođač: {artist}",
+      "venues": "{count, plural, one {# lokacija} few {# lokacije} other {# lokacija}}",
+      "voiceCta": "Saznaj svoj vokalni raspon",
+      "connectCta": "Poveži svoju glazbu",
+      "profileTitle": "Tvoj glazbeni profil",
+      "voiceHint": "Pronađi pjesme koje odgovaraju tvom glasu",
+      "voiceRange": "Raspon {range}"
+    },
+    "songs": {
+      "addPast": "Dodaj pjesme koje sam pjevao/la",
+      "count": "{count, plural, one {# pjesma} few {# pjesme} other {# pjesama}}",
+      "empty": "Još nema pjesama. Označi pjesmu kao otpjevanu ili je spremi i pojavit će se ovdje.",
+      "emptyFiltered": "Nijedna pjesma ne odgovara ovim filtrima.",
+      "feel": {
+        "unrated": "Neocijenjeno",
+        "bad": "Nije za mene",
+        "great": "Odlično",
+        "ok": "OK"
+      },
+      "offline": "Izvan mreže si. Prikazuju se pjesme spremljene na ovom telefonu.",
+      "often": {
+        "once": "Jednom",
+        "twice": "2 ili više puta",
+        "unsung": "Još neotpjevano"
+      },
+      "oftenLabel": "Koliko često",
+      "searchLabel": "Pretraži svoje pjesme",
+      "sort": {
+        "most": "Najviše pjevano",
+        "rated": "Najbolje ocijenjeno",
+        "recent": "Nedavno",
+        "az": "Od A do Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Ugođaj",
+      "crowdPleaser": "Favorit publike",
+      "feelLabel": "Tvoja ocjena",
+      "loadError": "Učitavanje tvojih pjesama nije uspjelo.",
+      "moodLabel": "Raspoloženje",
+      "saved": "Spremljeno",
+      "searchPlaceholder": "Pjesma ili izvođač",
+      "sortLabel": "Sortiraj",
+      "timesSungLabel": "{count, plural, one {Otpjevano # put} few {Otpjevano # puta} other {Otpjevano # puta}}"
     }
   }
 }

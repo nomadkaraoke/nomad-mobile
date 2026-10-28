@@ -1,4 +1,4 @@
-import { Text } from '@nomad/ui';
+import { BrandIcon, Text, type BrandId } from '@nomad/ui';
 import type { ReactNode } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
@@ -8,6 +8,7 @@ import { ActivityIndicator, Pressable, View } from 'react-native';
  */
 export function ConnectCard({
   testID,
+  brand,
   title,
   detail,
   connectedLabel,
@@ -17,6 +18,8 @@ export function ConnectCard({
   children,
 }: {
   testID: string;
+  /** The service's logo, shown before the title. */
+  brand?: BrandId;
   title: string;
   detail: string;
   /** Shown as a tag when set (the source is connected or has imported data). */
@@ -38,6 +41,7 @@ export function ConnectCard({
         onPress={onPress}
         className={`min-h-11 flex-row items-center gap-3 ${disabled ? 'opacity-50' : ''}`}
       >
+        {brand ? <BrandIcon brand={brand} size={28} /> : null}
         <View className="flex-1 gap-1">
           <Text className="font-semibold">{title}</Text>
           <Text variant="muted">{detail}</Text>

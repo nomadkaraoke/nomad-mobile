@@ -22,6 +22,7 @@ jest.mock('react-native-mmkv', () => {
         getBoolean: (k) => (typeof s.get(k) === 'boolean' ? s.get(k) : undefined),
         remove: (k) => s.delete(k),
         clearAll: () => s.clear(),
+        getAllKeys: () => [...s.keys()],
       };
     },
     __resetMMKV: () => stores.forEach((s) => s.clear()),

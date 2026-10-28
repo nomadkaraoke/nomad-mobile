@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Apple Music'e Tekrar Bağlan",
     "musicServices": "Müzik servislerin",
     "appleMusicDenied": "Nomad Karaoke'nin Apple Music'e erişimi yok. Ayarlar › Nomad Karaoke › Ortamlar ve Apple Music bölümünden bu izni aç, ardından tekrar dene.",
-    "appleMusicNoSubscription": "Apple Music arşivini paylaşmadı. Bağlanmak için Apple Music aboneliği gerekir."
+    "appleMusicNoSubscription": "Apple Music arşivini paylaşmadı. Bağlanmak için Apple Music aboneliği gerekir.",
+    "artistsAll": "Tüm sanatçılar",
+    "artistsNoMatch": "Eşleşen sanatçı bulunamadı.",
+    "artistsRemoveA11y": "{artist} adlı sanatçıyı kaldır",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Tümünü gör (#)} other {Tümünü gör (#)}}",
+    "artistsSearch": "Bir sanatçı bul"
   },
   "common": {
     "error": "Bir şeyler ters gitti.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Şarkı söylemeye ve paylaşmaya hazır, kendi karaoke videonu oluştur.",
     "offlineMissing": "Çevrimdışısın ve bu şarkı telefonuna kaydedilen şarkı listesinde bulunmuyor.",
     "offlineNote": "Çevrimdışı · Bu telefona kaydedilen şarkı listesinden",
-    "cloudErrorNote": "Şu anda aramaya ulaşılamıyor · bu telefona kaydedilen şarkı listesi gösteriliyor"
+    "cloudErrorNote": "Şu anda aramaya ulaşılamıyor · bu telefona kaydedilen şarkı listesi gösteriliyor",
+    "history": {
+      "beforeApp": "Uygulamadan önce",
+      "crowd": "Herkesin sevdiği",
+      "feel": "Hissiyat: {value}",
+      "key": "Ton: {value}",
+      "nomadNight": "Nomad gecesi",
+      "otherVenue": "Başka bir bar",
+      "pageTitle": "Şarkı geçmişi",
+      "removeBody": "Artık söylenmiş olarak sayılmayacak.",
+      "removeTitle": "Bu kayıt silinsin mi?",
+      "times": "×{count}",
+      "title": "Geçmişin",
+      "edit": "Düzenle",
+      "remove": "Kaldır"
+    },
+    "save": "Şarkılarıma kaydet",
+    "saved": "Kaydedildi",
+    "addToSetlist": "Çalma listesine ekle",
+    "markSung": "Söylendi olarak işaretle"
   },
   "tabs": {
     "discover": "Keşfet",
@@ -706,7 +731,26 @@
       "skip": "Şimdi değil",
       "song": "{artist} - {title}",
       "title": "Nasıl geçti?",
-      "save": "Kaydet"
+      "save": "Kaydet",
+      "reason": {
+        "awkward_music": "Garip müzik",
+        "crowd_quiet": "Sessiz kitle",
+        "didnt_know_it": "Şarkıyı bilmiyordum",
+        "out_of_range": "Ses aralığımın dışındaydı",
+        "too_hard": "Çok zordu",
+        "too_long": "Çok uzundu"
+      },
+      "reasonsLabel": "Ters giden neydi?",
+      "vibe": {
+        "ballad": "Balad",
+        "duet": "Düet",
+        "emotional": "Duygusal",
+        "party": "Parti",
+        "rock_out": "Coşkulu rock",
+        "singalong": "Hep bir ağızdan",
+        "warm_up": "Isınma"
+      },
+      "vibesLabel": "Ortamın havası nasıldı?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Mekân arşivi",
     "loved": "Sevilenler",
-    "menuLoveIt": "Çok sevdim",
+    "menuLoveIt": "Şarkılarıma kaydet",
     "menuNotForMe": "Bana göre değil",
     "menuOpen": "{title} için daha fazla seçenek",
     "offlinePicks": "Çevrimdışı: son seçimlerin gösteriliyor",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Topluluk",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Tekrar dene",
-    "signInForPicksAction": "Giriş yap"
+    "signInForPicksAction": "Giriş yap",
+    "menuSaved": "Kaydedildi",
+    "menuAddToSetlist": "Çalma listesine ekle",
+    "menuMarkSung": "Söylendi olarak işaretle"
   },
   "review": {
     "discard": "Düzenlemelerimi sil",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {Şarkılarından # tanesi hazır — kendi sesini keşfet} other {Şarkılarından # tanesi hazır — kendi sesini keşfet}}",
       "request": "Şarkılarımı hazırla",
       "title": "Müziğimi analiz et"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Bir süre önce",
+      "day": "Gün (isteğe bağlı)",
+      "less": "Azalt",
+      "onDate": "Belirli bir tarihte",
+      "times": "Kaç kez söylendi",
+      "title": "Söylendi olarak işaretle",
+      "close": "Kapat",
+      "more": "Artır",
+      "save": "Kaydet",
+      "song": "{artist} - {title}",
+      "tonight": "Bu Gece"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Tamam} one {# şarkı ekle} other {# şarkı ekle}}",
+      "hint": "Daha önce söylediğin şarkıları işaretle. Onları geçmişine ekleyeceğiz.",
+      "title": "Söylediğim şarkılar",
+      "searchLabel": "Bir şarkı bul",
+      "searchPlaceholder": "Şarkı ara",
+      "songValue": "{artist} - {title}"
+    },
+    "setlists": {
+      "add": "Şarkı ekle",
+      "addNew": "Oluştur ve ekle",
+      "addNewPlaceholder": "Yeni çalma listesi adı",
+      "addToTitle": "Çalma listesine ekle",
+      "addTyped": "\"{query}\" adlı şarkıyı yeni şarkı olarak ekle",
+      "count": "{count, plural, =0 {Şarkı yok} one {# şarkı} other {# şarkı}}",
+      "deleteBody": "{name} silinecek. Bu işlem geri alınamaz.",
+      "deleteTitle": "Bu çalma listesi silinsin mi?",
+      "detailTitle": "Çalma Listesi",
+      "editOrder": "Sıralamayı düzenle",
+      "empty": "Henüz çalma listesi yok. Bir gece için şarkılarını planlamak üzere hemen bir tane oluştur.",
+      "full": "Bu çalma listesi dolu (500 şarkı).",
+      "itemsEmpty": "Henüz şarkı yok. Biraz ekle.",
+      "nameLabel": "Çalma listesi adı",
+      "namePlaceholder": "örn. Cuma favorileri",
+      "new": "Yeni çalma listesi",
+      "newTitle": "Yeni çalma listesi",
+      "notFound": "Bu çalma listesi artık mevcut değil.",
+      "number": "{number}",
+      "rename": "Yeniden adlandır",
+      "renameTitle": "Çalma listesini yeniden adlandır",
+      "saveOrder": "Sıralamayı kaydet",
+      "title": "Çalma Listeleri",
+      "addSongTitle": "Şarkı ekle",
+      "added": "Eklendi",
+      "cancel": "İptal",
+      "cancelOrder": "İptal",
+      "close": "Kapat",
+      "delete": "Sil",
+      "done": "Bitti",
+      "down": "{song} şarkısını aşağı taşı",
+      "make": "Oluştur",
+      "nameSave": "Kaydet",
+      "remove": "Kaldır",
+      "searchLabel": "Bir şarkı bul",
+      "searchPlaceholder": "Şarkı ara",
+      "songValue": "{artist} - {title}",
+      "sung": "Söylendi olarak işaretle",
+      "up": "{song} şarkısını yukarı taşı"
+    },
+    "allSongs": "Tüm şarkıların",
+    "home": {
+      "allSongsRow": "Tüm şarkıların ({count})",
+      "allTime": "Tüm zamanlar",
+      "connectHint": "Zaten dinlediğin parçalardan öneriler al",
+      "gotosEmpty": "Söylemeyi sevdiğin şarkılar burada görünecek. Daha önce söylediğin şarkıları ekleyerek başla.",
+      "gotosEmptyCta": "Söylediğim şarkıları ekle",
+      "gotosTitle": "Gözdelerin",
+      "greatShare": "%{percent} harika geçti",
+      "keysLabel": "Klavyede ses aralığın",
+      "manage": "Yönet",
+      "manageHint": "Ses aralığını ayarla, müzik servislerini bağla ve senin hakkında bildiklerimizi düzenle",
+      "mostSung": "En çok söylenen: {song} ({count}×)",
+      "nights": "{count, plural, one {# gece} other {# gece}}",
+      "performances": "{count, plural, one {# performans} other {# performans}}",
+      "saved": "{count, plural, one {# kaydedilen} other {# kaydedilen}}",
+      "seeAll": "Tümünü gör",
+      "setlistsEmpty": "Bir gece planla: söylemek istediğin şarkılardan bir çalma listesi oluştur.",
+      "songs": "{count, plural, one {# şarkı} other {# şarkı}}",
+      "sourcesLabel": "Bağlı müzik hesapları",
+      "statsEmpty": "Henüz şarkı söylenmedi. İstatistiklerini başlatmak için bir şarkıyı söylendi olarak işaretle.",
+      "statsTitle": "Karaoke özetin",
+      "sung": "{count, plural, one {# şarkı söylendi} other {# şarkı söylendi}}",
+      "thisYear": "Bu yıl",
+      "topArtist": "En çok söylenen sanatçı: {artist}",
+      "venues": "{count, plural, one {# mekan} other {# mekan}}",
+      "voiceCta": "Ses aralığını bul",
+      "connectCta": "Müziğini bağla",
+      "profileTitle": "Müzik profilin",
+      "voiceHint": "Sesine uygun şarkıları bul",
+      "voiceRange": "Ses aralığı {range}"
+    },
+    "songs": {
+      "addPast": "Söylediğim şarkıları ekle",
+      "count": "{count, plural, one {# şarkı} other {# şarkı}}",
+      "empty": "Henüz şarkı yok. Bir şarkıyı söylendi olarak işaretle veya kaydet, burada görünecektir.",
+      "emptyFiltered": "Bu filtrelere uyan şarkı yok.",
+      "feel": {
+        "unrated": "Puanlanmamış",
+        "bad": "Bana göre değil",
+        "great": "Harika",
+        "ok": "Tamam"
+      },
+      "offline": "Çevrimdışısın. Bu telefona kaydedilen şarkılar gösteriliyor.",
+      "often": {
+        "once": "1 kez",
+        "twice": "2 veya daha fazla",
+        "unsung": "Henüz söylenmedi"
+      },
+      "oftenLabel": "Sıklık",
+      "searchLabel": "Şarkılarında ara",
+      "sort": {
+        "most": "En çok söylenen",
+        "rated": "En yüksek puanlı",
+        "recent": "En son",
+        "az": "A'dan Z'ye"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Mod",
+      "crowdPleaser": "Herkesin sevdiği",
+      "feelLabel": "Puanın",
+      "loadError": "Şarkıların yüklenemedi.",
+      "moodLabel": "Ruh Hali",
+      "saved": "Kaydedildi",
+      "searchPlaceholder": "Şarkı veya sanatçı",
+      "sortLabel": "Sırala",
+      "timesSungLabel": "{count, plural, one {# kez söylendi} other {# kez söylendi}}"
     }
   }
 }

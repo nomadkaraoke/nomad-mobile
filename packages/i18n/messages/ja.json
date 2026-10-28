@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Apple Musicを再連携",
     "musicServices": "連携中の音楽サービス",
     "appleMusicDenied": "Nomad KaraokeはApple Musicへのアクセス権限がありません。「設定」›「Nomad Karaoke」›「メディアとApple Music」で許可をオンにしてから、もう一度お試しください。",
-    "appleMusicNoSubscription": "Apple Musicのライブラリが共有されませんでした。接続するにはApple Musicのサブスクリプションが必要です。"
+    "appleMusicNoSubscription": "Apple Musicのライブラリが共有されませんでした。接続するにはApple Musicのサブスクリプションが必要です。",
+    "artistsAll": "すべてのアーティスト",
+    "artistsNoMatch": "一致するアーティストが見つかりません。",
+    "artistsRemoveA11y": "{artist}を削除",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, other {すべて表示 (#)}}",
+    "artistsSearch": "アーティストを探す"
   },
   "common": {
     "error": "問題が発生しました。",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "自分だけのカラオケ動画を作成して、歌ったりシェアしたりしましょう。",
     "offlineMissing": "オフラインです。この曲はこの端末に保存された曲リストに含まれていません。",
     "offlineNote": "オフライン · この端末に保存された曲リストより",
-    "cloudErrorNote": "現在検索に接続できません · このスマートフォンに保存されている曲リストを表示しています"
+    "cloudErrorNote": "現在検索に接続できません · このスマートフォンに保存されている曲リストを表示しています",
+    "history": {
+      "beforeApp": "アプリ利用前",
+      "crowd": "盛り上がり曲",
+      "feel": "雰囲気: {value}",
+      "key": "キー: {value}",
+      "nomadNight": "Nomadナイト",
+      "otherVenue": "別のお店",
+      "pageTitle": "歌唱履歴",
+      "removeBody": "歌った記録としてカウントされなくなります。",
+      "removeTitle": "この記録を削除しますか？",
+      "times": "×{count}",
+      "title": "あなたの歌唱履歴",
+      "edit": "編集",
+      "remove": "削除"
+    },
+    "save": "マイソングに保存",
+    "saved": "保存済み",
+    "addToSetlist": "セットリストに追加",
+    "markSung": "歌った曲として記録"
   },
   "tabs": {
     "discover": "見つける",
@@ -706,7 +731,26 @@
       "skip": "今はしない",
       "song": "{artist} - {title}",
       "title": "いかがでしたか？",
-      "save": "保存"
+      "save": "保存",
+      "reason": {
+        "awkward_music": "曲のノリが合わなかった",
+        "crowd_quiet": "周りの反応が薄かった",
+        "didnt_know_it": "曲をよく知らなかった",
+        "out_of_range": "キー・音域が合わなかった",
+        "too_hard": "難しすぎた",
+        "too_long": "長すぎた"
+      },
+      "reasonsLabel": "うまくいかなかった理由は？",
+      "vibe": {
+        "ballad": "バラード",
+        "duet": "デュエット",
+        "emotional": "エモい・しっとり",
+        "party": "パーティー・盛り上がり",
+        "rock_out": "ロック全開",
+        "singalong": "みんなで熱唱",
+        "warm_up": "ウォーミングアップ"
+      },
+      "vibesLabel": "どんな雰囲気でしたか？"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "店舗ライブラリ",
     "loved": "お気に入り",
-    "menuLoveIt": "大好き",
+    "menuLoveIt": "マイソングに保存",
     "menuNotForMe": "好みに合わない",
     "menuOpen": "「{title}」のその他のオプション",
     "offlinePicks": "オフライン: 前回のおすすめを表示中",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "コミュニティ",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "もう一度試す",
-    "signInForPicksAction": "サインイン"
+    "signInForPicksAction": "サインイン",
+    "menuSaved": "保存済み",
+    "menuAddToSetlist": "セットリストに追加",
+    "menuMarkSung": "歌った曲として記録"
   },
   "review": {
     "discard": "編集内容を破棄",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {#曲の準備ができました — 声を出してみましょう} other {#曲の準備ができました — 声を出してみましょう}}",
       "request": "曲を準備する",
       "title": "音楽を分析する"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "少し前",
+      "day": "日付（任意）",
+      "less": "減らす",
+      "onDate": "日付を指定",
+      "times": "歌った回数",
+      "title": "歌った曲として記録",
+      "close": "閉じる",
+      "more": "増やす",
+      "save": "保存",
+      "song": "{artist} - {title}",
+      "tonight": "今夜"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {完了} other {#曲を追加}}",
+      "hint": "これまでに歌ったことがある曲にチェックを入れてください。履歴に追加されます。",
+      "title": "歌ったことがある曲",
+      "searchLabel": "曲を探す",
+      "searchPlaceholder": "曲を検索",
+      "songValue": "{artist} - {title}"
+    },
+    "setlists": {
+      "add": "曲を追加",
+      "addNew": "作成して追加",
+      "addNewPlaceholder": "新しいセットリスト名",
+      "addToTitle": "セットリストに追加",
+      "addTyped": "「{query}」を新しい曲として追加",
+      "count": "{count, plural, =0 {曲なし} other {#曲}}",
+      "deleteBody": "「{name}」が削除されます。この操作は取り消せません。",
+      "deleteTitle": "このセットリストを削除しますか？",
+      "detailTitle": "セットリスト",
+      "editOrder": "並び替え",
+      "empty": "セットリストはまだありません。作成して今夜歌う曲をリストアップしてみましょう。",
+      "full": "このセットリストは上限に達しています（500曲）。",
+      "itemsEmpty": "曲はまだありません。曲を追加してみましょう。",
+      "nameLabel": "セットリスト名",
+      "namePlaceholder": "例：金曜日のお気に入り",
+      "new": "新規セットリスト",
+      "newTitle": "新規セットリスト",
+      "notFound": "このセットリストは現在見つかりません。",
+      "number": "{number}",
+      "rename": "名前を変更",
+      "renameTitle": "セットリスト名を変更",
+      "saveOrder": "並び順を保存",
+      "title": "セットリスト",
+      "addSongTitle": "曲を追加",
+      "added": "追加済み",
+      "cancel": "キャンセル",
+      "cancelOrder": "キャンセル",
+      "close": "閉じる",
+      "delete": "削除",
+      "done": "完了",
+      "down": "{song}を下に移動",
+      "make": "作成する",
+      "nameSave": "保存",
+      "remove": "削除",
+      "searchLabel": "曲を探す",
+      "searchPlaceholder": "曲を検索",
+      "songValue": "{artist} - {title}",
+      "sung": "歌った曲として記録",
+      "up": "{song}を上に移動"
+    },
+    "allSongs": "すべての曲",
+    "home": {
+      "allSongsRow": "すべての曲（{count}）",
+      "allTime": "全期間",
+      "connectHint": "普段聴いている曲からおすすめを表示",
+      "gotosEmpty": "よく歌うお気に入りの曲がここに表示されます。まずは過去に歌った曲を追加してみましょう。",
+      "gotosEmptyCta": "歌った曲を追加",
+      "gotosTitle": "定番曲",
+      "greatShare": "{percent}%が大好評",
+      "keysLabel": "鍵盤で見るあなたの音域",
+      "manage": "管理",
+      "manageHint": "音域の設定、音楽サービスの連携、登録情報の編集ができます",
+      "mostSung": "一番歌った曲: {song}（{count}回）",
+      "nights": "{count, plural, one {#夜} other {#夜}}",
+      "performances": "{count, plural, one {#回の歌唱} other {#回の歌唱}}",
+      "saved": "{count, plural, one {#件保存済み} other {#件保存済み}}",
+      "seeAll": "すべて表示",
+      "setlistsEmpty": "カラオケの計画を立てましょう。歌いたい曲のセットリストを作成できます。",
+      "songs": "{count, plural, one {#曲} other {#曲}}",
+      "sourcesLabel": "連携中の音楽サービス",
+      "statsEmpty": "まだ記録がありません。曲を「歌った」にチェックして統計をスタートしましょう。",
+      "statsTitle": "カラオケ記録",
+      "sung": "{count, plural, one {#曲歌唱} other {#曲歌唱}}",
+      "thisYear": "今年",
+      "topArtist": "一番歌ったアーティスト: {artist}",
+      "venues": "{count, plural, one {#店舗} other {#店舗}}",
+      "voiceCta": "音域を測定する",
+      "connectCta": "音楽を連携する",
+      "profileTitle": "あなたの音楽プロフィール",
+      "voiceHint": "あなたの声に合う曲を見つける",
+      "voiceRange": "音域：{range}"
+    },
+    "songs": {
+      "addPast": "歌った曲を追加",
+      "count": "{count, plural, one {#曲} other {#曲}}",
+      "empty": "まだ曲がありません。曲を「歌った」にするか保存すると、ここに表示されます。",
+      "emptyFiltered": "条件に一致する曲は見つかりませんでした。",
+      "feel": {
+        "unrated": "未評価",
+        "bad": "好みに合わない",
+        "great": "とても良かった",
+        "ok": "OK"
+      },
+      "offline": "オフラインです。この端末に保存されている曲を表示しています。",
+      "often": {
+        "once": "1回",
+        "twice": "2回以上",
+        "unsung": "まだ歌っていない"
+      },
+      "oftenLabel": "歌った回数",
+      "searchLabel": "曲を検索",
+      "sort": {
+        "most": "歌った回数順",
+        "rated": "評価順",
+        "recent": "最近の曲順",
+        "az": "アルファベット順"
+      },
+      "timesSung": "{count}回",
+      "vibeLabel": "雰囲気",
+      "crowdPleaser": "盛り上がり曲",
+      "feelLabel": "あなたの評価",
+      "loadError": "曲を読み込めませんでした。",
+      "moodLabel": "ムード",
+      "saved": "保存済み",
+      "searchPlaceholder": "曲名またはアーティスト名",
+      "sortLabel": "並べ替え",
+      "timesSungLabel": "{count, plural, one {#回歌唱} other {#回歌唱}}"
     }
   }
 }

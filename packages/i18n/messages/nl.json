@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Koppel Apple Music opnieuw",
     "musicServices": "Je muziekdiensten",
     "appleMusicDenied": "Nomad Karaoke heeft geen toegang tot Apple Music. Schakel dit in via Instellingen › Nomad Karaoke › Media en Apple Music en probeer het opnieuw.",
-    "appleMusicNoSubscription": "Apple Music heeft je bibliotheek niet gedeeld. Om te verbinden heb je een Apple Music-abonnement nodig."
+    "appleMusicNoSubscription": "Apple Music heeft je bibliotheek niet gedeeld. Om te verbinden heb je een Apple Music-abonnement nodig.",
+    "artistsAll": "Alle artiesten",
+    "artistsNoMatch": "Geen overeenkomende artiesten.",
+    "artistsRemoveA11y": "{artist} verwijderen",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Alles bekijken (#)} other {Alles bekijken (#)}}",
+    "artistsSearch": "Zoek een artiest"
   },
   "common": {
     "error": "Er is iets misgegaan.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Maak er je eigen karaokevideo van, klaar om te zingen en te delen.",
     "offlineMissing": "Je bent offline en dit nummer staat niet in de nummerslijst die op deze telefoon is opgeslagen.",
     "offlineNote": "Offline · uit de nummerslijst die op deze telefoon is opgeslagen",
-    "cloudErrorNote": "Kan de zoekfunctie nu niet bereiken · nummerslijst op deze telefoon wordt getoond"
+    "cloudErrorNote": "Kan de zoekfunctie nu niet bereiken · nummerslijst op deze telefoon wordt getoond",
+    "history": {
+      "beforeApp": "Vóór de app",
+      "crowd": "Publieksfavoriet",
+      "feel": "Gevoel: {value}",
+      "key": "Toonsoort: {value}",
+      "nomadNight": "Nomad-avond",
+      "otherVenue": "Andere bar",
+      "pageTitle": "Nummergeschiedenis",
+      "removeBody": "Het telt niet meer mee als gezongen.",
+      "removeTitle": "Dit item verwijderen?",
+      "times": "×{count}",
+      "title": "Je geschiedenis",
+      "edit": "Bewerken",
+      "remove": "Verwijderen"
+    },
+    "save": "Opslaan in Mijn nummers",
+    "saved": "Opgeslagen",
+    "addToSetlist": "Toevoegen aan setlist",
+    "markSung": "Markeren als gezongen"
   },
   "tabs": {
     "discover": "Ontdekken",
@@ -706,7 +731,26 @@
       "skip": "Niet nu",
       "song": "{title} van {artist}",
       "title": "Hoe ging het?",
-      "save": "Opslaan"
+      "save": "Opslaan",
+      "reason": {
+        "awkward_music": "Ongemakkelijke muziek",
+        "crowd_quiet": "Stil publiek",
+        "didnt_know_it": "Kende het niet",
+        "out_of_range": "Buiten mijn bereik",
+        "too_hard": "Te moeilijk",
+        "too_long": "Te lang"
+      },
+      "reasonsLabel": "Wat zat er in de weg?",
+      "vibe": {
+        "ballad": "Ballad",
+        "duet": "Duet",
+        "emotional": "Emotioneel",
+        "party": "Feest",
+        "rock_out": "Lekker rocken",
+        "singalong": "Meezinger",
+        "warm_up": "Opwarmertje"
+      },
+      "vibesLabel": "Wat was de sfeer?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Locatiecatalogus",
     "loved": "Favoriet",
-    "menuLoveIt": "Geweldig",
+    "menuLoveIt": "Opslaan in Mijn nummers",
     "menuNotForMe": "Niks voor mij",
     "menuOpen": "Meer opties voor {title}",
     "offlinePicks": "Offline: toont je laatste selecties",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Probeer opnieuw",
-    "signInForPicksAction": "Inloggen"
+    "signInForPicksAction": "Inloggen",
+    "menuSaved": "Opgeslagen",
+    "menuAddToSetlist": "Toevoegen aan setlist",
+    "menuMarkSung": "Markeren als gezongen"
   },
   "review": {
     "discard": "Mijn bewerkingen wissen",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# van je nummers is klaar — ontdek je stem} other {# van je nummers zijn klaar — ontdek je stem}}",
       "request": "Mijn nummers voorbereiden",
       "title": "Mijn muziek analyseren"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Een tijdje geleden",
+      "day": "Dag (optioneel)",
+      "less": "Verlagen",
+      "onDate": "Op een datum",
+      "times": "Hoe vaak gezongen",
+      "title": "Markeren als gezongen",
+      "close": "Sluiten",
+      "more": "Verhogen",
+      "save": "Opslaan",
+      "song": "{title} van {artist}",
+      "tonight": "Vanavond"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Klaar} one {# nummer toevoegen} other {# nummers toevoegen}}",
+      "hint": "Vink de nummers aan die je al eens hebt gezongen. We voegen ze toe aan je geschiedenis.",
+      "title": "Nummers die ik heb gezongen",
+      "searchLabel": "Zoek een nummer",
+      "searchPlaceholder": "Nummers zoeken",
+      "songValue": "{title} van {artist}"
+    },
+    "setlists": {
+      "add": "Nummers toevoegen",
+      "addNew": "Aanmaken en toevoegen",
+      "addNewPlaceholder": "Naam van nieuwe setlist",
+      "addToTitle": "Toevoegen aan setlist",
+      "addTyped": "Voeg \"{query}\" toe als nieuw nummer",
+      "count": "{count, plural, =0 {Geen nummers} one {# nummer} other {# nummers}}",
+      "deleteBody": "{name} wordt verwijderd. Dit kan niet ongedaan worden gemaakt.",
+      "deleteTitle": "Deze setlist verwijderen?",
+      "detailTitle": "Setlist",
+      "editOrder": "Volgorde bewerken",
+      "empty": "Nog geen setlists. Maak er een aan om je nummers voor een avondje te plannen.",
+      "full": "Die setlist is vol (500 nummers).",
+      "itemsEmpty": "Nog geen nummers. Voeg er een paar toe.",
+      "nameLabel": "Setlistnaam",
+      "namePlaceholder": "bijv. Vrijdagfavorieten",
+      "new": "Nieuwe setlist",
+      "newTitle": "Nieuwe setlist",
+      "notFound": "Deze setlist bestaat niet meer.",
+      "number": "{number}",
+      "rename": "Naam wijzigen",
+      "renameTitle": "Naam van setlist wijzigen",
+      "saveOrder": "Volgorde opslaan",
+      "title": "Setlists",
+      "addSongTitle": "Nummer toevoegen",
+      "added": "Toegevoegd",
+      "cancel": "Annuleren",
+      "cancelOrder": "Annuleren",
+      "close": "Sluiten",
+      "delete": "Verwijderen",
+      "done": "Gereed",
+      "down": "Verplaats {song} omlaag",
+      "make": "Maken",
+      "nameSave": "Opslaan",
+      "remove": "Verwijderen",
+      "searchLabel": "Zoek een nummer",
+      "searchPlaceholder": "Nummers zoeken",
+      "songValue": "{title} van {artist}",
+      "sung": "Markeren als gezongen",
+      "up": "Verplaats {song} omhoog"
+    },
+    "allSongs": "Al je nummers",
+    "home": {
+      "allSongsRow": "Al je nummers ({count})",
+      "allTime": "Alles bij elkaar",
+      "connectHint": "Krijg suggesties op basis van waar je al naar luistert",
+      "gotosEmpty": "De nummers die je graag zingt, verschijnen hier. Begin met het toevoegen van nummers die je al eerder hebt gezongen.",
+      "gotosEmptyCta": "Nummers toevoegen die ik heb gezongen",
+      "gotosTitle": "Je favorieten",
+      "greatShare": "{percent}% ging geweldig",
+      "keysLabel": "Je stembereik op een toetsenbord",
+      "manage": "Beheren",
+      "manageHint": "Stel je stembereik in, koppel muziek en pas aan wat we over je weten",
+      "mostSung": "Meest gezongen: {song} ({count}×)",
+      "nights": "{count, plural, one {# avond} other {# avonden}}",
+      "performances": "{count, plural, one {# optreden} other {# optredens}}",
+      "saved": "{count, plural, one {# opgeslagen} other {# opgeslagen}}",
+      "seeAll": "Bekijk alles",
+      "setlistsEmpty": "Plan een avond: maak een setlist van nummers die je wilt zingen.",
+      "songs": "{count, plural, one {# nummer} other {# nummers}}",
+      "sourcesLabel": "Gekoppelde muziek",
+      "statsEmpty": "Nog niets gezongen. Markeer een nummer als gezongen om je statistieken te starten.",
+      "statsTitle": "Jouw karaoke",
+      "sung": "{count, plural, one {# nummer gezongen} other {# nummers gezongen}}",
+      "thisYear": "Dit jaar",
+      "topArtist": "Topartiest: {artist}",
+      "venues": "{count, plural, one {# locatie} other {# locaties}}",
+      "voiceCta": "Ontdek je stembereik",
+      "connectCta": "Verbind je muziek",
+      "profileTitle": "Je muziekprofiel",
+      "voiceHint": "Vind nummers die bij je stem passen",
+      "voiceRange": "Bereik {range}"
+    },
+    "songs": {
+      "addPast": "Nummers toevoegen die ik heb gezongen",
+      "count": "{count, plural, one {# nummer} other {# nummers}}",
+      "empty": "Nog geen nummers. Markeer een nummer als gezongen of sla er een op, dan verschijnt het hier.",
+      "emptyFiltered": "Geen nummers gevonden die aan deze filters voldoen.",
+      "feel": {
+        "unrated": "Niet beoordeeld",
+        "bad": "Niks voor mij",
+        "great": "Geweldig",
+        "ok": "OK"
+      },
+      "offline": "Je bent offline. We tonen de nummers die op deze telefoon zijn opgeslagen.",
+      "often": {
+        "once": "1 keer",
+        "twice": "2 of vaker",
+        "unsung": "Nog niet gezongen"
+      },
+      "oftenLabel": "Hoe vaak",
+      "searchLabel": "Zoek in je nummers",
+      "sort": {
+        "most": "Meest gezongen",
+        "rated": "Best beoordeeld",
+        "recent": "Recent",
+        "az": "A tot Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Publieksfavoriet",
+      "feelLabel": "Je beoordeling",
+      "loadError": "Kon je nummers niet laden.",
+      "moodLabel": "Stemming",
+      "saved": "Opgeslagen",
+      "searchPlaceholder": "Nummer of artiest",
+      "sortLabel": "Sorteer",
+      "timesSungLabel": "{count, plural, one {# keer gezongen} other {# keer gezongen}}"
     }
   }
 }

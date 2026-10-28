@@ -52,7 +52,13 @@
     "appleMusicReconnect": "إعادة ربط Apple Music",
     "musicServices": "خدمات الموسيقى الخاصة بك",
     "appleMusicDenied": "لا يملك Nomad Karaoke إذن الوصول إلى Apple Music. يرجى تفعيله من الإعدادات › Nomad Karaoke › الوسائط وApple Music، ثم أعد المحاولة.",
-    "appleMusicNoSubscription": "لم تتم مشاركة مكتبتك من Apple Music. يتطلب الربط وجود اشتراك في Apple Music."
+    "appleMusicNoSubscription": "لم تتم مشاركة مكتبتك من Apple Music. يتطلب الربط وجود اشتراك في Apple Music.",
+    "artistsAll": "جميع الفنانين",
+    "artistsNoMatch": "لا يوجد فنانون مطابقون.",
+    "artistsRemoveA11y": "إزالة {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {عرض الكل (#)} other {عرض الكل (#)}}",
+    "artistsSearch": "ابحث عن فنان"
   },
   "common": {
     "error": "حدث خطأ ما.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "أنشئ فيديو كاريوكي خاصاً بك لهذه الأغنية، جاهزاً للغناء والمشاركة.",
     "offlineMissing": "أنت غير متصل بالإنترنت، وهذه الأغنية ليست ضمن قائمة الأغاني المحفوظة على هذا الهاتف.",
     "offlineNote": "بلا اتصال · من قائمة الأغاني المحفوظة على هذا الهاتف",
-    "cloudErrorNote": "تعذر الاتصال بالبحث حاليًا · نعرض لك قائمة الأغاني المحفوظة على هذا الهاتف"
+    "cloudErrorNote": "تعذر الاتصال بالبحث حاليًا · نعرض لك قائمة الأغاني المحفوظة على هذا الهاتف",
+    "history": {
+      "beforeApp": "قبل التطبيق",
+      "crowd": "المفضلة لدى الجمهور",
+      "feel": "المشاعر: {value}",
+      "key": "الطبقة: {value}",
+      "nomadNight": "ليلة Nomad",
+      "otherVenue": "مكان آخر",
+      "pageTitle": "سجل الأغنية",
+      "removeBody": "لن يتم احتسابها كأغنية غنّيتها بعد الآن.",
+      "removeTitle": "إزالة هذا السجل؟",
+      "times": "×{count}",
+      "title": "سجلك",
+      "edit": "تعديل",
+      "remove": "إزالة"
+    },
+    "save": "حفظ في أغنياتي",
+    "saved": "تم الحفظ",
+    "addToSetlist": "إضافة إلى قائمة الأغاني",
+    "markSung": "تحديد كمُغنّاة"
   },
   "tabs": {
     "discover": "استكشف",
@@ -706,7 +731,26 @@
       "skip": "ليس الآن",
       "song": "{title} لـ {artist}",
       "title": "كيف كان أداؤك الليلة؟",
-      "save": "حفظ"
+      "save": "حفظ",
+      "reason": {
+        "awkward_music": "موسيقى غير مناسبة",
+        "crowd_quiet": "تفاعل الجمهور هادئ",
+        "didnt_know_it": "لم أكن أعرف الأغنية",
+        "out_of_range": "خارج طبقتي الصوتية",
+        "too_hard": "صعبة جداً",
+        "too_long": "طويلة جداً"
+      },
+      "reasonsLabel": "ما الذي لم يسر على ما يرام؟",
+      "vibe": {
+        "ballad": "أغنية هادئة (Ballad)",
+        "duet": "دويتو (ثنائي)",
+        "emotional": "مفعمة بالمشاعر",
+        "party": "حفلة وحماس",
+        "rock_out": "روك صاخب",
+        "singalong": "غناء جماعي",
+        "warm_up": "إحماء"
+      },
+      "vibesLabel": "كيف كانت الأجواء؟"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "مكتبة المكان",
     "loved": "مفضلة",
-    "menuLoveIt": "أحببتها",
+    "menuLoveIt": "حفظ في أغنياتي",
     "menuNotForMe": "لا تناسبني",
     "menuOpen": "المزيد من الخيارات لـ {title}",
     "offlinePicks": "غير متصل بالإنترنت: نعرض آخر ترشيحاتك",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "مجتمعي",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "حاول مرة أخرى",
-    "signInForPicksAction": "تسجيل الدخول"
+    "signInForPicksAction": "تسجيل الدخول",
+    "menuSaved": "تم الحفظ",
+    "menuAddToSetlist": "إضافة إلى قائمة الأغاني",
+    "menuMarkSung": "تحديد كمُغنّاة"
   },
   "review": {
     "discard": "تجاهل تعديلاتي",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, zero {لا توجد أغانٍ جاهزة — اكتشف صوتك} one {أغنية واحدة من أغانيك جاهزة — اكتشف صوتك} two {أغنيتان من أغانيك جاهزتان — اكتشف صوتك} few {# أغانٍ من أغانيك جاهزة — اكتشف صوتك} many {# أغنية من أغانيك جاهزة — اكتشف صوتك} other {# أغنية من أغانيك جاهزة — اكتشف صوتك}}",
       "request": "تجهيز أغانيّ",
       "title": "تحليل موسيقاي"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "منذ فترة",
+      "day": "اليوم (اختياري)",
+      "less": "تقليل",
+      "onDate": "في تاريخ محدد",
+      "times": "عدد مرات الغناء",
+      "title": "تحديد كمُغنّاة",
+      "close": "إغلاق",
+      "more": "زيادة",
+      "save": "حفظ",
+      "song": "{title} لـ {artist}",
+      "tonight": "الليلة"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {تم} one {إضافة أغنية واحدة} two {إضافة أغنيتين} few {إضافة # أغانٍ} many {إضافة # أغنية} other {إضافة # أغنية}}",
+      "hint": "ضع علامة على الأغاني التي غنيتها من قبل، وسنضيفها إلى سجلك.",
+      "title": "أغانٍ غنيتها",
+      "searchLabel": "ابحث عن أغنية",
+      "searchPlaceholder": "ابحث عن أغانٍ",
+      "songValue": "{title} لـ {artist}"
+    },
+    "setlists": {
+      "add": "إضافة أغانٍ",
+      "addNew": "إنشاء وإضافة",
+      "addNewPlaceholder": "اسم قائمة الأغاني الجديدة",
+      "addToTitle": "إضافة إلى قائمة الأغاني",
+      "addTyped": "إضافة \"{query}\" كأغنية جديدة",
+      "count": "{count, plural, =0 {لا توجد أغانٍ} one {أغنية واحدة} two {أغنيتان} few {# أغانٍ} many {# أغنية} other {# أغنية}}",
+      "deleteBody": "سيتم حذف {name}. لا يمكن التراجع عن هذا الإجراء.",
+      "deleteTitle": "هل تريد حذف قائمة الأغاني هذه؟",
+      "detailTitle": "قائمة الأغاني",
+      "editOrder": "تعديل الترتيب",
+      "empty": "لا توجد قوائم أغانٍ بعد. أنشئ قائمة للتخطيط لأغانيك في سهرتك القادمة.",
+      "full": "قائمة الأغاني هذه ممتلئة (500 أغنية).",
+      "itemsEmpty": "لا توجد أغانٍ بعد. أضف بعض الأغاني.",
+      "nameLabel": "اسم قائمة الأغاني",
+      "namePlaceholder": "مثال: أغاني الجمعة المفضلة",
+      "new": "قائمة أغانٍ جديدة",
+      "newTitle": "قائمة أغانٍ جديدة",
+      "notFound": "لم تعد قائمة الأغاني هذه موجودة.",
+      "number": "{number}",
+      "rename": "إعادة التسمية",
+      "renameTitle": "إعادة تسمية قائمة الأغاني",
+      "saveOrder": "حفظ الترتيب",
+      "title": "قوائم الأغاني",
+      "addSongTitle": "إضافة أغنية",
+      "added": "تمت الإضافة",
+      "cancel": "إلغاء",
+      "cancelOrder": "إلغاء",
+      "close": "إغلاق",
+      "delete": "حذف",
+      "done": "تم",
+      "down": "تحريك {song} لأسفل",
+      "make": "إنشاء",
+      "nameSave": "حفظ",
+      "remove": "إزالة",
+      "searchLabel": "ابحث عن أغنية",
+      "searchPlaceholder": "ابحث عن أغانٍ",
+      "songValue": "{title} لـ {artist}",
+      "sung": "تحديد كمُغنّاة",
+      "up": "تحريك {song} لأعلى"
+    },
+    "allSongs": "جميع أغانيك",
+    "home": {
+      "allSongsRow": "جميع أغانيك ({count})",
+      "allTime": "طوال الوقت",
+      "connectHint": "احصل على ترشيحات مما تستمع إليه بالفعل",
+      "gotosEmpty": "ستظهر الأغاني التي تحب غناءها هنا. ابدأ بإضافة أغانٍ غنيتها من قبل.",
+      "gotosEmptyCta": "إضافة أغانٍ غنيتها",
+      "gotosTitle": "أغانيك المفضلة دائماً",
+      "greatShare": "{percent}% كان أداؤها رائعاً",
+      "keysLabel": "نطاقك الصوتي على لوحة المفاتيح",
+      "manage": "إدارة",
+      "manageHint": "اضبط نطاقك الصوتي، واربط موسيقاك، وعدّل بياناتك لدينا",
+      "mostSung": "الأكثر غناءً: {song} ({count}×)",
+      "nights": "{count, plural, zero {ولا سهرة} one {سهرة واحدة} two {سهرتان} few {# سهرات} many {# سهرة} other {# سهرة}}",
+      "performances": "{count, plural, zero {لا توجد عروض غنائية} one {عرض غنائي واحد} two {عرضان غنائيان} few {# عروض غنائية} many {# عرضاً غنائياً} other {# عرض غنائي}}",
+      "saved": "{count, plural, zero {لا توجد عناصر محفوظة} one {عنصر واحد محفوظ} two {عنصران محفوظان} few {# عناصر محفوظة} many {# عنصراً محفوظاً} other {# عنصر محفوظ}}",
+      "seeAll": "عرض الكل",
+      "setlistsEmpty": "خطط لسهرتك: أنشئ قائمة بالأغاني التي ترغب في غنائها.",
+      "songs": "{count, plural, zero {لا توجد أغانٍ} one {أغنية واحدة} two {أغنيتان} few {# أغانٍ} many {# أغنية} other {# أغنية}}",
+      "sourcesLabel": "الموسيقى المتصلة",
+      "statsEmpty": "لم تغنِّ أي شيء بعد. حدّد أي أغنية بأنك غنيتها لبدء إحصاءاتك.",
+      "statsTitle": "الكاريوكي الخاص بك",
+      "sung": "{count, plural, zero {لم تُغنَّ أي أغنية} one {أغنية واحدة مغناة} two {أغنيتان مغناتان} few {# أغانٍ مغناة} many {# أغنية مغناة} other {# أغنية مغناة}}",
+      "thisYear": "هذا العام",
+      "topArtist": "الفنان الأفضل: {artist}",
+      "venues": "{count, plural, zero {لا توجد أماكن} one {مكان واحد} two {مكانان} few {# أماكن} many {# مكاناً} other {# مكان}}",
+      "voiceCta": "اكتشف نطاقك الصوتي",
+      "connectCta": "اربط موسيقاك",
+      "profileTitle": "ملفك الموسيقي",
+      "voiceHint": "ابحث عن أغانٍ تناسب صوتك",
+      "voiceRange": "النطاق الصوتي {range}"
+    },
+    "songs": {
+      "addPast": "إضافة أغانٍ غنيتها",
+      "count": "{count, plural, zero {لا توجد أغانٍ} one {أغنية واحدة} two {أغنيتان} few {# أغانٍ} many {# أغنية} other {# أغنية}}",
+      "empty": "لا توجد أغانٍ بعد. حدّد أي أغنية بأنك غنيتها أو احفظها وستظهر هنا.",
+      "emptyFiltered": "لا توجد أغانٍ تطابق عوامل التصفية هذه.",
+      "feel": {
+        "unrated": "غير مقيّمة",
+        "bad": "لا تناسبني",
+        "great": "رائع",
+        "ok": "سليم"
+      },
+      "offline": "أنت غير متصل بالإنترنت. يتم عرض الأغاني المحفوظة على هذا الهاتف.",
+      "often": {
+        "once": "مرة واحدة",
+        "twice": "مرتان أو أكثر",
+        "unsung": "لم تُغنَّ بعد"
+      },
+      "oftenLabel": "عدد المرات",
+      "searchLabel": "ابحث في أغانيك",
+      "sort": {
+        "most": "الأكثر غناءً",
+        "rated": "الأعلى تقييماً",
+        "recent": "الأحدث",
+        "az": "أبجدياً (أ إلى ي)"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "الأجواء",
+      "crowdPleaser": "المفضلة لدى الجمهور",
+      "feelLabel": "تقييمك",
+      "loadError": "تعذر تحميل أغانيك.",
+      "moodLabel": "المزاج",
+      "saved": "تم الحفظ",
+      "searchPlaceholder": "اسم الأغنية أو الفنان",
+      "sortLabel": "ترتيب",
+      "timesSungLabel": "{count, plural, zero {لم تُغنَّ} one {غُنيت مرة واحدة} two {غُنيت مرتين} few {غُنيت # مرات} many {غُنيت # مرة} other {غُنيت # مرة}}"
     }
   }
 }

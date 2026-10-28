@@ -1,0 +1,136 @@
+// markSung: the Mark as sung sheet (Phase 4a, B10).
+import { act, fireEvent, screen } from '@testing-library/react-native';
+import { Modal, Platform } from 'react-native';
+
+import { MarkSungSheet } from '../../me/MarkSungSheet';
+import { SurveySheet } from '../../tonight/log/SurveySheet';
+import { useNightStore } from '../../tonight/nightStore';
+import { UNKNOWN_ARTIST, useLogStore } from '../../tonight/log/logStore';
+import { useOutbox } from '../../tonight/log/outbox';
+import { renderTonight } from '../../test-utils/tonightFixtures';
+import { resetMe } from './helpers';
+
+const SONG = { artist: 'Invented Band', title: 'Made Up Song', song_key: 'sk_1' };
+const entries = () => Object.values(useLogStore.getState().entries);
+const queued = () => useOutbox.getState().items;
+
+beforeEach(() => {
+  resetMe();
+  useNightStore.getState().end();
+});
+
+describe('markSung', () => {
+  it('"A while ago" x3 backfills with times 3 and precision unknown', () => {
+    const onClose = jest.fn();
+    renderTonight(<MarkSungSheet song={SONG} onClose={onClose} />);
+    fireEvent.press(screen.getByTestId('mark-when-ago'));
+    fireEvent.press(screen.getByTestId('mark-times-plus'));
+    fireEvent.press(screen.getByTestId('mark-times-plus'));
+    expect(screen.getByTestId('mark-times-value')).toHaveTextContent('3');
+    fireEvent.press(screen.getByTestId('mark-save'));
+
+    const [e] = entries();
+    expect(entries()).toHaveLength(1);
+    expect(e).toMatchObject({ state: 'sung', times: 3, origin: 'backfill', song_key: 'sk_1', night: { kind: 'other', date_precision: 'unknown' } });
+    expect(e!.night!.date).toBeUndefined();
+    expect((queued()[0] as { patch: unknown }).patch).toMatchObject({ times: 3, origin: 'backfill' });
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it('the stepper stays within 1-50', () => {
+    renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
+    fireEvent.press(screen.getByTestId('mark-when-ago'));
+    fireEvent.press(screen.getByTestId('mark-times-minus'));
+    expect(screen.getByTestId('mark-times-value')).toHaveTextContent('1');
+    for (let i = 0; i < 60; i++) fireEvent.press(screen.getByTestId('mark-times-plus'));
+    expect(screen.getByTestId('mark-times-value')).toHaveTextContent('50');
+  });
+
+  it('a month and year gives month precision; a day upgrades it to day', () => {
+    renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
+    fireEvent.press(screen.getByTestId('mark-when-date'));
+    fireEvent.press(screen.getByTestId('mark-year-2020'));
+    fireEvent.press(screen.getByTestId('mark-month-3'));
+    fireEvent.press(screen.getByTestId('mark-save'));
+    expect(entries()[0]!.night).toMatchObject({ date: '2020-03', date_precision: 'month' });
+    expect(entries()[0]!.times).toBe(1);
+  });
+
+  it('an optional day gives day precision', () => {
+    renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
+    fireEvent.press(screen.getByTestId('mark-when-date'));
+    fireEvent.press(screen.getByTestId('mark-year-2020'));
+    fireEvent.press(screen.getByTestId('mark-month-3'));
+    fireEvent.press(screen.getByTestId('mark-day-plus'));
+    fireEvent.press(screen.getByTestId('mark-day-plus'));
+    fireEvent.press(screen.getByTestId('mark-save'));
+    expect(entries()[0]!.night).toMatchObject({ date: '2020-03-02', date_precision: 'day' });
+  });
+
+  it('Tonight joins the open other-bar night through addOther', () => {
+    useNightStore.getState().startOther('The Test Bar');
+    renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
+    fireEvent.press(screen.getByTestId('mark-when-tonight'));
+    expect(screen.queryByTestId('mark-times-value')).toBeNull();
+    fireEvent.press(screen.getByTestId('mark-save'));
+    expect(entries()[0]).toMatchObject({ title: 'Made Up Song', night: { kind: 'other', venue_name: 'The Test Bar' } });
+    expect(entries()[0]).toMatchObject({ state: 'sung' });
+    expect(entries()[0]!.origin).toBeUndefined();
+  });
+
+  it('offers the survey from the sheet dismissal, not while it is closing', () => {
+    renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
+    fireEvent.press(screen.getByTestId('mark-when-ago'));
+    fireEvent.press(screen.getByTestId('mark-save'));
+    expect(screen.queryByTestId('survey')).toBeNull();
+    const modal = screen.UNSAFE_getAllByType(Modal)[0]!;
+    act(() => modal.props.onDismiss());
+    expect(screen.getByTestId('survey')).toBeTruthy();
+  });
+
+  it('Tonight with no open night still uses addOther: a live entry, not a backfill', () => {
+    renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
+    fireEvent.press(screen.getByTestId('mark-save'));
+    expect(entries()).toHaveLength(1);
+    expect(entries()[0]).toMatchObject({ state: 'sung' });
+    expect(entries()[0]!.origin).not.toBe('backfill');
+    expect(entries()[0]!.night).toBeUndefined();
+  });
+
+  it('disables future months in the current year', () => {
+    renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
+    fireEvent.press(screen.getByTestId('mark-when-date'));
+    const next = new Date().getMonth() + 2;
+    if (next <= 12) expect(screen.getByTestId(`mark-month-${next}`).props.accessibilityState).toMatchObject({ disabled: true });
+    fireEvent.press(screen.getByTestId(`mark-year-${new Date().getFullYear() - 1}`));
+    expect(screen.getByTestId('mark-month-12').props.accessibilityState).toMatchObject({ disabled: false });
+  });
+
+  it('on Android the survey opens straight away (no onDismiss)', () => {
+    const orig = Platform.OS;
+    Platform.OS = 'android';
+    try {
+      renderTonight(<MarkSungSheet song={SONG} onClose={jest.fn()} />);
+      fireEvent.press(screen.getByTestId('mark-when-ago'));
+      fireEvent.press(screen.getByTestId('mark-save'));
+      expect(screen.getByTestId('survey')).toBeTruthy();
+    } finally {
+      Platform.OS = orig;
+    }
+  });
+});
+
+describe('markSung unknown artist', () => {
+  it('shows the translated "Unknown artist", not the stored sentinel', () => {
+    renderTonight(<MarkSungSheet song={{ artist: UNKNOWN_ARTIST, title: 'Made Up Song' }} onClose={jest.fn()} />);
+    expect(screen.getByText(/Made Up Song.* by .*Unknown artist/)).toBeTruthy();
+    expect(screen.queryByText(/Unknown Artist/)).toBeNull();
+  });
+
+  it('the survey sheet title translates it too', () => {
+    useLogStore.getState().noteNomad('kj_9', { artist: UNKNOWN_ARTIST, title: 'Made Up Song' });
+    renderTonight(<SurveySheet entryId="kj_9" artist={UNKNOWN_ARTIST} title="Made Up Song" />);
+    expect(screen.getByText(/Made Up Song.* by .*Unknown artist/)).toBeTruthy();
+    expect(screen.queryByText(/Unknown Artist/)).toBeNull();
+  });
+});

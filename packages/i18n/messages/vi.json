@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Kết nối lại Apple Music",
     "musicServices": "Dịch vụ âm nhạc của bạn",
     "appleMusicDenied": "Nomad Karaoke không có quyền truy cập Apple Music. Hãy bật quyền này trong Cài đặt › Nomad Karaoke › Phương tiện & Apple Music, rồi thử lại.",
-    "appleMusicNoSubscription": "Apple Music không chia sẻ thư viện của bạn. Bạn cần có gói đăng ký Apple Music để kết nối."
+    "appleMusicNoSubscription": "Apple Music không chia sẻ thư viện của bạn. Bạn cần có gói đăng ký Apple Music để kết nối.",
+    "artistsAll": "Tất cả nghệ sĩ",
+    "artistsNoMatch": "Không có nghệ sĩ nào khớp.",
+    "artistsRemoveA11y": "Xóa {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, other {Xem tất cả (#)}}",
+    "artistsSearch": "Tìm nghệ sĩ"
   },
   "common": {
     "error": "Đã có lỗi xảy ra.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Tự tạo video karaoke cho bài này, sẵn sàng để hát và chia sẻ.",
     "offlineMissing": "Bạn đang ngoại tuyến và bài hát này không có trong danh sách đã lưu trên điện thoại này.",
     "offlineNote": "Ngoại tuyến · từ danh sách bài hát đã lưu trên điện thoại này",
-    "cloudErrorNote": "Hiện không thể tìm kiếm trực tuyến · đang hiển thị danh sách bài hát đã lưu trên điện thoại này"
+    "cloudErrorNote": "Hiện không thể tìm kiếm trực tuyến · đang hiển thị danh sách bài hát đã lưu trên điện thoại này",
+    "history": {
+      "beforeApp": "Trước khi dùng ứng dụng",
+      "crowd": "Được khán giả yêu thích",
+      "feel": "Cảm xúc: {value}",
+      "key": "Tone: {value}",
+      "nomadNight": "Đêm nhạc Nomad",
+      "otherVenue": "Quán khác",
+      "pageTitle": "Lịch sử bài hát",
+      "removeBody": "Bài hát này sẽ không còn được tính là đã hát.",
+      "removeTitle": "Xóa lượt hát này?",
+      "times": "×{count}",
+      "title": "Lịch sử của bạn",
+      "edit": "Chỉnh sửa",
+      "remove": "Xóa"
+    },
+    "save": "Lưu vào Bài hát của tôi",
+    "saved": "Đã lưu",
+    "addToSetlist": "Thêm vào danh sách bài hát",
+    "markSung": "Đánh dấu đã hát"
   },
   "tabs": {
     "discover": "Khám phá",
@@ -706,7 +731,26 @@
       "skip": "Để sau",
       "song": "{title} - {artist}",
       "title": "Mọi chuyện thế nào rồi?",
-      "save": "Lưu"
+      "save": "Lưu",
+      "reason": {
+        "awkward_music": "Nhạc kỳ lạ",
+        "crowd_quiet": "Khán giả im ắng",
+        "didnt_know_it": "Không thuộc bài",
+        "out_of_range": "Quá tầm giọng",
+        "too_hard": "Quá khó",
+        "too_long": "Quá dài"
+      },
+      "reasonsLabel": "Điều gì đã cản trở bạn?",
+      "vibe": {
+        "ballad": "Ballad",
+        "duet": "Song ca",
+        "emotional": "Cảm xúc",
+        "party": "Tiệc tùng",
+        "rock_out": "Cháy hết mình",
+        "singalong": "Hòa giọng",
+        "warm_up": "Khởi động"
+      },
+      "vibesLabel": "Không khí lúc đó thế nào?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Thư viện quán",
     "loved": "Đã thích",
-    "menuLoveIt": "Yêu thích",
+    "menuLoveIt": "Lưu vào Bài hát của tôi",
     "menuNotForMe": "Không hợp với mình",
     "menuOpen": "Tùy chọn khác cho {title}",
     "offlinePicks": "Ngoại tuyến: đang hiển thị các gợi ý gần nhất của bạn",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Cộng đồng",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Thử lại",
-    "signInForPicksAction": "Đăng nhập"
+    "signInForPicksAction": "Đăng nhập",
+    "menuSaved": "Đã lưu",
+    "menuAddToSetlist": "Thêm vào danh sách bài hát",
+    "menuMarkSung": "Đánh dấu đã hát"
   },
   "review": {
     "discard": "Bỏ các chỉnh sửa của tôi",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# bài hát của bạn đã sẵn sàng — hãy cất cao giọng hát} other {# bài hát của bạn đã sẵn sàng — hãy cất cao giọng hát}}",
       "request": "Chuẩn bị bài hát của tôi",
       "title": "Phân tích âm nhạc của tôi"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Cách đây một thời gian",
+      "day": "Ngày (không bắt buộc)",
+      "less": "Giảm",
+      "onDate": "Vào một ngày cụ thể",
+      "times": "Số lần đã hát",
+      "title": "Đánh dấu đã hát",
+      "close": "Đóng",
+      "more": "Tăng",
+      "save": "Lưu",
+      "song": "{title} - {artist}",
+      "tonight": "Tối nay"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Xong} other {Thêm # bài hát}}",
+      "hint": "Đánh dấu những bài hát bạn từng hát trước đây. Chúng tôi sẽ thêm vào lịch sử của bạn.",
+      "title": "Bài hát tôi đã hát",
+      "searchLabel": "Tìm bài hát",
+      "searchPlaceholder": "Tìm kiếm bài hát",
+      "songValue": "{title} - {artist}"
+    },
+    "setlists": {
+      "add": "Thêm bài hát",
+      "addNew": "Tạo và thêm",
+      "addNewPlaceholder": "Tên danh sách bài hát mới",
+      "addToTitle": "Thêm vào danh sách bài hát",
+      "addTyped": "Thêm \"{query}\" làm bài hát mới",
+      "count": "{count, plural, =0 {Chưa có bài hát nào} one {# bài hát} other {# bài hát}}",
+      "deleteBody": "{name} sẽ bị xóa. Bạn không thể hoàn tác thao tác này.",
+      "deleteTitle": "Xóa danh sách bài hát này?",
+      "detailTitle": "Danh sách bài hát",
+      "editOrder": "Chỉnh sửa thứ tự",
+      "empty": "Chưa có danh sách bài hát nào. Hãy tạo một danh sách để chuẩn bị bài hát cho một đêm vui nhé.",
+      "full": "Danh sách bài hát đó đã đầy (tối đa 500 bài hát).",
+      "itemsEmpty": "Chưa có bài hát nào. Hãy thêm vài bài nhé.",
+      "nameLabel": "Tên danh sách bài hát",
+      "namePlaceholder": "Ví dụ: Nhạc tủ tối thứ Sáu",
+      "new": "Danh sách bài hát mới",
+      "newTitle": "Danh sách bài hát mới",
+      "notFound": "Danh sách bài hát này không còn tồn tại.",
+      "number": "{number}",
+      "rename": "Đổi tên",
+      "renameTitle": "Đổi tên danh sách bài hát",
+      "saveOrder": "Lưu thứ tự",
+      "title": "Danh sách bài hát",
+      "addSongTitle": "Thêm một bài hát",
+      "added": "Đã thêm",
+      "cancel": "Hủy",
+      "cancelOrder": "Hủy",
+      "close": "Đóng",
+      "delete": "Xóa",
+      "done": "Xong",
+      "down": "Chuyển {song} xuống",
+      "make": "Tạo bài hát",
+      "nameSave": "Lưu",
+      "remove": "Xóa",
+      "searchLabel": "Tìm bài hát",
+      "searchPlaceholder": "Tìm kiếm bài hát",
+      "songValue": "{title} - {artist}",
+      "sung": "Đánh dấu đã hát",
+      "up": "Chuyển {song} lên"
+    },
+    "allSongs": "Tất cả bài hát của bạn",
+    "home": {
+      "allSongsRow": "Tất cả bài hát của bạn ({count})",
+      "allTime": "Tất cả thời gian",
+      "connectHint": "Nhận gợi ý từ những bài bạn hay nghe",
+      "gotosEmpty": "Những bài hát tủ của bạn sẽ xuất hiện ở đây. Hãy bắt đầu bằng cách thêm các bài hát bạn từng hát trước đây.",
+      "gotosEmptyCta": "Thêm bài hát tôi từng hát",
+      "gotosTitle": "Bài tủ của bạn",
+      "greatShare": "{percent}% lần hát tuyệt vời",
+      "keysLabel": "Quãng giọng của bạn trên phím đàn",
+      "manage": "Quản lý",
+      "manageHint": "Cài đặt quãng giọng, kết nối dịch vụ âm nhạc và chỉnh sửa thông tin của bạn",
+      "mostSung": "Hát nhiều nhất: {song} ({count}×)",
+      "nights": "{count, plural, other {# buổi}}",
+      "performances": "{count, plural, other {# lượt hát}}",
+      "saved": "{count, plural, other {# bài đã lưu}}",
+      "seeAll": "Xem tất cả",
+      "setlistsEmpty": "Lên kế hoạch cho buổi đi hát: tạo danh sách các bài hát bạn muốn biểu diễn.",
+      "songs": "{count, plural, other {# bài hát}}",
+      "sourcesLabel": "Nhạc đã kết nối",
+      "statsEmpty": "Chưa có bài nào được hát. Hãy đánh dấu bài hát là đã hát để bắt đầu theo dõi thống kê.",
+      "statsTitle": "Hành trình karaoke của bạn",
+      "sung": "{count, plural, other {# bài đã hát}}",
+      "thisYear": "Năm nay",
+      "topArtist": "Nghệ sĩ hát nhiều nhất: {artist}",
+      "venues": "{count, plural, other {# địa điểm}}",
+      "voiceCta": "Tìm quãng giọng của bạn",
+      "connectCta": "Kết nối âm nhạc của bạn",
+      "profileTitle": "Hồ sơ âm nhạc của bạn",
+      "voiceHint": "Tìm các bài hát hợp với giọng của bạn",
+      "voiceRange": "Âm vực {range}"
+    },
+    "songs": {
+      "addPast": "Thêm bài hát tôi từng hát",
+      "count": "{count, plural, other {# bài hát}}",
+      "empty": "Chưa có bài hát nào. Hãy đánh dấu một bài là đã hát hoặc lưu lại, bài hát sẽ xuất hiện ở đây.",
+      "emptyFiltered": "Không có bài hát nào khớp với bộ lọc này.",
+      "feel": {
+        "unrated": "Chưa đánh giá",
+        "bad": "Không hợp với mình",
+        "great": "Tuyệt vời",
+        "ok": "OK"
+      },
+      "offline": "Bạn đang ngoại tuyến. Đang hiển thị các bài hát đã lưu trên thiết bị này.",
+      "often": {
+        "once": "1 lần",
+        "twice": "Từ 2 lần trở lên",
+        "unsung": "Chưa hát lần nào"
+      },
+      "oftenLabel": "Tần suất hát",
+      "searchLabel": "Tìm kiếm bài hát của bạn",
+      "sort": {
+        "most": "Hát nhiều nhất",
+        "rated": "Được đánh giá cao nhất",
+        "recent": "Gần đây",
+        "az": "A đến Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Giai điệu & cảm xúc",
+      "crowdPleaser": "Được khán giả yêu thích",
+      "feelLabel": "Đánh giá của bạn",
+      "loadError": "Không thể tải các bài hát của bạn.",
+      "moodLabel": "Tâm trạng",
+      "saved": "Đã lưu",
+      "searchPlaceholder": "Bài hát hoặc nghệ sĩ",
+      "sortLabel": "Sắp xếp",
+      "timesSungLabel": "{count, plural, one {Đã hát # lần} other {Đã hát # lần}}"
     }
   }
 }

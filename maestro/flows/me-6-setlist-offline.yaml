@@ -1,0 +1,93 @@
+# Me 6 (Phase 4a spec §6.9 offline + outbox): decide goes away → New setlist "Offline set" with a typed song still
+# works on the phone → decide comes back → a relaunch (keeping the app's data) flushes the Me outbox → decide has
+# exactly one "Offline set" (the create is idempotent on the client id). Runs in the force-offline group, last.
+appId: com.nomadkaraoke.mobile
+name: me-6-setlist-offline
+tags:
+  - me
+  - force-offline
+onFlowComplete:
+  - runScript:
+      file: ../scripts/stack.js
+      env:
+        ACTION: decide
+        OP: start
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me6
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{}'
+      ENTRIES: '[]'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: decide
+      OP: stop
+- scrollUntilVisible:
+    element:
+      id: "me-setlist-new"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "me-setlist-new"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-name-input"
+    timeout: 10000
+- inputText: "Offline set"
+- tapOn:
+    id: "setlist-name-save"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-name"
+      text: ".*Offline set.*"
+    timeout: 10000
+- tapOn:
+    id: "setlist-add"
+- tapOn:
+    id: "setlist-search-input"
+- inputText: "Zzq Offline Tune"
+- tapOn:
+    id: "setlist-search-typed"
+- tapOn:
+    id: "setlist-search-sheet-close"
+- extendedWaitUntil:
+    visible:
+      id: "setlist-item-0"
+    timeout: 10000
+- takeScreenshot: ${ME_SHOTS}/me-6-offline
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: decide
+      OP: start
+- runFlow: ../common/relaunch-keep-data.yaml
+- tapOn:
+    id: "tab-me"
+- scrollUntilVisible:
+    element:
+      id: "me-setlists"
+    direction: DOWN
+    centerElement: true
+- extendedWaitUntil:
+    visible:
+      id: "me-setlist-.*"
+      text: ".*Offline set.*"
+    timeout: 20000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setlists-assert
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_NAME: "Offline set"
+      EXPECT_TITLES: "Zzq Offline Tune"
+      EXPECT_COUNT: "1"
+      WAIT_MS: "60000"
+- takeScreenshot: ${ME_SHOTS}/me-6-synced

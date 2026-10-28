@@ -24,8 +24,18 @@ export type LogEntry = {
   night?: LogNight;
   sung_at?: string;
   survey?: Survey;
+  /** Backfill: how many times (1-50) it was sung before. */
+  times?: number;
+  origin?: 'live' | 'backfill';
   /** Local ms epoch of the last change. */
   updatedAt: number;
+};
+export type BackfillOptions = {
+  /** 1-50. */
+  times: number;
+  /** `YYYY`, `YYYY-MM` or `YYYY-MM-DD`, matching `precision` (omitted for `unknown`). */
+  date?: string;
+  precision: NonNullable<LogNight['date_precision']>;
 };
 export type LogSong = { song_key?: string; artist: string; title: string };
 
@@ -100,12 +110,14 @@ type LogStore = {
   surveyed: Record<string, number>;
   /** Logs a song at another bar (`app_<uuid>`) under the active Other night; returns the id (null when signed out). */
   addOther(song: LogSong, state: LogState): string | null;
+  /** Logs a song sung before the app, with a rough date (`origin: 'backfill'`); returns the id (null when signed out). */
+  addBackfill(song: LogSong, opts: BackfillOptions): string | null;
   /** Mirrors a Nomad song kjbox reported sung (local only: kjbox delivers the facts to decide). */
   noteNomad(id: string, song: { artist: string; title: string; nightId?: string }): void;
   /** Moves an app entry along planned → requested → sung (or skipped). kjbox owns Nomad entries' state: ignored. */
   setState(id: string, state: LogState): void;
-  /** Saves the survey (answered now) and sends only `{survey}` to decide. */
-  saveSurvey(id: string, survey: LogSurvey): void;
+  /** Saves the survey (answered now) and sends only `{survey}` to decide; `clear` names vibes/reasons to empty (sent as []). */
+  saveSurvey(id: string, survey: LogSurvey, clear?: ('vibes' | 'reasons' | 'notes')[]): void;
   /** Dismissed survey: never asked again for this song. */
   skipSurvey(id: string): void;
   /** Removes a mistaken log (soft delete in decide). */
@@ -166,6 +178,33 @@ export const useLogStore = create<LogStore>((set, get) => {
       return id;
     },
 
+    addBackfill(song, opts) {
+      if (!get().userKey) return null;
+      const id = `app_${newUuid()}`;
+      const times = Math.min(50, Math.max(1, Math.round(opts.times)));
+      const night: LogNight = {
+        kind: 'other',
+        ...(opts.precision !== 'unknown' && opts.date ? { date: opts.date } : {}),
+        date_precision: opts.precision,
+      };
+      const entry: LogEntry = {
+        id,
+        source: 'app',
+        state: 'sung',
+        artist: song.artist,
+        title: song.title,
+        ...(song.song_key ? { song_key: song.song_key } : {}),
+        night,
+        times,
+        origin: 'backfill',
+        updatedAt: clock(),
+      };
+      saveEntries({ ...get().entries, [id]: entry });
+      const { updatedAt: _u, id: _i, source: _s, ...facts } = entry;
+      put(id, facts);
+      return id;
+    },
+
     noteNomad(id, song) {
       if (!get().userKey || get().entries[id]) return;
       saveEntries({
@@ -190,11 +229,17 @@ export const useLogStore = create<LogStore>((set, get) => {
       put(id, { state, ...(sungAt ? { sung_at: sungAt } : {}) });
     },
 
-    saveSurvey(id, answers) {
+    saveSurvey(id, answers, clear = []) {
       if (!get().userKey) return;
       const survey: Survey = {};
       for (const [k, v] of Object.entries(answers)) {
-        if (v !== undefined && v !== null && v !== '') (survey as Record<string, unknown>)[k] = v;
+        if (v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && v.length === 0)) (survey as Record<string, unknown>)[k] = v;
+      }
+      // Explicit clears (an edit that emptied vibes/reasons): decide merges survey sub-fields, so omitted keys are
+      // kept and a clear has to be sent as [].
+      for (const k of clear) {
+        if (k === 'notes') survey.notes = null; // decide's merge applies None as an override
+        else if (!survey[k]) survey[k] = [];
       }
       survey.answered_at = iso();
       const e = get().entries[id];

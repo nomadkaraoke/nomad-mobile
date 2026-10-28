@@ -52,7 +52,13 @@
     "appleMusicReconnect": "重新关联 Apple Music",
     "musicServices": "已绑定的音乐服务",
     "appleMusicDenied": "Nomad Karaoke 无权访问 Apple Music。请前往“设置”› Nomad Karaoke ›“媒体与 Apple Music”中开启权限，然后重试。",
-    "appleMusicNoSubscription": "Apple Music 未共享您的资料库。连接需要订阅 Apple Music。"
+    "appleMusicNoSubscription": "Apple Music 未共享您的资料库。连接需要订阅 Apple Music。",
+    "artistsAll": "所有歌手",
+    "artistsNoMatch": "未找到匹配的歌手。",
+    "artistsRemoveA11y": "移除 {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, other {查看全部 (#)}}",
+    "artistsSearch": "查找歌手"
   },
   "common": {
     "error": "出错了。",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "为这首歌制作专属的卡拉OK视频，随时开唱与分享。",
     "offlineMissing": "您当前处于离线状态，且本设备保存的歌单中未包含这首歌曲。",
     "offlineNote": "离线 · 来自保存在本设备上的歌单",
-    "cloudErrorNote": "暂时无法连接搜索 · 正在显示保存在此手机上的歌曲列表"
+    "cloudErrorNote": "暂时无法连接搜索 · 正在显示保存在此手机上的歌曲列表",
+    "history": {
+      "beforeApp": "使用应用之前",
+      "crowd": "全场嗨唱",
+      "feel": "感觉：{value}",
+      "key": "音调：{value}",
+      "nomadNight": "Nomad之夜",
+      "otherVenue": "其他酒吧",
+      "pageTitle": "点唱历史",
+      "removeBody": "此记录将不再计入已唱歌曲。",
+      "removeTitle": "删除这条记录？",
+      "times": "×{count}",
+      "title": "你的点唱历史",
+      "edit": "编辑",
+      "remove": "移除"
+    },
+    "save": "保存到我的歌曲",
+    "saved": "已保存",
+    "addToSetlist": "添加到歌单",
+    "markSung": "标记为已唱"
   },
   "tabs": {
     "discover": "发现",
@@ -706,7 +731,26 @@
       "skip": "暂不填写",
       "song": "{artist}《{title}》",
       "title": "唱得怎么样？",
-      "save": "保存"
+      "save": "保存",
+      "reason": {
+        "awkward_music": "伴奏不对劲",
+        "crowd_quiet": "观众太安静",
+        "didnt_know_it": "不太会唱这首",
+        "out_of_range": "不在我的音域内",
+        "too_hard": "难度太高",
+        "too_long": "时间太长"
+      },
+      "reasonsLabel": "是什么影响了发挥？",
+      "vibe": {
+        "ballad": "抒情慢歌",
+        "duet": "双人对唱",
+        "emotional": "走心情歌",
+        "party": "派对狂欢",
+        "rock_out": "摇滚炸场",
+        "singalong": "全场大合唱",
+        "warm_up": "热身开嗓"
+      },
+      "vibesLabel": "现场氛围如何？"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "场地曲库",
     "loved": "特别喜爱",
-    "menuLoveIt": "特别喜欢",
+    "menuLoveIt": "保存到我的歌曲",
     "menuNotForMe": "不合口味",
     "menuOpen": "查看《{title}》的更多选项",
     "offlinePicks": "离线状态：显示上次的精选",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "社区版",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "重试",
-    "signInForPicksAction": "登录"
+    "signInForPicksAction": "登录",
+    "menuSaved": "已保存",
+    "menuAddToSetlist": "添加到歌单",
+    "menuMarkSung": "标记为已唱"
   },
   "review": {
     "discard": "放弃我的修改",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {您的 # 首歌曲已准备就绪 — 快来一展歌喉} other {您的 # 首歌曲已准备就绪 — 快来一展歌喉}}",
       "request": "准备我的歌曲",
       "title": "分析我的音乐"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "前段时间",
+      "day": "具体日期（可选）",
+      "less": "减少",
+      "onDate": "指定日期",
+      "times": "演唱次数",
+      "title": "标记为已唱",
+      "close": "关闭",
+      "more": "增加",
+      "save": "保存",
+      "song": "{artist}《{title}》",
+      "tonight": "今晚"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {完成} other {添加 # 首歌曲}}",
+      "hint": "勾选你以前唱过的歌，我们会将它们添加到你的历史记录中。",
+      "title": "我唱过的歌",
+      "searchLabel": "查找歌曲",
+      "searchPlaceholder": "搜索歌曲",
+      "songValue": "{artist}《{title}》"
+    },
+    "setlists": {
+      "add": "添加歌曲",
+      "addNew": "创建并添加",
+      "addNewPlaceholder": "新歌单名称",
+      "addToTitle": "添加到歌单",
+      "addTyped": "将“{query}”添加为新歌曲",
+      "count": "{count, plural, =0 {暂无歌曲} other {# 首歌曲}}",
+      "deleteBody": "“{name}”将被删除。此操作无法撤销。",
+      "deleteTitle": "删除此歌单？",
+      "detailTitle": "歌单",
+      "editOrder": "调整顺序",
+      "empty": "还没有歌单。创建一个来规划今晚要唱的歌吧。",
+      "full": "该歌单已满（最多 500 首歌曲）。",
+      "itemsEmpty": "还没有歌曲，快去添加一些吧。",
+      "nameLabel": "歌单名称",
+      "namePlaceholder": "例如：周五精选",
+      "new": "新建歌单",
+      "newTitle": "新建歌单",
+      "notFound": "该歌单已不存在。",
+      "number": "{number}",
+      "rename": "重命名",
+      "renameTitle": "重命名歌单",
+      "saveOrder": "保存顺序",
+      "title": "歌单",
+      "addSongTitle": "添加歌曲",
+      "added": "已添加",
+      "cancel": "取消",
+      "cancelOrder": "取消",
+      "close": "关闭",
+      "delete": "删除",
+      "done": "完成",
+      "down": "下移《{song}》",
+      "make": "立即制作",
+      "nameSave": "保存",
+      "remove": "移除",
+      "searchLabel": "查找歌曲",
+      "searchPlaceholder": "搜索歌曲",
+      "songValue": "{artist}《{title}》",
+      "sung": "标记为已唱",
+      "up": "上移《{song}》"
+    },
+    "allSongs": "你的所有歌曲",
+    "home": {
+      "allSongsRow": "你的所有歌曲 ({count})",
+      "allTime": "所有时间",
+      "connectHint": "根据你常听的音乐获取推荐",
+      "gotosEmpty": "你常唱拿手的歌曲会显示在这里。先添加你以前唱过的歌吧。",
+      "gotosEmptyCta": "添加我唱过的歌",
+      "gotosTitle": "拿手曲目",
+      "greatShare": "{percent}% 唱得很棒",
+      "keysLabel": "在键盘上查看你的音域",
+      "manage": "管理",
+      "manageHint": "设置你的音域、关联音乐账号，并编辑你的个人信息",
+      "mostSung": "唱得最多：{song}（{count}次）",
+      "nights": "{count, plural, one {# 晚} other {# 晚}}",
+      "performances": "{count, plural, one {# 次演唱} other {# 次演唱}}",
+      "saved": "{count, plural, one {# 首已收藏} other {# 首已收藏}}",
+      "seeAll": "查看全部",
+      "setlistsEmpty": "规划一个欢唱之夜：创建你想唱的歌单吧。",
+      "songs": "{count, plural, one {# 首歌曲} other {# 首歌曲}}",
+      "sourcesLabel": "已关联音乐",
+      "statsEmpty": "还没有唱过歌。将歌曲标记为已唱即可开始统计。",
+      "statsTitle": "你的卡拉OK数据",
+      "sung": "{count, plural, one {# 首已唱} other {# 首已唱}}",
+      "thisYear": "今年",
+      "topArtist": "唱得最多的歌手：{artist}",
+      "venues": "{count, plural, one {# 个地点} other {# 个地点}}",
+      "voiceCta": "测测你的音域",
+      "connectCta": "连接你的音乐服务",
+      "profileTitle": "你的音乐偏好",
+      "voiceHint": "查找适合你声线的歌曲",
+      "voiceRange": "音域 {range}"
+    },
+    "songs": {
+      "addPast": "添加我唱过的歌",
+      "count": "{count, plural, one {# 首歌曲} other {# 首歌曲}}",
+      "empty": "暂无歌曲。标记已唱或收藏歌曲，就会显示在这里。",
+      "emptyFiltered": "没有符合筛选条件的歌曲。",
+      "feel": {
+        "unrated": "未评分",
+        "bad": "不合口味",
+        "great": "感觉棒极了",
+        "ok": "正常"
+      },
+      "offline": "你当前处于离线状态。仅显示保存在本机上的歌曲。",
+      "often": {
+        "once": "1 次",
+        "twice": "2 次及以上",
+        "unsung": "尚未唱过"
+      },
+      "oftenLabel": "演唱频次",
+      "searchLabel": "搜索你的歌曲",
+      "sort": {
+        "most": "唱得最多",
+        "rated": "评分最高",
+        "recent": "最近",
+        "az": "A 到 Z"
+      },
+      "timesSung": "{count}次",
+      "vibeLabel": "曲风氛围",
+      "crowdPleaser": "全场嗨唱",
+      "feelLabel": "你的评分",
+      "loadError": "无法加载您的歌曲。",
+      "moodLabel": "心情",
+      "saved": "已保存",
+      "searchPlaceholder": "歌名或歌手",
+      "sortLabel": "排序",
+      "timesSungLabel": "{count, plural, one {唱过 # 次} other {唱过 # 次}}"
     }
   }
 }

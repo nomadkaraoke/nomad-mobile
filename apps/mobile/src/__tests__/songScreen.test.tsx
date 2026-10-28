@@ -22,6 +22,11 @@ jest.mock('@nomad/api-decide', () => ({
   pingSearch: jest.fn(async () => true),
   getSongDetail: jest.fn(),
   getSongVocalRange: jest.fn(),
+  ApiError: class ApiError extends Error {},
+  getLibrary: jest.fn(async () => ({ notModified: false, etag: 'e', items: [] })),
+  listSetlists: jest.fn(async () => []),
+  listKaraokeLog: jest.fn(async () => ({ entries: [] })),
+  listSongHistory: jest.fn(async () => []),
   logSearchEvent: jest.fn(async () => {}),
   configureClient: jest.fn(),
 }));
@@ -382,5 +387,33 @@ describe('vocal fit (Phase 3c)', () => {
     fireEvent.press(await screen.findByTestId('fit-song-cta'));
     expect(await screen.findByTestId('voice-stub')).toBeTruthy();
     expect(screen.queryByTestId('fit-badge-song')).toBeNull();
+  });
+});
+
+describe('library actions and history (Phase 4a)', () => {
+  it('signed out: no library actions and no history', async () => {
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    await screen.findByText('Starlight');
+    expect(screen.queryByTestId('song-save')).toBeNull();
+    expect(screen.queryByTestId('song-history')).toBeNull();
+  });
+
+  it('signed in: Save, Add to setlist and Mark as sung, and your history of the song', async () => {
+    (decide.listKaraokeLog as jest.Mock).mockResolvedValue({
+      entries: [
+        {
+          id: 'app_1', user_id: 'u', source: 'app', state: 'sung', artist: 'Muse', title: 'Starlight',
+          song_key: 'muse|starlight', song_key_status: 'resolved', origin: 'backfill', times: 3,
+          night: { kind: 'other', date_precision: 'unknown' },
+        },
+      ],
+    });
+    await useAuth.getState().signInWithSession(session('history@example.com'));
+    renderRouter(routes(), { initialUrl: KEY_URL });
+    expect(await screen.findByTestId('song-save')).toBeTruthy();
+    expect(screen.getByTestId('song-add-setlist')).toBeTruthy();
+    expect(screen.getByTestId('song-mark-sung')).toBeTruthy();
+    await waitFor(() => expect(decide.listKaraokeLog).toHaveBeenCalled());
+    expect(await screen.findByTestId('song-history-app_1')).toHaveTextContent(/Before the app ×3/);
   });
 });

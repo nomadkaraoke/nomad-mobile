@@ -12,11 +12,21 @@ appId: com.nomadkaraoke.mobile
     env:
       EMAIL: ${EMAIL}
       PROFILE: '{"genres":["pop","rock"]}'
-- scrollUntilVisible:
-    element:
+# The Improve card is last on the picks. scrollUntilVisible missed its row now and then on iOS (on screen, the 100%
+# visibility check failing), and a row that only just showed sits under the tab bar, where the tap lands on a tab:
+# scroll until it shows, then once more (as common/voice-session-scroll-to-entry.yaml does).
+- repeat:
+    times: 8
+    while:
+      notVisible:
+        id: "discover-improve-connect"
+    commands:
+      - scroll
+- scroll
+- extendedWaitUntil:
+    visible:
       id: "discover-improve-connect"
-    direction: DOWN
-    timeout: 30000
+    timeout: 20000
 - tapOn:
     id: "discover-improve-connect"
 - extendedWaitUntil:

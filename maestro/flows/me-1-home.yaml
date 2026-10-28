@@ -1,0 +1,73 @@
+# Me 1 (Phase 4a spec §6.5): a seeded karaoke log (Hello went great, Starlight sung on two nights, Rocket Man went
+# OK) → the Me home's profile card, Your go-tos (Hello and Starlight, not Rocket Man), the setlists shelf, All your
+# songs (3) and the stats card (All time: 3 songs, 4 performances).
+appId: com.nomadkaraoke.mobile
+name: me-1-home
+tags:
+  - me
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me1
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["pop","rock"]}'
+      ENTRIES: '[{"id":"app_me1-hello","state":"sung","artist":"Adele","title":"Hello","song_key":"adele|hello","sung_at":"2026-10-03T21:00:00Z","night":{"kind":"other","venue_name":"The Rusty Mic","date":"2026-10-03","date_precision":"day"},"origin":"live","survey":{"feel":"great","key":"right"}},{"id":"app_me1-star1","state":"sung","artist":"Muse","title":"Starlight","song_key":"muse|starlight","sung_at":"2026-10-03T21:30:00Z","night":{"kind":"other","venue_name":"The Rusty Mic","date":"2026-10-03","date_precision":"day"},"origin":"live"},{"id":"app_me1-star2","state":"sung","artist":"Muse","title":"Starlight","song_key":"muse|starlight","sung_at":"2026-10-10T21:30:00Z","night":{"kind":"other","venue_name":"Blue Note Bar","date":"2026-10-10","date_precision":"day"},"origin":"live"},{"id":"app_me1-rocket","state":"sung","artist":"Elton John","title":"Rocket Man (I Think It''s Going to Be a Long, Long Time)","song_key":"elton john|rocket man i think its going to be a long long time","sung_at":"2026-10-10T22:00:00Z","night":{"kind":"other","venue_name":"Blue Note Bar","date":"2026-10-10","date_precision":"day"},"origin":"live","survey":{"feel":"ok"}}]'
+- extendedWaitUntil:
+    visible:
+      id: "me-goto-1"
+    timeout: 30000
+- assertVisible:
+    id: "me-goto-.*"
+    text: ".*Hello.*"
+- assertVisible:
+    id: "me-goto-.*"
+    text: ".*Starlight.*"
+- assertNotVisible:
+    id: "me-goto-2"
+- assertNotVisible:
+    id: "me-goto-.*"
+    text: ".*Rocket Man.*"
+- assertVisible:
+    id: "me-profile-sung"
+    text: "3 songs sung"
+- takeScreenshot: ${ME_SHOTS}/me-1-home
+- scrollUntilVisible:
+    element:
+      id: "me-setlists"
+    direction: DOWN
+    centerElement: true
+- assertVisible:
+    id: "me-setlist-new"
+- scrollUntilVisible:
+    element:
+      id: "me-all-songs"
+    direction: DOWN
+    centerElement: true
+- assertVisible:
+    id: "me-all-songs"
+    text: ".*All your songs \\(3\\).*"
+- scrollUntilVisible:
+    element:
+      id: "me-stats-all"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "me-stats-all"
+- scrollUntilVisible:
+    element:
+      id: "me-stats-songs"
+    direction: DOWN
+    centerElement: true
+- assertVisible:
+    id: "me-stats-songs"
+    text: "3 songs"
+- assertVisible:
+    id: "me-stats-performances"
+    text: "4 performances"
+- takeScreenshot: ${ME_SHOTS}/me-1-stats

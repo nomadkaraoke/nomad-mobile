@@ -1,11 +1,12 @@
 import { GENRE_IDS } from '@nomad/core';
 import { isolate, useTranslations } from '@nomad/i18n';
-import { Button, Screen, Text } from '@nomad/ui';
+import { BrandIcon, Button, Screen, Text } from '@nomad/ui';
 import { router, type Href } from 'expo-router';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { useAuth } from '../../auth/store';
 import { ConnectedSources } from '../../discover/connect/ConnectedSources';
+import { ArtistsYouLove } from '../../discover/profile/ArtistsYouLove';
 import { ProfileSection } from '../../discover/profile/ProfileSection';
 import { useAppleMusic } from '../../discover/profile/useAppleMusic';
 import { useMusicProfile } from '../../discover/profile/useMusicProfile';
@@ -66,97 +67,42 @@ export default function MusicProfileScreen() {
         </Text>
       ) : null}
 
+      {/* Phase 3c: the voice profile. */}
+      <VoiceProfileSection />
+
+      {voiceFlags?.session_enabled ? (
+        <Button testID="vs-entry-me" label={tvs('entry')} onPress={() => router.push('/discover/voice-session' as Href)} />
+      ) : null}
+
+      {/* Deleting recordings stays available to every signed-in person, whatever the session flag says. */}
+      <RecordingsSection />
+      <AnalyseMyMusicCard />
+
+      {/* Phase 3b: every connected or imported source, with a way to add more. */}
       <ProfileSection
-        testID="profile-quiz"
-        title={t('musicProfileQuiz')}
+        testID="profile-connected"
+        title={tc('sources.title')}
         isEmpty={false}
         empty=""
+        action={
+          <Pressable
+            testID="connect-add-more"
+            accessibilityRole="button"
+            onPress={() => router.push('/discover/connect' as Href)}
+            className="min-h-11 justify-center"
+          >
+            <Text className="text-primary">{tc('sources.addMore')}</Text>
+          </Pressable>
+        }
       >
-        <View className="gap-1">
-          <Text variant="muted">{t('musicProfileGenres')}</Text>
-          <Text testID="profile-genres">
-            {genres.length
-              ? genres.map((g) => (KNOWN_GENRES.includes(g) ? tg(genreKey(g)) : g)).join(', ')
-              : t('musicProfileNone')}
-          </Text>
-          <Button
-            testID="profile-edit-genres"
-            label={t('musicProfileEditGenres')}
-            variant="secondary"
-            onPress={() => router.push('/discover/quiz?step=1&from=profile')}
-          />
-        </View>
-        <View className="gap-1">
-          <Text variant="muted">{t('musicProfileDecades')}</Text>
-          <Text testID="profile-decades">
-            {decades.length ? decades.map((d) => td(`d${d}`)).join(', ') : t('musicProfileNone')}
-          </Text>
-          <Text testID="profile-energy">
-            {energy ? t('musicProfileEnergy', { energy: tq(energy) }) : t('musicProfileNoEnergy')}
-          </Text>
-          <Button
-            testID="profile-edit-decades"
-            label={t('musicProfileEditDecades')}
-            variant="secondary"
-            onPress={() => router.push('/discover/quiz?step=2&from=profile')}
-          />
-        </View>
+        <ConnectedSources onReconnectApple={() => void apple.connect()} />
       </ProfileSection>
-
-      <ProfileSection
-        testID="profile-artists"
-        title={t('musicProfileArtists')}
-        isEmpty={(p.artists.data?.artists.length ?? 0) === 0}
-        empty={t('musicProfileArtistsEmpty')}
-      >
-        {p.artists.data?.artists.map((a, i) => (
-          <RemoveRow
-            key={a.artist_name}
-            testID={`profile-artist-remove-${i}`}
-            text={isolate(a.artist_name)}
-            label={t('musicProfileRemove')}
-            onPress={() => p.removeArtist(a.artist_name)}
-          />
-        ))}
-      </ProfileSection>
-
-      <ProfileSection
-        testID="profile-loved"
-        title={t('musicProfileLoved')}
-        isEmpty={(p.loved.data?.length ?? 0) === 0}
-        empty={t('musicProfileLovedEmpty')}
-      >
-        {p.loved.data?.map((s, i) => (
-          <RemoveRow
-            key={s.song_key}
-            testID={`profile-loved-remove-${i}`}
-            text={t('musicProfileSong', { artist: isolate(s.artist), title: isolate(s.title) })}
-            label={t('musicProfileRemove')}
-            onPress={() => p.unlove(s.song_key)}
-          />
-        ))}
-      </ProfileSection>
-
-      <ProfileSection
-        testID="profile-hidden"
-        title={t('musicProfileHidden')}
-        isEmpty={(p.hidden.data?.length ?? 0) === 0}
-        empty={t('musicProfileHiddenEmpty')}
-      >
-        {p.hidden.data?.map((s, i) => (
-          <RemoveRow
-            key={s.song_key}
-            testID={`profile-hidden-unhide-${i}`}
-            text={t('musicProfileSong', { artist: isolate(s.artist), title: isolate(s.title) })}
-            label={t('musicProfileUnhide')}
-            onPress={() => p.unhide(s.song_key)}
-          />
-        ))}
-      </ProfileSection>
-
       <ProfileSection testID="profile-services" title={t('musicServices')} isEmpty={false} empty="">
         <View className="gap-2">
-          <Text className="font-semibold">{t('appleMusic')}</Text>
+          <View className="flex-row items-center gap-2">
+            <BrandIcon brand="apple_music" size={22} testID="profile-apple-mark" />
+            <Text className="flex-1 font-semibold">{t('appleMusic')}</Text>
+          </View>
           {apple.loading ? <ActivityIndicator testID="profile-apple-loading" /> : null}
           {!apple.loading && apple.status === 'notConnected' ? (
             <>
@@ -216,35 +162,85 @@ export default function MusicProfileScreen() {
         </View>
       </ProfileSection>
 
-      {/* Phase 3b: every connected or imported source, with a way to add more. */}
       <ProfileSection
-        testID="profile-connected"
-        title={tc('sources.title')}
+        testID="profile-artists"
+        title={t('musicProfileArtists')}
+        isEmpty={(p.artists.data?.artists.length ?? 0) === 0}
+        empty={t('musicProfileArtistsEmpty')}
+      >
+        <ArtistsYouLove artists={p.artists.data?.artists ?? []} onRemove={p.removeArtist} />
+      </ProfileSection>
+
+      <ProfileSection
+        testID="profile-loved"
+        title={t('musicProfileLoved')}
+        isEmpty={(p.loved.data?.length ?? 0) === 0}
+        empty={t('musicProfileLovedEmpty')}
+      >
+        {p.loved.data?.map((s, i) => (
+          <RemoveRow
+            key={s.song_key}
+            testID={`profile-loved-remove-${i}`}
+            text={t('musicProfileSong', { artist: isolate(s.artist), title: isolate(s.title) })}
+            label={t('musicProfileRemove')}
+            onPress={() => p.unlove(s.song_key)}
+          />
+        ))}
+      </ProfileSection>
+
+      <ProfileSection
+        testID="profile-quiz"
+        title={t('musicProfileQuiz')}
         isEmpty={false}
         empty=""
-        action={
-          <Pressable
-            testID="connect-add-more"
-            accessibilityRole="button"
-            onPress={() => router.push('/discover/connect' as Href)}
-            className="min-h-11 justify-center"
-          >
-            <Text className="text-primary">{tc('sources.addMore')}</Text>
-          </Pressable>
-        }
       >
-        <ConnectedSources onReconnectApple={() => void apple.connect()} />
+        <View className="gap-1">
+          <Text variant="muted">{t('musicProfileGenres')}</Text>
+          <Text testID="profile-genres">
+            {genres.length
+              ? genres.map((g) => (KNOWN_GENRES.includes(g) ? tg(genreKey(g)) : g)).join(', ')
+              : t('musicProfileNone')}
+          </Text>
+          <Button
+            testID="profile-edit-genres"
+            label={t('musicProfileEditGenres')}
+            variant="secondary"
+            onPress={() => router.push('/discover/quiz?step=1&from=profile')}
+          />
+        </View>
+        <View className="gap-1">
+          <Text variant="muted">{t('musicProfileDecades')}</Text>
+          <Text testID="profile-decades">
+            {decades.length ? decades.map((d) => td(`d${d}`)).join(', ') : t('musicProfileNone')}
+          </Text>
+          <Text testID="profile-energy">
+            {energy ? t('musicProfileEnergy', { energy: tq(energy) }) : t('musicProfileNoEnergy')}
+          </Text>
+          <Button
+            testID="profile-edit-decades"
+            label={t('musicProfileEditDecades')}
+            variant="secondary"
+            onPress={() => router.push('/discover/quiz?step=2&from=profile')}
+          />
+        </View>
       </ProfileSection>
-      {/* Phase 3c: the voice profile. */}
-      <VoiceProfileSection />
 
-      {voiceFlags?.session_enabled ? (
-        <Button testID="vs-entry-me" label={tvs('entry')} onPress={() => router.push('/discover/voice-session' as Href)} />
-      ) : null}
-
-      {/* Deleting recordings stays available to every signed-in person, whatever the session flag says. */}
-      <RecordingsSection />
-      <AnalyseMyMusicCard />
+      <ProfileSection
+        testID="profile-hidden"
+        title={t('musicProfileHidden')}
+        isEmpty={(p.hidden.data?.length ?? 0) === 0}
+        empty={t('musicProfileHiddenEmpty')}
+      >
+        {p.hidden.data?.map((s, i) => (
+          <RemoveRow
+            key={s.song_key}
+            testID={`profile-hidden-unhide-${i}`}
+            text={t('musicProfileSong', { artist: isolate(s.artist), title: isolate(s.title) })}
+            label={t('musicProfileUnhide')}
+            onPress={() => p.unhide(s.song_key)}
+          />
+        ))}
+      </ProfileSection>
 
       {isAdmin ? (
         <Button

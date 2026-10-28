@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Torna a connectar Apple Music",
     "musicServices": "Els teus serveis de música",
     "appleMusicDenied": "Nomad Karaoke no té accés a Apple Music. Activa'l a Ajustos › Nomad Karaoke › Contingut multimèdia i Apple Music i torna-ho a provar.",
-    "appleMusicNoSubscription": "Apple Music no ha compartit la teva biblioteca. Per connectar-t'hi cal una subscripció a Apple Music."
+    "appleMusicNoSubscription": "Apple Music no ha compartit la teva biblioteca. Per connectar-t'hi cal una subscripció a Apple Music.",
+    "artistsAll": "Tots els artistes",
+    "artistsNoMatch": "No coincideix cap artista.",
+    "artistsRemoveA11y": "Elimina {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Mostra'ls tots (#)} other {Mostra'ls tots (#)}}",
+    "artistsSearch": "Cerca un artista"
   },
   "common": {
     "error": "S'ha produït un error.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Crea el teu propi vídeo de karaoke d'aquesta cançó, a punt per cantar i compartir.",
     "offlineMissing": "No tens connexió i aquesta cançó no és a la llista desada en aquest telèfon.",
     "offlineNote": "Sense connexió · de la llista de cançons desada en aquest telèfon",
-    "cloudErrorNote": "Ara mateix no es pot accedir a la cerca · es mostra la llista de cançons desada en aquest telèfon"
+    "cloudErrorNote": "Ara mateix no es pot accedir a la cerca · es mostra la llista de cançons desada en aquest telèfon",
+    "history": {
+      "beforeApp": "Abans de l'aplicació",
+      "crowd": "Èxit assegurat",
+      "feel": "Sensació: {value}",
+      "key": "Tonalitat: {value}",
+      "nomadNight": "Nit Nomad",
+      "otherVenue": "Un altre bar",
+      "pageTitle": "Historial de cançons",
+      "removeBody": "Ja no comptarà com a cantada.",
+      "removeTitle": "Vols eliminar aquest registre?",
+      "times": "×{count}",
+      "title": "El teu historial",
+      "edit": "Edita",
+      "remove": "Elimina"
+    },
+    "save": "Desa a Les meves cançons",
+    "saved": "Desat",
+    "addToSetlist": "Afegeix al repertori",
+    "markSung": "Marca com a cantada"
   },
   "tabs": {
     "discover": "Descobreix",
@@ -706,7 +731,26 @@
       "skip": "Ara no",
       "song": "{title} de {artist}",
       "title": "Com ha anat?",
-      "save": "Desa"
+      "save": "Desa",
+      "reason": {
+        "awkward_music": "Música incòmoda",
+        "crowd_quiet": "Públic apàtic",
+        "didnt_know_it": "No me la sabia",
+        "out_of_range": "Fora del meu registre",
+        "too_hard": "Massa difícil",
+        "too_long": "Massa llarga"
+      },
+      "reasonsLabel": "Què ha fallat?",
+      "vibe": {
+        "ballad": "Balada",
+        "duet": "Duet",
+        "emotional": "Emotiva",
+        "party": "Festa",
+        "rock_out": "Per donar-ho tot",
+        "singalong": "Per cantar tots junts",
+        "warm_up": "Escalfament"
+      },
+      "vibesLabel": "Quin era l'ambient?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Catàleg del local",
     "loved": "Preferides",
-    "menuLoveIt": "M'encanta",
+    "menuLoveIt": "Desa a Les meves cançons",
     "menuNotForMe": "No és per a mi",
     "menuOpen": "Més opcions per a {title}",
     "offlinePicks": "Sense connexió: es mostren les teves últimes seleccions",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Comunitat",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Torna-ho a provar",
-    "signInForPicksAction": "Inicia la sessió"
+    "signInForPicksAction": "Inicia la sessió",
+    "menuSaved": "Desat",
+    "menuAddToSetlist": "Afegeix al repertori",
+    "menuMarkSung": "Marca com a cantada"
   },
   "review": {
     "discard": "Descarta les meves edicions",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# de les teves cançons està a punt — troba la teva veu} other {# de les teves cançons estan a punt — troba la teva veu}}",
       "request": "Prepara les meves cançons",
       "title": "Analitza la meva música"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Fa un temps",
+      "day": "Dia (opcional)",
+      "less": "Redueix",
+      "onDate": "En una data concreta",
+      "times": "Quants cops l'has cantada",
+      "title": "Marca com a cantada",
+      "close": "Tanca",
+      "more": "Augmenta",
+      "save": "Desa",
+      "song": "{title} de {artist}",
+      "tonight": "Aquesta nit"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Fet} one {Afegeix # cançó} other {Afegeix # cançons}}",
+      "hint": "Marca les cançons que ja hagis cantat abans. Les afegirem al teu historial.",
+      "title": "Cançons que he cantat",
+      "searchLabel": "Cerca una cançó",
+      "searchPlaceholder": "Cerca cançons",
+      "songValue": "{title} de {artist}"
+    },
+    "setlists": {
+      "add": "Afegeix cançons",
+      "addNew": "Crea i afegeix",
+      "addNewPlaceholder": "Nom del nou repertori",
+      "addToTitle": "Afegeix al repertori",
+      "addTyped": "Afegeix \"{query}\" com a cançó nova",
+      "count": "{count, plural, =0 {Cap cançó} one {# cançó} other {# cançons}}",
+      "deleteBody": "S'eliminarà {name}. Aquesta acció no es pot desfer.",
+      "deleteTitle": "Vols eliminar aquest repertori?",
+      "detailTitle": "Repertori",
+      "editOrder": "Edita l'ordre",
+      "empty": "Encara no hi ha cap repertori. Crea'n un per planificar les cançons d'una nit.",
+      "full": "Aquest repertori està ple (500 cançons).",
+      "itemsEmpty": "Encara no hi ha cançons. Afegeix-ne alguna.",
+      "nameLabel": "Nom del repertori",
+      "namePlaceholder": "p. ex., Preferides de divendres",
+      "new": "Nou repertori",
+      "newTitle": "Nou repertori",
+      "notFound": "Aquest repertori ja no existeix.",
+      "number": "{number}",
+      "rename": "Canvia el nom",
+      "renameTitle": "Canvia el nom del repertori",
+      "saveOrder": "Desa l'ordre",
+      "title": "Repertoris",
+      "addSongTitle": "Afegeix una cançó",
+      "added": "Afegit",
+      "cancel": "Cancel·la",
+      "cancelOrder": "Cancel·la",
+      "close": "Tanca",
+      "delete": "Suprimeix",
+      "done": "Fet",
+      "down": "Mou {song} cap avall",
+      "make": "Crea'l",
+      "nameSave": "Desa",
+      "remove": "Elimina",
+      "searchLabel": "Cerca una cançó",
+      "searchPlaceholder": "Cerca cançons",
+      "songValue": "{title} de {artist}",
+      "sung": "Marca com a cantada",
+      "up": "Mou {song} cap amunt"
+    },
+    "allSongs": "Totes les teves cançons",
+    "home": {
+      "allSongsRow": "Totes les teves cançons ({count})",
+      "allTime": "Des de sempre",
+      "connectHint": "Aconsegueix recomanacions basades en el que ja escoltes",
+      "gotosEmpty": "Les cançons que t'encanta cantar apareixeran aquí. Comença afegint cançons que hagis cantat abans.",
+      "gotosEmptyCta": "Afegeix cançons que he cantat",
+      "gotosTitle": "Els teus clàssics",
+      "greatShare": "El {percent}% han anat genial",
+      "keysLabel": "El teu rang vocal en un teclat",
+      "manage": "Gestiona",
+      "manageHint": "Configura el teu rang vocal, connecta la teva música i edita el que sabem sobre tu",
+      "mostSung": "Més cantada: {song} ({count}×)",
+      "nights": "{count, plural, one {# nit} other {# nits}}",
+      "performances": "{count, plural, one {# actuació} other {# actuacions}}",
+      "saved": "{count, plural, one {# desada} other {# desades}}",
+      "seeAll": "Mostra-ho tot",
+      "setlistsEmpty": "Planifica una nit: crea una llista de cançons que vulguis cantar.",
+      "songs": "{count, plural, one {# cançó} other {# cançons}}",
+      "sourcesLabel": "Música connectada",
+      "statsEmpty": "Encara no has cantat res. Marca una cançó com a cantada per començar les teves estadístiques.",
+      "statsTitle": "El teu karaoke",
+      "sung": "{count, plural, one {# cançó cantada} other {# cançons cantades}}",
+      "thisYear": "Aquest any",
+      "topArtist": "Artista principal: {artist}",
+      "venues": "{count, plural, one {# local} other {# locals}}",
+      "voiceCta": "Descobreix el teu rang vocal",
+      "connectCta": "Connecta la teva música",
+      "profileTitle": "El teu perfil musical",
+      "voiceHint": "Troba cançons que s'adaptin a la teva veu",
+      "voiceRange": "Tessitura: {range}"
+    },
+    "songs": {
+      "addPast": "Afegeix cançons que he cantat",
+      "count": "{count, plural, one {# cançó} other {# cançons}}",
+      "empty": "Encara no hi ha cap cançó. Marca una cançó com a cantada o desa'n una i apareixerà aquí.",
+      "emptyFiltered": "Cap cançó coincideix amb aquests filtres.",
+      "feel": {
+        "unrated": "Sense valorar",
+        "bad": "No és per a mi",
+        "great": "Molt bé",
+        "ok": "OK"
+      },
+      "offline": "No tens connexió. Es mostren les cançons desades en aquest telèfon.",
+      "often": {
+        "once": "Una vegada",
+        "twice": "2 o més",
+        "unsung": "Encara no cantades"
+      },
+      "oftenLabel": "Freqüència",
+      "searchLabel": "Cerca entre les teves cançons",
+      "sort": {
+        "most": "Més cantades",
+        "rated": "Millor valorades",
+        "recent": "Recents",
+        "az": "De la A a la Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Ambient",
+      "crowdPleaser": "Èxit assegurat",
+      "feelLabel": "La teva valoració",
+      "loadError": "No s'han pogut carregar les teves cançons.",
+      "moodLabel": "Estat d'ànim",
+      "saved": "Desat",
+      "searchPlaceholder": "Cançó o artista",
+      "sortLabel": "Ordena",
+      "timesSungLabel": "{count, plural, one {Cantada # vegada} other {Cantada # vegades}}"
     }
   }
 }

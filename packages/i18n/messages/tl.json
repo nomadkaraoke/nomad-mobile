@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Ikonekta ulit ang Apple Music",
     "musicServices": "Iyong mga music service",
     "appleMusicDenied": "Walang access ang Nomad Karaoke sa Apple Music. I-on ito sa Settings › Nomad Karaoke › Media & Apple Music, pagkatapos ay subukang muli.",
-    "appleMusicNoSubscription": "Hindi ibinahagi ng Apple Music ang iyong library. Kinakailangan ng subscription sa Apple Music para makakonekta."
+    "appleMusicNoSubscription": "Hindi ibinahagi ng Apple Music ang iyong library. Kinakailangan ng subscription sa Apple Music para makakonekta.",
+    "artistsAll": "Lahat ng artist",
+    "artistsNoMatch": "Walang tumutugmang artist.",
+    "artistsRemoveA11y": "Alisin ang {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Tingnan lahat (#)} other {Tingnan lahat (#)}}",
+    "artistsSearch": "Maghanap ng artist"
   },
   "common": {
     "error": "May nagkaproblema.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Gumawa ng sarili mong karaoke video nito, handa nang kantahin at i-share.",
     "offlineMissing": "Offline ka, at wala ang kantang ito sa listahan ng mga kanta na naka-save sa teleponong ito.",
     "offlineNote": "Offline · mula sa listahan ng mga kanta na naka-save sa teleponong ito",
-    "cloudErrorNote": "Hindi ma-access ang search sa ngayon · ipinapakita ang listahan ng mga kanta na naka-save sa teleponong ito"
+    "cloudErrorNote": "Hindi ma-access ang search sa ngayon · ipinapakita ang listahan ng mga kanta na naka-save sa teleponong ito",
+    "history": {
+      "beforeApp": "Bago ang app",
+      "crowd": "Paborito ng marami",
+      "feel": "Pakiramdam: {value}",
+      "key": "Key: {value}",
+      "nomadNight": "Nomad night",
+      "otherVenue": "Ibang bar",
+      "pageTitle": "History ng kanta",
+      "removeBody": "Hindi na ito mabibilang na nakanta.",
+      "removeTitle": "Alisin ang record na ito?",
+      "times": "×{count}",
+      "title": "Iyong history",
+      "edit": "I-edit",
+      "remove": "Alisin"
+    },
+    "save": "I-save sa Aking mga kanta",
+    "saved": "Nai-save na",
+    "addToSetlist": "Idagdag sa setlist",
+    "markSung": "Markahan bilang nakanta na"
   },
   "tabs": {
     "discover": "Mag-discover",
@@ -706,7 +731,26 @@
       "skip": "Huwag muna",
       "song": "{title} ni {artist}",
       "title": "Kumusta ang naging takbo?",
-      "save": "I-save"
+      "save": "I-save",
+      "reason": {
+        "awkward_music": "Alanganing tugtog",
+        "crowd_quiet": "Tahimik ang crowd",
+        "didnt_know_it": "Hindi kabisado ang kanta",
+        "out_of_range": "Wala sa range ng boses ko",
+        "too_hard": "Masyadong mahirap",
+        "too_long": "Masyadong mahaba"
+      },
+      "reasonsLabel": "Ano ang naging aberya?",
+      "vibe": {
+        "ballad": "Ballad",
+        "duet": "Duet",
+        "emotional": "Madrama",
+        "party": "Party",
+        "rock_out": "Rock out",
+        "singalong": "Sing-along",
+        "warm_up": "Warm-up"
+      },
+      "vibesLabel": "Ano ang naging vibe?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Library ng venue",
     "loved": "Paborito",
-    "menuLoveIt": "I-love ito",
+    "menuLoveIt": "I-save sa Aking mga kanta",
     "menuNotForMe": "Hindi para sa akin",
     "menuOpen": "Higit pang opsyon para sa {title}",
     "offlinePicks": "Offline: ipinapakita ang huli mong mga napili",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Subukan muli",
-    "signInForPicksAction": "Mag-sign in"
+    "signInForPicksAction": "Mag-sign in",
+    "menuSaved": "Nai-save na",
+    "menuAddToSetlist": "Idagdag sa setlist",
+    "menuMarkSung": "Markahan bilang nakanta na"
   },
   "review": {
     "discard": "I-discard ang aking mga edit",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {Handa na ang # sa iyong mga kanta — tuklasin ang iyong boses} other {Handa na ang # sa iyong mga kanta — tuklasin ang iyong boses}}",
       "request": "Ihanda ang aking mga kanta",
       "title": "Suriin ang aking musika"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Ilang panahon na ang nakalipas",
+      "day": "Araw (opsyonal)",
+      "less": "Bawasan",
+      "onDate": "Sa petsang ito",
+      "times": "Ilang beses kinanta",
+      "title": "Markahan bilang nakanta na",
+      "close": "Isara",
+      "more": "Dagdagan",
+      "save": "I-save",
+      "song": "{title} ni {artist}",
+      "tonight": "Ngayong Gabi"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Tapos na} one {Magdagdag ng # kanta} other {Magdagdag ng # na kanta}}",
+      "hint": "Lagyan ng tsek ang mga kantang nakanta mo na noon. Idaragdag namin ang mga ito sa iyong history.",
+      "title": "Mga kantang nakanta ko na",
+      "searchLabel": "Maghanap ng kanta",
+      "searchPlaceholder": "Maghanap ng mga kanta",
+      "songValue": "{title} ni {artist}"
+    },
+    "setlists": {
+      "add": "Magdagdag ng mga kanta",
+      "addNew": "Gumawa at magdagdag",
+      "addNewPlaceholder": "Pangalan ng bagong setlist",
+      "addToTitle": "Idagdag sa setlist",
+      "addTyped": "Idagdag ang \"{query}\" bilang bagong kanta",
+      "count": "{count, plural, =0 {Walang kanta} one {# kanta} other {# na kanta}}",
+      "deleteBody": "Mabubura ang {name}. Hindi na ito maibabalik.",
+      "deleteTitle": "Burahin ang setlist na ito?",
+      "detailTitle": "Setlist",
+      "editOrder": "I-edit ang pagkakasunod-sunod",
+      "empty": "Wala pang mga setlist. Gumawa ng isa para planuhin ang mga kanta mo para sa isang gabi.",
+      "full": "Puno na ang setlist na iyan (500 kanta).",
+      "itemsEmpty": "Wala pang kanta. Magdagdag ng ilan.",
+      "nameLabel": "Pangalan ng setlist",
+      "namePlaceholder": "hal. Mga paborito sa Biyernes",
+      "new": "Bagong setlist",
+      "newTitle": "Bagong setlist",
+      "notFound": "Wala na rito ang setlist na ito.",
+      "number": "{number}",
+      "rename": "Palitan ang pangalan",
+      "renameTitle": "Palitan ang pangalan ng setlist",
+      "saveOrder": "I-save ang pagkakasunod-sunod",
+      "title": "Mga Setlist",
+      "addSongTitle": "Magdagdag ng kanta",
+      "added": "Naidagdag na",
+      "cancel": "Kanselahin",
+      "cancelOrder": "Kanselahin",
+      "close": "Isara",
+      "delete": "Burahin",
+      "done": "Tapos na",
+      "down": "Ilipat pababa ang {song}",
+      "make": "Gawin ito",
+      "nameSave": "I-save",
+      "remove": "Alisin",
+      "searchLabel": "Maghanap ng kanta",
+      "searchPlaceholder": "Maghanap ng mga kanta",
+      "songValue": "{title} ni {artist}",
+      "sung": "Markahan bilang nakanta na",
+      "up": "Ilipat pataas ang {song}"
+    },
+    "allSongs": "Lahat ng iyong kanta",
+    "home": {
+      "allSongsRow": "Lahat ng iyong kanta ({count})",
+      "allTime": "Kailanman",
+      "connectHint": "Kumuha ng mga rekomendasyon batay sa mga pinakikinggan mo na",
+      "gotosEmpty": "Lalabas dito ang mga kantang paborito mong kantahin. Magsimula sa pagdaragdag ng mga kantang nakanta mo na dati.",
+      "gotosEmptyCta": "Magdagdag ng mga kantang nakanta ko na",
+      "gotosTitle": "Iyong mga paborito",
+      "greatShare": "{percent}% ang naging maganda",
+      "keysLabel": "Ang vocal range mo sa keyboard",
+      "manage": "Pamahalaan",
+      "manageHint": "I-set up ang range ng iyong boses, ikonekta ang musika, at i-edit ang nalalaman namin tungkol sa iyo",
+      "mostSung": "Pinakamadalas kantahin: {song} ({count}×)",
+      "nights": "{count, plural, one {# gabi} other {# gabi}}",
+      "performances": "{count, plural, one {# performance} other {# performance}}",
+      "saved": "{count, plural, one {# ang naka-save} other {# ang naka-save}}",
+      "seeAll": "Tingnan lahat",
+      "setlistsEmpty": "Magplano para sa isang gabi: gumawa ng setlist ng mga kantang gusto mong kantahin.",
+      "songs": "{count, plural, one {# kanta} other {# kanta}}",
+      "sourcesLabel": "Nakakonektang musika",
+      "statsEmpty": "Wala pang nakakanta. Magmarka ng kanta bilang nakanta na para masimulan ang iyong stats.",
+      "statsTitle": "Iyong karaoke",
+      "sung": "{count, plural, one {# kanta ang nakanta} other {# kanta ang nakanta}}",
+      "thisYear": "Ngayong taon",
+      "topArtist": "Nangungunang artist: {artist}",
+      "venues": "{count, plural, one {# venue} other {# venue}}",
+      "voiceCta": "Alamin ang range ng iyong boses",
+      "connectCta": "Ikonekta ang iyong musika",
+      "profileTitle": "Iyong profile sa musika",
+      "voiceHint": "Maghanap ng mga kantang bagay sa boses mo",
+      "voiceRange": "Range {range}"
+    },
+    "songs": {
+      "addPast": "Magdagdag ng mga kantang nakanta ko na",
+      "count": "{count, plural, one {# kanta} other {# kanta}}",
+      "empty": "Wala pang kanta. Magmarka ng kanta bilang nakanta na o mag-save para lumabas ito rito.",
+      "emptyFiltered": "Walang kantang tumutugma sa mga filter na ito.",
+      "feel": {
+        "unrated": "Walang rating",
+        "bad": "Hindi para sa akin",
+        "great": "Sobrang ayos",
+        "ok": "OK"
+      },
+      "offline": "Offline ka. Ipinapakita ang mga kantang naka-save sa teleponong ito.",
+      "often": {
+        "once": "Isang beses",
+        "twice": "2 o higit pa",
+        "unsung": "Hindi pa nakakanta"
+      },
+      "oftenLabel": "Gaano kadalas",
+      "searchLabel": "Hanapin ang iyong mga kanta",
+      "sort": {
+        "most": "Pinakamadalas kantahin",
+        "rated": "Pinakamataas ang rating",
+        "recent": "Pinakabago",
+        "az": "A hanggang Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Paborito ng marami",
+      "feelLabel": "Iyong rating",
+      "loadError": "Hindi ma-load ang iyong mga kanta.",
+      "moodLabel": "Mood",
+      "saved": "Nai-save na",
+      "searchPlaceholder": "Kanta o artist",
+      "sortLabel": "I-sort",
+      "timesSungLabel": "{count, plural, one {# beses kinanta} other {# beses kinanta}}"
     }
   }
 }

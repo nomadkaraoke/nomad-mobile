@@ -27,8 +27,16 @@ tags:
       PROFILE: '{"genres":["pop"]}'
 - tapOn:
     id: "tab-me"
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-manage"
+    timeout: 15000
 - tapOn:
-    id: "me-music-profile"
+    id: "me-profile-manage"
+- extendedWaitUntil:
+    visible:
+      id: "voice-section"
+    timeout: 15000
 - scrollUntilVisible:
     element:
       id: "vs-rec-0-2"

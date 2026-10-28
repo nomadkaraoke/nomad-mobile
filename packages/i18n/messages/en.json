@@ -82,7 +82,7 @@
     "menuTitle": "{title} · {artist}",
     "menuOpen": "More options for {title}",
     "menuNotForMe": "Not for me",
-    "menuLoveIt": "Love it",
+    "menuLoveIt": "Save to My songs",
     "loved": "Loved",
     "hiddenToast": "Hidden from your picks",
     "reason": {
@@ -201,7 +201,10 @@
         "yes": "Has karaoke",
         "make": "Make it"
       }
-    }
+    },
+    "menuSaved": "Saved",
+    "menuAddToSetlist": "Add to setlist",
+    "menuMarkSung": "Mark as sung"
   },
   "song": {
     "artistLabel": "Artist",
@@ -213,7 +216,26 @@
     "hasKaraokeHint": "You can still make your own, from the audio you pick.",
     "offlineNote": "Offline · from the song list saved on this phone",
     "offlineMissing": "You're offline, and this song isn't in the song list saved on this phone.",
-    "cloudErrorNote": "Can't reach search right now · showing the song list saved on this phone"
+    "cloudErrorNote": "Can't reach search right now · showing the song list saved on this phone",
+    "save": "Save to My songs",
+    "saved": "Saved",
+    "addToSetlist": "Add to setlist",
+    "markSung": "Mark as sung",
+    "history": {
+      "title": "Your history",
+      "pageTitle": "Song history",
+      "beforeApp": "Before the app",
+      "times": "×{count}",
+      "nomadNight": "Nomad night",
+      "otherVenue": "Another bar",
+      "feel": "Feel: {value}",
+      "key": "Key: {value}",
+      "crowd": "Crowd-pleaser",
+      "edit": "Edit",
+      "remove": "Remove",
+      "removeTitle": "Remove this record?",
+      "removeBody": "It will no longer count as sung."
+    }
   },
   "signIn": {
     "emailTitle": "Sign in",
@@ -289,6 +311,12 @@
     "musicProfileHiddenEmpty": "You haven't hidden any songs.",
     "musicProfileSong": "{artist} - {title}",
     "musicProfileRemove": "Remove",
+    "artistsSearch": "Find an artist",
+    "artistsSeeAll": "{count, plural, one {See all (#)} other {See all (#)}}",
+    "artistsAll": "All artists",
+    "artistsNoMatch": "No artists match.",
+    "artistsRemoveA11y": "Remove {artist}",
+    "artistsRemoveGlyph": "×",
     "musicProfileUnhide": "Unhide",
     "musicServices": "Your music services",
     "appleMusic": "Apple Music",
@@ -551,6 +579,25 @@
       "crowd": {
         "yes": "Yes",
         "no": "Not really"
+      },
+      "vibesLabel": "What was the vibe?",
+      "vibe": {
+        "party": "Party",
+        "ballad": "Ballad",
+        "warm_up": "Warm-up",
+        "duet": "Duet",
+        "emotional": "Emotional",
+        "rock_out": "Rock out",
+        "singalong": "Sing-along"
+      },
+      "reasonsLabel": "What got in the way?",
+      "reason": {
+        "out_of_range": "Out of my range",
+        "too_hard": "Too hard",
+        "crowd_quiet": "Quiet crowd",
+        "awkward_music": "Awkward music",
+        "too_long": "Too long",
+        "didnt_know_it": "Didn't know it"
       },
       "notesLabel": "Notes (optional)",
       "notesPlaceholder": "Anything to remember next time?",
@@ -1835,6 +1882,138 @@
       "paused": "Busy right now, try again tomorrow",
       "nothingToAdd": "We've already got your top songs. Try again after you listen to more music.",
       "failed": "Couldn't ask just now. Try again in a minute."
+    }
+  },
+  "me": {
+    "mark": {
+      "title": "Mark as sung",
+      "close": "Close",
+      "song": "{title} by {artist}",
+      "tonight": "Tonight",
+      "onDate": "On a date",
+      "aWhileAgo": "Some time ago",
+      "day": "Day (optional)",
+      "times": "How many times sung",
+      "less": "Decrease",
+      "more": "Increase",
+      "save": "Save"
+    },
+    "sungBefore": {
+      "title": "Songs I've sung",
+      "hint": "Tick the songs you have sung before. We'll add them to your history.",
+      "searchLabel": "Find a song",
+      "searchPlaceholder": "Search songs",
+      "songValue": "{title} by {artist}",
+      "done": "{count, plural, =0 {Done} one {Add # song} other {Add # songs}}"
+    },
+    "setlists": {
+      "title": "Setlists",
+      "detailTitle": "Setlist",
+      "empty": "No setlists yet. Make one to plan your songs for a night.",
+      "new": "New setlist",
+      "newTitle": "New setlist",
+      "renameTitle": "Rename setlist",
+      "count": "{count, plural, =0 {No songs} one {# song} other {# songs}}",
+      "nameLabel": "Setlist name",
+      "namePlaceholder": "e.g. Friday favourites",
+      "nameSave": "Save",
+      "close": "Close",
+      "rename": "Rename",
+      "delete": "Delete",
+      "deleteTitle": "Delete this setlist?",
+      "deleteBody": "{name} will be deleted. This can't be undone.",
+      "cancel": "Cancel",
+      "add": "Add songs",
+      "addSongTitle": "Add a song",
+      "searchLabel": "Find a song",
+      "searchPlaceholder": "Search songs",
+      "addTyped": "Add \"{query}\" as a new song",
+      "added": "Added",
+      "addToTitle": "Add to setlist",
+      "addNewPlaceholder": "New setlist name",
+      "addNew": "Create and add",
+      "done": "Done",
+      "full": "That setlist is full (500 songs).",
+      "itemsEmpty": "No songs yet. Add some.",
+      "notFound": "This setlist isn't here any more.",
+      "editOrder": "Edit order",
+      "saveOrder": "Save order",
+      "cancelOrder": "Cancel",
+      "up": "Move {song} up",
+      "down": "Move {song} down",
+      "number": "{number}",
+      "songValue": "{title} by {artist}",
+      "sung": "Mark as sung",
+      "make": "Make it",
+      "remove": "Remove"
+    },
+    "home": {
+      "profileTitle": "Your music profile",
+      "manage": "Manage",
+      "manageHint": "Set up your voice range, connect music and edit what we know about you",
+      "voiceCta": "Find your voice range",
+      "voiceHint": "Find songs that fit your voice",
+      "connectCta": "Connect your music",
+      "connectHint": "Get picks from what you already listen to",
+      "keysLabel": "Your vocal range on a keyboard",
+      "voiceRange": "Range {range}",
+      "sourcesLabel": "Connected music",
+      "sung": "{count, plural, one {# song sung} other {# songs sung}}",
+      "saved": "{count, plural, one {# saved} other {# saved}}",
+      "seeAll": "See all",
+      "gotosTitle": "Your go-tos",
+      "gotosEmpty": "The songs you love to sing will show up here. Start by adding songs you've sung before.",
+      "gotosEmptyCta": "Add songs I've sung",
+      "setlistsEmpty": "Plan a night: make a setlist of songs you want to sing.",
+      "allSongsRow": "All your songs ({count})",
+      "statsTitle": "Your karaoke",
+      "thisYear": "This year",
+      "allTime": "All time",
+      "songs": "{count, plural, one {# song} other {# songs}}",
+      "performances": "{count, plural, one {# performance} other {# performances}}",
+      "nights": "{count, plural, one {# night} other {# nights}}",
+      "venues": "{count, plural, one {# venue} other {# venues}}",
+      "topArtist": "Top artist: {artist}",
+      "mostSung": "Most sung: {song} ({count}×)",
+      "greatShare": "{percent}% went great",
+      "statsEmpty": "Nothing sung yet. Mark a song as sung to start your stats."
+    },
+    "allSongs": "All your songs",
+    "songs": {
+      "searchLabel": "Search your songs",
+      "searchPlaceholder": "Song or artist",
+      "addPast": "Add songs I've sung",
+      "sortLabel": "Sort",
+      "sort": {
+        "most": "Most sung",
+        "recent": "Recent",
+        "rated": "Best rated",
+        "az": "A to Z"
+      },
+      "feelLabel": "Your rating",
+      "feel": {
+        "great": "Great",
+        "ok": "OK",
+        "bad": "Not for me",
+        "unrated": "Unrated"
+      },
+      "oftenLabel": "How often",
+      "often": {
+        "twice": "2 or more",
+        "once": "Once",
+        "unsung": "Not yet sung"
+      },
+      "moodLabel": "Mood",
+      "vibeLabel": "Vibe",
+      "saved": "Saved",
+      "timesSung": "{count}×",
+      "timesSungLabel": "{count, plural, one {Sung # time} other {Sung # times}}",
+      "crowdPleaser": "Crowd-pleaser",
+      "empty": "No songs yet. Mark a song as sung or save one and it will show up here.",
+      "emptyFiltered": "No songs match these filters.",
+      "offline": "You're offline. Showing the songs saved on this phone.",
+      "loadError": "Couldn't load your songs.",
+      "count": "{count, plural, one {# song} other {# songs}}"
     }
   }
 }

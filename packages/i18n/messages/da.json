@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Genopret forbindelse til Apple Music",
     "musicServices": "Dine musiktjenester",
     "appleMusicDenied": "Nomad Karaoke har ikke adgang til Apple Music. Slå det til under Indstillinger › Nomad Karaoke › Medier og Apple Music, og prøv igen.",
-    "appleMusicNoSubscription": "Apple Music delte ikke dit bibliotek. Tilknytning kræver et Apple Music-abonnement."
+    "appleMusicNoSubscription": "Apple Music delte ikke dit bibliotek. Tilknytning kræver et Apple Music-abonnement.",
+    "artistsAll": "Alle kunstnere",
+    "artistsNoMatch": "Ingen kunstnere matcher.",
+    "artistsRemoveA11y": "Fjern {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Se alle (#)} other {Se alle (#)}}",
+    "artistsSearch": "Find en kunstner"
   },
   "common": {
     "error": "Der gik noget galt.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Lav din egen karaokevideo af den, klar til at synge og dele.",
     "offlineMissing": "Du er offline, og denne sang findes ikke i sanglisten, der er gemt på denne telefon.",
     "offlineNote": "Offline · fra sanglisten gemt på denne telefon",
-    "cloudErrorNote": "Kan ikke få forbindelse til søgningen lige nu · viser sanglisten, der er gemt på denne telefon"
+    "cloudErrorNote": "Kan ikke få forbindelse til søgningen lige nu · viser sanglisten, der er gemt på denne telefon",
+    "history": {
+      "beforeApp": "Før appen",
+      "crowd": "Publikumsfavorit",
+      "feel": "Stemning: {value}",
+      "key": "Toneart: {value}",
+      "nomadNight": "Nomad-aften",
+      "otherVenue": "En anden bar",
+      "pageTitle": "Sanghistorik",
+      "removeBody": "Den vil ikke længere tælle som sunget.",
+      "removeTitle": "Fjern denne registrering?",
+      "times": "×{count}",
+      "title": "Din historik",
+      "edit": "Rediger",
+      "remove": "Fjern"
+    },
+    "save": "Gem i Mine sange",
+    "saved": "Gemt",
+    "addToSetlist": "Tilføj til setliste",
+    "markSung": "Markér som sunget"
   },
   "tabs": {
     "discover": "Udforsk",
@@ -706,7 +731,26 @@
       "skip": "Ikke nu",
       "song": "{title} af {artist}",
       "title": "Hvordan gik det?",
-      "save": "Gem"
+      "save": "Gem",
+      "reason": {
+        "awkward_music": "Akavet musik",
+        "crowd_quiet": "Stille publikum",
+        "didnt_know_it": "Kendte den ikke",
+        "out_of_range": "Uden for mit toneleje",
+        "too_hard": "For svær",
+        "too_long": "For lang"
+      },
+      "reasonsLabel": "Hvad kom i vejen?",
+      "vibe": {
+        "ballad": "Ballade",
+        "duet": "Duet",
+        "emotional": "Følelsesladet",
+        "party": "Fest",
+        "rock_out": "Rocke igennem",
+        "singalong": "Fællessang",
+        "warm_up": "Opvarmning"
+      },
+      "vibesLabel": "Hvordan var stemningen?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Stedets sangkatalog",
     "loved": "Favoritter",
-    "menuLoveIt": "Elsker den",
+    "menuLoveIt": "Gem i Mine sange",
     "menuNotForMe": "Ikke noget for mig",
     "menuOpen": "Flere muligheder for {title}",
     "offlinePicks": "Offline: viser dine seneste anbefalinger",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Fællesskab",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Prøv igen",
-    "signInForPicksAction": "Log ind"
+    "signInForPicksAction": "Log ind",
+    "menuSaved": "Gemt",
+    "menuAddToSetlist": "Tilføj til setliste",
+    "menuMarkSung": "Markér som sunget"
   },
   "review": {
     "discard": "Kassér mine ændringer",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# af dine sange er klar – find din stemme} other {# af dine sange er klar – find din stemme}}",
       "request": "Klargør mine sange",
       "title": "Analysér min musik"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "For et stykke tid siden",
+      "day": "Dag (valgfrit)",
+      "less": "Formindsk",
+      "onDate": "På en bestemt dato",
+      "times": "Antal gange sunget",
+      "title": "Markér som sunget",
+      "close": "Luk",
+      "more": "Forøg",
+      "save": "Gem",
+      "song": "{title} af {artist}",
+      "tonight": "I aften"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Færdig} one {Tilføj # sang} other {Tilføj # sange}}",
+      "hint": "Sæt kryds ved de sange, du har sunget før. Vi føjer dem til din historik.",
+      "title": "Sange, jeg har sunget",
+      "searchLabel": "Find en sang",
+      "searchPlaceholder": "Søg efter sange",
+      "songValue": "{title} af {artist}"
+    },
+    "setlists": {
+      "add": "Tilføj sange",
+      "addNew": "Opret og tilføj",
+      "addNewPlaceholder": "Navn på ny setliste",
+      "addToTitle": "Tilføj til setliste",
+      "addTyped": "Tilføj \"{query}\" som en ny sang",
+      "count": "{count, plural, =0 {Ingen sange} one {# sang} other {# sange}}",
+      "deleteBody": "{name} vil blive slettet. Dette kan ikke fortrydes.",
+      "deleteTitle": "Vil du slette denne setliste?",
+      "detailTitle": "Setliste",
+      "editOrder": "Rediger rækkefølge",
+      "empty": "Ingen setlister endnu. Opret en for at planlægge dine sange til en aften.",
+      "full": "Den setliste er fuld (500 sange).",
+      "itemsEmpty": "Ingen sange endnu. Tilføj nogle.",
+      "nameLabel": "Setlistens navn",
+      "namePlaceholder": "f.eks. Fredagsfavoritter",
+      "new": "Ny setliste",
+      "newTitle": "Ny setliste",
+      "notFound": "Denne setliste findes ikke længere.",
+      "number": "{number}",
+      "rename": "Omdøb",
+      "renameTitle": "Omdøb setliste",
+      "saveOrder": "Gem rækkefølge",
+      "title": "Setlister",
+      "addSongTitle": "Tilføj en sang",
+      "added": "Tilføjet",
+      "cancel": "Annuller",
+      "cancelOrder": "Annuller",
+      "close": "Luk",
+      "delete": "Slet",
+      "done": "Færdig",
+      "down": "Flyt {song} ned",
+      "make": "Lav den",
+      "nameSave": "Gem",
+      "remove": "Fjern",
+      "searchLabel": "Find en sang",
+      "searchPlaceholder": "Søg efter sange",
+      "songValue": "{title} af {artist}",
+      "sung": "Markér som sunget",
+      "up": "Flyt {song} op"
+    },
+    "allSongs": "Alle dine sange",
+    "home": {
+      "allSongsRow": "Alle dine sange ({count})",
+      "allTime": "Altid",
+      "connectHint": "Få forslag baseret på det, du allerede lytter til",
+      "gotosEmpty": "De sange, du elsker at synge, vises her. Start med at tilføje sange, du har sunget før.",
+      "gotosEmptyCta": "Tilføj sange, jeg har sunget",
+      "gotosTitle": "Dine favoritter",
+      "greatShare": "{percent}% gik fantastisk",
+      "keysLabel": "Dit stemmeomfang på et keyboard",
+      "manage": "Administrer",
+      "manageHint": "Indstil dit stemmeomfang, tilknyt musiktjenester og rediger, hvad vi ved om dig",
+      "mostSung": "Mest sunget: {song} ({count}×)",
+      "nights": "{count, plural, one {# aften} other {# aftener}}",
+      "performances": "{count, plural, one {# optræden} other {# optrædener}}",
+      "saved": "{count, plural, one {# gemt} other {# gemte}}",
+      "seeAll": "Se alle",
+      "setlistsEmpty": "Planlæg en aften: lav en sætliste med sange, du vil synge.",
+      "songs": "{count, plural, one {# sang} other {# sange}}",
+      "sourcesLabel": "Tilknyttet musik",
+      "statsEmpty": "Intet sunget endnu. Marker en sang som sunget for at starte din statistik.",
+      "statsTitle": "Din karaoke",
+      "sung": "{count, plural, one {# sang sunget} other {# sange sunget}}",
+      "thisYear": "I år",
+      "topArtist": "Topkunstner: {artist}",
+      "venues": "{count, plural, one {# sted} other {# steder}}",
+      "voiceCta": "Find dit stemmeomfang",
+      "connectCta": "Forbind din musik",
+      "profileTitle": "Din musikprofil",
+      "voiceHint": "Find sange, der passer til din stemme",
+      "voiceRange": "Toneomfang {range}"
+    },
+    "songs": {
+      "addPast": "Tilføj sange, jeg har sunget",
+      "count": "{count, plural, one {# sang} other {# sange}}",
+      "empty": "Ingen sange endnu. Marker en sang som sunget, eller gem en, så vises den her.",
+      "emptyFiltered": "Ingen sange matcher disse filtre.",
+      "feel": {
+        "unrated": "Ikke bedømt",
+        "bad": "Ikke noget for mig",
+        "great": "Fantastisk",
+        "ok": "OK"
+      },
+      "offline": "Du er offline. Viser sange gemt på denne telefon.",
+      "often": {
+        "once": "Én gang",
+        "twice": "2 eller flere",
+        "unsung": "Ikke sunget endnu"
+      },
+      "oftenLabel": "Hvor ofte",
+      "searchLabel": "Søg i dine sange",
+      "sort": {
+        "most": "Mest sunget",
+        "rated": "Bedst bedømt",
+        "recent": "Seneste",
+        "az": "A til Å"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Stemning",
+      "crowdPleaser": "Publikumsfavorit",
+      "feelLabel": "Din bedømmelse",
+      "loadError": "Kunne ikke indlæse dine sange.",
+      "moodLabel": "Stemning",
+      "saved": "Gemt",
+      "searchPlaceholder": "Sang eller kunstner",
+      "sortLabel": "Sortér",
+      "timesSungLabel": "{count, plural, one {Sunget # gang} other {Sunget # gange}}"
     }
   }
 }

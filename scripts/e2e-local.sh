@@ -13,12 +13,14 @@
 #                                     # (discover-* screens: docs/screenshots/phase3a/<platform>/<locale>;
 #                                     # tonight-* screens: docs/screenshots/phase5/<platform>/<locale>;
 #                                     # voice-* / fit-* screens: docs/screenshots/phase3c/<platform>/<locale>;
-#                                     # voice-session-* screens: docs/screenshots/phase3d/<platform>/<locale>)
+#                                     # voice-session-* screens: docs/screenshots/phase3d/<platform>/<locale>;
+#                                     # me-* screens: docs/screenshots/phase4/<platform>/<locale>)
 #   scripts/e2e-local.sh --platform ios voice-           # the vocal range flows (voice-1…3, Phase 3c) and voice-session-*
 #   scripts/e2e-local.sh --platform ios --skip tonight   # every flow except those whose name contains "tonight"
 #   scripts/e2e-local.sh --platform ios tonight          # the Tonight flows (tonight-1…11)
 #   scripts/e2e-local.sh --platform ios voice-session    # the voice session flows (decide's fixture voice.db)
 #   scripts/e2e-local.sh --platform ios --flows make-1-happy-path,review-1-approve   # exactly these flows (a CI shard)
+#   scripts/e2e-local.sh --platform ios me-              # the Me flows (me-1…9, Phase 4a; decide >= v0.29)
 #
 # Env: GEN_DIR (gen checkout with scripts/local-stack.sh, at least v0.278.2 plus the fake match judge; default
 #      ../karaoke-gen, the main clone: pull it first, or point GEN_DIR at a gen worktree with the code you want),
@@ -95,7 +97,7 @@ while [[ $# -gt 0 ]]; do
     --screen) SCREEN="$2"; shift 2 ;;
     --skip) SKIP="$2"; shift 2 ;;
     --flows) FLOWS="$2"; shift 2 ;;
-    -h|--help) sed -n '2,55p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,59p' "$0"; exit 0 ;;
     *) FILTER="$1"; shift ;;
   esac
 done
@@ -209,18 +211,27 @@ if [[ "$NEED_KJBOX" == 1 ]]; then
     (cd "$KJBOX_DIR/kj-controller" && env $(lane_kjbox_env) scripts/local-stack.sh reset)
   fi
   curl -sf -m 5 -o /dev/null "$KJBOX/sing/api/test/state" || { echo "kjbox at $KJBOX has no /sing/api/test (KJBOX_TEST_API off?)" >&2; exit 1; }
-  # tonight-9 stops and restarts the kjbox stack mid-flow ("box unreachable"), tonight-10 decide's (the karaoke log
-  # offline); Maestro scripts can only make HTTP calls, so a loopback helper (scripts/stack-control.py, :8049) runs
-  # local-stack.sh down/up for them.
-  if ! curl -sf -m 2 "$CONTROL/health" >/dev/null; then
-    # It restarts this lane's kjbox and decide stacks, so it gets their env.
-    # shellcheck disable=SC2046
-    env $(lane_kjbox_env) $(lane_decide_env) python3 "$ROOT/scripts/stack-control.py" --kjbox-dir "$KJBOX_DIR" \
-      --decide-dir "$DECIDE_DIR" --port "$CONTROL_PORT" >"/tmp/nomad-mobile-stack-control-$CONTROL_PORT.log" 2>&1 &
-    CONTROL_PID=$!
-  fi
 else
   echo "No Tonight flows in this run: kjbox's local stack not needed"
+fi
+# tonight-9 stops and restarts the kjbox stack mid-flow ("box unreachable"), tonight-10 and me-6 decide's (offline);
+# Maestro scripts can only make HTTP calls, so a loopback helper (scripts/stack-control.py, :8049) runs
+# local-stack.sh down/up for them. Started for Tonight runs and for any selected flow that stops decide.
+needs_control() {
+  [[ -z "$SCREEN" ]] || return 1
+  [[ "$NEED_KJBOX" == 1 ]] && return 0
+  local f
+  while IFS= read -r f; do
+    grep -qE '^\s*ACTION:\s*decide\s*$' "$f" && return 0
+  done < <(list_flows)
+  return 1
+}
+if needs_control && ! curl -sf -m 2 "$CONTROL/health" >/dev/null; then
+  # It restarts this lane's kjbox and decide stacks, so it gets their env.
+  # shellcheck disable=SC2046
+  env $(lane_kjbox_env) $(lane_decide_env) python3 "$ROOT/scripts/stack-control.py" --kjbox-dir "$KJBOX_DIR" \
+    --decide-dir "$DECIDE_DIR" --port "$CONTROL_PORT" >"/tmp/nomad-mobile-stack-control-$CONTROL_PORT.log" 2>&1 &
+  CONTROL_PID=$!
 fi
 
 # 3. Device prep.
@@ -349,7 +360,9 @@ SHOTS3B="docs/screenshots/phase3b/$PLATFORM"
 VOICE_SHOTS="docs/screenshots/phase3c/$PLATFORM"
 # Voice session (voice-session-*, Phase 3d).
 VOICE_SESSION_SHOTS="docs/screenshots/phase3d/$PLATFORM"
-mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B" "$VOICE_SHOTS" "$VOICE_SESSION_SHOTS"
+# Me (me-*, Phase 4a).
+ME_SHOTS="docs/screenshots/phase4/$PLATFORM"
+mkdir -p "$SHOTS" "$REVIEW_SHOTS" "$DISCOVER_SHOTS" "$TONIGHT_SHOTS" "$SHOTS3B" "$VOICE_SHOTS" "$VOICE_SESSION_SHOTS" "$ME_SHOTS"
 ALL=()
 while IFS= read -r f; do ALL+=("maestro/flows/${f##*/}"); done < <(list_flows)
 [[ ${#ALL[@]} -gt 0 ]] || { echo "no flow matches $FILTER" >&2; exit 2; }
@@ -425,7 +438,7 @@ run_flows() {
   "$MAESTRO" --device "$DEVICE" test ${extra[@]+"${extra[@]}"} -e STACK="$STACK" -e DECIDE_STACK="$DECIDE" -e KJBOX_STACK="$KJBOX" -e CONTROL="$CONTROL" \
     -e KJBOX_DIR="$KJBOX_DIR" -e PLATFORM="$PLATFORM" -e SHOTS="$SHOTS" -e REVIEW_SHOTS="$REVIEW_SHOTS" \
     -e DISCOVER_SHOTS="$DISCOVER_SHOTS" -e TONIGHT_SHOTS="$TONIGHT_SHOTS" -e SHOTS3B="$SHOTS3B" -e METRO_PORT="$METRO_PORT" \
-    -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" -e VOICE_SESSION_SHOTS="$VOICE_SESSION_SHOTS" \
+    -e VOICE_SHOTS="$VOICE_SHOTS" -e FIT_SHOTS="$VOICE_SHOTS" -e VOICE_SESSION_SHOTS="$VOICE_SESSION_SHOTS" -e ME_SHOTS="$ME_SHOTS" \
     -e LAUNCH_TIMEOUT="${E2E_LAUNCH_TIMEOUT:-60000}" "$@"
 }
 status=0
@@ -438,6 +451,7 @@ if [[ -n "$SCREEN" ]]; then
   if [[ "$SCREEN" == discover* ]]; then TOUR_SHOTS="$DISCOVER_SHOTS/$lang"
   elif [[ "$SCREEN" == tonight* ]]; then TOUR_SHOTS="$TONIGHT_SHOTS/$lang"
   elif [[ "$SCREEN" == voice-session* ]]; then TOUR_SHOTS="$VOICE_SESSION_SHOTS/$lang"
+  elif [[ "$SCREEN" == me-* ]]; then TOUR_SHOTS="$ME_SHOTS/$lang"
   elif [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; then TOUR_SHOTS="$VOICE_SHOTS/$lang"
   else TOUR_SHOTS="docs/screenshots/phase2/review/$PLATFORM/$lang"; fi
   mkdir -p "$TOUR_SHOTS"

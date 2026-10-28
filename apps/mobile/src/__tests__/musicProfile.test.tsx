@@ -122,6 +122,71 @@ describe('musicProfile', () => {
     expect(screen.queryByTestId('profile-hidden-unhide-1')).toBeNull();
   });
 
+  it('puts the voice profile first, then connected sources, before the artists', async () => {
+    await signIn();
+    open();
+    await screen.findByTestId('voice-section');
+    const tree = JSON.stringify(screen.toJSON());
+    const pos = (id: string) => tree.indexOf(`"testID":"${id}"`);
+    expect(pos('voice-section')).toBeGreaterThan(-1);
+    expect(pos('voice-section')).toBeLessThan(pos('profile-connected'));
+    expect(pos('profile-connected')).toBeLessThan(pos('profile-artists'));
+  });
+
+  it('shows 12 artist chips and "See all (30)" for 30 artists, best affinity first', async () => {
+    artistRows = Array.from({ length: 30 }, (_, i) => ({
+      artist_name: `Artist ${String(i).padStart(2, '0')}`,
+      sources: ['quiz'],
+      affinity: i === 29 ? 'love' : 'like',
+    }));
+    await signIn();
+    open();
+    expect(await screen.findByTestId('profile-artist-chip-0')).toHaveTextContent(/Artist 29/);
+    expect(screen.getByTestId('profile-artist-chip-11')).toBeTruthy();
+    expect(screen.queryByTestId('profile-artist-chip-12')).toBeNull();
+    expect(screen.getByTestId('profile-artists-all')).toHaveTextContent('See all (30)');
+  });
+
+  it('filters the artist chips with the search field', async () => {
+    artistRows = [userArtist('Alpha Band'), userArtist('Beta Band'), userArtist('Gamma Group')];
+    await signIn();
+    open();
+    fireEvent.changeText(await screen.findByTestId('profile-artists-search'), 'gam');
+    await waitFor(() => expect(screen.queryByText(/Alpha Band/)).toBeNull());
+    expect(screen.getByTestId('profile-artist-chip-0')).toHaveTextContent(/Gamma Group/);
+  });
+
+  it('follows has_more so every artist counts, chips and See all', async () => {
+    const page = (n: number) =>
+      Array.from({ length: 3 }, (_, i) => ({ artist_name: `P${n} Artist ${i}`, sources: ['quiz'] }));
+    m(decide.listMyArtists).mockImplementation(async (q?: { page?: number }) =>
+      q?.page === 2
+        ? { artists: page(2), total: 6, page: 2, per_page: 3, has_more: false }
+        : { artists: page(1), total: 6, page: 1, per_page: 3, has_more: true },
+    );
+    await signIn();
+    open();
+    await waitFor(() => expect(screen.getByTestId('profile-artists-all')).toHaveTextContent('See all (6)'));
+    expect(screen.getByTestId('profile-artist-chip-5')).toBeTruthy();
+    expect(decide.listMyArtists).toHaveBeenCalledWith(expect.objectContaining({ page: 2 }));
+  });
+
+  it('search folds accents', async () => {
+    artistRows = [userArtist('Étoile'), userArtist('Beta Band')];
+    await signIn();
+    open();
+    fireEvent.changeText(await screen.findByTestId('profile-artists-search'), 'etoile');
+    await waitFor(() => expect(screen.queryByText(/Beta Band/)).toBeNull());
+    expect(screen.getByTestId('profile-artist-chip-0')).toHaveTextContent(/Étoile/);
+  });
+
+  it('See all opens the A-Z artists screen', async () => {
+    await signIn();
+    const app = open();
+    fireEvent.press(await screen.findByTestId('profile-artists-all'));
+    await waitFor(() => expect(app.getPathname()).toBe('/me/artists'));
+  });
+
   it('removing an artist calls removeMyArtist(name)', async () => {
     await signIn();
     open();

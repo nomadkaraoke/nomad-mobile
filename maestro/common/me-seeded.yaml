@@ -1,0 +1,29 @@
+# A signed-in Me home for a fresh user with a seeded decide profile and karaoke log (Phase 4a). Run ACTION setup
+# first (the flow's own user). Env: EMAIL, PROFILE (JSON, decide's /api/test/profile/seed body without the email;
+# "{}" for none), ENTRIES (JSON array of app karaoke-log patches with `app_…` ids, stack.js ACTION log-seed; "[]"
+# for none), DECIDE_STACK. Seeds before signing in, so Me's first library and log reads already have the data.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    file: seed-decide-profile.yaml
+    env:
+      EMAIL: ${EMAIL}
+      PROFILE: ${PROFILE}
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: log-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      EMAIL: ${EMAIL}
+      ENTRIES: ${ENTRIES}
+- runFlow: launch.yaml
+- runFlow:
+    file: discover-signin.yaml
+    env:
+      EMAIL: ${EMAIL}
+- tapOn:
+    id: "tab-me"
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-card"
+    timeout: 30000

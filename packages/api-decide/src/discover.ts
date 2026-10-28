@@ -92,6 +92,7 @@ export const searchArtists = async (q: string, limit = 10) =>
 export const getPreferences = async () => (await getPreferencesApiMyDataPreferencesGet()).data;
 export const updatePreferences = async (body: UpdatePreferencesRequest) =>
   (await updatePreferencesApiMyDataPreferencesPut({ body })).data;
-export const listMyArtists = async () => (await getAllArtistsApiMyDataArtistsGet()).data;
+export const listMyArtists = async (query?: { page?: number; per_page?: number }) =>
+  (await getAllArtistsApiMyDataArtistsGet({ query })).data;
 export const removeMyArtist = async (name: string) =>
   (await removeArtistApiMyDataArtistsArtistNameDelete({ path: { artist_name: name } })).data;

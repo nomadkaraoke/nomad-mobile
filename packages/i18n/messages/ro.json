@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Reconectează Apple Music",
     "musicServices": "Serviciile tale de muzică",
     "appleMusicDenied": "Nomad Karaoke nu are acces la Apple Music. Activează permisiunea din Configurări › Nomad Karaoke › Media și Apple Music, apoi încearcă din nou.",
-    "appleMusicNoSubscription": "Apple Music nu a partajat biblioteca ta. Conectarea necesită un abonament Apple Music."
+    "appleMusicNoSubscription": "Apple Music nu a partajat biblioteca ta. Conectarea necesită un abonament Apple Music.",
+    "artistsAll": "Toți artiștii",
+    "artistsNoMatch": "Niciun artist găsit.",
+    "artistsRemoveA11y": "Elimină {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Vezi tot (#)} few {Vezi tot (#)} other {Vezi tot (#)}}",
+    "artistsSearch": "Găsește un artist"
   },
   "common": {
     "error": "Ceva nu a funcționat.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Creează-ți propriul videoclip karaoke cu această piesă, gata de cântat și distribuit.",
     "offlineMissing": "Ești offline, iar această melodie nu se află în lista salvată pe acest telefon.",
     "offlineNote": "Offline · din lista de melodii salvată pe acest telefon",
-    "cloudErrorNote": "Căutarea nu este disponibilă acum · se afișează lista de melodii salvată pe acest telefon"
+    "cloudErrorNote": "Căutarea nu este disponibilă acum · se afișează lista de melodii salvată pe acest telefon",
+    "history": {
+      "beforeApp": "Înainte de aplicație",
+      "crowd": "Pe placul publicului",
+      "feel": "Stare: {value}",
+      "key": "Gamă: {value}",
+      "nomadNight": "Seară Nomad",
+      "otherVenue": "Alt bar",
+      "pageTitle": "Istoricul piesei",
+      "removeBody": "Nu va mai fi considerată cântată.",
+      "removeTitle": "Ștergi această înregistrare?",
+      "times": "×{count}",
+      "title": "Istoricul tău",
+      "edit": "Editează",
+      "remove": "Elimină"
+    },
+    "save": "Salvează în Piesele mele",
+    "saved": "Salvat",
+    "addToSetlist": "Adaugă în setlist",
+    "markSung": "Marchează ca fiind cântată"
   },
   "tabs": {
     "discover": "Descoperă",
@@ -706,7 +731,26 @@
       "skip": "Nu acum",
       "song": "{title} de {artist}",
       "title": "Cum a mers?",
-      "save": "Salvează"
+      "save": "Salvează",
+      "reason": {
+        "awkward_music": "Muzică nepotrivită",
+        "crowd_quiet": "Public prea liniștit",
+        "didnt_know_it": "N-am știut piesa",
+        "out_of_range": "Prea sus/jos pentru vocea mea",
+        "too_hard": "Prea grea",
+        "too_long": "Prea lungă"
+      },
+      "reasonsLabel": "Ce nu a mers?",
+      "vibe": {
+        "ballad": "Baladă",
+        "duet": "Duet",
+        "emotional": "Emoționantă",
+        "party": "Petrecere",
+        "rock_out": "Rock energic",
+        "singalong": "De cântat în cor",
+        "warm_up": "Încălzire"
+      },
+      "vibesLabel": "Care a fost atmosfera?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Catalogul localului",
     "loved": "Favorite",
-    "menuLoveIt": "Ador piesa",
+    "menuLoveIt": "Salvează în Piesele mele",
     "menuNotForMe": "Nu e pentru mine",
     "menuOpen": "Mai multe opțiuni pentru {title}",
     "offlinePicks": "Offline: se afișează ultimele tale recomandări",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Comunitate",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Încearcă din nou",
-    "signInForPicksAction": "Conectează-te"
+    "signInForPicksAction": "Conectează-te",
+    "menuSaved": "Salvat",
+    "menuAddToSetlist": "Adaugă în setlist",
+    "menuMarkSung": "Marchează ca fiind cântată"
   },
   "review": {
     "discard": "Renunță la modificările mele",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# dintre melodiile tale este gata — găsește-ți vocea} few {# dintre melodiile tale sunt gata — găsește-ți vocea} other {# de melodii dintre ale tale sunt gata — găsește-ți vocea}}",
       "request": "Pregătește-mi melodiile",
       "title": "Analizează-mi muzica"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Cu ceva timp în urmă",
+      "day": "Ziua (opțional)",
+      "less": "Scade",
+      "onDate": "La o dată anume",
+      "times": "De câte ori a fost cântată",
+      "title": "Marchează ca fiind cântată",
+      "close": "Închide",
+      "more": "Crește",
+      "save": "Salvează",
+      "song": "{title} de {artist}",
+      "tonight": "În această seară"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Gata} one {Adaugă # melodie} few {Adaugă # melodii} other {Adaugă # de melodii}}",
+      "hint": "Bifează melodiile pe care le-ai mai cântat. Le vom adăuga în istoricul tău.",
+      "title": "Melodii pe care le-am cântat",
+      "searchLabel": "Găsește o piesă",
+      "searchPlaceholder": "Caută piese",
+      "songValue": "{title} de {artist}"
+    },
+    "setlists": {
+      "add": "Adaugă melodii",
+      "addNew": "Creează și adaugă",
+      "addNewPlaceholder": "Numele noului setlist",
+      "addToTitle": "Adaugă în setlist",
+      "addTyped": "Adaugă „{query}” ca melodie nouă",
+      "count": "{count, plural, =0 {Nicio melodie} one {# melodie} few {# melodii} other {# de melodii}}",
+      "deleteBody": "{name} va fi șters. Această acțiune nu poate fi anulată.",
+      "deleteTitle": "Ștergi acest setlist?",
+      "detailTitle": "Setlist",
+      "editOrder": "Modifică ordinea",
+      "empty": "Niciun setlist încă. Creează unul pentru a-ți planifica melodiile pentru o seară.",
+      "full": "Acest setlist este plin (500 de melodii).",
+      "itemsEmpty": "Nicio melodie încă. Adaugă câteva.",
+      "nameLabel": "Numele setlistului",
+      "namePlaceholder": "de ex. Favorite de vineri",
+      "new": "Setlist nou",
+      "newTitle": "Setlist nou",
+      "notFound": "Acest setlist nu mai este disponibil.",
+      "number": "{number}",
+      "rename": "Redenumește",
+      "renameTitle": "Redenumește setlistul",
+      "saveOrder": "Salvează ordinea",
+      "title": "Setlisturi",
+      "addSongTitle": "Adaugă o melodie",
+      "added": "Adăugat",
+      "cancel": "Anulează",
+      "cancelOrder": "Anulează",
+      "close": "Închide",
+      "delete": "Șterge",
+      "done": "Gata",
+      "down": "Mută {song} mai jos",
+      "make": "Creează",
+      "nameSave": "Salvează",
+      "remove": "Elimină",
+      "searchLabel": "Găsește o piesă",
+      "searchPlaceholder": "Caută piese",
+      "songValue": "{title} de {artist}",
+      "sung": "Marchează ca fiind cântată",
+      "up": "Mută {song} mai sus"
+    },
+    "allSongs": "Toate melodiile tale",
+    "home": {
+      "allSongsRow": "Toate melodiile tale ({count})",
+      "allTime": "Dintotdeauna",
+      "connectHint": "Primește recomandări pe baza a ceea ce asculți deja",
+      "gotosEmpty": "Melodiile pe care îți place să le cânți vor apărea aici. Începe prin a adăuga melodiile pe care le-ai mai cântat.",
+      "gotosEmptyCta": "Adaugă melodii cântate anterior",
+      "gotosTitle": "Preferatele tale",
+      "greatShare": "{percent}% au ieșit grozav",
+      "keysLabel": "Întinderea ta vocală pe o claviatură",
+      "manage": "Gestionează",
+      "manageHint": "Setează-ți întinderea vocală, conectează serviciile muzicale și modifică ce știm despre tine",
+      "mostSung": "Cea mai cântată: {song} ({count}×)",
+      "nights": "{count, plural, one {# seară} few {# seri} other {# de seri}}",
+      "performances": "{count, plural, one {# interpretare} few {# interpretări} other {# de interpretări}}",
+      "saved": "{count, plural, one {# salvată} few {# salvate} other {# de salvate}}",
+      "seeAll": "Vezi tot",
+      "setlistsEmpty": "Planifică o seară: creează un setlist cu melodiile pe care vrei să le cânți.",
+      "songs": "{count, plural, one {# melodie} few {# melodii} other {# de melodii}}",
+      "sourcesLabel": "Muzică conectată",
+      "statsEmpty": "Nu ai cântat nimic încă. Marchează o melodie ca fiind cântată pentru a începe statisticile.",
+      "statsTitle": "Activitatea ta karaoke",
+      "sung": "{count, plural, one {# melodie cântată} few {# melodii cântate} other {# de melodii cântate}}",
+      "thisYear": "Anul acesta",
+      "topArtist": "Artist preferat: {artist}",
+      "venues": "{count, plural, one {# local} few {# localuri} other {# de localuri}}",
+      "voiceCta": "Află-ți întinderea vocală",
+      "connectCta": "Conectează-ți muzica",
+      "profileTitle": "Profilul tău muzical",
+      "voiceHint": "Găsește melodii care se potrivesc cu vocea ta",
+      "voiceRange": "Întindere vocală {range}"
+    },
+    "songs": {
+      "addPast": "Adaugă melodii cântate anterior",
+      "count": "{count, plural, one {# melodie} few {# melodii} other {# de melodii}}",
+      "empty": "Nicio melodie încă. Marchează o melodie ca fiind cântată sau salvează una și va apărea aici.",
+      "emptyFiltered": "Nicio melodie nu corespunde acestor filtre.",
+      "feel": {
+        "unrated": "Neevaluată",
+        "bad": "Nu e pentru mine",
+        "great": "Excelent",
+        "ok": "OK"
+      },
+      "offline": "Ești offline. Se afișează melodiile salvate pe acest telefon.",
+      "often": {
+        "once": "O dată",
+        "twice": "De cel puțin 2 ori",
+        "unsung": "Necântată încă"
+      },
+      "oftenLabel": "Frecvență",
+      "searchLabel": "Caută în melodiile tale",
+      "sort": {
+        "most": "Cele mai cântate",
+        "rated": "Cele mai bine cotate",
+        "recent": "Recente",
+        "az": "De la A la Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Pe placul publicului",
+      "feelLabel": "Evaluarea ta",
+      "loadError": "Nu s-au putut încărca piesele tale.",
+      "moodLabel": "Stare",
+      "saved": "Salvat",
+      "searchPlaceholder": "Melodie sau artist",
+      "sortLabel": "Sortează",
+      "timesSungLabel": "{count, plural, one {Cântată o dată} few {Cântată de # ori} other {Cântată de # de ori}}"
     }
   }
 }

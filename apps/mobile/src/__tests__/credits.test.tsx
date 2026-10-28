@@ -11,6 +11,13 @@ import { gen, session } from '../test-utils/genAuthMock';
 import { makeRoutes } from '../test-utils/makeFixtures';
 
 jest.mock('@nomad/api-decide', () => ({
+  ...jest.requireActual('@nomad/api-decide'),
+  // The Me home (signed in) loads the library, setlists, log mirror and services summary.
+  getLibrary: jest.fn(async () => ({ status: 'ok', etag: 'e', items: [] })),
+  listSetlists: jest.fn(async () => []),
+  listKaraokeLog: jest.fn(async () => ({ entries: [] })),
+  getServicesSummary: jest.fn(async () => ({ sources: [], capabilities: { screenshot_import: false, listenbrainz_oauth: false } })),
+  getVoiceProfile: jest.fn(async () => null),
   searchSongs: jest.fn(),
   popularSongs: jest.fn(async () => []),
   pingSearch: jest.fn(async () => true),

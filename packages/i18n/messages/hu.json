@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Apple Music újrakapcsolása",
     "musicServices": "Zenei szolgáltatásaid",
     "appleMusicDenied": "A Nomad Karaoke nem fér hozzá az Apple Music szolgáltatáshoz. Kapcsold be a Beállítások › Nomad Karaoke › Média és Apple Music menüpontban, majd próbáld újra.",
-    "appleMusicNoSubscription": "Az Apple Music nem osztotta meg a könyvtáradat. Az összekapcsoláshoz Apple Music-előfizetés szükséges."
+    "appleMusicNoSubscription": "Az Apple Music nem osztotta meg a könyvtáradat. Az összekapcsoláshoz Apple Music-előfizetés szükséges.",
+    "artistsAll": "Összes előadó",
+    "artistsNoMatch": "Nincs találat az előadók között.",
+    "artistsRemoveA11y": "{artist} eltávolítása",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Összes megtekintése (#)} other {Összes megtekintése (#)}}",
+    "artistsSearch": "Keress előadót"
   },
   "common": {
     "error": "Valami hiba történt.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Készíts belőle saját karaoke videót, készen az éneklésre és megosztásra.",
     "offlineMissing": "Offline módban vagy, és ez a dal nem szerepel az erre a telefonra mentett dallistában.",
     "offlineNote": "Offline · az erre a telefonra mentett dallistából",
-    "cloudErrorNote": "A keresés jelenleg nem érhető el · az erre a telefonra mentett dallista jelenik meg"
+    "cloudErrorNote": "A keresés jelenleg nem érhető el · az erre a telefonra mentett dallista jelenik meg",
+    "history": {
+      "beforeApp": "Az alkalmazás előtt",
+      "crowd": "Közönségkedvenc",
+      "feel": "Hangulat: {value}",
+      "key": "Hangnem: {value}",
+      "nomadNight": "Nomad este",
+      "otherVenue": "Másik bár",
+      "pageTitle": "Dalelőzmények",
+      "removeBody": "Már nem fog énekeltként szerepelni.",
+      "removeTitle": "Törlöd ezt a bejegyzést?",
+      "times": "×{count}",
+      "title": "Előzményeid",
+      "edit": "Szerkesztés",
+      "remove": "Eltávolítás"
+    },
+    "save": "Mentés a Dalaim közé",
+    "saved": "Mentve",
+    "addToSetlist": "Hozzáadás a dallistához",
+    "markSung": "Megjelölés elénekeltként"
   },
   "tabs": {
     "discover": "Felfedezés",
@@ -706,7 +731,26 @@
       "skip": "Most ne",
       "song": "{artist} – {title}",
       "title": "Hogy sikerült?",
-      "save": "Mentés"
+      "save": "Mentés",
+      "reason": {
+        "awkward_music": "Kellemetlen zene",
+        "crowd_quiet": "Csendes közönség",
+        "didnt_know_it": "Nem ismertem",
+        "out_of_range": "Kívül esik a hangterjedelmemen",
+        "too_hard": "Túl nehéz",
+        "too_long": "Túl hosszú"
+      },
+      "reasonsLabel": "Mi volt a gond?",
+      "vibe": {
+        "ballad": "Ballada",
+        "duet": "Duett",
+        "emotional": "Érzelmes",
+        "party": "Buli",
+        "rock_out": "Zúzós",
+        "singalong": "Közös éneklés",
+        "warm_up": "Bemelegítés"
+      },
+      "vibesLabel": "Milyen volt a hangulat?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Helyszín zenei könyvtára",
     "loved": "Kedvenc",
-    "menuLoveIt": "Imádom",
+    "menuLoveIt": "Mentés a Dalaim közé",
     "menuNotForMe": "Nem nekem való",
     "menuOpen": "További lehetőségek ehhez: {title}",
     "offlinePicks": "Offline: legutóbbi ajánlataid megjelenítése",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Közösségi",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Próbáld újra",
-    "signInForPicksAction": "Bejelentkezés"
+    "signInForPicksAction": "Bejelentkezés",
+    "menuSaved": "Mentve",
+    "menuAddToSetlist": "Hozzáadás a dallistához",
+    "menuMarkSung": "Megjelölés elénekeltként"
   },
   "review": {
     "discard": "Módosításaim elvetése",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# dalod elkészült — találd meg a hangod} other {# dalod elkészült — találd meg a hangod}}",
       "request": "Dalaim előkészítése",
       "title": "Zenéim elemzése"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Valamikor régebben",
+      "day": "Nap (nem kötelező)",
+      "less": "Csökkentés",
+      "onDate": "Adott napon",
+      "times": "Hányszor énekelted",
+      "title": "Megjelölés elénekeltként",
+      "close": "Bezárás",
+      "more": "Növelés",
+      "save": "Mentés",
+      "song": "{artist} – {title}",
+      "tonight": "Ma este"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Kész} one {# dal hozzáadása} other {# dal hozzáadása}}",
+      "hint": "Pipáld be azokat a dalokat, amiket már énekeltél korábban! Hozzáadjuk őket az előzményeidhez.",
+      "title": "Dalok, amiket énekeltem",
+      "searchLabel": "Keress egy dalt",
+      "searchPlaceholder": "Dalok keresése",
+      "songValue": "{artist} – {title}"
+    },
+    "setlists": {
+      "add": "Számok hozzáadása",
+      "addNew": "Létrehozás és hozzáadás",
+      "addNewPlaceholder": "Új dallista neve",
+      "addToTitle": "Hozzáadás a dallistához",
+      "addTyped": "\"{query}\" hozzáadása új dalként",
+      "count": "{count, plural, =0 {Nincs dal} one {# dal} other {# dal}}",
+      "deleteBody": "A(z) {name} törlődik. Ez a művelet nem vonható vissza.",
+      "deleteTitle": "Törlöd ezt a dallistát?",
+      "detailTitle": "Dallista",
+      "editOrder": "Sorrend módosítása",
+      "empty": "Még nincsenek dallistáid. Hozz létre egyet, és tervezd meg az est számait!",
+      "full": "Ez a dallista megtelt (500 dal).",
+      "itemsEmpty": "Még nincsenek dalok. Adj hozzá párat!",
+      "nameLabel": "Dallista neve",
+      "namePlaceholder": "pl. Pénteki kedvencek",
+      "new": "Új dallista",
+      "newTitle": "Új dallista",
+      "notFound": "Ez a dallista már nem található.",
+      "number": "{number}",
+      "rename": "Átnevezés",
+      "renameTitle": "Dallista átnevezése",
+      "saveOrder": "Sorrend mentése",
+      "title": "Dallisták",
+      "addSongTitle": "Dal hozzáadása",
+      "added": "Hozzáadva",
+      "cancel": "Mégse",
+      "cancelOrder": "Mégse",
+      "close": "Bezárás",
+      "delete": "Törlés",
+      "done": "Kész",
+      "down": "{song} mozgatása lefelé",
+      "make": "Készítsd el",
+      "nameSave": "Mentés",
+      "remove": "Eltávolítás",
+      "searchLabel": "Keress egy dalt",
+      "searchPlaceholder": "Dalok keresése",
+      "songValue": "{artist} – {title}",
+      "sung": "Megjelölés elénekeltként",
+      "up": "{song} mozgatása felfelé"
+    },
+    "allSongs": "Minden dalod",
+    "home": {
+      "allSongsRow": "Minden dalod ({count})",
+      "allTime": "Kezdetektől",
+      "connectHint": "Kérj ajánlásokat abból, amit egyébként is hallgatsz",
+      "gotosEmpty": "Itt jelennek meg azok a dalok, amiket a legszívesebben énekelsz. Kezdésként add hozzá azokat, amiket korábban már énekeltél.",
+      "gotosEmptyCta": "Már énekelt dalaim hozzáadása",
+      "gotosTitle": "A tuti befutóid",
+      "greatShare": "{percent}% szuperül sikerült",
+      "keysLabel": "A hangterjedelmed zongorabillentyűkön",
+      "manage": "Kezelés",
+      "manageHint": "Állítsd be a hangterjedelmed, csatlakoztass zenéket, és szerkeszd, amit rólad tudunk",
+      "mostSung": "Legtöbbet énekelt: {song} ({count}×)",
+      "nights": "{count, plural, one {# este} other {# este}}",
+      "performances": "{count, plural, one {# előadás} other {# előadás}}",
+      "saved": "{count, plural, one {# mentve} other {# mentve}}",
+      "seeAll": "Összes megtekintése",
+      "setlistsEmpty": "Tervezz meg egy estét: készíts dallistát azokból a számokból, amiket énekelni szeretnél.",
+      "songs": "{count, plural, one {# dal} other {# dal}}",
+      "sourcesLabel": "Csatlakoztatott zenék",
+      "statsEmpty": "Még nem énekeltél semmit. Jelölj meg egy dalt énekeltként, hogy elinduljon a statisztikád.",
+      "statsTitle": "Karaoke-statisztikáid",
+      "sung": "{count, plural, one {# elénekelt dal} other {# elénekelt dal}}",
+      "thisYear": "Idén",
+      "topArtist": "Kedvenc előadó: {artist}",
+      "venues": "{count, plural, one {# helyszín} other {# helyszín}}",
+      "voiceCta": "Mérd fel a hangterjedelmed",
+      "connectCta": "Csatlakoztasd a zenéidet",
+      "profileTitle": "Zenei profilod",
+      "voiceHint": "Keress a hangodhoz illő dalokat",
+      "voiceRange": "Hangterjedelem: {range}"
+    },
+    "songs": {
+      "addPast": "Már énekelt dalaim hozzáadása",
+      "count": "{count, plural, one {# dal} other {# dal}}",
+      "empty": "Még nincsenek dalok. Jelölj meg egy dalt énekeltként, vagy ments el egyet, és itt meg fog jelenni.",
+      "emptyFiltered": "Egyetlen dal sem felel meg ezeknek a szűrőknek.",
+      "feel": {
+        "unrated": "Nincs értékelve",
+        "bad": "Nem nekem való",
+        "great": "Nagyszerű",
+        "ok": "OK"
+      },
+      "offline": "Offline vagy. A telefonra mentett dalok megjelenítése.",
+      "often": {
+        "once": "Egyszer",
+        "twice": "2 vagy több",
+        "unsung": "Még nem énekeltem"
+      },
+      "oftenLabel": "Milyen gyakran",
+      "searchLabel": "Keresés a dalaid között",
+      "sort": {
+        "most": "Legtöbbet énekelt",
+        "rated": "Legjobbra értékelt",
+        "recent": "Legutóbbi",
+        "az": "A–Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Hangulat",
+      "crowdPleaser": "Közönségkedvenc",
+      "feelLabel": "Értékelésed",
+      "loadError": "Nem sikerült betölteni a dalaidat.",
+      "moodLabel": "Hangulat",
+      "saved": "Mentve",
+      "searchPlaceholder": "Dal vagy előadó",
+      "sortLabel": "Rendezés",
+      "timesSungLabel": "{count, plural, one {# alkalommal elénekelve} other {# alkalommal elénekelve}}"
     }
   }
 }

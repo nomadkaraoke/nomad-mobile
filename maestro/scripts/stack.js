@@ -3,6 +3,7 @@
 //   ACTION   setup | code | config | judge | job | scenario | review | decide-seed | decide-reset | voice-seed |
 //            voice-assert | kjbox | decide | log | fake-externals | fake-lb-user | fake-lastfm-user | lb-poll | source-counts |
 //            voice-session-assert | voice-recordings-count | voice-reset | voice-seed-history | voice-history-assert |
+//            log-seed | setlists-assert | library-assert |
 //            voice-personal-seed
 //   setup:   NAME (flow name, used in the unique email), CREDITS (default 2),
 //            USER_CONFIG (JSON, per-user fake-config knobs: fail_at, auto_approve, audio_duration_seconds,
@@ -76,7 +77,9 @@
 //            output.lbListens (JSON). ADD (JSON [{artist, title}]): instead, the same user (output.lbUsername unless
 //            USERNAME) keeps output.lbListens and gets these listened to just now (the fake only replaces a user).
 //   fake-lastfm-user: USERNAME (default e2e-lastfm-<ms>), TOP_TRACKS / TOP_ARTISTS (JSON, default fixture catalog
-//            songs / artists) -> a fake Last.fm user; output.lastfmUsername
+//            songs / artists) -> a fake Last.fm user; output.lastfmUsername. CONNECT_TOKEN (a gen session token, e.g.
+//            setup's output.token): also connects that user's decide account to it (POST /api/services/lastfm/connect),
+//            as the app's Connect → Last.fm does (Phase 4a me-9 seeds a connected source this way).
 //   lb-poll:  runs decide's daily ListenBrainz poller once (POST ${DECIDE_STACK}/api/test/listenbrainz/poll)
 //            -> output.lbListensAdded; EXPECT_ADDED: fails unless it added at least that many listens
 //   source-counts: SOURCE (decide source id: screenshot, spotify_playlist, spotify_export, listenbrainz, lastfm, …),
@@ -106,6 +109,21 @@
 //   voice-history-assert: TOKEN (default output.token) -> the user's own GET ${DECIDE_STACK}/api/voice/history,
 //            polled until EXPECT_EXCLUDED (attempts marked "Don't count") and / or EXPECT_RECORDINGS (attempts with a
 //            recording) hold or WAIT_MS (default 15000) passes -> output.voiceHistory (JSON)
+//   Phase 4a Me (decide >= v0.29):
+//   log-seed: EMAIL (default output.email), ENTRIES (JSON array of app karaoke-log patches, each with an `app_…` id:
+//            state, artist, title, song_key (catalog songs: needed for a sung row keyed by it), sung_at, night
+//            {kind, venue_name, date, date_precision}, survey {feel, key, vibes, reasons, …}, origin live|backfill,
+//            times) -> written through decide's POST ${DECIDE_STACK}/api/test/karaoke-log/seed, as the app's own
+//            PUTs would (counts and the library follow) -> output.decideUserId
+//   setlists-assert: TOKEN (default output.token; decide takes the gen session), EXPECT_NAME (exactly one setlist has
+//            this name), EXPECT_TITLES (optional, comma list: that setlist's item titles in order; "" = no items),
+//            EXPECT_COUNT (optional: how many setlists the user has) -> polls GET ${DECIDE_STACK}/api/playlists until
+//            they hold or WAIT_MS (default 20000) passes (the app's Me outbox syncs in the background)
+//            -> output.setlists (JSON [[name, [titles]]])
+//   library-assert: TOKEN (default output.token), EXPECT_KEY (the library key: song_key, or "u:" + songKey for an
+//            uncatalogued song), EXPECT_TIMES (its times_sung), EXPECT_COUNT (optional: how many library items) ->
+//            polls GET ${DECIDE_STACK}/api/my/library until they hold or WAIT_MS (default 20000) passes
+//            -> output.libraryItems (JSON [[key, times_sung]])
 // Wrapped in a function: a flow can run this file more than once, and top-level `let`s must not collide.
 (function () {
   const base = (typeof STACK !== 'undefined' && STACK && STACK !== 'undefined' && STACK) || 'http://127.0.0.1:8010';
@@ -580,6 +598,16 @@
       'decide fake Last.fm user',
     );
     output.lastfmUsername = username;
+    const connectToken = envValue(typeof CONNECT_TOKEN !== 'undefined' ? CONNECT_TOKEN : undefined);
+    if (connectToken) {
+      check(
+        http.post(decideBase + '/api/services/lastfm/connect', {
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + connectToken },
+          body: JSON.stringify({ username: username }),
+        }),
+        'decide Last.fm connect',
+      );
+    }
   } else if (action === 'lb-poll') {
     const r = check(
       http.post(decideBase + '/api/test/listenbrainz/poll', { headers: JSON_HEADERS, body: '{}' }),
@@ -750,6 +778,75 @@
       );
       output.voiceRecordings = String(r.count);
     }
+  } else if (action === 'log-seed') {
+    const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+    if (!email) throw new Error('ACTION log-seed needs EMAIL (or ACTION setup first)');
+    const entriesEnv = envValue(typeof ENTRIES !== 'undefined' ? ENTRIES : undefined);
+    if (!entriesEnv) throw new Error('ACTION log-seed needs ENTRIES (JSON array)');
+    const res = check(
+      http.post(decideBase + '/api/test/karaoke-log/seed', {
+        headers: JSON_HEADERS,
+        body: JSON.stringify({ email: email, entries: JSON.parse(entriesEnv) }),
+      }),
+      'decide karaoke-log seed',
+    );
+    output.decideUserId = res.user_id;
+  } else if (action === 'setlists-assert' || action === 'library-assert') {
+    const token = envValue(typeof TOKEN !== 'undefined' ? TOKEN : undefined) || output.token;
+    if (!token) throw new Error('ACTION ' + action + ' needs TOKEN (or ACTION setup first)');
+    const auth = { headers: { Authorization: 'Bearer ' + token } };
+    const waitMs = Number(envValue(typeof WAIT_MS !== 'undefined' ? WAIT_MS : undefined) || 20000);
+    const wantCount = envValue(typeof EXPECT_COUNT !== 'undefined' ? EXPECT_COUNT : undefined);
+    let read;
+    let problem;
+    let report;
+    if (action === 'setlists-assert') {
+      const name = envValue(typeof EXPECT_NAME !== 'undefined' ? EXPECT_NAME : undefined);
+      // '' (no items) is a real expectation here, so only a missing variable means "don't check".
+      const titlesRaw = typeof EXPECT_TITLES !== 'undefined' && EXPECT_TITLES !== 'undefined' ? EXPECT_TITLES : null;
+      if (name === null && wantCount === null) throw new Error('ACTION setlists-assert needs EXPECT_NAME or EXPECT_COUNT');
+      read = () => check(http.get(decideBase + '/api/playlists', auth), 'decide playlists').playlists;
+      report = (lists) => JSON.stringify(lists.map((l) => [l.name, (l.items || []).map((x) => x.title)]));
+      problem = (lists) => {
+        if (wantCount !== null && lists.length !== Number(wantCount)) return lists.length + ' setlists, expected ' + wantCount;
+        if (name === null) return null;
+        const named = lists.filter((l) => l.name === name);
+        if (named.length !== 1) return named.length + ' setlists named "' + name + '", expected 1';
+        if (titlesRaw === null) return null;
+        const want = titlesRaw === '' ? [] : String(titlesRaw).split(',').map((x) => x.trim());
+        const got = (named[0].items || []).map((x) => x.title);
+        return JSON.stringify(got) === JSON.stringify(want) ? null : 'titles ' + JSON.stringify(got) + ', expected ' + JSON.stringify(want);
+      };
+    } else {
+      const key = envValue(typeof EXPECT_KEY !== 'undefined' ? EXPECT_KEY : undefined);
+      const times = envValue(typeof EXPECT_TIMES !== 'undefined' ? EXPECT_TIMES : undefined);
+      if (key === null && wantCount === null) throw new Error('ACTION library-assert needs EXPECT_KEY or EXPECT_COUNT');
+      read = () => check(http.get(decideBase + '/api/my/library', auth), 'decide library').items;
+      report = (items) => JSON.stringify(items.map((x) => [x.key, x.times_sung]));
+      problem = (items) => {
+        if (wantCount !== null && items.length !== Number(wantCount)) return items.length + ' library items, expected ' + wantCount;
+        if (key === null) return null;
+        const item = items.filter((x) => x.key === key)[0];
+        if (!item) return 'no library item ' + key;
+        if (times !== null && item.times_sung !== Number(times)) return key + ' times_sung ' + item.times_sung + ', expected ' + times;
+        return null;
+      };
+    }
+    const deadline = new Date().getTime() + waitMs;
+    let value = null;
+    let why = null;
+    do {
+      value = read();
+      why = problem(value);
+      if (why === null) break;
+      const pause = new Date().getTime() + 1000;
+      while (new Date().getTime() < pause) {
+        // busy-wait: the script engine has no timers
+      }
+    } while (new Date().getTime() < deadline);
+    if (action === 'setlists-assert') output.setlists = report(value);
+    else output.libraryItems = report(value);
+    if (why !== null) throw new Error(action + ': ' + why + '\n' + report(value));
   } else {
     throw new Error('unknown ACTION ' + action);
   }

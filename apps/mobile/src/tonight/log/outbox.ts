@@ -1,9 +1,7 @@
-import { ApiError, deleteKaraokeLog, putKaraokeLog, type KaraokeLogPatch } from '@nomad/api-decide';
-import { create } from 'zustand';
+import { deleteKaraokeLog, putKaraokeLog, type KaraokeLogPatch } from '@nomad/api-decide';
 
-import { useAuth } from '../../auth/store';
-import { appStorage } from '../../storage';
-import { userKeyFor } from '../nightStore';
+import { createOutbox } from '../../sync/createOutbox';
+import { OUTBOX_BACKOFF_BASE_MS, OUTBOX_BACKOFF_MAX_MS, isPermanent, outboxBackoffMs } from '../../sync/outboxPolicy';
 
 /**
  * The karaoke-log outbox (spec §6.1): writes to decide's `/api/my/karaoke-log` queued on the phone, so a log works
@@ -12,20 +10,14 @@ import { userKeyFor } from '../nightStore';
  * Review Focus 1). One flush at a time; a transient failure backs off 5 s → 5 min.
  */
 export type OutboxItem =
-  | { id: string; op: 'put'; patch: KaraokeLogPatch; rev: number }
-  | { id: string; op: 'delete'; rev: number };
+  | { key?: string; id: string; op: 'put'; patch: KaraokeLogPatch; rev: number }
+  | { key?: string; id: string; op: 'delete'; rev: number };
 
-export const OUTBOX_BACKOFF_BASE_MS = 5_000;
-export const OUTBOX_BACKOFF_MAX_MS = 5 * 60_000;
+/** What the generic outbox is fed (it assigns `rev`). `key` is the record id. */
+type Queued = { key: string; id: string } & ({ op: 'put'; patch: KaraokeLogPatch } | { op: 'delete' });
 
-const keyFor = (userKey: string) => `tonight.outbox.v1.${userKey}`;
-
-/** Backoff after `attempts` consecutive transient failures (1 → 5 s, doubling, capped at 5 min). */
-export const outboxBackoffMs = (attempts: number): number =>
-  Math.min(OUTBOX_BACKOFF_MAX_MS, OUTBOX_BACKOFF_BASE_MS * 2 ** Math.max(0, attempts - 1));
-
-/** decide answers that will never succeed on retry: drop the item (400 invalid, 403 not_owner, 404 not_found, 422). */
-export const isPermanent = (e: unknown): boolean => e instanceof ApiError && [400, 403, 404, 422].includes(e.status);
+// Policy lives in sync/ (shared with the Me outbox); re-exported so this module's API is unchanged.
+export { OUTBOX_BACKOFF_BASE_MS, OUTBOX_BACKOFF_MAX_MS, isPermanent, outboxBackoffMs };
 
 const NESTED = new Set(['survey', 'night', 'media']);
 
@@ -42,167 +34,64 @@ export function mergePatch(a: KaraokeLogPatch, b: KaraokeLogPatch): KaraokeLogPa
   return out as KaraokeLogPatch;
 }
 
-/**
- * Item version counter. It must stay above every stored item's rev: a persisted item and a new write coalesced onto
- * it while in flight must never share a rev (the in-flight success would then drop the merged patch). Bumped past
- * the stored maximum on every load, so it survives restarts.
- */
-let rev = 0;
 
-function load(userKey: string | null): OutboxItem[] {
-  const items = loadRaw(userKey);
-  for (const i of items) if (typeof i.rev === 'number' && i.rev > rev) rev = i.rev;
-  return items;
-}
+const hook = createOutbox<Queued>({
+  storageKey: (userKey) => `tonight.outbox.v1.${userKey}`,
+  // Items persisted before the generic outbox have no `key`: it is the record id.
+  parse: (raw) => {
+    const x = raw as { id?: unknown; op?: unknown; patch?: unknown };
+    if (typeof x.id !== 'string') return null;
+    if (x.op === 'delete') return { key: x.id, id: x.id, op: 'delete' };
+    if (x.op === 'put' && x.patch) return { key: x.id, id: x.id, op: 'put', patch: x.patch as KaraokeLogPatch };
+    return null;
+  },
+  send: async (item) => {
+    if (item.op === 'put') await putKaraokeLog(item.id, item.patch);
+    else await deleteKaraokeLog(item.id);
+  },
+  // A put after a queued delete for the same id:
+  // - app_ ids: the delete wins and the put is dropped (returned unchanged = no-op). The record is gone (decide's
+  //   `deleted: false` would not reliably revive it), and a song logged again always gets a new id.
+  // - kj_ ids: last write wins (the put replaces the delete). The id is kjbox's, fixed per performance, so a later
+  //   survey or re-add for that performance must reach decide.
+  merge: (queued, next) => {
+    if (next.op === 'put' && queued.op === 'delete' && !next.id.startsWith('kj_')) return queued;
+    if (next.op === 'put' && queued.op === 'put') return { ...next, patch: mergePatch(queued.patch, next.patch) };
+    return next;
+  },
+  // E8-R4: a 403 not_owner on a kj_ id (kjbox hasn't delivered; decide made a placeholder) is permanent too: dropped.
+  isPermanent,
+  backoff: outboxBackoffMs,
+});
 
-function loadRaw(userKey: string | null): OutboxItem[] {
-  if (!userKey) return [];
-  try {
-    const raw = appStorage.getString(keyFor(userKey));
-    const v: unknown = raw ? JSON.parse(raw) : [];
-    return Array.isArray(v)
-      ? v.filter(
-          (x): x is OutboxItem =>
-            !!x && typeof x === 'object' && typeof x.id === 'string' && (x.op === 'delete' || (x.op === 'put' && !!x.patch)),
-        )
-      : [];
-  } catch {
-    return [];
-  }
-}
-
-type OutboxStore = {
-  userKey: string | null;
+type TonightStore = Omit<ReturnType<typeof hook.getState>, 'items' | 'enqueue'> & {
   items: OutboxItem[];
-  /** Consecutive transient failures (drives the backoff). */
-  attempts: number;
-  /** When the next backoff retry fires (ms epoch), or null. */
-  retryAt: number | null;
-  /** Writes decide has accepted this session (the Ideas panel's most-sung list refreshes when it moves). */
-  synced: number;
   enqueue(id: string, op: 'put', patch: KaraokeLogPatch): void;
   enqueue(id: string, op: 'delete'): void;
-  /** Sends the queue in order; resolves when it is empty, blocked (401 / transient error) or the user changed. */
-  flush(): Promise<void>;
-  rehydrate(email: string | null): void;
 };
 
-const emailOf = (): string | null => {
-  const s = useAuth.getState().state;
-  return s.status === 'signedIn' ? s.session.email : null;
-};
+function enqueue(id: string, op: 'put' | 'delete', patch?: KaraokeLogPatch) {
+  hook.getState().enqueue(op === 'delete' ? { key: id, id, op } : { key: id, id, op, patch: patch ?? {} });
+}
 
-let flushing: Promise<void> | null = null;
-let timer: ReturnType<typeof setTimeout> | null = null;
-const clearTimer = () => {
-  if (timer) clearTimeout(timer);
-  timer = null;
-};
+type TonightState = Omit<ReturnType<typeof hook.getState>, 'items' | 'enqueue'> & { items: OutboxItem[]; enqueue: TonightStore['enqueue'] };
 
-export const useOutbox = create<OutboxStore>((set, get) => {
-  const save = (items: OutboxItem[]) => {
-    const { userKey } = get();
-    if (!userKey) return;
-    if (items.length) appStorage.set(keyFor(userKey), JSON.stringify(items));
-    else appStorage.remove(keyFor(userKey));
-    set({ items });
-  };
-
-  async function run(owner: string): Promise<void> {
-    for (;;) {
-      if (get().userKey !== owner) return; // account changed mid-flush: never send or touch the other queue
-      const head = get().items[0];
-      if (!head) return;
-      try {
-        if (head.op === 'put') await putKaraokeLog(head.id, head.patch);
-        else await deleteKaraokeLog(head.id);
-      } catch (e) {
-        if (get().userKey !== owner) return;
-        if (isPermanent(e)) {
-          const detail = e instanceof ApiError ? `${e.status} ${String(e.detail)}` : String(e);
-          // E8-R4: a 403 not_owner on a kj_ id (kjbox hasn't delivered; decide made a placeholder) lands here too.
-          console.warn(`[karaoke-log] dropped ${head.op} ${head.id}: ${detail}`);
-          save(get().items.filter((i) => !(i.id === head.id && i.rev === head.rev)));
-          continue;
-        }
-        if (e instanceof ApiError && e.status === 401) return; // retried after sign-in (or the next trigger)
-        const attempts = get().attempts + 1;
-        const delay = outboxBackoffMs(attempts);
-        clearTimer();
-        timer = setTimeout(() => {
-          timer = null;
-          void get().flush();
-        }, delay);
-        set({ attempts, retryAt: Date.now() + delay });
-        return;
-      }
-      if (get().userKey !== owner) return;
-      set({ attempts: 0, retryAt: null, synced: get().synced + 1 });
-      // Coalesced while in flight (a newer rev): keep it, it is sent again with the merged patch.
-      save(get().items.filter((i) => !(i.id === head.id && i.rev === head.rev)));
-    }
-  }
-
-  const initialKey = emailOf() ? userKeyFor(emailOf()!) : null;
-  return {
-    userKey: initialKey,
-    items: load(initialKey),
-    attempts: 0,
-    retryAt: null,
-    synced: 0,
-
-    enqueue(id: string, op: 'put' | 'delete', patch?: KaraokeLogPatch) {
-      if (!get().userKey) return;
-      const items = [...get().items];
-      const i = items.findIndex((x) => x.id === id);
-      const prev = i >= 0 ? items[i] : undefined;
-      // A put after a queued delete for the same id:
-      // - app_ ids: the delete wins and the put is dropped. The record is gone (decide's `deleted: false` would not
-      //   reliably revive it), and a song logged again always gets a new id.
-      // - kj_ ids: last write wins (the put replaces the delete). The id is kjbox's, fixed per performance, so a
-      //   later survey or re-add for that performance must reach decide.
-      if (op === 'put' && prev?.op === 'delete' && !id.startsWith('kj_')) return;
-      const next: OutboxItem =
-        op === 'delete'
-          ? { id, op, rev: ++rev }
-          : { id, op, patch: prev?.op === 'put' ? mergePatch(prev.patch, patch ?? {}) : (patch ?? {}), rev: ++rev };
-      if (i >= 0) items[i] = next;
-      else items.push(next);
-      save(items);
-      void get().flush();
-    },
-
-    flush() {
-      const owner = get().userKey;
-      if (!owner || flushing) return flushing ?? Promise.resolve();
-      clearTimer();
-      set({ retryAt: null });
-      flushing = run(owner).finally(() => {
-        flushing = null;
-        // The account changed mid-flush: the new user's queue gets its own flush.
-        const now = get().userKey;
-        if (now && now !== owner) void get().flush();
-      });
-      return flushing;
-    },
-
-    rehydrate(email) {
-      clearTimer();
-      const userKey = email ? userKeyFor(email) : null;
-      set({ userKey, items: load(userKey), attempts: 0, retryAt: null });
-    },
-  } as OutboxStore;
+/** Same store as before (`getState().enqueue(id, op, patch)`), now backed by the generic outbox. */
+function useOutboxImpl<T>(selector: (s: TonightStore) => T): T {
+  return hook((s) => selector({ ...s, enqueue } as unknown as TonightStore));
+}
+export const useOutbox = Object.assign(useOutboxImpl, {
+  getState: (): TonightStore => ({ ...hook.getState(), enqueue }) as unknown as TonightStore,
+  /** Items given without a `key` (older shapes) are keyed by their id. */
+  setState: (partial: Partial<Omit<TonightState, 'enqueue'>>) =>
+    hook.setState({
+      ...partial,
+      ...(partial.items ? { items: partial.items.map((i) => ({ ...i, key: i.key ?? i.id })) } : {}),
+    } as never),
+  subscribe: hook.subscribe,
+  /** Told about every successful send (the Me library keeps a sent record in its overlay until a refetch). */
+  addSentListener: hook.addSentListener,
 });
 
 /** Test hook: waits for the running flush (if any). */
-export const outboxIdle = (): Promise<void> => flushing ?? Promise.resolve();
-
-// Account switch: the new user's queue (or none), never the previous one's; then try to send it.
-useAuth.subscribe((s) => {
-  const email = s.state.status === 'signedIn' ? s.state.session.email : null;
-  const want = email ? userKeyFor(email) : null;
-  if (want !== useOutbox.getState().userKey) {
-    useOutbox.getState().rehydrate(email);
-    if (want) void useOutbox.getState().flush();
-  }
-});
+export const outboxIdle = (): Promise<void> => hook.idle();

@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Znova pripojiť Apple Music",
     "musicServices": "Tvoje hudobné služby",
     "appleMusicDenied": "Nomad Karaoke nemá prístup k Apple Music. Zapni ho v Nastavenia › Nomad Karaoke › Médiá a Apple Music a skús to znova.",
-    "appleMusicNoSubscription": "Služba Apple Music nezdieľala tvoju knižnicu. Na pripojenie je potrebné predplatné Apple Music."
+    "appleMusicNoSubscription": "Služba Apple Music nezdieľala tvoju knižnicu. Na pripojenie je potrebné predplatné Apple Music.",
+    "artistsAll": "Všetci interpreti",
+    "artistsNoMatch": "Žiadni zodpovedajúci interpreti.",
+    "artistsRemoveA11y": "Odstrániť {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Zobraziť všetkých (#)} few {Zobraziť všetkých (#)} other {Zobraziť všetkých (#)}}",
+    "artistsSearch": "Nájsť interpreta"
   },
   "common": {
     "error": "Niečo sa pokazilo.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Vytvor si z nej vlastné karaoke video, pripravené na spievanie a zdieľanie.",
     "offlineMissing": "Si offline a táto skladba nie je v zozname skladieb uloženom v tomto telefóne.",
     "offlineNote": "Offline · zo zoznamu skladieb uloženého v tomto telefóne",
-    "cloudErrorNote": "Vyhľadávanie je momentálne nedostupné · zobrazuje sa zoznam skladieb uložený v tomto telefóne"
+    "cloudErrorNote": "Vyhľadávanie je momentálne nedostupné · zobrazuje sa zoznam skladieb uložený v tomto telefóne",
+    "history": {
+      "beforeApp": "Pred aplikáciou",
+      "crowd": "Trhák u publika",
+      "feel": "Nálada: {value}",
+      "key": "Tónina: {value}",
+      "nomadNight": "Nomad večer",
+      "otherVenue": "Iný bar",
+      "pageTitle": "História piesne",
+      "removeBody": "Už sa nebude počítať ako odspievaná.",
+      "removeTitle": "Odstrániť tento záznam?",
+      "times": "×{count}",
+      "title": "Tvoja história",
+      "edit": "Upraviť",
+      "remove": "Odstrániť"
+    },
+    "save": "Uložiť do Mojich piesní",
+    "saved": "Uložené",
+    "addToSetlist": "Pridať do setlistu",
+    "markSung": "Označiť ako odspievané"
   },
   "tabs": {
     "discover": "Objavovať",
@@ -706,7 +731,26 @@
       "skip": "Teraz nie",
       "song": "{title} od {artist}",
       "title": "Aké to bolo?",
-      "save": "Uložiť"
+      "save": "Uložiť",
+      "reason": {
+        "awkward_music": "Zvláštna hudba",
+        "crowd_quiet": "Tiché publikum",
+        "didnt_know_it": "Nepoznal/a som to",
+        "out_of_range": "Mimo môjho rozsahu",
+        "too_hard": "Príliš ťažké",
+        "too_long": "Príliš dlhé"
+      },
+      "reasonsLabel": "Čo ti prekážalo?",
+      "vibe": {
+        "ballad": "Balada",
+        "duet": "Duet",
+        "emotional": "Emocionálna",
+        "party": "Párty",
+        "rock_out": "Poriadny rock",
+        "singalong": "Hromadný spev",
+        "warm_up": "Na rozohriatie"
+      },
+      "vibesLabel": "Aká bola nálada?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Knižnica podniku",
     "loved": "Obľúbené",
-    "menuLoveIt": "To milujem",
+    "menuLoveIt": "Uložiť do Mojich piesní",
     "menuNotForMe": "Toto nie je pre mňa",
     "menuOpen": "Ďalšie možnosti pre {title}",
     "offlinePicks": "Offline: zobrazujú sa tvoje posledné tipy",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Komunitné",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Skúsiť znova",
-    "signInForPicksAction": "Prihlásiť sa"
+    "signInForPicksAction": "Prihlásiť sa",
+    "menuSaved": "Uložené",
+    "menuAddToSetlist": "Pridať do setlistu",
+    "menuMarkSung": "Označiť ako odspievané"
   },
   "review": {
     "discard": "Zahodiť moje úpravy",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# z tvojich skladieb je pripravená — objav svoj hlas} few {# z tvojich skladieb sú pripravené — objav svoj hlas} other {# z tvojich skladieb je pripravených — objav svoj hlas}}",
       "request": "Pripraviť moje skladby",
       "title": "Analyzovať moju hudbu"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Dávnejšie",
+      "day": "Deň (voliteľné)",
+      "less": "Znížiť",
+      "onDate": "V konkrétny deň",
+      "times": "Koľkokrát odspievané",
+      "title": "Označiť ako odspievané",
+      "close": "Zavrieť",
+      "more": "Zvýšiť",
+      "save": "Uložiť",
+      "song": "{title} od {artist}",
+      "tonight": "Dnes večer"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Hotovo} one {Pridať # pieseň} few {Pridať # piesne} other {Pridať # piesní}}",
+      "hint": "Označ piesne, ktoré si už spieval/a. Pridáme ich do tvojej histórie.",
+      "title": "Piesne, ktoré som spieval/a",
+      "searchLabel": "Nájsť skladbu",
+      "searchPlaceholder": "Hľadať skladby",
+      "songValue": "{title} od {artist}"
+    },
+    "setlists": {
+      "add": "Pridať skladby",
+      "addNew": "Vytvoriť a pridať",
+      "addNewPlaceholder": "Názov nového setlistu",
+      "addToTitle": "Pridať do setlistu",
+      "addTyped": "Pridať „{query}“ ako novú skladbu",
+      "count": "{count, plural, =0 {Žiadne skladby} one {# skladba} few {# skladby} many {# skladieb} other {# skladieb}}",
+      "deleteBody": "{name} sa vymaže. Túto akciu nemožno vrátiť späť.",
+      "deleteTitle": "Vymazať tento setlist?",
+      "detailTitle": "Setlist",
+      "editOrder": "Upraviť poradie",
+      "empty": "Zatiaľ žiadne setlisty. Vytvor si jeden a naplánuj si skladby na večer.",
+      "full": "Tento setlist je plný (500 skladieb).",
+      "itemsEmpty": "Zatiaľ žiadne skladby. Pridaj nejaké.",
+      "nameLabel": "Názov setlistu",
+      "namePlaceholder": "napr. Piatkové obľúbené",
+      "new": "Nový setlist",
+      "newTitle": "Nový setlist",
+      "notFound": "Tento setlist tu už nie je.",
+      "number": "{number}",
+      "rename": "Premenovať",
+      "renameTitle": "Premenovať setlist",
+      "saveOrder": "Uložiť poradie",
+      "title": "Setlisty",
+      "addSongTitle": "Pridať pesničku",
+      "added": "Pridané",
+      "cancel": "Zrušiť",
+      "cancelOrder": "Zrušiť",
+      "close": "Zavrieť",
+      "delete": "Vymazať",
+      "done": "Hotovo",
+      "down": "Posunúť {song} nižšie",
+      "make": "Vytvoriť",
+      "nameSave": "Uložiť",
+      "remove": "Odstrániť",
+      "searchLabel": "Nájsť skladbu",
+      "searchPlaceholder": "Hľadať skladby",
+      "songValue": "{title} od {artist}",
+      "sung": "Označiť ako odspievané",
+      "up": "Posunúť {song} vyššie"
+    },
+    "allSongs": "Všetky tvoje piesne",
+    "home": {
+      "allSongsRow": "Všetky tvoje piesne ({count})",
+      "allTime": "Za celý čas",
+      "connectHint": "Získaj tipy podľa toho, čo už počúvaš",
+      "gotosEmpty": "Piesne, ktoré rád spievaš, sa zobrazia tu. Začni pridaním piesní, ktoré si už spieval.",
+      "gotosEmptyCta": "Pridať odspievané piesne",
+      "gotosTitle": "Tvoje istoty",
+      "greatShare": "{percent} % dopadlo skvele",
+      "keysLabel": "Tvoj hlasový rozsah na klávesnici",
+      "manage": "Spravovať",
+      "manageHint": "Nastav si hlasový rozsah, prepoj hudbu a uprav, čo o tebe vieme",
+      "mostSung": "Najčastejšie spievaná: {song} ({count}×)",
+      "nights": "{count, plural, one {# večer} few {# večery} many {# večerov} other {# večerov}}",
+      "performances": "{count, plural, one {# vystúpenie} few {# vystúpenia} many {# vystúpení} other {# vystúpení}}",
+      "saved": "{count, plural, one {# uložená} few {# uložené} many {# uložených} other {# uložených}}",
+      "seeAll": "Zobraziť všetko",
+      "setlistsEmpty": "Naplánuj si večer: vytvor si setlist piesní, ktoré chceš spievať.",
+      "songs": "{count, plural, one {# pieseň} few {# piesne} many {# piesní} other {# piesní}}",
+      "sourcesLabel": "Prepojená hudba",
+      "statsEmpty": "Zatiaľ si nič nezaspieval. Označ pieseň ako odspievanú a začni sledovať svoje štatistiky.",
+      "statsTitle": "Tvoje karaoke",
+      "sung": "{count, plural, one {# odspievaná pieseň} few {# odspievané piesne} many {# odspievaných piesní} other {# odspievaných piesní}}",
+      "thisYear": "Tento rok",
+      "topArtist": "Najhranejší interpret: {artist}",
+      "venues": "{count, plural, one {# podnik} few {# podniky} many {# podnikov} other {# podnikov}}",
+      "voiceCta": "Zisti svoj hlasový rozsah",
+      "connectCta": "Pripoj svoju hudbu",
+      "profileTitle": "Tvoj hudobný profil",
+      "voiceHint": "Nájdi skladby, ktoré sedia k tvojmu hlasu",
+      "voiceRange": "Rozsah {range}"
+    },
+    "songs": {
+      "addPast": "Pridať odspievané piesne",
+      "count": "{count, plural, one {# pieseň} few {# piesne} many {# piesní} other {# piesní}}",
+      "empty": "Zatiaľ žiadne piesne. Označ pieseň ako odspievanú alebo si nejakú ulož a zobrazí sa tu.",
+      "emptyFiltered": "Týmto filtrom nezodpovedajú žiadne piesne.",
+      "feel": {
+        "unrated": "Nehodnotené",
+        "bad": "Toto nie je pre mňa",
+        "great": "Super",
+        "ok": "OK"
+      },
+      "offline": "Si offline. Zobrazujú sa piesne uložené v tomto telefóne.",
+      "often": {
+        "once": "Raz",
+        "twice": "2- a viackrát",
+        "unsung": "Zatiaľ nespievané"
+      },
+      "oftenLabel": "Frekvencia",
+      "searchLabel": "Hľadaj vo svojich piesňach",
+      "sort": {
+        "most": "Najčastejšie spievané",
+        "rated": "Najlepšie hodnotené",
+        "recent": "Nedávne",
+        "az": "Od A po Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Nálada",
+      "crowdPleaser": "Trhák u publika",
+      "feelLabel": "Tvoje hodnotenie",
+      "loadError": "Nepodarilo sa načítať tvoje skladby.",
+      "moodLabel": "Nálada",
+      "saved": "Uložené",
+      "searchPlaceholder": "Pesnička alebo interpret",
+      "sortLabel": "Zoradiť",
+      "timesSungLabel": "{count, plural, one {Spievané # raz} few {Spievané # razy} other {Spievané #-krát}}"
     }
   }
 }

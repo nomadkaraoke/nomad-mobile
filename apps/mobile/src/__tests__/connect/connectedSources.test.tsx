@@ -104,9 +104,24 @@ describe('Connected sources on the music profile', () => {
     expect(exp.getByText('Importing')).toBeTruthy();
     expect(exp.getByText('30 artists · 250 songs')).toBeTruthy();
     expect(exp.getByText('Last import today')).toBeTruthy();
+    // Services with a logo show it; a source without one (screenshot) shows none.
+    expect(within(screen.getByTestId('connected-row-lastfm')).getByTestId('brand-icon-lastfm', { includeHiddenElements: true })).toBeTruthy();
+    expect(exp.getByTestId('brand-icon-spotify', { includeHiddenElements: true })).toBeTruthy();
     // Each counts line has its own id (E2E asserts one source's counts).
     expect(screen.getByTestId('connected-counts-lastfm')).toHaveTextContent('1 artist · 1 song');
     expect(screen.getByTestId('connected-counts-spotify_export')).toHaveTextContent('30 artists · 250 songs');
+  });
+
+  it('maps every source id to the right brand, none for screenshots', async () => {
+    sources = ['spotify', 'spotify_playlist', 'apple_music', 'apple_export', 'youtube_music', 'listenbrainz', 'screenshot'].map((id) => source({ source: id }));
+    open();
+    await screen.findByTestId('connected-row-spotify');
+    const hidden = { includeHiddenElements: true };
+    expect(screen.getAllByTestId('brand-icon-spotify', hidden)).toHaveLength(2);
+    expect(screen.getAllByTestId('brand-icon-apple_music', hidden)).toHaveLength(2);
+    expect(screen.getAllByTestId('brand-icon-youtube_music', hidden)).toHaveLength(1);
+    expect(screen.getAllByTestId('brand-icon-listenbrainz', hidden)).toHaveLength(1);
+    expect(within(screen.getByTestId('connected-row-screenshot')).queryByTestId(/^brand-icon-/, hidden)).toBeNull();
   });
 
   it('says nothing is connected yet, and Add more opens the hub', async () => {

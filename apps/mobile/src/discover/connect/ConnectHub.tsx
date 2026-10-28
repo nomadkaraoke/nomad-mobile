@@ -1,6 +1,6 @@
 import type { SourceSummary } from '@nomad/api-decide';
 import { useTranslations } from '@nomad/i18n';
-import { Screen, Text } from '@nomad/ui';
+import { Screen, Text, type BrandId } from '@nomad/ui';
 import { router, type Href } from 'expo-router';
 import { Pressable } from 'react-native';
 
@@ -12,12 +12,12 @@ import { useCapabilities, useServicesSummary } from './queries';
 export type ConnectCardId = 'screenshot' | 'playlist' | 'spotify-export' | 'listenbrainz' | 'lastfm' | 'apple';
 
 /** Each routed card: its message key under `connect.cards`, its screen, and the decide sources it feeds. */
-const ROUTED: readonly { id: Exclude<ConnectCardId, 'apple'>; key: string; href: string; sources: readonly string[] }[] = [
+const ROUTED: readonly { id: Exclude<ConnectCardId, 'apple'>; key: string; href: string; sources: readonly string[]; brand?: BrandId }[] = [
   { id: 'screenshot', key: 'screenshot', href: '/discover/connect/screenshot', sources: ['screenshot'] },
   { id: 'playlist', key: 'playlist', href: '/discover/connect/playlist', sources: ['spotify_playlist', 'youtube_music'] },
-  { id: 'spotify-export', key: 'spotifyExport', href: '/discover/connect/spotify-export', sources: ['spotify_export'] },
-  { id: 'listenbrainz', key: 'listenbrainz', href: '/discover/connect/listenbrainz', sources: ['listenbrainz'] },
-  { id: 'lastfm', key: 'lastfm', href: '/discover/connect/lastfm', sources: ['lastfm'] },
+  { id: 'spotify-export', key: 'spotifyExport', href: '/discover/connect/spotify-export', sources: ['spotify_export'], brand: 'spotify' },
+  { id: 'listenbrainz', key: 'listenbrainz', href: '/discover/connect/listenbrainz', sources: ['listenbrainz'], brand: 'listenbrainz' },
+  { id: 'lastfm', key: 'lastfm', href: '/discover/connect/lastfm', sources: ['lastfm'], brand: 'lastfm' },
 ];
 
 /** A source counts as connected once decide has a connection for it or it has added something. */
@@ -58,6 +58,7 @@ export function ConnectHub() {
         <ConnectCard
           key={c.id}
           testID={`connect-card-${c.id}`}
+          brand={c.brand}
           title={t(`cards.${c.key}.title`)}
           detail={t(`cards.${c.key}.detail`)}
           connectedLabel={c.sources.some((s) => connectedSources.has(s)) ? t('connected') : null}
@@ -66,6 +67,7 @@ export function ConnectHub() {
       ))}
       <ConnectCard
         testID="connect-card-apple"
+        brand="apple_music"
         title={t('cards.apple.title')}
         detail={t('cards.apple.detail')}
         connectedLabel={appleConnected ? t('connected') : null}

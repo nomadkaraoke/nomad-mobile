@@ -61,7 +61,11 @@ onFlowComplete:
 - tapOn:
     id: "tab-me"
 - tapOn:
-    id: "me-music-profile"
+    id: "me-profile-manage"
+- extendedWaitUntil:
+    visible:
+      id: "voice-section"
+    timeout: 15000
 - scrollUntilVisible:
     element:
       id: "voice-section-method"

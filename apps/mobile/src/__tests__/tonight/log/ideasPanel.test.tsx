@@ -4,6 +4,7 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { useAuth } from '../../../auth/store';
+import { appStorage } from '../../../storage';
 import { IdeasPanel, mostSung, useKaraokeLogFreshness } from '../../../tonight/log/IdeasPanel';
 import { useOutbox } from '../../../tonight/log/outbox';
 import { UNKNOWN_ARTIST } from '../../../tonight/log/logStore';
@@ -53,6 +54,7 @@ const logged = (artist: string, title: string, over: Partial<Entry> = {}): Entry
 });
 
 beforeEach(async () => {
+  appStorage.clearAll(); // the log mirror is persisted
   jest.useRealTimers();
   jest.clearAllMocks();
   useRequestStore.getState().clear();

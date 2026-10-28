@@ -1,8 +1,10 @@
-import { hideSong, loveSong, unhideSong, type RecSong } from '@nomad/api-decide';
+import { hideSong, unhideSong, type RecSong } from '@nomad/api-decide';
 import { useQueryClient, type Query, type QueryClient, type QueryKey } from '@tanstack/react-query';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAuth } from '../auth/store';
+import { useLovedOverrides } from '../me/lovedOverrides';
+import { useMeOutbox } from '../me/meOutbox';
 import { RECS_KEY, type RecsPages } from './useRecommendations';
 
 /** How long the "Hidden from your picks · Undo" toast stays up. */
@@ -147,14 +149,40 @@ export function useSongFeedback() {
   const love = useCallback((song: RecSong) => {
     const key = song.song_key;
     setLoved((s) => new Set(s).add(key));
-    loveSong(key, { artist: song.artist, title: song.title }).catch(() => {
-      setLoved((s) => {
-        const next = new Set(s);
-        next.delete(key);
-        return next;
-      });
-    });
+    // Me's library and saves see this love at once (and Me's un-save un-hearts it here). The request goes through
+    // the Me outbox (one item per song), so a later un-save is ordered after it and never overtaken by it.
+    useLovedOverrides.getState().set(song, true);
+    useMeOutbox.getState().enqueue({ key: `love:${key}`, op: 'love', song_key: key, artist: song.artist, title: song.title, loved: true });
   }, []);
 
-  return { hide, love, undoHide, hidden, loved };
+  // The outbox gave up on a love (permanent error): the heart goes back (librarySettle drops the shared override).
+  useEffect(
+    () =>
+      useMeOutbox.addDroppedListener((item) => {
+        if (item.op !== 'love' || !item.loved) return;
+        setLoved((s) => {
+          if (!s.has(item.song_key)) return s;
+          const next = new Set(s);
+          next.delete(item.song_key);
+          return next;
+        });
+      }),
+    [],
+  );
+
+  // Me's saves and un-saves win over this view's own record.
+  const overrides = useLovedOverrides((s) => s.byKey);
+  // A Me un-save drops the heart for good (the override itself is settled away once decide has it).
+  const gone = Object.entries(overrides).filter(([k, o]) => !o.loved && loved.has(k));
+  if (gone.length) setLoved((s) => new Set([...s].filter((k) => !gone.some(([g]) => g === k))));
+  const merged = useMemo(() => {
+    const out = new Set(loved);
+    for (const [k, o] of Object.entries(overrides)) {
+      if (o.loved) out.add(k);
+      else out.delete(k);
+    }
+    return out as ReadonlySet<string>;
+  }, [loved, overrides]);
+
+  return { hide, love, undoHide, hidden, loved: merged };
 }

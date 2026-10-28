@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Återanslut Apple Music",
     "musicServices": "Dina musiktjänster",
     "appleMusicDenied": "Nomad Karaoke har inte tillgång till Apple Music. Slå på det i Inställningar › Nomad Karaoke › Medier och Apple Music och försök igen.",
-    "appleMusicNoSubscription": "Apple Music delade inte ditt bibliotek. Du behöver ett Apple Music-abonnemang för att ansluta."
+    "appleMusicNoSubscription": "Apple Music delade inte ditt bibliotek. Du behöver ett Apple Music-abonnemang för att ansluta.",
+    "artistsAll": "Alla artister",
+    "artistsNoMatch": "Inga artister matchar.",
+    "artistsRemoveA11y": "Ta bort {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Visa alla (#)} other {Visa alla (#)}}",
+    "artistsSearch": "Hitta en artist"
   },
   "common": {
     "error": "Något gick fel.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Gör en egen karaokevideo av den, redo att sjungas till och delas.",
     "offlineMissing": "Du är offline och den här låten finns inte i låtlistan som sparats på den här telefonen.",
     "offlineNote": "Offline · från låtlistan som sparats på den här telefonen",
-    "cloudErrorNote": "Det går inte att nå sökningen just nu · visar låtlistan som sparats på denna telefon"
+    "cloudErrorNote": "Det går inte att nå sökningen just nu · visar låtlistan som sparats på denna telefon",
+    "history": {
+      "beforeApp": "Före appen",
+      "crowd": "Publikfavorit",
+      "feel": "Känsla: {value}",
+      "key": "Tonart: {value}",
+      "nomadNight": "Nomad-kväll",
+      "otherVenue": "Annan bar",
+      "pageTitle": "Låthistorik",
+      "removeBody": "Den kommer inte längre räknas som sjungen.",
+      "removeTitle": "Ta bort den här posten?",
+      "times": "×{count}",
+      "title": "Din historik",
+      "edit": "Redigera",
+      "remove": "Ta bort"
+    },
+    "save": "Spara till Mina låtar",
+    "saved": "Sparad",
+    "addToSetlist": "Lägg till i setlist",
+    "markSung": "Markera som sjungen"
   },
   "tabs": {
     "discover": "Upptäck",
@@ -706,7 +731,26 @@
       "skip": "Inte nu",
       "song": "{title} med {artist}",
       "title": "Hur gick det?",
-      "save": "Spara"
+      "save": "Spara",
+      "reason": {
+        "awkward_music": "Konstig musik",
+        "crowd_quiet": "Tyst publik",
+        "didnt_know_it": "Kunde den inte",
+        "out_of_range": "Utanför mitt röstomfång",
+        "too_hard": "För svår",
+        "too_long": "För lång"
+      },
+      "reasonsLabel": "Vad kom i vägen?",
+      "vibe": {
+        "ballad": "Ballad",
+        "duet": "Duett",
+        "emotional": "Känslosam",
+        "party": "Fest",
+        "rock_out": "Ösigt/rockigt",
+        "singalong": "Allsång",
+        "warm_up": "Uppvärmning"
+      },
+      "vibesLabel": "Hur var stämningen?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Ställets låtbibliotek",
     "loved": "Favoriter",
-    "menuLoveIt": "Älskar den",
+    "menuLoveIt": "Spara till Mina låtar",
     "menuNotForMe": "Inte för mig",
     "menuOpen": "Fler alternativ för {title}",
     "offlinePicks": "Offline: visar dina senaste låtförslag",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Försök igen",
-    "signInForPicksAction": "Logga in"
+    "signInForPicksAction": "Logga in",
+    "menuSaved": "Sparad",
+    "menuAddToSetlist": "Lägg till i setlist",
+    "menuMarkSung": "Markera som sjungen"
   },
   "review": {
     "discard": "Ignorera mina ändringar",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# av dina låtar är klar — hitta din röst} other {# av dina låtar är klara — hitta din röst}}",
       "request": "Förbered mina låtar",
       "title": "Analysera min musik"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "För ett tag sedan",
+      "day": "Dag (valfritt)",
+      "less": "Minska",
+      "onDate": "Ett visst datum",
+      "times": "Antal gånger sjungen",
+      "title": "Markera som sjungen",
+      "close": "Stäng",
+      "more": "Öka",
+      "save": "Spara",
+      "song": "{title} med {artist}",
+      "tonight": "I kväll"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Klar} one {Lägg till # låt} other {Lägg till # låtar}}",
+      "hint": "Bocka för låtarna du har sjungit tidigare, så lägger vi till dem i din historik.",
+      "title": "Låtar jag har sjungit",
+      "searchLabel": "Hitta en låt",
+      "searchPlaceholder": "Sök efter låtar",
+      "songValue": "{title} med {artist}"
+    },
+    "setlists": {
+      "add": "Lägg till låtar",
+      "addNew": "Skapa och lägg till",
+      "addNewPlaceholder": "Namn på ny setlist",
+      "addToTitle": "Lägg till i setlist",
+      "addTyped": "Lägg till \"{query}\" som en ny låt",
+      "count": "{count, plural, =0 {Inga låtar} one {# låt} other {# låtar}}",
+      "deleteBody": "{name} kommer att raderas. Detta kan inte ångras.",
+      "deleteTitle": "Ta bort denna setlist?",
+      "detailTitle": "Setlist",
+      "editOrder": "Ändra ordning",
+      "empty": "Inga setlists än. Skapa en för att planera dina låtar för kvällen.",
+      "full": "Den setlisten är full (500 låtar).",
+      "itemsEmpty": "Inga låtar än. Lägg till några.",
+      "nameLabel": "Namn på setlist",
+      "namePlaceholder": "t.ex. Fredagsfavoriter",
+      "new": "Ny setlist",
+      "newTitle": "Ny setlist",
+      "notFound": "Den här setlisten finns inte kvar längre.",
+      "number": "{number}",
+      "rename": "Byt namn",
+      "renameTitle": "Byt namn på setlist",
+      "saveOrder": "Spara ordning",
+      "title": "Setlists",
+      "addSongTitle": "Lägg till en låt",
+      "added": "Tillagd",
+      "cancel": "Avbryt",
+      "cancelOrder": "Avbryt",
+      "close": "Stäng",
+      "delete": "Ta bort",
+      "done": "Klar",
+      "down": "Flytta ner {song}",
+      "make": "Skapa",
+      "nameSave": "Spara",
+      "remove": "Ta bort",
+      "searchLabel": "Hitta en låt",
+      "searchPlaceholder": "Sök efter låtar",
+      "songValue": "{title} med {artist}",
+      "sung": "Markera som sjungen",
+      "up": "Flytta upp {song}"
+    },
+    "allSongs": "Alla dina låtar",
+    "home": {
+      "allSongsRow": "Alla dina låtar ({count})",
+      "allTime": "Genom tiderna",
+      "connectHint": "Få förslag baserat på vad du redan lyssnar på",
+      "gotosEmpty": "Låtarna du älskar att sjunga kommer att visas här. Börja med att lägga till låtar du har sjungit tidigare.",
+      "gotosEmptyCta": "Lägg till låtar jag har sjungit",
+      "gotosTitle": "Dina favoriter",
+      "greatShare": "{percent} % gick toppen",
+      "keysLabel": "Ditt röstomfång på en klaviatur",
+      "manage": "Hantera",
+      "manageHint": "Ställ in ditt röstomfång, koppla musiktjänster och ändra vad vi vet om dig",
+      "mostSung": "Mest sjungen: {song} ({count}×)",
+      "nights": "{count, plural, one {# kväll} other {# kvällar}}",
+      "performances": "{count, plural, one {# framträdande} other {# framträdanden}}",
+      "saved": "{count, plural, one {# sparad} other {# sparade}}",
+      "seeAll": "Visa alla",
+      "setlistsEmpty": "Planera en kväll: skapa en spellista med låtar du vill sjunga.",
+      "songs": "{count, plural, one {# låt} other {# låtar}}",
+      "sourcesLabel": "Ansluten musik",
+      "statsEmpty": "Inget sjunget än. Markera en låt som sjungen för att sätta igång din statistik.",
+      "statsTitle": "Din karaoke",
+      "sung": "{count, plural, one {# sjungen låt} other {# sjungna låtar}}",
+      "thisYear": "I år",
+      "topArtist": "Toppartist: {artist}",
+      "venues": "{count, plural, one {# ställe} other {# ställen}}",
+      "voiceCta": "Hitta ditt röstomfång",
+      "connectCta": "Anslut din musik",
+      "profileTitle": "Din musikprofil",
+      "voiceHint": "Hitta låtar som passar din röst",
+      "voiceRange": "Omfång {range}"
+    },
+    "songs": {
+      "addPast": "Lägg till låtar jag har sjungit",
+      "count": "{count, plural, one {# låt} other {# låtar}}",
+      "empty": "Inga låtar än. Markera en låt som sjungen eller spara en så visas den här.",
+      "emptyFiltered": "Inga låtar matchar dessa filter.",
+      "feel": {
+        "unrated": "Inte betygsatt",
+        "bad": "Inte för mig",
+        "great": "Toppen",
+        "ok": "OK"
+      },
+      "offline": "Du är offline. Visar låtarna som sparats på den här telefonen.",
+      "often": {
+        "once": "En gång",
+        "twice": "2 eller fler",
+        "unsung": "Inte sjungits än"
+      },
+      "oftenLabel": "Hur ofta",
+      "searchLabel": "Sök bland dina låtar",
+      "sort": {
+        "most": "Mest sjungna",
+        "rated": "Högst betyg",
+        "recent": "Senaste",
+        "az": "A till Ö"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Känsla",
+      "crowdPleaser": "Publikfavorit",
+      "feelLabel": "Ditt betyg",
+      "loadError": "Kunde inte läsa in dina låtar.",
+      "moodLabel": "Stämning",
+      "saved": "Sparad",
+      "searchPlaceholder": "Låt eller artist",
+      "sortLabel": "Sortera",
+      "timesSungLabel": "{count, plural, one {Sjungen # gång} other {Sjungen # gånger}}"
     }
   }
 }

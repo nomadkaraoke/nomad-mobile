@@ -19,6 +19,10 @@ appId: com.nomadkaraoke.mobile
     commands:
       - launchApp:
           clearKeychain: true
+      # Screenshot-based (no view-hierarchy query): right after a relaunch the first hierarchy query sometimes 500s
+      # (kAXErrorInvalidUIElement), which failed the DEVELOPMENT SERVERS check below (me-2, 2026-10-25).
+      - waitForAnimationToEnd:
+          timeout: 3000
 - runFlow:
     when:
       platform: Android

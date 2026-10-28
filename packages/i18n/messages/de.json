@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Apple Music erneut verbinden",
     "musicServices": "Deine Musikdienste",
     "appleMusicDenied": "Nomad Karaoke hat keinen Zugriff auf Apple Music. Aktiviere den Zugriff unter Einstellungen › Nomad Karaoke › Medien & Apple Music und versuche es dann erneut.",
-    "appleMusicNoSubscription": "Apple Music hat deine Mediathek nicht freigegeben. Für die Verbindung ist ein Apple Music-Abo erforderlich."
+    "appleMusicNoSubscription": "Apple Music hat deine Mediathek nicht freigegeben. Für die Verbindung ist ein Apple Music-Abo erforderlich.",
+    "artistsAll": "Alle Künstler",
+    "artistsNoMatch": "Keine passenden Künstler gefunden.",
+    "artistsRemoveA11y": "{artist} entfernen",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Alle anzeigen (#)} other {Alle anzeigen (#)}}",
+    "artistsSearch": "Künstler finden"
   },
   "common": {
     "error": "Etwas ist schiefgelaufen.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Erstelle dein eigenes Karaoke-Video davon – bereit zum Mitsingen und Teilen.",
     "offlineMissing": "Du bist offline und dieser Song ist nicht in der auf diesem Smartphone gespeicherten Songliste enthalten.",
     "offlineNote": "Offline · aus der auf diesem Smartphone gespeicherten Songliste",
-    "cloudErrorNote": "Suche gerade nicht erreichbar · es wird die auf diesem Smartphone gespeicherte Songliste angezeigt"
+    "cloudErrorNote": "Suche gerade nicht erreichbar · es wird die auf diesem Smartphone gespeicherte Songliste angezeigt",
+    "history": {
+      "beforeApp": "Vor der App",
+      "crowd": "Publikumsliebling",
+      "feel": "Stimmung: {value}",
+      "key": "Tonart: {value}",
+      "nomadNight": "Nomad-Abend",
+      "otherVenue": "Andere Bar",
+      "pageTitle": "Song-Verlauf",
+      "removeBody": "Wird nicht mehr als gesungen gezählt.",
+      "removeTitle": "Diesen Eintrag entfernen?",
+      "times": "×{count}",
+      "title": "Dein Verlauf",
+      "edit": "Bearbeiten",
+      "remove": "Entfernen"
+    },
+    "save": "In „Meine Songs“ speichern",
+    "saved": "Gespeichert",
+    "addToSetlist": "Zur Setlist hinzufügen",
+    "markSung": "Als gesungen markieren"
   },
   "tabs": {
     "discover": "Entdecken",
@@ -706,7 +731,26 @@
       "skip": "Nicht jetzt",
       "song": "{title} von {artist}",
       "title": "Wie lief es?",
-      "save": "Speichern"
+      "save": "Speichern",
+      "reason": {
+        "awkward_music": "Unpassende Musik",
+        "crowd_quiet": "Ruhiges Publikum",
+        "didnt_know_it": "Kannte das Lied nicht",
+        "out_of_range": "Nicht meine Tonlage",
+        "too_hard": "Zu schwer",
+        "too_long": "Zu lang"
+      },
+      "reasonsLabel": "Woran lag es?",
+      "vibe": {
+        "ballad": "Ballade",
+        "duet": "Duett",
+        "emotional": "Gefühlvoll",
+        "party": "Party",
+        "rock_out": "Abrocken",
+        "singalong": "Mitsingen",
+        "warm_up": "Aufwärmen"
+      },
+      "vibesLabel": "Wie war die Stimmung?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Katalog der Location",
     "loved": "Favoriten",
-    "menuLoveIt": "Liebe ich",
+    "menuLoveIt": "In „Meine Songs“ speichern",
     "menuNotForMe": "Nicht mein Fall",
     "menuOpen": "Mehr Optionen für {title}",
     "offlinePicks": "Offline: deine letzten Empfehlungen werden angezeigt",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Erneut versuchen",
-    "signInForPicksAction": "Anmelden"
+    "signInForPicksAction": "Anmelden",
+    "menuSaved": "Gespeichert",
+    "menuAddToSetlist": "Zur Setlist hinzufügen",
+    "menuMarkSung": "Als gesungen markieren"
   },
   "review": {
     "discard": "Meine Änderungen verwerfen",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# deiner Songs ist bereit – finde deine Stimme} other {# deiner Songs sind bereit – finde deine Stimme}}",
       "request": "Meine Songs vorbereiten",
       "title": "Meine Musik analysieren"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Vor einiger Zeit",
+      "day": "Tag (optional)",
+      "less": "Verringern",
+      "onDate": "An einem bestimmten Datum",
+      "times": "Wie oft gesungen",
+      "title": "Als gesungen markieren",
+      "close": "Schließen",
+      "more": "Erhöhen",
+      "save": "Speichern",
+      "song": "{title} von {artist}",
+      "tonight": "Heute Abend"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Fertig} one {# Song hinzufügen} other {# Songs hinzufügen}}",
+      "hint": "Hake die Songs ab, die du schon einmal gesungen hast. Wir fügen sie deinem Verlauf hinzu.",
+      "title": "Songs, die ich gesungen habe",
+      "searchLabel": "Song suchen",
+      "searchPlaceholder": "Songs suchen",
+      "songValue": "{title} von {artist}"
+    },
+    "setlists": {
+      "add": "Songs hinzufügen",
+      "addNew": "Erstellen und hinzufügen",
+      "addNewPlaceholder": "Name der neuen Setlist",
+      "addToTitle": "Zur Setlist hinzufügen",
+      "addTyped": "„{query}“ als neuen Song hinzufügen",
+      "count": "{count, plural, =0 {Keine Songs} one {# Song} other {# Songs}}",
+      "deleteBody": "„{name}“ wird gelöscht. Das kann nicht rückgängig gemacht werden.",
+      "deleteTitle": "Diese Setlist löschen?",
+      "detailTitle": "Setlist",
+      "editOrder": "Reihenfolge bearbeiten",
+      "empty": "Noch keine Setlists vorhanden. Erstelle eine, um deine Songs für den Abend zu planen.",
+      "full": "Diese Setlist ist voll (500 Songs).",
+      "itemsEmpty": "Noch keine Songs vorhanden. Füge welche hinzu.",
+      "nameLabel": "Name der Setlist",
+      "namePlaceholder": "z. B. Freitags-Favoriten",
+      "new": "Neue Setlist",
+      "newTitle": "Neue Setlist",
+      "notFound": "Diese Setlist gibt es nicht mehr.",
+      "number": "{number}",
+      "rename": "Umbenennen",
+      "renameTitle": "Setlist umbenennen",
+      "saveOrder": "Reihenfolge speichern",
+      "title": "Setlists",
+      "addSongTitle": "Song hinzufügen",
+      "added": "Hinzugefügt",
+      "cancel": "Abbrechen",
+      "cancelOrder": "Abbrechen",
+      "close": "Schließen",
+      "delete": "Löschen",
+      "done": "Fertig",
+      "down": "{song} nach unten verschieben",
+      "make": "Erstellen",
+      "nameSave": "Speichern",
+      "remove": "Entfernen",
+      "searchLabel": "Song suchen",
+      "searchPlaceholder": "Songs suchen",
+      "songValue": "{title} von {artist}",
+      "sung": "Als gesungen markieren",
+      "up": "{song} nach oben verschieben"
+    },
+    "allSongs": "Alle deine Songs",
+    "home": {
+      "allSongsRow": "Alle deine Songs ({count})",
+      "allTime": "Gesamter Zeitraum",
+      "connectHint": "Erhalte Vorschläge basierend auf dem, was du bereits hörst",
+      "gotosEmpty": "Die Songs, die du am liebsten singst, werden hier angezeigt. Füge zuerst Songs hinzu, die du schon einmal gesungen hast.",
+      "gotosEmptyCta": "Bereits gesungene Songs hinzufügen",
+      "gotosTitle": "Deine Favoriten",
+      "greatShare": "{percent} % liefen großartig",
+      "keysLabel": "Dein Stimmumfang auf einer Klaviatur",
+      "manage": "Verwalten",
+      "manageHint": "Richte deinen Stimmumfang ein, verbinde Musik und bearbeite, was wir über dich wissen",
+      "mostSung": "Am meisten gesungen: {song} ({count}×)",
+      "nights": "{count, plural, one {# Abend} other {# Abende}}",
+      "performances": "{count, plural, one {# Auftritt} other {# Auftritte}}",
+      "saved": "{count, plural, one {# gespeichert} other {# gespeichert}}",
+      "seeAll": "Alle anzeigen",
+      "setlistsEmpty": "Plane einen Abend: Erstelle eine Setlist mit Songs, die du singen möchtest.",
+      "songs": "{count, plural, one {# Song} other {# Songs}}",
+      "sourcesLabel": "Verbundene Musik",
+      "statsEmpty": "Bisher noch nichts gesungen. Markiere einen Song als gesungen, um deine Statistiken zu starten.",
+      "statsTitle": "Dein Karaoke",
+      "sung": "{count, plural, one {# Song gesungen} other {# Songs gesungen}}",
+      "thisYear": "Dieses Jahr",
+      "topArtist": "Top-Künstler: {artist}",
+      "venues": "{count, plural, one {# Location} other {# Locations}}",
+      "voiceCta": "Finde deinen Stimmumfang",
+      "connectCta": "Verbinde deine Musik",
+      "profileTitle": "Dein Musikprofil",
+      "voiceHint": "Finde Songs, die zu deiner Stimme passen",
+      "voiceRange": "Tonumfang {range}"
+    },
+    "songs": {
+      "addPast": "Bereits gesungene Songs hinzufügen",
+      "count": "{count, plural, one {# Song} other {# Songs}}",
+      "empty": "Noch keine Songs. Markiere einen Song als gesungen oder speichere einen, damit er hier angezeigt wird.",
+      "emptyFiltered": "Keine Songs entsprechen diesen Filtern.",
+      "feel": {
+        "unrated": "Nicht bewertet",
+        "bad": "Nicht mein Fall",
+        "great": "Großartig",
+        "ok": "OK"
+      },
+      "offline": "Du bist offline. Es werden die auf diesem Telefon gespeicherten Songs angezeigt.",
+      "often": {
+        "once": "Einmal",
+        "twice": "2-mal oder öfter",
+        "unsung": "Noch nicht gesungen"
+      },
+      "oftenLabel": "Häufigkeit",
+      "searchLabel": "Deine Songs durchsuchen",
+      "sort": {
+        "most": "Am meisten gesungen",
+        "rated": "Am besten bewertet",
+        "recent": "Zuletzt gesungen",
+        "az": "A bis Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Publikumsliebling",
+      "feelLabel": "Deine Bewertung",
+      "loadError": "Deine Songs konnten nicht geladen werden.",
+      "moodLabel": "Stimmung",
+      "saved": "Gespeichert",
+      "searchPlaceholder": "Song oder Interpret",
+      "sortLabel": "Sortieren",
+      "timesSungLabel": "{count, plural, one {# Mal gesungen} other {# Mal gesungen}}"
     }
   }
 }

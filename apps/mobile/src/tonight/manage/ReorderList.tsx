@@ -2,8 +2,9 @@ import { KjboxError, reorder, type ReorderItem, type Song } from '@nomad/api-kjb
 import { isolate, useTranslations } from '@nomad/i18n';
 import { Button, Text } from '@nomad/ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
+import { ArrowButton } from '../../ui/ArrowButton';
 import { useNightStore, type NomadNight } from '../nightStore';
 import { useEditingStore } from '../nomad/editingStore';
 import { isLive, isOnStage, isOwnRequest, songKey, songParts } from '../nomad/model';
@@ -151,23 +152,5 @@ export function ReorderList({ night, userKey, songs, onDone }: ReorderListProps)
         <Button testID="tonight-reorder-cancel" variant="secondary" label={t('cancel')} onPress={() => onDone(null)} disabled={saving} />
       </View>
     </View>
-  );
-}
-
-function ArrowButton({ testID, glyph, label, disabled, onPress }: { testID: string; glyph: string; label: string; disabled: boolean; onPress: () => void }) {
-  return (
-    <Pressable
-      testID={testID}
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ disabled }}
-      disabled={disabled}
-      onPress={onPress}
-      className={`h-11 w-11 items-center justify-center rounded-md border border-border ${disabled ? 'opacity-30' : ''}`}
-    >
-      <Text importantForAccessibility="no" accessibilityElementsHidden className="text-lg">
-        {glyph}
-      </Text>
-    </Pressable>
   );
 }

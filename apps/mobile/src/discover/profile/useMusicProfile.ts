@@ -22,6 +22,22 @@ const KEYS = {
   hidden: [...PROFILE_KEY, 'hidden'],
 } as const;
 
+/** decide's largest page (`per_page` le=500) and a cap on pages, so a runaway has_more can't loop forever. */
+const ARTISTS_PER_PAGE = 500;
+const MAX_ARTIST_PAGES = 20;
+
+/** Every artist the person has: follows has_more until the last page. */
+export async function listAllMyArtists() {
+  const first = await listMyArtists({ page: 1, per_page: ARTISTS_PER_PAGE });
+  const artists = [...first.artists];
+  let last = first;
+  for (let page = 2; last.has_more && page <= MAX_ARTIST_PAGES; page++) {
+    last = await listMyArtists({ page, per_page: ARTISTS_PER_PAGE });
+    artists.push(...last.artists);
+  }
+  return { ...first, artists, total: Math.max(first.total, artists.length), has_more: false };
+}
+
 /** An edit that takes one row out of the list at `key` at once, undoes that if decide refuses, then refreshes. */
 function useRowEdit<T>(key: readonly unknown[], request: (id: string) => Promise<unknown>, without: (d: T, id: string) => T) {
   const queryClient = useQueryClient();
@@ -50,7 +66,7 @@ function useRowEdit<T>(key: readonly unknown[], request: (id: string) => Promise
 export function useMusicProfile() {
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
   const prefs = useQuery({ queryKey: KEYS.prefs, queryFn: getPreferences, enabled: signedIn });
-  const artists = useQuery({ queryKey: KEYS.artists, queryFn: listMyArtists, enabled: signedIn });
+  const artists = useQuery({ queryKey: KEYS.artists, queryFn: listAllMyArtists, enabled: signedIn });
   const loved = useQuery({ queryKey: KEYS.loved, queryFn: listLovedSongs, enabled: signedIn });
   const hidden = useQuery({ queryKey: KEYS.hidden, queryFn: listHiddenSongs, enabled: signedIn });
 

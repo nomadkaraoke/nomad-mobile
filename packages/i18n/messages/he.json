@@ -52,7 +52,13 @@
     "appleMusicReconnect": "התחברות מחדש ל-Apple Music",
     "musicServices": "שירותי המוזיקה שלך",
     "appleMusicDenied": "ל-Nomad Karaoke אין גישה ל-Apple Music. יש להפעיל את הגישה ב'הגדרות' › Nomad Karaoke ‏› 'מדיה ו-Apple Music', ואז לנסות שוב.",
-    "appleMusicNoSubscription": "Apple Music לא שיתף את הספרייה שלך. כדי להתחבר דרוש מנוי ל-Apple Music."
+    "appleMusicNoSubscription": "Apple Music לא שיתף את הספרייה שלך. כדי להתחבר דרוש מנוי ל-Apple Music.",
+    "artistsAll": "כל האמנים",
+    "artistsNoMatch": "לא נמצאו אמנים תואמים.",
+    "artistsRemoveA11y": "הסרת {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {הצגת הכל (#)} other {הצגת הכל (#)}}",
+    "artistsSearch": "חיפוש אמן"
   },
   "common": {
     "error": "משהו השתבש.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "אפשר להכין סרטון קריוקי משלך, שמוכן לשירה ולשיתוף.",
     "offlineMissing": "אין לך חיבור לאינטרנט, והשיר הזה אינו מופיע ברשימת השירים שנשמרה בטלפון זה.",
     "offlineNote": "ללא חיבור לאינטרנט · מתוך רשימת השירים שנשמרה בטלפון זה",
-    "cloudErrorNote": "לא ניתן לגשת לחיפוש כרגע · מוצגת רשימת השירים השמורה בטלפון הזה"
+    "cloudErrorNote": "לא ניתן לגשת לחיפוש כרגע · מוצגת רשימת השירים השמורה בטלפון הזה",
+    "history": {
+      "beforeApp": "לפני השימוש באפליקציה",
+      "crowd": "להיט שכולם אוהבים",
+      "feel": "אווירה: {value}",
+      "key": "סולם: {value}",
+      "nomadNight": "ערב Nomad",
+      "otherVenue": "בר אחר",
+      "pageTitle": "היסטוריית שירים",
+      "removeBody": "השיר כבר לא ייחשב כשיר ששרת בעבר.",
+      "removeTitle": "להסיר את התיעוד הזה?",
+      "times": "×{count}",
+      "title": "ההיסטוריה שלך",
+      "edit": "עריכה",
+      "remove": "הסרה"
+    },
+    "save": "שמירה ב'השירים שלי'",
+    "saved": "נשמר",
+    "addToSetlist": "הוספה לרשימת השמעה",
+    "markSung": "סימון כשיר ששרתי"
   },
   "tabs": {
     "discover": "גילוי",
@@ -706,7 +731,26 @@
       "skip": "לא עכשיו",
       "song": "{title} מאת {artist}",
       "title": "איך היה?",
-      "save": "שמור"
+      "save": "שמור",
+      "reason": {
+        "awkward_music": "מוזיקה לא זורמת",
+        "crowd_quiet": "קהל שקט",
+        "didnt_know_it": "לא הכרתי את השיר",
+        "out_of_range": "מחוץ למנעד שלי",
+        "too_hard": "קשה מדי",
+        "too_long": "ארוך מדי"
+      },
+      "reasonsLabel": "מה הפריע?",
+      "vibe": {
+        "ballad": "בלדה",
+        "duet": "דואט",
+        "emotional": "מרגש",
+        "party": "מסיבה",
+        "rock_out": "רוק מחשמל",
+        "singalong": "כולם שרים יחד",
+        "warm_up": "חימום"
+      },
+      "vibesLabel": "איך היה הוייב?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "מאגר המקום",
     "loved": "אהבתי",
-    "menuLoveIt": "אהבתי",
+    "menuLoveIt": "שמירה ב'השירים שלי'",
     "menuNotForMe": "לא בשבילי",
     "menuOpen": "אפשרויות נוספות עבור {title}",
     "offlinePicks": "מצב לא מקוון: מוצגות הבחירות האחרונות שלך",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "קהילתי",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "נסה שוב",
-    "signInForPicksAction": "התחברות"
+    "signInForPicksAction": "התחברות",
+    "menuSaved": "נשמר",
+    "menuAddToSetlist": "הוספה לרשימת השמעה",
+    "menuMarkSung": "סימון כשיר ששרתי"
   },
   "review": {
     "discard": "מחיקת העריכות שלי",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {שיר אחד שלך מוכן — גלה את הקול שלך} other {# מהשירים שלך מוכנים — גלה את הקול שלך}}",
       "request": "הכן את השירים שלי",
       "title": "ניתוח המוזיקה שלי"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "לפני זמן מה",
+      "day": "יום (אופציונלי)",
+      "less": "הפחתה",
+      "onDate": "בתאריך מסוים",
+      "times": "כמה פעמים שרת",
+      "title": "סימון כשיר ששרתי",
+      "close": "סגירה",
+      "more": "הוספה",
+      "save": "שמור",
+      "song": "{title} מאת {artist}",
+      "tonight": "הערב"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {סיום} one {הוספת שיר אחד} two {הוספת שני שירים} other {הוספת # שירים}}",
+      "hint": "סמנו את השירים שכבר שרתם בעבר. נוסיף אותם להיסטוריה שלכם.",
+      "title": "שירים ששרתי",
+      "searchLabel": "חיפוש שיר",
+      "searchPlaceholder": "חיפוש שירים",
+      "songValue": "{title} מאת {artist}"
+    },
+    "setlists": {
+      "add": "הוספת שירים",
+      "addNew": "יצירה והוספה",
+      "addNewPlaceholder": "שם לרשימת שירים חדשה",
+      "addToTitle": "הוספה לרשימת השמעה",
+      "addTyped": "הוספת \"{query}\" כשיר חדש",
+      "count": "{count, plural, =0 {אין שירים} one {שיר אחד} two {שני שירים} other {# שירים}}",
+      "deleteBody": "{name} תימחק. לא ניתן לבטל פעולה זו.",
+      "deleteTitle": "למחוק את רשימת השירים הזו?",
+      "detailTitle": "רשימת שירים",
+      "editOrder": "עריכת הסדר",
+      "empty": "עדיין אין רשימות שירים. אפשר ליצור אחת כדי לתכנן את השירים לערב שלכם.",
+      "full": "רשימת השירים הזו מלאה (500 שירים).",
+      "itemsEmpty": "עדיין אין שירים. כדאי להוסיף כמה.",
+      "nameLabel": "שם רשימת השירים",
+      "namePlaceholder": "למשל: המועדפים של שישי",
+      "new": "רשימת שירים חדשה",
+      "newTitle": "רשימת שירים חדשה",
+      "notFound": "רשימת השירים הזו כבר לא קיימת.",
+      "number": "{number}",
+      "rename": "שינוי שם",
+      "renameTitle": "שינוי שם רשימת השירים",
+      "saveOrder": "שמירת הסדר",
+      "title": "רשימות שירים",
+      "addSongTitle": "הוספת שיר",
+      "added": "נוסף",
+      "cancel": "ביטול",
+      "cancelOrder": "ביטול",
+      "close": "סגירה",
+      "delete": "מחיקה",
+      "done": "סיום",
+      "down": "הורדת {song}",
+      "make": "להכין עכשיו",
+      "nameSave": "שמור",
+      "remove": "הסרה",
+      "searchLabel": "חיפוש שיר",
+      "searchPlaceholder": "חיפוש שירים",
+      "songValue": "{title} מאת {artist}",
+      "sung": "סימון כשיר ששרתי",
+      "up": "העלאת {song}"
+    },
+    "allSongs": "כל השירים שלך",
+    "home": {
+      "allSongsRow": "כל השירים שלך ({count})",
+      "allTime": "בכל הזמנים",
+      "connectHint": "קבלו המלצות לפי מה שאתם כבר מאזינים לו",
+      "gotosEmpty": "השירים שאתם הכי אוהבים לשיר יופיעו כאן. התחילו בהוספת שירים שכבר שרתם בעבר.",
+      "gotosEmptyCta": "הוספת שירים ששרתי",
+      "gotosTitle": "הקבועים שלך",
+      "greatShare": "{percent}% הלכו מעולה",
+      "keysLabel": "המנעד הקולי שלך על מקלדת",
+      "manage": "ניהול",
+      "manageHint": "הגדירו את המנעד הקולי שלכם, חברו מוזיקה וערכו את מה שאנחנו יודעים עליכם",
+      "mostSung": "הכי מושר: {song} ({count}×)",
+      "nights": "{count, plural, one {ערב אחד} two {שני ערבים} other {# ערבים}}",
+      "performances": "{count, plural, one {ביצוע אחד} two {שני ביצועים} other {# ביצועים}}",
+      "saved": "{count, plural, one {שיר אחד שמור} two {שני שירים שמורים} other {# שירים שמורים}}",
+      "seeAll": "הצגת הכל",
+      "setlistsEmpty": "מתכננים ערב? הכינו רשימת שירים (סטליסט) שתרצו לשיר.",
+      "songs": "{count, plural, one {שיר אחד} two {שני שירים} other {# שירים}}",
+      "sourcesLabel": "מוזיקה מחוברת",
+      "statsEmpty": "עדיין לא שרתם כלום. סמנו שיר ככזה ששרתם כדי להתחיל לצבור נתונים.",
+      "statsTitle": "הקריוקי שלך",
+      "sung": "{count, plural, one {שיר אחד מושר} two {שני שירים מושרים} other {# שירים מושרים}}",
+      "thisYear": "השנה",
+      "topArtist": "האמן המוביל: {artist}",
+      "venues": "{count, plural, one {מקום אחד} two {שני מקומות} other {# מקומות}}",
+      "voiceCta": "גלו את המנעד הקולי שלכם",
+      "connectCta": "חיבור המוזיקה שלך",
+      "profileTitle": "פרופיל המוזיקה שלך",
+      "voiceHint": "למצוא שירים שמתאימים לקול שלך",
+      "voiceRange": "מנעד {range}"
+    },
+    "songs": {
+      "addPast": "הוספת שירים ששרתי",
+      "count": "{count, plural, one {שיר אחד} two {שני שירים} other {# שירים}}",
+      "empty": "עדיין אין שירים. סמנו שיר ככזה ששרתם או שמרו שיר, והוא יופיע כאן.",
+      "emptyFiltered": "אין שירים שתואמים למסננים אלה.",
+      "feel": {
+        "unrated": "ללא דירוג",
+        "bad": "לא בשבילי",
+        "great": "מעולה",
+        "ok": "תקין"
+      },
+      "offline": "אין חיבור לאינטרנט. מוצגים שירים שנשמרו בטלפון זה.",
+      "often": {
+        "once": "פעם אחת",
+        "twice": "פעמיים ומעלה",
+        "unsung": "טרם הושר"
+      },
+      "oftenLabel": "באיזו תדירות",
+      "searchLabel": "חיפוש בשירים שלך",
+      "sort": {
+        "most": "הכי מושרים",
+        "rated": "הכי אהובים",
+        "recent": "אחרונים",
+        "az": "א' עד ת'"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "וייב",
+      "crowdPleaser": "להיט שכולם אוהבים",
+      "feelLabel": "הדירוג שלך",
+      "loadError": "לא הצלחנו לטעון את השירים שלך.",
+      "moodLabel": "מצב רוח",
+      "saved": "נשמר",
+      "searchPlaceholder": "שיר או אמן",
+      "sortLabel": "מיון",
+      "timesSungLabel": "{count, plural, one {הושר פעם אחת} other {הושר # פעמים}}"
     }
   }
 }

@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Sambung semula Apple Music",
     "musicServices": "Perkhidmatan muzik anda",
     "appleMusicDenied": "Nomad Karaoke tidak mempunyai akses kepada Apple Music. Hidupkannya dalam Tetapan › Nomad Karaoke › Media & Apple Music, kemudian cuba lagi.",
-    "appleMusicNoSubscription": "Apple Music tidak berkongsi pustaka anda. Langganan Apple Music diperlukan untuk menyambung."
+    "appleMusicNoSubscription": "Apple Music tidak berkongsi pustaka anda. Langganan Apple Music diperlukan untuk menyambung.",
+    "artistsAll": "Semua artis",
+    "artistsNoMatch": "Tiada artis yang sepadan.",
+    "artistsRemoveA11y": "Alih keluar {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, other {Lihat semua (#)}}",
+    "artistsSearch": "Cari artis"
   },
   "common": {
     "error": "Sesuatu telah berlaku masalah.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Cipta video karaoke anda sendiri untuk lagu ini, sedia untuk dinyanyikan dan dikongsi.",
     "offlineMissing": "Anda sedang berada di luar talian, dan lagu ini tiada dalam senarai lagu yang disimpan pada telefon ini.",
     "offlineNote": "Luar talian · daripada senarai lagu yang disimpan pada telefon ini",
-    "cloudErrorNote": "Carian tidak dapat dihubungi buat masa ini · memaparkan senarai lagu yang disimpan pada telefon ini"
+    "cloudErrorNote": "Carian tidak dapat dihubungi buat masa ini · memaparkan senarai lagu yang disimpan pada telefon ini",
+    "history": {
+      "beforeApp": "Sebelum ada aplikasi",
+      "crowd": "Pilihan ramai",
+      "feel": "Rasa: {value}",
+      "key": "Kunci: {value}",
+      "nomadNight": "Malam Nomad",
+      "otherVenue": "Bar lain",
+      "pageTitle": "Sejarah lagu",
+      "removeBody": "Ia tidak akan dikira sebagai pernah dinyanyikan lagi.",
+      "removeTitle": "Padamkan rekod ini?",
+      "times": "×{count}",
+      "title": "Sejarah anda",
+      "edit": "Edit",
+      "remove": "Alih keluar"
+    },
+    "save": "Simpan ke Lagu saya",
+    "saved": "Disimpan",
+    "addToSetlist": "Tambah ke setlist",
+    "markSung": "Tandakan sebagai pernah dinyanyikan"
   },
   "tabs": {
     "discover": "Teroka",
@@ -706,7 +731,26 @@
       "skip": "Bukan sekarang",
       "song": "{title} oleh {artist}",
       "title": "Bagaimana persembahan tadi?",
-      "save": "Simpan"
+      "save": "Simpan",
+      "reason": {
+        "awkward_music": "Muzik janggal",
+        "crowd_quiet": "Penonton kaku",
+        "didnt_know_it": "Tak tahu lagu",
+        "out_of_range": "Luar julat vokal",
+        "too_hard": "Terlalu susah",
+        "too_long": "Terlalu panjang"
+      },
+      "reasonsLabel": "Apa yang kurang kena?",
+      "vibe": {
+        "ballad": "Balada",
+        "duet": "Duet",
+        "emotional": "Penuh emosi",
+        "party": "Parti",
+        "rock_out": "Rock habis",
+        "singalong": "Nyanyi bersama",
+        "warm_up": "Pemanas badan"
+      },
+      "vibesLabel": "Macam mana suasana tadi?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Pustaka premis",
     "loved": "Digemari",
-    "menuLoveIt": "Suka sangat",
+    "menuLoveIt": "Simpan ke Lagu saya",
     "menuNotForMe": "Bukan untuk saya",
     "menuOpen": "Lagi pilihan untuk {title}",
     "offlinePicks": "Luar talian: memaparkan pilihan terakhir anda",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Komuniti",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Cuba lagi",
-    "signInForPicksAction": "Log masuk"
+    "signInForPicksAction": "Log masuk",
+    "menuSaved": "Disimpan",
+    "menuAddToSetlist": "Tambah ke setlist",
+    "menuMarkSung": "Tandakan sebagai pernah dinyanyikan"
   },
   "review": {
     "discard": "Buang suntingan saya",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, other {# daripada lagu anda sudah sedia — temui suara anda}}",
       "request": "Sediakan lagu saya",
       "title": "Analisis muzik saya"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Beberapa ketika dahulu",
+      "day": "Hari (pilihan)",
+      "less": "Kurangkan",
+      "onDate": "Pada tarikh tertentu",
+      "times": "Berapa kali dinyanyikan",
+      "title": "Tandakan sebagai pernah dinyanyikan",
+      "close": "Tutup",
+      "more": "Tambah",
+      "save": "Simpan",
+      "song": "{title} oleh {artist}",
+      "tonight": "Malam Ini"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Selesai} other {Tambah # lagu}}",
+      "hint": "Tandakan lagu yang pernah anda nyanyikan. Kami akan masukkannya ke dalam sejarah anda.",
+      "title": "Lagu yang pernah saya nyanyikan",
+      "searchLabel": "Cari lagu",
+      "searchPlaceholder": "Cari lagu",
+      "songValue": "{title} oleh {artist}"
+    },
+    "setlists": {
+      "add": "Tambah lagu",
+      "addNew": "Cipta dan tambah",
+      "addNewPlaceholder": "Nama setlist baharu",
+      "addToTitle": "Tambah ke setlist",
+      "addTyped": "Tambah \"{query}\" sebagai lagu baharu",
+      "count": "{count, plural, =0 {Tiada lagu} other {# lagu}}",
+      "deleteBody": "{name} akan dipadamkan. Tindakan ini tidak boleh dibuat asal.",
+      "deleteTitle": "Padam setlist ini?",
+      "detailTitle": "Setlist",
+      "editOrder": "Ubah susunan",
+      "empty": "Belum ada setlist. Buat satu untuk rancang lagu anda untuk satu malam.",
+      "full": "Setlist itu sudah penuh (500 lagu).",
+      "itemsEmpty": "Belum ada lagu. Tambah sekarang.",
+      "nameLabel": "Nama setlist",
+      "namePlaceholder": "cth. Lagu kegemaran Jumaat",
+      "new": "Setlist baharu",
+      "newTitle": "Setlist baharu",
+      "notFound": "Setlist ini sudah tiada lagi.",
+      "number": "{number}",
+      "rename": "Namakan semula",
+      "renameTitle": "Namakan semula setlist",
+      "saveOrder": "Simpan susunan",
+      "title": "Setlist",
+      "addSongTitle": "Tambah lagu",
+      "added": "Ditambah",
+      "cancel": "Batal",
+      "cancelOrder": "Batal",
+      "close": "Tutup",
+      "delete": "Padam",
+      "done": "Selesai",
+      "down": "Alih {song} ke bawah",
+      "make": "Buat",
+      "nameSave": "Simpan",
+      "remove": "Alih keluar",
+      "searchLabel": "Cari lagu",
+      "searchPlaceholder": "Cari lagu",
+      "songValue": "{title} oleh {artist}",
+      "sung": "Tandakan sebagai pernah dinyanyikan",
+      "up": "Alih {song} ke atas"
+    },
+    "allSongs": "Semua lagu anda",
+    "home": {
+      "allSongsRow": "Semua lagu anda ({count})",
+      "allTime": "Sepanjang masa",
+      "connectHint": "Dapatkan cadangan lagu daripada apa yang biasa anda dengar",
+      "gotosEmpty": "Lagu kegemaran anda akan dipaparkan di sini. Mulakan dengan menambah lagu yang pernah anda nyanyikan.",
+      "gotosEmptyCta": "Tambah lagu yang pernah saya nyanyikan",
+      "gotosTitle": "Lagu kegemaran anda",
+      "greatShare": "{percent}% berjalan lancar",
+      "keysLabel": "Julat vokal anda pada papan kekunci",
+      "manage": "Urus",
+      "manageHint": "Tetapkan julat vokal anda, sambungkan muzik dan edit maklumat tentang diri anda",
+      "mostSung": "Paling kerap dinyanyikan: {song} ({count}×)",
+      "nights": "{count, plural, other {# malam}}",
+      "performances": "{count, plural, other {# persembahan}}",
+      "saved": "{count, plural, other {# disimpan}}",
+      "seeAll": "Lihat semua",
+      "setlistsEmpty": "Rancang sesi karaoke anda: buat senarai lagu yang ingin anda nyanyikan.",
+      "songs": "{count, plural, other {# lagu}}",
+      "sourcesLabel": "Muzik disambungkan",
+      "statsEmpty": "Belum ada lagu dinyanyikan. Tandakan lagu sebagai telah dinyanyikan untuk mula menjejak statistik anda.",
+      "statsTitle": "Karaoke anda",
+      "sung": "{count, plural, other {# lagu dinyanyikan}}",
+      "thisYear": "Tahun ini",
+      "topArtist": "Artis popular: {artist}",
+      "venues": "{count, plural, other {# lokasi}}",
+      "voiceCta": "Ketahui julat vokal anda",
+      "connectCta": "Sambungkan muzik anda",
+      "profileTitle": "Profil muzik anda",
+      "voiceHint": "Cari lagu yang sesuai dengan suara anda",
+      "voiceRange": "Julat {range}"
+    },
+    "songs": {
+      "addPast": "Tambah lagu yang pernah saya nyanyikan",
+      "count": "{count, plural, other {# lagu}}",
+      "empty": "Belum ada lagu. Tandakan lagu sebagai telah dinyanyikan atau simpan lagu untuk memaparkannya di sini.",
+      "emptyFiltered": "Tiada lagu yang sepadan dengan penapis ini.",
+      "feel": {
+        "unrated": "Belum dinilai",
+        "bad": "Bukan untuk saya",
+        "great": "Hebat",
+        "ok": "OK"
+      },
+      "offline": "Anda berada di luar talian. Memaparkan lagu yang disimpan pada telefon ini.",
+      "often": {
+        "once": "Sekali",
+        "twice": "2 kali atau lebih",
+        "unsung": "Belum pernah dinyanyikan"
+      },
+      "oftenLabel": "Kekerapan",
+      "searchLabel": "Cari lagu anda",
+      "sort": {
+        "most": "Paling kerap dinyanyikan",
+        "rated": "Penilaian terbaik",
+        "recent": "Terkini",
+        "az": "A ke Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Pilihan ramai",
+      "feelLabel": "Penilaian anda",
+      "loadError": "Tidak dapat memuatkan lagu anda.",
+      "moodLabel": "Suasana",
+      "saved": "Disimpan",
+      "searchPlaceholder": "Lagu atau artis",
+      "sortLabel": "Susun",
+      "timesSungLabel": "{count, plural, one {Dinyanyikan # kali} other {Dinyanyikan # kali}}"
     }
   }
 }

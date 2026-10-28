@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Koble til Apple Music på nytt",
     "musicServices": "Dine musikktjenester",
     "appleMusicDenied": "Nomad Karaoke har ikke tilgang til Apple Music. Slå det på i Innstillinger › Nomad Karaoke › Medier og Apple Music, og prøv igjen.",
-    "appleMusicNoSubscription": "Apple Music delte ikke biblioteket ditt. Tilkobling krever et Apple Music-abonnement."
+    "appleMusicNoSubscription": "Apple Music delte ikke biblioteket ditt. Tilkobling krever et Apple Music-abonnement.",
+    "artistsAll": "Alle artister",
+    "artistsNoMatch": "Ingen artister samsvarer.",
+    "artistsRemoveA11y": "Fjern {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Se (#)} other {Se alle (#)}}",
+    "artistsSearch": "Finn en artist"
   },
   "common": {
     "error": "Noe gikk galt.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Lag din egen karaokevideo av den, klar til å synges og deles.",
     "offlineMissing": "Du er frakoblet, og denne sangen finnes ikke i sanglisten som er lagret på denne telefonen.",
     "offlineNote": "Frakoblet · fra sanglisten som er lagret på denne telefonen",
-    "cloudErrorNote": "Får ikke kontakt med søketjenesten akkurat nå · viser sanglisten som er lagret på denne telefonen"
+    "cloudErrorNote": "Får ikke kontakt med søketjenesten akkurat nå · viser sanglisten som er lagret på denne telefonen",
+    "history": {
+      "beforeApp": "Før appen",
+      "crowd": "Publikumsfavoritt",
+      "feel": "Stemning: {value}",
+      "key": "Toneart: {value}",
+      "nomadNight": "Nomad-kveld",
+      "otherVenue": "En annen bar",
+      "pageTitle": "Sanghistorikk",
+      "removeBody": "Den vil ikke lenger telle som sunget.",
+      "removeTitle": "Fjerne denne oppføringen?",
+      "times": "×{count}",
+      "title": "Historikken din",
+      "edit": "Rediger",
+      "remove": "Fjern"
+    },
+    "save": "Lagre i Mine sanger",
+    "saved": "Lagret",
+    "addToSetlist": "Legg til i spilleliste",
+    "markSung": "Marker som sunget"
   },
   "tabs": {
     "discover": "Oppdag",
@@ -706,7 +731,26 @@
       "skip": "Ikke nå",
       "song": "{title} av {artist}",
       "title": "Hvordan gikk det?",
-      "save": "Lagre"
+      "save": "Lagre",
+      "reason": {
+        "awkward_music": "Merkelig musikk",
+        "crowd_quiet": "Stille publikum",
+        "didnt_know_it": "Kunne den ikke",
+        "out_of_range": "Utenfor mitt stemmeleie",
+        "too_hard": "For vanskelig",
+        "too_long": "For lang"
+      },
+      "reasonsLabel": "Hva kom i veien?",
+      "vibe": {
+        "ballad": "Ballade",
+        "duet": "Duett",
+        "emotional": "Følelsesladet",
+        "party": "Fest",
+        "rock_out": "Rokkefot",
+        "singalong": "Allsang",
+        "warm_up": "Oppvarming"
+      },
+      "vibesLabel": "Hva var stemningen?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Lokalets sangutvalg",
     "loved": "Elsket",
-    "menuLoveIt": "Elsker den",
+    "menuLoveIt": "Lagre i Mine sanger",
     "menuNotForMe": "Ikke noe for meg",
     "menuOpen": "Flere alternativer for {title}",
     "offlinePicks": "Frakoblet: viser dine siste anbefalinger",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Community",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Prøv igjen",
-    "signInForPicksAction": "Logg inn"
+    "signInForPicksAction": "Logg inn",
+    "menuSaved": "Lagret",
+    "menuAddToSetlist": "Legg til i spilleliste",
+    "menuMarkSung": "Marker som sunget"
   },
   "review": {
     "discard": "Forkast endringene mine",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# av sangene dine er klar – finn stemmen din} other {# av sangene dine er klare – finn stemmen din}}",
       "request": "Klargjør sangene mine",
       "title": "Analyser musikken min"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "En stund siden",
+      "day": "Dag (valgfritt)",
+      "less": "Mindre",
+      "onDate": "På en dato",
+      "times": "Antall ganger sunget",
+      "title": "Marker som sunget",
+      "close": "Lukk",
+      "more": "Mer",
+      "save": "Lagre",
+      "song": "{title} av {artist}",
+      "tonight": "I kveld"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Ferdig} one {Legg til # sang} other {Legg til # sanger}}",
+      "hint": "Kryss av for sangene du har sunget før. Vi legger dem til i historikken din.",
+      "title": "Sanger jeg har sunget",
+      "searchLabel": "Finn en sang",
+      "searchPlaceholder": "Søk etter sanger",
+      "songValue": "{title} av {artist}"
+    },
+    "setlists": {
+      "add": "Legg til sanger",
+      "addNew": "Opprett og legg til",
+      "addNewPlaceholder": "Navn på ny spilleliste",
+      "addToTitle": "Legg til i spilleliste",
+      "addTyped": "Legg til «{query}» som en ny sang",
+      "count": "{count, plural, =0 {Ingen sanger} one {# sang} other {# sanger}}",
+      "deleteBody": "{name} vil bli slettet. Dette kan ikke angres.",
+      "deleteTitle": "Slette denne spillelisten?",
+      "detailTitle": "Spilleliste",
+      "editOrder": "Endre rekkefølge",
+      "empty": "Ingen spillelister ennå. Lag en for å planlegge sangene dine for kvelden.",
+      "full": "Den spillelisten er full (500 sanger).",
+      "itemsEmpty": "Ingen sanger ennå. Legg til noen.",
+      "nameLabel": "Navn på spilleliste",
+      "namePlaceholder": "f.eks. Fredagsfavoritter",
+      "new": "Ny spilleliste",
+      "newTitle": "Ny spilleliste",
+      "notFound": "Denne spillelisten finnes ikke lenger.",
+      "number": "{number}",
+      "rename": "Gi nytt navn",
+      "renameTitle": "Gi spillelisten nytt navn",
+      "saveOrder": "Lagre rekkefølge",
+      "title": "Spillelister",
+      "addSongTitle": "Legg til en sang",
+      "added": "Lagt til",
+      "cancel": "Avbryt",
+      "cancelOrder": "Avbryt",
+      "close": "Lukk",
+      "delete": "Slett",
+      "done": "Ferdig",
+      "down": "Flytt {song} ned",
+      "make": "Lag den",
+      "nameSave": "Lagre",
+      "remove": "Fjern",
+      "searchLabel": "Finn en sang",
+      "searchPlaceholder": "Søk etter sanger",
+      "songValue": "{title} av {artist}",
+      "sung": "Marker som sunget",
+      "up": "Flytt {song} opp"
+    },
+    "allSongs": "Alle sangene dine",
+    "home": {
+      "allSongsRow": "Alle sangene dine ({count})",
+      "allTime": "Gjennom tidene",
+      "connectHint": "Få anbefalinger basert på det du allerede hører på",
+      "gotosEmpty": "Sangene du elsker å synge, dukker opp her. Start med å legge til sanger du har sunget før.",
+      "gotosEmptyCta": "Legg til sanger jeg har sunget",
+      "gotosTitle": "Dine faste favoritter",
+      "greatShare": "{percent} % gikk kjempebra",
+      "keysLabel": "Stemmerekkevidden din på tangenter",
+      "manage": "Administrer",
+      "manageHint": "Angi stemmerekkevidde, koble til musikk og rediger det vi vet om deg",
+      "mostSung": "Mest sunget: {song} ({count}×)",
+      "nights": "{count, plural, one {# kveld} other {# kvelder}}",
+      "performances": "{count, plural, one {# opptreden} other {# opptredener}}",
+      "saved": "{count, plural, one {# lagret} other {# lagrede}}",
+      "seeAll": "Se alle",
+      "setlistsEmpty": "Planlegg en kveld: lag en spilleliste over sanger du vil synge.",
+      "songs": "{count, plural, one {# sang} other {# sanger}}",
+      "sourcesLabel": "Tilkoblet musikk",
+      "statsEmpty": "Ingenting sunget ennå. Marker en sang som sunget for å starte statistikken din.",
+      "statsTitle": "Karaoken din",
+      "sung": "{count, plural, one {# sang sunget} other {# sanger sunget}}",
+      "thisYear": "I år",
+      "topArtist": "Toppartist: {artist}",
+      "venues": "{count, plural, one {# sted} other {# steder}}",
+      "voiceCta": "Finn stemmerekkevidden din",
+      "connectCta": "Koble til musikken din",
+      "profileTitle": "Musikkprofilen din",
+      "voiceHint": "Finn sanger som passer til stemmen din",
+      "voiceRange": "Toneomfang {range}"
+    },
+    "songs": {
+      "addPast": "Legg til sanger jeg har sunget",
+      "count": "{count, plural, one {# sang} other {# sanger}}",
+      "empty": "Ingen sanger ennå. Marker en sang som sunget eller lagre en, så dukker den opp her.",
+      "emptyFiltered": "Ingen sanger passer til disse filtrene.",
+      "feel": {
+        "unrated": "Ikke vurdert",
+        "bad": "Ikke noe for meg",
+        "great": "Topp",
+        "ok": "OK"
+      },
+      "offline": "Du er frakoblet. Viser sanger som er lagret på denne telefonen.",
+      "often": {
+        "once": "Én gang",
+        "twice": "2 eller flere",
+        "unsung": "Ikke sunget ennå"
+      },
+      "oftenLabel": "Hvor ofte",
+      "searchLabel": "Søk i sangene dine",
+      "sort": {
+        "most": "Mest sunget",
+        "rated": "Beste vurdering",
+        "recent": "Siste",
+        "az": "A til Å"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Vibe",
+      "crowdPleaser": "Publikumsfavoritt",
+      "feelLabel": "Din vurdering",
+      "loadError": "Kunne ikke laste inn sangene dine.",
+      "moodLabel": "Stemning",
+      "saved": "Lagret",
+      "searchPlaceholder": "Sang eller artist",
+      "sortLabel": "Sorter",
+      "timesSungLabel": "{count, plural, one {Sunget # gang} other {Sunget # ganger}}"
     }
   }
 }

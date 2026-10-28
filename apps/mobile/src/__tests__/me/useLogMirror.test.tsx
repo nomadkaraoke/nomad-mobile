@@ -1,0 +1,60 @@
+import * as decide from '@nomad/api-decide';
+import { renderHook, waitFor } from '@testing-library/react-native';
+
+import { useLogMirror } from '../../me/useLogMirror';
+import { appStorage } from '../../storage';
+import { userKeyFor } from '../../auth/userKey';
+import { resetMe, wrapperFor } from './helpers';
+
+jest.mock('@nomad/api-decide', () => ({ ...jest.requireActual('@nomad/api-decide'), listKaraokeLog: jest.fn() }));
+const api = decide as jest.Mocked<typeof decide>;
+const KEY = `me.logmirror.v1.${userKeyFor('a@example.com')}`;
+const e = (id: string, o: Partial<decide.KaraokeLogEntry> = {}) =>
+  ({ id, user_id: 'u', source: 'app', state: 'sung', artist: 'A', title: id, updated_at: '2026-10-01T00:00:00Z', ...o }) as decide.KaraokeLogEntry;
+
+it('a full pull when there is no since, then a since sync applies updates and deletions', async () => {
+  const client = resetMe();
+  api.listKaraokeLog.mockResolvedValueOnce({ entries: [e('a'), e('b')] });
+  const { result } = renderHook(() => useLogMirror(), { wrapper: wrapperFor(client) });
+  await waitFor(() => expect(result.current.entries.map((x) => x.id).sort()).toEqual(['a', 'b']));
+  expect(api.listKaraokeLog).toHaveBeenCalledWith(expect.not.objectContaining({ since: expect.anything() }));
+  expect(JSON.parse(appStorage.getString(KEY)!).since).toBe('2026-10-01T00:00:00Z');
+
+  api.listKaraokeLog.mockResolvedValueOnce({
+    entries: [e('a', { deleted: true, updated_at: '2026-10-02T00:00:00Z' }), e('b', { title: 'B2', updated_at: '2026-10-03T00:00:00Z' }), e('c', { updated_at: '2026-10-03T00:00:00Z' })],
+  });
+  await client.invalidateQueries({ queryKey: ['decide'] });
+  await waitFor(() => expect(result.current.entries.map((x) => x.id).sort()).toEqual(['b', 'c']));
+  expect(api.listKaraokeLog).toHaveBeenLastCalledWith(expect.objectContaining({ since: '2026-10-01T00:00:00Z' }));
+  expect(result.current.entries.find((x) => x.id === 'b')!.title).toBe('B2');
+  expect(JSON.parse(appStorage.getString(KEY)!).since).toBe('2026-10-03T00:00:00Z');
+});
+
+it('pages with the cursor', async () => {
+  const client = resetMe();
+  api.listKaraokeLog.mockResolvedValueOnce({ entries: [e('a')], next_cursor: 'c1' }).mockResolvedValueOnce({ entries: [e('b')] });
+  const { result } = renderHook(() => useLogMirror(), { wrapper: wrapperFor(client) });
+  await waitFor(() => expect(result.current.entries).toHaveLength(2));
+  expect(api.listKaraokeLog).toHaveBeenLastCalledWith(expect.objectContaining({ cursor: 'c1' }));
+});
+
+it('compares updated_at as instants, not strings', async () => {
+  const client = resetMe();
+  api.listKaraokeLog.mockResolvedValueOnce({
+    entries: [e('a', { updated_at: '2026-10-01T10:00:00+02:00' }), e('b', { updated_at: '2026-10-01T09:00:00Z' })],
+  });
+  const { result } = renderHook(() => useLogMirror(), { wrapper: wrapperFor(client) });
+  await waitFor(() => expect(result.current.entries).toHaveLength(2));
+  // 10:00+02:00 = 08:00Z, so b (09:00Z) is the later one though its string sorts earlier
+  expect(JSON.parse(appStorage.getString(KEY)!).since).toBe('2026-10-01T09:00:00Z');
+});
+
+it('a cached mirror seeds the view but a cold start still runs the incremental since sync', async () => {
+  const client = resetMe();
+  appStorage.set(KEY, JSON.stringify({ entries: [e('a')], since: '2026-10-01T00:00:00Z' }));
+  api.listKaraokeLog.mockResolvedValueOnce({ entries: [e('z', { updated_at: '2026-10-05T00:00:00Z' })] });
+  const { result } = renderHook(() => useLogMirror(), { wrapper: wrapperFor(client) });
+  expect(result.current.entries.map((x) => x.id)).toEqual(['a']); // the seed shows at once
+  await waitFor(() => expect(result.current.entries.map((x) => x.id).sort()).toEqual(['a', 'z']));
+  expect(api.listKaraokeLog).toHaveBeenCalledWith(expect.objectContaining({ since: '2026-10-01T00:00:00Z' }));
+});

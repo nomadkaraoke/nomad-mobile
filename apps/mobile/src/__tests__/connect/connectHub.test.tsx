@@ -115,6 +115,19 @@ describe('Connect your music hub', () => {
     expect(screen.getByText('No Apple Music subscription? Import your play history instead')).toBeTruthy();
   });
 
+  it('shows each service card\'s brand mark, and none on the generic cards', async () => {
+    open();
+    await screen.findByTestId('connect-card-screenshot');
+    const hidden = { includeHiddenElements: true };
+    const icon = (card: string, brand: string) => within(screen.getByTestId(`connect-card-${card}`)).queryByTestId(`brand-icon-${brand}`, hidden);
+    expect(icon('spotify-export', 'spotify')).toBeTruthy();
+    expect(icon('listenbrainz', 'listenbrainz')).toBeTruthy();
+    expect(icon('lastfm', 'lastfm')).toBeTruthy();
+    expect(icon('apple', 'apple_music')).toBeTruthy();
+    expect(within(screen.getByTestId('connect-card-screenshot')).queryByTestId(/^brand-icon-/, hidden)).toBeNull();
+    expect(within(screen.getByTestId('connect-card-playlist')).queryByTestId(/^brand-icon-/, hidden)).toBeNull();
+  });
+
   it('the hub has a back button to where it was opened from (the root stack hides its header for the group)', async () => {
     const r = renderRouter(appRoutes(), { initialUrl: '/discover' });
     await screen.findByTestId('discover-search-input');

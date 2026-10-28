@@ -50,7 +50,7 @@ async function requestTonight(code: string, nightId: string, song: LogSong): Pro
  * The song page's one Tonight action (spec §6.2, ruling E9-R5): "Request tonight" during a Nomad night, "Add to
  * tonight" during an Other night, nothing otherwise.
  */
-export function SongTonightAction({ song }: { song: LogSong }) {
+export function SongTonightAction({ song, testID = 'song-tonight-action' }: { song: LogSong; testID?: string }) {
   const t = useTranslations('tonight.other');
   const night = useNightStore((s) => s.active);
   const [busy, setBusy] = useState(false);
@@ -58,7 +58,7 @@ export function SongTonightAction({ song }: { song: LogSong }) {
   if (night.kind === 'other') {
     return (
       <Button
-        testID="song-tonight-action"
+        testID={testID}
         variant="secondary"
         label={t('addToTonight')}
         onPress={() =>
@@ -75,5 +75,5 @@ export function SongTonightAction({ song }: { song: LogSong }) {
     setBusy(true);
     void requestTonight(night.code, night.nightId, song).finally(() => setBusy(false));
   };
-  return <Button testID="song-tonight-action" variant="secondary" label={t('requestTonight')} onPress={onPress} loading={busy} />;
+  return <Button testID={testID} variant="secondary" label={t('requestTonight')} onPress={onPress} loading={busy} />;
 }

@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Apple Music फिर से कनेक्ट करो",
     "musicServices": "तुम्हारी म्यूजिक सेवाएं",
     "appleMusicDenied": "Nomad Karaoke के पास Apple Music का एक्सेस नहीं है। इसे Settings › Nomad Karaoke › Media & Apple Music में जाकर चालू करो, फिर दोबारा कोशिश करो।",
-    "appleMusicNoSubscription": "Apple Music ने तुम्हारी लाइब्रेरी शेयर नहीं की। कनेक्ट करने के लिए Apple Music सब्सक्रिप्शन होना ज़रूरी है।"
+    "appleMusicNoSubscription": "Apple Music ने तुम्हारी लाइब्रेरी शेयर नहीं की। कनेक्ट करने के लिए Apple Music सब्सक्रिप्शन होना ज़रूरी है।",
+    "artistsAll": "सभी कलाकार",
+    "artistsNoMatch": "कोई कलाकार मेल नहीं खाता।",
+    "artistsRemoveA11y": "{artist} को हटाओ",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {सभी (#) देखें} other {सभी (#) देखें}}",
+    "artistsSearch": "कोई आर्टिस्ट खोजो"
   },
   "common": {
     "error": "कुछ गड़बड़ हो गई।",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "इसका अपना खुद का कराओके वीडियो बनाओ, गाने और शेयर करने के लिए बिल्कुल तैयार।",
     "offlineMissing": "तुम ऑफ़लाइन हो, और यह गाना इस फ़ोन पर सेव की गई गानों की लिस्ट में नहीं है।",
     "offlineNote": "ऑफ़लाइन · इस फ़ोन पर सेव की गई गानों की लिस्ट से",
-    "cloudErrorNote": "अभी सर्च से कनेक्ट नहीं हो पा रहा है · इस फ़ोन पर सेव की गई गानों की सूची दिखाई जा रही है"
+    "cloudErrorNote": "अभी सर्च से कनेक्ट नहीं हो पा रहा है · इस फ़ोन पर सेव की गई गानों की सूची दिखाई जा रही है",
+    "history": {
+      "beforeApp": "ऐप से पहले",
+      "crowd": "सबका पसंदीदा",
+      "feel": "माहौल: {value}",
+      "key": "Key: {value}",
+      "nomadNight": "Nomad नाइट",
+      "otherVenue": "कोई दूसरा बार",
+      "pageTitle": "गाने की हिस्ट्री",
+      "removeBody": "इसे अब गाया हुआ नहीं माना जाएगा।",
+      "removeTitle": "क्या इस रिकॉर्ड को हटाना चाहते हो?",
+      "times": "×{count}",
+      "title": "तुम्हारी हिस्ट्री",
+      "edit": "एडिट करो",
+      "remove": "हटाओ"
+    },
+    "save": "मेरे गानों में सेव करें",
+    "saved": "सेव किया गया",
+    "addToSetlist": "सेटलिस्ट में जोड़ो",
+    "markSung": "गाया हुआ मार्क करो"
   },
   "tabs": {
     "discover": "एक्सप्लोर करो",
@@ -706,7 +731,26 @@
       "skip": "अभी नहीं",
       "song": "{artist} का {title}",
       "title": "कैसा रहा?",
-      "save": "सेव करो"
+      "save": "सेव करो",
+      "reason": {
+        "awkward_music": "अजीब म्यूज़िक",
+        "crowd_quiet": "शांत भीड़",
+        "didnt_know_it": "गाना नहीं आता था",
+        "out_of_range": "मेरी रेंज से बाहर",
+        "too_hard": "बहुत मुश्किल",
+        "too_long": "बहुत लंबा"
+      },
+      "reasonsLabel": "किस चीज़ ने मज़ा किरकिरा किया?",
+      "vibe": {
+        "ballad": "बैलाड",
+        "duet": "डुएट",
+        "emotional": "इमोशनल",
+        "party": "पार्टी",
+        "rock_out": "रॉक आउट",
+        "singalong": "साथ गाने वाला",
+        "warm_up": "वॉर्म-अप"
+      },
+      "vibesLabel": "माहौल कैसा था?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "वेन्यू लाइब्रेरी",
     "loved": "पसंदीदा",
-    "menuLoveIt": "बहुत पसंद है",
+    "menuLoveIt": "मेरे गानों में सेव करें",
     "menuNotForMe": "मेरे लिए नहीं",
     "menuOpen": "{title} के लिए और विकल्प",
     "offlinePicks": "ऑफ़लाइन: तुम्हारी पिछली पसंद दिखाई जा रही है",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "कम्युनिटी",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "फिर से कोशिश करो",
-    "signInForPicksAction": "साइन इन करो"
+    "signInForPicksAction": "साइन इन करो",
+    "menuSaved": "सेव किया गया",
+    "menuAddToSetlist": "सेटलिस्ट में जोड़ो",
+    "menuMarkSung": "गाया हुआ मार्क करो"
   },
   "review": {
     "discard": "मेरे बदलाव हटाएं",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {तुम्हारा # गाना तैयार है — अपनी आवाज़ पहचानो} other {तुम्हारे # गाने तैयार हैं — अपनी आवाज़ पहचानो}}",
       "request": "मेरे गाने तैयार करो",
       "title": "मेरे संगीत का विश्लेषण करो"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "कुछ समय पहले",
+      "day": "दिन (वैकल्पिक)",
+      "less": "कम करो",
+      "onDate": "किसी तारीख पर",
+      "times": "कितनी बार गाया",
+      "title": "गाया हुआ मार्क करो",
+      "close": "बंद करो",
+      "more": "बढ़ाओ",
+      "save": "सेव करो",
+      "song": "{artist} का {title}",
+      "tonight": "आज रात"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {हो गया} one {# गाना जोड़ो} other {# गाने जोड़ो}}",
+      "hint": "उन गानों पर टिक करो जो तुमने पहले गाए हैं। हम उन्हें तुम्हारी हिस्ट्री में जोड़ देंगे।",
+      "title": "मेरे गाए हुए गाने",
+      "searchLabel": "गाना ढूंढो",
+      "searchPlaceholder": "गाने खोजो",
+      "songValue": "{artist} का {title}"
+    },
+    "setlists": {
+      "add": "गाने जोड़ो",
+      "addNew": "बनाओ और जोड़ो",
+      "addNewPlaceholder": "नई सेटलिस्ट का नाम",
+      "addToTitle": "सेटलिस्ट में जोड़ो",
+      "addTyped": "\"{query}\" को नए गाने के रूप में जोड़ो",
+      "count": "{count, plural, =0 {कोई गाना नहीं} one {# गाना} other {# गाने}}",
+      "deleteBody": "{name} को हटा दिया जाएगा। इसे पहले जैसा नहीं किया जा सकता।",
+      "deleteTitle": "क्या इस सेटलिस्ट को हटाना चाहते हो?",
+      "detailTitle": "सेटलिस्ट",
+      "editOrder": "क्रम बदलो",
+      "empty": "अभी कोई सेटलिस्ट नहीं है। किसी शाम के लिए अपने गानों की योजना बनाने के लिए एक सेटलिस्ट बनाओ।",
+      "full": "वह सेटलिस्ट भर चुकी है (500 गाने)।",
+      "itemsEmpty": "अभी कोई गाना नहीं है। कुछ गाने जोड़ो।",
+      "nameLabel": "सेटलिस्ट का नाम",
+      "namePlaceholder": "उदा. शुक्रवार के पसंदीदा गाने",
+      "new": "नई सेटलिस्ट",
+      "newTitle": "नई सेटलिस्ट",
+      "notFound": "यह सेटलिस्ट अब यहाँ नहीं है।",
+      "number": "{number}",
+      "rename": "नाम बदलो",
+      "renameTitle": "सेटलिस्ट का नाम बदलो",
+      "saveOrder": "क्रम सहेजो",
+      "title": "सेटलिस्ट्स",
+      "addSongTitle": "एक गाना जोड़ें",
+      "added": "जोड़ दिया गया",
+      "cancel": "कैंसल",
+      "cancelOrder": "कैंसल",
+      "close": "बंद करो",
+      "delete": "डिलीट करो",
+      "done": "हो गया",
+      "down": "{song} को नीचे ले जाएँ",
+      "make": "इसे बनाओ",
+      "nameSave": "सेव करो",
+      "remove": "हटाओ",
+      "searchLabel": "गाना ढूंढो",
+      "searchPlaceholder": "गाने खोजो",
+      "songValue": "{artist} का {title}",
+      "sung": "गाया हुआ मार्क करो",
+      "up": "{song} को ऊपर ले जाएँ"
+    },
+    "allSongs": "तुम्हारे सभी गाने",
+    "home": {
+      "allSongsRow": "तुम्हारे सभी गाने ({count})",
+      "allTime": "अब तक का",
+      "connectHint": "तुम जो पहले से सुनते हो, उसी से सुझाव पाओ",
+      "gotosEmpty": "जो गाने तुम्हें गाना पसंद हैं, वे यहाँ दिखाई देंगे। शुरुआत करने के लिए वे गाने जोड़ो जो तुमने पहले गाए हैं।",
+      "gotosEmptyCta": "मेरे गाए हुए गाने जोड़ो",
+      "gotosTitle": "तुम्हारी पसंद",
+      "greatShare": "{percent}% बहुत बढ़िया रहे",
+      "keysLabel": "कीबोर्ड पर तुम्हारी वोकल रेंज",
+      "manage": "मैनेज करो",
+      "manageHint": "अपनी वॉइस रेंज सेट करो, म्यूज़िक कनेक्ट करो और तुम्हारे बारे में मौजूद जानकारी को एडिट करो",
+      "mostSung": "सबसे ज़्यादा गाया गया: {song} ({count}×)",
+      "nights": "{count, plural, one {# रात} other {# रातें}}",
+      "performances": "{count, plural, one {# परफ़ॉर्मेंस} other {# परफ़ॉर्मेंस}}",
+      "saved": "{count, plural, one {# सेव किया गया} other {# सेव किए गए}}",
+      "seeAll": "सब देखो",
+      "setlistsEmpty": "एक शाम प्लान करो: उन गानों की सेटलिस्ट बनाओ जिन्हें तुम गाना चाहते हो।",
+      "songs": "{count, plural, one {# गाना} other {# गाने}}",
+      "sourcesLabel": "कनेक्ट किया गया म्यूज़िक",
+      "statsEmpty": "अभी तक कुछ नहीं गाया। अपने आंकड़े शुरू करने के लिए किसी गाने को 'गाया हुआ' मार्क करो।",
+      "statsTitle": "तुम्हारा कराओके",
+      "sung": "{count, plural, one {# गाना गाया गया} other {# गाने गाए गए}}",
+      "thisYear": "इस साल",
+      "topArtist": "टॉप आर्टिस्ट: {artist}",
+      "venues": "{count, plural, one {# वेन्यू} other {# वेन्यू}}",
+      "voiceCta": "अपनी वॉइस रेंज पता करो",
+      "connectCta": "अपना म्यूज़िक कनेक्ट करो",
+      "profileTitle": "तुम्हारा म्यूज़िक प्रोफ़ाइल",
+      "voiceHint": "ऐसे गाने ढूंढो जो तुम्हारी आवाज़ के लिए सही हों",
+      "voiceRange": "रेंज {range}"
+    },
+    "songs": {
+      "addPast": "मेरे गाए हुए गाने जोड़ो",
+      "count": "{count, plural, one {# गाना} other {# गाने}}",
+      "empty": "अभी कोई गाना नहीं है। किसी गाने को 'गाया हुआ' मार्क करो या सेव करो, और वह यहाँ दिखाई देगा।",
+      "emptyFiltered": "इन फ़िल्टर्स से कोई भी गाना मेल नहीं खाता।",
+      "feel": {
+        "unrated": "बिना रेटिंग वाला",
+        "bad": "मेरे लिए नहीं",
+        "great": "बहुत बढ़िया",
+        "ok": "ठीक है"
+      },
+      "offline": "तुम ऑफ़लाइन हो। इस फ़ोन पर सेव किए गए गाने दिखाए जा रहे हैं।",
+      "often": {
+        "once": "एक बार",
+        "twice": "2 या अधिक",
+        "unsung": "अभी तक नहीं गाया"
+      },
+      "oftenLabel": "कितनी बार",
+      "searchLabel": "अपने गाने खोजो",
+      "sort": {
+        "most": "सबसे ज़्यादा गाए गए",
+        "rated": "बेस्ट रेटेड",
+        "recent": "हाल ही के",
+        "az": "A से Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "वाइब",
+      "crowdPleaser": "सबका पसंदीदा",
+      "feelLabel": "तुम्हारी रेटिंग",
+      "loadError": "तुम्हारे गाने लोड नहीं हो सके।",
+      "moodLabel": "मूड",
+      "saved": "सेव किया गया",
+      "searchPlaceholder": "गाना या कलाकार",
+      "sortLabel": "सॉर्ट करें",
+      "timesSungLabel": "{count, plural, one {# बार गाया गया} other {# बार गाया गया}}"
     }
   }
 }

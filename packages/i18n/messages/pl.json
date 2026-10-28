@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Połącz ponownie z Apple Music",
     "musicServices": "Twoje serwisy muzyczne",
     "appleMusicDenied": "Nomad Karaoke nie ma dostępu do Apple Music. Włącz go w: Ustawienia › Nomad Karaoke › Multimedia i Apple Music, a następnie spróbuj ponownie.",
-    "appleMusicNoSubscription": "Apple Music nie udostępniło Twojej biblioteki. Połączenie wymaga aktywnej subskrypcji Apple Music."
+    "appleMusicNoSubscription": "Apple Music nie udostępniło Twojej biblioteki. Połączenie wymaga aktywnej subskrypcji Apple Music.",
+    "artistsAll": "Wszyscy wykonawcy",
+    "artistsNoMatch": "Brak pasujących wykonawców.",
+    "artistsRemoveA11y": "Usuń wykonawcę {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Zobacz wszystkich (#)} few {Zobacz wszystkich (#)} many {Zobacz wszystkich (#)} other {Zobacz wszystkich (#)}}",
+    "artistsSearch": "Znajdź wykonawcę"
   },
   "common": {
     "error": "Coś poszło nie tak.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Stwórz własne wideo karaoke z tego utworu – gotowe do śpiewania i udostępniania.",
     "offlineMissing": "Jesteś offline, a tego utworu nie ma na liście zapisanej na tym telefonie.",
     "offlineNote": "Offline · z listy utworów zapisanej na tym telefonie",
-    "cloudErrorNote": "Nie można teraz połączyć się z wyszukiwarką · wyświetlam listę utworów zapisaną na tym telefonie"
+    "cloudErrorNote": "Nie można teraz połączyć się z wyszukiwarką · wyświetlam listę utworów zapisaną na tym telefonie",
+    "history": {
+      "beforeApp": "Przed aplikacją",
+      "crowd": "Hit publiczności",
+      "feel": "Klimat: {value}",
+      "key": "Tonacja: {value}",
+      "nomadNight": "Noc Nomad",
+      "otherVenue": "Inny bar",
+      "pageTitle": "Historia piosenki",
+      "removeBody": "Nie będzie już liczona jako zaśpiewana.",
+      "removeTitle": "Usunąć ten wpis?",
+      "times": "×{count}",
+      "title": "Twoja historia",
+      "edit": "Edytuj",
+      "remove": "Usuń"
+    },
+    "save": "Zapisz w Moich piosenkach",
+    "saved": "Zapisano",
+    "addToSetlist": "Dodaj do playlisty",
+    "markSung": "Oznacz jako zaśpiewane"
   },
   "tabs": {
     "discover": "Odkrywaj",
@@ -706,7 +731,26 @@
       "skip": "Nie teraz",
       "song": "{title} – {artist}",
       "title": "Jak poszło?",
-      "save": "Zapisz"
+      "save": "Zapisz",
+      "reason": {
+        "awkward_music": "Niezręczny podkład",
+        "crowd_quiet": "Cicha publiczność",
+        "didnt_know_it": "Nie znałem/am utworu",
+        "out_of_range": "Poza moją skalą",
+        "too_hard": "Za trudny",
+        "too_long": "Za długi"
+      },
+      "reasonsLabel": "Co poszło nie tak?",
+      "vibe": {
+        "ballad": "Ballada",
+        "duet": "Duet",
+        "emotional": "Emocjonalnie",
+        "party": "Imprezowo",
+        "rock_out": "Czad / rockowo",
+        "singalong": "Do wspólnego śpiewania",
+        "warm_up": "Na rozgrzewkę"
+      },
+      "vibesLabel": "Jaki to był klimat?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Katalog lokalu",
     "loved": "Uwielbiane",
-    "menuLoveIt": "Uwielbiam",
+    "menuLoveIt": "Zapisz w Moich piosenkach",
     "menuNotForMe": "Nie dla mnie",
     "menuOpen": "Więcej opcji dla: {title}",
     "offlinePicks": "Tryb offline: wyświetlamy Twoje ostatnie propozycje",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Społecznościowe",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Spróbuj ponownie",
-    "signInForPicksAction": "Zaloguj się"
+    "signInForPicksAction": "Zaloguj się",
+    "menuSaved": "Zapisano",
+    "menuAddToSetlist": "Dodaj do playlisty",
+    "menuMarkSung": "Oznacz jako zaśpiewane"
   },
   "review": {
     "discard": "Odrzuć moje zmiany",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# z Twoich piosenek jest gotowa — odkryj swój głos} few {# z Twoich piosenek są gotowe — odkryj swój głos} many {# z Twoich piosenek jest gotowych — odkryj swój głos} other {# z Twoich piosenek jest gotowych — odkryj swój głos}}",
       "request": "Przygotuj moje piosenki",
       "title": "Przeanalizuj moją muzykę"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Jakiś czas temu",
+      "day": "Dzień (opcjonalnie)",
+      "less": "Zmniejsz",
+      "onDate": "W konkretnym dniu",
+      "times": "Ile razy zaśpiewano",
+      "title": "Oznacz jako zaśpiewane",
+      "close": "Zamknij",
+      "more": "Zwiększ",
+      "save": "Zapisz",
+      "song": "{title} – {artist}",
+      "tonight": "Dziś wieczorem"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Gotowe} one {Dodaj # piosenkę} few {Dodaj # piosenki} many {Dodaj # piosenek} other {Dodaj # piosenek}}",
+      "hint": "Zaznacz piosenki, które zdarzyło Ci się już śpiewać. Dodamy je do Twojej historii.",
+      "title": "Zaśpiewane piosenki",
+      "searchLabel": "Znajdź piosenkę",
+      "searchPlaceholder": "Szukaj utworów",
+      "songValue": "{title} – {artist}"
+    },
+    "setlists": {
+      "add": "Dodaj utwory",
+      "addNew": "Utwórz i dodaj",
+      "addNewPlaceholder": "Nazwa nowej playlisty",
+      "addToTitle": "Dodaj do playlisty",
+      "addTyped": "Dodaj „{query}” jako nowy utwór",
+      "count": "{count, plural, =0 {Brak utworów} one {# utwór} few {# utwory} many {# utworów} other {# utworów}}",
+      "deleteBody": "Playlista {name} zostanie usunięta. Tej operacji nie można cofnąć.",
+      "deleteTitle": "Usunąć tę playlistę?",
+      "detailTitle": "Playlista",
+      "editOrder": "Zmień kolejność",
+      "empty": "Nie masz jeszcze żadnych playlist. Utwórz playlistę, aby zaplanować utwory na wieczór.",
+      "full": "Ta playlista jest pełna (500 utworów).",
+      "itemsEmpty": "Nie ma jeszcze żadnych utworów. Dodaj jakieś.",
+      "nameLabel": "Nazwa playlisty",
+      "namePlaceholder": "np. Piątkowe hity",
+      "new": "Nowa playlista",
+      "newTitle": "Nowa playlista",
+      "notFound": "Ta playlista już nie istnieje.",
+      "number": "{number}",
+      "rename": "Zmień nazwę",
+      "renameTitle": "Zmień nazwę playlisty",
+      "saveOrder": "Zapisz kolejność",
+      "title": "Playlisty",
+      "addSongTitle": "Dodaj piosenkę",
+      "added": "Dodano",
+      "cancel": "Anuluj",
+      "cancelOrder": "Anuluj",
+      "close": "Zamknij",
+      "delete": "Usuń",
+      "done": "Gotowe",
+      "down": "Przesuń {song} w dół",
+      "make": "Stwórz",
+      "nameSave": "Zapisz",
+      "remove": "Usuń",
+      "searchLabel": "Znajdź piosenkę",
+      "searchPlaceholder": "Szukaj utworów",
+      "songValue": "{title} – {artist}",
+      "sung": "Oznacz jako zaśpiewane",
+      "up": "Przesuń {song} w górę"
+    },
+    "allSongs": "Wszystkie Twoje piosenki",
+    "home": {
+      "allSongsRow": "Wszystkie Twoje piosenki ({count})",
+      "allTime": "Od początku",
+      "connectHint": "Otrzymuj propozycje na podstawie tego, czego już słuchasz",
+      "gotosEmpty": "Piosenki, które uwielbiasz śpiewać, pojawią się tutaj. Zacznij od dodania utworów zaśpiewanych w przeszłości.",
+      "gotosEmptyCta": "Dodaj zaśpiewane piosenki",
+      "gotosTitle": "Twoje pewniaki",
+      "greatShare": "{percent}% poszło świetnie",
+      "keysLabel": "Twój zakres głosu na klawiaturze",
+      "manage": "Zarządzaj",
+      "manageHint": "Ustaw skalę głosu, połącz serwisy muzyczne i edytuj informacje o sobie",
+      "mostSung": "Najczęściej śpiewane: {song} ({count}×)",
+      "nights": "{count, plural, one {# wieczór} few {# wieczory} many {# wieczorów} other {# wieczorów}}",
+      "performances": "{count, plural, one {# występ} few {# występy} many {# występów} other {# występów}}",
+      "saved": "{count, plural, one {# zapisana} few {# zapisane} many {# zapisanych} other {# zapisanych}}",
+      "seeAll": "Zobacz wszystkie",
+      "setlistsEmpty": "Zaplanuj wieczór: stwórz setlistę piosenek, które chcesz zaśpiewać.",
+      "songs": "{count, plural, one {# piosenka} few {# piosenki} many {# piosenek} other {# piosenek}}",
+      "sourcesLabel": "Połączona muzyka",
+      "statsEmpty": "Jeszcze nic nie zaśpiewano. Oznacz piosenkę jako zaśpiewaną, aby rozpocząć zbieranie statystyk.",
+      "statsTitle": "Twoje karaoke",
+      "sung": "{count, plural, one {# zaśpiewana piosenka} few {# zaśpiewane piosenki} many {# zaśpiewanych piosenek} other {# zaśpiewanych piosenek}}",
+      "thisYear": "W tym roku",
+      "topArtist": "Najpopularniejszy wykonawca: {artist}",
+      "venues": "{count, plural, one {# lokal} few {# lokale} many {# lokali} other {# lokali}}",
+      "voiceCta": "Poznaj swoją skalę głosu",
+      "connectCta": "Połącz swoją muzykę",
+      "profileTitle": "Twój profil muzyczny",
+      "voiceHint": "Znajdź piosenki pasujące do Twojego głosu",
+      "voiceRange": "Skala: {range}"
+    },
+    "songs": {
+      "addPast": "Dodaj zaśpiewane piosenki",
+      "count": "{count, plural, one {# piosenka} few {# piosenki} many {# piosenek} other {# piosenek}}",
+      "empty": "Brak piosenek. Oznacz piosenkę jako zaśpiewaną lub zapisz ją, a pojawi się tutaj.",
+      "emptyFiltered": "Żadne piosenki nie pasują do wybranych filtrów.",
+      "feel": {
+        "unrated": "Bez oceny",
+        "bad": "Nie dla mnie",
+        "great": "Świetnie",
+        "ok": "OK"
+      },
+      "offline": "Jesteś offline. Wyświetlamy piosenki zapisane na tym telefonie.",
+      "often": {
+        "once": "Raz",
+        "twice": "2 lub więcej",
+        "unsung": "Jeszcze niezaśpiewane"
+      },
+      "oftenLabel": "Jak często",
+      "searchLabel": "Szukaj w swoich piosenkach",
+      "sort": {
+        "most": "Najczęściej śpiewane",
+        "rated": "Najwyżej oceniane",
+        "recent": "Ostatnio dodane",
+        "az": "Od A do Z"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Klimat",
+      "crowdPleaser": "Hit publiczności",
+      "feelLabel": "Twoja ocena",
+      "loadError": "Nie udało się wczytać Twoich utworów.",
+      "moodLabel": "Nastrój",
+      "saved": "Zapisano",
+      "searchPlaceholder": "Tytuł lub wykonawca",
+      "sortLabel": "Sortuj",
+      "timesSungLabel": "{count, plural, one {Zaśpiewano # raz} few {Zaśpiewano # razy} many {Zaśpiewano # razy} other {Zaśpiewano # razy}}"
     }
   }
 }

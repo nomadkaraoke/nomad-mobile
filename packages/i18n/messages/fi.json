@@ -52,7 +52,13 @@
     "appleMusicReconnect": "Yhdistä Apple Music uudelleen",
     "musicServices": "Musiikkipalvelusi",
     "appleMusicDenied": "Nomad Karaokella ei ole pääsyä Apple Musiciin. Ota se käyttöön kohdassa Asetukset › Nomad Karaoke › Media ja Apple Music ja yritä sitten uudelleen.",
-    "appleMusicNoSubscription": "Apple Music ei jakanut kirjastoasi. Yhdistäminen vaatii Apple Music -tilauksen."
+    "appleMusicNoSubscription": "Apple Music ei jakanut kirjastoasi. Yhdistäminen vaatii Apple Music -tilauksen.",
+    "artistsAll": "Kaikki artistit",
+    "artistsNoMatch": "Yksikään artisti ei vastaa hakua.",
+    "artistsRemoveA11y": "Poista {artist}",
+    "artistsRemoveGlyph": "×",
+    "artistsSeeAll": "{count, plural, one {Näytä kaikki (#)} other {Näytä kaikki (#)}}",
+    "artistsSearch": "Etsi artisti"
   },
   "common": {
     "error": "Jokin meni pieleen.",
@@ -111,7 +117,26 @@
     "noKaraokeHint": "Tee siitä oma karaokevideosi, valmiina laulettavaksi ja jaettavaksi.",
     "offlineMissing": "Olet offline-tilassa, eikä tätä kappaletta löydy tähän puhelimeen tallennetusta kappalelistasta.",
     "offlineNote": "Offline · tähän puhelimeen tallennetusta kappalelistasta",
-    "cloudErrorNote": "Hakuun ei juuri nyt saada yhteyttä · näytetään tähän puhelimeen tallennettu kappalelista"
+    "cloudErrorNote": "Hakuun ei juuri nyt saada yhteyttä · näytetään tähän puhelimeen tallennettu kappalelista",
+    "history": {
+      "beforeApp": "Ennen sovellusta",
+      "crowd": "Yleisön suosikki",
+      "feel": "Fiilis: {value}",
+      "key": "Sävellaji: {value}",
+      "nomadNight": "Nomad-ilta",
+      "otherVenue": "Toinen baari",
+      "pageTitle": "Kappalehistoria",
+      "removeBody": "Tätä ei enää lasketa lauletuksi.",
+      "removeTitle": "Poistetaanko tämä merkintä?",
+      "times": "×{count}",
+      "title": "Oma historiasi",
+      "edit": "Muokkaa",
+      "remove": "Poista"
+    },
+    "save": "Tallenna Omiin kappaleisiin",
+    "saved": "Tallennettu",
+    "addToSetlist": "Lisää settilistaan",
+    "markSung": "Merkitse lauletuksi"
   },
   "tabs": {
     "discover": "Löydä uutta",
@@ -706,7 +731,26 @@
       "skip": "Ei nyt",
       "song": "{title} – {artist}",
       "title": "Miten se meni?",
-      "save": "Tallenna"
+      "save": "Tallenna",
+      "reason": {
+        "awkward_music": "Kankea tausta",
+        "crowd_quiet": "Hiljainen yleisö",
+        "didnt_know_it": "En osannut biisiä",
+        "out_of_range": "Ei sopinut äänialalleni",
+        "too_hard": "Liian vaikea",
+        "too_long": "Liian pitkä"
+      },
+      "reasonsLabel": "Mikä meni pieleen?",
+      "vibe": {
+        "ballad": "Balladi",
+        "duet": "Duetto",
+        "emotional": "Tunteikas",
+        "party": "Bileet",
+        "rock_out": "Kunnon rokkia",
+        "singalong": "Yhteislaulu",
+        "warm_up": "Lämmittely"
+      },
+      "vibesLabel": "Millainen fiilis oli?"
     }
   },
   "credits": {
@@ -921,7 +965,7 @@
     "libraryKarafun": "KaraFun",
     "libraryLabel": "Karaokepaikan valikoima",
     "loved": "Suosikit",
-    "menuLoveIt": "Tykkään tosi paljon",
+    "menuLoveIt": "Tallenna Omiin kappaleisiin",
     "menuNotForMe": "Ei minua varten",
     "menuOpen": "Lisää vaihtoehtoja kappaleelle {title}",
     "offlinePicks": "Offline-tila: näytetään viimeisimmät suosituksesi",
@@ -964,7 +1008,10 @@
     "libraryCommunity": "Yhteisö",
     "menuTitle": "{title} · {artist}",
     "picksRetry": "Yritä uudelleen",
-    "signInForPicksAction": "Kirjaudu sisään"
+    "signInForPicksAction": "Kirjaudu sisään",
+    "menuSaved": "Tallennettu",
+    "menuAddToSetlist": "Lisää settilistaan",
+    "menuMarkSung": "Merkitse lauletuksi"
   },
   "review": {
     "discard": "Hylkää muokkaukseni",
@@ -1835,6 +1882,138 @@
       "ready": "{ready, plural, one {# kappaleistasi on valmis — löydä äänesi} other {# kappaleistasi on valmiina — löydä äänesi}}",
       "request": "Valmistele kappaleeni",
       "title": "Analysoi musiikkini"
+    }
+  },
+  "me": {
+    "mark": {
+      "aWhileAgo": "Jokin aika sitten",
+      "day": "Päivä (valinnainen)",
+      "less": "Vähennä",
+      "onDate": "Tiettynä päivänä",
+      "times": "Kuinka monta kertaa laulettu",
+      "title": "Merkitse lauletuksi",
+      "close": "Sulje",
+      "more": "Lisää",
+      "save": "Tallenna",
+      "song": "{title} – {artist}",
+      "tonight": "Tänä iltana"
+    },
+    "sungBefore": {
+      "done": "{count, plural, =0 {Valmis} one {Lisää # kappale} other {Lisää # kappaletta}}",
+      "hint": "Merkitse kappaleet, joita olet laulanut aiemmin. Lisäämme ne historiaasi.",
+      "title": "Laulamani kappaleet",
+      "searchLabel": "Etsi kappale",
+      "searchPlaceholder": "Etsi kappaleita",
+      "songValue": "{title} – {artist}"
+    },
+    "setlists": {
+      "add": "Lisää kappaleita",
+      "addNew": "Luo ja lisää",
+      "addNewPlaceholder": "Uuden settilistan nimi",
+      "addToTitle": "Lisää settilistaan",
+      "addTyped": "Lisää \"{query}\" uutena kappaleena",
+      "count": "{count, plural, =0 {Ei kappaleita} one {# kappale} other {# kappaletta}}",
+      "deleteBody": "{name} poistetaan. Tätä toimintoa ei voi kumota.",
+      "deleteTitle": "Poistetaanko tämä settilista?",
+      "detailTitle": "Settilista",
+      "editOrder": "Muokkaa järjestystä",
+      "empty": "Ei vielä settilistoja. Luo lista ja suunnittele illan kappaleesi.",
+      "full": "Settilista on täynnä (500 kappaletta).",
+      "itemsEmpty": "Ei vielä kappaleita. Lisää muutama!",
+      "nameLabel": "Settilistan nimi",
+      "namePlaceholder": "esim. Perjantain suosikit",
+      "new": "Uusi settilista",
+      "newTitle": "Uusi settilista",
+      "notFound": "Tätä settilistaa ei enää löydy.",
+      "number": "{number}",
+      "rename": "Nimeä uudelleen",
+      "renameTitle": "Nimeä settilista uudelleen",
+      "saveOrder": "Tallenna järjestys",
+      "title": "Settilistat",
+      "addSongTitle": "Lisää kappale",
+      "added": "Lisätty",
+      "cancel": "Peruuta",
+      "cancelOrder": "Peruuta",
+      "close": "Sulje",
+      "delete": "Poista",
+      "done": "Valmis",
+      "down": "Siirrä kappaletta {song} alemmas",
+      "make": "Luo versio",
+      "nameSave": "Tallenna",
+      "remove": "Poista",
+      "searchLabel": "Etsi kappale",
+      "searchPlaceholder": "Etsi kappaleita",
+      "songValue": "{title} – {artist}",
+      "sung": "Merkitse lauletuksi",
+      "up": "Siirrä kappaletta {song} ylemmäs"
+    },
+    "allSongs": "Kaikki kappaleesi",
+    "home": {
+      "allSongsRow": "Kaikki kappaleesi ({count})",
+      "allTime": "Koko ajalta",
+      "connectHint": "Saa suosituksia siitä, mitä jo kuuntelet",
+      "gotosEmpty": "Lempikappaleesi näkyvät täällä. Aloita lisäämällä kappaleita, joita olet laulanut aiemmin.",
+      "gotosEmptyCta": "Lisää aiemmin laulamiani kappaleita",
+      "gotosTitle": "Luottobiisisi",
+      "greatShare": "{percent} % meni loistavasti",
+      "keysLabel": "Äänialasi koskettimistolla",
+      "manage": "Hallinnoi",
+      "manageHint": "Määritä äänialasi, yhdistä musiikkipalvelusi ja muokkaa sinusta tallennettuja tietoja",
+      "mostSung": "Eniten laulettu: {song} ({count}×)",
+      "nights": "{count, plural, one {# ilta} other {# iltaa}}",
+      "performances": "{count, plural, one {# esitys} other {# esitystä}}",
+      "saved": "{count, plural, one {# tallennettu} other {# tallennettua}}",
+      "seeAll": "Näytä kaikki",
+      "setlistsEmpty": "Suunnittele ilta: tee settilista kappaleista, joita haluat laulaa.",
+      "songs": "{count, plural, one {# kappale} other {# kappaletta}}",
+      "sourcesLabel": "Yhdistetyt musiikkipalvelut",
+      "statsEmpty": "Ei vielä lauluja. Merkitse kappale lauletuksi aloittaaksesi tilastosi.",
+      "statsTitle": "Oma karaokesi",
+      "sung": "{count, plural, one {# laulettu kappale} other {# laulettua kappaletta}}",
+      "thisYear": "Tänä vuonna",
+      "topArtist": "Suosituin artisti: {artist}",
+      "venues": "{count, plural, one {# paikka} other {# paikkaa}}",
+      "voiceCta": "Selvitä äänialasi",
+      "connectCta": "Yhdistä musiikkisi",
+      "profileTitle": "Musiikkiprofiilisi",
+      "voiceHint": "Löydä äänellesi sopivia kappaleita",
+      "voiceRange": "Ääniala {range}"
+    },
+    "songs": {
+      "addPast": "Lisää aiemmin laulamiani kappaleita",
+      "count": "{count, plural, one {# kappale} other {# kappaletta}}",
+      "empty": "Ei vielä kappaleita. Merkitse kappale lauletuksi tai tallenna sellainen, niin se näkyy täällä.",
+      "emptyFiltered": "Yksikään kappale ei vastaa näitä suodattimia.",
+      "feel": {
+        "unrated": "Ei arviota",
+        "bad": "Ei minua varten",
+        "great": "Mahtavalta",
+        "ok": "OK"
+      },
+      "offline": "Olet offline-tilassa. Näytetään tähän puhelimeen tallennetut kappaleet.",
+      "often": {
+        "once": "Kerran",
+        "twice": "Vähintään kahdesti",
+        "unsung": "Ei vielä laulettu"
+      },
+      "oftenLabel": "Kuinka usein",
+      "searchLabel": "Hae kappaleistasi",
+      "sort": {
+        "most": "Eniten lauletut",
+        "rated": "Parhaat arviot",
+        "recent": "Viimeisimmät",
+        "az": "A–Ö"
+      },
+      "timesSung": "{count}×",
+      "vibeLabel": "Fiilis",
+      "crowdPleaser": "Yleisön suosikki",
+      "feelLabel": "Arviosi",
+      "loadError": "Kappaleitasi ei voitu ladata.",
+      "moodLabel": "Tunnelma",
+      "saved": "Tallennettu",
+      "searchPlaceholder": "Kappale tai esittäjä",
+      "sortLabel": "Lajittele",
+      "timesSungLabel": "{count, plural, one {Laulettu # kerran} other {Laulettu # kertaa}}"
     }
   }
 }

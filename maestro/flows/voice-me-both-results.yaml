@@ -35,21 +35,38 @@ tags:
       PROFILE: '{"genres":["pop"]}'
 - tapOn:
     id: "tab-me"
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-manage"
+    timeout: 15000
 - tapOn:
-    id: "me-music-profile"
+    id: "me-profile-manage"
+- extendedWaitUntil:
+    visible:
+      id: "voice-section"
+    timeout: 15000
+# The voice section is at the top of the profile: check the mic card first, then scroll on to the session card
+# (scrolling straight to the session card pushes the mic card's title off the screen).
+- scrollUntilVisible:
+    element:
+      id: "voice-card-mic"
+    direction: DOWN
+    timeout: 20000
+    centerElement: true
+- assertVisible:
+    id: "voice-card-mic"
+# Container testIDs don't carry their children's text on iOS: match the texts themselves.
+- assertVisible: "From your mic test"
+- assertVisible: "Used for song fit"
 - scrollUntilVisible:
     element:
       id: "voice-card-session"
     direction: DOWN
     timeout: 20000
-- assertVisible:
-    id: "voice-card-mic"
+    centerElement: true
 - assertVisible:
     id: "voice-session-unsaved"
-# Container testIDs don't carry their children's text on iOS: match the texts themselves.
-- assertVisible: "From your mic test"
 - assertVisible: "From your voice session"
-- assertVisible: "Used for song fit"
 - assertVisible: "Between Baritone and Tenor"
 - takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-me-both-results
 # The session card sits below the mic card: on a phone-height screen "Use this as my voice" is below the fold.
