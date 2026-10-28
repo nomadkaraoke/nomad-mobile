@@ -5,6 +5,7 @@ import type { SongCrowd } from '@nomad/api-decide';
 import { act, screen, waitFor } from '@testing-library/react-native';
 
 import { useAuth } from '../../auth/store';
+import { profileFromSelfReport, useVoiceStore } from '../../voice/voiceStore';
 import { SongCrowdLine } from '../../me/SongCrowdLine';
 import { renderTonight } from '../../test-utils/tonightFixtures';
 import { resetMe } from './helpers';
@@ -37,7 +38,9 @@ const KEY = 'invented band|made up song';
 
 beforeEach(() => {
   jest.clearAllMocks();
+  api.getSongCrowd.mockReset();
   mockConnected = true;
+  useVoiceStore.getState().clear();
   resetMe();
 });
 
@@ -152,4 +155,32 @@ it('offline: keeps the last cached value without fetching, or shows nothing', as
   await act(async () => {});
   expect(api.getSongCrowd).toHaveBeenCalledTimes(1);
   expect(screen.queryByTestId('song-crowd')).toBeNull();
+});
+
+it("refetches when the synced voice profile changes (decide reads the viewer's bucket from it)", async () => {
+  act(() => useVoiceStore.getState().adopt(profileFromSelfReport('tenor', '2026-10-01T00:00:00.000Z')));
+  api.getSongCrowd.mockResolvedValueOnce(crowd({ singers: 11, comfortable_share: 0.7273, bucket: 'tenor', bucket_singers: 5, bucket_comfortable_share: 0.4 }));
+  renderTonight(<SongCrowdLine songKey={KEY} />);
+  expect(await screen.findByTestId('song-crowd')).toHaveTextContent('40% of tenors found the key comfortable');
+
+  api.getSongCrowd.mockResolvedValueOnce(crowd({ singers: 11, comfortable_share: 0.7273, bucket: 'baritone', bucket_singers: 6, bucket_comfortable_share: 1 }));
+  act(() => useVoiceStore.getState().adopt(profileFromSelfReport('baritone', '2026-10-28T00:00:00.000Z')));
+  await waitFor(() => expect(screen.getByTestId('song-crowd')).toHaveTextContent('100% of baritones found the key comfortable'));
+  expect(api.getSongCrowd).toHaveBeenCalledTimes(2);
+});
+
+it('a voice profile still waiting to sync does not refetch (decide does not know it yet)', async () => {
+  api.getSongCrowd.mockResolvedValue(crowd({ singers: 11, comfortable_share: 0.7273 }));
+  renderTonight(<SongCrowdLine songKey={KEY} />);
+  expect(await screen.findByTestId('song-crowd')).toHaveTextContent(/8 of 11 singers/);
+  act(() => useVoiceStore.getState().save(profileFromSelfReport('alto', '2026-10-28T00:00:00.000Z')));
+  await act(async () => {});
+  expect(api.getSongCrowd).toHaveBeenCalledTimes(1);
+});
+
+it('retries a failed fetch once', async () => {
+  api.getSongCrowd.mockRejectedValueOnce(new Error('blip')).mockResolvedValueOnce(crowd({ singers: 5, comfortable_share: 1 }));
+  renderTonight(<SongCrowdLine songKey={KEY} />);
+  expect(await screen.findByTestId('song-crowd', {}, { timeout: 4000 })).toHaveTextContent('5 of 5 singers found the key comfortable');
+  expect(api.getSongCrowd).toHaveBeenCalledTimes(2);
 });

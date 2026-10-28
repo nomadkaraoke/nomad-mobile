@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useAuth } from '../auth/store';
 import { useOffline } from '../net/useOffline';
+import { useVoiceStore } from '../voice/voiceStore';
 import { useUserKey } from './account';
 
 /** decide's voice buckets (spec §6.7) → their `song.crowd.bucket.*` sentence. */
@@ -48,12 +49,14 @@ export function SongCrowdLine({ songKey }: { songKey: string }) {
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
   const userKey = useUserKey();
   const offline = useOffline();
+  // decide reads the viewer's bucket from the voice profile it has: a newly synced profile refetches (as recs do).
+  const voice = useVoiceStore((s) => (s.profile && !s.pending ? s.profile.measuredAt : null));
   const q = useQuery({
-    queryKey: ['decide', userKey, 'crowd', songKey],
+    queryKey: ['decide', userKey, 'crowd', songKey, voice],
     queryFn: () => getSongCrowd(songKey),
     enabled: signedIn && userKey !== null && !offline,
     staleTime: 60 * 60 * 1000,
-    retry: false,
+    retry: 1,
   });
   const line = signedIn ? crowdLine(q.data) : null;
   if (!line) return null;

@@ -50,7 +50,7 @@ export function useClearMeOnAccountChange(): void {
         queryClient.removeQueries({ queryKey: BOARD_QUERY_KEY });
       }
       if (was && !is) {
-        for (const kind of ['library', 'setlists', 'karaoke-log', 'song-history', 'get-made', 'recs-gotos']) {
+        for (const kind of ['library', 'setlists', 'karaoke-log', 'song-history', 'get-made', 'recs-gotos', 'crowd']) {
           const predicate = (q: { queryKey: readonly unknown[] }) => q.queryKey[0] === 'decide' && q.queryKey[2] === kind;
           void queryClient.cancelQueries({ predicate });
           queryClient.removeQueries({ predicate });

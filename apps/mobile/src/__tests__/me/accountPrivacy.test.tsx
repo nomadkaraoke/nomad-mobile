@@ -121,3 +121,11 @@ describe('song history is per account', () => {
     expect(b.result.current).toEqual([]);
   });
 });
+
+it("sign-out drops the cached crowd figures (decide answers them for the viewer's voice bucket)", () => {
+  const client = resetMe('a@example.com');
+  renderHook(() => useClearMeOnAccountChange(), { wrapper: wrapperFor(client) });
+  client.setQueryData(['decide', A, 'crowd', 'invented band|made up song', null], { singers: 5 });
+  act(() => useAuth.setState({ state: { status: 'signedOut' } }));
+  expect(client.getQueryCache().findAll({ predicate: (q) => q.queryKey[2] === 'crowd' })).toEqual([]);
+});

@@ -82,7 +82,10 @@ beforeEach(async () => {
   mockConnected = true;
   getSongDetail.mockResolvedValue(detail([version(0), version(1, 'commercial', false)]));
   getSongVocalRange.mockResolvedValue({ song_key: 'muse|starlight', range: null });
-  getSongCrowd.mockResolvedValue({ singers: null, comfortable_share: null, bucket: null, bucket_comfortable_share: null });
+  getSongCrowd.mockResolvedValue({
+    singers: null, comfortable_share: null, too_high_share: null, too_low_share: null,
+    bucket: null, bucket_singers: null, bucket_comfortable_share: null, crowd_pleaser_share: null,
+  });
   useVoiceStore.getState().clear();
 });
 
