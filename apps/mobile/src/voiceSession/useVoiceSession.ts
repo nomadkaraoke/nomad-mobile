@@ -3,6 +3,7 @@
 // a killed app resumes; on mount the stored session is checked against decide. No UI and no copy here: errors are
 // kinds that the screens (D6) turn into words.
 import {
+  adoptVoiceSession,
   ApiError,
   createVoiceSession,
   getVoiceFlags,
@@ -21,19 +22,32 @@ import {
 } from '@nomad/api-decide';
 import {
   canSubmitQuiz,
+  chestSummary,
+  createFalsettoDetector,
   EMPTY_SESSION_QUIZ,
+  falsettoOffset,
+  type FalsettoCandidate,
+  type FalsettoDetector,
+  type HeldNote,
+  type LabelledNote,
+  type NoteLabel,
   prefillPosition,
+  sameNote,
+  toNoteLabelsIn,
   toQuizIn,
   type PitchSummary,
   type PositionPrefill,
   type QuizAnswers,
 } from '@nomad/core';
 import { Directory, File, Paths } from 'expo-file-system';
-import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 
 import { PLAYER_MODE } from '../config';
 import type { PitchSource } from '../voice/pitchSource';
 import { usePitchSource } from '../voice/usePitchSource';
+import { followServerVoice } from '../voice/useVoiceProfile';
+import { useVoiceStore } from '../voice/voiceStore';
+import { chestTopFor } from './falsettoReference';
 import type { PlayerEvent, PlayerHandle } from './player/KaraokePlayer';
 import type { PlayerMode } from './player/playerMode';
 import { AAC_DIR_NAMES, AAC_FILE_PREFIX, deleteFileQuietly, WAV_DIR_NAME } from './recording/files';
@@ -45,6 +59,10 @@ export type { VsStep } from './sessionStore';
 
 /** An embed that reports neither `ready` nor an error in this long (offline, a stuck WebView) counts as unplayable. */
 export const PLAYER_READY_TIMEOUT_MS = 20_000;
+/** How long the live falsetto chip stays up unanswered. */
+export const FALSETTO_CHIP_MS = 5_000;
+/** The quiz asks about at most this many missed high notes. */
+export const MAX_CATCH_UP = 3;
 
 /**
  * What went wrong, for the screens to word. `network` / `warming_up` / `server` keep the step and offer `retry()`;
@@ -64,6 +82,21 @@ export type VoiceSession = {
   /** Q2's prefill from the song's pitch summary (null without one). */
   prefill: PositionPrefill | null;
   result: ResultOut | null;
+  /** The live "High note: falsetto?" chip's note (play only), null when no chip shows. */
+  falsettoChip: FalsettoCandidate | null;
+  /**
+   * The singer's answer about a falsetto candidate: `live` from the chip (it goes away), `quiz` from the catch-up. One
+   * label per note: a new answer replaces the old one.
+   */
+  answerFalsetto(c: FalsettoCandidate, label: NoteLabel, source?: LabelledNote['source']): void;
+  /** The quiz's catch-up: the song's candidates not answered while singing, highest first, at most 3. */
+  catchUp: FalsettoCandidate[];
+  /** This song's falsetto answers so far. */
+  noteLabels: LabelledNote[];
+  /** The finished song's take still on the phone (consent only), for the catch-up's replay. */
+  take: SessionState['take'];
+  /** Stream time when that take started. */
+  takeOffsetS: number;
   /** The singer's live note (MIDI) while the recorder runs (play, warm-up). */
   livePitch: number | null;
   /** The session's one pitch source (the setup screen's quiet second reads it before the recorder runs). */
@@ -90,6 +123,11 @@ export type VoiceSession = {
   submitQuiz(): Promise<void>;
   finish(): Promise<void>;
   patchContext(patch: SessionPatch): Promise<void>;
+  /**
+   * Makes the shown result the singer's voice profile (decide's adopt, for a result too unsure to save itself): the
+   * phone follows decide's profile and the result reads as saved. False when decide refused or was unreachable.
+   */
+  adoptResult(): Promise<boolean>;
   /** Repeats the call that failed (`error` set). */
   retry(): Promise<void>;
   /** Forgets the session: back to the intro. */
@@ -126,6 +164,24 @@ const toPitchIn = (p: PitchSummary | null): AttemptIn['pitch'] =>
     p90: p.p90,
   };
 
+/**
+ * The attempt's pitch fields. `pitch` is chest-only: with a falsetto or unsure answer it is recomputed from the
+ * contour without those notes (`chestSummary`); `pitch_all` is the song as sung. `note_labels` only when answered.
+ * A song from before batch 1 (no contour) sends its stored summary as both; a song with no summary sends null for
+ * both.
+ */
+function attemptPitch(st: SessionState): Pick<AttemptIn, 'pitch' | 'pitch_all' | 'note_labels'> {
+  const all = toPitchIn(st.pitch);
+  const relabels = st.noteLabels.some((l) => l.label !== 'full');
+  // No whole-song summary (too little singing): no chest one either, whatever the labels.
+  const chest =
+    st.pitch && relabels && st.contour
+      ? toPitchIn(chestSummary(st.contour, st.held, st.noteLabels, st.pitch.voicedS))
+      : all;
+  const labels = toNoteLabelsIn(st.noteLabels);
+  return { pitch: chest, pitch_all: all, ...(labels.length > 0 && { note_labels: labels }) };
+}
+
 /** The per-song fields reset for a new offer. */
 const FRESH_SONG = {
   quiz: EMPTY_SESSION_QUIZ,
@@ -134,6 +190,11 @@ const FRESH_SONG = {
   playEndedAt: null,
   stoppedEarly: false,
   take: null,
+  contour: null,
+  held: [],
+  noteLabels: [],
+  candidates: [],
+  takeOffsetS: 0,
 } satisfies Partial<SessionState>;
 
 const warn = (what: string, e: unknown) => console.warn(`[voice session] ${what}: ${String(e)}`);
@@ -175,9 +236,17 @@ const discardTake = () => {
 export function useVoiceSession(): VoiceSession {
   const s = useVoiceSessionStore();
   const source = usePitchSource();
+  /** The playing song's falsetto detector (null outside play: the warm-up never asks). */
+  const detector = useRef<FalsettoDetector | null>(null);
+  const [falsettoChip, setFalsettoChip] = useState<FalsettoCandidate | null>(null);
+  const onHeldNote = useCallback((n: HeldNote) => {
+    const c = detector.current?.push(n);
+    if (c) setFalsettoChip(c);
+  }, []);
   const recorder = useSongRecorder(source, {
     record: s.step !== 'warmup' && !!s.setup?.record,
     floor: s.floor,
+    onHeldNote,
   });
   const recorderRef = useRef(recorder);
   useEffect(() => {
@@ -277,14 +346,23 @@ export function useVoiceSession(): VoiceSession {
         return await recorderRef.current.stop();
       } catch (e) {
         warn('recorder stop failed', e);
-        return { pitch: null, file: null };
+        return { pitch: null, file: null, contour: null, held: [], takeOffsetS: 0 };
       } finally {
         stopping.current = false;
       }
     };
 
+    /** Stops listening for falsetto: no chip, no detector. Returns every candidate the song had. */
+    const disarmFalsetto = (): FalsettoCandidate[] => {
+      const all = detector.current?.all() ?? [];
+      detector.current = null;
+      setFalsettoChip(null);
+      return all;
+    };
+
     /** Leaving `play` other than into the quiz (error, result, disabled, reset): the take is stopped and dropped. */
     const dropRunningTake = async () => {
+      disarmFalsetto();
       if (get().step !== 'play') return;
       const take = await stopTake();
       deleteFileQuietly(take?.file?.uri);
@@ -386,6 +464,7 @@ export function useVoiceSession(): VoiceSession {
     const endSong = async (stoppedEarly: boolean) => {
       if (get().step !== 'play' || stopping.current) return;
       const take = await stopTake();
+      const candidates = disarmFalsetto();
       if (!take || get().step !== 'play') {
         deleteFileQuietly(take?.file?.uri);
         return;
@@ -398,6 +477,10 @@ export function useVoiceSession(): VoiceSession {
         step: 'quiz',
         pitch: take.pitch,
         take: keep,
+        contour: take.contour,
+        held: take.held,
+        takeOffsetS: take.takeOffsetS,
+        candidates,
         stoppedEarly,
         playStartedAt: get().playStartedAt ?? now,
         playEndedAt: now,
@@ -412,6 +495,7 @@ export function useVoiceSession(): VoiceSession {
       const { step, song, sessionId } = get();
       if (step !== 'play' || !song || !sessionId) return;
       const take = await stopTake();
+      disarmFalsetto();
       deleteFileQuietly(take?.file?.uri);
       if (get().sessionId !== sessionId) return;
       const body: SkipIn = global
@@ -430,6 +514,10 @@ export function useVoiceSession(): VoiceSession {
           readyFor.current = videoId;
           // iOS start order (D1/D4): audio mode → stream → recorder, and only then the video.
           takeConsent.current = get().setup?.record === true;
+          detector.current = createFalsettoDetector({
+            chestTop: chestTopFor(song.comfort_estimate, useVoiceStore.getState().profile?.comfortHigh ?? null),
+            offset: falsettoOffset(get().setup?.uses_falsetto),
+          });
           try {
             await recorderRef.current.start();
           } catch (err) {
@@ -490,7 +578,7 @@ export function useVoiceSession(): VoiceSession {
         ended_at: new Date(endedAt).toISOString(),
         stopped_early: st.stoppedEarly,
         quiz: toQuizIn(quiz),
-        pitch: toPitchIn(st.pitch),
+        ...attemptPitch(st),
       };
       const device = setup.device ?? null;
       const posted = { done: false };
@@ -594,6 +682,11 @@ export function useVoiceSession(): VoiceSession {
         });
       }),
       stopEarly: () => endSong(true),
+      answerFalsetto(c: FalsettoCandidate, label: NoteLabel, source: LabelledNote['source'] = 'live') {
+        setFalsettoChip((cur) => (cur === c ? null : cur));
+        const others = get().noteLabels.filter((l) => !sameNote(l, c));
+        update({ noteLabels: [...others, { tStart: c.tStart, tEnd: c.tEnd, midi: c.midi, label, source }] });
+      },
       setAnswer(patch: Partial<QuizAnswers>) {
         update({ quiz: { ...get().quiz, ...patch } });
       },
@@ -622,6 +715,20 @@ export function useVoiceSession(): VoiceSession {
         pendingPatch.current = { sessionId, patch: { ...prev, ...patch } };
         // While another action runs, it is sent when that one settles.
         await sendPendingPatch();
+      },
+      async adoptResult(): Promise<boolean> {
+        const id = get().sessionId;
+        if (!id) return false;
+        try {
+          const profile = await adoptVoiceSession(id);
+          if (get().sessionId !== id) return false;
+          followServerVoice(profile);
+          setResult((r) => (r ? { ...r, profile_saved: true } : r));
+          return true;
+        } catch (e) {
+          warn('adopt failed', e);
+          return false;
+        }
       },
       retry: guarded(async () => {
         await retryRef.current?.();
@@ -706,6 +813,22 @@ export function useVoiceSession(): VoiceSession {
     return () => clearTimeout(timer);
   }, [s.step, videoId, actions]);
 
+  // The falsetto chip hides itself after 5 s (a replacement restarts the clock); unanswered, the quiz asks again.
+  useEffect(() => {
+    if (!falsettoChip) return;
+    const timer = setTimeout(() => setFalsettoChip((cur) => (cur === falsettoChip ? null : cur)), FALSETTO_CHIP_MS);
+    return () => clearTimeout(timer);
+  }, [falsettoChip]);
+
+  const catchUp = useMemo(
+    () =>
+      s.candidates
+        .filter((c) => !s.noteLabels.some((l) => l.source === 'live' && sameNote(l, c)))
+        .sort((a, b) => b.midi - a.midi)
+        .slice(0, MAX_CATCH_UP),
+    [s.candidates, s.noteLabels],
+  );
+
   const prefill = useMemo(() => prefillPosition(s.pitch, s.song?.song_range ?? null), [s.pitch, s.song]);
 
   return {
@@ -717,6 +840,12 @@ export function useVoiceSession(): VoiceSession {
     quiz: s.quiz,
     prefill,
     result,
+    falsettoChip,
+    answerFalsetto: actions.answerFalsetto,
+    catchUp,
+    noteLabels: s.noteLabels,
+    take: s.take,
+    takeOffsetS: s.takeOffsetS,
     livePitch: recorder.livePitch,
     pitchSource: source,
     playerMode: s.song?.version.embeddable === false ? 'linkout' : PLAYER_MODE,
@@ -738,5 +867,6 @@ export function useVoiceSession(): VoiceSession {
     patchContext: actions.patchContext,
     retry: actions.retry,
     reset: actions.reset,
+    adoptResult: actions.adoptResult,
   };
 }

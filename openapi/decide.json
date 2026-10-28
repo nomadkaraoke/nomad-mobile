@@ -5629,6 +5629,58 @@
         }
       }
     },
+    "/api/voice/personal-pool": {
+      "get": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Personal Pool",
+        "description": "Eligibility, the cap (``used`` of ``cap`` songs in the window) and your batches, newest first.",
+        "operationId": "personal_pool_api_voice_personal_pool_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalPoolOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Request Personal Pool",
+        "description": "Queue up to ``cap`` of your best-known songs for analysis. Refusals: 403 ``not_eligible``, 429 ``cap``\n(with ``next_allowed_at``), 409 ``nothing_to_add`` / ``concurrent_request``, 503 ``budget_paused``.",
+        "operationId": "request_personal_pool_api_voice_personal_pool_post",
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalBatchCreated"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/api/voice/recordings": {
       "post": {
         "tags": [
@@ -6373,6 +6425,61 @@
                     "$ref": "#/components/schemas/UserSongOut"
                   },
                   "title": "Response User Songs Api Admin Voice Users  Email  Songs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/voice/costs": {
+      "get": {
+        "tags": [
+          "admin-voice"
+        ],
+        "summary": "Costs",
+        "description": "This month's estimated personal-pool spend against ``voice_monthly_budget_usd``, and the shared pool.",
+        "operationId": "costs_api_admin_voice_costs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "x-admin-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceCostsOut"
                 }
               }
             }
@@ -7485,6 +7592,24 @@
                 "type": "null"
               }
             ]
+          },
+          "pitch_all": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PitchSummaryIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "note_labels": {
+            "items": {
+              "$ref": "#/components/schemas/NoteLabelIn"
+            },
+            "type": "array",
+            "maxItems": 40,
+            "title": "Note Labels"
           }
         },
         "additionalProperties": false,
@@ -7497,7 +7622,8 @@
           "stopped_early",
           "quiz"
         ],
-        "title": "AttemptIn"
+        "title": "AttemptIn",
+        "description": "``pitch`` is the chest-only summary (the app drops falsetto-labelled spans; Phase 3d batch 1, Part C);\n``pitch_all`` the unfiltered one, kept for analysis. Old apps send an unfiltered ``pitch`` and neither new\nfield, which stays valid."
       },
       "AttemptOut": {
         "properties": {
@@ -8039,6 +8165,40 @@
         ],
         "title": "CollectEmailResponse",
         "description": "Response after collecting email."
+      },
+      "ComfortEstimateOut": {
+        "properties": {
+          "low": {
+            "type": "number",
+            "title": "Low"
+          },
+          "high": {
+            "type": "number",
+            "title": "High"
+          },
+          "sd_high": {
+            "type": "number",
+            "title": "Sd High"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "measured",
+              "model",
+              "profile"
+            ],
+            "title": "Source"
+          }
+        },
+        "type": "object",
+        "required": [
+          "low",
+          "high",
+          "sd_high",
+          "source"
+        ],
+        "title": "ComfortEstimateOut",
+        "description": "The session's chest comfort estimate when the song is offered (the live falsetto chip's reference).\n\n``source``: \"measured\" (from the songs rated comfortable, as the result shows it), \"model\" (the posterior\nmean) or \"profile\" (no attempt counts yet: the prior profile's own band). ``sd_high`` is always the model's\nposterior SD of the comfort top, so the app can tell a settled model estimate from a guess."
       },
       "ConfirmItem": {
         "properties": {
@@ -10175,6 +10335,16 @@
             "type": "integer",
             "title": "Max Attempts",
             "default": 12
+          },
+          "comfort_estimate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ComfortEstimateOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -10190,6 +10360,56 @@
           "attempt_n"
         ],
         "title": "NextSongOut"
+      },
+      "NoteLabelIn": {
+        "properties": {
+          "t_start": {
+            "type": "number",
+            "maximum": 3600,
+            "minimum": 0,
+            "title": "T Start"
+          },
+          "t_end": {
+            "type": "number",
+            "maximum": 3600,
+            "minimum": 0,
+            "title": "T End"
+          },
+          "midi": {
+            "type": "number",
+            "maximum": 96,
+            "minimum": 24,
+            "title": "Midi"
+          },
+          "label": {
+            "type": "string",
+            "enum": [
+              "falsetto",
+              "full",
+              "unsure"
+            ],
+            "title": "Label"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "live",
+              "quiz"
+            ],
+            "title": "Source"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "t_start",
+          "t_end",
+          "midi",
+          "label",
+          "source"
+        ],
+        "title": "NoteLabelIn",
+        "description": "One held high note the singer labelled: live (the \"High note: falsetto?\" chip) or in the quiz catch-up.\n``t_start`` / ``t_end`` are seconds on the take's stream clock; ``midi`` the held note."
       },
       "PendingListenBrainzImport": {
         "properties": {
@@ -10208,6 +10428,136 @@
           "status"
         ],
         "title": "PendingListenBrainzImport"
+      },
+      "PersonalBatchCreated": {
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "songs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Songs"
+          },
+          "est_cost_usd": {
+            "type": "number",
+            "title": "Est Cost Usd"
+          }
+        },
+        "type": "object",
+        "required": [
+          "batch_id",
+          "songs",
+          "est_cost_usd"
+        ],
+        "title": "PersonalBatchCreated"
+      },
+      "PersonalBatchOut": {
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "requested_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Requested At"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "ready": {
+            "type": "integer",
+            "title": "Ready"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "done"
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "batch_id",
+          "requested_at",
+          "total",
+          "ready",
+          "status"
+        ],
+        "title": "PersonalBatchOut"
+      },
+      "PersonalPoolOut": {
+        "properties": {
+          "eligible": {
+            "type": "boolean",
+            "title": "Eligible"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "paid",
+              "history",
+              "admin",
+              "not_eligible"
+            ],
+            "title": "Reason"
+          },
+          "listens": {
+            "type": "integer",
+            "title": "Listens"
+          },
+          "songs_with_plays": {
+            "type": "integer",
+            "title": "Songs With Plays"
+          },
+          "next_allowed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Allowed At"
+          },
+          "cap": {
+            "type": "integer",
+            "title": "Cap"
+          },
+          "used": {
+            "type": "integer",
+            "title": "Used"
+          },
+          "batches": {
+            "items": {
+              "$ref": "#/components/schemas/PersonalBatchOut"
+            },
+            "type": "array",
+            "title": "Batches"
+          }
+        },
+        "type": "object",
+        "required": [
+          "eligible",
+          "reason",
+          "listens",
+          "songs_with_plays",
+          "next_allowed_at",
+          "cap",
+          "used",
+          "batches"
+        ],
+        "title": "PersonalPoolOut"
       },
       "PitchSummaryIn": {
         "properties": {
@@ -11851,6 +12201,26 @@
             "type": "integer",
             "title": "Comfort High"
           },
+          "comfort_source": {
+            "type": "string",
+            "enum": [
+              "measured",
+              "model"
+            ],
+            "title": "Comfort Source",
+            "default": "model"
+          },
+          "falsetto_high": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Falsetto High"
+          },
           "attempts": {
             "type": "integer",
             "title": "Attempts"
@@ -11984,71 +12354,56 @@
         "title": "ServiceStats",
         "description": "Music service connection statistics."
       },
-      "ServiceSummary": {
+      "backend__models__admin__ServiceSummary": {
         "properties": {
-          "connected": {
-            "type": "boolean",
-            "title": "Connected"
+          "service_type": {
+            "type": "string",
+            "title": "Service Type"
           },
-          "username": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Username"
+          "service_username": {
+            "type": "string",
+            "title": "Service Username"
           },
-          "tracks_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Tracks Synced"
-          },
-          "songs_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Songs Synced"
-          },
-          "artists_synced": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Artists Synced"
+          "sync_status": {
+            "type": "string",
+            "title": "Sync Status"
           },
           "last_sync_at": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "format": "date-time"
               },
               {
                 "type": "null"
               }
             ],
             "title": "Last Sync At"
+          },
+          "tracks_synced": {
+            "type": "integer",
+            "title": "Tracks Synced"
+          },
+          "sync_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sync Error"
           }
         },
         "type": "object",
         "required": [
-          "connected"
+          "service_type",
+          "service_username",
+          "sync_status",
+          "last_sync_at",
+          "tracks_synced",
+          "sync_error"
         ],
         "title": "ServiceSummary",
         "description": "Summary of a connected music service."
@@ -12215,6 +12570,39 @@
               }
             ],
             "title": "Device"
+          },
+          "experience": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "some",
+                  "trained"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Experience"
+          },
+          "uses_falsetto": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "yes",
+                  "sometimes",
+                  "no",
+                  "unsure"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uses Falsetto"
           }
         },
         "additionalProperties": false,
@@ -12271,6 +12659,26 @@
           "comfort_high": {
             "type": "integer",
             "title": "Comfort High"
+          },
+          "comfort_source": {
+            "type": "string",
+            "enum": [
+              "measured",
+              "model"
+            ],
+            "title": "Comfort Source",
+            "default": "model"
+          },
+          "falsetto_high": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Falsetto High"
           },
           "attempts": {
             "type": "integer",
@@ -12348,6 +12756,39 @@
               }
             ],
             "title": "Device"
+          },
+          "experience": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "some",
+                  "trained"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Experience"
+          },
+          "uses_falsetto": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "yes",
+                  "sometimes",
+                  "no",
+                  "unsure"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uses Falsetto"
           }
         },
         "additionalProperties": false,
@@ -14178,62 +14619,27 @@
         "title": "UpgradeGuestResponse",
         "description": "Response after requesting guest upgrade."
       },
-      "UserArtistResponse": {
+      "backend__api__routes__recommendations__UserArtistResponse": {
         "properties": {
-          "mbid": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Mbid"
+          "id": {
+            "type": "string",
+            "title": "Id"
           },
           "artist_name": {
             "type": "string",
             "title": "Artist Name"
           },
-          "sources": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Sources"
+          "source": {
+            "type": "string",
+            "title": "Source"
           },
-          "spotify_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Id"
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
           },
-          "spotify_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Rank"
-          },
-          "spotify_time_range": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Spotify Time Range"
+          "time_range": {
+            "type": "string",
+            "title": "Time Range"
           },
           "popularity": {
             "anyOf": [
@@ -14253,71 +14659,18 @@
             "type": "array",
             "title": "Genres",
             "default": []
-          },
-          "lastfm_rank": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Rank"
-          },
-          "lastfm_playcount": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Lastfm Playcount"
-          },
-          "tags": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Tags",
-            "default": []
-          },
-          "is_excluded": {
-            "type": "boolean",
-            "title": "Is Excluded",
-            "default": false
-          },
-          "is_manual": {
-            "type": "boolean",
-            "title": "Is Manual",
-            "default": false
-          },
-          "affinity": {
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "love",
-                  "like",
-                  "occasionally"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Affinity"
           }
         },
         "type": "object",
         "required": [
+          "id",
           "artist_name",
-          "sources"
+          "source",
+          "rank",
+          "time_range"
         ],
         "title": "UserArtistResponse",
-        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
+        "description": "Artist from user's listening history."
       },
       "UserArtistsResponse": {
         "properties": {
@@ -14919,6 +15272,54 @@
         ],
         "title": "VersionOut"
       },
+      "VoiceCostsOut": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "title": "Month"
+          },
+          "personal_batches": {
+            "type": "integer",
+            "title": "Personal Batches"
+          },
+          "personal_songs": {
+            "type": "integer",
+            "title": "Personal Songs"
+          },
+          "est_cost_usd": {
+            "type": "number",
+            "title": "Est Cost Usd"
+          },
+          "budget_usd": {
+            "type": "number",
+            "title": "Budget Usd"
+          },
+          "paused": {
+            "type": "boolean",
+            "title": "Paused"
+          },
+          "shared_songs_analysed": {
+            "type": "integer",
+            "title": "Shared Songs Analysed"
+          },
+          "est_cost_per_song_usd": {
+            "type": "number",
+            "title": "Est Cost Per Song Usd"
+          }
+        },
+        "type": "object",
+        "required": [
+          "month",
+          "personal_batches",
+          "personal_songs",
+          "est_cost_usd",
+          "budget_usd",
+          "paused",
+          "shared_songs_analysed",
+          "est_cost_per_song_usd"
+        ],
+        "title": "VoiceCostsOut"
+      },
       "VoiceFlagsOut": {
         "properties": {
           "session_enabled": {
@@ -15096,6 +15497,65 @@
             ],
             "title": "Session Id"
           },
+          "falsetto_high": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 96,
+                "minimum": 24
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Falsetto High"
+          },
+          "falsetto_low": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 96,
+                "minimum": 24
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Falsetto Low"
+          },
+          "experience": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "some",
+                  "trained"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Experience"
+          },
+          "uses_falsetto": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "yes",
+                  "sometimes",
+                  "no",
+                  "unsure"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uses Falsetto"
+          },
           "updated_at": {
             "type": "string",
             "format": "date-time",
@@ -15243,6 +15703,65 @@
               }
             ],
             "title": "Session Id"
+          },
+          "falsetto_high": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 96,
+                "minimum": 24
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Falsetto High"
+          },
+          "falsetto_low": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 96,
+                "minimum": 24
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Falsetto Low"
+          },
+          "experience": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "some",
+                  "trained"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Experience"
+          },
+          "uses_falsetto": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "yes",
+                  "sometimes",
+                  "no",
+                  "unsure"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uses Falsetto"
           }
         },
         "additionalProperties": false,
@@ -15342,27 +15861,131 @@
         "title": "YouTubeMusicImportResponse",
         "description": "Result of a YouTube Music playlist import."
       },
-      "backend__api__routes__recommendations__UserArtistResponse": {
+      "ServiceSummary": {
         "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
+          "connected": {
+            "type": "boolean",
+            "title": "Connected"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          },
+          "tracks_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tracks Synced"
+          },
+          "songs_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Songs Synced"
+          },
+          "artists_synced": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artists Synced"
+          },
+          "last_sync_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sync At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "connected"
+        ],
+        "title": "ServiceSummary",
+        "description": "Summary of a connected music service."
+      },
+      "UserArtistResponse": {
+        "properties": {
+          "mbid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mbid"
           },
           "artist_name": {
             "type": "string",
             "title": "Artist Name"
           },
-          "source": {
-            "type": "string",
-            "title": "Source"
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sources"
           },
-          "rank": {
-            "type": "integer",
-            "title": "Rank"
+          "spotify_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Id"
           },
-          "time_range": {
-            "type": "string",
-            "title": "Time Range"
+          "spotify_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Rank"
+          },
+          "spotify_time_range": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spotify Time Range"
           },
           "popularity": {
             "anyOf": [
@@ -15382,72 +16005,71 @@
             "type": "array",
             "title": "Genres",
             "default": []
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "artist_name",
-          "source",
-          "rank",
-          "time_range"
-        ],
-        "title": "UserArtistResponse",
-        "description": "Artist from user's listening history."
-      },
-      "backend__models__admin__ServiceSummary": {
-        "properties": {
-          "service_type": {
-            "type": "string",
-            "title": "Service Type"
           },
-          "service_username": {
-            "type": "string",
-            "title": "Service Username"
+          "lastfm_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Rank"
           },
-          "sync_status": {
-            "type": "string",
-            "title": "Sync Status"
+          "lastfm_playcount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastfm Playcount"
           },
-          "last_sync_at": {
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "default": []
+          },
+          "is_excluded": {
+            "type": "boolean",
+            "title": "Is Excluded",
+            "default": false
+          },
+          "is_manual": {
+            "type": "boolean",
+            "title": "Is Manual",
+            "default": false
+          },
+          "affinity": {
             "anyOf": [
               {
                 "type": "string",
-                "format": "date-time"
+                "enum": [
+                  "love",
+                  "like",
+                  "occasionally"
+                ]
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Last Sync At"
-          },
-          "tracks_synced": {
-            "type": "integer",
-            "title": "Tracks Synced"
-          },
-          "sync_error": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Sync Error"
+            "title": "Affinity"
           }
         },
         "type": "object",
         "required": [
-          "service_type",
-          "service_username",
-          "sync_status",
-          "last_sync_at",
-          "tracks_synced",
-          "sync_error"
+          "artist_name",
+          "sources"
         ],
-        "title": "ServiceSummary",
-        "description": "Summary of a connected music service."
+        "title": "UserArtistResponse",
+        "description": "An artist from user's data with merged source information.\n\nMBID-first: MusicBrainz ID is the primary identifier when available.\nSpotify ID is optional enrichment for images and external links."
       }
     },
     "securitySchemes": {

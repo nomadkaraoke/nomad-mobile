@@ -1,5 +1,5 @@
 import { classifyVoice } from '../voiceType';
-import { summarizeRange } from '../range';
+import { chestRangeBelowFalsetto, summarizeRange } from '../range';
 import { framesFor } from '../testSignals';
 
 const held = (notes: number[]) => notes.map((n, i) => ({ start: i, end: i + 0.6, midi: n, note: n }));
@@ -27,5 +27,22 @@ describe('summarizeRange', () => {
   it('comfort from free singing is clamped into the held range', () => {
     const r = summarizeRange(held([50, 60]), framesFor([{ midi: 40, dur: 2 }, { midi: 70, dur: 2 }]))!;
     expect(r).toMatchObject({ comfortLow: 50, comfortHigh: 60 });
+  });
+});
+
+describe('chestRangeBelowFalsetto', () => {
+  const r = { low: 45, high: 69, comfortLow: 52, comfortHigh: 66, heldCount: 6, freeVoicedS: 6 };
+  it('the highest high-step note at least 2 below the top; comfort kept under it', () => {
+    expect(chestRangeBelowFalsetto(r, [64, 68, 69], 69)).toEqual({ ...r, high: 64, comfortHigh: 64 });
+  });
+  it('no such note: three below the top', () => {
+    expect(chestRangeBelowFalsetto(r, [69], 69)).toEqual({ ...r, high: 66, comfortHigh: 66 });
+  });
+  it('never below low, and comfortLow follows a lowered comfortHigh', () => {
+    const narrow = { ...r, low: 60, high: 62, comfortLow: 61, comfortHigh: 62 };
+    expect(chestRangeBelowFalsetto(narrow, [62], 62)).toEqual({ ...narrow, high: 60, comfortHigh: 60, comfortLow: 60 });
+  });
+  it('a top already under the range high (a low-step note higher) changes nothing', () => {
+    expect(chestRangeBelowFalsetto({ ...r, high: 60 }, [69], 69)).toEqual({ ...r, high: 60 });
   });
 });

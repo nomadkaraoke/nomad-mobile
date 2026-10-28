@@ -1533,7 +1533,13 @@
     "singProgressLabel": "노래 부를 수 있는 남은 시간",
     "micBusyBody": "다른 앱이나 통화에서 마이크를 사용하고 있어요. 해당 앱을 종료하고 다시 시도하거나, 음역대를 직접 선택해 주세요.",
     "micBusyTitle": "마이크가 사용 중입니다",
-    "typeUnknown": "나의 음성 유형"
+    "typeUnknown": "나의 음성 유형",
+    "highFalsettoBody": "가장 높았던 음은 {note}입니다. 가성이었다면 진성 음역대에서 제외하여 노래가 더 잘 맞도록 해 드려요.",
+    "highFalsettoTitle": "가장 높았던 음이 가성이나 두성(더 가볍고 숨소리가 섞인 소리)이었나요?",
+    "highFalsettoNo": "아니요",
+    "highFalsettoSkip": "건너뛰기",
+    "highFalsettoUnsure": "잘 모르겠어요",
+    "highFalsettoYes": "네"
   },
   "fit": {
     "fits": "내 음역대에 맞음",
@@ -1755,10 +1761,15 @@
       "probably": "{type} 타입일 가능성이 높지만, 확실하게 확인하려면 노래를 더 불러봐야 해요",
       "range": "{range}, 편안한 음역 {comfort}",
       "saved": "음악 프로필에 저장되었습니다.",
-      "suited": "나에게 잘 어울리는 노래",
+      "suited": "내가 좋아하고 잘 어울리는 곡",
       "confidenceHigh": "높은 확신도",
       "done": "완료",
-      "typeUnknown": "나의 음성 유형"
+      "typeUnknown": "나의 음성 유형",
+      "comfortEstimated": "예상치",
+      "comfortMeasured": "편안하게 불렀던 곡들을 바탕으로 측정한 결과",
+      "falsetto": "가성 최대 {note}",
+      "adopt": "내 음성 프로필로 사용하기",
+      "adoptFailed": "내 음성으로 저장하지 못했어요. 네트워크 연결을 확인하고 다시 시도해 주세요."
     },
     "setup": {
       "bit_warm": "조금 풀림",
@@ -1786,7 +1797,18 @@
       "no": "아니요",
       "openSettings": "설정 열기",
       "quiet": "잠시 조용히 해주세요…",
-      "yes": "네"
+      "yes": "네",
+      "background": "노래 스타일에 대해 알려주세요 (선택 사항)",
+      "backgroundHint": "진성과 가성을 구분하는 데 도움이 됩니다.",
+      "experience": "노래를 배운 적이 있으신가요?",
+      "experience_none": "없음",
+      "experience_some": "조금 있음",
+      "experience_trained": "전문 교육 받음",
+      "usesFalsetto": "가성이나 두성을 사용하시나요?",
+      "usesFalsetto_sometimes": "가끔 사용함",
+      "usesFalsetto_no": "아니요",
+      "usesFalsetto_unsure": "잘 모르겠어요",
+      "usesFalsetto_yes": "네"
     },
     "title": "내 목소리 찾기",
     "warmup": {
@@ -1837,6 +1859,29 @@
       "play": "재생",
       "song": "{title} · {artist}",
       "stop": "중지"
+    },
+    "falsetto": {
+      "chip": "고음 ({note}): 가성인가요?",
+      "chipLabel": "방금 부르신 고음({note})은 가성이나 두성일 수 있어요. 맞나요?",
+      "no": "아니요",
+      "yes": "네",
+      "catchUpBody": "선택 사항입니다. 가성이나 두성은 소리가 더 가볍고 숨소리가 섞여 들립니다. 알려주시면 해당 음들은 진성(흉성) 음역대에서 제외해 드려요.",
+      "catchUpTitle": "이 고음들이 가성이었나요?",
+      "note": "{time}의 {note}",
+      "play": "듣기",
+      "unsure": "잘 모르겠어요",
+      "stop": "중지"
+    },
+    "personal": {
+      "body": "가장 많이 들으신 노래를 최대 {cap}곡까지 밤새 준비해 드릴게요.",
+      "cap": "{date}에 다시 요청하실 수 있어요",
+      "failed": "지금은 요청을 처리할 수 없어요. 잠시 후 다시 시도해 주세요.",
+      "nothingToAdd": "이미 가장 많이 듣는 노래가 모두 준비되어 있어요. 음악을 더 들으신 후에 다시 시도해 주세요.",
+      "paused": "현재 사용량이 많아요. 내일 다시 시도해 주세요",
+      "preparing": "{total, plural, one {회원님의 노래 중 #곡을 준비하는 중…} other {회원님의 노래 중 #곡을 준비하는 중…}}",
+      "ready": "{ready, plural, one {노래 #곡이 준비되었어요 — 내게 맞는 노래를 찾아보세요} other {노래 #곡이 준비되었어요 — 내게 맞는 노래를 찾아보세요}}",
+      "request": "내 노래 준비하기",
+      "title": "내 음악 분석하기"
     }
   },
   "me": {

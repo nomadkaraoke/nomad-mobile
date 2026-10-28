@@ -1533,7 +1533,13 @@
     "registerLower": "Lower voice",
     "registerMiddle": "Middle voice",
     "registerHigher": "Higher voice",
-    "typeUnknown": "Your voice type"
+    "typeUnknown": "Your voice type",
+    "highFalsettoTitle": "Was your top note falsetto or head voice (lighter, breathier)?",
+    "highFalsettoBody": "Your top note was {note}. If it was falsetto, we keep it out of your chest range, so songs fit better.",
+    "highFalsettoYes": "Yes",
+    "highFalsettoNo": "No",
+    "highFalsettoUnsure": "Not sure",
+    "highFalsettoSkip": "Skip"
   },
   "fit": {
     "fits": "Fits your voice",
@@ -1660,7 +1666,18 @@
       "coldTitle": "Warm up first?",
       "coldBody": "A minute of humming and sirens gets your voice ready and makes the result more accurate.",
       "warmupStart": "Warm up (1 min)",
-      "warmupSkip": "Skip the warm-up"
+      "warmupSkip": "Skip the warm-up",
+      "background": "About your singing (optional)",
+      "backgroundHint": "Helps us tell your chest voice from falsetto.",
+      "experience": "Singing experience?",
+      "experience_none": "None",
+      "experience_some": "Some",
+      "experience_trained": "Trained",
+      "usesFalsetto": "Do you use falsetto or head voice?",
+      "usesFalsetto_yes": "Yes",
+      "usesFalsetto_sometimes": "Sometimes",
+      "usesFalsetto_no": "No",
+      "usesFalsetto_unsure": "Not sure"
     },
     "warmup": {
       "hum": "Hum a comfortable note",
@@ -1780,11 +1797,16 @@
         "more_songs": "A few more songs would make this surer"
       },
       "saved": "Saved to your music profile.",
-      "suited": "Songs that suit you",
+      "suited": "Songs you like that suit you",
       "loved": "Songs you loved",
       "done": "Done",
       "more": "Keep going",
-      "typeUnknown": "Your voice type"
+      "typeUnknown": "Your voice type",
+      "falsetto": "Falsetto up to {note}",
+      "comfortMeasured": "Measured from the songs you found comfortable",
+      "comfortEstimated": "Estimated",
+      "adopt": "Use this as my voice",
+      "adoptFailed": "Couldn't save it as your voice. Check your connection and try again."
     },
     "error": {
       "network": "You're offline or the connection dropped. Check it and try again.",
@@ -1837,6 +1859,29 @@
       },
       "rowFailed": "Couldn't change that. Check your connection and try again.",
       "playFailed": "Couldn't play that recording. Check your connection and try again."
+    },
+    "falsetto": {
+      "chip": "High note ({note}): falsetto?",
+      "chipLabel": "That high note, {note}, may have been falsetto or head voice. Was it?",
+      "yes": "Yes",
+      "no": "No",
+      "catchUpTitle": "Were these high notes falsetto?",
+      "catchUpBody": "Optional. Falsetto or head voice sounds lighter and breathier. Your answers keep those notes out of your chest range.",
+      "note": "{note} at {time}",
+      "play": "Listen",
+      "stop": "Stop",
+      "unsure": "Not sure"
+    },
+    "personal": {
+      "title": "Analyse my music",
+      "body": "We'll prepare up to {cap} songs you listen to most, overnight.",
+      "request": "Prepare my songs",
+      "preparing": "{total, plural, one {Preparing # of your songs…} other {Preparing # of your songs…}}",
+      "ready": "{ready, plural, one {# of your songs is ready — find your voice} other {# of your songs are ready — find your voice}}",
+      "cap": "You can ask again on {date}",
+      "paused": "Busy right now, try again tomorrow",
+      "nothingToAdd": "We've already got your top songs. Try again after you listen to more music.",
+      "failed": "Couldn't ask just now. Try again in a minute."
     }
   },
   "me": {

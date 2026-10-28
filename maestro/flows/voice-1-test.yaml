@@ -69,6 +69,14 @@ onFlowComplete:
 - takeScreenshot: ${VOICE_SHOTS}/voice-1-high
 - tapOn:
     id: "voice-high-done"
+# Batch 1 (M10): "Was your top note falsetto or head voice?" about the fake singer's E4: No (the range stays as
+# measured, so the result is still Likely Baritone).
+- extendedWaitUntil:
+    visible:
+      id: "voice-high-falsetto-no"
+    timeout: 10000
+- tapOn:
+    id: "voice-high-falsetto-no"
 # The sing step waits for "I'm ready" (Finish already shows, to skip it); the fake singer's sing slice starts on the tap.
 - extendedWaitUntil:
     visible:

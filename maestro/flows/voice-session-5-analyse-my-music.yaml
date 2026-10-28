@@ -1,0 +1,57 @@
+# Voice session 5 (Phase 3d Part F, F2): Me → Your music profile → "Analyse my music". decide's test API resets the
+# personal pool (`voice-reset`: this user's batches plus every personal fetch-queue doc and this month's budget, so an
+# earlier run can't turn this one into "nothing to add") and seeds listening history that makes the singer eligible
+# with songs the pool can pick (`voice-personal-seed`: fixture songs with a community version that the fixture
+# voice.db doesn't hold; after discover-seeded, whose profile seed clears user_songs). The card shows the pitch with
+# decide's cap; "Prepare my songs" POSTs `/api/voice/personal-pool` and the card reads the pool again: "Preparing N
+# of your songs…". Needs decide ≥ v0.34.2.
+appId: com.nomadkaraoke.mobile
+name: voice-session-5-analyse-my-music
+tags:
+  - voice-session
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: vs5
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-reset
+      DECIDE_STACK: ${DECIDE_STACK}
+- runFlow:
+    file: ../common/discover-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"genres":["pop"]}'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-personal-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+- tapOn:
+    id: "tab-me"
+- tapOn:
+    id: "me-music-profile"
+- scrollUntilVisible:
+    element:
+      id: "vs-personal-request"
+    direction: DOWN
+    timeout: 30000
+    centerElement: true
+- assertVisible:
+    id: "vs-personal-body"
+    text: "We'll prepare up to [0-9]+ songs you listen to most, overnight\\."
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-5-analyse-idle
+- tapOn:
+    id: "vs-personal-request"
+- extendedWaitUntil:
+    visible:
+      id: "vs-personal-preparing"
+      text: "Preparing [0-9]+ of your songs…"
+    timeout: 20000
+- assertNotVisible:
+    id: "vs-personal-request"
+- takeScreenshot: ${VOICE_SESSION_SHOTS}/vs-5-analyse-preparing

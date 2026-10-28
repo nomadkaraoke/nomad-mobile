@@ -1533,7 +1533,13 @@
     "singProgressLabel": "Şarkı söylemek için kalan süre",
     "micBusyBody": "Mikrofonu başka bir uygulama veya arama kullanıyor. Uygulamayı kapatıp tekrar dene ya da bunun yerine ses türünü seç.",
     "micBusyTitle": "Mikrofon meşgul",
-    "typeUnknown": "Ses türün"
+    "typeUnknown": "Ses türün",
+    "highFalsettoBody": "En yüksek notan {note} oldu. Şarkıların sana daha iyi uyması için, eğer falsettoysa bunu göğüs sesi aralığının dışında tutarız.",
+    "highFalsettoTitle": "En yüksek notan falsetto veya kafa sesi (daha hafif, daha nefesli) miydi?",
+    "highFalsettoNo": "Hayır",
+    "highFalsettoSkip": "Geç",
+    "highFalsettoUnsure": "Emin değilim",
+    "highFalsettoYes": "Evet"
   },
   "fit": {
     "fits": "Sesine uygun",
@@ -1755,10 +1761,15 @@
       "probably": "Muhtemelen {type}, ancak emin olmak için daha fazla şarkıya ihtiyacımız var",
       "range": "{range}, rahat {comfort}",
       "saved": "Müzik profiline kaydedildi.",
-      "suited": "Sana uyan şarkılar",
+      "suited": "Sevdiğin ve sana uyan şarkılar",
       "confidenceHigh": "Yüksek güven",
       "done": "Bitti",
-      "typeUnknown": "Ses türün"
+      "typeUnknown": "Ses türün",
+      "comfortEstimated": "Tahmini",
+      "comfortMeasured": "Söylerken rahat ettiğin şarkılardan ölçüldü",
+      "falsetto": "{note} notasına kadar falseto",
+      "adopt": "Bunu sesim olarak kullan",
+      "adoptFailed": "Sesin olarak kaydedilemedi. Bağlantını kontrol et ve tekrar dene."
     },
     "setup": {
       "bit_warm": "Biraz ısınmış",
@@ -1786,7 +1797,18 @@
       "no": "Hayır",
       "openSettings": "Ayarlar'ı Aç",
       "quiet": "Bir saniye sessiz kal…",
-      "yes": "Evet"
+      "yes": "Evet",
+      "background": "Şarkı söyleme geçmişin hakkında (isteğe bağlı)",
+      "backgroundHint": "Göğüs sesini falsettodan ayırt etmemize yardımcı olur.",
+      "experience": "Şarkı söyleme deneyimin var mı?",
+      "experience_none": "Yok",
+      "experience_some": "Biraz",
+      "experience_trained": "Eğitimli",
+      "usesFalsetto": "Falsetto veya kafa sesi kullanıyor musun?",
+      "usesFalsetto_sometimes": "Bazen",
+      "usesFalsetto_no": "Hayır",
+      "usesFalsetto_unsure": "Emin değilim",
+      "usesFalsetto_yes": "Evet"
     },
     "title": "Sesini keşfet",
     "warmup": {
@@ -1837,6 +1859,29 @@
       "play": "Oynat",
       "song": "{title} · {artist}",
       "stop": "Durdur"
+    },
+    "falsetto": {
+      "chip": "Tiz nota ({note}): falseto mu?",
+      "chipLabel": "Şu tiz nota ({note}) falseto veya kafa sesi olabilir. Öyle miydi?",
+      "no": "Hayır",
+      "yes": "Evet",
+      "catchUpBody": "İsteğe bağlı. Falsetto veya kafa sesi daha hafif ve nefesli duyulur. Yanıtların, bu notaların göğüs ses aralığına girmesini engeller.",
+      "catchUpTitle": "Bu tiz notalar falsetto muydu?",
+      "note": "{time} anında {note}",
+      "play": "Dinle",
+      "unsure": "Emin değilim",
+      "stop": "Durdur"
+    },
+    "personal": {
+      "body": "En çok dinlediğin şarkılardan en fazla {cap} tanesini bu gece hazırlayacağız.",
+      "cap": "{date} tarihinde tekrar talep edebilirsin",
+      "failed": "Şu anda istek gönderilemedi. Bir dakika sonra tekrar dene.",
+      "nothingToAdd": "En çok dinlediğin şarkıları zaten aldık. Biraz daha müzik dinledikten sonra tekrar dene.",
+      "paused": "Şu anda yoğunluk var, yarın tekrar dene",
+      "preparing": "{total, plural, one {Şarkılarından # tanesi hazırlanıyor…} other {Şarkılarından # tanesi hazırlanıyor…}}",
+      "ready": "{ready, plural, one {Şarkılarından # tanesi hazır — kendi sesini keşfet} other {Şarkılarından # tanesi hazır — kendi sesini keşfet}}",
+      "request": "Şarkılarımı hazırla",
+      "title": "Müziğimi analiz et"
     }
   },
   "me": {

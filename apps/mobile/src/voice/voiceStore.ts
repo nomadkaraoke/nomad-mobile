@@ -35,6 +35,8 @@ export type LocalVoiceProfile = {
   /** Session profiles: how many attempts carried evidence, and the session. Absent on the phone's own mic/self. */
   evidenceCount?: number | null;
   sessionId?: string | null;
+  /** The top note the singer said was falsetto (mic test; kept out of lowMidi..highMidi). Absent when none. */
+  falsettoHigh?: number;
 };
 
 /** The body of decide's `PUT /api/my/voice` (`VoiceProfilePutIn`, extra="forbid": no other keys). */
@@ -50,6 +52,8 @@ export type VoiceProfileInBody = {
   /** The public PUT rejects `session` (422). */
   method: 'mic' | 'self';
   measured_at: string;
+  /** decide ≥ v0.33 (an older decide answers 422 extra_forbidden: sendPendingVoice then resends without it). */
+  falsetto_high?: number;
 };
 
 /**
@@ -85,7 +89,12 @@ function widenComfort(range: RangeSummary): { comfortLow: number; comfortHigh: n
  * least MIN_COMFORT_KEYS (clamped to the range). The voice type still comes from the free-sing centre (`c`,
  * classified upstream). The result screen shows this same profile, so what is shown is what is saved.
  */
-export function profileFromResult(range: RangeSummary, c: Classification, measuredAt: string): LocalVoiceProfile {
+export function profileFromResult(
+  range: RangeSummary,
+  c: Classification,
+  measuredAt: string,
+  falsettoHigh?: number | null,
+): LocalVoiceProfile {
   return {
     lowMidi: range.low,
     highMidi: range.high,
@@ -96,6 +105,7 @@ export function profileFromResult(range: RangeSummary, c: Classification, measur
     confidence: c.confidence,
     method: 'mic',
     measuredAt,
+    ...(falsettoHigh != null && { falsettoHigh }),
   };
 }
 
@@ -129,6 +139,7 @@ export function toVoiceProfileIn(p: LocalVoiceProfile): VoiceProfileInBody {
     confidence: p.confidence,
     method: p.method,
     measured_at: p.measuredAt,
+    ...(p.falsettoHigh !== undefined && { falsetto_high: p.falsettoHigh }),
   };
 }
 
@@ -158,7 +169,8 @@ function parseProfile(raw: unknown): LocalVoiceProfile | null {
     (o.method === 'mic' || o.method === 'self' || o.method === 'session') &&
     typeof o.measuredAt === 'string' &&
     (o.evidenceCount === undefined || o.evidenceCount === null || (int(o.evidenceCount) && o.evidenceCount >= 0)) &&
-    (o.sessionId === undefined || o.sessionId === null || typeof o.sessionId === 'string');
+    (o.sessionId === undefined || o.sessionId === null || typeof o.sessionId === 'string') &&
+    (o.falsettoHigh === undefined || (int(o.falsettoHigh) && o.falsettoHigh >= (o.lowMidi as number) && o.falsettoHigh <= 96));
   if (!ok) return null;
   // decide's rule: low ≤ comfortLow ≤ comfortHigh ≤ high.
   const { lowMidi, highMidi, comfortLow, comfortHigh } = o as LocalVoiceProfile;
@@ -180,6 +192,7 @@ const toLocal = (p: LocalVoiceProfile): LocalVoiceProfile => ({
   measuredAt: p.measuredAt,
   ...(p.evidenceCount !== undefined && { evidenceCount: p.evidenceCount }),
   ...(p.sessionId !== undefined && { sessionId: p.sessionId }),
+  ...(p.falsettoHigh !== undefined && { falsettoHigh: p.falsettoHigh }),
 });
 
 /**

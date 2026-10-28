@@ -305,3 +305,27 @@ describe('followServerVoice (decide changed the saved profile itself)', () => {
     expect(useRecFilters.getState().filters).toMatchObject({ singable: false, sort: 'best' });
   });
 });
+
+describe('falsetto top (batch 1, M10)', () => {
+  it('profileFromResult keeps the falsetto top beside the chest range', () => {
+    const p = profileFromResult(range, classifyVoice(range), AT, 69);
+    expect(p.falsettoHigh).toBe(69);
+    expect(p.highMidi).toBe(64);
+    expect(profileFromResult(range, classifyVoice(range), AT)).not.toHaveProperty('falsettoHigh');
+  });
+
+  it('PUT body includes falsetto_high (only when there is one)', () => {
+    const body = toVoiceProfileIn(profileFromResult(range, classifyVoice(range), AT, 69));
+    expect(body.falsetto_high).toBe(69);
+    expect(Object.keys(body).sort()).toEqual([...API_KEYS, 'falsetto_high'].sort());
+    expect(toVoiceProfileIn(profileFromResult(range, classifyVoice(range), AT))).not.toHaveProperty('falsetto_high');
+  });
+
+  it('loadVoice() reads the falsetto top back; a bad one drops the copy', () => {
+    act(() => useVoiceStore.getState().save(profileFromResult(range, classifyVoice(range), AT, 69)));
+    expect(loadVoice().profile?.falsettoHigh).toBe(69);
+    const p = { ...profileFromResult(range, classifyVoice(range), AT), falsettoHigh: 40 };
+    appStorage.set(VOICE_STORAGE_KEY, JSON.stringify({ profile: p, pending: false }));
+    expect(loadVoice().profile).toBeNull();
+  });
+});

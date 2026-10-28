@@ -5,6 +5,7 @@ import { useAuth } from '../auth/store';
 import { appStorage } from '../storage';
 import { VOICE_KEY } from '../voice/useVoiceProfile';
 import { useVoiceStore } from '../voice/voiceStore';
+import { BACKGROUND_KEY } from '../voiceSession/backgroundDefault';
 import { RECORD_DEFAULT_KEY } from '../voiceSession/recordDefault';
 import { deleteFileQuietly } from '../voiceSession/recording/files';
 import { useRecordingQueue } from '../voiceSession/recording/recordingQueue';
@@ -48,6 +49,7 @@ export function useClearDiscoverOnSignOut(): void {
         vs.clear();
         useRecordingQueue.getState().clearAll();
         appStorage.remove(RECORD_DEFAULT_KEY);
+        appStorage.remove(BACKGROUND_KEY);
       }),
     [queryClient],
   );

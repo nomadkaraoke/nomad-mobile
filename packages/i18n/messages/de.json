@@ -1533,7 +1533,13 @@
     "singProgressLabel": "Verbleibende Singzeit",
     "micBusyBody": "Eine andere App oder ein Anruf verwendet gerade das Mikrofon. Schließe die App bzw. beende den Anruf und versuche es erneut, oder wähle stattdessen deinen Stimmtyp aus.",
     "micBusyTitle": "Das Mikrofon wird bereits verwendet",
-    "typeUnknown": "Deine Stimmlage"
+    "typeUnknown": "Deine Stimmlage",
+    "highFalsettoBody": "Dein höchster Ton war {note}. Wenn es Falsett war, klammern wir ihn aus deinem Bruststimmbereich aus, damit die Songs besser zu dir passen.",
+    "highFalsettoTitle": "War dein höchster Ton Falsett oder Kopfstimme (leichter, hauchiger)?",
+    "highFalsettoNo": "Nein",
+    "highFalsettoSkip": "Überspringen",
+    "highFalsettoUnsure": "Nicht sicher",
+    "highFalsettoYes": "Ja"
   },
   "fit": {
     "fits": "Passt zu deiner Stimme",
@@ -1755,10 +1761,15 @@
       "probably": "Wahrscheinlich {type}, aber wir brauchen noch mehr Songs, um sicher zu sein",
       "range": "{range}, angenehm {comfort}",
       "saved": "In deinem Musikprofil gespeichert.",
-      "suited": "Songs, die zu dir passen",
+      "suited": "Songs, die dir gefallen und zu dir passen",
       "confidenceHigh": "Hohe Sicherheit",
       "done": "Fertig",
-      "typeUnknown": "Deine Stimmlage"
+      "typeUnknown": "Deine Stimmlage",
+      "comfortEstimated": "Geschätzt",
+      "comfortMeasured": "Gemessen anhand der Songs, die für dich angenehm waren",
+      "falsetto": "Falsett bis {note}",
+      "adopt": "Als meine Stimme verwenden",
+      "adoptFailed": "Konnte nicht als deine Stimme gespeichert werden. Überprüfe deine Verbindung und versuche es erneut."
     },
     "setup": {
       "bit_warm": "Ein bisschen aufgewärmt",
@@ -1786,7 +1797,18 @@
       "no": "Nein",
       "openSettings": "Einstellungen öffnen",
       "quiet": "Sei kurz ganz leise …",
-      "yes": "Ja"
+      "yes": "Ja",
+      "background": "Über deinen Gesang (optional)",
+      "backgroundHint": "Hilft uns dabei, deine Bruststimme vom Falsett zu unterscheiden.",
+      "experience": "Gesangserfahrung?",
+      "experience_none": "Keine",
+      "experience_some": "Ein wenig",
+      "experience_trained": "Ausgebildet",
+      "usesFalsetto": "Nutzt du Falsett oder Kopfstimme?",
+      "usesFalsetto_sometimes": "Manchmal",
+      "usesFalsetto_no": "Nein",
+      "usesFalsetto_unsure": "Nicht sicher",
+      "usesFalsetto_yes": "Ja"
     },
     "title": "Finde deine Stimme",
     "warmup": {
@@ -1837,6 +1859,29 @@
       "play": "Abspielen",
       "song": "{title} · {artist}",
       "stop": "Stopp"
+    },
+    "falsetto": {
+      "chip": "Hoher Ton ({note}): Falsett?",
+      "chipLabel": "Dieser hohe Ton, {note}, war vielleicht Falsett oder Kopfstimme. War er das?",
+      "no": "Nein",
+      "yes": "Ja",
+      "catchUpBody": "Optional. Falsett oder Kopfstimme klingt leichter und hauchiger. Deine Antworten sorgen dafür, dass diese Töne nicht zu deinem Bruststimmbereich gezählt werden.",
+      "catchUpTitle": "Waren diese hohen Töne im Falsett?",
+      "note": "{note} bei {time}",
+      "play": "Anhören",
+      "unsure": "Nicht sicher",
+      "stop": "Stopp"
+    },
+    "personal": {
+      "body": "Wir bereiten über Nacht bis zu {cap} der Songs vor, die du am meisten hörst.",
+      "cap": "Du kannst am {date} wieder anfragen",
+      "failed": "Anfrage konnte gerade nicht gestellt werden. Versuch es in einer Minute noch einmal.",
+      "nothingToAdd": "Wir haben deine Top-Songs bereits. Versuch es wieder, wenn du mehr Musik gehört hast.",
+      "paused": "Gerade viel zu tun, versuch es morgen noch einmal",
+      "preparing": "{total, plural, one {# deiner Songs wird vorbereitet…} other {# deiner Songs werden vorbereitet…}}",
+      "ready": "{ready, plural, one {# deiner Songs ist bereit – finde deine Stimme} other {# deiner Songs sind bereit – finde deine Stimme}}",
+      "request": "Meine Songs vorbereiten",
+      "title": "Meine Musik analysieren"
     }
   },
   "me": {

@@ -353,6 +353,38 @@ describe('rejections', () => {
   });
 });
 
+describe('falsetto_high and an older decide (batch 1, M10)', () => {
+  const withTop = () => ({ ...local(), falsettoHigh: 76 });
+  it('a 422 extra_forbidden on falsetto_high resends without it', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    fetchMock.mockImplementation(async (req: Request) => {
+      const body = await req.clone().json();
+      if ('falsetto_high' in body)
+        return json({ detail: [{ type: 'extra_forbidden', loc: ['body', 'falsetto_high'], msg: 'Extra inputs are not permitted' }] }, 422);
+      return json({ ...body, updated_at: T1 });
+    });
+    const { result } = renderHook(() => useSaveVoiceProfile(), { wrapper: wrapperFor() });
+    await act(async () => void (await result.current(withTop())));
+    const puts = voiceCalls('PUT');
+    expect(puts).toHaveLength(2);
+    expect(await puts[0]!.json()).toHaveProperty('falsetto_high', 76);
+    expect(await puts[1]!.json()).not.toHaveProperty('falsetto_high');
+    // Synced, and the phone keeps the falsetto top for itself.
+    expect(useVoiceStore.getState()).toMatchObject({ pending: false, profile: withTop() });
+    warn.mockRestore();
+  });
+
+  it('any other 422 is still a rejection', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    fetchMock.mockResolvedValue(json({ detail: [{ type: 'value_error', loc: ['body', 'falsetto_high'] }] }, 422));
+    const { result } = renderHook(() => useSaveVoiceProfile(), { wrapper: wrapperFor() });
+    await act(async () => void (await result.current(withTop())));
+    expect(voiceCalls('PUT')).toHaveLength(1);
+    expect(useVoiceStore.getState()).toMatchObject({ pending: false, rejected: true });
+    warn.mockRestore();
+  });
+});
+
 describe('session profiles are never PUT', () => {
   it('a pending session profile is marked synced without a request (decide wrote it)', async () => {
     const p = { ...local(T1), method: 'session' as const, evidenceCount: 4, sessionId: 'sess-2' };

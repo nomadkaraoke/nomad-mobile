@@ -1533,7 +1533,13 @@
     "singProgressLabel": "Timp rămas de cântat",
     "micBusyBody": "O altă aplicație sau un apel folosește microfonul. Închide-o și încearcă din nou sau alege-ți direct tipul de voce.",
     "micBusyTitle": "Microfonul este ocupat",
-    "typeUnknown": "Tipul tău de voce"
+    "typeUnknown": "Tipul tău de voce",
+    "highFalsettoBody": "Cea mai înaltă notă a ta a fost {note}. Dacă a fost în falset, o vom exclude din registrul tău de piept, astfel încât piesele să ți se potrivească mai bine.",
+    "highFalsettoTitle": "Cea mai înaltă notă a ta a fost în falset sau voce de cap (mai lejeră, mai aerată)?",
+    "highFalsettoNo": "Nu",
+    "highFalsettoSkip": "Sari",
+    "highFalsettoUnsure": "Nu știu sigur",
+    "highFalsettoYes": "Da"
   },
   "fit": {
     "fits": "Se potrivește cu vocea ta",
@@ -1755,10 +1761,15 @@
       "probably": "Probabil {type}, dar avem nevoie de mai multe melodii pentru a fi siguri",
       "range": "{range}, confortabil {comfort}",
       "saved": "Salvat în profilul tău muzical.",
-      "suited": "Melodii care ți se potrivesc",
+      "suited": "Melodii care îți plac și ți se potrivesc",
       "confidenceHigh": "Încredere ridicată",
       "done": "Gata",
-      "typeUnknown": "Tipul tău de voce"
+      "typeUnknown": "Tipul tău de voce",
+      "comfortEstimated": "Estimat",
+      "comfortMeasured": "Măsurat pe baza melodiilor care ți s-au părut confortabile",
+      "falsetto": "Falset până la {note}",
+      "adopt": "Folosește ca vocea mea",
+      "adoptFailed": "Nu s-a putut salva ca vocea ta. Verifică-ți conexiunea și încearcă din nou."
     },
     "setup": {
       "bit_warm": "Puțin încălzit(ă)",
@@ -1786,7 +1797,18 @@
       "no": "Nu",
       "openSettings": "Deschide Setări",
       "quiet": "Păstrează liniștea o secundă…",
-      "yes": "Da"
+      "yes": "Da",
+      "background": "Despre vocea ta (opțional)",
+      "backgroundHint": "Ne ajută să distingem vocea de piept de falset.",
+      "experience": "Experiență la cântat?",
+      "experience_none": "Deloc",
+      "experience_some": "Câteva noțiuni",
+      "experience_trained": "Cu pregătire vocală",
+      "usesFalsetto": "Folosești falset sau voce de cap?",
+      "usesFalsetto_sometimes": "Uneori",
+      "usesFalsetto_no": "Nu",
+      "usesFalsetto_unsure": "Nu știu sigur",
+      "usesFalsetto_yes": "Da"
     },
     "title": "Găsește-ți vocea",
     "warmup": {
@@ -1837,6 +1859,29 @@
       "play": "Redă",
       "song": "{title} · {artist}",
       "stop": "Oprește"
+    },
+    "falsetto": {
+      "chip": "Notă înaltă ({note}): falset?",
+      "chipLabel": "Acea notă înaltă, {note}, s-ar putea să fi fost falset sau voce de cap. Așa a fost?",
+      "no": "Nu",
+      "yes": "Da",
+      "catchUpBody": "Opțional. Falsetul sau vocea de cap sună mai lejer și mai aerat. Răspunsurile tale împiedică includerea acelor note în registrul tău de piept.",
+      "catchUpTitle": "Aceste note înalte au fost în falset?",
+      "note": "{note} la {time}",
+      "play": "Ascultă",
+      "unsure": "Nu știu sigur",
+      "stop": "Oprește"
+    },
+    "personal": {
+      "body": "Vom pregăti peste noapte până la {cap} dintre melodiile pe care le asculți cel mai des.",
+      "cap": "Poți solicita din nou pe {date}",
+      "failed": "Nu am putut trimite solicitarea acum. Încearcă din nou într-un minut.",
+      "nothingToAdd": "Avem deja melodiile tale preferate. Încearcă din nou după ce asculți mai multă muzică.",
+      "paused": "Sistemul este ocupat acum, încearcă din nou mâine",
+      "preparing": "{total, plural, one {Se pregătește # dintre melodiile tale…} few {Se pregătesc # dintre melodiile tale…} other {Se pregătesc # de melodii dintre ale tale…}}",
+      "ready": "{ready, plural, one {# dintre melodiile tale este gata — găsește-ți vocea} few {# dintre melodiile tale sunt gata — găsește-ți vocea} other {# de melodii dintre ale tale sunt gata — găsește-ți vocea}}",
+      "request": "Pregătește-mi melodiile",
+      "title": "Analizează-mi muzica"
     }
   },
   "me": {

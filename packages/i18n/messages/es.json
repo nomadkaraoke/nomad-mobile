@@ -1533,7 +1533,13 @@
     "singProgressLabel": "Tiempo restante para cantar",
     "micBusyBody": "Otra aplicación o una llamada está usando el micrófono. Ciérrala e inténtalo de nuevo, o elige tu tipo de voz.",
     "micBusyTitle": "El micrófono está ocupado",
-    "typeUnknown": "Tu tipo de voz"
+    "typeUnknown": "Tu tipo de voz",
+    "highFalsettoBody": "Tu nota más alta fue {note}. Si fue en falsete, la mantendremos fuera de tu registro de pecho para que las canciones se adapten mejor.",
+    "highFalsettoTitle": "¿Tu nota más alta fue en falsete o voz de cabeza (más ligera, con más aire)?",
+    "highFalsettoNo": "No",
+    "highFalsettoSkip": "Omitir",
+    "highFalsettoUnsure": "No estoy seguro",
+    "highFalsettoYes": "Sí"
   },
   "fit": {
     "fits": "Se adapta a tu voz",
@@ -1755,10 +1761,15 @@
       "probably": "Probablemente {type}, pero necesitamos más canciones para tener la certeza",
       "range": "{range}, cómoda {comfort}",
       "saved": "Guardado en tu perfil musical.",
-      "suited": "Canciones que te van bien",
+      "suited": "Canciones que te gustan y que se adaptan a ti",
       "confidenceHigh": "Alta confianza",
       "done": "Listo",
-      "typeUnknown": "Tu tipo de voz"
+      "typeUnknown": "Tu tipo de voz",
+      "comfortEstimated": "Estimado",
+      "comfortMeasured": "Medido a partir de las canciones que te resultaron cómodas",
+      "falsetto": "Falsete hasta {note}",
+      "adopt": "Usar esto como mi voz",
+      "adoptFailed": "No se pudo guardar como tu voz. Comprueba tu conexión e inténtalo de nuevo."
     },
     "setup": {
       "bit_warm": "Algo calentada",
@@ -1786,7 +1797,18 @@
       "no": "No",
       "openSettings": "Abrir Ajustes",
       "quiet": "Quédate en silencio un segundo…",
-      "yes": "Sí"
+      "yes": "Sí",
+      "background": "Sobre tu forma de cantar (opcional)",
+      "backgroundHint": "Nos ayuda a distinguir tu voz de pecho del falsete.",
+      "experience": "¿Experiencia al cantar?",
+      "experience_none": "Ninguna",
+      "experience_some": "Alguna",
+      "experience_trained": "Con formación",
+      "usesFalsetto": "¿Usas falsete o voz de cabeza?",
+      "usesFalsetto_sometimes": "A veces",
+      "usesFalsetto_no": "No",
+      "usesFalsetto_unsure": "No estoy seguro",
+      "usesFalsetto_yes": "Sí"
     },
     "title": "Encuentra tu voz",
     "warmup": {
@@ -1837,6 +1859,29 @@
       "play": "Reproducir",
       "song": "{title} · {artist}",
       "stop": "Detener"
+    },
+    "falsetto": {
+      "chip": "Nota alta ({note}): ¿falsete?",
+      "chipLabel": "Esa nota alta, {note}, pudo haber sido falsete o voz de cabeza. ¿Lo fue?",
+      "no": "No",
+      "yes": "Sí",
+      "catchUpBody": "Opcional. El falsete o la voz de cabeza suena más ligero y con más aire. Tus respuestas evitan que esas notas se incluyan en tu rango de pecho.",
+      "catchUpTitle": "¿Estas notas agudas fueron en falsete?",
+      "note": "{note} en {time}",
+      "play": "Escuchar",
+      "unsure": "No estoy seguro",
+      "stop": "Detener"
+    },
+    "personal": {
+      "body": "Prepararemos durante la noche hasta {cap} de las canciones que más escuchas.",
+      "cap": "Puedes volver a pedirlo el {date}",
+      "failed": "No pudimos procesar tu solicitud ahora mismo. Inténtalo de nuevo en un minuto.",
+      "nothingToAdd": "Ya tenemos tus canciones más escuchadas. Vuelve a intentarlo después de escuchar más música.",
+      "paused": "El servicio está ocupado en este momento, vuelve a intentarlo mañana",
+      "preparing": "{total, plural, one {Preparando # de tus canciones…} other {Preparando # de tus canciones…}}",
+      "ready": "{ready, plural, one {# de tus canciones está lista — encuentra tu voz} other {# de tus canciones están listas — encuentra tu voz}}",
+      "request": "Preparar mis canciones",
+      "title": "Analizar mi música"
     }
   },
   "me": {

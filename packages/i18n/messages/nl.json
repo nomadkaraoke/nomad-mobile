@@ -1533,7 +1533,13 @@
     "singProgressLabel": "Resterende zangtijd",
     "micBusyBody": "Een andere app of een oproep gebruikt de microfoon. Sluit deze en probeer het opnieuw, of kies in plaats daarvan je stemtype.",
     "micBusyTitle": "De microfoon is bezet",
-    "typeUnknown": "Je stemtype"
+    "typeUnknown": "Je stemtype",
+    "highFalsettoBody": "Je hoogste noot was {note}. Als dit falset was, houden we deze buiten je borststembereik, zodat nummers beter bij je passen.",
+    "highFalsettoTitle": "Was je hoogste noot falset of kopstem (lichter, luchtiger)?",
+    "highFalsettoNo": "Nee",
+    "highFalsettoSkip": "Overslaan",
+    "highFalsettoUnsure": "Niet zeker",
+    "highFalsettoYes": "Ja"
   },
   "fit": {
     "fits": "Past bij je stem",
@@ -1755,10 +1761,15 @@
       "probably": "Waarschijnlijk {type}, maar we hebben meer nummers nodig om het zeker te weten",
       "range": "{range}, comfortabel {comfort}",
       "saved": "Opgeslagen in je muziekprofiel.",
-      "suited": "Nummers die bij je passen",
+      "suited": "Nummers die je leuk vindt en goed bij je passen",
       "confidenceHigh": "Hoge zekerheid",
       "done": "Gereed",
-      "typeUnknown": "Je stemtype"
+      "typeUnknown": "Je stemtype",
+      "comfortEstimated": "Geschat",
+      "comfortMeasured": "Gemeten aan de hand van de nummers die je prettig vond om te zingen",
+      "falsetto": "Falset tot {note}",
+      "adopt": "Gebruik dit als mijn stem",
+      "adoptFailed": "Kon dit niet opslaan als je stem. Controleer je verbinding en probeer het opnieuw."
     },
     "setup": {
       "bit_warm": "Een beetje opgewarmd",
@@ -1786,7 +1797,18 @@
       "no": "Nee",
       "openSettings": "Instellingen openen",
       "quiet": "Wees even stil…",
-      "yes": "Ja"
+      "yes": "Ja",
+      "background": "Over je zang (optioneel)",
+      "backgroundHint": "Helpt ons je borststem van je falsetstem te onderscheiden.",
+      "experience": "Zangervaring?",
+      "experience_none": "Geen",
+      "experience_some": "Een beetje",
+      "experience_trained": "Geschoold",
+      "usesFalsetto": "Gebruik je falset of kopstem?",
+      "usesFalsetto_sometimes": "Soms",
+      "usesFalsetto_no": "Nee",
+      "usesFalsetto_unsure": "Niet zeker",
+      "usesFalsetto_yes": "Ja"
     },
     "title": "Vind je stem",
     "warmup": {
@@ -1837,6 +1859,29 @@
       "play": "Afspelen",
       "song": "{title} · {artist}",
       "stop": "Stoppen"
+    },
+    "falsetto": {
+      "chip": "Hoge noot ({note}): falset?",
+      "chipLabel": "Die hoge noot, {note}, was misschien falset of kopstem. Klopt dat?",
+      "no": "Nee",
+      "yes": "Ja",
+      "catchUpBody": "Optioneel. Falset of kopstem klinkt lichter en luchtiger. Je antwoorden zorgen ervoor dat die noten buiten je borststem blijven.",
+      "catchUpTitle": "Waren deze hoge noten falset?",
+      "note": "{note} op {time}",
+      "play": "Luisteren",
+      "unsure": "Niet zeker",
+      "stop": "Stoppen"
+    },
+    "personal": {
+      "body": "We bereiden vannacht tot wel {cap} nummers voor waar je het meest naar luistert.",
+      "cap": "Je kunt het opnieuw aanvragen op {date}",
+      "failed": "Aanvragen is nu niet gelukt. Probeer het over een minuutje opnieuw.",
+      "nothingToAdd": "We hebben je topnummers al. Probeer het opnieuw als je naar meer muziek hebt geluisterd.",
+      "paused": "Het is momenteel druk, probeer het morgen opnieuw",
+      "preparing": "{total, plural, one {# van je nummers wordt voorbereid…} other {# van je nummers worden voorbereid…}}",
+      "ready": "{ready, plural, one {# van je nummers is klaar — ontdek je stem} other {# van je nummers zijn klaar — ontdek je stem}}",
+      "request": "Mijn nummers voorbereiden",
+      "title": "Mijn muziek analyseren"
     }
   },
   "me": {
