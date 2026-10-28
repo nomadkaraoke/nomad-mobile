@@ -55,7 +55,14 @@ describe('submitSongRequest', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
-  it('maps 429 to submission_limit', async () => {
+  it('rethrows a 429 without the submission_limit code (WAF / edge rate limit)', async () => {
+    fetchMock.mockResolvedValueOnce(json({ detail: 'Too Many Requests' }, 429));
+    await expect(submitSongRequest('A', 'B')).rejects.toMatchObject({ status: 429 });
+    fetchMock.mockResolvedValueOnce(new Response('rate limited', { status: 429 }));
+    await expect(submitSongRequest('A', 'B')).rejects.toMatchObject({ status: 429 });
+  });
+
+  it('maps 429 submission_limit to submission_limit', async () => {
     fetchMock.mockResolvedValue(json({ detail: { code: 'submission_limit', message: 'tomorrow' } }, 429));
     await expect(submitSongRequest('A', 'B')).resolves.toEqual({ status: 'submission_limit' });
   });
@@ -76,11 +83,16 @@ describe('submitSongRequest', () => {
 });
 
 describe('listBoardRequests', () => {
-  it('GETs the board and returns only the active requests', async () => {
+  it('GETs the board and returns the active requests plus the daily vote state', async () => {
     const published = { ...REQ, id: 'p1', status: 'published' };
     fetchMock.mockResolvedValue(json({ requests: [REQ], published: [published], voted_today: true, your_vote_request_id: 'r1' }));
-    await expect(listBoardRequests()).resolves.toEqual([REQ]);
+    await expect(listBoardRequests()).resolves.toEqual({ requests: [REQ], votedToday: true, yourVoteRequestId: 'r1' });
     expect(lastRequest().method).toBe('GET');
     expect(lastRequest().url).toBe('https://gen.test/api/requests-board/requests');
+  });
+
+  it('maps a missing vote state to null', async () => {
+    fetchMock.mockResolvedValue(json({ requests: [] }));
+    await expect(listBoardRequests()).resolves.toEqual({ requests: [], votedToday: null, yourVoteRequestId: null });
   });
 });

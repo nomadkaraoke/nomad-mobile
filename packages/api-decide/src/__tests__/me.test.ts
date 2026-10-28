@@ -160,7 +160,7 @@ describe('get this made', () => {
 });
 
 describe('getSongCrowd', () => {
-  it('encodes a key containing | and returns the figure', async () => {
+  it('encodes a key containing | and / and returns the figure', async () => {
     const crowd = {
       singers: 6,
       comfortable_share: 0.8333,
@@ -172,8 +172,8 @@ describe('getSongCrowd', () => {
       crowd_pleaser_share: null,
     };
     fetchMock.mockResolvedValue(json(crowd));
-    await expect(getSongCrowd('adele|hello')).resolves.toEqual(crowd);
+    await expect(getSongCrowd('ac/dc|back in black')).resolves.toEqual(crowd);
     expect(lastRequest().method).toBe('GET');
-    expect(lastRequest().url).toBe('https://decide.test/api/songs/adele%7Chello/crowd');
+    expect(lastRequest().url).toBe('https://decide.test/api/songs/ac%2Fdc%7Cback%20in%20black/crowd');
   });
 });

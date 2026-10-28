@@ -27,13 +27,27 @@ export async function submitSongRequest(artist: string, title: string): Promise<
     return { status: data.status, request: data.request };
   } catch (e) {
     if (isApiError(e, 409) && errorCode(e) === 'vote_already_used') return { status: 'vote_used' };
-    if (isApiError(e, 429)) return { status: 'submission_limit' };
+    // Only gen's own daily limit: a 429 from the WAF / edge rate limit is not "one free request a day".
+    if (isApiError(e, 429) && errorCode(e) === 'submission_limit') return { status: 'submission_limit' };
     throw e;
   }
 }
 
-/** The board's active (votable) requests; recently published ones are left out. */
-export async function listBoardRequests(): Promise<SongRequestPublic[]> {
+export type BoardRequests = {
+  /** Active (votable) requests; recently published ones are left out. */
+  requests: SongRequestPublic[];
+  /** Whether the caller already spent today's vote (null when signed out). */
+  votedToday: boolean | null;
+  /** The request today's vote went to, if any. */
+  yourVoteRequestId: string | null;
+};
+
+/** The board's active requests plus the caller's daily vote state. */
+export async function listBoardRequests(): Promise<BoardRequests> {
   const { data } = await listRequestsApiRequestsBoardRequestsGet();
-  return data.requests;
+  return {
+    requests: data.requests,
+    votedToday: data.voted_today ?? null,
+    yourVoteRequestId: data.your_vote_request_id ?? null,
+  };
 }
