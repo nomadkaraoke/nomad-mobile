@@ -1992,7 +1992,8 @@
       "connectCta": "Müziğini bağla",
       "profileTitle": "Müzik profilin",
       "voiceHint": "Sesine uygun şarkıları bul",
-      "voiceRange": "Ses aralığı {range}"
+      "voiceRange": "Ses aralığı {range}",
+      "known": "{count, plural, one {# bilinen şarkı} other {# bilinen şarkı}}"
     },
     "songs": {
       "addPast": "Söylediğim şarkıları ekle",

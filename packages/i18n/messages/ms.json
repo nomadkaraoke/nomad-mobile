@@ -1992,7 +1992,8 @@
       "connectCta": "Sambungkan muzik anda",
       "profileTitle": "Profil muzik anda",
       "voiceHint": "Cari lagu yang sesuai dengan suara anda",
-      "voiceRange": "Julat {range}"
+      "voiceRange": "Julat {range}",
+      "known": "{count, plural, other {# lagu diketahui}}"
     },
     "songs": {
       "addPast": "Tambah lagu yang pernah saya nyanyikan",

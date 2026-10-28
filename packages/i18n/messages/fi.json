@@ -1992,7 +1992,8 @@
       "connectCta": "Yhdistä musiikkisi",
       "profileTitle": "Musiikkiprofiilisi",
       "voiceHint": "Löydä äänellesi sopivia kappaleita",
-      "voiceRange": "Ääniala {range}"
+      "voiceRange": "Ääniala {range}",
+      "known": "{count, plural, one {# tuttu kappale} other {# tuttua kappaletta}}"
     },
     "songs": {
       "addPast": "Lisää aiemmin laulamiani kappaleita",

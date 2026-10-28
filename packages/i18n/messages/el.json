@@ -1992,7 +1992,8 @@
       "connectCta": "Σύνδεσε τη μουσική σου",
       "profileTitle": "Το μουσικό προφίλ σου",
       "voiceHint": "Βρες τραγούδια που ταιριάζουν στη φωνή σου",
-      "voiceRange": "Έκταση: {range}"
+      "voiceRange": "Έκταση: {range}",
+      "known": "{count, plural, one {# γνωστό τραγούδι} other {# γνωστά τραγούδια}}"
     },
     "songs": {
       "addPast": "Πρόσθεσε τραγούδια που έχεις πει",

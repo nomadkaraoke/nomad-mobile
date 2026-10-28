@@ -1992,7 +1992,8 @@
       "connectCta": "Conectează-ți muzica",
       "profileTitle": "Profilul tău muzical",
       "voiceHint": "Găsește melodii care se potrivesc cu vocea ta",
-      "voiceRange": "Întindere vocală {range}"
+      "voiceRange": "Întindere vocală {range}",
+      "known": "{count, plural, one {# melodie știută} few {# melodii știute} other {# de melodii știute}}"
     },
     "songs": {
       "addPast": "Adaugă melodii cântate anterior",

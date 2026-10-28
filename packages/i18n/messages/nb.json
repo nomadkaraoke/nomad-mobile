@@ -1992,7 +1992,8 @@
       "connectCta": "Koble til musikken din",
       "profileTitle": "Musikkprofilen din",
       "voiceHint": "Finn sanger som passer til stemmen din",
-      "voiceRange": "Toneomfang {range}"
+      "voiceRange": "Toneomfang {range}",
+      "known": "{count, plural, one {# sang du kan} other {# sanger du kan}}"
     },
     "songs": {
       "addPast": "Legg til sanger jeg har sunget",

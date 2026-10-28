@@ -1992,7 +1992,8 @@
       "connectCta": "Připoj svou hudbu",
       "profileTitle": "Tvůj hudební profil",
       "voiceHint": "Najdi písničky, které sedí tvému hlasu",
-      "voiceRange": "Rozsah {range}"
+      "voiceRange": "Rozsah {range}",
+      "known": "{count, plural, one {# známá písnička} few {# známé písničky} other {# známých písniček}}"
     },
     "songs": {
       "addPast": "Přidat odzpívané písničky",

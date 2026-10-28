@@ -1992,7 +1992,8 @@
       "connectCta": "เชื่อมต่อเพลงของคุณ",
       "profileTitle": "โปรไฟล์เพลงของคุณ",
       "voiceHint": "ค้นหาเพลงที่เหมาะกับเสียงของคุณ",
-      "voiceRange": "ช่วงเสียง {range}"
+      "voiceRange": "ช่วงเสียง {range}",
+      "known": "{count, plural, one {รู้จัก # เพลง} other {รู้จัก # เพลง}}"
     },
     "songs": {
       "addPast": "เพิ่มเพลงที่ฉันเคยร้อง",

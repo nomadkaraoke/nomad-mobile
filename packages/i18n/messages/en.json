@@ -1973,6 +1973,7 @@
       "keysLabel": "Your vocal range on a keyboard",
       "voiceRange": "Range {range}",
       "sourcesLabel": "Connected music",
+      "known": "{count, plural, one {# song known} other {# songs known}}",
       "sung": "{count, plural, one {# song sung} other {# songs sung}}",
       "saved": "{count, plural, one {# saved} other {# saved}}",
       "seeAll": "See all",

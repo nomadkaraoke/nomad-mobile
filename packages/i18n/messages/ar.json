@@ -1992,7 +1992,8 @@
       "connectCta": "اربط موسيقاك",
       "profileTitle": "ملفك الموسيقي",
       "voiceHint": "ابحث عن أغانٍ تناسب صوتك",
-      "voiceRange": "النطاق الصوتي {range}"
+      "voiceRange": "النطاق الصوتي {range}",
+      "known": "{count, plural, zero {لا توجد أغانٍ معروفة} one {أغنية واحدة معروفة} two {أغنيتان معروفتان} few {# أغانٍ معروفة} many {# أغنية معروفة} other {# أغنية معروفة}}"
     },
     "songs": {
       "addPast": "إضافة أغانٍ غنيتها",

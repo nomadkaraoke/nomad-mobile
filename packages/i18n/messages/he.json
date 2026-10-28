@@ -1992,7 +1992,8 @@
       "connectCta": "חיבור המוזיקה שלך",
       "profileTitle": "פרופיל המוזיקה שלך",
       "voiceHint": "למצוא שירים שמתאימים לקול שלך",
-      "voiceRange": "מנעד {range}"
+      "voiceRange": "מנעד {range}",
+      "known": "{count, plural, one {שיר אחד מוכר} two {שני שירים מוכרים} other {# שירים מוכרים}}"
     },
     "songs": {
       "addPast": "הוספת שירים ששרתי",

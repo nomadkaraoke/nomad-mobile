@@ -1992,7 +1992,8 @@
       "connectCta": "Connecter ta musique",
       "profileTitle": "Ton profil musical",
       "voiceHint": "Trouve des chansons adaptées à ta voix",
-      "voiceRange": "Tessiture {range}"
+      "voiceRange": "Tessiture {range}",
+      "known": "{count, plural, one {# chanson connue} other {# chansons connues}}"
     },
     "songs": {
       "addPast": "Ajouter des chansons que j'ai chantées",

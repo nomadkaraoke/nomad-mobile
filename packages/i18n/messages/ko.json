@@ -1992,7 +1992,8 @@
       "connectCta": "내 음악 연결하기",
       "profileTitle": "내 음악 프로필",
       "voiceHint": "내 음역대에 맞는 노래 찾기",
-      "voiceRange": "음역대 {range}"
+      "voiceRange": "음역대 {range}",
+      "known": "{count, plural, other {아는 곡 #곡}}"
     },
     "songs": {
       "addPast": "불러본 노래 추가하기",

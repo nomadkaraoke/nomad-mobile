@@ -1992,7 +1992,8 @@
       "connectCta": "Csatlakoztasd a zenéidet",
       "profileTitle": "Zenei profilod",
       "voiceHint": "Keress a hangodhoz illő dalokat",
-      "voiceRange": "Hangterjedelem: {range}"
+      "voiceRange": "Hangterjedelem: {range}",
+      "known": "{count, plural, one {# ismert dal} other {# ismert dal}}"
     },
     "songs": {
       "addPast": "Már énekelt dalaim hozzáadása",

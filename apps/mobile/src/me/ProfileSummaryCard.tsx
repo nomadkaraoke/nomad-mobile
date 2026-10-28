@@ -48,6 +48,8 @@ export function ProfileSummaryCard({ items }: { items: MeSong[] }) {
   const brands = useMemo(() => [...new Set(connected.map((s) => brandFor(s.source)).filter((b): b is BrandId => b !== null))], [connected]);
   const sung = items.filter((s) => s.times_sung > 0).length;
   const saved = items.filter((s) => s.loved).length;
+  // decide's total, deduplicated by library identity across sources (absent from an older decide: hide it).
+  const known = summary.data?.known_songs;
 
   let strip = null;
   if (profile) {
@@ -100,6 +102,11 @@ export function ProfileSummaryCard({ items }: { items: MeSong[] }) {
         <Cta testID="me-profile-connect" title={t('connectCta')} hint={t('connectHint')} onPress={go('/discover/connect')} />
       ) : null}
       <View className="flex-row flex-wrap gap-x-4 gap-y-1">
+        {typeof known === 'number' ? (
+          <Text testID="me-profile-known" variant="muted">
+            {t('known', { count: known })}
+          </Text>
+        ) : null}
         <Text testID="me-profile-sung" variant="muted">
           {t('sung', { count: sung })}
         </Text>

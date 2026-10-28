@@ -1992,7 +1992,8 @@
       "connectCta": "Ikonekta ang iyong musika",
       "profileTitle": "Iyong profile sa musika",
       "voiceHint": "Maghanap ng mga kantang bagay sa boses mo",
-      "voiceRange": "Range {range}"
+      "voiceRange": "Range {range}",
+      "known": "{count, plural, one {# kanta ang alam} other {# kanta ang alam}}"
     },
     "songs": {
       "addPast": "Magdagdag ng mga kantang nakanta ko na",

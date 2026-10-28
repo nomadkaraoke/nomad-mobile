@@ -1992,7 +1992,8 @@
       "connectCta": "音楽を連携する",
       "profileTitle": "あなたの音楽プロフィール",
       "voiceHint": "あなたの声に合う曲を見つける",
-      "voiceRange": "音域：{range}"
+      "voiceRange": "音域：{range}",
+      "known": "{count, plural, one {#曲を把握} other {#曲を把握}}"
     },
     "songs": {
       "addPast": "歌った曲を追加",

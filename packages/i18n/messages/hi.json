@@ -1992,7 +1992,8 @@
       "connectCta": "अपना म्यूज़िक कनेक्ट करो",
       "profileTitle": "तुम्हारा म्यूज़िक प्रोफ़ाइल",
       "voiceHint": "ऐसे गाने ढूंढो जो तुम्हारी आवाज़ के लिए सही हों",
-      "voiceRange": "रेंज {range}"
+      "voiceRange": "रेंज {range}",
+      "known": "{count, plural, one {# गाना जानते हो} other {# गाने जानते हो}}"
     },
     "songs": {
       "addPast": "मेरे गाए हुए गाने जोड़ो",

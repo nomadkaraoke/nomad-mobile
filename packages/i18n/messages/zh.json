@@ -1992,7 +1992,8 @@
       "connectCta": "连接你的音乐服务",
       "profileTitle": "你的音乐偏好",
       "voiceHint": "查找适合你声线的歌曲",
-      "voiceRange": "音域 {range}"
+      "voiceRange": "音域 {range}",
+      "known": "{count, plural, one {# 首会唱} other {# 首会唱}}"
     },
     "songs": {
       "addPast": "添加我唱过的歌",

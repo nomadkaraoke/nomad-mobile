@@ -1992,7 +1992,8 @@
       "connectCta": "Anslut din musik",
       "profileTitle": "Din musikprofil",
       "voiceHint": "Hitta låtar som passar din röst",
-      "voiceRange": "Omfång {range}"
+      "voiceRange": "Omfång {range}",
+      "known": "{count, plural, one {# låt du kan} other {# låtar du kan}}"
     },
     "songs": {
       "addPast": "Lägg till låtar jag har sjungit",

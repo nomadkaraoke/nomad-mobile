@@ -1992,7 +1992,8 @@
       "connectCta": "Połącz swoją muzykę",
       "profileTitle": "Twój profil muzyczny",
       "voiceHint": "Znajdź piosenki pasujące do Twojego głosu",
-      "voiceRange": "Skala: {range}"
+      "voiceRange": "Skala: {range}",
+      "known": "{count, plural, one {# znana piosenka} few {# znane piosenki} many {# znanych piosenek} other {# znanych piosenek}}"
     },
     "songs": {
       "addPast": "Dodaj zaśpiewane piosenki",

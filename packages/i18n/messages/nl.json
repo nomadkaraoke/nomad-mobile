@@ -1992,7 +1992,8 @@
       "connectCta": "Verbind je muziek",
       "profileTitle": "Je muziekprofiel",
       "voiceHint": "Vind nummers die bij je stem passen",
-      "voiceRange": "Bereik {range}"
+      "voiceRange": "Bereik {range}",
+      "known": "{count, plural, one {# nummer bekend} other {# nummers bekend}}"
     },
     "songs": {
       "addPast": "Nummers toevoegen die ik heb gezongen",

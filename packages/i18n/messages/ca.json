@@ -1992,7 +1992,8 @@
       "connectCta": "Connecta la teva música",
       "profileTitle": "El teu perfil musical",
       "voiceHint": "Troba cançons que s'adaptin a la teva veu",
-      "voiceRange": "Tessitura: {range}"
+      "voiceRange": "Tessitura: {range}",
+      "known": "{count, plural, one {# cançó coneguda} other {# cançons conegudes}}"
     },
     "songs": {
       "addPast": "Afegeix cançons que he cantat",

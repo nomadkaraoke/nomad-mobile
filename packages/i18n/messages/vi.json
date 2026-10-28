@@ -1992,7 +1992,8 @@
       "connectCta": "Kết nối âm nhạc của bạn",
       "profileTitle": "Hồ sơ âm nhạc của bạn",
       "voiceHint": "Tìm các bài hát hợp với giọng của bạn",
-      "voiceRange": "Âm vực {range}"
+      "voiceRange": "Âm vực {range}",
+      "known": "{count, plural, other {# bài hát đã biết}}"
     },
     "songs": {
       "addPast": "Thêm bài hát tôi từng hát",

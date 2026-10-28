@@ -1992,7 +1992,8 @@
       "connectCta": "Poveži svoju glazbu",
       "profileTitle": "Tvoj glazbeni profil",
       "voiceHint": "Pronađi pjesme koje odgovaraju tvom glasu",
-      "voiceRange": "Raspon {range}"
+      "voiceRange": "Raspon {range}",
+      "known": "{count, plural, one {# poznata pjesma} few {# poznate pjesme} other {# poznatih pjesama}}"
     },
     "songs": {
       "addPast": "Dodaj pjesme koje sam pjevao/la",

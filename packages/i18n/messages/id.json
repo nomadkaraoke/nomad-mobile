@@ -1992,7 +1992,8 @@
       "connectCta": "Hubungkan musik Anda",
       "profileTitle": "Profil musik Anda",
       "voiceHint": "Temukan lagu yang sesuai dengan suara Anda",
-      "voiceRange": "Rentang nada {range}"
+      "voiceRange": "Rentang nada {range}",
+      "known": "{count, plural, other {# lagu dikenali}}"
     },
     "songs": {
       "addPast": "Tambah lagu yang pernah kunyanyikan",

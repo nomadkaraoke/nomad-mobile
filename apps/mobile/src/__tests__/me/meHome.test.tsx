@@ -114,6 +114,18 @@ describe('Me home', () => {
     expect(within(card).getByTestId('me-profile-sung')).toHaveTextContent(/8/);
   });
 
+  it('profile card: songs known comes from decide (deduped), and is hidden when decide does not send it', async () => {
+    api.getServicesSummary.mockResolvedValue({
+      sources: [{ source: 'spotify', connected: true, songs: 120 }, { source: 'lastfm', connected: true, songs: 300 }],
+      capabilities: { screenshot_import: false, listenbrainz_oauth: false },
+      known_songs: 340,
+    } as never);
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    const card = await screen.findByTestId('me-profile-card');
+    // decide's deduplicated total, not the per-source sum (420)
+    expect(await within(card).findByTestId('me-profile-known')).toHaveTextContent('340 songs known');
+  });
+
   it('profile card: each source mark is announced by its service name (a mark alone says nothing)', async () => {
     api.getServicesSummary.mockResolvedValue({
       sources: [

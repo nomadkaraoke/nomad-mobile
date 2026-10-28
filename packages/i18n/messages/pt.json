@@ -1992,7 +1992,8 @@
       "connectCta": "Conectar suas músicas",
       "profileTitle": "Seu perfil musical",
       "voiceHint": "Encontre músicas que combinam com a sua voz",
-      "voiceRange": "Extensão {range}"
+      "voiceRange": "Extensão {range}",
+      "known": "{count, plural, one {# música conhecida} other {# músicas conhecidas}}"
     },
     "songs": {
       "addPast": "Adicionar músicas que já cantei",
