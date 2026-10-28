@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '../auth/store';
 import { useLovedOverrides } from '../me/lovedOverrides';
 import { useMeOutbox } from '../me/meOutbox';
+import { dropRecsGoTo, invalidateRecsGoTos, restoreRecsGoTo, type GoToSpot } from '../me/useRecsGoTos';
 import { RECS_KEY, type RecsPages } from './useRecommendations';
 
 /** How long the "Hidden from your picks · Undo" toast stays up. */
@@ -91,7 +92,7 @@ export function useSongFeedback() {
     setHidden(null);
   }
   // song_key -> what hiding it removed, and the raw hide request (an undo waits for it to settle).
-  const pending = useRef(new Map<string, { removed: Removed[]; request: Promise<void> }>());
+  const pending = useRef(new Map<string, { removed: Removed[]; goTos: GoToSpot[]; request: Promise<void> }>());
   // song_key -> number of the latest hide/undo: a settled request only acts if its action is still the latest.
   const actions = useRef(new Map<string, number>());
 
@@ -112,16 +113,24 @@ export function useSongFeedback() {
         predicate: (q) => q.state.data !== undefined && !pagingNow(q),
       });
       const removed = removeEverywhere(queryClient, key);
+      // Me's go-tos shelf and its offline copy too (they are separate from the picks pages).
+      const goTos = dropRecsGoTo(queryClient, key);
       setHidden(song);
       const request = hideSong(key, { artist: song.artist, title: song.title });
-      pending.current.set(key, { removed, request });
-      request.catch(() => {
-        // Only roll back if this hide is still the latest action (no undo or re-hide in between).
-        if (actions.current.get(key) !== action) return;
-        pending.current.delete(key);
-        putBack(queryClient, song, removed);
-        setHidden((h) => (h?.song_key === key ? null : h));
-      });
+      pending.current.set(key, { removed, goTos, request });
+      request.then(
+        () => {
+          if (actions.current.get(key) === action) invalidateRecsGoTos(queryClient);
+        },
+        () => {
+          // Only roll back if this hide is still the latest action (no undo or re-hide in between).
+          if (actions.current.get(key) !== action) return;
+          pending.current.delete(key);
+          putBack(queryClient, song, removed);
+          restoreRecsGoTo(queryClient, song, goTos);
+          setHidden((h) => (h?.song_key === key ? null : h));
+        },
+      );
     },
     [queryClient],
   );
@@ -135,13 +144,21 @@ export function useSongFeedback() {
       if (!entry) return;
       const action = nextAction(actions.current, key);
       putBack(queryClient, song, entry.removed);
+      restoreRecsGoTo(queryClient, song, entry.goTos);
       // After the hide has settled, so decide never sees the unhide first; skipped if the song was hidden again.
       void entry.request
         .catch(() => {})
         .then(() => (actions.current.get(key) === action ? unhideSong(key) : undefined))
-        .catch(() => {
-          if (actions.current.get(key) === action) removeEverywhere(queryClient, key); // decide still has it hidden
-        });
+        .then(
+          () => {
+            if (actions.current.get(key) === action) invalidateRecsGoTos(queryClient);
+          },
+          () => {
+            if (actions.current.get(key) !== action) return;
+            removeEverywhere(queryClient, key); // decide still has it hidden
+            dropRecsGoTo(queryClient, key);
+          },
+        );
     },
     [queryClient],
   );

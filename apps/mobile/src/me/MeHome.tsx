@@ -17,13 +17,13 @@ import { useStatsLog } from './useStatsLog';
  */
 export function MeHome() {
   const t = useTranslations('me.home');
-  const { items } = useLibrary();
+  const { items, pendingKeys } = useLibrary();
   const log = useStatsLog();
   return (
     <>
       <ProfileSummaryCard items={items} />
       {/* 4c slot: "Were these you?" (nothing yet) */}
-      <GoTosShelf items={items} />
+      <GoTosShelf items={items} pending={pendingKeys} />
       <SetlistsShelf />
       <GetMadeShelf />
       <Pressable
