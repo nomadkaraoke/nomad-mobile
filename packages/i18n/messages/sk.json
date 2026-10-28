@@ -2039,7 +2039,9 @@
         "voice": "Z tvojej hlasovej relácie"
       },
       "makeIt": "Vytvoriť",
-      "undo": "Vrátiť späť"
+      "undo": "Vrátiť späť",
+      "loadError": "Tieto skladby sa momentálne nepodarilo načítať.",
+      "retry": "Skúsiť znova"
     }
   }
 }

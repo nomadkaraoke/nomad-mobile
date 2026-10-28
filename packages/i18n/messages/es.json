@@ -2039,7 +2039,9 @@
         "voice": "De tu sesión de voz"
       },
       "makeIt": "Crear",
-      "undo": "Deshacer"
+      "undo": "Deshacer",
+      "loadError": "No se pudieron cargar estas canciones en este momento.",
+      "retry": "Intentar de nuevo"
     }
   }
 }

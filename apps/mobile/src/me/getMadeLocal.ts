@@ -23,12 +23,19 @@ type GetMadeLocal = {
    * Dismiss / undo taps this session, newest per key, with the row they were made on (so an undo can show the row
    * again even if a refetch already left it out). The Me outbox carries them to decide.
    */
-  dismissed: Record<string, { dismissed: boolean; item: GetMadeItem }>;
+  dismissed: Record<string, { dismissed: boolean; item: GetMadeItem; sentAt?: number }>;
   requests: Record<string, RequestState>;
   /** The row the undo toast is for. */
   toast: string | null;
   setDismissed(item: GetMadeItem, dismissed: boolean): void;
   setRequest(key: string, state: RequestState): void;
+  /** An undo (undismiss) reached decide at `at`. */
+  markSent(key: string, at: number): void;
+  /**
+   * A get-made response that started at `startedAt` landed: a restored (undone) row is no longer pinned once the
+   * server lists it again, or once a fetch started after its undo was sent.
+   */
+  settle(serverKeys: ReadonlySet<string>, startedAt: number): void;
   /** Account change: none of this belongs to the next person. */
   clear(): void;
 };
@@ -56,6 +63,23 @@ export const useGetMadeLocal = create<GetMadeLocal>((set) => ({
   },
   setRequest(key, state) {
     set((s) => ({ requests: { ...s.requests, [key]: state } }));
+  },
+  markSent(key, at) {
+    set((s) => {
+      const d = s.dismissed[key];
+      return d && !d.dismissed ? { dismissed: { ...s.dismissed, [key]: { ...d, sentAt: at } } } : s;
+    });
+  },
+  settle(serverKeys, startedAt) {
+    set((s) => {
+      const drop = Object.entries(s.dismissed).filter(
+        ([k, d]) => !d.dismissed && (serverKeys.has(k) || (d.sentAt !== undefined && startedAt > d.sentAt)),
+      );
+      if (drop.length === 0) return s;
+      const dismissed = { ...s.dismissed };
+      for (const [k] of drop) delete dismissed[k];
+      return { dismissed };
+    });
   },
   clear() {
     stopTimer();

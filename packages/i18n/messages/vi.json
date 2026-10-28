@@ -2039,7 +2039,9 @@
         "voice": "Từ phiên thu giọng của bạn"
       },
       "makeIt": "Tạo bài hát",
-      "undo": "Hoàn tác"
+      "undo": "Hoàn tác",
+      "loadError": "Hiện không thể tải các bài hát này.",
+      "retry": "Thử lại"
     }
   }
 }

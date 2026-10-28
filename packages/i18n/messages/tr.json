@@ -2039,7 +2039,9 @@
         "voice": "Ses seansından"
       },
       "makeIt": "Oluştur",
-      "undo": "Geri al"
+      "undo": "Geri al",
+      "loadError": "Bu şarkılar şu anda yüklenemedi.",
+      "retry": "Tekrar dene"
     }
   }
 }

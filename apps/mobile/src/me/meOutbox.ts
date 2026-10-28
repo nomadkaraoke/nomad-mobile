@@ -49,6 +49,8 @@ export function meMerge(queued: MeOutboxItem & { attempted?: boolean }, next: Me
   // A delete after a create that was never attempted: nothing to do. Once a create has been attempted (in flight, or
   // timed out but maybe committed) the delete must still go out (404 = done).
   if (next.op === 'delete' && queued.op === 'save') return queued.create && !queued.attempted ? null : next;
+  // A dismiss undone (or an undo re-done) before it was ever sent: the server already has the state we want.
+  if (queued.op === 'dismiss' && next.op === 'dismiss' && !queued.attempted && queued.dismissed !== next.dismissed) return null;
   return next; // love after love, dismiss after dismiss, delete after delete, save after delete: the newer wins
 }
 

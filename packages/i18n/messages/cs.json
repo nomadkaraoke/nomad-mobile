@@ -2039,7 +2039,9 @@
         "voice": "Z tvé hlasové relace"
       },
       "makeIt": "Vytvořit",
-      "undo": "Zpět"
+      "undo": "Zpět",
+      "loadError": "Tyto písničky se právě teď nepodařilo načíst.",
+      "retry": "Zkusit znovu"
     }
   }
 }

@@ -2039,7 +2039,9 @@
         "voice": "Da sua sessão de voz"
       },
       "makeIt": "Criar",
-      "undo": "Desfazer"
+      "undo": "Desfazer",
+      "loadError": "Não foi possível carregar essas músicas no momento.",
+      "retry": "Tentar novamente"
     }
   }
 }

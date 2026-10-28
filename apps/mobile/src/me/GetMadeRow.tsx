@@ -29,7 +29,10 @@ type Props = {
   index: number;
   /** testID prefix: `getmade` on the full screen, `me-getmade` on the Me shelf. */
   prefix: 'getmade' | 'me-getmade';
+  /** No connection: Make it and Request it free (both gen) are off. */
   offline: boolean;
+  /** Make it is also off until the user's gen jobs are known (no second paid make of a made song). */
+  makeDisabled: boolean;
   onRequest(row: Row): void;
   onDismiss(key: string): void;
 };
@@ -38,7 +41,7 @@ type Props = {
  * One Get this made song: title, artist, why chip and board votes, then Make it / Request it free and a dismiss ×.
  * Offline, Make it and Request it free are off (dismiss is queued, so it still works).
  */
-export function GetMadeRow({ row, index: i, prefix, offline, onRequest, onDismiss }: Props) {
+export function GetMadeRow({ row, index: i, prefix, offline, makeDisabled, onRequest, onDismiss }: Props) {
   const t = useTranslations('me.getMade');
   const tu = useTranslations('tonight.other');
   const signedIn = useAuth((s) => s.state.status === 'signedIn');
@@ -99,7 +102,7 @@ export function GetMadeRow({ row, index: i, prefix, offline, onRequest, onDismis
       ) : null}
       <View className="flex-row gap-2">
         <View className="flex-1">
-          <Button testID={`${prefix}-make-${i}`} label={t('makeIt')} disabled={offline} onPress={() => makeFromRow(row, signedIn)} />
+          <Button testID={`${prefix}-make-${i}`} label={t('makeIt')} disabled={offline || makeDisabled} onPress={() => makeFromRow(row, signedIn)} />
         </View>
         {canRequest ? (
           <View className="flex-1">

@@ -2039,7 +2039,9 @@
         "voice": "Aus deiner Gesangssitzung"
       },
       "makeIt": "Erstellen",
-      "undo": "Rückgängig"
+      "undo": "Rückgängig",
+      "loadError": "Diese Songs konnten gerade nicht geladen werden.",
+      "retry": "Erneut versuchen"
     }
   }
 }

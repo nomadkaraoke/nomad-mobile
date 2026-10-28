@@ -9,10 +9,11 @@ import { userKeyFor } from '../../auth/userKey';
 import { useGetMadeLocal } from '../../me/getMadeLocal';
 import { useMakeIntent } from '../../make/intentStore';
 import { useMeOutbox } from '../../me/meOutbox';
+import { meQueryClient } from '../../me/queryClientRef';
 import { job } from '../../test-utils/jobFixtures';
 import { appRoutes } from '../../test-utils/routes';
 import { appStorage } from '../../storage';
-import { resetMe } from './helpers';
+import { resetMe, signIn } from './helpers';
 
 jest.setTimeout(20_000);
 
@@ -146,12 +147,10 @@ describe('Get this made screen', () => {
     expect(g.submitSongRequest).toHaveBeenCalledTimes(1);
     expect(g.submitSongRequest).toHaveBeenCalledWith('Band 0', 'Song 0');
     expect(g.voteApiRequestsBoardRequestsRequestIdVotePost).not.toHaveBeenCalled();
-    if (status === 'created' || status === 'already_exists') {
-      await waitFor(() => expect(g.listBoardRequests.mock.calls.length).toBeGreaterThan(boardCalls));
-      expect(screen.queryByTestId('getmade-request-0')).toBeNull();
-    } else {
-      expect(within(row).queryByText(/Requested/)).toBeNull();
-    }
+    // Every board answer refreshes the board's vote state, including the daily limits.
+    await waitFor(() => expect(g.listBoardRequests.mock.calls.length).toBeGreaterThan(boardCalls));
+    expect(screen.queryByTestId('getmade-request-0')).toBeNull();
+    if (status === 'vote_used' || status === 'submission_limit') expect(within(row).queryByText(/Requested/)).toBeNull();
   });
 
   it('with today\'s vote already spent elsewhere, Request it free is off up front (no 409 round trip)', async () => {
@@ -241,9 +240,133 @@ describe('Get this made screen', () => {
     fireEvent.press(screen.getByTestId('getmade-dismiss-0'));
     const cacheKey = `me.getmade.v1.${userKeyFor('me@example.com')}`;
     expect(appStorage.getString(cacheKey)).toBeTruthy();
+    await waitFor(() => expect(meQueryClient()?.getQueryData(['gen', 'requests-board'])).toBeTruthy());
     act(() => useAuth.setState({ state: { status: 'signedOut' } }));
+    expect(meQueryClient()?.getQueryData(['gen', 'requests-board'])).toBeUndefined();
     expect(appStorage.getString(cacheKey)).toBeUndefined();
     expect(useGetMadeLocal.getState().dismissed).toEqual({});
     expect(useGetMadeLocal.getState().toast).toBeNull();
+  });
+
+  it('switching account purges the previous person\'s list, dismissals and board state', async () => {
+    g.listBoardRequests.mockResolvedValue(board([], true, null));
+    await openScreen();
+    await screen.findByText(/Song 0/);
+    fireEvent.press(screen.getByTestId('getmade-dismiss-0'));
+    const oldKey = `me.getmade.v1.${userKeyFor('me@example.com')}`;
+    expect(appStorage.getString(oldKey)).toBeTruthy();
+    api.getGetMade.mockResolvedValue([item(7)]);
+    g.listBoardRequests.mockResolvedValue(board());
+    act(() => signIn('other@example.com'));
+    expect(appStorage.getString(oldKey)).toBeUndefined();
+    expect(useGetMadeLocal.getState().dismissed).toEqual({});
+    expect(await screen.findByText(/Song 7/)).toBeTruthy();
+    expect(screen.queryByText(/Song 1/)).toBeNull();
+    // The old account's spent vote doesn't carry over.
+    await waitFor(() => expect(screen.getByTestId('getmade-request-0')).toBeTruthy());
+  });
+
+  it('a double tap on Request it free sends one submit', async () => {
+    let resolve!: (o: gen.RequestOutcome) => void;
+    g.submitSongRequest.mockImplementation(() => new Promise((r) => (resolve = r)));
+    await openScreen();
+    const btn = await screen.findByTestId('getmade-request-0');
+    fireEvent.press(btn);
+    fireEvent.press(screen.getByTestId('getmade-request-0'));
+    expect(g.submitSongRequest).toHaveBeenCalledTimes(1);
+    await act(async () => resolve({ status: 'created', request: boardReq('Band 0', 'Song 0', 1) }));
+    expect(await screen.findByText('Requested · 1 vote')).toBeTruthy();
+    expect(g.submitSongRequest).toHaveBeenCalledTimes(1);
+  });
+
+  it('a failed request shows the error and keeps the button for a retry', async () => {
+    g.submitSongRequest.mockRejectedValueOnce(new gen.ApiError(500, 'boom'));
+    g.submitSongRequest.mockResolvedValueOnce({ status: 'created', request: boardReq('Band 0', 'Song 0', 2) });
+    await openScreen();
+    fireEvent.press(await screen.findByTestId('getmade-request-0'));
+    expect(await screen.findByText("Couldn't send the request. Try again.")).toBeTruthy();
+    expect(screen.getByTestId('getmade-request-0')).not.toBeDisabled();
+    fireEvent.press(screen.getByTestId('getmade-request-0'));
+    expect(await screen.findByText('Requested · 2 votes')).toBeTruthy();
+    expect(g.submitSongRequest).toHaveBeenCalledTimes(2);
+  });
+
+  it('a request that answers after the account changed is dropped (no outcome, no board refresh)', async () => {
+    let resolve!: (o: gen.RequestOutcome) => void;
+    g.submitSongRequest.mockImplementation(() => new Promise((r) => (resolve = r)));
+    await openScreen();
+    fireEvent.press(await screen.findByTestId('getmade-request-0'));
+    act(() => signIn('other@example.com'));
+    const boardCalls = g.listBoardRequests.mock.calls.length;
+    await act(async () => resolve({ status: 'created', request: boardReq('Band 0', 'Song 0', 1) }));
+    expect(useGetMadeLocal.getState().requests).toEqual({});
+    await act(async () => {
+      for (let n = 0; n < 5; n++) await Promise.resolve();
+    });
+    expect(g.listBoardRequests.mock.calls.length).toBe(boardCalls);
+  });
+
+  it('a failed load with nothing cached says so and Retry loads the list', async () => {
+    api.getGetMade.mockRejectedValueOnce(new decide.ApiError(503, { code: 'warming_up' }));
+    await openScreen();
+    expect(await screen.findByTestId('getmade-error')).toHaveTextContent("Couldn't load these songs right now.");
+    expect(screen.queryByTestId('getmade-empty')).toBeNull();
+    fireEvent.press(screen.getByTestId('getmade-retry'));
+    expect(await screen.findByText(/Song 0/)).toBeTruthy();
+    expect(screen.queryByTestId('getmade-error')).toBeNull();
+  });
+
+  it('the shelf shows the load error with Retry', async () => {
+    api.getGetMade.mockRejectedValueOnce(new decide.ApiError(503, { code: 'warming_up' }));
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    expect(await screen.findByTestId('me-getmade-error')).toBeTruthy();
+    fireEvent.press(screen.getByTestId('me-getmade-retry'));
+    expect(await screen.findByTestId('me-getmade-0')).toBeTruthy();
+  });
+
+  it('Make it waits for the user\'s jobs (pending or failed) so a made song can\'t be made twice', async () => {
+    let resolveJobs!: (j: gen.JobSummary[]) => void;
+    g.listMyJobs.mockImplementation(() => new Promise((r) => (resolveJobs = r)));
+    await openScreen();
+    await screen.findByText(/Song 0/);
+    expect(screen.getByTestId('getmade-make-0')).toBeDisabled();
+    fireEvent.press(screen.getByTestId('getmade-make-0'));
+    expect(useMakeIntent.getState().intent).toBeNull();
+    await act(async () => resolveJobs([]));
+    await waitFor(() => expect(screen.getByTestId('getmade-make-0')).not.toBeDisabled());
+  });
+
+  it('Make it stays off when the jobs list fails', async () => {
+    g.listMyJobs.mockRejectedValue(new gen.ApiError(500, 'x'));
+    await openScreen();
+    await screen.findByText(/Song 0/);
+    await waitFor(() => expect(g.listMyJobs).toHaveBeenCalled());
+    await act(async () => {
+      for (let n = 0; n < 5; n++) await Promise.resolve();
+    });
+    expect(screen.getByTestId('getmade-make-0')).toBeDisabled();
+  });
+
+  it('a decide outage (status 0) with the network up keeps Make it and Request it free on', async () => {
+    api.getGetMade.mockRejectedValue(new decide.ApiError(0, 'unreachable'));
+    appStorage.set(`me.getmade.v1.${userKeyFor('me@example.com')}`, JSON.stringify({ items: [item(0)], savedAt: Date.now() - 3_600_000 }));
+    await openScreen();
+    await screen.findByText(/Song 0/);
+    await waitFor(() => expect(api.getGetMade).toHaveBeenCalled());
+    await waitFor(() => expect(screen.getByTestId('getmade-make-0')).not.toBeDisabled());
+    expect(screen.getByTestId('getmade-request-0')).not.toBeDisabled();
+    expect(screen.queryByTestId('getmade-offline')).toBeNull();
+  });
+
+  it('an undone row is no longer pinned once the server lists it again', async () => {
+    await openScreen();
+    await screen.findByText(/Song 0/);
+    fireEvent.press(screen.getByTestId('getmade-dismiss-0'));
+    await act(() => useMeOutbox.idle());
+    fireEvent.press(screen.getByTestId('getmade-undo'));
+    await act(() => useMeOutbox.idle());
+    // The undo's send invalidates the list; the refetch includes the song again.
+    await waitFor(() => expect(useGetMadeLocal.getState().dismissed['band 0|song 0']).toBeUndefined());
+    expect(screen.getByText(/Song 0/)).toBeTruthy();
   });
 });

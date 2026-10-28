@@ -2039,7 +2039,9 @@
         "voice": "Z Twojej sesji głosowej"
       },
       "makeIt": "Stwórz",
-      "undo": "Cofnij"
+      "undo": "Cofnij",
+      "loadError": "Nie udało się teraz załadować tych utworów.",
+      "retry": "Spróbuj ponownie"
     }
   }
 }

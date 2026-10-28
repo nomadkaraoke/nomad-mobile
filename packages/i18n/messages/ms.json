@@ -2039,7 +2039,9 @@
         "voice": "Daripada sesi suara anda"
       },
       "makeIt": "Buat",
-      "undo": "Buat asal"
+      "undo": "Buat asal",
+      "loadError": "Tidak dapat memuatkan lagu-lagu ini sekarang.",
+      "retry": "Cuba lagi"
     }
   }
 }

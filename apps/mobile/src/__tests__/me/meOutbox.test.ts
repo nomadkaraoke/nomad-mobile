@@ -153,6 +153,22 @@ it('get-made dismiss then undo coalesce to the last (latest wins) and send by th
   expect(useMeOutbox.getState().items).toHaveLength(0);
 });
 
+it('a dismiss undone before it was ever attempted cancels out (no calls)', async () => {
+  // A love ahead of it fails transiently, so the queue stops before the dismiss is attempted.
+  api.loveSong.mockRejectedValue(new ApiError(503, 'x'));
+  const b = useMeOutbox.getState();
+  b.enqueue({ key: 'love:k1', op: 'love', song_key: 'k1', artist: 'A', title: 'T', loved: true });
+  await useMeOutbox.idle();
+  const dismiss = (dismissed: boolean): MeOutboxItem => ({ key: 'dismiss:k9', op: 'dismiss', dismissKey: 'k9', dismissed });
+  b.enqueue(dismiss(true));
+  await useMeOutbox.idle();
+  b.enqueue(dismiss(false));
+  await useMeOutbox.idle();
+  expect(useMeOutbox.getState().items.map((i) => i.key)).toEqual(['love:k1']);
+  expect(api.dismissGetMade).not.toHaveBeenCalled();
+  expect(api.undismissGetMade).not.toHaveBeenCalled();
+});
+
 const setlist = (items: decide.SetlistItemIn[], name = 'N') =>
   ({ id: 'pl_12345678', name, rev: 3, items: items.map((i, n) => ({ item_id: `i${n}`, ...i })) }) as never;
 

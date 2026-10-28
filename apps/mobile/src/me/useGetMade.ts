@@ -1,4 +1,4 @@
-import { ApiError, getGetMade, type GetMadeItem } from '@nomad/api-decide';
+import { getGetMade, type GetMadeItem } from '@nomad/api-decide';
 import { listBoardRequests, submitSongRequest, type SongRequestPublic } from '@nomad/api-gen';
 import { jobPhase, songKey } from '@nomad/core';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -7,7 +7,7 @@ import { useCallback, useMemo } from 'react';
 import { useAuth } from '../auth/store';
 import { useMyJobs } from '../jobs/useMyJobs';
 import { useOffline } from '../net/useOffline';
-import { getMadeStorageKey, useUserKey, writeCacheFor } from './account';
+import { currentUserKey, getMadeStorageKey, useUserKey, writeCacheFor } from './account';
 import { isObj, readCache } from './cache';
 import { BOARD_QUERY_KEY, useGetMadeLocal, type RequestState } from './getMadeLocal';
 import { useMeOutbox, type MeOutboxItem } from './meOutbox';
@@ -28,6 +28,11 @@ export type GetMadeRow = GetMadeItem & {
 };
 
 const BOARD_STALE_MS = 5 * 60_000;
+
+// An undo that reached decide: a fetch started after this no longer needs the restored row pinned.
+useMeOutbox.addSentListener((item) => {
+  if (item.op === 'dismiss' && !item.dismissed) useGetMadeLocal.getState().markSent(item.dismissKey, Date.now());
+});
 
 /** Dismissals still waiting in the Me outbox (they survive an app restart; the memory overrides don't). */
 function pendingDismissals(items: MeOutboxItem[]): Map<string, boolean> {
@@ -68,8 +73,12 @@ export function useGetMade() {
     staleTime: 60_000,
     retry: false,
     queryFn: async ({ signal }) => {
+      const startedAt = Date.now();
       const next = { items: await getGetMade(), savedAt: Date.now() };
-      if (!signal?.aborted && userKey) writeCacheFor(userKey, getMadeStorageKey(userKey), next);
+      if (!signal?.aborted && userKey && currentUserKey() === userKey) {
+        writeCacheFor(userKey, getMadeStorageKey(userKey), next);
+        useGetMadeLocal.getState().settle(new Set(next.items.map((x) => x.key)), startedAt);
+      }
       return next;
     },
   });
@@ -137,29 +146,39 @@ export function useGetMade() {
    */
   const request = useCallback(
     async (row: Pick<GetMadeItem, 'key' | 'artist' | 'title'>) => {
-      const local = useGetMadeLocal.getState();
+        const local = useGetMadeLocal.getState();
       if (local.requests[row.key]?.kind === 'pending') return;
+      // The outcome belongs to the account that tapped: a sign-out or switch mid-request drops it.
+      const owner = currentUserKey();
+      if (!owner) return;
       local.setRequest(row.key, { kind: 'pending' });
+      let state: RequestState;
       try {
         const out = await submitSongRequest(row.artist, row.title);
-        if (out.status === 'created' || out.status === 'already_exists') {
-          useGetMadeLocal.getState().setRequest(row.key, { kind: 'requested', votes: out.request.vote_count });
-          void queryClient.invalidateQueries({ queryKey: BOARD_QUERY_KEY });
-        } else {
-          useGetMadeLocal.getState().setRequest(row.key, { kind: out.status });
-        }
+        state = out.status === 'created' || out.status === 'already_exists' ? { kind: 'requested', votes: out.request.vote_count } : { kind: out.status };
       } catch {
-        useGetMadeLocal.getState().setRequest(row.key, { kind: 'error' });
+        state = { kind: 'error' };
       }
+      if (currentUserKey() !== owner) return;
+      useGetMadeLocal.getState().setRequest(row.key, state);
+      // Every answer from the board (including the daily limits) means its vote state may have moved.
+      if (state.kind !== 'error') void queryClient.invalidateQueries({ queryKey: BOARD_QUERY_KEY });
     },
     [queryClient],
   );
 
-  const offline = netOffline || (q.isError && q.error instanceof ApiError && q.error.status === 0);
+  // Make it and Request it free go to gen, so only a lost connection turns them off (a decide outage doesn't).
+  const offline = netOffline;
+  // Until the user's jobs are known, Make it could start a second paid make of a song they already made.
+  const jobsKnown = email === null || jobs.isSuccess;
   return {
     items,
     loading: userKey !== null && q.data === undefined && q.isFetching,
     offline,
+    /** The list failed to load and there is nothing cached to show. */
+    error: q.isError && !q.data,
+    refetch: () => void q.refetch(),
+    makeDisabled: offline || !jobsKnown,
     dismiss,
     undismiss,
     request,

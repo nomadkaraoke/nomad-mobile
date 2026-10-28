@@ -2039,7 +2039,9 @@
         "voice": "Fra stemmeøkten din"
       },
       "makeIt": "Lag den",
-      "undo": "Angre"
+      "undo": "Angre",
+      "loadError": "Kunne ikke laste inn disse sangene akkurat nå.",
+      "retry": "Prøv igjen"
     }
   }
 }

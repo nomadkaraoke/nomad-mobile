@@ -2039,7 +2039,9 @@
         "voice": "Mula sa iyong voice session"
       },
       "makeIt": "Gawin ito",
-      "undo": "I-undo"
+      "undo": "I-undo",
+      "loadError": "Hindi ma-load ang mga kantang ito sa ngayon.",
+      "retry": "Subukan muli"
     }
   }
 }

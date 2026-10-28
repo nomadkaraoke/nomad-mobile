@@ -2039,7 +2039,9 @@
         "voice": "A hangmunkamenetedből"
       },
       "makeIt": "Készítsd el",
-      "undo": "Visszavonás"
+      "undo": "Visszavonás",
+      "loadError": "Most nem sikerült betölteni ezeket a dalokat.",
+      "retry": "Próbáld újra"
     }
   }
 }

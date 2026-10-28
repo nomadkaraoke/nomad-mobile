@@ -2039,7 +2039,9 @@
         "voice": "Dalla tua sessione vocale"
       },
       "makeIt": "Crea",
-      "undo": "Annulla"
+      "undo": "Annulla",
+      "loadError": "Impossibile caricare queste canzoni al momento.",
+      "retry": "Riprova"
     }
   }
 }

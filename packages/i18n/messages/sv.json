@@ -2039,7 +2039,9 @@
         "voice": "Från din röstsession"
       },
       "makeIt": "Skapa",
-      "undo": "Ångra"
+      "undo": "Ångra",
+      "loadError": "Det gick inte att ladda de här låtarna just nu.",
+      "retry": "Försök igen"
     }
   }
 }

@@ -2039,7 +2039,9 @@
         "voice": "Van je stemsessie"
       },
       "makeIt": "Maken",
-      "undo": "Ongedaan maken"
+      "undo": "Ongedaan maken",
+      "loadError": "Kon deze nummers op dit moment niet laden.",
+      "retry": "Probeer opnieuw"
     }
   }
 }

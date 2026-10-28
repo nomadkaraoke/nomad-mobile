@@ -2039,7 +2039,9 @@
         "voice": "Fra din stemmesession"
       },
       "makeIt": "Lav den",
-      "undo": "Fortryd"
+      "undo": "Fortryd",
+      "loadError": "Kunne ikke indlæse disse sange lige nu.",
+      "retry": "Prøv igen"
     }
   }
 }

@@ -2039,7 +2039,9 @@
         "voice": "Din sesiunea ta vocală"
       },
       "makeIt": "Creează",
-      "undo": "Anulează"
+      "undo": "Anulează",
+      "loadError": "Nu am putut încărca aceste melodii acum.",
+      "retry": "Încearcă din nou"
     }
   }
 }

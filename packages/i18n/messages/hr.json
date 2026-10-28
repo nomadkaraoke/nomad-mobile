@@ -2039,7 +2039,9 @@
         "voice": "Iz tvoje glasovne sesije"
       },
       "makeIt": "Izradi",
-      "undo": "Poništi"
+      "undo": "Poništi",
+      "loadError": "Trenutačno nije moguće učitati ove pjesme.",
+      "retry": "Pokušaj ponovno"
     }
   }
 }

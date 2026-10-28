@@ -2039,7 +2039,9 @@
         "voice": "De la teva sessió de veu"
       },
       "makeIt": "Crea'l",
-      "undo": "Desfer"
+      "undo": "Desfer",
+      "loadError": "No s'han pogut carregar aquestes cançons ara mateix.",
+      "retry": "Torna-ho a provar"
     }
   }
 }

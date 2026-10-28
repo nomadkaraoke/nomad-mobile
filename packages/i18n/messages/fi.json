@@ -2039,7 +2039,9 @@
         "voice": "Äänisessiostasi"
       },
       "makeIt": "Luo versio",
-      "undo": "Kumoa"
+      "undo": "Kumoa",
+      "loadError": "Näitä kappaleita ei saatu ladattua juuri nyt.",
+      "retry": "Yritä uudelleen"
     }
   }
 }
