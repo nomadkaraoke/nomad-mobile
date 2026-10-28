@@ -191,6 +191,29 @@ describe('a synced write stays visible until a refetch lands', () => {
     expect(Object.keys(useLibrarySettle.getState().setlistsSent)).toEqual([]);
   });
 
+  it('a post-send fetch that is cancelled neither settles the overlay nor writes the cache', async () => {
+    const client = resetMe();
+    api.listSetlists.mockRejectedValueOnce(new ApiError(0, 'offline'));
+    api.createSetlist.mockImplementation(async (i) => echo(i.id, i.name, i.items));
+    const { result } = renderHook(() => useSetlists(), { wrapper: wrapperFor(client) });
+    await waitFor(() => expect(result.current.offline).toBe(true));
+    // The post-sync refetch (started after the send) is held, then cancelled.
+    let land: (v: decide.Setlist[]) => void = () => {};
+    api.listSetlists.mockImplementationOnce(() => new Promise((r) => (land = r)));
+    let id = '';
+    act(() => {
+      id = result.current.createSetlist('Friday');
+    });
+    await act(async () => useMeOutbox.idle());
+    await waitFor(() => expect(api.listSetlists).toHaveBeenCalledTimes(2));
+    // (With no data yet an invalidate dedupes onto the running fetch; cancelling is what an account change does.)
+    await act(async () => client.cancelQueries({ queryKey: ['decide', userKeyFor('a@example.com'), 'setlists'] }));
+    await act(async () => land([]));
+    expect(Object.keys(useLibrarySettle.getState().setlistsSent)).toEqual([id]);
+    expect(result.current.setlists.map((s) => s.id)).toEqual([id]);
+    expect(appStorage.getString(`me.setlists.v1.${userKeyFor('a@example.com')}`)).toBeUndefined();
+  });
+
   it('an edit sent once the cache exists is not reverted by an older unsettled send', async () => {
     const client = resetMe();
     api.listSetlists.mockRejectedValueOnce(new ApiError(0, 'offline'));

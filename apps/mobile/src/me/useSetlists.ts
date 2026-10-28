@@ -27,7 +27,7 @@ export function useSetlists() {
   const userKey = useUserKey();
   const queryKey = useMemo(() => setlistsKeyFor(userKey), [userKey]);
   const cached = useMemo(() => readCache(userKey && setlistsStorageKey(userKey), isCache), [userKey]);
-  const q = useQuery<SetlistsCache>({
+  const q = useQuery<SetlistsCache & { fetchStartedAt?: number }>({
     queryKey,
     enabled: userKey !== null,
     initialData: cached,
@@ -40,10 +40,15 @@ export function useSetlists() {
       // Cancelled (account change, unmount): its result is discarded, so it must not write the cache or settle.
       if (signal?.aborted) return next;
       if (userKey) writeCacheFor(userKey, setlistsStorageKey(userKey), next);
-      useLibrarySettle.getState().settleSetlists(startedAt);
-      return next;
+      // Settled once TanStack commits this data (the effect below), never before: no render may drop a sent write
+      // while the list it shows is still the older one.
+      return { ...next, fetchStartedAt: startedAt };
     },
   });
+  const fetchStartedAt = q.data?.fetchStartedAt;
+  useEffect(() => {
+    if (fetchStartedAt !== undefined) useLibrarySettle.getState().settleSetlists(fetchStartedAt);
+  }, [fetchStartedAt, q.dataUpdatedAt]);
   useInvalidateOnSynced([queryKey]);
 
   const pending = useMeOutbox((s) => s.items);

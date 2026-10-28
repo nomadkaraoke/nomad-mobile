@@ -88,6 +88,17 @@ describe('useServicesSummary', () => {
     await waitFor(() => expect(result.current.data).toEqual(summary));
   });
 
+  it("is cached per account: another account never sees the previous one's summary", async () => {
+    const client = newClient();
+    api.getServicesSummary.mockResolvedValueOnce({ sources: [], capabilities: { screenshot_import: false, listenbrainz_oauth: false }, known_songs: 5 });
+    const { result } = renderHook(() => useServicesSummary(), { wrapper: wrapper(client) });
+    await waitFor(() => expect(result.current.data?.known_songs).toBe(5));
+    api.getServicesSummary.mockImplementation(() => new Promise(() => {}));
+    act(() => useAuth.setState({ state: { status: 'signedIn', session: { token: 't2', email: 'b@example.com', createdAt: 0 } } }));
+    await waitFor(() => expect(api.getServicesSummary).toHaveBeenCalledTimes(2));
+    expect(result.current.data).toBeUndefined();
+  });
+
   it('does not ask while signed out', async () => {
     useAuth.setState({ state: { status: 'signedOut' } });
     const { result } = renderHook(() => useServicesSummary(), { wrapper: wrapper(newClient()) });
