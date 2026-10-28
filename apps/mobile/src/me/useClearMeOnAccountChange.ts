@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useAuth } from '../auth/store';
 import { userKeyFor } from '../auth/userKey';
 import { appStorage } from '../storage';
-import { getMadeStorageKey, libraryStorageKey, logMirrorStorageKey, OWNER_KEY, setlistsStorageKey } from './account';
+import { getMadeStorageKey, goTosStorageKey, libraryStorageKey, logMirrorStorageKey, OWNER_KEY, setlistsStorageKey } from './account';
 import { BOARD_QUERY_KEY, useGetMadeLocal } from './getMadeLocal';
 import { useLibrarySettle } from './librarySettle';
 import { useLovedOverrides } from './lovedOverrides';
@@ -50,7 +50,7 @@ export function useClearMeOnAccountChange(): void {
         queryClient.removeQueries({ queryKey: BOARD_QUERY_KEY });
       }
       if (was && !is) {
-        for (const kind of ['library', 'setlists', 'karaoke-log', 'song-history', 'get-made']) {
+        for (const kind of ['library', 'setlists', 'karaoke-log', 'song-history', 'get-made', 'recs-gotos']) {
           const predicate = (q: { queryKey: readonly unknown[] }) => q.queryKey[0] === 'decide' && q.queryKey[2] === kind;
           void queryClient.cancelQueries({ predicate });
           queryClient.removeQueries({ predicate });
@@ -59,6 +59,7 @@ export function useClearMeOnAccountChange(): void {
         appStorage.remove(setlistsStorageKey(was));
         appStorage.remove(logMirrorStorageKey(was));
         appStorage.remove(getMadeStorageKey(was));
+        appStorage.remove(goTosStorageKey(was));
       }
       if (is && is !== was) adoptOwner(is);
     });

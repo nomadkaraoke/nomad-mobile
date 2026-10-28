@@ -21,4 +21,5 @@ export const libraryStorageKey = (userKey: string) => `me.library.v1.${userKey}`
 export const setlistsStorageKey = (userKey: string) => `me.setlists.v1.${userKey}`;
 export const logMirrorStorageKey = (userKey: string) => `me.logmirror.v1.${userKey}`;
 export const getMadeStorageKey = (userKey: string) => `me.getmade.v1.${userKey}`;
+export const goTosStorageKey = (userKey: string) => `me.gotos.v1.${userKey}`;
 export const OWNER_KEY = 'me.owner.v1';

@@ -1,9 +1,12 @@
 // The Me home (Phase 4a, B8): profile card, go-tos, setlists, All your songs, stats; signed out shows sign-in.
 import * as decide from '@nomad/api-decide';
-import { fireEvent, screen, within } from '@testing-library/react-native';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { useAuth } from '../../auth/store';
+import { userKeyFor } from '../../auth/userKey';
+import { goTosStorageKey } from '../../me/account';
+import { appStorage } from '../../storage';
 import { useVoiceStore } from '../../voice/voiceStore';
 import { gen } from '../../test-utils/genAuthMock';
 import { appRoutes } from '../../test-utils/routes';
@@ -22,6 +25,7 @@ jest.mock('@nomad/api-decide', () => ({
   getVoiceProfile: jest.fn(async () => null),
   getVoiceFlags: jest.fn(async () => ({ session_enabled: false, is_admin: false, voice_data: false })),
   popularSongs: jest.fn(async () => []),
+  getRecommendationsV2: jest.fn(),
   pingSearch: jest.fn(async () => true),
   logSearchEvent: jest.fn(async () => {}),
   configureClient: jest.fn(),
@@ -32,8 +36,21 @@ const api = decide as jest.Mocked<typeof decide>;
 
 const goTo = (n: number) => li(`Band ${n}`, `Song ${n}`, { times_sung: 10 - n, latest_feel: 'great', feel_counts: { great: 1 } });
 
+/** A recs row as decide sends it (only what the shelf reads matters). */
+const rec = (artist: string, title: string, o: Record<string, unknown> = {}) => ({
+  song_key: `k_${title}`, artist, title, reason: "You've sung this", reason_type: 'sung_before', reason_artist: null,
+  score: 1, has_karaoke_version: true, karaoke: { community: true, karafun: false }, fit: null, ...o,
+});
+const recsWith = (sections: { id: string; songs: unknown[] }[]) => ({
+  sections: sections.map((s) => ({ title_key: `recs.section.${s.id}.title`, reason_key: null, ...s })),
+  filters_applied: {}, next_cursor: null, has_profile: true, catalog_run: 'r',
+});
+/** An uncatalogued go-to: no song_key, the `u:` identity. */
+const pubSong = li('Bar Band', 'Pub Song', { key: 'u:bar band|pub song', song_key: null, times_sung: 3, latest_feel: 'ok' });
+
 beforeEach(() => {
   jest.clearAllMocks();
+  api.getRecommendationsV2.mockRejectedValue(new decide.ApiError(503, 'warming_up'));
   resetMe('me@example.com');
   useVoiceStore.getState().clear();
   gen.getMe.mockResolvedValue({ email: 'me@example.com', credits: 3 } as never);
@@ -114,6 +131,65 @@ describe('Me home', () => {
     // One mark per brand, named for the brand rather than one of its sources.
     expect(within(card).getByTestId('me-profile-source-spotify')).toHaveProp('accessibilityLabel', 'Spotify');
     expect(within(card).getAllByLabelText('Spotify')).toHaveLength(1);
+  });
+
+  it('recs go_tos come first with their fit badge, then the local uncatalogued go-tos (no other local ones)', async () => {
+    api.getLibrary.mockResolvedValue({
+      status: 'ok', etag: 'e',
+      items: [goTo(1), goTo(2), pubSong, li('Recs Artist', 'Recs Hit', { times_sung: 2 })],
+    } as never);
+    api.getRecommendationsV2.mockResolvedValue(recsWith([
+      { id: 'go_tos', songs: [rec('Recs Artist', 'Recs Hit', { fit: { bucket: 'fitsIn', transpose: -2, octave: 0 } })] },
+      { id: 'songs_you_know', songs: [rec('Band 1', 'Song 1')] },
+    ]) as never);
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    await waitFor(() => expect(screen.getByTestId('me-goto-0')).toHaveTextContent(/Recs Hit/));
+    expect(screen.getByTestId('me-goto-fit-0')).toBeTruthy();
+    expect(screen.getByTestId('me-goto-1')).toHaveTextContent(/Pub Song/);
+    expect(screen.queryByTestId('me-goto-fit-1')).toBeNull();
+    // Catalogued go-tos come from recs only (songs_you_know is not the go-tos section).
+    expect(screen.queryByTestId('me-goto-2')).toBeNull();
+    // Defaults, any venue library: the shelf never inherits Discover's filters.
+    expect(api.getRecommendationsV2).toHaveBeenCalledWith({});
+    // Kept per account for offline.
+    await waitFor(() => expect(appStorage.getString(goTosStorageKey(userKeyFor('me@example.com')))).toMatch(/Recs Hit/));
+  });
+
+  it('a recs go-to the phone now knows is hidden or "not for me" is left out; duplicates show once', async () => {
+    api.getLibrary.mockResolvedValue({
+      status: 'ok', etag: 'e',
+      items: [pubSong, li('A', 'Gone Bad', { times_sung: 4, latest_feel: 'bad' }), li('B', 'Kept', { times_sung: 2 })],
+    } as never);
+    api.getRecommendationsV2.mockResolvedValue(recsWith([
+      { id: 'go_tos', songs: [rec('A', 'Gone Bad'), rec('B', 'Kept'), rec('B', 'Kept')] },
+    ]) as never);
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    await waitFor(() => expect(screen.getByTestId('me-goto-0')).toHaveTextContent(/Kept/));
+    expect(screen.getByTestId('me-goto-1')).toHaveTextContent(/Pub Song/);
+    expect(screen.queryByTestId('me-goto-2')).toBeNull();
+  });
+
+  it('without a recs go_tos section the local go-tos are used (catalogued ones included)', async () => {
+    api.getLibrary.mockResolvedValue({ status: 'ok', etag: 'e', items: [goTo(1), pubSong] } as never);
+    api.getRecommendationsV2.mockResolvedValue(recsWith([{ id: 'songs_you_know', songs: [rec('Band 1', 'Song 1')] }]) as never);
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    await waitFor(() => expect(api.getRecommendationsV2).toHaveBeenCalled());
+    expect(await screen.findByTestId('me-goto-1')).toBeTruthy();
+    expect(screen.getByTestId('me-goto-0')).toHaveTextContent(/Song 1/);
+    expect(screen.getByTestId('me-goto-1')).toHaveTextContent(/Pub Song/);
+    expect(screen.queryByTestId('me-goto-fit-0')).toBeNull();
+  });
+
+  it('offline (decide unreachable), the last recs go-tos cached for this account still show', async () => {
+    api.getLibrary.mockResolvedValue({ status: 'ok', etag: 'e', items: [goTo(1)] } as never);
+    appStorage.set(
+      goTosStorageKey(userKeyFor('me@example.com')),
+      JSON.stringify({ songs: [rec('Recs Artist', 'Recs Hit')], savedAt: Date.now() }),
+    );
+    api.getRecommendationsV2.mockRejectedValue(new decide.ApiError(0, 'network'));
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    await waitFor(() => expect(screen.getByTestId('me-goto-0')).toHaveTextContent(/Recs Hit/));
+    expect(screen.queryByTestId('me-goto-1')).toBeNull();
   });
 
   it('empty go-tos open the bulk picker; New setlist opens a named setlist', async () => {
