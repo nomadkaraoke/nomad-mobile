@@ -1824,6 +1824,17 @@
       "play": "Ouvir",
       "unsure": "Não tenho certeza",
       "stop": "Parar"
+    },
+    "personal": {
+      "body": "Vamos preparar até {cap} músicas que você mais escuta, durante a noite.",
+      "cap": "Você pode pedir novamente em {date}",
+      "failed": "Não foi possível pedir agora. Tente novamente em um minuto.",
+      "nothingToAdd": "Já temos suas músicas favoritas. Tente novamente depois de ouvir mais músicas.",
+      "paused": "Ocupado no momento, tente novamente amanhã",
+      "preparing": "{total, plural, one {Preparando # das suas músicas…} other {Preparando # das suas músicas…}}",
+      "ready": "{ready, plural, one {# das suas músicas está pronta — descubra sua voz} other {# das suas músicas estão prontas — descubra sua voz}}",
+      "request": "Preparar minhas músicas",
+      "title": "Analisar minhas músicas"
     }
   }
 }

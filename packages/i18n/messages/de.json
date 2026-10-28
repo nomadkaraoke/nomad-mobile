@@ -1824,6 +1824,17 @@
       "play": "Anhören",
       "unsure": "Nicht sicher",
       "stop": "Stopp"
+    },
+    "personal": {
+      "body": "Wir bereiten über Nacht bis zu {cap} der Songs vor, die du am meisten hörst.",
+      "cap": "Du kannst am {date} wieder anfragen",
+      "failed": "Anfrage konnte gerade nicht gestellt werden. Versuch es in einer Minute noch einmal.",
+      "nothingToAdd": "Wir haben deine Top-Songs bereits. Versuch es wieder, wenn du mehr Musik gehört hast.",
+      "paused": "Gerade viel zu tun, versuch es morgen noch einmal",
+      "preparing": "{total, plural, one {# deiner Songs wird vorbereitet…} other {# deiner Songs werden vorbereitet…}}",
+      "ready": "{ready, plural, one {# deiner Songs ist bereit – finde deine Stimme} other {# deiner Songs sind bereit – finde deine Stimme}}",
+      "request": "Meine Songs vorbereiten",
+      "title": "Meine Musik analysieren"
     }
   }
 }

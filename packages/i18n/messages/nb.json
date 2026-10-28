@@ -1824,6 +1824,17 @@
       "play": "Lytt",
       "unsure": "Ikke sikker",
       "stop": "Stopp"
+    },
+    "personal": {
+      "body": "Vi klargjør opptil {cap} sanger du lytter mest til, over natten.",
+      "cap": "Du kan be om på nytt den {date}",
+      "failed": "Kunne ikke sende forespørselen akkurat nå. Prøv igjen om et minutt.",
+      "nothingToAdd": "Vi har allerede toppsangene dine. Prøv igjen etter at du har lyttet til mer musikk.",
+      "paused": "Mye pågang akkurat nå, prøv igjen i morgen",
+      "preparing": "{total, plural, one {Klargjør # av sangene dine…} other {Klargjør # av sangene dine…}}",
+      "ready": "{ready, plural, one {# av sangene dine er klar – finn stemmen din} other {# av sangene dine er klare – finn stemmen din}}",
+      "request": "Klargjør sangene mine",
+      "title": "Analyser musikken min"
     }
   }
 }

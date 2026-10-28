@@ -1824,6 +1824,17 @@
       "play": "Pakinggan",
       "unsure": "Hindi sigurado",
       "stop": "Itigil"
+    },
+    "personal": {
+      "body": "Ihahanda namin magdamag ang hanggang {cap} na kantang pinakapinapakinggan mo.",
+      "cap": "Maaari kang humiling ulit sa {date}",
+      "failed": "Hindi makapaghiling sa ngayon. Subukan ulit pagkalipas ng isang minuto.",
+      "nothingToAdd": "Nasa amin na ang mga paborito mong kanta. Subukan ulit kapag nakapakinig ka na ng mas marami pang musika.",
+      "paused": "Medyo abala sa ngayon, subukan ulit bukas",
+      "preparing": "{total, plural, one {Inihahanda ang # sa iyong mga kanta…} other {Inihahanda ang # sa iyong mga kanta…}}",
+      "ready": "{ready, plural, one {Handa na ang # sa iyong mga kanta — tuklasin ang iyong boses} other {Handa na ang # sa iyong mga kanta — tuklasin ang iyong boses}}",
+      "request": "Ihanda ang aking mga kanta",
+      "title": "Suriin ang aking musika"
     }
   }
 }

@@ -5629,6 +5629,58 @@
         }
       }
     },
+    "/api/voice/personal-pool": {
+      "get": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Personal Pool",
+        "description": "Eligibility, the cap (``used`` of ``cap`` songs in the window) and your batches, newest first.",
+        "operationId": "personal_pool_api_voice_personal_pool_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalPoolOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "voice-session"
+        ],
+        "summary": "Request Personal Pool",
+        "description": "Queue up to ``cap`` of your best-known songs for analysis. Refusals: 403 ``not_eligible``, 429 ``cap``\n(with ``next_allowed_at``), 409 ``nothing_to_add`` / ``concurrent_request``, 503 ``budget_paused``.",
+        "operationId": "request_personal_pool_api_voice_personal_pool_post",
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalBatchCreated"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/api/voice/recordings": {
       "post": {
         "tags": [
@@ -6373,6 +6425,61 @@
                     "$ref": "#/components/schemas/UserSongOut"
                   },
                   "title": "Response User Songs Api Admin Voice Users  Email  Songs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/voice/costs": {
+      "get": {
+        "tags": [
+          "admin-voice"
+        ],
+        "summary": "Costs",
+        "description": "This month's estimated personal-pool spend against ``voice_monthly_budget_usd``, and the shared pool.",
+        "operationId": "costs_api_admin_voice_costs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "x-admin-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceCostsOut"
                 }
               }
             }
@@ -10321,6 +10428,136 @@
           "status"
         ],
         "title": "PendingListenBrainzImport"
+      },
+      "PersonalBatchCreated": {
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "songs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Songs"
+          },
+          "est_cost_usd": {
+            "type": "number",
+            "title": "Est Cost Usd"
+          }
+        },
+        "type": "object",
+        "required": [
+          "batch_id",
+          "songs",
+          "est_cost_usd"
+        ],
+        "title": "PersonalBatchCreated"
+      },
+      "PersonalBatchOut": {
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "requested_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Requested At"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "ready": {
+            "type": "integer",
+            "title": "Ready"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "done"
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "batch_id",
+          "requested_at",
+          "total",
+          "ready",
+          "status"
+        ],
+        "title": "PersonalBatchOut"
+      },
+      "PersonalPoolOut": {
+        "properties": {
+          "eligible": {
+            "type": "boolean",
+            "title": "Eligible"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "paid",
+              "history",
+              "admin",
+              "not_eligible"
+            ],
+            "title": "Reason"
+          },
+          "listens": {
+            "type": "integer",
+            "title": "Listens"
+          },
+          "songs_with_plays": {
+            "type": "integer",
+            "title": "Songs With Plays"
+          },
+          "next_allowed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Allowed At"
+          },
+          "cap": {
+            "type": "integer",
+            "title": "Cap"
+          },
+          "used": {
+            "type": "integer",
+            "title": "Used"
+          },
+          "batches": {
+            "items": {
+              "$ref": "#/components/schemas/PersonalBatchOut"
+            },
+            "type": "array",
+            "title": "Batches"
+          }
+        },
+        "type": "object",
+        "required": [
+          "eligible",
+          "reason",
+          "listens",
+          "songs_with_plays",
+          "next_allowed_at",
+          "cap",
+          "used",
+          "batches"
+        ],
+        "title": "PersonalPoolOut"
       },
       "PitchSummaryIn": {
         "properties": {
@@ -15034,6 +15271,54 @@
           "brand_name"
         ],
         "title": "VersionOut"
+      },
+      "VoiceCostsOut": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "title": "Month"
+          },
+          "personal_batches": {
+            "type": "integer",
+            "title": "Personal Batches"
+          },
+          "personal_songs": {
+            "type": "integer",
+            "title": "Personal Songs"
+          },
+          "est_cost_usd": {
+            "type": "number",
+            "title": "Est Cost Usd"
+          },
+          "budget_usd": {
+            "type": "number",
+            "title": "Budget Usd"
+          },
+          "paused": {
+            "type": "boolean",
+            "title": "Paused"
+          },
+          "shared_songs_analysed": {
+            "type": "integer",
+            "title": "Shared Songs Analysed"
+          },
+          "est_cost_per_song_usd": {
+            "type": "number",
+            "title": "Est Cost Per Song Usd"
+          }
+        },
+        "type": "object",
+        "required": [
+          "month",
+          "personal_batches",
+          "personal_songs",
+          "est_cost_usd",
+          "budget_usd",
+          "paused",
+          "shared_songs_analysed",
+          "est_cost_per_song_usd"
+        ],
+        "title": "VoiceCostsOut"
       },
       "VoiceFlagsOut": {
         "properties": {

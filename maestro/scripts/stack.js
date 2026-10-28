@@ -2,7 +2,8 @@
 // Env (pass with runScript `env:`; STACK comes from `maestro test -e STACK=http://127.0.0.1:8010`):
 //   ACTION   setup | code | config | judge | job | scenario | review | decide-seed | decide-reset | voice-seed |
 //            voice-assert | kjbox | decide | log | fake-externals | fake-lb-user | fake-lastfm-user | lb-poll | source-counts |
-//            voice-session-assert | voice-recordings-count | voice-reset | voice-seed-history | voice-history-assert
+//            voice-session-assert | voice-recordings-count | voice-reset | voice-seed-history | voice-history-assert |
+//            voice-personal-seed
 //   setup:   NAME (flow name, used in the unique email), CREDITS (default 2),
 //            USER_CONFIG (JSON, per-user fake-config knobs: fail_at, auto_approve, audio_duration_seconds,
 //            youtube_url_enabled, step_delay_seconds, judge_*), GLOBAL_CONFIG (JSON, merged over the defaults
@@ -93,7 +94,11 @@
 //   voice-recordings-count: EMAIL (default output.email), EXPECT_COUNT -> decide's stored take recordings for that
 //            user, polled until it is EXPECT_COUNT or WAIT_MS (default 30000) passes (the app uploads in the
 //            background) -> output.voiceRecordings
-//   voice-reset: EMAIL (default output.email) -> deletes the user's voice sessions, attempts and recordings
+//   voice-reset: EMAIL (default output.email) -> deletes the user's voice sessions, attempts and recordings, and resets
+//            the personal pool (the user's batches, every personal fetch-queue doc, this month's budget; decide ≥ v0.34.2)
+//   voice-personal-seed: EMAIL (default output.email) -> makes the user eligible for "Analyse my music" by history
+//            with fixture songs the pool can pick (POST ${DECIDE_STACK}/api/test/voice/personal-seed, decide ≥ v0.34.2;
+//            after decide-seed, which clears user_songs) -> output.personalSongs (JSON)
 //   voice-seed-history: EMAIL (default output.email), HISTORY (JSON {sessions: [{state, result_summary?, attempts:
 //            [{song_key, artist, title, quiz, pitch?, recording, excluded?, demand?}]}]}, the first session the oldest)
 //            -> replaces the user's voice history (POST ${DECIDE_STACK}/api/test/voice/seed-history, decide ≥ v0.31;
@@ -635,6 +640,14 @@
       'voice history seed',
     );
     output.voiceHistory = JSON.stringify(res);
+  } else if (action === 'voice-personal-seed') {
+    const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+    if (!email) throw new Error('ACTION voice-personal-seed needs EMAIL (or ACTION setup first)');
+    const res = check(
+      http.post(decideBase + '/api/test/voice/personal-seed', { headers: JSON_HEADERS, body: JSON.stringify({ email: email }) }),
+      'voice personal seed',
+    );
+    output.personalSongs = JSON.stringify(res.songs);
   } else if (action === 'voice-history-assert') {
     const token = envValue(typeof TOKEN !== 'undefined' ? TOKEN : undefined) || output.token;
     if (!token) throw new Error('ACTION voice-history-assert needs TOKEN (setup output.token)');

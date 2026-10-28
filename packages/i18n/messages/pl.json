@@ -1824,6 +1824,17 @@
       "play": "Odsłuchaj",
       "unsure": "Nie mam pewności",
       "stop": "Zatrzymaj"
+    },
+    "personal": {
+      "body": "Przygotujemy przez noc do {cap} Twoich najczęściej słuchanych utworów.",
+      "cap": "Możesz złożyć prośbę ponownie w dniu {date}",
+      "failed": "Nie udało się teraz wysłać prośby. Spróbuj ponownie za minutę.",
+      "nothingToAdd": "Mamy już Twoje ulubione piosenki. Spróbuj ponownie, gdy posłuchasz więcej muzyki.",
+      "paused": "Mamy teraz dużo pracy, spróbuj ponownie jutro",
+      "preparing": "{total, plural, one {Przygotowujemy # z Twoich utworów…} few {Przygotowujemy # z Twoich utworów…} many {Przygotowujemy # z Twoich utworów…} other {Przygotowujemy # z Twoich utworów…}}",
+      "ready": "{ready, plural, one {# z Twoich piosenek jest gotowa — odkryj swój głos} few {# z Twoich piosenek są gotowe — odkryj swój głos} many {# z Twoich piosenek jest gotowych — odkryj swój głos} other {# z Twoich piosenek jest gotowych — odkryj swój głos}}",
+      "request": "Przygotuj moje piosenki",
+      "title": "Przeanalizuj moją muzykę"
     }
   }
 }

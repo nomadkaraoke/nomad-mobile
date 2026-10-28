@@ -1824,6 +1824,17 @@
       "play": "Écouter",
       "unsure": "Je ne sais pas",
       "stop": "Arrêter"
+    },
+    "personal": {
+      "body": "On va préparer jusqu'à {cap} des morceaux que tu écoutes le plus, pendant la nuit.",
+      "cap": "Tu pourras refaire une demande le {date}",
+      "failed": "Impossible de faire la demande pour l'instant. Réessaie dans une minute.",
+      "nothingToAdd": "On a déjà tes morceaux préférés. Réessaie après avoir écouté plus de musique.",
+      "paused": "Un peu débordés pour l'instant, réessaie demain",
+      "preparing": "{total, plural, one {Préparation d'un de tes morceaux…} other {Préparation de # de tes morceaux…}}",
+      "ready": "{ready, plural, one {# de tes morceaux est prêt — trouve ta voix} other {# de tes morceaux sont prêts — trouve ta voix}}",
+      "request": "Préparer mes morceaux",
+      "title": "Analyser ma musique"
     }
   }
 }

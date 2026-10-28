@@ -1824,6 +1824,17 @@
       "play": "Kuuntele",
       "unsure": "En ole varma",
       "stop": "Pysäytä"
+    },
+    "personal": {
+      "body": "Valmistelemme yön aikana jopa {cap} eniten kuuntelemaasi kappaletta.",
+      "cap": "Voit pyytää uudelleen {date}",
+      "failed": "Pyyntö epäonnistui juuri nyt. Yritä hetken kuluttua uudelleen.",
+      "nothingToAdd": "Meillä on jo suosituimmat kappaleesi. Yritä uudelleen, kun olet kuunnellut lisää musiikkia.",
+      "paused": "Palvelussa on juuri nyt ruuhkaa, yritä huomenna uudelleen",
+      "preparing": "{total, plural, one {Valmistellaan # kappaleistasi…} other {Valmistellaan # kappaleistasi…}}",
+      "ready": "{ready, plural, one {# kappaleistasi on valmis — löydä äänesi} other {# kappaleistasi on valmiina — löydä äänesi}}",
+      "request": "Valmistele kappaleeni",
+      "title": "Analysoi musiikkini"
     }
   }
 }

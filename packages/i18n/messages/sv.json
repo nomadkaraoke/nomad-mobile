@@ -1824,6 +1824,17 @@
       "play": "Lyssna",
       "unsure": "Inte säker",
       "stop": "Stopp"
+    },
+    "personal": {
+      "body": "Vi förbereder upp till {cap} av de låtar du lyssnar mest på, över natten.",
+      "cap": "Du kan göra en ny förfrågan den {date}",
+      "failed": "Kunde inte skicka förfrågan just nu. Försök igen om en minut.",
+      "nothingToAdd": "Vi har redan dina topplåtar. Försök igen när du har lyssnat på mer musik.",
+      "paused": "Upptaget just nu, försök igen i morgon",
+      "preparing": "{total, plural, one {Förbereder # av dina låtar…} other {Förbereder # av dina låtar…}}",
+      "ready": "{ready, plural, one {# av dina låtar är klar — hitta din röst} other {# av dina låtar är klara — hitta din röst}}",
+      "request": "Förbered mina låtar",
+      "title": "Analysera min musik"
     }
   }
 }

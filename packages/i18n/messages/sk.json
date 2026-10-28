@@ -1824,6 +1824,17 @@
       "play": "Vypočuť si",
       "unsure": "Neviem isto",
       "stop": "Zastaviť"
+    },
+    "personal": {
+      "body": "Cez noc pripravíme až {cap} skladieb, ktoré počúvaš najviac.",
+      "cap": "Znova môžeš požiadať {date}",
+      "failed": "Práve teraz sa to nepodarilo odoslať. Skús to znova o minútu.",
+      "nothingToAdd": "Tvoje najobľúbenejšie skladby už máme. Skús to znova, keď si vypočuješ viac hudby.",
+      "paused": "Momentálne máme plno, skús to znova zajtra",
+      "preparing": "{total, plural, one {Pripravuje sa # z tvojich skladieb…} few {Pripravujú sa # z tvojich skladieb…} other {Pripravuje sa # z tvojich skladieb…}}",
+      "ready": "{ready, plural, one {# z tvojich skladieb je pripravená — objav svoj hlas} few {# z tvojich skladieb sú pripravené — objav svoj hlas} other {# z tvojich skladieb je pripravených — objav svoj hlas}}",
+      "request": "Pripraviť moje skladby",
+      "title": "Analyzovať moju hudbu"
     }
   }
 }

@@ -1824,6 +1824,17 @@
       "play": "Dengarkan",
       "unsure": "Kurang yakin",
       "stop": "Berhenti"
+    },
+    "personal": {
+      "body": "Kami akan menyiapkan hingga {cap} lagu yang paling sering Anda dengarkan dalam semalam.",
+      "cap": "Anda bisa mengajukan permintaan lagi pada {date}",
+      "failed": "Gagal memproses permintaan tadi. Coba lagi sebentar lagi.",
+      "nothingToAdd": "Kami sudah memiliki daftar lagu favorit Anda. Coba lagi setelah Anda mendengarkan lebih banyak musik.",
+      "paused": "Sedang sibuk saat ini, silakan coba lagi besok",
+      "preparing": "{total, plural, other {Menyiapkan # lagu Anda…}}",
+      "ready": "{ready, plural, other {# lagu Anda sudah siap — temukan suara terbaikmu}}",
+      "request": "Siapkan lagu saya",
+      "title": "Analisis musik saya"
     }
   }
 }

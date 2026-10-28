@@ -1824,6 +1824,17 @@
       "play": "Nghe",
       "unsure": "Không chắc",
       "stop": "Dừng"
+    },
+    "personal": {
+      "body": "Chúng tôi sẽ chuẩn bị tối đa {cap} bài hát bạn nghe nhiều nhất qua đêm nay.",
+      "cap": "Bạn có thể yêu cầu lại vào {date}",
+      "failed": "Chưa thể gửi yêu cầu lúc này. Vui lòng thử lại sau một phút.",
+      "nothingToAdd": "Chúng tôi đã có các bài hát bạn nghe nhiều nhất rồi. Hãy thử lại sau khi bạn nghe thêm nhạc nhé.",
+      "paused": "Hệ thống hiện đang bận, vui lòng thử lại vào ngày mai",
+      "preparing": "{total, plural, one {Đang chuẩn bị # bài hát của bạn…} other {Đang chuẩn bị # bài hát của bạn…}}",
+      "ready": "{ready, plural, one {# bài hát của bạn đã sẵn sàng — hãy cất cao giọng hát} other {# bài hát của bạn đã sẵn sàng — hãy cất cao giọng hát}}",
+      "request": "Chuẩn bị bài hát của tôi",
+      "title": "Phân tích âm nhạc của tôi"
     }
   }
 }
