@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Canzone o artista",
       "sortLabel": "Ordina",
       "timesSungLabel": "{count, plural, one {Cantata # volta} other {Cantata # volte}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# voto sulla bacheca} other {# voti sulla bacheca}}",
+      "dismiss": "Nascondi questo brano",
+      "empty": "Niente da creare al momento. I brani che salvi o canti che non hanno una versione karaoke appariranno qui.",
+      "hiddenToast": "Nascosto da Fallo creare",
+      "intro": "Brani che vorresti cantare che non hanno ancora una versione karaoke. Creane uno ora, oppure richiedilo gratis sulla nostra bacheca.",
+      "offline": "Sei offline. Per creare o richiedere brani serve una connessione.",
+      "request": "Richiedi gratis",
+      "requestError": "Impossibile inviare la richiesta. Riprova.",
+      "requested": "{count, plural, one {Richiesto · # voto} other {Richiesto · # voti}}",
+      "submissionLimit": "Una richiesta gratuita al giorno: riprova domani",
+      "title": "Fallo creare",
+      "voteUsed": "Hai usato il tuo voto gratuito di oggi",
+      "why": {
+        "imported": "Dalla tua musica",
+        "recommended": "Scelto per te",
+        "sung": "L'hai cantato",
+        "saved": "Salvato",
+        "voice": "Dalla tua sessione vocale"
+      },
+      "makeIt": "Crea",
+      "undo": "Annulla"
     }
   }
 }

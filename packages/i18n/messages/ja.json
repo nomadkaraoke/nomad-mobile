@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "曲名またはアーティスト名",
       "sortLabel": "並べ替え",
       "timesSungLabel": "{count, plural, one {#回歌唱} other {#回歌唱}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {ボードで#票獲得中} other {ボードで#票獲得中}}",
+      "dismiss": "この曲を非表示にする",
+      "empty": "現在作成できる曲はありません。保存した曲や歌った曲のうち、カラオケ音源がないものがここに表示されます。",
+      "hiddenToast": "「作成リクエスト」から非表示にしました",
+      "intro": "あなたが歌いたい曲のうち、まだカラオケ音源がない曲です。今すぐ作成するか、ボードから無料でリクエストできます。",
+      "offline": "オフラインです。作成やリクエストには接続が必要です。",
+      "request": "無料でリクエスト",
+      "requestError": "リクエストを送信できませんでした。もう一度お試しください。",
+      "requested": "{count, plural, one {リクエスト済み · #票} other {リクエスト済み · #票}}",
+      "submissionLimit": "無料リクエストは1日1回までです。明日またお試しください",
+      "title": "作成リクエスト",
+      "voteUsed": "今日の無料投票は既に使用済みです",
+      "why": {
+        "imported": "ライブラリの楽曲から",
+        "recommended": "あなたへのおすすめ",
+        "sung": "過去に歌った曲",
+        "saved": "保存済み",
+        "voice": "ボイスセッションから"
+      },
+      "makeIt": "作成する",
+      "undo": "元に戻す"
     }
   }
 }

@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Song oder Interpret",
       "sortLabel": "Sortieren",
       "timesSungLabel": "{count, plural, one {# Mal gesungen} other {# Mal gesungen}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# Stimme auf dem Board} other {# Stimmen auf dem Board}}",
+      "dismiss": "Diesen Song ausblenden",
+      "empty": "Aktuell gibt es hier nichts zu erstellen. Songs, die du speicherst oder singst und von denen es noch keine Karaoke-Version gibt, werden hier angezeigt.",
+      "hiddenToast": "Aus „Erstellen lassen“ ausgeblendet",
+      "intro": "Songs, die du singen würdest, von denen es aber noch keine Karaoke-Version gibt. Erstelle jetzt eine oder wünsche sie dir kostenlos auf unserem Board.",
+      "offline": "Du bist offline. Zum Erstellen und Wünschen benötigst du eine Internetverbindung.",
+      "request": "Kostenlos wünschen",
+      "requestError": "Anfrage konnte nicht gesendet werden. Versuche es bitte noch einmal.",
+      "requested": "{count, plural, one {Gewünscht · # Stimme} other {Gewünscht · # Stimmen}}",
+      "submissionLimit": "Ein kostenloser Wunsch pro Tag: Versuche es morgen wieder",
+      "title": "Erstellen lassen",
+      "voteUsed": "Du hast deine heutige kostenlose Stimme bereits abgegeben",
+      "why": {
+        "imported": "Aus deiner Musik",
+        "recommended": "Für dich ausgewählt",
+        "sung": "Von dir gesungen",
+        "saved": "Gespeichert",
+        "voice": "Aus deiner Gesangssitzung"
+      },
+      "makeIt": "Erstellen",
+      "undo": "Rückgängig"
     }
   }
 }

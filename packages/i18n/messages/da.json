@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Sang eller kunstner",
       "sortLabel": "Sortér",
       "timesSungLabel": "{count, plural, one {Sunget # gang} other {Sunget # gange}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# stemme på tavlen} other {# stemmer på tavlen}}",
+      "dismiss": "Skjul denne sang",
+      "empty": "Intet at lave lige nu. Sange, du gemmer eller synger, som ikke findes som karaokeversion, vises her.",
+      "hiddenToast": "Skjult fra Få den lavet",
+      "intro": "Sange, du gerne vil synge, som ikke findes som karaokeversion endnu. Lav en nu, eller anmod gratis om den på vores tavle.",
+      "offline": "Du er offline. Oprettelse og anmodning kræver internetforbindelse.",
+      "request": "Anmod gratis om den",
+      "requestError": "Kunne ikke sende anmodningen. Prøv igen.",
+      "requested": "{count, plural, one {Anmodet · # stemme} other {Anmodet · # stemmer}}",
+      "submissionLimit": "Én gratis anmodning om dagen: prøv igen i morgen",
+      "title": "Få den lavet",
+      "voteUsed": "Du har brugt dagens gratis stemme",
+      "why": {
+        "imported": "Fra din musik",
+        "recommended": "Udvalgt til dig",
+        "sung": "Du sang den",
+        "saved": "Gemt",
+        "voice": "Fra din stemmesession"
+      },
+      "makeIt": "Lav den",
+      "undo": "Fortryd"
     }
   }
 }

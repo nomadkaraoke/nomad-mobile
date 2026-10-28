@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Kappale tai esittäjä",
       "sortLabel": "Lajittele",
       "timesSungLabel": "{count, plural, one {Laulettu # kerran} other {Laulettu # kertaa}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# ääni toivelistalla} other {# ääntä toivelistalla}}",
+      "dismiss": "Piilota tämä kappale",
+      "empty": "Ei mitään luotavaa juuri nyt. Tallentamasi tai laulamasi kappaleet, joista ei ole karaokeversiota, näkyvät täällä.",
+      "hiddenToast": "Piilotettu Teetä tämä -näkymästä",
+      "intro": "Kappaleet, joita haluaisit laulaa, mutta joista ei ole vielä karaokeversiota. Tee sellainen nyt tai toivo sitä ilmaiseksi toivelistallamme.",
+      "offline": "Olet offline-tilassa. Tekeminen ja toivominen vaativat verkkoyhteyden.",
+      "request": "Toivo ilmaiseksi",
+      "requestError": "Toivetta ei voitu lähettää. Yritä uudelleen.",
+      "requested": "{count, plural, one {Toivottu · # ääni} other {Toivottu · # ääntä}}",
+      "submissionLimit": "Yksi ilmainen toive päivässä: kokeile huomenna uudelleen",
+      "title": "Teetä tämä",
+      "voteUsed": "Olet käyttänyt tämän päivän ilmaisen äänesi",
+      "why": {
+        "imported": "Omasta musiikistasi",
+        "recommended": "Valittu sinulle",
+        "sung": "Olet laulanut tämän",
+        "saved": "Tallennettu",
+        "voice": "Äänisessiostasi"
+      },
+      "makeIt": "Luo versio",
+      "undo": "Kumoa"
     }
   }
 }

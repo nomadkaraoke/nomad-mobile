@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Dal vagy előadó",
       "sortLabel": "Rendezés",
       "timesSungLabel": "{count, plural, one {# alkalommal elénekelve} other {# alkalommal elénekelve}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# szavazat a táblán} other {# szavazat a táblán}}",
+      "dismiss": "Dal elrejtése",
+      "empty": "Jelenleg nincs mit elkészíteni. Azok a mentett vagy elénekelt dalaid, amelyeknek nincs karaoke verziója, itt fognak megjelenni.",
+      "hiddenToast": "Elrejtve a „Készíttesd el” listáról",
+      "intro": "Dalok, amiket elénekelnél, de még nincs belőlük karaoke verzió. Készíts egyet most, vagy kérd ingyen a táblánkon.",
+      "offline": "Offline vagy. A készítéshez és a kéréshez internetkapcsolat szükséges.",
+      "request": "Kérd ingyen",
+      "requestError": "Nem sikerült elküldeni a kérést. Próbáld újra.",
+      "requested": "{count, plural, one {Kérve · # szavazat} other {Kérve · # szavazat}}",
+      "submissionLimit": "Naponta egy ingyenes kérés: próbáld újra holnap",
+      "title": "Készíttesd el",
+      "voteUsed": "Már felhasználtad a mai ingyenes szavazatodat",
+      "why": {
+        "imported": "A zenéidből",
+        "recommended": "Neked ajánlott",
+        "sung": "Ezt énekelted",
+        "saved": "Mentve",
+        "voice": "A hangmunkamenetedből"
+      },
+      "makeIt": "Készítsd el",
+      "undo": "Visszavonás"
     }
   }
 }

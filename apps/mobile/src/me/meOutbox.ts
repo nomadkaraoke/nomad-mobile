@@ -2,9 +2,11 @@ import {
   ApiError,
   createSetlist,
   deleteSetlist,
+  dismissGetMade,
   loveSong,
   putSetlistItems,
   renameSetlist,
+  undismissGetMade,
   unloveSong,
   type Setlist,
   type SetlistItemIn,
@@ -31,7 +33,9 @@ export type MeOutboxItem =
       rename?: boolean;
     }
   | { key: `setlist:${string}`; op: 'delete'; id: string }
-  | { key: `love:${string}`; op: 'love'; song_key: string; artist: string; title: string; loved: boolean };
+  | { key: `love:${string}`; op: 'love'; song_key: string; artist: string; title: string; loved: boolean }
+  /** Get this made: hide (or, on undo, show again) a song by its get-made `key` (a song_key or a `u:` key). */
+  | { key: `dismiss:${string}`; op: 'dismiss'; dismissKey: string; dismissed: boolean };
 
 export function meMerge(queued: MeOutboxItem & { attempted?: boolean }, next: MeOutboxItem): MeOutboxItem | null {
   if (queued.op === 'save' && next.op === 'save') {
@@ -45,7 +49,7 @@ export function meMerge(queued: MeOutboxItem & { attempted?: boolean }, next: Me
   // A delete after a create that was never attempted: nothing to do. Once a create has been attempted (in flight, or
   // timed out but maybe committed) the delete must still go out (404 = done).
   if (next.op === 'delete' && queued.op === 'save') return queued.create && !queued.attempted ? null : next;
-  return next; // love after love, delete after delete, save after delete: the newer wins
+  return next; // love after love, dismiss after dismiss, delete after delete, save after delete: the newer wins
 }
 
 const sig = (x: { song_key?: string | null; artist?: string; title?: string }) =>
@@ -81,6 +85,11 @@ export async function sendMe(item: MeOutboxItem): Promise<Setlist | void> {
     case 'love':
       if (item.loved) await loveSong(item.song_key, { artist: item.artist, title: item.title });
       else await unloveSong(item.song_key);
+      return;
+    case 'dismiss':
+      // Both are idempotent on decide, so a retry after a timed-out send is safe.
+      if (item.dismissed) await dismissGetMade(item.dismissKey);
+      else await undismissGetMade(item.dismissKey);
   }
 }
 

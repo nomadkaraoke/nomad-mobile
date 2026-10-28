@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Sang eller artist",
       "sortLabel": "Sorter",
       "timesSungLabel": "{count, plural, one {Sunget # gang} other {Sunget # ganger}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# stemme på tavlen} other {# stemmer på tavlen}}",
+      "dismiss": "Skjul denne sangen",
+      "empty": "Ingenting å lage akkurat nå. Sanger du lagrer eller synger som ikke har noen karaokeversjon, vil dukke opp her.",
+      "hiddenToast": "Skjult fra Få denne laget",
+      "intro": "Sanger du vil synge som ikke har noen karaokeversjon ennå. Lag en nå, eller be om den gratis på tavlen vår.",
+      "offline": "Du er frakoblet. Du må være på nett for å lage eller be om sanger.",
+      "request": "Be om den gratis",
+      "requestError": "Kunne ikke sende forespørselen. Prøv igjen.",
+      "requested": "{count, plural, one {Forespurt · # stemme} other {Forespurt · # stemmer}}",
+      "submissionLimit": "Én gratis forespørsel per dag: prøv igjen i morgen",
+      "title": "Få denne laget",
+      "voteUsed": "Du har brukt dagens gratisstemme",
+      "why": {
+        "imported": "Fra musikken din",
+        "recommended": "Valgt for deg",
+        "sung": "Du sang den",
+        "saved": "Lagret",
+        "voice": "Fra stemmeøkten din"
+      },
+      "makeIt": "Lag den",
+      "undo": "Angre"
     }
   }
 }

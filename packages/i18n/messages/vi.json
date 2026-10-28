@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Bài hát hoặc nghệ sĩ",
       "sortLabel": "Sắp xếp",
       "timesSungLabel": "{count, plural, one {Đã hát # lần} other {Đã hát # lần}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# lượt bình chọn trên bảng} other {# lượt bình chọn trên bảng}}",
+      "dismiss": "Ẩn bài hát này",
+      "empty": "Hiện không có bài nào cần tạo. Các bài hát bạn lưu hoặc từng hát mà chưa có bản karaoke sẽ xuất hiện ở đây.",
+      "hiddenToast": "Đã ẩn khỏi mục Yêu cầu tạo bài",
+      "intro": "Những bài hát bạn muốn hát mà chưa có bản karaoke. Bạn có thể tự tạo ngay, hoặc gửi yêu cầu miễn phí trên bảng của chúng tôi.",
+      "offline": "Bạn đang ngoại tuyến. Cần có kết nối mạng để tạo bài và gửi yêu cầu.",
+      "request": "Yêu cầu miễn phí",
+      "requestError": "Không thể gửi yêu cầu. Vui lòng thử lại.",
+      "requested": "{count, plural, one {Đã yêu cầu · # lượt bình chọn} other {Đã yêu cầu · # lượt bình chọn}}",
+      "submissionLimit": "Mỗi ngày chỉ được một yêu cầu miễn phí: hãy quay lại vào ngày mai nhé",
+      "title": "Yêu cầu tạo bài",
+      "voteUsed": "Bạn đã dùng hết lượt bình chọn miễn phí hôm nay",
+      "why": {
+        "imported": "Từ kho nhạc của bạn",
+        "recommended": "Gợi ý dành cho bạn",
+        "sung": "Bạn đã từng hát",
+        "saved": "Đã lưu",
+        "voice": "Từ phiên thu giọng của bạn"
+      },
+      "makeIt": "Tạo bài hát",
+      "undo": "Hoàn tác"
     }
   }
 }

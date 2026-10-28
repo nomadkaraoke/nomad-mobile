@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Şarkı veya sanatçı",
       "sortLabel": "Sırala",
       "timesSungLabel": "{count, plural, one {# kez söylendi} other {# kez söylendi}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {Panoda # oy} other {Panoda # oy}}",
+      "dismiss": "Bu şarkıyı gizle",
+      "empty": "Şu anda yapılacak bir şey yok. Kaydettiğin veya söylediğin şarkıların karaoke versiyonu yoksa burada görünür.",
+      "hiddenToast": "\"Bunu hazırlat\" bölümünden gizlendi",
+      "intro": "Söylemek isteyeceğin ama henüz karaoke versiyonu olmayan şarkılar. Hemen bir tane yap veya panomuzda ücretsiz talep et.",
+      "offline": "Çevrimdışısın. Şarkı hazırlamak ve talep etmek için internet bağlantısı gerekir.",
+      "request": "Ücretsiz talep et",
+      "requestError": "İstek gönderilemedi. Tekrar dene.",
+      "requested": "{count, plural, one {Talep edildi · # oy} other {Talep edildi · # oy}}",
+      "submissionLimit": "Günde bir ücretsiz istek hakkı: Yarın tekrar dene",
+      "title": "Bunu hazırlat",
+      "voteUsed": "Bugünkü ücretsiz oy hakkını kullandın",
+      "why": {
+        "imported": "Müziklerinden",
+        "recommended": "Senin için seçildi",
+        "sung": "Bunu söyledin",
+        "saved": "Kaydedildi",
+        "voice": "Ses seansından"
+      },
+      "makeIt": "Oluştur",
+      "undo": "Geri al"
     }
   }
 }

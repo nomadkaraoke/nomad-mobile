@@ -4,7 +4,8 @@ import { useEffect } from 'react';
 import { useAuth } from '../auth/store';
 import { userKeyFor } from '../auth/userKey';
 import { appStorage } from '../storage';
-import { libraryStorageKey, logMirrorStorageKey, OWNER_KEY, setlistsStorageKey } from './account';
+import { getMadeStorageKey, libraryStorageKey, logMirrorStorageKey, OWNER_KEY, setlistsStorageKey } from './account';
+import { BOARD_QUERY_KEY, useGetMadeLocal } from './getMadeLocal';
 import { useLibrarySettle } from './librarySettle';
 import { useLovedOverrides } from './lovedOverrides';
 import { useMeOutbox } from './meOutbox';
@@ -44,9 +45,12 @@ export function useClearMeOnAccountChange(): void {
         // any account change: loves and sent-but-unfetched writes are per person
         useLovedOverrides.getState().clear();
         useLibrarySettle.getState().clear();
+        useGetMadeLocal.getState().clear();
+        // The board's vote state (voted today, your vote) is the signed-in person's.
+        queryClient.removeQueries({ queryKey: BOARD_QUERY_KEY });
       }
       if (was && !is) {
-        for (const kind of ['library', 'setlists', 'karaoke-log', 'song-history']) {
+        for (const kind of ['library', 'setlists', 'karaoke-log', 'song-history', 'get-made']) {
           const predicate = (q: { queryKey: readonly unknown[] }) => q.queryKey[0] === 'decide' && q.queryKey[2] === kind;
           void queryClient.cancelQueries({ predicate });
           queryClient.removeQueries({ predicate });
@@ -54,6 +58,7 @@ export function useClearMeOnAccountChange(): void {
         appStorage.remove(libraryStorageKey(was));
         appStorage.remove(setlistsStorageKey(was));
         appStorage.remove(logMirrorStorageKey(was));
+        appStorage.remove(getMadeStorageKey(was));
       }
       if (is && is !== was) adoptOwner(is);
     });

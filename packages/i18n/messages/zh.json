@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "歌名或歌手",
       "sortLabel": "排序",
       "timesSungLabel": "{count, plural, one {唱过 # 次} other {唱过 # 次}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {看板上已有 # 票} other {看板上已有 # 票}}",
+      "dismiss": "隐藏这首歌",
+      "empty": "目前没有待制作的歌曲。你收藏或演唱过但尚无伴奏版本的歌曲会显示在这里。",
+      "hiddenToast": "已从“制作伴奏”中隐藏",
+      "intro": "你想唱但还没有伴奏版本的歌曲。现在就制作一首，或在我们的看板上免费申请。",
+      "offline": "你当前处于离线状态。制作和申请需要网络连接。",
+      "request": "免费申请",
+      "requestError": "无法发送申请。请重试。",
+      "requested": "{count, plural, one {已申请 · # 票} other {已申请 · # 票}}",
+      "submissionLimit": "每天限免费申请一次：请明天再试",
+      "title": "制作伴奏",
+      "voteUsed": "你今天的免费投票额度已用完",
+      "why": {
+        "imported": "来自你的音乐",
+        "recommended": "为你推荐",
+        "sung": "你唱过这首",
+        "saved": "已保存",
+        "voice": "来自您的练唱环节"
+      },
+      "makeIt": "立即制作",
+      "undo": "撤销"
     }
   }
 }

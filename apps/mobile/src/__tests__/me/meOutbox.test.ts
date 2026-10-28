@@ -12,6 +12,8 @@ jest.mock('@nomad/api-decide', () => ({
   deleteSetlist: jest.fn(),
   loveSong: jest.fn(),
   unloveSong: jest.fn(),
+  dismissGetMade: jest.fn(),
+  undismissGetMade: jest.fn(),
 }));
 const api = decide as jest.Mocked<typeof decide>;
 const { ApiError } = jest.requireActual<typeof decide>('@nomad/api-decide');
@@ -48,11 +50,11 @@ afterEach(() => useMeOutbox.idle());
 /** Every send answers 401 (parks the queue), as when the session is lapsed or the phone is offline. */
 const goOffline = () => {
   const e = new ApiError(401, 'x');
-  for (const f of [api.createSetlist, api.putSetlistItems, api.renameSetlist, api.deleteSetlist, api.loveSong, api.unloveSong])
+  for (const f of [api.createSetlist, api.putSetlistItems, api.renameSetlist, api.deleteSetlist, api.loveSong, api.unloveSong, api.dismissGetMade, api.undismissGetMade])
     (f as jest.Mock).mockRejectedValue(e);
 };
 const goOnline = () => {
-  for (const f of [api.createSetlist, api.putSetlistItems, api.renameSetlist, api.deleteSetlist, api.loveSong, api.unloveSong])
+  for (const f of [api.createSetlist, api.putSetlistItems, api.renameSetlist, api.deleteSetlist, api.loveSong, api.unloveSong, api.dismissGetMade, api.undismissGetMade])
     (f as jest.Mock).mockResolvedValue(undefined);
   jest.clearAllMocks();
   api.createSetlist.mockImplementation(echoCreate);
@@ -130,6 +132,25 @@ it('love then unlove coalesce to the last', async () => {
   await useMeOutbox.getState().flush();
   expect(api.unloveSong).toHaveBeenCalledWith('k1');
   expect(api.loveSong).not.toHaveBeenCalled();
+});
+
+it('get-made dismiss then undo coalesce to the last (latest wins) and send by the get-made key', async () => {
+  goOffline();
+  const b = useMeOutbox.getState();
+  const dismiss = (dismissed: boolean): MeOutboxItem => ({ key: 'dismiss:u:odd|tune', op: 'dismiss', dismissKey: 'u:odd|tune', dismissed });
+  b.enqueue(dismiss(true));
+  await useMeOutbox.idle();
+  b.enqueue(dismiss(false));
+  await useMeOutbox.idle();
+  expect(useMeOutbox.getState().items).toEqual([expect.objectContaining({ op: 'dismiss', dismissed: false })]);
+  goOnline();
+  await useMeOutbox.getState().flush();
+  expect(api.undismissGetMade).toHaveBeenCalledWith('u:odd|tune');
+  expect(api.dismissGetMade).not.toHaveBeenCalled();
+  b.enqueue(dismiss(true));
+  await useMeOutbox.idle();
+  expect(api.dismissGetMade).toHaveBeenCalledWith('u:odd|tune');
+  expect(useMeOutbox.getState().items).toHaveLength(0);
 });
 
 const setlist = (items: decide.SetlistItemIn[], name = 'N') =>

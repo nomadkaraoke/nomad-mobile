@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "곡명 또는 아티스트",
       "sortLabel": "정렬",
       "timesSungLabel": "{count, plural, one {#회 부름} other {#회 부름}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {게시판 투표 #표} other {게시판 투표 #표}}",
+      "dismiss": "이 곡 숨기기",
+      "empty": "지금은 제작할 곡이 없습니다. 노래방 버전이 없는 곡을 저장하거나 부르면 여기에 표시됩니다.",
+      "hiddenToast": "'노래방 곡 만들기'에서 숨김 처리되었습니다",
+      "intro": "부르고 싶지만 아직 노래방 버전이 없는 곡들입니다. 지금 직접 제작하거나, 게시판에 무료로 요청해 보세요.",
+      "offline": "오프라인 상태입니다. 곡을 제작하거나 요청하려면 인터넷 연결이 필요합니다.",
+      "request": "무료로 요청하기",
+      "requestError": "요청을 보내지 못했습니다. 다시 시도해 주세요.",
+      "requested": "{count, plural, one {요청됨 · #표} other {요청됨 · #표}}",
+      "submissionLimit": "무료 요청은 하루에 한 번만 가능합니다. 내일 다시 시도해 주세요",
+      "title": "노래방 곡 만들기",
+      "voteUsed": "오늘의 무료 투표를 이미 사용하셨습니다",
+      "why": {
+        "imported": "내 음악에서 가져옴",
+        "recommended": "회원님을 위한 추천",
+        "sung": "내가 부른 곡",
+        "saved": "저장됨",
+        "voice": "보이스 세션 기록 기반"
+      },
+      "makeIt": "만들기",
+      "undo": "실행 취소"
     }
   }
 }

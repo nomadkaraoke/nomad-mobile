@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Chanson ou artiste",
       "sortLabel": "Trier",
       "timesSungLabel": "{count, plural, one {Chantée # fois} other {Chantée # fois}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# vote sur le tableau} other {# votes sur le tableau}}",
+      "dismiss": "Masquer ce morceau",
+      "empty": "Rien à créer pour le moment. Les morceaux que tu enregistres ou chantes et qui n'ont pas de version karaoké apparaîtront ici.",
+      "hiddenToast": "Masqué de « Faire créer »",
+      "intro": "Des morceaux que tu aimerais chanter qui n'ont pas encore de version karaoké. Crée-en une maintenant ou demande-la gratuitement sur notre tableau.",
+      "offline": "Tu es hors ligne. La création et les demandes nécessitent une connexion.",
+      "request": "Demander gratuitement",
+      "requestError": "Impossible d'envoyer la demande. Réessaie.",
+      "requested": "{count, plural, one {Demandé · # vote} other {Demandé · # votes}}",
+      "submissionLimit": "Une demande gratuite par jour : réessaie demain",
+      "title": "Faire créer",
+      "voteUsed": "Tu as utilisé ton vote gratuit du jour",
+      "why": {
+        "imported": "Depuis ta musique",
+        "recommended": "Choisi pour toi",
+        "sung": "Tu l'as chanté",
+        "saved": "Enregistré",
+        "voice": "D'après ta session vocale"
+      },
+      "makeIt": "Créer",
+      "undo": "Annuler"
     }
   }
 }

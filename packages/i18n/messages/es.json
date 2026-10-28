@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Canción o artista",
       "sortLabel": "Ordenar",
       "timesSungLabel": "{count, plural, one {Cantada # vez} other {Cantada # veces}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# voto en el tablero} other {# votos en el tablero}}",
+      "dismiss": "Ocultar esta canción",
+      "empty": "Nada para crear en este momento. Las canciones que guardes o cantes y que no tengan versión de karaoke aparecerán aquí.",
+      "hiddenToast": "Ocultado de Crear esto",
+      "intro": "Canciones que cantarías y que aún no tienen versión de karaoke. Crea una ahora o pídela gratis en nuestro tablero.",
+      "offline": "Estás sin conexión. Para crear o solicitar necesitas conexión a internet.",
+      "request": "Pídela gratis",
+      "requestError": "No se pudo enviar la solicitud. Inténtalo de nuevo.",
+      "requested": "{count, plural, one {Solicitada · # voto} other {Solicitada · # votos}}",
+      "submissionLimit": "Una solicitud gratis al día: inténtalo mañana",
+      "title": "Crear esto",
+      "voteUsed": "Ya usaste tu voto gratis de hoy",
+      "why": {
+        "imported": "De tu música",
+        "recommended": "Elegida para ti",
+        "sung": "La cantaste",
+        "saved": "Guardado",
+        "voice": "De tu sesión de voz"
+      },
+      "makeIt": "Crear",
+      "undo": "Deshacer"
     }
   }
 }

@@ -2017,6 +2017,29 @@
       "offline": "You're offline. Showing the songs saved on this phone.",
       "loadError": "Couldn't load your songs.",
       "count": "{count, plural, one {# song} other {# songs}}"
+    },
+    "getMade": {
+      "title": "Get this made",
+      "intro": "Songs you'd sing that have no karaoke version yet. Make one now, or request it free on our board.",
+      "makeIt": "Make it",
+      "request": "Request it free",
+      "dismiss": "Hide this song",
+      "requested": "{count, plural, one {Requested · # vote} other {Requested · # votes}}",
+      "boardVotes": "{count, plural, one {# vote on the board} other {# votes on the board}}",
+      "voteUsed": "You've used today's free vote",
+      "submissionLimit": "One free request a day: try tomorrow",
+      "requestError": "Couldn't send the request. Try again.",
+      "hiddenToast": "Hidden from Get this made",
+      "undo": "Undo",
+      "empty": "Nothing to make right now. Songs you save or sing that have no karaoke version will show up here.",
+      "offline": "You're offline. Making and requesting need a connection.",
+      "why": {
+        "saved": "Saved",
+        "sung": "You sang it",
+        "imported": "From your music",
+        "voice": "From your voice session",
+        "recommended": "Picked for you"
+      }
     }
   }
 }

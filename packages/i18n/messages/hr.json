@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Pjesma ili izvođač",
       "sortLabel": "Sortiraj",
       "timesSungLabel": "{count, plural, one {Otpjevano # put} few {Otpjevano # puta} other {Otpjevano # puta}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# glas na ploči} few {# glasa na ploči} other {# glasova na ploči}}",
+      "dismiss": "Sakrij ovu pjesmu",
+      "empty": "Trenutačno nema ničega za izradu. Pjesme koje spremiš ili otpjevaš, a nemaju karaoke verziju, pojavit će se ovdje.",
+      "hiddenToast": "Skriveno iz odjeljka Izradi ovo",
+      "intro": "Pjesme koje bi pjevao, a još nemaju karaoke verziju. Izradi je odmah ili je zatraži besplatno na našoj ploči.",
+      "offline": "Izvan mreže si. Za izradu i slanje zahtjeva potrebna je internetska veza.",
+      "request": "Zatraži besplatno",
+      "requestError": "Slanje zahtjeva nije uspjelo. Pokušaj ponovno.",
+      "requested": "{count, plural, one {Zatraženo · # glas} few {Zatraženo · # glasa} other {Zatraženo · # glasova}}",
+      "submissionLimit": "Jedan besplatni zahtjev dnevno: pokušaj sutra",
+      "title": "Izradi ovo",
+      "voteUsed": "Iskoristio si današnji besplatni glas",
+      "why": {
+        "imported": "Iz tvoje glazbe",
+        "recommended": "Odabrano za tebe",
+        "sung": "Već si pjevao",
+        "saved": "Spremljeno",
+        "voice": "Iz tvoje glasovne sesije"
+      },
+      "makeIt": "Izradi",
+      "undo": "Poništi"
     }
   }
 }

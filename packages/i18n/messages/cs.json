@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Písnička nebo interpret",
       "sortLabel": "Seřadit",
       "timesSungLabel": "{count, plural, one {Zpíváno #krát} few {Zpíváno #krát} other {Zpíváno #krát}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# hlas na nástěnce} few {# hlasy na nástěnce} many {# hlasu na nástěnce} other {# hlasů na nástěnce}}",
+      "dismiss": "Skrýt tuto skladbu",
+      "empty": "Zatím tu nic k vytvoření není. Tady se objeví skladby, které si uložíš nebo zazpíváš a které ještě nemají karaoke verzi.",
+      "hiddenToast": "Skryto ze sekce Nechat vytvořit",
+      "intro": "Skladby, které chceš zpívat, ale ještě nemají karaoke verzi. Vytvoř si ji hned, nebo o ni zdarma požádej na naší nástěnce.",
+      "offline": "Jsi offline. Vytváření i žádosti vyžadují připojení.",
+      "request": "Požádat zdarma",
+      "requestError": "Žádost se nepodařilo odeslat. Zkus to znovu.",
+      "requested": "{count, plural, one {Zažádáno · # hlas} few {Zažádáno · # hlasy} many {Zažádáno · # hlasu} other {Zažádáno · # hlasů}}",
+      "submissionLimit": "Jedna bezplatná žádost denně. Zkus to zítra",
+      "title": "Nechat vytvořit",
+      "voteUsed": "Svůj dnešní bezplatný hlas už máš vyčerpaný",
+      "why": {
+        "imported": "Z tvé hudby",
+        "recommended": "Vybráno pro tebe",
+        "sung": "Už jsi to zpíval/a",
+        "saved": "Uloženo",
+        "voice": "Z tvé hlasové relace"
+      },
+      "makeIt": "Vytvořit",
+      "undo": "Zpět"
     }
   }
 }

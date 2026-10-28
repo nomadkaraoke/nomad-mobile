@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Cançó o artista",
       "sortLabel": "Ordena",
       "timesSungLabel": "{count, plural, one {Cantada # vegada} other {Cantada # vegades}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# vot al tauler} other {# vots al tauler}}",
+      "dismiss": "Amaga aquesta cançó",
+      "empty": "No hi ha res per crear ara mateix. Les cançons que desis o cantis que no tinguin versió de karaoke apareixeran aquí.",
+      "hiddenToast": "S'ha amagat de Fes-la realitat",
+      "intro": "Cançons que cantaries i que encara no tenen versió de karaoke. Crea'n una ara o demana-la de franc al nostre tauler.",
+      "offline": "No tens connexió. Cal connexió per crear i fer peticions.",
+      "request": "Demana-la de franc",
+      "requestError": "No s'ha pogut enviar la petició. Torna-ho a provar.",
+      "requested": "{count, plural, one {Demanada · # vot} other {Demanada · # vots}}",
+      "submissionLimit": "Una petició de franc al dia: torna-ho a provar demà",
+      "title": "Fes-la realitat",
+      "voteUsed": "Ja has fet servir el vot gratuït d'avui",
+      "why": {
+        "imported": "De la teva música",
+        "recommended": "Triada per a tu",
+        "sung": "La vas cantar",
+        "saved": "Desat",
+        "voice": "De la teva sessió de veu"
+      },
+      "makeIt": "Crea'l",
+      "undo": "Desfer"
     }
   }
 }

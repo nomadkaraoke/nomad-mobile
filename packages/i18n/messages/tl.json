@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Kanta o artist",
       "sortLabel": "I-sort",
       "timesSungLabel": "{count, plural, one {# beses kinanta} other {# beses kinanta}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# boto sa board} other {# boto sa board}}",
+      "dismiss": "Itago ang kantang ito",
+      "empty": "Walang gagawin sa ngayon. Dito lalabas ang mga kantang na-save o kinanta mo na wala pang karaoke version.",
+      "hiddenToast": "Itinago mula sa Ipagawa ito",
+      "intro": "Mga kantang gusto mong kantahin na wala pang karaoke version. Gumawa na ngayon, o i-request ito nang libre sa aming board.",
+      "offline": "Offline ka. Kailangan ng koneksyon para makagawa at mag-request.",
+      "request": "I-request nang libre",
+      "requestError": "Hindi maipadala ang request. Subukan muli.",
+      "requested": "{count, plural, one {Na-request na · # boto} other {Na-request na · # boto}}",
+      "submissionLimit": "Isang libreng request bawat araw: subukan bukas",
+      "title": "Ipagawa ito",
+      "voteUsed": "Nagamit mo na ang iyong libreng boto para sa araw na ito",
+      "why": {
+        "imported": "Mula sa iyong musika",
+        "recommended": "Pinili para sa iyo",
+        "sung": "Kinanta mo ito",
+        "saved": "Nai-save na",
+        "voice": "Mula sa iyong voice session"
+      },
+      "makeIt": "Gawin ito",
+      "undo": "I-undo"
     }
   }
 }

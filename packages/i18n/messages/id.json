@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Lagu atau artis",
       "sortLabel": "Urutkan",
       "timesSungLabel": "{count, plural, other {Dinyanyikan # kali}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, other {# suara di papan}}",
+      "dismiss": "Sembunyikan lagu ini",
+      "empty": "Belum ada yang perlu dibuat saat ini. Lagu yang Anda simpan atau nyanyikan yang belum memiliki versi karaoke akan muncul di sini.",
+      "hiddenToast": "Disembunyikan dari Minta dibuatkan",
+      "intro": "Lagu yang ingin Anda nyanyikan yang belum ada versi karaokenya. Buat sekarang, atau minta gratis di papan permintaan kami.",
+      "offline": "Anda sedang offline. Diperlukan koneksi internet untuk membuat dan meminta lagu.",
+      "request": "Minta gratis",
+      "requestError": "Gagal mengirim permintaan. Coba lagi.",
+      "requested": "{count, plural, other {Diminta · # suara}}",
+      "submissionLimit": "Batas satu permintaan gratis per hari: coba lagi besok",
+      "title": "Minta dibuatkan",
+      "voteUsed": "Anda sudah menggunakan suara gratis hari ini",
+      "why": {
+        "imported": "Dari musik Anda",
+        "recommended": "Dipilihkan untuk Anda",
+        "sung": "Pernah Anda nyanyikan",
+        "saved": "Tersimpan",
+        "voice": "Dari sesi suara Anda"
+      },
+      "makeIt": "Buat",
+      "undo": "Urungkan"
     }
   }
 }

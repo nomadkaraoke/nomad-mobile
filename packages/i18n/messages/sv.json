@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Låt eller artist",
       "sortLabel": "Sortera",
       "timesSungLabel": "{count, plural, one {Sjungen # gång} other {Sjungen # gånger}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# röst på önskelistan} other {# röster på önskelistan}}",
+      "dismiss": "Dölj den här låten",
+      "empty": "Inget att skapa just nu. Låtar du sparar eller sjunger som saknar karaokeversion visas här.",
+      "hiddenToast": "Dold från Få den skapad",
+      "intro": "Låtar du vill sjunga som saknar karaokeversion än så länge. Skapa en nu, eller önska den gratis på vår önskelista.",
+      "offline": "Du är offline. Du behöver anslutning för att skapa och önska låtar.",
+      "request": "Önska gratis",
+      "requestError": "Kunde inte skicka förfrågan. Försök igen.",
+      "requested": "{count, plural, one {Önskad · # röst} other {Önskad · # röster}}",
+      "submissionLimit": "Ett gratisönskemål per dag – försök igen i morgon",
+      "title": "Få den skapad",
+      "voteUsed": "Du har använt dagens gratisröst",
+      "why": {
+        "imported": "Från din musik",
+        "recommended": "Utvald för dig",
+        "sung": "Du sjöng den",
+        "saved": "Sparad",
+        "voice": "Från din röstsession"
+      },
+      "makeIt": "Skapa",
+      "undo": "Ångra"
     }
   }
 }

@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Nummer of artiest",
       "sortLabel": "Sorteer",
       "timesSungLabel": "{count, plural, one {# keer gezongen} other {# keer gezongen}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# stem op het bord} other {# stemmen op het bord}}",
+      "dismiss": "Dit nummer verbergen",
+      "empty": "Er is nu niets om te maken. Nummers die je opslaat of zingt en die nog geen karaokeversie hebben, verschijnen hier.",
+      "hiddenToast": "Verborgen uit Laat dit maken",
+      "intro": "Nummers die je graag zou zingen en die nog geen karaokeversie hebben. Maak er nu een, of vraag hem gratis aan op ons bord.",
+      "offline": "Je bent offline. Voor maken en aanvragen is een verbinding nodig.",
+      "request": "Gratis aanvragen",
+      "requestError": "Kon de aanvraag niet versturen. Probeer het opnieuw.",
+      "requested": "{count, plural, one {Aangevraagd · # stem} other {Aangevraagd · # stemmen}}",
+      "submissionLimit": "Eén gratis aanvraag per dag: probeer het morgen weer",
+      "title": "Laat dit maken",
+      "voteUsed": "Je hebt je gratis stem voor vandaag gebruikt",
+      "why": {
+        "imported": "Uit je muziek",
+        "recommended": "Voor jou gekozen",
+        "sung": "Je hebt dit gezongen",
+        "saved": "Opgeslagen",
+        "voice": "Van je stemsessie"
+      },
+      "makeIt": "Maken",
+      "undo": "Ongedaan maken"
     }
   }
 }

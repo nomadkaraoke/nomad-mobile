@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 
 import { useAuth } from '../../auth/store';
+import { useGetMadeLocal } from '../../me/getMadeLocal';
 import { useMeOutbox } from '../../me/meOutbox';
 import { setMeQueryClient } from '../../me/queryClientRef';
 import { useLibrarySettle } from '../../me/librarySettle';
@@ -18,6 +19,7 @@ export function resetMe(email = 'a@example.com'): QueryClient {
   appStorage.clearAll();
   useLovedOverrides.getState().clear();
   useLibrarySettle.getState().clear();
+  useGetMadeLocal.getState().clear();
   signIn(email);
   useMeOutbox.getState().rehydrate(email);
   useOutbox.getState().rehydrate(email);

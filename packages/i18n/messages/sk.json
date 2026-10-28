@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Pesnička alebo interpret",
       "sortLabel": "Zoradiť",
       "timesSungLabel": "{count, plural, one {Spievané # raz} few {Spievané # razy} other {Spievané #-krát}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# hlas na nástenke} few {# hlasy na nástenke} other {# hlasov na nástenke}}",
+      "dismiss": "Skryť túto skladbu",
+      "empty": "Momentálne tu nie je čo vytvoriť. Skladby, ktoré si uložíš alebo zaspievaš a nemajú karaoke verziu, sa zobrazia tu.",
+      "hiddenToast": "Skryté zo sekcie Daj to vyrobiť",
+      "intro": "Skladby, ktoré by si si rád zaspieval, no zatiaľ nemajú karaoke verziu. Vytvor si ju teraz alebo o ňu zadarmo požiadaj na našej nástenke.",
+      "offline": "Si offline. Na vytváranie a posielanie žiadostí potrebuješ pripojenie na internet.",
+      "request": "Požiadať zadarmo",
+      "requestError": "Žiadosť sa nepodarilo odoslať. Skús to znova.",
+      "requested": "{count, plural, one {Odoslaná žiadosť · # hlas} few {Odoslaná žiadosť · # hlasy} other {Odoslaná žiadosť · # hlasov}}",
+      "submissionLimit": "Jedna bezplatná žiadosť denne – skús to zajtra",
+      "title": "Daj to vyrobiť",
+      "voteUsed": "Svoj dnešný bezplatný hlas si už minul",
+      "why": {
+        "imported": "Z tvojej hudby",
+        "recommended": "Vybrané pre teba",
+        "sung": "Zaspievané tebou",
+        "saved": "Uložené",
+        "voice": "Z tvojej hlasovej relácie"
+      },
+      "makeIt": "Vytvoriť",
+      "undo": "Vrátiť späť"
     }
   }
 }

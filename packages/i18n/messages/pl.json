@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Tytuł lub wykonawca",
       "sortLabel": "Sortuj",
       "timesSungLabel": "{count, plural, one {Zaśpiewano # raz} few {Zaśpiewano # razy} many {Zaśpiewano # razy} other {Zaśpiewano # razy}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# głos na tablicy} few {# głosy na tablicy} many {# głosów na tablicy} other {# głosu na tablicy}}",
+      "dismiss": "Ukryj tę piosenkę",
+      "empty": "Na razie nie ma nic do stworzenia. Piosenki, które zapiszesz lub zaśpiewasz, a które nie mają jeszcze wersji karaoke, pojawią się tutaj.",
+      "hiddenToast": "Ukryto z sekcji „Stwórz to”",
+      "intro": "Piosenki, które chcesz zaśpiewać, a nie mają jeszcze wersji karaoke. Stwórz wersję teraz lub poproś o nią za darmo na naszej tablicy.",
+      "offline": "Jesteś offline. Tworzenie i zgłaszanie próśb wymaga połączenia z internetem.",
+      "request": "Poproś za darmo",
+      "requestError": "Nie udało się wysłać prośby. Spróbuj ponownie.",
+      "requested": "{count, plural, one {Zgłoszono · # głos} few {Zgłoszono · # głosy} many {Zgłoszono · # głosów} other {Zgłoszono · # głosu}}",
+      "submissionLimit": "Jedna darmowa prośba dziennie – spróbuj jutro",
+      "title": "Stwórz to",
+      "voteUsed": "Twój darmowy głos na dziś został już wykorzystany",
+      "why": {
+        "imported": "Z Twojej muzyki",
+        "recommended": "Dobrane dla Ciebie",
+        "sung": "Zaśpiewana przez Ciebie",
+        "saved": "Zapisano",
+        "voice": "Z Twojej sesji głosowej"
+      },
+      "makeIt": "Stwórz",
+      "undo": "Cofnij"
     }
   }
 }

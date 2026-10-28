@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Melodie sau artist",
       "sortLabel": "Sortează",
       "timesSungLabel": "{count, plural, one {Cântată o dată} few {Cântată de # ori} other {Cântată de # de ori}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# vot pe panou} few {# voturi pe panou} other {# de voturi pe panou}}",
+      "dismiss": "Ascunde această piesă",
+      "empty": "Nimic de creat acum. Piesele pe care le salvezi sau le cânți și care nu au o versiune karaoke vor apărea aici.",
+      "hiddenToast": "Ascunsă din „Creează această piesă”",
+      "intro": "Piese pe care le-ai cânta, dar care nu au încă o versiune karaoke. Creează una acum sau solicit-o gratuit pe panoul nostru.",
+      "offline": "Ești offline. Crearea și solicitarea necesită o conexiune la internet.",
+      "request": "Solicită gratuit",
+      "requestError": "Solicitarea nu a putut fi trimisă. Încearcă din nou.",
+      "requested": "{count, plural, one {Solicitată · # vot} few {Solicitată · # voturi} other {Solicitată · # de voturi}}",
+      "submissionLimit": "O solicitare gratuită pe zi: încearcă mâine",
+      "title": "Creează această piesă",
+      "voteUsed": "Ai folosit votul gratuit de azi",
+      "why": {
+        "imported": "Din muzica ta",
+        "recommended": "Aleasă pentru tine",
+        "sung": "Ai cântat-o",
+        "saved": "Salvat",
+        "voice": "Din sesiunea ta vocală"
+      },
+      "makeIt": "Creează",
+      "undo": "Anulează"
     }
   }
 }

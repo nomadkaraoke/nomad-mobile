@@ -19,6 +19,7 @@ import * as voice from '../app/discover/voice';
 import * as voiceSession from '../app/discover/voice-session';
 import * as index from '../app/index';
 import * as artistsAll from '../app/me/artists';
+import * as getMade from '../app/me/get-made';
 import * as setlistsIndex from '../app/me/setlists/index';
 import * as setlistDetail from '../app/me/setlists/[id]';
 import * as songHistory from '../app/me/history/[key]';
@@ -60,6 +61,7 @@ export function appRoutes() {
     'discover/voice-session': voiceSession,
     'me/music-profile': musicProfile,
     'me/artists': artistsAll,
+    'me/get-made': getMade,
     'me/history/[key]': songHistory,
     'me/sung-before': sungBefore,
     'me/songs': meSongs,

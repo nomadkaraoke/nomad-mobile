@@ -2017,6 +2017,29 @@
       "searchPlaceholder": "Lagu atau artis",
       "sortLabel": "Susun",
       "timesSungLabel": "{count, plural, one {Dinyanyikan # kali} other {Dinyanyikan # kali}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# undian di papan} other {# undian di papan}}",
+      "dismiss": "Sembunyikan lagu ini",
+      "empty": "Tiada apa-apa untuk dihasilkan buat masa ini. Lagu yang anda simpan atau nyanyikan yang belum ada versi karaoke akan dipaparkan di sini.",
+      "hiddenToast": "Disembunyikan daripada Dapatkan lagu ini",
+      "intro": "Lagu yang ingin anda nyanyikan yang belum ada versi karaoke. Hasilkan sekarang, atau minta secara percuma di papan kami.",
+      "offline": "Anda berada di luar talian. Sambungan internet diperlukan untuk menghasilkan dan membuat permintaan.",
+      "request": "Minta secara percuma",
+      "requestError": "Tidak dapat menghantar permintaan. Sila cuba lagi.",
+      "requested": "{count, plural, one {Diminta · # undian} other {Diminta · # undian}}",
+      "submissionLimit": "Satu permintaan percuma setiap hari: cuba lagi esok",
+      "title": "Dapatkan lagu ini",
+      "voteUsed": "Anda telah menggunakan undian percuma anda untuk hari ini",
+      "why": {
+        "imported": "Daripada muzik anda",
+        "recommended": "Dipilih untuk anda",
+        "sung": "Anda pernah menyanyikannya",
+        "saved": "Disimpan",
+        "voice": "Daripada sesi suara anda"
+      },
+      "makeIt": "Buat",
+      "undo": "Buat asal"
     }
   }
 }

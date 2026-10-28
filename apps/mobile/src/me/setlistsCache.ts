@@ -15,7 +15,7 @@ const isSetlist = (v: unknown, id: string): v is Setlist => isObj(v) && v.id ===
 
 /** `base` with one sent write applied: the server's answer when it is a setlist, else the write itself. */
 export function applySent(base: Setlist[], item: MeOutboxItem, result: unknown): Setlist[] {
-  if (item.op === 'love') return base;
+  if (item.op === 'love' || item.op === 'dismiss') return base;
   if (item.op === 'delete') return base.filter((s) => s.id !== item.id);
   const local = overlaySetlists(base, [item]).find((s) => s.id === item.id)!;
   const next: Setlist = isSetlist(result, item.id) ? { ...local, ...result, items: result.items ?? local.items } : local;
@@ -28,7 +28,7 @@ export function applySent(base: Setlist[], item: MeOutboxItem, result: unknown):
  * outbox, so the overlay never falls back to the pre-write list while the refetch is pending or fails.
  */
 export function onSetlistSent(item: MeOutboxItem, result: unknown, userKey: string): void {
-  if (item.op === 'love' || currentUserKey() !== userKey) return;
+  if (item.op === 'love' || item.op === 'dismiss' || currentUserKey() !== userKey) return;
   const client = meQueryClient();
   const queryKey = setlistsKeyFor(userKey);
   const inQuery = client?.getQueryData<SetlistsCache>(queryKey);
