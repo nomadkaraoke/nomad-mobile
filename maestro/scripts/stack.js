@@ -4,7 +4,7 @@
 //            voice-assert | kjbox | decide | log | fake-externals | fake-lb-user | fake-lastfm-user | lb-poll | source-counts |
 //            voice-session-assert | voice-recordings-count | voice-reset | voice-seed-history | voice-history-assert |
 //            log-seed | setlists-assert | library-assert |
-//            voice-personal-seed
+//            voice-personal-seed | get-made-seed | crowd-seed | crowd-reset
 //   setup:   NAME (flow name, used in the unique email), CREDITS (default 2),
 //            USER_CONFIG (JSON, per-user fake-config knobs: fail_at, auto_approve, audio_duration_seconds,
 //            youtube_url_enabled, step_delay_seconds, judge_*), GLOBAL_CONFIG (JSON, merged over the defaults
@@ -124,6 +124,16 @@
 //            uncatalogued song), EXPECT_TIMES (its times_sung), EXPECT_COUNT (optional: how many library items) ->
 //            polls GET ${DECIDE_STACK}/api/my/library until they hold or WAIT_MS (default 20000) passes
 //            -> output.libraryItems (JSON [[key, times_sung]])
+//   Phase 4b Me (decide >= v0.35):
+//   get-made-seed: EMAIL (default output.email), SONGS (JSON [{artist, title, song_key?, loved?, times_sung?}]) ->
+//            writes those user_songs rows (POST ${DECIDE_STACK}/api/test/get-made/seed; additive, so run it after
+//            decide-seed, which clears user_songs). Songs with no karaoke version (the "Fixture Artist NN / Fixture Song
+//            NN-MM" catalog rows) then show in Get this made -> output.getMadeKeys (JSON, the library keys)
+//   crowd-seed: SONG_KEY (catalog key, e.g. adele|hello), TOTAL (JSON {too_low, right, too_high}), BY_BUCKET (JSON
+//            {baritone: {right: 5}, …}; bucket votes must also be counted in TOTAL), PLEASER_YES / PLEASER_ANSWERED
+//            (optional) -> replaces that song's crowd aggregate (POST ${DECIDE_STACK}/api/test/crowd/seed). Shared by
+//            every user on the stack and not cleared by decide-reset: a flow that seeds it resets it.
+//   crowd-reset: SONG_KEY -> deletes that song's crowd aggregate (POST ${DECIDE_STACK}/api/test/crowd/reset)
 // Wrapped in a function: a flow can run this file more than once, and top-level `let`s must not collide.
 (function () {
   const base = (typeof STACK !== 'undefined' && STACK && STACK !== 'undefined' && STACK) || 'http://127.0.0.1:8010';
@@ -847,6 +857,45 @@
     if (action === 'setlists-assert') output.setlists = report(value);
     else output.libraryItems = report(value);
     if (why !== null) throw new Error(action + ': ' + why + '\n' + report(value));
+  } else if (action === 'get-made-seed') {
+    const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+    if (!email) throw new Error('ACTION get-made-seed needs EMAIL (or ACTION setup first)');
+    const songsEnv = envValue(typeof SONGS !== 'undefined' ? SONGS : undefined);
+    if (!songsEnv) throw new Error('ACTION get-made-seed needs SONGS (JSON array)');
+    const res = check(
+      http.post(decideBase + '/api/test/get-made/seed', {
+        headers: JSON_HEADERS,
+        body: JSON.stringify({ email: email, songs: JSON.parse(songsEnv) }),
+      }),
+      'decide get-made seed',
+    );
+    output.decideUserId = res.user_id;
+    output.getMadeKeys = JSON.stringify(res.keys);
+  } else if (action === 'crowd-seed' || action === 'crowd-reset') {
+    const songKey = envValue(typeof SONG_KEY !== 'undefined' ? SONG_KEY : undefined);
+    if (!songKey) throw new Error('ACTION ' + action + ' needs SONG_KEY');
+    if (action === 'crowd-reset') {
+      // 204, no body to parse.
+      const res = http.post(decideBase + '/api/test/crowd/reset', {
+        headers: JSON_HEADERS,
+        body: JSON.stringify({ song_key: songKey }),
+      });
+      if (res.status < 200 || res.status >= 300) throw new Error('decide crowd reset failed: HTTP ' + res.status + ' ' + res.body);
+    } else {
+      const body = {
+        song_key: songKey,
+        total: envJson(typeof TOTAL !== 'undefined' ? TOTAL : undefined),
+        by_bucket: envJson(typeof BY_BUCKET !== 'undefined' ? BY_BUCKET : undefined),
+      };
+      const yes = envValue(typeof PLEASER_YES !== 'undefined' ? PLEASER_YES : undefined);
+      const answered = envValue(typeof PLEASER_ANSWERED !== 'undefined' ? PLEASER_ANSWERED : undefined);
+      if (yes !== null) body.crowd_pleaser_yes = Number(yes);
+      if (answered !== null) body.crowd_pleaser_answered = Number(answered);
+      check(
+        http.post(decideBase + '/api/test/crowd/seed', { headers: JSON_HEADERS, body: JSON.stringify(body) }),
+        'decide crowd seed',
+      );
+    }
   } else {
     throw new Error('unknown ACTION ' + action);
   }

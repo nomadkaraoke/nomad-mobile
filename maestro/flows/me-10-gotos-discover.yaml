@@ -1,0 +1,44 @@
+# Me 10 (Phase 4b spec §6.5.3, recs from sung history): a karaoke log with Hello sung twice, both great → Discover
+# opens with the "Your go-tos" section first, Hello in it with the "Your go-to" chip; Me's go-tos shelf shows Hello
+# from decide's recs (the go_tos section) too.
+appId: com.nomadkaraoke.mobile
+name: me-10-gotos-discover
+tags:
+  - me
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me10
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"quiz_completed":true,"genres":["pop","rock"],"artists":[{"name":"Muse","affinity":"love"}]}'
+      ENTRIES: '[{"id":"app_me10-hello1","state":"sung","artist":"Adele","title":"Hello","song_key":"adele|hello","sung_at":"2026-10-03T21:00:00Z","night":{"kind":"other","venue_name":"The Rusty Mic","date":"2026-10-03","date_precision":"day"},"origin":"live","survey":{"feel":"great","key":"right"}},{"id":"app_me10-hello2","state":"sung","artist":"Adele","title":"Hello","song_key":"adele|hello","sung_at":"2026-10-10T21:00:00Z","night":{"kind":"other","venue_name":"Blue Note Bar","date":"2026-10-10","date_precision":"day"},"origin":"live","survey":{"feel":"great","key":"right"}}]'
+- extendedWaitUntil:
+    visible:
+      id: "me-goto-0"
+    timeout: 30000
+- assertVisible:
+    id: "me-goto-0"
+    text: ".*Hello.*"
+- tapOn:
+    id: "tab-discover"
+- extendedWaitUntil:
+    visible:
+      id: "rec-section-go_tos"
+    timeout: 30000
+# First section: nothing else is above it.
+- assertVisible: "Your go-tos"
+- assertVisible: "Songs you keep coming back to"
+- assertVisible:
+    id: "rec-row-go_tos-0"
+    text: ".*Hello.*Your go-to.*"
+- assertNotVisible:
+    id: "rec-section-.*"
+    above:
+      id: "rec-section-go_tos"
+- takeScreenshot: ${ME_SHOTS}/me-10-gotos-discover

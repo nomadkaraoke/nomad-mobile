@@ -1,0 +1,96 @@
+# Me 12 (Phase 4b spec §6.5.5, crowd singability): a baritone singer and a crowd aggregate for Adele "Hello"
+# (5 comfortable + 1 too high overall, of which 5 baritones, all comfortable) → the song page's crowd line reads
+# "100% of baritones found the key comfortable" (the literal text: Hermes' percent formatting on both platforms) →
+# crowd/reset → after a relaunch (the line is cached for 1 h per song and synced voice) the line is gone.
+# The aggregate is shared across users and profile resets don't clear it, so this flow resets it itself.
+appId: com.nomadkaraoke.mobile
+name: me-12-crowd
+tags:
+  - me
+onFlowComplete:
+  - runScript:
+      file: ../scripts/stack.js
+      env:
+        ACTION: crowd-reset
+        DECIDE_STACK: ${DECIDE_STACK}
+        SONG_KEY: "adele|hello"
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me12
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: crowd-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      SONG_KEY: "adele|hello"
+      TOTAL: '{"right":5,"too_high":1}'
+      BY_BUCKET: '{"baritone":{"right":5}}'
+- runFlow:
+    file: ../common/seed-decide-profile.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{}'
+# After the profile seed (a profile seed replaces the user's decide profile).
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: voice-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      PROFILE: '{"low_midi":45,"high_midi":67,"comfort_low":50,"comfort_high":62,"voice_type":"baritone","confidence":"high","method":"mic"}'
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/discover-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- tapOn:
+    id: "discover-search-input"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "song-card"
+    timeout: 30000
+- tapOn:
+    id: "song-card"
+- extendedWaitUntil:
+    visible:
+      id: "song-screen"
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: "song-crowd"
+      text: "100% of baritones found the key comfortable"
+    timeout: 30000
+- takeScreenshot: ${ME_SHOTS}/me-12-crowd
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: crowd-reset
+      DECIDE_STACK: ${DECIDE_STACK}
+      SONG_KEY: "adele|hello"
+# The line's answer is cached in memory: a relaunch (keeping the session and voice) fetches it again.
+- runFlow: ../common/relaunch-keep-data.yaml
+- tapOn:
+    id: "discover-search-input"
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "song-card"
+    timeout: 30000
+- tapOn:
+    id: "song-card"
+- extendedWaitUntil:
+    visible:
+      id: "song-badge-card"
+    timeout: 20000
+# Give the crowd request time to answer (all nulls → no line); a stale cache would show the line at once.
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: "4000"
+- assertNotVisible:
+    id: "song-crowd"
+- takeScreenshot: ${ME_SHOTS}/me-12-crowd-reset

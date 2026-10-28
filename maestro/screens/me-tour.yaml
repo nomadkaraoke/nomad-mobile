@@ -1,5 +1,5 @@
-# Me screen tour (Phase 4a): every Me screen and sheet with a seeded user (a voice profile, a connected Last.fm
-# source, a karaoke log with survey answers, saved songs), in any app language (testIDs and deep links only; the
+# Me screen tour (Phase 4a, 4b shots from me-28): every Me screen and sheet with a seeded user (a voice profile, a connected Last.fm
+# source, a karaoke log with survey answers, saved songs; 4b: a Get this made song, a crowd aggregate for Hello), in any app language (testIDs and deep links only; the
 # back button through common/header-back.yaml). Shots in ${TOUR_SHOTS}:
 #   scripts/e2e-local.sh --platform ios --locale ar --screen me-tour   # docs/screenshots/phase4/ios/ar/
 appId: com.nomadkaraoke.mobile
@@ -22,6 +22,22 @@ appId: com.nomadkaraoke.mobile
       ACTION: decide-seed
       DECIDE_STACK: ${DECIDE_STACK}
       PROFILE: '{"quiz_completed":true,"genres":["pop","rock"],"decades":["2000s","2010s"],"energy":"high","artists":[{"name":"Adele","affinity":"love"},{"name":"Muse","affinity":"love"},{"name":"Elton John","affinity":"like"},{"name":"Amber Lanes","affinity":"like"},{"name":"Bright Harbor","affinity":"like"},{"name":"Cobalt Fields","affinity":"like"},{"name":"Dune Velvet","affinity":"like"},{"name":"Echo Parlour","affinity":"like"},{"name":"Fable Street","affinity":"like"},{"name":"Gilded Moth","affinity":"like"},{"name":"Harlow Gray","affinity":"like"},{"name":"Indigo Tides","affinity":"like"},{"name":"Juniper Row","affinity":"like"},{"name":"Zephyr Parade","affinity":"like"}],"loved":["muse|uprising"]}'
+# 4b: a saved song with no karaoke version (Get this made; after decide-seed, which clears user_songs) and a crowd
+# aggregate for Hello (reset at the end of the tour).
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: get-made-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      SONGS: '[{"artist":"Fixture Artist 01","title":"Fixture Song 01-01","loved":true}]'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: crowd-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      SONG_KEY: "adele|hello"
+      TOTAL: '{"right":5,"too_high":1}'
+      BY_BUCKET: '{"baritone":{"right":5}}'
 - runScript:
     file: ../scripts/stack.js
     env:
@@ -316,3 +332,40 @@ appId: com.nomadkaraoke.mobile
     timeout: 20000
 - waitForAnimationToEnd
 - takeScreenshot: ${TOUR_SHOTS}/me-27-connect
+# 4b: Your go-tos first in Discover, the Get this made shelf and screen, the song page's crowd line.
+- tapOn:
+    id: "tab-discover"
+- extendedWaitUntil:
+    visible:
+      id: "rec-section-go_tos"
+    timeout: 30000
+- waitForAnimationToEnd
+- takeScreenshot: ${TOUR_SHOTS}/me-28-discover-gotos
+- tapOn:
+    id: "tab-me"
+- scrollUntilVisible:
+    element:
+      id: "me-getmade-open-0"
+    direction: DOWN
+    centerElement: true
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/me-29-getmade-shelf
+- openLink: "nomadkaraoke://me/get-made"
+- extendedWaitUntil:
+    visible:
+      id: "getmade-row-0"
+    timeout: 20000
+- waitForAnimationToEnd
+- takeScreenshot: ${TOUR_SHOTS}/me-30-getmade
+- openLink: "nomadkaraoke://song/adele%7Chello"
+- extendedWaitUntil:
+    visible:
+      id: "song-crowd"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/me-31-song-crowd
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: crowd-reset
+      DECIDE_STACK: ${DECIDE_STACK}
+      SONG_KEY: "adele|hello"

@@ -1,0 +1,129 @@
+# Me 11 (Phase 4b spec §6.5.4, Get this made): a saved fixture song with no karaoke version → Me's "Get this made"
+# shelf lists it ("Saved") → See all → Request it free → "Requested · 1 vote" (one gen board submit) → back on Me the
+# shelf shows the same status → Make it opens the make screen with that song → back → dismiss (×) hides it with an
+# undo toast → Undo brings it back.
+appId: com.nomadkaraoke.mobile
+name: me-11-get-made
+tags:
+  - me
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me11
+- runFlow:
+    file: ../common/seed-decide-profile.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{"quiz_completed":true,"genres":["pop"]}'
+# After the profile seed, which clears user_songs.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: get-made-seed
+      DECIDE_STACK: ${DECIDE_STACK}
+      EMAIL: ${output.email}
+      SONGS: '[{"artist":"Fixture Artist 01","title":"Fixture Song 01-01","loved":true}]'
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/discover-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- tapOn:
+    id: "tab-me"
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-card"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      id: "me-getmade-open-0"
+    direction: DOWN
+    centerElement: true
+    timeout: 30000
+- assertVisible:
+    id: "me-getmade-open-0"
+    text: ".*Fixture Song 01-01.*"
+- assertVisible:
+    id: "me-getmade-why-0"
+    text: "Saved"
+- takeScreenshot: ${ME_SHOTS}/me-11-getmade-shelf
+# The full screen: Request it free.
+- tapOn:
+    id: "me-getmade-all"
+- extendedWaitUntil:
+    visible:
+      id: "getmade-request-0"
+    timeout: 20000
+- assertVisible:
+    id: "getmade-open-0"
+    text: ".*Fixture Song 01-01.*"
+- tapOn:
+    id: "getmade-request-0"
+- extendedWaitUntil:
+    visible:
+      id: "getmade-status-0"
+      text: "Requested · .*"
+    timeout: 20000
+- assertNotVisible:
+    id: "getmade-request-0"
+- takeScreenshot: ${ME_SHOTS}/me-11-getmade-requested
+- runFlow:
+    file: ../common/header-back.yaml
+    env:
+      LOCALE: en
+# Back on Me: the shelf shares the outcome; Make it (enabled once the user's gen jobs are known) opens make.
+- scrollUntilVisible:
+    element:
+      id: "me-getmade-make-0"
+    direction: DOWN
+    centerElement: true
+- assertVisible:
+    id: "me-getmade-status-0"
+    text: "Requested · .*"
+- extendedWaitUntil:
+    visible:
+      id: "me-getmade-make-0"
+      enabled: true
+    timeout: 20000
+- tapOn:
+    id: "me-getmade-make-0"
+- extendedWaitUntil:
+    visible:
+      id: "make-song-title"
+    timeout: 30000
+- assertVisible:
+    id: "make-song-title"
+    text: ".*Fixture Song 01-01.*"
+- assertVisible:
+    id: "make-song-artist"
+    text: ".*Fixture Artist 01.*"
+- takeScreenshot: ${ME_SHOTS}/me-11-make
+- runFlow:
+    file: ../common/header-back.yaml
+    env:
+      LOCALE: en
+# Dismiss → gone (undo toast) → Undo → back.
+- scrollUntilVisible:
+    element:
+      id: "me-getmade-dismiss-0"
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: "me-getmade-dismiss-0"
+- extendedWaitUntil:
+    visible:
+      id: "me-getmade-undo"
+    timeout: 5000
+- assertNotVisible:
+    text: ".*Fixture Song 01-01.*"
+- takeScreenshot: ${ME_SHOTS}/me-11-getmade-dismissed
+- tapOn:
+    id: "me-getmade-undo"
+- extendedWaitUntil:
+    visible:
+      id: "me-getmade-open-0"
+      text: ".*Fixture Song 01-01.*"
+    timeout: 10000
