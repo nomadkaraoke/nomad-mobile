@@ -131,8 +131,8 @@ export function useRecsGoTos(): RecSong[] | null {
     // since (which rewrote the cache) is already reflected.
     initialData: () => cacheFor(userKey, voice),
     initialDataUpdatedAt: () => cacheFor(userKey, voice)?.savedAt,
-    // A new voice key keeps the previous rows on screen until its own land.
-    placeholderData: keepPreviousData,
+    // A new voice key keeps the previous rows on screen until its own land; never across accounts.
+    placeholderData: (prev, prevQuery) => (prevQuery?.queryKey[1] === userKey ? keepPreviousData(prev) : undefined),
     // Real changes (a sung log or survey reaching decide, a hide) invalidate it; this is only the backstop.
     staleTime: 5 * 60_000,
     retry: false,

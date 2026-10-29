@@ -162,6 +162,18 @@ describe('GoTosShelf', () => {
     expect(raw.songs.map((x) => x.title)).toEqual(['Theirs']);
   });
 
+  it("switching account never shows the previous account's go-tos while the new ones load", async () => {
+    const client = resetMe(EMAIL);
+    api.getRecommendationsV2.mockResolvedValueOnce(recsWith([{ id: 'go_tos', songs: [rec('Mine')] }]));
+    const shelf = render(<GoTosShelf items={[]} pending={new Set()} />, { wrapper: shelfWrapper(client) });
+    await waitFor(() => expect(shelf.getByTestId('me-goto-0')).toHaveTextContent(/Mine/));
+
+    api.getRecommendationsV2.mockImplementation(() => new Promise(() => {}) as never); // B's recs never land
+    act(() => signIn('other@example.com'));
+    await waitFor(() => expect(api.getRecommendationsV2).toHaveBeenCalledTimes(2));
+    expect(shelf.queryByText(/Mine/)).toBeNull();
+  });
+
   it('a voice profile synced within 5 min refetches the fits, and a song hidden earlier stays gone', async () => {
     const client = resetMe(EMAIL);
     const voice = (measuredAt: string) => ({
