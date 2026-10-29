@@ -63,6 +63,15 @@
 //            stop | start  stops / starts the kjbox stack itself through scripts/stack-control.py (CONTROL, default
 //                        http://127.0.0.1:8049, started by e2e-local.sh): the "box unreachable" case
 //            Entry ids of the user's own songs: `state` and the app's testIDs (tonight-song-<request id>).
+//            Phase 4c past nights (kjbox >= the 4c test API, docs/TESTING.md § test API):
+//            history-seed  NIGHTS (JSON [{date, entries: [{ref, singer, singers?, artist, title, status?, link
+//                        exact|inferred|none, played?, claimed_by?}]}]), IDENTITY (JSON {names, date, email?}: the
+//                        app account went by those names through the app on that date; email defaults to
+//                        output.email; omit IDENTITY for none) -> POST /history/seed
+//                        -> output.historyNights (JSON [{date, night_id, entries: {ref: entry_id}}])
+//            history-state EMAIL (default output.email), EXPECT_CLAIMS / EXPECT_REJECTIONS (counts for that account),
+//                        polled until they hold or WAIT_MS (default 15000) passes -> output.historyState (JSON
+//                        {claims, rejections, outbox})
 //   decide:  OP stop | start -> stops / starts decide's local stack (stack-control.py, as kjbox stop/start)
 //   log:     EMAIL (default output.email) -> decide's karaoke log for that user (GET ${DECIDE_STACK}/api/test/karaoke-log),
 //            polled until the expectations hold or WAIT_MS (default 20000) passes (kjbox's outbox sends every 5 s):
@@ -475,6 +484,40 @@
       post('host-remove', body);
     } else if (op === 'drain') {
       output.sent = String(post('outbox/drain', {}).sent);
+    } else if (op === 'history-seed') {
+      const nights = JSON.parse(env(typeof NIGHTS !== 'undefined' ? NIGHTS : undefined) || '[]');
+      const ident = envJson(typeof IDENTITY !== 'undefined' ? IDENTITY : undefined);
+      const seedBody = { nights: nights };
+      if (ident.names) {
+        if (!ident.email) ident.email = output.email;
+        if (!ident.email) throw new Error('kjbox history-seed: IDENTITY needs an email (or ACTION setup first)');
+        seedBody.identity = ident;
+      }
+      output.historyNights = JSON.stringify(post('history/seed', seedBody).nights);
+    } else if (op === 'history-state') {
+      const who = env(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+      if (!who) throw new Error('kjbox history-state needs EMAIL (or ACTION setup first)');
+      const wantClaims = env(typeof EXPECT_CLAIMS !== 'undefined' ? EXPECT_CLAIMS : undefined);
+      const wantRejections = env(typeof EXPECT_REJECTIONS !== 'undefined' ? EXPECT_REJECTIONS : undefined);
+      const waitMs = Number(env(typeof WAIT_MS !== 'undefined' ? WAIT_MS : undefined) || 15000);
+      const deadline = new Date().getTime() + waitMs;
+      let st = null;
+      let why = null;
+      do {
+        st = check(http.get(kjboxBase + '/sing/api/test/history/state?email=' + encodeURIComponent(who)), 'kjbox history state');
+        why = null;
+        if (wantClaims !== null && st.claims.length !== Number(wantClaims)) why = st.claims.length + ' claims, expected ' + wantClaims;
+        else if (wantRejections !== null && st.rejections.length !== Number(wantRejections)) {
+          why = st.rejections.length + ' rejections, expected ' + wantRejections;
+        }
+        if (why === null) break;
+        const pause = new Date().getTime() + 1000;
+        while (new Date().getTime() < pause) {
+          // busy-wait: the script engine has no timers
+        }
+      } while (new Date().getTime() < deadline);
+      output.historyState = JSON.stringify(st);
+      if (why !== null) throw new Error('kjbox history state of ' + who + ': ' + why + ' ' + JSON.stringify(st));
     } else if (op === 'state') {
       const st = check(http.get(kjboxBase + '/sing/api/test/state'), 'kjbox state');
       output.kjState = JSON.stringify(st);

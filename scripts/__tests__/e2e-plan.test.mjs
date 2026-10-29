@@ -20,6 +20,18 @@ test('a feature folder maps to its flows', () => {
   assert.deepEqual(affectedPrefixes(['apps/mobile/src/app/discover/voice-session/index.tsx']), ['voice-session-']);
 });
 
+test('the kjbox client runs the Tonight flows and the claim flows (4c)', () => {
+  assert.deepEqual(affectedPrefixes(['packages/api-kjbox/src/facades.ts']), ['me-13', 'me-14', 'tonight-']);
+});
+
+test('Me code runs the Me flows and the screens that embed Me pieces, not everything', () => {
+  const got = affectedPrefixes(['apps/mobile/src/me/ClaimNightCard.tsx']);
+  assert.notDeepEqual(got, [ALL]);
+  assert.ok(got.includes('me-'));
+  // Discover feedback, Connect, the song page's library actions and Tonight's log import from src/me.
+  for (const p of ['discover-', 'search-', 'tonight-', 'connect-']) assert.ok(got.includes(p), p);
+});
+
 test('a changed flow file runs that flow', () => {
   assert.deepEqual(affectedPrefixes(['maestro/flows/make-4-failed-job.yaml']), ['make-4-failed-job']);
 });
