@@ -457,4 +457,33 @@
 
 ## Execution ledger
 
-(Filled in during execution.)
+Subagent-driven, with one implementer and one reviewer per task. Fix rounds are shown in the outcome column.
+- decide = karaoke-decide-phase4-me (Part C). It merged as #200 (07a3e64, v0.35.0) and was deployed 2026-10-28; the prod smoke passed.
+- mobile = this branch (Part D), BASE 366f9fd.
+- Order: C1–C8, then D1–D8. D3/D4/D5 ran in parallel in one shared worktree, so commits were staged by path only.
+
+| Task | Commits | Review outcome |
+|---|---|---|
+| C1 survey state + crowd counters in the log transaction | decide 5ff8c91..13c20aa | clean after 1 fix round (per-field stamps, R17 answered counter) |
+| C2 backfill `last_sung_at` + `known_songs` | decide 13c20aa..3667d13 | approved; follow-up (malformed night.date, `u:` identity) clean |
+| C3 recs v2 from history + `go_tos` section | decide 3667d13..27843a6 | clean after 1 fix round (R20a, R21) |
+| C4 crowd API + crowd in recs | decide 27843a6..dc8e003 | clean after 1 fix round (own key beats crowd hint, R23 hashed ids) |
+| C5 Get this made endpoint + dismissals | decide dc8e003..8589e97 | approved (0C/0I/6M); follow-up clean |
+| C6 BigQuery crowd fill + Pulumi grant | decide 8589e97..3d7c342 | approved (0C/0I/4M); follow-up verified by diff read |
+| C7 test-API crowd + get-made seeds | decide 3d7c342..eeb6213 | approved (0C/0I/3M); follow-up (bucket ≤ total → 422) |
+| C8 docs, v0.35.0, R18 rebuild script, R19 web i18n, PR | decide ea9b025, bf691ec, 08231b1, 9140c7d, faa41bd; #200 merged 07a3e64 | CodeRabbit: 2 cycles. Whole-branch review "Fix first" (all-null `RecSong.crowd` revealed a sub-threshold doc; summary 500 on a `count_known_songs` failure) was fixed in faa41bd. The deploy, the Pulumi apply (mb-refresh-datastore-viewer, via gcp-admin) and the R18 dry run (no-op) are done. |
+| D1 clients + facades (get-made, crowd, requests board) | d437062, 1bbe863 | approved (0C/0I/3M); follow-up (429 only with `submission_limit`, R26 board shape) |
+| D2 Discover go-tos section + reason | 7d56295 | approved (0C/0I/2M) |
+| D3 Get this made (Me shelf + screen) | af28cec, 96ba4b7, 694b81b; R28 UX 8e4e291, 2b2bb57 | Needs fixes (load failure showed a false empty state); clean after 1 fix round + follow-up |
+| D4 go-tos shelf from recs merged with local | bdd808b, 1d8d4a3, 1bde9fa | Needs fixes (Discover Not for me not reflected on the shelf); clean after 1 fix round + follow-up |
+| D5 song page crowd line | 67ae84b, 5c6733c, 3b6266e | Needs fixes (the query key ignored the viewer's voice); clean after 1 fix round; deviations approved |
+| D6 "songs known" + setlist no-cache settle | 254379a, 779e6f4 | approved (0C/0I/3M); follow-up (settle after commit, per-account services summary) |
+| D7 Maestro me-10…12 + me-tour shots | ef3d532, 9942560, dc18430, 2bb4bf0; lint c9727a5 | CI run 40791061721: me-1…12 passed on iOS and Android. me-11 after R28: iOS 40795789679, Android 40794700559. One app fix (duplicate title). |
+| D8 docs, review, PR | this commit | final whole-branch review, PR |
+
+Rulings R15–R28 are listed one per line in the spec's §5 "As built (4b)", together with the deviations, the deferred follow-ups and the manual-pass list.
+
+Process notes:
+- D3's first fix commit swept in D5's staged files in the shared worktree. It was rebuilt with a temporary index, so each commit holds only its own task's paths. D3's fix-round tests were written after the fixes; no red run was possible without disturbing the live agents.
+- The build-host CI replaced local Maestro runs. me-7 flaked once on Android (launch timing), which is infra, not 4b.
+- Coordination: the orchestrator ([6f4a7b]) and Phase 6 ([c26790]) were told about the new decide collections (`user_make_dismissed`, `song_crowd_stats`, `sung_surveys`).

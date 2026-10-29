@@ -139,6 +139,71 @@ Rulings and deviations from building 4a (full ledger: the plan's "Execution ledg
   - Apple Music's mark is a flat red tile, not the gradient; Last.fm's red is low-contrast on dark.
 - Deferred minors: queued delete of a synced record doesn't subtract cached counts; rename/remove on lists over 500 items return silently false; Ø/Ł/ß sort under `#`; `listMyArtists` first page only in the quiz store; `head.attempted` mutates the previous snapshot object; stats year scope uses all-time `latest_feel`; the nights fallback uses UTC date; decide: `?song=` empty string, `update_playlist` rename rev race, seed partial write on mid-batch error.
 
+### As built (4b)
+
+decide shipped as #200, v0.35.0 (merged 07a3e64, deployed 2026-10-28). It adds:
+- per-record survey state on the `user_songs` row (`sung_surveys`), from which `sung_*` fields are derived on each write;
+- crowd counters in the karaoke-log transaction (`song_crowd_stats`, an anonymous aggregate kept after account deletion);
+- backfilled `last_sung_at` that ignores now for undated backfill, and a deduplicated `known_songs` on the services summary;
+- recs v2 weights from sung history and surveys, the `go_tos` section first in `best`, `reason_type: sung_before`, own-key hints, and `RecSong.crowd`;
+- `GET /api/songs/{key}/crowd` with `CROWD_MIN_SINGERS` / `CROWD_MIN_BUCKET` = 5;
+- `GET /api/my/get-made` plus `POST|DELETE /{key}/dismiss` (`user_make_dismissed`, deletion-registered);
+- the weekly BigQuery `song_vocal_range.crowd_*` fill, with the Pulumi grant `mb-refresh-datastore-viewer` applied from main;
+- test-API seeds `get-made/seed`, `crowd/seed` and `crowd/reset`;
+- web i18n for the new section and reason;
+- a one-off rebuild script, `scripts/rebuild_survey_state.py`. Its prod dry run found nothing to change.
+
+Rulings (full ledger: the 4b plan's "Execution ledger"):
+
+- **R15** Request it free = one gen submit, never a vote. The submit spends the daily vote, and a vote after `already_exists` would toggle it off. 409 `vote_already_used` and 429 `submission_limit` are shown as copy.
+- **R16** decide keeps an exact per-record survey map (`sung_surveys`) and derives the `sung_*` fields from it on each write, not from deltas, so edits and deletes can't drift.
+- **R17** `song_crowd_stats` also counts `crowd_pleaser_answered`, so the crowd-pleaser share is yes / answered, with the 5-singer threshold.
+- **R18** Pre-4b karaoke-log records get no survey state or crowd votes until rewritten. A one-off idempotent rebuild script runs once from main after the deploy. On prod it found 1 record and 0 counting, so `--apply` was skipped.
+- **R19** decide web gets `recs.section.go_tos.*` and `recs.reason.sung_before` in all 33 locales.
+- **R20** A key hint shifts the displayed transpose (`fit.transpose` + hint): the badge reads fits at 0, else fitsIn. Scoring, `sort=fit` and Singable stay on the unshifted fit, because the hint is display-only advice.
+- **R20a** Key hints apply only to fits / fitsIn at octave 0. Stretch, outside and octave fits are unchanged.
+- **R21** Go-tos that overflow the `go_tos` slot (limit or per-artist cap) fall through to `songs_you_know` and don't vanish.
+- **R22** A song with a voice-session "no" but sung ≥ 2 times (and not bad) stays a go-to, for parity with core `isGoTo`.
+- **R23** `song_crowd_stats` doc id = `crowd_doc_id(song_key)` (sha1 hex[:32]) with a `song_key` field, because Firestore ids can't contain `/`. One helper is used by every writer and reader.
+- **R24** The crowd-pleasers reorder gates on `crowd_pleaser_answered` ≥ 5 only, not on key-answer singers.
+- **R25** me-12 seeds a real catalogued key (`adele|hello`, metadata, not lyrics), because the song page needs a catalog song. Flows call `crowd/reset` themselves, because a profile reset doesn't clear aggregates.
+- **R26** `listBoardRequests` returns `{ requests, votedToday, yourVoteRequestId }`, so Get this made shows a spent vote up front without a 409 round trip.
+- **R27** Crowd figures ship with the spec thresholds (≥ 5 singers, ≥ 5 per bucket) and exact counts. Differencing is accepted as low-sensitivity (key comfort): for example, singers 6 with bucket 5 reveals the other singer. This is a decision item for Andrew. Hardening (a complement rule or coarser figures) is a cheap follow-up.
+- **R28** From the D7 screenshots, Get this made shows ONE vote-used / submission-limit line at the top, and rows drop Request it free. The Me shelf rows are compact: no buttons, and a tap opens the screen. The full screen keeps Make it and Request it free.
+
+Deviations:
+- **Get this made outbox item.** Dismissals are `{ key: 'dismiss:<k>', op: 'dismiss', dismissKey, dismissed }`. `dismissKey` replaces a second `key` field. A dismiss and an undismiss cancel out when neither was attempted.
+- **`useGetMade()` and request outcomes.** The hook also returns `request(row)` and a list-level `limit`. Request outcomes live in a memory store that the shelf and the screen share.
+- **Make it gate.** Make it waits for the jobs list, so a made song is never offered. Gen actions stay on during a decide-only outage.
+- **Go-tos query.** The go-tos shelf runs its own recs query (`useRecsGoTos`, default filters, MMKV `me.gotos.v1.<user>`), not Discover's infinite query, so it never inherits Discover's filters or venue library.
+- **Go-tos merge.** Local go-tos are appended only when uncatalogued or pending (`useLibrary().pendingKeys`). Catalogued local go-tos missing from recs are not added (§6.5.3). A Discover Not for me / undo patches the shelf and its cache.
+- **Crowd line order.** The line order is bucket, then "Most singers found it a bit high" (too-high share ≥ 0.6), then overall. In the plan's order the too-high line could never show.
+- **Crowd line copy.** Each voice type has its own full-sentence key, because the `voice.type*` names are capitalised singulars.
+- **Crowd query key.** The crowd query is keyed by song and the synced voice profile, with a 1 h staleTime and `retry: 1`, and it is purged on sign-out.
+- **Get this made screen header.** The screen has no in-body title, because the native header already shows it.
+- **Services summary key.** The services summary query is now keyed per account (`servicesSummaryKeyFor`).
+
+**Deferred follow-ups:**
+- decide: keep the per-field `at` stamp on the log survey, because stamps are lost while an entry is unresolved.
+- decide: dedupe crowd votes per (user, song_key). Legacy two-row songs vote twice. This is in the backlog.
+- decide: pass the recs context to get-made, because it is built twice. Also look at the stale `norm_key` vs `make_song_key` on unresolved keys.
+- decide: test widened partial-date parsing outside backfill, and remove the never-true `"u:"` guard in `count_known_songs`.
+- decide: hints are display-only for scoring (R20). Mention the go-to re-key of 3b import rows in the PR.
+- mobile: the crowd query key nulls the voice while a profile is pending, so the line can blank briefly. Reuse D4's synced-voice key.
+- mobile: the setlist settle branch where `startedAt > sentAt` is untested. `BOARD_QUERY_KEY` is not user-keyed; this is safe because of the account purge.
+- mobile: the es chip "Tus favoritas de siempre" is plural. Retranslate with `--no-cache` or leave it. The discoverRecs reason-line assertion isn't scoped with `within()`.
+- mobile: opening Me makes one extra recs request (default filters, staleTime 5 min). A catalogued go-to whose log is unsent appears only after it syncs. The R26 pre-empt trusts a board snapshot up to 5 min old.
+- R27 hardening, if Andrew wants it.
+
+**Manual pass (needs a human):**
+- Real crowd figures once survey data exists. Prod currently has nothing over the thresholds.
+- Request it free on prod with a real account.
+- Go-tos (Discover section and Me shelf) on Andrew's real history.
+- The iOS ~200 pt gap under pushed-screen headers (Get this made, and the song page too). This is pre-existing, not 4b.
+- The me-tour's new shots (me-28…31) and the Arabic shots. They have not been run, because CI has no `--screen`.
+- Hermes percent formatting ("100% of baritones…") has been seen working in CI on both platforms. Glance at it on a real device and in other locales.
+- The R27 crowd differencing decision.
+
 ## 6. Design
 
 ### 6.1 Library model (decide)
