@@ -2,13 +2,13 @@ import { useTranslations } from '@nomad/i18n';
 import { Button, Screen, Text } from '@nomad/ui';
 import { ActivityIndicator } from 'react-native';
 
-import { GetMadeRow, GetMadeUndoToast } from '../../me/GetMadeRow';
+import { GetMadeLimitLine, GetMadeRow, GetMadeUndoToast } from '../../me/GetMadeRow';
 import { useGetMade } from '../../me/useGetMade';
 
 /** Me → Get this made → See all: every song with no karaoke version yet (spec §6.9). */
 export default function GetMadeScreen() {
   const t = useTranslations('me.getMade');
-  const { items, loading, offline, makeDisabled, error, refetch, dismiss, undismiss, request } = useGetMade();
+  const { items, limit, loading, offline, makeDisabled, error, refetch, dismiss, undismiss, request } = useGetMade();
   return (
     <Screen testID="me-getmade-screen" scroll>
       {/* The native header already shows the title (_layout: me.getMade.title). */}
@@ -19,6 +19,7 @@ export default function GetMadeScreen() {
         </Text>
       ) : null}
       <GetMadeUndoToast prefix="getmade" onUndo={undismiss} />
+      <GetMadeLimitLine prefix="getmade" limit={limit} />
       {loading ? <ActivityIndicator testID="getmade-loading" /> : null}
       {error ? (
         <>
@@ -34,7 +35,7 @@ export default function GetMadeScreen() {
         </Text>
       ) : null}
       {items.map((row, i) => (
-        <GetMadeRow key={row.key} row={row} index={i} prefix="getmade" offline={offline} makeDisabled={makeDisabled} onRequest={request} onDismiss={dismiss} />
+        <GetMadeRow key={row.key} row={row} index={i} offline={offline} makeDisabled={makeDisabled} onRequest={request} onDismiss={dismiss} />
       ))}
     </Screen>
   );

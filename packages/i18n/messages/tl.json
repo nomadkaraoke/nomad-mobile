@@ -2041,9 +2041,7 @@
       "request": "I-request nang libre",
       "requestError": "Hindi maipadala ang request. Subukan muli.",
       "requested": "{count, plural, one {Na-request na · # boto} other {Na-request na · # boto}}",
-      "submissionLimit": "Isang libreng request bawat araw: subukan bukas",
       "title": "Ipagawa ito",
-      "voteUsed": "Nagamit mo na ang iyong libreng boto para sa araw na ito",
       "why": {
         "imported": "Mula sa iyong musika",
         "recommended": "Pinili para sa iyo",
@@ -2054,7 +2052,11 @@
       "makeIt": "Gawin ito",
       "undo": "I-undo",
       "loadError": "Hindi ma-load ang mga kantang ito sa ngayon.",
-      "retry": "Subukan muli"
+      "retry": "Subukan muli",
+      "limit": {
+        "submission": "Nagawa mo na ang iyong libreng request para sa araw na ito. Bumalik bukas para mag-request ulit.",
+        "voteUsed": "Nagamit mo na ang iyong libreng boto para sa araw na ito. Bumalik bukas para mag-request ulit."
+      }
     }
   }
 }

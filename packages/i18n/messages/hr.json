@@ -2041,9 +2041,7 @@
       "request": "Zatraži besplatno",
       "requestError": "Slanje zahtjeva nije uspjelo. Pokušaj ponovno.",
       "requested": "{count, plural, one {Zatraženo · # glas} few {Zatraženo · # glasa} other {Zatraženo · # glasova}}",
-      "submissionLimit": "Jedan besplatni zahtjev dnevno: pokušaj sutra",
       "title": "Izradi ovo",
-      "voteUsed": "Iskoristio si današnji besplatni glas",
       "why": {
         "imported": "Iz tvoje glazbe",
         "recommended": "Odabrano za tebe",
@@ -2054,7 +2052,11 @@
       "makeIt": "Izradi",
       "undo": "Poništi",
       "loadError": "Trenutačno nije moguće učitati ove pjesme.",
-      "retry": "Pokušaj ponovno"
+      "retry": "Pokušaj ponovno",
+      "limit": {
+        "submission": "Iskoristio si današnji besplatni zahtjev. Vrati se sutra i zatraži još jednu.",
+        "voteUsed": "Iskoristio si današnji besplatni glas. Vrati se sutra i zatraži još jednu pjesmu."
+      }
     }
   }
 }

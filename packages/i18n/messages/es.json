@@ -2041,9 +2041,7 @@
       "request": "Pídela gratis",
       "requestError": "No se pudo enviar la solicitud. Inténtalo de nuevo.",
       "requested": "{count, plural, one {Solicitada · # voto} other {Solicitada · # votos}}",
-      "submissionLimit": "Una solicitud gratis al día: inténtalo mañana",
       "title": "Crear esto",
-      "voteUsed": "Ya usaste tu voto gratis de hoy",
       "why": {
         "imported": "De tu música",
         "recommended": "Elegida para ti",
@@ -2054,7 +2052,11 @@
       "makeIt": "Crear",
       "undo": "Deshacer",
       "loadError": "No se pudieron cargar estas canciones en este momento.",
-      "retry": "Intentar de nuevo"
+      "retry": "Intentar de nuevo",
+      "limit": {
+        "submission": "Has realizado tu solicitud gratuita de hoy. Vuelve mañana para solicitar otra.",
+        "voteUsed": "Has usado tu voto gratuito de hoy. Vuelve mañana para solicitar otra."
+      }
     }
   }
 }

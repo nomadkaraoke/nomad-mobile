@@ -2041,9 +2041,7 @@
       "request": "免费申请",
       "requestError": "无法发送申请。请重试。",
       "requested": "{count, plural, one {已申请 · # 票} other {已申请 · # 票}}",
-      "submissionLimit": "每天限免费申请一次：请明天再试",
       "title": "制作伴奏",
-      "voteUsed": "你今天的免费投票额度已用完",
       "why": {
         "imported": "来自你的音乐",
         "recommended": "为你推荐",
@@ -2054,7 +2052,11 @@
       "makeIt": "立即制作",
       "undo": "撤销",
       "loadError": "暂时无法加载这些歌曲。",
-      "retry": "重试"
+      "retry": "重试",
+      "limit": {
+        "submission": "您今天免费的点播额度已用完。明天再来提交新的点播吧！",
+        "voteUsed": "您今天免费的投票额度已用完。明天再来提交新的点播吧！"
+      }
     }
   }
 }

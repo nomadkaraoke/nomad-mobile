@@ -2041,9 +2041,7 @@
       "request": "Ücretsiz talep et",
       "requestError": "İstek gönderilemedi. Tekrar dene.",
       "requested": "{count, plural, one {Talep edildi · # oy} other {Talep edildi · # oy}}",
-      "submissionLimit": "Günde bir ücretsiz istek hakkı: Yarın tekrar dene",
       "title": "Bunu hazırlat",
-      "voteUsed": "Bugünkü ücretsiz oy hakkını kullandın",
       "why": {
         "imported": "Müziklerinden",
         "recommended": "Senin için seçildi",
@@ -2054,7 +2052,11 @@
       "makeIt": "Oluştur",
       "undo": "Geri al",
       "loadError": "Bu şarkılar şu anda yüklenemedi.",
-      "retry": "Tekrar dene"
+      "retry": "Tekrar dene",
+      "limit": {
+        "submission": "Bugünkü ücretsiz istek hakkını kullandın. Başka bir istekte bulunmak için yarın tekrar gel.",
+        "voteUsed": "Bugünkü ücretsiz oy hakkını kullandın. Başka bir istekte bulunmak için yarın tekrar gel."
+      }
     }
   }
 }

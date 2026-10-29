@@ -2041,9 +2041,7 @@
       "request": "Richiedi gratis",
       "requestError": "Impossibile inviare la richiesta. Riprova.",
       "requested": "{count, plural, one {Richiesto · # voto} other {Richiesto · # voti}}",
-      "submissionLimit": "Una richiesta gratuita al giorno: riprova domani",
       "title": "Fallo creare",
-      "voteUsed": "Hai usato il tuo voto gratuito di oggi",
       "why": {
         "imported": "Dalla tua musica",
         "recommended": "Scelto per te",
@@ -2054,7 +2052,11 @@
       "makeIt": "Crea",
       "undo": "Annulla",
       "loadError": "Impossibile caricare queste canzoni al momento.",
-      "retry": "Riprova"
+      "retry": "Riprova",
+      "limit": {
+        "submission": "Hai effettuato la tua richiesta gratuita di oggi. Torna domani per richiederne un'altra.",
+        "voteUsed": "Hai usato il tuo voto gratuito di oggi. Torna domani per richiederne un altro."
+      }
     }
   }
 }

@@ -100,6 +100,38 @@ describe('Get this made shelf', () => {
     expect(await screen.findByTestId('getmade-row-3')).toBeTruthy();
   });
 
+  it('shelf rows are compact (no Make it / Request it free); tapping one opens the full screen', async () => {
+    g.listBoardRequests.mockResolvedValue(board([boardReq('Band 1', 'Song 1', 4)]));
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    const row = await screen.findByTestId('me-getmade-0');
+    expect(within(row).getByText(/Song 0/)).toBeTruthy();
+    expect(within(row).getByText(/Band 0/)).toBeTruthy();
+    expect(within(row).getByText('Saved')).toBeTruthy();
+    expect(within(row).getByTestId('me-getmade-dismiss-0')).toBeTruthy();
+    expect(await within(screen.getByTestId('me-getmade-1')).findByText('4 votes on the board')).toBeTruthy();
+    expect(screen.queryByTestId('me-getmade-make-0')).toBeNull();
+    expect(screen.queryByTestId('me-getmade-request-0')).toBeNull();
+    fireEvent.press(screen.getByTestId('me-getmade-open-0'));
+    expect(await screen.findByTestId('me-getmade-screen')).toBeTruthy();
+  });
+
+  it('shelf: dismiss works from the compact row, with Undo', async () => {
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    await screen.findByTestId('me-getmade-0');
+    fireEvent.press(screen.getByTestId('me-getmade-dismiss-0'));
+    expect(screen.queryByText(/Song 0/)).toBeNull();
+    fireEvent.press(screen.getByTestId('me-getmade-undo'));
+    expect(await screen.findByText(/Song 0/)).toBeTruthy();
+  });
+
+  it('shelf: a spent vote is one line at the top; the requested row keeps its count', async () => {
+    g.listBoardRequests.mockResolvedValue(board([boardReq('Band 1', 'Song 1', 3, 'mine')], true, 'mine'));
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    expect(await screen.findByTestId('me-getmade-limit')).toHaveTextContent("You've used today's free vote. Come back tomorrow to request another.");
+    expect(screen.getAllByText("You've used today's free vote. Come back tomorrow to request another.")).toHaveLength(1);
+    expect(within(screen.getByTestId('me-getmade-1')).getByText('Requested · 3 votes')).toBeTruthy();
+  });
+
   it('renders nothing when there is nothing to make', async () => {
     api.getGetMade.mockResolvedValue([]);
     renderRouter(appRoutes(), { initialUrl: '/me' });
@@ -140,8 +172,8 @@ describe('Get this made screen', () => {
   it.each([
     ['created', { status: 'created', request: boardReq('Band 0', 'Song 0', 1) }, 'Requested · 1 vote'],
     ['already_exists', { status: 'already_exists', request: boardReq('Band 0', 'Song 0', 5) }, 'Requested · 5 votes'],
-    ['vote_used', { status: 'vote_used' }, "You've used today's free vote"],
-    ['submission_limit', { status: 'submission_limit' }, 'One free request a day: try tomorrow'],
+    ['vote_used', { status: 'vote_used' }, "You've used today's free vote. Come back tomorrow to request another."],
+    ['submission_limit', { status: 'submission_limit' }, "You've made today's free request. Come back tomorrow to request another."],
   ] as const)('Request it free → %s shows its copy and never votes', async (status, outcome, copy) => {
     g.submitSongRequest.mockResolvedValue(outcome as gen.RequestOutcome);
     await openScreen();
@@ -149,7 +181,16 @@ describe('Get this made screen', () => {
     const boardCalls = g.listBoardRequests.mock.calls.length;
     fireEvent.press(screen.getByTestId('getmade-request-0'));
     const row = screen.getByTestId('getmade-row-0');
-    expect(await within(row).findByText(copy)).toBeTruthy();
+    if (status === 'vote_used' || status === 'submission_limit') {
+      // R28: ONE line at the top of the list, never repeated per row; every row drops Request it free.
+      expect(await screen.findByTestId('getmade-limit')).toHaveTextContent(copy);
+      expect(screen.getAllByText(copy)).toHaveLength(1);
+      expect(screen.queryByTestId('getmade-request-1')).toBeNull();
+      expect(screen.getByTestId('getmade-make-1')).toBeTruthy();
+    } else {
+      expect(await within(row).findByText(copy)).toBeTruthy();
+      expect(screen.queryByTestId('getmade-limit')).toBeNull();
+    }
     expect(g.submitSongRequest).toHaveBeenCalledTimes(1);
     expect(g.submitSongRequest).toHaveBeenCalledWith('Band 0', 'Song 0');
     expect(g.voteApiRequestsBoardRequestsRequestIdVotePost).not.toHaveBeenCalled();
@@ -162,9 +203,12 @@ describe('Get this made screen', () => {
   it('with today\'s vote already spent elsewhere, Request it free is off up front (no 409 round trip)', async () => {
     g.listBoardRequests.mockResolvedValue(board([boardReq('Band 1', 'Song 1', 3, 'mine')], true, 'mine'));
     await openScreen();
-    const row0 = await screen.findByTestId('getmade-row-0');
-    expect(await within(row0).findByText("You've used today's free vote")).toBeTruthy();
+    await screen.findByTestId('getmade-row-0');
+    expect(await screen.findByTestId('getmade-limit')).toHaveTextContent("You've used today's free vote. Come back tomorrow to request another.");
+    expect(screen.getAllByText("You've used today's free vote. Come back tomorrow to request another.")).toHaveLength(1);
+    expect(within(screen.getByTestId('getmade-row-0')).queryByText(/free vote/)).toBeNull();
     expect(screen.queryByTestId('getmade-request-0')).toBeNull();
+    expect(screen.queryByTestId('getmade-request-2')).toBeNull();
     // The row the vote went to reads as requested.
     expect(within(screen.getByTestId('getmade-row-1')).getByText('Requested · 3 votes')).toBeTruthy();
     expect(g.submitSongRequest).not.toHaveBeenCalled();

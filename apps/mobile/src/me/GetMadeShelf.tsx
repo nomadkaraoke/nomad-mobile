@@ -3,16 +3,19 @@ import { Button, Text } from '@nomad/ui';
 import { router, type Href } from 'expo-router';
 import { View } from 'react-native';
 
-import { GetMadeRow, GetMadeUndoToast } from './GetMadeRow';
+import { GetMadeLimitLine, GetMadeShelfRow, GetMadeUndoToast } from './GetMadeRow';
 import { Shelf } from './Shelf';
 import { useGetMade } from './useGetMade';
 
 const MAX = 3;
 
-/** Get this made on the Me home: the top three songs with Make it / Request it free, and See all. Nothing when empty. */
+/**
+ * Get this made on the Me home: the top three songs as compact rows (tap → the full screen, where Make it and Request
+ * it free live), the day's request limit once, and See all. Nothing when empty.
+ */
 export function GetMadeShelf() {
   const t = useTranslations('me.getMade');
-  const { items, offline, makeDisabled, error, refetch, dismiss, undismiss, request } = useGetMade();
+  const { items, limit, error, refetch, dismiss, undismiss } = useGetMade();
   const toast = <GetMadeUndoToast prefix="me-getmade" onUndo={undismiss} />;
   if (error) {
     return (
@@ -30,8 +33,9 @@ export function GetMadeShelf() {
   return (
     <Shelf testID="me-getmade" title={t('title')} onSeeAll={() => router.push('/me/get-made' as Href)}>
       {toast}
+      <GetMadeLimitLine prefix="me-getmade" limit={limit} />
       {items.slice(0, MAX).map((row, i) => (
-        <GetMadeRow key={row.key} row={row} index={i} prefix="me-getmade" offline={offline} makeDisabled={makeDisabled} onRequest={request} onDismiss={dismiss} />
+        <GetMadeShelfRow key={row.key} row={row} index={i} onDismiss={dismiss} />
       ))}
     </Shelf>
   );

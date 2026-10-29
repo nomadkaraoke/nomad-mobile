@@ -2041,9 +2041,7 @@
       "request": "Minta gratis",
       "requestError": "Gagal mengirim permintaan. Coba lagi.",
       "requested": "{count, plural, other {Diminta · # suara}}",
-      "submissionLimit": "Batas satu permintaan gratis per hari: coba lagi besok",
       "title": "Minta dibuatkan",
-      "voteUsed": "Anda sudah menggunakan suara gratis hari ini",
       "why": {
         "imported": "Dari musik Anda",
         "recommended": "Dipilihkan untuk Anda",
@@ -2054,7 +2052,11 @@
       "makeIt": "Buat",
       "undo": "Urungkan",
       "loadError": "Tidak dapat memuat lagu-lagu ini sekarang.",
-      "retry": "Coba lagi"
+      "retry": "Coba lagi",
+      "limit": {
+        "submission": "Kamu sudah menggunakan permintaan gratis hari ini. Balik lagi besok untuk meminta lagu lain.",
+        "voteUsed": "Kamu sudah menggunakan vote gratis hari ini. Balik lagi besok untuk memberikan vote lagi."
+      }
     }
   }
 }

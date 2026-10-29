@@ -2041,9 +2041,7 @@
       "request": "Demander gratuitement",
       "requestError": "Impossible d'envoyer la demande. Réessaie.",
       "requested": "{count, plural, one {Demandé · # vote} other {Demandé · # votes}}",
-      "submissionLimit": "Une demande gratuite par jour : réessaie demain",
       "title": "Faire créer",
-      "voteUsed": "Tu as utilisé ton vote gratuit du jour",
       "why": {
         "imported": "Depuis ta musique",
         "recommended": "Choisi pour toi",
@@ -2054,7 +2052,11 @@
       "makeIt": "Créer",
       "undo": "Annuler",
       "loadError": "Impossible de charger ces chansons pour le moment.",
-      "retry": "Réessayer"
+      "retry": "Réessayer",
+      "limit": {
+        "submission": "Tu as fait ta demande gratuite du jour. Reviens demain pour en faire une autre.",
+        "voteUsed": "Tu as utilisé ton vote gratuit du jour. Reviens demain pour voter à nouveau."
+      }
     }
   }
 }

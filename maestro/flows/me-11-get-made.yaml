@@ -1,7 +1,8 @@
-# Me 11 (Phase 4b spec §6.5.4, Get this made): a saved fixture song with no karaoke version → Me's "Get this made"
-# shelf lists it ("Saved") → See all → Request it free → "Requested · 1 vote" (one gen board submit) → back on Me the
-# shelf shows the same status → Make it opens the make screen with that song → back → dismiss (×) hides it with an
-# undo toast → Undo brings it back.
+# Me 11 (Phase 4b spec §6.5.4, Get this made; R28): a saved fixture song with no karaoke version → Me's compact
+# "Get this made" shelf lists it ("Saved", no action buttons) → tapping the row opens the full screen → Request it free
+# → "Requested · 1 vote" (one gen board submit) and ONE "used today's free vote" line at the top → Make it opens the
+# make screen with that song → back to Me: the shelf shows the same status and the one-line limit → dismiss (×) hides
+# it with an undo toast → Undo brings it back.
 appId: com.nomadkaraoke.mobile
 name: me-11-get-made
 tags:
@@ -50,9 +51,13 @@ tags:
     id: "me-getmade-why-0"
     text: "Saved"
 - takeScreenshot: ${ME_SHOTS}/me-11-getmade-shelf
-# The full screen: Request it free.
+# The compact shelf row has no buttons; tapping it opens the full screen, where Request it free and Make it live.
+- assertNotVisible:
+    id: "me-getmade-make-0"
+- assertNotVisible:
+    id: "me-getmade-request-0"
 - tapOn:
-    id: "me-getmade-all"
+    id: "me-getmade-open-0"
 - extendedWaitUntil:
     visible:
       id: "getmade-request-0"
@@ -69,34 +74,21 @@ tags:
     timeout: 20000
 - assertNotVisible:
     id: "getmade-request-0"
-- takeScreenshot: ${ME_SHOTS}/me-11-getmade-requested
-# Not common/header-back.yaml: its Android hideKeyboard with no keyboard up also went back (two screens).
-- runFlow:
-    when:
-      platform: Android
-    commands:
-      - back
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn: "Back|Navigate up"
-# Back on Me: the shelf shares the outcome; Make it (enabled once the user's gen jobs are known) opens make.
-- scrollUntilVisible:
-    element:
-      id: "me-getmade-make-0"
-    direction: DOWN
-    centerElement: true
-- assertVisible:
-    id: "me-getmade-status-0"
-    text: "Requested · .*"
+# Gen's submit spent today's vote: one line at the top of the list says so (the board refetch brings it).
 - extendedWaitUntil:
     visible:
-      id: "me-getmade-make-0"
+      id: "getmade-limit"
+      text: ".*free vote.*"
+    timeout: 20000
+- takeScreenshot: ${ME_SHOTS}/me-11-getmade-requested
+# Make it (enabled once the user's gen jobs are known) opens make with that song.
+- extendedWaitUntil:
+    visible:
+      id: "getmade-make-0"
       enabled: true
     timeout: 20000
 - tapOn:
-    id: "me-getmade-make-0"
+    id: "getmade-make-0"
 - extendedWaitUntil:
     visible:
       id: "make-song-title"
@@ -108,7 +100,8 @@ tags:
     id: "make-song-artist"
     text: ".*Fixture Artist 01.*"
 - takeScreenshot: ${ME_SHOTS}/me-11-make
-# Not common/header-back.yaml: its Android hideKeyboard with no keyboard up also went back (two screens).
+# Back twice (make → Get this made → Me). Not common/header-back.yaml: its Android hideKeyboard with no keyboard up
+# also went back (two screens).
 - runFlow:
     when:
       platform: Android
@@ -119,6 +112,33 @@ tags:
       platform: iOS
     commands:
       - tapOn: "Back|Navigate up"
+- extendedWaitUntil:
+    visible:
+      id: "me-getmade-screen"
+    timeout: 10000
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Back|Navigate up"
+# Back on Me: the shelf shares the outcome and shows the limit once.
+- scrollUntilVisible:
+    element:
+      id: "me-getmade-status-0"
+    direction: DOWN
+    centerElement: true
+    timeout: 20000
+- assertVisible:
+    id: "me-getmade-status-0"
+    text: "Requested · .*"
+- assertVisible:
+    id: "me-getmade-limit"
+- takeScreenshot: ${ME_SHOTS}/me-11-getmade-shelf-requested
 # Dismiss → gone (undo toast) → Undo → back.
 - scrollUntilVisible:
     element:

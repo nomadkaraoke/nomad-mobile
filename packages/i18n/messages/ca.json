@@ -2041,9 +2041,7 @@
       "request": "Demana-la de franc",
       "requestError": "No s'ha pogut enviar la petició. Torna-ho a provar.",
       "requested": "{count, plural, one {Demanada · # vot} other {Demanada · # vots}}",
-      "submissionLimit": "Una petició de franc al dia: torna-ho a provar demà",
       "title": "Fes-la realitat",
-      "voteUsed": "Ja has fet servir el vot gratuït d'avui",
       "why": {
         "imported": "De la teva música",
         "recommended": "Triada per a tu",
@@ -2054,7 +2052,11 @@
       "makeIt": "Crea'l",
       "undo": "Desfer",
       "loadError": "No s'han pogut carregar aquestes cançons ara mateix.",
-      "retry": "Torna-ho a provar"
+      "retry": "Torna-ho a provar",
+      "limit": {
+        "submission": "Ja has fet la teva petició gratuïta d'avui. Torna demà per demanar-ne una altra.",
+        "voteUsed": "Ja has fet servir el teu vot gratuït d'avui. Torna demà per votar-ne una altra."
+      }
     }
   }
 }

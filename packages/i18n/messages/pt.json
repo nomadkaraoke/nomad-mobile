@@ -2041,9 +2041,7 @@
       "request": "Pedir de graça",
       "requestError": "Não foi possível enviar o pedido. Tente novamente.",
       "requested": "{count, plural, one {Pedido enviado · # voto} other {Pedido enviado · # votos}}",
-      "submissionLimit": "Apenas um pedido gratuito por dia: tente amanhã",
       "title": "Peça para criar",
-      "voteUsed": "Você já usou seu voto gratuito de hoje",
       "why": {
         "imported": "Das suas músicas",
         "recommended": "Escolhida para você",
@@ -2054,7 +2052,11 @@
       "makeIt": "Criar",
       "undo": "Desfazer",
       "loadError": "Não foi possível carregar essas músicas no momento.",
-      "retry": "Tentar novamente"
+      "retry": "Tentar novamente",
+      "limit": {
+        "submission": "Você já fez o pedido gratuito de hoje. Volte amanhã para pedir outro.",
+        "voteUsed": "Você já usou o voto gratuito de hoje. Volte amanhã para pedir outro."
+      }
     }
   }
 }

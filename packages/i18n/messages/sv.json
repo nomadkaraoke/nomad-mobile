@@ -2041,9 +2041,7 @@
       "request": "Önska gratis",
       "requestError": "Kunde inte skicka förfrågan. Försök igen.",
       "requested": "{count, plural, one {Önskad · # röst} other {Önskad · # röster}}",
-      "submissionLimit": "Ett gratisönskemål per dag – försök igen i morgon",
       "title": "Få den skapad",
-      "voteUsed": "Du har använt dagens gratisröst",
       "why": {
         "imported": "Från din musik",
         "recommended": "Utvald för dig",
@@ -2054,7 +2052,11 @@
       "makeIt": "Skapa",
       "undo": "Ångra",
       "loadError": "Det gick inte att ladda de här låtarna just nu.",
-      "retry": "Försök igen"
+      "retry": "Försök igen",
+      "limit": {
+        "submission": "Du har gjort dagens gratisönskemål. Kom tillbaka i morgon för att önska en till.",
+        "voteUsed": "Du har använt dagens gratisröst. Kom tillbaka i morgon för att rösta igen."
+      }
     }
   }
 }

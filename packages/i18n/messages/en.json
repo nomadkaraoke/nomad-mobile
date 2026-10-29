@@ -2039,8 +2039,6 @@
       "dismiss": "Hide this song",
       "requested": "{count, plural, one {Requested · # vote} other {Requested · # votes}}",
       "boardVotes": "{count, plural, one {# vote on the board} other {# votes on the board}}",
-      "voteUsed": "You've used today's free vote",
-      "submissionLimit": "One free request a day: try tomorrow",
       "requestError": "Couldn't send the request. Try again.",
       "hiddenToast": "Hidden from Get this made",
       "undo": "Undo",
@@ -2054,7 +2052,11 @@
         "recommended": "Picked for you"
       },
       "loadError": "Couldn't load these songs right now.",
-      "retry": "Try again"
+      "retry": "Try again",
+      "limit": {
+        "voteUsed": "You've used today's free vote. Come back tomorrow to request another.",
+        "submission": "You've made today's free request. Come back tomorrow to request another."
+      }
     }
   }
 }

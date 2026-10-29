@@ -2041,9 +2041,7 @@
       "request": "Poproś za darmo",
       "requestError": "Nie udało się wysłać prośby. Spróbuj ponownie.",
       "requested": "{count, plural, one {Zgłoszono · # głos} few {Zgłoszono · # głosy} many {Zgłoszono · # głosów} other {Zgłoszono · # głosu}}",
-      "submissionLimit": "Jedna darmowa prośba dziennie – spróbuj jutro",
       "title": "Stwórz to",
-      "voteUsed": "Twój darmowy głos na dziś został już wykorzystany",
       "why": {
         "imported": "Z Twojej muzyki",
         "recommended": "Dobrane dla Ciebie",
@@ -2054,7 +2052,11 @@
       "makeIt": "Stwórz",
       "undo": "Cofnij",
       "loadError": "Nie udało się teraz załadować tych utworów.",
-      "retry": "Spróbuj ponownie"
+      "retry": "Spróbuj ponownie",
+      "limit": {
+        "submission": "Twój dzisiejszy darmowy utwór został już zgłoszony. Wróć jutro, aby zgłosić kolejny.",
+        "voteUsed": "Twój dzisiejszy darmowy głos został już wykorzystany. Wróć jutro, aby zagłosować ponownie."
+      }
     }
   }
 }

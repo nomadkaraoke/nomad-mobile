@@ -2041,9 +2041,7 @@
       "request": "Kérd ingyen",
       "requestError": "Nem sikerült elküldeni a kérést. Próbáld újra.",
       "requested": "{count, plural, one {Kérve · # szavazat} other {Kérve · # szavazat}}",
-      "submissionLimit": "Naponta egy ingyenes kérés: próbáld újra holnap",
       "title": "Készíttesd el",
-      "voteUsed": "Már felhasználtad a mai ingyenes szavazatodat",
       "why": {
         "imported": "A zenéidből",
         "recommended": "Neked ajánlott",
@@ -2054,7 +2052,11 @@
       "makeIt": "Készítsd el",
       "undo": "Visszavonás",
       "loadError": "Most nem sikerült betölteni ezeket a dalokat.",
-      "retry": "Próbáld újra"
+      "retry": "Próbáld újra",
+      "limit": {
+        "submission": "Elhasználtad a mai ingyenes kérésedet. Gyere vissza holnap, hogy újat kérhess.",
+        "voteUsed": "Elhasználtad a mai ingyenes szavazatodat. Gyere vissza holnap, ha újra szavaznál."
+      }
     }
   }
 }

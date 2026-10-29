@@ -2041,9 +2041,7 @@
       "request": "Toivo ilmaiseksi",
       "requestError": "Toivetta ei voitu lähettää. Yritä uudelleen.",
       "requested": "{count, plural, one {Toivottu · # ääni} other {Toivottu · # ääntä}}",
-      "submissionLimit": "Yksi ilmainen toive päivässä: kokeile huomenna uudelleen",
       "title": "Teetä tämä",
-      "voteUsed": "Olet käyttänyt tämän päivän ilmaisen äänesi",
       "why": {
         "imported": "Omasta musiikistasi",
         "recommended": "Valittu sinulle",
@@ -2054,7 +2052,11 @@
       "makeIt": "Luo versio",
       "undo": "Kumoa",
       "loadError": "Näitä kappaleita ei saatu ladattua juuri nyt.",
-      "retry": "Yritä uudelleen"
+      "retry": "Yritä uudelleen",
+      "limit": {
+        "submission": "Olet käyttänyt tämän päivän ilmaisen toiveesi. Tule huomenna takaisin toivoaksesi uutta kappaletta.",
+        "voteUsed": "Olet käyttänyt tämän päivän ilmaisen äänesi. Tule huomenna takaisin toivoaksesi lisää."
+      }
     }
   }
 }

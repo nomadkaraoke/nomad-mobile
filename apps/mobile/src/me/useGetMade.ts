@@ -29,6 +29,9 @@ export type GetMadeRow = GetMadeItem & {
 
 const BOARD_STALE_MS = 5 * 60_000;
 
+/** Today's free request can't be used: the vote is spent, or the day's one submission is (the stricter copy wins). */
+export type RequestLimit = 'vote_used' | 'submission_limit';
+
 // An undo that reached decide: a fetch started after this no longer needs the restored row pinned.
 useMeOutbox.addSentListener((item) => {
   if (item.op === 'dismiss' && !item.dismissed) useGetMadeLocal.getState().markSent(item.dismissKey, Date.now());
@@ -98,7 +101,7 @@ export function useGetMade() {
   const dismissed = useGetMadeLocal((s) => s.dismissed);
   const requests = useGetMadeLocal((s) => s.requests);
 
-  const items = useMemo<GetMadeRow[]>(() => {
+  const { items, limit } = useMemo<{ items: GetMadeRow[]; limit: RequestLimit | null }>(() => {
     // A failed job didn't make the song; anything else (done, working, waiting on the person) did or will.
     const made = new Set((jobs.data ?? []).filter((j) => jobPhase(j.status) !== 'failed').map((j) => songKey(j.artist, j.title)));
     const onBoard = new Map<string, SongRequestPublic>();
@@ -107,7 +110,15 @@ export function useGetMade() {
     const yourVote = board.data?.yourVoteRequestId ?? null;
     const pending = pendingDismissals(outboxItems);
     const restored = Object.values(dismissed).filter((d) => !d.dismissed).map((d) => d.item);
-    return withRestored(q.data?.items ?? [], restored)
+    const outcomes = Object.values(requests).map((r) => r.kind);
+    // One limit for the whole list (R28): gen's submit spends the day's one vote, so once it's spent (or the day's
+    // submission is), no row can be requested; the list says so once instead of a 409 per row.
+    const limit: RequestLimit | null = outcomes.includes('submission_limit')
+      ? 'submission_limit'
+      : votedToday || outcomes.includes('vote_used')
+        ? 'vote_used'
+        : null;
+    const rows = withRestored(q.data?.items ?? [], restored)
       .filter((it) => it.title.trim() !== '') // R4: a row needs a real title (never a key)
       .filter((it) => !(dismissed[it.key]?.dismissed ?? pending.get(it.key) ?? false))
       .filter((it) => !made.has(songKey(it.artist, it.title)))
@@ -116,10 +127,10 @@ export function useGetMade() {
         let request: RequestState | null = requests[it.key] ?? null;
         if (request?.kind === 'requested' && match) request = { kind: 'requested', votes: match.vote_count };
         if (!request && match && yourVote === match.id) request = { kind: 'requested', votes: match.vote_count };
-        // Gen's submit spends the day's one vote: once it's spent elsewhere, say so up front instead of a 409.
-        if (!request && votedToday) request = { kind: 'vote_used' };
+        if (limit && request?.kind !== 'requested' && request?.kind !== 'pending') request = { kind: limit };
         return { ...it, boardVotes: match?.vote_count ?? null, request };
       });
+    return { items: rows, limit };
   }, [q.data, jobs.data, board.data, outboxItems, dismissed, requests]);
 
   const findItem = useCallback(
@@ -174,6 +185,8 @@ export function useGetMade() {
   const jobsKnown = email === null || jobs.data !== undefined;
   return {
     items,
+    /** Shown once at the top of the list: today's free request is used up. */
+    limit,
     loading: userKey !== null && q.data === undefined && q.isFetching,
     offline,
     /** The list failed to load and there is nothing cached to show (hidden while a retry is fetching). */

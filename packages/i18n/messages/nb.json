@@ -2041,9 +2041,7 @@
       "request": "Be om den gratis",
       "requestError": "Kunne ikke sende forespørselen. Prøv igjen.",
       "requested": "{count, plural, one {Forespurt · # stemme} other {Forespurt · # stemmer}}",
-      "submissionLimit": "Én gratis forespørsel per dag: prøv igjen i morgen",
       "title": "Få denne laget",
-      "voteUsed": "Du har brukt dagens gratisstemme",
       "why": {
         "imported": "Fra musikken din",
         "recommended": "Valgt for deg",
@@ -2054,7 +2052,11 @@
       "makeIt": "Lag den",
       "undo": "Angre",
       "loadError": "Kunne ikke laste inn disse sangene akkurat nå.",
-      "retry": "Prøv igjen"
+      "retry": "Prøv igjen",
+      "limit": {
+        "submission": "Du har brukt dagens gratisønske. Kom tilbake i morgen for å ønske deg en til.",
+        "voteUsed": "Du har brukt dagens gratisstemme. Kom tilbake i morgen for å stemme igjen."
+      }
     }
   }
 }

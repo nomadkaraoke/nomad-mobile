@@ -2041,9 +2041,7 @@
       "request": "Minta secara percuma",
       "requestError": "Tidak dapat menghantar permintaan. Sila cuba lagi.",
       "requested": "{count, plural, one {Diminta · # undian} other {Diminta · # undian}}",
-      "submissionLimit": "Satu permintaan percuma setiap hari: cuba lagi esok",
       "title": "Dapatkan lagu ini",
-      "voteUsed": "Anda telah menggunakan undian percuma anda untuk hari ini",
       "why": {
         "imported": "Daripada muzik anda",
         "recommended": "Dipilih untuk anda",
@@ -2054,7 +2052,11 @@
       "makeIt": "Buat",
       "undo": "Buat asal",
       "loadError": "Tidak dapat memuatkan lagu-lagu ini sekarang.",
-      "retry": "Cuba lagi"
+      "retry": "Cuba lagi",
+      "limit": {
+        "submission": "Anda telah menggunakan permintaan percuma untuk hari ini. Kembali lagi esok untuk membuat permintaan lain.",
+        "voteUsed": "Anda telah menggunakan undian percuma untuk hari ini. Kembali lagi esok untuk mengundi lagu lain."
+      }
     }
   }
 }

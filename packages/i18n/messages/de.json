@@ -2041,9 +2041,7 @@
       "request": "Kostenlos wünschen",
       "requestError": "Anfrage konnte nicht gesendet werden. Versuche es bitte noch einmal.",
       "requested": "{count, plural, one {Gewünscht · # Stimme} other {Gewünscht · # Stimmen}}",
-      "submissionLimit": "Ein kostenloser Wunsch pro Tag: Versuche es morgen wieder",
       "title": "Erstellen lassen",
-      "voteUsed": "Du hast deine heutige kostenlose Stimme bereits abgegeben",
       "why": {
         "imported": "Aus deiner Musik",
         "recommended": "Für dich ausgewählt",
@@ -2054,7 +2052,11 @@
       "makeIt": "Erstellen",
       "undo": "Rückgängig",
       "loadError": "Diese Songs konnten gerade nicht geladen werden.",
-      "retry": "Erneut versuchen"
+      "retry": "Erneut versuchen",
+      "limit": {
+        "submission": "Du hast deine heutige kostenlose Anfrage bereits eingereicht. Komm morgen wieder, um eine weitere anzufragen.",
+        "voteUsed": "Du hast deine heutige kostenlose Stimme bereits abgegeben. Komm morgen wieder, um erneut abzustimmen."
+      }
     }
   }
 }

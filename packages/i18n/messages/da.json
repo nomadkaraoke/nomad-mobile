@@ -2041,9 +2041,7 @@
       "request": "Anmod gratis om den",
       "requestError": "Kunne ikke sende anmodningen. Prøv igen.",
       "requested": "{count, plural, one {Anmodet · # stemme} other {Anmodet · # stemmer}}",
-      "submissionLimit": "Én gratis anmodning om dagen: prøv igen i morgen",
       "title": "Få den lavet",
-      "voteUsed": "Du har brugt dagens gratis stemme",
       "why": {
         "imported": "Fra din musik",
         "recommended": "Udvalgt til dig",
@@ -2054,7 +2052,11 @@
       "makeIt": "Lav den",
       "undo": "Fortryd",
       "loadError": "Kunne ikke indlæse disse sange lige nu.",
-      "retry": "Prøv igen"
+      "retry": "Prøv igen",
+      "limit": {
+        "submission": "Du har brugt dagens gratis anmodning. Kom tilbage i morgen for at anmode om en ny.",
+        "voteUsed": "Du har brugt dagens gratis stemme. Kom tilbage i morgen for at stemme igen."
+      }
     }
   }
 }

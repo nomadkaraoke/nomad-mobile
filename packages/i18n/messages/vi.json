@@ -2041,9 +2041,7 @@
       "request": "Yêu cầu miễn phí",
       "requestError": "Không thể gửi yêu cầu. Vui lòng thử lại.",
       "requested": "{count, plural, one {Đã yêu cầu · # lượt bình chọn} other {Đã yêu cầu · # lượt bình chọn}}",
-      "submissionLimit": "Mỗi ngày chỉ được một yêu cầu miễn phí: hãy quay lại vào ngày mai nhé",
       "title": "Yêu cầu tạo bài",
-      "voteUsed": "Bạn đã dùng hết lượt bình chọn miễn phí hôm nay",
       "why": {
         "imported": "Từ kho nhạc của bạn",
         "recommended": "Gợi ý dành cho bạn",
@@ -2054,7 +2052,11 @@
       "makeIt": "Tạo bài hát",
       "undo": "Hoàn tác",
       "loadError": "Hiện không thể tải các bài hát này.",
-      "retry": "Thử lại"
+      "retry": "Thử lại",
+      "limit": {
+        "submission": "Bạn đã dùng lượt yêu cầu miễn phí của hôm nay rồi. Hãy quay lại vào ngày mai để gửi yêu cầu khác nhé.",
+        "voteUsed": "Bạn đã dùng lượt bình chọn miễn phí của hôm nay rồi. Hãy quay lại vào ngày mai để bình chọn tiếp nhé."
+      }
     }
   }
 }

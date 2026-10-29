@@ -2041,9 +2041,7 @@
       "request": "Solicită gratuit",
       "requestError": "Solicitarea nu a putut fi trimisă. Încearcă din nou.",
       "requested": "{count, plural, one {Solicitată · # vot} few {Solicitată · # voturi} other {Solicitată · # de voturi}}",
-      "submissionLimit": "O solicitare gratuită pe zi: încearcă mâine",
       "title": "Creează această piesă",
-      "voteUsed": "Ai folosit votul gratuit de azi",
       "why": {
         "imported": "Din muzica ta",
         "recommended": "Aleasă pentru tine",
@@ -2054,7 +2052,11 @@
       "makeIt": "Creează",
       "undo": "Anulează",
       "loadError": "Nu am putut încărca aceste melodii acum.",
-      "retry": "Încearcă din nou"
+      "retry": "Încearcă din nou",
+      "limit": {
+        "submission": "Ți-ai folosit cererea gratuită de azi. Revino mâine pentru a trimite alta.",
+        "voteUsed": "Ți-ai folosit votul gratuit de azi. Revino mâine pentru a vota din nou."
+      }
     }
   }
 }

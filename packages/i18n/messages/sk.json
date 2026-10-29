@@ -2041,9 +2041,7 @@
       "request": "Požiadať zadarmo",
       "requestError": "Žiadosť sa nepodarilo odoslať. Skús to znova.",
       "requested": "{count, plural, one {Odoslaná žiadosť · # hlas} few {Odoslaná žiadosť · # hlasy} other {Odoslaná žiadosť · # hlasov}}",
-      "submissionLimit": "Jedna bezplatná žiadosť denne – skús to zajtra",
       "title": "Daj to vyrobiť",
-      "voteUsed": "Svoj dnešný bezplatný hlas si už minul",
       "why": {
         "imported": "Z tvojej hudby",
         "recommended": "Vybrané pre teba",
@@ -2054,7 +2052,11 @@
       "makeIt": "Vytvoriť",
       "undo": "Vrátiť späť",
       "loadError": "Tieto skladby sa momentálne nepodarilo načítať.",
-      "retry": "Skúsiť znova"
+      "retry": "Skúsiť znova",
+      "limit": {
+        "submission": "Dnešnú bezplatnú žiadosť si už vyčerpal. Vráť sa zajtra a požiadaj o ďalšiu.",
+        "voteUsed": "Dnešný bezplatný hlas si už minul. Vráť sa zajtra a požiadaj o ďalšiu."
+      }
     }
   }
 }
