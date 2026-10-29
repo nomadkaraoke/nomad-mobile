@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {# bài đã được người khác lưu trước đó.} other {# bài đã được người khác lưu trước đó.}}",
       "title": "Bạn đã hát những bài này?",
       "unmatched": "{count, plural, one {Không thể khớp thêm # bài hát} other {Không thể khớp thêm # bài hát}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Quá nhiều yêu cầu cùng lúc. Vui lòng thử lại sau vài phút."
     }
   }
 }

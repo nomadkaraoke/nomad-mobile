@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {# je već spremio netko drugi.} few {# su već spremili drugi.} other {# je već spremio netko drugi.}}",
       "title": "Jesu li ovo tvoje pjesme?",
       "unmatched": "{count, plural, one {Još # pjesma nije se mogla povezati} few {Još # pjesme nisu se mogle povezati} other {Još # pjesama nije se moglo povezati}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Previše odjednom. Pokušaj ponovno za nekoliko minuta."
     }
   }
 }

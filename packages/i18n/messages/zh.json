@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {已有 # 首被其他人保存。} other {已有 # 首被其他人保存。}}",
       "title": "这些是你唱的吗？",
       "unmatched": "{count, plural, one {还有 # 首歌未能匹配} other {还有 # 首歌未能匹配}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "操作过于频繁，请几分钟后再试。"
     }
   }
 }

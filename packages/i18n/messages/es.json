@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {# ya fue guardada por otra persona.} other {# ya fueron guardadas por otra persona.}}",
       "title": "¿Fuiste tú?",
       "unmatched": "{count, plural, one {No se pudo vincular # canción más} other {No se pudieron vincular # canciones más}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Demasiadas solicitudes a la vez. Inténtalo de nuevo en unos minutos."
     }
   }
 }

@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {# sudah disimpan oleh orang lain.} other {# sudah disimpan oleh orang lain.}}",
       "title": "Apakah ini Anda?",
       "unmatched": "{count, plural, one {# lagu lainnya tidak dapat dicocokkan} other {# lagu lainnya tidak dapat dicocokkan}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Terlalu banyak permintaan sekaligus. Coba lagi dalam beberapa menit."
     }
   }
 }

@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {# já foi salva por outra pessoa.} other {# já foram salvas por outra pessoa.}}",
       "title": "Foi você que cantou?",
       "unmatched": "{count, plural, one {Mais # música não pôde ser identificada} other {Mais # músicas não puderam ser identificadas}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Muitas tentativas de uma vez só. Tente novamente em alguns minutos."
     }
   }
 }

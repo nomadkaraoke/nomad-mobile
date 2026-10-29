@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {#曲はすでに他のユーザーに保存されています。} other {#曲はすでに他のユーザーに保存されています。}}",
       "title": "あなたが歌った曲ですか？",
       "unmatched": "{count, plural, one {他#曲を照合できませんでした} other {他#曲を照合できませんでした}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "リクエストが多すぎます。数分後にもう一度お試しください。"
     }
   }
 }

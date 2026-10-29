@@ -2070,6 +2070,7 @@
       "saved": "{count, plural, one {Saved # song.} other {Saved # songs.}} They'll show in your history in a minute.",
       "taken": "{count, plural, one {# was already saved by someone else.} other {# were already saved by someone else.}}",
       "failed": "Couldn't reach the host's machine. Try again later.",
+      "rateLimited": "Too many at once. Try again in a few minutes.",
       "seeAll": "{count, plural, one {See all # night} other {See all # nights}}",
       "showingRecent": "{count, plural, one {Showing your most recent night} other {Showing your # most recent nights}}"
     }

@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {Joku muu oli jo tallentanut # kappaleen.} other {Joku muu oli jo tallentanut # kappaletta.}}",
       "title": "Olitko tämä sinä?",
       "unmatched": "{count, plural, one {Vielä # kappaletta ei voitu yhdistää} other {Vielä # muuta kappaletta ei voitu yhdistää}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Liian monta kerralla. Yritä uudelleen muutaman minuutin kuluttua."
     }
   }
 }

@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {# पहले ही किसी और ने सेव कर लिया है।} other {# पहले ही किसी और ने सेव कर लिए हैं।}}",
       "title": "क्या ये गाने तुमने गाए थे?",
       "unmatched": "{count, plural, one {# और गाना मैच नहीं हो सका} other {# और गाने मैच नहीं हो सके}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "एक साथ बहुत सारे अनुरोध। कुछ मिनट बाद फिर से कोशिश करो।"
     }
   }
 }

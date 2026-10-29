@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {# was al opgeslagen door iemand anders.} other {# waren al opgeslagen door iemand anders.}}",
       "title": "Was jij dit?",
       "unmatched": "{count, plural, one {Nog # nummer kon niet worden gekoppeld} other {Nog # nummers konden niet worden gekoppeld}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Te veel tegelijk. Probeer het over een paar minuten opnieuw."
     }
   }
 }

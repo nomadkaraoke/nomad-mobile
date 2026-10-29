@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {# a déjà été enregistrée par quelqu'un d'autre.} other {# ont déjà été enregistrées par quelqu'un d'autre.}}",
       "title": "C'était bien toi ?",
       "unmatched": "{count, plural, one {# autre chanson n'a pas pu être associée} other {# autres chansons n'ont pas pu être associées}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Trop de tentatives à la fois. Réessaie dans quelques minutes."
     }
   }
 }

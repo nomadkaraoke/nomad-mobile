@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {# var allerede gemt af en anden.} other {# var allerede gemt af andre.}}",
       "title": "Var det her dig?",
       "unmatched": "{count, plural, one {Yderligere # sang kunne ikke matches} other {Yderligere # sange kunne ikke matches}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "For mange på én gang. Prøv igen om et par minutter."
     }
   }
 }

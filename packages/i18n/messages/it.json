@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {# era già stata salvata da qualcun altro.} other {# erano già state salvate da qualcun altro.}}",
       "title": "Eri tu?",
       "unmatched": "{count, plural, one {Non è stato possibile abbinare # altra canzone} other {Non è stato possibile abbinare altre # canzoni}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Troppe richieste contemporaneamente. Riprova tra qualche minuto."
     }
   }
 }

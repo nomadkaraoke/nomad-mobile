@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {# a fost deja salvată de altcineva.} few {# au fost deja salvate de altcineva.} other {# au fost deja salvate de altcineva.}}",
       "title": "Tu ai fost?",
       "unmatched": "{count, plural, one {Încă # piesă nu a putut fi asociată} few {Încă # piese nu au putut fi asociate} other {Încă # de piese nu au putut fi asociate}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Prea multe deodată. Încearcă din nou în câteva minute."
     }
   }
 }

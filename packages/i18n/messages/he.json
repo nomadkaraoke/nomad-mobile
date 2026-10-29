@@ -2071,7 +2071,8 @@
       "taken": "{count, plural, one {שיר אחד (#) כבר נשמר על ידי מישהו אחר.} other {# שירים כבר נשמרו על ידי מישהו אחר.}}",
       "title": "אלה שירים שלך?",
       "unmatched": "{count, plural, one {לא הצלחנו להתאים שיר # נוסף} other {לא הצלחנו להתאים # שירים נוספים}}",
-      "songValue": "{title} · {artist}"
+      "songValue": "{title} · {artist}",
+      "rateLimited": "יותר מדי בבת אחת. נסו שוב בעוד כמה דקות."
     }
   }
 }
