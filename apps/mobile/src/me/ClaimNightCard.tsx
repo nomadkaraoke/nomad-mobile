@@ -61,6 +61,12 @@ export function ClaimNightCard({ prefix, index: i, night, unticked, status, offl
               {t('taken', { count: saved.taken })}
             </Text>
           ) : null}
+          {/* Nothing saved and nothing taken (shouldn't happen with a song ticked): never an empty card. */}
+          {savedCount === 0 && saved.taken === 0 ? (
+            <Text testID={`${prefix}-error-${i}`} accessibilityLiveRegion="polite" className="text-danger">
+              {t('failed')}
+            </Text>
+          ) : null}
         </>
       ) : (
         <>

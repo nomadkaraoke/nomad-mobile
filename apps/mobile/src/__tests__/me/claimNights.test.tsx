@@ -9,8 +9,9 @@ import type { ComponentProps, ReactNode } from 'react';
 import { ClaimNightsSection } from '../../me/ClaimNightsSection';
 import { CLAIM_RESULT_MS } from '../../me/useClaimNightsView';
 import { useClaimAnswered } from '../../me/useClaimSuggestions';
+import { useClearMeOnAccountChange } from '../../me/useClearMeOnAccountChange';
 import { appRoutes } from '../../test-utils/routes';
-import { resetMe, wrapperFor } from './helpers';
+import { resetMe, signIn, wrapperFor } from './helpers';
 
 jest.setTimeout(20_000);
 
@@ -68,6 +69,13 @@ const renderSection = (locale: Locale = 'en') => {
   const client = resetMe('wren@example.com');
   return render(<ClaimNightsSection />, { wrapper: wrapper(client, locale) });
 };
+
+// Let React Query's batched notifications land inside act() before the next test (no act() warnings).
+afterEach(async () => {
+  await act(async () => {});
+  act(() => useClaimAnswered.getState().clear());
+  jest.useRealTimers();
+});
 
 beforeEach(() => {
   jest.useRealTimers();
@@ -206,6 +214,33 @@ describe('Were these you? (Me section)', () => {
     expect(await screen.findByTestId('me-claim-result-0')).toHaveTextContent(/^Saved 3 songs\./);
   });
 
+  it('a Save that saved nothing and found nothing taken shows the failed copy, never an empty card', async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1', '2026-10-10')]));
+    api.claimHistory.mockResolvedValue(result({ saved: 0, already_saved: 0, taken: [] }));
+    renderSection();
+    await screen.findByTestId('me-claim-night-0');
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('me-claim-save-0'));
+    });
+    expect(await screen.findByTestId('me-claim-error-0')).toHaveTextContent("Couldn't reach the host's machine. Try again later.");
+    expect(screen.queryByTestId('me-claim-result-0')).toBeNull();
+  });
+
+  it('See all depends on the listed nights, not on a just-saved one still showing', async () => {
+    api.getHistorySuggestions.mockResolvedValue(
+      suggestions([night('n1', '2026-10-10'), night('n2', '2026-10-03'), night('n3', '2026-09-26')]),
+    );
+    api.claimHistory.mockResolvedValue(result());
+    renderSection();
+    await screen.findByTestId('me-claim-all');
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('me-claim-save-0'));
+    });
+    await screen.findByTestId('me-claim-result-0');
+    // 2 nights still listed + the saved one on screen: no See all (nothing past the 2 shown).
+    expect(screen.queryByTestId('me-claim-all')).toBeNull();
+  });
+
   it('the taken line when someone else already saved a song', async () => {
     api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1', '2026-10-10')]));
     api.claimHistory.mockResolvedValue(result({ saved: 2, taken: [12] }));
@@ -260,6 +295,56 @@ describe('Were these you? (Me section)', () => {
   });
 });
 
+describe('account switch (Review Focus 5)', () => {
+  /** The section plus the app's account-change purge, as AppProviders mounts it. */
+  function Harness() {
+    useClearMeOnAccountChange();
+    return <ClaimNightsSection />;
+  }
+  const renderHarness = () => {
+    const client = resetMe('wren@example.com');
+    return render(<Harness />, { wrapper: wrapper(client) });
+  };
+  const checked = (id: string) => screen.getByTestId(id).props.accessibilityState.checked;
+
+  it("A's result and ticks never show on B's card for a night with the same id", async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1', '2026-10-10')]));
+    api.claimHistory.mockResolvedValue(result({ saved: 2, rejected: 1 }));
+    renderHarness();
+    await screen.findByTestId('me-claim-night-0');
+    fireEvent.press(screen.getByTestId('me-claim-song-0-1'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('me-claim-save-0'));
+    });
+    expect(await screen.findByTestId('me-claim-result-0')).toBeTruthy();
+
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1', '2026-10-10')]));
+    await act(async () => signIn('juno@example.com'));
+    await screen.findByTestId('me-claim-song-0-1');
+    expect(screen.queryByTestId('me-claim-result-0')).toBeNull();
+    expect([0, 1, 2].map((j) => checked(`me-claim-song-0-${j}`))).toEqual([true, true, true]);
+    expect(screen.queryByTestId('me-claim-error-0')).toBeNull();
+  });
+
+  it("a claim that resolves after the switch leaves no saved or error state on B's card", async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1', '2026-10-10')]));
+    let resolve!: (r: kjbox.HistoryClaimResult) => void;
+    api.claimHistory.mockImplementation(() => new Promise((r) => (resolve = r)));
+    renderHarness();
+    await screen.findByTestId('me-claim-night-0');
+    fireEvent.press(screen.getByTestId('me-claim-save-0'));
+
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1', '2026-10-10')]));
+    await act(async () => signIn('juno@example.com'));
+    await screen.findByTestId('me-claim-song-0-0');
+    await act(async () => resolve(result()));
+    expect(screen.queryByTestId('me-claim-result-0')).toBeNull();
+    expect(screen.queryByTestId('me-claim-error-0')).toBeNull();
+    expect(screen.getByTestId('me-claim-save-0').props.accessibilityState).toMatchObject({ disabled: false, busy: false });
+    expect([0, 1, 2].map((j) => checked(`me-claim-song-0-${j}`))).toEqual([true, true, true]);
+  });
+});
+
 describe('/me/past-nights', () => {
   beforeEach(() => {
     resetMe('wren@example.com');
@@ -273,6 +358,23 @@ describe('/me/past-nights', () => {
     expect(await screen.findByTestId('me-past-nights')).toBeTruthy();
     expect(await screen.findByTestId('me-past-night-2')).toBeTruthy();
     expect(screen.getByTestId('me-past-nights-recent')).toHaveTextContent('Showing your 3 most recent nights');
+  });
+
+  it('goes back to Me once every night is answered', async () => {
+    api.getHistorySuggestions.mockResolvedValue(
+      suggestions([night('n1', '2026-10-10'), night('n2', '2026-10-03'), night('n3', '2026-09-26')]),
+    );
+    api.claimHistory.mockResolvedValue(result({ saved: 0, rejected: 3 }));
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    fireEvent.press(await screen.findByTestId('me-claim-all'));
+    await screen.findByTestId('me-past-night-2');
+    for (let k = 0; k < 3; k++) {
+      await act(async () => {
+        fireEvent.press(screen.getByTestId('me-past-none-0'));
+      });
+    }
+    await waitFor(() => expect(screen.queryByTestId('me-past-nights')).toBeNull());
+    expect(screen.queryByTestId('me-claim')).toBeNull();
   });
 
   it('See all opens it from Me', async () => {

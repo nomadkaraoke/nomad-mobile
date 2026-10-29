@@ -42,7 +42,7 @@ export function useClaimNightsView() {
   // One state object tagged with its owner: after an account change it reads as empty, so none of the previous
   // person's ticks or results stay on screen (and writes for a stale owner start fresh).
   const [view, setView] = useState<ViewState>(() => fresh(userKey));
-  const live = view.owner === userKey ? view : fresh(userKey);
+  const live = useMemo(() => (view.owner === userKey ? view : fresh(userKey)), [view, userKey]);
   const update = useCallback(
     (fn: (v: ViewState) => Partial<ViewState>) =>
       setView((prev) => {
@@ -72,8 +72,11 @@ export function useClaimNightsView() {
   const send = useCallback(
     async (night: HistoryNight, ticked: number[], showResult: boolean) => {
       const id = night.night_id;
+      // The account that tapped: if another one signs in meanwhile, this answer is not theirs to show.
+      const owner = currentUserKey();
       update((v) => ({ status: { ...v.status, [id]: 'busy' } }));
       const out = await s.claim(night, ticked);
+      if (currentUserKey() !== owner) return;
       if ('error' in out) {
         update((v) => ({ status: { ...v.status, [id]: 'error' } }));
         return;
@@ -125,6 +128,8 @@ export function useClaimNightsView() {
     rows,
     /** Every night kjbox has for the account (listed + more_nights), for "See all N nights". */
     total: s.nights.length + s.more,
+    /** Nights still listed (a just-saved night showing its result is not one). */
+    listed: s.nights.length,
     more: s.more,
     loading: s.loading,
     offline,

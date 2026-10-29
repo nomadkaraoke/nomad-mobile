@@ -36,7 +36,7 @@ export default function PastNightsScreen() {
         testID="me-past-nights-list"
         data={v.rows}
         keyExtractor={(r) => r.night.night_id}
-        extraData={v}
+        extraData={v.rows}
         ListHeaderComponent={header}
         renderItem={(r, i) => (
           <View className="pb-3">

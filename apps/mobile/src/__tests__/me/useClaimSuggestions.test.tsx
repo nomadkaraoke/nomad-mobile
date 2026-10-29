@@ -56,6 +56,11 @@ const result = (o: Partial<kjbox.HistoryClaimResult> = {}): kjbox.HistoryClaimRe
   ...o,
 });
 
+// Let React Query's batched notifications land inside act() before the next test (no act() warnings).
+afterEach(async () => {
+  await act(async () => {});
+});
+
 beforeEach(() => {
   jest.useRealTimers();
   mockConnected = true;

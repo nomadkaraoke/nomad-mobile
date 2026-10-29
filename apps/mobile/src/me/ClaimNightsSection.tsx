@@ -39,7 +39,7 @@ export function ClaimNightsSection() {
           onNone={() => void v.none(r.night)}
         />
       ))}
-      {v.rows.length > MAX || v.more > 0 ? (
+      {v.listed > MAX || v.more > 0 ? (
         <Pressable
           testID="me-claim-all"
           accessibilityRole="button"
