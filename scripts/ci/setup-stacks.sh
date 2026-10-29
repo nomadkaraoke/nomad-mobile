@@ -130,6 +130,9 @@ logs() {
     /tmp/nomad-mobile-metro*.log /tmp/nomad-mobile-stack-control.log; do
     [[ -f "$f" ]] || continue
     echo "::group::$f"
+    # Every warning and error first (a failing flow's server-side cause is usually long out of the tail), then the tail.
+    grep -E ' (WARNING|ERROR|CRITICAL) |Traceback' "$f" | tail -n 150 || true
+    echo "--- last 200 lines ---"
     tail -n 200 "$f"
     echo "::endgroup::"
   done
