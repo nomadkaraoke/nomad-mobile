@@ -622,4 +622,23 @@ Plans 4a and 4b: their Global Constraints still hold.
 
 ## Execution ledger
 
-(Filled in during execution.)
+Executed 2026-10-29 with subagent-driven development (orchestrator plus implementer / reviewer agents; the full log is `.superpowers/sdd/2026-10-29-mobile-phase4c-me/progress.md`, task reports beside it).
+
+**Rulings:** R29–R36 and R38–R46 accepted as recommended. R37 accepted without the app-join gate (manual-pass decision for Andrew). Added during execution: R47 (attribution never re-gives a claimed solo entry), R48 (request-time-only links stay `none`), R49 (device names per owned night; aliases after the latest link), R50 (forget deletes sent outbox rows), R51 (revised: `not_mine` on a held song is `invalid`), R52 (host un-Done releases the claim), R53 (alias ownership run). All are summarised in the spec's "As built (4c)".
+
+**Part E (kjbox, PR #300, v0.144.0, merged 190dda6):**
+- E1–E3: 2710046, 8b873df, 7268310; review fix round 22e8b6b (outbox holders, device names across owners, sent outbox rows on deletion); re-review clean.
+- E4–E5: ce002a8 (R49 follow-ups), 7f4315f (suggestions), b459bf2 (claims, R47); review approved (9 minors).
+- E6–E8: 887945c (v1 routes + contract), bef489c (host undo, claim counts, R52), b98c417 + 1e51b86 (test API seed/state; file-DB lock fix from the build-host smoke), 24b87c8 (E4–E5 follow-ups, R51 revised, stable night ids, ownership runs); review fix round b858548 (release_claims helper, orphan-put re-check); re-review clean.
+- E9: rebased onto v0.143.0, 28fecff (docs, v0.144.0), 19e4bf8 (whole-branch review fixes: atomic release, host-deleted release, R52 isolated in the scan, single-flight cache, night_id in retractions), 4416bea (CodeRabbit doc nit). Remote suite on the build host: 4449 passed, 4 failed (none from this branch: 2 environment-dependent on main too, 1 flaky, 1 order-dependent). Prod dry run (read-only snapshot on the build host): `_build` 0.59 s cold / ~0.08 s warm, suggestions ~17 ms.
+- Merged and deployed; NomadPC checked read-only (service active, new routes answer 401, tables present, no show on). The mobile kjbox snapshot matches kjbox main (no diff).
+
+**Part F (nomad-mobile, branch `feat/sess-20261029-phase4c-me`, base main 6c2b230 + plan 70141d1):**
+- F1 653126b: snapshot from the kjbox worktree, facades + shape guard (25 api-kjbox tests).
+- F2 ce8dfd4: `useClaimSuggestions` + account-change purge (27 tests). F1–F2 review fix round 8646dd7 (failed claim refreshes the list; shape guard tightened; in-flight release, signed-out outcome).
+- F3 1f287ef: card, section, past-nights screen; translations 734795d (33 locales, run by the orchestrator with its `/gcp-admin` grant). F3 review fix round 070b881 (account-switch privacy test and the post-await owner check, See all on listed nights, empty-result copy).
+- F4 920786f: `kjbox` tag, `history-seed` / `history-state`, plan-lib rules. F5 f53b1c6: me-13, me-14, me-tour me-32/33, durations.
+- E2E: me-14 passed iOS + Android (run 40847971504). me-13 failed (run 40858551146): iOS asserted the section title after scrolling a whole card into view (flow fix 905c3ef); Android showed no claimed songs after a relaunch inside the library's 60 s staleTime (app fix b32fa11 `markLibraryCacheStale`). The re-run passed on iOS + Android (run 40860948604).
+- F6: docs (this ledger, the spec's "As built (4c)", CLAUDE.md, VISION).
+
+**Open:** the final whole-branch review and its fix wave, `/coderabbit`, the PR (label `e2e-full`), merge, and the prod check (plan F6 step 5); the manual-pass list in the spec.
