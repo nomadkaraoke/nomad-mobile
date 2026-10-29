@@ -132,6 +132,20 @@ describe('GoTosShelf', () => {
     expect(cachedTitles()).toEqual(['Other']);
   });
 
+  it('hiding the only recs go-to keeps an empty section, so the local list (not hidden yet) does not bring it back', async () => {
+    const client = resetMe(EMAIL);
+    api.getRecommendationsV2.mockResolvedValue(recsWith([{ id: 'go_tos', songs: [rec('Hit')] }]));
+    api.hideSong.mockImplementation(() => new Promise<void>(() => {}) as never);
+    const local = [song('Hit', { times_sung: 3 })];
+    const shelf = render(<GoTosShelf items={local} pending={new Set()} />, { wrapper: shelfWrapper(client) });
+    await waitFor(() => expect(shelf.getByTestId('me-goto-0')).toHaveTextContent(/Hit/));
+    const disc = renderHook(() => useSongFeedback(), { wrapper: wrapperFor(client) });
+
+    act(() => disc.result.current.hide(rec('Hit')));
+    await waitFor(() => expect(shelf.queryByTestId('me-goto-0')).toBeNull());
+    expect(cachedTitles()).toEqual([]);
+  });
+
   it("an undo after switching accounts never writes the hidden song into the new account's cache", async () => {
     const client = resetMe(EMAIL);
     const other = 'b@example.com';

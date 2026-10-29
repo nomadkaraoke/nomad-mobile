@@ -45,7 +45,8 @@ const without = (c: GoTosCache, songKey: string): { next: GoTosCache; index: num
   const index = c.songs?.findIndex((s) => s.song_key === songKey) ?? -1;
   if (index < 0 || !c.songs) return { next: c, index };
   const songs = c.songs.filter((s) => s.song_key !== songKey);
-  return { next: { ...c, songs: songs.length ? songs : null }, index };
+  // An emptied section stays an empty array: null would fall back to the local go-tos, which still list the song.
+  return { next: { ...c, songs }, index };
 };
 const withSong = (c: GoTosCache, song: RecSong, index: number): GoTosCache => {
   const songs = [...(c.songs ?? [])];

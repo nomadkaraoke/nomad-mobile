@@ -147,7 +147,7 @@
         "tenor": "A tenor énekesek {share, number, percent}-a találta kényelmesnek a hangnemet"
       },
       "mostlyHigh": "A legtöbb énekes kissé magasnak találta",
-      "overall": "{singers, plural, one {# énekesből #} other {# énekesből {comfortable, number}}} találta kényelmesnek a hangnemet"
+      "overall": "{singers, plural, one {# énekesből {comfortable, number}} other {# énekesből {comfortable, number}}} találta kényelmesnek a hangnemet"
     }
   },
   "tabs": {
