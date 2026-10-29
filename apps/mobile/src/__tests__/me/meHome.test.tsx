@@ -31,6 +31,14 @@ jest.mock('@nomad/api-decide', () => ({
   configureClient: jest.fn(),
 }));
 jest.mock('@nomad/api-gen', () => ({ ...jest.requireActual('@nomad/api-gen'), getMe: jest.fn() }));
+jest.mock('@nomad/api-kjbox', () => ({
+  ...jest.requireActual('@nomad/api-kjbox'),
+  // By default an older box (no history routes): "Were these you?" stays hidden.
+  getHistorySuggestions: jest.fn(async () => {
+    const { KjboxError } = jest.requireActual('@nomad/api-kjbox');
+    throw new KjboxError('not_found', 404);
+  }),
+}));
 
 const api = decide as jest.Mocked<typeof decide>;
 
@@ -85,6 +93,30 @@ describe('Me home', () => {
     const at = order.map((id) => json.indexOf(`"testID":"${id}"`));
     expect(at.every((n) => n >= 0)).toBe(true);
     expect([...at].sort((a, b) => a - b)).toEqual(at);
+  });
+
+  it('"Were these you?" sits between the profile card and the go-tos, only with suggestions', async () => {
+    const kj = jest.requireMock<{ getHistorySuggestions: jest.Mock }>('@nomad/api-kjbox');
+    kj.getHistorySuggestions.mockResolvedValueOnce({
+      api_version: '1.0',
+      more_nights: 0,
+      nights: [{ night_id: 'n1', date: '2026-10-10', venue: null, names: ['Wren'], unmatched: 0,
+        songs: [{ entry_id: 1, singer_name: 'Wren', members: ['Wren'], artist: 'Muse', title: 'Starlight', started_at: null, state: 'sung_unplayed' }] }],
+    });
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    await screen.findByTestId('me-claim-night-0');
+    await screen.findByTestId('me-goto-0');
+    const order = ['me-profile-card', 'me-claim', 'me-gotos'];
+    const json = JSON.stringify(screen.toJSON());
+    const at = order.map((id) => json.indexOf(`"testID":"${id}"`));
+    expect(at.every((n) => n >= 0)).toBe(true);
+    expect([...at].sort((a, b) => a - b)).toEqual(at);
+  });
+
+  it('no "Were these you?" on an older box', async () => {
+    renderRouter(appRoutes(), { initialUrl: '/me' });
+    await screen.findByTestId('me-goto-0');
+    expect(screen.queryByTestId('me-claim')).toBeNull();
   });
 
   it('profile card: voice CTA and connect CTA with nothing set up; manage opens the music profile', async () => {

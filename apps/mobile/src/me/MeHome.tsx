@@ -3,6 +3,7 @@ import { Text } from '@nomad/ui';
 import { router, type Href } from 'expo-router';
 import { Pressable } from 'react-native';
 
+import { ClaimNightsSection } from './ClaimNightsSection';
 import { GetMadeShelf } from './GetMadeShelf';
 import { GoTosShelf } from './GoTosShelf';
 import { ProfileSummaryCard } from './ProfileSummaryCard';
@@ -12,8 +13,8 @@ import { useLibrary } from './useLibrary';
 import { useStatsLog } from './useStatsLog';
 
 /**
- * The signed-in top of Me: profile card, shelves, All your songs, stats. Phase 4c's "Were these you?" row goes
- * between the card and the go-tos; Get this made (4b) comes after the setlists.
+ * The signed-in top of Me: profile card, "Were these you?" (4c, only with suggestions), shelves, All your songs,
+ * stats; Get this made (4b) comes after the setlists.
  */
 export function MeHome() {
   const t = useTranslations('me.home');
@@ -22,7 +23,7 @@ export function MeHome() {
   return (
     <>
       <ProfileSummaryCard items={items} />
-      {/* 4c slot: "Were these you?" (nothing yet) */}
+      <ClaimNightsSection />
       <GoTosShelf items={items} pending={pendingKeys} />
       <SetlistsShelf />
       <GetMadeShelf />

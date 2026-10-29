@@ -77,6 +77,8 @@ export function useClaimSuggestions(): {
   nights: HistoryNight[];
   more: number;
   visible: boolean;
+  /** The first fetch is still running (nothing to show yet). */
+  loading: boolean;
   claim(night: HistoryNight, ticked: number[]): Promise<ClaimOutcome>;
 } {
   const queryClient = useQueryClient();
@@ -137,5 +139,5 @@ export function useClaimSuggestions(): {
     [offline, queryClient],
   );
 
-  return { nights, more, visible: nights.length > 0, claim };
+  return { nights, more, visible: nights.length > 0, loading: q.isLoading, claim };
 }

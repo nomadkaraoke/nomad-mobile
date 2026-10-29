@@ -86,6 +86,7 @@ function RootStack() {
         <Stack.Screen name="me/setlists/index" options={{ title: tMe('setlists.title') }} />
         <Stack.Screen name="me/setlists/[id]" options={{ title: tMe('setlists.detailTitle') }} />
         <Stack.Screen name="me/get-made" options={{ title: tMe('getMade.title') }} />
+        <Stack.Screen name="me/past-nights" options={{ title: tMe('claim.screenTitle') }} />
         <Stack.Screen name="me/history/[key]" options={{ title: tSong('history.pageTitle') }} />
         <Stack.Screen name="me/artists" options={(p) => ({ title: tAccount('artistsAll'), ...profileBack(p) })} />
         {/* Connect your music (Phase 3b): its own stack with its own headers. */}
