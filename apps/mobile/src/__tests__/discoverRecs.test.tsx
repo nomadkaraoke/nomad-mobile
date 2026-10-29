@@ -179,6 +179,25 @@ describe('discoverRecs', () => {
     expect(screen.queryByText('Lionel Richie')).toBeNull();
   });
 
+  it('a go_tos section renders first with its title, reason line and the go-to chip', async () => {
+    await signIn();
+    getRecs.mockResolvedValue(
+      recs([
+        section('go_tos', 'go_tos', [song('Muse', 'Uprising', { reason_type: 'sung_before' })]),
+        ...FULL.sections,
+      ]),
+    );
+    open();
+    expect(await screen.findByTestId('rec-section-go_tos')).toBeTruthy();
+    const headers = screen.getAllByTestId(/^rec-section-/).map((n) => n.props.testID as string);
+    expect(headers[0]).toBe('rec-section-go_tos');
+    expect(screen.getByText('Your go-tos')).toBeTruthy();
+    expect(screen.getByText('Songs you keep coming back to')).toBeTruthy();
+    const row = screen.getByTestId('rec-row-go_tos-0');
+    expect(within(row).getByText('Uprising')).toBeTruthy();
+    expect(within(row).getByText('Your go-to')).toBeTruthy();
+  });
+
   it('tapping a picks row opens the song page', async () => {
     await signIn();
     const app = open();

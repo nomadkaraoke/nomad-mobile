@@ -136,7 +136,19 @@
     "save": "Spremi u Moje pjesme",
     "saved": "Spremljeno",
     "addToSetlist": "Dodaj na setlistu",
-    "markSung": "Označi kao otpjevano"
+    "markSung": "Označi kao otpjevano",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} altova smatralo je tonalitet ugodnim",
+        "baritone": "{share, number, percent} baritona smatralo je tonalitet ugodnim",
+        "bass": "{share, number, percent} basova smatralo je tonalitet ugodnim",
+        "mezzo": "{share, number, percent} mecosoprana smatralo je tonalitet ugodnim",
+        "soprano": "{share, number, percent} soprana smatralo je tonalitet ugodnim",
+        "tenor": "{share, number, percent} tenora smatralo je tonalitet ugodnim"
+      },
+      "mostlyHigh": "Većini pjevača bilo je malo previsoko",
+      "overall": "{comfortable, number} od {singers, plural, one {# pjevača} few {# pjevača} other {# pjevača}} smatralo je tonalitet ugodnim"
+    }
   },
   "tabs": {
     "discover": "Otkrij",
@@ -986,7 +998,8 @@
       "known_song": "Ovo već znaš",
       "similar_artist": "Slično kao {artist}",
       "crowd_pleaser": "Podiže publiku",
-      "make_it": "Još nema karaoke verzije"
+      "make_it": "Još nema karaoke verzije",
+      "sung_before": "Tvoj favorit"
     },
     "section": {
       "all": "Tvoje preporuke",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Još nema karaoke verzije: dodirni za izradu vlastite",
       "songs_you_know": "Pjesme koje znaš",
       "songs_you_knowReason": "Pjesme koje već znaš, a imaju karaoke verziju",
-      "make_it": "Izradi"
+      "make_it": "Izradi",
+      "go_tosReason": "Pjesme kojima se stalno vraćaš",
+      "go_tos": "Tvoji favoriti"
     },
     "signInForPicks": "Prijavi se za svoje preporuke",
     "signInForPicksBody": "Reci nam što voliš i odabrat ćemo karaoke pjesme koje ćeš rado pjevati.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Poveži svoju glazbu",
       "profileTitle": "Tvoj glazbeni profil",
       "voiceHint": "Pronađi pjesme koje odgovaraju tvom glasu",
-      "voiceRange": "Raspon {range}"
+      "voiceRange": "Raspon {range}",
+      "known": "{count, plural, one {# poznata pjesma} few {# poznate pjesme} other {# poznatih pjesama}}"
     },
     "songs": {
       "addPast": "Dodaj pjesme koje sam pjevao/la",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Pjesma ili izvođač",
       "sortLabel": "Sortiraj",
       "timesSungLabel": "{count, plural, one {Otpjevano # put} few {Otpjevano # puta} other {Otpjevano # puta}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# glas na ploči} few {# glasa na ploči} other {# glasova na ploči}}",
+      "dismiss": "Sakrij ovu pjesmu",
+      "empty": "Trenutačno nema ničega za izradu. Pjesme koje spremiš ili otpjevaš, a nemaju karaoke verziju, pojavit će se ovdje.",
+      "hiddenToast": "Skriveno iz odjeljka Izradi ovo",
+      "intro": "Pjesme koje bi pjevao, a još nemaju karaoke verziju. Izradi je odmah ili je zatraži besplatno na našoj ploči.",
+      "offline": "Izvan mreže si. Za izradu i slanje zahtjeva potrebna je internetska veza.",
+      "request": "Zatraži besplatno",
+      "requestError": "Slanje zahtjeva nije uspjelo. Pokušaj ponovno.",
+      "requested": "{count, plural, one {Zatraženo · # glas} few {Zatraženo · # glasa} other {Zatraženo · # glasova}}",
+      "title": "Izradi ovo",
+      "why": {
+        "imported": "Iz tvoje glazbe",
+        "recommended": "Odabrano za tebe",
+        "sung": "Već si pjevao",
+        "saved": "Spremljeno",
+        "voice": "Iz tvoje glasovne sesije"
+      },
+      "makeIt": "Izradi",
+      "undo": "Poništi",
+      "loadError": "Trenutačno nije moguće učitati ove pjesme.",
+      "retry": "Pokušaj ponovno",
+      "limit": {
+        "submission": "Iskoristio si današnji besplatni zahtjev. Vrati se sutra i zatraži još jednu.",
+        "voteUsed": "Iskoristio si današnji besplatni glas. Vrati se sutra i zatraži još jednu pjesmu."
+      }
     }
   }
 }

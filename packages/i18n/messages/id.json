@@ -136,7 +136,19 @@
     "save": "Simpan ke Lagu Saya",
     "saved": "Tersimpan",
     "addToSetlist": "Tambah ke setlist",
-    "markSung": "Tandai sudah dinyanyikan"
+    "markSung": "Tandai sudah dinyanyikan",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} penyanyi alto merasa nadanya pas",
+        "baritone": "{share, number, percent} penyanyi bariton merasa nadanya pas",
+        "bass": "{share, number, percent} penyanyi bas merasa nadanya pas",
+        "mezzo": "{share, number, percent} penyanyi mezzo-sopran merasa nadanya pas",
+        "soprano": "{share, number, percent} penyanyi sopran merasa nadanya pas",
+        "tenor": "{share, number, percent} penyanyi tenor merasa nadanya pas"
+      },
+      "mostlyHigh": "Sebagian besar penyanyi merasa nadanya agak ketinggian",
+      "overall": "{comfortable, number} dari {singers, plural, other {# penyanyi}} merasa nadanya pas"
+    }
   },
   "tabs": {
     "discover": "Jelajahi",
@@ -986,7 +998,8 @@
       "known_song": "Anda tahu lagu ini",
       "similar_artist": "Mirip {artist}",
       "crowd_pleaser": "Favorit banyak orang",
-      "make_it": "Belum ada versi karaoke"
+      "make_it": "Belum ada versi karaoke",
+      "sung_before": "Andalanmu"
     },
     "section": {
       "all": "Pilihan Anda",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Belum ada versi karaoke: ketuk salah satu untuk membuatnya sendiri",
       "songs_you_know": "Lagu yang Anda tahu",
       "songs_you_knowReason": "Lagu yang sudah Anda tahu dan memiliki versi karaoke",
-      "make_it": "Buat"
+      "make_it": "Buat",
+      "go_tosReason": "Lagu yang selalu ingin kamu nyanyikan lagi",
+      "go_tos": "Lagu andalanmu"
     },
     "signInForPicks": "Masuk untuk mendapatkan pilihan Anda",
     "signInForPicksBody": "Beri tahu kami apa yang Anda sukai dan kami akan memilihkan lagu karaoke yang pasti Anda suka nyanyikan.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Hubungkan musik Anda",
       "profileTitle": "Profil musik Anda",
       "voiceHint": "Temukan lagu yang sesuai dengan suara Anda",
-      "voiceRange": "Rentang nada {range}"
+      "voiceRange": "Rentang nada {range}",
+      "known": "{count, plural, other {# lagu dikenali}}"
     },
     "songs": {
       "addPast": "Tambah lagu yang pernah kunyanyikan",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Lagu atau artis",
       "sortLabel": "Urutkan",
       "timesSungLabel": "{count, plural, other {Dinyanyikan # kali}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, other {# suara di papan}}",
+      "dismiss": "Sembunyikan lagu ini",
+      "empty": "Belum ada yang perlu dibuat saat ini. Lagu yang Anda simpan atau nyanyikan yang belum memiliki versi karaoke akan muncul di sini.",
+      "hiddenToast": "Disembunyikan dari Minta dibuatkan",
+      "intro": "Lagu yang ingin Anda nyanyikan yang belum ada versi karaokenya. Buat sekarang, atau minta gratis di papan permintaan kami.",
+      "offline": "Anda sedang offline. Diperlukan koneksi internet untuk membuat dan meminta lagu.",
+      "request": "Minta gratis",
+      "requestError": "Gagal mengirim permintaan. Coba lagi.",
+      "requested": "{count, plural, other {Diminta · # suara}}",
+      "title": "Minta dibuatkan",
+      "why": {
+        "imported": "Dari musik Anda",
+        "recommended": "Dipilihkan untuk Anda",
+        "sung": "Pernah Anda nyanyikan",
+        "saved": "Tersimpan",
+        "voice": "Dari sesi suara Anda"
+      },
+      "makeIt": "Buat",
+      "undo": "Urungkan",
+      "loadError": "Tidak dapat memuat lagu-lagu ini sekarang.",
+      "retry": "Coba lagi",
+      "limit": {
+        "submission": "Kamu sudah menggunakan permintaan gratis hari ini. Balik lagi besok untuk meminta lagu lain.",
+        "voteUsed": "Kamu sudah menggunakan vote gratis hari ini. Balik lagi besok untuk memberikan vote lagi."
+      }
     }
   }
 }

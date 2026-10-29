@@ -136,7 +136,19 @@
     "save": "Simpan ke Lagu saya",
     "saved": "Disimpan",
     "addToSetlist": "Tambah ke setlist",
-    "markSung": "Tandakan sebagai pernah dinyanyikan"
+    "markSung": "Tandakan sebagai pernah dinyanyikan",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} penyanyi alto mendapati nada kuncinya selesa",
+        "baritone": "{share, number, percent} penyanyi bariton mendapati nada kuncinya selesa",
+        "bass": "{share, number, percent} penyanyi bes mendapati nada kuncinya selesa",
+        "mezzo": "{share, number, percent} penyanyi mezzo-soprano mendapati nada kuncinya selesa",
+        "soprano": "{share, number, percent} penyanyi soprano mendapati nada kuncinya selesa",
+        "tenor": "{share, number, percent} penyanyi tenor mendapati nada kuncinya selesa"
+      },
+      "mostlyHigh": "Kebanyakan penyanyi mendapatinya agak tinggi",
+      "overall": "{comfortable, number} daripada {singers, plural, one {# orang penyanyi} other {# orang penyanyi}} mendapati nada kuncinya selesa"
+    }
   },
   "tabs": {
     "discover": "Teroka",
@@ -986,7 +998,8 @@
       "known_song": "Anda tahu lagu ini",
       "similar_artist": "Serupa dengan {artist}",
       "crowd_pleaser": "Pilihan ramai",
-      "make_it": "Belum ada versi karaoke"
+      "make_it": "Belum ada versi karaoke",
+      "sung_before": "Pilihan utama anda"
     },
     "section": {
       "all": "Pilihan anda",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Belum ada versi karaoke: ketik untuk cipta versi anda sendiri",
       "songs_you_know": "Lagu yang anda tahu",
       "songs_you_knowReason": "Lagu yang sudah anda tahu dan ada versi karaoke",
-      "make_it": "Buat"
+      "make_it": "Buat",
+      "go_tosReason": "Lagu yang sentiasa anda nyanyikan semula",
+      "go_tos": "Lagu kegemaran anda"
     },
     "signInForPicks": "Log masuk untuk mendapatkan pilihan anda",
     "signInForPicksBody": "Beritahu kami minat anda dan kami akan pilih lagu karaoke yang anda pasti seronok nyanyikan.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Sambungkan muzik anda",
       "profileTitle": "Profil muzik anda",
       "voiceHint": "Cari lagu yang sesuai dengan suara anda",
-      "voiceRange": "Julat {range}"
+      "voiceRange": "Julat {range}",
+      "known": "{count, plural, other {# lagu diketahui}}"
     },
     "songs": {
       "addPast": "Tambah lagu yang pernah saya nyanyikan",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Lagu atau artis",
       "sortLabel": "Susun",
       "timesSungLabel": "{count, plural, one {Dinyanyikan # kali} other {Dinyanyikan # kali}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# undian di papan} other {# undian di papan}}",
+      "dismiss": "Sembunyikan lagu ini",
+      "empty": "Tiada apa-apa untuk dihasilkan buat masa ini. Lagu yang anda simpan atau nyanyikan yang belum ada versi karaoke akan dipaparkan di sini.",
+      "hiddenToast": "Disembunyikan daripada Dapatkan lagu ini",
+      "intro": "Lagu yang ingin anda nyanyikan yang belum ada versi karaoke. Hasilkan sekarang, atau minta secara percuma di papan kami.",
+      "offline": "Anda berada di luar talian. Sambungan internet diperlukan untuk menghasilkan dan membuat permintaan.",
+      "request": "Minta secara percuma",
+      "requestError": "Tidak dapat menghantar permintaan. Sila cuba lagi.",
+      "requested": "{count, plural, one {Diminta · # undian} other {Diminta · # undian}}",
+      "title": "Dapatkan lagu ini",
+      "why": {
+        "imported": "Daripada muzik anda",
+        "recommended": "Dipilih untuk anda",
+        "sung": "Anda pernah menyanyikannya",
+        "saved": "Disimpan",
+        "voice": "Daripada sesi suara anda"
+      },
+      "makeIt": "Buat",
+      "undo": "Buat asal",
+      "loadError": "Tidak dapat memuatkan lagu-lagu ini sekarang.",
+      "retry": "Cuba lagi",
+      "limit": {
+        "submission": "Anda telah menggunakan permintaan percuma untuk hari ini. Kembali lagi esok untuk membuat permintaan lain.",
+        "voteUsed": "Anda telah menggunakan undian percuma untuk hari ini. Kembali lagi esok untuk mengundi lagu lain."
+      }
     }
   }
 }

@@ -136,7 +136,19 @@
     "save": "Lưu vào Bài hát của tôi",
     "saved": "Đã lưu",
     "addToSetlist": "Thêm vào danh sách bài hát",
-    "markSung": "Đánh dấu đã hát"
+    "markSung": "Đánh dấu đã hát",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} giọng nữ trầm (alto) thấy tông nhạc này vừa sức",
+        "baritone": "{share, number, percent} giọng nam trung (baritone) thấy tông nhạc này vừa sức",
+        "bass": "{share, number, percent} giọng nam trầm (bass) thấy tông nhạc này vừa sức",
+        "mezzo": "{share, number, percent} giọng nữ trung (mezzo-soprano) thấy tông nhạc này vừa sức",
+        "soprano": "{share, number, percent} giọng nữ cao (soprano) thấy tông nhạc này vừa sức",
+        "tenor": "{share, number, percent} giọng nam cao (tenor) thấy tông nhạc này vừa sức"
+      },
+      "mostlyHigh": "Hầu hết người hát thấy tông này hơi cao",
+      "overall": "{comfortable, number} trên {singers, plural, one {# người hát} other {# người hát}} thấy tông nhạc này vừa sức"
+    }
   },
   "tabs": {
     "discover": "Khám phá",
@@ -986,7 +998,8 @@
       "known_song": "Bài này bạn đã biết",
       "similar_artist": "Tương tự {artist}",
       "crowd_pleaser": "Được nhiều người thích",
-      "make_it": "Chưa có bản karaoke"
+      "make_it": "Chưa có bản karaoke",
+      "sung_before": "Bài tủ của bạn"
     },
     "section": {
       "all": "Gợi ý cho bạn",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Chưa có bản karaoke: chạm vào bài hát để tự tạo bản karaoke riêng nhé",
       "songs_you_know": "Bài hát quen thuộc",
       "songs_you_knowReason": "Những bài hát bạn đã biết và có sẵn bản karaoke",
-      "make_it": "Tạo bài hát"
+      "make_it": "Tạo bài hát",
+      "go_tosReason": "Những bài hát bạn luôn quay lại hát",
+      "go_tos": "Bài tủ của bạn"
     },
     "signInForPicks": "Đăng nhập để nhận gợi ý bài hát",
     "signInForPicksBody": "Hãy cho chúng tôi biết sở thích của bạn và chúng tôi sẽ gợi ý những bài karaoke bạn sẽ mê tít khi hát.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Kết nối âm nhạc của bạn",
       "profileTitle": "Hồ sơ âm nhạc của bạn",
       "voiceHint": "Tìm các bài hát hợp với giọng của bạn",
-      "voiceRange": "Âm vực {range}"
+      "voiceRange": "Âm vực {range}",
+      "known": "{count, plural, other {# bài hát đã biết}}"
     },
     "songs": {
       "addPast": "Thêm bài hát tôi từng hát",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Bài hát hoặc nghệ sĩ",
       "sortLabel": "Sắp xếp",
       "timesSungLabel": "{count, plural, one {Đã hát # lần} other {Đã hát # lần}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# lượt bình chọn trên bảng} other {# lượt bình chọn trên bảng}}",
+      "dismiss": "Ẩn bài hát này",
+      "empty": "Hiện không có bài nào cần tạo. Các bài hát bạn lưu hoặc từng hát mà chưa có bản karaoke sẽ xuất hiện ở đây.",
+      "hiddenToast": "Đã ẩn khỏi mục Yêu cầu tạo bài",
+      "intro": "Những bài hát bạn muốn hát mà chưa có bản karaoke. Bạn có thể tự tạo ngay, hoặc gửi yêu cầu miễn phí trên bảng của chúng tôi.",
+      "offline": "Bạn đang ngoại tuyến. Cần có kết nối mạng để tạo bài và gửi yêu cầu.",
+      "request": "Yêu cầu miễn phí",
+      "requestError": "Không thể gửi yêu cầu. Vui lòng thử lại.",
+      "requested": "{count, plural, one {Đã yêu cầu · # lượt bình chọn} other {Đã yêu cầu · # lượt bình chọn}}",
+      "title": "Yêu cầu tạo bài",
+      "why": {
+        "imported": "Từ kho nhạc của bạn",
+        "recommended": "Gợi ý dành cho bạn",
+        "sung": "Bạn đã từng hát",
+        "saved": "Đã lưu",
+        "voice": "Từ phiên thu giọng của bạn"
+      },
+      "makeIt": "Tạo bài hát",
+      "undo": "Hoàn tác",
+      "loadError": "Hiện không thể tải các bài hát này.",
+      "retry": "Thử lại",
+      "limit": {
+        "submission": "Bạn đã dùng lượt yêu cầu miễn phí của hôm nay rồi. Hãy quay lại vào ngày mai để gửi yêu cầu khác nhé.",
+        "voteUsed": "Bạn đã dùng lượt bình chọn miễn phí của hôm nay rồi. Hãy quay lại vào ngày mai để bình chọn tiếp nhé."
+      }
     }
   }
 }

@@ -136,7 +136,19 @@
     "save": "In „Meine Songs“ speichern",
     "saved": "Gespeichert",
     "addToSetlist": "Zur Setlist hinzufügen",
-    "markSung": "Als gesungen markieren"
+    "markSung": "Als gesungen markieren",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} der Altstimmen fanden die Tonart angenehm",
+        "baritone": "{share, number, percent} der Baritone fanden die Tonart angenehm",
+        "bass": "{share, number, percent} der Bässe fanden die Tonart angenehm",
+        "mezzo": "{share, number, percent} der Mezzosoprane fanden die Tonart angenehm",
+        "soprano": "{share, number, percent} der Soprane fanden die Tonart angenehm",
+        "tenor": "{share, number, percent} der Tenöre fanden die Tonart angenehm"
+      },
+      "mostlyHigh": "Die meisten Sänger fanden es etwas zu hoch",
+      "overall": "{comfortable, number} von {singers, plural, one {# Sänger} other {# Sängern}} fanden die Tonart angenehm"
+    }
   },
   "tabs": {
     "discover": "Entdecken",
@@ -986,7 +998,8 @@
       "known_song": "Das kennst du",
       "similar_artist": "Ähnlich wie {artist}",
       "crowd_pleaser": "Publikumsliebling",
-      "make_it": "Noch keine Karaoke-Version verfügbar"
+      "make_it": "Noch keine Karaoke-Version verfügbar",
+      "sung_before": "Dein Favorit"
     },
     "section": {
       "all": "Deine Empfehlungen",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Noch keine Karaoke-Version vorhanden: Tippe auf einen Song, um deine eigene zu erstellen",
       "songs_you_know": "Songs, die du kennst",
       "songs_you_knowReason": "Songs, die du bereits kennst und zu denen es eine Karaoke-Version gibt",
-      "make_it": "Erstellen"
+      "make_it": "Erstellen",
+      "go_tosReason": "Songs, zu denen du immer wieder zurückkehrst",
+      "go_tos": "Deine Favoriten"
     },
     "signInForPicks": "Melde dich an, um deine Empfehlungen zu erhalten",
     "signInForPicksBody": "Verrate uns, was du magst, und wir suchen Karaoke-Songs aus, die du mit Begeisterung singen wirst.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Verbinde deine Musik",
       "profileTitle": "Dein Musikprofil",
       "voiceHint": "Finde Songs, die zu deiner Stimme passen",
-      "voiceRange": "Tonumfang {range}"
+      "voiceRange": "Tonumfang {range}",
+      "known": "{count, plural, one {# Song bekannt} other {# Songs bekannt}}"
     },
     "songs": {
       "addPast": "Bereits gesungene Songs hinzufügen",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Song oder Interpret",
       "sortLabel": "Sortieren",
       "timesSungLabel": "{count, plural, one {# Mal gesungen} other {# Mal gesungen}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# Stimme auf dem Board} other {# Stimmen auf dem Board}}",
+      "dismiss": "Diesen Song ausblenden",
+      "empty": "Aktuell gibt es hier nichts zu erstellen. Songs, die du speicherst oder singst und von denen es noch keine Karaoke-Version gibt, werden hier angezeigt.",
+      "hiddenToast": "Aus „Erstellen lassen“ ausgeblendet",
+      "intro": "Songs, die du singen würdest, von denen es aber noch keine Karaoke-Version gibt. Erstelle jetzt eine oder wünsche sie dir kostenlos auf unserem Board.",
+      "offline": "Du bist offline. Zum Erstellen und Wünschen benötigst du eine Internetverbindung.",
+      "request": "Kostenlos wünschen",
+      "requestError": "Anfrage konnte nicht gesendet werden. Versuche es bitte noch einmal.",
+      "requested": "{count, plural, one {Gewünscht · # Stimme} other {Gewünscht · # Stimmen}}",
+      "title": "Erstellen lassen",
+      "why": {
+        "imported": "Aus deiner Musik",
+        "recommended": "Für dich ausgewählt",
+        "sung": "Von dir gesungen",
+        "saved": "Gespeichert",
+        "voice": "Aus deiner Gesangssitzung"
+      },
+      "makeIt": "Erstellen",
+      "undo": "Rückgängig",
+      "loadError": "Diese Songs konnten gerade nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "limit": {
+        "submission": "Du hast deine heutige kostenlose Anfrage bereits eingereicht. Komm morgen wieder, um eine weitere anzufragen.",
+        "voteUsed": "Du hast deine heutige kostenlose Stimme bereits abgegeben. Komm morgen wieder, um erneut abzustimmen."
+      }
     }
   }
 }

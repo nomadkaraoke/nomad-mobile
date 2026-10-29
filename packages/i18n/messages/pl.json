@@ -136,7 +136,19 @@
     "save": "Zapisz w Moich piosenkach",
     "saved": "Zapisano",
     "addToSetlist": "Dodaj do playlisty",
-    "markSung": "Oznacz jako zaśpiewane"
+    "markSung": "Oznacz jako zaśpiewane",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} altów uznało tę tonację za wygodną",
+        "baritone": "{share, number, percent} barytonów uznało tę tonację za wygodną",
+        "bass": "{share, number, percent} basów uznało tę tonację za wygodną",
+        "mezzo": "{share, number, percent} mezzosopranów uznało tę tonację za wygodną",
+        "soprano": "{share, number, percent} sopranów uznało tę tonację za wygodną",
+        "tenor": "{share, number, percent} tenorów uznało tę tonację za wygodną"
+      },
+      "mostlyHigh": "Większość wokalistów uznała ją za nieco zbyt wysoką",
+      "overall": "{comfortable, number} z {singers, plural, one {# wokalisty} few {# wokalistów} many {# wokalistów} other {# wokalistów}} uznało tę tonację za wygodną"
+    }
   },
   "tabs": {
     "discover": "Odkrywaj",
@@ -986,7 +998,8 @@
       "known_song": "Znasz ten utwór",
       "similar_artist": "Podobne do: {artist}",
       "crowd_pleaser": "Ulubieniec tłumu",
-      "make_it": "Brak jeszcze wersji karaoke"
+      "make_it": "Brak jeszcze wersji karaoke",
+      "sung_before": "Twój pewniak"
     },
     "section": {
       "all": "Twoje propozycje",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Brak wersji karaoke: stuknij, aby stworzyć własną",
       "songs_you_know": "Utwory, które znasz",
       "songs_you_knowReason": "Znane Ci utwory, które mają wersję karaoke",
-      "make_it": "Stwórz"
+      "make_it": "Stwórz",
+      "go_tosReason": "Piosenki, do których chętnie wracasz",
+      "go_tos": "Twoje pewniaki"
     },
     "signInForPicks": "Zaloguj się, aby otrzymać propozycje",
     "signInForPicksBody": "Powiedz nam, co lubisz, a dobierzemy utwory karaoke, które pokochasz śpiewać.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Połącz swoją muzykę",
       "profileTitle": "Twój profil muzyczny",
       "voiceHint": "Znajdź piosenki pasujące do Twojego głosu",
-      "voiceRange": "Skala: {range}"
+      "voiceRange": "Skala: {range}",
+      "known": "{count, plural, one {# znana piosenka} few {# znane piosenki} many {# znanych piosenek} other {# znanych piosenek}}"
     },
     "songs": {
       "addPast": "Dodaj zaśpiewane piosenki",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Tytuł lub wykonawca",
       "sortLabel": "Sortuj",
       "timesSungLabel": "{count, plural, one {Zaśpiewano # raz} few {Zaśpiewano # razy} many {Zaśpiewano # razy} other {Zaśpiewano # razy}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# głos na tablicy} few {# głosy na tablicy} many {# głosów na tablicy} other {# głosu na tablicy}}",
+      "dismiss": "Ukryj tę piosenkę",
+      "empty": "Na razie nie ma nic do stworzenia. Piosenki, które zapiszesz lub zaśpiewasz, a które nie mają jeszcze wersji karaoke, pojawią się tutaj.",
+      "hiddenToast": "Ukryto z sekcji „Stwórz to”",
+      "intro": "Piosenki, które chcesz zaśpiewać, a nie mają jeszcze wersji karaoke. Stwórz wersję teraz lub poproś o nią za darmo na naszej tablicy.",
+      "offline": "Jesteś offline. Tworzenie i zgłaszanie próśb wymaga połączenia z internetem.",
+      "request": "Poproś za darmo",
+      "requestError": "Nie udało się wysłać prośby. Spróbuj ponownie.",
+      "requested": "{count, plural, one {Zgłoszono · # głos} few {Zgłoszono · # głosy} many {Zgłoszono · # głosów} other {Zgłoszono · # głosu}}",
+      "title": "Stwórz to",
+      "why": {
+        "imported": "Z Twojej muzyki",
+        "recommended": "Dobrane dla Ciebie",
+        "sung": "Zaśpiewana przez Ciebie",
+        "saved": "Zapisano",
+        "voice": "Z Twojej sesji głosowej"
+      },
+      "makeIt": "Stwórz",
+      "undo": "Cofnij",
+      "loadError": "Nie udało się teraz załadować tych utworów.",
+      "retry": "Spróbuj ponownie",
+      "limit": {
+        "submission": "Twój dzisiejszy darmowy utwór został już zgłoszony. Wróć jutro, aby zgłosić kolejny.",
+        "voteUsed": "Twój dzisiejszy darmowy głos został już wykorzystany. Wróć jutro, aby zagłosować ponownie."
+      }
     }
   }
 }

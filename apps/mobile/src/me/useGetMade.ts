@@ -1,0 +1,200 @@
+import { getGetMade, type GetMadeItem } from '@nomad/api-decide';
+import { listBoardRequests, submitSongRequest, type SongRequestPublic } from '@nomad/api-gen';
+import { jobPhase, songKey } from '@nomad/core';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useMemo } from 'react';
+
+import { useAuth } from '../auth/store';
+import { useMyJobs } from '../jobs/useMyJobs';
+import { useOffline } from '../net/useOffline';
+import { currentUserKey, getMadeStorageKey, useUserKey, writeCacheFor } from './account';
+import { isObj, readCache } from './cache';
+import { BOARD_QUERY_KEY, useGetMadeLocal, type RequestState } from './getMadeLocal';
+import { useMeOutbox, type MeOutboxItem } from './meOutbox';
+import { useInvalidateOnSynced } from './useLibrary';
+
+export type GetMadeCache = { items: GetMadeItem[]; savedAt: number };
+const isCache = (v: unknown): v is GetMadeCache => isObj(v) && Array.isArray(v.items) && typeof v.savedAt === 'number';
+
+export const getMadeKeyFor = (userKey: string | null) => ['decide', userKey, 'get-made'] as const;
+
+/**
+ * A Get this made row: decide's item, plus the requests board's vote count when the song is already on the board,
+ * and what "Request it free" can do for it (null: it can be requested).
+ */
+export type GetMadeRow = GetMadeItem & {
+  boardVotes: number | null;
+  request: RequestState | null;
+};
+
+const BOARD_STALE_MS = 5 * 60_000;
+
+/** Today's free request can't be used: the vote is spent, or the day's one submission is (the stricter copy wins). */
+export type RequestLimit = 'vote_used' | 'submission_limit';
+
+// An undo that reached decide: a fetch started after this no longer needs the restored row pinned.
+useMeOutbox.addSentListener((item) => {
+  if (item.op === 'dismiss' && !item.dismissed) useGetMadeLocal.getState().markSent(item.dismissKey, Date.now());
+});
+
+/** Dismissals still waiting in the Me outbox (they survive an app restart; the memory overrides don't). */
+function pendingDismissals(items: MeOutboxItem[]): Map<string, boolean> {
+  const out = new Map<string, boolean>();
+  for (const it of items) if (it.op === 'dismiss') out.set(it.dismissKey, it.dismissed);
+  return out;
+}
+
+/** Puts rows the server list no longer has (an undo after a refetch) back in weight order. */
+function withRestored(server: GetMadeItem[], restored: GetMadeItem[]): GetMadeItem[] {
+  const out = [...server];
+  for (const r of restored) {
+    if (out.some((x) => x.key === r.key)) continue;
+    const at = out.findIndex((x) => x.weight < r.weight);
+    out.splice(at < 0 ? out.length : at, 0, r);
+  }
+  return out;
+}
+
+/**
+ * Get this made (spec §6.9): decide's list of the user's songs with no karaoke version, minus songs the user already
+ * made (their gen jobs, by normalised artist|title) and dismissed ones, with board vote counts. Cached per account,
+ * so offline shows the last list. Dismiss is optimistic and goes through the Me outbox.
+ */
+export function useGetMade() {
+  const queryClient = useQueryClient();
+  const userKey = useUserKey();
+  const email = useAuth((s) => (s.state.status === 'signedIn' ? s.state.session.email : null));
+  const netOffline = useOffline();
+  const queryKey = useMemo(() => getMadeKeyFor(userKey), [userKey]);
+  const cached = useMemo(() => readCache(userKey && getMadeStorageKey(userKey), isCache), [userKey]);
+
+  const q = useQuery<GetMadeCache>({
+    queryKey,
+    enabled: userKey !== null,
+    initialData: cached,
+    initialDataUpdatedAt: cached?.savedAt,
+    staleTime: 60_000,
+    retry: false,
+    queryFn: async ({ signal }) => {
+      const startedAt = Date.now();
+      const next = { items: await getGetMade(), savedAt: Date.now() };
+      if (!signal?.aborted && userKey && currentUserKey() === userKey) {
+        writeCacheFor(userKey, getMadeStorageKey(userKey), next);
+        useGetMadeLocal.getState().settle(new Set(next.items.map((x) => x.key)), startedAt);
+      }
+      return next;
+    },
+  });
+  // A sent dismissal, love or sung log can change the list.
+  useInvalidateOnSynced([queryKey]);
+
+  const jobs = useMyJobs(email);
+  const board = useQuery({
+    queryKey: BOARD_QUERY_KEY,
+    queryFn: listBoardRequests,
+    enabled: userKey !== null,
+    staleTime: BOARD_STALE_MS,
+    retry: false,
+  });
+
+  const outboxItems = useMeOutbox((s) => s.items);
+  const dismissed = useGetMadeLocal((s) => s.dismissed);
+  const requests = useGetMadeLocal((s) => s.requests);
+
+  const { items, limit } = useMemo<{ items: GetMadeRow[]; limit: RequestLimit | null }>(() => {
+    // A failed job didn't make the song; anything else (done, working, waiting on the person) did or will.
+    const made = new Set((jobs.data ?? []).filter((j) => jobPhase(j.status) !== 'failed').map((j) => songKey(j.artist, j.title)));
+    const onBoard = new Map<string, SongRequestPublic>();
+    for (const r of board.data?.requests ?? []) onBoard.set(songKey(r.artist, r.title), r);
+    const votedToday = board.data?.votedToday === true;
+    const yourVote = board.data?.yourVoteRequestId ?? null;
+    const pending = pendingDismissals(outboxItems);
+    const restored = Object.values(dismissed).filter((d) => !d.dismissed).map((d) => d.item);
+    const outcomes = Object.values(requests).map((r) => r.kind);
+    // One limit for the whole list (R28): gen's submit spends the day's one vote, so once it's spent (or the day's
+    // submission is), no row can be requested; the list says so once instead of a 409 per row.
+    const limit: RequestLimit | null = outcomes.includes('submission_limit')
+      ? 'submission_limit'
+      : votedToday || outcomes.includes('vote_used')
+        ? 'vote_used'
+        : null;
+    const rows = withRestored(q.data?.items ?? [], restored)
+      .filter((it) => it.title.trim() !== '') // R4: a row needs a real title (never a key)
+      .filter((it) => !(dismissed[it.key]?.dismissed ?? pending.get(it.key) ?? false))
+      .filter((it) => !made.has(songKey(it.artist, it.title)))
+      .map((it) => {
+        const match = onBoard.get(songKey(it.artist, it.title)) ?? null;
+        let request: RequestState | null = requests[it.key] ?? null;
+        if (request?.kind === 'requested' && match) request = { kind: 'requested', votes: match.vote_count };
+        if (!request && match && yourVote === match.id) request = { kind: 'requested', votes: match.vote_count };
+        if (limit && request?.kind !== 'requested' && request?.kind !== 'pending') request = { kind: limit };
+        return { ...it, boardVotes: match?.vote_count ?? null, request };
+      });
+    return { items: rows, limit };
+  }, [q.data, jobs.data, board.data, outboxItems, dismissed, requests]);
+
+  const findItem = useCallback(
+    (key: string): GetMadeItem | undefined =>
+      q.data?.items.find((x) => x.key === key) ?? useGetMadeLocal.getState().dismissed[key]?.item,
+    [q.data],
+  );
+
+  const setDismissed = useCallback(
+    (key: string, value: boolean) => {
+      const item = findItem(key);
+      if (!item) return;
+      useGetMadeLocal.getState().setDismissed(item, value);
+      useMeOutbox.getState().enqueue({ key: `dismiss:${key}`, op: 'dismiss', dismissKey: key, dismissed: value });
+    },
+    [findItem],
+  );
+  const dismiss = useCallback((key: string) => setDismissed(key, true), [setDismissed]);
+  const undismiss = useCallback((key: string) => setDismissed(key, false), [setDismissed]);
+
+  /**
+   * "Request it free": ONE submit to gen's board, never a vote (gen's submit already spends the day's vote, and a
+   * vote after `already_exists` would toggle it off). The outcome is shown on the row.
+   */
+  const request = useCallback(
+    async (row: Pick<GetMadeItem, 'key' | 'artist' | 'title'>) => {
+      const local = useGetMadeLocal.getState();
+      if (local.requests[row.key]?.kind === 'pending') return;
+      // The outcome belongs to the account that tapped: a sign-out or switch mid-request drops it.
+      const owner = currentUserKey();
+      if (!owner) return;
+      local.setRequest(row.key, { kind: 'pending' });
+      let state: RequestState;
+      try {
+        const out = await submitSongRequest(row.artist, row.title);
+        state = out.status === 'created' || out.status === 'already_exists' ? { kind: 'requested', votes: out.request.vote_count } : { kind: out.status };
+      } catch {
+        state = { kind: 'error' };
+      }
+      if (currentUserKey() !== owner) return;
+      useGetMadeLocal.getState().setRequest(row.key, state);
+      // Every answer from the board (including the daily limits) means its vote state may have moved.
+      if (state.kind !== 'error') void queryClient.invalidateQueries({ queryKey: BOARD_QUERY_KEY });
+    },
+    [queryClient],
+  );
+
+  // Make it and Request it free go to gen, so only a lost connection turns them off (a decide outage doesn't).
+  const offline = netOffline;
+  // Until the user's jobs are known, Make it could start a second paid make of a song they already made.
+  // Known once loaded at all: a failed background refetch keeps the last list, which is still good enough.
+  const jobsKnown = email === null || jobs.data !== undefined;
+  return {
+    items,
+    /** Shown once at the top of the list: today's free request is used up. */
+    limit,
+    loading: userKey !== null && q.data === undefined && q.isFetching,
+    offline,
+    /** The list failed to load and there is nothing cached to show (hidden while a retry is fetching). */
+    error: q.isError && !q.data && !q.isFetching,
+    refetch: () => void q.refetch(),
+    makeDisabled: offline || !jobsKnown,
+    dismiss,
+    undismiss,
+    request,
+  };
+}

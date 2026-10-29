@@ -136,7 +136,19 @@
     "save": "Spara till Mina låtar",
     "saved": "Sparad",
     "addToSetlist": "Lägg till i setlist",
-    "markSung": "Markera som sjungen"
+    "markSung": "Markera som sjungen",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} av altarna tyckte att tonarten var bekväm",
+        "baritone": "{share, number, percent} av barytonerna tyckte att tonarten var bekväm",
+        "bass": "{share, number, percent} av basarna tyckte att tonarten var bekväm",
+        "mezzo": "{share, number, percent} av mezzosopranerna tyckte att tonarten var bekväm",
+        "soprano": "{share, number, percent} av sopranerna tyckte att tonarten var bekväm",
+        "tenor": "{share, number, percent} av tenorerna tyckte att tonarten var bekväm"
+      },
+      "mostlyHigh": "De flesta sångare tyckte att den var lite hög",
+      "overall": "{comfortable, number} av {singers, plural, one {# sångare} other {# sångare}} tyckte att tonarten var bekväm"
+    }
   },
   "tabs": {
     "discover": "Upptäck",
@@ -986,7 +998,8 @@
       "known_song": "Du kan den här",
       "similar_artist": "Liknar {artist}",
       "crowd_pleaser": "Publikfavorit",
-      "make_it": "Ingen karaokeversion än"
+      "make_it": "Ingen karaokeversion än",
+      "sung_before": "Ditt säkra kort"
     },
     "section": {
       "all": "Dina låtförslag",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Finns inte som karaoke än: tryck på en för att göra din egen",
       "songs_you_know": "Låtar du kan",
       "songs_you_knowReason": "Låtar du redan kan som har en karaokeversion",
-      "make_it": "Skapa"
+      "make_it": "Skapa",
+      "go_tosReason": "Låtar du alltid återvänder till",
+      "go_tos": "Dina favoriter"
     },
     "signInForPicks": "Logga in för att få dina låtförslag",
     "signInForPicksBody": "Berätta vad du gillar så väljer vi karaokelåtar du kommer att älska att sjunga.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Anslut din musik",
       "profileTitle": "Din musikprofil",
       "voiceHint": "Hitta låtar som passar din röst",
-      "voiceRange": "Omfång {range}"
+      "voiceRange": "Omfång {range}",
+      "known": "{count, plural, one {# låt du kan} other {# låtar du kan}}"
     },
     "songs": {
       "addPast": "Lägg till låtar jag har sjungit",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Låt eller artist",
       "sortLabel": "Sortera",
       "timesSungLabel": "{count, plural, one {Sjungen # gång} other {Sjungen # gånger}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# röst på önskelistan} other {# röster på önskelistan}}",
+      "dismiss": "Dölj den här låten",
+      "empty": "Inget att skapa just nu. Låtar du sparar eller sjunger som saknar karaokeversion visas här.",
+      "hiddenToast": "Dold från Få den skapad",
+      "intro": "Låtar du vill sjunga som saknar karaokeversion än så länge. Skapa en nu, eller önska den gratis på vår önskelista.",
+      "offline": "Du är offline. Du behöver anslutning för att skapa och önska låtar.",
+      "request": "Önska gratis",
+      "requestError": "Kunde inte skicka förfrågan. Försök igen.",
+      "requested": "{count, plural, one {Önskad · # röst} other {Önskad · # röster}}",
+      "title": "Få den skapad",
+      "why": {
+        "imported": "Från din musik",
+        "recommended": "Utvald för dig",
+        "sung": "Du sjöng den",
+        "saved": "Sparad",
+        "voice": "Från din röstsession"
+      },
+      "makeIt": "Skapa",
+      "undo": "Ångra",
+      "loadError": "Det gick inte att ladda de här låtarna just nu.",
+      "retry": "Försök igen",
+      "limit": {
+        "submission": "Du har gjort dagens gratisönskemål. Kom tillbaka i morgon för att önska en till.",
+        "voteUsed": "Du har använt dagens gratisröst. Kom tillbaka i morgon för att rösta igen."
+      }
     }
   }
 }

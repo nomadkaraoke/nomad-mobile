@@ -1,6 +1,7 @@
 import * as decide from '@nomad/api-decide';
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 
+import { useLibrarySettle } from '../../me/librarySettle';
 import { useMeOutbox } from '../../me/meOutbox';
 import { useLibrary } from '../../me/useLibrary';
 import { outboxIdle, useOutbox } from '../../tonight/log/outbox';
@@ -85,4 +86,12 @@ describe('a synced write stays in the overlay until a fetch started after it lan
     expect(byTitle.One).toMatchObject({ loved: true });
     expect(byTitle.Two).toMatchObject({ setlist_ids: ['pl_existing1'] });
   });
+});
+
+it('settleSetlists drops writes sent at or before the fetch start and keeps later ones', () => {
+  const w = (id: string, sentAt: number) => ({ item: { key: `setlist:${id}`, op: 'delete', id, rev: 1 } as never, result: undefined, sentAt });
+  useLibrarySettle.setState({ setlistsSent: { pl_a: w('pl_a', 99), pl_b: w('pl_b', 100), pl_c: w('pl_c', 101) } });
+  useLibrarySettle.getState().settleSetlists(100);
+  expect(Object.keys(useLibrarySettle.getState().setlistsSent)).toEqual(['pl_c']);
+  useLibrarySettle.getState().clear();
 });

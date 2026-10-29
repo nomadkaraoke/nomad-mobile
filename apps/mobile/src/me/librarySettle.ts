@@ -8,6 +8,7 @@ import { useLovedOverrides } from './lovedOverrides';
 import { useMeOutbox } from './meOutbox';
 import { foldLog, pendingLog, pendingSetlists } from './pending';
 import { meQueryClient } from './queryClientRef';
+import { hasSetlistsCache, type SentSetlist } from './setlistsCache';
 import { syncedFeels, syncedRecords } from './useLogMirror';
 
 type Sent<T> = T & { sentAt: number };
@@ -20,19 +21,30 @@ type Sent<T> = T & { sentAt: number };
 type Store = {
   log: Record<string, Sent<PendingLog>>;
   setlists: Record<string, Sent<PendingSetlist>>;
+  /**
+   * Setlist writes sent while the account had no setlists cache (the first fetch pending or failed), for the setlists
+   * screens: without them a sent list would vanish from the outbox overlay with nothing to fall back to. Once set, an
+   * entry follows later sends of that list too, so an older write never shows over a newer one.
+   */
+  setlistsSent: Record<string, SentSetlist>;
   /** Drops everything sent before `before` (a library fetch started at `before` has landed). */
   settle(before: number): void;
+  /** Drops the setlist writes sent before `before` (a setlists fetch started at `before` has landed). */
+  settleSetlists(before: number): void;
   clear(): void;
 };
 
 export const useLibrarySettle = create<Store>((set, get) => ({
   log: {},
   setlists: {},
+  setlistsSent: {},
   settle: (before) => {
     const keep = <T extends { sentAt: number }>(r: Record<string, T>) => Object.fromEntries(Object.entries(r).filter(([, v]) => v.sentAt > before));
     set({ log: keep(get().log), setlists: keep(get().setlists) });
   },
-  clear: () => set({ log: {}, setlists: {} }),
+  settleSetlists: (before) =>
+    set({ setlistsSent: Object.fromEntries(Object.entries(get().setlistsSent).filter(([, v]) => v.sentAt > before)) }),
+  clear: () => set({ log: {}, setlists: {}, setlistsSent: {} }),
 }));
 
 useOutbox.addSentListener((item, _result, owner) => {
@@ -54,7 +66,7 @@ useOutbox.addSentListener((item, _result, owner) => {
   useLibrarySettle.setState({ log: { ...log, [item.id]: { ...foldLog(old && !old.deleted ? old : undefined, rec, item.patch), sentAt: Date.now() } } });
 });
 
-useMeOutbox.addSentListener((item, _result, owner) => {
+useMeOutbox.addSentListener((item, result, owner) => {
   if (currentUserKey() !== owner) return;
   if (item.op === 'love') {
     // Refresh the shared love override to the send time (unless a newer, different answer is already showing).
@@ -64,6 +76,11 @@ useMeOutbox.addSentListener((item, _result, owner) => {
   }
   const rec = pendingSetlists([item])[0];
   if (rec) useLibrarySettle.setState({ setlists: { ...useLibrarySettle.getState().setlists, [rec.id]: { ...rec, sentAt: Date.now() } } });
+  // `onSetlistSent` (run first) applied it to the cache when there is one; with none, keep it here until a fetch lands.
+  const { setlistsSent } = useLibrarySettle.getState();
+  if (item.op !== 'dismiss' && (!hasSetlistsCache(owner) || item.id in setlistsSent)) {
+    useLibrarySettle.setState({ setlistsSent: { ...setlistsSent, [item.id]: { item, result, sentAt: Date.now() } } });
+  }
 });
 
 // A love the server refused for good (permanent error): take the optimistic heart back (unless a newer answer shows).

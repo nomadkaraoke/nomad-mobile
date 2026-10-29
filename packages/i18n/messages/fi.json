@@ -136,7 +136,19 @@
     "save": "Tallenna Omiin kappaleisiin",
     "saved": "Tallennettu",
     "addToSetlist": "Lisää settilistaan",
-    "markSung": "Merkitse lauletuksi"
+    "markSung": "Merkitse lauletuksi",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} altoista piti sävellajia sopivana",
+        "baritone": "{share, number, percent} baritoneista piti sävellajia sopivana",
+        "bass": "{share, number, percent} bassoista piti sävellajia sopivana",
+        "mezzo": "{share, number, percent} mezzosopraanoista piti sävellajia sopivana",
+        "soprano": "{share, number, percent} sopraanoista piti sävellajia sopivana",
+        "tenor": "{share, number, percent} tenoreista piti sävellajia sopivana"
+      },
+      "mostlyHigh": "Useimpien laulajien mielestä sävellaji oli hieman liian korkea",
+      "overall": "{comfortable, number} / {singers, plural, one {# laulajasta} other {# laulajasta}} piti sävellajia sopivana"
+    }
   },
   "tabs": {
     "discover": "Löydä uutta",
@@ -986,7 +998,8 @@
       "known_song": "Tiedät tämän",
       "similar_artist": "Kuten {artist}",
       "crowd_pleaser": "Yleisön suosikki",
-      "make_it": "Ei vielä karaokeversiota"
+      "make_it": "Ei vielä karaokeversiota",
+      "sung_before": "Luottobiisisi"
     },
     "section": {
       "all": "Sinun suosituksesi",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Ei vielä karaokeversiota: napauta ja luo omasi",
       "songs_you_know": "Kappaleet, jotka tunnet",
       "songs_you_knowReason": "Entuudestaan tuttuja kappaleita, joista löytyy karaokeversio",
-      "make_it": "Luo versio"
+      "make_it": "Luo versio",
+      "go_tosReason": "Kappaleet, joihin palaat yhä uudelleen",
+      "go_tos": "Luottobiisisi"
     },
     "signInForPicks": "Kirjaudu sisään nähdäksesi suosituksesi",
     "signInForPicksBody": "Kerro meille musiikkimaustasi, niin suosittelemme karaokekappaleita, joita rakastat laulaa.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Yhdistä musiikkisi",
       "profileTitle": "Musiikkiprofiilisi",
       "voiceHint": "Löydä äänellesi sopivia kappaleita",
-      "voiceRange": "Ääniala {range}"
+      "voiceRange": "Ääniala {range}",
+      "known": "{count, plural, one {# tuttu kappale} other {# tuttua kappaletta}}"
     },
     "songs": {
       "addPast": "Lisää aiemmin laulamiani kappaleita",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Kappale tai esittäjä",
       "sortLabel": "Lajittele",
       "timesSungLabel": "{count, plural, one {Laulettu # kerran} other {Laulettu # kertaa}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# ääni toivelistalla} other {# ääntä toivelistalla}}",
+      "dismiss": "Piilota tämä kappale",
+      "empty": "Ei mitään luotavaa juuri nyt. Tallentamasi tai laulamasi kappaleet, joista ei ole karaokeversiota, näkyvät täällä.",
+      "hiddenToast": "Piilotettu Teetä tämä -näkymästä",
+      "intro": "Kappaleet, joita haluaisit laulaa, mutta joista ei ole vielä karaokeversiota. Tee sellainen nyt tai toivo sitä ilmaiseksi toivelistallamme.",
+      "offline": "Olet offline-tilassa. Tekeminen ja toivominen vaativat verkkoyhteyden.",
+      "request": "Toivo ilmaiseksi",
+      "requestError": "Toivetta ei voitu lähettää. Yritä uudelleen.",
+      "requested": "{count, plural, one {Toivottu · # ääni} other {Toivottu · # ääntä}}",
+      "title": "Teetä tämä",
+      "why": {
+        "imported": "Omasta musiikistasi",
+        "recommended": "Valittu sinulle",
+        "sung": "Olet laulanut tämän",
+        "saved": "Tallennettu",
+        "voice": "Äänisessiostasi"
+      },
+      "makeIt": "Luo versio",
+      "undo": "Kumoa",
+      "loadError": "Näitä kappaleita ei saatu ladattua juuri nyt.",
+      "retry": "Yritä uudelleen",
+      "limit": {
+        "submission": "Olet käyttänyt tämän päivän ilmaisen toiveesi. Tule huomenna takaisin toivoaksesi uutta kappaletta.",
+        "voteUsed": "Olet käyttänyt tämän päivän ilmaisen äänesi. Tule huomenna takaisin toivoaksesi lisää."
+      }
     }
   }
 }

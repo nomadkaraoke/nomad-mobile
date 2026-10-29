@@ -136,7 +136,19 @@
     "save": "Salvează în Piesele mele",
     "saved": "Salvat",
     "addToSetlist": "Adaugă în setlist",
-    "markSung": "Marchează ca fiind cântată"
+    "markSung": "Marchează ca fiind cântată",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} dintre altiști au considerat tonalitatea confortabilă",
+        "baritone": "{share, number, percent} dintre baritoni au considerat tonalitatea confortabilă",
+        "bass": "{share, number, percent} dintre bași au considerat tonalitatea confortabilă",
+        "mezzo": "{share, number, percent} dintre mezzosoprane au considerat tonalitatea confortabilă",
+        "soprano": "{share, number, percent} dintre soprane au considerat tonalitatea confortabilă",
+        "tenor": "{share, number, percent} dintre tenori au considerat tonalitatea confortabilă"
+      },
+      "mostlyHigh": "Majoritatea cântăreților au considerat-o puțin cam înaltă",
+      "overall": "{comfortable, number} din {singers, plural, one {# cântăreț} few {# cântăreți} other {# de cântăreți}} au considerat tonalitatea confortabilă"
+    }
   },
   "tabs": {
     "discover": "Descoperă",
@@ -986,7 +998,8 @@
       "known_song": "Știi piesa asta",
       "similar_artist": "În stilul {artist}",
       "crowd_pleaser": "Pe placul publicului",
-      "make_it": "Nu există încă o versiune karaoke"
+      "make_it": "Nu există încă o versiune karaoke",
+      "sung_before": "Preferata ta"
     },
     "section": {
       "all": "Recomandările tale",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Nu există încă versiune karaoke: apasă pe una pentru a crea propria ta versiune",
       "songs_you_know": "Piese pe care le știi",
       "songs_you_knowReason": "Piese pe care le știi deja și care au versiune karaoke",
-      "make_it": "Creează"
+      "make_it": "Creează",
+      "go_tosReason": "Piese la care revii mereu",
+      "go_tos": "Preferatele tale"
     },
     "signInForPicks": "Conectează-te pentru a primi recomandări",
     "signInForPicksBody": "Spune-ne ce îți place și vom alege piese de karaoke pe care vei adora să le cânți.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Conectează-ți muzica",
       "profileTitle": "Profilul tău muzical",
       "voiceHint": "Găsește melodii care se potrivesc cu vocea ta",
-      "voiceRange": "Întindere vocală {range}"
+      "voiceRange": "Întindere vocală {range}",
+      "known": "{count, plural, one {# melodie știută} few {# melodii știute} other {# de melodii știute}}"
     },
     "songs": {
       "addPast": "Adaugă melodii cântate anterior",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Melodie sau artist",
       "sortLabel": "Sortează",
       "timesSungLabel": "{count, plural, one {Cântată o dată} few {Cântată de # ori} other {Cântată de # de ori}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# vot pe panou} few {# voturi pe panou} other {# de voturi pe panou}}",
+      "dismiss": "Ascunde această piesă",
+      "empty": "Nimic de creat acum. Piesele pe care le salvezi sau le cânți și care nu au o versiune karaoke vor apărea aici.",
+      "hiddenToast": "Ascunsă din „Creează această piesă”",
+      "intro": "Piese pe care le-ai cânta, dar care nu au încă o versiune karaoke. Creează una acum sau solicit-o gratuit pe panoul nostru.",
+      "offline": "Ești offline. Crearea și solicitarea necesită o conexiune la internet.",
+      "request": "Solicită gratuit",
+      "requestError": "Solicitarea nu a putut fi trimisă. Încearcă din nou.",
+      "requested": "{count, plural, one {Solicitată · # vot} few {Solicitată · # voturi} other {Solicitată · # de voturi}}",
+      "title": "Creează această piesă",
+      "why": {
+        "imported": "Din muzica ta",
+        "recommended": "Aleasă pentru tine",
+        "sung": "Ai cântat-o",
+        "saved": "Salvat",
+        "voice": "Din sesiunea ta vocală"
+      },
+      "makeIt": "Creează",
+      "undo": "Anulează",
+      "loadError": "Nu am putut încărca aceste melodii acum.",
+      "retry": "Încearcă din nou",
+      "limit": {
+        "submission": "Ți-ai folosit cererea gratuită de azi. Revino mâine pentru a trimite alta.",
+        "voteUsed": "Ți-ai folosit votul gratuit de azi. Revino mâine pentru a vota din nou."
+      }
     }
   }
 }

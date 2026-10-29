@@ -136,7 +136,19 @@
     "save": "Lagre i Mine sanger",
     "saved": "Lagret",
     "addToSetlist": "Legg til i spilleliste",
-    "markSung": "Marker som sunget"
+    "markSung": "Marker som sunget",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} av alter syntes tonearten var behagelig",
+        "baritone": "{share, number, percent} av barytoner syntes tonearten var behagelig",
+        "bass": "{share, number, percent} av basser syntes tonearten var behagelig",
+        "mezzo": "{share, number, percent} av mezzosopraner syntes tonearten var behagelig",
+        "soprano": "{share, number, percent} av sopraner syntes tonearten var behagelig",
+        "tenor": "{share, number, percent} av tenorer syntes tonearten var behagelig"
+      },
+      "mostlyHigh": "De fleste sangere syntes den var litt for høy",
+      "overall": "{comfortable, number} av {singers, plural, one {# sanger} other {# sangere}} syntes tonearten var behagelig"
+    }
   },
   "tabs": {
     "discover": "Oppdag",
@@ -986,7 +998,8 @@
       "known_song": "Denne kan du",
       "similar_artist": "Ligner på {artist}",
       "crowd_pleaser": "Publikumsfavoritt",
-      "make_it": "Ingen karaokeversjon ennå"
+      "make_it": "Ingen karaokeversjon ennå",
+      "sung_before": "Din favoritt"
     },
     "section": {
       "all": "Dine anbefalinger",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Ingen karaokeversjon ennå: trykk på en for å lage din egen",
       "songs_you_know": "Sanger du kan",
       "songs_you_knowReason": "Sanger du allerede kan som har en karaokeversjon",
-      "make_it": "Lag den"
+      "make_it": "Lag den",
+      "go_tosReason": "Sanger du stadig vender tilbake til",
+      "go_tos": "Dine faste favoritter"
     },
     "signInForPicks": "Logg inn for å få anbefalingene dine",
     "signInForPicksBody": "Fortell oss hva du liker, så finner vi karaokesanger du vil elske å synge.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Koble til musikken din",
       "profileTitle": "Musikkprofilen din",
       "voiceHint": "Finn sanger som passer til stemmen din",
-      "voiceRange": "Toneomfang {range}"
+      "voiceRange": "Toneomfang {range}",
+      "known": "{count, plural, one {# sang du kan} other {# sanger du kan}}"
     },
     "songs": {
       "addPast": "Legg til sanger jeg har sunget",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Sang eller artist",
       "sortLabel": "Sorter",
       "timesSungLabel": "{count, plural, one {Sunget # gang} other {Sunget # ganger}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# stemme på tavlen} other {# stemmer på tavlen}}",
+      "dismiss": "Skjul denne sangen",
+      "empty": "Ingenting å lage akkurat nå. Sanger du lagrer eller synger som ikke har noen karaokeversjon, vil dukke opp her.",
+      "hiddenToast": "Skjult fra Få denne laget",
+      "intro": "Sanger du vil synge som ikke har noen karaokeversjon ennå. Lag en nå, eller be om den gratis på tavlen vår.",
+      "offline": "Du er frakoblet. Du må være på nett for å lage eller be om sanger.",
+      "request": "Be om den gratis",
+      "requestError": "Kunne ikke sende forespørselen. Prøv igjen.",
+      "requested": "{count, plural, one {Forespurt · # stemme} other {Forespurt · # stemmer}}",
+      "title": "Få denne laget",
+      "why": {
+        "imported": "Fra musikken din",
+        "recommended": "Valgt for deg",
+        "sung": "Du sang den",
+        "saved": "Lagret",
+        "voice": "Fra stemmeøkten din"
+      },
+      "makeIt": "Lag den",
+      "undo": "Angre",
+      "loadError": "Kunne ikke laste inn disse sangene akkurat nå.",
+      "retry": "Prøv igjen",
+      "limit": {
+        "submission": "Du har brukt dagens gratisønske. Kom tilbake i morgen for å ønske deg en til.",
+        "voteUsed": "Du har brukt dagens gratisstemme. Kom tilbake i morgen for å stemme igjen."
+      }
     }
   }
 }

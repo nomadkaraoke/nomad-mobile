@@ -136,7 +136,19 @@
     "save": "I-save sa Aking mga kanta",
     "saved": "Nai-save na",
     "addToSetlist": "Idagdag sa setlist",
-    "markSung": "Markahan bilang nakanta na"
+    "markSung": "Markahan bilang nakanta na",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} ng mga alto ang naging komportable sa tono",
+        "baritone": "{share, number, percent} ng mga baritone ang naging komportable sa tono",
+        "bass": "{share, number, percent} ng mga bass ang naging komportable sa tono",
+        "mezzo": "{share, number, percent} ng mga mezzo-soprano ang naging komportable sa tono",
+        "soprano": "{share, number, percent} ng mga soprano ang naging komportable sa tono",
+        "tenor": "{share, number, percent} ng mga tenor ang naging komportable sa tono"
+      },
+      "mostlyHigh": "Medyo mataas ito para sa karamihan ng mga mang-aawit",
+      "overall": "{comfortable, number} sa {singers, plural, one {# mang-aawit} other {# mang-aawit}} ang naging komportable sa tono"
+    }
   },
   "tabs": {
     "discover": "Mag-discover",
@@ -986,7 +998,8 @@
       "known_song": "Alam mo ito",
       "similar_artist": "Katulad ni {artist}",
       "crowd_pleaser": "Paborito ng karamihan",
-      "make_it": "Wala pang karaoke version"
+      "make_it": "Wala pang karaoke version",
+      "sung_before": "Paborito mong kantahin"
     },
     "section": {
       "all": "Iyong mga napili",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Wala pang karaoke version: mag-tap para gumawa ng sarili mo",
       "songs_you_know": "Mga kantang alam mo",
       "songs_you_knowReason": "Mga kantang alam mo na may karaoke version",
-      "make_it": "Gawin ito"
+      "make_it": "Gawin ito",
+      "go_tosReason": "Mga kantang lagi mong binabalik-balikan",
+      "go_tos": "Iyong mga paborito"
     },
     "signInForPicks": "Mag-sign in para makuha ang iyong mga napili",
     "signInForPicksBody": "Sabihin sa amin kung ano ang gusto mo at pipili kami ng mga karaoke song na magugustuhan mong kantahin.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Ikonekta ang iyong musika",
       "profileTitle": "Iyong profile sa musika",
       "voiceHint": "Maghanap ng mga kantang bagay sa boses mo",
-      "voiceRange": "Range {range}"
+      "voiceRange": "Range {range}",
+      "known": "{count, plural, one {# kanta ang alam} other {# kanta ang alam}}"
     },
     "songs": {
       "addPast": "Magdagdag ng mga kantang nakanta ko na",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Kanta o artist",
       "sortLabel": "I-sort",
       "timesSungLabel": "{count, plural, one {# beses kinanta} other {# beses kinanta}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# boto sa board} other {# boto sa board}}",
+      "dismiss": "Itago ang kantang ito",
+      "empty": "Walang gagawin sa ngayon. Dito lalabas ang mga kantang na-save o kinanta mo na wala pang karaoke version.",
+      "hiddenToast": "Itinago mula sa Ipagawa ito",
+      "intro": "Mga kantang gusto mong kantahin na wala pang karaoke version. Gumawa na ngayon, o i-request ito nang libre sa aming board.",
+      "offline": "Offline ka. Kailangan ng koneksyon para makagawa at mag-request.",
+      "request": "I-request nang libre",
+      "requestError": "Hindi maipadala ang request. Subukan muli.",
+      "requested": "{count, plural, one {Na-request na · # boto} other {Na-request na · # boto}}",
+      "title": "Ipagawa ito",
+      "why": {
+        "imported": "Mula sa iyong musika",
+        "recommended": "Pinili para sa iyo",
+        "sung": "Kinanta mo ito",
+        "saved": "Nai-save na",
+        "voice": "Mula sa iyong voice session"
+      },
+      "makeIt": "Gawin ito",
+      "undo": "I-undo",
+      "loadError": "Hindi ma-load ang mga kantang ito sa ngayon.",
+      "retry": "Subukan muli",
+      "limit": {
+        "submission": "Nagawa mo na ang iyong libreng request para sa araw na ito. Bumalik bukas para mag-request ulit.",
+        "voteUsed": "Nagamit mo na ang iyong libreng boto para sa araw na ito. Bumalik bukas para mag-request ulit."
+      }
     }
   }
 }

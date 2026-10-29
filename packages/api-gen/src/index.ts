@@ -22,4 +22,5 @@ export * from './facades/auth';
 export { createAppCheckout, listCreditPackages, type CreditPackage } from './facades/credits';
 export * from './facades/make';
 export * from './facades/jobs';
+export * from './facades/requests';
 export * from './facades/review';

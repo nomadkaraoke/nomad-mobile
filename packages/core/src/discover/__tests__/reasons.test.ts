@@ -1,7 +1,7 @@
 import { reasonKey, sectionTitle } from '../index';
 
 describe('reasonKey', () => {
-  it.each(['known_song', 'known_artist', 'similar_artist', 'genre_match', 'decade_match', 'crowd_pleaser', 'make_it'])(
+  it.each(['known_song', 'known_artist', 'similar_artist', 'genre_match', 'decade_match', 'crowd_pleaser', 'make_it', 'sung_before'])(
     '%s',
     (t) => expect(reasonKey(t)).toBe(`discover.reason.${t}`),
   );
@@ -28,7 +28,7 @@ describe('sectionTitle', () => {
     expect(sectionTitle({ title_key: 'recs.section.all.title' })).toEqual({ key: 'discover.section.all', params: {} });
     expect(sectionTitle({ title_key: 'weird' })).toEqual({ key: 'discover.section.crowd_pleasers', params: {} });
   });
-  it.each(['songs_you_know', 'artists_you_love', 'because', 'crowd_pleasers', 'make_it', 'all'])('knows %s', (x) => {
+  it.each(['go_tos', 'songs_you_know', 'artists_you_love', 'because', 'crowd_pleasers', 'make_it', 'all'])('knows %s', (x) => {
     expect(sectionTitle({ title_key: `recs.section.${x}.title` }).key).toBe(`discover.section.${x}`);
   });
   it('a well-formed but unknown section (decide added one) falls back to crowd_pleasers', () => {

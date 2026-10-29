@@ -148,7 +148,7 @@ export function pendingSetlists(items: MeOutboxItem[]): PendingSetlist[] {
 export function overlaySetlists(base: Setlist[], items: MeOutboxItem[], now = new Date().toISOString()): Setlist[] {
   const out = [...base];
   for (const it of items) {
-    if (it.op === 'love') continue;
+    if (it.op === 'love' || it.op === 'dismiss') continue;
     const i = out.findIndex((s) => s.id === it.id);
     if (it.op === 'delete') {
       if (i >= 0) out.splice(i, 1);

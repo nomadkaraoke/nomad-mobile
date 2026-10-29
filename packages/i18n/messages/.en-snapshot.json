@@ -92,9 +92,12 @@
       "genre_match": "Matches your genres",
       "decade_match": "From your favourite decades",
       "crowd_pleaser": "Crowd pleaser",
-      "make_it": "No karaoke version yet"
+      "make_it": "No karaoke version yet",
+      "sung_before": "Your go-to"
     },
     "section": {
+      "go_tos": "Your go-tos",
+      "go_tosReason": "Songs you keep coming back to",
       "songs_you_know": "Songs you know",
       "songs_you_knowReason": "Songs you already know that have a karaoke version",
       "artists_you_love": "From artists you love",
@@ -235,6 +238,18 @@
       "remove": "Remove",
       "removeTitle": "Remove this record?",
       "removeBody": "It will no longer count as sung."
+    },
+    "crowd": {
+      "bucket": {
+        "bass": "{share, number, percent} of basses found the key comfortable",
+        "baritone": "{share, number, percent} of baritones found the key comfortable",
+        "tenor": "{share, number, percent} of tenors found the key comfortable",
+        "alto": "{share, number, percent} of altos found the key comfortable",
+        "mezzo": "{share, number, percent} of mezzo-sopranos found the key comfortable",
+        "soprano": "{share, number, percent} of sopranos found the key comfortable"
+      },
+      "overall": "{comfortable, number} of {singers, plural, one {# singer} other {# singers}} found the key comfortable",
+      "mostlyHigh": "Most singers found it a bit high"
     }
   },
   "signIn": {
@@ -1958,6 +1973,7 @@
       "keysLabel": "Your vocal range on a keyboard",
       "voiceRange": "Range {range}",
       "sourcesLabel": "Connected music",
+      "known": "{count, plural, one {# song known} other {# songs known}}",
       "sung": "{count, plural, one {# song sung} other {# songs sung}}",
       "saved": "{count, plural, one {# saved} other {# saved}}",
       "seeAll": "See all",
@@ -2014,6 +2030,33 @@
       "offline": "You're offline. Showing the songs saved on this phone.",
       "loadError": "Couldn't load your songs.",
       "count": "{count, plural, one {# song} other {# songs}}"
+    },
+    "getMade": {
+      "title": "Get this made",
+      "intro": "Songs you'd sing that have no karaoke version yet. Make one now, or request it free on our board.",
+      "makeIt": "Make it",
+      "request": "Request it free",
+      "dismiss": "Hide this song",
+      "requested": "{count, plural, one {Requested · # vote} other {Requested · # votes}}",
+      "boardVotes": "{count, plural, one {# vote on the board} other {# votes on the board}}",
+      "requestError": "Couldn't send the request. Try again.",
+      "hiddenToast": "Hidden from Get this made",
+      "undo": "Undo",
+      "empty": "Nothing to make right now. Songs you save or sing that have no karaoke version will show up here.",
+      "offline": "You're offline. Making and requesting need a connection.",
+      "why": {
+        "saved": "Saved",
+        "sung": "You sang it",
+        "imported": "From your music",
+        "voice": "From your voice session",
+        "recommended": "Picked for you"
+      },
+      "loadError": "Couldn't load these songs right now.",
+      "retry": "Try again",
+      "limit": {
+        "voteUsed": "You've used today's free vote. Come back tomorrow to request another.",
+        "submission": "You've made today's free request. Come back tomorrow to request another."
+      }
     }
   }
 }

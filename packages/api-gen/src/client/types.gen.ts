@@ -1762,6 +1762,31 @@ export type BulkAlbum = {
 };
 
 /**
+ * BulkAlbumRef
+ *
+ * The album an album-mode batch was picked from. Lets the search worker find
+ * the album's torrent once instead of searching every track separately.
+ */
+export type BulkAlbumRef = {
+    /**
+     * Artist
+     */
+    artist: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Release Group Mbid
+     */
+    release_group_mbid?: string | null;
+    /**
+     * Release Mbid
+     */
+    release_mbid?: string | null;
+};
+
+/**
  * BulkAnalyzeRequest
  */
 export type BulkAnalyzeRequest = {
@@ -1797,6 +1822,10 @@ export type BulkArtist = {
      * Country
      */
     country?: string | null;
+    /**
+     * Alias
+     */
+    alias?: string | null;
 };
 
 /**
@@ -1965,6 +1994,10 @@ export type BulkSong = {
      * Display Title
      */
     display_title?: string | null;
+    /**
+     * Position
+     */
+    position?: number | null;
 };
 
 /**
@@ -1976,6 +2009,7 @@ export type BulkSubmitRequest = {
      */
     songs: Array<BulkSong>;
     settings?: BulkSettings;
+    album?: BulkAlbumRef | null;
 };
 
 /**
@@ -3513,6 +3547,10 @@ export type CreditPackage = {
      * Description
      */
     description: string;
+    /**
+     * Store Product Id
+     */
+    store_product_id?: string | null;
 };
 
 /**
@@ -3525,6 +3563,7 @@ export type CreditPackagesResponse = {
      * Packages
      */
     packages: Array<CreditPackage>;
+    web_link?: WebLink;
 };
 
 /**
@@ -3590,6 +3629,16 @@ export type DailyVoteStatus = {
      * Value
      */
     value?: number | null;
+};
+
+/**
+ * DeleteAccountRequest
+ */
+export type DeleteAccountRequest = {
+    /**
+     * Apple Authorization Code
+     */
+    apple_authorization_code?: string | null;
 };
 
 /**
@@ -3888,6 +3937,36 @@ export type EstimateRequest = {
      * Url
      */
     url: string;
+};
+
+/**
+ * ExpoTokenDeleteRequest
+ */
+export type ExpoTokenDeleteRequest = {
+    /**
+     * Token
+     */
+    token: string;
+};
+
+/**
+ * ExpoTokenRequest
+ *
+ * Register an Expo push token for one device of the mobile app.
+ */
+export type ExpoTokenRequest = {
+    /**
+     * Token
+     */
+    token: string;
+    /**
+     * Platform
+     */
+    platform: 'ios' | 'android';
+    /**
+     * Device Id
+     */
+    device_id: string;
 };
 
 /**
@@ -5345,6 +5424,46 @@ export type ProvideUrlRequest = {
 };
 
 /**
+ * PushPrefs
+ *
+ * Mobile push categories; all default on.
+ */
+export type PushPrefs = {
+    /**
+     * Ready
+     */
+    ready?: boolean;
+    /**
+     * Review
+     */
+    review?: boolean;
+    /**
+     * Problems
+     */
+    problems?: boolean;
+};
+
+/**
+ * PushPrefsUpdate
+ *
+ * Partial update of mobile push categories; omitted keys are unchanged.
+ */
+export type PushPrefsUpdate = {
+    /**
+     * Ready
+     */
+    ready?: boolean | null;
+    /**
+     * Review
+     */
+    review?: boolean | null;
+    /**
+     * Problems
+     */
+    problems?: boolean | null;
+};
+
+/**
  * ReferralInterstitialResponse
  *
  * Data for the referral landing/interstitial page.
@@ -5791,6 +5910,10 @@ export type SendCompletionEmailRequest = {
      * Cc Admin
      */
     cc_admin?: boolean;
+    /**
+     * Allow Missing Dropbox Link
+     */
+    allow_missing_dropbox_link?: boolean;
 };
 
 /**
@@ -6045,6 +6168,10 @@ export type SongRequestPublic = {
      * Your Vote
      */
     your_vote?: number | null;
+    /**
+     * Request Deleted
+     */
+    request_deleted?: boolean;
 };
 
 /**
@@ -7195,6 +7322,18 @@ export type UploadsCompleteRequest = {
 };
 
 /**
+ * UserCapabilities
+ *
+ * Server-side feature switches the mobile app reads from /me.
+ */
+export type UserCapabilities = {
+    /**
+     * Account Deletion
+     */
+    account_deletion?: boolean;
+};
+
+/**
  * UserDetailResponse
  *
  * Detailed user information for admin view.
@@ -7422,6 +7561,12 @@ export type UserProfileResponse = {
      * Has Session
      */
     has_session: boolean;
+    /**
+     * App User Id
+     */
+    app_user_id?: string | null;
+    capabilities?: UserCapabilities;
+    push_prefs?: PushPrefs;
 };
 
 /**
@@ -7689,6 +7834,39 @@ export type VoteBody = {
      * Direction
      */
     direction: 'up' | 'down';
+    /**
+     * Confirm Delete
+     */
+    confirm_delete?: boolean;
+};
+
+/**
+ * WebLink
+ *
+ * Where the mobile app shows the "buy on the web" link, and its copy (app i18n key).
+ */
+export type WebLink = {
+    show_for: WebLinkShowFor;
+    /**
+     * Copy Key
+     */
+    copy_key: string;
+};
+
+/**
+ * WebLinkShowFor
+ *
+ * Store countries (App Store / Play storefront codes) where the app may link to web checkout.
+ */
+export type WebLinkShowFor = {
+    /**
+     * Ios
+     */
+    ios: Array<string>;
+    /**
+     * Android
+     */
+    android: Array<string>;
 };
 
 /**
@@ -12728,6 +12906,95 @@ export type LogoutApiUsersAuthLogoutPostResponses = {
 
 export type LogoutApiUsersAuthLogoutPostResponse = LogoutApiUsersAuthLogoutPostResponses[keyof LogoutApiUsersAuthLogoutPostResponses];
 
+export type UpdatePushPrefsApiUsersMePushPrefsPatchData = {
+    body: PushPrefsUpdate;
+    path?: never;
+    query?: {
+        /**
+         * Token
+         */
+        token?: string | null;
+    };
+    url: '/api/users/me/push-prefs';
+};
+
+export type UpdatePushPrefsApiUsersMePushPrefsPatchErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdatePushPrefsApiUsersMePushPrefsPatchError = UpdatePushPrefsApiUsersMePushPrefsPatchErrors[keyof UpdatePushPrefsApiUsersMePushPrefsPatchErrors];
+
+export type UpdatePushPrefsApiUsersMePushPrefsPatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: PushPrefs;
+};
+
+export type UpdatePushPrefsApiUsersMePushPrefsPatchResponse = UpdatePushPrefsApiUsersMePushPrefsPatchResponses[keyof UpdatePushPrefsApiUsersMePushPrefsPatchResponses];
+
+export type AccountDeletionPreviewApiUsersMeDeletionPreviewGetData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Token
+         */
+        token?: string | null;
+    };
+    url: '/api/users/me/deletion-preview';
+};
+
+export type AccountDeletionPreviewApiUsersMeDeletionPreviewGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AccountDeletionPreviewApiUsersMeDeletionPreviewGetError = AccountDeletionPreviewApiUsersMeDeletionPreviewGetErrors[keyof AccountDeletionPreviewApiUsersMeDeletionPreviewGetErrors];
+
+export type AccountDeletionPreviewApiUsersMeDeletionPreviewGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type DeleteMyAccountApiUsersMeDeleteData = {
+    /**
+     * Body
+     */
+    body?: DeleteAccountRequest | null;
+    path?: never;
+    query?: {
+        /**
+         * Token
+         */
+        token?: string | null;
+    };
+    url: '/api/users/me';
+};
+
+export type DeleteMyAccountApiUsersMeDeleteErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteMyAccountApiUsersMeDeleteError = DeleteMyAccountApiUsersMeDeleteErrors[keyof DeleteMyAccountApiUsersMeDeleteErrors];
+
+export type DeleteMyAccountApiUsersMeDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
 export type GetCurrentUserApiUsersMeGetData = {
     body?: never;
     headers?: {
@@ -12873,6 +13140,35 @@ export type StripeWebhookApiUsersWebhooksStripePostErrors = {
 export type StripeWebhookApiUsersWebhooksStripePostError = StripeWebhookApiUsersWebhooksStripePostErrors[keyof StripeWebhookApiUsersWebhooksStripePostErrors];
 
 export type StripeWebhookApiUsersWebhooksStripePostResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type RevenuecatWebhookApiUsersWebhooksRevenuecatPostData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/users/webhooks/revenuecat';
+};
+
+export type RevenuecatWebhookApiUsersWebhooksRevenuecatPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RevenuecatWebhookApiUsersWebhooksRevenuecatPostError = RevenuecatWebhookApiUsersWebhooksRevenuecatPostErrors[keyof RevenuecatWebhookApiUsersWebhooksRevenuecatPostErrors];
+
+export type RevenuecatWebhookApiUsersWebhooksRevenuecatPostResponses = {
     /**
      * Successful Response
      */
@@ -16134,6 +16430,66 @@ export type UnsubscribePushApiPushUnsubscribePostResponses = {
 
 export type UnsubscribePushApiPushUnsubscribePostResponse = UnsubscribePushApiPushUnsubscribePostResponses[keyof UnsubscribePushApiPushUnsubscribePostResponses];
 
+export type DeleteExpoTokenApiPushExpoTokenDeleteData = {
+    body: ExpoTokenDeleteRequest;
+    path?: never;
+    query?: {
+        /**
+         * Token
+         */
+        token?: string | null;
+    };
+    url: '/api/push/expo-token';
+};
+
+export type DeleteExpoTokenApiPushExpoTokenDeleteErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteExpoTokenApiPushExpoTokenDeleteError = DeleteExpoTokenApiPushExpoTokenDeleteErrors[keyof DeleteExpoTokenApiPushExpoTokenDeleteErrors];
+
+export type DeleteExpoTokenApiPushExpoTokenDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteExpoTokenApiPushExpoTokenDeleteResponse = DeleteExpoTokenApiPushExpoTokenDeleteResponses[keyof DeleteExpoTokenApiPushExpoTokenDeleteResponses];
+
+export type RegisterExpoTokenApiPushExpoTokenPostData = {
+    body: ExpoTokenRequest;
+    path?: never;
+    query?: {
+        /**
+         * Token
+         */
+        token?: string | null;
+    };
+    url: '/api/push/expo-token';
+};
+
+export type RegisterExpoTokenApiPushExpoTokenPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RegisterExpoTokenApiPushExpoTokenPostError = RegisterExpoTokenApiPushExpoTokenPostErrors[keyof RegisterExpoTokenApiPushExpoTokenPostErrors];
+
+export type RegisterExpoTokenApiPushExpoTokenPostResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type RegisterExpoTokenApiPushExpoTokenPostResponse = RegisterExpoTokenApiPushExpoTokenPostResponses[keyof RegisterExpoTokenApiPushExpoTokenPostResponses];
+
 export type ListSubscriptionsApiPushSubscriptionsGetData = {
     body?: never;
     path?: never;
@@ -16923,6 +17279,76 @@ export type ShowCreditApiKjboxCreditsShowCreditPostResponses = {
 };
 
 export type ShowCreditApiKjboxCreditsShowCreditPostResponse = ShowCreditApiKjboxCreditsShowCreditPostResponses[keyof ShowCreditApiKjboxCreditsShowCreditPostResponses];
+
+export type ListAccountDeletionsApiKjboxAccountDeletionsGetData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Kjbox-Secret
+         */
+        'x-kjbox-secret'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Since
+         */
+        since?: string | null;
+    };
+    url: '/api/kjbox/account-deletions';
+};
+
+export type ListAccountDeletionsApiKjboxAccountDeletionsGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListAccountDeletionsApiKjboxAccountDeletionsGetError = ListAccountDeletionsApiKjboxAccountDeletionsGetErrors[keyof ListAccountDeletionsApiKjboxAccountDeletionsGetErrors];
+
+export type ListAccountDeletionsApiKjboxAccountDeletionsGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type AckAccountDeletionApiKjboxAccountDeletionsEntryIdAckPostData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Kjbox-Secret
+         */
+        'x-kjbox-secret'?: string | null;
+    };
+    path: {
+        /**
+         * Entry Id
+         */
+        entry_id: string;
+    };
+    query?: never;
+    url: '/api/kjbox/account-deletions/{entry_id}/ack';
+};
+
+export type AckAccountDeletionApiKjboxAccountDeletionsEntryIdAckPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AckAccountDeletionApiKjboxAccountDeletionsEntryIdAckPostError = AckAccountDeletionApiKjboxAccountDeletionsEntryIdAckPostErrors[keyof AckAccountDeletionApiKjboxAccountDeletionsEntryIdAckPostErrors];
+
+export type AckAccountDeletionApiKjboxAccountDeletionsEntryIdAckPostResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type AckAccountDeletionApiKjboxAccountDeletionsEntryIdAckPostResponse = AckAccountDeletionApiKjboxAccountDeletionsEntryIdAckPostResponses[keyof AckAccountDeletionApiKjboxAccountDeletionsEntryIdAckPostResponses];
 
 export type ReviewLinkApiKjboxJobsJobIdReviewLinkPostData = {
     body: ReviewLinkRequest;

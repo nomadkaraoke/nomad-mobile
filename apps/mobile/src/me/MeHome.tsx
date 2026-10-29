@@ -3,6 +3,7 @@ import { Text } from '@nomad/ui';
 import { router, type Href } from 'expo-router';
 import { Pressable } from 'react-native';
 
+import { GetMadeShelf } from './GetMadeShelf';
 import { GoTosShelf } from './GoTosShelf';
 import { ProfileSummaryCard } from './ProfileSummaryCard';
 import { SetlistsShelf } from './SetlistsShelf';
@@ -12,19 +13,19 @@ import { useStatsLog } from './useStatsLog';
 
 /**
  * The signed-in top of Me: profile card, shelves, All your songs, stats. Phase 4c's "Were these you?" row goes
- * between the card and the go-tos; Phase 4b's "Get this made" shelf goes after the setlists.
+ * between the card and the go-tos; Get this made (4b) comes after the setlists.
  */
 export function MeHome() {
   const t = useTranslations('me.home');
-  const { items } = useLibrary();
+  const { items, pendingKeys } = useLibrary();
   const log = useStatsLog();
   return (
     <>
       <ProfileSummaryCard items={items} />
       {/* 4c slot: "Were these you?" (nothing yet) */}
-      <GoTosShelf items={items} />
+      <GoTosShelf items={items} pending={pendingKeys} />
       <SetlistsShelf />
-      {/* 4b slot: "Get this made" shelf (nothing yet) */}
+      <GetMadeShelf />
       <Pressable
         testID="me-all-songs"
         accessibilityRole="button"

@@ -136,7 +136,19 @@
     "save": "Mentés a Dalaim közé",
     "saved": "Mentve",
     "addToSetlist": "Hozzáadás a dallistához",
-    "markSung": "Megjelölés elénekeltként"
+    "markSung": "Megjelölés elénekeltként",
+    "crowd": {
+      "bucket": {
+        "alto": "Az alt énekesek {share, number, percent}-a találta kényelmesnek a hangnemet",
+        "baritone": "A bariton énekesek {share, number, percent}-a találta kényelmesnek a hangnemet",
+        "bass": "A basszus énekesek {share, number, percent}-a találta kényelmesnek a hangnemet",
+        "mezzo": "A mezzoszoprán énekesek {share, number, percent}-a találta kényelmesnek a hangnemet",
+        "soprano": "A szoprán énekesek {share, number, percent}-a találta kényelmesnek a hangnemet",
+        "tenor": "A tenor énekesek {share, number, percent}-a találta kényelmesnek a hangnemet"
+      },
+      "mostlyHigh": "A legtöbb énekes kissé magasnak találta",
+      "overall": "{singers, plural, one {# énekesből {comfortable, number}} other {# énekesből {comfortable, number}}} találta kényelmesnek a hangnemet"
+    }
   },
   "tabs": {
     "discover": "Felfedezés",
@@ -986,7 +998,8 @@
       "known_song": "Ezt a dalt ismered",
       "similar_artist": "Hasonló, mint {artist}",
       "crowd_pleaser": "Közönségkedvenc",
-      "make_it": "Még nincs karaoke verzió"
+      "make_it": "Még nincs karaoke verzió",
+      "sung_before": "A tuti befutód"
     },
     "section": {
       "all": "Neked ajánlott dalok",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Még nincs karaoke verzió: koppints rá a sajátod elkészítéséhez",
       "songs_you_know": "Dalok, amiket ismersz",
       "songs_you_knowReason": "Olyan ismert dalok, amelyekből már elérhető karaoke verzió",
-      "make_it": "Készítsd el"
+      "make_it": "Készítsd el",
+      "go_tosReason": "Dalok, amikhez mindig visszatérsz",
+      "go_tos": "A tuti befutóid"
     },
     "signInForPicks": "Jelentkezz be az ajánlatokért",
     "signInForPicksBody": "Mondd el, mit szeretsz, és mi olyan karaoke dalokat választunk, amiket imádni fogsz énekelni.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Csatlakoztasd a zenéidet",
       "profileTitle": "Zenei profilod",
       "voiceHint": "Keress a hangodhoz illő dalokat",
-      "voiceRange": "Hangterjedelem: {range}"
+      "voiceRange": "Hangterjedelem: {range}",
+      "known": "{count, plural, one {# ismert dal} other {# ismert dal}}"
     },
     "songs": {
       "addPast": "Már énekelt dalaim hozzáadása",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Dal vagy előadó",
       "sortLabel": "Rendezés",
       "timesSungLabel": "{count, plural, one {# alkalommal elénekelve} other {# alkalommal elénekelve}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# szavazat a táblán} other {# szavazat a táblán}}",
+      "dismiss": "Dal elrejtése",
+      "empty": "Jelenleg nincs mit elkészíteni. Azok a mentett vagy elénekelt dalaid, amelyeknek nincs karaoke verziója, itt fognak megjelenni.",
+      "hiddenToast": "Elrejtve a „Készíttesd el” listáról",
+      "intro": "Dalok, amiket elénekelnél, de még nincs belőlük karaoke verzió. Készíts egyet most, vagy kérd ingyen a táblánkon.",
+      "offline": "Offline vagy. A készítéshez és a kéréshez internetkapcsolat szükséges.",
+      "request": "Kérd ingyen",
+      "requestError": "Nem sikerült elküldeni a kérést. Próbáld újra.",
+      "requested": "{count, plural, one {Kérve · # szavazat} other {Kérve · # szavazat}}",
+      "title": "Készíttesd el",
+      "why": {
+        "imported": "A zenéidből",
+        "recommended": "Neked ajánlott",
+        "sung": "Ezt énekelted",
+        "saved": "Mentve",
+        "voice": "A hangmunkamenetedből"
+      },
+      "makeIt": "Készítsd el",
+      "undo": "Visszavonás",
+      "loadError": "Most nem sikerült betölteni ezeket a dalokat.",
+      "retry": "Próbáld újra",
+      "limit": {
+        "submission": "Elhasználtad a mai ingyenes kérésedet. Gyere vissza holnap, hogy újat kérhess.",
+        "voteUsed": "Elhasználtad a mai ingyenes szavazatodat. Gyere vissza holnap, ha újra szavaznál."
+      }
     }
   }
 }

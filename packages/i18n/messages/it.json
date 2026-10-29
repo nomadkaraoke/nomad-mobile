@@ -136,7 +136,19 @@
     "save": "Salva nei Miei brani",
     "saved": "Salvato",
     "addToSetlist": "Aggiungi alla scaletta",
-    "markSung": "Segna come cantata"
+    "markSung": "Segna come cantata",
+    "crowd": {
+      "bucket": {
+        "alto": "Il {share, number, percent} dei contralti ha trovato la tonalità comoda",
+        "baritone": "Il {share, number, percent} dei baritoni ha trovato la tonalità comoda",
+        "bass": "Il {share, number, percent} dei bassi ha trovato la tonalità comoda",
+        "mezzo": "Il {share, number, percent} dei mezzosoprani ha trovato la tonalità comoda",
+        "soprano": "Il {share, number, percent} dei soprani ha trovato la tonalità comoda",
+        "tenor": "Il {share, number, percent} dei tenori ha trovato la tonalità comoda"
+      },
+      "mostlyHigh": "La maggior parte dei cantanti l'ha trovata un po' alta",
+      "overall": "{comfortable, number} su {singers, plural, one {# cantante} other {# cantanti}} hanno trovato la tonalità comoda"
+    }
   },
   "tabs": {
     "discover": "Scopri",
@@ -986,7 +998,8 @@
       "known_song": "Questo lo conosci",
       "similar_artist": "Simile a {artist}",
       "crowd_pleaser": "Piace al pubblico",
-      "make_it": "Nessuna versione karaoke per ora"
+      "make_it": "Nessuna versione karaoke per ora",
+      "sung_before": "Il tuo cavallo di battaglia"
     },
     "section": {
       "all": "I tuoi consigliati",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Non c'è ancora una versione karaoke: toccane uno per crearne una tua",
       "songs_you_know": "Brani che conosci",
       "songs_you_knowReason": "Brani che conosci già disponibili in karaoke",
-      "make_it": "Crea"
+      "make_it": "Crea",
+      "go_tosReason": "I brani su cui ritorni sempre",
+      "go_tos": "I tuoi cavalli di battaglia"
     },
     "signInForPicks": "Accedi per ricevere i tuoi brani consigliati",
     "signInForPicksBody": "Dicci cosa ti piace e sceglieremo i brani karaoke che adorerai cantare.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Connetti la tua musica",
       "profileTitle": "Il tuo profilo musicale",
       "voiceHint": "Trova brani adatti alla tua voce",
-      "voiceRange": "Estensione {range}"
+      "voiceRange": "Estensione {range}",
+      "known": "{count, plural, one {# brano conosciuto} other {# brani conosciuti}}"
     },
     "songs": {
       "addPast": "Aggiungi brani che ho cantato",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Canzone o artista",
       "sortLabel": "Ordina",
       "timesSungLabel": "{count, plural, one {Cantata # volta} other {Cantata # volte}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# voto sulla bacheca} other {# voti sulla bacheca}}",
+      "dismiss": "Nascondi questo brano",
+      "empty": "Niente da creare al momento. I brani che salvi o canti che non hanno una versione karaoke appariranno qui.",
+      "hiddenToast": "Nascosto da Fallo creare",
+      "intro": "Brani che vorresti cantare che non hanno ancora una versione karaoke. Creane uno ora, oppure richiedilo gratis sulla nostra bacheca.",
+      "offline": "Sei offline. Per creare o richiedere brani serve una connessione.",
+      "request": "Richiedi gratis",
+      "requestError": "Impossibile inviare la richiesta. Riprova.",
+      "requested": "{count, plural, one {Richiesto · # voto} other {Richiesto · # voti}}",
+      "title": "Fallo creare",
+      "why": {
+        "imported": "Dalla tua musica",
+        "recommended": "Scelto per te",
+        "sung": "L'hai cantato",
+        "saved": "Salvato",
+        "voice": "Dalla tua sessione vocale"
+      },
+      "makeIt": "Crea",
+      "undo": "Annulla",
+      "loadError": "Impossibile caricare queste canzoni al momento.",
+      "retry": "Riprova",
+      "limit": {
+        "submission": "Hai effettuato la tua richiesta gratuita di oggi. Torna domani per richiederne un'altra.",
+        "voteUsed": "Hai usato il tuo voto gratuito di oggi. Torna domani per richiederne un altro."
+      }
     }
   }
 }

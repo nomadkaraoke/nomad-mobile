@@ -136,7 +136,19 @@
     "save": "マイソングに保存",
     "saved": "保存済み",
     "addToSetlist": "セットリストに追加",
-    "markSung": "歌った曲として記録"
+    "markSung": "歌った曲として記録",
+    "crowd": {
+      "bucket": {
+        "alto": "アルトの{share, number, percent}が「ちょうどいいキー」と回答しました",
+        "baritone": "バリトンの{share, number, percent}が「ちょうどいいキー」と回答しました",
+        "bass": "バスの{share, number, percent}が「ちょうどいいキー」と回答しました",
+        "mezzo": "メゾソプラノの{share, number, percent}が「ちょうどいいキー」と回答しました",
+        "soprano": "ソプラノの{share, number, percent}が「ちょうどいいキー」と回答しました",
+        "tenor": "テノールの{share, number, percent}が「ちょうどいいキー」と回答しました"
+      },
+      "mostlyHigh": "ほとんどの人が少し高めだと感じました",
+      "overall": "{singers, plural, one {#人} other {#人}}中{comfortable, number}人が「ちょうどいいキー」と回答しました"
+    }
   },
   "tabs": {
     "discover": "見つける",
@@ -986,7 +998,8 @@
       "known_song": "知っている曲",
       "similar_artist": "{artist}が好きな人向け",
       "crowd_pleaser": "盛り上がる",
-      "make_it": "まだカラオケ音源がありません"
+      "make_it": "まだカラオケ音源がありません",
+      "sung_before": "いつもの定番曲"
     },
     "section": {
       "all": "あなたへのおすすめ",
@@ -1000,7 +1013,9 @@
       "make_itReason": "カラオケ版がまだありません: タップして自分で作成",
       "songs_you_know": "知っている曲",
       "songs_you_knowReason": "あなたが知っていて、カラオケ版もある曲",
-      "make_it": "作成する"
+      "make_it": "作成する",
+      "go_tosReason": "何度も歌いたくなるお気に入りの曲",
+      "go_tos": "定番曲"
     },
     "signInForPicks": "サインインしておすすめを表示",
     "signInForPicksBody": "好みを教えていただければ、歌いたくなるカラオケ曲をお選びします。",
@@ -1977,7 +1992,8 @@
       "connectCta": "音楽を連携する",
       "profileTitle": "あなたの音楽プロフィール",
       "voiceHint": "あなたの声に合う曲を見つける",
-      "voiceRange": "音域：{range}"
+      "voiceRange": "音域：{range}",
+      "known": "{count, plural, one {#曲を把握} other {#曲を把握}}"
     },
     "songs": {
       "addPast": "歌った曲を追加",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "曲名またはアーティスト名",
       "sortLabel": "並べ替え",
       "timesSungLabel": "{count, plural, one {#回歌唱} other {#回歌唱}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {ボードで#票獲得中} other {ボードで#票獲得中}}",
+      "dismiss": "この曲を非表示にする",
+      "empty": "現在作成できる曲はありません。保存した曲や歌った曲のうち、カラオケ音源がないものがここに表示されます。",
+      "hiddenToast": "「作成リクエスト」から非表示にしました",
+      "intro": "あなたが歌いたい曲のうち、まだカラオケ音源がない曲です。今すぐ作成するか、ボードから無料でリクエストできます。",
+      "offline": "オフラインです。作成やリクエストには接続が必要です。",
+      "request": "無料でリクエスト",
+      "requestError": "リクエストを送信できませんでした。もう一度お試しください。",
+      "requested": "{count, plural, one {リクエスト済み · #票} other {リクエスト済み · #票}}",
+      "title": "作成リクエスト",
+      "why": {
+        "imported": "ライブラリの楽曲から",
+        "recommended": "あなたへのおすすめ",
+        "sung": "過去に歌った曲",
+        "saved": "保存済み",
+        "voice": "ボイスセッションから"
+      },
+      "makeIt": "作成する",
+      "undo": "元に戻す",
+      "loadError": "現在、これらの曲を読み込めません。",
+      "retry": "もう一度試す",
+      "limit": {
+        "submission": "本日の無料リクエストは送信済みです。また明日リクエストしてくださいね。",
+        "voteUsed": "本日の無料投票は使用済みです。また明日投票してくださいね。"
+      }
     }
   }
 }

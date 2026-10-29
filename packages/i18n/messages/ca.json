@@ -136,7 +136,19 @@
     "save": "Desa a Les meves cançons",
     "saved": "Desat",
     "addToSetlist": "Afegeix al repertori",
-    "markSung": "Marca com a cantada"
+    "markSung": "Marca com a cantada",
+    "crowd": {
+      "bucket": {
+        "alto": "El {share, number, percent} de les contralts van trobar el to còmode",
+        "baritone": "El {share, number, percent} dels barítons van trobar el to còmode",
+        "bass": "El {share, number, percent} dels baixos van trobar el to còmode",
+        "mezzo": "El {share, number, percent} de les mezzosopranos van trobar el to còmode",
+        "soprano": "El {share, number, percent} de les sopranos van trobar el to còmode",
+        "tenor": "El {share, number, percent} dels tenors van trobar el to còmode"
+      },
+      "mostlyHigh": "La majoria de cantants el van trobar una mica alt",
+      "overall": "{comfortable, number} de {singers, plural, one {# cantant} other {# cantants}} van trobar el to còmode"
+    }
   },
   "tabs": {
     "discover": "Descobreix",
@@ -986,7 +998,8 @@
       "known_song": "Coneixes aquest tema",
       "similar_artist": "Semblant a {artist}",
       "crowd_pleaser": "Agrada al públic",
-      "make_it": "Encara no hi ha cap versió de karaoke"
+      "make_it": "Encara no hi ha cap versió de karaoke",
+      "sung_before": "El teu clàssic"
     },
     "section": {
       "all": "Les teves seleccions",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Encara no hi ha versió de karaoke: toca'n una per crear la teva",
       "songs_you_know": "Cançons que coneixes",
       "songs_you_knowReason": "Cançons que ja coneixes i que tenen versió de karaoke",
-      "make_it": "Crea'l"
+      "make_it": "Crea'l",
+      "go_tosReason": "Cançons a les quals sempre tornes",
+      "go_tos": "Els teus clàssics"
     },
     "signInForPicks": "Inicia la sessió per veure les teves seleccions",
     "signInForPicksBody": "Explica'ns què t'agrada i triarem cançons de karaoke que t'encantarà cantar.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Connecta la teva música",
       "profileTitle": "El teu perfil musical",
       "voiceHint": "Troba cançons que s'adaptin a la teva veu",
-      "voiceRange": "Tessitura: {range}"
+      "voiceRange": "Tessitura: {range}",
+      "known": "{count, plural, one {# cançó coneguda} other {# cançons conegudes}}"
     },
     "songs": {
       "addPast": "Afegeix cançons que he cantat",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Cançó o artista",
       "sortLabel": "Ordena",
       "timesSungLabel": "{count, plural, one {Cantada # vegada} other {Cantada # vegades}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# vot al tauler} other {# vots al tauler}}",
+      "dismiss": "Amaga aquesta cançó",
+      "empty": "No hi ha res per crear ara mateix. Les cançons que desis o cantis que no tinguin versió de karaoke apareixeran aquí.",
+      "hiddenToast": "S'ha amagat de Fes-la realitat",
+      "intro": "Cançons que cantaries i que encara no tenen versió de karaoke. Crea'n una ara o demana-la de franc al nostre tauler.",
+      "offline": "No tens connexió. Cal connexió per crear i fer peticions.",
+      "request": "Demana-la de franc",
+      "requestError": "No s'ha pogut enviar la petició. Torna-ho a provar.",
+      "requested": "{count, plural, one {Demanada · # vot} other {Demanada · # vots}}",
+      "title": "Fes-la realitat",
+      "why": {
+        "imported": "De la teva música",
+        "recommended": "Triada per a tu",
+        "sung": "La vas cantar",
+        "saved": "Desat",
+        "voice": "De la teva sessió de veu"
+      },
+      "makeIt": "Crea'l",
+      "undo": "Desfer",
+      "loadError": "No s'han pogut carregar aquestes cançons ara mateix.",
+      "retry": "Torna-ho a provar",
+      "limit": {
+        "submission": "Ja has fet la teva petició gratuïta d'avui. Torna demà per demanar-ne una altra.",
+        "voteUsed": "Ja has fet servir el teu vot gratuït d'avui. Torna demà per votar-ne una altra."
+      }
     }
   }
 }

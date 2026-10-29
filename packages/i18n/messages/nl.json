@@ -136,7 +136,19 @@
     "save": "Opslaan in Mijn nummers",
     "saved": "Opgeslagen",
     "addToSetlist": "Toevoegen aan setlist",
-    "markSung": "Markeren als gezongen"
+    "markSung": "Markeren als gezongen",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} van de alten vond de toonsoort prettig",
+        "baritone": "{share, number, percent} van de baritons vond de toonsoort prettig",
+        "bass": "{share, number, percent} van de bassen vond de toonsoort prettig",
+        "mezzo": "{share, number, percent} van de mezzosopranen vond de toonsoort prettig",
+        "soprano": "{share, number, percent} van de sopranen vond de toonsoort prettig",
+        "tenor": "{share, number, percent} van de tenoren vond de toonsoort prettig"
+      },
+      "mostlyHigh": "De meeste zangers vonden het aan de hoge kant",
+      "overall": "{comfortable, number} van de {singers, plural, one {# zanger} other {# zangers}} vond de toonsoort prettig"
+    }
   },
   "tabs": {
     "discover": "Ontdekken",
@@ -986,7 +998,8 @@
       "known_song": "Dit nummer ken je",
       "similar_artist": "Vergelijkbaar met {artist}",
       "crowd_pleaser": "Publiekslieveling",
-      "make_it": "Nog geen karaokeversie"
+      "make_it": "Nog geen karaokeversie",
+      "sung_before": "Je favoriet"
     },
     "section": {
       "all": "Jouw selecties",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Nog geen karaokeversie: tik op een nummer om er zelf een te maken",
       "songs_you_know": "Nummers die je kent",
       "songs_you_knowReason": "Nummers die je al kent met een karaokeversie",
-      "make_it": "Maken"
+      "make_it": "Maken",
+      "go_tosReason": "Nummers waar je steeds naar terugkeert",
+      "go_tos": "Je favorieten"
     },
     "signInForPicks": "Log in om je selecties te zien",
     "signInForPicksBody": "Vertel ons wat je leuk vindt en we kiezen karaokenummers die je met plezier zingt.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Verbind je muziek",
       "profileTitle": "Je muziekprofiel",
       "voiceHint": "Vind nummers die bij je stem passen",
-      "voiceRange": "Bereik {range}"
+      "voiceRange": "Bereik {range}",
+      "known": "{count, plural, one {# nummer bekend} other {# nummers bekend}}"
     },
     "songs": {
       "addPast": "Nummers toevoegen die ik heb gezongen",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Nummer of artiest",
       "sortLabel": "Sorteer",
       "timesSungLabel": "{count, plural, one {# keer gezongen} other {# keer gezongen}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# stem op het bord} other {# stemmen op het bord}}",
+      "dismiss": "Dit nummer verbergen",
+      "empty": "Er is nu niets om te maken. Nummers die je opslaat of zingt en die nog geen karaokeversie hebben, verschijnen hier.",
+      "hiddenToast": "Verborgen uit Laat dit maken",
+      "intro": "Nummers die je graag zou zingen en die nog geen karaokeversie hebben. Maak er nu een, of vraag hem gratis aan op ons bord.",
+      "offline": "Je bent offline. Voor maken en aanvragen is een verbinding nodig.",
+      "request": "Gratis aanvragen",
+      "requestError": "Kon de aanvraag niet versturen. Probeer het opnieuw.",
+      "requested": "{count, plural, one {Aangevraagd · # stem} other {Aangevraagd · # stemmen}}",
+      "title": "Laat dit maken",
+      "why": {
+        "imported": "Uit je muziek",
+        "recommended": "Voor jou gekozen",
+        "sung": "Je hebt dit gezongen",
+        "saved": "Opgeslagen",
+        "voice": "Van je stemsessie"
+      },
+      "makeIt": "Maken",
+      "undo": "Ongedaan maken",
+      "loadError": "Kon deze nummers op dit moment niet laden.",
+      "retry": "Probeer opnieuw",
+      "limit": {
+        "submission": "Je hebt je gratis aanvraag voor vandaag al ingediend. Kom morgen terug om er nog een aan te vragen.",
+        "voteUsed": "Je hebt je gratis stem voor vandaag al gebruikt. Kom morgen terug om nog eens te stemmen."
+      }
     }
   }
 }

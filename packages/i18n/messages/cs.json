@@ -136,7 +136,19 @@
     "save": "Uložit do Mých písniček",
     "saved": "Uloženo",
     "addToSetlist": "Přidat do setlistu",
-    "markSung": "Označit jako zazpívané"
+    "markSung": "Označit jako zazpívané",
+    "crowd": {
+      "bucket": {
+        "alto": "Pro {share, number, percent} altů byla tónina pohodlná",
+        "baritone": "Pro {share, number, percent} barytonů byla tónina pohodlná",
+        "bass": "Pro {share, number, percent} basů byla tónina pohodlná",
+        "mezzo": "Pro {share, number, percent} mezzosopránů byla tónina pohodlná",
+        "soprano": "Pro {share, number, percent} sopránů byla tónina pohodlná",
+        "tenor": "Pro {share, number, percent} tenorů byla tónina pohodlná"
+      },
+      "mostlyHigh": "Většině zpěváků přišla tónina trochu moc vysoko",
+      "overall": "Pro {comfortable, number} z {singers, plural, one {# zpěváka} few {# zpěváků} other {# zpěváků}} byla tato tónina pohodlná"
+    }
   },
   "tabs": {
     "discover": "Objevovat",
@@ -986,7 +998,8 @@
       "known_song": "Tohle znáš",
       "similar_artist": "Podobné jako {artist}",
       "crowd_pleaser": "Líbí se davu",
-      "make_it": "Zatím bez karaoke verze"
+      "make_it": "Zatím bez karaoke verze",
+      "sung_before": "Tvoje jistota"
     },
     "section": {
       "all": "Tvoje doporučení",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Zatím bez karaoke verze: klepnutím si vytvoř vlastní",
       "songs_you_know": "Skladby, které znáš",
       "songs_you_knowReason": "Skladby, které už znáš a mají karaoke verzi",
-      "make_it": "Vytvořit"
+      "make_it": "Vytvořit",
+      "go_tosReason": "Písničky, ke kterým se pořád vracíš",
+      "go_tos": "Tvoje jistoty"
     },
     "signInForPicks": "Přihlas se a získej doporučení",
     "signInForPicksBody": "Řekni nám, co máš rád, a my ti vybereme karaoke skladby, které budeš milovat zpívat.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Připoj svou hudbu",
       "profileTitle": "Tvůj hudební profil",
       "voiceHint": "Najdi písničky, které sedí tvému hlasu",
-      "voiceRange": "Rozsah {range}"
+      "voiceRange": "Rozsah {range}",
+      "known": "{count, plural, one {# známá písnička} few {# známé písničky} other {# známých písniček}}"
     },
     "songs": {
       "addPast": "Přidat odzpívané písničky",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Písnička nebo interpret",
       "sortLabel": "Seřadit",
       "timesSungLabel": "{count, plural, one {Zpíváno #krát} few {Zpíváno #krát} other {Zpíváno #krát}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# hlas na nástěnce} few {# hlasy na nástěnce} many {# hlasu na nástěnce} other {# hlasů na nástěnce}}",
+      "dismiss": "Skrýt tuto skladbu",
+      "empty": "Zatím tu nic k vytvoření není. Tady se objeví skladby, které si uložíš nebo zazpíváš a které ještě nemají karaoke verzi.",
+      "hiddenToast": "Skryto ze sekce Nechat vytvořit",
+      "intro": "Skladby, které chceš zpívat, ale ještě nemají karaoke verzi. Vytvoř si ji hned, nebo o ni zdarma požádej na naší nástěnce.",
+      "offline": "Jsi offline. Vytváření i žádosti vyžadují připojení.",
+      "request": "Požádat zdarma",
+      "requestError": "Žádost se nepodařilo odeslat. Zkus to znovu.",
+      "requested": "{count, plural, one {Zažádáno · # hlas} few {Zažádáno · # hlasy} many {Zažádáno · # hlasu} other {Zažádáno · # hlasů}}",
+      "title": "Nechat vytvořit",
+      "why": {
+        "imported": "Z tvé hudby",
+        "recommended": "Vybráno pro tebe",
+        "sung": "Už jsi to zpíval/a",
+        "saved": "Uloženo",
+        "voice": "Z tvé hlasové relace"
+      },
+      "makeIt": "Vytvořit",
+      "undo": "Zpět",
+      "loadError": "Tyto písničky se právě teď nepodařilo načíst.",
+      "retry": "Zkusit znovu",
+      "limit": {
+        "submission": "Dnešní bezplatnou žádost už máš vyčerpanou. Vrať se zítra a požádej o další.",
+        "voteUsed": "Dnešní bezplatný hlas už máš vyčerpaný. Vrať se zítra a hlasuj znovu."
+      }
     }
   }
 }

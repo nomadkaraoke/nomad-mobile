@@ -6,7 +6,8 @@ import { Linking } from 'react-native';
 
 import { importErrorKey } from './importErrors';
 import { LB_RETURN, LB_RETURN_URL, lbReturnFromUrl, type LbReturn } from './lbReturn';
-import { SERVICES_SUMMARY_KEY } from './queries';
+import { currentUserKey } from '../../me/account';
+import { SERVICES_SUMMARY_KEY, servicesSummaryKeyFor } from './queries';
 
 export { LB_RETURN_URL } from './lbReturn';
 
@@ -57,7 +58,7 @@ export function useListenBrainzOAuth({ onConnected }: { onConnected: () => void 
         let linked = false;
         try {
           const summary = await queryClient.fetchQuery({
-            queryKey: SERVICES_SUMMARY_KEY,
+            queryKey: servicesSummaryKeyFor(currentUserKey()),
             queryFn: getServicesSummary,
             staleTime: 0,
           });

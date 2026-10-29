@@ -291,7 +291,7 @@ export type AllArtistsResponse = {
     /**
      * Artists
      */
-    artists: Array<UserArtistResponse>;
+    artists: Array<BackendApiRoutesMyDataUserArtistResponse>;
     /**
      * Total
      */
@@ -1548,6 +1548,46 @@ export type FeedbackSongsResponse = {
      * Songs
      */
     songs: Array<FeedbackSong>;
+};
+
+/**
+ * GetMadeItem
+ */
+export type GetMadeItem = {
+    /**
+     * Key
+     */
+    key: string;
+    /**
+     * Song Key
+     */
+    song_key?: string | null;
+    /**
+     * Artist
+     */
+    artist: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Why
+     */
+    why: 'saved' | 'sung' | 'imported' | 'voice' | 'recommended';
+    /**
+     * Weight
+     */
+    weight: number;
+};
+
+/**
+ * GetMadeResponse
+ */
+export type GetMadeResponse = {
+    /**
+     * Items
+     */
+    items: Array<GetMadeItem>;
 };
 
 /**
@@ -3168,6 +3208,7 @@ export type RecSong = {
     karaoke: RecKaraoke;
     facets: RecFacets;
     fit?: RecFit | null;
+    crowd?: SongCrowd | null;
 };
 
 /**
@@ -3476,31 +3517,31 @@ export type ServiceStats = {
  *
  * Summary of a connected music service.
  */
-export type BackendModelsAdminServiceSummary = {
+export type ServiceSummary = {
     /**
-     * Service Type
+     * Connected
      */
-    service_type: string;
+    connected: boolean;
     /**
-     * Service Username
+     * Username
      */
-    service_username: string;
-    /**
-     * Sync Status
-     */
-    sync_status: string;
-    /**
-     * Last Sync At
-     */
-    last_sync_at: string | null;
+    username?: string | null;
     /**
      * Tracks Synced
      */
-    tracks_synced: number;
+    tracks_synced?: number | null;
     /**
-     * Sync Error
+     * Songs Synced
      */
-    sync_error: string | null;
+    songs_synced?: number | null;
+    /**
+     * Artists Synced
+     */
+    artists_synced?: number | null;
+    /**
+     * Last Sync At
+     */
+    last_sync_at?: string | null;
 };
 
 /**
@@ -3863,6 +3904,50 @@ export type SmartArtistRequest = {
 };
 
 /**
+ * SongCrowd
+ *
+ * How the crowd found a song, thresholded server-side: raw counts below the minimums never leave.
+ *
+ * The overall fields are null below ``CROWD_MIN_SINGERS`` key answers; the bucket fields are null
+ * unless the viewer has a bucket with at least ``CROWD_MIN_BUCKET`` answers;
+ * ``crowd_pleaser_share`` is null below ``CROWD_MIN_SINGERS`` crowd-pleaser answers (R17).
+ */
+export type SongCrowd = {
+    /**
+     * Singers
+     */
+    singers?: number | null;
+    /**
+     * Comfortable Share
+     */
+    comfortable_share?: number | null;
+    /**
+     * Too High Share
+     */
+    too_high_share?: number | null;
+    /**
+     * Too Low Share
+     */
+    too_low_share?: number | null;
+    /**
+     * Bucket
+     */
+    bucket?: string | null;
+    /**
+     * Bucket Singers
+     */
+    bucket_singers?: number | null;
+    /**
+     * Bucket Comfortable Share
+     */
+    bucket_comfortable_share?: number | null;
+    /**
+     * Crowd Pleaser Share
+     */
+    crowd_pleaser_share?: number | null;
+};
+
+/**
  * SongFacets
  */
 export type SongFacets = {
@@ -4095,6 +4180,10 @@ export type SourcesSummaryResponse = {
      */
     sources: Array<SourceSummary>;
     capabilities: Capabilities;
+    /**
+     * Known Songs
+     */
+    known_songs?: number;
 };
 
 /**
@@ -4779,7 +4868,7 @@ export type UpgradeGuestResponse = {
  *
  * Artist from user's listening history.
  */
-export type BackendApiRoutesRecommendationsUserArtistResponse = {
+export type UserArtistResponse = {
     /**
      * Id
      */
@@ -4819,7 +4908,7 @@ export type UserArtistsResponse = {
     /**
      * Artists
      */
-    artists: Array<BackendApiRoutesRecommendationsUserArtistResponse>;
+    artists: Array<UserArtistResponse>;
     /**
      * Total
      */
@@ -5431,38 +5520,6 @@ export type YouTubeMusicImportResponse = {
 };
 
 /**
- * ServiceSummary
- *
- * Summary of a connected music service.
- */
-export type ServiceSummary = {
-    /**
-     * Connected
-     */
-    connected: boolean;
-    /**
-     * Username
-     */
-    username?: string | null;
-    /**
-     * Tracks Synced
-     */
-    tracks_synced?: number | null;
-    /**
-     * Songs Synced
-     */
-    songs_synced?: number | null;
-    /**
-     * Artists Synced
-     */
-    artists_synced?: number | null;
-    /**
-     * Last Sync At
-     */
-    last_sync_at?: string | null;
-};
-
-/**
  * UserArtistResponse
  *
  * An artist from user's data with merged source information.
@@ -5470,7 +5527,7 @@ export type ServiceSummary = {
  * MBID-first: MusicBrainz ID is the primary identifier when available.
  * Spotify ID is optional enrichment for images and external links.
  */
-export type UserArtistResponse = {
+export type BackendApiRoutesMyDataUserArtistResponse = {
     /**
      * Mbid
      */
@@ -5527,6 +5584,38 @@ export type UserArtistResponse = {
      * Affinity
      */
     affinity?: 'love' | 'like' | 'occasionally' | null;
+};
+
+/**
+ * ServiceSummary
+ *
+ * Summary of a connected music service.
+ */
+export type BackendModelsAdminServiceSummary = {
+    /**
+     * Service Type
+     */
+    service_type: string;
+    /**
+     * Service Username
+     */
+    service_username: string;
+    /**
+     * Sync Status
+     */
+    sync_status: string;
+    /**
+     * Last Sync At
+     */
+    last_sync_at: string | null;
+    /**
+     * Tracks Synced
+     */
+    tracks_synced: number;
+    /**
+     * Sync Error
+     */
+    sync_error: string | null;
 };
 
 /**
@@ -7148,6 +7237,36 @@ export type LoveSongApiMySongsSongKeyLovePostResponses = {
 
 export type LoveSongApiMySongsSongKeyLovePostResponse = LoveSongApiMySongsSongKeyLovePostResponses[keyof LoveSongApiMySongsSongKeyLovePostResponses];
 
+export type SongCrowdApiSongsSongKeyCrowdGetData = {
+    body?: never;
+    path: {
+        /**
+         * Song Key
+         */
+        song_key: string;
+    };
+    query?: never;
+    url: '/api/songs/{song_key}/crowd';
+};
+
+export type SongCrowdApiSongsSongKeyCrowdGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type SongCrowdApiSongsSongKeyCrowdGetError = SongCrowdApiSongsSongKeyCrowdGetErrors[keyof SongCrowdApiSongsSongKeyCrowdGetErrors];
+
+export type SongCrowdApiSongsSongKeyCrowdGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: SongCrowd;
+};
+
+export type SongCrowdApiSongsSongKeyCrowdGetResponse = SongCrowdApiSongsSongKeyCrowdGetResponses[keyof SongCrowdApiSongsSongKeyCrowdGetResponses];
+
 export type GetMySongsApiMySongsGetData = {
     body?: never;
     path?: never;
@@ -8271,6 +8390,82 @@ export type GetLibraryApiMyLibraryGetResponses = {
 };
 
 export type GetLibraryApiMyLibraryGetResponse = GetLibraryApiMyLibraryGetResponses[keyof GetLibraryApiMyLibraryGetResponses];
+
+export type GetMadeApiMyGetMadeGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/my/get-made';
+};
+
+export type GetMadeApiMyGetMadeGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: GetMadeResponse;
+};
+
+export type GetMadeApiMyGetMadeGetResponse = GetMadeApiMyGetMadeGetResponses[keyof GetMadeApiMyGetMadeGetResponses];
+
+export type UndismissApiMyGetMadeKeyDismissDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * Key
+         */
+        key: string;
+    };
+    query?: never;
+    url: '/api/my/get-made/{key}/dismiss';
+};
+
+export type UndismissApiMyGetMadeKeyDismissDeleteErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UndismissApiMyGetMadeKeyDismissDeleteError = UndismissApiMyGetMadeKeyDismissDeleteErrors[keyof UndismissApiMyGetMadeKeyDismissDeleteErrors];
+
+export type UndismissApiMyGetMadeKeyDismissDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type UndismissApiMyGetMadeKeyDismissDeleteResponse = UndismissApiMyGetMadeKeyDismissDeleteResponses[keyof UndismissApiMyGetMadeKeyDismissDeleteResponses];
+
+export type DismissApiMyGetMadeKeyDismissPostData = {
+    body?: never;
+    path: {
+        /**
+         * Key
+         */
+        key: string;
+    };
+    query?: never;
+    url: '/api/my/get-made/{key}/dismiss';
+};
+
+export type DismissApiMyGetMadeKeyDismissPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DismissApiMyGetMadeKeyDismissPostError = DismissApiMyGetMadeKeyDismissPostErrors[keyof DismissApiMyGetMadeKeyDismissPostErrors];
+
+export type DismissApiMyGetMadeKeyDismissPostResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DismissApiMyGetMadeKeyDismissPostResponse = DismissApiMyGetMadeKeyDismissPostResponses[keyof DismissApiMyGetMadeKeyDismissPostResponses];
 
 export type PartnerDeleteKaraokeLogApiPartnerKjboxKaraokeLogEntryIdDeleteData = {
     body?: never;

@@ -136,7 +136,19 @@
     "save": "Gem i Mine sange",
     "saved": "Gemt",
     "addToSetlist": "Tilføj til setliste",
-    "markSung": "Markér som sunget"
+    "markSung": "Markér som sunget",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} af alterne fandt tonearten behagelig",
+        "baritone": "{share, number, percent} af barytonerne fandt tonearten behagelig",
+        "bass": "{share, number, percent} af basserne fandt tonearten behagelig",
+        "mezzo": "{share, number, percent} af mezzosopranerne fandt tonearten behagelig",
+        "soprano": "{share, number, percent} af sopranerne fandt tonearten behagelig",
+        "tenor": "{share, number, percent} af tenorerne fandt tonearten behagelig"
+      },
+      "mostlyHigh": "De fleste sangere syntes, den var lidt høj",
+      "overall": "{comfortable, number} ud af {singers, plural, one {# sanger} other {# sangere}} fandt tonearten behagelig"
+    }
   },
   "tabs": {
     "discover": "Udforsk",
@@ -986,7 +998,8 @@
       "known_song": "Denne kender du",
       "similar_artist": "Minder om {artist}",
       "crowd_pleaser": "Publikumsfavorit",
-      "make_it": "Ingen karaokeversion endnu"
+      "make_it": "Ingen karaokeversion endnu",
+      "sung_before": "Din faste favorit"
     },
     "section": {
       "all": "Dine anbefalinger",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Findes ikke som karaoke endnu: tryk på en for at lave din egen",
       "songs_you_know": "Sange du kender",
       "songs_you_knowReason": "Sange du allerede kender, som findes i en karaokeversion",
-      "make_it": "Lav den"
+      "make_it": "Lav den",
+      "go_tosReason": "Sange, du bliver ved med at vende tilbage til",
+      "go_tos": "Dine favoritter"
     },
     "signInForPicks": "Log ind for at få dine anbefalinger",
     "signInForPicksBody": "Fortæl os, hvad du kan lide, så finder vi karaokesange, du vil elske at synge.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Forbind din musik",
       "profileTitle": "Din musikprofil",
       "voiceHint": "Find sange, der passer til din stemme",
-      "voiceRange": "Toneomfang {range}"
+      "voiceRange": "Toneomfang {range}",
+      "known": "{count, plural, one {# kendt sang} other {# kendte sange}}"
     },
     "songs": {
       "addPast": "Tilføj sange, jeg har sunget",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Sang eller kunstner",
       "sortLabel": "Sortér",
       "timesSungLabel": "{count, plural, one {Sunget # gang} other {Sunget # gange}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# stemme på tavlen} other {# stemmer på tavlen}}",
+      "dismiss": "Skjul denne sang",
+      "empty": "Intet at lave lige nu. Sange, du gemmer eller synger, som ikke findes som karaokeversion, vises her.",
+      "hiddenToast": "Skjult fra Få den lavet",
+      "intro": "Sange, du gerne vil synge, som ikke findes som karaokeversion endnu. Lav en nu, eller anmod gratis om den på vores tavle.",
+      "offline": "Du er offline. Oprettelse og anmodning kræver internetforbindelse.",
+      "request": "Anmod gratis om den",
+      "requestError": "Kunne ikke sende anmodningen. Prøv igen.",
+      "requested": "{count, plural, one {Anmodet · # stemme} other {Anmodet · # stemmer}}",
+      "title": "Få den lavet",
+      "why": {
+        "imported": "Fra din musik",
+        "recommended": "Udvalgt til dig",
+        "sung": "Du sang den",
+        "saved": "Gemt",
+        "voice": "Fra din stemmesession"
+      },
+      "makeIt": "Lav den",
+      "undo": "Fortryd",
+      "loadError": "Kunne ikke indlæse disse sange lige nu.",
+      "retry": "Prøv igen",
+      "limit": {
+        "submission": "Du har brugt dagens gratis anmodning. Kom tilbage i morgen for at anmode om en ny.",
+        "voteUsed": "Du har brugt dagens gratis stemme. Kom tilbage i morgen for at stemme igen."
+      }
     }
   }
 }

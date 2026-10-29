@@ -136,7 +136,19 @@
     "save": "Salvar em Minhas músicas",
     "saved": "Salvo",
     "addToSetlist": "Adicionar à setlist",
-    "markSung": "Marcar como cantada"
+    "markSung": "Marcar como cantada",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} dos contraltos acharam o tom confortável",
+        "baritone": "{share, number, percent} dos barítonos acharam o tom confortável",
+        "bass": "{share, number, percent} dos baixos acharam o tom confortável",
+        "mezzo": "{share, number, percent} dos mezzo-sopranos acharam o tom confortável",
+        "soprano": "{share, number, percent} dos sopranos acharam o tom confortável",
+        "tenor": "{share, number, percent} dos tenores acharam o tom confortável"
+      },
+      "mostlyHigh": "A maioria dos cantores achou o tom um pouco alto",
+      "overall": "{comfortable, number} de {singers, plural, one {# cantor achou} other {# cantores acharam}} o tom confortável"
+    }
   },
   "tabs": {
     "discover": "Descobrir",
@@ -986,7 +998,8 @@
       "known_song": "Você conhece esta",
       "similar_artist": "Parecido com {artist}",
       "crowd_pleaser": "Agrada a galera",
-      "make_it": "Ainda não há versão de karaokê"
+      "make_it": "Ainda não há versão de karaokê",
+      "sung_before": "Sua favorita"
     },
     "section": {
       "all": "Suas sugestões",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Ainda sem versão karaokê: toque em uma para criar a sua",
       "songs_you_know": "Músicas que você conhece",
       "songs_you_knowReason": "Músicas que você já conhece e que têm versão karaokê",
-      "make_it": "Criar"
+      "make_it": "Criar",
+      "go_tosReason": "Músicas que você sempre volta a cantar",
+      "go_tos": "Suas favoritas"
     },
     "signInForPicks": "Entre para ver suas sugestões",
     "signInForPicksBody": "Conte o que você curte e escolheremos músicas de karaokê que você vai amar cantar.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Conectar suas músicas",
       "profileTitle": "Seu perfil musical",
       "voiceHint": "Encontre músicas que combinam com a sua voz",
-      "voiceRange": "Extensão {range}"
+      "voiceRange": "Extensão {range}",
+      "known": "{count, plural, one {# música conhecida} other {# músicas conhecidas}}"
     },
     "songs": {
       "addPast": "Adicionar músicas que já cantei",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Música ou artista",
       "sortLabel": "Ordenar",
       "timesSungLabel": "{count, plural, one {Cantada # vez} other {Cantada # vezes}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# voto no mural} other {# votos no mural}}",
+      "dismiss": "Ocultar esta música",
+      "empty": "Nada para criar no momento. Músicas que você salvar ou cantar que não tenham versão de karaokê aparecerão aqui.",
+      "hiddenToast": "Ocultado de Peça para criar",
+      "intro": "Músicas que você cantaria que ainda não têm versão de karaokê. Crie uma agora ou peça de graça no nosso mural.",
+      "offline": "Você está offline. É necessária uma conexão para criar ou pedir músicas.",
+      "request": "Pedir de graça",
+      "requestError": "Não foi possível enviar o pedido. Tente novamente.",
+      "requested": "{count, plural, one {Pedido enviado · # voto} other {Pedido enviado · # votos}}",
+      "title": "Peça para criar",
+      "why": {
+        "imported": "Das suas músicas",
+        "recommended": "Escolhida para você",
+        "sung": "Você cantou",
+        "saved": "Salvo",
+        "voice": "Da sua sessão de voz"
+      },
+      "makeIt": "Criar",
+      "undo": "Desfazer",
+      "loadError": "Não foi possível carregar essas músicas no momento.",
+      "retry": "Tentar novamente",
+      "limit": {
+        "submission": "Você já fez o pedido gratuito de hoje. Volte amanhã para pedir outro.",
+        "voteUsed": "Você já usou o voto gratuito de hoje. Volte amanhã para pedir outro."
+      }
     }
   }
 }

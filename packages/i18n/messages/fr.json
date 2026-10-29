@@ -136,7 +136,19 @@
     "save": "Ajouter à Mes chansons",
     "saved": "Enregistré",
     "addToSetlist": "Ajouter à la setlist",
-    "markSung": "Marquer comme chantée"
+    "markSung": "Marquer comme chantée",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} des altos ont trouvé la tonalité confortable",
+        "baritone": "{share, number, percent} des barytons ont trouvé la tonalité confortable",
+        "bass": "{share, number, percent} des basses ont trouvé la tonalité confortable",
+        "mezzo": "{share, number, percent} des mezzo-sopranos ont trouvé la tonalité confortable",
+        "soprano": "{share, number, percent} des sopranos ont trouvé la tonalité confortable",
+        "tenor": "{share, number, percent} des ténors ont trouvé la tonalité confortable"
+      },
+      "mostlyHigh": "La plupart des chanteurs l'ont trouvée un peu haute",
+      "overall": "{comfortable, number} sur {singers, plural, one {# chanteur} other {# chanteurs}} ont trouvé la tonalité confortable"
+    }
   },
   "tabs": {
     "discover": "Découvrir",
@@ -986,7 +998,8 @@
       "known_song": "Tu connais ce morceau",
       "similar_artist": "Dans le style de {artist}",
       "crowd_pleaser": "Plaît au public",
-      "make_it": "Aucune version karaoké pour l'instant"
+      "make_it": "Aucune version karaoké pour l'instant",
+      "sung_before": "Ton incontournable"
     },
     "section": {
       "all": "Tes sélections",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Pas encore de version karaoké : appuie sur un morceau pour créer la tienne",
       "songs_you_know": "Morceaux que tu connais",
       "songs_you_knowReason": "Des morceaux que tu connais déjà et disponibles en karaoké",
-      "make_it": "Créer"
+      "make_it": "Créer",
+      "go_tosReason": "Les chansons sur lesquelles tu reviens toujours",
+      "go_tos": "Tes incontournables"
     },
     "signInForPicks": "Connecte-toi pour obtenir tes sélections",
     "signInForPicksBody": "Dis-nous ce que tu aimes et nous choisirons des morceaux de karaoké que tu vas adorer chanter.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Connecter ta musique",
       "profileTitle": "Ton profil musical",
       "voiceHint": "Trouve des chansons adaptées à ta voix",
-      "voiceRange": "Tessiture {range}"
+      "voiceRange": "Tessiture {range}",
+      "known": "{count, plural, one {# chanson connue} other {# chansons connues}}"
     },
     "songs": {
       "addPast": "Ajouter des chansons que j'ai chantées",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Chanson ou artiste",
       "sortLabel": "Trier",
       "timesSungLabel": "{count, plural, one {Chantée # fois} other {Chantée # fois}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# vote sur le tableau} other {# votes sur le tableau}}",
+      "dismiss": "Masquer ce morceau",
+      "empty": "Rien à créer pour le moment. Les morceaux que tu enregistres ou chantes et qui n'ont pas de version karaoké apparaîtront ici.",
+      "hiddenToast": "Masqué de « Faire créer »",
+      "intro": "Des morceaux que tu aimerais chanter qui n'ont pas encore de version karaoké. Crée-en une maintenant ou demande-la gratuitement sur notre tableau.",
+      "offline": "Tu es hors ligne. La création et les demandes nécessitent une connexion.",
+      "request": "Demander gratuitement",
+      "requestError": "Impossible d'envoyer la demande. Réessaie.",
+      "requested": "{count, plural, one {Demandé · # vote} other {Demandé · # votes}}",
+      "title": "Faire créer",
+      "why": {
+        "imported": "Depuis ta musique",
+        "recommended": "Choisi pour toi",
+        "sung": "Tu l'as chanté",
+        "saved": "Enregistré",
+        "voice": "D'après ta session vocale"
+      },
+      "makeIt": "Créer",
+      "undo": "Annuler",
+      "loadError": "Impossible de charger ces chansons pour le moment.",
+      "retry": "Réessayer",
+      "limit": {
+        "submission": "Tu as fait ta demande gratuite du jour. Reviens demain pour en faire une autre.",
+        "voteUsed": "Tu as utilisé ton vote gratuit du jour. Reviens demain pour voter à nouveau."
+      }
     }
   }
 }

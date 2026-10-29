@@ -136,7 +136,19 @@
     "save": "保存到我的歌曲",
     "saved": "已保存",
     "addToSetlist": "添加到歌单",
-    "markSung": "标记为已唱"
+    "markSung": "标记为已唱",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent}的女低音觉得这个调很舒服",
+        "baritone": "{share, number, percent}的男中音觉得这个调很舒服",
+        "bass": "{share, number, percent}的男低音觉得这个调很舒服",
+        "mezzo": "{share, number, percent}的女中音觉得这个调很舒服",
+        "soprano": "{share, number, percent}的女高音觉得这个调很舒服",
+        "tenor": "{share, number, percent}的男高音觉得这个调很舒服"
+      },
+      "mostlyHigh": "大多数演唱者觉得音调偏高",
+      "overall": "{singers, plural, one {# 位演唱者} other {# 位演唱者}}中有 {comfortable, number} 位觉得这个调很合适"
+    }
   },
   "tabs": {
     "discover": "发现",
@@ -986,7 +998,8 @@
       "known_song": "你熟悉这首歌",
       "similar_artist": "类似 {artist}",
       "crowd_pleaser": "能带动全场",
-      "make_it": "暂无伴奏版本"
+      "make_it": "暂无伴奏版本",
+      "sung_before": "你的拿手曲目"
     },
     "section": {
       "all": "为你精选",
@@ -1000,7 +1013,9 @@
       "make_itReason": "暂无伴奏版本：点击即可制作专属伴奏",
       "songs_you_know": "你熟悉的歌曲",
       "songs_you_knowReason": "你已经熟悉且有伴奏版本的歌曲",
-      "make_it": "立即制作"
+      "make_it": "立即制作",
+      "go_tosReason": "那些让你百唱不厌的歌曲",
+      "go_tos": "拿手曲目"
     },
     "signInForPicks": "登录以获取专属精选",
     "signInForPicksBody": "告诉我们你的喜好，我们会为你精选你会爱唱的卡拉OK歌曲。",
@@ -1977,7 +1992,8 @@
       "connectCta": "连接你的音乐服务",
       "profileTitle": "你的音乐偏好",
       "voiceHint": "查找适合你声线的歌曲",
-      "voiceRange": "音域 {range}"
+      "voiceRange": "音域 {range}",
+      "known": "{count, plural, one {# 首会唱} other {# 首会唱}}"
     },
     "songs": {
       "addPast": "添加我唱过的歌",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "歌名或歌手",
       "sortLabel": "排序",
       "timesSungLabel": "{count, plural, one {唱过 # 次} other {唱过 # 次}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {看板上已有 # 票} other {看板上已有 # 票}}",
+      "dismiss": "隐藏这首歌",
+      "empty": "目前没有待制作的歌曲。你收藏或演唱过但尚无伴奏版本的歌曲会显示在这里。",
+      "hiddenToast": "已从“制作伴奏”中隐藏",
+      "intro": "你想唱但还没有伴奏版本的歌曲。现在就制作一首，或在我们的看板上免费申请。",
+      "offline": "你当前处于离线状态。制作和申请需要网络连接。",
+      "request": "免费申请",
+      "requestError": "无法发送申请。请重试。",
+      "requested": "{count, plural, one {已申请 · # 票} other {已申请 · # 票}}",
+      "title": "制作伴奏",
+      "why": {
+        "imported": "来自你的音乐",
+        "recommended": "为你推荐",
+        "sung": "你唱过这首",
+        "saved": "已保存",
+        "voice": "来自您的练唱环节"
+      },
+      "makeIt": "立即制作",
+      "undo": "撤销",
+      "loadError": "暂时无法加载这些歌曲。",
+      "retry": "重试",
+      "limit": {
+        "submission": "您今天免费的点播额度已用完。明天再来提交新的点播吧！",
+        "voteUsed": "您今天免费的投票额度已用完。明天再来提交新的点播吧！"
+      }
     }
   }
 }

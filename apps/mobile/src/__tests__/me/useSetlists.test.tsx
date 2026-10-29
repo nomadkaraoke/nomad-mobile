@@ -2,6 +2,7 @@ import * as decide from '@nomad/api-decide';
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 
 import { useSetlists } from '../../me/useSetlists';
+import { useLibrarySettle } from '../../me/librarySettle';
 import { useMeOutbox } from '../../me/meOutbox';
 import { appStorage } from '../../storage';
 import { userKeyFor } from '../../auth/userKey';
@@ -138,6 +139,100 @@ describe('a synced write stays visible until a refetch lands', () => {
     act(() => result.current.deleteSetlist('pl_existing1'));
     await act(async () => useMeOutbox.idle());
     expect(result.current.setlists).toHaveLength(0);
+  });
+
+  it('with nothing cached, a synced create stays visible through a rejected refetch, and addSongs works in the gap', async () => {
+    const client = resetMe();
+    api.listSetlists.mockRejectedValue(new ApiError(0, 'offline')); // the first fetch fails: nothing is ever cached
+    api.createSetlist.mockImplementation(async (i) => echo(i.id, i.name, i.items));
+    api.putSetlistItems.mockImplementation(async (sid, items) => echo(sid, 'Friday', items, 2));
+    const { result } = renderHook(() => useSetlists(), { wrapper: wrapperFor(client) });
+    await waitFor(() => expect(result.current.offline).toBe(true));
+    let id = '';
+    act(() => {
+      id = result.current.createSetlist('Friday');
+    });
+    await act(async () => useMeOutbox.idle());
+    await waitFor(() => expect(api.listSetlists).toHaveBeenCalledTimes(2)); // the post-sync refetch, rejected too
+    expect(useMeOutbox.getState().items).toHaveLength(0);
+    expect(result.current.setlists.map((s) => [s.id, s.name])).toEqual([[id, 'Friday']]);
+    // Adding a song in the gap builds on the sent list (it is not refused or created nameless).
+    let res: { added: string[]; full: string[] } = { added: [], full: [] };
+    act(() => {
+      res = result.current.addSongs([id], { artist: 'A', title: 'One', song_key: 'k1' });
+    });
+    expect(res).toEqual({ added: [id], full: [] });
+    expect(useMeOutbox.getState().items[0]).toMatchObject({ op: 'save', id, name: 'Friday', create: false });
+    expect(result.current.setlists[0]!.items!.map((x) => x.title)).toEqual(['One']);
+    await act(async () => useMeOutbox.idle());
+    await waitFor(() => expect(api.listSetlists).toHaveBeenCalledTimes(3));
+    expect(result.current.setlists.map((s) => [s.id, (s.items ?? []).map((x) => x.title)])).toEqual([[id, ['One']]]);
+    // removeItem in the gap works too
+    const itemId = result.current.setlists[0]!.items![0]!.item_id;
+    act(() => result.current.removeItem(id, itemId));
+    expect(result.current.setlists[0]!.items).toHaveLength(0);
+    expect(useMeOutbox.getState().items[0]).toMatchObject({ op: 'save', id, name: 'Friday', items: [] });
+  });
+
+  it('with nothing cached, a fetch that started after the send settles the overlay', async () => {
+    const client = resetMe();
+    api.listSetlists.mockRejectedValueOnce(new ApiError(0, 'offline'));
+    api.createSetlist.mockImplementation(async (i) => echo(i.id, i.name, i.items));
+    const { result } = renderHook(() => useSetlists(), { wrapper: wrapperFor(client) });
+    await waitFor(() => expect(result.current.offline).toBe(true));
+    let id = '';
+    act(() => {
+      id = result.current.createSetlist('Friday');
+    });
+    // The refetch after the send answers with the server's lists (another one too): the server copy now rules.
+    api.listSetlists.mockImplementation(async () => [echo(id, 'Friday (server)', []), echo('pl_other0001', 'Other', [])]);
+    await act(async () => useMeOutbox.idle());
+    await waitFor(() => expect(result.current.setlists.map((s) => s.name)).toEqual(['Friday (server)', 'Other']));
+    expect(Object.keys(useLibrarySettle.getState().setlistsSent)).toEqual([]);
+  });
+
+  it('a post-send fetch that is cancelled neither settles the overlay nor writes the cache', async () => {
+    const client = resetMe();
+    api.listSetlists.mockRejectedValueOnce(new ApiError(0, 'offline'));
+    api.createSetlist.mockImplementation(async (i) => echo(i.id, i.name, i.items));
+    const { result } = renderHook(() => useSetlists(), { wrapper: wrapperFor(client) });
+    await waitFor(() => expect(result.current.offline).toBe(true));
+    // The post-sync refetch (started after the send) is held, then cancelled.
+    let land: (v: decide.Setlist[]) => void = () => {};
+    api.listSetlists.mockImplementationOnce(() => new Promise((r) => (land = r)));
+    let id = '';
+    act(() => {
+      id = result.current.createSetlist('Friday');
+    });
+    await act(async () => useMeOutbox.idle());
+    await waitFor(() => expect(api.listSetlists).toHaveBeenCalledTimes(2));
+    // (With no data yet an invalidate dedupes onto the running fetch; cancelling is what an account change does.)
+    await act(async () => client.cancelQueries({ queryKey: ['decide', userKeyFor('a@example.com'), 'setlists'] }));
+    await act(async () => land([]));
+    expect(Object.keys(useLibrarySettle.getState().setlistsSent)).toEqual([id]);
+    expect(result.current.setlists.map((s) => s.id)).toEqual([id]);
+    expect(appStorage.getString(`me.setlists.v1.${userKeyFor('a@example.com')}`)).toBeUndefined();
+  });
+
+  it('an edit sent once the cache exists is not reverted by an older unsettled send', async () => {
+    const client = resetMe();
+    api.listSetlists.mockRejectedValueOnce(new ApiError(0, 'offline'));
+    api.createSetlist.mockImplementation(async (i) => echo(i.id, i.name, i.items));
+    api.putSetlistItems.mockImplementation(async (sid, items) => echo(sid, 'Friday', items, 2));
+    const { result } = renderHook(() => useSetlists(), { wrapper: wrapperFor(client) });
+    await waitFor(() => expect(result.current.offline).toBe(true));
+    let id = '';
+    act(() => {
+      id = result.current.createSetlist('Friday');
+    });
+    api.listSetlists.mockImplementation(() => new Promise<never>(() => {})); // the post-sync refetch hangs
+    await act(async () => useMeOutbox.idle());
+    // A cache appears that hasn't seen the send (a fetch that started before it): the overlay keeps the list.
+    act(() => client.setQueryData(['decide', userKeyFor('a@example.com'), 'setlists'], { setlists: [], savedAt: 1 }));
+    expect(result.current.setlists.map((s) => s.id)).toEqual([id]);
+    act(() => void result.current.addSongs([id], { artist: 'A', title: 'One', song_key: 'k1' }));
+    await act(async () => useMeOutbox.idle());
+    expect(result.current.setlists[0]!.items!.map((x) => x.title)).toEqual(['One']);
   });
 
   it('save() never creates a nameless setlist when the list is unknown', async () => {

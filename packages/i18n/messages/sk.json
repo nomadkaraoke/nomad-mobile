@@ -136,7 +136,19 @@
     "save": "Uložiť do Mojich piesní",
     "saved": "Uložené",
     "addToSetlist": "Pridať do setlistu",
-    "markSung": "Označiť ako odspievané"
+    "markSung": "Označiť ako odspievané",
+    "crowd": {
+      "bucket": {
+        "alto": "{share, number, percent} altistiek považovalo túto tóninu za pohodlnú",
+        "baritone": "{share, number, percent} barytonistov považovalo túto tóninu za pohodlnú",
+        "bass": "{share, number, percent} basistov považovalo túto tóninu za pohodlnú",
+        "mezzo": "{share, number, percent} mezzosopranistiek považovalo túto tóninu za pohodlnú",
+        "soprano": "{share, number, percent} sopranistiek považovalo túto tóninu za pohodlnú",
+        "tenor": "{share, number, percent} tenoristov považovalo túto tóninu za pohodlnú"
+      },
+      "mostlyHigh": "Väčšine spevákov sa zdala trochu privysoká",
+      "overall": "{comfortable, number} z {singers, plural, one {# speváka} few {# spevákov} many {# speváka} other {# spevákov}} považovalo túto tóninu za pohodlnú"
+    }
   },
   "tabs": {
     "discover": "Objavovať",
@@ -986,7 +998,8 @@
       "known_song": "Toto poznáš",
       "similar_artist": "Podobné ako {artist}",
       "crowd_pleaser": "Páči sa davu",
-      "make_it": "Zatiaľ bez karaoke verzie"
+      "make_it": "Zatiaľ bez karaoke verzie",
+      "sung_before": "Tvoja istota"
     },
     "section": {
       "all": "Tvoje tipy",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Zatiaľ bez karaoke verzie: ťuknutím vytvoríš vlastnú",
       "songs_you_know": "Skladby, ktoré poznáš",
       "songs_you_knowReason": "Skladby, ktoré už poznáš a majú karaoke verziu",
-      "make_it": "Vytvoriť"
+      "make_it": "Vytvoriť",
+      "go_tosReason": "Skladby, ku ktorým sa neustále vraciaš",
+      "go_tos": "Tvoje istoty"
     },
     "signInForPicks": "Prihlás sa a získaj tipy na mieru",
     "signInForPicksBody": "Povedz nám, čo sa ti páči, a my ti vyberieme karaoke skladby, ktoré budeš spievať s radosťou.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Pripoj svoju hudbu",
       "profileTitle": "Tvoj hudobný profil",
       "voiceHint": "Nájdi skladby, ktoré sedia k tvojmu hlasu",
-      "voiceRange": "Rozsah {range}"
+      "voiceRange": "Rozsah {range}",
+      "known": "{count, plural, one {# známa pieseň} few {# známe piesne} many {# známych piesní} other {# známych piesní}}"
     },
     "songs": {
       "addPast": "Pridať odspievané piesne",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Pesnička alebo interpret",
       "sortLabel": "Zoradiť",
       "timesSungLabel": "{count, plural, one {Spievané # raz} few {Spievané # razy} other {Spievané #-krát}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {# hlas na nástenke} few {# hlasy na nástenke} other {# hlasov na nástenke}}",
+      "dismiss": "Skryť túto skladbu",
+      "empty": "Momentálne tu nie je čo vytvoriť. Skladby, ktoré si uložíš alebo zaspievaš a nemajú karaoke verziu, sa zobrazia tu.",
+      "hiddenToast": "Skryté zo sekcie Daj to vyrobiť",
+      "intro": "Skladby, ktoré by si si rád zaspieval, no zatiaľ nemajú karaoke verziu. Vytvor si ju teraz alebo o ňu zadarmo požiadaj na našej nástenke.",
+      "offline": "Si offline. Na vytváranie a posielanie žiadostí potrebuješ pripojenie na internet.",
+      "request": "Požiadať zadarmo",
+      "requestError": "Žiadosť sa nepodarilo odoslať. Skús to znova.",
+      "requested": "{count, plural, one {Odoslaná žiadosť · # hlas} few {Odoslaná žiadosť · # hlasy} other {Odoslaná žiadosť · # hlasov}}",
+      "title": "Daj to vyrobiť",
+      "why": {
+        "imported": "Z tvojej hudby",
+        "recommended": "Vybrané pre teba",
+        "sung": "Zaspievané tebou",
+        "saved": "Uložené",
+        "voice": "Z tvojej hlasovej relácie"
+      },
+      "makeIt": "Vytvoriť",
+      "undo": "Vrátiť späť",
+      "loadError": "Tieto skladby sa momentálne nepodarilo načítať.",
+      "retry": "Skúsiť znova",
+      "limit": {
+        "submission": "Dnešnú bezplatnú žiadosť si už vyčerpal. Vráť sa zajtra a požiadaj o ďalšiu.",
+        "voteUsed": "Dnešný bezplatný hlas si už minul. Vráť sa zajtra a požiadaj o ďalšiu."
+      }
     }
   }
 }

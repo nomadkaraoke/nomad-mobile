@@ -3,11 +3,17 @@ import { useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-q
 import { useCallback } from 'react';
 
 import { useAuth } from '../../auth/store';
+import { userKeyFor } from '../../auth/userKey';
 import { PROFILE_KEY } from '../profile/useMusicProfile';
 import { RECS_KEY } from '../useRecommendations';
 
-/** Every connected or imported source with counts and status (decide `GET /api/services/summary`). */
+/**
+ * Every connected or imported source with counts and status (decide `GET /api/services/summary`). The key is a prefix
+ * (invalidate / remove every account's); each account's copy lives under `servicesSummaryKeyFor(userKey)`, so another
+ * account never sees the previous one's counts while its own load.
+ */
 export const SERVICES_SUMMARY_KEY = ['decide', 'services-summary'] as const;
+export const servicesSummaryKeyFor = (userKey: string | null) => [...SERVICES_SUMMARY_KEY, userKey] as const;
 export const CAPABILITIES_KEY = ['decide', 'capabilities'] as const;
 
 const HOUR_MS = 60 * 60 * 1000;
@@ -23,8 +29,14 @@ const CAPABILITIES_OFF: Capabilities & { fallback: true } = Object.freeze({
 const isFallback = (data: unknown) => (data as { fallback?: boolean } | undefined)?.fallback === true;
 
 export function useServicesSummary(): UseQueryResult<SourcesSummaryResponse> {
-  const signedIn = useAuth((s) => s.state.status === 'signedIn');
-  return useQuery({ queryKey: SERVICES_SUMMARY_KEY, queryFn: getServicesSummary, enabled: signedIn });
+  const userKey = useAuth((s) => (s.state.status === 'signedIn' ? userKeyFor(s.state.session.email) : null));
+  // Imports and connects invalidate it (useInvalidateAfterImport); the staleTime only spares remounts a refetch.
+  return useQuery({
+    queryKey: servicesSummaryKeyFor(userKey),
+    queryFn: getServicesSummary,
+    enabled: userKey !== null,
+    staleTime: 5 * 60_000,
+  });
 }
 
 /**

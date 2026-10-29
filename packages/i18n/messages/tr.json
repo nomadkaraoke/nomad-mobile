@@ -136,7 +136,19 @@
     "save": "Şarkılarıma kaydet",
     "saved": "Kaydedildi",
     "addToSetlist": "Çalma listesine ekle",
-    "markSung": "Söylendi olarak işaretle"
+    "markSung": "Söylendi olarak işaretle",
+    "crowd": {
+      "bucket": {
+        "alto": "Altoların {share, number, percent} kadarı tonu rahat buldu",
+        "baritone": "Baritonların {share, number, percent} kadarı tonu rahat buldu",
+        "bass": "Basların {share, number, percent} kadarı tonu rahat buldu",
+        "mezzo": "Mezzo-sopranoların {share, number, percent} kadarı tonu rahat buldu",
+        "soprano": "Sopranoların {share, number, percent} kadarı tonu rahat buldu",
+        "tenor": "Tenorların {share, number, percent} kadarı tonu rahat buldu"
+      },
+      "mostlyHigh": "Şarkı söyleyenlerin çoğu tonu biraz tiz buldu",
+      "overall": "{singers, plural, one {# şarkıcıdan} other {# şarkıcıdan}} {comfortable, number} tanesi tonu rahat buldu"
+    }
   },
   "tabs": {
     "discover": "Keşfet",
@@ -986,7 +998,8 @@
       "known_song": "Bunu biliyorsun",
       "similar_artist": "{artist} benzeri",
       "crowd_pleaser": "Kalabalığı coşturan",
-      "make_it": "Henüz karaoke versiyonu yok"
+      "make_it": "Henüz karaoke versiyonu yok",
+      "sung_before": "Favorin"
     },
     "section": {
       "all": "Senin seçimlerin",
@@ -1000,7 +1013,9 @@
       "make_itReason": "Henüz karaoke versiyonu yok: kendininkini yapmak için birine dokun",
       "songs_you_know": "Bildiğin şarkılar",
       "songs_you_knowReason": "Zaten bildiğin ve karaoke versiyonu olan şarkılar",
-      "make_it": "Oluştur"
+      "make_it": "Oluştur",
+      "go_tosReason": "Dönüp dolaşıp söylediğin şarkılar",
+      "go_tos": "Gözdelerin"
     },
     "signInForPicks": "Seçimlerini almak için giriş yap",
     "signInForPicksBody": "Bize nelerden hoşlandığını söyle, sana söylemeyi çok seveceğin karaoke şarkıları seçelim.",
@@ -1977,7 +1992,8 @@
       "connectCta": "Müziğini bağla",
       "profileTitle": "Müzik profilin",
       "voiceHint": "Sesine uygun şarkıları bul",
-      "voiceRange": "Ses aralığı {range}"
+      "voiceRange": "Ses aralığı {range}",
+      "known": "{count, plural, one {# bilinen şarkı} other {# bilinen şarkı}}"
     },
     "songs": {
       "addPast": "Söylediğim şarkıları ekle",
@@ -2014,6 +2030,33 @@
       "searchPlaceholder": "Şarkı veya sanatçı",
       "sortLabel": "Sırala",
       "timesSungLabel": "{count, plural, one {# kez söylendi} other {# kez söylendi}}"
+    },
+    "getMade": {
+      "boardVotes": "{count, plural, one {Panoda # oy} other {Panoda # oy}}",
+      "dismiss": "Bu şarkıyı gizle",
+      "empty": "Şu anda yapılacak bir şey yok. Kaydettiğin veya söylediğin şarkıların karaoke versiyonu yoksa burada görünür.",
+      "hiddenToast": "\"Bunu hazırlat\" bölümünden gizlendi",
+      "intro": "Söylemek isteyeceğin ama henüz karaoke versiyonu olmayan şarkılar. Hemen bir tane yap veya panomuzda ücretsiz talep et.",
+      "offline": "Çevrimdışısın. Şarkı hazırlamak ve talep etmek için internet bağlantısı gerekir.",
+      "request": "Ücretsiz talep et",
+      "requestError": "İstek gönderilemedi. Tekrar dene.",
+      "requested": "{count, plural, one {Talep edildi · # oy} other {Talep edildi · # oy}}",
+      "title": "Bunu hazırlat",
+      "why": {
+        "imported": "Müziklerinden",
+        "recommended": "Senin için seçildi",
+        "sung": "Bunu söyledin",
+        "saved": "Kaydedildi",
+        "voice": "Ses seansından"
+      },
+      "makeIt": "Oluştur",
+      "undo": "Geri al",
+      "loadError": "Bu şarkılar şu anda yüklenemedi.",
+      "retry": "Tekrar dene",
+      "limit": {
+        "submission": "Bugünkü ücretsiz istek hakkını kullandın. Başka bir istekte bulunmak için yarın tekrar gel.",
+        "voteUsed": "Bugünkü ücretsiz oy hakkını kullandın. Başka bir istekte bulunmak için yarın tekrar gel."
+      }
     }
   }
 }

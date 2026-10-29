@@ -5,11 +5,12 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { newUuid } from '../tonight/nightStore';
 import { setlistsStorageKey, useUserKey, writeCacheFor } from './account';
 import { readCache } from './cache';
+import { useLibrarySettle } from './librarySettle';
 import { useInvalidateOnSynced } from './useLibrary';
 import { useMeOutbox } from './meOutbox';
 import { overlaySetlists } from './pending';
 import { useBindMeQueryClient } from './queryClientRef';
-import { isSetlistsCache as isCache, setlistsKeyFor, type SetlistsCache } from './setlistsCache';
+import { isSetlistsCache as isCache, setlistsKeyFor, withSentSetlists, type SetlistsCache } from './setlistsCache';
 
 export { setlistsKeyFor };
 
@@ -26,23 +27,34 @@ export function useSetlists() {
   const userKey = useUserKey();
   const queryKey = useMemo(() => setlistsKeyFor(userKey), [userKey]);
   const cached = useMemo(() => readCache(userKey && setlistsStorageKey(userKey), isCache), [userKey]);
-  const q = useQuery<SetlistsCache>({
+  const q = useQuery<SetlistsCache & { fetchStartedAt?: number }>({
     queryKey,
     enabled: userKey !== null,
     initialData: cached,
     initialDataUpdatedAt: cached?.savedAt,
     staleTime: 60_000,
     retry: false,
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
+      const startedAt = Date.now();
       const next = { setlists: await listSetlists(), savedAt: Date.now() };
+      // Cancelled (account change, unmount): its result is discarded, so it must not write the cache or settle.
+      if (signal?.aborted) return next;
       if (userKey) writeCacheFor(userKey, setlistsStorageKey(userKey), next);
-      return next;
+      // Settled once TanStack commits this data (the effect below), never before: no render may drop a sent write
+      // while the list it shows is still the older one.
+      return { ...next, fetchStartedAt: startedAt };
     },
   });
+  const fetchStartedAt = q.data?.fetchStartedAt;
+  useEffect(() => {
+    if (fetchStartedAt !== undefined) useLibrarySettle.getState().settleSetlists(fetchStartedAt);
+  }, [fetchStartedAt, q.dataUpdatedAt]);
   useInvalidateOnSynced([queryKey]);
 
   const pending = useMeOutbox((s) => s.items);
-  const setlists = useMemo(() => overlaySetlists(q.data?.setlists ?? [], pending), [q.data, pending]);
+  // Sent writes not yet seen by a fetch, when there was no cache to put them in (see librarySettle.setlistsSent).
+  const sent = useLibrarySettle((s) => s.setlistsSent);
+  const setlists = useMemo(() => overlaySetlists(withSentSetlists(q.data?.setlists ?? [], sent), pending), [q.data, sent, pending]);
   const offline = q.isError && q.error instanceof ApiError && q.error.status === 0;
   // Every setlist this hook has shown, so an edit from an open screen never loses its list if the cache briefly
   // lacks it (save() would otherwise have nothing to build on).
@@ -53,9 +65,14 @@ export function useSetlists() {
   }, [setlists, userKey]);
 
   const find = useCallback(
-    (id: string) => overlaySetlists(queryClient.getQueryData<SetlistsCache>(queryKey)?.setlists ?? [], useMeOutbox.getState().items).find((s) => s.id === id),
+    (id: string) => {
+      const base = withSentSetlists(queryClient.getQueryData<SetlistsCache>(queryKey)?.setlists ?? [], useLibrarySettle.getState().setlistsSent);
+      return overlaySetlists(base, useMeOutbox.getState().items).find((s) => s.id === id);
+    },
     [queryClient, queryKey],
   );
+  // What an edit builds on: the cache and queue, else the last list this hook showed (like save()).
+  const current = useCallback((id: string) => find(id) ?? lastKnown.current.byId.get(id), [find]);
   const save = useCallback(
     (id: string, patch: { name?: string; items?: SetlistItemIn[]; create?: boolean }): boolean => {
       const queued = useMeOutbox.getState().items.find((i) => i.key === `setlist:${id}`);
@@ -100,7 +117,7 @@ export function useSetlists() {
     addSongs(ids: string[], song: SongRef): { added: string[]; full: string[] } {
       const out = { added: [] as string[], full: [] as string[] };
       for (const id of ids) {
-        const cur = find(id);
+        const cur = current(id);
         if (!cur) continue;
         const items = cur.items ?? [];
         if (items.some((x) => sameSong(x, song))) continue;
@@ -110,7 +127,7 @@ export function useSetlists() {
       return out;
     },
     removeItem(id: string, itemId: string) {
-      const cur = find(id);
+      const cur = current(id);
       if (cur) save(id, { items: (cur.items ?? []).filter((x) => x.item_id !== itemId) });
     },
     deleteSetlist(id: string) {

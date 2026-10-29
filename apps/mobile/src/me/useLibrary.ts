@@ -38,7 +38,15 @@ export function useInvalidateOnSynced(keys: (readonly unknown[])[]): void {
  * The singer's library: the cached server items (MMKV, revalidated by etag) overlaid with everything still waiting
  * in the outboxes, so a log, love or setlist change shows at once and offline.
  */
-export function useLibrary(): { items: MeSong[]; loading: boolean; offline: boolean; error: boolean; refetch(): void } {
+export function useLibrary(): {
+  items: MeSong[];
+  /** Songs whose row the phone's pending writes changed (decide hasn't counted them yet): their local row is the fresher. */
+  pendingKeys: ReadonlySet<string>;
+  loading: boolean;
+  offline: boolean;
+  error: boolean;
+  refetch(): void;
+} {
   const queryClient = useQueryClient();
   useBindMeQueryClient(queryClient);
   const userKey = useUserKey();
@@ -102,9 +110,20 @@ export function useLibrary(): { items: MeSong[]; loading: boolean; offline: bool
     });
   }, [base, logItems, logEntries, meItems, overrides, sentLog, sentSetlists, userKey, queryClient]);
 
+  const pendingKeys = useMemo(() => {
+    const server = new Map((base ?? []).map((s) => [s.key, s]));
+    const out = new Set<string>();
+    for (const s of items) {
+      const was = server.get(s.key);
+      if (!was || was.times_sung !== s.times_sung || was.latest_feel !== s.latest_feel || was.hidden !== s.hidden) out.add(s.key);
+    }
+    return out as ReadonlySet<string>;
+  }, [base, items]);
+
   const offline = q.isError && q.error instanceof ApiError && q.error.status === 0;
   return {
     items,
+    pendingKeys,
     loading: userKey !== null && q.data === undefined && q.isFetching,
     offline,
     error: q.isError && !offline && q.data === undefined,
