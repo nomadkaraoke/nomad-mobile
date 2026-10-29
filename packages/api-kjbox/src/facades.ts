@@ -135,12 +135,14 @@ const isInt = (v: unknown) => typeof v === 'number' && Number.isInteger(v);
 const malformed = (status: number | undefined) =>
   new KjboxError('internal', status ?? 0, undefined, { message: 'malformed reply' });
 
+const isStrings = (v: unknown) => Array.isArray(v) && v.every((x) => typeof x === 'string');
 const isHistorySong = (s: unknown) =>
-  isObj(s) && isInt(s.entry_id) && typeof s.singer_name === 'string' && Array.isArray(s.members) &&
+  isObj(s) && isInt(s.entry_id) && typeof s.singer_name === 'string' && isStrings(s.members) &&
   typeof s.artist === 'string' && typeof s.title === 'string' && (s.started_at === null || typeof s.started_at === 'string') &&
   (s.state === 'sung' || s.state === 'sung_unplayed');
 const isHistoryNight = (n: unknown) =>
-  isObj(n) && typeof n.night_id === 'string' && typeof n.date === 'string' && Array.isArray(n.names) && isInt(n.unmatched) &&
+  isObj(n) && typeof n.night_id === 'string' && typeof n.date === 'string' && (n.venue === null || typeof n.venue === 'string') &&
+  isStrings(n.names) && isInt(n.unmatched) &&
   Array.isArray(n.songs) && n.songs.every(isHistorySong);
 
 /** Past nights at this box with songs this account may have sung (nothing is claimed until claimHistory). */

@@ -271,4 +271,19 @@ describe('past-night history (no event code, no night id)', () => {
     fetchMock.mockResolvedValueOnce(json({ api_version: '1.0', saved: '1' }));
     await expect(claimHistory('kn_1', [12], [])).rejects.toMatchObject({ code: 'internal', status: 200 });
   });
+
+  it.each([
+    ['a non-string name', { names: [7] }],
+    ['a non-string venue', { venue: 3 }],
+    ['a missing venue', { venue: undefined }],
+    ['a non-string member', { songs: [{ ...night.songs[0], members: [null] }] }],
+  ])('rejects suggestions with %s', async (_label, patch) => {
+    fetchMock.mockResolvedValueOnce(json({ api_version: '1.0', nights: [{ ...night, ...patch }], more_nights: 0 }));
+    await expect(getHistorySuggestions()).rejects.toMatchObject({ code: 'internal', status: 200 });
+  });
+
+  it('accepts a null venue', async () => {
+    fetchMock.mockResolvedValueOnce(json({ api_version: '1.0', nights: [{ ...night, venue: null }], more_nights: 0 }));
+    await expect(getHistorySuggestions()).resolves.toMatchObject({ nights: [{ venue: null }] });
+  });
 });

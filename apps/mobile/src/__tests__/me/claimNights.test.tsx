@@ -195,6 +195,17 @@ describe('Were these you? (Me section)', () => {
     expect(screen.getByTestId('me-claim-save-0')).toBeTruthy();
   });
 
+  it('songs saved by an earlier try (already_saved) count as saved', async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1', '2026-10-10')]));
+    api.claimHistory.mockResolvedValue(result({ saved: 1, already_saved: 2 }));
+    renderSection();
+    await screen.findByTestId('me-claim-night-0');
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('me-claim-save-0'));
+    });
+    expect(await screen.findByTestId('me-claim-result-0')).toHaveTextContent(/^Saved 3 songs\./);
+  });
+
   it('the taken line when someone else already saved a song', async () => {
     api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1', '2026-10-10')]));
     api.claimHistory.mockResolvedValue(result({ saved: 2, taken: [12] }));

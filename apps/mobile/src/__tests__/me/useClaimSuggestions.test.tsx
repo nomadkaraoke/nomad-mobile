@@ -144,6 +144,98 @@ describe('visibility', () => {
 });
 
 describe('claim', () => {
+  afterEach(() => {
+    act(() => useClaimAnswered.getState().clear());
+    jest.useRealTimers();
+  });
+
+  it('a 400 invalid claim refetches the suggestions and shows the refreshed list', async () => {
+    api.getHistorySuggestions.mockResolvedValueOnce(suggestions([night('n1'), night('n2')]));
+    api.claimHistory.mockRejectedValue(new KjboxError('invalid', 400));
+    const { wrapper } = setup();
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    api.getHistorySuggestions.mockResolvedValueOnce(suggestions([night('n2')]));
+    await act(async () => {
+      await h.result.current.claim(h.result.current.nights[0]!, [1]);
+    });
+    await waitFor(() => expect(api.getHistorySuggestions).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(h.result.current.nights.map((n) => n.night_id)).toEqual(['n2']));
+  });
+
+  it('a 404 not_found claim refetches the suggestions too', async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1')]));
+    api.claimHistory.mockRejectedValue(new KjboxError('not_found', 404));
+    const { wrapper } = setup();
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    await act(async () => {
+      await h.result.current.claim(h.result.current.nights[0]!, [1]);
+    });
+    await waitFor(() => expect(api.getHistorySuggestions).toHaveBeenCalledTimes(2));
+  });
+
+  it('unreachable after the retry marks the list stale without refetching now (the card keeps its error line)', async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1')]));
+    api.claimHistory.mockRejectedValue(new KjboxError('internal', 530, undefined, {}, true));
+    const { client, wrapper } = setup();
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    await act(async () => {
+      await h.result.current.claim(h.result.current.nights[0]!, [1]);
+    });
+    await act(async () => {});
+    expect(api.getHistorySuggestions).toHaveBeenCalledTimes(1);
+    expect(client.getQueryState(suggestionsKeyFor(A))?.isInvalidated).toBe(true);
+    expect(h.result.current.visible).toBe(true);
+  });
+
+  it('a 429 claim leaves the list alone', async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1')]));
+    api.claimHistory.mockRejectedValue(new KjboxError('rate_limited', 429, 60));
+    const { client, wrapper } = setup();
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    await act(async () => {
+      await h.result.current.claim(h.result.current.nights[0]!, [1]);
+    });
+    expect(client.getQueryState(suggestionsKeyFor(A))?.isInvalidated).toBe(false);
+  });
+
+  it('releases the in-flight slot: after a failed claim, the same night can be sent again', async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1')]));
+    api.claimHistory.mockRejectedValueOnce(new KjboxError('rate_limited', 429, 1)).mockResolvedValueOnce(result());
+    const { wrapper } = setup();
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    const n = h.result.current.nights[0]!;
+    let first: unknown;
+    let second: unknown;
+    await act(async () => {
+      first = await h.result.current.claim(n, [1]);
+    });
+    await act(async () => {
+      second = await h.result.current.claim(n, [1]);
+    });
+    expect(first).toEqual({ error: 'failed' });
+    expect(second).toMatchObject({ saved: 1 });
+    expect(api.claimHistory).toHaveBeenCalledTimes(2);
+  });
+
+  it('signed out: sends nothing and reports failed', async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1')]));
+    const { wrapper } = setup();
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    const n = h.result.current.nights[0]!;
+    act(() => useAuth.setState({ state: { status: 'signedOut' } }));
+    let out: unknown;
+    await act(async () => {
+      out = await h.result.current.claim(n, [1]);
+    });
+    expect(out).toEqual({ error: 'failed' });
+    expect(api.claimHistory).not.toHaveBeenCalled();
+  });
   it('sends the ticked songs as mine and the rest as not_mine, then hides the night', async () => {
     api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1'), night('n2')]));
     api.claimHistory.mockResolvedValue(result({ saved: 2, rejected: 1, taken: [] }));

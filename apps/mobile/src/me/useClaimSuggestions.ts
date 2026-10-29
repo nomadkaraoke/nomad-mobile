@@ -63,6 +63,19 @@ function scheduleMeRefetch(queryClient: QueryClient, owner: string): void {
   }
 }
 
+/**
+ * A failed claim may mean the list is out of date (another device or account took a song, the night changed, a
+ * claim landed but its answer was lost). `invalid` / `not_found`: refetch now, so a stale list can't keep failing.
+ * Unreachable after the retry: only mark it stale (refetched on the next mount), since a refetch now would fail too
+ * and hide the card with its error line. Other answers (429, 401, 503) leave it alone.
+ */
+function staleAfterFailure(queryClient: QueryClient, owner: string, e: unknown): void {
+  if (!(e instanceof KjboxError)) return;
+  const queryKey = suggestionsKeyFor(owner);
+  if (e.unreachable) void queryClient.invalidateQueries({ queryKey, refetchType: 'none' });
+  else if (e.code === 'invalid' || e.code === 'not_found') void queryClient.invalidateQueries({ queryKey });
+}
+
 async function sendClaim(nightId: string, mine: number[], notMine: number[]) {
   try {
     return await claimHistory(nightId, mine, notMine);
@@ -112,8 +125,9 @@ export function useClaimSuggestions(): {
       const running = inFlight.get(flightKey);
       if (running) return running;
 
-      // R33: songs left unticked on Save are "not mine". Every listed song is still claimable, so not_mine never
-      // names a song the account holds (R51: the server rejects that as invalid).
+      // R33: songs left unticked on Save are "not mine". While the list is fresh every listed song is still
+      // claimable, so not_mine never names a song the account holds (R51: the server rejects that as invalid; a
+      // failed claim refreshes the list, below).
       const ids = night.songs.map((s) => s.entry_id);
       const pick = new Set(ticked);
       const mine = ids.filter((id) => pick.has(id));
@@ -127,7 +141,8 @@ export function useClaimSuggestions(): {
           void queryClient.invalidateQueries({ queryKey: suggestionsKeyFor(owner) });
           scheduleMeRefetch(queryClient, owner);
           return { saved: r.saved, alreadySaved: r.already_saved, taken: r.taken.length, takenIds: r.taken, rejected: r.rejected };
-        } catch {
+        } catch (e) {
+          if (currentUserKey() === owner) staleAfterFailure(queryClient, owner, e);
           return { error: 'failed' };
         } finally {
           inFlight.delete(flightKey);
