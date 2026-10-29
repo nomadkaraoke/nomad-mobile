@@ -2057,6 +2057,22 @@
         "submission": "Kamu sudah menggunakan permintaan gratis hari ini. Balik lagi besok untuk meminta lagu lain.",
         "voteUsed": "Kamu sudah menggunakan vote gratis hari ini. Balik lagi besok untuk memberikan vote lagi."
       }
+    },
+    "claim": {
+      "explainer": "Lagu-lagu yang dinyanyikan dengan nama yang mirip nama Anda di acara malam Nomad. Centang lagu yang memang Anda nyanyikan.",
+      "failed": "Tidak dapat terhubung ke perangkat host. Coba lagi nanti.",
+      "nightHeader": "{date} · {count, plural, one {# lagu} other {# lagu}} sebagai “{name}”",
+      "none": "Tidak ada yang cocok dengan saya",
+      "save": "Simpan lagu yang dicentang",
+      "saved": "{count, plural, one {Berhasil menyimpan # lagu.} other {Berhasil menyimpan # lagu.}} Lagu tersebut akan muncul di riwayat Anda sebentar lagi.",
+      "screenTitle": "Malam Nomad Anda sebelumnya",
+      "seeAll": "{count, plural, one {Lihat semua # malam} other {Lihat semua # malam}}",
+      "showingRecent": "{count, plural, one {Menampilkan malam terbaru Anda} other {Menampilkan # malam terbaru Anda}}",
+      "taken": "{count, plural, one {# sudah disimpan oleh orang lain.} other {# sudah disimpan oleh orang lain.}}",
+      "title": "Apakah ini Anda?",
+      "unmatched": "{count, plural, one {# lagu lainnya tidak dapat dicocokkan} other {# lagu lainnya tidak dapat dicocokkan}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Terlalu banyak permintaan sekaligus. Coba lagi dalam beberapa menit."
     }
   }
 }

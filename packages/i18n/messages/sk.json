@@ -2057,6 +2057,22 @@
         "submission": "Dnešnú bezplatnú žiadosť si už vyčerpal. Vráť sa zajtra a požiadaj o ďalšiu.",
         "voteUsed": "Dnešný bezplatný hlas si už minul. Vráť sa zajtra a požiadaj o ďalšiu."
       }
+    },
+    "claim": {
+      "explainer": "Piesne spievané pod menom ako tvoje na večeroch Nomad. Označ tie, ktoré si spieval ty.",
+      "failed": "Nepodarilo sa spojiť so zariadením hostiteľa. Skús to znova neskôr.",
+      "nightHeader": "{date} · {count, plural, one {# pieseň} few {# piesne} many {# piesní} other {# piesní}} ako „{name}“",
+      "none": "Žiadna z nich nie som ja",
+      "save": "Uložiť označené piesne",
+      "saved": "{count, plural, one {Uložená # pieseň.} few {Uložené # piesne.} many {Uložených # piesní.} other {Uložených # piesní.}} O chvíľu sa zobrazia v tvojej histórii.",
+      "screenTitle": "Tvoje minulé večery Nomad",
+      "seeAll": "{count, plural, one {Zobraziť celý # večer} few {Zobraziť všetky # večery} many {Zobraziť všetkých # večerov} other {Zobraziť všetkých # večerov}}",
+      "showingRecent": "{count, plural, one {Zobrazuje sa tvoj najnovší večer} few {Zobrazujú sa tvoje # najnovšie večery} many {Zobrazuje sa tvojich # najnovších večerov} other {Zobrazuje sa tvojich # najnovších večerov}}",
+      "taken": "{count, plural, one {# už bola uložená niekým iným.} few {# už boli uložené niekým iným.} many {# už bolo uložených niekým iným.} other {# už bolo uložených niekým iným.}}",
+      "title": "Bolo toto od teba?",
+      "unmatched": "{count, plural, one {Ešte # pieseň sa nepodarilo priradiť} few {Ešte # ďalšie piesne sa nepodarilo priradiť} many {Ešte # ďalších piesní sa nepodarilo priradiť} other {Ešte # ďalších piesní sa nepodarilo priradiť}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Príliš veľa požiadaviek naraz. Skús to znova o niekoľko minút."
     }
   }
 }

@@ -2057,6 +2057,22 @@
         "submission": "Iskoristio si današnji besplatni zahtjev. Vrati se sutra i zatraži još jednu.",
         "voteUsed": "Iskoristio si današnji besplatni glas. Vrati se sutra i zatraži još jednu pjesmu."
       }
+    },
+    "claim": {
+      "explainer": "Pjesme pjevane pod imenom sličnim tvojemu na Nomad večerima. Označi one koje su tvoje.",
+      "failed": "Povezivanje s uređajem voditelja nije uspjelo. Pokušaj ponovno kasnije.",
+      "nightHeader": "{date} · {count, plural, one {# pjesma} few {# pjesme} other {# pjesama}} kao „{name}”",
+      "none": "Nijedna od ovih nije moja",
+      "save": "Spremi označene pjesme",
+      "saved": "{count, plural, one {Spremljena # pjesma.} few {Spremljene # pjesme.} other {Spremljeno # pjesama.}} Prikazat će se u tvojoj povijesti za minutu.",
+      "screenTitle": "Tvoje prošle Nomad večeri",
+      "seeAll": "{count, plural, one {Pogledaj # večer} few {Pogledaj sve # večeri} other {Pogledaj svih # večeri}}",
+      "showingRecent": "{count, plural, one {Prikazuje se tvoja najnovija večer} few {Prikazuju se tvoje # najnovije večeri} other {Prikazuje se tvojih # najnovijih večeri}}",
+      "taken": "{count, plural, one {# je već spremio netko drugi.} few {# su već spremili drugi.} other {# je već spremio netko drugi.}}",
+      "title": "Jesu li ovo tvoje pjesme?",
+      "unmatched": "{count, plural, one {Još # pjesma nije se mogla povezati} few {Još # pjesme nisu se mogle povezati} other {Još # pjesama nije se moglo povezati}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Previše odjednom. Pokušaj ponovno za nekoliko minuta."
     }
   }
 }

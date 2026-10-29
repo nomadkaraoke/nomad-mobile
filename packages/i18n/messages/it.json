@@ -2057,6 +2057,22 @@
         "submission": "Hai effettuato la tua richiesta gratuita di oggi. Torna domani per richiederne un'altra.",
         "voteUsed": "Hai usato il tuo voto gratuito di oggi. Torna domani per richiederne un altro."
       }
+    },
+    "claim": {
+      "explainer": "Canzoni cantate con un nome simile al tuo durante le serate Nomad. Seleziona quelle che hai cantato tu.",
+      "failed": "Impossibile raggiungere il computer dell'host. Riprova più tardi.",
+      "nightHeader": "{date} · {count, plural, one {# canzone} other {# canzoni}} come “{name}”",
+      "none": "Nessuna di queste è mia",
+      "save": "Salva le canzoni selezionate",
+      "saved": "{count, plural, one {# canzone salvata.} other {# canzoni salvate.}} Appariranno nella tua cronologia tra un minuto.",
+      "screenTitle": "Le tue serate Nomad passate",
+      "seeAll": "{count, plural, one {Vedi l'intera serata} other {Vedi tutte le # serate}}",
+      "showingRecent": "{count, plural, one {Mostra la tua serata più recente} other {Mostra le tue # serate più recenti}}",
+      "taken": "{count, plural, one {# era già stata salvata da qualcun altro.} other {# erano già state salvate da qualcun altro.}}",
+      "title": "Eri tu?",
+      "unmatched": "{count, plural, one {Non è stato possibile abbinare # altra canzone} other {Non è stato possibile abbinare altre # canzoni}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Troppe richieste contemporaneamente. Riprova tra qualche minuto."
     }
   }
 }

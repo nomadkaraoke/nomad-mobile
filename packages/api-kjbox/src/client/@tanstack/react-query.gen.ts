@@ -3,8 +3,8 @@
 import { queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { cancelRequest, changeRequest, checkMake, claimTip, closePreview, createRequest, getMe, getMyStats, getNight, getNow, getRotation, getTips, identifySong, joinNight, listSingers, logSearchEvent, makeSearch, type Options, registerPushToken, reorderRequests, resolvePreview, resolveSearch, searchSongs, setRequestConsent, updateMe, useQuickVersion, validateMakeUrl } from '../sdk.gen';
-import type { CancelRequestData, CancelRequestError, CancelRequestResponse, ChangeRequestData, ChangeRequestError, ChangeRequestResponse, CheckMakeData, CheckMakeError, CheckMakeResponse, ClaimTipData, ClaimTipError, ClaimTipResponse, ClosePreviewData, ClosePreviewError, ClosePreviewResponse, CreateRequestData, CreateRequestError, CreateRequestResponse, GetMeData, GetMeError, GetMeResponse, GetMyStatsData, GetMyStatsError, GetMyStatsResponse, GetNightData, GetNightError, GetNightResponse, GetNowData, GetNowError, GetNowResponse, GetRotationData, GetRotationError, GetRotationResponse, GetTipsData, GetTipsError, GetTipsResponse, IdentifySongData, IdentifySongError, IdentifySongResponse, JoinNightData, JoinNightError, JoinNightResponse, ListSingersData, ListSingersError, ListSingersResponse, LogSearchEventData, LogSearchEventError, LogSearchEventResponse, MakeSearchData, MakeSearchError, MakeSearchResponse, RegisterPushTokenData, RegisterPushTokenError, RegisterPushTokenResponse, ReorderRequestsData, ReorderRequestsError, ReorderRequestsResponse, ResolvePreviewData, ResolvePreviewError, ResolvePreviewResponse, ResolveSearchData, ResolveSearchError, ResolveSearchResponse, SearchSongsData, SearchSongsError, SearchSongsResponse, SetRequestConsentData, SetRequestConsentError, SetRequestConsentResponse, UpdateMeData, UpdateMeError, UpdateMeResponse, UseQuickVersionData, UseQuickVersionError, UseQuickVersionResponse, ValidateMakeUrlData, ValidateMakeUrlError, ValidateMakeUrlResponse } from '../types.gen';
+import { cancelRequest, changeRequest, checkMake, claimHistory, claimTip, closePreview, createRequest, getHistorySuggestions, getMe, getMyStats, getNight, getNow, getRotation, getTips, identifySong, joinNight, listSingers, logSearchEvent, makeSearch, type Options, registerPushToken, reorderRequests, resolvePreview, resolveSearch, searchSongs, setRequestConsent, unregisterPushToken, updateMe, useQuickVersion, validateMakeUrl } from '../sdk.gen';
+import type { CancelRequestData, CancelRequestError, CancelRequestResponse, ChangeRequestData, ChangeRequestError, ChangeRequestResponse, CheckMakeData, CheckMakeError, CheckMakeResponse, ClaimHistoryData, ClaimHistoryError, ClaimHistoryResponse, ClaimTipData, ClaimTipError, ClaimTipResponse, ClosePreviewData, ClosePreviewError, ClosePreviewResponse, CreateRequestData, CreateRequestError, CreateRequestResponse, GetHistorySuggestionsData, GetHistorySuggestionsError, GetHistorySuggestionsResponse, GetMeData, GetMeError, GetMeResponse, GetMyStatsData, GetMyStatsError, GetMyStatsResponse, GetNightData, GetNightError, GetNightResponse, GetNowData, GetNowError, GetNowResponse, GetRotationData, GetRotationError, GetRotationResponse, GetTipsData, GetTipsError, GetTipsResponse, IdentifySongData, IdentifySongError, IdentifySongResponse, JoinNightData, JoinNightError, JoinNightResponse, ListSingersData, ListSingersError, ListSingersResponse, LogSearchEventData, LogSearchEventError, LogSearchEventResponse, MakeSearchData, MakeSearchError, MakeSearchResponse, RegisterPushTokenData, RegisterPushTokenError, RegisterPushTokenResponse, ReorderRequestsData, ReorderRequestsError, ReorderRequestsResponse, ResolvePreviewData, ResolvePreviewError, ResolvePreviewResponse, ResolveSearchData, ResolveSearchError, ResolveSearchResponse, SearchSongsData, SearchSongsError, SearchSongsResponse, SetRequestConsentData, SetRequestConsentError, SetRequestConsentResponse, UnregisterPushTokenData, UnregisterPushTokenError, UnregisterPushTokenResponse, UpdateMeData, UpdateMeError, UpdateMeResponse, UseQuickVersionData, UseQuickVersionError, UseQuickVersionResponse, ValidateMakeUrlData, ValidateMakeUrlError, ValidateMakeUrlResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -515,14 +515,72 @@ export const useQuickVersionMutation = (options?: Partial<Options<UseQuickVersio
 };
 
 /**
+ * Unregister this device's Expo push token
+ *
+ * Idempotent: an unknown token is still 200. Only this account's own token rows are removed.
+ */
+export const unregisterPushTokenMutation = (options?: Partial<Options<UnregisterPushTokenData>>): UseMutationOptions<UnregisterPushTokenResponse, UnregisterPushTokenError, Options<UnregisterPushTokenData>> => {
+    const mutationOptions: UseMutationOptions<UnregisterPushTokenResponse, UnregisterPushTokenError, Options<UnregisterPushTokenData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await unregisterPushToken({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
  * Register this device's Expo push token
  *
- * Idempotent per token. Tonight's updates (approved, up in 2, up next, now singing, sung) go to the token; Expo reports a dead token and kjbox then stops sending to it.
+ * Idempotent per token. The app is pushed only when the singer is up next and when it is their turn (`up_next`, `now_singing`); `data.url` is `/tonight`. Expo reports a dead token and kjbox then stops sending to it.
  */
 export const registerPushTokenMutation = (options?: Partial<Options<RegisterPushTokenData>>): UseMutationOptions<RegisterPushTokenResponse, RegisterPushTokenError, Options<RegisterPushTokenData>> => {
     const mutationOptions: UseMutationOptions<RegisterPushTokenResponse, RegisterPushTokenError, Options<RegisterPushTokenData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await registerPushToken({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const getHistorySuggestionsQueryKey = (options?: Options<GetHistorySuggestionsData>) => createQueryKey('getHistorySuggestions', options);
+
+/**
+ * Past Nomad nights with songs this account may have sung
+ *
+ * Songs from past nights at this box whose singer name loosely matches a name the account goes by (the first word of the gen display name, of names its devices used on requests, or of their aliases; at least 2 letters). Nothing is claimed until POST /history/claim. Only songs that are still claimable are listed: not already claimed by this account, not marked not mine, and with a free singer slot (one per singer on the song). Nights with no such song are left out; at most 20 nights, newest first, with more_nights counting the rest. Tonight's songs appear only once the host closes requests. No t, no night_id; works while the night is closed.
+ */
+export const getHistorySuggestionsOptions = (options?: Options<GetHistorySuggestionsData>) => queryOptions<GetHistorySuggestionsResponse, GetHistorySuggestionsError, GetHistorySuggestionsResponse, ReturnType<typeof getHistorySuggestionsQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await getHistorySuggestions({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: getHistorySuggestionsQueryKey(options)
+});
+
+/**
+ * Save a past night's ticked songs as mine, the rest as not mine
+ *
+ * Every id must be a song of that night (from GET /history/suggestions) whose singer matches the account, or one it already holds; otherwise 400 invalid and nothing is written. mine songs are recorded to the account's karaoke log (first claimer wins per singer slot: a song someone else holds comes back in taken). Re-sending is idempotent (already_saved). not_mine songs are no longer suggested to this account; not_mine on a song it already holds is 400 invalid, and mine on a song it once marked not mine clears that. No t, no night_id.
+ */
+export const claimHistoryMutation = (options?: Partial<Options<ClaimHistoryData>>): UseMutationOptions<ClaimHistoryResponse, ClaimHistoryError, Options<ClaimHistoryData>> => {
+    const mutationOptions: UseMutationOptions<ClaimHistoryResponse, ClaimHistoryError, Options<ClaimHistoryData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await claimHistory({
                 ...options,
                 ...fnOptions,
                 throwOnError: true

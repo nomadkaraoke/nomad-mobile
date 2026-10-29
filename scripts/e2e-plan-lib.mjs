@@ -31,11 +31,16 @@ const RULES = [
   [/^apps\/mobile\/src\/(app\/review|review)\//, ['review-', 'make-5']],
   [/^packages\/review-core\//, ['review-', 'make-5']],
   [/^apps\/mobile\/src\/(app\/tonight|tonight)\//, ['tonight-']],
-  [/^packages\/api-kjbox\//, ['tonight-']],
+  // The kjbox client: Tonight, and Me's past-night claims (4c).
+  [/^packages\/api-kjbox\//, ['tonight-', 'me-13', 'me-14']],
   [/^apps\/mobile\/src\/voiceSession\//, ['voice-session-']],
   [/^apps\/mobile\/src\/voice\//, ['voice-', 'discover-5']],
   [/^apps\/mobile\/src\/offline\//, ['search-4', 'discover-6', 'me-6']],
-  [/^apps\/mobile\/src\/app\/me\//, ['me-', 'discover-5', 'connect-', 'account-', 'notify-']],
+  // Me's logic: its own flows, plus what imports it (Discover feedback and Connect, the song page's library actions,
+  // Tonight's karaoke log, the voice flows' Me profile card, and AppProviders' account-change purge, which account-1
+  // exercises). account- / notify- / purchase- name Phase 6 flows (account-1, notify-1/2, purchase-1/2).
+  [/^apps\/mobile\/src\/me\//, ['me-', 'discover-', 'search-', 'connect-', 'tonight-', 'voice-', 'make-8', 'make-10', 'account-']],
+  [/^apps\/mobile\/src\/app\/me\//, ['me-', 'discover-5', 'connect-', 'voice-', 'account-', 'notify-']],
   [/^apps\/mobile\/src\/app\/sign-in\//, ['make-1', 'make-2', 'make-7', 'discover-1', 'tonight-2']],
   [/^apps\/mobile\/src\/audio\//, ['review-', 'voice-']],
   [/^apps\/mobile\/src\/media\//, ['make-1', 'voice-session-']],

@@ -2057,6 +2057,22 @@
         "submission": "Ja has fet la teva petició gratuïta d'avui. Torna demà per demanar-ne una altra.",
         "voteUsed": "Ja has fet servir el teu vot gratuït d'avui. Torna demà per votar-ne una altra."
       }
+    },
+    "claim": {
+      "explainer": "Cançons cantades amb un nom com el teu a les nits Nomad. Marca les que vas cantar tu.",
+      "failed": "No s'ha pogut connectar amb la màquina de l'amfitrió. Torna-ho a provar més tard.",
+      "nightHeader": "{date} · {count, plural, one {# cançó} other {# cançons}} com a «{name}»",
+      "none": "Cap d'aquestes soc jo",
+      "save": "Desa les cançons marcades",
+      "saved": "{count, plural, one {S'ha desat # cançó.} other {S'han desat # cançons.}} Apareixeran al teu historial d'aquí a un minut.",
+      "screenTitle": "Les teves nits Nomad passades",
+      "seeAll": "{count, plural, one {Mostra la nit sencera} other {Mostra totes les # nits}}",
+      "showingRecent": "{count, plural, one {Es mostra la teva nit més recent} other {Es mostren les teves # nits més recents}}",
+      "taken": "{count, plural, one {# ja l'ha desat una altra persona.} other {# ja les ha desat una altra persona.}}",
+      "title": "Ets tu?",
+      "unmatched": "{count, plural, one {No s'ha pogut fer coincidir # cançó més} other {No s'han pogut fer coincidir # cançons més}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Massa intents alhora. Torna-ho a provar d'aquí a uns minuts."
     }
   }
 }

@@ -203,6 +203,73 @@ Deviations:
 - The me-tour's new shots (me-28…31) and the Arabic shots. They have not been run, because CI has no `--screen`.
 - Hermes percent formatting ("100% of baritones…") has been seen working in CI on both platforms. Glance at it on a real device and in other locales.
 - The R27 crowd differencing decision.
+- (4c) A real Nomad night claimed on prod with a real account, checked end to end into decide's karaoke log and Me's library.
+- (4c) The R37 privacy decision: matching is by first name with no "joined a night through the app" gate, so anyone whose gen display name starts "Wren" sees songs sung under any "Wren …" at past nights (public on the venue screen at the time). Protections: no auto-claim, songs shown before ticking, no private fields, rate limits, host undo. Andrew to confirm or ask for the gate.
+- (4c) The workspace `scripts/kjbox-test-remote` bugs found in E9: with no pytest args the empty `$2` is lost over ssh (`unbound variable`; pass `tests`); it doesn't sync `desktop/` (which `tests/unit/test_overlay_config.py` imports); it runs only the first of several pytest node ids.
+- (4c) The me-tour's me-32 (the card) and me-33 (past nights) shots, en and ar (CI has no `--screen`), and the iPad check of the card.
+
+### As built (4c)
+
+kjbox shipped as #300, v0.144.0 (merged 190dda6, deployed to NomadPC 2026-10-29: kj-controller active, `/sing/api/v1/history/suggestions` answers 401 without a bearer on the local and public hosts, the `history_claims` / `history_rejections` tables present). It adds:
+- `history_claims.py`: loose name matching, past-night suggestions (≤ 20 nights + `more_nights`), claims through the existing history outbox as ordinary `kj_` records, and the R47 attribution guard;
+- `sing_store` tables `history_claims` (per entry, per singer slot) and `history_rejections` (by email hash), both erased by `forget_gen_account` together with the account's outbox rows (R50);
+- app API v1 `GET /history/suggestions` and `POST /history/claim` (bearer only: no `t`, no `night_id`, no open night, R29) in the contract, with per-device limits (suggestions 30 / 10 min, claims 20 / 10 min);
+- KJ-side `POST /history/claims/undo` (no UI; TROUBLESHOOTING), a `claims` count per Night Log entry, and the R52 release on un-Done;
+- test API `POST /sing/api/test/history/seed` and `GET /sing/api/test/history/state`;
+- a single-flight Night Log build cache (prod dry run: `_build` 0.59 s cold in a fresh process, 73–84 ms warm; suggestions ~17 ms).
+decide needed no change (R42).
+
+The mobile side (this repo):
+- `@nomad/api-kjbox` facades `getHistorySuggestions()` / `claimHistory(nightId, mine, notMine)` (the first without `t`); a 2xx with the wrong shape rejects as `KjboxError` internal;
+- `useClaimSuggestions` (memory-only, per-account query `['kjbox', userKey, 'history-suggestions']`, online only, any error hides the card; claim with one retry after an unreachable box, double-tap guard, answered nights hidden at once, library + log mirror refetched at +10 s / +30 s, the library's MMKV cache marked stale);
+- `useClaimNightsView` (owner-tagged ticks / busy / result state), `ClaimNightCard`, `ClaimNightsSection` (Me, between the profile card and the go-tos) and `app/me/past-nights.tsx`;
+- `useClearMeOnAccountChange` removes the query and the answered set on any account change;
+- Maestro me-13 (claim yes) and me-14 (not mine / None / box down), tag `kjbox`, `stack.js` `history-seed` / `history-state`; both pass on iOS and Android in CI.
+
+Rulings (full ledger: the 4c plan's "Execution ledger"):
+
+- **R29** The history routes need no event code or open night: the bearer and per-device limits only, and they never link a device to tonight.
+- **R30** Nights before 2026-06-04 (recycled entry ids) use `history_id_for(box, "<night>:<entry_id>", email)`; later nights the plain formula, identical to the live outbox.
+- **R31** An entry can be held by at most `max(1, len(members))` accounts (claims plus live outbox records), each account once.
+- **R32** A claim's `night_id` is the night's existing claim / marker night id when one maps to the date, else `night_id_for_marker(box, "night:" + date)`.
+- **R33** Songs left unticked on Save are "not mine"; None of these are me covers the whole night.
+- **R34** Tonight's live rotation is excluded while requests are open; once the host closes requests its Done entries are claimable, with the same history id the live outbox would use.
+- **R35** Name sources: the gen display name's first word (no email local part), names the account's devices used on requests (not friend songs), and their aliases; a first word of ≥ 2 characters.
+- **R36** The "First Song of the Night" starter entry is never suggested.
+- **R37** Privacy envelope: matched entries only (date, venue, singer text as shown, artist, title, start time, state), never emails, devices, request ids, phones or notes; rate limits; ≤ 20 nights. Accepted **without** the "joined a night through the app" gate (most past singers never used the app); on the manual-pass list for Andrew.
+- **R38** Nights with no claimable songs are dropped; `unmatched` counts Done legacy rows under a matching name with no entry id.
+- **R39** Claims are online only, with no phone outbox; suggestions are never cached in MMKV.
+- **R40** Me shows at most 2 nights plus "See all N nights" (`/me/past-nights`).
+- **R41** Host undo is a KJ-side route (no UI) plus a `claims` count on the Night Log; the KJ modal marker is a follow-up.
+- **R42** No decide change: claims are plain `kj_` records; the app refetches the library and log mirror at +10 s / +30 s.
+- **R43** The Night Log build cache stays (single-flight); its key keeps `rotation_rev` (warm `_build` is under the ~200 ms threshold).
+- **R44** Claims are idempotent (`already_saved`, no second outbox row); the phone retries once after a timeout with the same body.
+- **R45** A song already backfilled ("a while ago") and then claimed counts twice in decide; accepted, a decide dedupe can follow.
+- **R46** The Maestro tag `kjbox` starts the kjbox stack for non-Tonight flows.
+- **R47** The live outbox's attribution never gives a solo entry already claimed by one account to another (re-checked right before enqueueing).
+- **R48** Night Log rows linked only by request time stay `link: none` and are never offered (pre-14-Oct nights contribute only songs linked to an entry).
+- **R49** A device's names count only on nights it belonged to this email (the window ends at that night's noon or the next marker); another device's alias counts only if set after this email's latest link.
+- **R50** `forget_gen_account` also deletes the account's sent history outbox rows.
+- **R51** `not_mine` on a song the account already holds is `invalid` for the whole request; nothing is written. `mine` on a song once marked not mine clears the rejection.
+- **R52** The host un-Doing a claimed song releases the claim and retracts its decide record.
+- **R53** An alias counts from the start of this email's ownership run (its earliest link after any other email's latest link), so a same-night re-link keeps it.
+
+Deviations:
+- **`HistorySong.members`** was added to the plan's song shape (each person on a duet), and the card shows the singer text on duet rows.
+- **`taken` is a list of entry ids**, not a count: the hook returns `taken` (count) and `takenIds`.
+- **A failed claim refreshes the list:** `invalid` / `not_found` refetch the suggestions at once; unreachable after the retry only marks them stale (an immediate refetch would fail too and hide the card with its error line).
+- **The library cache is marked stale after a claim** (`markLibraryCacheStale`): the +10 s / +30 s timers die with the app, and a relaunch inside the 60 s staleTime otherwise showed no claimed songs (found by me-13 on Android).
+- **The E2E plan maps `apps/mobile/src/me/`** to the Me flows plus Discover, Search, Connect, Tonight, make-8/10 and account- (everything that imports it), not `me-` alone.
+- **`link_account` keeps `linked_at`** when the same email re-links the same device on the same night (kjbox, for R53).
+- **The past-nights screen cards use the testID prefix `me-past-*`**, so Maestro never matches Me's `me-claim-*` cards under the pushed screen.
+
+**Deferred follow-ups:**
+- kjbox: the KJ Night Log modal marker for claimed songs (R41).
+- kjbox: a residual R47 window (a claim in the moments between the scan's re-read and its enqueue), documented in the module.
+- kjbox: fix `scripts/kjbox-test-remote` (manual-pass list); `test_routes.py` download tests fail on the build host on main too; `test_push_app_filter.py` is order-dependent.
+- decide: dedupe a backfilled song later claimed from a Nomad night (R45), if it shows up in real data.
+- mobile: iOS tick-state (`checked:`) assertions in Maestro, if Maestro can read them there.
+- mobile: two React Query act() notices remain in `useClaimSuggestions.test.tsx` when its visibility and account-change groups run together (pre-existing pairing; all tests pass).
 
 ## 6. Design
 

@@ -2057,6 +2057,22 @@
         "submission": "Você já fez o pedido gratuito de hoje. Volte amanhã para pedir outro.",
         "voteUsed": "Você já usou o voto gratuito de hoje. Volte amanhã para pedir outro."
       }
+    },
+    "claim": {
+      "explainer": "Músicas cantadas com um nome parecido com o seu nas noites Nomad. Marque as que você cantou.",
+      "failed": "Não foi possível conectar à máquina do anfitrião. Tente novamente mais tarde.",
+      "nightHeader": "{date} · {count, plural, one {# música} other {# músicas}} como “{name}”",
+      "none": "Não cantei nenhuma dessas",
+      "save": "Salvar músicas marcadas",
+      "saved": "{count, plural, one {# música salva.} other {# músicas salvas.}} Elas aparecerão no seu histórico em um minuto.",
+      "screenTitle": "Suas noites Nomad anteriores",
+      "seeAll": "{count, plural, one {Ver a # noite} other {Ver todas as # noites}}",
+      "showingRecent": "{count, plural, one {Mostrando sua noite mais recente} other {Mostrando suas # noites mais recentes}}",
+      "taken": "{count, plural, one {# já foi salva por outra pessoa.} other {# já foram salvas por outra pessoa.}}",
+      "title": "Foi você que cantou?",
+      "unmatched": "{count, plural, one {Mais # música não pôde ser identificada} other {Mais # músicas não puderam ser identificadas}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Muitas tentativas de uma vez só. Tente novamente em alguns minutos."
     }
   }
 }

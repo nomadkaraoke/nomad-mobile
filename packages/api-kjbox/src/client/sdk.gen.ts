@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { CancelRequestData, CancelRequestErrors, CancelRequestResponses, ChangeRequestData, ChangeRequestErrors, ChangeRequestResponses, CheckMakeData, CheckMakeErrors, CheckMakeResponses, ClaimTipData, ClaimTipErrors, ClaimTipResponses, ClosePreviewData, ClosePreviewErrors, ClosePreviewResponses, CreateRequestData, CreateRequestErrors, CreateRequestResponses, GetMeData, GetMeErrors, GetMeResponses, GetMyStatsData, GetMyStatsErrors, GetMyStatsResponses, GetNightData, GetNightErrors, GetNightResponses, GetNowData, GetNowErrors, GetNowResponses, GetRotationData, GetRotationErrors, GetRotationResponses, GetTipsData, GetTipsErrors, GetTipsResponses, IdentifySongData, IdentifySongErrors, IdentifySongResponses, JoinNightData, JoinNightErrors, JoinNightResponses, ListSingersData, ListSingersErrors, ListSingersResponses, LogSearchEventData, LogSearchEventErrors, LogSearchEventResponses, MakeSearchData, MakeSearchErrors, MakeSearchResponses, RegisterPushTokenData, RegisterPushTokenErrors, RegisterPushTokenResponses, ReorderRequestsData, ReorderRequestsErrors, ReorderRequestsResponses, ResolvePreviewData, ResolvePreviewErrors, ResolvePreviewResponses, ResolveSearchData, ResolveSearchErrors, ResolveSearchResponses, SearchSongsData, SearchSongsErrors, SearchSongsResponses, SetRequestConsentData, SetRequestConsentErrors, SetRequestConsentResponses, UpdateMeData, UpdateMeErrors, UpdateMeResponses, UseQuickVersionData, UseQuickVersionErrors, UseQuickVersionResponses, ValidateMakeUrlData, ValidateMakeUrlErrors, ValidateMakeUrlResponses } from './types.gen';
+import type { CancelRequestData, CancelRequestErrors, CancelRequestResponses, ChangeRequestData, ChangeRequestErrors, ChangeRequestResponses, CheckMakeData, CheckMakeErrors, CheckMakeResponses, ClaimHistoryData, ClaimHistoryErrors, ClaimHistoryResponses, ClaimTipData, ClaimTipErrors, ClaimTipResponses, ClosePreviewData, ClosePreviewErrors, ClosePreviewResponses, CreateRequestData, CreateRequestErrors, CreateRequestResponses, GetHistorySuggestionsData, GetHistorySuggestionsErrors, GetHistorySuggestionsResponses, GetMeData, GetMeErrors, GetMeResponses, GetMyStatsData, GetMyStatsErrors, GetMyStatsResponses, GetNightData, GetNightErrors, GetNightResponses, GetNowData, GetNowErrors, GetNowResponses, GetRotationData, GetRotationErrors, GetRotationResponses, GetTipsData, GetTipsErrors, GetTipsResponses, IdentifySongData, IdentifySongErrors, IdentifySongResponses, JoinNightData, JoinNightErrors, JoinNightResponses, ListSingersData, ListSingersErrors, ListSingersResponses, LogSearchEventData, LogSearchEventErrors, LogSearchEventResponses, MakeSearchData, MakeSearchErrors, MakeSearchResponses, RegisterPushTokenData, RegisterPushTokenErrors, RegisterPushTokenResponses, ReorderRequestsData, ReorderRequestsErrors, ReorderRequestsResponses, ResolvePreviewData, ResolvePreviewErrors, ResolvePreviewResponses, ResolveSearchData, ResolveSearchErrors, ResolveSearchResponses, SearchSongsData, SearchSongsErrors, SearchSongsResponses, SetRequestConsentData, SetRequestConsentErrors, SetRequestConsentResponses, UnregisterPushTokenData, UnregisterPushTokenErrors, UnregisterPushTokenResponses, UpdateMeData, UpdateMeErrors, UpdateMeResponses, UseQuickVersionData, UseQuickVersionErrors, UseQuickVersionResponses, ValidateMakeUrlData, ValidateMakeUrlErrors, ValidateMakeUrlResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -344,13 +344,54 @@ export const useQuickVersion = <ThrowOnError extends boolean = true>(options: Op
 });
 
 /**
+ * Unregister this device's Expo push token
+ *
+ * Idempotent: an unknown token is still 200. Only this account's own token rows are removed.
+ */
+export const unregisterPushToken = <ThrowOnError extends boolean = true>(options: Options<UnregisterPushTokenData, ThrowOnError>): RequestResult<UnregisterPushTokenResponses, UnregisterPushTokenErrors, ThrowOnError> => (options.client ?? client).delete<UnregisterPushTokenResponses, UnregisterPushTokenErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/push-token',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
  * Register this device's Expo push token
  *
- * Idempotent per token. Tonight's updates (approved, up in 2, up next, now singing, sung) go to the token; Expo reports a dead token and kjbox then stops sending to it.
+ * Idempotent per token. The app is pushed only when the singer is up next and when it is their turn (`up_next`, `now_singing`); `data.url` is `/tonight`. Expo reports a dead token and kjbox then stops sending to it.
  */
 export const registerPushToken = <ThrowOnError extends boolean = true>(options: Options<RegisterPushTokenData, ThrowOnError>): RequestResult<RegisterPushTokenResponses, RegisterPushTokenErrors, ThrowOnError> => (options.client ?? client).post<RegisterPushTokenResponses, RegisterPushTokenErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/push-token',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Past Nomad nights with songs this account may have sung
+ *
+ * Songs from past nights at this box whose singer name loosely matches a name the account goes by (the first word of the gen display name, of names its devices used on requests, or of their aliases; at least 2 letters). Nothing is claimed until POST /history/claim. Only songs that are still claimable are listed: not already claimed by this account, not marked not mine, and with a free singer slot (one per singer on the song). Nights with no such song are left out; at most 20 nights, newest first, with more_nights counting the rest. Tonight's songs appear only once the host closes requests. No t, no night_id; works while the night is closed.
+ */
+export const getHistorySuggestions = <ThrowOnError extends boolean = true>(options?: Options<GetHistorySuggestionsData, ThrowOnError>): RequestResult<GetHistorySuggestionsResponses, GetHistorySuggestionsErrors, ThrowOnError> => (options?.client ?? client).get<GetHistorySuggestionsResponses, GetHistorySuggestionsErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/history/suggestions',
+    ...options
+});
+
+/**
+ * Save a past night's ticked songs as mine, the rest as not mine
+ *
+ * Every id must be a song of that night (from GET /history/suggestions) whose singer matches the account, or one it already holds; otherwise 400 invalid and nothing is written. mine songs are recorded to the account's karaoke log (first claimer wins per singer slot: a song someone else holds comes back in taken). Re-sending is idempotent (already_saved). not_mine songs are no longer suggested to this account; not_mine on a song it already holds is 400 invalid, and mine on a song it once marked not mine clears that. No t, no night_id.
+ */
+export const claimHistory = <ThrowOnError extends boolean = true>(options: Options<ClaimHistoryData, ThrowOnError>): RequestResult<ClaimHistoryResponses, ClaimHistoryErrors, ThrowOnError> => (options.client ?? client).post<ClaimHistoryResponses, ClaimHistoryErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/history/claim',
     ...options,
     headers: {
         'Content-Type': 'application/json',

@@ -2057,6 +2057,22 @@
         "voteUsed": "You've used today's free vote. Come back tomorrow to request another.",
         "submission": "You've made today's free request. Come back tomorrow to request another."
       }
+    },
+    "claim": {
+      "title": "Were these you?",
+      "explainer": "Songs sung under a name like yours at Nomad nights. Tick the ones that were you.",
+      "screenTitle": "Your past Nomad nights",
+      "nightHeader": "{date} · {count, plural, one {# song} other {# songs}} as “{name}”",
+      "songValue": "{title} · {artist}",
+      "unmatched": "{count, plural, one {# more song couldn't be matched} other {# more songs couldn't be matched}}",
+      "save": "Save ticked songs",
+      "none": "None of these are me",
+      "saved": "{count, plural, one {Saved # song.} other {Saved # songs.}} They'll show in your history in a minute.",
+      "taken": "{count, plural, one {# was already saved by someone else.} other {# were already saved by someone else.}}",
+      "failed": "Couldn't reach the host's machine. Try again later.",
+      "rateLimited": "Too many at once. Try again in a few minutes.",
+      "seeAll": "{count, plural, one {See all # night} other {See all # nights}}",
+      "showingRecent": "{count, plural, one {Showing your most recent night} other {Showing your # most recent nights}}"
     }
   }
 }

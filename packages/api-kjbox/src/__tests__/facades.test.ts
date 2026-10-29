@@ -2,8 +2,10 @@ import {
   KjboxError,
   MAKE_TIMEOUT_MS,
   cancelRequest,
+  claimHistory,
   claimTip,
   configureKjbox,
+  getHistorySuggestions,
   getMe,
   getNight,
   getNow,
@@ -196,5 +198,92 @@ it('night_changed carries nightId on submitRequest', async () => {
   await expect(submitRequest('2121', { client_request_id: 'c', source_type: 'local' })).rejects.toMatchObject({
     code: 'night_changed',
     nightId: 'n9',
+  });
+});
+
+describe('past-night history (no event code, no night id)', () => {
+  const night = {
+    night_id: 'kn_1',
+    date: '2026-10-09',
+    venue: 'Host Bar',
+    names: ['Wren B'],
+    unmatched: 1,
+    songs: [
+      { entry_id: 12, singer_name: 'Wren B', members: ['Wren B'], artist: 'Adele', title: 'Hello', started_at: '2026-10-10T02:14:00Z', state: 'sung' },
+    ],
+  };
+
+  it('getHistorySuggestions sends the bearer and no t or night_id', async () => {
+    fetchMock.mockImplementation(async () => json({ api_version: '1.0', nights: [night], more_nights: 3 }));
+    const res = await getHistorySuggestions();
+    const url = new URL(last().url);
+    expect(last().method).toBe('GET');
+    expect(url.origin + url.pathname).toBe('https://sing.test/api/v1/history/suggestions');
+    expect(url.search).toBe('');
+    expect(last().headers.get('authorization')).toBe('Bearer tok');
+    expect(res).toEqual({ api_version: '1.0', nights: [night], more_nights: 3 });
+  });
+
+  it('claimHistory posts night_id, mine and not_mine only (no t)', async () => {
+    fetchMock.mockImplementation(async () => json({ api_version: '1.0', saved: 1, already_saved: 0, taken: [14], rejected: 1 }));
+    const res = await claimHistory('kn_1', [12, 14], [13]);
+    const url = new URL(last().url);
+    expect(last().method).toBe('POST');
+    expect(url.pathname).toBe('/api/v1/history/claim');
+    expect(url.search).toBe('');
+    expect(last().headers.get('authorization')).toBe('Bearer tok');
+    expect(await lastBody()).toEqual({ night_id: 'kn_1', mine: [12, 14], not_mine: [13] });
+    expect(res).toEqual({ api_version: '1.0', saved: 1, already_saved: 0, taken: [14], rejected: 1 });
+  });
+
+  it('a 404 from an older box rejects with KjboxError not_found', async () => {
+    fetchMock.mockImplementation(async () => json({ api_version: '1.0', error: 'not_found' }, 404));
+    const err = await getHistorySuggestions().catch((e) => e);
+    expect(err).toBeInstanceOf(KjboxError);
+    expect(err).toMatchObject({ code: 'not_found', status: 404, unreachable: false });
+  });
+
+  it('a non-JSON 404 (a box without the route) rejects as internal, not unreachable', async () => {
+    fetchMock.mockImplementation(async () => new Response('<html>Not Found</html>', { status: 404 }));
+    const err = await getHistorySuggestions().catch((e) => e);
+    expect(err).toBeInstanceOf(KjboxError);
+    expect(err).toMatchObject({ code: 'internal', status: 404, unreachable: false });
+  });
+
+  it('a non-JSON 530 rejects as unreachable', async () => {
+    fetchMock.mockImplementation(async () => new Response('<html>tunnel down</html>', { status: 530 }));
+    await expect(getHistorySuggestions()).rejects.toMatchObject({ unreachable: true, code: 'internal', status: 530 });
+    await expect(claimHistory('kn_1', [12], [])).rejects.toMatchObject({ unreachable: true, code: 'internal', status: 530 });
+  });
+
+  it('claim errors keep their contract code', async () => {
+    fetchMock.mockResolvedValueOnce(json({ api_version: '1.0', error: 'invalid', message: 'bad ids' }, 400));
+    await expect(claimHistory('kn_1', [99], [])).rejects.toMatchObject({ code: 'invalid', status: 400 });
+    fetchMock.mockResolvedValueOnce(json({ api_version: '1.0', error: 'rate_limited' }, 429, { 'Retry-After': '42' }));
+    await expect(claimHistory('kn_1', [12], [])).rejects.toMatchObject({ code: 'rate_limited', retryAfter: 42 });
+  });
+
+  it('a malformed 200 reply rejects with KjboxError internal', async () => {
+    fetchMock.mockResolvedValueOnce(json({ api_version: '1.0', nights: 'nope' }));
+    await expect(getHistorySuggestions()).rejects.toMatchObject({ code: 'internal', status: 200 });
+    fetchMock.mockResolvedValueOnce(new Response('<html>ok</html>', { status: 200 }));
+    await expect(getHistorySuggestions()).rejects.toBeInstanceOf(KjboxError);
+    fetchMock.mockResolvedValueOnce(json({ api_version: '1.0', saved: '1' }));
+    await expect(claimHistory('kn_1', [12], [])).rejects.toMatchObject({ code: 'internal', status: 200 });
+  });
+
+  it.each([
+    ['a non-string name', { names: [7] }],
+    ['a non-string venue', { venue: 3 }],
+    ['a missing venue', { venue: undefined }],
+    ['a non-string member', { songs: [{ ...night.songs[0], members: [null] }] }],
+  ])('rejects suggestions with %s', async (_label, patch) => {
+    fetchMock.mockResolvedValueOnce(json({ api_version: '1.0', nights: [{ ...night, ...patch }], more_nights: 0 }));
+    await expect(getHistorySuggestions()).rejects.toMatchObject({ code: 'internal', status: 200 });
+  });
+
+  it('accepts a null venue', async () => {
+    fetchMock.mockResolvedValueOnce(json({ api_version: '1.0', nights: [{ ...night, venue: null }], more_nights: 0 }));
+    await expect(getHistorySuggestions()).resolves.toMatchObject({ nights: [{ venue: null }] });
   });
 });

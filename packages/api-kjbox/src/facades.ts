@@ -1,7 +1,10 @@
 import * as sdk from './client';
 import { fetchWithTimeout, MAKE_TIMEOUT_MS } from './configure';
+import { KjboxError } from './errors';
 import type {
   ChangeSongRequest,
+  HistoryClaimResult,
+  HistorySuggestions,
   MakeCheckRequest,
   PushTokenRequest,
   ReorderItem,
@@ -122,3 +125,41 @@ export const useQuick = async (t: string, id: number, nightId?: string) =>
 // Push
 export const registerPushToken = async (t: string, token: string, platform: PushTokenRequest['platform'], nightId?: string) =>
   (await sdk.registerPushToken({ body: { ...q(t, nightId), expo_push_token: token, platform } })).data;
+
+// Past-night history. The only routes without `t` or `night_id`: they need just the bearer and work any day, even
+// while the box's night is closed. A box older than these routes answers 404 (a KjboxError, `not_found` when JSON).
+
+const isObj = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v);
+const isInt = (v: unknown) => typeof v === 'number' && Number.isInteger(v);
+/** A 2xx whose body isn't the contract's shape (a proxy page, an older or broken box) rejects like any failure. */
+const malformed = (status: number | undefined) =>
+  new KjboxError('internal', status ?? 0, undefined, { message: 'malformed reply' });
+
+const isStrings = (v: unknown) => Array.isArray(v) && v.every((x) => typeof x === 'string');
+const isHistorySong = (s: unknown) =>
+  isObj(s) && isInt(s.entry_id) && typeof s.singer_name === 'string' && isStrings(s.members) &&
+  typeof s.artist === 'string' && typeof s.title === 'string' && (s.started_at === null || typeof s.started_at === 'string') &&
+  (s.state === 'sung' || s.state === 'sung_unplayed');
+const isHistoryNight = (n: unknown) =>
+  isObj(n) && typeof n.night_id === 'string' && typeof n.date === 'string' && (n.venue === null || typeof n.venue === 'string') &&
+  isStrings(n.names) && isInt(n.unmatched) &&
+  Array.isArray(n.songs) && n.songs.every(isHistorySong);
+
+/** Past nights at this box with songs this account may have sung (nothing is claimed until claimHistory). */
+export const getHistorySuggestions = async (): Promise<HistorySuggestions> => {
+  const { data, response } = await sdk.getHistorySuggestions();
+  if (!isObj(data) || !Array.isArray(data.nights) || !isInt(data.more_nights) || !data.nights.every(isHistoryNight))
+    throw malformed(response?.status);
+  return data;
+};
+
+/**
+ * Save one night's ticked songs as `mine` and the rest as `notMine` (never suggested again). Idempotent: re-sending
+ * the same body answers `already_saved`, so a retry after a timeout is safe.
+ */
+export const claimHistory = async (nightId: string, mine: number[], notMine: number[]): Promise<HistoryClaimResult> => {
+  const { data, response } = await sdk.claimHistory({ body: { night_id: nightId, mine, not_mine: notMine } });
+  if (!isObj(data) || !isInt(data.saved) || !isInt(data.already_saved) || !isInt(data.rejected) || !Array.isArray(data.taken))
+    throw malformed(response?.status);
+  return data;
+};

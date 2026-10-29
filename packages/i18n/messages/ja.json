@@ -2057,6 +2057,22 @@
         "submission": "本日の無料リクエストは送信済みです。また明日リクエストしてくださいね。",
         "voteUsed": "本日の無料投票は使用済みです。また明日投票してくださいね。"
       }
+    },
+    "claim": {
+      "explainer": "Nomadのイベントであなたと似た名前で歌われた曲です。ご自身が歌った曲にチェックを入れてください。",
+      "failed": "ホストのマシンに接続できませんでした。後でもう一度お試しください。",
+      "nightHeader": "{date} · 「{name}」として{count, plural, one {#曲} other {#曲}}",
+      "none": "自分が歌った曲はありません",
+      "save": "チェックした曲を保存",
+      "saved": "{count, plural, one {#曲を保存しました。} other {#曲を保存しました。}}まもなく履歴に表示されます。",
+      "screenTitle": "参加したNomadのイベント履歴",
+      "seeAll": "{count, plural, one {全#件のイベントを見る} other {全#件のイベントを見る}}",
+      "showingRecent": "{count, plural, one {直近のイベントを表示中} other {直近#件のイベントを表示中}}",
+      "taken": "{count, plural, one {#曲はすでに他のユーザーに保存されています。} other {#曲はすでに他のユーザーに保存されています。}}",
+      "title": "あなたが歌った曲ですか？",
+      "unmatched": "{count, plural, one {他#曲を照合できませんでした} other {他#曲を照合できませんでした}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "リクエストが多すぎます。数分後にもう一度お試しください。"
     }
   }
 }

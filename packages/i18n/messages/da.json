@@ -2057,6 +2057,22 @@
         "submission": "Du har brugt dagens gratis anmodning. Kom tilbage i morgen for at anmode om en ny.",
         "voteUsed": "Du har brugt dagens gratis stemme. Kom tilbage i morgen for at stemme igen."
       }
+    },
+    "claim": {
+      "explainer": "Sange sunget under et navn som dit til Nomad-aftener. Sæt kryds ved dem, der var dig.",
+      "failed": "Kunne ikke få forbindelse til værtens maskine. Prøv igen senere.",
+      "nightHeader": "{date} · {count, plural, one {# sang} other {# sange}} som “{name}”",
+      "none": "Ingen af disse er mig",
+      "save": "Gem markerede sange",
+      "saved": "{count, plural, one {# sang er gemt.} other {# sange er gemt.}} De vises i din historik om et øjeblik.",
+      "screenTitle": "Dine tidligere Nomad-aftener",
+      "seeAll": "{count, plural, one {Se # aften} other {Se alle # aftener}}",
+      "showingRecent": "{count, plural, one {Viser din seneste aften} other {Viser dine # seneste aftener}}",
+      "taken": "{count, plural, one {# var allerede gemt af en anden.} other {# var allerede gemt af andre.}}",
+      "title": "Var det her dig?",
+      "unmatched": "{count, plural, one {Yderligere # sang kunne ikke matches} other {Yderligere # sange kunne ikke matches}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "For mange på én gang. Prøv igen om et par minutter."
     }
   }
 }

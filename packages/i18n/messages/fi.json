@@ -2057,6 +2057,22 @@
         "submission": "Olet käyttänyt tämän päivän ilmaisen toiveesi. Tule huomenna takaisin toivoaksesi uutta kappaletta.",
         "voteUsed": "Olet käyttänyt tämän päivän ilmaisen äänesi. Tule huomenna takaisin toivoaksesi lisää."
       }
+    },
+    "claim": {
+      "explainer": "Kappaleet, jotka on laulettu nimesi kaltaisella nimellä Nomad-illoissa. Rastita omasi.",
+      "failed": "Yhteyttä vetäjän koneeseen ei saatu. Yritä myöhemmin uudelleen.",
+      "nightHeader": "{date} · {count, plural, one {# kappale} other {# kappaletta}} nimellä ”{name}”",
+      "none": "Mikään näistä ei ole minun",
+      "save": "Tallenna valitut kappaleet",
+      "saved": "{count, plural, one {Tallennettu # kappale.} other {Tallennettu # kappaletta.}} Ne näkyvät historiassasi hetken kuluttua.",
+      "screenTitle": "Aiemmat Nomad-iltasi",
+      "seeAll": "{count, plural, one {Näytä koko # ilta} other {Näytä kaikki # iltaa}}",
+      "showingRecent": "{count, plural, one {Näytetään viimeisin iltasi} other {Näytetään # viimeisintä iltaasi}}",
+      "taken": "{count, plural, one {Joku muu oli jo tallentanut # kappaleen.} other {Joku muu oli jo tallentanut # kappaletta.}}",
+      "title": "Olitko tämä sinä?",
+      "unmatched": "{count, plural, one {Vielä # kappaletta ei voitu yhdistää} other {Vielä # muuta kappaletta ei voitu yhdistää}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Liian monta kerralla. Yritä uudelleen muutaman minuutin kuluttua."
     }
   }
 }

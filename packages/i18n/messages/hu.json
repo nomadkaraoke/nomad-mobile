@@ -2057,6 +2057,22 @@
         "submission": "Elhasználtad a mai ingyenes kérésedet. Gyere vissza holnap, hogy újat kérhess.",
         "voteUsed": "Elhasználtad a mai ingyenes szavazatodat. Gyere vissza holnap, ha újra szavaznál."
       }
+    },
+    "claim": {
+      "explainer": "A Nomad esteken a tiédhez hasonló néven elénekelt dalok. Pipáld be azokat, amelyeket te énekeltél.",
+      "failed": "Nem sikerült elérni a műsorvezető gépét. Próbáld újra később.",
+      "nightHeader": "{date} · {count, plural, one {# dal} other {# dal}} „{name}” néven",
+      "none": "Ezek közül egyik sem én voltam",
+      "save": "Kijelölt dalok mentése",
+      "saved": "{count, plural, one {# dal elmentve.} other {# dal elmentve.}} Hamarosan megjelennek az előzményeidben.",
+      "screenTitle": "Korábbi Nomad estéid",
+      "seeAll": "{count, plural, one {Mind a(z) # este megtekintése} other {Mind a(z) # este megtekintése}}",
+      "showingRecent": "{count, plural, one {A legutóbbi estéd megjelenítése} other {A legutóbbi # estéd megjelenítése}}",
+      "taken": "{count, plural, one {# dalt már elmentett valaki más.} other {# dalt már elmentett valaki más.}}",
+      "title": "Ezeket te énekelted?",
+      "unmatched": "{count, plural, one {További # dalt nem sikerült párosítani} other {További # dalt nem sikerült párosítani}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Túl sok egyszerre. Próbáld újra néhány perc múlva."
     }
   }
 }

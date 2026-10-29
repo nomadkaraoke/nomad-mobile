@@ -2057,6 +2057,22 @@
         "submission": "Dnešní bezplatnou žádost už máš vyčerpanou. Vrať se zítra a požádej o další.",
         "voteUsed": "Dnešní bezplatný hlas už máš vyčerpaný. Vrať se zítra a hlasuj znovu."
       }
+    },
+    "claim": {
+      "explainer": "Písničky zazpívané pod jménem podobným tvému na akcích Nomad. Zaškrtni ty, které patří tobě.",
+      "failed": "Nepodařilo se spojit s počítačem hostitele. Zkus to znovu později.",
+      "nightHeader": "{date} · {count, plural, one {# písnička} few {# písničky} other {# písniček}} jako „{name}“",
+      "none": "Žádná z nich není moje",
+      "save": "Uložit zaškrtnuté písničky",
+      "saved": "{count, plural, one {Uložena # písnička.} few {Uloženy # písničky.} other {Uloženo # písniček.}} Za chvilku se ti zobrazí v historii.",
+      "screenTitle": "Tvoje minulé akce Nomad",
+      "seeAll": "{count, plural, one {Zobrazit # večer} few {Zobrazit všechny # večery} other {Zobrazit všech # večerů}}",
+      "showingRecent": "{count, plural, one {Zobrazuje se tvůj nejnovější večer} few {Zobrazují se tvé # nejnovější večery} other {Zobrazuje se tvých # nejnovějších večerů}}",
+      "taken": "{count, plural, one {# už si uložil někdo jiný.} few {# už si uložil někdo jiný.} other {# už si uložil někdo jiný.}}",
+      "title": "Patří tyhle tobě?",
+      "unmatched": "{count, plural, one {Nepodařilo se přiřadit ještě # další písničku} few {Nepodařilo se přiřadit ještě # další písničky} other {Nepodařilo se přiřadit ještě # dalších písniček}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Příliš mnoho požadavků najednou. Zkus to znovu za pár minut."
     }
   }
 }

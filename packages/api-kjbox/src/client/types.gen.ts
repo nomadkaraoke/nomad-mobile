@@ -836,6 +836,96 @@ export type PushTokenRequest = {
     platform: 'ios' | 'android';
 };
 
+export type PushTokenDeleteRequest = {
+    /**
+     * Event code (or the t query parameter)
+     */
+    t?: string;
+    night_id?: string;
+    expo_push_token: string;
+};
+
+export type HistorySong = {
+    /**
+     * The song's id on that night (send it back in mine / not_mine)
+     */
+    entry_id: number;
+    /**
+     * The singer text as the venue screen showed it (duet partners included)
+     */
+    singer_name: string;
+    /**
+     * Each person singing it
+     */
+    members: Array<string>;
+    artist: string;
+    title: string;
+    /**
+     * When the song started playing (UTC); null when no play was recorded
+     */
+    started_at: string | null;
+    state: 'sung' | 'sung_unplayed';
+};
+
+export type HistoryNight = {
+    /**
+     * Send it back to POST /history/claim
+     */
+    night_id: string;
+    /**
+     * The night (a show past midnight is one night)
+     */
+    date: string;
+    /**
+     * The host's name, when set
+     */
+    venue: string | null;
+    /**
+     * The singer names on these songs that matched the account
+     */
+    names: Array<string>;
+    /**
+     * Songs that night under a matching name that can't be claimed (older nights the box can't link to a song)
+     */
+    unmatched: number;
+    songs: Array<HistorySong>;
+};
+
+export type HistorySuggestions = {
+    api_version: string;
+    nights: Array<HistoryNight>;
+    /**
+     * Nights with songs beyond the 20 listed
+     */
+    more_nights: number;
+};
+
+/**
+ * At least one of mine / not_mine must be non-empty, and no id may be in both.
+ */
+export type HistoryClaimRequest = {
+    night_id: string;
+    /**
+     * Songs the singer ticked
+     */
+    mine?: Array<number>;
+    /**
+     * Songs left unticked: never suggested to this account again
+     */
+    not_mine?: Array<number>;
+};
+
+export type HistoryClaimResult = {
+    api_version: string;
+    saved: number;
+    already_saved: number;
+    /**
+     * mine songs someone else already holds
+     */
+    taken: Array<number>;
+    rejected: number;
+};
+
 /**
  * The night's event code. Required on every call, here or as JSON body field t.
  */
@@ -2322,6 +2412,64 @@ export type UseQuickVersionResponses = {
 
 export type UseQuickVersionResponse = UseQuickVersionResponses[keyof UseQuickVersionResponses];
 
+export type UnregisterPushTokenData = {
+    body: PushTokenDeleteRequest;
+    path?: never;
+    query?: {
+        /**
+         * The night's event code. Required on every call, here or as JSON body field t.
+         */
+        t?: string;
+        /**
+         * The night_id the app last saw (also accepted as JSON body field night_id). A mismatch returns 409 night_changed.
+         */
+        night_id?: string;
+    };
+    url: '/push-token';
+};
+
+export type UnregisterPushTokenErrors = {
+    /**
+     * Bad request body (error invalid)
+     */
+    400: Error;
+    /**
+     * Missing or rejected gen session token (error unauthenticated). Does not by itself mean the app should sign out.
+     */
+    401: Error;
+    /**
+     * Requests are closed, the event code is wrong, or no night has started (error not_open)
+     */
+    403: Error;
+    /**
+     * The host started a new night (error night_changed); night_id is the new one
+     */
+    409: NightChangedError;
+    /**
+     * Too many wrong event codes from this account's device (10 per 5 min) or from this network (100 per 5 min across all devices), or too many sign-in checks from this network (error rate_limited); retry after retry_after seconds (also the Retry-After header). The bearer is checked before the event code, so a missing or rejected token is always 401 and a wrong code on one phone doesn't lock out others on the same wifi.
+     */
+    429: Error;
+    /**
+     * kjbox couldn't verify the token with gen (error gen_unavailable); retry after retry_after seconds
+     */
+    503: Error;
+    /**
+     * Any other error: not_found (unknown v1 path, 404), invalid (wrong method, 405), internal (500)
+     */
+    default: Error;
+};
+
+export type UnregisterPushTokenError = UnregisterPushTokenErrors[keyof UnregisterPushTokenErrors];
+
+export type UnregisterPushTokenResponses = {
+    /**
+     * Unregistered
+     */
+    200: OkResult;
+};
+
+export type UnregisterPushTokenResponse = UnregisterPushTokenResponses[keyof UnregisterPushTokenResponses];
+
 export type RegisterPushTokenData = {
     body: PushTokenRequest;
     path?: never;
@@ -2379,3 +2527,85 @@ export type RegisterPushTokenResponses = {
 };
 
 export type RegisterPushTokenResponse = RegisterPushTokenResponses[keyof RegisterPushTokenResponses];
+
+export type GetHistorySuggestionsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/history/suggestions';
+};
+
+export type GetHistorySuggestionsErrors = {
+    /**
+     * Missing or rejected gen session token (error unauthenticated). Does not by itself mean the app should sign out.
+     */
+    401: Error;
+    /**
+     * rate_limited: this device is over the history budget (suggestions 30 per 10 min, claims 20 per 10 min) or this network over the sign-in check limit; retry after retry_after seconds (also the Retry-After header)
+     */
+    429: Error;
+    /**
+     * gen_unavailable: kjbox couldn't verify the token with gen, or the box can't serve history right now; retry after retry_after seconds
+     */
+    503: Error;
+    /**
+     * Any other error: not_found (unknown v1 path, 404), invalid (wrong method, 405), internal (500)
+     */
+    default: Error;
+};
+
+export type GetHistorySuggestionsError = GetHistorySuggestionsErrors[keyof GetHistorySuggestionsErrors];
+
+export type GetHistorySuggestionsResponses = {
+    /**
+     * OK
+     */
+    200: HistorySuggestions;
+};
+
+export type GetHistorySuggestionsResponse = GetHistorySuggestionsResponses[keyof GetHistorySuggestionsResponses];
+
+export type ClaimHistoryData = {
+    body: HistoryClaimRequest;
+    path?: never;
+    query?: never;
+    url: '/history/claim';
+};
+
+export type ClaimHistoryErrors = {
+    /**
+     * invalid: a missing or malformed night_id / ids, both lists empty, an id in both lists, an id that isn't one of this night's songs for this account, or not_mine on a song the account holds
+     */
+    400: Error;
+    /**
+     * Missing or rejected gen session token (error unauthenticated). Does not by itself mean the app should sign out.
+     */
+    401: Error;
+    /**
+     * not_found: no such night with songs for this account
+     */
+    404: Error;
+    /**
+     * rate_limited: this device is over the history budget (suggestions 30 per 10 min, claims 20 per 10 min) or this network over the sign-in check limit; retry after retry_after seconds (also the Retry-After header)
+     */
+    429: Error;
+    /**
+     * gen_unavailable: kjbox couldn't verify the token with gen, or the box can't serve history right now; retry after retry_after seconds
+     */
+    503: Error;
+    /**
+     * Any other error: not_found (unknown v1 path, 404), invalid (wrong method, 405), internal (500)
+     */
+    default: Error;
+};
+
+export type ClaimHistoryError = ClaimHistoryErrors[keyof ClaimHistoryErrors];
+
+export type ClaimHistoryResponses = {
+    /**
+     * OK
+     */
+    200: HistoryClaimResult;
+};
+
+export type ClaimHistoryResponse = ClaimHistoryResponses[keyof ClaimHistoryResponses];

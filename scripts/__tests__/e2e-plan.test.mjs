@@ -20,6 +20,20 @@ test('a feature folder maps to its flows', () => {
   assert.deepEqual(affectedPrefixes(['apps/mobile/src/app/discover/voice-session/index.tsx']), ['voice-session-']);
 });
 
+test('the kjbox client runs the Tonight flows and the claim flows (4c)', () => {
+  assert.deepEqual(affectedPrefixes(['packages/api-kjbox/src/facades.ts']), ['me-13', 'me-14', 'tonight-']);
+});
+
+test('Me code runs the Me flows and the screens that embed Me pieces, not everything', () => {
+  const got = affectedPrefixes(['apps/mobile/src/me/ClaimNightCard.tsx']);
+  assert.notDeepEqual(got, [ALL]);
+  assert.ok(got.includes('me-'));
+  // Discover feedback, Connect, the song page's library actions and Tonight's log import from src/me.
+  for (const p of ['discover-', 'search-', 'tonight-', 'connect-', 'voice-']) assert.ok(got.includes(p), p);
+  // The voice flows open Me's profile card (Your voice) too.
+  assert.ok(affectedPrefixes(['apps/mobile/src/app/me/music-profile.tsx']).includes('voice-'));
+});
+
 test('a changed flow file runs that flow', () => {
   assert.deepEqual(affectedPrefixes(['maestro/flows/make-4-failed-job.yaml']), ['make-4-failed-job']);
 });
@@ -59,5 +73,9 @@ test('parseTags reads every real flow header', () => {
   const all = Object.fromEntries(readdirSync(dir).map((f) => [f, parseTags(readFileSync(join(dir, f), 'utf8'))]));
   assert.deepEqual(all['search-4-offline.yaml'], ['force-offline']);
   assert.ok(all['tonight-1-join-link.yaml'].includes('tonight'));
+  // R46: the claim flows start the kjbox stack through their own tag, not Tonight's.
+  for (const f of ['me-13-claim-yes.yaml', 'me-14-claim-not-mine.yaml']) {
+    assert.deepEqual(all[f], ['me', 'kjbox'], f);
+  }
   assert.deepEqual(parseTags('appId: x\n---\n- launchApp\n'), []);
 });

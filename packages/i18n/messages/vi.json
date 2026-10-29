@@ -2057,6 +2057,22 @@
         "submission": "Bạn đã dùng lượt yêu cầu miễn phí của hôm nay rồi. Hãy quay lại vào ngày mai để gửi yêu cầu khác nhé.",
         "voteUsed": "Bạn đã dùng lượt bình chọn miễn phí của hôm nay rồi. Hãy quay lại vào ngày mai để bình chọn tiếp nhé."
       }
+    },
+    "claim": {
+      "explainer": "Các bài hát được hát dưới tên tương tự tên bạn tại các đêm Nomad. Hãy tích chọn những bài bạn đã hát.",
+      "failed": "Không thể kết nối với máy của host. Vui lòng thử lại sau.",
+      "nightHeader": "{date} · {count, plural, one {# bài hát} other {# bài hát}} với tên “{name}”",
+      "none": "Không có bài nào của tôi",
+      "save": "Lưu các bài hát đã chọn",
+      "saved": "{count, plural, one {Đã lưu # bài hát.} other {Đã lưu # bài hát.}} Bài hát sẽ xuất hiện trong lịch sử của bạn sau giây lát.",
+      "screenTitle": "Các đêm Nomad trước đây của bạn",
+      "seeAll": "{count, plural, one {Xem tất cả # đêm} other {Xem tất cả # đêm}}",
+      "showingRecent": "{count, plural, one {Hiển thị đêm gần đây nhất của bạn} other {Hiển thị # đêm gần đây nhất của bạn}}",
+      "taken": "{count, plural, one {# bài đã được người khác lưu trước đó.} other {# bài đã được người khác lưu trước đó.}}",
+      "title": "Bạn đã hát những bài này?",
+      "unmatched": "{count, plural, one {Không thể khớp thêm # bài hát} other {Không thể khớp thêm # bài hát}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Quá nhiều yêu cầu cùng lúc. Vui lòng thử lại sau vài phút."
     }
   }
 }

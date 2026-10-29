@@ -1,0 +1,185 @@
+# Me 14 (Phase 4c spec §6.10, R31/R33/R37): "not mine", "None of these are me", and the box going away.
+# The account went by "Wren B" through the app; the box's past nights:
+#   night 1 (2026-10-16): "Wren B" Adele "Hello", Muse "Starlight", Muse "Uprising" (Uprising already claimed by
+#     another account: never offered, first claimer wins);
+#   night 2 (2026-10-09): "Wren" Muse "Madness", "Wren B" Adele "Skyfall".
+# → night 1 shows 2 songs → untick Starlight, Save → kjbox: 1 claim, 1 rejection → night 2: None of these are me
+# → 3 rejections, and after a relaunch the card stays gone (server-side) → a fresh night 3 is seeded, the box is
+# stopped: Me shows no card and no error → the box is back: the card returns.
+appId: com.nomadkaraoke.mobile
+name: me-14-claim-not-mine
+tags:
+  - me
+  - kjbox
+# Never leave the box down for the next flow.
+onFlowComplete:
+  - runScript:
+      file: ../scripts/stack.js
+      env:
+        ACTION: kjbox
+        KJBOX_STACK: ${KJBOX_STACK}
+        OP: start
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me14
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: reset
+      FIXTURE: empty
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: history-seed
+      IDENTITY: '{"names":["Wren B"],"date":"2026-10-01"}'
+      NIGHTS: '[{"date":"2026-10-16","entries":[{"ref":"c1","singer":"Wren B","artist":"Adele","title":"Hello","link":"exact","played":true},{"ref":"c2","singer":"Wren B","artist":"Muse","title":"Starlight","link":"exact","played":true},{"ref":"c3","singer":"Wren B","artist":"Muse","title":"Uprising","link":"exact","claimed_by":"e2e-me14-other@example.com"}]},{"date":"2026-10-09","entries":[{"ref":"d1","singer":"Wren","artist":"Muse","title":"Madness","link":"exact"},{"ref":"d2","singer":"Wren B","artist":"Adele","title":"Skyfall","link":"exact"}]}]'
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{}'
+      ENTRIES: '[]'
+- scrollUntilVisible:
+    element:
+      id: "me-claim-night-0"
+    direction: DOWN
+    centerElement: true
+    timeout: 30000
+- assertVisible:
+    id: "me-claim-header-0"
+    text: ".*2 songs as .*Wren B.*"
+- assertNotVisible: ".*Uprising.*"
+# Untick Starlight: on Save it goes as "not mine" (R33).
+- tapOn:
+    id: "me-claim-song-0-1"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible:
+          id: "me-claim-song-0-1"
+          checked: false
+- takeScreenshot: ${ME_SHOTS}/me-14-unticked
+- scrollUntilVisible:
+    element:
+      id: "me-claim-save-0"
+    direction: DOWN
+    centerElement: true
+    timeout: 10000
+- tapOn:
+    id: "me-claim-save-0"
+- extendedWaitUntil:
+    visible:
+      id: "me-claim-result-0"
+      text: ".*Saved 1 song.*"
+    timeout: 20000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: history-state
+      EXPECT_CLAIMS: "1"
+      EXPECT_REJECTIONS: "1"
+# Night 1 goes after its 5 s result; night 2 is first.
+- extendedWaitUntil:
+    visible:
+      id: "me-claim-song-0-0"
+      text: ".*Madness.*"
+    timeout: 20000
+- scrollUntilVisible:
+    element:
+      id: "me-claim-none-0"
+    direction: DOWN
+    centerElement: true
+    timeout: 10000
+- tapOn:
+    id: "me-claim-none-0"
+- extendedWaitUntil:
+    notVisible:
+      id: "me-claim"
+    timeout: 20000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: history-state
+      EXPECT_CLAIMS: "1"
+      EXPECT_REJECTIONS: "3"
+# Gone server-side, not just on this screen: a relaunch (memory-only suggestions) asks the box again.
+- runFlow: ../common/relaunch-keep-data.yaml
+- tapOn:
+    id: "tab-me"
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-card"
+    timeout: 30000
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: "4000"
+- assertNotVisible:
+    id: "me-claim"
+- takeScreenshot: ${ME_SHOTS}/me-14-answered
+# A new night to claim, then the box goes away: the card is simply not there, with no error.
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: history-seed
+      NIGHTS: '[{"date":"2026-10-23","entries":[{"ref":"e1","singer":"Wren B","artist":"Muse","title":"Hysteria","link":"exact"}]}]'
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: stop
+- runFlow: ../common/relaunch-keep-data.yaml
+- tapOn:
+    id: "tab-me"
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-card"
+    timeout: 30000
+# Long enough for the request to fail (10 s client timeout at worst).
+- runScript:
+    file: ../scripts/wait.js
+    env:
+      MS: "12000"
+- assertNotVisible:
+    id: "me-claim"
+- assertNotVisible: ".*Couldn't reach the host.*"
+- assertNotVisible: ".*Something went wrong.*"
+- takeScreenshot: ${ME_SHOTS}/me-14-box-down
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: start
+- runFlow: ../common/relaunch-keep-data.yaml
+- tapOn:
+    id: "tab-me"
+- scrollUntilVisible:
+    element:
+      id: "me-claim-night-0"
+    direction: DOWN
+    centerElement: true
+    timeout: 30000
+- assertVisible:
+    id: "me-claim-header-0"
+    text: ".*1 song as .*Wren B.*"
+- assertVisible:
+    id: "me-claim-song-0-0"
+    text: ".*Hysteria.*"
+- takeScreenshot: ${ME_SHOTS}/me-14-box-back

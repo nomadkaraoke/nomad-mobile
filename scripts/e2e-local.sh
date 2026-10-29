@@ -119,13 +119,15 @@ list_flows() {
   done
 }
 
-# kjbox (and the stack-control helper) only when this run has Tonight flows: a flow tagged `tonight` among the
-# filtered ones, or a tonight* screen tour. Make / Search / Review / Discover runs don't need ../kjbox.
+# kjbox (and the stack-control helper) only when this run has Tonight flows or other kjbox-backed flows: a flow tagged
+# `tonight` or `kjbox` (Me's past-night claims, me-13/14, R46) among the filtered ones, or a tonight* / me-tour screen tour.
+# Make / Search / Review / Discover runs don't need ../kjbox.
 needs_kjbox() {
-  if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == tonight* ]]; return; fi
+  # me-tour's 4c shots (me-32/33) read past nights from the box.
+  if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == tonight* || "$SCREEN" == me-tour ]]; return; fi
   local f
   while IFS= read -r f; do
-    grep -qE '^\s*-\s*tonight\s*$' "$f" && return 0
+    grep -qE '^\s*-\s*(tonight|kjbox)\s*$' "$f" && return 0
   done < <(list_flows)
   return 1
 }

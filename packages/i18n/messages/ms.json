@@ -2057,6 +2057,22 @@
         "submission": "Anda telah menggunakan permintaan percuma untuk hari ini. Kembali lagi esok untuk membuat permintaan lain.",
         "voteUsed": "Anda telah menggunakan undian percuma untuk hari ini. Kembali lagi esok untuk mengundi lagu lain."
       }
+    },
+    "claim": {
+      "explainer": "Lagu yang dinyanyikan di bawah nama seperti nama anda semasa malam Nomad. Tandakan lagu yang dinyanyikan oleh anda.",
+      "failed": "Tidak dapat menyambung ke mesin hos. Cuba sebentar lagi.",
+      "nightHeader": "{date} · {count, plural, one {# lagu} other {# lagu}} sebagai “{name}”",
+      "none": "Tiada satu pun daripada ini adalah saya",
+      "save": "Simpan lagu yang ditandakan",
+      "saved": "{count, plural, one {# lagu telah disimpan.} other {# lagu telah disimpan.}} Ia akan dipaparkan dalam sejarah anda sebentar lagi.",
+      "screenTitle": "Malam Nomad anda yang lalu",
+      "seeAll": "{count, plural, one {Lihat kesemua # malam} other {Lihat kesemua # malam}}",
+      "showingRecent": "{count, plural, one {Menunjukkan malam terkini anda} other {Menunjukkan # malam terkini anda}}",
+      "taken": "{count, plural, one {# telah pun disimpan oleh orang lain.} other {# telah pun disimpan oleh orang lain.}}",
+      "title": "Adakah ini anda?",
+      "unmatched": "{count, plural, one {# lagi lagu tidak dapat dipadankan} other {# lagi lagu tidak dapat dipadankan}}",
+      "songValue": "{title} · {artist}",
+      "rateLimited": "Terlalu banyak permintaan serentak. Cuba lagi dalam beberapa minit."
     }
   }
 }
