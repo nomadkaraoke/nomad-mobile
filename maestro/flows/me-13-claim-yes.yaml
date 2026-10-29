@@ -41,13 +41,14 @@ tags:
       EMAIL: ${output.email}
       PROFILE: '{}'
       ENTRIES: '[]'
+# Scroll to the section title, not the card: scrolling a whole card fully into view (centred) on iOS pushed the
+# title above the viewport (run 40858551146). The first card sits right under it.
 - scrollUntilVisible:
     element:
-      id: "me-claim-night-0"
+      text: ".*Were these you.*"
     direction: DOWN
     centerElement: true
     timeout: 30000
-- assertVisible: ".*Were these you.*"
 - assertVisible:
     id: "me-claim-header-0"
     text: ".*2 songs as .*Wren.*"
@@ -120,7 +121,9 @@ tags:
       EXPECT_TITLE: "Hello"
       EXPECT_STATE: "sung"
       EXPECT_SUNG_AT: "set"
-# The app refetches the library 10 s and 30 s after a claim; a relaunch reads it fresh either way.
+# The app refetches the library 10 s and 30 s after a claim. This relaunch comes ~8 s after Save, before either
+# timer, so it checks the other path: a claim marks the phone's library cache stale, and the relaunch fetches it
+# (run 40858551146 showed "No songs yet" here: the cache was inside its 60 s staleTime).
 - runFlow: ../common/relaunch-keep-data.yaml
 - tapOn:
     id: "tab-me"
