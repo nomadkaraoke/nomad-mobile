@@ -64,8 +64,16 @@ fit_to() { # file W H
   local f="$1" tw="$2" th="$3" w h
   read -r w h < <(size_of "$f" | tr 'x' ' ')
   # Scale so both sides fit, then pad to the exact size.
-  if (( w * th >= h * tw )); then sips --resampleWidth "$tw" "$f" >/dev/null; else sips --resampleHeight "$th" "$f" >/dev/null; fi
+  if (( w * th >= h * tw )); then sips --resampleWidth "$tw" "$f" >/dev/null || return 1
+  else sips --resampleHeight "$th" "$f" >/dev/null || return 1; fi
   sips --padToHeightWidth "$th" "$tw" --padColor "$PAD_COLOR" "$f" >/dev/null
+}
+size_ok() { # kind WxH: the final size each store accepts
+  local w="${2%x*}" h="${2#*x}" short long
+  if [[ "$1" == android ]]; then
+    short=$(( w < h ? w : h )); long=$(( w < h ? h : w ))
+    (( short >= 1080 && long <= short * 2 ))
+  else ok_apple "$1" "$2"; fi
 }
 
 SUMMARY=()
@@ -101,6 +109,15 @@ check_dir() { # kind dir
     fi
   done
   if (( count == 0 )); then note "$kind: no store-*.png in $dir"; return 1; fi
+  # Explicit checks (callers run this under `|| rc=1`, which turns off errexit inside): a failed sips leaves a bad
+  # size, caught here, and the tour's first shot must exist.
+  [[ -f "$dir/store-01-discover.png" ]] || { note "$kind: store-01-discover.png missing in $dir"; return 1; }
+  local bad=0
+  for f in "$dir"/store-*.png; do
+    dims="$(size_of "$f")"
+    size_ok "$kind" "$dims" || { note "$kind: $f is $dims, not a size the store accepts"; bad=1; }
+  done
+  (( bad == 0 )) || return 1
   note "$kind: $count shots in $dir, sizes ok ($(size_of "$dir/store-01-discover.png"))"
 }
 
