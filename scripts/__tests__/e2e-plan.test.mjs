@@ -71,5 +71,9 @@ test('parseTags reads every real flow header', () => {
   const all = Object.fromEntries(readdirSync(dir).map((f) => [f, parseTags(readFileSync(join(dir, f), 'utf8'))]));
   assert.deepEqual(all['search-4-offline.yaml'], ['force-offline']);
   assert.ok(all['tonight-1-join-link.yaml'].includes('tonight'));
+  // R46: the claim flows start the kjbox stack through their own tag, not Tonight's.
+  for (const f of ['me-13-claim-yes.yaml', 'me-14-claim-not-mine.yaml']) {
+    assert.deepEqual(all[f], ['me', 'kjbox'], f);
+  }
   assert.deepEqual(parseTags('appId: x\n---\n- launchApp\n'), []);
 });

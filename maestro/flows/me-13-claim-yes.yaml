@@ -1,0 +1,139 @@
+# Me 13 (Phase 4c spec §6.10, R35/R38): "Were these you?" claims past Nomad nights by loose name.
+# The account went by "Wren" through the app; the box's past nights:
+#   night A (2026-10-16, exact links): "Wren B" Adele "Hello" + "Wren" Muse "Starlight" (both played), "Quill"
+#     Muse "Uprising" and "Wrenna" Muse "Madness" (names that only look like it: never suggested);
+#   night B (2026-10-02, rebuilt): "Wren B." Muse "Hysteria" (inferred link) + "Wren" Adele "Skyfall" (no link:
+#     only counted as unmatched).
+# → Me shows night A first with its 2 songs ticked → Save → "Saved 2 songs", night A goes, night B shows its
+# unmatched line → kjbox holds 2 claims → the outbox sends 2 records to decide → All your songs has Hello.
+# Fixture singer names are invented (public repo).
+appId: com.nomadkaraoke.mobile
+name: me-13-claim-yes
+tags:
+  - me
+  - kjbox
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: me13
+# An empty box: no live rotation (tonight's songs are never claimable while requests are open, R34).
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: reset
+      FIXTURE: empty
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: history-seed
+      IDENTITY: '{"names":["Wren"],"date":"2026-10-01"}'
+      NIGHTS: '[{"date":"2026-10-16","entries":[{"ref":"a1","singer":"Wren B","artist":"Adele","title":"Hello","link":"exact","played":true},{"ref":"a2","singer":"Wren","artist":"Muse","title":"Starlight","link":"exact","played":true},{"ref":"a3","singer":"Quill","artist":"Muse","title":"Uprising","link":"exact"},{"ref":"a4","singer":"Wrenna","artist":"Muse","title":"Madness","link":"exact"}]},{"date":"2026-10-02","entries":[{"ref":"b1","singer":"Wren B.","artist":"Muse","title":"Hysteria","link":"inferred"},{"ref":"b2","singer":"Wren","artist":"Adele","title":"Skyfall","link":"none"}]}]'
+- runFlow:
+    file: ../common/me-seeded.yaml
+    env:
+      EMAIL: ${output.email}
+      PROFILE: '{}'
+      ENTRIES: '[]'
+- scrollUntilVisible:
+    element:
+      id: "me-claim-night-0"
+    direction: DOWN
+    centerElement: true
+    timeout: 30000
+- assertVisible: ".*Were these you.*"
+- assertVisible:
+    id: "me-claim-header-0"
+    text: ".*2 songs as .*Wren.*"
+- assertVisible:
+    id: "me-claim-song-0-0"
+    text: ".*Hello.*Adele.*"
+- assertVisible:
+    id: "me-claim-song-0-1"
+    text: ".*Starlight.*Muse.*"
+# Ticked by default (Android exposes the checkbox state to Maestro; on iOS the claims below are the check).
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible:
+          id: "me-claim-song-0-0"
+          checked: true
+      - assertVisible:
+          id: "me-claim-song-0-1"
+          checked: true
+# "Quill" and "Wrenna" are not this account.
+- assertNotVisible: ".*Uprising.*"
+- assertNotVisible: ".*Madness.*"
+- takeScreenshot: ${ME_SHOTS}/me-13-card
+- scrollUntilVisible:
+    element:
+      id: "me-claim-save-0"
+    direction: DOWN
+    centerElement: true
+    timeout: 10000
+- tapOn:
+    id: "me-claim-save-0"
+- extendedWaitUntil:
+    visible:
+      id: "me-claim-result-0"
+      text: ".*Saved 2 songs.*"
+    timeout: 20000
+- takeScreenshot: ${ME_SHOTS}/me-13-saved
+# The result shows for 5 s, then night A goes and night B (the rebuilt night) is first.
+- extendedWaitUntil:
+    visible:
+      id: "me-claim-unmatched-0"
+      text: ".*couldn't be matched.*"
+    timeout: 20000
+- assertVisible:
+    id: "me-claim-song-0-0"
+    text: ".*Hysteria.*"
+- assertNotVisible: ".*Skyfall.*"
+- takeScreenshot: ${ME_SHOTS}/me-13-night-b
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: history-state
+      EXPECT_CLAIMS: "2"
+      EXPECT_REJECTIONS: "0"
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: kjbox
+      KJBOX_STACK: ${KJBOX_STACK}
+      OP: drain
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: log
+      DECIDE_STACK: ${DECIDE_STACK}
+      EXPECT_COUNT: "2"
+      EXPECT_TITLE: "Hello"
+      EXPECT_STATE: "sung"
+      EXPECT_SUNG_AT: "set"
+# The app refetches the library 10 s and 30 s after a claim; a relaunch reads it fresh either way.
+- runFlow: ../common/relaunch-keep-data.yaml
+- tapOn:
+    id: "tab-me"
+- scrollUntilVisible:
+    element:
+      id: "me-all-songs"
+    direction: DOWN
+    centerElement: true
+    timeout: 30000
+- tapOn:
+    id: "me-all-songs"
+- extendedWaitUntil:
+    visible: ".*Hello.*"
+    timeout: 30000
+- assertVisible: ".*Starlight.*"
+- takeScreenshot: ${ME_SHOTS}/me-13-all-songs
