@@ -138,11 +138,16 @@ describe('GoTosShelf', () => {
     api.hideSong.mockImplementation(() => new Promise<void>(() => {}) as never);
     const local = [song('Hit', { times_sung: 3 })];
     const shelf = render(<GoTosShelf items={local} pending={new Set()} />, { wrapper: shelfWrapper(client) });
+    // The local fallback shows Hit too: wait for the recs section itself to land before hiding.
+    await waitFor(() => expect(cachedTitles()).toEqual(['Hit']));
     await waitFor(() => expect(shelf.getByTestId('me-goto-0')).toHaveTextContent(/Hit/));
     const disc = renderHook(() => useSongFeedback(), { wrapper: wrapperFor(client) });
 
-    act(() => disc.result.current.hide(rec('Hit')));
-    await waitFor(() => expect(shelf.queryByTestId('me-goto-0')).toBeNull());
+    await act(async () => {
+      disc.result.current.hide(rec('Hit'));
+      await new Promise((r) => setTimeout(r, 50));
+    });
+    expect(shelf.queryByTestId('me-goto-0')).toBeNull();
     expect(cachedTitles()).toEqual([]);
   });
 
