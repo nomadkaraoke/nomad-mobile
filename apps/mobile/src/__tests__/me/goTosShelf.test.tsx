@@ -9,6 +9,8 @@ import { act, render, renderHook, screen, waitFor } from '@testing-library/react
 import { userKeyFor } from '../../auth/userKey';
 import { useSongFeedback } from '../../discover/useSongFeedback';
 import { goTosStorageKey } from '../../me/account';
+import { libraryKeyFor } from '../../me/useLibrary';
+import { getMadeKeyFor } from '../../me/useGetMade';
 import { goToRows, GoTosShelf } from '../../me/GoTosShelf';
 import { appStorage } from '../../storage';
 import { useVoiceStore } from '../../voice/voiceStore';
@@ -144,5 +146,57 @@ describe('GoTosShelf', () => {
     act(() => disc.result.current.undoHide(hiddenSong ?? rec('Hit')));
     const raw = JSON.parse(appStorage.getString(goTosStorageKey(userKeyFor(other))) ?? '{}') as { songs: { title: string }[] };
     expect(raw.songs.map((x) => x.title)).toEqual(['Theirs']);
+  });
+
+  it('a voice profile synced within 5 min refetches the fits, and a song hidden earlier stays gone', async () => {
+    const client = resetMe(EMAIL);
+    const voice = (measuredAt: string) => ({
+      lowMidi: 45, highMidi: 69, comfortLow: 48, comfortHigh: 66, voiceType: 'baritone' as const, voiceTypeBetween: null,
+      register: null, confidence: 'high' as const, method: 'mic' as const, measuredAt,
+    });
+    useVoiceStore.getState().adopt(voice('2026-10-01T00:00:00Z'));
+    // A fresh cache for this voice (as a fetch a minute ago left it): the shelf starts from it, no fetch.
+    appStorage.set(
+      goTosStorageKey(userKeyFor(EMAIL)),
+      JSON.stringify({ songs: [rec('Hit'), rec('Other')], savedAt: Date.now(), voice: '2026-10-01T00:00:00Z' }),
+    );
+    api.hideSong.mockImplementation(() => new Promise(() => {}) as never); // never settles: no invalidate from it
+    const w = wrapperFor(client);
+    const shelf = render(<GoTosShelf items={items} pending={new Set()} />, { wrapper: shelfWrapper(client) });
+    await waitFor(() => expect(shelf.getByTestId('me-goto-1')).toHaveTextContent(/Other/));
+    expect(api.getRecommendationsV2).not.toHaveBeenCalled();
+    const disc = renderHook(() => useSongFeedback(), { wrapper: w });
+    act(() => disc.result.current.hide(rec('Hit')));
+    await waitFor(() => expect(shelf.getByTestId('me-goto-0')).toHaveTextContent(/Other/));
+
+    api.getRecommendationsV2.mockResolvedValue(
+      recsWith([{ id: 'go_tos', songs: [rec('Other', { fit: { bucket: 'fits', transpose: 0, octave: 0 } })] }]),
+    );
+    act(() => useVoiceStore.getState().save(voice('2026-10-02T00:00:00Z')));
+    expect(shelf.getByTestId('me-goto-0')).toHaveTextContent(/Other/);
+    act(() => useVoiceStore.getState().markSynced('2026-10-02T00:00:00Z'));
+    await waitFor(() => expect(api.getRecommendationsV2).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(shelf.getByTestId('me-goto-fit-0')).toBeTruthy());
+    expect(shelf.getByTestId('me-goto-0')).toHaveTextContent(/Other/);
+    expect(shelf.queryByText('Hit')).toBeNull();
+  });
+
+  it("a hide or unhide decide accepted refreshes Me's library and Get this made", async () => {
+    const client = resetMe(EMAIL);
+    const userKey = userKeyFor(EMAIL);
+    api.hideSong.mockResolvedValue(undefined as never);
+    const spy = jest.spyOn(client, 'invalidateQueries');
+    const invalidated = () => spy.mock.calls.map(([f]) => JSON.stringify((f as { queryKey?: unknown })?.queryKey));
+    const disc = renderHook(() => useSongFeedback(), { wrapper: wrapperFor(client) });
+    await act(async () => disc.result.current.hide(rec('Hit')));
+    await waitFor(() => expect(invalidated()).toEqual(expect.arrayContaining([
+      JSON.stringify(libraryKeyFor(userKey)), JSON.stringify(getMadeKeyFor(userKey)),
+    ])));
+    spy.mockClear();
+    await act(async () => disc.result.current.undoHide(rec('Hit')));
+    await waitFor(() => expect(api.unhideSong).toHaveBeenCalledWith('k_Hit'));
+    await waitFor(() => expect(invalidated()).toEqual(expect.arrayContaining([
+      JSON.stringify(libraryKeyFor(userKey)), JSON.stringify(getMadeKeyFor(userKey)),
+    ])));
   });
 });

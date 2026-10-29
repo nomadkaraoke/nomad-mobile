@@ -5,8 +5,20 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '../auth/store';
 import { useLovedOverrides } from '../me/lovedOverrides';
 import { useMeOutbox } from '../me/meOutbox';
+import { currentUserKey } from '../me/account';
+import { getMadeKeyFor } from '../me/useGetMade';
+import { libraryKeyFor } from '../me/useLibrary';
 import { dropRecsGoTo, invalidateRecsGoTos, restoreRecsGoTo, type GoToSpot } from '../me/useRecsGoTos';
 import { RECS_KEY, type RecsPages } from './useRecommendations';
+
+/** decide has a hide or unhide: Me's go-tos, library (hidden flag) and Get this made (hidden songs left out) refetch. */
+function invalidateMe(queryClient: QueryClient): void {
+  invalidateRecsGoTos(queryClient);
+  const userKey = currentUserKey();
+  if (!userKey) return;
+  void queryClient.invalidateQueries({ queryKey: libraryKeyFor(userKey) });
+  void queryClient.invalidateQueries({ queryKey: getMadeKeyFor(userKey) });
+}
 
 /** How long the "Hidden from your picks · Undo" toast stays up. */
 export const HIDDEN_TOAST_MS = 5_000;
@@ -120,7 +132,7 @@ export function useSongFeedback() {
       pending.current.set(key, { removed, goTos, request });
       request.then(
         () => {
-          if (actions.current.get(key) === action) invalidateRecsGoTos(queryClient);
+          if (actions.current.get(key) === action) invalidateMe(queryClient);
         },
         () => {
           // Only roll back if this hide is still the latest action (no undo or re-hide in between).
@@ -151,7 +163,7 @@ export function useSongFeedback() {
         .then(() => (actions.current.get(key) === action ? unhideSong(key) : undefined))
         .then(
           () => {
-            if (actions.current.get(key) === action) invalidateRecsGoTos(queryClient);
+            if (actions.current.get(key) === action) invalidateMe(queryClient);
           },
           () => {
             if (actions.current.get(key) !== action) return;

@@ -8,10 +8,22 @@ import { currentUserKey, goTosStorageKey, useUserKey, writeCacheFor } from './ac
 import { isObj, readCache, writeCache } from './cache';
 import { useInvalidateOnSynced } from './useLibrary';
 
-/** decide's go_tos section (null: the response had none), kept per account so offline still shows it. */
-export type GoTosCache = { songs: RecSong[] | null; savedAt: number };
+/**
+ * decide's go_tos section (null: the response had none), kept per account so offline still shows it. `voice` is the
+ * synced voice key it was fetched for: the fits are that profile's, so a cache for another one never seeds a query.
+ */
+export type GoTosCache = { songs: RecSong[] | null; savedAt: number; voice?: string | null };
 const isCache = (v: unknown): v is GoTosCache =>
-  isObj(v) && (v.songs === null || Array.isArray(v.songs)) && typeof v.savedAt === 'number';
+  isObj(v) &&
+  (v.songs === null || Array.isArray(v.songs)) &&
+  typeof v.savedAt === 'number' &&
+  (v.voice === undefined || v.voice === null || typeof v.voice === 'string');
+
+/** The account's offline go-tos, only if fetched for this voice key (read when a query is created, so never stale). */
+const cacheFor = (userKey: string | null, voice: string | null): GoTosCache | undefined => {
+  const c = readCache(userKey && goTosStorageKey(userKey), isCache);
+  return c && (c.voice ?? null) === voice ? c : undefined;
+};
 
 const GO_TOS = 'go_tos';
 const KIND = 'recs-gotos';
@@ -94,7 +106,7 @@ export const invalidateRecsGoTos = (queryClient: QueryClient) =>
  * The voice profile decide has: a measuredAt once synced. While a new profile is still being sent, the last synced
  * one stays (the fits don't change until decide has it, and the shelf doesn't blank meanwhile).
  */
-function useSyncedVoiceKey(): string | null {
+export function useSyncedVoiceKey(): string | null {
   const v = useVoiceStore((s) => (s.profile ? (s.pending ? undefined : s.profile.measuredAt) : null));
   const [last, setLast] = useState<string | null>(v ?? null);
   if (v !== undefined && v !== last) setLast(v);
@@ -111,12 +123,13 @@ export function useRecsGoTos(): RecSong[] | null {
   // A voice profile decide now has changes every row's fit: refetch (Discover does the same for its picks).
   const voice = useSyncedVoiceKey();
   const queryKey = useMemo(() => ['decide', userKey, KIND, voice] as const, [userKey, voice]);
-  const cached = useMemo(() => readCache(userKey && goTosStorageKey(userKey), isCache), [userKey]);
   const q = useQuery<GoTosCache>({
     queryKey,
     enabled: userKey !== null,
-    initialData: cached,
-    initialDataUpdatedAt: cached?.savedAt,
+    // Read lazily per query: a new voice key gets the cache only if it was fetched for that voice, and a hide
+    // since (which rewrote the cache) is already reflected.
+    initialData: () => cacheFor(userKey, voice),
+    initialDataUpdatedAt: () => cacheFor(userKey, voice)?.savedAt,
     // A new voice key keeps the previous rows on screen until its own land.
     placeholderData: keepPreviousData,
     // Real changes (a sung log or survey reaching decide, a hide) invalidate it; this is only the backstop.
@@ -125,7 +138,8 @@ export function useRecsGoTos(): RecSong[] | null {
     queryFn: async ({ signal }) => {
       const res = await getRecommendationsV2(toRecQuery(DEFAULT_REC_FILTERS, 'any'));
       const section = res.sections.find((s) => s.id === GO_TOS);
-      const next: GoTosCache = { songs: section && section.songs.length > 0 ? section.songs : null, savedAt: Date.now() };
+      const songs = section && section.songs.length > 0 ? section.songs : null;
+      const next: GoTosCache = { songs, savedAt: Date.now(), voice };
       if (!signal?.aborted && userKey) writeCacheFor(userKey, goTosStorageKey(userKey), next);
       return next;
     },

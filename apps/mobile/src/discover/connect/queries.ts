@@ -30,7 +30,13 @@ const isFallback = (data: unknown) => (data as { fallback?: boolean } | undefine
 
 export function useServicesSummary(): UseQueryResult<SourcesSummaryResponse> {
   const userKey = useAuth((s) => (s.state.status === 'signedIn' ? userKeyFor(s.state.session.email) : null));
-  return useQuery({ queryKey: servicesSummaryKeyFor(userKey), queryFn: getServicesSummary, enabled: userKey !== null });
+  // Imports and connects invalidate it (useInvalidateAfterImport); the staleTime only spares remounts a refetch.
+  return useQuery({
+    queryKey: servicesSummaryKeyFor(userKey),
+    queryFn: getServicesSummary,
+    enabled: userKey !== null,
+    staleTime: 5 * 60_000,
+  });
 }
 
 /**

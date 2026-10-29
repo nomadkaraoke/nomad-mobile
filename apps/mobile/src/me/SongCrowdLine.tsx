@@ -5,8 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useAuth } from '../auth/store';
 import { useOffline } from '../net/useOffline';
-import { useVoiceStore } from '../voice/voiceStore';
 import { useUserKey } from './account';
+import { useSyncedVoiceKey } from './useRecsGoTos';
 
 /** decide's voice buckets (spec §6.7) → their `song.crowd.bucket.*` sentence. */
 const BUCKETS = ['bass', 'baritone', 'tenor', 'alto', 'mezzo', 'soprano'] as const;
@@ -50,7 +50,8 @@ export function SongCrowdLine({ songKey }: { songKey: string }) {
   const userKey = useUserKey();
   const offline = useOffline();
   // decide reads the viewer's bucket from the voice profile it has: a newly synced profile refetches (as recs do).
-  const voice = useVoiceStore((s) => (s.profile && !s.pending ? s.profile.measuredAt : null));
+  // While a new profile is still being sent, the last synced key stays (no blank line meanwhile).
+  const voice = useSyncedVoiceKey();
   const q = useQuery({
     queryKey: ['decide', userKey, 'crowd', songKey, voice],
     queryFn: () => getSongCrowd(songKey),
