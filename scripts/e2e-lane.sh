@@ -32,8 +32,11 @@ if (( LANE > 0 )); then
   KJBOX_DATA_DIR="$HOME/kjdata-localstack-lane$LANE"
 fi
 # `env` arguments for each stack script (empty values are dropped, so lane 0 passes nothing new).
+# KARAOKE_DECIDE_API_URL: gen's decide partner client (account deletion) defaults to PRODUCTION decide; point it at
+# this lane's local decide (same local-stack-secret on both sides).
 lane_gen_env() {
-  local a=(LOCAL_STACK_API_PORT="$GEN_PORT" LOCAL_STACK_WEB_PORT="$GEN_WEB_PORT")
+  local a=(LOCAL_STACK_API_PORT="$GEN_PORT" LOCAL_STACK_WEB_PORT="$GEN_WEB_PORT"
+    KARAOKE_DECIDE_API_URL="http://127.0.0.1:$DECIDE_PORT")
   [[ -n "$LANE_PROJECT" ]] && a+=(LOCAL_STACK_PROJECT="$LANE_PROJECT" LOCAL_STACK_STATE_DIR="$GEN_STATE_DIR"
     LOCAL_STACK_GCS_BUCKET="test-bucket-lane$LANE")
   printf '%s\n' "${a[@]}"
