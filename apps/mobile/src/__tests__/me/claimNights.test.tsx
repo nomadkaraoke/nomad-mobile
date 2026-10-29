@@ -389,6 +389,20 @@ describe('/me/past-nights', () => {
     expect(screen.queryByTestId('me-claim')).toBeNull();
   });
 
+  it('stays put when the phone goes offline (the list empties, but nothing was answered)', async () => {
+    api.getHistorySuggestions.mockResolvedValue(
+      suggestions([night('n1', '2026-10-10'), night('n2', '2026-10-03'), night('n3', '2026-09-26')]),
+    );
+    mockConnected = false;
+    try {
+      renderRouter(appRoutes(), { initialUrl: '/me/past-nights' });
+      await act(async () => {});
+      expect(screen.getByTestId('me-past-nights')).toBeTruthy();
+    } finally {
+      mockConnected = true;
+    }
+  });
+
   it('See all opens it from Me', async () => {
     api.getHistorySuggestions.mockResolvedValue(
       suggestions([night('n1', '2026-10-10'), night('n2', '2026-10-03'), night('n3', '2026-09-26')]),

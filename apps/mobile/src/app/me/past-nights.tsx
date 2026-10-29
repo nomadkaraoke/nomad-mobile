@@ -13,12 +13,13 @@ export default function PastNightsScreen() {
   const v = useClaimNightsView();
   const empty = !v.loading && v.rows.length === 0;
 
-  // Every night answered (or nothing to show, e.g. the box went away): back to Me.
+  // Every night answered (or nothing to show, e.g. the box went away): back to Me. Offline the list reads as
+  // empty too; stay, so a network blip doesn't throw the singer off the screen.
   useEffect(() => {
-    if (!empty) return;
+    if (!empty || v.offline) return;
     if (router.canGoBack()) router.back();
     else router.replace('/me');
-  }, [empty]);
+  }, [empty, v.offline]);
 
   const header = (
     <View className="gap-2 pb-3">

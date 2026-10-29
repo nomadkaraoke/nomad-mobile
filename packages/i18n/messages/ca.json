@@ -2069,7 +2069,7 @@
       "seeAll": "{count, plural, one {Mostra la nit sencera} other {Mostra totes les # nits}}",
       "showingRecent": "{count, plural, one {Es mostra la teva nit més recent} other {Es mostren les teves # nits més recents}}",
       "taken": "{count, plural, one {# ja l'ha desat una altra persona.} other {# ja les ha desat una altra persona.}}",
-      "title": "Eres tu?",
+      "title": "Ets tu?",
       "unmatched": "{count, plural, one {No s'ha pogut fer coincidir # cançó més} other {No s'han pogut fer coincidir # cançons més}}",
       "songValue": "{title} · {artist}",
       "rateLimited": "Massa intents alhora. Torna-ho a provar d'aquí a uns minuts."
