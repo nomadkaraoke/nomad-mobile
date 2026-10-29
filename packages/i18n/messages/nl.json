@@ -2057,6 +2057,21 @@
         "submission": "Je hebt je gratis aanvraag voor vandaag al ingediend. Kom morgen terug om er nog een aan te vragen.",
         "voteUsed": "Je hebt je gratis stem voor vandaag al gebruikt. Kom morgen terug om nog eens te stemmen."
       }
+    },
+    "claim": {
+      "explainer": "Nummers gezongen onder een naam zoals die van jou tijdens Nomad-avonden. Vink aan welke van jou waren.",
+      "failed": "Kon de computer van de host niet bereiken. Probeer het later opnieuw.",
+      "nightHeader": "{date} · {count, plural, one {# nummer} other {# nummers}} als “{name}”",
+      "none": "Geen van deze ben ik",
+      "save": "Aangevinkte nummers opslaan",
+      "saved": "{count, plural, one {# nummer opgeslagen.} other {# nummers opgeslagen.}} Ze verschijnen over een minuutje in je geschiedenis.",
+      "screenTitle": "Je eerdere Nomad-avonden",
+      "seeAll": "{count, plural, one {Bekijk de # avond} other {Bekijk alle # avonden}}",
+      "showingRecent": "{count, plural, one {Je meest recente avond wordt weergegeven} other {Je # meest recente avonden worden weergegeven}}",
+      "taken": "{count, plural, one {# was al opgeslagen door iemand anders.} other {# waren al opgeslagen door iemand anders.}}",
+      "title": "Was jij dit?",
+      "unmatched": "{count, plural, one {Nog # nummer kon niet worden gekoppeld} other {Nog # nummers konden niet worden gekoppeld}}",
+      "songValue": "{title} · {artist}"
     }
   }
 }

@@ -2057,6 +2057,21 @@
         "submission": "Twój dzisiejszy darmowy utwór został już zgłoszony. Wróć jutro, aby zgłosić kolejny.",
         "voteUsed": "Twój dzisiejszy darmowy głos został już wykorzystany. Wróć jutro, aby zagłosować ponownie."
       }
+    },
+    "claim": {
+      "explainer": "Piosenki zaśpiewane pod imieniem takim jak Twoje podczas wieczorów Nomad. Zaznacz te, które należą do Ciebie.",
+      "failed": "Nie udało się połączyć z urządzeniem gospodarza. Spróbuj ponownie później.",
+      "nightHeader": "{date} · {count, plural, one {# piosenka} few {# piosenki} many {# piosenek} other {# piosenek}} jako „{name}”",
+      "none": "Żadna z nich nie jest moja",
+      "save": "Zapisz zaznaczone piosenki",
+      "saved": "{count, plural, one {Zapisano # piosenkę.} few {Zapisano # piosenki.} many {Zapisano # piosenek.} other {Zapisano # piosenki.}} Za chwilę pojawią się w Twojej historii.",
+      "screenTitle": "Twoje poprzednie wieczory Nomad",
+      "seeAll": "{count, plural, one {Zobacz # wieczór} few {Zobacz wszystkie # wieczory} many {Zobacz wszystkie # wieczorów} other {Zobacz wszystkie # wieczorów}}",
+      "showingRecent": "{count, plural, one {Wyświetlanie Twojego ostatniego wieczoru} few {Wyświetlanie Twoich # ostatnich wieczorów} many {Wyświetlanie Twoich # ostatnich wieczorów} other {Wyświetlanie Twoich # ostatnich wieczorów}}",
+      "taken": "{count, plural, one {# została już zapisana przez kogoś innego.} few {# zostały już zapisane przez kogoś innego.} many {# zostało już zapisanych przez kogoś innego.} other {# zostało już zapisanych przez kogoś innego.}}",
+      "title": "Czy to Twoje wykonania?",
+      "unmatched": "{count, plural, one {Nie udało się dopasować jeszcze # piosenki} few {Nie udało się dopasować jeszcze # piosenek} many {Nie udało się dopasować jeszcze # piosenek} other {Nie udało się dopasować jeszcze # piosenek}}",
+      "songValue": "{title} · {artist}"
     }
   }
 }

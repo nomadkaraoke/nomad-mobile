@@ -2057,6 +2057,21 @@
         "submission": "Ți-ai folosit cererea gratuită de azi. Revino mâine pentru a trimite alta.",
         "voteUsed": "Ți-ai folosit votul gratuit de azi. Revino mâine pentru a vota din nou."
       }
+    },
+    "claim": {
+      "explainer": "Piese cântate sub un nume similar cu al tău la serile Nomad. Bifează-le pe cele cântate de tine.",
+      "failed": "Nu s-a putut realiza conexiunea cu dispozitivul gazdei. Încearcă din nou mai târziu.",
+      "nightHeader": "{date} · {count, plural, one {# piesă} few {# piese} other {# de piese}} ca „{name}”",
+      "none": "Niciuna dintre acestea nu am fost eu",
+      "save": "Salvează piesele bifate",
+      "saved": "{count, plural, one {S-a salvat # piesă.} few {S-au salvat # piese.} other {S-au salvat # de piese.}} Vor apărea în istoricul tău într-un minut.",
+      "screenTitle": "Serile tale Nomad anterioare",
+      "seeAll": "{count, plural, one {Vezi singura seară} few {Vezi toate cele # seri} other {Vezi toate cele # de seri}}",
+      "showingRecent": "{count, plural, one {Se afișează cea mai recentă seară a ta} few {Se afișează cele mai recente # seri ale tale} other {Se afișează cele mai recente # de seri ale tale}}",
+      "taken": "{count, plural, one {# a fost deja salvată de altcineva.} few {# au fost deja salvate de altcineva.} other {# au fost deja salvate de altcineva.}}",
+      "title": "Tu ai fost?",
+      "unmatched": "{count, plural, one {Încă # piesă nu a putut fi asociată} few {Încă # piese nu au putut fi asociate} other {Încă # de piese nu au putut fi asociate}}",
+      "songValue": "{title} · {artist}"
     }
   }
 }

@@ -2057,6 +2057,21 @@
         "submission": "Bugünkü ücretsiz istek hakkını kullandın. Başka bir istekte bulunmak için yarın tekrar gel.",
         "voteUsed": "Bugünkü ücretsiz oy hakkını kullandın. Başka bir istekte bulunmak için yarın tekrar gel."
       }
+    },
+    "claim": {
+      "explainer": "Nomad gecelerinde seninkine benzer bir isim altında söylenen şarkılar. Senin söylediklerini işaretle.",
+      "failed": "Sunucu makinesine ulaşılamadı. Daha sonra tekrar dene.",
+      "nightHeader": "{date} · “{name}” olarak {count, plural, one {# şarkı} other {# şarkı}}",
+      "none": "Bunların hiçbiri ben değilim",
+      "save": "İşaretlenen şarkıları kaydet",
+      "saved": "{count, plural, one {# şarkı kaydedildi.} other {# şarkı kaydedildi.}} Birazdan geçmişinde görünecektir.",
+      "screenTitle": "Geçmiş Nomad gecelerin",
+      "seeAll": "{count, plural, one {# gecenin tümünü gör} other {# gecenin tümünü gör}}",
+      "showingRecent": "{count, plural, one {En son gecen gösteriliyor} other {En son # gecen gösteriliyor}}",
+      "taken": "{count, plural, one {# tanesi başka biri tarafından zaten kaydedilmiş.} other {# tanesi başka biri tarafından zaten kaydedilmiş.}}",
+      "title": "Bunları sen mi söyledin?",
+      "unmatched": "{count, plural, one {# şarkı daha eşleştirilemedi} other {# şarkı daha eşleştirilemedi}}",
+      "songValue": "{title} · {artist}"
     }
   }
 }

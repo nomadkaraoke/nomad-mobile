@@ -2057,6 +2057,21 @@
         "submission": "Du har gjort dagens gratisönskemål. Kom tillbaka i morgon för att önska en till.",
         "voteUsed": "Du har använt dagens gratisröst. Kom tillbaka i morgon för att rösta igen."
       }
+    },
+    "claim": {
+      "explainer": "Låtar som sjungits under ett namn likt ditt på Nomad-kvällar. Bocka för de som var du.",
+      "failed": "Kunde inte nå värdens dator. Försök igen senare.",
+      "nightHeader": "{date} · {count, plural, one {# låt} other {# låtar}} som ”{name}”",
+      "none": "Ingen av dessa är jag",
+      "save": "Spara förbockade låtar",
+      "saved": "{count, plural, one {Sparade # låt.} other {Sparade # låtar.}} De visas i din historik om en minut.",
+      "screenTitle": "Dina tidigare Nomad-kvällar",
+      "seeAll": "{count, plural, one {Visa hela kvällen (#)} other {Visa alla # kvällar}}",
+      "showingRecent": "{count, plural, one {Visar din senaste kväll} other {Visar dina # senaste kvällar}}",
+      "taken": "{count, plural, one {# hade redan sparats av någon annan.} other {# hade redan sparats av någon annan.}}",
+      "title": "Var det här du?",
+      "unmatched": "{count, plural, one {# låt till kunde inte matchas} other {# fler låtar kunde inte matchas}}",
+      "songValue": "{title} · {artist}"
     }
   }
 }

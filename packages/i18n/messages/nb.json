@@ -2057,6 +2057,21 @@
         "submission": "Du har brukt dagens gratisønske. Kom tilbake i morgen for å ønske deg en til.",
         "voteUsed": "Du har brukt dagens gratisstemme. Kom tilbake i morgen for å stemme igjen."
       }
+    },
+    "claim": {
+      "explainer": "Sanger sunget under et navn som ligner på ditt på Nomad-kvelder. Huk av for de som var deg.",
+      "failed": "Kunne ikke nå vertens maskin. Prøv igjen senere.",
+      "nightHeader": "{date} · {count, plural, one {# sang} other {# sanger}} som «{name}»",
+      "none": "Ingen av disse er meg",
+      "save": "Lagre avhukede sanger",
+      "saved": "{count, plural, one {Lagret # sang.} other {Lagret # sanger.}} De vises i historikken din om et øyeblikk.",
+      "screenTitle": "Dine tidligere Nomad-kvelder",
+      "seeAll": "{count, plural, one {Se # kveld} other {Se alle # kvelder}}",
+      "showingRecent": "{count, plural, one {Viser den siste kvelden din} other {Viser de # siste kveldene dine}}",
+      "taken": "{count, plural, one {# var allerede lagret av noen andre.} other {# var allerede lagret av noen andre.}}",
+      "title": "Var dette deg?",
+      "unmatched": "{count, plural, one {# sang til kunne ikke matches} other {# sanger til kunne ikke matches}}",
+      "songValue": "{title} · {artist}"
     }
   }
 }

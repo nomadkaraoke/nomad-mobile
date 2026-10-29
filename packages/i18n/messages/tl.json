@@ -2057,6 +2057,21 @@
         "submission": "Nagawa mo na ang iyong libreng request para sa araw na ito. Bumalik bukas para mag-request ulit.",
         "voteUsed": "Nagamit mo na ang iyong libreng boto para sa araw na ito. Bumalik bukas para mag-request ulit."
       }
+    },
+    "claim": {
+      "explainer": "Mga kantang kinanta gamit ang pangalang katulad ng sa iyo sa mga Nomad night. Lagyan ng tsek ang mga kinanta mo.",
+      "failed": "Hindi makakonekta sa machine ng host. Subukan muli mamaya.",
+      "nightHeader": "{date} · {count, plural, one {# kanta} other {# kanta}} bilang “{name}”",
+      "none": "Wala sa mga ito ang kinanta ko",
+      "save": "I-save ang mga may tsek na kanta",
+      "saved": "{count, plural, one {Na-save ang # kanta.} other {Na-save ang # kanta.}} Lalabas ang mga ito sa iyong history sa loob ng isang minuto.",
+      "screenTitle": "Ang iyong mga nakaraang Nomad night",
+      "seeAll": "{count, plural, one {Tingnan ang lahat ng # gabi} other {Tingnan ang lahat ng # gabi}}",
+      "showingRecent": "{count, plural, one {Ipinapakita ang iyong pinakabagong gabi} other {Ipinapakita ang iyong # pinakabagong gabi}}",
+      "taken": "{count, plural, one {Na-save na ito ng ibang tao.} other {Na-save na ang # sa mga ito ng ibang tao.}}",
+      "title": "Ikaw ba ang kumanta ng mga ito?",
+      "unmatched": "{count, plural, one {# pang kanta ang hindi maitugma} other {# pang kanta ang hindi maitugma}}",
+      "songValue": "{title} · {artist}"
     }
   }
 }

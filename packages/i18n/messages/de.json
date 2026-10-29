@@ -2057,6 +2057,21 @@
         "submission": "Du hast deine heutige kostenlose Anfrage bereits eingereicht. Komm morgen wieder, um eine weitere anzufragen.",
         "voteUsed": "Du hast deine heutige kostenlose Stimme bereits abgegeben. Komm morgen wieder, um erneut abzustimmen."
       }
+    },
+    "claim": {
+      "explainer": "Songs, die bei Nomad-Abenden unter einem ähnlichen Namen wie deinem gesungen wurden. Hake die an, die von dir waren.",
+      "failed": "Konnte das Gerät des Hosts nicht erreichen. Versuche es später noch einmal.",
+      "nightHeader": "{date} · {count, plural, one {# Song} other {# Songs}} als „{name}“",
+      "none": "Keiner davon war ich",
+      "save": "Ausgewählte Songs speichern",
+      "saved": "{count, plural, one {# Song gespeichert.} other {# Songs gespeichert.}} Sie werden gleich in deinem Verlauf angezeigt.",
+      "screenTitle": "Deine vergangenen Nomad-Abende",
+      "seeAll": "{count, plural, one {Den # Abend anzeigen} other {Alle # Abende anzeigen}}",
+      "showingRecent": "{count, plural, one {Dein neuester Abend wird angezeigt} other {Deine # neuesten Abende werden angezeigt}}",
+      "taken": "{count, plural, one {# wurde bereits von jemand anderem gespeichert.} other {# wurden bereits von jemand anderem gespeichert.}}",
+      "title": "Warst du das?",
+      "unmatched": "{count, plural, one {# weiterer Song konnte nicht zugeordnet werden} other {# weitere Songs konnten nicht zugeordnet werden}}",
+      "songValue": "{title} · {artist}"
     }
   }
 }
