@@ -111,7 +111,9 @@ tags:
     when:
       platform: iOS
     commands:
-      - tapOn: "Back|Navigate up"
+      # The chevron's label is the previous screen's title ("Get this made" here), so tap it by its id.
+      - tapOn:
+          id: "BackButton"
 - extendedWaitUntil:
     visible:
       id: "me-getmade-screen"
@@ -125,7 +127,9 @@ tags:
     when:
       platform: iOS
     commands:
-      - tapOn: "Back|Navigate up"
+      # The chevron's label is the previous screen's title ("Get this made" here), so tap it by its id.
+      - tapOn:
+          id: "BackButton"
 # Back on Me: the shelf shares the outcome and shows the limit once.
 - scrollUntilVisible:
     element:
