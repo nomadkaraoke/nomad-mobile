@@ -103,9 +103,9 @@ export function ClaimNightCard({ prefix, index: i, night, unticked, status, offl
               {t('unmatched', { count: night.unmatched })}
             </Text>
           ) : null}
-          {status === 'error' ? (
+          {status === 'error' || status === 'rateLimited' ? (
             <Text testID={`${prefix}-error-${i}`} accessibilityLiveRegion="polite" className="text-danger">
-              {t('failed')}
+              {t(status === 'rateLimited' ? 'rateLimited' : 'failed')}
             </Text>
           ) : null}
           <Button

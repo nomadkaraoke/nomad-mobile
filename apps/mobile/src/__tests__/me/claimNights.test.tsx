@@ -241,6 +241,18 @@ describe('Were these you? (Me section)', () => {
     expect(screen.queryByTestId('me-claim-all')).toBeNull();
   });
 
+  it('a rate-limited Save shows its own line and keeps the card', async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1', '2026-10-10')]));
+    api.claimHistory.mockRejectedValue(new KjboxError('rate_limited', 429, 60));
+    renderSection();
+    await screen.findByTestId('me-claim-night-0');
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('me-claim-save-0'));
+    });
+    expect(await screen.findByTestId('me-claim-error-0')).toHaveTextContent('Too many at once. Try again in a few minutes.');
+    expect(screen.getByTestId('me-claim-save-0')).toBeTruthy();
+  });
+
   it('the taken line when someone else already saved a song', async () => {
     api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1', '2026-10-10')]));
     api.claimHistory.mockResolvedValue(result({ saved: 2, taken: [12] }));

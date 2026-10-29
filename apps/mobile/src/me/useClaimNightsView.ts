@@ -9,7 +9,7 @@ import { useClaimSuggestions, type ClaimOutcome } from './useClaimSuggestions';
 export const CLAIM_RESULT_MS = 5_000;
 
 export type ClaimSaved = Exclude<ClaimOutcome, { error: string }>;
-export type ClaimCardStatus = 'idle' | 'busy' | 'error';
+export type ClaimCardStatus = 'idle' | 'busy' | 'error' | 'rateLimited';
 
 export type ClaimNightRow = {
   night: HistoryNight;
@@ -78,7 +78,8 @@ export function useClaimNightsView() {
       const out = await s.claim(night, ticked);
       if (currentUserKey() !== owner) return;
       if ('error' in out) {
-        update((v) => ({ status: { ...v.status, [id]: 'error' } }));
+        const failed: ClaimCardStatus = out.error === 'rate_limited' ? 'rateLimited' : 'error';
+        update((v) => ({ status: { ...v.status, [id]: failed } }));
         return;
       }
       update((v) => ({ status: { ...v.status, [id]: 'idle' } }));

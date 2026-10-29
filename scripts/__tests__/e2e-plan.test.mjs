@@ -29,7 +29,9 @@ test('Me code runs the Me flows and the screens that embed Me pieces, not everyt
   assert.notDeepEqual(got, [ALL]);
   assert.ok(got.includes('me-'));
   // Discover feedback, Connect, the song page's library actions and Tonight's log import from src/me.
-  for (const p of ['discover-', 'search-', 'tonight-', 'connect-']) assert.ok(got.includes(p), p);
+  for (const p of ['discover-', 'search-', 'tonight-', 'connect-', 'voice-']) assert.ok(got.includes(p), p);
+  // The voice flows open Me's profile card (Your voice) too.
+  assert.ok(affectedPrefixes(['apps/mobile/src/app/me/music-profile.tsx']).includes('voice-'));
 });
 
 test('a changed flow file runs that flow', () => {

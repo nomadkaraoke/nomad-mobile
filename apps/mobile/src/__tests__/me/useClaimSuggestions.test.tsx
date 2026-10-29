@@ -7,6 +7,7 @@ import { CLAIM_REFETCH_DELAYS_MS, suggestionsKeyFor, useClaimAnswered, useClaimS
 import { useClearMeOnAccountChange } from '../../me/useClearMeOnAccountChange';
 import { libraryKeyFor, useLibrary } from '../../me/useLibrary';
 import { libraryStorageKey } from '../../me/account';
+import { getMadeKeyFor } from '../../me/useGetMade';
 import * as decide from '@nomad/api-decide';
 import { logMirrorKeyFor } from '../../me/useLogMirror';
 import { appStorage } from '../../storage';
@@ -234,7 +235,7 @@ describe('claim', () => {
     await act(async () => {
       second = await h.result.current.claim(n, [1]);
     });
-    expect(first).toEqual({ error: 'failed' });
+    expect(first).toEqual({ error: 'rate_limited' });
     expect(second).toMatchObject({ saved: 1 });
     expect(api.claimHistory).toHaveBeenCalledTimes(2);
   });
@@ -450,6 +451,109 @@ describe('claim', () => {
       await h.result.current.claim(h.result.current.nights[0]!, [1]);
     });
     expect(appStorage.getString(libraryStorageKey(A))).toBeUndefined();
+  });
+
+  it('never retries under another account: A\'s unreachable claim answered after B signed in is sent once', async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1')]));
+    let reject!: (e: unknown) => void;
+    api.claimHistory.mockImplementationOnce(() => new Promise((_, rej) => (reject = rej))).mockResolvedValue(result());
+    const { wrapper } = setup();
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    let p!: Promise<unknown>;
+    act(() => {
+      p = h.result.current.claim(h.result.current.nights[0]!, [1]);
+    });
+    act(() => signIn('b@example.com'));
+    await act(async () => reject(new KjboxError('internal', 0, undefined, { message: 'aborted' }, true)));
+    expect(await p).toEqual({ error: 'failed' });
+    expect(api.claimHistory).toHaveBeenCalledTimes(1);
+  });
+
+  it('a claim that saved nothing (None of these are me) schedules no refetch and leaves the library cache alone', async () => {
+    jest.useFakeTimers();
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1')]));
+    api.claimHistory.mockResolvedValue(result({ saved: 0, already_saved: 0, rejected: 3 }));
+    const { client, wrapper } = setup();
+    appStorage.set(libraryStorageKey(A), JSON.stringify({ etag: '"e0"', items: [], savedAt: 123 }));
+    const spy = jest.spyOn(client, 'invalidateQueries');
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    await act(async () => {
+      await h.result.current.claim(h.result.current.nights[0]!, []);
+    });
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(31_000);
+    });
+    const lib = JSON.stringify(libraryKeyFor(A));
+    expect(spy.mock.calls.map((c) => JSON.stringify((c[0] as { queryKey: unknown }).queryKey))).not.toContain(lib);
+    expect(JSON.parse(appStorage.getString(libraryStorageKey(A))!).savedAt).toBe(123);
+  });
+
+  it('a burst of claims coalesces into one refetch at +10 s and one at +30 s (from the last claim)', async () => {
+    jest.useFakeTimers();
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1'), night('n2')]));
+    api.claimHistory.mockResolvedValue(result());
+    const { client, wrapper } = setup();
+    const spy = jest.spyOn(client, 'invalidateQueries');
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    const [n1, n2] = h.result.current.nights;
+    await act(async () => {
+      await h.result.current.claim(n1!, [1]);
+    });
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(3_000);
+    });
+    await act(async () => {
+      await h.result.current.claim(n2!, [1]);
+    });
+    const lib = JSON.stringify(libraryKeyFor(A));
+    const libCalls = () => spy.mock.calls.filter((c) => JSON.stringify((c[0] as { queryKey: unknown }).queryKey) === lib).length;
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(10_000);
+    });
+    expect(libCalls()).toBe(1);
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(25_000);
+    });
+    expect(libCalls()).toBe(2);
+  });
+
+  it('the +30 s refetch also refreshes the go-tos and Get this made for that account', async () => {
+    jest.useFakeTimers();
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1')]));
+    api.claimHistory.mockResolvedValue(result());
+    const { client, wrapper } = setup();
+    const spy = jest.spyOn(client, 'invalidateQueries');
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    await act(async () => {
+      await h.result.current.claim(h.result.current.nights[0]!, [1]);
+    });
+    const keys = () => spy.mock.calls.map((c) => JSON.stringify((c[0] as { queryKey: unknown }).queryKey));
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(10_000);
+    });
+    expect(keys()).not.toContain(JSON.stringify(['decide', A, 'recs-gotos']));
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(20_000);
+    });
+    expect(keys()).toContain(JSON.stringify(['decide', A, 'recs-gotos']));
+    expect(keys()).toContain(JSON.stringify(getMadeKeyFor(A)));
+  });
+
+  it('a 429 claim reports rate_limited', async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1')]));
+    api.claimHistory.mockRejectedValue(new KjboxError('rate_limited', 429, 60));
+    const { wrapper } = setup();
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    let out: unknown;
+    await act(async () => {
+      out = await h.result.current.claim(h.result.current.nights[0]!, [1]);
+    });
+    expect(out).toEqual({ error: 'rate_limited' });
   });
 
   it('a later refetch for another account is skipped (the claimer signed out)', async () => {
