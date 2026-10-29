@@ -56,12 +56,11 @@ without providing it.
 | 18 | **Camera** (QR scan of the night code) | Not collected (frames are decoded on the device and never sent) | n/a | Not collected | No | n/a | n/a |
 | 19 | **Saved videos** (MP4 written to Photos, write-only; `READ_MEDIA_*` blocked on Android) | Not collected | n/a | Not collected | No | n/a | n/a |
 
-Rows 8, 9, 12 and the mic: **the iOS and Android microphone permission text says "Audio stays on your
-phone."** (`app.json` `expo-audio.microphonePermission`, and en.json `permissions.microphone`,
-`voice.introPrivacy`, `voice.micDeniedBody`). That holds for the vocal range test. It **isn't true for
-the 3d voice session**, which uploads opt-in recordings. Before 3d opens to everyone, change the
-permission string to something like "...to measure your vocal range. Recordings are only saved if you
-choose to keep them." Apple checks purpose strings against behaviour (5.1.1).
+Rows 8, 9, 12 and the mic: **done in Phase 6.** The microphone permission text (`app.json`
+`expo-audio.microphonePermission`, en.json `permissions.microphone`) now says the mic measures vocal range and that
+an opt-in voice-session recording is uploaded and kept privately, deletable in Me. It used to say "Audio stays on
+your phone", which wasn't true for the 3d voice session (Apple 5.1.1). `voice.introPrivacy` and
+`voice.micDeniedBody` still say audio stays on the phone: they're shown only for the vocal range test, where that's true.
 
 ## Third parties that receive user data
 
@@ -97,14 +96,12 @@ Apple's current 5.1.2(i) (read 2026-10-25 at https://developer.apple.com/app-sto
 "You must clearly disclose where personal data will be shared with third parties, including with
 third-party AI, and obtain explicit permission before doing so."
 
-Today the app sends personal data to Google Gemini in two places **without an in-app disclosure or
-explicit permission**:
+The app sends personal data to Google Gemini in two places:
 
-1. **Screenshot import** (row 12). The intro says "We'll read the names and you check them before
-   anything is saved". It doesn't say that an AI provider reads the images. **Fix (app):** add a line to
-   `connect.screenshot.intro`, e.g. "Your screenshots are sent to Google's Gemini AI to read the names,
-   and aren't kept.", plus a one-time "OK, continue" consent before the first upload (stored per account).
-2. **gen's welcome-credit check** (`credit_evaluation_service.py`). At signup, the prompt includes the
+1. **Screenshot import** (row 12): **done in Phase 6.** The screen shows a standing note
+   (`connect.screenshot.aiNote`) and, before the first upload, a consent card (`aiConsentTitle`/`aiConsentBody`)
+   stored per account (`ScreenshotImport.tsx`).
+2. **gen's welcome-credit check** (`credit_evaluation_service.py`), **still open (Andrew's decision)**. At signup, the prompt includes the
    **email, signup IP and device fingerprint** of the new user and of matching accounts. **Fix (gen),
    preferred:** send Gemini pseudonymised signals instead (counts, "same IP as N accounts", hashed ids).
    Gemini doesn't need the raw email or IP to decide, and then no personal data reaches the AI. The

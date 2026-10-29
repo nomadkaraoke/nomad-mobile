@@ -51,6 +51,7 @@ export function JoinScreen() {
 
   const finish = (c: string, night: NightOpen) => {
     useNightStore.getState().joinNomad(c, night.night_id, night.kj_name);
+    track('night_joined');
     setPhase({ kind: 'joined' });
     router.replace('/tonight');
     // In context (spec §5): "up next" / "your turn" pushes, asked once per install once Tonight has settled (the
@@ -231,7 +232,6 @@ function NameForm({ code, night, onJoined, onNightMoved }: NameFormProps) {
     setError(null);
     try {
       await joinNight(code, trimmed, night.night_id);
-      track('night_joined');
       onJoined();
     } catch (e) {
       setSending(false);

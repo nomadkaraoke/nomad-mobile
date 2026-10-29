@@ -83,6 +83,9 @@ check_dir() { # kind dir
         # Upscale so the short side reaches 1080 (keeps the ratio).
         if (( w <= h )); then sips --resampleWidth 1080 "$f" >/dev/null; else sips --resampleHeight 1080 "$f" >/dev/null; fi
         note "resized $f ($dims) to a 1080 px short side"
+        # The 2:1 padding below must use the upscaled size, not the original.
+        local now; now="$(size_of "$f")"; w="${now%x*}"; h="${now#*x}"
+        short=$(( w < h ? w : h )); long=$(( w < h ? h : w ))
       fi
       if (( long > short * 2 )); then
         local tw th
