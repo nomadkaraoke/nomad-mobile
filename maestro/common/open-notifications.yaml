@@ -8,9 +8,8 @@ appId: com.nomadkaraoke.mobile
     id: "tab-me"
 - scrollUntilVisible:
     element:
-      id: "me-account"
-    direction: DOWN
-    centerElement: true  # at the very bottom a tap can land on the tab bar (notify-2 opened Make)
+      id: "me-signout"  # the row below Account: scrolled this far, Account is clear of the tab bar (a tap on a
+    direction: DOWN       # bottom-edge Account once landed on the Make tab)
     timeout: 15000
 - tapOn:
     id: "me-account"
