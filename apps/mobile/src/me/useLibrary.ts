@@ -19,6 +19,16 @@ const isCache = (v: unknown): v is LibraryCache => isObj(v) && typeof v.etag ===
 
 export const libraryKeyFor = (userKey: string | null) => ['decide', userKey, 'library'] as const;
 
+/**
+ * Something changed the library on the server behind the app's back (a past-night claim kjbox delivers later): the
+ * phone's cache stops counting as fresh, so the next launch fetches it even inside the 60 s staleTime.
+ */
+export function markLibraryCacheStale(userKey: string): void {
+  const key = libraryStorageKey(userKey);
+  const cached = readCache(key, isCache);
+  if (cached) writeCacheFor(userKey, key, { ...cached, savedAt: 0 });
+}
+
 /** Invalidates the library and setlist queries whenever an outbox lands a write (shared by both hooks). */
 export function useInvalidateOnSynced(keys: (readonly unknown[])[]): void {
   const queryClient = useQueryClient();

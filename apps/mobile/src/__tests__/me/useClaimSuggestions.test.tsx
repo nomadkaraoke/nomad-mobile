@@ -5,11 +5,17 @@ import { userKeyFor } from '../../auth/userKey';
 import { useAuth } from '../../auth/store';
 import { CLAIM_REFETCH_DELAYS_MS, suggestionsKeyFor, useClaimAnswered, useClaimSuggestions } from '../../me/useClaimSuggestions';
 import { useClearMeOnAccountChange } from '../../me/useClearMeOnAccountChange';
-import { libraryKeyFor } from '../../me/useLibrary';
+import { libraryKeyFor, useLibrary } from '../../me/useLibrary';
+import { libraryStorageKey } from '../../me/account';
+import * as decide from '@nomad/api-decide';
 import { logMirrorKeyFor } from '../../me/useLogMirror';
 import { appStorage } from '../../storage';
 import { resetMe, signIn, wrapperFor } from './helpers';
 
+jest.mock('@nomad/api-decide', () => ({
+  ...jest.requireActual('@nomad/api-decide'),
+  getLibrary: jest.fn(),
+}));
 jest.mock('@nomad/api-kjbox', () => ({
   ...jest.requireActual('@nomad/api-kjbox'),
   getHistorySuggestions: jest.fn(),
@@ -68,6 +74,12 @@ beforeEach(() => {
   api.claimHistory.mockReset();
   useClaimAnswered.getState().clear();
 });
+
+/** A new query client for the same signed-in person, keeping the phone's storage (an app relaunch). */
+function resetMeKeepStorage() {
+  const { QueryClient } = jest.requireActual<typeof import('@tanstack/react-query')>('@tanstack/react-query');
+  return new QueryClient();
+}
 
 function setup(email = 'a@example.com') {
   const client = resetMe(email);
@@ -405,6 +417,39 @@ describe('claim', () => {
     });
     expect(keysCalled().filter((k) => k === lib)).toHaveLength(2);
     expect(keysCalled().filter((k) => k === mirror)).toHaveLength(2);
+  });
+
+  it('a claim marks the phone\'s library cache stale, so a relaunch before the +10 s refetch still fetches it', async () => {
+    const lib = decide as jest.Mocked<typeof decide>;
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1')]));
+    api.claimHistory.mockResolvedValue(result());
+    const { wrapper } = setup();
+    // The library fetched moments ago (inside its 60 s staleTime).
+    appStorage.set(libraryStorageKey(A), JSON.stringify({ etag: '"e0"', items: [], savedAt: Date.now() }));
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    await act(async () => {
+      await h.result.current.claim(h.result.current.nights[0]!, [1]);
+    });
+    expect(JSON.parse(appStorage.getString(libraryStorageKey(A))!).savedAt).toBe(0);
+
+    // "Relaunch": a fresh query client reads the stored cache, and must fetch instead of trusting it.
+    lib.getLibrary.mockResolvedValue({ status: 'ok', etag: '"e1"', items: [] } as never);
+    const relaunched = resetMeKeepStorage();
+    renderHook(() => useLibrary(), { wrapper: wrapperFor(relaunched) });
+    await waitFor(() => expect(lib.getLibrary).toHaveBeenCalled());
+  });
+
+  it('no stored library cache: a claim writes none', async () => {
+    api.getHistorySuggestions.mockResolvedValue(suggestions([night('n1')]));
+    api.claimHistory.mockResolvedValue(result());
+    const { wrapper } = setup();
+    const h = renderHook(() => useClaimSuggestions(), { wrapper });
+    await waitFor(() => expect(h.result.current.visible).toBe(true));
+    await act(async () => {
+      await h.result.current.claim(h.result.current.nights[0]!, [1]);
+    });
+    expect(appStorage.getString(libraryStorageKey(A))).toBeUndefined();
   });
 
   it('a later refetch for another account is skipped (the claimer signed out)', async () => {

@@ -5,7 +5,7 @@ import { create } from 'zustand';
 
 import { useOffline } from '../net/useOffline';
 import { currentUserKey, useUserKey } from './account';
-import { libraryKeyFor } from './useLibrary';
+import { libraryKeyFor, markLibraryCacheStale } from './useLibrary';
 import { logMirrorKeyFor } from './useLogMirror';
 
 /**
@@ -140,6 +140,9 @@ export function useClaimSuggestions(): {
           useClaimAnswered.getState().markAnswered(owner, night.night_id);
           void queryClient.invalidateQueries({ queryKey: suggestionsKeyFor(owner) });
           scheduleMeRefetch(queryClient, owner);
+          // The timers die with the app: a relaunch before them must still fetch the library (the log mirror
+          // already syncs on every launch).
+          markLibraryCacheStale(owner);
           return { saved: r.saved, alreadySaved: r.already_saved, taken: r.taken.length, takenIds: r.taken, rejected: r.rejected };
         } catch (e) {
           if (currentUserKey() === owner) staleAfterFailure(queryClient, owner, e);
