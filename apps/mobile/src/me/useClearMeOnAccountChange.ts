@@ -10,6 +10,7 @@ import { useLibrarySettle } from './librarySettle';
 import { useLovedOverrides } from './lovedOverrides';
 import { useMeOutbox } from './meOutbox';
 import { useBindMeQueryClient } from './queryClientRef';
+import { useClaimAnswered } from './useClaimSuggestions';
 
 const keyOf = (s: ReturnType<typeof useAuth.getState>): string | null =>
   s.state.status === 'signedIn' ? userKeyFor(s.state.session.email) : null;
@@ -48,6 +49,11 @@ export function useClearMeOnAccountChange(): void {
         useGetMadeLocal.getState().clear();
         // The board's vote state (voted today, your vote) is the signed-in person's.
         queryClient.removeQueries({ queryKey: BOARD_QUERY_KEY });
+        // Past-night suggestions hold other singers' names and are memory-only (R39): never shown to the next person.
+        const history = (q: { queryKey: readonly unknown[] }) => q.queryKey[0] === 'kjbox' && q.queryKey[2] === 'history-suggestions';
+        void queryClient.cancelQueries({ predicate: history });
+        queryClient.removeQueries({ predicate: history });
+        useClaimAnswered.getState().clear();
       }
       if (was && !is) {
         for (const kind of ['library', 'setlists', 'karaoke-log', 'song-history', 'get-made', 'recs-gotos', 'crowd']) {
