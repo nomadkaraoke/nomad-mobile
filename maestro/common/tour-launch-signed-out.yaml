@@ -22,7 +22,15 @@ appId: com.nomadkaraoke.mobile
     when:
       visible: "Runtime version.*"
     commands:
-      - tapOn: "Close|Continue"
+      - runFlow:
+          when:
+            visible: "This is the developer menu.*"
+          commands:
+            - tapOn: "Continue"
+      - runFlow:
+          when:
+            visible: "Runtime version.*"
+          file: close-dev-menu.yaml
 # The dev menu can also come up late (a cold Metro bundle): close it if it is in front now.
 - extendedWaitUntil:
     visible:
@@ -33,7 +41,15 @@ appId: com.nomadkaraoke.mobile
     when:
       visible: "Runtime version.*"
     commands:
-      - tapOn: "Close|Continue"
+      - runFlow:
+          when:
+            visible: "This is the developer menu.*"
+          commands:
+            - tapOn: "Continue"
+      - runFlow:
+          when:
+            visible: "Runtime version.*"
+          file: close-dev-menu.yaml
 - extendedWaitUntil:
     visible:
       id: "discover-signin"

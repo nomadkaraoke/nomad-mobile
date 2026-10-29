@@ -16,7 +16,7 @@ appId: com.nomadkaraoke.mobile
     when:
       visible: "Runtime version.*"
     commands:
-      - tapOn: "Close"
+      - runFlow: close-dev-menu.yaml
 # Android: the Close tap can land after the dev menu has gone, on the launcher behind it (it opened YouTube);
 # bring the app back if it isn't showing (see launch.yaml).
 - runFlow:

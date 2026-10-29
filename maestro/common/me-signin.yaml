@@ -14,7 +14,14 @@ appId: com.nomadkaraoke.mobile
     file: google-signin.yaml
     env:
       EMAIL: ${EMAIL}
+# Since Phase 4a's Me (profile card, go-tos, setlists, songs) the balance row sits below the fold: scroll to it.
 - extendedWaitUntil:
-    visible:
+    notVisible:
+      id: "me-signin"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
       id: "me-credits"
+    direction: DOWN
+    centerElement: true  # Buy credits sits just below the balance
     timeout: 30000

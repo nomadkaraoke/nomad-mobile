@@ -60,10 +60,12 @@ tags:
         id: "credits-added"
     commands:
       - takeScreenshot: ${PHASE6_SHOTS}/purchase-1-added
-- extendedWaitUntil:
-    visible:
+- scrollUntilVisible:
+    element:
       id: "me-credits"
       text: "3 credits"
+    direction: DOWN
+    centerElement: true
     timeout: 30000
 - takeScreenshot: ${PHASE6_SHOTS}/purchase-1-me-3-credits
 - runScript:

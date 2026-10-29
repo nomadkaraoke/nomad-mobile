@@ -27,7 +27,7 @@ appId: com.nomadkaraoke.mobile
     when:
       visible: "Runtime version.*"
     commands:
-      - tapOn: "Close"
+      - runFlow: close-dev-menu.yaml
 - extendedWaitUntil:
     visible:
       id: "discover-search-input"
