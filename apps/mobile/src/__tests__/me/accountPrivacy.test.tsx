@@ -6,7 +6,9 @@ import { useMeOutbox } from '../../me/meOutbox';
 import { useLibrary } from '../../me/useLibrary';
 import { useSetlists } from '../../me/useSetlists';
 import { useSongHistory } from '../../me/SongHistory';
+import { useGetMadeLocal } from '../../me/getMadeLocal';
 import { useLovedOverrides } from '../../me/lovedOverrides';
+import { useClaimAnswered } from '../../me/useClaimSuggestions';
 import { useAuth } from '../../auth/store';
 import { userKeyFor } from '../../auth/userKey';
 import { appStorage } from '../../storage';
@@ -149,4 +151,19 @@ it('account deletion (clearMeLocalData) forgets the owner, their caches, unsent 
   // The same person signing in again gets nothing back.
   act(() => signIn('a@example.com'));
   expect(useMeOutbox.getState().items).toEqual([]);
+});
+
+it("account deletion (clearMeLocalData) also drops 4b's Get this made state and 4c's answered past nights", () => {
+  resetMe('a@example.com');
+  const item = { key: 'k_Gone', artist: 'Invented Band', title: 'Made Up Song' } as never;
+  act(() => {
+    useGetMadeLocal.getState().setDismissed(item, true);
+    useGetMadeLocal.getState().setRequest('k_Gone', 'sent' as never);
+    useClaimAnswered.getState().markAnswered(A, 'kn_1');
+  });
+  expect(Object.keys(useGetMadeLocal.getState().dismissed)).toEqual(['k_Gone']);
+  expect(useClaimAnswered.getState().byUser[A]).toEqual({ kn_1: true });
+  act(() => clearMeLocalData());
+  expect(useGetMadeLocal.getState()).toMatchObject({ dismissed: {}, requests: {}, toast: null });
+  expect(useClaimAnswered.getState().byUser).toEqual({});
 });
