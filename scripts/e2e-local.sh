@@ -64,6 +64,24 @@
 # with the app in Hebrew (RTL), set before and reset after them.
 set -euo pipefail
 
+# Nothing under test may reach production. The stacks, Metro and Maestro inherit this shell's environment, and a
+# developer's direnv exports real credentials and prod settings (flacfetch URL + key, the GCP key and
+# GOOGLE_CLOUD_PROJECT=nomadkaraoke, Discord webhooks, Telnyx, OpenAI, …): gen's local stack would have used the real
+# flacfetch. Re-run under an allowlisted environment: tools, paths, CI/runner settings and this harness's own knobs.
+if [[ -z "${E2E_ENV_SCRUBBED:-}" ]]; then
+  keep=()
+  while IFS= read -r v; do
+    case "$v" in
+      HOME|USER|LOGNAME|PATH|SHELL|TERM|TERM_*|COLORTERM|LANG|LC_*|TZ|TMPDIR|XDG_*|HOMEBREW_*|DEVELOPER_DIR|JAVA_HOME*|\
+      ANDROID_*|PYTHON|PNPM_*|NVM_*|NODE_*|COREPACK_*|POETRY_*|PIP_*|CI|GITHUB_*|RUNNER_*|ACTIONS_*|LANE|\
+      GEN_*|DECIDE_DIR|DECIDE_PORT|SEARCH_PORT|DECIDE_GEN_PARTNER_SECRET|KJBOX_DIR|KJBOX_PORT|KJBOX_KEEP|CONTROL_PORT|\
+      METRO_PORT|EMULATOR_*|IOS_*|E2E_*|MAESTRO*|LOCAL_STACK_*|EXPO_PUBLIC_*|STORE_SHOTS|LOCK_WAIT|NOMAD_DEVICE_LOCK_DIR|\
+      CLAUDE_SESSION_NAME|TMUX_PANE) keep+=("$v=${!v}") ;;
+    esac
+  done < <(compgen -e)
+  exec env -i ${keep[@]+"${keep[@]}"} E2E_ENV_SCRUBBED=1 bash "$0" "$@"
+fi
+
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 GEN_DIR="${GEN_DIR:-$ROOT/../karaoke-gen}"
 if [[ -z "${DECIDE_DIR:-}" ]]; then
