@@ -97,6 +97,40 @@ describe('Tap To Sync', () => {
     expect(out.segments[0]).toBe(doc.segments[0]);
   });
 
+  it('a pass that stops early never leaves an untapped word starting before the tapped ones', () => {
+    // Gen's fake fixture line 3 (15.5-19.5, five words) with line 4 at 20.0. Taps land late (slow taps on Android CI:
+    // review-3 / review-10), so the pass auto-stops after four words; the fifth keeps its stale 18.74-19.5.
+    const line3 = seg([w('nothing', 15.5, 16.26), w('here', 16.31, 17.07), w('was', 17.12, 17.88), w('ever', 17.93, 18.69),
+      w('transcribed', 18.74, 19.5)], 15.5, 19.5, 's3');
+    const line4 = seg([w('workers', 20, 20.53)], 20, 20.53, 's4');
+    const doc = docOf([line3, line4]);
+    let s = createTapSync(doc, 0);
+    for (const t of [16.0, 17.2, 18.4, 19.6]) s = tap(s, t);
+    expect(shouldStop(s, 20.6)).toBe(true);
+    const out = commitTapSync(doc, s).segments[0]!.words;
+    let prevEnd = -Infinity;
+    for (const word of out) {
+      if (word.start_time === null) continue;
+      expect(word.start_time).toBeGreaterThanOrEqual(prevEnd);
+      prevEnd = word.end_time ?? word.start_time;
+    }
+    // The stale word goes untimed (the untimed issue blocks Finish and leads to it); "ever" isn't squashed to 0 s.
+    expect(out[4]).toMatchObject({ start_time: null, end_time: null });
+    expect(out[3]!.start_time).toBe(19.6);
+    expect(out[3]!.end_time).toBeGreaterThan(19.6);
+    expect(out[3]!.end_time).toBeLessThan(20);
+  });
+
+  it('an untapped word that still starts after the last tapped one keeps its timing', () => {
+    const doc = docOf([seg([w('a', 10, 10.5), w('b', 11, 11.5), w('c', 12, 12.5)], 10, 12.5)]);
+    let s = createTapSync(doc, 0);
+    s = tap(s, 10.1);
+    s = tap(s, 10.9);
+    const out = commitTapSync(doc, s).segments[0]!.words;
+    expect(out[2]).toMatchObject({ start_time: 12, end_time: 12.5 });
+    expect(out[1]!.end_time).toBeLessThan(12);
+  });
+
   it('hold threshold is 200 ms (gen TAP_THRESHOLD_MS)', () => {
     const mk = () => press(createTapSync(docOf([seg([w('a'), w('b')], 9, 12)]), 0), 10);
     expect(release(mk(), 10.2, 199).segment.words[0]!.end_time).toBe(11); // tap

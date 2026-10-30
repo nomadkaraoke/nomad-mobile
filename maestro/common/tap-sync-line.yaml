@@ -1,7 +1,9 @@
 # Tap To Sync on the selected line: 0.5× (Maestro taps take ~0.5-1 s each, the fixture lines ~4 s), restart the
 # pass at that speed, wait out the lead-in (3 s of audio = 6 s at 0.5×; the first tap takes ~1 s to land), then
 # one tap on the pad per word, back to back, so the taps fall inside the line (the line plays ~8 s at 0.5×).
-# Ends on the finished pass (Redo shows).
+# Ends on the finished pass (Redo shows), every word synced. Pad taps don't wait for the screen to settle: Maestro's
+# default settle wait made each tap take 2.2-2.7 s on Android CI (~1.15 s of audio at 0.5×), so the pass auto-stopped
+# before the last word (review-3 / review-10, 2026-10).
 # Env: TAPS (the line's word count, 1-8).
 appId: com.nomadkaraoke.mobile
 ---
@@ -27,7 +29,13 @@ appId: com.nomadkaraoke.mobile
     commands:
       - tapOn:
           id: "review-sync-pad"
+          waitToSettleTimeoutMs: 150
+          retryTapIfNoChange: false
 - extendedWaitUntil:
     visible:
       id: "review-sync-redo"
     timeout: 20000
+# A tap that missed the line fails here, by name, not later as an untimed word blocking Finish.
+- assertVisible:
+    id: "review-sync-word-${TAPS - 1}"
+    selected: true

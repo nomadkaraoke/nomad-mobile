@@ -129,6 +129,17 @@ export function commitTapSync(doc: ReviewDoc, state: TapSyncState): ReviewDoc {
   const last = state.synced.size ? Math.max(...state.synced) : -1;
   const lastWord = last >= 0 ? seg.words[last] : undefined;
   if (lastWord && lastWord.start_time !== null && lastWord.end_time !== null) {
+    // A pass that stopped early (auto-stop after slow taps, or Done mid-line) leaves the untapped words after the last
+    // tapped one with their old timings, which can now start BEFORE it ("transcribed" 18.74 after "ever" 19.6 in gen's
+    // fixture, review-3 / review-10 on Android CI). Those timings are stale: clear them, so the untimed issue blocks
+    // Finish and leads the singer there, instead of saving words that highlight out of order.
+    const tappedStart = lastWord.start_time;
+    seg = {
+      ...seg,
+      words: seg.words.map((w, j) =>
+        j > last && w.start_time !== null && w.start_time < tappedStart ? { ...w, start_time: null, end_time: null } : w,
+      ),
+    };
     const inLine = seg.words.slice(last + 1).find((w) => w.start_time !== null);
     const nextStart = inLine ? (inLine.start_time as number) : nextTimedStart(doc.segments, state.segmentIndex);
     if (nextStart !== null) {

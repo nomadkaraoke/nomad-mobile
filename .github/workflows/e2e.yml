@@ -2,8 +2,8 @@
 # Each shard is one runner with its own gen + decide + kjbox local stacks (fake workers, emulators, fixture data;
 # no secrets anywhere in this workflow: the repo is public and so are its logs and artifacts).
 #
-# - pull_request: only the flows the PR's changes affect (scripts/e2e-plan-lib.mjs), sharded, Android only for now;
-#   the label `e2e-ios` adds iOS, `e2e-full` runs every flow on both.
+# - pull_request: only the flows the PR's changes affect (scripts/e2e-plan-lib.mjs), sharded, iOS and Android; the label
+#   `e2e-full` runs every flow.
 # - schedule (nightly) and workflow_dispatch: the full suite (dispatch can narrow it with filter / skip / flows).
 # Trigger and read results from a session: scripts/e2e-ci.sh.
 name: E2E
@@ -95,8 +95,9 @@ jobs:
           EVENT: ${{ github.event_name }}
           BASE_REF: ${{ github.base_ref }}
           FULL_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'e2e-full') }}
-          # PRs: Android only until the iOS CI path is proven (label e2e-ios or e2e-full adds iOS); nightly and dispatch: both.
-          PLATFORMS: ${{ inputs.platforms || ((github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'e2e-ios') || contains(github.event.pull_request.labels.*.name, 'e2e-full')) && 'ios,android' || 'android') }}
+          # Both platforms everywhere (PRs: the affected flows on each). iOS was dropped from PRs while the lanes were
+          # unhealthy (late Oct 2026); the e2e-ios label still exists but is no longer needed.
+          PLATFORMS: ${{ inputs.platforms || 'ios,android' }}
           FILTER: ${{ inputs.filter }}
           SKIP: ${{ inputs.skip }}
           AFFECTED: ${{ inputs.affected }}
@@ -214,12 +215,18 @@ jobs:
     if: needs.plan.outputs.android != '[]'
     name: android ${{ matrix.shard.index }} (~${{ matrix.shard.minutes }} min)
     runs-on: ${{ needs.plan.outputs.android_runner == 'self-hosted' && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'ubuntu-latest' }}
-    timeout-minutes: 75
+    timeout-minutes: 100
     strategy:
       fail-fast: false
       matrix:
         shard: ${{ fromJSON(needs.plan.outputs.android) }}
     steps:
+      # Self-hosted workspaces outlive jobs: a shard that died before Maestro wrote anything uploaded the lane's
+      # PREVIOUS job's reports (the 2026-10-30 nightly counted another shard's failures twice). Start empty.
+      - &clean_reports
+        name: Clear the previous job's reports
+        working-directory: .
+        run: rm -rf e2e-out stack-logs
       - &checkout_app
         uses: actions/checkout@v4
         with:
@@ -336,23 +343,29 @@ jobs:
           disable-animations: true
           working-directory: nomad-mobile
           script: scripts/ci/run-shard.sh android dev-client/app-debug.apk "${{ matrix.shard.flows }}" ../e2e-out
+      # Bounded on its own (waits for memory, then boots, one retry): an unbounded boot hung shards until the job timeout.
+      - name: Boot the lane's emulator (self-hosted)
+        if: runner.environment == 'self-hosted'
+        timeout-minutes: 25
+        run: scripts/ci/android-emulator.sh start
       - name: Run the shard on the lane's emulator (self-hosted)
         if: runner.environment == 'self-hosted'
+        timeout-minutes: 60
         env:
           FLOWS: ${{ matrix.shard.flows }}
-        run: |
-          scripts/ci/android-emulator.sh start
-          status=0
-          scripts/ci/run-shard.sh android dev-client/app-debug.apk "$FLOWS" ../e2e-out || status=$?
-          scripts/ci/android-emulator.sh stop
-          exit "$status"
-      - name: Stop the lane's emulator (self-hosted, after a cancel or failure)
+        run: scripts/ci/run-shard.sh android dev-client/app-debug.apk "$FLOWS" ../e2e-out
+      - name: Stop the lane's emulator (self-hosted)
         if: always() && runner.environment == 'self-hosted'
         run: scripts/ci/android-emulator.sh stop
       - &logs
         name: Stack logs (on failure)
         if: failure()
         run: scripts/ci/setup-stacks.sh logs
+      # Idle lanes held their gen, decide, web and Metro for hours (RAM the next job's emulator needed).
+      - &stacks_down
+        name: Stop the lane's stacks (self-hosted)
+        if: always() && runner.environment == 'self-hosted'
+        run: scripts/ci/setup-stacks.sh down
       - &upload
         uses: actions/upload-artifact@v4
         if: always()
@@ -369,12 +382,13 @@ jobs:
     # The self-hosted runner only for dispatch runs; the runner itself also refuses fork PRs (a job-started hook on the
     # machine, which a workflow edit can't bypass).
     runs-on: ${{ needs.plan.outputs.ios_runner == 'self-hosted' && fromJSON('["self-hosted","macOS","nomad-mbp"]') || 'macos-26' }}
-    timeout-minutes: 75
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
         shard: ${{ fromJSON(needs.plan.outputs.ios) }}
     steps:
+      - *clean_reports
       - *checkout_app
       - *checkout_gen
       - *checkout_decide
@@ -395,6 +409,7 @@ jobs:
         if: runner.environment == 'self-hosted'
         run: echo "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer" >>"$GITHUB_ENV"
       - name: Run the shard on a simulator
+        timeout-minutes: 65
         run: scripts/ci/run-shard.sh ios dev-client/NomadKaraoke.app "${{ matrix.shard.flows }}" ../e2e-out
       - name: Shut down the lane's simulator (self-hosted; frees RAM for the lane's next job)
         if: always() && runner.environment == 'self-hosted'
@@ -402,6 +417,7 @@ jobs:
           name="iPhone 17 Pro"; if (( ${LANE:-0} > 0 )); then name+=" lane $LANE"; fi
           xcrun simctl list devices booted | grep -F "$name (" | grep -oE '[0-9A-F-]{36}' | xargs -n1 xcrun simctl shutdown 2>/dev/null || true
       - *logs
+      - *stacks_down
       - *upload
 
   report:

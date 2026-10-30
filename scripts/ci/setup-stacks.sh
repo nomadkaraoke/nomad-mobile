@@ -8,7 +8,8 @@
 #                                                 # emulators, a static ffmpeg in $EMULATOR_CACHE/bin if none is on PATH
 #   scripts/ci/setup-stacks.sh up                 # emulators + gen (+ web if WITH_WEB=1) + decide; kjbox is left to
 #                                                 # e2e-local.sh (it resets it fresh for Tonight runs)
-#   scripts/ci/setup-stacks.sh logs               # tail every stack log (on failure)
+#   scripts/ci/setup-stacks.sh down               # stop this lane's servers (self-hosted, after the job: frees RAM)
+#   scripts/ci/setup-stacks.sh logs               # tail this lane's stack logs (on failure)
 #
 # Emulators run natively, without Docker (GitHub's macOS runners have none): the Firestore emulator jar that
 # firebase-tools pins on :8080 and fake-gcs-server on :4443, with the flags gen's start-emulators.sh gives its
@@ -107,18 +108,44 @@ up() {
   if emulators_up; then echo "emulators already up (shared)"; else start_emulators; fi
   local web=()
   [[ "${WITH_WEB:-}" == 1 ]] && web=(--frontend)
-  # Self-hosted lanes keep their servers between jobs, and `up` skips a server that is already running: restart this
-  # lane's gen and decide so the job runs the code and env it just checked out (a gen left over from an earlier job
-  # kept calling production decide for account deletion after the env fix). The shared emulators stay up.
-  # shellcheck disable=SC2046
-  (cd "$GEN" && env LOCAL_STACK_KEEP_EMULATORS=1 $(lane_gen_env) scripts/local-stack.sh down) || true
-  # shellcheck disable=SC2046
-  (cd "$DECIDE" && env $(lane_decide_env) scripts/local-stack.sh down) || true
+  # Self-hosted lanes keep their servers between jobs, and `up` skips a server that is already running: stop this
+  # lane's servers so the job runs the code and env it just checked out. By port, not only by the stacks' pidfiles:
+  # those live in the checkouts (.local-stack-laneN), which actions/checkout wipes, so `down` found nothing and lane 2
+  # served a 3-day-old gen (from before the KARAOKE_DECIDE_API_URL fix, i.e. calling production decide). The shared
+  # emulators stay up.
+  down
   # shellcheck disable=SC2046 # one VAR=value per line, no spaces
   (cd "$GEN" && env DECIDE_GEN_PARTNER_SECRET="$PARTNER_SECRET" LOCAL_STACK_API_URL="http://127.0.0.1:$GEN_PORT" \
     $(lane_gen_env) scripts/local-stack.sh up ${web[@]+"${web[@]}"})
   # shellcheck disable=SC2046
   (cd "$DECIDE" && env $(lane_decide_env) scripts/local-stack.sh up)
+}
+
+# This lane's servers: gen API + web, decide + search, kjbox, stack-control and Metro (scripts/e2e-lane.sh ports).
+LANE_PORTS=("$GEN_PORT" "$GEN_WEB_PORT" "$SEARCH_PORT" "$DECIDE_PORT" "$KJBOX_PORT" "$CONTROL_PORT" "$METRO_PORT")
+kill_tree() { local c; for c in $(pgrep -P "$1" 2>/dev/null); do kill_tree "$c"; done; kill "$1" 2>/dev/null || true; }
+down() {
+  # shellcheck disable=SC2046
+  (cd "$GEN" && env LOCAL_STACK_KEEP_EMULATORS=1 $(lane_gen_env) scripts/local-stack.sh down) >/dev/null 2>&1 || true
+  # shellcheck disable=SC2046
+  (cd "$DECIDE" && env $(lane_decide_env) scripts/local-stack.sh down) >/dev/null 2>&1 || true
+  # shellcheck disable=SC2046
+  (cd "$KJBOX/kj-controller" && env $(lane_kjbox_env) scripts/local-stack.sh down) >/dev/null 2>&1 || true
+  command -v lsof >/dev/null || return 0
+  local port pid i left
+  for port in "${LANE_PORTS[@]}"; do
+    for pid in $(lsof -ti "tcp:$port" -sTCP:LISTEN 2>/dev/null); do
+      echo "lane $LANE: stopping $(ps -o command= -p "$pid" 2>/dev/null | cut -c1-80) (pid $pid) on :$port"
+      kill_tree "$pid"
+    done
+  done
+  for i in $(seq 1 10); do
+    left=""
+    for port in "${LANE_PORTS[@]}"; do lsof -ti "tcp:$port" -sTCP:LISTEN >/dev/null 2>&1 && left+=" $port"; done
+    [[ -n "$left" ]] || return 0
+    sleep 1
+  done
+  for port in $left; do lsof -ti "tcp:$port" -sTCP:LISTEN 2>/dev/null | xargs kill -9 2>/dev/null || true; done
 }
 
 start_emulators() {
@@ -131,10 +158,11 @@ start_emulators() {
 }
 
 logs() {
-  local f
+  # Only this lane's Metro (e2e-local.sh's names; lane 0 keeps the historic name): other lanes' logs confused reports.
+  local f metro_log=/tmp/nomad-mobile-metro.log
+  [[ "$METRO_PORT" == 8081 ]] || metro_log="/tmp/nomad-mobile-metro-$METRO_PORT.log"
   for f in "$LOGS"/*.log "${GEN_STATE_DIR:-$GEN/.local-stack}"/*.log "${DECIDE_STATE_DIR:-$DECIDE/.local-stack}"/*.log \
-    "${KJBOX_DATA_DIR:-$HOME/kjdata-localstack}"/*.log \
-    /tmp/nomad-mobile-metro*.log /tmp/nomad-mobile-stack-control.log; do
+    "${KJBOX_DATA_DIR:-$HOME/kjdata-localstack}"/*.log "$metro_log" "/tmp/nomad-mobile-stack-control-$CONTROL_PORT.log"; do
     [[ -f "$f" ]] || continue
     echo "::group::$f"
     # Every warning and error first (a failing flow's server-side cause is usually long out of the tail), then the tail.
@@ -148,6 +176,7 @@ logs() {
 case "${1:-}" in
   install) install ;;
   up) up ;;
+  down) down ;;
   logs) logs ;;
   *) sed -n '2,16p' "$0"; exit 2 ;;
 esac
