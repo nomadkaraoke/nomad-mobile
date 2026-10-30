@@ -122,8 +122,8 @@ export const makeValidateUrl = async (t: string, url: string, nightId?: string) 
 export const useQuick = async (t: string, id: number, nightId?: string) =>
   (await sdk.useQuickVersion({ path: { id }, body: q(t, nightId) })).data;
 
-// Push
-export const registerPushToken = async (t: string, token: string, platform: PushTokenRequest['platform'], nightId?: string) =>
+// Push (the app's Expo token; the box pushes "up next" and "your turn" for tonight's requests, data.url /tonight)
+export const registerKjboxPushToken = async (t: string, token: string, platform: PushTokenRequest['platform'], nightId?: string) =>
   (await sdk.registerPushToken({ body: { ...q(t, nightId), expo_push_token: token, platform } })).data;
 
 // Past-night history. The only routes without `t` or `night_id`: they need just the bearer and work any day, even
@@ -163,3 +163,7 @@ export const claimHistory = async (nightId: string, mine: number[], notMine: num
     throw malformed(response?.status);
   return data;
 };
+
+/** Idempotent (an unknown token is still ok); only this account's own rows for the token are removed. */
+export const deleteKjboxPushToken = async (t: string, token: string, nightId?: string) =>
+  (await sdk.unregisterPushToken({ body: { ...q(t, nightId), expo_push_token: token } })).data;

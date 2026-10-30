@@ -778,7 +778,18 @@
     "signInPrompt": "Logga in för att köpa krediter",
     "packageCredits": "{credits, plural, one {# kredit} other {# krediter}}",
     "popular": "Populära",
-    "title": "Köp krediter"
+    "title": "Köp krediter",
+    "balance": "Du har {credits, plural, one {# kredit} other {# krediter}}",
+    "buy": "Köp",
+    "buyFor": "Köp för {price}",
+    "purchaseFailed": "Köpet gick inte igenom. Försök igen.",
+    "referralNote": "Din värvningsrabatt på {percent} % gäller när du köper på webben.",
+    "webLink": {
+      "default": "Köp på webben"
+    },
+    "store": {
+      "awaitingApproval": "Väntar på godkännande. Dina krediter visas så fort köpet har godkänts."
+    }
   },
   "duration": {
     "body": "Det här spåret är {duration} långt, så det kostar totalt {total, plural, one {# kredit} other {# krediter}} ({extra} extra).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Välj andra skärmdumpar",
       "reading": "Läser dina skärmdumpar…",
       "unmatched": "Finns inte i vår karaokekatalog ännu",
-      "retry": "Försök igen"
+      "retry": "Försök igen",
+      "aiConsentBody": "För att hitta låtarna skickas din skärmdump till Googles Gemini AI. Den används bara för att läsa av låtnamnen och sparas inte efteråt.",
+      "aiConsentTitle": "Läsa av din skärmdump med AI?",
+      "aiNote": "Skärmdumpar läses av Googles Gemini AI och sparas inte.",
+      "aiConsentCancel": "Avbryt",
+      "aiConsentContinue": "Fortsätt"
     },
     "source": {
       "appleExport": "Apple Music-historik",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Du har redan importerat den här filen, så det fanns inget nytt att lägga till."
   },
   "permissions": {
-    "microphone": "Tillåt Nomad Karaoke att höra dig sjunga så att ditt röstomfång kan mätas. Ljudet stannar på din telefon."
+    "microphone": "Nomad Karaoke använder mikrofonen för att mäta ditt röstomfång. Om du väljer att spela in dig själv under en röstsession laddas inspelningen upp och sparas privat (endast du och Nomad Karaoke-teamet kan lyssna på den), och du kan när som helst ta bort den under Jag."
   },
   "voice": {
     "between": "Mellan {low} och {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "För många på en gång. Försök igen om några minuter."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Aktivera",
+      "make": {
+        "body": "Vi meddelar dig när den är klar att titta på, eller om du behöver kontrollera låttexten.",
+        "title": "Vill du få en notis när din video är klar?"
+      },
+      "night": {
+        "body": "Vi meddelar dig när du står på tur och när det är din tur att sjunga.",
+        "title": "Vill du få en notis när det är din tur?"
+      },
+      "notNow": "Inte nu"
+    },
+    "channels": {
+      "jobs": "Dina videor",
+      "tonight": "Nomad-kvällar"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Aviseringar",
+      "row": "Konto och aviseringar",
+      "title": "Konto och aviseringar"
+    },
+    "notifications": {
+      "askBody": "Slå på aviseringar för att få veta när din video är klar eller behöver din uppmärksamhet.",
+      "askButton": "Slå på aviseringar",
+      "deniedBody": "Aviseringar är avstängda för Nomad Karaoke på den här telefonen. Slå på dem i Inställningar för att få veta när dina videor är klara.",
+      "error": "Det gick inte att spara ändringen. Kontrollera anslutningen och försök igen.",
+      "night": {
+        "hint": "När du står på tur och när det är din tur att sjunga.",
+        "label": "Nomad-kvällsaviseringar"
+      },
+      "problems": {
+        "hint": "När något går fel med en video.",
+        "label": "Problem"
+      },
+      "ready": {
+        "hint": "När din karaokevideo är klar att titta på.",
+        "label": "Videon är klar"
+      },
+      "review": {
+        "hint": "När låttexten behöver en snabb koll från dig.",
+        "label": "Kräver din granskning"
+      },
+      "title": "Aviseringar",
+      "openSettings": "Öppna Inställningar",
+      "loadFailed": "Det gick inte att läsa in dina aviseringsinställningar. Kontrollera din anslutning och försök igen."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Kunde inte bekräfta med Apple. Försök igen.",
+    "blocked": {
+      "admin": "Det här är ett personalkonto, så det kan inte raderas från appen.",
+      "connect_account": "Ditt konto är kopplat till ett utbetalningskonto, så det kan inte raderas från appen.",
+      "generic": "Vi kan inte radera det här kontot från appen.",
+      "order_in_progress": "Du har en pågående beställning, så ditt konto kan inte raderas från appen än.",
+      "referral_balance": "Du har värvningsintäkter som inte har betalats ut än, så ditt konto kan inte raderas från appen.",
+      "unavailable": "Det går inte att radera ditt konto från appen just nu."
+    },
+    "contactSupport": "Mejla supporten",
+    "creditsLost": "{count, plural, one {# kredit kommer att gå förlorad.} other {# krediter kommer att gå förlorade.}}",
+    "deletedDetails": "Dina personuppgifter",
+    "deletedDiscover": "Din musik- och röstdata i Discover",
+    "deletedUploads": "Dina uppladdningar",
+    "doneBody": "Ditt konto är borttaget och den här telefonen har rensats.",
+    "doneTitle": "Ditt konto har raderats",
+    "intro": "Detta raderar ditt Nomad Karaoke-konto permanent. Åtgärden kan inte ångras.",
+    "jobsCancelled": "{count, plural, one {# pågående video kommer att avbrytas.} other {# pågående videor kommer att avbrytas.}}",
+    "keep": "Behåll mitt konto",
+    "keptRecords": "Jobb- och betalningshistorik, som vi behöver för bokföringen",
+    "loadError": "Kunde inte läsa in dina kontouppgifter. Kontrollera din anslutning och försök igen.",
+    "retryNetwork": "Kunde inte radera ditt konto. Kontrollera din anslutning och försök igen.",
+    "signedOutTitle": "Du har loggats ut",
+    "support": "Mejla oss på {email} så ordnar vi det.",
+    "confirm": "Radera mitt konto",
+    "deletedHeading": "Vad vi raderar",
+    "deletedNights": "Dina Nomad-kvällslänkar",
+    "deletedRecordings": "Dina inspelningar",
+    "keptHeading": "Vad vi behåller",
+    "keptVideos": "Karaokevideor som redan har publicerats på YouTube",
+    "ok": "OK",
+    "retryPartWay": "Något gick fel halvvägs. Försök igen – borttagningen fortsätter där den avbröts.",
+    "row": "Radera konto",
+    "signedOutBody": "Du har loggats ut. Om du nyss tog bort ditt konto är det borta. Logga annars in och försök igen.",
+    "title": "Radera ditt konto"
   }
 }

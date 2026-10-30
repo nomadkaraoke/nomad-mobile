@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Erlaube Nomad Karaoke, dich singen zu hören, damit dein Stimmumfang gemessen werden kann. Die Audiodaten bleiben auf deinem Smartphone."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke nutzt das Mikrofon, um deinen Stimmumfang zu messen. Wenn du dich entscheidest, dich in einer Gesangssitzung aufzunehmen, wird die Aufnahme hochgeladen und vertraulich gespeichert (nur du und das Team von Nomad Karaoke können sie anhören). Du kannst sie jederzeit unter „Ich“ löschen."
   }
 }

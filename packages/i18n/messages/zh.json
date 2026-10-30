@@ -778,7 +778,18 @@
     "signInPrompt": "登录以购买积分",
     "packageCredits": "{credits, plural, one {# 点积分} other {# 点积分}}",
     "popular": "热门",
-    "title": "购买点数"
+    "title": "购买点数",
+    "balance": "您拥有 {credits, plural, one {# 点积分} other {# 点积分}}",
+    "buy": "购买",
+    "buyFor": "{price} 立即购买",
+    "purchaseFailed": "购买未能成功完成，请重试。",
+    "referralNote": "在网页端购买即可享受 {percent}% 的推荐折扣。",
+    "webLink": {
+      "default": "在网页端购买"
+    },
+    "store": {
+      "awaitingApproval": "等待审核。购买审核通过后，点数将显示在您的账户中。"
+    }
   },
   "duration": {
     "body": "这首曲目时长为 {duration}，因此总共需要 {total, plural, one {# 点积分} other {# 点积分}}（需额外支付 {extra} 点）。",
@@ -1422,7 +1433,12 @@
       "pickMore": "重新选择截图",
       "reading": "正在读取截图…",
       "unmatched": "卡拉OK曲库中暂未收录",
-      "retry": "重试"
+      "retry": "重试",
+      "aiConsentBody": "为了找到这些歌曲，您的截图将被发送至 Google 的 Gemini AI。该截图仅用于识别歌名，处理完毕后不会保留。",
+      "aiConsentTitle": "是否使用 AI 识别您的截图？",
+      "aiNote": "截图由 Google 的 Gemini AI 进行识别，且不会被保留。",
+      "aiConsentCancel": "取消",
+      "aiConsentContinue": "继续"
     },
     "source": {
       "appleExport": "Apple Music 历史记录",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "您已经导入过此文件，因此没有可添加的新内容。"
   },
   "permissions": {
-    "microphone": "允许 Nomad Karaoke 听您唱歌，以便测定您的音域。音频只会保留在您的手机上。"
+    "microphone": "Nomad Karaoke 需要使用麦克风来测定您的音域。如果您选择在语音测试中录音，录音将被上传并设为私密保存（仅您和 Nomad Karaoke 团队可以收听），您可以随时在“我的”页面中将其删除。"
   },
   "voice": {
     "between": "介于 {low} 和 {high} 之间",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "操作过于频繁，请几分钟后再试。"
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "开启",
+      "make": {
+        "body": "视频制作完成可供观看，或需要您确认歌词时，我们会通知您。",
+        "title": "想在视频制作完成时收到通知吗？"
+      },
+      "night": {
+        "body": "快轮到您以及轮到您开唱时，我们会通知您。",
+        "title": "想在轮到您开唱时收到通知吗？"
+      },
+      "notNow": "暂不开启"
+    },
+    "channels": {
+      "jobs": "您的视频",
+      "tonight": "Nomad 之夜"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "通知",
+      "row": "账户与通知",
+      "title": "账户与通知"
+    },
+    "notifications": {
+      "askBody": "开启通知，以便在视频制作完成或需要你协助时及时收到消息。",
+      "askButton": "开启通知",
+      "deniedBody": "这台手机已关闭 Nomad Karaoke 的通知。请在“设置”中开启，以便在视频制作完成时收到提醒。",
+      "error": "无法保存更改。请检查网络连接后重试。",
+      "night": {
+        "hint": "提醒你即将上台或轮到你演唱。",
+        "label": "Nomad 聚会提醒"
+      },
+      "problems": {
+        "hint": "当视频处理出现问题时提醒。",
+        "label": "异常问题"
+      },
+      "ready": {
+        "hint": "当你的卡拉OK视频制作完成可供观看时提醒。",
+        "label": "视频已制作完成"
+      },
+      "review": {
+        "hint": "当歌词需要你快速核对时提醒。",
+        "label": "待你审核"
+      },
+      "title": "通知",
+      "openSettings": "打开设置",
+      "loadFailed": "无法加载通知设置。请检查网络连接后重试。"
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "无法通过 Apple 进行确认。请重试。",
+    "blocked": {
+      "admin": "这是员工账号，无法在 App 内注销。",
+      "connect_account": "您的账号已关联收款账户，无法在 App 内注销。",
+      "generic": "无法在 App 内注销此账号。",
+      "order_in_progress": "您有正在进行的订单，因此暂时无法在 App 内注销账号。",
+      "referral_balance": "您有尚未结算的推荐收益，无法在 App 内注销账号。",
+      "unavailable": "目前无法在 App 内注销账号。"
+    },
+    "contactSupport": "发送邮件联系客服",
+    "creditsLost": "{count, plural, one {将失去 # 点积分。} other {将失去 # 点积分。}}",
+    "deletedDetails": "您的个人信息",
+    "deletedDiscover": "您在“发现”中的音乐与声音数据",
+    "deletedUploads": "您上传的内容",
+    "doneBody": "您的账号已注销，本机数据已清除。",
+    "doneTitle": "账号已注销",
+    "intro": "这将永久注销您的 Nomad Karaoke 账号。此操作无法撤销。",
+    "jobsCancelled": "{count, plural, one {将取消 # 个正在制作的视频。} other {将取消 # 个正在制作的视频。}}",
+    "keep": "保留我的账号",
+    "keptRecords": "制作任务与付款记录（我们需要留存用于做账）",
+    "loadError": "无法加载您的账号详情。请检查网络连接后重试。",
+    "retryNetwork": "无法注销您的账号。请检查网络连接后重试。",
+    "signedOutTitle": "您已退出登录",
+    "support": "请发送邮件至 {email}，我们将为您处理。",
+    "confirm": "注销我的账户",
+    "deletedHeading": "我们将删除的内容",
+    "deletedNights": "您的 Nomad 活动之夜链接",
+    "deletedRecordings": "您的录音",
+    "keptHeading": "我们将保留的内容",
+    "keptVideos": "已发布到 YouTube 上的卡拉OK视频",
+    "ok": "确定",
+    "retryPartWay": "处理过程中出了点问题。请重试——删除流程将从中断处继续。",
+    "row": "注销账户",
+    "signedOutBody": "您已退出登录。如果您刚刚注销了账户，该账户已被成功删除。否则，请重新登录并重试。",
+    "title": "注销您的账户"
   }
 }

@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import { useRef, useState } from 'react';
 import { View } from 'react-native';
 
+import { track } from '../../observability';
 import { DuetPicker } from '../manage/DuetPicker';
 import {
   consentFields,
@@ -120,6 +121,7 @@ export function ConfirmScreen() {
         });
       }
       useRequestStore.getState().noteSend(p, 'settled');
+      track('song_requested', { mode: p.mode });
       void queryClient.invalidateQueries({ queryKey: nightKey(night, userKey) });
       // Leaving search + confirm clears the pick (useRequestFlowScope); clearing here would flash "Pick a song first".
       router.dismissTo(NIGHT_ROUTE);

@@ -93,3 +93,21 @@ export async function appleAvailable(): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Account deletion: a fresh Sign in with Apple (no name or email asked) for its one-time `authorizationCode`, which
+ * gen uses to revoke the app's Apple link. 'cancelled' when the person closes Apple's sheet; throws SignInError
+ * ('failed') when Apple gives no code.
+ */
+export async function appleReauthorize(): Promise<string | 'cancelled'> {
+  let code: string | null;
+  try {
+    const cred = await AppleAuthentication.signInAsync({ requestedScopes: [] });
+    code = cred.authorizationCode;
+  } catch (e) {
+    if ((e as { code?: unknown } | null)?.code === 'ERR_REQUEST_CANCELED') return 'cancelled';
+    throw new SignInError('failed');
+  }
+  if (!code) throw new SignInError('failed');
+  return code;
+}

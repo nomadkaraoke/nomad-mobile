@@ -6,6 +6,7 @@ import { renderRouter } from 'expo-router/testing-library';
 
 import { useAuth } from '../auth/store';
 import { useMakeIntent } from '../make/intentStore';
+import { takePendingPushAsk } from '../notifications/push';
 import { apiError, gen, session } from '../test-utils/genAuthMock';
 import { bestChoice, makeRoutes, spotify, youtube } from '../test-utils/makeFixtures';
 
@@ -290,6 +291,8 @@ it('after create the screen keeps its song until it is gone (no "Pick a song" fl
   await readySubmit();
   await act(async () => fireEvent.press(screen.getByTestId('make-submit')));
   expect(dismiss).toHaveBeenCalledWith('/(tabs)/make');
+  // The push question waits for the Make tab (an Alert raised during the dismiss is dropped on iOS).
+  expect(takePendingPushAsk('make')).toBe(true);
   expect(screen.queryByTestId('make-no-intent')).toBeNull();
   expect(screen.getByTestId('make-pick')).toBeTruthy();
   dismiss.mockRestore();

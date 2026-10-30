@@ -112,6 +112,8 @@ onFlowComplete:
     visible:
       id: "tonight-your-songs"
     timeout: 30000
+# Tonight's push question (once per install); NOT_NOW is "Not now" in the tour's language when it isn't English.
+- runFlow: ../common/dismiss-push-ask.yaml
 - runFlow:
     when:
       visible:

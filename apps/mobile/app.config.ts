@@ -42,6 +42,25 @@ const NIGHT_LINK_FILTERS = [
   },
 ];
 
+/**
+ * EAS project (account `nomadkaraoke`, slug `nomad-karaoke`; docs/RELEASE.md). EAS Build/Update read it from
+ * `extra.eas.projectId`; expo-updates fetches from `updates.url`. Debug builds (the dev client on Metro, E2E) never
+ * download updates, so local dev and the local stack are unaffected.
+ */
+const EAS_PROJECT_ID = 'c6092d15-ad6e-4e3d-bfc2-befc2e239af2';
+
+/**
+ * The app only saves videos (expo-media-library, write-only) and picks screenshots through the system photo
+ * picker, so no read access to the user's media. expo-media-library / expo-image-picker add these by default.
+ */
+const BLOCKED_ANDROID_PERMISSIONS = [
+  'android.permission.READ_MEDIA_VIDEO',
+  'android.permission.READ_MEDIA_IMAGES',
+  'android.permission.READ_MEDIA_AUDIO',
+  'android.permission.READ_EXTERNAL_STORAGE',
+  'android.permission.READ_MEDIA_VISUAL_USER_SELECTED',
+];
+
 /** iOS universal links for the same hosts (https only; the uppercase HTTP:// QR reaches iOS via the in-app scanner). */
 const ASSOCIATED_DOMAINS = ['applinks:kjbox.cc', 'applinks:www.kjbox.cc', 'applinks:sing.nomadkaraoke.com'];
 
@@ -56,8 +75,9 @@ const withoutAppleSignIn: ConfigPlugin = (config) =>
   });
 
 /**
- * expo-notifications' plugin adds `aps-environment` (a push entitlement). The app only schedules local reminders,
- * which need no entitlement, and the App ID has no push capability: strip it (this mod runs after that one).
+ * expo-notifications' plugin adds `aps-environment` (the push entitlement). Team-signed builds keep it (Expo push
+ * needs it, Phase 6). EXPO_PUBLIC_PUSH=0 (the e2e-test profile: unsigned simulator / E2E builds, which can't carry
+ * it) strips it again (this mod runs after that one).
  */
 const withoutPushEntitlement: ConfigPlugin = (config) =>
   withEntitlementsPlist(config, (c) => {
@@ -82,17 +102,32 @@ export default ({ config }: ConfigContext): ExpoConfig => {
   const apple = process.env.EXPO_PUBLIC_APPLE_SIGNIN !== '0';
   // Associated domains are an entitlement too (it needs the team-signed build), so off until the flag is set.
   const associatedDomains = process.env.EXPO_PUBLIC_ASSOCIATED_DOMAINS === '1';
+  const push = process.env.EXPO_PUBLIC_PUSH !== '0';
+  const projectId = (config.extra?.eas as { projectId?: string } | undefined)?.projectId ?? EAS_PROJECT_ID;
   const resolved: ExpoConfig = {
     ...config,
     name: config.name ?? 'Nomad Karaoke',
     slug: config.slug ?? 'nomad-karaoke',
+    owner: 'nomadkaraoke',
+    extra: { ...config.extra, eas: { ...config.extra?.eas, projectId } },
+    runtimeVersion: { policy: 'fingerprint' },
+    updates: { ...config.updates, url: `https://u.expo.dev/${projectId}` },
     locales: { ...config.locales, ...NATIVE_LOCALES },
     ios: {
       ...config.ios,
       ...(apple ? { usesAppleSignIn: true } : {}),
       ...(associatedDomains ? { associatedDomains: ASSOCIATED_DOMAINS } : {}),
     },
-    android: { ...config.android, intentFilters: [...(config.android?.intentFilters ?? []), ...NIGHT_LINK_FILTERS] },
+    android: {
+      ...config.android,
+      // Firebase app `1:718638054799:android:af245e1c3cba60766adffa` (GCP project nomadkaraoke), for FCM: Expo push on
+      // Android (docs/RELEASE.md § Push). Committed, not an EAS file variable: it holds only public client identifiers,
+      // and the fingerprint hashes its contents, so a file EAS has and the local machine lacks would split the runtime
+      // version again.
+      googleServicesFile: './google-services.json',
+      intentFilters: [...(config.android?.intentFilters ?? []), ...NIGHT_LINK_FILTERS],
+      blockedPermissions: [...(config.android?.blockedPermissions ?? []), ...BLOCKED_ANDROID_PERMISSIONS],
+    },
     plugins: [
       ...(config.plugins ?? []),
       // iOS: GIDClientID + the reversed-client-id URL scheme the Google Sign-In SDK returns through.
@@ -101,8 +136,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ...(apple ? ['expo-apple-authentication'] : []),
       // Android Share -> Nomad Karaoke for privacy-export zips/CSVs (Phase 3b Task 24).
       './plugins/withShareIntake',
+      // Source maps + native symbols upload at build time when SENTRY_AUTH_TOKEN is set (EAS secret); without it
+      // the build still succeeds and just skips the upload (warning only).
+      ['@sentry/react-native/expo', { organization: 'nomadkaraoke', project: 'mobile' }],
     ],
   };
-  const labelled = withoutPushEntitlement(withLauncherLabel(resolved));
+  const labelled = push ? withLauncherLabel(resolved) : withoutPushEntitlement(withLauncherLabel(resolved));
   return apple ? labelled : withoutAppleSignIn(labelled);
 };

@@ -1,5 +1,6 @@
 # Make it on the make screen, once it is enabled: it stays disabled while gen's match judge checks the song (up to
 # the judge's timeout). The flows' users get the fake judge's `none` verdict (stack.js), which settles at once.
+# Then dismisses the push question the Make tab raises after a successful create (dismiss-push-ask.yaml).
 appId: com.nomadkaraoke.mobile
 ---
 - extendedWaitUntil:
@@ -9,3 +10,5 @@ appId: com.nomadkaraoke.mobile
     timeout: 20000
 - tapOn:
     id: "make-submit"
+# A created make lands on the Make tab, which asks about push once per install.
+- runFlow: dismiss-push-ask.yaml

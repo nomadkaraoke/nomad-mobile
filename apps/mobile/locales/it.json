@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Consenti a Nomad Karaoke di ascoltarti mentre canti per poter misurare la tua estensione vocale. L'audio non lascerà il tuo telefono."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke usa il microfono per misurare la tua estensione vocale. Se scegli di registrarti durante una sessione vocale, la registrazione viene caricata e conservata in modo privato (solo tu e il team di Nomad Karaoke potete ascoltarla) e puoi eliminarla in qualsiasi momento nella sezione Me."
   }
 }

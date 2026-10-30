@@ -14,7 +14,22 @@ appId: com.nomadkaraoke.mobile
 - inputText: ${SINGER_NAME}
 - tapOn:
     id: "tonight-name-confirm"
+# Tonight asks about push once per install after a join. Android: every flow starts from clearState, so the question
+# always comes, and its dialog hides the screen from Maestro (tonight-your-songs never "appears" behind it): answer
+# it first, allowing for a slow emulator.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - extendedWaitUntil:
+          visible: ${NOT_NOW || 'Not now'}
+          timeout: 20000
+          optional: true
+      - tapOn:
+          text: ${NOT_NOW || 'Not now'}
+          optional: true
 - extendedWaitUntil:
     visible:
       id: "tonight-your-songs"
     timeout: 30000
+- runFlow: dismiss-push-ask.yaml

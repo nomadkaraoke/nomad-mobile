@@ -13,6 +13,13 @@ describe('native locale files (iOS InfoPlist strings)', () => {
     expect(native).toEqual({ ios: { NSMicrophoneUsageDescription: messages.permissions.microphone } });
   });
 
+  // Expo writes InfoPlist.strings without escaping: a straight double quote or a backslash ends the string early and
+  // the iOS build fails ("Couldn't parse property list"). Use typographic quotes (“ ” « ») in these messages.
+  it.each([...LOCALES])('%s: the microphone text has no straight double quote or backslash', (code) => {
+    const messages = JSON.parse(fs.readFileSync(path.join(MESSAGES, `${code}.json`), 'utf8'));
+    expect(messages.permissions.microphone).not.toMatch(/["\\]/);
+  });
+
   it('has no stray files besides one per locale', () => {
     expect(fs.readdirSync(LOCALES_DIR).sort()).toEqual(LOCALES.map((l) => `${l}.json`).sort());
   });

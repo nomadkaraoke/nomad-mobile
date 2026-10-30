@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Povol Nomad Karaoke poslouchat tvůj zpěv, aby ti změřil hlasový rozsah. Zvuk zůstane jen ve tvém telefonu."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke používá mikrofon ke změření tvého hlasového rozsahu. Pokud se rozhodneš nahrávat v hlasové relaci, záznam se nahraje a bezpečně uloží v soukromí (poslechnout si ho můžeš jen ty a tým Nomad Karaoke) a v sekci Já ho můžeš kdykoli smazat."
   }
 }

@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Permite aplicației Nomad Karaoke să te audă cântând, ca să-ți poată măsura ambitusul vocal. Înregistrarea audio rămâne pe telefonul tău."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke folosește microfonul pentru a-ți măsura ambitusul vocal. Dacă alegi să te înregistrezi într-o sesiune vocală, înregistrarea este încărcată și păstrată în mod confidențial (doar tu și echipa Nomad Karaoke o puteți asculta) și o poți șterge oricând din secțiunea Eu."
   }
 }

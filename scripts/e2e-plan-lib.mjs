@@ -41,6 +41,8 @@ const RULES = [
   // exercises). account- / notify- / purchase- name Phase 6 flows (account-1, notify-1/2, purchase-1/2).
   [/^apps\/mobile\/src\/me\//, ['me-', 'discover-', 'search-', 'connect-', 'tonight-', 'voice-', 'make-8', 'make-10', 'account-']],
   [/^apps\/mobile\/src\/app\/me\//, ['me-', 'discover-5', 'connect-', 'voice-', 'account-', 'notify-']],
+  [/^apps\/mobile\/src\/notifications\//, ['notify-']],
+  [/^apps\/mobile\/src\/account\//, ['account-']],
   [/^apps\/mobile\/src\/app\/sign-in\//, ['make-1', 'make-2', 'make-7', 'discover-1', 'tonight-2']],
   [/^apps\/mobile\/src\/audio\//, ['review-', 'voice-']],
   [/^apps\/mobile\/src\/media\//, ['make-1', 'voice-session-']],

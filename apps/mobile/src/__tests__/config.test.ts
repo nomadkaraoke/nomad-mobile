@@ -11,6 +11,7 @@ const ENV_KEYS = [
   'EXPO_PUBLIC_FAKE_YT',
   'EXPO_PUBLIC_FAKE_YT_SECONDS',
   'EXPO_PUBLIC_VS_PLAYER_MODE',
+  'EXPO_PUBLIC_PUSH',
 ] as const;
 
 beforeEach(() => {
@@ -196,4 +197,14 @@ describe('PLAYER_MODE (voice session player)', () => {
     process.env.EXPO_PUBLIC_VS_PLAYER_MODE = 'embed-iframe-lib';
     expect(load().PLAYER_MODE).toBe('embed-hosted');
   });
+});
+
+it('push: on unless EXPO_PUBLIC_PUSH=0; the fake E2E token only with push off against a local gen', () => {
+  expect(load()).toMatchObject({ PUSH_ENABLED: true, FAKE_PUSH_TOKEN: false });
+  process.env.EXPO_PUBLIC_PUSH = '0';
+  expect(load()).toMatchObject({ PUSH_ENABLED: false, FAKE_PUSH_TOKEN: false });
+  process.env.EXPO_PUBLIC_GEN_API_URL = 'http://127.0.0.1:8010';
+  expect(load()).toMatchObject({ PUSH_ENABLED: false, FAKE_PUSH_TOKEN: true });
+  process.env.EXPO_PUBLIC_PUSH = '1';
+  expect(load()).toMatchObject({ PUSH_ENABLED: true, FAKE_PUSH_TOKEN: false });
 });

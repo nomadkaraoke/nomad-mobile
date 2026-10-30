@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Tillåt Nomad Karaoke att höra dig sjunga så att ditt röstomfång kan mätas. Ljudet stannar på din telefon."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke använder mikrofonen för att mäta ditt röstomfång. Om du väljer att spela in dig själv under en röstsession laddas inspelningen upp och sparas privat (endast du och Nomad Karaoke-teamet kan lyssna på den), och du kan när som helst ta bort den under Jag."
   }
 }

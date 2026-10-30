@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Zezwól Nomad Karaoke na dostęp do mikrofonu podczas śpiewania, aby zmierzyć Twoją skalę głosu. Dźwięk nie opuszcza Twojego telefonu."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke używa mikrofonu do pomiaru Twojej skali głosu. Jeśli zdecydujesz się nagrać swój głos podczas sesji głosowej, nagranie zostanie przesłane i zachowane jako prywatne (możesz odsłuchać je tylko Ty i zespół Nomad Karaoke), a usunąć je możesz w każdej chwili w zakładce Ja."
   }
 }

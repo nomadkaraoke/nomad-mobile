@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Geef Nomad Karaoke toestemming om je te horen zingen, zodat het je stembereik kan meten. Audio blijft op je telefoon."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke gebruikt de microfoon om je stembereik te meten. Als je ervoor kiest om jezelf op te nemen in een stemsessie, wordt de opname geüpload en privé bewaard (alleen jij en het Nomad Karaoke-team kunnen deze beluisteren). Je kunt deze op elk moment verwijderen in 'Ik'."
   }
 }

@@ -18,6 +18,9 @@ test('a feature folder maps to its flows', () => {
   assert.deepEqual(affectedPrefixes(['apps/mobile/src/tonight/nightStore.ts']), ['tonight-']);
   assert.deepEqual(affectedPrefixes(['packages/review-core/src/doc.ts']), ['make-5', 'review-']);
   assert.deepEqual(affectedPrefixes(['apps/mobile/src/app/discover/voice-session/index.tsx']), ['voice-session-']);
+  assert.deepEqual(affectedPrefixes(['apps/mobile/src/notifications/usePushPrefs.ts']), ['notify-']);
+  assert.deepEqual(affectedPrefixes(['apps/mobile/src/account/wipeLocal.ts']), ['account-']);
+  assert.deepEqual(affectedPrefixes(['apps/mobile/src/app/credits.tsx']), ['make-', 'purchase-', 'search-2', 'tonight-7']);
 });
 
 test('the kjbox client runs the Tonight flows and the claim flows (4c)', () => {

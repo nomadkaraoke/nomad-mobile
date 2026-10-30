@@ -7,6 +7,8 @@ import { View } from 'react-native';
 
 import { openSignIn } from '../auth/signInUi';
 import { useAuth } from '../auth/store';
+import { requestPushAsk } from '../notifications/push';
+import { track } from '../observability';
 import { CodeEntry } from './CodeEntry';
 import { parseNightLink } from './links';
 import { useNightStore } from './nightStore';
@@ -49,8 +51,12 @@ export function JoinScreen() {
 
   const finish = (c: string, night: NightOpen) => {
     useNightStore.getState().joinNomad(c, night.night_id, night.kj_name);
+    track('night_joined');
     setPhase({ kind: 'joined' });
     router.replace('/tonight');
+    // In context (spec §5): "up next" / "your turn" pushes, asked once per install once Tonight has settled (the
+    // name sheet may still be closing, and iOS drops an Alert raised then); registers with the box when on.
+    requestPushAsk('night');
   };
 
   const proceed = (c: string, night: NightOpen, switchConfirmed: boolean) => {

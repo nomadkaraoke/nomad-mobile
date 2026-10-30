@@ -1,0 +1,16 @@
+# Closes the open dev menu (callers check "Runtime version.*" is visible first).
+# Android: the menu header shows the runtime version in full, and the fingerprint runtimeVersion (a 40-character
+# hash, Phase 6) wraps and squeezes the header's Close button out of the layout, so there is no Close to tap:
+# Back dismisses the bottom sheet instead.
+appId: com.nomadkaraoke.mobile
+---
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Close"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: back

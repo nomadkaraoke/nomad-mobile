@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Nomad Karaokeが歌声を聴いて音域を測定できるように、マイクへのアクセスを許可してください。音声データがスマートフォンから外部に送信されることはありません。"
+    "NSMicrophoneUsageDescription": "Nomad Karaokeは音域を測定するためにマイクを使用します。ボイスセッションでご自身の声を録音した場合、録音データはアップロードされて非公開で保存され（ご自身とNomad Karaokeチームのみが聴くことができます）、「マイページ」からいつでも削除できます。"
   }
 }

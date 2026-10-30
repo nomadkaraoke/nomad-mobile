@@ -778,7 +778,18 @@
     "signInPrompt": "Đăng nhập để mua credit",
     "packageCredits": "{credits, plural, one {# credit} other {# credit}}",
     "popular": "Phổ biến",
-    "title": "Mua credit"
+    "title": "Mua credit",
+    "balance": "Bạn có {credits, plural, one {# credit} other {# credit}}",
+    "buy": "Mua",
+    "buyFor": "Mua với giá {price}",
+    "purchaseFailed": "Giao dịch không thành công. Vui lòng thử lại.",
+    "referralNote": "Mức giảm giá giới thiệu {percent}% của bạn được áp dụng khi mua trên web.",
+    "webLink": {
+      "default": "Mua trên web"
+    },
+    "store": {
+      "awaitingApproval": "Đang chờ phê duyệt. Số credit của bạn sẽ được cộng sau khi giao dịch mua được duyệt."
+    }
   },
   "duration": {
     "body": "Bản nhạc này dài {duration}, vì vậy tổng chi phí là {total, plural, one {# credit} other {# credit}} (thêm {extra}).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Chọn các ảnh chụp màn hình khác",
       "reading": "Đang đọc ảnh chụp màn hình của bạn…",
       "unmatched": "Chưa có trong danh mục karaoke của chúng tôi",
-      "retry": "Thử lại"
+      "retry": "Thử lại",
+      "aiConsentBody": "Để tìm bài hát, ảnh chụp màn hình của bạn sẽ được gửi đến Google Gemini AI. Ảnh chỉ được dùng để nhận diện tên bài hát và sẽ không được lưu lại sau đó.",
+      "aiConsentTitle": "Đọc ảnh chụp màn hình bằng AI?",
+      "aiNote": "Ảnh chụp màn hình do Google Gemini AI xử lý và không được lưu lại.",
+      "aiConsentCancel": "Hủy",
+      "aiConsentContinue": "Tiếp tục"
     },
     "source": {
       "appleExport": "Lịch sử Apple Music",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Bạn đã nhập tệp này rồi, nên không có nội dung mới nào để thêm."
   },
   "permissions": {
-    "microphone": "Cho phép Nomad Karaoke nghe bạn hát để ứng dụng có thể đo âm vực của bạn. Âm thanh chỉ được lưu lại trên điện thoại của bạn."
+    "microphone": "Nomad Karaoke sử dụng micrô để đo âm vực của bạn. Nếu bạn chọn ghi âm giọng hát trong một phiên luyện giọng, bản ghi âm sẽ được tải lên và bảo mật riêng tư (chỉ bạn và đội ngũ Nomad Karaoke mới có thể nghe), và bạn có thể xóa bản ghi bất cứ lúc nào trong mục Tôi."
   },
   "voice": {
     "between": "Từ {low} đến {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Quá nhiều yêu cầu cùng lúc. Vui lòng thử lại sau vài phút."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Bật",
+      "make": {
+        "body": "Chúng tôi sẽ thông báo cho bạn khi video sẵn sàng để xem, hoặc nếu cần bạn kiểm tra lại lời bài hát.",
+        "title": "Nhận thông báo khi video của bạn sẵn sàng?"
+      },
+      "night": {
+        "body": "Chúng tôi sẽ thông báo cho bạn khi sắp đến lượt và khi đến lượt bạn hát.",
+        "title": "Nhận thông báo khi đến lượt bạn?"
+      },
+      "notNow": "Để sau"
+    },
+    "channels": {
+      "jobs": "Video của bạn",
+      "tonight": "Đêm nhạc Nomad"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Thông báo",
+      "row": "Tài khoản và thông báo",
+      "title": "Tài khoản và thông báo"
+    },
+    "notifications": {
+      "askBody": "Bật thông báo để biết khi video của bạn đã sẵn sàng hoặc cần bạn xử lý.",
+      "askButton": "Bật thông báo",
+      "deniedBody": "Thông báo cho Nomad Karaoke đang bị tắt trên điện thoại này. Hãy bật lại trong mục Cài đặt để biết khi nào video của bạn đã sẵn sàng.",
+      "error": "Không thể lưu thay đổi đó. Vui lòng kiểm tra kết nối mạng và thử lại.",
+      "night": {
+        "hint": "Khi sắp đến lượt và khi đến lượt bạn hát.",
+        "label": "Thông báo đêm nhạc Nomad"
+      },
+      "problems": {
+        "hint": "Khi có sự cố xảy ra với video.",
+        "label": "Sự cố"
+      },
+      "ready": {
+        "hint": "Khi video karaoke của bạn đã sẵn sàng để xem.",
+        "label": "Video đã sẵn sàng"
+      },
+      "review": {
+        "hint": "Khi lời bài hát cần bạn kiểm tra nhanh lại.",
+        "label": "Cần bạn xem lại"
+      },
+      "title": "Thông báo",
+      "openSettings": "Mở Cài đặt",
+      "loadFailed": "Không thể tải cài đặt thông báo của bạn. Vui lòng kiểm tra kết nối và thử lại."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Không thể xác nhận với Apple. Vui lòng thử lại.",
+    "blocked": {
+      "admin": "Đây là tài khoản nhân viên nên không thể xóa khỏi ứng dụng.",
+      "connect_account": "Tài khoản của bạn đang liên kết với tài khoản nhận thanh toán, nên không thể xóa khỏi ứng dụng.",
+      "generic": "Không thể xóa tài khoản này khỏi ứng dụng.",
+      "order_in_progress": "Bạn đang có đơn hàng đang xử lý, nên chưa thể xóa tài khoản khỏi ứng dụng lúc này.",
+      "referral_balance": "Bạn còn thu nhập giới thiệu chưa được thanh toán, nên không thể xóa tài khoản khỏi ứng dụng.",
+      "unavailable": "Tính năng xóa tài khoản từ ứng dụng hiện chưa khả dụng."
+    },
+    "contactSupport": "Gửi email cho bộ phận hỗ trợ",
+    "creditsLost": "{count, plural, other {Bạn sẽ bị mất # credit.}}",
+    "deletedDetails": "Thông tin cá nhân của bạn",
+    "deletedDiscover": "Dữ liệu âm nhạc và giọng hát của bạn trong Discover",
+    "deletedUploads": "Các tệp bạn đã tải lên",
+    "doneBody": "Tài khoản của bạn đã được xóa và dữ liệu trên điện thoại này đã được dọn sạch.",
+    "doneTitle": "Tài khoản của bạn đã được xóa",
+    "intro": "Thao tác này sẽ xóa vĩnh viễn tài khoản Nomad Karaoke của bạn và không thể hoàn tác.",
+    "jobsCancelled": "{count, plural, other {# video đang tạo sẽ bị hủy.}}",
+    "keep": "Giữ lại tài khoản",
+    "keptRecords": "Lịch sử tác vụ và thanh toán cần giữ lại cho mục đích kế toán",
+    "loadError": "Không thể tải thông tin tài khoản của bạn. Vui lòng kiểm tra kết nối mạng và thử lại.",
+    "retryNetwork": "Không thể xóa tài khoản của bạn. Vui lòng kiểm tra kết nối mạng và thử lại.",
+    "signedOutTitle": "Bạn đã được đăng xuất",
+    "support": "Hãy gửi email cho chúng tôi tại {email} và chúng tôi sẽ hỗ trợ bạn.",
+    "confirm": "Xóa tài khoản của tôi",
+    "deletedHeading": "Những gì chúng tôi sẽ xóa",
+    "deletedNights": "Các liên kết đêm nhạc Nomad của bạn",
+    "deletedRecordings": "Bản ghi âm của bạn",
+    "keptHeading": "Những gì chúng tôi sẽ giữ lại",
+    "keptVideos": "Các video karaoke đã xuất bản trên YouTube",
+    "ok": "OK",
+    "retryPartWay": "Đã xảy ra lỗi giữa chừng. Vui lòng thử lại — quá trình xóa sẽ tiếp tục từ điểm bị gián đoạn.",
+    "row": "Xóa tài khoản",
+    "signedOutBody": "Bạn đã được đăng xuất. Nếu bạn vừa xóa tài khoản thì tài khoản đã được xóa hoàn tất. Nếu không, vui lòng đăng nhập lại và thử lại.",
+    "title": "Xóa tài khoản của bạn"
   }
 }

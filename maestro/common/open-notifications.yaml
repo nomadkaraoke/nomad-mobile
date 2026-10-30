@@ -1,0 +1,49 @@
+# Signed in: Me → Account and notifications → Notifications, once gen's switches have loaded. Then, while the OS can
+# still ask (a fresh install), "Turn on notifications" → the OS prompt → Allow: askPermission registers this device
+# with gen (and the box, at a night), so the fake push outboxes record sends (EXPO_PUBLIC_PUSH=0, fake token). Leaves
+# the Notifications screen open. A no-op prompt-wise once notifications are allowed.
+appId: com.nomadkaraoke.mobile
+---
+- tapOn:
+    id: "tab-me"
+- scrollUntilVisible:
+    element:
+      id: "me-signout"  # the row below Account: scrolled this far, Account is clear of the tab bar (a tap on a
+    direction: DOWN       # bottom-edge Account once landed on the Make tab)
+    timeout: 15000
+- tapOn:
+    id: "me-account"
+- tapOn:
+    id: "account-notifications"
+- extendedWaitUntil:
+    visible:
+      id: "notif-ready"
+      enabled: true
+    timeout: 20000
+# The permission is read asynchronously, so the banner can come a moment after the switches.
+- extendedWaitUntil:
+    visible:
+      id: "notif-ask"
+    timeout: 3000
+    optional: true
+- runFlow:
+    when:
+      visible:
+        id: "notif-ask"
+    commands:
+      - tapOn:
+          id: "notif-ask"
+      # The system prompt ("Allow" / "Don't Allow" on iOS, "Allow" / "Don't allow" on Android 13+); a full-text
+      # match, so the "Don't" button never matches. On iOS Maestro's launchApp already grants the app's permissions
+      # (the OS then answers without a prompt), so it may never show.
+      - extendedWaitUntil:
+          visible: "Allow"
+          timeout: 5000
+          optional: true
+      - tapOn:
+          text: "Allow"
+          optional: true
+      - extendedWaitUntil:
+          notVisible:
+            id: "notif-ask"
+          timeout: 10000

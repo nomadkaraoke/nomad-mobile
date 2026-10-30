@@ -778,7 +778,18 @@
     "signInPrompt": "Inicia sessió per comprar crèdits",
     "packageCredits": "{credits, plural, one {# crèdit} other {# crèdits}}",
     "popular": "Popular",
-    "title": "Compra crèdits"
+    "title": "Compra crèdits",
+    "balance": "Tens {credits, plural, one {# crèdit} other {# crèdits}}",
+    "buy": "Compra",
+    "buyFor": "Compra per {price}",
+    "purchaseFailed": "La compra no s'ha pogut completar. Torna-ho a provar.",
+    "referralNote": "El teu descompte de referit del {percent}% s'aplica quan compres al web.",
+    "webLink": {
+      "default": "Compra al web"
+    },
+    "store": {
+      "awaitingApproval": "Esperant l'aprovació. Els teus crèdits apareixeran un cop s'hagi aprovat la compra."
+    }
   },
   "duration": {
     "body": "Aquesta pista dura {duration}, així que costa {total, plural, one {# crèdit} other {# crèdits}} en total ({extra} més).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Tria captures de pantalla diferents",
       "reading": "S'estan llegint les teves captures de pantalla…",
       "unmatched": "Encara no és al nostre catàleg de karaoke",
-      "retry": "Torna-ho a provar"
+      "retry": "Torna-ho a provar",
+      "aiConsentBody": "Per trobar les cançons, la teva captura de pantalla s'envia a la IA Gemini de Google. Només s'utilitza per llegir els noms de les cançons i després no es conserva.",
+      "aiConsentTitle": "Vols llegir la captura de pantalla amb IA?",
+      "aiNote": "Les captures de pantalla es llegeixen amb la IA Gemini de Google i no es conserven.",
+      "aiConsentCancel": "Cancel·la",
+      "aiConsentContinue": "Continua"
     },
     "source": {
       "appleExport": "Historial d'Apple Music",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Ja has importat aquest fitxer, així que no hi havia res de nou per afegir."
   },
   "permissions": {
-    "microphone": "Permet que Nomad Karaoke et senti cantar per poder mesurar el teu rang vocal. L'àudio no sortirà del teu telèfon."
+    "microphone": "Nomad Karaoke utilitza el micròfon per mesurar el teu rang vocal. Si decideixes gravar-te en una sessió de veu, la gravació es penja i es guarda de manera privada (només tu i l'equip de Nomad Karaoke la podeu escoltar), i la pots eliminar en qualsevol moment des de Jo."
   },
   "voice": {
     "between": "Entre {low} i {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Massa intents alhora. Torna-ho a provar d'aquí a uns minuts."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Activa",
+      "make": {
+        "body": "T'avisarem quan estigui a punt per mirar o si cal que revisis la lletra.",
+        "title": "Vols rebre una notificació quan el teu vídeo estigui a punt?"
+      },
+      "night": {
+        "body": "T'avisarem quan siguis el següent i quan et toqui cantar.",
+        "title": "Vols rebre una notificació quan sigui el teu torn?"
+      },
+      "notNow": "Ara no"
+    },
+    "channels": {
+      "jobs": "Els teus vídeos",
+      "tonight": "Nits Nomad"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Notificacions",
+      "row": "Compte i notificacions",
+      "title": "Compte i notificacions"
+    },
+    "notifications": {
+      "askBody": "Activa les notificacions per saber quan el teu vídeo estigui a punt o necessiti la teva atenció.",
+      "askButton": "Activa les notificacions",
+      "deniedBody": "Les notificacions estan desactivades per a Nomad Karaoke en aquest telèfon. Activa-les a la Configuració per saber quan els teus vídeos estiguin a punt.",
+      "error": "No s'ha pogut desar aquest canvi. Comprova la connexió i torna-ho a provar.",
+      "night": {
+        "hint": "Quan siguis el següent i quan et toqui cantar.",
+        "label": "Alertes de la nit Nomad"
+      },
+      "problems": {
+        "hint": "Quan hi hagi algun problema amb un vídeo.",
+        "label": "Problemes"
+      },
+      "ready": {
+        "hint": "Quan el teu vídeo de karaoke estigui a punt per mirar.",
+        "label": "Vídeo a punt"
+      },
+      "review": {
+        "hint": "Quan la lletra necessiti que li facis un cop d'ull ràpid.",
+        "label": "Revisió necessària"
+      },
+      "title": "Notificacions",
+      "openSettings": "Obre la configuració",
+      "loadFailed": "No s'ha pogut carregar la teva configuració de notificacions. Comprova la connexió i torna-ho a provar."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "No s'ha pogut confirmar amb Apple. Torna-ho a provar.",
+    "blocked": {
+      "admin": "Aquest és un compte d'equip, de manera que no es pot suprimir des de l'aplicació.",
+      "connect_account": "El teu compte està vinculat a un compte de cobrament, de manera que no es pot suprimir des de l'aplicació.",
+      "generic": "No podem suprimir aquest compte des de l'aplicació.",
+      "order_in_progress": "Tens una comanda en curs, així que el teu compte encara no es pot suprimir des de l'aplicació.",
+      "referral_balance": "Tens guanys de referits pendents de cobrar, de manera que el teu compte no es pot suprimir des de l'aplicació.",
+      "unavailable": "La supressió del compte des de l'aplicació no està disponible ara mateix."
+    },
+    "contactSupport": "Envia un correu al servei d'assistència",
+    "creditsLost": "{count, plural, one {Es perdrà # crèdit.} other {Es perdran # crèdits.}}",
+    "deletedDetails": "Les teves dades personals",
+    "deletedDiscover": "La teva música i dades de veu a Discover",
+    "deletedUploads": "Les teves càrregues",
+    "doneBody": "El teu compte s'ha suprimit i s'han esborrat les dades d'aquest telèfon.",
+    "doneTitle": "S'ha suprimit el teu compte",
+    "intro": "Això suprimirà permanentment el teu compte de Nomad Karaoke. Aquesta acció no es pot desfer.",
+    "jobsCancelled": "{count, plural, one {Es cancel·larà # vídeo en curs.} other {Es cancel·laran # vídeos en curs.}}",
+    "keep": "Conserva el meu compte",
+    "keptRecords": "Els registres de tasques i pagaments, que necessitem per qüestions de comptabilitat",
+    "loadError": "No s'han pogut carregar les dades del teu compte. Comprova la connexió i torna-ho a provar.",
+    "retryNetwork": "No s'ha pogut suprimir el teu compte. Comprova la connexió i torna-ho a provar.",
+    "signedOutTitle": "S'ha tancat la teva sessió",
+    "support": "Envia'ns un correu a {email} i ens n'ocuparem.",
+    "confirm": "Elimina el meu compte",
+    "deletedHeading": "Què eliminem",
+    "deletedNights": "Els teus enllaços de nit de Nomad",
+    "deletedRecordings": "Les teves gravacions",
+    "keptHeading": "Què conservem",
+    "keptVideos": "Vídeos de karaoke que ja s'han publicat a YouTube",
+    "ok": "OK",
+    "retryPartWay": "S'ha produït un error a mig camí. Torna-ho a provar: el procés d'eliminació es reprendrà on s'havia quedat.",
+    "row": "Elimina el compte",
+    "signedOutBody": "S'ha tancat la teva sessió. Si acabes d'eliminar el teu compte, ja no existeix. Si no, inicia la sessió i torna-ho a provar.",
+    "title": "Elimina el teu compte"
   }
 }

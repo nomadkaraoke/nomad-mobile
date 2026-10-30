@@ -107,6 +107,13 @@ up() {
   if emulators_up; then echo "emulators already up (shared)"; else start_emulators; fi
   local web=()
   [[ "${WITH_WEB:-}" == 1 ]] && web=(--frontend)
+  # Self-hosted lanes keep their servers between jobs, and `up` skips a server that is already running: restart this
+  # lane's gen and decide so the job runs the code and env it just checked out (a gen left over from an earlier job
+  # kept calling production decide for account deletion after the env fix). The shared emulators stay up.
+  # shellcheck disable=SC2046
+  (cd "$GEN" && env LOCAL_STACK_KEEP_EMULATORS=1 $(lane_gen_env) scripts/local-stack.sh down) || true
+  # shellcheck disable=SC2046
+  (cd "$DECIDE" && env $(lane_decide_env) scripts/local-stack.sh down) || true
   # shellcheck disable=SC2046 # one VAR=value per line, no spaces
   (cd "$GEN" && env DECIDE_GEN_PARTNER_SECRET="$PARTNER_SECRET" LOCAL_STACK_API_URL="http://127.0.0.1:$GEN_PORT" \
     $(lane_gen_env) scripts/local-stack.sh up ${web[@]+"${web[@]}"})
@@ -130,6 +137,9 @@ logs() {
     /tmp/nomad-mobile-metro*.log /tmp/nomad-mobile-stack-control.log; do
     [[ -f "$f" ]] || continue
     echo "::group::$f"
+    # Every warning and error first (a failing flow's server-side cause is usually long out of the tail), then the tail.
+    grep -E ' (WARNING|ERROR|CRITICAL) |Traceback' "$f" | tail -n 150 || true
+    echo "--- last 200 lines ---"
     tail -n 200 "$f"
     echo "::endgroup::"
   done

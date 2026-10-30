@@ -39,11 +39,18 @@ appId: com.nomadkaraoke.mobile
 - extendedWaitUntil:
     visible: "Runtime version.*|Search songs or artists"
     timeout: "${typeof LAUNCH_TIMEOUT !== 'undefined' && LAUNCH_TIMEOUT ? LAUNCH_TIMEOUT : 60000}"
+# A dev client that has never shown its menu (a fresh emulator or simulator: GitHub-hosted runners, or Android after
+# clearState) first shows the menu's onboarding, whose only button is Continue; after that, the menu has Close.
+- runFlow:
+    when:
+      visible: "This is the developer menu.*"
+    commands:
+      - tapOn: "Continue"
 - runFlow:
     when:
       visible: "Runtime version.*"
     commands:
-      - tapOn: "Close"
+      - runFlow: close-dev-menu.yaml
 # Android: the Close tap above can land after the dev menu has gone, on whatever is behind it; twice that was
 # the launcher's YouTube icon, leaving YouTube in front. Bring the app back if it isn't showing.
 - runFlow:

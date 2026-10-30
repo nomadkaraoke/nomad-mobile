@@ -778,7 +778,18 @@
     "signInPrompt": "Mag-sign in para bumili ng mga credit",
     "packageCredits": "{credits, plural, one {# credit} other {# credits}}",
     "popular": "Sikat",
-    "title": "Bumili ng credits"
+    "title": "Bumili ng credits",
+    "balance": "Mayroon kang {credits, plural, one {# credit} other {# credits}}",
+    "buy": "Bumili",
+    "buyFor": "Bumili sa halagang {price}",
+    "purchaseFailed": "Hindi natuloy ang pagbili. Subukang muli.",
+    "referralNote": "Magagamit ang iyong {percent}% referral discount kapag bumili ka sa web.",
+    "webLink": {
+      "default": "Bumili sa web"
+    },
+    "store": {
+      "awaitingApproval": "Naghihintay ng pag-apruba. Lalabas ang iyong mga credit kapag naaprubahan na ang pagbili."
+    }
   },
   "duration": {
     "body": "Ang track na ito ay {duration} ang haba, kaya ang kabuuang halaga nito ay {total, plural, one {# credit} other {# credits}} (karagdagang {extra}).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Pumili ng iba pang mga screenshot",
       "reading": "Binabasa ang iyong mga screenshot…",
       "unmatched": "Wala pa sa aming karaoke catalog",
-      "retry": "Subukan muli"
+      "retry": "Subukan muli",
+      "aiConsentBody": "Upang mahanap ang mga kanta, ipapadala ang iyong screenshot sa Gemini AI ng Google. Ginagamit lamang ito para basahin ang mga pamagat ng kanta at hindi itinatago pagkatapos.",
+      "aiConsentTitle": "Basahin ang iyong screenshot gamit ang AI?",
+      "aiNote": "Binabasa ng Gemini AI ng Google ang mga screenshot at hindi itinatago ang mga ito.",
+      "aiConsentCancel": "Kanselahin",
+      "aiConsentContinue": "Magpatuloy"
     },
     "source": {
       "appleExport": "Apple Music history",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Na-import mo na ang file na ito, kaya walang bagong naidagdag."
   },
   "permissions": {
-    "microphone": "Payagan ang Nomad Karaoke na marinig kang kumanta upang masukat nito ang iyong vocal range. Mananatili ang audio sa iyong telepono."
+    "microphone": "Ginagamit ng Nomad Karaoke ang mikropono upang sukatin ang iyong vocal range. Kung pipiliin mong i-record ang iyong sarili sa isang voice session, ia-upload ang recording at pananatilihing pribado (ikaw at ang team ng Nomad Karaoke lamang ang makakarinig nito), at maaari mo itong burahin anumang oras sa Me."
   },
   "voice": {
     "between": "Sa pagitan ng {low} at {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Masyadong marami nang sabay-sabay. Subukan muli pagkalipas ng ilang minuto."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "I-on",
+      "make": {
+        "body": "Sasabihan ka namin kapag puwede na itong panoorin, o kung kailangan mong i-check ang lyrics.",
+        "title": "Gusto mo bang makatanggap ng notification kapag handa na ang iyong video?"
+      },
+      "night": {
+        "body": "Sasabihan ka namin kapag ikaw na ang susunod at kapag oras mo nang kumanta.",
+        "title": "Gusto mo bang makatanggap ng notification kapag oras mo na?"
+      },
+      "notNow": "Huwag muna"
+    },
+    "channels": {
+      "jobs": "Iyong mga video",
+      "tonight": "Nomad nights"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Mga Notipikasyon",
+      "row": "Account at mga notipikasyon",
+      "title": "Account at mga notipikasyon"
+    },
+    "notifications": {
+      "askBody": "I-on ang mga notipikasyon para malaman kung handa na o kailangan ka ng iyong video.",
+      "askButton": "I-on ang mga notipikasyon",
+      "deniedBody": "Naka-off ang mga notipikasyon para sa Nomad Karaoke sa teleponong ito. I-on ang mga ito sa Mga Setting para malaman kapag handa na ang iyong mga video.",
+      "error": "Hindi ma-save ang pagbabagong iyon. Suriin ang iyong koneksyon at subukang muli.",
+      "night": {
+        "hint": "Kapag ikaw na ang susunod at kapag oras mo nang kumanta.",
+        "label": "Mga alerto sa Nomad night"
+      },
+      "problems": {
+        "hint": "Kapag may naging problema sa video.",
+        "label": "Mga problema"
+      },
+      "ready": {
+        "hint": "Kapag handa nang panoorin ang iyong karaoke video.",
+        "label": "Handa na ang video"
+      },
+      "review": {
+        "hint": "Kapag kailangan mong i-check saglit ang lyrics.",
+        "label": "Kailangan ng iyong pagsusuri"
+      },
+      "title": "Mga Notipikasyon",
+      "openSettings": "Buksan ang Mga Setting",
+      "loadFailed": "Hindi ma-load ang iyong mga setting ng notification. Pakisuri ang iyong koneksyon at subukan ulit."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Hindi makumpirma sa Apple. Pakisubukang muli.",
+    "blocked": {
+      "admin": "Isa itong staff account, kaya hindi ito maaaring i-delete mula sa app.",
+      "connect_account": "Naka-link ang account mo sa isang payout account, kaya hindi ito maaaring i-delete mula sa app.",
+      "generic": "Hindi namin ma-delete ang account na ito mula sa app.",
+      "order_in_progress": "May order ka pang pinoproseso, kaya hindi pa maaaring i-delete ang iyong account mula sa app.",
+      "referral_balance": "Mayroon kang referral earnings na hindi pa naibabayad, kaya hindi maaaring i-delete ang iyong account mula sa app.",
+      "unavailable": "Hindi available ang pag-delete ng account mula sa app sa ngayon."
+    },
+    "contactSupport": "Mag-email sa support",
+    "creditsLost": "{count, plural, one {# credit ang mawawala.} other {# credits ang mawawala.}}",
+    "deletedDetails": "Ang iyong personal na impormasyon",
+    "deletedDiscover": "Ang iyong data ng musika at boses sa Discover",
+    "deletedUploads": "Ang iyong mga na-upload",
+    "doneBody": "Wala na ang iyong account, at na-clear na ang phone na ito.",
+    "doneTitle": "Na-delete na ang iyong account",
+    "intro": "Permanenteng ide-delete nito ang iyong Nomad Karaoke account. Hindi na ito mababawi.",
+    "jobsCancelled": "{count, plural, one {# video na pinoproseso ang makakansela.} other {# na video na pinoproseso ang makakansela.}}",
+    "keep": "Panatilihin ang aking account",
+    "keptRecords": "Mga record ng trabaho at pagbabayad, na kailangan namin para sa accounting",
+    "loadError": "Hindi ma-load ang mga detalye ng iyong account. Tingnan ang iyong koneksyon at subukang muli.",
+    "retryNetwork": "Hindi ma-delete ang iyong account. Tingnan ang iyong koneksyon at subukang muli.",
+    "signedOutTitle": "Na-sign out ka na",
+    "support": "Mag-email sa amin sa {email} at kami na ang bahala.",
+    "confirm": "I-delete ang aking account",
+    "deletedHeading": "Ang mga ide-delete namin",
+    "deletedNights": "Ang iyong mga Nomad night link",
+    "deletedRecordings": "Iyong mga recording",
+    "keptHeading": "Ang mga pananatilihin namin",
+    "keptVideos": "Mga karaoke video na na-publish na sa YouTube",
+    "ok": "OK",
+    "retryPartWay": "May nagkaproblema habang pinoproseso ito. Pakisubukang muli — magpapatuloy ang pagbura kung saan ito natigil.",
+    "row": "I-delete ang account",
+    "signedOutBody": "Naka-sign out ka na. Kung kabubura mo lang ng iyong account, tuluyan na itong nabura. Kung hindi naman, mag-sign in at subukang muli.",
+    "title": "I-delete ang iyong account"
   }
 }

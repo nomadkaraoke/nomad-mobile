@@ -1,4 +1,7 @@
 # 3. Cancelled payment (spec §8.3): fake checkout Cancel → "No payment made", still on credits.
+# Since Phase 6 the credits screen sells through the store (FAKE_IAP here); the web checkout is the "Buy on the web"
+# link, offered only on iOS in the US (gen's web_link default), so the cancel path runs on iOS. Android checks that
+# its credits screen is store-only.
 appId: com.nomadkaraoke.mobile
 name: make-3-cancelled-payment
 # Never leave the in-app browser open when the flow ends (SafariViewService crashes on iOS).
@@ -24,25 +27,36 @@ onFlowComplete:
       EMAIL: ${output.email}
 - extendedWaitUntil:
     visible:
-      id: "credits-checkout"
+      id: "credits-buy"
+      enabled: true
     timeout: 30000
-- tapOn:
-    id: "credits-checkout"
-- runFlow: ../common/web-auth-alert.yaml
-- extendedWaitUntil:
-    visible: "Pay"
-    timeout: 30000
-# The page's Cancel button (beside Pay), not the browser's own toolbar Cancel.
-- tapOn:
-    text: "Cancel"
-    rightOf:
-      text: "Pay"
-- extendedWaitUntil:
-    visible:
-      id: "credits-no-payment"
-    timeout: 20000
-- assertVisible:
-    id: "credits-checkout"
-- assertNotVisible:
-    id: "credits-added"
-- takeScreenshot: ${SHOTS}/credits-no-payment
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertNotVisible:
+          id: "credits-web-link"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn:
+          id: "credits-web-link"
+      - runFlow: ../common/web-auth-alert.yaml
+      - extendedWaitUntil:
+          visible: "Pay"
+          timeout: 30000
+      # The page's Cancel button (beside Pay), not the browser's own toolbar Cancel.
+      - tapOn:
+          text: "Cancel"
+          rightOf:
+            text: "Pay"
+      - extendedWaitUntil:
+          visible:
+            id: "credits-no-payment"
+          timeout: 20000
+      - assertVisible:
+          id: "credits-web-link"
+      - assertNotVisible:
+          id: "credits-added"
+      - takeScreenshot: ${SHOTS}/credits-no-payment

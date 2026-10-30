@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Autorise Nomad Karaoke à t'écouter chanter pour mesurer ta tessiture vocale. L'audio reste sur ton téléphone."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke utilise le micro pour mesurer ta tessiture vocale. Si tu choisis de t'enregistrer lors d'une session vocale, l'enregistrement est mis en ligne et conservé de manière privée (seuls toi et l'équipe de Nomad Karaoke pouvez l'écouter), et tu peux le supprimer à tout moment dans Moi."
   }
 }

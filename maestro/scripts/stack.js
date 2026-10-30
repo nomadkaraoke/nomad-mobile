@@ -4,7 +4,8 @@
 //            voice-assert | kjbox | decide | log | fake-externals | fake-lb-user | fake-lastfm-user | lb-poll | source-counts |
 //            voice-session-assert | voice-recordings-count | voice-reset | voice-seed-history | voice-history-assert |
 //            log-seed | setlists-assert | library-assert |
-//            voice-personal-seed | get-made-seed | crowd-seed | crowd-reset
+//            voice-personal-seed | get-made-seed | crowd-seed | crowd-reset | push-outbox | push-prefs |
+//            credits | user-exists
 //   setup:   NAME (flow name, used in the unique email), CREDITS (default 2),
 //            USER_CONFIG (JSON, per-user fake-config knobs: fail_at, auto_approve, audio_duration_seconds,
 //            youtube_url_enabled, step_delay_seconds, judge_*), GLOBAL_CONFIG (JSON, merged over the defaults
@@ -143,6 +144,19 @@
 //            (optional) -> replaces that song's crowd aggregate (POST ${DECIDE_STACK}/api/test/crowd/seed). Shared by
 //            every user on the stack and not cleared by decide-reset: a flow that seeds it resets it.
 //   crowd-reset: SONG_KEY -> deletes that song's crowd aggregate (POST ${DECIDE_STACK}/api/test/crowd/reset)
+//   Phase 6 (purchases, account deletion, push; the app's fake push token, EXPO_PUBLIC_PUSH=0):
+//   push-outbox: SOURCE gen (default: GET ${STACK}/api/test/push-outbox?to=EMAIL, EMAIL default output.email) | kjbox
+//            (GET ${KJBOX_STACK}/sing/api/test/push-outbox, the box's Expo pushes: kind = message.data.step), EXPECT_KIND
+//            (gen: ready | review | problems; kjbox: up_next | now_singing), EXPECT_URL (e.g. /job/<id>, /tonight),
+//            EXPECT_COUNT (exactly that many matching pushes; 0 waits WAIT_MS first, then expects none) -> polled until
+//            a matching push (or EXPECT_COUNT of them) is there or WAIT_MS (default 15000) passes; output.pushes (JSON)
+//   push-prefs: TOKEN (default output.token), EXPECT_READY / EXPECT_REVIEW / EXPECT_PROBLEMS ("true" | "false") ->
+//            polls gen's /api/users/me push_prefs until they match or WAIT_MS (default 10000) passes; output.pushPrefs
+//   credits: EMAIL (default output.email), EXPECT_CREDITS -> polls gen's balance (admin user detail, ADMIN_TOKEN default
+//            local-stack-admin) until it is EXPECT_CREDITS or WAIT_MS (default 15000) passes; output.credits
+//   user-exists: EMAIL (default output.email), EXPECT "true" | "false" (default true) -> polled the same way; fails
+//            unless gen has (or no longer has) that user; output.userExists. Never reads /api/users/me, which creates
+//            the user it is asked about.
 // Wrapped in a function: a flow can run this file more than once, and top-level `let`s must not collide.
 (function () {
   const base = (typeof STACK !== 'undefined' && STACK && STACK !== 'undefined' && STACK) || 'http://127.0.0.1:8010';
@@ -938,6 +952,138 @@
         http.post(decideBase + '/api/test/crowd/seed', { headers: JSON_HEADERS, body: JSON.stringify(body) }),
         'decide crowd seed',
       );
+    }
+  } else if (action === 'push-outbox') {
+    // gen rows: {to, kind, title, body, url}; the box's: {kind: "expo"|"web", sub, message: {to, title, body,
+    // data: {step, url, …}}}. Both read as {kind, url} here (the box's step is the kind).
+    const source = envValue(typeof SOURCE !== 'undefined' ? SOURCE : undefined) || 'gen';
+    if (source !== 'gen' && source !== 'kjbox') throw new Error('ACTION push-outbox: SOURCE is gen or kjbox');
+    const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+    if (source === 'gen' && !email) throw new Error('ACTION push-outbox SOURCE gen needs EMAIL (or ACTION setup first)');
+    const wantKind = envValue(typeof EXPECT_KIND !== 'undefined' ? EXPECT_KIND : undefined);
+    const wantUrl = envValue(typeof EXPECT_URL !== 'undefined' ? EXPECT_URL : undefined);
+    const countEnv = envValue(typeof EXPECT_COUNT !== 'undefined' ? EXPECT_COUNT : undefined);
+    const wantCount = countEnv === null ? null : Number(countEnv);
+    const waitMs = Number(envValue(typeof WAIT_MS !== 'undefined' ? WAIT_MS : undefined) || 15000);
+    const read = () => {
+      if (source === 'gen') {
+        const r = check(http.get(base + '/api/test/push-outbox?limit=200&to=' + encodeURIComponent(email)), 'gen push outbox');
+        return r.pushes.map((p) => ({ kind: p.kind, url: p.url, title: p.title }));
+      }
+      const r = check(http.get(kjboxBase + '/sing/api/test/push-outbox'), 'kjbox push outbox');
+      return r.pushes
+        .filter((p) => p.kind === 'expo')
+        .map((p) => {
+          const m = p.message || {};
+          const data = m.data || {};
+          return { kind: data.step, url: data.url, title: m.title };
+        });
+    };
+    const matching = (rows) =>
+      rows.filter((p) => (wantKind === null || p.kind === wantKind) && (wantUrl === null || p.url === wantUrl));
+    let rows = [];
+    if (wantCount === 0) {
+      // Proving a push was NOT sent: let the async send settle for WAIT_MS (default 15 s here: gen sends after the
+      // job's status write, off the request thread), then expect none.
+      const until = new Date().getTime() + waitMs;
+      while (new Date().getTime() < until) {
+        // busy-wait: the script engine has no timers
+      }
+      rows = read();
+    } else {
+      // Polled until a matching push (or EXPECT_COUNT of them) is there.
+      const deadline = new Date().getTime() + waitMs;
+      do {
+        rows = read();
+        const n = matching(rows).length;
+        if (wantCount === null ? n > 0 : n === wantCount) break;
+        const pause = new Date().getTime() + 1000;
+        while (new Date().getTime() < pause) {
+          // busy-wait
+        }
+      } while (new Date().getTime() < deadline);
+    }
+    const hits = matching(rows);
+    output.pushes = JSON.stringify(rows);
+    const ok = wantCount === null ? hits.length > 0 : hits.length === wantCount;
+    if (!ok) {
+      throw new Error(
+        source + ' push outbox' + (source === 'gen' ? ' for ' + email : '') + ': ' + hits.length + ' pushes' +
+          (wantKind !== null ? ' of kind ' + wantKind : '') + (wantUrl !== null ? ' to ' + wantUrl : '') + ', expected ' +
+          (wantCount === null ? 'at least 1' : wantCount) + '; outbox ' + JSON.stringify(rows),
+      );
+    }
+  } else if (action === 'push-prefs') {
+    // The Notifications switches are optimistic (the PATCH lands a moment later): wait for gen to hold them before a
+    // flow makes a job whose push depends on them. TOKEN default output.token (an existing user: /me would create one).
+    const token = envValue(typeof TOKEN !== 'undefined' ? TOKEN : undefined) || output.token;
+    if (!token) throw new Error('ACTION push-prefs needs TOKEN (or ACTION setup first)');
+    const want = {};
+    const ready = envValue(typeof EXPECT_READY !== 'undefined' ? EXPECT_READY : undefined);
+    const review = envValue(typeof EXPECT_REVIEW !== 'undefined' ? EXPECT_REVIEW : undefined);
+    const problems = envValue(typeof EXPECT_PROBLEMS !== 'undefined' ? EXPECT_PROBLEMS : undefined);
+    if (ready !== null) want.ready = ready === 'true';
+    if (review !== null) want.review = review === 'true';
+    if (problems !== null) want.problems = problems === 'true';
+    const waitMs = Number(envValue(typeof WAIT_MS !== 'undefined' ? WAIT_MS : undefined) || 10000);
+    const deadline = new Date().getTime() + waitMs;
+    let prefs = null;
+    let wrong = [];
+    do {
+      prefs = check(http.get(base + '/api/users/me', { headers: { Authorization: 'Bearer ' + token } }), 'gen /me').push_prefs;
+      wrong = Object.keys(want).filter((k) => prefs[k] !== want[k]);
+      if (!wrong.length) break;
+      const pause = new Date().getTime() + 500;
+      while (new Date().getTime() < pause) {
+        // busy-wait
+      }
+    } while (new Date().getTime() < deadline);
+    output.pushPrefs = JSON.stringify(prefs);
+    if (wrong.length) throw new Error('gen push_prefs ' + JSON.stringify(prefs) + ', expected ' + JSON.stringify(want));
+  } else if (action === 'credits' || action === 'user-exists') {
+    // Read through gen's admin user detail (the local stack's admin token), never /api/users/me: /me creates the
+    // user it is asked about, which would bring a deleted account back.
+    const email = envValue(typeof EMAIL !== 'undefined' ? EMAIL : undefined) || output.email;
+    if (!email) throw new Error('ACTION ' + action + ' needs EMAIL (or ACTION setup first)');
+    const admin = envValue(typeof ADMIN_TOKEN !== 'undefined' ? ADMIN_TOKEN : undefined) || 'local-stack-admin';
+    const detail = () =>
+      http.get(base + '/api/users/admin/users/' + encodeURIComponent(email) + '/detail', {
+        headers: { Authorization: 'Bearer ' + admin },
+      });
+    const waitMs = Number(envValue(typeof WAIT_MS !== 'undefined' ? WAIT_MS : undefined) || 15000);
+    const deadline = new Date().getTime() + waitMs;
+    const settle = () => {
+      const pause = new Date().getTime() + 1000;
+      while (new Date().getTime() < pause) {
+        // busy-wait
+      }
+    };
+    if (action === 'user-exists') {
+      // EXPECT "true" | "false" (default "true"), polled (the app's DELETE returns before the screen moves on).
+      const want = (envValue(typeof EXPECT !== 'undefined' ? EXPECT : undefined) || 'true') === 'true';
+      let status = 0;
+      do {
+        const res = detail();
+        status = res.status;
+        if (status !== 200 && status !== 404) throw new Error('admin user detail failed: HTTP ' + status + ' ' + res.body);
+        if ((status === 200) === want) break;
+        settle();
+      } while (new Date().getTime() < deadline);
+      output.userExists = String(status === 200);
+      if ((status === 200) !== want) throw new Error('gen user ' + email + (want ? ' does not exist' : ' still exists'));
+    } else {
+      // EXPECT_CREDITS: polled until gen's balance is exactly that (a store purchase lands through a webhook).
+      const wantEnv = envValue(typeof EXPECT_CREDITS !== 'undefined' ? EXPECT_CREDITS : undefined);
+      let credits = null;
+      do {
+        credits = check(detail(), 'admin user detail').credits;
+        if (wantEnv === null || credits === Number(wantEnv)) break;
+        settle();
+      } while (new Date().getTime() < deadline);
+      output.credits = String(credits);
+      if (wantEnv !== null && credits !== Number(wantEnv)) {
+        throw new Error('gen user ' + email + ' has ' + credits + ' credits, expected ' + wantEnv);
+      }
     }
   } else {
     throw new Error('unknown ACTION ' + action);

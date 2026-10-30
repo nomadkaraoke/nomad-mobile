@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Cho phép Nomad Karaoke nghe bạn hát để ứng dụng có thể đo âm vực của bạn. Âm thanh chỉ được lưu lại trên điện thoại của bạn."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke sử dụng micrô để đo âm vực của bạn. Nếu bạn chọn ghi âm giọng hát trong một phiên luyện giọng, bản ghi âm sẽ được tải lên và bảo mật riêng tư (chỉ bạn và đội ngũ Nomad Karaoke mới có thể nghe), và bạn có thể xóa bản ghi bất cứ lúc nào trong mục Tôi."
   }
 }

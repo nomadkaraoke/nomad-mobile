@@ -1,5 +1,6 @@
 # 1. Happy path (spec §8.1): 0 credits → decide search (search local stack) → song card → song page → Make it →
-#    email code sign-in → credits → fake checkout Pay → back to Make it → job → ready → YouTube block → Copy link.
+#    email code sign-in → credits → Buy (the fake store, Phase 6 IAP) → back to Make it → job → ready → YouTube block →
+#    Copy link. The web checkout's Pay path is covered by make-3 (iOS web link) and purchase-2.
 appId: com.nomadkaraoke.mobile
 name: make-1-happy-path
 # Never leave the in-app browser open when the flow ends (SafariViewService crashes on iOS).
@@ -73,19 +74,15 @@ onFlowComplete:
 - takeScreenshot: ${SHOTS}/signin-code
 - inputText: ${output.code}
 # 0 credits: the make flow sends the person to credits.
+# The store's packs (FAKE_IAP); 3 credits is preselected.
 - extendedWaitUntil:
     visible:
-      id: "credits-checkout"
+      id: "credits-buy"
+      enabled: true
     timeout: 30000
 - takeScreenshot: ${SHOTS}/credits-picker
 - tapOn:
-    id: "credits-checkout"
-- runFlow: ../common/web-auth-alert.yaml
-- extendedWaitUntil:
-    visible: "Pay"
-    timeout: 30000
-- takeScreenshot: ${SHOTS}/fake-checkout
-- tapOn: "Pay"
+    id: "credits-buy"
 # "Credits added" shows for under a second before the screen returns to the make flow (Android's slower
 # hierarchy reads can miss it), so the proof of payment is the new balance there.
 - runFlow:

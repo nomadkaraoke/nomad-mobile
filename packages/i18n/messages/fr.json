@@ -778,7 +778,18 @@
     "signInPrompt": "Connecte-toi pour acheter des crédits",
     "packageCredits": "{credits, plural, one {# crédit} other {# crédits}}",
     "popular": "Populaire",
-    "title": "Acheter des crédits"
+    "title": "Acheter des crédits",
+    "balance": "Tu as {credits, plural, one {# crédit} other {# crédits}}",
+    "buy": "Acheter",
+    "buyFor": "Acheter pour {price}",
+    "purchaseFailed": "L'achat n'a pas abouti. Réessaie.",
+    "referralNote": "Ta réduction de parrainage de {percent} % s'applique lors d'un achat sur le Web.",
+    "webLink": {
+      "default": "Acheter sur le Web"
+    },
+    "store": {
+      "awaitingApproval": "En attente de validation. Tes crédits apparaîtront dès que l'achat aura été validé."
+    }
   },
   "duration": {
     "body": "Ce morceau dure {duration}, il coûte donc {total, plural, one {# crédit} other {# crédits}} au total ({extra} de plus).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Choisir d'autres captures d'écran",
       "reading": "Lecture de tes captures d'écran…",
       "unmatched": "Pas encore dans notre catalogue karaoké",
-      "retry": "Réessayer"
+      "retry": "Réessayer",
+      "aiConsentBody": "Pour trouver les morceaux, ta capture d'écran est envoyée à l'IA Gemini de Google. Elle sert uniquement à lire le titre des morceaux et n'est pas conservée ensuite.",
+      "aiConsentTitle": "Lire ta capture d'écran avec l'IA ?",
+      "aiNote": "Les captures d'écran sont lues par l'IA Gemini de Google et ne sont pas conservées.",
+      "aiConsentCancel": "Annuler",
+      "aiConsentContinue": "Continuer"
     },
     "source": {
       "appleExport": "Historique Apple Music",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Tu as déjà importé ce fichier, il n'y avait donc rien de nouveau à ajouter."
   },
   "permissions": {
-    "microphone": "Autorise Nomad Karaoke à t'écouter chanter pour mesurer ta tessiture vocale. L'audio reste sur ton téléphone."
+    "microphone": "Nomad Karaoke utilise le micro pour mesurer ta tessiture vocale. Si tu choisis de t'enregistrer lors d'une session vocale, l'enregistrement est mis en ligne et conservé de manière privée (seuls toi et l'équipe de Nomad Karaoke pouvez l'écouter), et tu peux le supprimer à tout moment dans Moi."
   },
   "voice": {
     "between": "Entre {low} et {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Trop de tentatives à la fois. Réessaie dans quelques minutes."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Activer",
+      "make": {
+        "body": "On te préviendra dès qu'elle sera prête à être regardée, ou si tu dois vérifier les paroles.",
+        "title": "Recevoir une notification quand ta vidéo est prête ?"
+      },
+      "night": {
+        "body": "On te préviendra quand tu passeras bientôt et quand ce sera ton tour de chanter.",
+        "title": "Recevoir une notification quand c'est ton tour ?"
+      },
+      "notNow": "Pas maintenant"
+    },
+    "channels": {
+      "jobs": "Tes vidéos",
+      "tonight": "Soirées Nomad"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Notifications",
+      "row": "Compte et notifications",
+      "title": "Compte et notifications"
+    },
+    "notifications": {
+      "askBody": "Active les notifications pour savoir quand ta vidéo est prête ou si ton intervention est nécessaire.",
+      "askButton": "Activer les notifications",
+      "deniedBody": "Les notifications sont désactivées pour Nomad Karaoke sur ce téléphone. Active-les dans les Réglages pour savoir quand tes vidéos sont prêtes.",
+      "error": "Impossible d'enregistrer cette modification. Vérifie ta connexion et réessaie.",
+      "night": {
+        "hint": "Quand tu passes bientôt et quand c'est ton tour de chanter.",
+        "label": "Alertes de soirée Nomad"
+      },
+      "problems": {
+        "hint": "Quand un problème survient avec une vidéo.",
+        "label": "Problèmes"
+      },
+      "ready": {
+        "hint": "Quand ta vidéo karaoké est prête à être visionnée.",
+        "label": "Vidéo prête"
+      },
+      "review": {
+        "hint": "Quand les paroles ont besoin d'une petite vérification de ta part.",
+        "label": "À vérifier"
+      },
+      "title": "Notifications",
+      "openSettings": "Ouvrir les Réglages",
+      "loadFailed": "Impossible de charger tes paramètres de notification. Vérifie ta connexion et réessaie."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Impossible de confirmer auprès d'Apple. Réessaie.",
+    "blocked": {
+      "admin": "Il s'agit d'un compte membre de l'équipe, il ne peut donc pas être supprimé depuis l'application.",
+      "connect_account": "Ton compte est associé à un compte de paiement, il ne peut donc pas être supprimé depuis l'application.",
+      "generic": "Nous ne pouvons pas supprimer ce compte depuis l'application.",
+      "order_in_progress": "Tu as une commande en cours, ton compte ne peut donc pas encore être supprimé depuis l'application.",
+      "referral_balance": "Tu as des gains de parrainage en attente de versement, ton compte ne peut donc pas être supprimé depuis l'application.",
+      "unavailable": "La suppression de ton compte depuis l'application n'est pas disponible pour le moment."
+    },
+    "contactSupport": "Contacter l'assistance par e-mail",
+    "creditsLost": "{count, plural, one {# crédit sera perdu.} other {# crédits seront perdus.}}",
+    "deletedDetails": "Tes informations personnelles",
+    "deletedDiscover": "Tes données musicales et vocales dans Discover",
+    "deletedUploads": "Tes fichiers importés",
+    "doneBody": "Ton compte a été supprimé et les données ont été effacées de cet appareil.",
+    "doneTitle": "Ton compte a été supprimé",
+    "intro": "Cette action supprime définitivement ton compte Nomad Karaoke. C'est irréversible.",
+    "jobsCancelled": "{count, plural, one {# vidéo en cours sera annulée.} other {# vidéos en cours seront annulées.}}",
+    "keep": "Garder mon compte",
+    "keptRecords": "L'historique des générations et des paiements, nécessaire pour notre comptabilité",
+    "loadError": "Impossible de charger les informations de ton compte. Vérifie ta connexion et réessaie.",
+    "retryNetwork": "Impossible de supprimer ton compte. Vérifie ta connexion et réessaie.",
+    "signedOutTitle": "Tu as été déconnecté",
+    "support": "Écris-nous à {email} et nous nous en occuperons.",
+    "confirm": "Supprimer mon compte",
+    "deletedHeading": "Ce que nous supprimons",
+    "deletedNights": "Tes liens de soirée Nomad",
+    "deletedRecordings": "Tes enregistrements",
+    "keptHeading": "Ce que nous conservons",
+    "keptVideos": "Les vidéos de karaoké déjà publiées sur YouTube",
+    "ok": "OK",
+    "retryPartWay": "Un problème est survenu en cours de route. Réessaie — la suppression reprendra là où elle s'est arrêtée.",
+    "row": "Supprimer le compte",
+    "signedOutBody": "Tu as été déconnecté. Si tu viens de supprimer ton compte, il n'existe plus. Sinon, reconnecte-toi et réessaie.",
+    "title": "Supprimer ton compte"
   }
 }

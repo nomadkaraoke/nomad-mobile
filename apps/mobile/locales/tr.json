@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Ses aralığını ölçebilmesi için Nomad Karaoke'nin seni şarkı söylerken duymasına izin ver. Ses kaydı telefonunda kalır."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke, ses aralığını ölçmek için mikrofonu kullanır. Bir ses oturumunda kendini kaydetmeyi seçersen, kayıt yüklenir ve gizli olarak saklanır (yalnızca sen ve Nomad Karaoke ekibi dinleyebilir); kaydı Ben sekmesinden dilediğin zaman silebilirsin."
   }
 }

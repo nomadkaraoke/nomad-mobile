@@ -778,7 +778,18 @@
     "signInPrompt": "Kredi satın almak için giriş yap",
     "packageCredits": "{credits, plural, one {# kredi} other {# kredi}}",
     "popular": "Popüler",
-    "title": "Kredi satın al"
+    "title": "Kredi satın al",
+    "balance": "{credits, plural, one {# kredin} other {# kredin}} var",
+    "buy": "Satın Al",
+    "buyFor": "{price} karşılığında satın al",
+    "purchaseFailed": "Satın alma işlemi tamamlanamadı. Tekrar dene.",
+    "referralNote": "%{percent} referans indirimin web üzerinden satın aldığında geçerlidir.",
+    "webLink": {
+      "default": "Web üzerinden satın al"
+    },
+    "store": {
+      "awaitingApproval": "Onay bekleniyor. Satın alma işlemi onaylandığında kredilerin görünecektir."
+    }
   },
   "duration": {
     "body": "Bu parça {duration} uzunluğunda, bu yüzden toplam maliyeti {total, plural, one {# kredi} other {# kredi}} ({extra} ek kredi).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Farklı ekran görüntüleri seç",
       "reading": "Ekran görüntülerin okunuyor…",
       "unmatched": "Henüz karaoke kataloğumuzda yok",
-      "retry": "Tekrar dene"
+      "retry": "Tekrar dene",
+      "aiConsentBody": "Şarkıları bulmak için ekran görüntün Google'ın Gemini yapay zekasına gönderilir. Yalnızca şarkı adlarını okumak için kullanılır ve sonrasında saklanmaz.",
+      "aiConsentTitle": "Ekran görüntün yapay zeka ile okunsun mu?",
+      "aiNote": "Ekran görüntüleri Google'ın Gemini yapay zekası tarafından okunur ve saklanmaz.",
+      "aiConsentCancel": "İptal",
+      "aiConsentContinue": "Devam Et"
     },
     "source": {
       "appleExport": "Apple Music geçmişi",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Bu dosyayı zaten içe aktardın, bu yüzden eklenecek yeni bir şey yoktu."
   },
   "permissions": {
-    "microphone": "Ses aralığını ölçebilmesi için Nomad Karaoke'nin seni şarkı söylerken duymasına izin ver. Ses kaydı telefonunda kalır."
+    "microphone": "Nomad Karaoke, ses aralığını ölçmek için mikrofonu kullanır. Bir ses oturumunda kendini kaydetmeyi seçersen, kayıt yüklenir ve gizli olarak saklanır (yalnızca sen ve Nomad Karaoke ekibi dinleyebilir); kaydı Ben sekmesinden dilediğin zaman silebilirsin."
   },
   "voice": {
     "between": "{low} ile {high} arasında",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Aynı anda çok fazla istek yapıldı. Birkaç dakika sonra tekrar dene."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Aç",
+      "make": {
+        "body": "İzlemeye hazır olduğunda veya şarkı sözlerini kontrol etmen gerektiğinde sana haber vereceğiz.",
+        "title": "Videon hazır olduğunda bildirim almak ister misin?"
+      },
+      "night": {
+        "body": "Sıradaki kişi sen olduğunda ve söyleme sıran geldiğinde sana haber vereceğiz.",
+        "title": "Sıra sana geldiğinde bildirim almak ister misin?"
+      },
+      "notNow": "Şimdi değil"
+    },
+    "channels": {
+      "jobs": "Videoların",
+      "tonight": "Nomad geceleri"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Bildirimler",
+      "row": "Hesap ve bildirimler",
+      "title": "Hesap ve bildirimler"
+    },
+    "notifications": {
+      "askBody": "Videon hazır olduğunda veya senin bakman gerektiğinde haberdar olmak için bildirimleri aç.",
+      "askButton": "Bildirimleri aç",
+      "deniedBody": "Bu telefonda Nomad Karaoke için bildirimler kapalı. Videoların hazır olduğunda haberdar olmak için Ayarlar'dan bildirimleri aç.",
+      "error": "Bu değişiklik kaydedilemedi. Bağlantını kontrol et ve tekrar dene.",
+      "night": {
+        "hint": "Sıradaki sen olduğunda ve şarkı söyleme sıran geldiğinde.",
+        "label": "Nomad gece bildirimleri"
+      },
+      "problems": {
+        "hint": "Bir videoyla ilgili bir sorun çıktığında.",
+        "label": "Sorunlar"
+      },
+      "ready": {
+        "hint": "Karaoke videon izlenmeye hazır olduğunda.",
+        "label": "Video hazır"
+      },
+      "review": {
+        "hint": "Şarkı sözlerine hızlıca bir göz atman gerektiğinde.",
+        "label": "İncelemen gerekiyor"
+      },
+      "title": "Bildirimler",
+      "openSettings": "Ayarlar'ı Aç",
+      "loadFailed": "Bildirim ayarların yüklenemedi. Bağlantını kontrol et ve tekrar dene."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Apple ile doğrulanamadı. Lütfen tekrar dene.",
+    "blocked": {
+      "admin": "Bu bir personel hesabı olduğu için uygulamadan silinemez.",
+      "connect_account": "Hesabın bir ödeme hesabına bağlı olduğu için uygulamadan silinemez.",
+      "generic": "Bu hesabı uygulamadan silemiyoruz.",
+      "order_in_progress": "Devam eden bir siparişin olduğu için hesabın henüz uygulamadan silinemez.",
+      "referral_balance": "Henüz ödenmemiş referans kazançların olduğu için hesabın uygulamadan silinemez.",
+      "unavailable": "Hesabını uygulamadan silme özelliği şu anda kullanılamıyor."
+    },
+    "contactSupport": "Desteğe e-posta gönder",
+    "creditsLost": "{count, plural, one {# kredi kaybolacak.} other {# kredi kaybolacak.}}",
+    "deletedDetails": "Kişisel bilgilerin",
+    "deletedDiscover": "Discover'daki müzik ve ses verilerin",
+    "deletedUploads": "Yüklemelerin",
+    "doneBody": "Hesabın silindi ve bu cihazdaki veriler temizlendi.",
+    "doneTitle": "Hesabın silindi",
+    "intro": "Bu işlem Nomad Karaoke hesabını kalıcı olarak siler ve geri alınamaz.",
+    "jobsCancelled": "{count, plural, one {Devam eden # video iptal edilecek.} other {Devam eden # video iptal edilecek.}}",
+    "keep": "Hesabımı tut",
+    "keptRecords": "Muhasebe için saklamamız gereken işlem ve ödeme kayıtları",
+    "loadError": "Hesap bilgilerin yüklenemedi. Bağlantını kontrol edip tekrar dene.",
+    "retryNetwork": "Hesabın silinemedi. Bağlantını kontrol edip tekrar dene.",
+    "signedOutTitle": "Oturumun kapatıldı",
+    "support": "Bize {email} adresinden e-posta gönder, hemen ilgilenelim.",
+    "confirm": "Hesabımı sil",
+    "deletedHeading": "Sildiğimiz veriler",
+    "deletedNights": "Nomad gece bağlantıların",
+    "deletedRecordings": "Kayıtların",
+    "keptHeading": "Sakladığımız veriler",
+    "keptVideos": "YouTube'da halihazırda yayınlanmış olan karaoke videoları",
+    "ok": "Tamam",
+    "retryPartWay": "İşlem sırasında bir sorun oluştu. Lütfen tekrar dene — silme işlemi kaldığı yerden devam edecektir.",
+    "row": "Hesabı sil",
+    "signedOutBody": "Oturumun kapatıldı. Hesabını az önce sildiysen tamamen kaldırılmıştır. Değilse tekrar giriş yapıp dene.",
+    "title": "Hesabını sil"
   }
 }

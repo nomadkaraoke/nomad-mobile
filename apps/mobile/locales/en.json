@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Allow Nomad Karaoke to hear you sing so it can measure your vocal range. Audio stays on your phone."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke uses the microphone to measure your vocal range. If you choose to record yourself in a voice session, the recording is uploaded and kept privately (only you and the Nomad Karaoke team can listen to it), and you can delete it any time in Me."
   }
 }

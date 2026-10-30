@@ -1,14 +1,11 @@
 import * as Notifications from 'expo-notifications';
-import { router, type Href } from 'expo-router';
-import { useEffect } from 'react';
 
 import { appStorage } from '../../storage';
 
 /**
  * Local reminders for the Spotify privacy export (Phase 3b spec §5.4): Spotify takes about 5 days for Account data
  * and up to 30 for Extended streaming history, so "Remind me" schedules one local notification for each. Local
- * notifications only: no push token, no `aps-environment` entitlement (app.config.ts strips it). Notification
- * permission is asked only when the user taps "Remind me".
+ * notifications only (no push token needed). Notification permission is asked only when the user taps "Remind me".
  */
 export type ReminderKind = 'account' | 'extended';
 
@@ -94,23 +91,5 @@ export async function cancelExportReminder(kind: ReminderKind): Promise<void> {
   await cancelId(id);
 }
 
-/** Opens the screen a tapped reminder points to, whether the tap launched the app or arrived while it was running. */
-export function useReminderTapRouting(): void {
-  useEffect(() => {
-    const open = (r: Notifications.NotificationResponse | null) => {
-      const url = r?.notification.request.content.data?.url;
-      if (typeof url === 'string' && url.startsWith('/')) router.push(url as Href);
-    };
-    try {
-      const last = Notifications.getLastNotificationResponse();
-      if (last) {
-        Notifications.clearLastNotificationResponse();
-        open(last);
-      }
-    } catch {
-      // No native module (e.g. web): nothing to route.
-    }
-    const sub = Notifications.addNotificationResponseReceivedListener(open);
-    return () => sub.remove();
-  }, []);
-}
+// The tap router moved to notifications/tapRouting.ts (Phase 6: pushes use it too); this path keeps working.
+export { useReminderTapRouting } from '../../notifications/tapRouting';

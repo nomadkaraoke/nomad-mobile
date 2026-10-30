@@ -778,7 +778,18 @@
     "signInPrompt": "Prijavi se za kupnju kredita",
     "packageCredits": "{credits, plural, one {# kredit} few {# kredita} other {# kredita}}",
     "popular": "Popularno",
-    "title": "Kupi kredite"
+    "title": "Kupi kredite",
+    "balance": "Imaš {credits, plural, one {# kredit} few {# kredita} other {# kredita}}",
+    "buy": "Kupi",
+    "buyFor": "Kupi za {price}",
+    "purchaseFailed": "Kupnja nije uspjela. Pokušaj ponovno.",
+    "referralNote": "Tvoj popust za preporuku od {percent}% primjenjuje se kada kupuješ na webu.",
+    "webLink": {
+      "default": "Kupi na webu"
+    },
+    "store": {
+      "awaitingApproval": "Čeka se odobrenje. Tvoji će se krediti pojaviti čim kupnja bude odobrena."
+    }
   },
   "duration": {
     "body": "Ova pjesma traje {duration}, pa ukupno košta {total, plural, one {# kredit} few {# kredita} other {# kredita}} ({extra} više).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Odaberi druge snimke zaslona",
       "reading": "Čitanje tvojih snimki zaslona…",
       "unmatched": "Još nije u našem karaoke katalogu",
-      "retry": "Pokušaj ponovno"
+      "retry": "Pokušaj ponovno",
+      "aiConsentBody": "Kako bi se pronašle pjesme, tvoja se snimka zaslona šalje Googleovom Gemini AI-ju. Koristi se samo za očitavanje naziva pjesama i nakon toga se ne sprema.",
+      "aiConsentTitle": "Očitati snimku zaslona pomoću AI-ja?",
+      "aiNote": "Snimke zaslona očitava Googleov Gemini AI i one se ne spremaju.",
+      "aiConsentCancel": "Odustani",
+      "aiConsentContinue": "Nastavi"
     },
     "source": {
       "appleExport": "Apple Music povijest",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Već si uvezao ovu datoteku, pa nije bilo ničeg novog za dodavanje."
   },
   "permissions": {
-    "microphone": "Dopusti aplikaciji Nomad Karaoke da te čuje dok pjevaš kako bi mogla izmjeriti tvoj vokalni raspon. Zvuk ostaje na tvom telefonu."
+    "microphone": "Nomad Karaoke koristi mikrofon za mjerenje tvog vokalnog raspona. Ako se odlučiš snimati tijekom glasovne sesije, snimka se prenosi i čuva privatno (možete je slušati samo ti i tim Nomad Karaoke), a možeš je izbrisati u bilo kojem trenutku u odjeljku Ja."
   },
   "voice": {
     "between": "Između {low} i {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Previše odjednom. Pokušaj ponovno za nekoliko minuta."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Uključi",
+      "make": {
+        "body": "Javit ćemo ti kad bude spreman za gledanje ili ako trebaš provjeriti tekst.",
+        "title": "Želiš li obavijest kada tvoj video bude spreman?"
+      },
+      "night": {
+        "body": "Javit ćemo ti kad si sljedeći na redu i kada dođe tvoj red za pjevanje.",
+        "title": "Želiš li obavijest kada dođe tvoj red?"
+      },
+      "notNow": "Ne sada"
+    },
+    "channels": {
+      "jobs": "Tvoji videozapisi",
+      "tonight": "Nomad večeri"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Obavijesti",
+      "row": "Račun i obavijesti",
+      "title": "Račun i obavijesti"
+    },
+    "notifications": {
+      "askBody": "Uključi obavijesti kako bi na vrijeme saznao kada je tvoj video spreman ili kada treba tvoju pažnju.",
+      "askButton": "Uključi obavijesti",
+      "deniedBody": "Obavijesti za Nomad Karaoke isključene su na ovom telefonu. Uključi ih u Postavkama kako bi na vrijeme saznao kada su tvoji videozapisi spremni.",
+      "error": "Promjenu nije bilo moguće spremiti. Provjeri internetsku vezu i pokušaj ponovno.",
+      "night": {
+        "hint": "Kada si sljedeći i kada dođe tvoj red za pjevanje.",
+        "label": "Obavijesti za Nomad večer"
+      },
+      "problems": {
+        "hint": "Kada nešto pođe po zlu s videozapisom.",
+        "label": "Poteškoće"
+      },
+      "ready": {
+        "hint": "Kada je tvoj karaoke videozapis spreman za gledanje.",
+        "label": "Videozapis je spreman"
+      },
+      "review": {
+        "hint": "Kada tekst pjesme treba tvoju brzu provjeru.",
+        "label": "Potreban pregled"
+      },
+      "title": "Obavijesti",
+      "openSettings": "Otvori Postavke",
+      "loadFailed": "Nismo uspjeli učitati tvoje postavke obavijesti. Provjeri vezu i pokušaj ponovno."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "Potvrda s Appleom nije uspjela. Pokušaj ponovno.",
+    "blocked": {
+      "admin": "Ovo je račun osoblja pa se ne može izbrisati iz aplikacije.",
+      "connect_account": "Tvoj račun je povezan s računom za isplatu pa se ne može izbrisati iz aplikacije.",
+      "generic": "Ne možemo izbrisati ovaj račun iz aplikacije.",
+      "order_in_progress": "Imaš narudžbu u tijeku pa se tvoj račun još ne može izbrisati iz aplikacije.",
+      "referral_balance": "Imaš zaradu od preporuka koja još nije isplaćena pa se tvoj račun ne može izbrisati iz aplikacije.",
+      "unavailable": "Brisanje računa iz aplikacije trenutačno nije dostupno."
+    },
+    "contactSupport": "Pošalji e-poruku podršci",
+    "creditsLost": "{count, plural, one {Izgubit ćeš # kredit.} few {Izgubit ćeš # kredita.} other {Izgubit ćeš # kredita.}}",
+    "deletedDetails": "Tvoji osobni podaci",
+    "deletedDiscover": "Tvoji glazbeni i glasovni podaci u Discoveru",
+    "deletedUploads": "Tvoji prijenosi",
+    "doneBody": "Tvoj račun je izbrisan, a podaci s ovog telefona su uklonjeni.",
+    "doneTitle": "Tvoj račun je izbrisan",
+    "intro": "Ovim se trajno briše tvoj Nomad Karaoke račun. To se više ne može poništiti.",
+    "jobsCancelled": "{count, plural, one {# videozapis u izradi bit će otkazan.} few {# videozapisa u izradi bit će otkazana.} other {# videozapisa u izradi bit će otkazano.}}",
+    "keep": "Zadrži moj račun",
+    "keptRecords": "Evidencija poslova i plaćanja, koja nam je potrebna za računovodstvo",
+    "loadError": "Nismo uspjeli učitati podatke o tvom računu. Provjeri vezu i pokušaj ponovno.",
+    "retryNetwork": "Nismo uspjeli izbrisati tvoj račun. Provjeri vezu i pokušaj ponovno.",
+    "signedOutTitle": "Odjava je uspjela",
+    "support": "Pošalji nam e-poruku na {email} i mi ćemo to riješiti.",
+    "confirm": "Izbriši moj račun",
+    "deletedHeading": "Što brišemo",
+    "deletedNights": "Tvoje Nomad noćne poveznice",
+    "deletedRecordings": "Tvoje snimke",
+    "keptHeading": "Što zadržavamo",
+    "keptVideos": "Karaoke videozapise već objavljene na YouTubeu",
+    "ok": "OK",
+    "retryPartWay": "Nešto je pošlo po zlu tijekom postupka. Pokušaj ponovno — brisanje će se nastaviti tamo gdje je stalo.",
+    "row": "Izbriši račun",
+    "signedOutBody": "Odjava je uspjela. Ako je tvoj račun upravo obrisan, više ne postoji. U suprotnom se ponovno prijavi i pokušaj opet.",
+    "title": "Izbriši svoj račun"
   }
 }

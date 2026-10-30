@@ -45,7 +45,7 @@ export default function SignInSheet() {
     try {
       const result = await run({ fakeEmail });
       if (result === 'cancelled') return;
-      await signInWithSession(result);
+      await signInWithSession(result, provider);
       finishSignIn(returnTo);
     } catch (e) {
       setError(errorText(e, provider));

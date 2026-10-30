@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Anna Nomad Karaoken kuulla lauluasi, jotta se voi mitata äänialasi. Ääni pysyy puhelimessasi."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke käyttää mikrofonia äänialasi mittaamiseen. Jos päätät äänittää itseäsi äänisessiossa, tallenne ladataan palveluun ja pidetään yksityisenä (vain sinä ja Nomad Karaoke -tiimi voitte kuunnella sitä), ja voit poistaa sen milloin tahansa Minä-osiossa."
   }
 }

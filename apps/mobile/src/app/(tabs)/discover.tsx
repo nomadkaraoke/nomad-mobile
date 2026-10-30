@@ -63,6 +63,7 @@ import {
   type SongIdentity,
 } from "../../make/intentStore";
 import { openYouTubeUrl } from "../../media/youtube";
+import { track } from "../../observability";
 import { useOfflineIndex } from "../../offline/offlineIndex";
 import { useVoiceStore } from "../../voice/voiceStore";
 import { useFlushVoiceOnDiscoverMount } from "../../voice/useVoiceProfile";
@@ -212,6 +213,16 @@ export default function DiscoverScreen() {
         : recs.status === "error"
           ? "error"
           : "loading";
+  // Picks on screen: once per focus of this tab (leaving and coming back counts again).
+  const tabFocused = useIsFocused();
+  const recsSeen = useRef(false);
+  useEffect(() => {
+    if (!tabFocused) recsSeen.current = false;
+    else if (picks === "picks" && !recsSeen.current) {
+      recsSeen.current = true;
+      track("recs_viewed");
+    }
+  }, [tabFocused, picks]);
   // The bar stays up while a filtered load is pending or failed, so a filter that returns nothing can be undone.
   const showFilterBar =
     signedIn && (picks === "picks" || (activeFilterCount(filters) > 0 && picks !== "quiz" && picks !== "signin"));

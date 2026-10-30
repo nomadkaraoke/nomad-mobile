@@ -16,9 +16,24 @@ const keyOf = (s: ReturnType<typeof useAuth.getState>): string | null =>
   s.state.status === 'signedIn' ? userKeyFor(s.state.session.email) : null;
 
 /** Deletes every `me.*.<userKey>` key (caches, outbox) and the in-memory outbox if it is that user's. */
-function purgeOwner(userKey: string): void {
+export function purgeOwner(userKey: string): void {
   for (const k of appStorage.getAllKeys()) if (k.startsWith('me.') && k.endsWith(`.${userKey}`)) appStorage.remove(k);
   useMeOutbox.getState().purge(userKey);
+}
+
+/**
+ * Account deletion (account/wipeLocal.ts): forgets every account's Me data on this phone (the recorded owner's caches
+ * and unsent Me writes, any other `me.*` key, the in-memory overlays) and the owner record itself. Runs after the
+ * sign-out, so it reads the owner from storage, not from the session.
+ */
+export function clearMeLocalData(): void {
+  const owner = appStorage.getString(OWNER_KEY);
+  if (owner) purgeOwner(owner);
+  for (const k of appStorage.getAllKeys()) if (k.startsWith('me.')) appStorage.remove(k);
+  useLovedOverrides.getState().clear();
+  useLibrarySettle.getState().clear();
+  useGetMadeLocal.getState().clear();
+  useClaimAnswered.getState().clear();
 }
 
 /** On sign-in: a different account than the last owner purges the owner's Me data and unsent Me writes. */

@@ -1,0 +1,27 @@
+# Signed out: Me → Sign in → the sign-in sheet's fake Google path (google-signin.yaml) → back on Me, signed in (the
+# balance shows). Env: EMAIL.
+appId: com.nomadkaraoke.mobile
+---
+- tapOn:
+    id: "tab-me"
+- extendedWaitUntil:
+    visible:
+      id: "me-signin"
+    timeout: 15000
+- tapOn:
+    id: "me-signin"
+- runFlow:
+    file: google-signin.yaml
+    env:
+      EMAIL: ${EMAIL}
+# Since Phase 4a's Me (profile card, go-tos, setlists, songs) the balance row sits below the fold: scroll to it.
+- extendedWaitUntil:
+    notVisible:
+      id: "me-signin"
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      id: "me-credits"
+    direction: DOWN
+    centerElement: true  # Buy credits sits just below the balance
+    timeout: 30000

@@ -1,11 +1,26 @@
 import { getJob, type JobDetail } from '@nomad/api-gen';
-import { File, Paths } from 'expo-file-system';
+import { Directory, File, Paths } from 'expo-file-system';
 import { Asset, requestPermissionsAsync } from 'expo-media-library';
 
 import { useAuth } from '../auth/store';
 import { GEN_API_URL } from '../config';
 
 const KEY = 'lossy_720p_mp4';
+const MP4_NAME = /^nomad-.+-720p\.mp4$/;
+const mp4Name = (jobId: string) => `nomad-${jobId}-720p.mp4`;
+
+/** Account deletion: removes every video fetchMp4 downloaded into the cache (`nomad-<job>-720p.mp4`). */
+export function deleteDownloadedMp4s(): void {
+  for (const entry of new Directory(Paths.cache).list()) {
+    if (entry instanceof File && MP4_NAME.test(entry.name)) {
+      try {
+        entry.delete();
+      } catch {
+        // Best-effort: the OS purges the cache eventually.
+      }
+    }
+  }
+}
 
 /**
  * The signed 2-hour GCS URL gen adds to GET /api/jobs/{id} for a complete job, if any: the flat
@@ -45,7 +60,7 @@ export async function fetchMp4(jobId: string, onProgress?: Mp4Progress): Promise
   const signed = signedMp4Url(job);
   const token = useAuth.getState().getToken();
   const url = signed ?? `${GEN_API_URL.replace(/\/+$/, '')}/api/jobs/${encodeURIComponent(jobId)}/download/finals/${KEY}`;
-  const destination = new File(Paths.cache, `nomad-${jobId}-720p.mp4`);
+  const destination = new File(Paths.cache, mp4Name(jobId));
   try {
     return await File.downloadFileAsync(url, destination, {
       idempotent: true,

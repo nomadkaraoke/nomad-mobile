@@ -368,6 +368,12 @@ function purgeOthers(owner: string | null): void {
   });
 }
 
+/** Account deletion: drops every queued upload, payload file, batch and error on this phone, whoever they belong to. */
+export function clearImportQueue(): void {
+  clearTimer();
+  purgeOthers(null);
+}
+
 // Signing in (or switching account) may unblock that account's uploads. A DIFFERENT account than the queue's owner
 // purges the owner's leftovers; sign-out keeps the queue (the same person signing back in still gets it sent) but
 // hides the error.

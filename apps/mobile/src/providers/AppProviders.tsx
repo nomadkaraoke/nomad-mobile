@@ -1,7 +1,6 @@
-import { installIntlPolyfills, IntlProvider, RTL_LOCALES } from '@nomad/i18n';
+import { installIntlPolyfills, IntlProvider } from '@nomad/i18n';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect, useState, type ReactNode } from 'react';
-import { I18nManager } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { setupApiClients } from '../api/setup';
@@ -11,8 +10,9 @@ import { fakeSocialEnabled } from '../config';
 import { useClearDiscoverOnSignOut } from '../discover/useClearDiscoverOnSignOut';
 import { useClearMeOnAccountChange } from '../me/useClearMeOnAccountChange';
 import { useSearchWarmup } from '../find/useSearchWarmup';
-import { currentLocale } from '../locale';
-import { initObservability } from '../observability';
+import { currentLocale, syncLayoutDirection } from '../locale';
+import { usePushRegistration } from '../notifications/usePushRegistration';
+import { initObservability, track } from '../observability';
 import { useKaraokeLogFreshness } from '../tonight/log/IdeasPanel';
 import { useLogSync } from '../tonight/log/useLogSync';
 import { useVoiceSync } from '../voice/useVoiceProfile';
@@ -22,6 +22,7 @@ import { installDevWarningTrace } from './devWarnings';
 // Before anything formats: Hermes has no Intl.PluralRules (ICU plurals would throw).
 installIntlPolyfills();
 initObservability();
+track('app_opened');
 setupApiClients();
 // Dev only (Ruling T): trace "state update on a component that hasn't mounted yet" to its caller; E2E
 // builds also keep that warning's LogBox toast from covering what Maestro taps.
@@ -68,6 +69,12 @@ function ClearMeOnAccountChange() {
   return null;
 }
 
+/** Phase 6: keeps this device's push token registered with gen (and the box at a Nomad night); foreground handler. */
+function PushRegistration() {
+  usePushRegistration();
+  return null;
+}
+
 /** i18n + server-state providers; renders nothing until the stored session has been read. */
 export function AppProviders({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({ defaultOptions: { queries: { retry: 1 } } }));
@@ -79,12 +86,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    // Takes effect on next launch; Phase 1 reloads via expo-updates instead.
-    const rtl = RTL_LOCALES.has(locale);
-    if (I18nManager.isRTL !== rtl) {
-      I18nManager.allowRTL(rtl);
-      I18nManager.forceRTL(rtl);
-    }
+    syncLayoutDirection(locale);
   }, [locale]);
 
   if (!hydrated) return null;
@@ -101,6 +103,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
           <ClearDiscoverOnSignOut />
           <ClearMeOnAccountChange />
           <VoiceSync />
+          <PushRegistration />
           {children}
         </QueryClientProvider>
       </IntlProvider>

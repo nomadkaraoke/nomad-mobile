@@ -21,6 +21,14 @@ tags:
     id: "connect-card-screenshot"
 - tapOn:
     id: "connect-shot-pick"
+# First upload ever on this install: the Gemini consent card (skipped when already agreed).
+- runFlow:
+    when:
+      visible:
+        id: "screenshot-ai-consent-continue"
+    commands:
+      - tapOn:
+          id: "screenshot-ai-consent-continue"
 - runFlow: ../common/connect-pick-photo.yaml
 - extendedWaitUntil:
     visible:

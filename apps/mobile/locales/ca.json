@@ -1,5 +1,5 @@
 {
   "ios": {
-    "NSMicrophoneUsageDescription": "Permet que Nomad Karaoke et senti cantar per poder mesurar el teu rang vocal. L'àudio no sortirà del teu telèfon."
+    "NSMicrophoneUsageDescription": "Nomad Karaoke utilitza el micròfon per mesurar el teu rang vocal. Si decideixes gravar-te en una sessió de veu, la gravació es penja i es guarda de manera privada (només tu i l'equip de Nomad Karaoke la podeu escoltar), i la pots eliminar en qualsevol moment des de Jo."
   }
 }

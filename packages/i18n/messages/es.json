@@ -778,7 +778,18 @@
     "signInPrompt": "Inicia sesión para comprar créditos",
     "packageCredits": "{credits, plural, one {# crédito} other {# créditos}}",
     "popular": "Populares",
-    "title": "Comprar créditos"
+    "title": "Comprar créditos",
+    "balance": "Tienes {credits, plural, one {# crédito} other {# créditos}}",
+    "buy": "Comprar",
+    "buyFor": "Comprar por {price}",
+    "purchaseFailed": "La compra no se pudo completar. Inténtalo de nuevo.",
+    "referralNote": "Tu descuento por referido del {percent}% se aplica cuando compras en la web.",
+    "webLink": {
+      "default": "Comprar en la web"
+    },
+    "store": {
+      "awaitingApproval": "Esperando aprobación. Tus créditos aparecerán una vez que se apruebe la compra."
+    }
   },
   "duration": {
     "body": "Esta pista dura {duration}, por lo que cuesta {total, plural, one {# crédito} other {# créditos}} en total ({extra} más).",
@@ -1422,7 +1433,12 @@
       "pickMore": "Elegir otras capturas de pantalla",
       "reading": "Leyendo tus capturas de pantalla…",
       "unmatched": "Aún no está en nuestro catálogo de karaoke",
-      "retry": "Intentar de nuevo"
+      "retry": "Intentar de nuevo",
+      "aiConsentBody": "Para encontrar las canciones, tu captura de pantalla se envía a la IA Gemini de Google. Solo se utiliza para leer los nombres de las canciones y no se conserva después.",
+      "aiConsentTitle": "¿Leer tu captura de pantalla con IA?",
+      "aiNote": "La IA Gemini de Google lee las capturas de pantalla y no se conservan.",
+      "aiConsentCancel": "Cancelar",
+      "aiConsentContinue": "Continuar"
     },
     "source": {
       "appleExport": "Historial de Apple Music",
@@ -1483,7 +1499,7 @@
     "alreadyImported": "Ya has importado este archivo, por lo que no había nada nuevo que añadir."
   },
   "permissions": {
-    "microphone": "Permite que Nomad Karaoke te escuche cantar para que pueda medir tu rango vocal. El audio no sale de tu teléfono."
+    "microphone": "Nomad Karaoke utiliza el micrófono para medir tu rango vocal. Si decides grabarte en una sesión de voz, la grabación se sube y se guarda de forma privada (solo tú y el equipo de Nomad Karaoke pueden escucharla), y puedes eliminarla en cualquier momento en Yo."
   },
   "voice": {
     "between": "Entre {low} y {high}",
@@ -2074,5 +2090,92 @@
       "songValue": "{title} · {artist}",
       "rateLimited": "Demasiadas solicitudes a la vez. Inténtalo de nuevo en unos minutos."
     }
+  },
+  "push": {
+    "ask": {
+      "allow": "Activar",
+      "make": {
+        "body": "Te avisaremos cuando esté listo para ver o si hace falta que revises la letra.",
+        "title": "¿Quieres recibir una notificación cuando tu video esté listo?"
+      },
+      "night": {
+        "body": "Te avisaremos cuando seas el siguiente y cuando llegue tu turno de cantar.",
+        "title": "¿Quieres recibir una notificación cuando sea tu turno?"
+      },
+      "notNow": "Ahora no"
+    },
+    "channels": {
+      "jobs": "Tus videos",
+      "tonight": "Noches de Nomad"
+    }
+  },
+  "settings": {
+    "account": {
+      "notifications": "Notificaciones",
+      "row": "Cuenta y notificaciones",
+      "title": "Cuenta y notificaciones"
+    },
+    "notifications": {
+      "askBody": "Activa las notificaciones para enterarte cuando tu video esté listo o necesite tu atención.",
+      "askButton": "Activar notificaciones",
+      "deniedBody": "Las notificaciones están desactivadas para Nomad Karaoke en este teléfono. Actívalas en Configuración para enterarte cuando tus videos estén listos.",
+      "error": "No se pudo guardar ese cambio. Comprueba tu conexión e inténtalo de nuevo.",
+      "night": {
+        "hint": "Cuando seas el siguiente y cuando sea tu turno de cantar.",
+        "label": "Alertas de noche Nomad"
+      },
+      "problems": {
+        "hint": "Cuando algo salga mal con un video.",
+        "label": "Problemas"
+      },
+      "ready": {
+        "hint": "Cuando tu video de karaoke esté listo para ver.",
+        "label": "Video listo"
+      },
+      "review": {
+        "hint": "Cuando las letras necesiten una revisión rápida de tu parte.",
+        "label": "Necesita tu revisión"
+      },
+      "title": "Notificaciones",
+      "openSettings": "Abrir Ajustes",
+      "loadFailed": "No se pudo cargar tu configuración de notificaciones. Comprueba tu conexión e inténtalo de nuevo."
+    }
+  },
+  "deleteAccount": {
+    "appleFailed": "No se pudo confirmar con Apple. Inténtalo de nuevo.",
+    "blocked": {
+      "admin": "Esta es una cuenta de personal, por lo que no se puede eliminar desde la app.",
+      "connect_account": "Tu cuenta está vinculada a una cuenta de cobro, por lo que no se puede eliminar desde la app.",
+      "generic": "No podemos eliminar esta cuenta desde la app.",
+      "order_in_progress": "Tienes un pedido en curso, por lo que tu cuenta aún no se puede eliminar desde la app.",
+      "referral_balance": "Tienes ganancias por referidos que aún no se han pagado, por lo que tu cuenta no se puede eliminar desde la app.",
+      "unavailable": "Eliminar tu cuenta desde la app no está disponible en este momento."
+    },
+    "contactSupport": "Enviar un correo a soporte",
+    "creditsLost": "{count, plural, one {Se perderá # crédito.} other {Se perderán # créditos.}}",
+    "deletedDetails": "Tus datos personales",
+    "deletedDiscover": "Tus datos de música y voz en Discover",
+    "deletedUploads": "Tus archivos subidos",
+    "doneBody": "Tu cuenta se ha eliminado y se han borrado los datos de este teléfono.",
+    "doneTitle": "Tu cuenta fue eliminada",
+    "intro": "Esto eliminará permanentemente tu cuenta de Nomad Karaoke. No se puede deshacer.",
+    "jobsCancelled": "{count, plural, one {Se cancelará # video en curso.} other {Se cancelarán # videos en curso.}}",
+    "keep": "Conservar mi cuenta",
+    "keptRecords": "Registros de trabajos y pagos, que necesitamos para fines contables",
+    "loadError": "No se pudieron cargar los datos de tu cuenta. Comprueba tu conexión e inténtalo de nuevo.",
+    "retryNetwork": "No se pudo eliminar tu cuenta. Comprueba tu conexión e inténtalo de nuevo.",
+    "signedOutTitle": "Has cerrado sesión",
+    "support": "Envíanos un correo a {email} y nos encargaremos de ello.",
+    "confirm": "Eliminar mi cuenta",
+    "deletedHeading": "Lo que eliminamos",
+    "deletedNights": "Tus enlaces de noche Nomad",
+    "deletedRecordings": "Tus grabaciones",
+    "keptHeading": "Lo que conservamos",
+    "keptVideos": "Videos de karaoke ya publicados en YouTube",
+    "ok": "OK",
+    "retryPartWay": "Algo salió mal a mitad del proceso. Por favor, inténtalo de nuevo; la eliminación continuará donde se quedó.",
+    "row": "Eliminar cuenta",
+    "signedOutBody": "Se ha cerrado tu sesión. Si acabas de eliminar tu cuenta, ya no existe. De lo contrario, inicia sesión e inténtalo de nuevo.",
+    "title": "Eliminar tu cuenta"
   }
 }

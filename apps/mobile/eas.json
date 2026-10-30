@@ -1,10 +1,43 @@
 {
   "cli": { "version": ">= 16.0.0", "appVersionSource": "remote" },
   "build": {
+    "base": {
+      "env": {
+        "EXPO_PUBLIC_GEN_API_URL": "https://api.nomadkaraoke.com",
+        "EXPO_PUBLIC_GEN_WEB_URL": "https://gen.nomadkaraoke.com",
+        "EXPO_PUBLIC_DECIDE_API_URL": "https://decide.nomadkaraoke.com",
+        "EXPO_PUBLIC_KJBOX_API_URL": "https://sing.nomadkaraoke.com",
+        "SENTRY_ALLOW_FAILURE": "true"
+      }
+    },
+    "release": {
+      "extends": "base",
+      "env": {
+        "EXPO_PUBLIC_ASSOCIATED_DOMAINS": "1",
+        "EXPO_PUBLIC_PUSH": "1",
+        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_DWuzBOczZnmeAxFCBpuyEFByAGA",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_KEY": "goog_iIeISSotmtDWCILZSHxRNKPwJlp",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://fc42e40b65756724b9992bea21bbbe7d@o4507654072631296.ingest.us.sentry.io/4512318495457280",
+        "EXPO_PUBLIC_POSTHOG_KEY": "phc_nonjuPuxanDJJDiv5Mw9DojJAhGteb42DWiQxVmSjWPE",
+        "EXPO_PUBLIC_POSTHOG_HOST": "https://us.i.posthog.com"
+      }
+    },
     "development": { "developmentClient": true, "distribution": "internal", "channel": "development" },
-    "e2e-test": { "withoutCredentials": true, "ios": { "simulator": true }, "android": { "buildType": "apk" }, "channel": "e2e" },
-    "preview": { "distribution": "internal", "channel": "preview" },
-    "production": { "autoIncrement": true, "channel": "production" }
+    "e2e-test": {
+      "withoutCredentials": true,
+      "ios": { "simulator": true },
+      "android": { "buildType": "apk" },
+      "channel": "e2e",
+      "env": {
+        "EXPO_PUBLIC_PUSH": "0",
+        "EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN": "1",
+        "EXPO_PUBLIC_FAKE_IAP": "1",
+        "EXPO_PUBLIC_FAKE_MIC": "baritone-scale",
+        "EXPO_PUBLIC_FAKE_YT": "1"
+      }
+    },
+    "preview": { "extends": "release", "distribution": "internal", "channel": "preview" },
+    "production": { "extends": "release", "autoIncrement": true, "channel": "production" }
   },
   "submit": { "production": {} }
 }

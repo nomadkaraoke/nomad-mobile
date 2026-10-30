@@ -1,7 +1,7 @@
 import * as decide from '@nomad/api-decide';
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 
-import { useClearMeOnAccountChange } from '../../me/useClearMeOnAccountChange';
+import { clearMeLocalData, useClearMeOnAccountChange } from '../../me/useClearMeOnAccountChange';
 import { useMeOutbox } from '../../me/meOutbox';
 import { useLibrary } from '../../me/useLibrary';
 import { useSetlists } from '../../me/useSetlists';
@@ -128,4 +128,25 @@ it("sign-out drops the cached crowd figures (decide answers them for the viewer'
   client.setQueryData(['decide', A, 'crowd', 'invented band|made up song', null], { singers: 5 });
   act(() => useAuth.setState({ state: { status: 'signedOut' } }));
   expect(client.getQueryCache().findAll({ predicate: (q) => q.queryKey[2] === 'crowd' })).toEqual([]);
+});
+
+it('account deletion (clearMeLocalData) forgets the owner, their caches, unsent Me writes and the loves overlay', async () => {
+  const client = resetMe('a@example.com');
+  api.getLibrary.mockResolvedValue({ status: 'ok', etag: '"a"', items: [li('A', 'Secret') as never] });
+  const wrapper = wrapperFor(client);
+  renderHook(() => useClearMeOnAccountChange(), { wrapper });
+  const lib = renderHook(() => useLibrary(), { wrapper });
+  await waitFor(() => expect(lib.result.current.items).toHaveLength(1));
+  act(() => useLovedOverrides.getState().set({ song_key: 'k_Secret', artist: 'A', title: 'Secret' }, true));
+  act(() => useMeOutbox.getState().enqueue({ key: 'love:k_Secret', op: 'love', song_key: 'k_Secret', artist: 'A', title: 'Secret', loved: true }));
+  expect(appStorage.getString(`me.outbox.v1.${A}`)).toBeTruthy();
+  // wipeLocal signs out first (sessionDead), then clears Me: the owner is read from storage, not the session.
+  act(() => useAuth.setState({ state: { status: 'signedOut' } }));
+  expect(appStorage.getString(`me.outbox.v1.${A}`)).toBeTruthy(); // a lone sign-out keeps it
+  act(() => clearMeLocalData());
+  expect(appStorage.getAllKeys().filter((k) => k.startsWith('me.'))).toEqual([]);
+  expect(useLovedOverrides.getState().byKey).toEqual({});
+  // The same person signing in again gets nothing back.
+  act(() => signIn('a@example.com'));
+  expect(useMeOutbox.getState().items).toEqual([]);
 });
