@@ -19,7 +19,8 @@ other's global fake-config.
 - **iOS:** `macos-26` (Xcode 26.x, "iPhone 17 Pro" simulator), 4 shards; best-effort (a 3-core, 7 GB runner can stall
   under the simulator plus three stacks). The self-hosted lanes below are the default for this repo's PRs.
 - **When:**
-  - every PR runs only the flows its changes affect (path rules in `scripts/e2e-plan-lib.mjs`). An unmapped app or
+  - every PR runs only the flows its changes affect (path rules in `scripts/e2e-plan-lib.mjs`), on iOS and Android
+    (PRs were Android-only for a few days in late October 2026 while the lanes were unhealthy). An unmapped app or
     package path, a dependency change or a change to `maestro/common`, `maestro/scripts` or the E2E scripts runs
     everything; docs and tests run nothing. Add the label **`e2e-full`** to a PR to run every flow.
   - nightly (03:23 ET) and `scripts/e2e-ci.sh run`: the full suite on both platforms.
@@ -38,13 +39,16 @@ scripts/e2e-ci.sh run --platforms ios --filter review-   # narrow it
 scripts/e2e-ci.sh run --affected                  # like a PR run
 scripts/e2e-ci.sh run --gen-ref feat/sess-…       # against an unmerged gen branch (also --decide-ref / --kjbox-ref)
 scripts/e2e-ci.sh pr                              # wait for this branch's newest E2E run (e.g. the PR's) and fetch results
-scripts/e2e-ci.sh results <run id>
+scripts/e2e-ci.sh results <run id>                # the failed shards only; add --all for every shard and flow
 ```
 
-`results` downloads every shard's artifacts into `.e2e-ci/<run id>/e2e-<platform>-<shard>/` (gitignored):
-`junit-<n>.xml`, `debug-<n>/` (Maestro's per-flow screenshots, command JSON and logs; open the failing flow's
-screenshots with the Read tool) and `final.png` (where a failed shard stopped). The job log also prints every stack's
-log on failure (`scripts/ci/setup-stacks.sh logs`). Artifacts are kept 7 days.
+`results` downloads the **failed shards'** artifacts into `.e2e-ci/<run id>/e2e-<platform>-<shard>/` (gitignored):
+`junit-<n>.xml`, `debug-<n>/<flow>/` (Maestro's screenshots, command JSON and logs, kept only for flows that failed,
+including a first try that passed on retry; open the screenshots with the Read tool; logs over 1 MB are gzipped, use
+`zgrep`), `final.png` (where a failed shard stopped) and `android-guard.log` (below). The run's GitHub job summary has
+every shard's pass/fail list. `.e2e-ci` keeps the newest 5 runs (`E2E_CI_KEEP`) within 2 GB (`E2E_CI_MAX_MB`): full
+downloads of every run once filled Andrew's disk (23 GB). The job log also prints the lane's stack logs on failure
+(`scripts/ci/setup-stacks.sh logs`). Artifacts are kept 7 days.
 
 `workflow_dispatch` (so `e2e-ci.sh run`) needs `e2e.yml` on main, which it is once this lands; on a branch that
 changes the workflow, a PR run tests the changed workflow.
@@ -70,6 +74,21 @@ its screen are in the **private** workspace doc `docs/BUILD-HOST.md` (workspace 
   add lanes without measuring.
 - **Offline** (`gh api repos/nomadkaraoke/nomad-mobile/actions/runners`): jobs wait in the queue; unset the variables
   or dispatch with `github` to use hosted runners.
+- **Lane health** (fixed 2026-10-30; nightly runs had gone red on infra alone). Each job:
+  - clears the previous job's reports first. A shard that died early used to upload the lane's *previous* reports,
+    and the summary counted them.
+  - stops the lane's servers **by port** before starting its stacks, and again after the job. Before this, `down`
+    used pidfiles inside the checkouts, which `actions/checkout` wipes. Lane 2 kept serving a 3-day-old gen.
+  - boots the emulator only once the machine has room (`scripts/ci/mem-gate.sh`, 5 GB available, waiting up to 15
+    min). An emulator booted while another lane's xcodebuild ran froze at boot. Every adb wait is bounded, and a
+    failed boot is retried once.
+  - runs an **Android guard** in `e2e-local.sh` (locally too). An emulator stalled under load drops its adb transport
+    (Maestro: `DeviceServerDiedException`), and the reconnect wipes every `adb reverse` rule, so every later flow lost
+    the stacks: "Can't reach search", sign-in going nowhere, `make-list` missing. The guard reconnects, re-adds the
+    rules and, on the lanes, reboots a dead emulator and reinstalls the app. Its events are in the shard's
+    `android-guard.log`, and the summary prints them per shard ("🛠 shard 1 infra: lost adb reverse ×2"), so infra
+    noise is visible instead of looking like flow failures.
+  - gives Metro its own `TMPDIR` per port: two lanes' `--clear` raced on one `metro-cache` (`ENOTEMPTY`).
 - Lanes work locally too: `LANE=1 scripts/e2e-local.sh --platform ios make-4` runs beside a lane-0 run on another
   simulator (needs gen/decide/kjbox with the lane env overrides, all merged 2026-10-26).
 
@@ -84,6 +103,12 @@ all outside contributors), and the self-hosted runners refuse fork PRs themselve
 
 Still the right tool while writing or debugging one flow (Maestro MCP, quick reruns). Run only what you are working
 on, then let CI run the suite. See CLAUDE.md § E2E for the stacks, env and gotchas.
+
+- **Nothing under test reaches production.** `e2e-local.sh` re-runs itself under an allowlisted environment (tools,
+  paths, CI settings and its own knobs: `LANE`, `GEN_*`, `E2E_*`, `LOCAL_STACK_*`, …), so the stacks it starts never see
+  a developer's direnv credentials or prod settings (the real flacfetch URL and key, `GOOGLE_CLOUD_PROJECT`, webhooks).
+  A knob the stacks need must be added to that list. Every stack's partner URLs are pinned to the lane's loopback
+  ports (`scripts/e2e-lane.sh`).
 
 - **Device lock:** `scripts/e2e-local.sh` waits for the device it uses, the gen stack (its search knobs and step
   delay are global fake-config) and, with Maestro older than 2.2, the fixed iOS driver port. Parallel sessions
