@@ -44,6 +44,10 @@ if [[ "$platform" == ios ]]; then
     udid="$(xcrun simctl create "$name" "com.apple.CoreSimulator.SimDeviceType.${model// /-}" "$runtime")"
   fi
   echo "Simulator: $name on ${runtime##*.} ($udid)"
+  # Room for the simulator first (scripts/ci/mem-gate.sh), unless it is already booted.
+  if [[ "${RUNNER_ENVIRONMENT:-}" == self-hosted ]] && ! xcrun simctl list devices booted | grep -q "$udid"; then
+    "$ROOT/scripts/ci/mem-gate.sh" 4000
+  fi
   xcrun simctl boot "$udid" 2>/dev/null || true
   xcrun simctl bootstatus "$udid" -b >/dev/null
   # A fresh simulator's dev launcher has no last-opened server and its discovery never finds Metro on CI ("Searching
@@ -62,8 +66,12 @@ if [[ "$platform" == ios ]]; then
 else
   # The lane's own emulator (scripts/e2e-lane.sh): a self-hosted machine runs one per lane.
   export ANDROID_SERIAL
-  adb -s "$ANDROID_SERIAL" wait-for-device
+  timeout 300 adb -s "$ANDROID_SERIAL" wait-for-device
   adb -s "$ANDROID_SERIAL" install -r -g "$app" >/dev/null
+  # e2e-local.sh's Android guard: reconnect / re-reverse always; on the self-hosted lanes (our own emulator,
+  # scripts/ci/android-emulator.sh) also reboot a dead emulator and reinstall the app. Its events go in the report dir.
+  export E2E_APP_APK="$(cd "$(dirname "$app")" && pwd)/$(basename "$app")" E2E_GUARD_LOG="$out/android-guard.log"
+  if [[ "${RUNNER_ENVIRONMENT:-}" == self-hosted ]]; then export E2E_EMULATOR_RESTART=1; fi
 fi
 
 status=0

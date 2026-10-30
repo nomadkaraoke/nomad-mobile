@@ -190,7 +190,9 @@ retry_curl -X POST -H 'Content-Type: application/json' -d '{"email":"e2e-probe@e
 needs_voice() {
   if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == voice* || "$SCREEN" == fit* || "$SCREEN" == store* ]]; return; fi
   # The selected flow files (FILTER minus --skip), like needs_kjbox: `--skip voice` needs no voice routes.
-  list_flows | grep -qE '/(voice|fit)[^/]*\.yaml$'
+  # Not grep -q: it exits at the first match, list_flows' next echo then fails (EPIPE; CI ignores SIGPIPE) and pipefail
+  # made a match look like no match ("echo: write error: Broken pipe" in every CI log).
+  list_flows | grep -E '/(voice|fit)[^/]*\.yaml$' >/dev/null
 }
 if needs_voice; then
   code="$(curl -s -m 5 -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{}' \
@@ -245,7 +247,7 @@ fi
 #     pushes instead of sending them; the app registers a fake token, EXPO_PUBLIC_PUSH=0). The notify flows assert
 #     what was "sent", so they start from empty outboxes. Only when the run has notify flows: gen's outbox is shared
 #     by every session on that stack (its rows are per email, the box's are not).
-if list_flows | grep -q '/notify-'; then
+if list_flows | grep '/notify-' >/dev/null; then
   curl -sf -m 5 -o /dev/null -X DELETE "$STACK/api/test/push-outbox" ||
     echo "warning: couldn't clear gen's push outbox at $STACK (gen older than its Expo push sink?)" >&2
   if [[ "$NEED_KJBOX" == 1 ]]; then
@@ -254,13 +256,13 @@ if list_flows | grep -q '/notify-'; then
   fi
 fi
 
-# 3. Device prep.
-if [[ "$PLATFORM" == android ]]; then
-  SERIAL="${ANDROID_SERIAL:-emulator-5554}"
-  adb -s "$SERIAL" wait-for-device
+# Android device prep, also re-run by the guard below after the emulator comes back.
+REVERSE_PORTS=("$GEN_PORT" "$GEN_WEB_PORT" "$SEARCH_PORT" "$DECIDE_PORT" "$KJBOX_PORT")
+android_reverse() { local port; for port in "${REVERSE_PORTS[@]}"; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done; }
+android_prep() {
   # An AVD left in airplane mode (a manual offline check) can't reach Metro on 10.0.2.2 (ENETUNREACH on every launch).
   adb -s "$SERIAL" shell cmd connectivity airplane-mode disable >/dev/null 2>&1 || true
-  for port in "$GEN_PORT" "$GEN_WEB_PORT" "$SEARCH_PORT" "$DECIDE_PORT" "$KJBOX_PORT"; do adb -s "$SERIAL" reverse "tcp:$port" "tcp:$port" >/dev/null; done
+  android_reverse
   # Skip Chrome's first-run screen inside the Custom Tab (the flows also tap past it if it shows).
   adb -s "$SERIAL" shell 'echo "_ --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line'
   adb -s "$SERIAL" shell am set-debug-app --persistent com.android.chrome >/dev/null
@@ -268,6 +270,54 @@ if [[ "$PLATFORM" == android ]]; then
   # so make the app the user-selected handler for the night-link hosts (Android 12+), else a chooser shows.
   adb -s "$SERIAL" shell pm set-app-links-user-selection --user 0 --package com.nomadkaraoke.mobile true \
     kjbox.cc www.kjbox.cc sing.nomadkaraoke.com >/dev/null 2>&1 || true
+}
+# The Android guard: the adb transport can drop mid-run (an emulator stalled under load goes "device offline" and
+# Maestro reports DeviceServerDiedException), and the reconnect wipes every `adb reverse` rule, so every later flow lost
+# the stacks ("Can't reach search right now", sign-in going nowhere: 15 flows after review-12 in the 2026-10-30 nightly).
+# Every few seconds it reconnects an offline transport and re-adds missing reverse rules; with E2E_EMULATOR_RESTART=1
+# (CI, the lane's own emulator, scripts/ci/android-emulator.sh) it also reboots an emulator whose process died and
+# reinstalls E2E_APP_APK. Events go to stderr and $E2E_GUARD_LOG (CI: the shard's report dir).
+GUARD_PID=""
+guard_log() { echo "android-guard $(date '+%H:%M:%S'): $*" | tee -a "${E2E_GUARD_LOG:-/dev/null}" >&2; }
+android_guard() {
+  local state rules port missing offline_since=""
+  while sleep "${E2E_GUARD_INTERVAL:-4}"; do
+    state="$(adb -s "$SERIAL" get-state 2>/dev/null || echo gone)"
+    if [[ "$state" != device ]]; then
+      if [[ "${E2E_EMULATOR_RESTART:-}" == 1 ]] && ! "$ROOT/scripts/ci/android-emulator.sh" alive; then
+        guard_log "$SERIAL: emulator process gone; rebooting it"
+        if ANDROID_SERIAL="$SERIAL" "$ROOT/scripts/ci/android-emulator.sh" start >&2; then
+          [[ -z "${E2E_APP_APK:-}" ]] || adb -s "$SERIAL" install -r -g "$E2E_APP_APK" >/dev/null || guard_log "reinstall failed"
+          android_prep || true
+          guard_log "$SERIAL: emulator back"
+        fi
+        offline_since=""
+        continue
+      fi
+      [[ -n "$offline_since" ]] || { offline_since=$SECONDS; guard_log "$SERIAL is $state; reconnecting"; }
+      adb -s "$SERIAL" reconnect >/dev/null 2>&1 || true
+      continue
+    fi
+    [[ -z "$offline_since" ]] || { guard_log "$SERIAL back after $((SECONDS - offline_since)) s"; offline_since=""; }
+    rules="$(adb -s "$SERIAL" reverse --list 2>/dev/null || true)"
+    missing=""
+    for port in "${REVERSE_PORTS[@]}"; do grep -q "tcp:$port tcp:$port" <<<"$rules" || missing+=" $port"; done
+    if [[ -n "$missing" ]]; then
+      guard_log "$SERIAL lost adb reverse for$missing; re-adding"
+      android_reverse 2>/dev/null || guard_log "re-adding reverse rules failed"
+    fi
+  done
+}
+
+# 3. Device prep.
+if [[ "$PLATFORM" == android ]]; then
+  SERIAL="${ANDROID_SERIAL:-emulator-5554}"
+  # Bounded where `timeout` exists (an unbounded wait hung CI shards until the job timeout).
+  if command -v timeout >/dev/null; then
+    timeout 300 adb -s "$SERIAL" wait-for-device || { echo "no adb device $SERIAL within 300 s" >&2; exit 1; }
+  else adb -s "$SERIAL" wait-for-device; fi
+  android_prep
+  if [[ "${E2E_GUARD:-1}" == 1 ]]; then android_guard & GUARD_PID=$!; fi
   DEVICE="$SERIAL"
 else
   DEVICE="${IOS_DEVICE:-iPhone 17 Pro}"
@@ -294,6 +344,7 @@ fi
 #    decide ignores the pitch and the type comes from the quiz answers alone (voice-session-1 then ends at Tenor).
 METRO_PID=""
 if [[ "$METRO_PORT" == 8081 ]]; then METRO_LOG=/tmp/nomad-mobile-metro.log; else METRO_LOG="/tmp/nomad-mobile-metro-$METRO_PORT.log"; fi
+METRO_TMP="${TMPDIR:-/tmp}"; METRO_TMP="${METRO_TMP%/}/nomad-metro-$METRO_PORT"
 metro_up() { curl -sf -m 2 "http://127.0.0.1:$METRO_PORT/status" | grep -q running; }
 kill_tree() {
   local c
@@ -314,6 +365,7 @@ stop_metro() {
   METRO_PID=""
 }
 cleanup() {
+  [[ -z "$GUARD_PID" ]] || kill "$GUARD_PID" 2>/dev/null || true
   stop_metro
   [[ -z "$CONTROL_PID" ]] || kill "$CONTROL_PID" 2>/dev/null || true
   release_locks
@@ -324,7 +376,10 @@ start_metro() {
   echo "Starting Metro (logs: $METRO_LOG) $*"
   # --clear: the EXPO_PUBLIC_* values are baked into cached transforms, and new special route files
   # (e.g. +native-intent) need a fresh route context.
-  (cd "$ROOT/apps/mobile" && exec env EXPO_PUBLIC_GEN_API_URL="$STACK" EXPO_PUBLIC_GEN_WEB_URL="$WEB" \
+  # Its own TMPDIR per Metro port: Metro's transform cache and file map live in os.tmpdir(), and two lanes' `--clear`
+  # at once raced on the shared metro-cache ("ENOTEMPTY: directory not empty, rmdir …/metro-cache/…").
+  mkdir -p "$METRO_TMP"
+  (cd "$ROOT/apps/mobile" && exec env TMPDIR="$METRO_TMP" EXPO_PUBLIC_GEN_API_URL="$STACK" EXPO_PUBLIC_GEN_WEB_URL="$WEB" \
     EXPO_PUBLIC_DECIDE_API_URL="$DECIDE" EXPO_PUBLIC_DECIDE_SEARCH_URL="$SEARCH" EXPO_PUBLIC_KJBOX_API_URL="$KJBOX_APP" \
     EXPO_PUBLIC_FAKE_SOCIAL_SIGNIN=1 EXPO_PUBLIC_FAKE_MIC=baritone-scale EXPO_PUBLIC_FAKE_YT=1 \
     EXPO_PUBLIC_FAKE_YT_SECONDS=40 EXPO_PUBLIC_FAKE_IAP=1 EXPO_PUBLIC_PUSH=0 CI=1 "$@" \
