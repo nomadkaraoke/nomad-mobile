@@ -28,6 +28,17 @@ adb_() { "$SDK/platform-tools/adb" -s "$ANDROID_SERIAL" "$@"; }
 
 # The lane's qemu process (adb can't stop an emulator whose transport is offline).
 qemu_pid() { pgrep -f "qemu-system.*-avd $AVD( |$)" 2>/dev/null | head -1 || true; }
+# The lane's own netsimd (-netsim-args --instance=LANE+1). After an emulator crash (SIGSEGV mid-shard, 2026-10-31) both
+# reboots on that lane froze at once ("hanging thread 'QEMU2 CPU0 thread'"), the same symptom as the frozen boots of
+# 2026-10-30: something the dead emulator left behind wedges the next boot. stop clears the lane's netsimd and the
+# AVD's lock files; a failed boot prints what was still around (diagnose).
+netsim_pids() { pgrep -f "netsim.*instance[= ]$((LANE + 1))( |$)" 2>/dev/null || true; }
+diagnose() {
+  echo "--- emulator $AVD diagnostics" >&2
+  pgrep -fl "netsim|qemu-system" 2>/dev/null | cut -c1-220 >&2 || true
+  ls -la "$HOME/.android/avd/$AVD.avd/"*.lock 2>/dev/null >&2 || echo "(no AVD lock files)" >&2
+  vm_stat 2>/dev/null | head -6 >&2 || true
+}
 # AVD config keys, set (not appended: the older script appended a second hw.ramSize to the avdmanager default).
 set_cfg() {
   local cfg="$HOME/.android/avd/$AVD.avd/config.ini" k="$1" v="$2"
@@ -67,6 +78,7 @@ start() {
   for try in 1 2; do
     boot && break
     echo "emulator $AVD: boot attempt $try failed; killing it" >&2
+    diagnose
     stop
     (( try == 2 )) && exit 1
     "$ROOT/scripts/ci/mem-gate.sh"
@@ -90,9 +102,16 @@ start() {
 stop() {
   adb_ emu kill >/dev/null 2>&1 || true
   local pid i
-  for i in $(seq 1 10); do pid="$(qemu_pid)"; [[ -n "$pid" ]] || return 0; sleep 1; done
-  kill "$pid" 2>/dev/null || true; sleep 3
-  pid="$(qemu_pid)"; [[ -z "$pid" ]] || kill -9 "$pid" 2>/dev/null || true
+  for i in $(seq 1 10); do pid="$(qemu_pid)"; [[ -n "$pid" ]] || break; sleep 1; done
+  if [[ -n "$pid" ]]; then
+    kill "$pid" 2>/dev/null || true; sleep 3
+    pid="$(qemu_pid)"; [[ -z "$pid" ]] || kill -9 "$pid" 2>/dev/null || true
+  fi
+  # This lane's netsimd and the AVD's locks (see netsim_pids): never another lane's.
+  for pid in $(netsim_pids); do kill "$pid" 2>/dev/null || true; done
+  sleep 1
+  for pid in $(netsim_pids); do kill -9 "$pid" 2>/dev/null || true; done
+  rm -f "$HOME/.android/avd/$AVD.avd/"*.lock 2>/dev/null || true
 }
 
 case "${1:-}" in

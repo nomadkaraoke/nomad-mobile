@@ -298,16 +298,21 @@ android_prep() {
 GUARD_PID=""
 guard_log() { echo "android-guard $(date '+%H:%M:%S'): $*" | tee -a "${E2E_GUARD_LOG:-/dev/null}" >&2; }
 android_guard() {
-  local state rules port missing offline_since=""
+  local state rules port missing offline_since="" reboots=0
   while sleep "${E2E_GUARD_INTERVAL:-4}"; do
     state="$(adb -s "$SERIAL" get-state 2>/dev/null || echo gone)"
     if [[ "$state" != device ]]; then
       if [[ "${E2E_EMULATOR_RESTART:-}" == 1 ]] && ! "$ROOT/scripts/ci/android-emulator.sh" alive; then
+        # One reboot per run: a lane that can't boot again won't on the next try either (and each try is minutes).
+        (( reboots < 1 )) || { guard_log "$SERIAL: emulator gone again; not rebooting twice"; sleep 60; continue; }
+        reboots=$((reboots + 1))
         guard_log "$SERIAL: emulator process gone; rebooting it"
         if ANDROID_SERIAL="$SERIAL" "$ROOT/scripts/ci/android-emulator.sh" start >&2; then
           [[ -z "${E2E_APP_APK:-}" ]] || adb -s "$SERIAL" install -r -g "$E2E_APP_APK" >/dev/null || guard_log "reinstall failed"
           android_prep || true
           guard_log "$SERIAL: emulator back"
+        else
+          guard_log "$SERIAL: emulator reboot failed"
         fi
         offline_since=""
         continue
