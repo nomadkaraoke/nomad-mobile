@@ -227,6 +227,15 @@ jobs:
         name: Clear the previous job's reports
         working-directory: .
         run: rm -rf e2e-out stack-logs
+      # Self-hosted: the machine's top memory footprints (MEM includes swapped pages, which RSS hides) and swap, to
+      # find what grows over days (swap reached 47 of 48 GB on 2026-10-31, with emulators crashing).
+      - &host_memory
+        name: Host memory (self-hosted diagnostics)
+        if: runner.environment == 'self-hosted'
+        working-directory: .
+        run: |
+          sysctl vm.swapusage
+          top -l 1 -o mem -n 15 -stats pid,mem,cmprs,command | tail -16
       - &checkout_app
         uses: actions/checkout@v4
         with:
@@ -389,6 +398,7 @@ jobs:
         shard: ${{ fromJSON(needs.plan.outputs.ios) }}
     steps:
       - *clean_reports
+      - *host_memory
       - *checkout_app
       - *checkout_gen
       - *checkout_decide
