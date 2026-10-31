@@ -170,6 +170,12 @@ logs() {
     echo "--- last 200 lines ---"
     tail -n 200 "$f"
     echo "::endgroup::"
+    # The whole log goes in the shard's artifact too (gzipped): the job log keeps only warnings and the tail, which
+    # missed e.g. gen not answering kjbox's /api/users/me for 30 s mid-shard (tonight-1, 2026-10-31).
+    if [[ -d "$WS/e2e-out" ]]; then
+      mkdir -p "$WS/e2e-out/stack-logs"
+      gzip -c "$f" >"$WS/e2e-out/stack-logs/$(echo "${f#/}" | tr '/' '_').gz" 2>/dev/null || true
+    fi
   done
 }
 
