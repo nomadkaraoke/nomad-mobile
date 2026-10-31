@@ -57,8 +57,8 @@ Play App Signing re-signs releases with Google's app signing key (public):
 
 Read the upload key's any time through the EAS GraphQL API (`androidAppCredentials.androidAppBuildCredentialsList.androidKeystore
 { sha1CertificateFingerprint sha256CertificateFingerprint }`); the app signing key's are in Play Console >
-App integrity. The Google OAuth Android client needs BOTH SHA-1s (upload key for sideloaded and internal
-builds, app signing key for Play installs). Both clients exist since 2026-10-30 (ids in CLAUDE.md
+App integrity. Google sign-in needs one OAuth Android client per certificate (an Android client holds a single
+package + SHA-1 pair): one for the upload key (sideloaded and EAS builds), one for the app signing key (Play installs). Both clients exist since 2026-10-30 (ids in CLAUDE.md
 § App identity). Push on Play installs: the Firebase Android API key's Android restriction already
 allows both SHA-1s (upload and app signing, checked 2026-10-31 through `apikeys.googleapis.com`), which is
 what FCM registration needs. The Firebase app's own fingerprint list (upload key only) matters only for
