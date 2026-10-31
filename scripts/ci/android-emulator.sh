@@ -40,9 +40,10 @@ boot() { # -> 0 when booted within BOOT_S
   nohup "$SDK/emulator/emulator" -avd "$AVD" -port "$EMULATOR_PORT" -no-window -no-audio -no-boot-anim \
     -no-snapshot -wipe-data -memory "${EMULATOR_RAM_MB:-3072}" -gpu "${EMULATOR_GPU:-swiftshader_indirect}" \
     -netsim-args "--instance=$((LANE + 1))" >"$log" 2>&1 &
-  local deadline=$((SECONDS + ${BOOT_S:-300}))
+  # The launcher's own pid: qemu starts a moment after it, so "no qemu yet" isn't "exited".
+  local launcher=$! deadline=$((SECONDS + ${BOOT_S:-300}))
   until [[ "$(adb_ get-state 2>/dev/null)" == device ]]; do
-    if (( SECONDS >= deadline )) || [[ -z "$(qemu_pid)" ]]; then
+    if (( SECONDS >= deadline )) || { ! kill -0 "$launcher" 2>/dev/null && [[ -z "$(qemu_pid)" ]]; }; then
       echo "emulator $AVD: no adb device within ${BOOT_S:-300} s (or it exited)" >&2; tail -15 "$log" >&2; return 1
     fi
     sleep 3
