@@ -9,7 +9,9 @@ name: review-6-stems-pending
       ACTION: setup
       STACK: ${STACK}
       NAME: review6
-      USER_CONFIG: '{"stems_delay_seconds":60}'
+      # 120 s, not 60: on a loaded Android lane the review opened 64 s after the job started, the stems had already
+      # landed and there was nothing pending to see (2026-10-31).
+      USER_CONFIG: '{"stems_delay_seconds":120}'
 - runScript:
     file: ../scripts/stack.js
     env:
@@ -36,11 +38,11 @@ name: review-6-stems-pending
     id: "review-finish-submit"
     enabled: false
 - takeScreenshot: ${REVIEW_SHOTS}/review-6-waiting-stems
-# The stems land (≤ 60 s after the job started) and the chooser replaces the spinner.
+# The stems land (≤ 120 s after the job started) and the chooser replaces the spinner.
 - extendedWaitUntil:
     visible:
       id: "review-choice-clean"
-    timeout: 120000
+    timeout: 180000
 - assertNotVisible:
     id: "review-finish-waiting-hint"
 - runFlow: ../common/finish-review.yaml

@@ -104,6 +104,34 @@ if [[ "$status" != 0 && "${E2E_RETRY:-1}" == 1 ]]; then
     MAESTRO_TEST_ARGS="--format junit --output $out/junit-retry-{run}.xml --debug-output $out/debug-retry-{run} --flatten-debug-output" \
       "$ROOT/scripts/e2e-local.sh" --platform "$platform" --flows "$failed" || status=$?
   fi
+  # A second retry only for flows whose retry died of the device, not of the app: the adb transport dropped
+  # ("device offline" / "not found", Maestro's DeviceServerDied or "Unknown error"). Those say nothing about the app,
+  # and on a loaded lane a retry could land on the next drop (tonight-2, 2026-10-31). The report still shows them.
+  if [[ "$status" != 0 ]]; then
+    infra="$(node -e '
+      const fs = require("fs"), dir = process.argv[1], names = new Set();
+      const infra = /device offline|not found|DeviceServerDied|Unknown error|UNAVAILABLE/;
+      for (const f of fs.readdirSync(dir).filter((x) => /^junit-retry-\d+\.xml$/.test(x))) {
+        const xml = fs.readFileSync(`${dir}/${f}`, "utf8");
+        for (const m of xml.matchAll(/<testcase\b[^>]*?name="([^"]+)"[^>]*?(\/>|>([\s\S]*?)<\/testcase>)/g))
+          if (/<(failure|error)\b/.test(m[3] || "") && infra.test(m[3] || "")) names.add(m[1]);
+      }
+      console.log([...names].join(","));' "$out")"
+    if [[ -n "$infra" ]]; then
+      echo "Retrying flows that failed on the device, not the app, once more: $infra"
+      MAESTRO_TEST_ARGS="--format junit --output $out/junit-retry2-{run}.xml --debug-output $out/debug-retry2-{run} --flatten-debug-output" \
+        "$ROOT/scripts/e2e-local.sh" --platform "$platform" --flows "$infra" && {
+          # Passed now: the shard passes if nothing else failed in the first retry.
+          rest="$(node -e '
+            const fs = require("fs"), dir = process.argv[1], bad = new Set(), ok = new Set(process.argv[2].split(","));
+            for (const f of fs.readdirSync(dir).filter((x) => /^junit-retry-\d+\.xml$/.test(x)))
+              for (const m of fs.readFileSync(`${dir}/${f}`, "utf8").matchAll(/<testcase\b[^>]*?name="([^"]+)"[^>]*?(\/>|>([\s\S]*?)<\/testcase>)/g))
+                if (/<(failure|error)\b/.test(m[3] || "") && !ok.has(m[1])) bad.add(m[1]);
+            console.log([...bad].join(","));' "$out" "$infra")"
+          [[ -n "$rest" ]] || status=0
+        }
+    fi
+  fi
 fi
 # Simulator / emulator screenshots of where the last flow stopped, for a failed shard.
 if [[ "$status" != 0 ]]; then

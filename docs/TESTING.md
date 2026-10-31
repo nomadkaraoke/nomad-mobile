@@ -89,6 +89,16 @@ its screen are in the **private** workspace doc `docs/BUILD-HOST.md` (workspace 
     `android-guard.log`, and the summary prints them per shard ("🛠 shard 1 infra: lost adb reverse ×2"), so infra
     noise is visible instead of looking like flow failures.
   - gives Metro its own `TMPDIR` per port: two lanes' `--clear` raced on one `metro-cache` (`ENOTEMPTY`).
+  - resets its lane's Firestore project and GCS bucket (gen's `/api/test/reset`, keeping the seed themes) before
+    decide starts. Nothing cleared them before: every flow's users, jobs and fake media piled up for days in the
+    shared emulators (fake-gcs-server keeps objects in RAM), and the build host reached 47 of 48 GB swap.
+  - on `android-emulator.sh stop`, also clears the lane's netsimd and the AVD's lock files. After an emulator crash,
+    the reboots on that lane froze at once. A failed boot prints what was left behind.
+  - logs the host's top memory footprints and swap (step "Host memory"); a failed shard uploads its lane's full
+    stack logs, gzipped, in its artifact (`stack-logs/`).
+- **Retries:** a shard retries its failed flows once, then retries once more any flow whose retry died of the device
+  (adb `device offline` / `not found`, `DeviceServerDied`, Maestro's "Unknown error"). Both show as ⚠️ flaky with
+  the first error, never as passes.
 - Lanes work locally too: `LANE=1 scripts/e2e-local.sh --platform ios make-4` runs beside a lane-0 run on another
   simulator (needs gen/decide/kjbox with the lane env overrides, all merged 2026-10-26).
 

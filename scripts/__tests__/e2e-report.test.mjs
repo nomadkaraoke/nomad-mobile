@@ -1,5 +1,9 @@
 // scripts/ci/e2e-report.mjs: JUnit parsing and the Android guard's infra summary.
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { test } from 'node:test';
 
 import { guardSummary, parseJunit } from '../ci/e2e-report.mjs';
@@ -34,4 +38,17 @@ test('guardSummary counts the guard events by kind', () => {
   ].join('\n');
   assert.equal(guardSummary(log), 'lost adb reverse ×2, adb offline ×1, emulator died and was rebooted ×1');
   assert.equal(guardSummary('android-guard 1: emulator-5554 back after 3 s\n'), '');
+});
+
+test('the summary counts a flow that passed on the device-death retry (junit-retry2) as flaky, not failed', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'e2e-report-'));
+  const shard = join(dir, 'e2e-android-1');
+  mkdirSync(shard);
+  const fail = (msg) => `<testcase id="t" name="tonight-2" time="5"><failure message="${msg}"/></testcase>`;
+  writeFileSync(join(shard, 'junit-1.xml'), junit('emulator-5556', fail('Unknown error') + '<testcase id="m" name="make-1" time="9"/>'));
+  writeFileSync(join(shard, 'junit-retry-1.xml'), junit('emulator-5556', fail('Command failed: device offline')));
+  writeFileSync(join(shard, 'junit-retry2-1.xml'), junit('emulator-5556', '<testcase id="t" name="tonight-2" time="5"/>'));
+  const out = execFileSync('node', [new URL('../ci/e2e-report.mjs', import.meta.url).pathname, dir], { encoding: 'utf8' });
+  assert.match(out, /### android: 2\/2 passed/);
+  assert.match(out, /⚠️ flaky `tonight-2` \(shard 1\): passed on retry; first run: Unknown error/);
 });

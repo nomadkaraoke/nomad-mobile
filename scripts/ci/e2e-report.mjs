@@ -61,8 +61,9 @@ function main(dir) {
       if (g) guard.set(Number(m[2]), g);
     }
     const first = files.filter((x) => /^junit-\d+\.xml$/.test(x)).flatMap((f) => parseJunit(readFileSync(join(dir, d, f), 'utf8'), m[1], Number(m[2])));
-    // run-shard.sh retries failed flows once (junit-retry-<n>.xml): passed on retry = flaky.
-    const retried = new Map(files.filter((x) => /^junit-retry-\d+\.xml$/.test(x))
+    // run-shard.sh retries failed flows once (junit-retry-<n>.xml), and device-died ones once more (junit-retry2-<n>.xml,
+    // read last so it wins): passed on a retry = flaky.
+    const retried = new Map(files.filter((x) => /^junit-retry2?-\d+\.xml$/.test(x)).sort()
       .flatMap((f) => parseJunit(readFileSync(join(dir, d, f), 'utf8'), m[1], Number(m[2]))).map((r) => [r.flow, r]));
     for (const r of first) {
       const again = retried.get(r.flow);

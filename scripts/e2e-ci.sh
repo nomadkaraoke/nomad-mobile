@@ -48,7 +48,7 @@ trim_passing() {
   local shard="$1" keep
   keep="$(node -e '
     const fs = require("fs"), dir = process.argv[1], bad = new Set();
-    for (const f of fs.readdirSync(dir).filter((x) => /^junit-(retry-)?\d+\.xml$/.test(x)))
+    for (const f of fs.readdirSync(dir).filter((x) => /^junit-(retry2?-)?\d+\.xml$/.test(x)))
       for (const m of fs.readFileSync(`${dir}/${f}`, "utf8").matchAll(/<testcase\b[^>]*?name="([^"]+)"[^>]*?(\/>|>([\s\S]*?)<\/testcase>)/g))
         if (/<(failure|error)\b/.test(m[3] || "")) bad.add(m[1]);
     console.log([...bad].join("\n"));' "$shard")"
