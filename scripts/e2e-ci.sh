@@ -73,7 +73,7 @@ results() {
       | .name | capture("^(?<p>ios|android) (?<n>[0-9]+)") | "e2e-\(.p)-\(.n)"'))
   fi
   for n in ${names[@]+"${names[@]}"}; do
-    gh run download "$id" -R "$REPO" -n "$n" -D "$dir/$n" 2>/dev/null || echo "($n: no artifact)" >&2
+    gh run download "$id" -R "$REPO" -n "$n" -D "$dir/$n" 2>/dev/null || { echo "($n: no artifact)" >&2; continue; }
     [[ "$all" == --all ]] || trim_passing "$dir/$n"
   done
   # Device and driver logs are most of the bytes (437 of 511 MB on one nightly): gzip the big ones (zgrep / zless).
