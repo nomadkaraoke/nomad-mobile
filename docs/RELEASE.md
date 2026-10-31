@@ -21,10 +21,10 @@ Secret Manager (project `nomadkaraoke`); none is in this repo.
 | RevenueCat | Free | public SDK keys: iOS `appl_DWuzBOczZnmeAxFCBpuyEFByAGA`, Android `goog_iIeISSotmtDWCILZSHxRNKPwJlp` | App Store and Play Store apps created. Play credentials valid and Google real-time developer notifications connected. App Store in-app purchase key still to upload |
 | Apple Developer Program | Paid | team `55B76HN73D` | Conversion from an Individual to an Organization (Nomad Karaoke LLC) requested; pending with Apple |
 | App Store Connect | n/a | bundle `com.nomadkaraoke.mobile`, SKU `nomad-karaoke-ios` | Blocked on accepting the new Paid Applications agreement (account holder). Then: app record, TestFlight group, Small Business Program |
-| Google Play Console | One-off fee | organization account "Nomad Karaoke LLC"; app "Nomad Karaoke", package `com.nomadkaraoke.mobile` | App created, internal testing release 1.0.0 (3) rolled out. In-app products wait for a Google Payments merchant account |
+| Google Play Console | One-off fee | organization account "Nomad Karaoke LLC"; app "Nomad Karaoke", package `com.nomadkaraoke.mobile` | App created, internal testing release 1.0.0 (4) rolled out (2026-10-31). Real-time developer notifications go to Pub/Sub `projects/nomadkaraoke/topics/Play-Store-Notifications` (all one-time products), which RevenueCat consumes; Play's publish grant is IaC in gen (`infrastructure/modules/play_rtdn.py`). In-app products wait for a Google Payments merchant account |
 
 Store credentials still to create once the store accounts allow it: an App Store Connect API key (EAS
-Submit and RevenueCat) and the Google OAuth Android clients (§ Android signing).
+Submit and RevenueCat).
 
 ## Build profiles (`apps/mobile/eas.json`)
 
@@ -58,8 +58,8 @@ Play App Signing re-signs releases with Google's app signing key (public):
 Read the upload key's any time through the EAS GraphQL API (`androidAppCredentials.androidAppBuildCredentialsList.androidKeystore
 { sha1CertificateFingerprint sha256CertificateFingerprint }`); the app signing key's are in Play Console >
 App integrity. The Google OAuth Android client needs BOTH SHA-1s (upload key for sideloaded and internal
-builds, app signing key for Play installs). TODO: create the two OAuth Android clients
-(package `com.nomadkaraoke.mobile`) and add the app signing SHA-1/SHA-256 to the Firebase Android app.
+builds, app signing key for Play installs). Both clients exist since 2026-10-30 (ids in CLAUDE.md
+§ App identity). TODO: add the app signing SHA-1/SHA-256 to the Firebase Android app.
 
 EAS environment variable `SENTRY_AUTH_TOKEN` (visibility: secret) in the `production` and `preview`
 environments uploads source maps.
