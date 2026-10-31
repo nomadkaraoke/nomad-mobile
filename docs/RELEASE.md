@@ -59,13 +59,17 @@ Read the upload key's any time through the EAS GraphQL API (`androidAppCredentia
 { sha1CertificateFingerprint sha256CertificateFingerprint }`); the app signing key's are in Play Console >
 App integrity. The Google OAuth Android client needs BOTH SHA-1s (upload key for sideloaded and internal
 builds, app signing key for Play installs). Both clients exist since 2026-10-30 (ids in CLAUDE.md
-§ App identity). TODO: add the app signing SHA-1/SHA-256 to the Firebase Android app.
+§ App identity). Push on Play installs: the Firebase Android API key's Android restriction already
+allows both SHA-1s (upload and app signing, checked 2026-10-31 through `apikeys.googleapis.com`), which is
+what FCM registration needs. The Firebase app's own fingerprint list (upload key only) matters only for
+Firebase Auth / Dynamic Links, which the app doesn't use. Add the app signing SHA there only if one of
+those is ever adopted (then re-download `google-services.json`).
 
 EAS environment variable `SENTRY_AUTH_TOKEN` (visibility: secret) in the `production` and `preview`
 environments uploads source maps.
 
 The first production Android build failed in "Configure expo-updates" on a runtime version (fingerprint)
-mismatch, fixed below. The second (versionCode 3) is the internal testing release.
+mismatch, fixed below. The second (versionCode 3) was the first internal testing release; 1.0.0 (4) (EAS build `2ea75a8f`) superseded it on 2026-10-31.
 
 ## Runtime version (fingerprint)
 
