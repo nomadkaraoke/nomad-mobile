@@ -117,6 +117,16 @@ up() {
   # shellcheck disable=SC2046 # one VAR=value per line, no spaces
   (cd "$GEN" && env DECIDE_GEN_PARTNER_SECRET="$PARTNER_SECRET" LOCAL_STACK_API_URL="http://127.0.0.1:$GEN_PORT" \
     $(lane_gen_env) scripts/local-stack.sh up ${web[@]+"${web[@]}"})
+  # Start the job from empty stores (before decide, which seeds its own data at startup). Nothing ever cleared them:
+  # every flow's users, jobs and fake media piled up for days in the shared Firestore emulator and in fake-gcs-server,
+  # which keeps every object in RAM (-backend memory), and the build host reached 47 of 48 GB swap (2026-10-31).
+  # gen's test reset wipes this lane's Firestore project and bucket, keeping the seed themes.
+  local i
+  for i in $(seq 1 12); do
+    curl -sf -m 120 -X POST "http://127.0.0.1:$GEN_PORT/api/test/reset" >/dev/null && { echo "lane $LANE: stores reset"; break; }
+    (( i < 12 )) || echo "warning: gen's /api/test/reset failed; the lane's Firestore project and bucket keep old data" >&2
+    sleep 5
+  done
   # shellcheck disable=SC2046
   (cd "$DECIDE" && env $(lane_decide_env) scripts/local-stack.sh up)
 }
