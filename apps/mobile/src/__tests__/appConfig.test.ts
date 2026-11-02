@@ -67,6 +67,11 @@ describe('microphone (vocal range test)', () => {
   });
 });
 
+it('declares no non-exempt encryption (standard HTTPS only), so TestFlight builds skip the export compliance prompt', () => {
+  const appJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../app.json'), 'utf8'));
+  expect(appJson.expo.ios.config.usesNonExemptEncryption).toBe(false);
+});
+
 it('enables Sign in with Apple by default', () => {
   const c = resolve();
   expect(c.ios?.usesAppleSignIn).toBe(true);

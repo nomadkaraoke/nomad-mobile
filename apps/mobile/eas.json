@@ -39,5 +39,5 @@
     "preview": { "extends": "release", "distribution": "internal", "channel": "preview" },
     "production": { "extends": "release", "autoIncrement": true, "channel": "production" }
   },
-  "submit": { "production": {} }
+  "submit": { "production": { "ios": { "ascAppId": "6829908363" } } }
 }
