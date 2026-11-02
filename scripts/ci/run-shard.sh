@@ -44,6 +44,10 @@ if [[ "$platform" == ios ]]; then
     udid="$(xcrun simctl create "$name" "com.apple.CoreSimulator.SimDeviceType.${model// /-}" "$runtime")"
   fi
   echo "Simulator: $name on ${runtime##*.} ($udid)"
+  # Room for the simulator first (scripts/ci/mem-gate.sh), unless it is already booted.
+  if [[ "${RUNNER_ENVIRONMENT:-}" == self-hosted ]] && ! xcrun simctl list devices booted | grep -q "$udid"; then
+    "$ROOT/scripts/ci/mem-gate.sh" 4000
+  fi
   xcrun simctl boot "$udid" 2>/dev/null || true
   xcrun simctl bootstatus "$udid" -b >/dev/null
   # A fresh simulator's dev launcher has no last-opened server and its discovery never finds Metro on CI ("Searching
@@ -62,8 +66,14 @@ if [[ "$platform" == ios ]]; then
 else
   # The lane's own emulator (scripts/e2e-lane.sh): a self-hosted machine runs one per lane.
   export ANDROID_SERIAL
-  adb -s "$ANDROID_SERIAL" wait-for-device
+  if command -v timeout >/dev/null; then
+    timeout 300 adb -s "$ANDROID_SERIAL" wait-for-device || { echo "no adb device $ANDROID_SERIAL within 300 s" >&2; exit 1; }
+  else adb -s "$ANDROID_SERIAL" wait-for-device; fi
   adb -s "$ANDROID_SERIAL" install -r -g "$app" >/dev/null
+  # e2e-local.sh's Android guard: reconnect / re-reverse always; on the self-hosted lanes (our own emulator,
+  # scripts/ci/android-emulator.sh) also reboot a dead emulator and reinstall the app. Its events go in the report dir.
+  export E2E_APP_APK="$(cd "$(dirname "$app")" && pwd)/$(basename "$app")" E2E_GUARD_LOG="$out/android-guard.log"
+  if [[ "${RUNNER_ENVIRONMENT:-}" == self-hosted ]]; then export E2E_EMULATOR_RESTART=1; fi
 fi
 
 status=0
@@ -95,6 +105,34 @@ if [[ "$status" != 0 && "${E2E_RETRY:-1}" == 1 ]]; then
     status=0
     MAESTRO_TEST_ARGS="--format junit --output $out/junit-retry-{run}.xml --debug-output $out/debug-retry-{run} --flatten-debug-output" \
       "$ROOT/scripts/e2e-local.sh" --platform "$platform" --flows "$failed" || status=$?
+  fi
+  # A second retry only for flows whose retry died of the device, not of the app: the adb transport dropped
+  # ("device offline" / "not found", Maestro's DeviceServerDied or "Unknown error"). Those say nothing about the app,
+  # and on a loaded lane a retry could land on the next drop (tonight-2, 2026-10-31). The report still shows them.
+  if [[ "$status" != 0 ]]; then
+    infra="$(node -e '
+      const fs = require("fs"), dir = process.argv[1], names = new Set();
+      const infra = /device offline|device .{0,60}not found|DeviceServerDied|Unknown error|UNAVAILABLE/;
+      for (const f of fs.readdirSync(dir).filter((x) => /^junit-retry-\d+\.xml$/.test(x))) {
+        const xml = fs.readFileSync(`${dir}/${f}`, "utf8");
+        for (const m of xml.matchAll(/<testcase\b[^>]*?name="([^"]+)"[^>]*?(\/>|>([\s\S]*?)<\/testcase>)/g))
+          if (/<(failure|error)\b/.test(m[3] || "") && infra.test(m[3] || "")) names.add(m[1]);
+      }
+      console.log([...names].join(","));' "$out")"
+    if [[ -n "$infra" ]]; then
+      echo "Retrying flows that failed on the device, not the app, once more: $infra"
+      MAESTRO_TEST_ARGS="--format junit --output $out/junit-retry2-{run}.xml --debug-output $out/debug-retry2-{run} --flatten-debug-output" \
+        "$ROOT/scripts/e2e-local.sh" --platform "$platform" --flows "$infra" && {
+          # Passed now: the shard passes if nothing else failed in the first retry.
+          rest="$(node -e '
+            const fs = require("fs"), dir = process.argv[1], bad = new Set(), ok = new Set(process.argv[2].split(","));
+            for (const f of fs.readdirSync(dir).filter((x) => /^junit-retry-\d+\.xml$/.test(x)))
+              for (const m of fs.readFileSync(`${dir}/${f}`, "utf8").matchAll(/<testcase\b[^>]*?name="([^"]+)"[^>]*?(\/>|>([\s\S]*?)<\/testcase>)/g))
+                if (/<(failure|error)\b/.test(m[3] || "") && !ok.has(m[1])) bad.add(m[1]);
+            console.log([...bad].join(","));' "$out" "$infra")"
+          [[ -n "$rest" ]] || status=0
+        }
+    fi
   fi
 fi
 # Simulator / emulator screenshots of where the last flow stopped, for a failed shard.

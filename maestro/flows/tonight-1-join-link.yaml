@@ -17,6 +17,17 @@ tags:
       platform: iOS
     commands:
       - openLink: "nomadkaraoke://tonight?t=2121"
+      # A simulator that hasn't opened the scheme before asks "Open in “Karaoke”?" (SpringBoard; Maestro sees it). Only
+      # the first time per simulator, so new lane simulators failed here (nightly 2026-10-30) and older ones passed.
+      - extendedWaitUntil:
+          visible: "Open in .*"
+          timeout: 5000
+          optional: true
+      - runFlow:
+          when:
+            visible: "Open in .*"
+          commands:
+            - tapOn: "Open"
 - runFlow:
     when:
       platform: Android

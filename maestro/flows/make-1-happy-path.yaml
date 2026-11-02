@@ -117,8 +117,10 @@ onFlowComplete:
     visible:
       id: "ready-youtube-link"
     timeout: 20000
+# The "Copied" toast lasts 2 s; Maestro's settle wait after a tap took ~2.4 s on Android CI and outlasted it.
 - tapOn:
     id: "ready-copy"
+    waitToSettleTimeoutMs: 150
 - assertVisible:
     id: "ready-copied"
 - takeScreenshot: ${SHOTS}/ready-youtube-copied
