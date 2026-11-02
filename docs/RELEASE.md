@@ -20,11 +20,11 @@ Secret Manager (project `nomadkaraoke`); none is in this repo.
 | PostHog | Free, US cloud | project "Nomad Karaoke app", key `phc_nonjuPuxanDJJDiv5Mw9DojJAhGteb42DWiQxVmSjWPE`, host `https://us.i.posthog.com` | Done. Session replay, autocapture, web vitals and heatmaps off; "Discard client IP data" on |
 | RevenueCat | Free | public SDK keys: iOS `appl_DWuzBOczZnmeAxFCBpuyEFByAGA`, Android `goog_iIeISSotmtDWCILZSHxRNKPwJlp` | App Store and Play Store apps created. Play credentials valid and Google real-time developer notifications connected. App Store in-app purchase key still to upload |
 | Apple Developer Program | Paid | team `55B76HN73D` | Conversion from an Individual to an Organization (Nomad Karaoke LLC) requested; pending with Apple |
-| App Store Connect | n/a | bundle `com.nomadkaraoke.mobile`, SKU `nomad-karaoke-ios` | Blocked on accepting the new Paid Applications agreement (account holder). Then: app record, TestFlight group, Small Business Program |
+| App Store Connect | n/a | app id `6829908363`, bundle `com.nomadkaraoke.mobile`, SKU `nomad-karaoke-ios` | App record created 2026-11-02. TestFlight internal group "Nomad internal" has 1.0.0 (2). Not submitted for review. Waiting for the Organization conversion: seller name, bank and tax details, Small Business Program, in-app products, Sign in with Apple key |
 | Google Play Console | One-off fee | organization account "Nomad Karaoke LLC"; app "Nomad Karaoke", package `com.nomadkaraoke.mobile` | App created, internal testing release 1.0.0 (4) rolled out (2026-10-31). Real-time developer notifications go to Pub/Sub `projects/nomadkaraoke/topics/Play-Store-Notifications` (all one-time products), which RevenueCat consumes; Play's publish grant is IaC in gen (`infrastructure/modules/play_rtdn.py`). In-app products wait for a Google Payments merchant account |
 
-Store credentials still to create once the store accounts allow it: an App Store Connect API key (EAS
-Submit and RevenueCat).
+Store credentials still to create: an App Store in-app purchase key (RevenueCat) and an APNs key (iOS push,
+§ iOS signing and TestFlight).
 
 ## Build profiles (`apps/mobile/eas.json`)
 
@@ -70,6 +70,36 @@ environments uploads source maps.
 
 The first production Android build failed in "Configure expo-updates" on a runtime version (fingerprint)
 mismatch, fixed below. The second (versionCode 3) was the first internal testing release; 1.0.0 (4) (EAS build `2ea75a8f`) superseded it on 2026-10-31.
+
+## iOS signing and TestFlight
+
+EAS manages the Apple Distribution certificate and App Store provisioning profile remotely. An App Store Connect
+team API key (App Manager role) is on EAS as the project's submission key, with a backup in Secret Manager. It also
+authenticates credential repairs when passed through `EXPO_ASC_API_KEY_PATH`, `EXPO_ASC_KEY_ID`, `EXPO_ASC_ISSUER_ID`,
+`EXPO_APPLE_TEAM_ID` and `EXPO_APPLE_TEAM_TYPE`.
+
+To ship a build to internal testers, from `apps/mobile` on main:
+
+```bash
+npx eas-cli build -p ios --profile production --non-interactive --no-wait   # autoIncrement bumps the remote buildNumber
+npx eas-cli submit -p ios --profile production --id <build id> --non-interactive --no-wait
+```
+
+The "Nomad internal" group has automatic distribution on, so a build reaches its testers once Apple finishes
+processing (`processingState` VALID, internal state `IN_BETA_TESTING`). `eas submit` only uploads: it never submits
+for App Store review.
+
+- **Export compliance:** `ios.config.usesNonExemptEncryption: false` in `app.json` sets
+  `ITSAppUsesNonExemptEncryption`, so TestFlight asks nothing. The app uses standard HTTPS only (`expo-crypto` is
+  `randomUUID`). Revisit this if the app ever adds its own encryption.
+- **Capabilities:** the App ID needs Sign in with Apple, Push Notifications, Associated Domains, In-App Purchase and
+  MusicKit, all enabled. eas-cli 27.2.0's capability sync failed with "not a valid request document object", so a
+  run that has to sync capabilities needs `EXPO_NO_CAPABILITY_SYNC=1` and the change made in the Apple developer
+  console or through `POST /v1/bundleIdCapabilities`.
+- **First-time credentials need an interactive `eas build`:** in `--non-interactive` mode, a missing distribution
+  certificate is an error. Existing credentials work non-interactively.
+- **Push:** iOS push needs an APNs key on EAS (`eas credentials`, or the EAS GraphQL API). A build needs no change
+  when it is added, because it already carries the `aps-environment` entitlement.
 
 ## Runtime version (fingerprint)
 
