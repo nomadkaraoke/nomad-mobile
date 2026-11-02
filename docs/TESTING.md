@@ -97,7 +97,7 @@ its screen are in the **private** workspace doc `docs/BUILD-HOST.md` (workspace 
   - logs the host's top memory footprints and swap (step "Host memory"); a failed shard uploads its lane's full
     stack logs, gzipped, in its artifact (`stack-logs/`).
 - **Retries:** a shard retries its failed flows once, then retries once more any flow whose retry died of the device
-  (adb `device offline` / `not found`, `DeviceServerDied`, Maestro's "Unknown error"). Both show as ⚠️ flaky with
+  (adb `device offline` / `device … not found`, `DeviceServerDied`, Maestro's "Unknown error"). Both show as ⚠️ flaky with
   the first error, never as passes.
 - Lanes work locally too: `LANE=1 scripts/e2e-local.sh --platform ios make-4` runs beside a lane-0 run on another
   simulator (needs gen/decide/kjbox with the lane env overrides, all merged 2026-10-26).

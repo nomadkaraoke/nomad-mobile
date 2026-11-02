@@ -66,7 +66,9 @@ if [[ "$platform" == ios ]]; then
 else
   # The lane's own emulator (scripts/e2e-lane.sh): a self-hosted machine runs one per lane.
   export ANDROID_SERIAL
-  timeout 300 adb -s "$ANDROID_SERIAL" wait-for-device
+  if command -v timeout >/dev/null; then
+    timeout 300 adb -s "$ANDROID_SERIAL" wait-for-device || { echo "no adb device $ANDROID_SERIAL within 300 s" >&2; exit 1; }
+  else adb -s "$ANDROID_SERIAL" wait-for-device; fi
   adb -s "$ANDROID_SERIAL" install -r -g "$app" >/dev/null
   # e2e-local.sh's Android guard: reconnect / re-reverse always; on the self-hosted lanes (our own emulator,
   # scripts/ci/android-emulator.sh) also reboot a dead emulator and reinstall the app. Its events go in the report dir.
@@ -110,7 +112,7 @@ if [[ "$status" != 0 && "${E2E_RETRY:-1}" == 1 ]]; then
   if [[ "$status" != 0 ]]; then
     infra="$(node -e '
       const fs = require("fs"), dir = process.argv[1], names = new Set();
-      const infra = /device offline|not found|DeviceServerDied|Unknown error|UNAVAILABLE/;
+      const infra = /device offline|device .{0,60}not found|DeviceServerDied|Unknown error|UNAVAILABLE/;
       for (const f of fs.readdirSync(dir).filter((x) => /^junit-retry-\d+\.xml$/.test(x))) {
         const xml = fs.readFileSync(`${dir}/${f}`, "utf8");
         for (const m of xml.matchAll(/<testcase\b[^>]*?name="([^"]+)"[^>]*?(\/>|>([\s\S]*?)<\/testcase>)/g))
