@@ -23,7 +23,7 @@ Secret Manager (project `nomadkaraoke`); none is in this repo.
 | App Store Connect | n/a | app id `6829908363`, bundle `com.nomadkaraoke.mobile`, SKU `nomad-karaoke-ios` | App record created 2026-11-02. TestFlight internal group "Nomad internal" has 1.0.0 (2). Not submitted for review. Waiting for the Organization conversion: seller name, bank and tax details, Small Business Program, in-app products, Sign in with Apple key |
 | Google Play Console | One-off fee | organization account "Nomad Karaoke LLC"; app "Nomad Karaoke", package `com.nomadkaraoke.mobile` | App created, internal testing release 1.0.0 (4) rolled out (2026-10-31). Real-time developer notifications go to Pub/Sub `projects/nomadkaraoke/topics/Play-Store-Notifications` (all one-time products), which RevenueCat consumes; Play's publish grant is IaC in gen (`infrastructure/modules/play_rtdn.py`). In-app products wait for a Google Payments merchant account |
 
-Store credential still to create: an App Store in-app purchase key (RevenueCat).
+Store credential still to set up: the App Store in-app purchase key in RevenueCat.
 
 ## Build profiles (`apps/mobile/eas.json`)
 
