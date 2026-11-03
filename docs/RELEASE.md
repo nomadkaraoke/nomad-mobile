@@ -23,8 +23,7 @@ Secret Manager (project `nomadkaraoke`); none is in this repo.
 | App Store Connect | n/a | app id `6829908363`, bundle `com.nomadkaraoke.mobile`, SKU `nomad-karaoke-ios` | App record created 2026-11-02. TestFlight internal group "Nomad internal" has 1.0.0 (2). Not submitted for review. Waiting for the Organization conversion: seller name, bank and tax details, Small Business Program, in-app products, Sign in with Apple key |
 | Google Play Console | One-off fee | organization account "Nomad Karaoke LLC"; app "Nomad Karaoke", package `com.nomadkaraoke.mobile` | App created, internal testing release 1.0.0 (4) rolled out (2026-10-31). Real-time developer notifications go to Pub/Sub `projects/nomadkaraoke/topics/Play-Store-Notifications` (all one-time products), which RevenueCat consumes; Play's publish grant is IaC in gen (`infrastructure/modules/play_rtdn.py`). In-app products wait for a Google Payments merchant account |
 
-Store credentials still to create: an App Store in-app purchase key (RevenueCat) and an APNs key (iOS push,
-§ iOS signing and TestFlight).
+Store credential still to set up: the App Store in-app purchase key in RevenueCat.
 
 ## Build profiles (`apps/mobile/eas.json`)
 
@@ -98,8 +97,8 @@ for App Store review.
   console or through `POST /v1/bundleIdCapabilities`.
 - **First-time credentials need an interactive `eas build`:** in `--non-interactive` mode, a missing distribution
   certificate is an error. Existing credentials work non-interactively.
-- **Push:** iOS push needs an APNs key on EAS (`eas credentials`, or the EAS GraphQL API). A build needs no change
-  when it is added, because it already carries the `aps-environment` entitlement.
+- **Push:** the APNs key (Sandbox & Production, team scoped) is on EAS, with a backup in Secret Manager. Builds already
+  carry the `aps-environment` entitlement, so adding it needed no rebuild.
 
 ## Runtime version (fingerprint)
 
