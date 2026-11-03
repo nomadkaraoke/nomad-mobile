@@ -65,6 +65,26 @@ describe('useReviewLoader', () => {
     expect(mockGet).toHaveBeenCalledTimes(1);
   });
 
+  it('a 409 from start-review means the job left review: final, no retry, no failure report', async () => {
+    mockStart.mockRejectedValue(new ApiError(409, 'Job not in review state (current status: complete)'));
+    const { result } = renderHook(() => useReviewLoader('j3c'));
+    await flush();
+    expect(result.current).toMatchObject({ status: 'error', error: 'not_in_review' });
+    await flush(120_000);
+    expect(mockStart).toHaveBeenCalledTimes(1);
+    expect(mockGet).not.toHaveBeenCalled();
+    expect(mockReport).not.toHaveBeenCalled();
+  });
+
+  it('a 409 from correction-data (the auto-approver race) is the same', async () => {
+    mockGet.mockRejectedValue(new ApiError(409, 'moved on'));
+    const { result } = renderHook(() => useReviewLoader('j3d'));
+    await flush();
+    expect(result.current).toMatchObject({ status: 'error', error: 'not_in_review' });
+    await flush(120_000);
+    expect(mockGet).toHaveBeenCalledTimes(1);
+  });
+
   it('treats a 401 as final', async () => {
     mockGet.mockRejectedValue(new ApiError(401, 'x'));
     const { result } = renderHook(() => useReviewLoader('j3b'));

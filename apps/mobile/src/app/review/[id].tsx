@@ -1,26 +1,35 @@
 import { useTranslations } from '@nomad/i18n';
 import { Button, NomadLoader, Screen, Text } from '@nomad/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useEffect } from 'react';
 import { View } from 'react-native';
 
 import { openWebHandoff } from '../../jobs/openWebHandoff';
 import { ReviewScreen } from '../../review/ReviewScreen';
 import { useReviewLoader } from '../../review/useReviewLoader';
 
-/** /review/[id]: opens the review on gen (retrying transient failures), then the native review screen. A load error offers Retry and Continue on web. */
+/**
+ * /review/[id]: opens the review on gen (retrying transient failures), then the native review screen. A load error
+ * offers Retry and Continue on web. A job no longer in review (a stale push on a finished song) goes to its job page.
+ */
 export default function ReviewRoute() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const load = useReviewLoader(id);
   const t = useTranslations('review');
   const queryClient = useQueryClient();
   const web = useMutation({ mutationFn: () => openWebHandoff(id, queryClient) });
+  const notInReview = load.status === 'error' && load.error === 'not_in_review';
+
+  useEffect(() => {
+    if (notInReview) router.replace({ pathname: '/job/[id]', params: { id } });
+  }, [notInReview, id]);
 
   if (load.status === 'ready') return <ReviewScreen key={id} jobId={id} data={load.data} />;
 
   return (
     <Screen testID="review-loading-screen">
-      {load.status === 'error' ? (
+      {load.status === 'error' && !notInReview ? (
         <View className="flex-1 justify-center gap-4">
           {/* Never "access denied": a 404 says not found, everything else is a connection problem. */}
           <Text testID="review-load-error" className="text-center" variant="body">

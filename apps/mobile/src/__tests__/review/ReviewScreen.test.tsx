@@ -507,6 +507,18 @@ describe('review route', () => {
     expect(await screen.findByTestId('review-screen')).toBeTruthy();
   });
 
+  it('a job no longer in review (409) goes to the job page, never a connection error', async () => {
+    jest.useRealTimers();
+    gen.startReview!.mockRejectedValue(new ApiError(409, 'Job not in review state (current status: complete)'));
+    const router = renderRouter(
+      { _layout: layout, 'review/[id]': { default: ReviewRoute }, 'job/[id]': () => <View testID="job-stub" /> },
+      { initialUrl: '/review/j1' },
+    );
+    expect(await screen.findByTestId('job-stub')).toBeTruthy();
+    expect(router.getPathname()).toBe('/job/j1');
+    expect(screen.queryByTestId('review-load-error')).toBeNull();
+  });
+
   it('a load error also offers Continue on web (the escape hatch)', async () => {
     jest.useRealTimers();
     gen.startReview!.mockRejectedValue(new ApiError(404, 'nope'));

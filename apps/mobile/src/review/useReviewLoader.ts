@@ -33,7 +33,7 @@ export function useReviewLoader(jobId: string): ReviewLoad {
       } catch (e) {
         if (run.current !== id) return;
         const { error, transient, status } = classifyLoadError(e);
-        reportThrottled('lyrics_load_failed', { jobId, status, attempt: n });
+        if (error !== 'not_in_review') reportThrottled('lyrics_load_failed', { jobId, status, attempt: n });
         const delay = transient ? retryDelayMs(e, n) : null;
         if (delay === null) {
           setState({ status: 'error', error });
