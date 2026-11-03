@@ -32,9 +32,10 @@ name: review-13-finished-song
       visible: "Open in .*"
     commands:
       - tapOn: "Open"
+# ready-screen also shows while the job loads or fails; the download button only shows for a finished job.
 - extendedWaitUntil:
     visible:
-      id: "ready-screen"
+      id: "ready-download"
     timeout: 30000
 - assertNotVisible:
     id: "review-load-error"
