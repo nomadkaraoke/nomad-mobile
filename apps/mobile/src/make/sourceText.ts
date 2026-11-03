@@ -49,7 +49,8 @@ function details(r: AudioResult, t: MakeT): string[] {
   else if (!isYoutube(r) && !isSpotify(r)) out.push(t('reason.lossy'));
   if (r.seeders != null) {
     out.push(t(r.seeders >= 50 ? 'reason.reliable' : r.seeders >= 10 ? 'reason.slower' : 'reason.lowAvailability'));
-  } else if (r.view_count != null) {
+  } else if (r.view_count != null && !isSpotify(r)) {
+    // flacfetch fills a Spotify result's view_count from its popularity score, so it isn't a real count.
     out.push(t('reason.views', { views: formatCount(r.view_count) }));
   }
   if (r.formatted_duration) out.push(r.formatted_duration);

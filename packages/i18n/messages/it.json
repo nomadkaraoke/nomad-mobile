@@ -817,9 +817,9 @@
     "reviewLyrics": "Rivedi il testo",
     "slow": "Ancora in lavorazione, ci vorrà un po' più del solito",
     "steps": {
-      "audio": "Audio acquisito",
+      "audio": "Recupero dell'audio",
       "lyrics": "Sincronizzazione del testo",
-      "separated": "Voce separata",
+      "separated": "Separazione della voce",
       "video": "Creazione del video",
       "youtube": "Pubblicazione su YouTube"
     },

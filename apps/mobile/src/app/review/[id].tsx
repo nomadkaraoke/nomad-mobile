@@ -1,7 +1,7 @@
 import { useTranslations } from '@nomad/i18n';
 import { Button, NomadLoader, Screen, Text } from '@nomad/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useLocalSearchParams } from 'expo-router';
+import { Redirect, useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
 import { openWebHandoff } from '../../jobs/openWebHandoff';
@@ -17,9 +17,10 @@ export default function ReviewRoute() {
   const web = useMutation({ mutationFn: () => openWebHandoff(id, queryClient) });
 
   if (load.status === 'ready') return <ReviewScreen key={id} jobId={id} data={load.data} />;
+  if (load.status === 'closed') return <Redirect href={`/job/${id}`} />;
 
   return (
-    <Screen testID="review-loading-screen">
+    <Screen testID="review-loading-screen" underHeader>
       {load.status === 'error' ? (
         <View className="flex-1 justify-center gap-4">
           {/* Never "access denied": a 404 says not found, everything else is a connection problem. */}
@@ -37,7 +38,7 @@ export default function ReviewRoute() {
         </View>
       ) : (
         <View className="flex-1 items-center justify-center gap-3">
-          <NomadLoader testID="review-loading" accessibilityLabel={t('loading')} style={{ width: 240 }} />
+          <NomadLoader testID="review-loading" accessibilityLabel={t('loading')} style={{ width: 240, alignSelf: 'center' }} />
           <Text variant="muted">{t('loading')}</Text>
         </View>
       )}

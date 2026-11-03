@@ -35,6 +35,16 @@ beforeEach(() => {
 afterEach(() => jest.useRealTimers());
 
 describe('useReviewLoader', () => {
+  it('a 409 means the review is over: closed at once, with no retry and no correction doc', async () => {
+    mockStart.mockRejectedValue(new ApiError(409, 'review_closed'));
+    const { result } = renderHook(() => useReviewLoader('j1'));
+    await flush();
+    expect(result.current.status).toBe('closed');
+    await flush(120_000);
+    expect(mockStart).toHaveBeenCalledTimes(1);
+    expect(mockGet).not.toHaveBeenCalled();
+  });
+
   it('loads on the first try', async () => {
     mockGet.mockResolvedValue(DATA);
     const { result } = renderHook(() => useReviewLoader('j1'));

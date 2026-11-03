@@ -817,9 +817,9 @@
     "reviewLyrics": "Songtekst controleren",
     "slow": "Nog even bezig, deze duurt iets langer",
     "steps": {
-      "audio": "Audio ontvangen",
+      "audio": "Audio ophalen",
       "lyrics": "Songtekst synchroniseren",
-      "separated": "Zang gescheiden",
+      "separated": "Zang scheiden",
       "video": "Video maken",
       "youtube": "Plaatsen op YouTube"
     },

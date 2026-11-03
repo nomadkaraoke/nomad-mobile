@@ -817,9 +817,9 @@
     "reviewLyrics": "Vérifier les paroles",
     "slow": "Toujours en cours, cela prend un peu plus de temps que prévu",
     "steps": {
-      "audio": "Audio récupéré",
+      "audio": "Récupération de l'audio",
       "lyrics": "Synchronisation des paroles",
-      "separated": "Voix isolée",
+      "separated": "Séparation des voix",
       "video": "Création de la vidéo",
       "youtube": "Publication sur YouTube"
     },

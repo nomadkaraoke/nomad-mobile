@@ -121,7 +121,7 @@ export default function DeleteAccountScreen() {
   );
 
   return (
-    <Screen testID="delete-account-screen" scroll>
+    <Screen testID="delete-account-screen" underHeader scroll>
       <Text variant="title">{t('title')}</Text>
       {preview.isPending ? (
         <ActivityIndicator testID="delete-account-loading" />

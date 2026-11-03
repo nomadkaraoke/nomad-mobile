@@ -817,9 +817,9 @@
     "reviewLyrics": "Pregledaj tekst",
     "slow": "Još uvijek radimo na tome, ovo traje malo duže",
     "steps": {
-      "audio": "Zvuk je preuzet",
+      "audio": "Preuzimanje zvuka",
       "lyrics": "Sinkronizacija teksta",
-      "separated": "Vokali su odvojeni",
+      "separated": "Odvajanje vokala",
       "video": "Izrada videa",
       "youtube": "Objavljivanje na YouTubeu"
     },

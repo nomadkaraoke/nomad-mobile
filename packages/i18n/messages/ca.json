@@ -817,9 +817,9 @@
     "reviewLyrics": "Revisa la lletra",
     "slow": "Encara s'està processant; aquest està trigant una mica més",
     "steps": {
-      "audio": "Àudio obtingut",
+      "audio": "Obtenint l'àudio",
       "lyrics": "Sincronitzant la lletra",
-      "separated": "Veu separada",
+      "separated": "Separant la veu",
       "video": "Creant el vídeo",
       "youtube": "Publicant a YouTube"
     },

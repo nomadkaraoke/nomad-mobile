@@ -10,7 +10,7 @@ export default function GetMadeScreen() {
   const t = useTranslations('me.getMade');
   const { items, limit, loading, offline, makeDisabled, error, refetch, dismiss, undismiss, request } = useGetMade();
   return (
-    <Screen testID="me-getmade-screen" scroll>
+    <Screen testID="me-getmade-screen" underHeader scroll>
       {/* The native header already shows the title (_layout: me.getMade.title). */}
       <Text variant="muted">{t('intro')}</Text>
       {offline ? (

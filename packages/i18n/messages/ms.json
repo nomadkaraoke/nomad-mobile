@@ -817,9 +817,9 @@
     "reviewLyrics": "Semak lirik",
     "slow": "Masih berjalan, proses ini mengambil masa lebih lama sedikit",
     "steps": {
-      "audio": "Audio sedia ada",
+      "audio": "Mendapatkan audio",
       "lyrics": "Menyelaraskan lirik",
-      "separated": "Vokal telah diasingkan",
+      "separated": "Mengasingkan vokal",
       "video": "Menghasilkan video",
       "youtube": "Memuat naik ke YouTube"
     },

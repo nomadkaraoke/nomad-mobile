@@ -1003,8 +1003,8 @@
     "keepTrying": "Keep trying",
     "chooseAudioOnWeb": "Choose different audio on the website",
     "steps": {
-      "audio": "Got the audio",
-      "separated": "Separated the vocals",
+      "audio": "Getting the audio",
+      "separated": "Separating the vocals",
       "lyrics": "Syncing lyrics",
       "video": "Making the video",
       "youtube": "Posting to YouTube"

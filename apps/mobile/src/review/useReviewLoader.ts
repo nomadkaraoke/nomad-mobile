@@ -1,4 +1,4 @@
-import { getCorrectionData, startReview } from '@nomad/api-gen';
+import { ApiError, getCorrectionData, startReview } from '@nomad/api-gen';
 import type { CorrectionData } from '@nomad/review-core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -8,16 +8,22 @@ import { reportThrottled } from './telemetry';
 export type ReviewLoad =
   | { status: 'loading'; retry(): void }
   | { status: 'ready'; data: CorrectionData; retry(): void }
-  | { status: 'error'; error: LoadError; retry(): void };
+  | { status: 'error'; error: LoadError; retry(): void }
+  /** The review is over (auto-approved, submitted, finished): the job's own screen has what's next. */
+  | { status: 'closed'; retry(): void };
 
 /**
  * Opens the review (startReview, idempotent on gen) and loads the correction doc. Transient failures
  * retry on the 5/15/30/60 s schedule (Retry-After wins when present); after that, or on a final error,
- * the status is 'error' and `retry()` starts a fresh attempt.
+ * the status is 'error' and `retry()` starts a fresh attempt. A 409 from startReview means the review has ended,
+ * e.g. a "review your lyrics" notification tapped after gen finished the job: the status is 'closed'.
  */
 export function useReviewLoader(jobId: string): ReviewLoad {
   const [state, setState] = useState<
-    { status: 'loading' } | { status: 'ready'; data: CorrectionData } | { status: 'error'; error: LoadError }
+    | { status: 'loading' }
+    | { status: 'ready'; data: CorrectionData }
+    | { status: 'error'; error: LoadError }
+    | { status: 'closed' }
   >({ status: 'loading' });
   const run = useRef(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -32,6 +38,10 @@ export function useReviewLoader(jobId: string): ReviewLoad {
         if (run.current === id) setState({ status: 'ready', data });
       } catch (e) {
         if (run.current !== id) return;
+        if (e instanceof ApiError && e.status === 409) {
+          setState({ status: 'closed' });
+          return;
+        }
         const { error, transient, status } = classifyLoadError(e);
         reportThrottled('lyrics_load_failed', { jobId, status, attempt: n });
         const delay = transient ? retryDelayMs(e, n) : null;

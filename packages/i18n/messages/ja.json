@@ -817,9 +817,9 @@
     "reviewLyrics": "歌詞を確認する",
     "slow": "処理中です。通常より少し時間がかかっています",
     "steps": {
-      "audio": "音声を取得しました",
+      "audio": "音声を準備中",
       "lyrics": "歌詞を同期中",
-      "separated": "ボーカルを分離しました",
+      "separated": "ボーカルを分離中",
       "video": "動画を作成中",
       "youtube": "YouTubeに投稿中"
     },

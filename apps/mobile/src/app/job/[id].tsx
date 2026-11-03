@@ -78,7 +78,7 @@ export default function ReadyScreen() {
 
   if (!job.data) {
     return (
-      <Screen testID="ready-screen">
+      <Screen testID="ready-screen" underHeader>
         {job.isError ? (
           <>
             <Text variant="error">{tc('error')}</Text>
@@ -94,7 +94,7 @@ export default function ReadyScreen() {
   const data: JobDetail = job.data;
   if (data.status !== 'complete') {
     return (
-      <Screen testID="ready-screen">
+      <Screen testID="ready-screen" underHeader>
         <Text variant="title">{data.title}</Text>
         {data.status === 'awaiting_review' || data.status === 'in_review' ? (
           <>
@@ -119,7 +119,7 @@ export default function ReadyScreen() {
   const playUri = signed ?? local?.uri ?? null;
 
   return (
-    <Screen testID="ready-screen" scroll>
+    <Screen testID="ready-screen" underHeader scroll>
       {ytId ? (
         <YouTubeBlock id={ytId} title={youtubeTitle(data)} />
       ) : job.isPlaceholderData ? (

@@ -817,9 +817,9 @@
     "reviewLyrics": "Zkontrolovat text",
     "slow": "Stále pracujeme, tentokrát to trvá o něco déle",
     "steps": {
-      "audio": "Zvuk je připraven",
+      "audio": "Získávání audia",
       "lyrics": "Synchronizace textu",
-      "separated": "Oddělení vokálů",
+      "separated": "Oddělování vokálů",
       "video": "Vytváření videa",
       "youtube": "Nahrávání na YouTube"
     },

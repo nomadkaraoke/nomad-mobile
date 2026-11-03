@@ -817,9 +817,9 @@
     "reviewLyrics": "Dalszöveg ellenőrzése",
     "slow": "Még dolgozunk rajta, ez a szám kicsit tovább tart",
     "steps": {
-      "audio": "Hanganyag betöltve",
+      "audio": "Hang letöltése",
       "lyrics": "Dalszöveg szinkronizálása",
-      "separated": "Éneksáv leválasztva",
+      "separated": "Énekhang leválasztása",
       "video": "Videó készítése",
       "youtube": "Közzététel a YouTube-on"
     },

@@ -817,9 +817,9 @@
     "reviewLyrics": "Verifică versurile",
     "slow": "Încă se lucrează, durează puțin mai mult",
     "steps": {
-      "audio": "Audio preluat",
+      "audio": "Se preia conținutul audio",
       "lyrics": "Se sincronizează versurile",
-      "separated": "Vocea a fost separată",
+      "separated": "Se separă vocea",
       "video": "Se creează videoclipul",
       "youtube": "Se postează pe YouTube"
     },

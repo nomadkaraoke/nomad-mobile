@@ -817,9 +817,9 @@
     "reviewLyrics": "Se over sangteksten",
     "slow": "Jobber fortsatt – denne tar litt lengre tid enn vanlig",
     "steps": {
-      "audio": "Hentet lyden",
+      "audio": "Henter lyden",
       "lyrics": "Synkroniserer sangtekst",
-      "separated": "Skilte ut vokalen",
+      "separated": "Skiller ut vokalen",
       "video": "Lager videoen",
       "youtube": "Publiserer på YouTube"
     },
