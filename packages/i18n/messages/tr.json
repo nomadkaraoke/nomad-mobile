@@ -817,9 +817,9 @@
     "reviewLyrics": "Sözleri incele",
     "slow": "Çalışma sürüyor, bu işlem biraz daha uzun sürüyor",
     "steps": {
-      "audio": "Ses dosyası alındı",
+      "audio": "Ses alınıyor",
       "lyrics": "Sözler senkronize ediliyor",
-      "separated": "Vokaller ayrıştırıldı",
+      "separated": "Vokaller ayrıştırılıyor",
       "video": "Video hazırlanıyor",
       "youtube": "YouTube'a yükleniyor"
     },

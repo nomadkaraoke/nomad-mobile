@@ -89,7 +89,7 @@ function MakeAnySong() {
   const canMake = intent.artist !== '' && intent.title !== '';
 
   return (
-    <Screen testID="song-screen" scroll>
+    <Screen testID="song-screen" underHeader scroll>
       <TextField testID="song-artist" label={t('artistLabel')} value={draft.artist} onChangeText={(v) => edit('artist', v)} />
       <TextField testID="song-title" label={t('titleLabel')} value={draft.title} onChangeText={(v) => edit('title', v)} />
       <Button
@@ -221,7 +221,7 @@ function KnownSong({ songKey, also = [] }: { songKey: string; also?: string[] })
   }
 
   return (
-    <Screen testID="song-screen" scroll>
+    <Screen testID="song-screen" underHeader scroll>
       {body}
       {detail ? <SongTonightAction song={detail.song} /> : null}
       {detail && signedIn ? <SongLibraryActions song={detail.song} /> : null}

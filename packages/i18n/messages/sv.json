@@ -817,9 +817,9 @@
     "reviewLyrics": "Granska texten",
     "slow": "Arbetar fortfarande, den här tar lite längre tid",
     "steps": {
-      "audio": "Ljudet har hämtats",
+      "audio": "Hämtar ljudet",
       "lyrics": "Synkar text",
-      "separated": "Separerade sången",
+      "separated": "Separerar sången",
       "video": "Skapar videon",
       "youtube": "Publicerar på YouTube"
     },

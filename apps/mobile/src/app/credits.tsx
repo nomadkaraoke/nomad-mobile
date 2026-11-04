@@ -65,7 +65,7 @@ export default function CreditsScreen() {
 
   if (!email) {
     return (
-      <Screen testID="credits-screen">
+      <Screen testID="credits-screen" underHeader>
         <Text variant="title">{t('title')}</Text>
         <Text variant="muted">{t('signInPrompt')}</Text>
         <Button testID="credits-signin" label={ta('signIn')} onPress={() => openSignIn(signInReturn)} />
@@ -115,7 +115,7 @@ function WebCreditsBody({ email, returnTo, catalog }: BodyProps) {
   const locked = phase === 'pending';
 
   return (
-    <Screen testID="credits-screen" scroll>
+    <Screen testID="credits-screen" underHeader scroll>
       <Header email={email} />
       <PhaseBanners phase={phase} failedText={t('checkoutFailed')} onRefresh={() => void checkout.refresh()} />
       <PackageList
@@ -214,7 +214,7 @@ function StoreCreditsBody({ adapter, email, returnTo, catalog }: BodyProps & { a
   if (storeSellsNone) return <WebCreditsBody email={email} returnTo={returnTo} catalog={catalog} />;
 
   return (
-    <Screen testID="credits-screen" scroll>
+    <Screen testID="credits-screen" underHeader scroll>
       <Header email={email} />
       {/* App Review 3.1.1: the note points at web buying, so only where the web link is offered. */}
       {discount && showWebLink ? (

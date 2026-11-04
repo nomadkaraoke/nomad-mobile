@@ -45,7 +45,7 @@ export default function MusicProfileScreen() {
 
   if (!signedIn) {
     return (
-      <Screen testID="profile-screen" scroll>
+      <Screen testID="profile-screen" underHeader scroll>
         <Text variant="muted">{t('musicProfileSignedOut')}</Text>
       </Screen>
     );
@@ -58,7 +58,7 @@ export default function MusicProfileScreen() {
   const loading = p.prefs.isPending || p.artists.isPending || p.loved.isPending || p.hidden.isPending;
 
   return (
-    <Screen testID="profile-screen" scroll>
+    <Screen testID="profile-screen" underHeader scroll>
       <Text variant="muted">{t('musicProfileIntro')}</Text>
       {loading ? <ActivityIndicator testID="profile-loading" /> : null}
       {p.failed ? (

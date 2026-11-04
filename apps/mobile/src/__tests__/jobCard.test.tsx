@@ -56,7 +56,7 @@ it('working: progress bar and five steps, done before the current stage and pend
   expect(state(3)).toEqual({ checked: false, selected: true });
   expect(state(4)).toEqual({ checked: false, selected: false });
   expect(state(5)).toEqual({ checked: false, selected: false });
-  expect(screen.getByTestId('job-step-j-1')).toHaveTextContent('Got the audio');
+  expect(screen.getByTestId('job-step-j-1')).toHaveTextContent('Getting the audio');
   expect(screen.getByTestId('job-step-j-5')).toHaveTextContent('Posting to YouTube');
   expect(screen.queryByTestId('job-slow-j')).toBeNull();
   // An unknown status is still "working" and starts with every step pending.

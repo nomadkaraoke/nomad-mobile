@@ -1,0 +1,32 @@
+# A "review your lyrics" notification tapped after gen finished the job: /review/<id> goes to the job's own screen
+# instead of waiting on the loader (gen's start-review answers 409).
+appId: com.nomadkaraoke.mobile
+name: review-13-closed-review-goes-to-job
+tags:
+  - review
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: review13
+      CREDITS: "1"
+- runFlow: ../common/launch.yaml
+- runFlow:
+    file: ../common/me-signin.yaml
+    env:
+      EMAIL: ${output.email}
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: scenario
+      STACK: ${STACK}
+      SCENARIO: job_complete
+- openLink: nomadkaraoke://review/${output.jobId}
+- extendedWaitUntil:
+    visible:
+      id: "ready-screen"
+    timeout: 30000
+- assertNotVisible:
+    id: "review-loading"

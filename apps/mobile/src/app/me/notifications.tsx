@@ -57,7 +57,7 @@ export default function NotificationsScreen() {
   );
 
   return (
-    <Screen testID="notifications-screen" scroll>
+    <Screen testID="notifications-screen" underHeader scroll>
       <Text variant="title">{t('title')}</Text>
       {p.permission === 'denied' ? (
         <View testID="notif-denied" className="gap-2 rounded-xl border border-border bg-card p-3">

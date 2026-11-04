@@ -817,9 +817,9 @@
     "reviewLyrics": "Przejrzyj tekst",
     "slow": "Nadal pracujemy — to zajmuje trochę więcej czasu",
     "steps": {
-      "audio": "Pobrano dźwięk",
+      "audio": "Pobieranie dźwięku",
       "lyrics": "Synchronizowanie tekstu",
-      "separated": "Wyizolowano wokal",
+      "separated": "Rozdzielanie wokalu",
       "video": "Tworzenie wideo",
       "youtube": "Publikowanie na YouTube"
     },

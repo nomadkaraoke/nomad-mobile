@@ -38,13 +38,13 @@ it.each([
 
 it('YouTube: the title is the video, so it stays out of the reason; Spotify: the title is the album', () => {
   expect(pickReason({ ...youtube(1), formatted_duration: '4:00' }, t)).toBe('YouTube · 2.0M views · 4:00');
-  expect(pickReason(spotify(2), t)).toBe(`Spotify · ${iso('Black Holes and Revelations')} · 720.0K views`);
+  expect(pickReason(spotify(2), t)).toBe(`Spotify · ${iso('Black Holes and Revelations')}`);
 });
 
 it('a Spotify row shows the track (target_file), not the album (spec A108)', () => {
   expect(sourceRowText(spotify(2), t)).toEqual({
     title: 'Supermassive Black Hole',
-    detail: `${iso('Muse')} · ${iso('Black Holes and Revelations')} · 720.0K views`,
+    detail: `${iso('Muse')} · ${iso('Black Holes and Revelations')}`,
   });
   // No track name: fall back to the title rather than an empty row.
   expect(sourceRowText({ ...spotify(2), target_file: undefined } as never, t).title).toBe('Black Holes and Revelations');

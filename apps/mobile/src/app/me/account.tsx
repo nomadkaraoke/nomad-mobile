@@ -16,7 +16,7 @@ export default function AccountScreen() {
   const email = useAuth((s) => (s.state.status === 'signedIn' ? s.state.session.email : null));
   const me = useQuery({ queryKey: ['me', email], queryFn: getMe, enabled: email !== null });
   return (
-    <Screen testID="account-screen" scroll>
+    <Screen testID="account-screen" underHeader scroll>
       <Text variant="title">{t('title')}</Text>
       <Button
         testID="account-notifications"

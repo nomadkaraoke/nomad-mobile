@@ -30,7 +30,7 @@ export default function UncataloguedSongScreen() {
     else openSignIn('/make/new');
   };
   return (
-    <Screen testID="history-screen" scroll>
+    <Screen testID="history-screen" underHeader scroll>
       <Text testID="history-title" variant="title">
         {title}
       </Text>

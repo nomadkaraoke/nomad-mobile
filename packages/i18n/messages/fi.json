@@ -817,9 +817,9 @@
     "reviewLyrics": "Tarkista sanoitukset",
     "slow": "Käsitellään vielä, tässä kestää hieman tavallista pidempään",
     "steps": {
-      "audio": "Ääni noudettu",
+      "audio": "Haetaan ääntä",
       "lyrics": "Synkronoidaan sanoituksia",
-      "separated": "Lauluäänet eroteltu",
+      "separated": "Erotellaan laulua",
       "video": "Luodaan videota",
       "youtube": "Julkaistaan YouTubeen"
     },

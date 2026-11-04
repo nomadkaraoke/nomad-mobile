@@ -248,7 +248,7 @@ export default function MakeScreen() {
 
   if (!intent) {
     return (
-      <Screen testID="make-screen">
+      <Screen testID="make-screen" underHeader>
         <Text testID="make-no-intent">{t('noIntent')}</Text>
         {/* dismissTo pops back to the tabs (replace would stack a second (tabs)); with no history it opens Discover. */}
         <Button testID="make-discover" label={t('findSong')} onPress={() => router.dismissTo('/discover')} />
@@ -285,7 +285,7 @@ export default function MakeScreen() {
   );
 
   return (
-    <Screen testID="make-screen" scroll>
+    <Screen testID="make-screen" underHeader scroll>
       <View className="gap-1">
         <Text testID="make-song-title" variant="title">
           {song?.title ?? intent.title}
@@ -308,7 +308,7 @@ export default function MakeScreen() {
         />
       ) : search.isPending || search.isIdle ? (
         <View testID="make-searching" className="items-center gap-2 py-8">
-          <NomadLoader testID="make-searching-loader" accessibilityLabel={t('searching')} style={{ width: 240 }} />
+          <NomadLoader testID="make-searching-loader" accessibilityLabel={t('searching')} style={{ width: 240, alignSelf: 'center' }} />
           <Text>{t('searching')}</Text>
           <Text variant="muted">{t('searchingHint')}</Text>
         </View>

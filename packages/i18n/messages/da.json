@@ -817,9 +817,9 @@
     "reviewLyrics": "Gennemse sangtekst",
     "slow": "Arbejder stadig – denne tager lidt længere tid",
     "steps": {
-      "audio": "Lyden er hentet",
+      "audio": "Henter lyden",
       "lyrics": "Synkroniserer sangtekst",
-      "separated": "Vokalen er adskilt",
+      "separated": "Adskiller vokalen",
       "video": "Laver videoen",
       "youtube": "Uploader til YouTube"
     },

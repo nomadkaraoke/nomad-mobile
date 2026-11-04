@@ -817,9 +817,9 @@
     "reviewLyrics": "Text überprüfen",
     "slow": "Wird noch bearbeitet, das dauert etwas länger",
     "steps": {
-      "audio": "Audio erhalten",
+      "audio": "Audio wird abgerufen",
       "lyrics": "Text wird synchronisiert",
-      "separated": "Gesang getrennt",
+      "separated": "Gesang wird getrennt",
       "video": "Video wird erstellt",
       "youtube": "Wird auf YouTube veröffentlicht"
     },

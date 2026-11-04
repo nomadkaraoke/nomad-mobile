@@ -817,9 +817,9 @@
     "reviewLyrics": "Revisar letra",
     "slow": "Ainda em andamento, isso está demorando um pouco mais",
     "steps": {
-      "audio": "Áudio obtido",
+      "audio": "Obtendo o áudio",
       "lyrics": "Sincronizando a letra",
-      "separated": "Vocais separados",
+      "separated": "Separando a voz",
       "video": "Criando o vídeo",
       "youtube": "Publicando no YouTube"
     },

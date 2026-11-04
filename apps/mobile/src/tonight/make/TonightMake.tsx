@@ -603,7 +603,7 @@ function MakeSearch({ night, userKey, friend, wanted }: TonightMakeProps & { nig
 
       {search.isPending || search.isIdle ? (
         <View testID="tonight-make-searching" className="items-center gap-2 py-8">
-          <NomadLoader testID="tonight-make-searching-loader" accessibilityLabel={tMake('searching')} style={{ width: 240 }} />
+          <NomadLoader testID="tonight-make-searching-loader" accessibilityLabel={tMake('searching')} style={{ width: 240, alignSelf: 'center' }} />
           <Text>{tMake('searching')}</Text>
           <Text variant="muted">{tMake('searchingHint')}</Text>
         </View>

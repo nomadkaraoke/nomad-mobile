@@ -817,9 +817,9 @@
     "reviewLyrics": "Xem lại lời bài hát",
     "slow": "Vẫn đang xử lý, bài này mất nhiều thời gian hơn một chút",
     "steps": {
-      "audio": "Đã nhận âm thanh",
+      "audio": "Đang lấy âm thanh",
       "lyrics": "Đang đồng bộ lời bài hát",
-      "separated": "Đã tách giọng hát",
+      "separated": "Đang tách giọng hát",
       "video": "Đang tạo video",
       "youtube": "Đang đăng lên YouTube"
     },

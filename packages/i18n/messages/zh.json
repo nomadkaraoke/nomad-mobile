@@ -817,9 +817,9 @@
     "reviewLyrics": "检查歌词",
     "slow": "仍在处理中，这个任务需要的时间稍长一些",
     "steps": {
-      "audio": "已获取音频",
+      "audio": "正在获取音频",
       "lyrics": "正在同步歌词",
-      "separated": "已分离伴奏与人声",
+      "separated": "正在分离人声",
       "video": "正在制作视频",
       "youtube": "正在发布至 YouTube"
     },
