@@ -28,6 +28,8 @@ adb_() { "$SDK/platform-tools/adb" -s "$ANDROID_SERIAL" "$@"; }
 
 # The lane's qemu process (adb can't stop an emulator whose transport is offline).
 qemu_pid() { pgrep -f "qemu-system.*-avd $AVD( |$)" 2>/dev/null | head -1 || true; }
+# -feature -WiFiPacketStream: with netsim's Wi-Fi stream on, one lane's emulator stopping aborted the other lanes' qemu
+# in the same second (std::bad_function_call in a gRPC callback; crash reports 2026-11-05 00:40:25 and 00:53:25).
 # The lane's own netsimd (-netsim-args --instance=LANE+1). After an emulator crash (SIGSEGV mid-shard, 2026-10-31) both
 # reboots on that lane froze at once ("hanging thread 'QEMU2 CPU0 thread'"), the same symptom as the frozen boots of
 # 2026-10-30: something the dead emulator left behind wedges the next boot. stop clears the lane's netsimd and the
@@ -50,7 +52,7 @@ boot() { # -> 0 when booted within BOOT_S
   local log="/tmp/emulator-$AVD.log"
   nohup "$SDK/emulator/emulator" -avd "$AVD" -port "$EMULATOR_PORT" -no-window -no-audio -no-boot-anim \
     -no-snapshot -wipe-data -memory "${EMULATOR_RAM_MB:-3072}" -gpu "${EMULATOR_GPU:-swiftshader_indirect}" \
-    -netsim-args "--instance=$((LANE + 1))" >"$log" 2>&1 &
+    -netsim-args "--instance=$((LANE + 1))" -feature -WiFiPacketStream >"$log" 2>&1 &
   # The launcher's own pid: qemu starts a moment after it, so "no qemu yet" isn't "exited".
   local launcher=$! deadline=$((SECONDS + ${BOOT_S:-300}))
   until [[ "$(adb_ get-state 2>/dev/null)" == device ]]; do
