@@ -1,11 +1,13 @@
 // recsOffline: Discover offline shows the last picks (Task E10, spec §8.4).
 import * as decide from '@nomad/api-decide';
+import { filtersKey } from '@nomad/core';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 import { View } from 'react-native';
 
 import { useAuth } from '../auth/store';
+import { useRecFilters } from '../discover/filtersStore';
 import { clearRecsSnapshot, loadRecsSnapshot, recsSnapshotKey, saveRecsSnapshot } from '../discover/recsSnapshot';
 import { useLibraryFilter } from '../find/library';
 import { resetSearchCacheForTests } from '../find/useSearch';
@@ -110,6 +112,45 @@ describe('recsOffline', () => {
     await waitFor(() => expect(loadRecsSnapshot()?.data.sections[0]?.songs[0]?.title).toBe('Song A'));
     expect(loadRecsSnapshot()?.key.startsWith(`${EMAIL}\n`)).toBe(true);
     expect(screen.queryByTestId('discover-offline-picks')).toBeNull();
+  });
+
+  describe('online while decide is slow or failing', () => {
+    const currentKey = () => recsSnapshotKey(EMAIL, filtersKey(useRecFilters.getState().filters, 'any'));
+
+    it("shows this user's last picks for these filters while the load is pending, then the live ones", async () => {
+      saveRecsSnapshot(currentKey(), SAVED, Date.now() - DAY);
+      let answer: (r: decide.RecommendationsV2Response) => void = () => {};
+      getRecs.mockImplementation(() => new Promise((resolve) => (answer = resolve)));
+      await signIn();
+      open();
+      expect(await screen.findByText(/Song B/)).toBeTruthy();
+      expect(screen.queryByTestId('discover-offline-picks')).toBeNull();
+
+      await act(async () => answer(recs([song('Band C', 'Song C')])));
+      expect(await screen.findByText(/Song C/)).toBeTruthy();
+      expect(screen.queryByText(/Song B/)).toBeNull();
+    });
+
+    it('shows the last picks when decide answers 500', async () => {
+      saveRecsSnapshot(currentKey(), SAVED, Date.now() - DAY);
+      getRecs.mockRejectedValue(new decide.ApiError(500, 'boom'));
+      await signIn();
+      open();
+      expect(await screen.findByText(/Song B/)).toBeTruthy();
+    });
+
+    it("never shows another user's picks or another filter's while loading", async () => {
+      saveRecsSnapshot(recsSnapshotKey('someone.else@example.com', filtersKey(useRecFilters.getState().filters, 'any')), SAVED);
+      getRecs.mockImplementation(() => new Promise(() => {}));
+      await signIn();
+      open();
+      await act(async () => {});
+      expect(screen.queryByText(/Song B/)).toBeNull();
+
+      saveRecsSnapshot(recsSnapshotKey(EMAIL, 'other-filters'), SAVED);
+      await act(async () => {});
+      expect(screen.queryByText(/Song B/)).toBeNull();
+    });
   });
 
   it('offline shows the banner and the saved sections without calling decide', async () => {

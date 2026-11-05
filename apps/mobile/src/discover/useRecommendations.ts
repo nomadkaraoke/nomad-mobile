@@ -160,17 +160,29 @@ export function useRecommendations(filters: RecFilters) {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- re-read when the live data changes (a hide re-saves)
   }, [useSnapshot, email, firstPage]);
 
+  // Online with nothing loaded yet (a big history can take a while), or decide failing: this user's last picks for
+  // these exact filters, never the generic list under a loader. The live answer replaces them when it lands.
+  const decideFailing = query.error instanceof ApiError && query.error.status >= 500 && !isWarmingUp(query.error);
+  const useLastPicks = signedIn && !offline && !pages && (query.isPending || decideFailing);
+  const lastPicks = useMemo(() => {
+    if (!useLastPicks) return null;
+    const snap = loadRecsSnapshot();
+    return snap && snap.key === currentKey ? snap : null;
+  }, [useLastPicks, currentKey]);
+
   const live = useMemo(() => (pages ? mergePages(pages) : undefined), [pages]);
   const offlineSnapshot = useSnapshot && (live !== undefined || snapshot !== null);
   const data = useMemo(() => {
-    if (!useSnapshot) return live;
+    if (!useSnapshot) return live ?? (lastPicks ? mergePages([lastPicks.data]) : undefined);
     if (live) return filterByLibrary(live, library);
     return snapshot ? filterByLibrary(mergePages([snapshot.data]), library) : undefined;
-  }, [useSnapshot, live, snapshot, library]);
+  }, [useSnapshot, live, snapshot, lastPicks, library]);
 
   return {
     data,
     offlineSnapshot,
+    /** Online, showing this user's last picks until decide answers. */
+    showingLastPicks: !useSnapshot && !live && lastPicks !== null,
     /** Offline with nothing usable saved (none, too old, or someone else's). */
     offlineEmpty: useSnapshot && data === undefined,
     status: query.status,
