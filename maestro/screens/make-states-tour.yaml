@@ -1,0 +1,61 @@
+# Screenshot tour of the Make path's other states (Phase 7 UX review): the "not sure" audio pick, then a failed job and
+# its details, with one user (gen's global search_confidence plus the user's fail_at). In the app language LOCALE;
+# testIDs only. Not part of the E2E suite:
+#
+#   scripts/e2e-local.sh --platform ios --locale ar --screen make-states-tour   # docs/screenshots/phase7/ios/ar/
+appId: com.nomadkaraoke.mobile
+name: screens-make-states-tour
+onFlowComplete:
+  - runScript:
+      file: ../scripts/stack.js
+      env:
+        ACTION: config
+        STACK: ${STACK}
+        GLOBAL_CONFIG: '{"search_confidence":"perfect"}'
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: states
+      CREDITS: "2"
+      USER_CONFIG: '{"fail_at":"lyrics"}'
+      GLOBAL_CONFIG: '{"search_confidence":"unsure"}'
+- runFlow:
+    file: ../common/tour-launch.yaml
+    env:
+      EMAIL: ${output.email}
+- runFlow:
+    file: ../common/make-any.yaml
+    env:
+      ARTIST: "Fake Artist"
+      TITLE: "Unsure Song"
+- extendedWaitUntil:
+    visible:
+      id: "make-source-.*"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/states-01-pick-not-sure
+- tapOn:
+    id: "make-source-.*"
+    index: 0
+- scrollUntilVisible:
+    element:
+      id: "make-submit"
+    direction: DOWN
+- takeScreenshot: ${TOUR_SHOTS}/states-02-pick-not-sure-chosen
+- runFlow: ../common/make-submit.yaml
+- extendedWaitUntil:
+    visible:
+      id: "job-retry-.*"
+    timeout: 90000
+- takeScreenshot: ${TOUR_SHOTS}/states-03-job-failed
+- tapOn:
+    id: "job-error-.*"
+- extendedWaitUntil:
+    visible:
+      id: "job-error-text-.*"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/states-04-job-failed-details

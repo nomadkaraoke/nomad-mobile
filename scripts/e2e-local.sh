@@ -557,6 +557,7 @@ if [[ -n "$SCREEN" ]]; then
   elif [[ "$SCREEN" == voice-session* ]]; then TOUR_SHOTS="$VOICE_SESSION_SHOTS/$lang"
   elif [[ "$SCREEN" == me-* ]]; then TOUR_SHOTS="$ME_SHOTS/$lang"
   elif [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; then TOUR_SHOTS="$VOICE_SHOTS/$lang"
+  elif [[ "$SCREEN" == make* ]]; then TOUR_SHOTS="docs/screenshots/phase7/$PLATFORM/$lang"
   else TOUR_SHOTS="docs/screenshots/phase2/review/$PLATFORM/$lang"; fi
   mkdir -p "$TOUR_SHOTS"
   metro_up || start_metro
@@ -566,7 +567,9 @@ if [[ -n "$SCREEN" ]]; then
   # The voice and fit tours write to ${VOICE_SHOTS} / ${FIT_SHOTS} (run_flows passes both from VOICE_SHOTS): the
   # locale's folder for a tour, the platform's folder for the flows.
   if [[ "$SCREEN" == voice* || "$SCREEN" == fit* ]]; then VOICE_SHOTS="$TOUR_SHOTS"; fi
-  run_flows -e LOCALE="$lang" -e TOUR_SHOTS="$TOUR_SHOTS" -e SHOT="ux-$lang" "maestro/screens/$SCREEN.yaml" || status=$?
+  # NOT_NOW: common/dismiss-push-ask.yaml taps the app's push question by its text, in the tour's language.
+  not_now="$(node -p 'require("./packages/i18n/messages/" + process.argv[1] + ".json").push.ask.notNow' "$lang" 2>/dev/null || echo "Not now")"
+  run_flows -e LOCALE="$lang" -e TOUR_SHOTS="$TOUR_SHOTS" -e SHOT="ux-$lang" -e NOT_NOW="$not_now" "maestro/screens/$SCREEN.yaml" || status=$?
   set_app_locale ""
   exit "$status"
 fi

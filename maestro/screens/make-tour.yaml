@@ -1,0 +1,169 @@
+# Screenshot tour of first launch and the make path (Phase 7 UX review): every tab signed out, search, the song page,
+# the sign-in sheet, email and code, the credits paywall, the audio pick, the Make tab working and ready, the ready
+# screen. Then Me's credits and settings. In the app language LOCALE; testIDs only. Not part of the E2E suite:
+#
+#   scripts/e2e-local.sh --platform ios --locale ar --screen make-tour   # docs/screenshots/phase7/ios/ar/
+appId: com.nomadkaraoke.mobile
+name: screens-make-tour
+---
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: setup
+      STACK: ${STACK}
+      NAME: maketour
+      CREDITS: "0"
+- runFlow: ../common/tour-launch-signed-out.yaml
+- takeScreenshot: ${TOUR_SHOTS}/make-01-first-launch-discover
+- tapOn:
+    id: "tab-tonight"
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/make-02-signed-out-tonight
+- tapOn:
+    id: "tab-make"
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/make-03-signed-out-make
+- tapOn:
+    id: "tab-me"
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/make-04-signed-out-me
+- tapOn:
+    id: "tab-discover"
+- tapOn:
+    id: "discover-search-input"
+- takeScreenshot: ${TOUR_SHOTS}/make-05-search-focused
+- inputText: "hello"
+- extendedWaitUntil:
+    visible:
+      id: "song-card"
+    timeout: 30000
+- pressKey: Enter
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/make-06-search-results
+- tapOn:
+    id: "song-card"
+- extendedWaitUntil:
+    visible:
+      id: "song-badge"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/make-07-song-page
+- tapOn:
+    id: "song-make"
+- extendedWaitUntil:
+    visible:
+      id: "signin-sheet"
+    timeout: 10000
+- takeScreenshot: ${TOUR_SHOTS}/make-08-signin-sheet
+- tapOn:
+    id: "signin-email-start"
+- extendedWaitUntil:
+    visible:
+      id: "signin-email"
+    timeout: 10000
+- tapOn:
+    id: "signin-email"
+- inputText: ${output.email}
+- takeScreenshot: ${TOUR_SHOTS}/make-09-signin-email
+- tapOn:
+    id: "signin-send"
+- extendedWaitUntil:
+    visible:
+      id: "signin-code-screen"
+    timeout: 15000
+- runScript:
+    file: ../scripts/stack.js
+    env:
+      ACTION: code
+      STACK: ${STACK}
+      EMAIL: ${output.email}
+- takeScreenshot: ${TOUR_SHOTS}/make-10-signin-code
+- inputText: ${output.code}
+- extendedWaitUntil:
+    visible:
+      id: "credits-buy"
+      enabled: true
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/make-11-credits-paywall
+- scroll
+- takeScreenshot: ${TOUR_SHOTS}/make-12-credits-paywall-scrolled
+- tapOn:
+    id: "credits-buy"
+- extendedWaitUntil:
+    visible:
+      id: "make-pick"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/make-13-pick
+- runFlow: ../common/make-submit.yaml
+- extendedWaitUntil:
+    visible:
+      id: "make-list"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/make-14-tab-working
+- tapOn:
+    id: "job-card-.*"
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/make-15-job-working
+- extendedWaitUntil:
+    visible:
+      id: "ready-youtube-link"
+    timeout: 120000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/make-16-ready
+- scroll
+- takeScreenshot: ${TOUR_SHOTS}/make-17-ready-scrolled
+- runFlow: ../common/header-back.yaml
+- extendedWaitUntil:
+    visible:
+      id: "job-ready-.*"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/make-18-tab-ready
+# Me: the settings at the bottom, account and notifications, deletion's preview (nothing is deleted).
+- tapOn:
+    id: "tab-me"
+- extendedWaitUntil:
+    visible:
+      id: "me-profile-card"
+    timeout: 30000
+- takeScreenshot: ${TOUR_SHOTS}/make-19-me-new-user
+- scrollUntilVisible:
+    element:
+      id: "me-signout"
+    direction: DOWN
+    timeout: 15000
+- takeScreenshot: ${TOUR_SHOTS}/make-20-me-settings
+- tapOn:
+    id: "me-account"
+- extendedWaitUntil:
+    visible:
+      id: "account-notifications"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/make-21-account
+- tapOn:
+    id: "account-notifications"
+- extendedWaitUntil:
+    visible:
+      id: "notif-ready"
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/make-22-notifications
+- runFlow: ../common/header-back.yaml
+- extendedWaitUntil:
+    visible:
+      id: "account-delete"
+    timeout: 20000
+- tapOn:
+    id: "account-delete"
+- extendedWaitUntil:
+    visible:
+      id: "delete-account-keep"
+    timeout: 20000
+- takeScreenshot: ${TOUR_SHOTS}/make-23-delete-account
