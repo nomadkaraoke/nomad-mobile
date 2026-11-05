@@ -200,6 +200,12 @@ export default function DiscoverScreen() {
     lastFiltersKey.current = filtersKey;
     picksList.current?.scrollToTop({ animated: false });
   }, [filtersKey]);
+  // The live picks replacing the last ones swap the data the same way.
+  const wasLastPicks = useRef(recs.showingLastPicks);
+  useEffect(() => {
+    if (wasLastPicks.current && !recs.showingLastPicks) picksList.current?.scrollToTop({ animated: false });
+    wasLastPicks.current = recs.showingLastPicks;
+  }, [recs.showingLastPicks]);
   const picks: PicksMode = !signedIn
     ? "signin"
     : recs.data

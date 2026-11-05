@@ -181,6 +181,8 @@ export function useRecommendations(filters: RecFilters) {
   return {
     data,
     offlineSnapshot,
+    /** Online, showing this user's last picks until decide answers. */
+    showingLastPicks: !useSnapshot && !live && lastPicks !== null,
     /** Offline with nothing usable saved (none, too old, or someone else's). */
     offlineEmpty: useSnapshot && data === undefined,
     status: query.status,
