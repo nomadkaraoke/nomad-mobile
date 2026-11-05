@@ -30,6 +30,7 @@ adb_() { "$SDK/platform-tools/adb" -s "$ANDROID_SERIAL" "$@"; }
 qemu_pid() { pgrep -f "qemu-system.*-avd $AVD( |$)" 2>/dev/null | head -1 || true; }
 # -feature -WiFiPacketStream: with netsim's Wi-Fi stream on, one lane's emulator stopping aborted the other lanes' qemu
 # in the same second (std::bad_function_call in a gRPC callback; crash reports 2026-11-05 00:40:25 and 00:53:25).
+# Not a full fix: the same abort recurred with the flag on (2026-11-05 11:18:49 UTC, docs/TESTING.md § Lane health).
 # The lane's own netsimd (-netsim-args --instance=LANE+1). After an emulator crash (SIGSEGV mid-shard, 2026-10-31) both
 # reboots on that lane froze at once ("hanging thread 'QEMU2 CPU0 thread'"), the same symptom as the frozen boots of
 # 2026-10-30: something the dead emulator left behind wedges the next boot. stop clears the lane's netsimd and the

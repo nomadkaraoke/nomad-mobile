@@ -91,6 +91,8 @@ its screen are in the **private** workspace doc `docs/BUILD-HOST.md` (workspace 
   - boots the emulator with `-feature -WiFiPacketStream`. With netsim's Wi-Fi stream on, one lane's emulator stopping
     at the end of its job aborted the other lanes' qemu in the same second (`std::bad_function_call` in a gRPC callback;
     crash reports in `~/Library/Logs/DiagnosticReports` on the Mac), so their flows died with "device offline".
+    **Not fully fixed:** the same abort recurred with the flag on (2026-11-05 11:18:49 UTC), so a shard can still lose its
+    emulator when another lane stops. The Android guard and retries cover flows; tours reboot the emulator and rerun.
   - gives Metro its own `TMPDIR` per port: two lanes' `--clear` raced on one `metro-cache` (`ENOTEMPTY`).
   - resets its lane's Firestore project and GCS bucket (gen's `/api/test/reset`, keeping the seed themes) before
     decide starts. Nothing cleared them before: every flow's users, jobs and fake media piled up for days in the
