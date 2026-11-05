@@ -7,8 +7,7 @@ appId: com.nomadkaraoke.mobile
     when:
       platform: Android
     commands:
-      # With the keyboard up, the first back only closes the keyboard.
-      - hideKeyboard
+      # No hideKeyboard: with no keyboard up it navigates back as well (CLAUDE.md), so this went back two screens.
       - back
 - runFlow:
     when:
@@ -22,4 +21,6 @@ appId: com.nomadkaraoke.mobile
       platform: iOS
       true: ${LOCALE != 'ar' && LOCALE != 'he'}
     commands:
-      - tapOn: "Back|Navigate up"
+      # By id: its label is the previous screen's title on a stack two screens deep.
+      - tapOn:
+          id: "BackButton"

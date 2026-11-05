@@ -561,7 +561,9 @@ if [[ -n "$SCREEN" ]]; then
   else TOUR_SHOTS="docs/screenshots/phase2/review/$PLATFORM/$lang"; fi
   mkdir -p "$TOUR_SHOTS"
   metro_up || start_metro
-  point_dev_client
+  # CI's iOS app already opens this Metro (run-shard.sh's DEV_CLIENT_DEFAULT_LAUNCHER_URL), and openurl's "Open in
+  # Karaoke?" prompt stayed up over the relaunch set_app_locale does, covering the app for the whole tour.
+  [[ -n "${CI:-}" && "$PLATFORM" == ios ]] || point_dev_client
   set_app_locale "$lang"
   # SHOT: the name prefix long-title.yaml gives its shots (in ${SHOTS}).
   # The voice and fit tours write to ${VOICE_SHOTS} / ${FIT_SHOTS} (run_flows passes both from VOICE_SHOTS): the

@@ -91,13 +91,27 @@ if [[ "$flows" == screen:* ]]; then
     echo "::group::$tour ($locale)"
     tour_status=0
     "$ROOT/scripts/e2e-local.sh" --platform "$platform" --locale "$locale" --screen "$tour" || tour_status=$?
+    # A dead lane emulator isn't the tour's fault: boot it again and run the tour once more.
+    if [[ "$tour_status" != 0 && "$platform" == android && "${RUNNER_ENVIRONMENT:-}" == self-hosted ]] &&
+      ! adb -s "$ANDROID_SERIAL" shell true >/dev/null 2>&1; then
+      echo "Lane emulator gone during $tour: booting it again"
+      "$ROOT/scripts/ci/android-emulator.sh" stop
+      if "$ROOT/scripts/ci/android-emulator.sh" start; then
+        adb -s "$ANDROID_SERIAL" install -r -g "$app" >/dev/null
+        rm -rf "$out"/debug-*
+        tour_status=0
+        "$ROOT/scripts/e2e-local.sh" --platform "$platform" --locale "$locale" --screen "$tour" || tour_status=$?
+      fi
+    fi
     echo "::endgroup::"
+    # With --debug-output Maestro writes takeScreenshot's files under the debug dir, not the path the flow names.
     while IFS= read -r shot; do
       name="$(basename "$shot" .png)"
       if command -v sips >/dev/null; then
         sips -Z 1400 -s format jpeg -s formatOptions 70 "$shot" --out "$dest/$name.jpg" >/dev/null || cp "$shot" "$dest/"
       else cp "$shot" "$dest/"; fi
-    done < <(find docs/screenshots docs/store/screenshots -type f -name '*.png' -newer "$marker")
+    done < <(find "$out" docs/screenshots docs/store/screenshots -type f -name '*.png' -newer "$marker" \
+      \( -path '*/takeScreenshot/*' -o -path 'docs/*' \))
     echo "$platform $tour $locale exit=$tour_status shots=$(find "$dest" -type f | wc -l | tr -d ' ')" | tee -a "$out/tours/summary.txt"
     if [[ "$tour_status" == 0 ]]; then rm -rf "$out"/debug-*
     else

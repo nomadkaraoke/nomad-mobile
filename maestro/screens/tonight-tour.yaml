@@ -108,6 +108,18 @@ onFlowComplete:
 - inputText: "Sam"
 - tapOn:
     id: "tonight-name-confirm"
+# Android: the push question's dialog hides the screen from Maestro, so answer it first (common/tonight-name.yaml).
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - extendedWaitUntil:
+          visible: ${NOT_NOW || 'Not now'}
+          timeout: 20000
+          optional: true
+      - tapOn:
+          text: ${NOT_NOW || 'Not now'}
+          optional: true
 - extendedWaitUntil:
     visible:
       id: "tonight-your-songs"
