@@ -105,13 +105,6 @@ name: screens-make-tour
       id: "make-list"
     timeout: 20000
 - takeScreenshot: ${TOUR_SHOTS}/make-14-tab-working
-- tapOn:
-    id: "job-card-.*"
-- waitForAnimationToEnd:
-    timeout: 3000
-- takeScreenshot: ${TOUR_SHOTS}/make-15-job-working
-# The job page doesn't turn into the ready screen: back to the list, then open the finished job.
-- runFlow: ../common/header-back.yaml
 - extendedWaitUntil:
     visible:
       id: "job-ready-.*"

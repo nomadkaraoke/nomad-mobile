@@ -333,7 +333,8 @@ appId: com.nomadkaraoke.mobile
 - waitForAnimationToEnd
 - takeScreenshot: ${TOUR_SHOTS}/me-27-connect
 # 4b: Your go-tos first in Discover, the Get this made shelf and screen, the song page's crowd line.
-- runFlow: ../common/connect-back-to-tabs.yaml
+# Connect opened by deep link has nothing under it, so relaunch to get the tabs back.
+- runFlow: ../common/relaunch-keep-data.yaml
 - tapOn:
     id: "tab-discover"
 - extendedWaitUntil:
