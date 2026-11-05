@@ -110,21 +110,27 @@ name: screens-make-tour
 - waitForAnimationToEnd:
     timeout: 3000
 - takeScreenshot: ${TOUR_SHOTS}/make-15-job-working
+# The job page doesn't turn into the ready screen: back to the list, then open the finished job.
+- runFlow: ../common/header-back.yaml
+- extendedWaitUntil:
+    visible:
+      id: "job-ready-.*"
+    timeout: 120000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ${TOUR_SHOTS}/make-18-tab-ready
+- tapOn:
+    id: "job-card-.*"
 - extendedWaitUntil:
     visible:
       id: "ready-youtube-link"
-    timeout: 120000
+    timeout: 20000
 - waitForAnimationToEnd:
     timeout: 3000
 - takeScreenshot: ${TOUR_SHOTS}/make-16-ready
 - scroll
 - takeScreenshot: ${TOUR_SHOTS}/make-17-ready-scrolled
 - runFlow: ../common/header-back.yaml
-- extendedWaitUntil:
-    visible:
-      id: "job-ready-.*"
-    timeout: 20000
-- takeScreenshot: ${TOUR_SHOTS}/make-18-tab-ready
 # Me: the settings at the bottom, account and notifications, deletion's preview (nothing is deleted).
 - tapOn:
     id: "tab-me"

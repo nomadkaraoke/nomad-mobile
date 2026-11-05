@@ -245,7 +245,8 @@ fi
 # Maestro scripts can only make HTTP calls, so a loopback helper (scripts/stack-control.py, :8049) runs
 # local-stack.sh down/up for them. Started for Tonight runs and for any selected flow that stops decide.
 needs_control() {
-  [[ -z "$SCREEN" ]] || return 1
+  # The Tonight tour stops the box for its "unreachable" shot.
+  if [[ -n "$SCREEN" ]]; then [[ "$SCREEN" == tonight* ]]; return; fi
   [[ "$NEED_KJBOX" == 1 ]] && return 0
   local f
   while IFS= read -r f; do

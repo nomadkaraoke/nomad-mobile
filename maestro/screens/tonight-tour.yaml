@@ -405,9 +405,25 @@ onFlowComplete:
         id: "tonight-search"
     commands:
       - runFlow:
+          when:
+            platform: iOS
           file: ../common/header-back.yaml
           env:
             LOCALE: ${LOCALE}
+      # Android: the keyboard is up, and the first back only closes it.
+      - runFlow:
+          when:
+            platform: Android
+          commands:
+            - repeat:
+                while:
+                  notVisible:
+                    id: "tonight-your-songs"
+                times: 3
+                commands:
+                  - back
+                  - waitForAnimationToEnd:
+                      timeout: 2000
 - extendedWaitUntil:
     visible:
       id: "tonight-your-songs"
