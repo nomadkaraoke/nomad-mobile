@@ -88,6 +88,9 @@ its screen are in the **private** workspace doc `docs/BUILD-HOST.md` (workspace 
     rules and, on the lanes, reboots a dead emulator and reinstalls the app. Its events are in the shard's
     `android-guard.log`, and the summary prints them per shard ("🛠 shard 1 infra: lost adb reverse ×2"), so infra
     noise is visible instead of looking like flow failures.
+  - boots the emulator with `-feature -WiFiPacketStream`. With netsim's Wi-Fi stream on, one lane's emulator stopping
+    at the end of its job aborted the other lanes' qemu in the same second (`std::bad_function_call` in a gRPC callback;
+    crash reports in `~/Library/Logs/DiagnosticReports` on the Mac), so their flows died with "device offline".
   - gives Metro its own `TMPDIR` per port: two lanes' `--clear` raced on one `metro-cache` (`ENOTEMPTY`).
   - resets its lane's Firestore project and GCS bucket (gen's `/api/test/reset`, keeping the seed themes) before
     decide starts. Nothing cleared them before: every flow's users, jobs and fake media piled up for days in the
