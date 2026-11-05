@@ -5,6 +5,7 @@ import { renderRouter } from 'expo-router/testing-library';
 import { Modal, View } from 'react-native';
 
 import { useAuth } from '../auth/store';
+import { clearRecsSnapshot } from '../discover/recsSnapshot';
 import { useLovedOverrides } from '../me/lovedOverrides';
 import { useMeOutbox } from '../me/meOutbox';
 import { useLibraryFilter } from '../find/library';
@@ -117,6 +118,7 @@ const warming = () => new decide.ApiError(503, 'warming_up');
 beforeEach(async () => {
   jest.clearAllMocks();
   resetSearchCacheForTests();
+  clearRecsSnapshot(); // each test starts with no last picks to show while loading
   await useAuth.getState().signOut();
   useLovedOverrides.getState().clear();
   useMeOutbox.getState().rehydrate(null);
