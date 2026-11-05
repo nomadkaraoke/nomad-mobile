@@ -50,6 +50,12 @@ on:
         default: main
       kjbox_ref:
         default: main
+      screens:
+        description: 'Run these maestro/screens tours instead of the flows (comma-separated); shots land in the artifacts under tours/'
+        default: ''
+      locales:
+        description: 'App languages for screens (comma-separated)'
+        default: 'en'
 
 concurrency:
   # A label other than e2e-full / e2e-ios gets its own group, so it never cancels a running E2E run.
@@ -101,6 +107,8 @@ jobs:
           FILTER: ${{ inputs.filter }}
           SKIP: ${{ inputs.skip }}
           AFFECTED: ${{ inputs.affected }}
+          SCREENS: ${{ inputs.screens }}
+          LOCALES: ${{ inputs.locales }}
           # iOS on the self-hosted Mac (3 lanes, scripts/e2e-lane.sh) when a dispatch asks for it, or by default when
           # the repo variable E2E_IOS_RUNNER is self-hosted; never for a fork's PR (the machine's job-started guard
           # refuses those too). Hosted macos-26 otherwise.
@@ -125,6 +133,10 @@ jobs:
           for p in ios android; do
             if [[ ",$PLATFORMS," != *",$p,"* ]]; then echo "$p=[]" >>"$GITHUB_OUTPUT"; continue; fi
             n="$IOS_SHARDS"; [[ "$p" == android ]] && n="$ANDROID_SHARDS"
+            if [[ -n "$SCREENS" ]]; then
+              echo "$p=$(node scripts/ci/tour-plan.mjs --screens "$SCREENS" --locales "$LOCALES" --shards "$n")" >>"$GITHUB_OUTPUT"
+              continue
+            fi
             plan="$(node scripts/e2e-plan.mjs --shards "$n" ${args[@]+"${args[@]}"})"
             # One matrix entry per shard; web = the shard needs gen web on :3010 (the web review handoffs).
             echo "$p=$(node -e '

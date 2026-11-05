@@ -76,6 +76,40 @@ else
   if [[ "${RUNNER_ENVIRONMENT:-}" == self-hosted ]]; then export E2E_EMULATOR_RESTART=1; fi
 fi
 
+# Screen tours (dispatch input `screens`, scripts/ci/tour-plan.mjs): FLOWS is "screen:<tour>:<locale>,...". A tour that
+# fails keeps the shots it took and the next one still runs. Shots are collected into $out/tours/<platform>/<tour>/<locale>/,
+# shrunk to JPEG where sips exists; Maestro's debug output stays only for tours that failed.
+if [[ "$flows" == screen:* ]]; then
+  status=0
+  cd "$ROOT"
+  marker="$(mktemp)"
+  for item in ${flows//,/ }; do
+    IFS=: read -r _ tour locale <<<"$item"
+    dest="$out/tours/$platform/$tour/$locale"
+    mkdir -p "$dest"
+    touch "$marker"
+    echo "::group::$tour ($locale)"
+    tour_status=0
+    "$ROOT/scripts/e2e-local.sh" --platform "$platform" --locale "$locale" --screen "$tour" || tour_status=$?
+    echo "::endgroup::"
+    while IFS= read -r shot; do
+      name="$(basename "$shot" .png)"
+      if command -v sips >/dev/null; then
+        sips -Z 1400 -s format jpeg -s formatOptions 70 "$shot" --out "$dest/$name.jpg" >/dev/null || cp "$shot" "$dest/"
+      else cp "$shot" "$dest/"; fi
+    done < <(find docs/screenshots docs/store/screenshots -type f -name '*.png' -newer "$marker")
+    echo "$platform $tour $locale exit=$tour_status shots=$(find "$dest" -type f | wc -l | tr -d ' ')" | tee -a "$out/tours/summary.txt"
+    if [[ "$tour_status" == 0 ]]; then rm -rf "$out"/debug-*
+    else
+      status=1
+      mkdir -p "$out/failed/$tour-$locale"
+      mv "$out"/debug-* "$out/failed/$tour-$locale/" 2>/dev/null || true
+    fi
+  done
+  rm -f "$marker"
+  exit "$status"
+fi
+
 status=0
 "$ROOT/scripts/e2e-local.sh" --platform "$platform" --flows "$flows" || status=$?
 # One retry of the failed flows (CI runners are slower than a Mac, so timing-sensitive flows can flake). The retry's

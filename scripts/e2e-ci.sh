@@ -11,6 +11,8 @@
 #   scripts/e2e-ci.sh pr                          # wait for the newest E2E run of this branch (PR or dispatch)
 #   scripts/e2e-ci.sh results RUN_ID              # the failed shards' reports + failing flows' screenshots, summary
 #   scripts/e2e-ci.sh results RUN_ID --all        # every shard, every flow's debug output (hundreds of MB)
+#   scripts/e2e-ci.sh run --screens me-tour,tonight-tour --locales en,ar --no-wait   # screen tours instead of flows
+#   scripts/e2e-ci.sh tours RUN_ID [DIR]          # that run's tour shots (shrunk JPEGs): DIR/<platform>/<tour>/<locale>/
 #
 # run/pr wait for the run, then call results. Artifacts land in .e2e-ci/<run id>/e2e-<platform>-<shard>/:
 # junit-<n>.xml, debug-<n>/<flow>/ (Maestro's screenshots and command logs; by default only for flows that failed,
@@ -115,6 +117,8 @@ case "$cmd" in
         --gen-ref) fields+=(-f "gen_ref=$2"); shift 2 ;;
         --decide-ref) fields+=(-f "decide_ref=$2"); shift 2 ;;
         --kjbox-ref) fields+=(-f "kjbox_ref=$2"); shift 2 ;;
+        --screens) fields+=(-f "screens=$2"); shift 2 ;;
+        --locales) fields+=(-f "locales=$2"); shift 2 ;;
         --no-wait) wait=""; shift ;;
         *) echo "unknown option $1" >&2; exit 2 ;;
       esac
@@ -142,5 +146,21 @@ case "$cmd" in
     wait_run "$id"
     ;;
   results) results "${1:?RUN_ID}" "${2:-}" ;;
-  *) sed -n '2,23p' "$0"; exit 2 ;;
+  tours)
+    id="${1:?RUN_ID}"; dest="${2:-$ROOT/.e2e-ci/$id-tours}"; tmp="$(mktemp -d)"
+    mkdir -p "$dest"
+    for n in $(gh api "repos/$REPO/actions/runs/$id/artifacts" --paginate -q '.artifacts[].name | select(startswith("e2e-"))'); do
+      gh run download "$id" -R "$REPO" -n "$n" -D "$tmp/$n" || { echo "($n: no artifact)" >&2; continue; }
+      if [[ -d "$tmp/$n/tours" ]]; then
+        cat "$tmp/$n/tours/summary.txt" 2>/dev/null >>"$dest/summary.txt" || true
+        rm -f "$tmp/$n/tours/summary.txt"
+        cp -R "$tmp/$n/tours/." "$dest/"
+      fi
+      rm -rf "${tmp:?}/$n"
+    done
+    rm -rf "$tmp"
+    cat "$dest/summary.txt" 2>/dev/null || echo "no tour shots in run $id"
+    echo "Shots: $dest ($(du -sh "$dest" | cut -f1))"
+    ;;
+  *) sed -n '2,25p' "$0"; exit 2 ;;
 esac
