@@ -4,15 +4,14 @@
 #
 # - pull_request: only the flows the PR's changes affect (scripts/e2e-plan-lib.mjs), sharded, iOS and Android; the label
 #   `e2e-full` runs every flow.
-# - schedule (nightly) and workflow_dispatch: the full suite (dispatch can narrow it with filter / skip / flows).
+# - workflow_dispatch: the full suite (dispatch can narrow it with filter / skip / flows). The nightly run is a dispatch
+#   at 03:00 ET from the build host (scripts/ci/nightly-dispatch.sh): GitHub's `schedule:` started it 7-10 h late.
 # Trigger and read results from a session: scripts/e2e-ci.sh.
 name: E2E
 
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
-  schedule:
-    - cron: '23 7 * * *' # 03:23 US Eastern
   workflow_dispatch:
     inputs:
       platforms:
