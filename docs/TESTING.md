@@ -23,7 +23,11 @@ other's global fake-config.
     (PRs were Android-only for a few days in late October 2026 while the lanes were unhealthy). An unmapped app or
     package path, a dependency change or a change to `maestro/common`, `maestro/scripts` or the E2E scripts runs
     everything; docs and tests run nothing. Add the label **`e2e-full`** to a PR to run every flow.
-  - nightly (03:23 ET) and `scripts/e2e-ci.sh run`: the full suite on both platforms.
+  - nightly (03:00 ET) and `scripts/e2e-ci.sh run`: the full suite on both platforms. The nightly run is a
+    `workflow_dispatch` from the build host's LaunchAgent `com.nomadkaraoke.mobile-nightly-e2e`
+    (`scripts/ci/nightly-dispatch.sh`, installed by `scripts/ci/install-nightly-agent.sh`; log
+    `~/Library/Logs/nomad-mobile-nightly.log` on the Mac). It used to be a GitHub `schedule:` cron, which in
+    November 2026 started 7-10 h late (09:15-13:00 ET) and skipped 10-30 to 11-10 entirely.
 - **Native builds are cached by the Expo fingerprint** (`scripts/ci/build-dev-client.sh fingerprint`), so a JS-only
   change reuses the last dev client and only rebundles in Metro. A new native dependency, config plugin or
   `app.config.ts` change rebuilds (iOS ~15–20 min, Android ~10 min).
