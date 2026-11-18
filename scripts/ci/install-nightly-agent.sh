@@ -7,7 +7,7 @@ set -euo pipefail
 LABEL=com.nomadkaraoke.mobile-nightly-e2e
 PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
 SRC_URL=https://raw.githubusercontent.com/nomadkaraoke/nomad-mobile/main/scripts/ci/nightly-dispatch.sh
-mkdir -p "$HOME/bin" "$HOME/.config/nomad-ci" "$HOME/Library/Logs"
+mkdir -p "$HOME/bin" "$HOME/.config/nomad-ci" "$HOME/Library/Logs" "$HOME/Library/LaunchAgents"
 chmod 700 "$HOME/.config/nomad-ci"
 curl -fsSL "$SRC_URL" -o "$HOME/bin/nomad-mobile-nightly-dispatch.new"
 chmod +x "$HOME/bin/nomad-mobile-nightly-dispatch.new"

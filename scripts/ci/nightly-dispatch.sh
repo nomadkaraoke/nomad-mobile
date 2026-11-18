@@ -16,7 +16,7 @@ if [[ ! -r "$TOKEN_FILE" ]]; then
   log "no token at $TOKEN_FILE; nightly E2E not started"
   exit 1
 fi
-code=$(curl -sS -o /tmp/nightly-dispatch.out -w '%{http_code}' -X POST \
+code=$(curl -sS --connect-timeout 15 --max-time 60 -o /tmp/nightly-dispatch.out -w '%{http_code}' -X POST \
   -H "Authorization: Bearer $(<"$TOKEN_FILE")" \
   -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
   -H "User-Agent: nomad-mobile-nightly" \
