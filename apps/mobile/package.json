@@ -19,36 +19,36 @@
     "@shopify/flash-list": "2.0.2",
     "@shopify/react-native-skia": "2.6.2",
     "@tanstack/react-query": "^5.104.2",
-    "expo": "~57.0.31",
+    "expo": "~57.0.33",
     "expo-apple-authentication": "~57.0.2",
-    "expo-asset": "~57.0.20",
+    "expo-asset": "~57.0.21",
     "expo-audio": "~57.0.5",
     "expo-camera": "~57.0.6",
     "expo-clipboard": "~57.0.2",
-    "expo-constants": "~57.0.22",
+    "expo-constants": "~57.0.24",
     "expo-crypto": "~57.0.4",
-    "expo-dev-client": "~57.0.20",
+    "expo-dev-client": "~57.0.21",
     "expo-device": "~57.0.2",
     "expo-document-picker": "~57.0.3",
     "expo-file-system": "~57.0.7",
     "expo-font": "~57.0.4",
-    "expo-glass-effect": "~57.0.4",
+    "expo-glass-effect": "~57.0.5",
     "expo-haptics": "~57.0.3",
     "expo-image": "~57.0.5",
-    "expo-image-manipulator": "~57.0.21",
-    "expo-image-picker": "~57.0.20",
-    "expo-linking": "~57.0.13",
+    "expo-image-manipulator": "~57.0.22",
+    "expo-image-picker": "~57.0.21",
+    "expo-linking": "~57.0.14",
     "expo-localization": "~57.0.2",
-    "expo-media-library": "~57.0.5",
-    "expo-notifications": "~57.0.24",
-    "expo-router": "~57.0.29",
+    "expo-media-library": "~57.0.6",
+    "expo-notifications": "~57.0.25",
+    "expo-router": "~57.0.31",
     "expo-secure-store": "~57.0.4",
-    "expo-splash-screen": "~57.0.10",
+    "expo-splash-screen": "~57.0.11",
     "expo-sqlite": "57.0.4",
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.3",
     "expo-system-ui": "~57.0.4",
-    "expo-updates": "~57.0.26",
+    "expo-updates": "~57.0.28",
     "expo-video": "~57.0.5",
     "expo-web-browser": "~57.0.3",
     "pako": "^3.0.2",
@@ -83,5 +83,12 @@
     "web": "expo start --web",
     "typecheck": "tsc --noEmit"
   },
-  "private": true
+  "private": true,
+  "expo": {
+    "install": {
+      "exclude": [
+        "expo-sqlite"
+      ]
+    }
+  }
 }
